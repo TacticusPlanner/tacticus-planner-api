@@ -68,11 +68,11 @@ Use user-secrets for local identity values:
 
 ```powershell
 dotnet user-secrets set "Authentication:Authority" "<ciam-authority>" --project src/TacticusPlanner.Api
-dotnet user-secrets set "Authentication:Audience" "api://tacticus-planner-api-stg" --project src/TacticusPlanner.Api
+dotnet user-secrets set "Authentication:Audience" "api://tacticus-planner-api-local" --project src/TacticusPlanner.Api
 ```
 
-Local development uses the staging identity registrations with localhost
-redirect URIs while calling the locally hosted API.
+Local development uses the dedicated local identity registrations and API
+audience while calling the locally hosted API.
 
 Authentication is the default authorization policy. Health and OpenAPI
 endpoints are intentionally anonymous. The frontend must request the deployed
