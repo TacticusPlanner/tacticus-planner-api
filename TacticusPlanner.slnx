@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/TacticusPlanner.Api/TacticusPlanner.Api.csproj" />
+  </Folder>
+  <Folder Name="/orchestration/">
+    <Project Path="orchestration/TacticusPlanner.AppHost/TacticusPlanner.AppHost.csproj" />
+    <Project Path="orchestration/TacticusPlanner.ServiceDefaults/TacticusPlanner.ServiceDefaults.csproj" />
+  </Folder>
+</Solution>

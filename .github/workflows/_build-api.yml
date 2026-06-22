@@ -1,0 +1,53 @@
+name: Build API
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: Git ref to check out. Defaults to the triggering ref.
+        required: false
+        type: string
+        default: ""
+      run-validation:
+        description: Run formatting validation before building.
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  build:
+    name: Build API
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    env:
+      ConnectionStrings__planner-db: Host=localhost;Port=5432;Database=tacticus_planner;Username=postgres;Password=postgres
+      Authentication__Authority: https://example.ciamlogin.com/example.onmicrosoft.com/v2.0
+      Authentication__Audience: api://tacticus-planner-api-ci
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.ref || github.ref }}
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
+          cache: true
+          cache-dependency-path: "**/packages.lock.json"
+
+      - name: Restore locked dependencies
+        run: dotnet restore TacticusPlanner.slnx --locked-mode
+
+      - name: Check formatting
+        if: ${{ inputs.run-validation }}
+        run: dotnet format TacticusPlanner.slnx --verify-no-changes --no-restore
+
+      - name: Build
+        run: dotnet build TacticusPlanner.slnx --configuration Release --no-restore
+
+      - name: Build container image
+        run: docker build --file src/TacticusPlanner.Api/Dockerfile --tag tacticus-planner-api:${{ github.sha }} .
