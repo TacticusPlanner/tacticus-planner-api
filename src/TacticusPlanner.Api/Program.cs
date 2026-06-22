@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 using Scalar.AspNetCore;
 using TacticusPlanner.Api.Features;
 using TacticusPlanner.Api.Persistence;
@@ -12,7 +13,28 @@ builder.AddServiceDefaults();
 builder.AddNpgsqlDbContext<PlannerDbContext>("planner-db");
 
 builder.Services.AddProblemDetails();
-builder.Services.AddOpenApi("v1");
+builder.Services.AddOpenApi("v1", options =>
+{
+    options.AddDocumentTransformer((document, _, _) =>
+    {
+        document.Components ??= new OpenApiComponents();
+        document.Components.SecuritySchemes ??=
+            new Dictionary<string, IOpenApiSecurityScheme>();
+        document.Components.SecuritySchemes["Bearer"] = new OpenApiSecurityScheme
+        {
+            Type = SecuritySchemeType.Http,
+            Scheme = "bearer",
+            BearerFormat = "JWT",
+        };
+        document.Security ??= [];
+        document.Security.Add(new OpenApiSecurityRequirement
+        {
+            [new OpenApiSecuritySchemeReference("Bearer", document)] = [],
+        });
+
+        return Task.CompletedTask;
+    });
+});
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -30,6 +52,20 @@ builder.Services
 
 builder.Services
     .AddAuthorizationBuilder()
+    .AddPolicy(
+        AuthorizationPolicies.AccessAsUser,
+        policy =>
+        {
+            policy.RequireAuthenticatedUser();
+            policy.RequireClaim("sub");
+            policy.RequireAssertion(context =>
+                context.User
+                    .FindAll("scp")
+                    .SelectMany(claim => claim.Value.Split(' ', StringSplitOptions.RemoveEmptyEntries))
+                    .Contains("access_as_user", StringComparer.Ordinal)
+            );
+        }
+    )
     .SetFallbackPolicy(
         new AuthorizationPolicyBuilder()
             .RequireAuthenticatedUser()

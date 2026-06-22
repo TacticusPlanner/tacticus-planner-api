@@ -68,12 +68,17 @@ Use user-secrets for local identity values:
 
 ```powershell
 dotnet user-secrets set "Authentication:Authority" "<ciam-authority>" --project src/TacticusPlanner.Api
-dotnet user-secrets set "Authentication:Audience" "api://tacticus-planner-api-local" --project src/TacticusPlanner.Api
+dotnet user-secrets set "Authentication:Audience" "api://tacticus-planner-api-stg" --project src/TacticusPlanner.Api
 ```
+
+Local development uses the staging identity registrations with localhost
+redirect URIs while calling the locally hosted API.
 
 Authentication is the default authorization policy. Health and OpenAPI
 endpoints are intentionally anonymous. The frontend must request the deployed
-API's `access_as_user` scope before calling future protected endpoints.
+API's `access_as_user` scope before calling protected endpoints. Routes under
+`/api/v1` enforce that delegated scope in addition to validating the token's
+issuer and audience.
 
 ## API and health endpoints
 
@@ -81,9 +86,10 @@ API's `access_as_user` scope before calling future protected endpoints.
 - Interactive API reference in Development: `/docs`
 - Liveness: `/health/live`
 - Readiness, including PostgreSQL: `/health/ready`
+- Authenticated user: `/api/v1/me`
 
-Future feature endpoints belong under `/api/v1` and require authentication by
-default.
+Future feature endpoints belong under `/api/v1` and require the delegated
+`access_as_user` scope by default.
 
 Every API build generates the OpenAPI artifact under `artifacts/openapi`:
 
