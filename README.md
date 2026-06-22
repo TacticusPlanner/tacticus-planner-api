@@ -1,1 +1,150 @@
-# tacticus-planner-api
+# Tacticus Planner API
+
+ASP.NET Core API foundation for Tacticus Planner V2. The solution targets
+.NET 10, uses PostgreSQL through EF Core, and uses .NET Aspire for local
+orchestration and observability.
+
+## Prerequisites
+
+- .NET SDK 10.0.301 or a newer 10.0 patch
+- Docker Desktop or another OCI-compatible container runtime
+- The .NET EF Core CLI tool when creating migrations:
+  `dotnet tool install --global dotnet-ef --version 10.*`
+
+## Restore and build
+
+```powershell
+dotnet restore src/TacticusPlanner.Api --locked-mode
+dotnet restore orchestration/TacticusPlanner.AppHost
+dotnet build -c Release --no-restore
+```
+
+Package versions are managed in `Directory.Packages.props`. Lock files are
+committed for the API and ServiceDefaults projects. AppHost is intentionally
+unlocked because Aspire injects platform-specific dashboard and orchestration
+packages for Windows, Linux, or macOS during restore.
+
+## Run with Aspire
+
+Aspire starts PostgreSQL, the API, and the local observability dashboard:
+
+```powershell
+dotnet run --project orchestration/TacticusPlanner.AppHost
+```
+
+PostgreSQL uses a persistent container lifetime and a named Docker volume.
+Stopping AppHost leaves the container available for the next run, and the
+database data survives both AppHost and container restarts. Aspire supplies the
+`planner-db` connection string to the API.
+
+## Run the API directly
+
+Set the PostgreSQL connection string before starting the API outside Aspire:
+
+```powershell
+$env:ConnectionStrings__planner-db = "Host=localhost;Port=5432;Database=tacticus_planner;Username=postgres;Password=<password>"
+dotnet run --project src/TacticusPlanner.Api
+```
+
+The direct-development profile listens at `http://localhost:5100` and
+`https://localhost:7100`.
+
+## Configuration
+
+Configuration is read from standard ASP.NET Core sources. Production values
+must be supplied through environment configuration or the deployment platform;
+do not commit secrets.
+
+| Setting | Purpose |
+| --- | --- |
+| `ConnectionStrings__planner-db` | PostgreSQL connection string |
+| `Authentication__Authority` | Microsoft Entra External ID token authority |
+| `Authentication__Audience` | Environment-specific API audience |
+| `Cors__AllowedOrigins__0` | First allowed frontend origin; add more by index |
+| `APPLICATIONINSIGHTS_CONNECTION_STRING` | Enables Azure Monitor telemetry |
+| `OTEL_EXPORTER_OTLP_ENDPOINT` | Sends local telemetry to an OTLP collector |
+
+Use user-secrets for local identity values:
+
+```powershell
+dotnet user-secrets set "Authentication:Authority" "<ciam-authority>" --project src/TacticusPlanner.Api
+dotnet user-secrets set "Authentication:Audience" "api://tacticus-planner-api-local" --project src/TacticusPlanner.Api
+```
+
+Authentication is the default authorization policy. Health and OpenAPI
+endpoints are intentionally anonymous. The frontend must request the deployed
+API's `access_as_user` scope before calling future protected endpoints.
+
+## API and health endpoints
+
+- OpenAPI JSON: `/openapi/v1.json`
+- Interactive API reference in Development: `/docs`
+- Liveness: `/health/live`
+- Readiness, including PostgreSQL: `/health/ready`
+
+Future feature endpoints belong under `/api/v1` and require authentication by
+default.
+
+Every API build generates the OpenAPI artifact under `artifacts/openapi`:
+
+```powershell
+dotnet build src/TacticusPlanner.Api -c Release --no-restore
+```
+
+## Database migrations
+
+The initial context has no entities, so it intentionally has no migration.
+After adding the first persisted model, create and apply migrations explicitly:
+
+```powershell
+dotnet ef migrations add <MigrationName> --project src/TacticusPlanner.Api
+dotnet ef database update --project src/TacticusPlanner.Api
+```
+
+The API never applies migrations automatically during startup. Production
+migrations must be an explicit deployment operation.
+
+## Container image
+
+Build the same API image shape intended for Azure Container Apps:
+
+```powershell
+docker build -f src/TacticusPlanner.Api/Dockerfile -t tacticus-planner-api:local .
+```
+
+The image runs as a non-root user and listens on port `8080`. Aspire is only a
+local development dependency and is not included in the runtime image.
+
+## Validation
+
+```powershell
+dotnet restore src/TacticusPlanner.Api --locked-mode
+dotnet restore orchestration/TacticusPlanner.AppHost
+dotnet format TacticusPlanner.slnx --verify-no-changes --no-restore
+dotnet build TacticusPlanner.slnx -c Release --no-restore
+docker build -f src/TacticusPlanner.Api/Dockerfile -t tacticus-planner-api:local .
+```
+
+No automated test project is configured in this foundation.
+
+## Azure staging deployment
+
+The `CD Stage` workflow builds and pushes an immutable image after each merge to
+`main`, then updates the staging Container App when it exists. Azure login uses
+GitHub OIDC; no Azure client secret or PostgreSQL password is stored in this
+repository.
+
+Configure the repository's protected `stage` environment with:
+
+- `AZURE_CLIENT_ID`
+- `AZURE_TENANT_ID`
+- `AZURE_SUBSCRIPTION_ID`
+- `ACR_NAME`
+- `CONTAINER_APP_NAME`
+- `RESOURCE_GROUP_NAME`
+
+The first workflow run may occur before the Container App is provisioned. In
+that case it publishes the image, reports the immutable digest in the workflow
+summary, and skips deployment successfully. Supply that digest to the initial
+local infrastructure deployment. Subsequent runs update the existing Container
+App automatically.

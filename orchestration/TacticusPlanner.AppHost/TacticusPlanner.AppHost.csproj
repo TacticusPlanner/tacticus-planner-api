@@ -1,0 +1,16 @@
+<Project Sdk="Aspire.AppHost.Sdk/13.4.6">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>TacticusPlanner.AppHost</RootNamespace>
+    <UserSecretsId>tacticus-planner-apphost-local</UserSecretsId>
+    <NoWarn>$(NoWarn);ASPIREPERSISTENCE001</NoWarn>
+    <!-- Aspire injects platform-specific dashboard and orchestration packages. -->
+    <RestorePackagesWithLockFile>false</RestorePackagesWithLockFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.PostgreSQL" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\TacticusPlanner.Api\TacticusPlanner.Api.csproj" IsAspireProjectResource="true" />
+  </ItemGroup>
+</Project>
