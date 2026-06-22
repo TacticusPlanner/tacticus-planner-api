@@ -14,12 +14,15 @@ orchestration and observability.
 ## Restore and build
 
 ```powershell
-dotnet restore --locked-mode
+dotnet restore src/TacticusPlanner.Api --locked-mode
+dotnet restore orchestration/TacticusPlanner.AppHost
 dotnet build -c Release --no-restore
 ```
 
-Package versions are managed in `Directory.Packages.props` and resolved
-versions are committed in each project's `packages.lock.json`.
+Package versions are managed in `Directory.Packages.props`. Lock files are
+committed for the API and ServiceDefaults projects. AppHost is intentionally
+unlocked because Aspire injects platform-specific dashboard and orchestration
+packages for Windows, Linux, or macOS during restore.
 
 ## Run with Aspire
 
@@ -115,7 +118,8 @@ local development dependency and is not included in the runtime image.
 ## Validation
 
 ```powershell
-dotnet restore --locked-mode
+dotnet restore src/TacticusPlanner.Api --locked-mode
+dotnet restore orchestration/TacticusPlanner.AppHost
 dotnet format TacticusPlanner.slnx --verify-no-changes --no-restore
 dotnet build TacticusPlanner.slnx -c Release --no-restore
 docker build -f src/TacticusPlanner.Api/Dockerfile -t tacticus-planner-api:local .

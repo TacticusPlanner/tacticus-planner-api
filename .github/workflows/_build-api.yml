@@ -39,8 +39,11 @@ jobs:
           cache: true
           cache-dependency-path: "**/packages.lock.json"
 
-      - name: Restore locked dependencies
-        run: dotnet restore TacticusPlanner.slnx --locked-mode
+      - name: Restore locked API dependencies
+        run: dotnet restore src/TacticusPlanner.Api/TacticusPlanner.Api.csproj --locked-mode
+
+      - name: Restore platform-specific AppHost dependencies
+        run: dotnet restore orchestration/TacticusPlanner.AppHost/TacticusPlanner.AppHost.csproj
 
       - name: Check formatting
         if: ${{ inputs.run-validation }}
