@@ -102,7 +102,7 @@ do not commit secrets.
 | --- | --- |
 | `ConnectionStrings__planner-db` | PostgreSQL connection string |
 | `Authentication__Authority` | Microsoft Entra External ID token authority |
-| `Authentication__Audience` | Environment-specific API audience |
+| `Authentication__Audience` | Exact access-token `aud` claim for the API |
 | `Cors__AllowedOrigins__0` | First allowed frontend origin; add more by index |
 | `APPLICATIONINSIGHTS_CONNECTION_STRING` | Enables Azure Monitor telemetry |
 | `OTEL_EXPORTER_OTLP_ENDPOINT` | Sends local telemetry to an OTLP collector |
@@ -111,11 +111,15 @@ Use user-secrets for local identity values:
 
 ```powershell
 dotnet user-secrets set "Authentication:Authority" "<ciam-authority>" --project src/TacticusPlanner.Api
-dotnet user-secrets set "Authentication:Audience" "api://tacticus-planner-api-local" --project src/TacticusPlanner.Api
+dotnet user-secrets set "Authentication:Audience" "<aud-claim-from-local-api-access-token>" --project src/TacticusPlanner.Api
 ```
 
 Local development uses the dedicated local identity registrations and API
-audience while calling the locally hosted API.
+audience while calling the locally hosted API. For Microsoft Entra v2.0 access
+tokens, the API audience is the API app registration's application/client ID
+GUID. Do not use the delegated scope, such as
+`api://tacticus-planner-api-local/access_as_user`, as
+`Authentication:Audience`.
 
 Authentication is the default authorization policy. Health and OpenAPI
 endpoints are intentionally anonymous. The frontend must request the deployed
