@@ -1,11 +1,15 @@
+using TacticusPlanner.Api.Features.CurrentUser;
+
 namespace TacticusPlanner.Api.Features;
 
 public static class ApiEndpointRouteBuilderExtensions
 {
     public static void MapApiEndpoints(this IEndpointRouteBuilder endpoints)
     {
-        _ = endpoints
+        var api = endpoints
             .MapGroup("/api/v1")
-            .RequireAuthorization();
+            .RequireAuthorization(AuthorizationPolicies.AccessAsUser);
+
+        api.MapCurrentUserEndpoints();
     }
 }

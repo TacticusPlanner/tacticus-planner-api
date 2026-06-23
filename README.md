@@ -24,13 +24,56 @@ committed for the API and ServiceDefaults projects. AppHost is intentionally
 unlocked because Aspire injects platform-specific dashboard and orchestration
 packages for Windows, Linux, or macOS during restore.
 
-## Run with Aspire
+## Run the local full stack with Aspire
 
-Aspire starts PostgreSQL, the API, and the local observability dashboard:
+Aspire starts PostgreSQL, the API, the external React/Vite client app, and the
+local observability dashboard:
 
 ```powershell
 dotnet run --project orchestration/TacticusPlanner.AppHost
 ```
+
+This integration is for local development only. It does not change staging or
+production deployment, CI/CD workflows, or the client repository's standalone
+Turborepo commands.
+
+By default AppHost expects the API and client repositories to be checked out as
+sibling folders:
+
+```text
+/tacticus/v2
+  /tacticus-planner-api
+  /tacticus-planner-apps
+```
+
+The default client app path is configured in
+`orchestration/TacticusPlanner.AppHost/appsettings.json`:
+
+```json
+{
+  "ClientAppPath": "../../../tacticus-planner-apps/apps/web"
+}
+```
+
+Override `ClientAppPath` when your local checkout uses a different layout:
+
+```powershell
+$env:ClientAppPath = "D:\repos\tacticus\v2\tacticus-planner-apps\apps\web"
+dotnet run --project orchestration/TacticusPlanner.AppHost
+```
+
+You can also store a machine-specific path in AppHost user secrets:
+
+```powershell
+dotnet user-secrets set "ClientAppPath" "D:\repos\tacticus\v2\tacticus-planner-apps\apps\web" --project orchestration/TacticusPlanner.AppHost
+```
+
+The `web` resource uses pnpm and the Vite `dev` script from the client app.
+Because the client app is part of a Turborepo workspace, AppHost derives the
+workspace root from `ClientAppPath` and runs the root `dev:web` Turbo script.
+AppHost passes the API's local HTTP endpoint to the client as
+`VITE_API_BASE_URL`, sets the web resource `PORT`, and configures the API CORS
+origin from the Aspire-managed client endpoint.
 
 PostgreSQL uses a persistent container lifetime and a named Docker volume.
 Stopping AppHost leaves the container available for the next run, and the
@@ -71,9 +114,14 @@ dotnet user-secrets set "Authentication:Authority" "<ciam-authority>" --project 
 dotnet user-secrets set "Authentication:Audience" "api://tacticus-planner-api-local" --project src/TacticusPlanner.Api
 ```
 
+Local development uses the dedicated local identity registrations and API
+audience while calling the locally hosted API.
+
 Authentication is the default authorization policy. Health and OpenAPI
 endpoints are intentionally anonymous. The frontend must request the deployed
-API's `access_as_user` scope before calling future protected endpoints.
+API's `access_as_user` scope before calling protected endpoints. Routes under
+`/api/v1` enforce that delegated scope in addition to validating the token's
+issuer and audience.
 
 ## API and health endpoints
 
@@ -81,9 +129,10 @@ API's `access_as_user` scope before calling future protected endpoints.
 - Interactive API reference in Development: `/docs`
 - Liveness: `/health/live`
 - Readiness, including PostgreSQL: `/health/ready`
+- Authenticated user: `/api/v1/me`
 
-Future feature endpoints belong under `/api/v1` and require authentication by
-default.
+Future feature endpoints belong under `/api/v1` and require the delegated
+`access_as_user` scope by default.
 
 Every API build generates the OpenAPI artifact under `artifacts/openapi`:
 
