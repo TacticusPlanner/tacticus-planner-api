@@ -24,13 +24,56 @@ committed for the API and ServiceDefaults projects. AppHost is intentionally
 unlocked because Aspire injects platform-specific dashboard and orchestration
 packages for Windows, Linux, or macOS during restore.
 
-## Run with Aspire
+## Run the local full stack with Aspire
 
-Aspire starts PostgreSQL, the API, and the local observability dashboard:
+Aspire starts PostgreSQL, the API, the external React/Vite client app, and the
+local observability dashboard:
 
 ```powershell
 dotnet run --project orchestration/TacticusPlanner.AppHost
 ```
+
+This integration is for local development only. It does not change staging or
+production deployment, CI/CD workflows, or the client repository's standalone
+Turborepo commands.
+
+By default AppHost expects the API and client repositories to be checked out as
+sibling folders:
+
+```text
+/tacticus/v2
+  /tacticus-planner-api
+  /tacticus-planner-apps
+```
+
+The default client app path is configured in
+`orchestration/TacticusPlanner.AppHost/appsettings.json`:
+
+```json
+{
+  "ClientAppPath": "../../../tacticus-planner-apps/apps/web"
+}
+```
+
+Override `ClientAppPath` when your local checkout uses a different layout:
+
+```powershell
+$env:ClientAppPath = "D:\repos\tacticus\v2\tacticus-planner-apps\apps\web"
+dotnet run --project orchestration/TacticusPlanner.AppHost
+```
+
+You can also store a machine-specific path in AppHost user secrets:
+
+```powershell
+dotnet user-secrets set "ClientAppPath" "D:\repos\tacticus\v2\tacticus-planner-apps\apps\web" --project orchestration/TacticusPlanner.AppHost
+```
+
+The `web` resource uses pnpm and the Vite `dev` script from the client app.
+Because the client app is part of a Turborepo workspace, AppHost derives the
+workspace root from `ClientAppPath` and runs the root `dev:web` Turbo script.
+AppHost passes the API's local HTTP endpoint to the client as
+`VITE_API_BASE_URL`, sets the web resource `PORT`, and configures the API CORS
+origin from the Aspire-managed client endpoint.
 
 PostgreSQL uses a persistent container lifetime and a named Docker volume.
 Stopping AppHost leaves the container available for the next run, and the

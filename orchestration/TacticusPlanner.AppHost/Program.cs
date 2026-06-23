@@ -7,9 +7,28 @@ var postgres = builder
 
 var plannerDatabase = postgres.AddDatabase("planner-db", "tacticus_planner");
 
-builder
+var api = builder
     .AddProject<Projects.TacticusPlanner_Api>("api")
     .WithReference(plannerDatabase)
-    .WaitFor(plannerDatabase);
+    .WaitFor(plannerDatabase)
+    .WithHttpHealthCheck("/health/ready");
+
+var clientAppPath = builder.Configuration["ClientAppPath"]
+    ?? "../../../tacticus-planner-apps/apps/web";
+var clientWorkspacePath = Path.GetFullPath(
+    Path.Combine(clientAppPath, "..", ".."),
+    builder.AppHostDirectory
+);
+
+var web = builder
+    .AddJavaScriptApp("web", clientWorkspacePath)
+    .WithPnpm()
+    .WithRunScript("dev:web")
+    .WithHttpEndpoint(env: "PORT")
+    .WithExternalHttpEndpoints()
+    .WithReference(api)
+    .WithEnvironment("VITE_API_BASE_URL", api.GetEndpoint("http"));
+
+api.WithEnvironment("Cors__AllowedOrigins__0", web.GetEndpoint("http"));
 
 builder.Build().Run();
