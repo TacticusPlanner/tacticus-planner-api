@@ -1,0 +1,34 @@
+{
+  "version": "dev-2026-06-24",
+  "schemaVersion": 1,
+  "datasets": [
+    {
+      "key": "units",
+      "file": "units.json"
+    },
+    {
+      "key": "mows",
+      "file": "mows.json"
+    },
+    {
+      "key": "upgrades",
+      "file": "upgrades.json"
+    },
+    {
+      "key": "equipment",
+      "file": "equipment.json"
+    },
+    {
+      "key": "campaigns",
+      "file": "campaigns.json"
+    },
+    {
+      "key": "campaign-battles",
+      "file": "campaign-battles.json"
+    },
+    {
+      "key": "lres",
+      "file": "lres.json"
+    }
+  ]
+}

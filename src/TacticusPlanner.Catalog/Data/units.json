@@ -1,0 +1,4659 @@
+[
+  {
+    "id": "adeptCanoness",
+    "name": "Roswitha",
+    "unitKind": "character",
+    "title": "Canoness",
+    "fullName": "Roswitha Esther",
+    "shortName": "Roswitha",
+    "extraShortName": "Roswitha",
+    "faction": "Sisterhood",
+    "alliance": "Imperial",
+    "health": 85,
+    "damage": 30,
+    "armour": 17,
+    "initialRarity": "Uncommon",
+    "meleeDamage": "Chain",
+    "meleeHits": 3,
+    "rangedDamage": "Bolter",
+    "rangedHits": 2,
+    "rangeDistance": 2,
+    "movement": 3,
+    "traits": [
+      "ActOfFaith"
+    ],
+    "activeAbilityNames": [
+      "BrazierOfHolyFire"
+    ],
+    "passiveAbilityNames": [
+      "CondemnorStake"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Block"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_adept_canoness_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_adept_canoness_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "adeptCelestine",
+    "name": "Celestine",
+    "unitKind": "character",
+    "title": "Living Saint",
+    "fullName": "Celestine, the living Saint",
+    "shortName": "Celestine",
+    "extraShortName": "Celestine",
+    "faction": "Sisterhood",
+    "alliance": "Imperial",
+    "health": 60,
+    "damage": 25,
+    "armour": 20,
+    "initialRarity": "Legendary",
+    "meleeDamage": "Power",
+    "meleeHits": 3,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 4,
+    "traits": [
+      "ActOfFaith",
+      "Flying"
+    ],
+    "activeAbilityNames": [
+      "SkyStrike"
+    ],
+    "passiveAbilityNames": [
+      "GeminaeSuperia"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_adept_celestine_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_adept_celestine_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "adeptHospitaller",
+    "name": "Isabella",
+    "unitKind": "character",
+    "title": "Hospitaller",
+    "fullName": "Isabella Mariken",
+    "shortName": "Isabella",
+    "extraShortName": "Isabella",
+    "faction": "Sisterhood",
+    "alliance": "Imperial",
+    "health": 85,
+    "damage": 20,
+    "armour": 18,
+    "initialRarity": "Rare",
+    "meleeDamage": "Bolter",
+    "meleeHits": 3,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 3,
+    "traits": [
+      "ActOfFaith",
+      "Healer"
+    ],
+    "activeAbilityNames": [
+      "RitesOfRestoration"
+    ],
+    "passiveAbilityNames": [
+      "MedicusMinistorum"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Block"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_adept_hospitaller_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_adept_hospitaller_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "adeptMorvenn",
+    "name": "Morvenn Vahl",
+    "unitKind": "character",
+    "title": "Abbess Sanctorum of the Adepta Sororitas",
+    "fullName": "Morvenn Vahl",
+    "shortName": "Morvenn Vahl",
+    "extraShortName": "Morvenn Vahl",
+    "faction": "Sisterhood",
+    "alliance": "Imperial",
+    "health": 95,
+    "damage": 24,
+    "armour": 24,
+    "initialRarity": "Legendary",
+    "meleeDamage": "Power",
+    "meleeHits": 2,
+    "rangedDamage": "Bolter",
+    "rangedHits": 3,
+    "rangeDistance": 3,
+    "movement": 3,
+    "traits": [
+      "ActOfFaith",
+      "BigTarget",
+      "Explodes",
+      "Mechanical"
+    ],
+    "activeAbilityNames": [
+      "SanctorumMissile"
+    ],
+    "passiveAbilityNames": [
+      "RighteousRepugnance"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Block"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_adept_morvenn_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_adept_morvenn_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "adeptRetributor",
+    "name": "Vindicta",
+    "unitKind": "character",
+    "title": "Celestian",
+    "fullName": "Battle Sister Vindicta",
+    "shortName": "Vindicta",
+    "extraShortName": "Vindicta",
+    "faction": "Sisterhood",
+    "alliance": "Imperial",
+    "health": 70,
+    "damage": 20,
+    "armour": 12,
+    "initialRarity": "Common",
+    "meleeDamage": "Physical",
+    "meleeHits": 1,
+    "rangedDamage": "Flame",
+    "rangedHits": 4,
+    "rangeDistance": 2,
+    "movement": 3,
+    "traits": [
+      "ActOfFaith",
+      "HeavyWeapon"
+    ],
+    "activeAbilityNames": [
+      "ArmoriumCherub"
+    ],
+    "passiveAbilityNames": [
+      "FireOfAbsolution"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_adept_retributor_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_adept_retributor_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "admecDestroyer",
+    "name": "Sy-gex",
+    "unitKind": "character",
+    "title": "Kataphron Destroyer",
+    "fullName": "Sy-gex-KPH008/15.mk41",
+    "shortName": "Sy-gex",
+    "extraShortName": "Sy-gex",
+    "faction": "AdeptusMechanicus",
+    "alliance": "Imperial",
+    "health": 95,
+    "damage": 25,
+    "armour": 17,
+    "initialRarity": "Uncommon",
+    "meleeDamage": "Flame",
+    "meleeHits": 4,
+    "rangedDamage": "Physical",
+    "rangedHits": 4,
+    "rangeDistance": 3,
+    "movement": 2,
+    "traits": [
+      "Mechanical",
+      "HeavyWeapon",
+      "Overwatch",
+      "Vehicle"
+    ],
+    "activeAbilityNames": [
+      "SentinelDirectives"
+    ],
+    "passiveAbilityNames": [
+      "HeavyGravCannon"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_admec_destroyer_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_admec_destroyer_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "admecDominus",
+    "name": "Vitruvius",
+    "unitKind": "character",
+    "title": "Tech-Priest Dominus",
+    "fullName": "Magos Dominus Vitruvius Thannek",
+    "shortName": "Vitruvius",
+    "extraShortName": "Vitruvius",
+    "faction": "AdeptusMechanicus",
+    "alliance": "Imperial",
+    "health": 90,
+    "damage": 50,
+    "armour": 18,
+    "initialRarity": "Legendary",
+    "meleeDamage": "Power",
+    "meleeHits": 1,
+    "rangedDamage": "Gauss",
+    "rangedHits": 1,
+    "rangeDistance": 2,
+    "movement": 3,
+    "traits": [
+      "Mechanical",
+      "Mechanic"
+    ],
+    "activeAbilityNames": [
+      "RadBombardment"
+    ],
+    "passiveAbilityNames": [
+      "MasterAnnihilator"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_admec_dominus_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_admec_dominus_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "admecManipulus",
+    "name": "Actus",
+    "unitKind": "character",
+    "title": "Tech-Priest Manipulus",
+    "fullName": "Manipulus Actus Fulgorosus",
+    "shortName": "Actus",
+    "extraShortName": "Actus",
+    "faction": "AdeptusMechanicus",
+    "alliance": "Imperial",
+    "health": 95,
+    "damage": 25,
+    "armour": 19,
+    "initialRarity": "Rare",
+    "meleeDamage": "Energy",
+    "meleeHits": 2,
+    "rangedDamage": "Energy",
+    "rangedHits": 2,
+    "rangeDistance": 2,
+    "movement": 3,
+    "traits": [
+      "Mechanical",
+      "Mechanic",
+      "Flying"
+    ],
+    "activeAbilityNames": [
+      "DefendTheDivineWork"
+    ],
+    "passiveAbilityNames": [
+      "GalvanicField"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Block"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_admec_manipulus_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_admec_manipulus_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "admecMarshall",
+    "name": "Tan Gi'da",
+    "unitKind": "character",
+    "title": "Skitarii Marshal",
+    "fullName": "Tan Gi'da",
+    "shortName": "Tan Gi'da",
+    "extraShortName": "Tan Gi'da",
+    "faction": "AdeptusMechanicus",
+    "alliance": "Imperial",
+    "health": 85,
+    "damage": 35,
+    "armour": 16,
+    "initialRarity": "Rare",
+    "meleeDamage": "Physical",
+    "meleeHits": 2,
+    "rangedDamage": "Toxic",
+    "rangedHits": 1,
+    "rangeDistance": 2,
+    "movement": 3,
+    "traits": [
+      "Mechanical"
+    ],
+    "activeAbilityNames": [
+      "DoctrinaImperatives"
+    ],
+    "passiveAbilityNames": [
+      "ControlEdict"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_admec_marshall_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_admec_marshall_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "admecRuststalker",
+    "name": "Exitor-Rho",
+    "unitKind": "character",
+    "title": "Sicarian Ruststalker Princeps",
+    "fullName": "Exitor-Rho-1.15/x",
+    "shortName": "Exitor-Rho",
+    "extraShortName": "Exitor-Rho",
+    "faction": "AdeptusMechanicus",
+    "alliance": "Imperial",
+    "health": 80,
+    "damage": 30,
+    "armour": 17,
+    "initialRarity": "Uncommon",
+    "meleeDamage": "Energy",
+    "meleeHits": 2,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 4,
+    "traits": [
+      "Mechanical",
+      "Camouflage",
+      "Infiltrate",
+      "Unstoppable"
+    ],
+    "activeAbilityNames": [
+      "CordClaw"
+    ],
+    "passiveAbilityNames": [
+      "OptimizedGait"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_admec_ruststalker_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_admec_ruststalker_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "astarCyrus",
+    "name": "Cyrus",
+    "unitKind": "character",
+    "title": "Captain in Phobos Armour",
+    "fullName": "Cyrus",
+    "shortName": "Cyrus",
+    "extraShortName": "Cyrus",
+    "faction": "AdeptusAstartes",
+    "alliance": "Imperial",
+    "health": 80,
+    "damage": 28,
+    "armour": 20,
+    "initialRarity": "Epic",
+    "meleeDamage": "Bolter",
+    "meleeHits": 3,
+    "rangedDamage": "Bolter",
+    "rangedHits": 3,
+    "rangeDistance": 3,
+    "movement": 3,
+    "traits": [
+      "Camouflage",
+      "Infiltrate",
+      "SuppressiveFire"
+    ],
+    "activeAbilityNames": [
+      "StrikeFromTheShadows"
+    ],
+    "passiveAbilityNames": [
+      "HaywireMine"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_astar_cyrus_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_astar_cyrus_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "astraBullgryn",
+    "name": "Kut",
+    "unitKind": "character",
+    "title": "Bullgryn Bone’ead",
+    "fullName": "Kut Skoden",
+    "shortName": "Kut Skoden",
+    "extraShortName": "Kut",
+    "faction": "AstraMilitarum",
+    "alliance": "Imperial",
+    "health": 95,
+    "damage": 30,
+    "armour": 35,
+    "initialRarity": "Uncommon",
+    "meleeDamage": "Physical",
+    "meleeHits": 4,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 3,
+    "traits": [
+      "BigTarget"
+    ],
+    "activeAbilityNames": [
+      "FragBomb"
+    ],
+    "passiveAbilityNames": [
+      "AvalancheOfMuscle"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Defensive"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_astra_bullgryn_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_astra_bullgryn_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "astraCreed",
+    "name": "Creed",
+    "unitKind": "character",
+    "title": "Lord General of the Astra Militarum",
+    "fullName": "Lord Castellan Ursarkar E. Creed",
+    "shortName": "Castellan Creed",
+    "extraShortName": "Creed",
+    "faction": "AstraMilitarum",
+    "alliance": "Imperial",
+    "health": 90,
+    "damage": 38,
+    "armour": 21,
+    "initialRarity": "Legendary",
+    "meleeDamage": "Las",
+    "meleeHits": 2,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 3,
+    "traits": [],
+    "activeAbilityNames": [
+      "SupremeCommander"
+    ],
+    "passiveAbilityNames": [
+      "SwornProtector"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Block"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_astra_creed_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_astra_creed_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "astraDreir",
+    "name": "Dreir",
+    "unitKind": "character",
+    "title": "Lord Marshal",
+    "fullName": "Lord Marshal Varnan Dreir",
+    "shortName": "Marshal Dreir",
+    "extraShortName": "Dreir",
+    "faction": "AstraMilitarum",
+    "alliance": "Imperial",
+    "health": 100,
+    "damage": 28,
+    "armour": 17,
+    "initialRarity": "Epic",
+    "meleeDamage": "Power",
+    "meleeHits": 3,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 4,
+    "traits": [
+      "Resilient",
+      "Unstoppable"
+    ],
+    "activeAbilityNames": [
+      "LeadingTheCharge"
+    ],
+    "passiveAbilityNames": [
+      "ToughToKill"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Block"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_astra_dreir_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_astra_dreir_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "astraOrdnance",
+    "name": "Thaddeus",
+    "unitKind": "character",
+    "title": "Master of Ordnance",
+    "fullName": "Thaddeus Noble",
+    "shortName": "Thaddeus Noble",
+    "extraShortName": "Thaddeus",
+    "faction": "AstraMilitarum",
+    "alliance": "Imperial",
+    "health": 65,
+    "damage": 38,
+    "armour": 15,
+    "initialRarity": "Rare",
+    "meleeDamage": "Las",
+    "meleeHits": 1,
+    "rangedDamage": "Blast",
+    "rangedHits": 3,
+    "rangeDistance": 3,
+    "movement": 3,
+    "traits": [
+      "SuppressiveFire",
+      "IndirectFire"
+    ],
+    "activeAbilityNames": [
+      "BasiliskBarrage"
+    ],
+    "passiveAbilityNames": [
+      "SpotterReworked"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_astra_ordnance_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_astra_ordnance_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "astraPrimarisPsy",
+    "name": "Sibyll",
+    "unitKind": "character",
+    "title": "Primaris Psyker",
+    "fullName": "Sibyll Devine",
+    "shortName": "Sibyll Devine",
+    "extraShortName": "Sibyll",
+    "faction": "AstraMilitarum",
+    "alliance": "Imperial",
+    "health": 55,
+    "damage": 30,
+    "armour": 20,
+    "initialRarity": "Common",
+    "meleeDamage": "Psychic",
+    "meleeHits": 1,
+    "rangedDamage": "Psychic",
+    "rangedHits": 1,
+    "rangeDistance": 2,
+    "movement": 3,
+    "traits": [
+      "Psyker"
+    ],
+    "activeAbilityNames": [
+      "PsychicMaelstrom"
+    ],
+    "passiveAbilityNames": [
+      "Nightshroud"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_astra_psyker_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_astra_psyker_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "astraYarrick",
+    "name": "Yarrick",
+    "unitKind": "character",
+    "title": "Lord Commissar",
+    "fullName": "Commissar Sebastian Yarrick",
+    "shortName": "Commissar Yarrick",
+    "extraShortName": "Yarrick",
+    "faction": "AstraMilitarum",
+    "alliance": "Imperial",
+    "health": 75,
+    "damage": 30,
+    "armour": 17,
+    "initialRarity": "Rare",
+    "meleeDamage": "Power",
+    "meleeHits": 3,
+    "rangedDamage": "Bolter",
+    "rangedHits": 2,
+    "rangeDistance": 2,
+    "movement": 3,
+    "traits": [
+      "Resilient"
+    ],
+    "activeAbilityNames": [
+      "SendInTheNextWave"
+    ],
+    "passiveAbilityNames": [
+      "SummaryExecution"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Block"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_astra_yarrick_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_astra_yarrick_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "blackAbaddon",
+    "name": "Abaddon",
+    "unitKind": "character",
+    "title": "Warmaster of Chaos",
+    "fullName": "Abaddon the Despoiler",
+    "shortName": "Abaddon the Despoiler",
+    "extraShortName": "Abaddon",
+    "faction": "BlackLegion",
+    "alliance": "Chaos",
+    "health": 100,
+    "damage": 15,
+    "armour": 25,
+    "initialRarity": "Legendary",
+    "meleeDamage": "Power",
+    "meleeHits": 5,
+    "rangedDamage": "Bolter",
+    "rangedHits": 3,
+    "rangeDistance": 2,
+    "movement": 3,
+    "traits": [
+      "LetTheGalaxyBurn",
+      "Resilient",
+      "TerminatorArmour"
+    ],
+    "activeAbilityNames": [
+      "Drachnyen"
+    ],
+    "passiveAbilityNames": [
+      "FirstAmongTraitors"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Block"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_black_abaddon_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_black_abaddon_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "blackHaarken",
+    "name": "Haarken",
+    "unitKind": "character",
+    "title": "Herald of the Apocalypse",
+    "fullName": "Haarken Worldclaimer",
+    "shortName": "Haarken Worldclaimer",
+    "extraShortName": "Haarken",
+    "faction": "BlackLegion",
+    "alliance": "Chaos",
+    "health": 95,
+    "damage": 11,
+    "armour": 20,
+    "initialRarity": "Epic",
+    "meleeDamage": "Piercing",
+    "meleeHits": 4,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 4,
+    "traits": [
+      "LetTheGalaxyBurn",
+      "Flying",
+      "Terrifying"
+    ],
+    "activeAbilityNames": [
+      "HeraldOfTheApocalypse"
+    ],
+    "passiveAbilityNames": [
+      "HeadClaimer"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_black_haarken_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_black_haarken_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "blackObliterator",
+    "name": "Volk",
+    "unitKind": "character",
+    "title": "Obliterator",
+    "fullName": "Volk, Reforged by the Warp",
+    "shortName": "Volk",
+    "extraShortName": "Volk",
+    "faction": "BlackLegion",
+    "alliance": "Chaos",
+    "health": 125,
+    "damage": 9,
+    "armour": 12,
+    "initialRarity": "Rare",
+    "meleeDamage": "Power",
+    "meleeHits": 4,
+    "rangedDamage": "HeavyRound",
+    "rangedHits": 6,
+    "rangeDistance": 3,
+    "movement": 2,
+    "traits": [
+      "LetTheGalaxyBurn",
+      "BigTarget",
+      "Daemon",
+      "HeavyWeapon",
+      "SuppressiveFire"
+    ],
+    "activeAbilityNames": [
+      "FrenziedFiring"
+    ],
+    "passiveAbilityNames": [
+      "FleshmetalGuns"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_black_obliterator_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_black_obliterator_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "blackPossession",
+    "name": "Archimatos",
+    "unitKind": "character",
+    "title": "Master of Possession",
+    "fullName": "Master Archimatos",
+    "shortName": "Archimatos",
+    "extraShortName": "Archimatos",
+    "faction": "BlackLegion",
+    "alliance": "Chaos",
+    "health": 80,
+    "damage": 16,
+    "armour": 18,
+    "initialRarity": "Uncommon",
+    "meleeDamage": "Psychic",
+    "meleeHits": 2,
+    "rangedDamage": "Psychic",
+    "rangedHits": 1,
+    "rangeDistance": 2,
+    "movement": 3,
+    "traits": [
+      "LetTheGalaxyBurn",
+      "Psyker"
+    ],
+    "activeAbilityNames": [
+      "Incursion"
+    ],
+    "passiveAbilityNames": [
+      "Possession"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_black_possession_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_black_possession_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "blackTerminator",
+    "name": "Angrax",
+    "unitKind": "character",
+    "title": "Terminator Champion",
+    "fullName": "Drakfus Angrax",
+    "shortName": "Angrax",
+    "extraShortName": "Angrax",
+    "faction": "BlackLegion",
+    "alliance": "Chaos",
+    "health": 110,
+    "damage": 19,
+    "armour": 30,
+    "initialRarity": "Common",
+    "meleeDamage": "Power",
+    "meleeHits": 4,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 2,
+    "traits": [
+      "LetTheGalaxyBurn",
+      "TeleportStrike",
+      "TerminatorArmour"
+    ],
+    "activeAbilityNames": [
+      "BringerOfDespair"
+    ],
+    "passiveAbilityNames": [
+      "HatefulAssault"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Block"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_black_terminator_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_black_terminator_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "bloodDante",
+    "name": "Dante",
+    "unitKind": "character",
+    "title": "Chapter Master",
+    "fullName": "Commander Dante",
+    "shortName": "Dante",
+    "extraShortName": "Dante",
+    "faction": "BloodAngels",
+    "alliance": "Imperial",
+    "health": 90,
+    "damage": 11,
+    "armour": 23,
+    "initialRarity": "Legendary",
+    "meleeDamage": "Piercing",
+    "meleeHits": 4,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 4,
+    "traits": [
+      "TeleportStrike",
+      "FinalJustice",
+      "Flying",
+      "RapidAssault",
+      "Terrifying"
+    ],
+    "activeAbilityNames": [
+      "LightOfSanguinius"
+    ],
+    "passiveAbilityNames": [
+      "LordOfTheHost"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Block"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_blood_dante_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_blood_dante_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "bloodDeathCompany",
+    "name": "Lucien",
+    "unitKind": "character",
+    "title": "Death Company Intercessor",
+    "fullName": "Lucien",
+    "shortName": "Lucien",
+    "extraShortName": "Lucien",
+    "faction": "BloodAngels",
+    "alliance": "Imperial",
+    "health": 90,
+    "damage": 30,
+    "armour": 21,
+    "initialRarity": "Uncommon",
+    "meleeDamage": "Physical",
+    "meleeHits": 4,
+    "rangedDamage": "Blast",
+    "rangedHits": 3,
+    "rangeDistance": 2,
+    "movement": 3,
+    "traits": [
+      "RapidAssault",
+      "Resilient",
+      "Unstoppable"
+    ],
+    "activeAbilityNames": [
+      "BlackRage"
+    ],
+    "passiveAbilityNames": [
+      "VisionsOfHeresy"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_blood_deathcompany_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_blood_deathcompany_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "bloodIntercessor",
+    "name": "Mataneo",
+    "unitKind": "character",
+    "title": "Jump Pack Intercessor Sergeant",
+    "fullName": "Mataneo",
+    "shortName": "Mataneo",
+    "extraShortName": "Mataneo",
+    "faction": "BloodAngels",
+    "alliance": "Imperial",
+    "health": 90,
+    "damage": 40,
+    "armour": 22,
+    "initialRarity": "Uncommon",
+    "meleeDamage": "Plasma",
+    "meleeHits": 1,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 4,
+    "traits": [
+      "TeleportStrike",
+      "Flying",
+      "RapidAssault"
+    ],
+    "activeAbilityNames": [
+      "HammerOfWrath"
+    ],
+    "passiveAbilityNames": [
+      "AggressiveOnslaught"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_blood_intercessor_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_blood_intercessor_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "bloodMephiston",
+    "name": "Mephiston",
+    "unitKind": "character",
+    "title": "Lord of Death",
+    "fullName": "Mephiston",
+    "shortName": "Mephiston",
+    "extraShortName": "Mephiston",
+    "faction": "BloodAngels",
+    "alliance": "Imperial",
+    "health": 95,
+    "damage": 10,
+    "armour": 20,
+    "initialRarity": "Legendary",
+    "meleeDamage": "Psychic",
+    "meleeHits": 3,
+    "rangedDamage": "Psychic",
+    "rangedHits": 2,
+    "rangeDistance": 2,
+    "movement": 3,
+    "traits": [
+      "Psyker",
+      "RapidAssault",
+      "Terrifying"
+    ],
+    "activeAbilityNames": [
+      "TheQuickening"
+    ],
+    "passiveAbilityNames": [
+      "FuryOfTheAncients"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_blood_mephiston_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_blood_mephiston_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "bloodSanguinary",
+    "name": "Nicodemus",
+    "unitKind": "character",
+    "title": "Sanguinary Priest",
+    "fullName": "Nicodemus",
+    "shortName": "Nicodemus",
+    "extraShortName": "Nicodemus",
+    "faction": "BloodAngels",
+    "alliance": "Imperial",
+    "health": 90,
+    "damage": 23,
+    "armour": 23,
+    "initialRarity": "Rare",
+    "meleeDamage": "Chain",
+    "meleeHits": 3,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 3,
+    "traits": [
+      "Healer",
+      "RapidAssault"
+    ],
+    "activeAbilityNames": [
+      "BloodChalice"
+    ],
+    "passiveAbilityNames": [
+      "SanguinaryPriest"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_blood_sanguinary_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_blood_sanguinary_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "bloodTerminator",
+    "name": "Cezare",
+    "unitKind": "character",
+    "title": "Assault Terminator Sergeant",
+    "fullName": "Cezare",
+    "shortName": "Cezare",
+    "extraShortName": "Cezare",
+    "faction": "BloodAngels",
+    "alliance": "Imperial",
+    "health": 105,
+    "damage": 19,
+    "armour": 27,
+    "initialRarity": "Uncommon",
+    "meleeDamage": "Power",
+    "meleeHits": 4,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 2,
+    "traits": [
+      "TeleportStrike",
+      "TerminatorArmour",
+      "RapidAssault"
+    ],
+    "activeAbilityNames": [
+      "SavageEchoes"
+    ],
+    "passiveAbilityNames": [
+      "RedRampage"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Block"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_blood_terminator_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_blood_terminator_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "custoAtlacoya",
+    "name": "Atlacoya",
+    "unitKind": "character",
+    "title": "Vigilator",
+    "fullName": "Atlacoya",
+    "shortName": "Atlacoya",
+    "extraShortName": "Atlacoya",
+    "faction": "Custodes",
+    "alliance": "Imperial",
+    "health": 80,
+    "damage": 30,
+    "armour": 19,
+    "initialRarity": "Rare",
+    "meleeDamage": "Power",
+    "meleeHits": 3,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 3,
+    "traits": [
+      "Parry",
+      "Terrifying"
+    ],
+    "activeAbilityNames": [
+      "TalonsOfTheEmperor"
+    ],
+    "passiveAbilityNames": [
+      "DaughterOfTheAbyss"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_custo_atlacoya_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_custo_atlacoya_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "custoBladeChampion",
+    "name": "Kariyan",
+    "unitKind": "character",
+    "title": "Blade Champion",
+    "fullName": "Kariyan Helsates",
+    "shortName": "Kariyan",
+    "extraShortName": "Kariyan",
+    "faction": "Custodes",
+    "alliance": "Imperial",
+    "health": 95,
+    "damage": 21,
+    "armour": 24,
+    "initialRarity": "Epic",
+    "meleeDamage": "Power",
+    "meleeHits": 3,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 3,
+    "traits": [
+      "MartialKatah",
+      "BeastSlayer",
+      "RapidAssault",
+      "Parry",
+      "Resilient"
+    ],
+    "activeAbilityNames": [
+      "MartialInspiration"
+    ],
+    "passiveAbilityNames": [
+      "LegacyOfCombat"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_custo_bladechampion_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_custo_bladechampion_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "custoKyrus",
+    "name": "Tyrith",
+    "unitKind": "character",
+    "title": "Custodian Guard",
+    "fullName": "Tyrith Shiva Kyrus",
+    "shortName": "Tyrith",
+    "extraShortName": "Tyrith",
+    "faction": "Custodes",
+    "alliance": "Imperial",
+    "health": 95,
+    "damage": 25,
+    "armour": 22,
+    "initialRarity": "Rare",
+    "meleeDamage": "Power",
+    "meleeHits": 3,
+    "rangedDamage": "Bolter",
+    "rangedHits": 2,
+    "rangeDistance": 2,
+    "movement": 3,
+    "traits": [
+      "MartialKatah",
+      "Resilient"
+    ],
+    "activeAbilityNames": [
+      "VigilanceEternal"
+    ],
+    "passiveAbilityNames": [
+      "UnwaveringSentinel"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_custo_kyrus_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_custo_kyrus_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "custoTrajann",
+    "name": "Trajann",
+    "unitKind": "character",
+    "title": "Captain-General",
+    "fullName": "Trajann Valoris",
+    "shortName": "Trajann",
+    "extraShortName": "Trajann",
+    "faction": "Custodes",
+    "alliance": "Imperial",
+    "health": 100,
+    "damage": 11,
+    "armour": 25,
+    "initialRarity": "Legendary",
+    "meleeDamage": "Piercing",
+    "meleeHits": 3,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 3,
+    "traits": [
+      "MartialKatah",
+      "CrushingStrike",
+      "Resilient"
+    ],
+    "activeAbilityNames": [
+      "MomentShackle"
+    ],
+    "passiveAbilityNames": [
+      "LegendaryCommander"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Block"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_custo_trajann_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_custo_trajann_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "custoVexilusPraetor",
+    "name": "Aesoth",
+    "unitKind": "character",
+    "title": "Vexilus Praetor",
+    "fullName": "Aesoth Koumadra",
+    "shortName": "Aesoth",
+    "extraShortName": "Aesoth",
+    "faction": "Custodes",
+    "alliance": "Imperial",
+    "health": 110,
+    "damage": 58,
+    "armour": 28,
+    "initialRarity": "Uncommon",
+    "meleeDamage": "Physical",
+    "meleeHits": 1,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 3,
+    "traits": [
+      "MartialKatah",
+      "BigTarget",
+      "Resilient"
+    ],
+    "activeAbilityNames": [
+      "VexillaMagnifica"
+    ],
+    "passiveAbilityNames": [
+      "StandVigil"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Block"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_custo_vexilus_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_custo_vexilus_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "darkaAsmodai",
+    "name": "Asmodai",
+    "unitKind": "character",
+    "title": "Master of Repentance",
+    "fullName": "Asmodai",
+    "shortName": "Asmodai",
+    "extraShortName": "Asmodai",
+    "faction": "DarkAngels",
+    "alliance": "Imperial",
+    "health": 90,
+    "damage": 20,
+    "armour": 23,
+    "initialRarity": "Epic",
+    "meleeDamage": "Power",
+    "meleeHits": 4,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 3,
+    "traits": [
+      "Terrifying"
+    ],
+    "activeAbilityNames": [
+      "ExemplarOfHate"
+    ],
+    "passiveAbilityNames": [
+      "FearedInterrogator"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_darka_asmodai_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_darka_asmodai_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "darkaAzrael",
+    "name": "Azrael",
+    "unitKind": "character",
+    "title": "Supreme Grandmaster",
+    "fullName": "Azrael",
+    "shortName": "Azrael",
+    "extraShortName": "Azrael",
+    "faction": "DarkAngels",
+    "alliance": "Imperial",
+    "health": 95,
+    "damage": 28,
+    "armour": 24,
+    "initialRarity": "Epic",
+    "meleeDamage": "Power",
+    "meleeHits": 3,
+    "rangedDamage": "Plasma",
+    "rangedHits": 1,
+    "rangeDistance": 2,
+    "movement": 3,
+    "traits": [
+      "FinalJustice",
+      "Overwatch"
+    ],
+    "activeAbilityNames": [
+      "DarkTalonStrike"
+    ],
+    "passiveAbilityNames": [
+      "LionHelm"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Block"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_darka_azrael_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_darka_azrael_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "darkaCompanion",
+    "name": "Forcas",
+    "unitKind": "character",
+    "title": "Inner Circle Companion",
+    "fullName": "Forcas Oathsworn",
+    "shortName": "Forcas",
+    "extraShortName": "Forcas",
+    "faction": "DarkAngels",
+    "alliance": "Imperial",
+    "health": 90,
+    "damage": 12,
+    "armour": 21,
+    "initialRarity": "Rare",
+    "meleeDamage": "Power",
+    "meleeHits": 6,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 3,
+    "traits": [
+      "Camouflage",
+      "Parry"
+    ],
+    "activeAbilityNames": [
+      "CalibaniteGreatsword"
+    ],
+    "passiveAbilityNames": [
+      "EnmityForTheUnworthy"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_darka_companion_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_darka_companion_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "darkaHellblaster",
+    "name": "Sarquael",
+    "unitKind": "character",
+    "title": "Hellblaster Sergeant",
+    "fullName": "Sarquael",
+    "shortName": "Sarquael",
+    "extraShortName": "Sarquael",
+    "faction": "DarkAngels",
+    "alliance": "Imperial",
+    "health": 70,
+    "damage": 50,
+    "armour": 20,
+    "initialRarity": "Uncommon",
+    "meleeDamage": "Physical",
+    "meleeHits": 1,
+    "rangedDamage": "Plasma",
+    "rangedHits": 1,
+    "rangeDistance": 3,
+    "movement": 3,
+    "traits": [
+      "FinalJustice",
+      "Overwatch",
+      "HeavyWeapon"
+    ],
+    "activeAbilityNames": [
+      "Supercharge"
+    ],
+    "passiveAbilityNames": [
+      "GrimRetribution"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_darka_hellblaster_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_darka_hellblaster_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "darkaSternguard",
+    "name": "Ramus",
+    "unitKind": "character",
+    "title": "Veteran Sergeant",
+    "fullName": "Ramus",
+    "shortName": "Ramus",
+    "extraShortName": "Ramus",
+    "faction": "DarkAngels",
+    "alliance": "Imperial",
+    "health": 85,
+    "damage": 40,
+    "armour": 21,
+    "initialRarity": "Rare",
+    "meleeDamage": "Melta",
+    "meleeHits": 1,
+    "rangedDamage": "Bolter",
+    "rangedHits": 1,
+    "rangeDistance": 3,
+    "movement": 3,
+    "traits": [
+      "Overwatch"
+    ],
+    "activeAbilityNames": [
+      "SternguardFocus"
+    ],
+    "passiveAbilityNames": [
+      "SpecialIssueCombiMelta"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_darka_sternguard_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_darka_sternguard_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "darkaTerminator",
+    "name": "Baraqiel",
+    "unitKind": "character",
+    "title": "Deathwing Terminator",
+    "fullName": "Baraqiel",
+    "shortName": "Baraqiel",
+    "extraShortName": "Baraqiel",
+    "faction": "DarkAngels",
+    "alliance": "Imperial",
+    "health": 110,
+    "damage": 22,
+    "armour": 29,
+    "initialRarity": "Uncommon",
+    "meleeDamage": "Power",
+    "meleeHits": 3,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 2,
+    "traits": [
+      "TeleportStrike",
+      "CrushingStrike",
+      "HeavyWeapon",
+      "TerminatorArmour"
+    ],
+    "activeAbilityNames": [
+      "PlasmaCannon"
+    ],
+    "passiveAbilityNames": [
+      "Deathwing"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Block"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_darka_terminator_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_darka_terminator_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "deathBlightbringer",
+    "name": "Corrodius",
+    "unitKind": "character",
+    "title": "Noxious Blightbringer",
+    "fullName": "Corrodius Achebile",
+    "shortName": "Corrodius",
+    "extraShortName": "Corrodius",
+    "faction": "DeathGuard",
+    "alliance": "Chaos",
+    "health": 125,
+    "damage": 40,
+    "armour": 25,
+    "initialRarity": "Rare",
+    "meleeDamage": "Plasma",
+    "meleeHits": 1,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 2,
+    "traits": [
+      "ContagionsOfNurgle",
+      "Resilient"
+    ],
+    "activeAbilityNames": [
+      "Poxwalkers"
+    ],
+    "passiveAbilityNames": [
+      "CursedPlagueBell"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_death_blightbringer_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_death_blightbringer_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "deathBlightlord",
+    "name": "Maladus",
+    "unitKind": "character",
+    "title": "Blightlord Champion",
+    "fullName": "Maladus Phlegmore",
+    "shortName": "Maladus",
+    "extraShortName": "Maladus",
+    "faction": "DeathGuard",
+    "alliance": "Chaos",
+    "health": 120,
+    "damage": 26,
+    "armour": 33,
+    "initialRarity": "Uncommon",
+    "meleeDamage": "Power",
+    "meleeHits": 3,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 2,
+    "traits": [
+      "ContagionsOfNurgle",
+      "Resilient",
+      "TerminatorArmour"
+    ],
+    "activeAbilityNames": [
+      "FlailSwing"
+    ],
+    "passiveAbilityNames": [
+      "HazeOfCorruption"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Block"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_death_blightlord_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_death_blightlord_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "deathPutrifier",
+    "name": "Pestillian",
+    "unitKind": "character",
+    "title": "Biologus Putrifier",
+    "fullName": "Pestillian Witherpus",
+    "shortName": "Pestillian",
+    "extraShortName": "Pestillian",
+    "faction": "DeathGuard",
+    "alliance": "Chaos",
+    "health": 120,
+    "damage": 40,
+    "armour": 27,
+    "initialRarity": "Rare",
+    "meleeDamage": "Toxic",
+    "meleeHits": 1,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 2,
+    "traits": [
+      "ContagionsOfNurgle",
+      "Resilient",
+      "PutridExplosion"
+    ],
+    "activeAbilityNames": [
+      "FoulInfusion"
+    ],
+    "passiveAbilityNames": [
+      "ExplosiveMaladies"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_death_putrifier_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_death_putrifier_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "deathRotbone",
+    "name": "Nauseous",
+    "unitKind": "character",
+    "title": "Plague Surgeon",
+    "fullName": "Nauseous Rotbone",
+    "shortName": "Nauseous Rotbone",
+    "extraShortName": "Nauseous",
+    "faction": "DeathGuard",
+    "alliance": "Chaos",
+    "health": 120,
+    "damage": 14,
+    "armour": 27,
+    "initialRarity": "Epic",
+    "meleeDamage": "Power",
+    "meleeHits": 4,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 2,
+    "traits": [
+      "ContagionsOfNurgle",
+      "Resilient",
+      "Healer"
+    ],
+    "activeAbilityNames": [
+      "RevitalizingMalignancy"
+    ],
+    "passiveAbilityNames": [
+      "TaintedNarthecium"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_death_rotbone_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_death_rotbone_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "deathTyphus",
+    "name": "Typhus",
+    "unitKind": "character",
+    "title": "Herald of the Plague God",
+    "fullName": "Typhus, Host of the Destroyer Hive",
+    "shortName": "Typhus",
+    "extraShortName": "Typhus",
+    "faction": "DeathGuard",
+    "alliance": "Chaos",
+    "health": 120,
+    "damage": 18,
+    "armour": 25,
+    "initialRarity": "Legendary",
+    "meleeDamage": "Power",
+    "meleeHits": 1,
+    "rangedDamage": "Psychic",
+    "rangedHits": 1,
+    "rangeDistance": 2,
+    "movement": 2,
+    "traits": [
+      "ContagionsOfNurgle",
+      "Resilient",
+      "Psyker",
+      "TerminatorArmour"
+    ],
+    "activeAbilityNames": [
+      "PlagueWind"
+    ],
+    "passiveAbilityNames": [
+      "DestroyerHive"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Block"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_death_typhus_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_death_typhus_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "eldarAutarch",
+    "name": "Aethana",
+    "unitKind": "character",
+    "title": "Autarch",
+    "fullName": "Aethana Barantharal",
+    "shortName": "Aethana",
+    "extraShortName": "Aethana",
+    "faction": "Aeldari",
+    "alliance": "Xenos",
+    "health": 80,
+    "damage": 14,
+    "armour": 17,
+    "initialRarity": "Uncommon",
+    "meleeDamage": "Piercing",
+    "meleeHits": 3,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 5,
+    "traits": [
+      "Flying",
+      "TeleportStrike"
+    ],
+    "activeAbilityNames": [
+      "Loki_SwoopingHawk"
+    ],
+    "passiveAbilityNames": [
+      "PathOfCommand"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Block"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_aelda_autarch_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_aelda_autarch_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "eldarFarseer",
+    "name": "Eldryon",
+    "unitKind": "character",
+    "title": "Farseer",
+    "fullName": "Eldryon Ynaduin",
+    "shortName": "Eldryon",
+    "extraShortName": "Eldryon",
+    "faction": "Aeldari",
+    "alliance": "Xenos",
+    "health": 75,
+    "damage": 16,
+    "armour": 16,
+    "initialRarity": "Rare",
+    "meleeDamage": "Piercing",
+    "meleeHits": 2,
+    "rangedDamage": "Psychic",
+    "rangedHits": 2,
+    "rangeDistance": 2,
+    "movement": 3,
+    "traits": [
+      "Psyker"
+    ],
+    "activeAbilityNames": [
+      "Executioner"
+    ],
+    "passiveAbilityNames": [
+      "Doom"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Block"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_aelda_farseer_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_aelda_farseer_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "eldarJainZar",
+    "name": "Jain Zar",
+    "unitKind": "character",
+    "title": "Howling Banshee Phoenix Lord",
+    "fullName": "Jain Zar",
+    "shortName": "Jain Zar",
+    "extraShortName": "Jain Zar",
+    "faction": "Aeldari",
+    "alliance": "Xenos",
+    "health": 75,
+    "damage": 19,
+    "armour": 18,
+    "initialRarity": "Legendary",
+    "meleeDamage": "Piercing",
+    "meleeHits": 3,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 4,
+    "traits": [
+      "Infiltrate"
+    ],
+    "activeAbilityNames": [
+      "SilentDeath"
+    ],
+    "passiveAbilityNames": [
+      "TerrorsLament"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Block"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_aelda_jainzar_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_aelda_jainzar_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "eldarMauganRa",
+    "name": "Maugan Ra",
+    "unitKind": "character",
+    "title": "Dark Reaper Phoenix Lord",
+    "fullName": "Maugan Ra",
+    "shortName": "Maugan Ra",
+    "extraShortName": "Maugan Ra",
+    "faction": "Aeldari",
+    "alliance": "Xenos",
+    "health": 70,
+    "damage": 9,
+    "armour": 22,
+    "initialRarity": "Legendary",
+    "meleeDamage": "Power",
+    "meleeHits": 5,
+    "rangedDamage": "HeavyRound",
+    "rangedHits": 6,
+    "rangeDistance": 3,
+    "movement": 3,
+    "traits": [
+      "Terrifying",
+      "HeavyWeapon",
+      "Overwatch"
+    ],
+    "activeAbilityNames": [
+      "HarvesterOfSouls"
+    ],
+    "passiveAbilityNames": [
+      "InescapableAccuracy"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Block"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_aelda_maugan_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_aelda_maugan_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "eldarRanger",
+    "name": "Calandis",
+    "unitKind": "character",
+    "title": "Ranger",
+    "fullName": "Calandis Tawaren",
+    "shortName": "Calandis",
+    "extraShortName": "Calandis",
+    "faction": "Aeldari",
+    "alliance": "Xenos",
+    "health": 70,
+    "damage": 45,
+    "armour": 18,
+    "initialRarity": "Common",
+    "meleeDamage": "Physical",
+    "meleeHits": 1,
+    "rangedDamage": "Energy",
+    "rangedHits": 1,
+    "rangeDistance": 3,
+    "movement": 3,
+    "traits": [
+      "HeavyWeapon",
+      "Overwatch"
+    ],
+    "activeAbilityNames": [
+      "FireAndReposition"
+    ],
+    "passiveAbilityNames": [
+      "WireweaveNet"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Crit",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_aelda_ranger_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_aelda_ranger_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "emperExultant",
+    "name": "Laviscus",
+    "unitKind": "character",
+    "title": "Lord Exultant",
+    "fullName": "Laviscus Sentrillion, the Perfect",
+    "shortName": "Laviscus",
+    "extraShortName": "Laviscus",
+    "faction": "EmperorsChildren",
+    "alliance": "Chaos",
+    "health": 90,
+    "damage": 40,
+    "armour": 21,
+    "initialRarity": "Epic",
+    "meleeDamage": "Power",
+    "meleeHits": 1,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 3,
+    "traits": [
+      "ThrillSeekers",
+      "CrushingStrike"
+    ],
+    "activeAbilityNames": [
+      "EuphoricStrikes"
+    ],
+    "passiveAbilityNames": [
+      "RefusalToBeOutdone"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_emper_exultant_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_emper_exultant_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "emperFlawlessBlade",
+    "name": "Hascule",
+    "unitKind": "character",
+    "title": "Flawless Blade",
+    "fullName": "Hascule Thorn of the Silken Blade",
+    "shortName": "Hascule",
+    "extraShortName": "Hascule",
+    "faction": "EmperorsChildren",
+    "alliance": "Chaos",
+    "health": 95,
+    "damage": 15,
+    "armour": 19,
+    "initialRarity": "Rare",
+    "meleeDamage": "Piercing",
+    "meleeHits": 3,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 4,
+    "traits": [
+      "ThrillSeekers",
+      "Parry"
+    ],
+    "activeAbilityNames": [
+      "DaemonicPatrons"
+    ],
+    "passiveAbilityNames": [
+      "EcstaticSlaughter"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_emper_blade_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_emper_blade_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "emperKakophonist",
+    "name": "Adamatar",
+    "unitKind": "character",
+    "title": "Lord Kakophonist",
+    "fullName": "Adamatar Xandassus, Mirrorborn",
+    "shortName": "Adamatar",
+    "extraShortName": "Adamatar",
+    "faction": "EmperorsChildren",
+    "alliance": "Chaos",
+    "health": 100,
+    "damage": 17,
+    "armour": 23,
+    "initialRarity": "Rare",
+    "meleeDamage": "Eviscerate",
+    "meleeHits": 3,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 3,
+    "traits": [
+      "ThrillSeekers"
+    ],
+    "activeAbilityNames": [
+      "DoomSiren"
+    ],
+    "passiveAbilityNames": [
+      "ObsessiveAnnunciation"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_emper_kakophonist_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_emper_kakophonist_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "emperLucius",
+    "name": "Lucius",
+    "unitKind": "character",
+    "title": "Champion of Slaanesh",
+    "fullName": "Lucius the Eternal",
+    "shortName": "Lucius",
+    "extraShortName": "Lucius",
+    "faction": "EmperorsChildren",
+    "alliance": "Chaos",
+    "health": 90,
+    "damage": 13,
+    "armour": 20,
+    "initialRarity": "Legendary",
+    "meleeDamage": "Power",
+    "meleeHits": 6,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 4,
+    "traits": [
+      "ThrillSeekers",
+      "Parry"
+    ],
+    "activeAbilityNames": [
+      "LashOfTorment"
+    ],
+    "passiveAbilityNames": [
+      "ArmourOfShriekingSouls"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_emper_lucius_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_emper_lucius_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "emperNoiseMarine",
+    "name": "Shiron",
+    "unitKind": "character",
+    "title": "Noise Marine",
+    "fullName": "Shiron Capersi, the Idolator",
+    "shortName": "Shiron",
+    "extraShortName": "Shiron",
+    "faction": "EmperorsChildren",
+    "alliance": "Chaos",
+    "health": 85,
+    "damage": 6,
+    "armour": 20,
+    "initialRarity": "Uncommon",
+    "meleeDamage": "Eviscerate",
+    "meleeHits": 3,
+    "rangedDamage": "Eviscerate",
+    "rangedHits": 6,
+    "rangeDistance": 3,
+    "movement": 3,
+    "traits": [
+      "ThrillSeekers",
+      "HeavyWeapon",
+      "SuppressiveFire"
+    ],
+    "activeAbilityNames": [
+      "ExcruciatingFrequencies"
+    ],
+    "passiveAbilityNames": [
+      "TerrifyingCrescendo"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_emper_noisemarine_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_emper_noisemarine_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "genesBiophagus",
+    "name": "Hollan",
+    "unitKind": "character",
+    "title": "Biophagus",
+    "fullName": "Hollan Baumgart",
+    "shortName": "Hollan",
+    "extraShortName": "Hollan",
+    "faction": "Genestealers",
+    "alliance": "Xenos",
+    "health": 55,
+    "damage": 36,
+    "armour": 12,
+    "initialRarity": "Uncommon",
+    "meleeDamage": "Toxic",
+    "meleeHits": 1,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 3,
+    "traits": [
+      "Ambush",
+      "Healer"
+    ],
+    "activeAbilityNames": [
+      "AberrantHypermorph"
+    ],
+    "passiveAbilityNames": [
+      "TwistedScience"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_genes_biophagus_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_genes_biophagus_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "genesKelermorph",
+    "name": "Judh",
+    "unitKind": "character",
+    "title": "Kelermorph",
+    "fullName": "Judh Lhaska",
+    "shortName": "Judh",
+    "extraShortName": "Judh",
+    "faction": "Genestealers",
+    "alliance": "Xenos",
+    "health": 60,
+    "damage": 25,
+    "armour": 13,
+    "initialRarity": "Epic",
+    "meleeDamage": "Projectile",
+    "meleeHits": 3,
+    "rangedDamage": "Projectile",
+    "rangedHits": 3,
+    "rangeDistance": 2,
+    "movement": 3,
+    "traits": [
+      "Ambush",
+      "BeastSlayer"
+    ],
+    "activeAbilityNames": [
+      "HeroicFusillade"
+    ],
+    "passiveAbilityNames": [
+      "HypersensoryAbilities"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Crit",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_genes_kelermorph_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_genes_kelermorph_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "genesMagus",
+    "name": "Xybia",
+    "unitKind": "character",
+    "title": "Magus",
+    "fullName": "Xybia Kheiser",
+    "shortName": "Xybia",
+    "extraShortName": "Xybia",
+    "faction": "Genestealers",
+    "alliance": "Xenos",
+    "health": 55,
+    "damage": 15,
+    "armour": 11,
+    "initialRarity": "Rare",
+    "meleeDamage": "Psychic",
+    "meleeHits": 2,
+    "rangedDamage": "Psychic",
+    "rangedHits": 2,
+    "rangeDistance": 2,
+    "movement": 3,
+    "traits": [
+      "Ambush",
+      "Psyker"
+    ],
+    "activeAbilityNames": [
+      "MindControl"
+    ],
+    "passiveAbilityNames": [
+      "SpiritualLeader"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Block"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_genes_magus_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_genes_magus_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "genesPatriarch",
+    "name": "The Patermine",
+    "unitKind": "character",
+    "title": "Genestealer Patriarch",
+    "fullName": "The Patermine",
+    "shortName": "The Patermine",
+    "extraShortName": "The Patermine",
+    "faction": "Genestealers",
+    "alliance": "Xenos",
+    "health": 100,
+    "damage": 14,
+    "armour": 17,
+    "initialRarity": "Legendary",
+    "meleeDamage": "Eviscerate",
+    "meleeHits": 5,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 4,
+    "traits": [
+      "Infiltrate",
+      "Synapse",
+      "Terrifying",
+      "Unstoppable"
+    ],
+    "activeAbilityNames": [
+      "MightFromBelow"
+    ],
+    "passiveAbilityNames": [
+      "CosmicHorror"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_genes_patriarch_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_genes_patriarch_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "genesPrimus",
+    "name": "Isaak",
+    "unitKind": "character",
+    "title": "Primus",
+    "fullName": "Isaak Starn",
+    "shortName": "Isaak",
+    "extraShortName": "Isaak",
+    "faction": "Genestealers",
+    "alliance": "Xenos",
+    "health": 70,
+    "damage": 30,
+    "armour": 14,
+    "initialRarity": "Rare",
+    "meleeDamage": "Bio",
+    "meleeHits": 3,
+    "rangedDamage": "Bio",
+    "rangedHits": 1,
+    "rangeDistance": 2,
+    "movement": 3,
+    "traits": [
+      "Ambush"
+    ],
+    "activeAbilityNames": [
+      "CultDemagogue"
+    ],
+    "passiveAbilityNames": [
+      "DecoysAndMisdirection"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_genes_primus_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_genes_primus_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "necroChronomancer",
+    "name": "Thothmek",
+    "unitKind": "character",
+    "title": "Chronomancer",
+    "fullName": "Thothmek",
+    "shortName": "Thothmek",
+    "extraShortName": "Thothmek",
+    "faction": "Necrons",
+    "alliance": "Xenos",
+    "health": 75,
+    "damage": 36,
+    "armour": 18,
+    "initialRarity": "Rare",
+    "meleeDamage": "Physical",
+    "meleeHits": 1,
+    "rangedDamage": "Energy",
+    "rangedHits": 2,
+    "rangeDistance": 2,
+    "movement": 3,
+    "traits": [
+      "LivingMetal",
+      "Mechanical",
+      "Flying",
+      "SuppressiveFire"
+    ],
+    "activeAbilityNames": [
+      "Chronometron"
+    ],
+    "passiveAbilityNames": [
+      "TimesplinterMantle"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Block"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_necro_chronomancer_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_necro_chronomancer_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "necroDestroyer",
+    "name": "Imospekh",
+    "unitKind": "character",
+    "title": "Hexmark Destroyer",
+    "fullName": "Hexmark Destroyer Imospekh",
+    "shortName": "Imospekh",
+    "extraShortName": "Imospekh",
+    "faction": "Necrons",
+    "alliance": "Xenos",
+    "health": 80,
+    "damage": 9,
+    "armour": 20,
+    "initialRarity": "Common",
+    "meleeDamage": "Gauss",
+    "meleeHits": 6,
+    "rangedDamage": "Gauss",
+    "rangedHits": 6,
+    "rangeDistance": 2,
+    "movement": 3,
+    "traits": [
+      "Overwatch",
+      "LivingMetal",
+      "Mechanical"
+    ],
+    "activeAbilityNames": [
+      "MultiThreatEliminator"
+    ],
+    "passiveAbilityNames": [
+      "InescapableDeath"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_necro_hexmark_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_necro_hexmark_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "necroOverlord",
+    "name": "Anuphet",
+    "unitKind": "character",
+    "title": "Overlord",
+    "fullName": "Overlord Anuphet",
+    "shortName": "Anuphet",
+    "extraShortName": "Anuphet",
+    "faction": "Necrons",
+    "alliance": "Xenos",
+    "health": 85,
+    "damage": 17,
+    "armour": 19,
+    "initialRarity": "Epic",
+    "meleeDamage": "Energy",
+    "meleeHits": 4,
+    "rangedDamage": "Energy",
+    "rangedHits": 3,
+    "rangeDistance": 2,
+    "movement": 3,
+    "traits": [
+      "LivingMetal",
+      "Mechanical"
+    ],
+    "activeAbilityNames": [
+      "ResurrectionOrb"
+    ],
+    "passiveAbilityNames": [
+      "MartialApotheosis"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_necro_overlord_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_necro_overlord_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "necroPlasmancer",
+    "name": "Thutmose",
+    "unitKind": "character",
+    "title": "Plasmancer",
+    "fullName": "Plasmancer Thutmose",
+    "shortName": "Thutmose",
+    "extraShortName": "Thutmose",
+    "faction": "Necrons",
+    "alliance": "Xenos",
+    "health": 75,
+    "damage": 36,
+    "armour": 18,
+    "initialRarity": "Rare",
+    "meleeDamage": "Plasma",
+    "meleeHits": 2,
+    "rangedDamage": "Plasma",
+    "rangedHits": 2,
+    "rangeDistance": 2,
+    "movement": 3,
+    "traits": [
+      "LivingMetal",
+      "Mechanical",
+      "Flying"
+    ],
+    "activeAbilityNames": [
+      "HarbingerOfDestruction"
+    ],
+    "passiveAbilityNames": [
+      "LivingLightning"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_necro_plasmancer_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_necro_plasmancer_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "necroSpyder",
+    "name": "Aleph-Null",
+    "unitKind": "character",
+    "title": "Canoptek Spyder",
+    "fullName": "Canoptek Spyder Aleph-Null",
+    "shortName": "Aleph-Null",
+    "extraShortName": "Aleph-Null",
+    "faction": "Necrons",
+    "alliance": "Xenos",
+    "health": 90,
+    "damage": 12,
+    "armour": 22,
+    "initialRarity": "Uncommon",
+    "meleeDamage": "Particle",
+    "meleeHits": 5,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 3,
+    "traits": [
+      "LivingMetal",
+      "Explodes",
+      "Mechanical",
+      "Flying",
+      "Mechanic"
+    ],
+    "activeAbilityNames": [
+      "ScarabHive"
+    ],
+    "passiveAbilityNames": [
+      "FabricatorClawArray"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_necro_spyder_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_necro_spyder_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "necroWarden",
+    "name": "Makhotep",
+    "unitKind": "character",
+    "title": "Royal Warden",
+    "fullName": "Royal Warden Makhotep",
+    "shortName": "Makhotep",
+    "extraShortName": "Makhotep",
+    "faction": "Necrons",
+    "alliance": "Xenos",
+    "health": 85,
+    "damage": 18,
+    "armour": 20,
+    "initialRarity": "Common",
+    "meleeDamage": "Physical",
+    "meleeHits": 1,
+    "rangedDamage": "Gauss",
+    "rangedHits": 2,
+    "rangeDistance": 3,
+    "movement": 3,
+    "traits": [
+      "LivingMetal",
+      "Mechanical"
+    ],
+    "activeAbilityNames": [
+      "AdaptiveStrategy"
+    ],
+    "passiveAbilityNames": [
+      "RelentlessMarch"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_necro_warden_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_necro_warden_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "orksBigMek",
+    "name": "Gibbascrapz",
+    "unitKind": "character",
+    "title": "Big Mek",
+    "fullName": "Gibbascrapz, da Spezulist",
+    "shortName": "Gibbascrapz",
+    "extraShortName": "Gibbascrapz",
+    "faction": "Orks",
+    "alliance": "Xenos",
+    "health": 80,
+    "damage": 25,
+    "armour": 18,
+    "initialRarity": "Common",
+    "meleeDamage": "Physical",
+    "meleeHits": 4,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 3,
+    "traits": [
+      "GetStuckIn",
+      "Mechanic"
+    ],
+    "activeAbilityNames": [
+      "GrotTank"
+    ],
+    "passiveAbilityNames": [
+      "KustomForceFieldReworked"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_orkss_mek_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_orkss_mek_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "orksKillaKan",
+    "name": "Snappawrecka",
+    "unitKind": "character",
+    "title": "Killa Kan",
+    "fullName": "Snappawrecka",
+    "shortName": "Snappawrecka",
+    "extraShortName": "Snappawrecka",
+    "faction": "Orks",
+    "alliance": "Xenos",
+    "health": 90,
+    "damage": 23,
+    "armour": 20,
+    "initialRarity": "Uncommon",
+    "meleeDamage": "Chain",
+    "meleeHits": 3,
+    "rangedDamage": "Projectile",
+    "rangedHits": 3,
+    "rangeDistance": 3,
+    "movement": 3,
+    "traits": [
+      "GetStuckIn",
+      "BigTarget",
+      "Explodes",
+      "Mechanical"
+    ],
+    "activeAbilityNames": [
+      "DakkaDakkaDakka"
+    ],
+    "passiveAbilityNames": [
+      "PowerTrip"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_orkss_killakan_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_orkss_killakan_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "orksNob",
+    "name": "Tanksmasha",
+    "unitKind": "character",
+    "title": "Nob on Smasha Squig",
+    "fullName": "Olog Tanksmasha",
+    "shortName": "Tanksmasha",
+    "extraShortName": "Tanksmasha",
+    "faction": "Orks",
+    "alliance": "Xenos",
+    "health": 100,
+    "damage": 24,
+    "armour": 15,
+    "initialRarity": "Epic",
+    "meleeDamage": "Eviscerate",
+    "meleeHits": 3,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 4,
+    "traits": [
+      "GetStuckIn",
+      "BeastSlayer",
+      "Unstoppable"
+    ],
+    "activeAbilityNames": [
+      "UnstoppableMomentumReworked"
+    ],
+    "passiveAbilityNames": [
+      "SmashaEad"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_orkss_nob_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_orkss_nob_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "orksRuntherd",
+    "name": "Snotflogga",
+    "unitKind": "character",
+    "title": "Runtherd",
+    "fullName": "Grumbal Snotflogga",
+    "shortName": "Snotflogga",
+    "extraShortName": "Snotflogga",
+    "faction": "Orks",
+    "alliance": "Xenos",
+    "health": 120,
+    "damage": 30,
+    "armour": 18,
+    "initialRarity": "Rare",
+    "meleeDamage": "Physical",
+    "meleeHits": 3,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 3,
+    "traits": [
+      "GetStuckIn",
+      "BeastSlayer"
+    ],
+    "activeAbilityNames": [
+      "GetEmRuntz"
+    ],
+    "passiveAbilityNames": [
+      "SquigHound"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_orkss_runtherd_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_orkss_runtherd_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "orksWarboss",
+    "name": "Gulgortz",
+    "unitKind": "character",
+    "title": "Warboss in Mega Armour",
+    "fullName": "Gulgortz Bulldoza",
+    "shortName": "Boss Gulgortz",
+    "extraShortName": "Gulgortz",
+    "faction": "Orks",
+    "alliance": "Xenos",
+    "health": 100,
+    "damage": 26,
+    "armour": 26,
+    "initialRarity": "Epic",
+    "meleeDamage": "Eviscerate",
+    "meleeHits": 2,
+    "rangedDamage": "Projectile",
+    "rangedHits": 1,
+    "rangeDistance": 3,
+    "movement": 3,
+    "traits": [
+      "GetStuckIn",
+      "BigTarget",
+      "CrushingStrike",
+      "FinalJustice",
+      "Mechanical"
+    ],
+    "activeAbilityNames": [
+      "Waaagh"
+    ],
+    "passiveAbilityNames": [
+      "LightImUp"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Block"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_orkss_warboss_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_orkss_warboss_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "spaceBlackmane",
+    "name": "Ragnar",
+    "unitKind": "character",
+    "title": "Wolf Lord of the Blackmanes",
+    "fullName": "Ragnar Blackmane",
+    "shortName": "Ragnar",
+    "extraShortName": "Ragnar",
+    "faction": "SpaceWolves",
+    "alliance": "Imperial",
+    "health": 100,
+    "damage": 14,
+    "armour": 24,
+    "initialRarity": "Legendary",
+    "meleeDamage": "Chain",
+    "meleeHits": 7,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 3,
+    "traits": [
+      "BeastSlayer",
+      "FinalJustice",
+      "RapidAssault"
+    ],
+    "activeAbilityNames": [
+      "WarHowl"
+    ],
+    "passiveAbilityNames": [
+      "SagaOfTheWarriorBorn"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_space_ragnar_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_space_ragnar_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "spaceHound",
+    "name": "Tjark",
+    "unitKind": "character",
+    "title": "Hound of Morkai Pack Leader",
+    "fullName": "Tjark Wyrdslayer",
+    "shortName": "Tjark",
+    "extraShortName": "Tjark",
+    "faction": "SpaceWolves",
+    "alliance": "Imperial",
+    "health": 85,
+    "damage": 32,
+    "armour": 23,
+    "initialRarity": "Uncommon",
+    "meleeDamage": "Physical",
+    "meleeHits": 4,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 3,
+    "traits": [
+      "Infiltrate",
+      "Terrifying"
+    ],
+    "activeAbilityNames": [
+      "GrapnelLauncher"
+    ],
+    "passiveAbilityNames": [
+      "HuntersBeyondDeath"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_space_hound_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_space_hound_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "spaceRockfist",
+    "name": "Arjac",
+    "unitKind": "character",
+    "title": "Champion of the Great Wolf",
+    "fullName": "Arjac Rockfist",
+    "shortName": "Arjac",
+    "extraShortName": "Arjac",
+    "faction": "SpaceWolves",
+    "alliance": "Imperial",
+    "health": 110,
+    "damage": 23,
+    "armour": 26,
+    "initialRarity": "Rare",
+    "meleeDamage": "Power",
+    "meleeHits": 3,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 2,
+    "traits": [
+      "Resilient",
+      "TeleportStrike",
+      "TerminatorArmour",
+      "Unstoppable"
+    ],
+    "activeAbilityNames": [
+      "Foehammer"
+    ],
+    "passiveAbilityNames": [
+      "AnvilShield"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Block"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_space_arjac_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_space_arjac_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "spaceStormcaller",
+    "name": "Njal",
+    "unitKind": "character",
+    "title": "Lord of Runes",
+    "fullName": "Njal Stormcaller",
+    "shortName": "Njal",
+    "extraShortName": "Njal",
+    "faction": "SpaceWolves",
+    "alliance": "Imperial",
+    "health": 80,
+    "damage": 8,
+    "armour": 26,
+    "initialRarity": "Epic",
+    "meleeDamage": "Psychic",
+    "meleeHits": 3,
+    "rangedDamage": "Psychic",
+    "rangedHits": 2,
+    "rangeDistance": 2,
+    "movement": 2,
+    "traits": [
+      "Psyker",
+      "TerminatorArmour",
+      "Unstoppable"
+    ],
+    "activeAbilityNames": [
+      "Stormcaller"
+    ],
+    "passiveAbilityNames": [
+      "LordOfTempests"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Block"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_space_njal_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_space_stormcaller_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "spaceWolfPriest",
+    "name": "Baldr",
+    "unitKind": "character",
+    "title": "Wolf Priest",
+    "fullName": "Baldr Thunderbrow",
+    "shortName": "Baldr",
+    "extraShortName": "Baldr",
+    "faction": "SpaceWolves",
+    "alliance": "Imperial",
+    "health": 90,
+    "damage": 25,
+    "armour": 21,
+    "initialRarity": "Rare",
+    "meleeDamage": "Power",
+    "meleeHits": 3,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 3,
+    "traits": [
+      "Healer",
+      "FinalJustice",
+      "Terrifying"
+    ],
+    "activeAbilityNames": [
+      "RitesOfMorkai"
+    ],
+    "passiveAbilityNames": [
+      "HealingBalms"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_space_wolfpriest_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_space_wolfpriest_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "spaceWulfen",
+    "name": "Ulf",
+    "unitKind": "character",
+    "title": "Wulfen Pack Leader",
+    "fullName": "Ulf Frosthowl",
+    "shortName": "Ulf",
+    "extraShortName": "Ulf",
+    "faction": "SpaceWolves",
+    "alliance": "Imperial",
+    "health": 90,
+    "damage": 33,
+    "armour": 20,
+    "initialRarity": "Uncommon",
+    "meleeDamage": "Power",
+    "meleeHits": 3,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 3,
+    "traits": [
+      "FinalJustice",
+      "Unstoppable"
+    ],
+    "activeAbilityNames": [
+      "GreatFrostAxe"
+    ],
+    "passiveAbilityNames": [
+      "SavageKiller"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_space_wulfen_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_space_wulfen_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "tauAunShi",
+    "name": "Aun'Shi",
+    "unitKind": "character",
+    "title": "Ethereal",
+    "fullName": "Aun'Shi",
+    "shortName": "Aun'Shi",
+    "extraShortName": "Aun'Shi",
+    "faction": "Tau",
+    "alliance": "Xenos",
+    "health": 85,
+    "damage": 13,
+    "armour": 16,
+    "initialRarity": "Legendary",
+    "meleeDamage": "Power",
+    "meleeHits": 5,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 3,
+    "traits": [],
+    "activeAbilityNames": [
+      "InspiredToGreatness"
+    ],
+    "passiveAbilityNames": [
+      "SereneUnifier"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_tauta_aunshi_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_tauta_aunshi_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "tauCrisis",
+    "name": "Re'vas",
+    "unitKind": "character",
+    "title": "XV8 Crisis Battlesuit",
+    "fullName": "Shas'vre Vior'la Re'vas",
+    "shortName": "Re'vas",
+    "extraShortName": "Re'vas",
+    "faction": "Tau",
+    "alliance": "Xenos",
+    "health": 105,
+    "damage": 7,
+    "armour": 25,
+    "initialRarity": "Uncommon",
+    "meleeDamage": "Flame",
+    "meleeHits": 6,
+    "rangedDamage": "Pulse",
+    "rangedHits": 6,
+    "rangeDistance": 2,
+    "movement": 3,
+    "traits": [
+      "BigTarget",
+      "Flying",
+      "Mechanical",
+      "RangedSpecialist"
+    ],
+    "activeAbilityNames": [
+      "EarlyWarningOverride"
+    ],
+    "passiveAbilityNames": [
+      "CyclicIonBlaster"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Block"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_tauta_crisis_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_tauta_crisis_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "tauDarkstrider",
+    "name": "Darkstrider",
+    "unitKind": "character",
+    "title": "Sub-Commander",
+    "fullName": "Shas'el T'au Myamoto",
+    "shortName": "Darkstrider",
+    "extraShortName": "Darkstrider",
+    "faction": "Tau",
+    "alliance": "Xenos",
+    "health": 75,
+    "damage": 25,
+    "armour": 17,
+    "initialRarity": "Rare",
+    "meleeDamage": "Physical",
+    "meleeHits": 3,
+    "rangedDamage": "Pulse",
+    "rangedHits": 4,
+    "rangeDistance": 2,
+    "movement": 3,
+    "traits": [
+      "Infiltrate",
+      "RangedSpecialist",
+      "SuppressiveFire"
+    ],
+    "activeAbilityNames": [
+      "FightingRetreat"
+    ],
+    "passiveAbilityNames": [
+      "StructuralAnalyser"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_tauta_darkstrider_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_tauta_darkstrider_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "tauFarsight",
+    "name": "Farsight",
+    "unitKind": "character",
+    "title": "Hero and Traitor",
+    "fullName": "Shas'o Vior'la Shovah Kais Mont'yr",
+    "shortName": "Commander Farsight",
+    "extraShortName": "Farsight",
+    "faction": "Tau",
+    "alliance": "Xenos",
+    "health": 100,
+    "damage": 20,
+    "armour": 20,
+    "initialRarity": "Legendary",
+    "meleeDamage": "Power",
+    "meleeHits": 4,
+    "rangedDamage": "Plasma",
+    "rangedHits": 2,
+    "rangeDistance": 2,
+    "movement": 4,
+    "traits": [
+      "BeastSlayer",
+      "BigTarget",
+      "Flying",
+      "Mechanical"
+    ],
+    "activeAbilityNames": [
+      "ExemplarOfTheMontka"
+    ],
+    "passiveAbilityNames": [
+      "WayOfTheShortBlade"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_tauta_farsight_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_tauta_farsight_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "tauMarksman",
+    "name": "Sho'syl",
+    "unitKind": "character",
+    "title": "Firesight Marksman",
+    "fullName": "Shas'ui Vior'la Sho'syl",
+    "shortName": "Sho'syl",
+    "extraShortName": "Sho'syl",
+    "faction": "Tau",
+    "alliance": "Xenos",
+    "health": 65,
+    "damage": 40,
+    "armour": 16,
+    "initialRarity": "Uncommon",
+    "meleeDamage": "Pulse",
+    "meleeHits": 1,
+    "rangedDamage": "Piercing",
+    "rangedHits": 1,
+    "rangeDistance": 3,
+    "movement": 2,
+    "traits": [
+      "Camouflage",
+      "RangedSpecialist"
+    ],
+    "activeAbilityNames": [
+      "SeekerMissileFrequencyLock"
+    ],
+    "passiveAbilityNames": [
+      "MV71SniperDroneSquad"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_tauta_marksman_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_tauta_marksman_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "tauShadowsun",
+    "name": "Shadowsun",
+    "unitKind": "character",
+    "title": "Supreme Commander of the T'au Empire",
+    "fullName": "Shas'o T'au Shaserra",
+    "shortName": "Commander Shadowsun",
+    "extraShortName": "Shadowsun",
+    "faction": "Tau",
+    "alliance": "Xenos",
+    "health": 80,
+    "damage": 25,
+    "armour": 18,
+    "initialRarity": "Legendary",
+    "meleeDamage": "Blast",
+    "meleeHits": 2,
+    "rangedDamage": "Melta",
+    "rangedHits": 2,
+    "rangeDistance": 2,
+    "movement": 4,
+    "traits": [
+      "Camouflage",
+      "Flying",
+      "Infiltrate",
+      "RangedSpecialist"
+    ],
+    "activeAbilityNames": [
+      "ExemplarOfTheKauyon"
+    ],
+    "passiveAbilityNames": [
+      "DefenderOfTheGreaterGood"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_tauta_shadowsun_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_tauta_shadowsun_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "templAggressor",
+    "name": "Burchard",
+    "unitKind": "character",
+    "title": "Aggressor Sergeant",
+    "fullName": "Brother Raimund Burchard",
+    "shortName": "Brother Burchard",
+    "extraShortName": "Burchard",
+    "faction": "BlackTemplars",
+    "alliance": "Imperial",
+    "health": 120,
+    "damage": 18,
+    "armour": 22,
+    "initialRarity": "Uncommon",
+    "meleeDamage": "Power",
+    "meleeHits": 3,
+    "rangedDamage": "Bolter",
+    "rangedHits": 3,
+    "rangeDistance": 2,
+    "movement": 2,
+    "traits": [
+      "CrushingStrike",
+      "MkXGravis",
+      "SuppressiveFire"
+    ],
+    "activeAbilityNames": [
+      "FragstormGrenadeLauncher"
+    ],
+    "passiveAbilityNames": [
+      "Boltstorm"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_templ_aggressor_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_templ_aggressor_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "templAncient",
+    "name": "Thoread",
+    "unitKind": "character",
+    "title": "Chapter Ancient",
+    "fullName": "Ancient Cantus Thoread",
+    "shortName": "Ancient Thoread",
+    "extraShortName": "Thoread",
+    "faction": "BlackTemplars",
+    "alliance": "Imperial",
+    "health": 100,
+    "damage": 33,
+    "armour": 22,
+    "initialRarity": "Rare",
+    "meleeDamage": "Power",
+    "meleeHits": 2,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 3,
+    "traits": [
+      "FinalJustice",
+      "Parry"
+    ],
+    "activeAbilityNames": [
+      "UnbreakableDuty"
+    ],
+    "passiveAbilityNames": [
+      "AstartesBanner"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_templ_ancient_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_templ_ancient_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "templChampion",
+    "name": "Jaeger",
+    "unitKind": "character",
+    "title": "The Emperor’s Champion",
+    "fullName": "Brother Kenric Jaeger",
+    "shortName": "Brother Jaeger",
+    "extraShortName": "Jaeger",
+    "faction": "BlackTemplars",
+    "alliance": "Imperial",
+    "health": 110,
+    "damage": 25,
+    "armour": 25,
+    "initialRarity": "Epic",
+    "meleeDamage": "Power",
+    "meleeHits": 3,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 3,
+    "traits": [
+      "FinalJustice",
+      "Parry",
+      "RapidAssault"
+    ],
+    "activeAbilityNames": [
+      "HolyDuel"
+    ],
+    "passiveAbilityNames": [
+      "MartialSuperiority"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Block"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_templ_champion_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_templ_champion_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "templHelbrecht",
+    "name": "Helbrecht",
+    "unitKind": "character",
+    "title": "High Marshal of the Black Templars",
+    "fullName": "High Marshal Helbrecht",
+    "shortName": "High Marshal Helbrecht",
+    "extraShortName": "Helbrecht",
+    "faction": "BlackTemplars",
+    "alliance": "Imperial",
+    "health": 95,
+    "damage": 15,
+    "armour": 22,
+    "initialRarity": "Legendary",
+    "meleeDamage": "Power",
+    "meleeHits": 6,
+    "rangedDamage": "Bolter",
+    "rangedHits": 3,
+    "rangeDistance": 2,
+    "movement": 3,
+    "traits": [
+      "FinalJustice",
+      "Parry"
+    ],
+    "activeAbilityNames": [
+      "CrusadeOfWrath"
+    ],
+    "passiveAbilityNames": [
+      "DestroyTheWitch"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Block"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_templ_helbrecht_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_templ_helbrecht_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "templSwordBrother",
+    "name": "Godswyl",
+    "unitKind": "character",
+    "title": "Sword Brother",
+    "fullName": "Sword Brother Fedreus Godswyl",
+    "shortName": "Sword Brother Godswyl",
+    "extraShortName": "Godswyl",
+    "faction": "BlackTemplars",
+    "alliance": "Imperial",
+    "health": 95,
+    "damage": 60,
+    "armour": 24,
+    "initialRarity": "Common",
+    "meleeDamage": "Power",
+    "meleeHits": 1,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 3,
+    "traits": [
+      "Parry",
+      "RapidAssault"
+    ],
+    "activeAbilityNames": [
+      "ThunderousAssault"
+    ],
+    "passiveAbilityNames": [
+      "ChampionOfTheFeast"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_templ_brother_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_templ_brother_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "thousAhriman",
+    "name": "Ahriman",
+    "unitKind": "character",
+    "title": "Architect of the Rubric",
+    "fullName": "Ahzek Ahriman",
+    "shortName": "Ahriman",
+    "extraShortName": "Ahriman",
+    "faction": "ThousandSons",
+    "alliance": "Chaos",
+    "health": 80,
+    "damage": 30,
+    "armour": 18,
+    "initialRarity": "Legendary",
+    "meleeDamage": "Flame",
+    "meleeHits": 1,
+    "rangedDamage": "Psychic",
+    "rangedHits": 1,
+    "rangeDistance": 2,
+    "movement": 3,
+    "traits": [
+      "WeaverOfFate",
+      "Flying",
+      "Psyker"
+    ],
+    "activeAbilityNames": [
+      "Doombolt"
+    ],
+    "passiveAbilityNames": [
+      "PsychicStalk"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_thous_ahriman_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_thous_ahriman_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "thousInfernalMaster",
+    "name": "Abraxas",
+    "unitKind": "character",
+    "title": "Infernal Master",
+    "fullName": "Arkarzar Abraxas",
+    "shortName": "Abraxas",
+    "extraShortName": "Abraxas",
+    "faction": "ThousandSons",
+    "alliance": "Chaos",
+    "health": 70,
+    "damage": 18,
+    "armour": 20,
+    "initialRarity": "Rare",
+    "meleeDamage": "Flame",
+    "meleeHits": 2,
+    "rangedDamage": "Psychic",
+    "rangedHits": 1,
+    "rangeDistance": 2,
+    "movement": 3,
+    "traits": [
+      "WeaverOfFate",
+      "Psyker"
+    ],
+    "activeAbilityNames": [
+      "MasterOfTheTutelaries"
+    ],
+    "passiveAbilityNames": [
+      "InfernalPacts"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_thous_infernal_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_thous_infernal_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "thousSorcerer",
+    "name": "Thaumachus",
+    "unitKind": "character",
+    "title": "Exalted Sorcerer",
+    "fullName": "Kairatar Thaumachus",
+    "shortName": "Thaumachus",
+    "extraShortName": "Thaumachus",
+    "faction": "ThousandSons",
+    "alliance": "Chaos",
+    "health": 75,
+    "damage": 27,
+    "armour": 18,
+    "initialRarity": "Epic",
+    "meleeDamage": "Flame",
+    "meleeHits": 1,
+    "rangedDamage": "Psychic",
+    "rangedHits": 1,
+    "rangeDistance": 2,
+    "movement": 3,
+    "traits": [
+      "WeaverOfFate",
+      "Flying",
+      "Psyker"
+    ],
+    "activeAbilityNames": [
+      "AttemptedPossession"
+    ],
+    "passiveAbilityNames": [
+      "ArcaneShield"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_thous_sorcerer_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_thous_sorcerer_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "thousTerminator",
+    "name": "Toth",
+    "unitKind": "character",
+    "title": "Scarab Occult Terminator",
+    "fullName": "Sokar Toth",
+    "shortName": "Toth",
+    "extraShortName": "Toth",
+    "faction": "ThousandSons",
+    "alliance": "Chaos",
+    "health": 90,
+    "damage": 10,
+    "armour": 27,
+    "initialRarity": "Uncommon",
+    "meleeDamage": "Power",
+    "meleeHits": 4,
+    "rangedDamage": "Flame",
+    "rangedHits": 5,
+    "rangeDistance": 2,
+    "movement": 2,
+    "traits": [
+      "WeaverOfFate",
+      "SuppressiveFire",
+      "TerminatorArmour"
+    ],
+    "activeAbilityNames": [
+      "HellfyreMissileRack"
+    ],
+    "passiveAbilityNames": [
+      "TimeFlux"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Block"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_thous_terminator_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_thous_terminator_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "thousTzaangor",
+    "name": "Yazaghor",
+    "unitKind": "character",
+    "title": "Tzaangor Enlightened",
+    "fullName": "Yazaghor Ficklefate",
+    "shortName": "Yazaghor",
+    "extraShortName": "Yazaghor",
+    "faction": "ThousandSons",
+    "alliance": "Chaos",
+    "health": 65,
+    "damage": 49,
+    "armour": 14,
+    "initialRarity": "Common",
+    "meleeDamage": "Physical",
+    "meleeHits": 1,
+    "rangedDamage": "HeavyRound",
+    "rangedHits": 1,
+    "rangeDistance": 2,
+    "movement": 4,
+    "traits": [
+      "WeaverOfFate",
+      "Flying"
+    ],
+    "activeAbilityNames": [
+      "SorcerousFacade"
+    ],
+    "passiveAbilityNames": [
+      "RealityUnbound"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_thous_tzaangor_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_thous_tzaangor_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "tyranDeathleaper",
+    "name": "Deathleaper",
+    "unitKind": "character",
+    "title": "Vanguard Organism",
+    "fullName": "Deathleaper",
+    "shortName": "Deathleaper",
+    "extraShortName": "Deathleaper",
+    "faction": "Tyranids",
+    "alliance": "Xenos",
+    "health": 80,
+    "damage": 24,
+    "armour": 17,
+    "initialRarity": "Epic",
+    "meleeDamage": "Bio",
+    "meleeHits": 3,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 3,
+    "traits": [
+      "Camouflage",
+      "TeleportStrike",
+      "Infiltrate",
+      "Terrifying"
+    ],
+    "activeAbilityNames": [
+      "FearOfTheUnseen"
+    ],
+    "passiveAbilityNames": [
+      "FeederTendrils"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_tyran_deathleaper_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_tyran_deathleaper_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "tyranNeurothrope",
+    "name": "Neurothrope",
+    "unitKind": "character",
+    "title": "Psychic Organism",
+    "fullName": "Neurothrope",
+    "shortName": "Neurothrope",
+    "extraShortName": "Neurothrope",
+    "faction": "Tyranids",
+    "alliance": "Xenos",
+    "health": 85,
+    "damage": 20,
+    "armour": 17,
+    "initialRarity": "Rare",
+    "meleeDamage": "Physical",
+    "meleeHits": 1,
+    "rangedDamage": "Psychic",
+    "rangedHits": 1,
+    "rangeDistance": 3,
+    "movement": 2,
+    "traits": [
+      "RangedSpecialist",
+      "Flying",
+      "Psyker",
+      "ShadowInTheWarp",
+      "Synapse"
+    ],
+    "activeAbilityNames": [
+      "SpiritLeech"
+    ],
+    "passiveAbilityNames": [
+      "Neuroparasite"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Block"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_tyran_neurothrope_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_tyran_neurothrope_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "tyranParasite",
+    "name": "Parasite of Mortrex",
+    "unitKind": "character",
+    "title": "Invader Organism",
+    "fullName": "Parasite of Mortrex",
+    "shortName": "Parasite of Mortrex",
+    "extraShortName": "Parasite of Mortrex",
+    "faction": "Tyranids",
+    "alliance": "Xenos",
+    "health": 90,
+    "damage": 45,
+    "armour": 17,
+    "initialRarity": "Epic",
+    "meleeDamage": "Toxic",
+    "meleeHits": 1,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 4,
+    "traits": [
+      "Flying",
+      "Synapse"
+    ],
+    "activeAbilityNames": [
+      "ItItches"
+    ],
+    "passiveAbilityNames": [
+      "BarbedOvipositor"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_tyran_parasite_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_tyran_parasite_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "tyranTyrantGuard",
+    "name": "Tyrant Guard",
+    "unitKind": "character",
+    "title": "Guardian Organism",
+    "fullName": "Tyrant Guard",
+    "shortName": "Tyrant Guard",
+    "extraShortName": "Tyrant Guard",
+    "faction": "Tyranids",
+    "alliance": "Xenos",
+    "health": 125,
+    "damage": 16,
+    "armour": 22,
+    "initialRarity": "Uncommon",
+    "meleeDamage": "Piercing",
+    "meleeHits": 2,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 3,
+    "traits": [
+      "BigTarget",
+      "CrushingStrike"
+    ],
+    "activeAbilityNames": [
+      "CrushingClaws"
+    ],
+    "passiveAbilityNames": [
+      "GuardianOrganism"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Defensive"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_tyran_tyrantguard_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_tyran_tyrantguard_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "tyranWingedPrime",
+    "name": "Winged Prime",
+    "unitKind": "character",
+    "title": "Lead Warrior Organism",
+    "fullName": "Winged Tyranid Prime",
+    "shortName": "Winged Prime",
+    "extraShortName": "Winged Prime",
+    "faction": "Tyranids",
+    "alliance": "Xenos",
+    "health": 100,
+    "damage": 11,
+    "armour": 19,
+    "initialRarity": "Rare",
+    "meleeDamage": "Bio",
+    "meleeHits": 6,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 4,
+    "traits": [
+      "Synapse",
+      "Flying",
+      "FinalJustice"
+    ],
+    "activeAbilityNames": [
+      "AlphaWarrior"
+    ],
+    "passiveAbilityNames": [
+      "SynapticLinchpin"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_tyran_wingedprime_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_tyran_wingedprime_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "ultraApothecary",
+    "name": "Incisus",
+    "unitKind": "character",
+    "title": "Apothecary",
+    "fullName": "Apothecary Incisus",
+    "shortName": "Incisus",
+    "extraShortName": "Incisus",
+    "faction": "Ultramarines",
+    "alliance": "Imperial",
+    "health": 100,
+    "damage": 46,
+    "armour": 22,
+    "initialRarity": "Common",
+    "meleeDamage": "Piercing",
+    "meleeHits": 1,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 3,
+    "traits": [
+      "Healer"
+    ],
+    "activeAbilityNames": [
+      "CombatRestoratives"
+    ],
+    "passiveAbilityNames": [
+      "Narthecium"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_ultra_apothecary_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_ultra_apothecary_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "ultraCalgar",
+    "name": "Calgar",
+    "unitKind": "character",
+    "title": "Chapter Master",
+    "fullName": "Marneus Calgar",
+    "shortName": "Marneus Calgar",
+    "extraShortName": "Calgar",
+    "faction": "Ultramarines",
+    "alliance": "Imperial",
+    "health": 95,
+    "damage": 28,
+    "armour": 20,
+    "initialRarity": "Legendary",
+    "meleeDamage": "Power",
+    "meleeHits": 2,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 3,
+    "traits": [
+      "CrushingStrike",
+      "FinalJustice",
+      "MkXGravis"
+    ],
+    "activeAbilityNames": [
+      "GauntletsOfUltramar"
+    ],
+    "passiveAbilityNames": [
+      "RitesOfBattle"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Block"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_ultra_calgar_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_ultra_calgar_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "ultraEliminatorSgt",
+    "name": "Certus",
+    "unitKind": "character",
+    "title": "Eliminator Sergeant",
+    "fullName": "Sergeant Certus",
+    "shortName": "Certus",
+    "extraShortName": "Certus",
+    "faction": "Ultramarines",
+    "alliance": "Imperial",
+    "health": 60,
+    "damage": 55,
+    "armour": 18,
+    "initialRarity": "Common",
+    "meleeDamage": "Physical",
+    "meleeHits": 1,
+    "rangedDamage": "Bolter",
+    "rangedHits": 1,
+    "rangeDistance": 3,
+    "movement": 2,
+    "traits": [
+      "Overwatch",
+      "HeavyWeapon",
+      "Infiltrate"
+    ],
+    "activeAbilityNames": [
+      "MortisRound"
+    ],
+    "passiveAbilityNames": [
+      "CamoCloak"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_ultra_eliminator_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_ultra_eliminator_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "ultraInceptorSgt",
+    "name": "Bellator",
+    "unitKind": "character",
+    "title": "Inceptor Sergeant",
+    "fullName": "Sergeant Bellator",
+    "shortName": "Bellator",
+    "extraShortName": "Bellator",
+    "faction": "Ultramarines",
+    "alliance": "Imperial",
+    "health": 85,
+    "damage": 10,
+    "armour": 13,
+    "initialRarity": "Common",
+    "meleeDamage": "Bolter",
+    "meleeHits": 6,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 4,
+    "traits": [
+      "Flying",
+      "MkXGravis"
+    ],
+    "activeAbilityNames": [
+      "DeathFromAbove"
+    ],
+    "passiveAbilityNames": [
+      "ShockAssault"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_ultra_inceptor_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_ultra_inceptor_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "ultraTigurius",
+    "name": "Tigurius",
+    "unitKind": "character",
+    "title": "Chief Librarian",
+    "fullName": "Varro Tigurius",
+    "shortName": "Varro Tigurius",
+    "extraShortName": "Tigurius",
+    "faction": "Ultramarines",
+    "alliance": "Imperial",
+    "health": 65,
+    "damage": 30,
+    "armour": 14,
+    "initialRarity": "Uncommon",
+    "meleeDamage": "Physical",
+    "meleeHits": 1,
+    "rangedDamage": "Psychic",
+    "rangedHits": 1,
+    "rangeDistance": 2,
+    "movement": 3,
+    "traits": [
+      "Psyker"
+    ],
+    "activeAbilityNames": [
+      "StormOfWrath"
+    ],
+    "passiveAbilityNames": [
+      "PsychicFortress"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_ultra_tigurius_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_ultra_tigurius_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "ultraTitus",
+    "name": "Titus",
+    "unitKind": "character",
+    "title": "Primaris Lieutenant",
+    "fullName": "Demetrian Titus",
+    "shortName": "Titus",
+    "extraShortName": "Titus",
+    "faction": "Ultramarines",
+    "alliance": "Imperial",
+    "health": 95,
+    "damage": 26,
+    "armour": 23,
+    "initialRarity": "Epic",
+    "meleeDamage": "Chain",
+    "meleeHits": 4,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 3,
+    "traits": [
+      "BeastSlayer",
+      "FinalJustice"
+    ],
+    "activeAbilityNames": [
+      "TacticalPrecision"
+    ],
+    "passiveAbilityNames": [
+      "FuelledByFury"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_ultra_titus_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_ultra_titus_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "votanBeserk",
+    "name": "Havyr",
+    "unitKind": "character",
+    "title": "Cthonian Beserk",
+    "fullName": "Hâvyr Wârspeke",
+    "shortName": "Hâvyr",
+    "extraShortName": "Hâvyr",
+    "faction": "LeaguesOfVotann",
+    "alliance": "Xenos",
+    "health": 90,
+    "damage": 20,
+    "armour": 14,
+    "initialRarity": "Uncommon",
+    "meleeDamage": "Eviscerate",
+    "meleeHits": 4,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 2,
+    "traits": [
+      "PrioritisedEfficiency",
+      "Resilient",
+      "CrushingStrike"
+    ],
+    "activeAbilityNames": [
+      "AugmentedAssault"
+    ],
+    "passiveAbilityNames": [
+      "FuryFromTheDelve"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_votan_beserk_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_votan_beserk_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "votanIronmaster",
+    "name": "Vynn",
+    "unitKind": "character",
+    "title": "Brôkhyr Iron-Master",
+    "fullName": "Vynn Conglahr",
+    "shortName": "Vynn",
+    "extraShortName": "Vynn",
+    "faction": "LeaguesOfVotann",
+    "alliance": "Xenos",
+    "health": 80,
+    "damage": 25,
+    "armour": 16,
+    "initialRarity": "Rare",
+    "meleeDamage": "Power",
+    "meleeHits": 3,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 2,
+    "traits": [
+      "PrioritisedEfficiency",
+      "Mechanic"
+    ],
+    "activeAbilityNames": [
+      "GravitonRifle"
+    ],
+    "passiveAbilityNames": [
+      "EcogSupport"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_votan_ironmaster_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_votan_ironmaster_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "votanMemnyr",
+    "name": "Ammuk",
+    "unitKind": "character",
+    "title": "Memnyr Strategist",
+    "fullName": "Âmmuk Keen Eye",
+    "shortName": "Âmmuk",
+    "extraShortName": "Âmmuk",
+    "faction": "LeaguesOfVotann",
+    "alliance": "Xenos",
+    "health": 90,
+    "damage": 25,
+    "armour": 22,
+    "initialRarity": "Rare",
+    "meleeDamage": "Physical",
+    "meleeHits": 1,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 2,
+    "traits": [
+      "PrioritisedEfficiency",
+      "Mechanical"
+    ],
+    "activeAbilityNames": [
+      "IronkinSteeljack"
+    ],
+    "passiveAbilityNames": [
+      "PredictiveGuidance"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_votan_memnyr_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_votan_memnyr_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "votanUthar",
+    "name": "Uthar",
+    "unitKind": "character",
+    "title": "High Kâhl",
+    "fullName": "Ûthar the Destined",
+    "shortName": "Ûthar the Destined",
+    "extraShortName": "Ûthar",
+    "faction": "LeaguesOfVotann",
+    "alliance": "Xenos",
+    "health": 90,
+    "damage": 19,
+    "armour": 23,
+    "initialRarity": "Legendary",
+    "meleeDamage": "Plasma",
+    "meleeHits": 3,
+    "rangedDamage": "Energy",
+    "rangedHits": 4,
+    "rangeDistance": 2,
+    "movement": 2,
+    "traits": [
+      "PrioritisedEfficiency",
+      "Resilient"
+    ],
+    "activeAbilityNames": [
+      "AncestralFortune"
+    ],
+    "passiveAbilityNames": [
+      "GrimEfficiency"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_votan_uthar_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_votan_uthar_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "worldEightbound",
+    "name": "Azkor",
+    "unitKind": "character",
+    "title": "Exalted Eightbound",
+    "fullName": "Azkor, the Eightfold",
+    "shortName": "Azkor",
+    "extraShortName": "Azkor",
+    "faction": "WorldEaters",
+    "alliance": "Chaos",
+    "health": 100,
+    "damage": 24,
+    "armour": 20,
+    "initialRarity": "Rare",
+    "meleeDamage": "Eviscerate",
+    "meleeHits": 2,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 3,
+    "traits": [
+      "BlessingsOfKhorne",
+      "Daemon",
+      "Resilient",
+      "Terrifying",
+      "Unstoppable"
+    ],
+    "activeAbilityNames": [
+      "OverwhelmingWrath"
+    ],
+    "passiveAbilityNames": [
+      "BeaconOfRage"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_world_eightbound_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_world_eightbound_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "worldExecutions",
+    "name": "Tarvakh",
+    "unitKind": "character",
+    "title": "Master of Executions",
+    "fullName": "Tarvakh, the Headsman ",
+    "shortName": "Tarvakh",
+    "extraShortName": "Tarvakh",
+    "faction": "WorldEaters",
+    "alliance": "Chaos",
+    "health": 95,
+    "damage": 48,
+    "armour": 24,
+    "initialRarity": "Rare",
+    "meleeDamage": "Piercing",
+    "meleeHits": 1,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 3,
+    "traits": [
+      "BlessingsOfKhorne",
+      "RapidAssault"
+    ],
+    "activeAbilityNames": [
+      "MurderousSwing"
+    ],
+    "passiveAbilityNames": [
+      "TrophyTaker"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Crit",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_world_executions_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_world_executions_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "worldJakhal",
+    "name": "Macer",
+    "unitKind": "character",
+    "title": "Jakhal Dishonoured",
+    "fullName": "Macer Bloodgrin",
+    "shortName": "Macer",
+    "extraShortName": "Macer",
+    "faction": "WorldEaters",
+    "alliance": "Chaos",
+    "health": 90,
+    "damage": 30,
+    "armour": 10,
+    "initialRarity": "Uncommon",
+    "meleeDamage": "Chain",
+    "meleeHits": 3,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 3,
+    "traits": [
+      "BlessingsOfKhorne",
+      "Resilient"
+    ],
+    "activeAbilityNames": [
+      "JakhalStimms"
+    ],
+    "passiveAbilityNames": [
+      "Skullsmasher"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Defensive",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_world_jakhal_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_world_jakhal_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "worldKharn",
+    "name": "Kharn",
+    "unitKind": "character",
+    "title": "Champion of Khorne",
+    "fullName": "Khârn the Betrayer",
+    "shortName": "Khârn",
+    "extraShortName": "Khârn",
+    "faction": "WorldEaters",
+    "alliance": "Chaos",
+    "health": 90,
+    "damage": 25,
+    "armour": 20,
+    "initialRarity": "Legendary",
+    "meleeDamage": "Eviscerate",
+    "meleeHits": 4,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 3,
+    "traits": [
+      "BlessingsOfKhorne",
+      "RapidAssault",
+      "FinalJustice"
+    ],
+    "activeAbilityNames": [
+      "KillMaimBurn"
+    ],
+    "passiveAbilityNames": [
+      "TheBetrayer"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Crit"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_world_kharn_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_world_kharn_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  },
+  {
+    "id": "worldTerminator",
+    "name": "Wrask",
+    "unitKind": "character",
+    "title": "World Eaters Terminator",
+    "fullName": "Wrask, the Butcher",
+    "shortName": "Wrask",
+    "extraShortName": "Wrask",
+    "faction": "WorldEaters",
+    "alliance": "Chaos",
+    "health": 95,
+    "damage": 20,
+    "armour": 28,
+    "initialRarity": "Uncommon",
+    "meleeDamage": "Flame",
+    "meleeHits": 4,
+    "rangedDamage": null,
+    "rangedHits": null,
+    "rangeDistance": null,
+    "movement": 2,
+    "traits": [
+      "BlessingsOfKhorne",
+      "TeleportStrike",
+      "RapidAssault",
+      "TerminatorArmour",
+      "Unstoppable"
+    ],
+    "activeAbilityNames": [
+      "BloodyFury"
+    ],
+    "passiveAbilityNames": [
+      "WrathfulDevotion"
+    ],
+    "equipmentSlots": [
+      "I_Crit",
+      "I_Block",
+      "I_Booster_Block"
+    ],
+    "icon": "snowprint_assets/characters/ui_image_portrait_world_terminator_01.png",
+    "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_world_terminator_01.png",
+    "requiredInCampaign": false,
+    "campaignsRequiredIn": [],
+    "releaseDate": null
+  }
+]

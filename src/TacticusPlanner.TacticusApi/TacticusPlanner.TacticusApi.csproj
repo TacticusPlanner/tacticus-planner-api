@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>TacticusPlanner.TacticusApi</RootNamespace>
+    <NoWarn>$(NoWarn);CS8618;CA1707;CA1716</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Refit" />
+    <PackageReference Include="Refit.HttpClientFactory" />
+  </ItemGroup>
+</Project>

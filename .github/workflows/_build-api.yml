@@ -39,8 +39,8 @@ jobs:
           cache: true
           cache-dependency-path: "**/packages.lock.json"
 
-      - name: Restore locked API dependencies
-        run: dotnet restore src/TacticusPlanner.Api/TacticusPlanner.Api.csproj --locked-mode
+      - name: Restore locked solution dependencies
+        run: dotnet restore TacticusPlanner.slnx --locked-mode
 
       - name: Restore platform-specific AppHost dependencies
         run: dotnet restore orchestration/TacticusPlanner.AppHost/TacticusPlanner.AppHost.csproj
@@ -51,6 +51,9 @@ jobs:
 
       - name: Build
         run: dotnet build TacticusPlanner.slnx --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test TacticusPlanner.slnx --configuration Release --no-build --collect:"XPlat Code Coverage"
 
       - name: Build container image
         run: docker build --file src/TacticusPlanner.Api/Dockerfile --tag tacticus-planner-api:${{ github.sha }} .

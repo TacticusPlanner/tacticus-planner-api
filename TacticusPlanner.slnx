@@ -1,9 +1,15 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/TacticusPlanner.Api/TacticusPlanner.Api.csproj" />
+    <Project Path="src/TacticusPlanner.Catalog/TacticusPlanner.Catalog.csproj" />
+    <Project Path="src/TacticusPlanner.TacticusApi/TacticusPlanner.TacticusApi.csproj" />
   </Folder>
   <Folder Name="/orchestration/">
     <Project Path="orchestration/TacticusPlanner.AppHost/TacticusPlanner.AppHost.csproj" />
     <Project Path="orchestration/TacticusPlanner.ServiceDefaults/TacticusPlanner.ServiceDefaults.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/TacticusPlanner.Api.Tests/TacticusPlanner.Api.Tests.csproj" />
+    <Project Path="tests/TacticusPlanner.Catalog.Tests/TacticusPlanner.Catalog.Tests.csproj" />
   </Folder>
 </Solution>
