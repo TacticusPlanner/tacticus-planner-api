@@ -15,48 +15,39 @@ var catalogOpenApiRoutes = new Dictionary<string, CatalogOpenApiRoute>(StringCom
 {
     ["api/v1/catalog/manifest"] = new(
         "Gets the active catalog manifest.",
-        "Returns catalog release metadata, source hash, and per-dataset hashes.",
-        []
+        "Returns catalog release metadata, source hash, per-dataset hashes, and dataset download URLs."
     ),
     ["api/v1/catalog/units"] = new(
         "Gets catalog units.",
-        "Returns active catalog units with optional filters.",
-        ["search", "unitKind", "faction", "alliance"]
+        "Returns the complete active catalog units chunk."
     ),
     ["api/v1/catalog/mows"] = new(
         "Gets catalog machines of war.",
-        "Returns active catalog machines of war with optional filters.",
-        ["search", "faction", "alliance"]
+        "Returns the complete active catalog machines of war chunk."
     ),
     ["api/v1/catalog/upgrades"] = new(
         "Gets catalog upgrade materials.",
-        "Returns active catalog upgrade materials with optional filters.",
-        ["search", "rarity"]
+        "Returns the complete active catalog upgrade materials chunk."
     ),
     ["api/v1/catalog/equipment"] = new(
         "Gets catalog equipment.",
-        "Returns active catalog equipment with optional filters.",
-        ["search", "rarity", "type"]
+        "Returns the complete active catalog equipment chunk."
     ),
     ["api/v1/catalog/campaigns"] = new(
         "Gets catalog campaigns.",
-        "Returns active catalog campaigns with optional filters.",
-        ["search", "releaseType", "groupType", "difficulty"]
+        "Returns the complete active regular catalog campaigns chunk."
     ),
     ["api/v1/catalog/campaign-events"] = new(
         "Gets catalog campaign events.",
-        "Returns active catalog campaign events with optional filters.",
-        ["search", "groupType", "difficulty"]
+        "Returns the complete active catalog campaign events chunk."
     ),
     ["api/v1/catalog/campaign-battles"] = new(
         "Gets catalog campaign battles.",
-        "Returns active catalog campaign battles with optional filters.",
-        ["search", "campaignId", "campaignType", "rewardId"]
+        "Returns the complete active catalog campaign battles chunk."
     ),
     ["api/v1/catalog/lres"] = new(
         "Gets catalog legendary release events.",
-        "Returns active catalog legendary release events with optional filters.",
-        ["search", "unitId", "finished"]
+        "Returns the complete active catalog legendary release events chunk."
     ),
 };
 
@@ -77,22 +68,6 @@ builder.Services.AddOpenApi("v1", options =>
             operation.Summary = route.Summary;
             operation.Description = route.Description;
             operation.RequestBody = null;
-            operation.Parameters ??= [];
-
-            foreach (var parameter in route.QueryParameters)
-            {
-                operation.Parameters.Add(new OpenApiParameter
-                {
-                    Name = parameter,
-                    In = ParameterLocation.Query,
-                    Required = false,
-                    Description = $"Optional {parameter} filter.",
-                    Schema = new OpenApiSchema
-                    {
-                        Type = JsonSchemaType.String,
-                    },
-                });
-            }
         }
 
         return Task.CompletedTask;
@@ -207,6 +182,5 @@ public partial class Program;
 
 internal sealed record CatalogOpenApiRoute(
     string Summary,
-    string Description,
-    IReadOnlyList<string> QueryParameters
+    string Description
 );

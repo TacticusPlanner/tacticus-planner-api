@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
+using System.Text.Json;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -43,27 +44,57 @@ public sealed class CatalogApiSmokeTests : IClassFixture<CatalogApiFactory>
 
         Assert.Contains("/api/v1/catalog/manifest", openApi, StringComparison.Ordinal);
         Assert.Contains("/api/v1/catalog/units", openApi, StringComparison.Ordinal);
+        Assert.Contains("/api/v1/catalog/campaign-events", openApi, StringComparison.Ordinal);
         Assert.Contains("/api/v1/catalog/lres", openApi, StringComparison.Ordinal);
         Assert.Contains("\"304\"", openApi, StringComparison.Ordinal);
+        Assert.DoesNotContain("\"rewardId\"", openApi, StringComparison.Ordinal);
     }
 
     [Fact]
-    public async Task CatalogEndpointReturnsEtagAndSupportsNotModified()
+    public async Task CatalogManifestReturnsEtagDatasetUrlsAndSupportsNotModified()
     {
         var client = factory.CreateClient();
 
-        var first = await client.GetAsync("/api/v1/catalog/units", TestContext.Current.CancellationToken);
+        var first = await client.GetAsync("/api/v1/catalog/manifest", TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, first.StatusCode);
         Assert.NotNull(first.Headers.ETag);
 
-        using var secondRequest = new HttpRequestMessage(HttpMethod.Get, "/api/v1/catalog/units");
+        var manifestJson = await first.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
+        using var manifest = JsonDocument.Parse(manifestJson);
+        var datasets = manifest.RootElement.GetProperty("datasets").EnumerateArray().ToArray();
+        var campaignEvents = datasets.Single(dataset =>
+            string.Equals(dataset.GetProperty("key").GetString(), "campaign-events", StringComparison.Ordinal)
+        );
+
+        Assert.False(string.IsNullOrWhiteSpace(campaignEvents.GetProperty("hash").GetString()));
+        Assert.Equal("/api/v1/catalog/campaign-events", campaignEvents.GetProperty("url").GetString());
+
+        using var secondRequest = new HttpRequestMessage(HttpMethod.Get, "/api/v1/catalog/manifest");
         secondRequest.Headers.IfNoneMatch.Add(new EntityTagHeaderValue(first.Headers.ETag!.Tag));
 
         var second = await client.SendAsync(secondRequest, TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.NotModified, second.StatusCode);
         Assert.Empty(await second.Content.ReadAsByteArrayAsync(TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    public async Task CatalogDatasetReturnsFullChunkWithoutEtagContract()
+    {
+        var client = factory.CreateClient();
+
+        var response = await client.GetAsync("/api/v1/catalog/campaign-events", TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Null(response.Headers.ETag);
+
+        var json = await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
+        using var document = JsonDocument.Parse(json);
+
+        Assert.Equal("campaign-events", document.RootElement.GetProperty("datasetKey").GetString());
+        Assert.False(string.IsNullOrWhiteSpace(document.RootElement.GetProperty("datasetHash").GetString()));
+        Assert.NotEmpty(document.RootElement.GetProperty("items").EnumerateArray());
     }
 }
 

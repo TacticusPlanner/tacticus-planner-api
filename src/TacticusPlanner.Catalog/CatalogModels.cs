@@ -10,6 +10,7 @@ public static class CatalogDatasets
     public const string Upgrades = "upgrades";
     public const string Equipment = "equipment";
     public const string Campaigns = "campaigns";
+    public const string CampaignEvents = "campaign-events";
     public const string CampaignBattles = "campaign-battles";
     public const string Lres = "lres";
 
@@ -20,6 +21,7 @@ public static class CatalogDatasets
         Upgrades,
         Equipment,
         Campaigns,
+        CampaignEvents,
         CampaignBattles,
         Lres,
     ];
@@ -48,6 +50,7 @@ public sealed record CatalogSnapshot(
     IReadOnlyList<CatalogUpgrade> Upgrades,
     IReadOnlyList<CatalogEquipment> Equipment,
     IReadOnlyList<CatalogCampaign> Campaigns,
+    IReadOnlyList<CatalogCampaign> CampaignEvents,
     IReadOnlyList<CatalogCampaignBattle> CampaignBattles,
     IReadOnlyList<CatalogLre> Lres
 )
@@ -64,10 +67,6 @@ public sealed record CatalogSnapshot(
 
     public IReadOnlyDictionary<string, CatalogCampaignBattle> CampaignBattlesById { get; } =
         ToLookup(CampaignBattles, battle => battle.Id);
-
-    public IReadOnlyList<CatalogCampaign> CampaignEvents { get; } = Campaigns
-        .Where(campaign => string.Equals(campaign.ReleaseType, "event", StringComparison.OrdinalIgnoreCase))
-        .ToArray();
 
     public IReadOnlyDictionary<string, IReadOnlyList<string>> UpgradeFarmLocations { get; } =
         BuildUpgradeFarmLocations(CampaignBattles);

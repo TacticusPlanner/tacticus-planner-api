@@ -12,6 +12,7 @@ public static class CatalogValidator
         ValidateUniqueIds(CatalogDatasets.Upgrades, snapshot.Upgrades, upgrade => upgrade.Id, errors);
         ValidateUniqueIds(CatalogDatasets.Equipment, snapshot.Equipment, item => item.Id, errors);
         ValidateUniqueIds(CatalogDatasets.Campaigns, snapshot.Campaigns, campaign => campaign.Id, errors);
+        ValidateUniqueIds(CatalogDatasets.CampaignEvents, snapshot.CampaignEvents, campaign => campaign.Id, errors);
         ValidateUniqueIds(CatalogDatasets.CampaignBattles, snapshot.CampaignBattles, battle => battle.Id, errors);
         ValidateUniqueIds(CatalogDatasets.Lres, snapshot.Lres, lre => lre.Id.ToString(System.Globalization.CultureInfo.InvariantCulture), errors);
         ValidateRequiredFields(snapshot, errors);
@@ -77,6 +78,12 @@ public static class CatalogValidator
             Require(CatalogDatasets.Campaigns, campaign.Id, campaign.ReleaseType, "releaseType", errors);
             Require(CatalogDatasets.Campaigns, campaign.Id, campaign.Difficulty, "difficulty", errors);
         }
+
+        foreach (var campaign in snapshot.CampaignEvents)
+        {
+            Require(CatalogDatasets.CampaignEvents, campaign.Id, campaign.ReleaseType, "releaseType", errors);
+            Require(CatalogDatasets.CampaignEvents, campaign.Id, campaign.Difficulty, "difficulty", errors);
+        }
     }
 
     private static void ValidateReferences(CatalogSnapshot snapshot, List<CatalogValidationError> errors)
@@ -87,6 +94,7 @@ public static class CatalogValidator
         unitOrMowIds.UnionWith(mowIds);
         var upgradeIds = new HashSet<string>(snapshot.Upgrades.Select(upgrade => upgrade.Id), StringComparer.OrdinalIgnoreCase);
         var campaignIds = new HashSet<string>(snapshot.Campaigns.Select(campaign => campaign.Id), StringComparer.OrdinalIgnoreCase);
+        campaignIds.UnionWith(snapshot.CampaignEvents.Select(campaign => campaign.Id));
 
         foreach (var mow in snapshot.Mows)
         {
@@ -117,6 +125,14 @@ public static class CatalogValidator
             foreach (var unitId in campaign.CoreCharacters)
             {
                 RequireReference(CatalogDatasets.Campaigns, campaign.Id, "coreCharacters", unitId, unitIds, errors);
+            }
+        }
+
+        foreach (var campaign in snapshot.CampaignEvents)
+        {
+            foreach (var unitId in campaign.CoreCharacters)
+            {
+                RequireReference(CatalogDatasets.CampaignEvents, campaign.Id, "coreCharacters", unitId, unitIds, errors);
             }
         }
 

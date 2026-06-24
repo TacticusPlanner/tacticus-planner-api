@@ -23,6 +23,10 @@
       "file": "campaigns.json"
     },
     {
+      "key": "campaign-events",
+      "file": "campaign-events.json"
+    },
+    {
       "key": "campaign-battles",
       "file": "campaign-battles.json"
     },

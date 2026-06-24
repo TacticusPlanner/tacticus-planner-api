@@ -16,6 +16,7 @@ public sealed class CatalogValidationTests
         Assert.NotEmpty(snapshot.Upgrades);
         Assert.NotEmpty(snapshot.Equipment);
         Assert.NotEmpty(snapshot.Campaigns);
+        Assert.NotEmpty(snapshot.CampaignEvents);
         Assert.NotEmpty(snapshot.CampaignBattles);
         Assert.NotEmpty(snapshot.Lres);
 
@@ -62,6 +63,7 @@ public sealed class CatalogValidationTests
         var snapshot = LoadSnapshot();
 
         Assert.NotEmpty(snapshot.CampaignEvents);
+        Assert.All(snapshot.Campaigns, campaign => Assert.NotEqual("event", campaign.ReleaseType));
         Assert.All(snapshot.CampaignEvents, campaign => Assert.Equal("event", campaign.ReleaseType));
 
         var farmableReward = snapshot.UpgradeFarmLocations.First(pair => pair.Value.Count > 0);

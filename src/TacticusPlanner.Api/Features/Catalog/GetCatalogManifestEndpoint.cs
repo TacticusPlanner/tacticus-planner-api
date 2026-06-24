@@ -46,10 +46,23 @@ public sealed class GetCatalogManifestEndpoint(ICatalogProvider catalog)
             snapshot.SourceHash,
             snapshot.DatasetHashes
                 .OrderBy(pair => pair.Key, StringComparer.Ordinal)
-                .Select(pair => new CatalogManifestDatasetResponse(pair.Key, pair.Value))
+                .Select(pair => new CatalogManifestDatasetResponse(pair.Key, pair.Value, GetDatasetUrl(pair.Key)))
                 .ToArray()
         );
 
         await Send.OkAsync(response, ct);
     }
+
+    private static string GetDatasetUrl(string datasetKey) => datasetKey switch
+    {
+        CatalogDatasets.Units => "/api/v1/catalog/units",
+        CatalogDatasets.Mows => "/api/v1/catalog/mows",
+        CatalogDatasets.Upgrades => "/api/v1/catalog/upgrades",
+        CatalogDatasets.Equipment => "/api/v1/catalog/equipment",
+        CatalogDatasets.Campaigns => "/api/v1/catalog/campaigns",
+        CatalogDatasets.CampaignEvents => "/api/v1/catalog/campaign-events",
+        CatalogDatasets.CampaignBattles => "/api/v1/catalog/campaign-battles",
+        CatalogDatasets.Lres => "/api/v1/catalog/lres",
+        _ => throw new InvalidOperationException($"Unknown catalog dataset '{datasetKey}'."),
+    };
 }

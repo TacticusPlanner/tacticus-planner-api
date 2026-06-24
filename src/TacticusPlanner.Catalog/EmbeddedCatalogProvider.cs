@@ -42,6 +42,11 @@ internal sealed class EmbeddedCatalogProvider : ICatalogProvider
         var upgrades = LoadDataset<IReadOnlyList<CatalogUpgrade>>(datasets, CatalogDatasets.Upgrades, datasetHashes);
         var equipment = LoadDataset<IReadOnlyList<CatalogEquipment>>(datasets, CatalogDatasets.Equipment, datasetHashes);
         var campaigns = LoadDataset<IReadOnlyList<CatalogCampaign>>(datasets, CatalogDatasets.Campaigns, datasetHashes);
+        var campaignEvents = LoadDataset<IReadOnlyList<CatalogCampaign>>(
+            datasets,
+            CatalogDatasets.CampaignEvents,
+            datasetHashes
+        );
         var campaignBattles = LoadDataset<IReadOnlyList<CatalogCampaignBattle>>(
             datasets,
             CatalogDatasets.CampaignBattles,
@@ -60,6 +65,7 @@ internal sealed class EmbeddedCatalogProvider : ICatalogProvider
             new ReadOnlyCollection<CatalogUpgrade>(upgrades.ToArray()),
             new ReadOnlyCollection<CatalogEquipment>(equipment.ToArray()),
             new ReadOnlyCollection<CatalogCampaign>(campaigns.ToArray()),
+            new ReadOnlyCollection<CatalogCampaign>(campaignEvents.ToArray()),
             new ReadOnlyCollection<CatalogCampaignBattle>(campaignBattles.ToArray()),
             new ReadOnlyCollection<CatalogLre>(lres.ToArray())
         );
