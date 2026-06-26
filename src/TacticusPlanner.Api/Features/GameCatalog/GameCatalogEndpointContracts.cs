@@ -1,21 +1,21 @@
-namespace TacticusPlanner.Api.Features.Catalog;
+namespace TacticusPlanner.Api.Features.GameCatalog;
 
-public sealed record CatalogManifestResponse(
+public sealed record GameCatalogManifestResponse(
     string Version,
     int SchemaVersion,
     string GameVersion,
     string SourceHash,
-    IReadOnlyList<CatalogManifestDatasetResponse> Datasets
+    IReadOnlyList<GameCatalogManifestDatasetResponse> Datasets
 );
 
-public sealed record CatalogManifestDatasetResponse(
+public sealed record GameCatalogManifestDatasetResponse(
     string Key,
     string Hash,
     string Url
 );
 
 /// <summary>Envelope for one served (denormalized) dataset. Payload shape varies per entity.</summary>
-public sealed record CatalogDatasetEnvelope<TPayload>(
+public sealed record GameCatalogDatasetEnvelope<TPayload>(
     string Version,
     int SchemaVersion,
     string GameVersion,

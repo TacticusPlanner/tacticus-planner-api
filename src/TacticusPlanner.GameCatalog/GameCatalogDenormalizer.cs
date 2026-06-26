@@ -1,23 +1,23 @@
 using System.Collections.ObjectModel;
 
-namespace TacticusPlanner.Catalog;
+namespace TacticusPlanner.GameCatalog;
 
 /// <summary>
 /// Builds the consolidated, denormalized served datasets from the raw source collections: cross-references
 /// (shard/upgrade farm locations with inlined drop chances, eligible equipment, recursively expanded
 /// recipes, per-track available units) are resolved server-side so the client never joins.
 /// </summary>
-internal static class CatalogDenormalizer
+internal static class GameCatalogDenormalizer
 {
     private static readonly string[] ShardPrefixes = ["shards_", "mythicShards_"];
 
     private readonly record struct RewardLocation(string BattleId, string Difficulty, bool Guaranteed, string? ChanceId);
 
-    public static IReadOnlyList<CatalogCharacterView> BuildCharacters(
-        IReadOnlyDictionary<string, CatalogFactionUnits> unitsByFaction,
-        IReadOnlyDictionary<string, IReadOnlyList<CatalogEquipment>> equipmentByType,
-        IReadOnlyDictionary<string, CatalogCampaignGroup> campaignGroups,
-        IReadOnlyList<CatalogDropChance> dropChances)
+    public static IReadOnlyList<GameCatalogCharacterView> BuildCharacters(
+        IReadOnlyDictionary<string, GameCatalogFactionUnits> unitsByFaction,
+        IReadOnlyDictionary<string, IReadOnlyList<GameCatalogEquipment>> equipmentByType,
+        IReadOnlyDictionary<string, GameCatalogCampaignGroup> campaignGroups,
+        IReadOnlyList<GameCatalogDropChance> dropChances)
     {
         var dropChanceById = BuildDropChanceIndex(dropChances);
         var rewardLocations = BuildRewardLocations(campaignGroups);
@@ -26,12 +26,12 @@ internal static class CatalogDenormalizer
             .GroupBy(item => item.Type, StringComparer.Ordinal)
             .ToDictionary(group => group.Key, group => group.ToArray(), StringComparer.Ordinal);
 
-        var characters = new List<CatalogCharacterView>();
+        var characters = new List<GameCatalogCharacterView>();
         foreach (var faction in unitsByFaction.OrderBy(pair => pair.Key, StringComparer.Ordinal).Select(pair => pair.Value))
         {
             foreach (var character in faction.Characters)
             {
-                characters.Add(new CatalogCharacterView(
+                characters.Add(new GameCatalogCharacterView(
                     character.Id,
                     character.Name,
                     faction.FactionId,
@@ -61,26 +61,23 @@ internal static class CatalogDenormalizer
         return characters;
     }
 
-    public static IReadOnlyList<CatalogNpc> BuildNpcs(IReadOnlyDictionary<string, CatalogFactionNpcs> npcsByFaction) =>
+    public static IReadOnlyList<GameCatalogNpc> BuildNpcs(IReadOnlyDictionary<string, GameCatalogFactionNpcs> npcsByFaction) =>
         npcsByFaction
             .OrderBy(pair => pair.Key, StringComparer.Ordinal)
             .SelectMany(pair => pair.Value.Npcs)
             .ToArray();
 
-    public static CatalogMowDataset BuildMows(
-        IReadOnlyDictionary<string, CatalogFactionUnits> unitsByFaction,
-        IReadOnlyList<CatalogMowUpgradeCost> mowUpgradeCosts) =>
-        new(
-            unitsByFaction
-                .OrderBy(pair => pair.Key, StringComparer.Ordinal)
-                .SelectMany(pair => pair.Value.Mows)
-                .ToArray(),
-            mowUpgradeCosts);
+    public static IReadOnlyList<GameCatalogMow> BuildMows(
+        IReadOnlyDictionary<string, GameCatalogFactionUnits> unitsByFaction) =>
+        unitsByFaction
+            .OrderBy(pair => pair.Key, StringComparer.Ordinal)
+            .SelectMany(pair => pair.Value.Mows)
+            .ToArray();
 
-    public static IReadOnlyList<CatalogUpgradeView> BuildUpgrades(
-        IReadOnlyDictionary<string, IReadOnlyList<CatalogUpgrade>> upgradesByRarity,
-        IReadOnlyDictionary<string, CatalogCampaignGroup> campaignGroups,
-        IReadOnlyList<CatalogDropChance> dropChances)
+    public static IReadOnlyList<GameCatalogUpgradeView> BuildUpgrades(
+        IReadOnlyDictionary<string, IReadOnlyList<GameCatalogUpgrade>> upgradesByRarity,
+        IReadOnlyDictionary<string, GameCatalogCampaignGroup> campaignGroups,
+        IReadOnlyList<GameCatalogDropChance> dropChances)
     {
         var dropChanceById = BuildDropChanceIndex(dropChances);
         var rewardLocations = BuildRewardLocations(campaignGroups);
@@ -90,10 +87,10 @@ internal static class CatalogDenormalizer
             .ToArray();
         var byId = upgrades.ToDictionary(upgrade => upgrade.Id, StringComparer.OrdinalIgnoreCase);
 
-        var views = new List<CatalogUpgradeView>(upgrades.Length);
+        var views = new List<GameCatalogUpgradeView>(upgrades.Length);
         foreach (var upgrade in upgrades)
         {
-            views.Add(new CatalogUpgradeView(
+            views.Add(new GameCatalogUpgradeView(
                 upgrade.Id,
                 upgrade.Material,
                 upgrade.SnowprintId,
@@ -110,38 +107,66 @@ internal static class CatalogDenormalizer
         return views;
     }
 
-    public static CatalogEquipmentDataset BuildEquipment(
-        IReadOnlyDictionary<string, IReadOnlyList<CatalogEquipment>> equipmentByType,
-        IReadOnlyList<CatalogEquipmentUpgradeCost> equipmentUpgradeCosts) =>
-        new(
-            equipmentByType
-                .OrderBy(pair => pair.Key, StringComparer.Ordinal)
-                .SelectMany(pair => pair.Value)
-                .ToArray(),
-            equipmentUpgradeCosts);
+    public static IReadOnlyList<GameCatalogEquipmentView> BuildEquipment(
+        IReadOnlyDictionary<string, IReadOnlyList<GameCatalogEquipment>> equipmentByType,
+        IReadOnlyList<GameCatalogEquipmentUpgradeCost> equipmentUpgradeCosts)
+    {
+        var levelsByRarity = equipmentUpgradeCosts
+            .GroupBy(cost => cost.Rarity, StringComparer.Ordinal)
+            .ToDictionary(group => group.Key, group => group.First().Levels, StringComparer.Ordinal);
 
-    public static IReadOnlyList<CatalogCampaignGroupView> BuildCampaignGroups(
-        IReadOnlyDictionary<string, CatalogCampaignGroup> campaignGroups,
-        IReadOnlyList<CatalogDropChance> dropChances)
+        return equipmentByType
+            .OrderBy(pair => pair.Key, StringComparer.Ordinal)
+            .SelectMany(pair => pair.Value)
+            .Select(item => new GameCatalogEquipmentView(
+                item.Id,
+                item.Name,
+                item.Rarity,
+                item.Type,
+                item.AbilityId,
+                item.IsRelic,
+                item.IsUniqueRelic,
+                item.AllowedUnits,
+                item.AllowedFactions,
+                item.Levels,
+                levelsByRarity.TryGetValue(item.Rarity, out var levels) ? levels : []))
+            .ToArray();
+    }
+
+    // campaign-battles: every battle flattened across all groups, each carrying its campaignGroupId and
+    // keyed (downstream) by its globally-unique battle id.
+    public static IReadOnlyList<GameCatalogCampaignBattleView> BuildCampaignBattles(
+        IReadOnlyDictionary<string, GameCatalogCampaignGroup> campaignGroups,
+        IReadOnlyList<GameCatalogDropChance> dropChances)
     {
         var dropChanceById = BuildDropChanceIndex(dropChances);
 
         return campaignGroups
             .OrderBy(pair => pair.Key, StringComparer.Ordinal)
             .Select(pair => pair.Value)
-            .Select(group => new CatalogCampaignGroupView(
+            .SelectMany(group => group.Battles.Select(battle => BuildBattleView(battle, group.GroupId, dropChanceById)))
+            .ToArray();
+    }
+
+    // campaign-definitions: one record per group with its metadata plus the ids of its battles (the battle
+    // bodies live in the campaign-battles dataset).
+    public static IReadOnlyList<GameCatalogCampaignDefinitionView> BuildCampaignDefinitions(
+        IReadOnlyDictionary<string, GameCatalogCampaignGroup> campaignGroups) =>
+        campaignGroups
+            .OrderBy(pair => pair.Key, StringComparer.Ordinal)
+            .Select(pair => pair.Value)
+            .Select(group => new GameCatalogCampaignDefinitionView(
                 group.GroupId,
                 group.Faction,
                 group.ReleaseType,
                 group.CoreCharacters,
                 group.Difficulties,
-                group.Battles.Select(battle => BuildBattleView(battle, dropChanceById)).ToArray()))
+                group.Battles.Select(battle => battle.Id).ToArray()))
             .ToArray();
-    }
 
-    public static IReadOnlyList<CatalogLreView> BuildLres(
-        IReadOnlyDictionary<string, CatalogLre> lresByEvent,
-        IReadOnlyDictionary<string, CatalogFactionUnits> unitsByFaction)
+    public static IReadOnlyList<GameCatalogLreView> BuildLres(
+        IReadOnlyDictionary<string, GameCatalogLre> lresByEvent,
+        IReadOnlyDictionary<string, GameCatalogFactionUnits> unitsByFaction)
     {
         var roster = unitsByFaction
             .OrderBy(pair => pair.Key, StringComparer.Ordinal)
@@ -153,8 +178,7 @@ internal static class CatalogDenormalizer
         return lresByEvent
             .OrderBy(pair => pair.Key, StringComparer.Ordinal)
             .Select(pair => pair.Value)
-            .Select(lre => new CatalogLreView(
-                lre.Id,
+            .Select(lre => new GameCatalogLreView(
                 lre.UnitSnowprintId,
                 lre.Name,
                 lre.WikiLink,
@@ -178,13 +202,13 @@ internal static class CatalogDenormalizer
 
     // ---- helpers ---------------------------------------------------------------------------------
 
-    private static Dictionary<string, CatalogDropChance> BuildDropChanceIndex(IReadOnlyList<CatalogDropChance> dropChances) =>
+    private static Dictionary<string, GameCatalogDropChance> BuildDropChanceIndex(IReadOnlyList<GameCatalogDropChance> dropChances) =>
         dropChances
             .GroupBy(chance => chance.Id, StringComparer.Ordinal)
             .ToDictionary(group => group.Key, group => group.First(), StringComparer.Ordinal);
 
     private static Dictionary<string, List<RewardLocation>> BuildRewardLocations(
-        IReadOnlyDictionary<string, CatalogCampaignGroup> campaignGroups)
+        IReadOnlyDictionary<string, GameCatalogCampaignGroup> campaignGroups)
     {
         var locations = new Dictionary<string, List<RewardLocation>>(StringComparer.OrdinalIgnoreCase);
 
@@ -223,12 +247,12 @@ internal static class CatalogDenormalizer
         }
     }
 
-    private static List<CatalogFarmLocation> BuildShardLocations(
+    private static List<GameCatalogFarmLocation> BuildShardLocations(
         string characterId,
         Dictionary<string, List<RewardLocation>> rewardLocations,
-        Dictionary<string, CatalogDropChance> dropChanceById)
+        Dictionary<string, GameCatalogDropChance> dropChanceById)
     {
-        var result = new List<CatalogFarmLocation>();
+        var result = new List<GameCatalogFarmLocation>();
         foreach (var prefix in ShardPrefixes)
         {
             foreach (var location in ResolveLocations(prefix + characterId, rewardLocations, dropChanceById))
@@ -240,10 +264,10 @@ internal static class CatalogDenormalizer
         return result;
     }
 
-    private static CatalogFarmLocation[] ResolveLocations(
+    private static GameCatalogFarmLocation[] ResolveLocations(
         string rewardId,
         Dictionary<string, List<RewardLocation>> rewardLocations,
-        Dictionary<string, CatalogDropChance> dropChanceById)
+        Dictionary<string, GameCatalogDropChance> dropChanceById)
     {
         if (!rewardLocations.TryGetValue(rewardId, out var locations))
         {
@@ -255,21 +279,21 @@ internal static class CatalogDenormalizer
             if (location.Guaranteed || location.ChanceId is null
                 || !dropChanceById.TryGetValue(location.ChanceId, out var chance))
             {
-                return new CatalogFarmLocation(location.BattleId, location.Difficulty, location.Guaranteed,
+                return new GameCatalogFarmLocation(location.BattleId, location.Difficulty, location.Guaranteed,
                     location.Guaranteed ? null : location.ChanceId, null, null, null);
             }
 
-            return new CatalogFarmLocation(location.BattleId, location.Difficulty, false,
+            return new GameCatalogFarmLocation(location.BattleId, location.Difficulty, false,
                 location.ChanceId, chance.Numerator, chance.Denominator, chance.EffectiveRate);
         }).ToArray();
     }
 
-    private static CatalogEquipmentSlot[] BuildEligibleEquipment(
-        CatalogCharacter character,
+    private static GameCatalogEquipmentSlot[] BuildEligibleEquipment(
+        GameCatalogCharacter character,
         string factionId,
-        Dictionary<string, CatalogEquipment[]> equipmentByTypeName) =>
+        Dictionary<string, GameCatalogEquipment[]> equipmentByTypeName) =>
         character.EquipmentSlots
-            .Select(slot => new CatalogEquipmentSlot(
+            .Select(slot => new GameCatalogEquipmentSlot(
                 slot,
                 equipmentByTypeName.TryGetValue(slot, out var items)
                     ? items
@@ -281,15 +305,15 @@ internal static class CatalogDenormalizer
                     : []))
             .ToArray();
 
-    private static CatalogUpgradeExpansion ExpandRecipe(
+    private static GameCatalogUpgradeExpansion ExpandRecipe(
         string upgradeId,
-        IReadOnlyDictionary<string, CatalogUpgrade> byId)
+        IReadOnlyDictionary<string, GameCatalogUpgrade> byId)
     {
         var baseUpgrades = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         var craftedUpgrades = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         Expand(upgradeId, 1, byId, baseUpgrades, craftedUpgrades, []);
 
-        return new CatalogUpgradeExpansion(
+        return new GameCatalogUpgradeExpansion(
             new ReadOnlyDictionary<string, int>(baseUpgrades),
             new ReadOnlyDictionary<string, int>(craftedUpgrades),
             baseUpgrades.Values.Sum(),
@@ -299,7 +323,7 @@ internal static class CatalogDenormalizer
     private static void Expand(
         string upgradeId,
         int multiplier,
-        IReadOnlyDictionary<string, CatalogUpgrade> byId,
+        IReadOnlyDictionary<string, GameCatalogUpgrade> byId,
         IDictionary<string, int> baseUpgrades,
         IDictionary<string, int> craftedUpgrades,
         HashSet<string> stack)
@@ -327,28 +351,30 @@ internal static class CatalogDenormalizer
     private static void Accumulate(IDictionary<string, int> target, string key, int amount) =>
         target[key] = target.TryGetValue(key, out var current) ? current + amount : amount;
 
-    private static CatalogCampaignBattleView BuildBattleView(
-        CatalogCampaignBattle battle,
-        Dictionary<string, CatalogDropChance> dropChanceById)
+    private static GameCatalogCampaignBattleView BuildBattleView(
+        GameCatalogCampaignBattle battle,
+        string campaignGroupId,
+        Dictionary<string, GameCatalogDropChance> dropChanceById)
     {
         var potential = battle.Rewards.Potential.Select(reward =>
         {
             if (reward.ChanceId is not null && dropChanceById.TryGetValue(reward.ChanceId, out var chance))
             {
-                return new CatalogCampaignPotentialRewardView(reward.Id, reward.ChanceId, chance.RewardKind,
+                return new GameCatalogCampaignPotentialRewardView(reward.Id, reward.ChanceId, chance.RewardKind,
                     chance.Numerator, chance.Denominator, chance.EffectiveRate);
             }
 
-            return new CatalogCampaignPotentialRewardView(reward.Id, reward.ChanceId, null, null, null, null);
+            return new GameCatalogCampaignPotentialRewardView(reward.Id, reward.ChanceId, null, null, null, null);
         }).ToArray();
 
-        return new CatalogCampaignBattleView(
+        return new GameCatalogCampaignBattleView(
             battle.Id,
+            campaignGroupId,
             battle.Difficulty,
             battle.EnergyCost,
             battle.NodeNumber,
             battle.Slots,
-            new CatalogCampaignRewardsView(battle.Rewards.Guaranteed, potential),
+            new GameCatalogCampaignRewardsView(battle.Rewards.Guaranteed, potential),
             battle.EnemyPower,
             battle.EnemiesAlliances,
             battle.EnemiesFactions,
@@ -357,8 +383,8 @@ internal static class CatalogDenormalizer
             battle.DetailedEnemyTypes);
     }
 
-    private static CatalogLreTrackView BuildTrackView(
-        CatalogLreTrack track,
+    private static GameCatalogLreTrackView BuildTrackView(
+        GameCatalogLreTrack track,
         IReadOnlyList<(string Id, string Faction, string Alliance)> roster)
     {
         var availableUnitIds = roster
@@ -366,7 +392,7 @@ internal static class CatalogDenormalizer
             .Select(unit => unit.Id)
             .ToArray();
 
-        return new CatalogLreTrackView(
+        return new GameCatalogLreTrackView(
             track.Name,
             track.Enemies,
             track.KillPoints,
@@ -378,7 +404,7 @@ internal static class CatalogDenormalizer
             availableUnitIds);
     }
 
-    private static bool Passes(CatalogLreFilter filter, string faction, string alliance)
+    private static bool Passes(GameCatalogLreFilter filter, string faction, string alliance)
     {
         var matches = filter.Kind switch
         {

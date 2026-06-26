@@ -1,9 +1,9 @@
 using System.Text.Json;
 using Xunit;
 
-namespace TacticusPlanner.Catalog.Tests;
+namespace TacticusPlanner.GameCatalog.Tests;
 
-public sealed class CatalogValidationTests
+public sealed class GameCatalogValidationTests
 {
     [Fact]
     public void EmbeddedSnapshotLoadsAllDatasets()
@@ -21,17 +21,17 @@ public sealed class CatalogValidationTests
         Assert.NotEmpty(snapshot.CampaignBattles);
         Assert.NotEmpty(snapshot.Lres);
 
-        Assert.All(CatalogDatasets.UnitFactions, key =>
+        Assert.All(GameCatalogDatasets.UnitFactions, key =>
         {
             Assert.True(snapshot.UnitsByFaction.TryGetValue(key, out var faction), $"Missing unit faction {key}.");
             Assert.NotEmpty(faction!.Characters);
         });
-        Assert.All(CatalogDatasets.NpcFactions, key =>
+        Assert.All(GameCatalogDatasets.NpcFactions, key =>
         {
             Assert.True(snapshot.NpcsByFaction.TryGetValue(key, out var faction), $"Missing npc faction {key}.");
             Assert.NotEmpty(faction!.Npcs);
         });
-        Assert.All(CatalogDatasets.CampaignBattleGroups, key =>
+        Assert.All(GameCatalogDatasets.CampaignBattleGroups, key =>
         {
             Assert.True(snapshot.CampaignGroups.TryGetValue(key, out var group), $"Missing campaign group {key}.");
             Assert.NotEmpty(group!.Faction);
@@ -39,21 +39,21 @@ public sealed class CatalogValidationTests
             Assert.NotEmpty(group.Difficulties);
             Assert.NotEmpty(group.Battles);
         });
-        Assert.All(CatalogDatasets.EquipmentTypes, key =>
+        Assert.All(GameCatalogDatasets.EquipmentTypes, key =>
         {
             Assert.True(snapshot.EquipmentByType.TryGetValue(key, out var items), $"Missing equipment type {key}.");
             Assert.NotEmpty(items!);
         });
-        Assert.All(CatalogDatasets.UpgradeRarities, key =>
+        Assert.All(GameCatalogDatasets.UpgradeRarities, key =>
         {
             Assert.True(snapshot.UpgradesByRarity.TryGetValue(key, out var items), $"Missing upgrade rarity {key}.");
             Assert.NotEmpty(items!);
         });
-        Assert.All(CatalogDatasets.LreEvents, key =>
+        Assert.All(GameCatalogDatasets.LreEvents, key =>
             Assert.True(snapshot.LresByEvent.ContainsKey(key), $"Missing LRE event {key}."));
 
         // The manifest now exposes the denormalized served datasets (hashes computed over each projection).
-        foreach (var servedDataset in CatalogDatasets.Served)
+        foreach (var servedDataset in GameCatalogDatasets.Served)
         {
             Assert.True(snapshot.DatasetHashes.ContainsKey(servedDataset), $"Missing hash for {servedDataset}.");
         }
@@ -61,13 +61,20 @@ public sealed class CatalogValidationTests
         Assert.Equal("1.40", snapshot.GameVersion);
         Assert.NotEmpty(snapshot.CharacterViews);
         Assert.NotEmpty(snapshot.NpcList);
-        Assert.NotEmpty(snapshot.MowDataset.Items);
-        Assert.NotEmpty(snapshot.MowDataset.UpgradeCosts);
+        Assert.NotEmpty(snapshot.MowList);
+        Assert.NotEmpty(snapshot.MowUpgradeCosts);
         Assert.NotEmpty(snapshot.UpgradeViews);
-        Assert.NotEmpty(snapshot.EquipmentDataset.Items);
-        Assert.NotEmpty(snapshot.EquipmentDataset.UpgradeCostsByRarity);
-        Assert.NotEmpty(snapshot.CampaignGroupViews);
+        Assert.NotEmpty(snapshot.EquipmentViews);
+        // Equipment carries its matched per-rarity upgrade-cost ladder inlined (no shared extras table).
+        Assert.Contains(snapshot.EquipmentViews, item => item.UpgradeLevels.Count > 0);
+        Assert.NotEmpty(snapshot.CampaignBattleViews);
+        Assert.Contains(snapshot.CampaignBattleViews, battle => !string.IsNullOrEmpty(battle.CampaignGroupId));
+        Assert.NotEmpty(snapshot.CampaignDefinitionViews);
+        Assert.Contains(snapshot.CampaignDefinitionViews, definition => definition.BattleIds.Count > 0);
         Assert.NotEmpty(snapshot.LreViews);
+        // LRE id is the unit snowprint id (a non-numeric string), not the old numeric event id.
+        Assert.All(snapshot.LreViews, lre => Assert.False(string.IsNullOrWhiteSpace(lre.Id)));
+        Assert.Contains(snapshot.LreViews, lre => lre.Id == "emperLucius");
     }
 
     [Fact]
@@ -119,11 +126,11 @@ public sealed class CatalogValidationTests
     }
 
     [Fact]
-    public void CatalogValidationPassesForEmbeddedSnapshot()
+    public void GameCatalogValidationPassesForEmbeddedSnapshot()
     {
         var snapshot = LoadSnapshot();
 
-        var errors = CatalogValidator.Validate(snapshot);
+        var errors = GameCatalogValidator.Validate(snapshot);
 
         Assert.Empty(errors);
     }
@@ -143,10 +150,10 @@ public sealed class CatalogValidationTests
             """);
         using var changed = JsonDocument.Parse("""{"b":3,"a":["x","y"]}""");
 
-        var originalHash = CatalogHashing.ComputeCanonicalJsonHash(original.RootElement);
+        var originalHash = GameCatalogHashing.ComputeCanonicalJsonHash(original.RootElement);
 
-        Assert.Equal(originalHash, CatalogHashing.ComputeCanonicalJsonHash(reformatted.RootElement));
-        Assert.NotEqual(originalHash, CatalogHashing.ComputeCanonicalJsonHash(changed.RootElement));
+        Assert.Equal(originalHash, GameCatalogHashing.ComputeCanonicalJsonHash(reformatted.RootElement));
+        Assert.NotEqual(originalHash, GameCatalogHashing.ComputeCanonicalJsonHash(changed.RootElement));
     }
 
     [Fact]
@@ -172,16 +179,16 @@ public sealed class CatalogValidationTests
         Assert.NotEmpty(expandedRecipe);
     }
 
-    private static CatalogSnapshot LoadSnapshot()
+    private static GameCatalogSnapshot LoadSnapshot()
     {
-        var serviceCollection = CatalogServiceCollectionExtensions.AddCatalog(
+        var serviceCollection = GameCatalogServiceCollectionExtensions.AddGameCatalog(
             new Microsoft.Extensions.DependencyInjection.ServiceCollection()
         );
         using var services =
             Microsoft.Extensions.DependencyInjection.ServiceCollectionContainerBuilderExtensions.BuildServiceProvider(serviceCollection);
 
         return Microsoft.Extensions.DependencyInjection.ServiceProviderServiceExtensions
-            .GetRequiredService<ICatalogProvider>(services)
+            .GetRequiredService<IGameCatalogProvider>(services)
             .Current;
     }
 }

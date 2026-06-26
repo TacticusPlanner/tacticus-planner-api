@@ -12,11 +12,11 @@ namespace TacticusPlanner.Api.Tests;
 /// lres body snapshot guards the denormalized payload shape. Regenerate baselines by running with the
 /// environment variable <c>UPDATE_SNAPSHOTS=1</c>.
 /// </summary>
-public sealed class CatalogSnapshotTests : IClassFixture<CatalogApiFactory>
+public sealed class GameCatalogSnapshotTests : IClassFixture<GameCatalogApiFactory>
 {
-    private readonly CatalogApiFactory factory;
+    private readonly GameCatalogApiFactory factory;
 
-    public CatalogSnapshotTests(CatalogApiFactory factory)
+    public GameCatalogSnapshotTests(GameCatalogApiFactory factory)
     {
         this.factory = factory;
     }
@@ -25,7 +25,7 @@ public sealed class CatalogSnapshotTests : IClassFixture<CatalogApiFactory>
     public async Task ManifestRegistryMatchesSnapshot()
     {
         var client = factory.CreateClient();
-        var json = await client.GetStringAsync("/api/v1/catalog/manifest", TestContext.Current.CancellationToken);
+        var json = await client.GetStringAsync("/api/v1/game-catalog/manifest", TestContext.Current.CancellationToken);
         using var manifest = JsonDocument.Parse(json);
         var root = manifest.RootElement;
 
@@ -50,7 +50,7 @@ public sealed class CatalogSnapshotTests : IClassFixture<CatalogApiFactory>
     public async Task LresDatasetMatchesSnapshot()
     {
         var client = factory.CreateClient();
-        var json = await client.GetStringAsync("/api/v1/catalog/lres", TestContext.Current.CancellationToken);
+        var json = await client.GetStringAsync("/api/v1/game-catalog/lres", TestContext.Current.CancellationToken);
         using var document = JsonDocument.Parse(json);
         var data = document.RootElement.GetProperty("data");
 

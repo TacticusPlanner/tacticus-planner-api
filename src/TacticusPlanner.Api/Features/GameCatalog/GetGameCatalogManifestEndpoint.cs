@@ -1,24 +1,24 @@
 using FastEndpoints;
 using Microsoft.Net.Http.Headers;
-using TacticusPlanner.Catalog;
+using TacticusPlanner.GameCatalog;
 
-namespace TacticusPlanner.Api.Features.Catalog;
+namespace TacticusPlanner.Api.Features.GameCatalog;
 
-public sealed class GetCatalogManifestEndpoint(ICatalogProvider catalog)
-    : EndpointWithoutRequest<CatalogManifestResponse>
+public sealed class GetGameCatalogManifestEndpoint(IGameCatalogProvider catalog)
+    : EndpointWithoutRequest<GameCatalogManifestResponse>
 {
     public override void Configure()
     {
-        Get("catalog/manifest");
+        Get("game-catalog/manifest");
         AllowAnonymous();
         Summary(summary =>
         {
-            summary.Summary = "Gets the active catalog manifest.";
-            summary.Description = "Returns catalog release metadata (version, schema version, game version), "
+            summary.Summary = "Gets the active game catalog manifest.";
+            summary.Description = "Returns game catalog release metadata (version, schema version, game version), "
                 + "source hash, and per-dataset hashes for the denormalized datasets.";
-            summary.Response<CatalogManifestResponse>(
+            summary.Response<GameCatalogManifestResponse>(
                 StatusCodes.Status200OK,
-                "The active catalog manifest."
+                "The active game catalog manifest."
             );
             summary.Response(StatusCodes.Status304NotModified, "The manifest has not changed.");
         });
@@ -27,9 +27,9 @@ public sealed class GetCatalogManifestEndpoint(ICatalogProvider catalog)
     public override async Task HandleAsync(CancellationToken ct)
     {
         var snapshot = catalog.Current;
-        var etag = CatalogHttpCaching.CreateEtag(snapshot.SourceHash);
+        var etag = GameCatalogHttpCaching.CreateEtag(snapshot.SourceHash);
 
-        if (CatalogHttpCaching.TryApplyNotModified(HttpContext, etag))
+        if (GameCatalogHttpCaching.TryApplyNotModified(HttpContext, etag))
         {
             await Send.NotModifiedAsync(ct);
             return;
@@ -39,14 +39,14 @@ public sealed class GetCatalogManifestEndpoint(ICatalogProvider catalog)
         HttpContext.Response.Headers.CacheControl = "private, must-revalidate";
         HttpContext.Response.Headers.Vary = HeaderNames.Authorization;
 
-        var response = new CatalogManifestResponse(
+        var response = new GameCatalogManifestResponse(
             snapshot.Version,
             snapshot.SchemaVersion,
             snapshot.GameVersion,
             snapshot.SourceHash,
             snapshot.DatasetHashes
                 .OrderBy(pair => pair.Key, StringComparer.Ordinal)
-                .Select(pair => new CatalogManifestDatasetResponse(pair.Key, pair.Value, GetDatasetUrl(pair.Key)))
+                .Select(pair => new GameCatalogManifestDatasetResponse(pair.Key, pair.Value, GetDatasetUrl(pair.Key)))
                 .ToArray()
         );
 
@@ -54,5 +54,5 @@ public sealed class GetCatalogManifestEndpoint(ICatalogProvider catalog)
     }
 
     // Served datasets are consolidated: each key maps 1:1 onto its route.
-    private static string GetDatasetUrl(string datasetKey) => $"/api/v1/catalog/{datasetKey}";
+    private static string GetDatasetUrl(string datasetKey) => $"/api/v1/game-catalog/{datasetKey}";
 }

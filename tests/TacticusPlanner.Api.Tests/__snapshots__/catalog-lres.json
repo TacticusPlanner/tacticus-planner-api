@@ -1,7 +1,6 @@
 [
   {
-    "id": 12,
-    "unitSnowprintId": "emperLucius",
+    "id": "emperLucius",
     "name": "Lucius",
     "wikiLink": "https://tacticus.wiki.gg/wiki/Legendary_Character_Events",
     "eventStage": 2,
@@ -7690,8 +7689,7 @@
     }
   },
   {
-    "id": 13,
-    "unitSnowprintId": "tauFarsight",
+    "id": "tauFarsight",
     "name": "Farsight",
     "wikiLink": "https://tacticus.wiki.gg/wiki/Legendary_Character_Events",
     "eventStage": 2,
@@ -15310,8 +15308,7 @@
     }
   },
   {
-    "id": 14,
-    "unitSnowprintId": "votanUthar",
+    "id": "votanUthar",
     "name": "Uthar",
     "wikiLink": "https://tacticus.wiki.gg/wiki/Legendary_Character_Events",
     "eventStage": 1,

@@ -11,24 +11,24 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using TacticusPlanner.Catalog;
+using TacticusPlanner.GameCatalog;
 using Xunit;
 
 namespace TacticusPlanner.Api.Tests;
 
-public sealed class CatalogApiSmokeTests : IClassFixture<CatalogApiFactory>
+public sealed class GameCatalogApiSmokeTests : IClassFixture<GameCatalogApiFactory>
 {
-    private readonly CatalogApiFactory factory;
+    private readonly GameCatalogApiFactory factory;
 
-    public CatalogApiSmokeTests(CatalogApiFactory factory)
+    public GameCatalogApiSmokeTests(GameCatalogApiFactory factory)
     {
         this.factory = factory;
     }
 
     [Fact]
-    public void ApiHostResolvesCatalogProviderAndParsesEmbeddedData()
+    public void ApiHostResolvesGameCatalogProviderAndParsesEmbeddedData()
     {
-        var snapshot = factory.Services.GetRequiredService<ICatalogProvider>().Current;
+        var snapshot = factory.Services.GetRequiredService<IGameCatalogProvider>().Current;
 
         Assert.NotEmpty(snapshot.SourceHash);
         Assert.NotEmpty(snapshot.Characters);
@@ -37,32 +37,34 @@ public sealed class CatalogApiSmokeTests : IClassFixture<CatalogApiFactory>
     }
 
     [Fact]
-    public async Task OpenApiDocumentContainsCatalogRoutes()
+    public async Task OpenApiDocumentContainsGameCatalogRoutes()
     {
         var client = factory.CreateClient();
 
         var openApi = await client.GetStringAsync("/openapi/v1.json", TestContext.Current.CancellationToken);
 
-        Assert.Contains("/api/v1/catalog/manifest", openApi, StringComparison.Ordinal);
-        Assert.Contains("/api/v1/catalog/characters", openApi, StringComparison.Ordinal);
-        Assert.Contains("/api/v1/catalog/npcs", openApi, StringComparison.Ordinal);
-        Assert.Contains("/api/v1/catalog/mows", openApi, StringComparison.Ordinal);
-        Assert.Contains("/api/v1/catalog/upgrades", openApi, StringComparison.Ordinal);
-        Assert.Contains("/api/v1/catalog/equipment", openApi, StringComparison.Ordinal);
-        Assert.Contains("/api/v1/catalog/campaign-battles", openApi, StringComparison.Ordinal);
-        Assert.Contains("/api/v1/catalog/lres", openApi, StringComparison.Ordinal);
+        Assert.Contains("/api/v1/game-catalog/manifest", openApi, StringComparison.Ordinal);
+        Assert.Contains("/api/v1/game-catalog/characters", openApi, StringComparison.Ordinal);
+        Assert.Contains("/api/v1/game-catalog/npcs", openApi, StringComparison.Ordinal);
+        Assert.Contains("/api/v1/game-catalog/mows", openApi, StringComparison.Ordinal);
+        Assert.Contains("/api/v1/game-catalog/mow-upgrade-costs", openApi, StringComparison.Ordinal);
+        Assert.Contains("/api/v1/game-catalog/upgrades", openApi, StringComparison.Ordinal);
+        Assert.Contains("/api/v1/game-catalog/equipment", openApi, StringComparison.Ordinal);
+        Assert.Contains("/api/v1/game-catalog/campaign-battles", openApi, StringComparison.Ordinal);
+        Assert.Contains("/api/v1/game-catalog/campaign-definitions", openApi, StringComparison.Ordinal);
+        Assert.Contains("/api/v1/game-catalog/lres", openApi, StringComparison.Ordinal);
         Assert.Contains("\"304\"", openApi, StringComparison.Ordinal);
         // The old parameterized chunk routes are gone.
-        Assert.DoesNotContain("/api/v1/catalog/units/{factionId}", openApi, StringComparison.Ordinal);
-        Assert.DoesNotContain("/api/v1/catalog/upgrades/{rarity}", openApi, StringComparison.Ordinal);
+        Assert.DoesNotContain("/api/v1/game-catalog/units/{factionId}", openApi, StringComparison.Ordinal);
+        Assert.DoesNotContain("/api/v1/game-catalog/upgrades/{rarity}", openApi, StringComparison.Ordinal);
     }
 
     [Fact]
-    public async Task CatalogManifestReturnsEtagDatasetUrlsAndSupportsNotModified()
+    public async Task GameCatalogManifestReturnsEtagDatasetUrlsAndSupportsNotModified()
     {
         var client = factory.CreateClient();
 
-        var first = await client.GetAsync("/api/v1/catalog/manifest", TestContext.Current.CancellationToken);
+        var first = await client.GetAsync("/api/v1/game-catalog/manifest", TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, first.StatusCode);
         Assert.NotNull(first.Headers.ETag);
@@ -76,9 +78,9 @@ public sealed class CatalogApiSmokeTests : IClassFixture<CatalogApiFactory>
         );
 
         Assert.False(string.IsNullOrWhiteSpace(characters.GetProperty("hash").GetString()));
-        Assert.Equal("/api/v1/catalog/characters", characters.GetProperty("url").GetString());
+        Assert.Equal("/api/v1/game-catalog/characters", characters.GetProperty("url").GetString());
 
-        using var secondRequest = new HttpRequestMessage(HttpMethod.Get, "/api/v1/catalog/manifest");
+        using var secondRequest = new HttpRequestMessage(HttpMethod.Get, "/api/v1/game-catalog/manifest");
         secondRequest.Headers.IfNoneMatch.Add(new EntityTagHeaderValue(first.Headers.ETag!.Tag));
 
         var second = await client.SendAsync(secondRequest, TestContext.Current.CancellationToken);
@@ -92,7 +94,7 @@ public sealed class CatalogApiSmokeTests : IClassFixture<CatalogApiFactory>
     {
         var client = factory.CreateClient();
 
-        var response = await client.GetAsync("/api/v1/catalog/upgrades", TestContext.Current.CancellationToken);
+        var response = await client.GetAsync("/api/v1/game-catalog/upgrades", TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Null(response.Headers.ETag);
@@ -117,30 +119,50 @@ public sealed class CatalogApiSmokeTests : IClassFixture<CatalogApiFactory>
     {
         var client = factory.CreateClient();
 
-        var characters = await GetData(client, "/api/v1/catalog/characters");
+        var characters = await GetData(client, "/api/v1/game-catalog/characters");
         Assert.NotEmpty(characters.EnumerateArray());
         var character = characters.EnumerateArray().First();
         Assert.False(string.IsNullOrEmpty(character.GetProperty("faction").GetString()));
         Assert.False(string.IsNullOrEmpty(character.GetProperty("alliance").GetString()));
 
-        var npcs = await GetData(client, "/api/v1/catalog/npcs");
+        var npcs = await GetData(client, "/api/v1/game-catalog/npcs");
         Assert.NotEmpty(npcs.EnumerateArray());
 
-        var mows = await GetData(client, "/api/v1/catalog/mows");
-        Assert.NotEmpty(mows.GetProperty("items").EnumerateArray());
-        Assert.NotEmpty(mows.GetProperty("upgradeCosts").EnumerateArray());
+        // mows is now a plain array of items; the shared cost ladder is its own dataset.
+        var mows = await GetData(client, "/api/v1/game-catalog/mows");
+        Assert.NotEmpty(mows.EnumerateArray());
 
-        var equipment = await GetData(client, "/api/v1/catalog/equipment");
-        Assert.NotEmpty(equipment.GetProperty("items").EnumerateArray());
-        Assert.NotEmpty(equipment.GetProperty("upgradeCostsByRarity").EnumerateArray());
+        var mowUpgradeCosts = await GetData(client, "/api/v1/game-catalog/mow-upgrade-costs");
+        Assert.NotEmpty(mowUpgradeCosts.EnumerateArray());
 
-        var groups = await GetData(client, "/api/v1/catalog/campaign-battles");
-        var firstGroup = groups.EnumerateArray().First();
-        Assert.NotEmpty(firstGroup.GetProperty("battles").EnumerateArray());
+        // equipment is a plain array; each item carries its matched upgrade-cost ladder inlined.
+        var equipment = await GetData(client, "/api/v1/game-catalog/equipment");
+        Assert.NotEmpty(equipment.EnumerateArray());
+        Assert.Contains(
+            equipment.EnumerateArray(),
+            item => item.GetProperty("upgradeLevels").EnumerateArray().Any());
 
-        var lres = await GetData(client, "/api/v1/catalog/lres");
+        // campaign-battles is a flat array of battles, each carrying its campaignGroupId.
+        var battles = await GetData(client, "/api/v1/game-catalog/campaign-battles");
+        Assert.NotEmpty(battles.EnumerateArray());
+        var firstBattle = battles.EnumerateArray().First();
+        Assert.False(string.IsNullOrEmpty(firstBattle.GetProperty("campaignGroupId").GetString()));
+
+        // campaign-definitions references battle ids that resolve in campaign-battles.
+        var definitions = await GetData(client, "/api/v1/game-catalog/campaign-definitions");
+        var battleIds = battles.EnumerateArray()
+            .Select(battle => battle.GetProperty("id").GetString())
+            .ToHashSet(StringComparer.Ordinal);
+        var firstDefinition = definitions.EnumerateArray().First();
+        Assert.NotEmpty(firstDefinition.GetProperty("battleIds").EnumerateArray());
+        Assert.All(
+            firstDefinition.GetProperty("battleIds").EnumerateArray(),
+            id => Assert.Contains(id.GetString(), battleIds));
+
+        // lres is keyed by the unit snowprint id (no separate unitSnowprintId field).
+        var lres = await GetData(client, "/api/v1/game-catalog/lres");
         var lucius = lres.EnumerateArray().Single(lre =>
-            string.Equals(lre.GetProperty("unitSnowprintId").GetString(), "emperLucius", StringComparison.Ordinal));
+            string.Equals(lre.GetProperty("id").GetString(), "emperLucius", StringComparison.Ordinal));
         Assert.NotEmpty(lucius.GetProperty("alpha").GetProperty("availableUnitIds").EnumerateArray());
     }
 
@@ -149,30 +171,30 @@ public sealed class CatalogApiSmokeTests : IClassFixture<CatalogApiFactory>
     {
         var client = factory.CreateClient();
 
-        var response = await client.GetAsync("/api/v1/catalog/manifest", TestContext.Current.CancellationToken);
+        var response = await client.GetAsync("/api/v1/game-catalog/manifest", TestContext.Current.CancellationToken);
         var manifestJson = await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
         using var manifest = JsonDocument.Parse(manifestJson);
         var datasets = manifest.RootElement.GetProperty("datasets").EnumerateArray().ToArray();
 
         var keys = datasets.Select(dataset => dataset.GetProperty("key").GetString()).ToArray();
-        Assert.Equal(CatalogDatasets.Served.OrderBy(key => key, StringComparer.Ordinal), keys);
+        Assert.Equal(GameCatalogDatasets.Served.OrderBy(key => key, StringComparer.Ordinal), keys);
 
         var characters = datasets.Single(dataset =>
             string.Equals(dataset.GetProperty("key").GetString(), "characters", StringComparison.Ordinal));
-        Assert.Equal("/api/v1/catalog/characters", characters.GetProperty("url").GetString());
+        Assert.Equal("/api/v1/game-catalog/characters", characters.GetProperty("url").GetString());
     }
 
     [Fact]
-    public async Task CatalogEndpointsAllowAnonymousAccess()
+    public async Task GameCatalogEndpointsAllowAnonymousAccess()
     {
         var client = factory.CreateClient();
 
-        using var manifestRequest = new HttpRequestMessage(HttpMethod.Get, "/api/v1/catalog/manifest");
+        using var manifestRequest = new HttpRequestMessage(HttpMethod.Get, "/api/v1/game-catalog/manifest");
         manifestRequest.Headers.Add(TestAuthenticationHandler.NoAuthHeader, "1");
         var manifest = await client.SendAsync(manifestRequest, TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, manifest.StatusCode);
 
-        using var charactersRequest = new HttpRequestMessage(HttpMethod.Get, "/api/v1/catalog/characters");
+        using var charactersRequest = new HttpRequestMessage(HttpMethod.Get, "/api/v1/game-catalog/characters");
         charactersRequest.Headers.Add(TestAuthenticationHandler.NoAuthHeader, "1");
         var characters = await client.SendAsync(charactersRequest, TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, characters.StatusCode);
@@ -188,7 +210,7 @@ public sealed class CatalogApiSmokeTests : IClassFixture<CatalogApiFactory>
     }
 }
 
-public sealed class CatalogApiFactory : WebApplicationFactory<Program>
+public sealed class GameCatalogApiFactory : WebApplicationFactory<Program>
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {

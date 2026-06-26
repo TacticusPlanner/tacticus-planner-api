@@ -3,9 +3,9 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 
-namespace TacticusPlanner.Catalog;
+namespace TacticusPlanner.GameCatalog;
 
-public static class CatalogHashing
+public static class GameCatalogHashing
 {
     public static string ComputeCanonicalJsonHash<T>(T value, JsonSerializerOptions options)
     {

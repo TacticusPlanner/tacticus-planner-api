@@ -1,16 +1,30 @@
-# Catalog Restructure — Handoff Summary
+# Game Catalog Restructure — Handoff Summary
 
-Repo: `D:/repos/tacticus/v2/tacticus-planner-api` (.NET 10). Catalog = manifest-driven sync:
-clients read `/api/v1/catalog/manifest`, compare per-dataset hashes, re-download changed datasets.
+Repo: `D:/repos/tacticus/v2/tacticus-planner-api` (.NET 10). The Game Catalog = manifest-driven sync:
+clients read `/api/v1/game-catalog/manifest`, compare per-dataset hashes, re-download changed datasets.
 As of round 10 the **served surface is denormalized**: raw embedded `Data/**.json` files remain the
 source, but the manifest exposes a small set of consolidated, self-contained datasets (reference tables
-inlined; client never joins) computed at runtime in the Catalog project. Per-dataset hashes are computed
-over the serialized **denormalized projection**. Data is committed (no runtime generator for raw files);
-one-off Python transforms in `tools/transform_catalog*.py`.
+inlined; client never joins) computed at runtime in the `TacticusPlanner.GameCatalog` project. Per-dataset
+hashes are computed over the serialized **denormalized projection**. Data is committed (no runtime
+generator for raw files); one-off Python transforms in `tools/transform_catalog*.py`.
 
-## Status: rounds 1–11 complete, build clean, 14/14 tests pass
-Served manifest now has **7 denormalized datasets**, schemaVersion **10**, gameVersion **1.40**.
+## Status: rounds 1–12 complete, build clean, 14/14 tests pass
+Served manifest now has **9 denormalized datasets**, schemaVersion **11**, gameVersion **1.40**.
 Raw source remains **79 files** (internal `catalog-manifest.json`).
+
+### Round 12 — Game Catalog rename + served-surface reshape
+- Renamed the project/namespace/domain `Catalog` → `GameCatalog` and routes `/api/v1/catalog/*` →
+  `/api/v1/game-catalog/*` (project `TacticusPlanner.GameCatalog`, `Features/GameCatalog`, tests renamed).
+- **Equipment** served as a plain array with the matched per-rarity upgrade-cost ladder **inlined**
+  (`upgradeLevels`); dropped the `{items, upgradeCostsByRarity}` wrapper.
+- **mows** served as a plain array; the shared cost ladder is its own served dataset `mow-upgrade-costs`.
+- **campaign-battles** split into `campaign-battles` (flat, keyed by battle id, each carrying
+  `campaignGroupId`) + `campaign-definitions` (keyed by groupId: metadata + `battleIds`). Battle ids are
+  globally unique (1316/1316).
+- **lres** `id` is now the unit snowprint string (e.g. `emperLucius`); removed the separate
+  `unitSnowprintId` field and the old numeric id. schemaVersion 10 → 11.
+- Validator: added campaign-definition `battleIds` → campaign-battles id cross-ref; non-empty checks for
+  the two new datasets. Denormalizer-only change (no raw-file edits).
 
 ### Round 1 — faction split
 - `units.json`+`mows.json` → `Data/units/units-{factionId}.json` = `{ alliance, factionId, name, characters[], mows[] }` (22 factions). Characters dropped client-only props (`title/fullName/shortName/extraShortName/requiredInCampaign/campaignsRequiredIn/releaseDate`) and gained inline `rankUpUpgrades`.
@@ -58,7 +72,7 @@ Raw source remains **79 files** (internal `catalog-manifest.json`).
   - **`unitsRestrictions`** — the 5 objectives, each `{ name, points, iconId, index, filter }`. (The C# model already declared an empty `UnitsRestrictions`; this populates it and extends `CatalogLreRestriction` with `index` + `filter`.) The v1 `units` array is computed at runtime from the filter, so it is NOT stored.
   - **`allowedUnitsFilter`** — the track-level allowed-units restriction (alliance/faction pre-filter, AND-combined, all exclusions). Captures the 2 compound tracks (Lucius β = no Chaos + no Tyranids, Farsight γ = no Chaos + no Orks) that the track display name silently dropped.
 - Filters use one structured shape **`{ kind, target, exclude }`** (reused for objective and track-level). v1's `objectiveType` maps to `kind`/`exclude`: `Not*` → `exclude:true`; `HasRangedAttack`/`HasNoRangedAttack` → `kind:"AttackType", target:"Ranged"` (melee = exclude ranged); `Min/MaxHits` keep the comparator in `kind` with `target` = number-as-string.
-- C# (`CatalogModels.cs`): added `CatalogLreFilter(Kind, Target, Exclude)`; extended `CatalogLreRestriction` (+`Index`, +`Filter`) and `CatalogLreTrack` (+`AllowedUnitsFilter`). No endpoint/route changes — `/catalog/lres/{event}` serializes by reflection. `CatalogValidator` unchanged (no new cross-ref checks on objective targets).
+- C# (`GameCatalogModels.cs`): added `CatalogLreFilter(Kind, Target, Exclude)`; extended `CatalogLreRestriction` (+`Index`, +`Filter`) and `CatalogLreTrack` (+`AllowedUnitsFilter`). No endpoint/route changes — `/catalog/lres/{event}` serializes by reflection. `CatalogValidator` unchanged (no new cross-ref checks on objective targets).
 - schemaVersion bumped **6 → 7** (served lres shape grew). Transform is idempotent.
 
 ### Round 9 — equipment cost-ladder extraction (latest)
@@ -72,7 +86,7 @@ Raw source remains **79 files** (internal `catalog-manifest.json`).
 - Stripped the three cost fields from every item level → each `levels[i]` is now `{ stats: {...} }`
   (1,636 level entries slimmed). A consumer rebuilds an item's cost by looking up its `rarity` in the
   shared table and aligning by level index (item level i ↔ ladder index i).
-- C# (`CatalogModels.cs`): added `CatalogEquipmentUpgradeCost(Rarity, Levels)` +
+- C# (`GameCatalogModels.cs`): added `CatalogEquipmentUpgradeCost(Rarity, Levels)` +
   `CatalogEquipmentUpgradeLevel(GoldCost, SalvageCost, MythicSalvageCost)`, the
   `EquipmentUpgradeCosts` dataset const (in `Required`), and the `CatalogSnapshot` field. Loader +
   endpoint (`GetCatalogEquipmentUpgradeCostsEndpoint`) + OpenAPI route mirror `mow-upgrade-costs`.
@@ -116,7 +130,7 @@ instead of the ~74 raw chunks.
   `"npcId:stars"` wave entries, duplicates aggregated). Per-battle `objectives` were dropped (they duplicate
   the track `unitsRestrictions`). The per-track **`defeatAll`** points array (already in the raw json) is now
   surfaced too.
-- C# (`CatalogModels.cs`): added `CatalogLreBattle`/`CatalogLreWave`/`CatalogLreEnemy`; extended
+- C# (`GameCatalogModels.cs`): added `CatalogLreBattle`/`CatalogLreWave`/`CatalogLreEnemy`; extended
   `CatalogLreTrack` + denormalized `CatalogLreTrackView` with `DefeatAll` + `Battles`. `BuildTrackView`
   passes them through (no enrichment — raw enemy ids). `CatalogValidator` now cross-checks every LRE enemy
   `id` against the npcs ids (all 84 resolve).
@@ -125,13 +139,13 @@ instead of the ~74 raw chunks.
   regenerated (now carries `defeatAll` + `battles`).
 
 ## Key files
-- Models/registries: `src/TacticusPlanner.Catalog/CatalogModels.cs` (`CatalogDatasets` holds the dataset registries + `Required`).
-- Loader: `src/TacticusPlanner.Catalog/EmbeddedCatalogProvider.cs` (leaf-filename resource resolution handles subfolders).
-- Validation: `src/TacticusPlanner.Catalog/CatalogValidator.cs`.
-- Denormalization: `src/TacticusPlanner.Catalog/CatalogDenormalizer.cs` (builds the 7 served projections from the raw collections).
-- Endpoints: `src/TacticusPlanner.Api/Features/Catalog/` (`ServedDatasetEndpoint<TPayload>` base → one endpoint per served entity; manifest in `GetCatalogManifestEndpoint`).
+- Models/registries: `src/TacticusPlanner.GameCatalog/GameCatalogModels.cs` (`GameCatalogDatasets` holds the dataset registries + `Required`).
+- Loader: `src/TacticusPlanner.GameCatalog/EmbeddedGameCatalogProvider.cs` (leaf-filename resource resolution handles subfolders).
+- Validation: `src/TacticusPlanner.GameCatalog/GameCatalogValidator.cs`.
+- Denormalization: `src/TacticusPlanner.GameCatalog/GameCatalogDenormalizer.cs` (builds the 9 served projections from the raw collections).
+- Endpoints: `src/TacticusPlanner.Api/Features/GameCatalog/` (`ServedDatasetEndpoint<TPayload>` base → one endpoint per served entity; manifest in `GetGameCatalogManifestEndpoint`).
 - OpenAPI route metadata + anonymous configurator: `src/TacticusPlanner.Api/Program.cs` (`catalogOpenApiRoutes`, `Endpoints.Configurator`).
-- Tests: `tests/TacticusPlanner.Catalog.Tests/CatalogValidationTests.cs`, `tests/TacticusPlanner.Api.Tests/CatalogApiSmokeTests.cs`, `tests/TacticusPlanner.Api.Tests/CatalogSnapshotTests.cs` (+ `__snapshots__/`).
+- Tests: `tests/TacticusPlanner.GameCatalog.Tests/GameCatalogValidationTests.cs`, `tests/TacticusPlanner.Api.Tests/GameCatalogApiSmokeTests.cs`, `tests/TacticusPlanner.Api.Tests/GameCatalogSnapshotTests.cs` (+ `__snapshots__/`).
 - Transforms: `tools/transform_catalog.py` (r1), `transform_catalog_round2.py`, `transform_catalog_round3.py`, `transform_catalog_round4.py` (r4 reads pre-transform originals from git HEAD), `transform_catalog_round5.py` (r5 reads original campaign names from git HEAD to split `eventChallenge`), `transform_catalog_round6.py` (r6 normalizes challenge battle ids), `transform_catalog_round7.py` (r7 normalizes `rank` values to space-free ids and emits the `enums.json` reference; idempotent), `transform_catalog_round8.py` (r8 injects LRE per-track `unitsRestrictions`+`allowedUnitsFilter` from the v1 `*.le.ts` data, bumps schemaVersion to 7; idempotent), `transform_catalog_round9.py` (r9 extracts the equipment cost ladder into `equipment-upgrade-costs.json` and strips cost fields from item levels, bumps schemaVersion to 8; self-validating + idempotent), `transform_catalog_round10.py` (r10 decomposes raw upgrades into per-rarity base/crafted files, adds `gameVersion`, bumps schemaVersion to 9; self-validating + idempotent), `transform_catalog_round11.py` (r11 injects v1 static LRE battle/enemy data into the raw lres files, bumps schemaVersion to 10; reads the v1 repo once, self-validating + idempotent).
 
 ## How to verify
@@ -139,7 +153,7 @@ instead of the ~74 raw chunks.
 
 ## Remaining follow-ups
 1. **Not committed** — all round 1–10 changes are uncommitted working-tree edits (no branch/commit made yet).
-2. **Frontend** (`D:/repos/tacticus/v2/tacticus-planner-apps`) — consume the 7 denormalized datasets (no client joins). Planned: extract a `packages/game-catalog` package, make sync manifest-driven (the stale hardcoded dataset-key array is wrong), store datasets + manifest in IndexedDB, react-router landing/home/redirect routes, a full-screen init loader (first-use vs re-sync, showing `gameVersion`).
+2. **Frontend** (`D:/repos/tacticus/v2/tacticus-planner-apps`) — consume the 9 denormalized datasets (no client joins). Planned: extract a `packages/game-catalog` package, make sync manifest-driven (the stale hardcoded dataset-key array is wrong), store datasets + manifest in IndexedDB, react-router landing/home/redirect routes, a full-screen init loader (first-use vs re-sync, showing `gameVersion`).
 3. **Docs repo** (`tacticus-planner-docs`) — refresh ERD / data-architecture for the denormalized served catalog.
 4. Consider a combined/idempotent transform script (rounds are sequential and assume prior state).
 5. `schemaVersion` is at 10, `gameVersion` is "1.40"; bump schemaVersion on any further structural change.

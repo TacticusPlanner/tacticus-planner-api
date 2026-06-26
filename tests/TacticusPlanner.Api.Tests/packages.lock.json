@@ -953,12 +953,12 @@
           "Microsoft.AspNetCore.Authentication.JwtBearer": "[10.0.9, )",
           "Microsoft.AspNetCore.OpenApi": "[10.0.9, )",
           "Scalar.AspNetCore": "[2.16.4, )",
-          "TacticusPlanner.Catalog": "[1.0.0, )",
+          "TacticusPlanner.GameCatalog": "[1.0.0, )",
           "TacticusPlanner.ServiceDefaults": "[1.0.0, )",
           "TacticusPlanner.TacticusApi": "[1.0.0, )"
         }
       },
-      "tacticusplanner.catalog": {
+      "tacticusplanner.gamecatalog": {
         "type": "Project",
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "[10.0.9, )"

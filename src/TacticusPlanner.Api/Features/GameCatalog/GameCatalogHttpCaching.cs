@@ -1,9 +1,9 @@
 using Microsoft.Net.Http.Headers;
-using TacticusPlanner.Catalog;
+using TacticusPlanner.GameCatalog;
 
-namespace TacticusPlanner.Api.Features.Catalog;
+namespace TacticusPlanner.Api.Features.GameCatalog;
 
-internal static class CatalogHttpCaching
+internal static class GameCatalogHttpCaching
 {
     public static string CreateEtag(string hash) => $"\"{hash}\"";
 
@@ -22,7 +22,7 @@ internal static class CatalogHttpCaching
             }
         }
 
-        return CreateEtag(CatalogHashing.ComputeQueryHash(datasetHash, normalizedQuery));
+        return CreateEtag(GameCatalogHashing.ComputeQueryHash(datasetHash, normalizedQuery));
     }
 
     public static bool TryApplyNotModified(HttpContext httpContext, string etag)

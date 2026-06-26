@@ -1,34 +1,42 @@
 {
-  "schemaVersion": 10,
+  "schemaVersion": 11,
   "gameVersion": "1.40",
   "datasets": [
     {
       "key": "campaign-battles",
-      "url": "/api/v1/catalog/campaign-battles"
+      "url": "/api/v1/game-catalog/campaign-battles"
+    },
+    {
+      "key": "campaign-definitions",
+      "url": "/api/v1/game-catalog/campaign-definitions"
     },
     {
       "key": "characters",
-      "url": "/api/v1/catalog/characters"
+      "url": "/api/v1/game-catalog/characters"
     },
     {
       "key": "equipment",
-      "url": "/api/v1/catalog/equipment"
+      "url": "/api/v1/game-catalog/equipment"
     },
     {
       "key": "lres",
-      "url": "/api/v1/catalog/lres"
+      "url": "/api/v1/game-catalog/lres"
+    },
+    {
+      "key": "mow-upgrade-costs",
+      "url": "/api/v1/game-catalog/mow-upgrade-costs"
     },
     {
       "key": "mows",
-      "url": "/api/v1/catalog/mows"
+      "url": "/api/v1/game-catalog/mows"
     },
     {
       "key": "npcs",
-      "url": "/api/v1/catalog/npcs"
+      "url": "/api/v1/game-catalog/npcs"
     },
     {
       "key": "upgrades",
-      "url": "/api/v1/catalog/upgrades"
+      "url": "/api/v1/game-catalog/upgrades"
     }
   ]
 }

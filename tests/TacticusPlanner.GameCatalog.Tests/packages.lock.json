@@ -178,7 +178,7 @@
           "xunit.v3.runner.common": "[3.2.2]"
         }
       },
-      "tacticusplanner.catalog": {
+      "tacticusplanner.gamecatalog": {
         "type": "Project",
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "[10.0.9, )"

@@ -1,7 +1,7 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/TacticusPlanner.Api/TacticusPlanner.Api.csproj" />
-    <Project Path="src/TacticusPlanner.Catalog/TacticusPlanner.Catalog.csproj" />
+    <Project Path="src/TacticusPlanner.GameCatalog/TacticusPlanner.GameCatalog.csproj" />
     <Project Path="src/TacticusPlanner.TacticusApi/TacticusPlanner.TacticusApi.csproj" />
   </Folder>
   <Folder Name="/orchestration/">
@@ -10,6 +10,6 @@
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/TacticusPlanner.Api.Tests/TacticusPlanner.Api.Tests.csproj" />
-    <Project Path="tests/TacticusPlanner.Catalog.Tests/TacticusPlanner.Catalog.Tests.csproj" />
+    <Project Path="tests/TacticusPlanner.GameCatalog.Tests/TacticusPlanner.GameCatalog.Tests.csproj" />
   </Folder>
 </Solution>

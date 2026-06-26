@@ -21,7 +21,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\orchestration\TacticusPlanner.ServiceDefaults\TacticusPlanner.ServiceDefaults.csproj" />
-    <ProjectReference Include="..\TacticusPlanner.Catalog\TacticusPlanner.Catalog.csproj" />
+    <ProjectReference Include="..\TacticusPlanner.GameCatalog\TacticusPlanner.GameCatalog.csproj" />
     <ProjectReference Include="..\TacticusPlanner.TacticusApi\TacticusPlanner.TacticusApi.csproj" />
   </ItemGroup>
 </Project>
