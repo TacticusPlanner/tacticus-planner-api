@@ -1,41 +1,52 @@
 {
+  "version": "dev-2026-06-26",
   "schemaVersion": 11,
   "gameVersion": "1.40",
+  "sourceHash": "244c63ee3e503d2d583c77487cdce36a9dbc4de5cb94d116003c19d86b8ab570",
   "datasets": [
     {
       "key": "campaign-battles",
+      "hash": "571b086822a7c8bd6104f9ee57d4fa80486fff561bc534d78f1365626f20464e",
       "url": "/api/v1/game-catalog/campaign-battles"
     },
     {
       "key": "campaign-definitions",
+      "hash": "2284581e07455cce7c06a97608f7bbee8db604bea30b741c7a8c065d94d508f4",
       "url": "/api/v1/game-catalog/campaign-definitions"
     },
     {
       "key": "characters",
+      "hash": "968814583010ff7e8ae81787513e7ef98269934b5944a6da2e11a65f845e2938",
       "url": "/api/v1/game-catalog/characters"
     },
     {
       "key": "equipment",
+      "hash": "c6ed2fc2937ae0964b05ad7e92e12ec0b6df51057120c196986cd4e89a06b19b",
       "url": "/api/v1/game-catalog/equipment"
     },
     {
       "key": "lres",
+      "hash": "e69c7b2197feff03f176f71b21386d5c61cd6d29dae31f4a4e4f59f127c8400c",
       "url": "/api/v1/game-catalog/lres"
     },
     {
       "key": "mow-upgrade-costs",
+      "hash": "f9edae42b150a95319c1e5725264a8fff950e42caa2914b17bc57e535f873ee7",
       "url": "/api/v1/game-catalog/mow-upgrade-costs"
     },
     {
       "key": "mows",
+      "hash": "b5c7d2a3c4c02b5f8a8ac5b10d48e3da7d7bc3b75e0e61dcfb57493aee2d9937",
       "url": "/api/v1/game-catalog/mows"
     },
     {
       "key": "npcs",
+      "hash": "4c7f757ab4cd5e1a603acb769b3c16d02e4d312f6ed5c7cf8759d4bd2bbe68c1",
       "url": "/api/v1/game-catalog/npcs"
     },
     {
       "key": "upgrades",
+      "hash": "b84819f0a8c18ea1419015321228fc6807c6fbd0d5a15005315800d21ca7ec72",
       "url": "/api/v1/game-catalog/upgrades"
     }
   ]

@@ -1,5 +1,6 @@
 using FastEndpoints;
 using TacticusPlanner.GameCatalog;
+using TacticusPlanner.GameCatalog.Models;
 
 namespace TacticusPlanner.Api.Features.GameCatalog;
 

@@ -1,29 +1,15 @@
 using Microsoft.Net.Http.Headers;
-using TacticusPlanner.GameCatalog;
 
-namespace TacticusPlanner.Api.Features.GameCatalog;
+namespace TacticusPlanner.Api.Http;
 
-internal static class GameCatalogHttpCaching
+/// <summary>
+/// Minimal strong-ETag conditional-request helper: wrap a content hash as an ETag and short-circuit a
+/// matching <c>If-None-Match</c> request with <c>304 Not Modified</c>. Domain-agnostic — any endpoint with
+/// a stable content hash can use it.
+/// </summary>
+internal static class ETagHelper
 {
     public static string CreateEtag(string hash) => $"\"{hash}\"";
-
-    public static string CreateFilteredEtag(
-        string datasetHash,
-        IEnumerable<KeyValuePair<string, string?>> query
-    )
-    {
-        var normalizedQuery = new List<KeyValuePair<string, string>>();
-
-        foreach (var (key, value) in query)
-        {
-            if (!string.IsNullOrWhiteSpace(value))
-            {
-                normalizedQuery.Add(new KeyValuePair<string, string>(key, value.Trim().ToUpperInvariant()));
-            }
-        }
-
-        return CreateEtag(GameCatalogHashing.ComputeQueryHash(datasetHash, normalizedQuery));
-    }
 
     public static bool TryApplyNotModified(HttpContext httpContext, string etag)
     {

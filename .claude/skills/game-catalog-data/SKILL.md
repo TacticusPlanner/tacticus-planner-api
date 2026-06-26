@@ -1,0 +1,82 @@
+---
+name: game-catalog-data
+description: How the server-side Game Catalog (TacticusPlanner.GameCatalog) is structured — embedded raw datasets, runtime denormalization into served datasets, hashing/manifest, and the non-obvious data conventions (drop-chances, difficulty enums, LRE filters, equipment cost ladders). Use when adding/changing catalog data or the served projections.
+---
+
+# Game Catalog data
+
+The Game Catalog is a **manifest-driven, server-side denormalized** dataset. Clients read
+`/api/v1/game-catalog/manifest`, compare per-dataset hashes, and re-download only changed datasets. Raw
+data lives as embedded JSON under `src/TacticusPlanner.GameCatalog/Data/**`; the served surface is a small
+set of consolidated, self-contained datasets computed at runtime (reference tables inlined — the client
+never joins).
+
+## Pipeline (where things live)
+- **Release metadata** — `Models/GameCatalogRelease.cs` constants (`Version`, `SchemaVersion`,
+  `GameVersion`). Bump `SchemaVersion` on any structural change to a served dataset.
+- **Dataset registry** — `Models/GameCatalogDatasets.cs`: the raw source keys (`UnitFactions`,
+  `NpcFactions`, `EquipmentTypes`, `UpgradeRarities`, `CampaignBattleGroups`, `LreEvents`, + the
+  single-file keys) and the 9 `Served` keys.
+- **Loading** — `GameCatalogLoader.Load()` (public; called eagerly at app startup in `Program.cs` to
+  fail fast). Source files are discovered **by convention**: dataset key `foo-bar` → embedded
+  `foo-bar.json` (matched by leaf filename, so subfolders don't matter). There is **no manifest file**.
+- **Denormalization** — `Denormalization/*.cs` (`partial class GameCatalogDenormalizer`, one file per
+  entity) builds the served views from the raw collections.
+- **Validation** — `Validation/*.cs` (`partial class GameCatalogValidator`) runs at load; throws on any
+  error (missing/empty dataset, duplicate id, missing required field, unresolved cross-reference).
+- **Hashing** — `Utils/GameCatalogHashing.cs`: per-dataset hash = canonical JSON (key-order-independent,
+  array-order-sensitive) of the denormalized payload; `SourceHash` = hash of
+  (version, schemaVersion, gameVersion, all dataset hashes).
+- **Endpoints** — `src/TacticusPlanner.Api/Features/GameCatalog/`. `ServedDatasetEndpoint<TPayload>` base
+  → one endpoint per served entity; manifest in `GetGameCatalogManifestEndpoint` (returns the domain
+  `GameCatalogManifest`). All catalog endpoints are `AllowAnonymous()` (static public data).
+
+## The 9 served datasets
+`characters`, `npcs`, `mows`, `mow-upgrade-costs`, `upgrades`, `equipment`, `campaign-battles`,
+`campaign-definitions`, `lres`. Each served at `/api/v1/game-catalog/{key}` in a
+`GameCatalogDatasetEnvelope<T>` (version/schemaVersion/gameVersion/sourceHash/datasetKey/datasetHash/data).
+
+Non-obvious shapes:
+- **mows** is a plain array; the shared upgrade-cost ladder is its own dataset **`mow-upgrade-costs`**,
+  keyed by the ability **level** it raises a MoW to (`level = rawIndex + 2`; level 1 is free).
+- **upgrades** carry a **nested recipe** tree: each craftable ingredient embeds its own `recipe`
+  (recursively; cycle-guarded); base materials have none. No separate "expanded totals" table.
+- **equipment** is a plain array, each item carrying its matched per-rarity cost ladder inlined as
+  `upgradeLevels`. The ladder is fully determined by rarity (exactly one per rarity; fixed level counts:
+  Common 3, Uncommon 5, Rare 7, Epic 9, Mythic 10, Legendary 11) — sourced from
+  `equipment-upgrade-costs.json`.
+- **campaign-battles** is flat, keyed by globally-unique battle id, each carrying its `campaignGroupId`;
+  **campaign-definitions** is keyed by `groupId` (metadata + `battleIds[]` only). A definition's
+  `battleIds` must all resolve to served battles (validated).
+- **lres** `id` is the unit snowprint string (e.g. `emperLucius`), not a numeric id. Each track resolves
+  `availableUnitIds` at runtime by applying its `allowedUnitsFilter` to the character roster.
+
+## Cross-cutting data conventions
+- **drop-chances** (`drop-chances.json`): potential campaign rewards reference a `chanceId` =
+  `{rewardKind}_{difficulty}` (rates are not baked into the id, so they can be rebalanced). Rows carry
+  `numerator`/`denominator`/`effectiveRate`. Denormalization inlines these onto each potential reward and
+  onto character shard / upgrade farm locations.
+- **difficulty enum**: standard campaigns use `standard`/`elite`/`mirror`; event campaigns use
+  `eventStandard`/`eventStandardChallenge`/`eventExtremis`/`eventExtremisChallenge` (the two "challenge"
+  tiers are kept distinct because each has its own drop rates).
+- **LRE filters** use one shape `{ kind, target, exclude }`, reused for per-objective
+  (`unitsRestrictions`) and track-level (`allowedUnitsFilter`) filters. `kind` ∈ `Alliance`/`Faction`/…;
+  `exclude` flips the match. The runtime roster filter ANDs all track filters.
+- **rank** values are space-free `{Tier}{arabic}` (e.g. `Stone1`, `Iron2`); the in-game Roman label lives
+  only in `Data/enums.json` (a reference file — not served, not in the registry).
+- A content-only change (no shape change) does **not** need a `SchemaVersion` bump — the per-dataset hash
+  picks it up via the normal sync. Bump `SchemaVersion` only when a served dataset's **shape** changes.
+
+## Editing checklist
+1. Edit the raw `Data/**` json (or add a new `{key}.json` + register its key in `GameCatalogDatasets`).
+2. If the served shape changes: update the relevant `Models/*` view record + the
+   `Denormalization/*Denormalizer` builder + any `Validation/*` cross-ref, and bump
+   `GameCatalogRelease.SchemaVersion`.
+3. `dotnet build TacticusPlanner.slnx` (startup load + validation fails fast on bad data), then
+   `dotnet test TacticusPlanner.slnx`. Regenerate the manifest snapshot baseline with
+   `UPDATE_SNAPSHOTS=1 dotnet test tests/TacticusPlanner.Api.Tests/...` and review the hash diff.
+
+## History
+Raw data was produced by one-off Python transforms (rounds 1–12) that are no longer part of the repo;
+the embedded `Data/**` json is now the committed source of truth. If you need the provenance of a specific
+field, the transform rationale is in the git history of the (removed) `tools/transform_catalog*.py`.

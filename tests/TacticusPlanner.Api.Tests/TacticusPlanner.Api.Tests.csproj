@@ -19,4 +19,9 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\TacticusPlanner.Api\TacticusPlanner.Api.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <!-- Committed snapshot baselines, copied to the output dir so the snapshot tests read them on a path
+         that exists on deterministic CI builds (where [CallerFilePath] is rewritten to an unwritable path). -->
+    <Content Include="__snapshots__\**\*.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 </Project>

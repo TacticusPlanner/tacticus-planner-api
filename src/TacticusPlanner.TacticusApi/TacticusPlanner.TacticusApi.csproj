@@ -7,4 +7,9 @@
     <PackageReference Include="Refit" />
     <PackageReference Include="Refit.HttpClientFactory" />
   </ItemGroup>
+  <ItemGroup>
+    <!-- The upstream Tacticus game API OpenAPI document, embedded as the source of truth for the
+         hand-written Refit client/models in this project. -->
+    <EmbeddedResource Include="OpenApi\tacticus-api-docs.json" />
+  </ItemGroup>
 </Project>

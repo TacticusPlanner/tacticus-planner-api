@@ -1,20 +1,10 @@
 namespace TacticusPlanner.Api.Features.GameCatalog;
 
-public sealed record GameCatalogManifestResponse(
-    string Version,
-    int SchemaVersion,
-    string GameVersion,
-    string SourceHash,
-    IReadOnlyList<GameCatalogManifestDatasetResponse> Datasets
-);
-
-public sealed record GameCatalogManifestDatasetResponse(
-    string Key,
-    string Hash,
-    string Url
-);
-
-/// <summary>Envelope for one served (denormalized) dataset. Payload shape varies per entity.</summary>
+/// <summary>
+/// Envelope for one served (denormalized) dataset. Payload shape varies per entity. The manifest itself
+/// is served as the domain <see cref="TacticusPlanner.GameCatalog.Models.GameCatalogManifest"/> (no
+/// parallel API-side record).
+/// </summary>
 public sealed record GameCatalogDatasetEnvelope<TPayload>(
     string Version,
     int SchemaVersion,

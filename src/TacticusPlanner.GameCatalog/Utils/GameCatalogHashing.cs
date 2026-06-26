@@ -3,8 +3,13 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 
-namespace TacticusPlanner.GameCatalog;
+namespace TacticusPlanner.GameCatalog.Utils;
 
+/// <summary>
+/// Content hashing for the catalog: order-independent canonical-JSON hashes (so reformatting never
+/// changes a hash, but content does) plus the aggregate snapshot hash. These back the per-dataset ETags
+/// and the manifest <c>sourceHash</c>.
+/// </summary>
 public static class GameCatalogHashing
 {
     public static string ComputeCanonicalJsonHash<T>(T value, JsonSerializerOptions options)
@@ -49,25 +54,6 @@ public static class GameCatalogHashing
                 .Append(key)
                 .Append(':')
                 .Append(hash)
-                .Append('\n');
-        }
-
-        return ComputeSha256Hex(Encoding.UTF8.GetBytes(builder.ToString()));
-    }
-
-    public static string ComputeQueryHash(string datasetHash, IEnumerable<KeyValuePair<string, string>> normalizedQuery)
-    {
-        var builder = new StringBuilder()
-            .Append("dataset:")
-            .Append(datasetHash)
-            .Append('\n');
-
-        foreach (var (key, value) in normalizedQuery.OrderBy(pair => pair.Key, StringComparer.Ordinal))
-        {
-            builder
-                .Append(key)
-                .Append('=')
-                .Append(value)
                 .Append('\n');
         }
 
