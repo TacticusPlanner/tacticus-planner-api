@@ -78,9 +78,9 @@ public sealed class GetGameCatalogMowsEndpoint(IGameCatalogProvider catalog)
 }
 
 public sealed class GetGameCatalogMowUpgradeCostsEndpoint(IGameCatalogProvider catalog)
-    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogMowUpgradeCost>>(catalog, GameCatalogDatasets.MowUpgradeCostsServed)
+    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogMowUpgradeCostView>>(catalog, GameCatalogDatasets.MowUpgradeCostsServed)
 {
-    protected override IReadOnlyList<GameCatalogMowUpgradeCost> Payload => Snapshot.MowUpgradeCosts;
+    protected override IReadOnlyList<GameCatalogMowUpgradeCostView> Payload => Snapshot.MowUpgradeCostViews;
 
     public override void Configure()
     {

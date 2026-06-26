@@ -86,6 +86,7 @@ internal sealed class EmbeddedGameCatalogProvider : IGameCatalogProvider
         var characterViews = GameCatalogDenormalizer.BuildCharacters(unitsByFaction, equipmentByType, campaignGroups, dropChances);
         var npcList = GameCatalogDenormalizer.BuildNpcs(npcsByFaction);
         var mowList = GameCatalogDenormalizer.BuildMows(unitsByFaction);
+        var mowUpgradeCostViews = GameCatalogDenormalizer.BuildMowUpgradeCosts(mowUpgradeCosts);
         var upgradeViews = GameCatalogDenormalizer.BuildUpgrades(upgradesByRarity, campaignGroups, dropChances);
         var equipmentViews = GameCatalogDenormalizer.BuildEquipment(equipmentByType, equipmentUpgradeCosts);
         var campaignBattleViews = GameCatalogDenormalizer.BuildCampaignBattles(campaignGroups, dropChances);
@@ -98,7 +99,7 @@ internal sealed class EmbeddedGameCatalogProvider : IGameCatalogProvider
             [GameCatalogDatasets.Characters] = GameCatalogHashing.ComputeCanonicalJsonHash(characterViews, JsonOptions),
             [GameCatalogDatasets.Npcs] = GameCatalogHashing.ComputeCanonicalJsonHash(npcList, JsonOptions),
             [GameCatalogDatasets.Mows] = GameCatalogHashing.ComputeCanonicalJsonHash(mowList, JsonOptions),
-            [GameCatalogDatasets.MowUpgradeCostsServed] = GameCatalogHashing.ComputeCanonicalJsonHash(mowUpgradeCosts, JsonOptions),
+            [GameCatalogDatasets.MowUpgradeCostsServed] = GameCatalogHashing.ComputeCanonicalJsonHash(mowUpgradeCostViews, JsonOptions),
             [GameCatalogDatasets.Upgrades] = GameCatalogHashing.ComputeCanonicalJsonHash(upgradeViews, JsonOptions),
             [GameCatalogDatasets.Equipment] = GameCatalogHashing.ComputeCanonicalJsonHash(equipmentViews, JsonOptions),
             [GameCatalogDatasets.CampaignBattles] = GameCatalogHashing.ComputeCanonicalJsonHash(campaignBattleViews, JsonOptions),
@@ -124,6 +125,7 @@ internal sealed class EmbeddedGameCatalogProvider : IGameCatalogProvider
             characterViews,
             npcList,
             mowList,
+            mowUpgradeCostViews,
             upgradeViews,
             equipmentViews,
             campaignBattleViews,

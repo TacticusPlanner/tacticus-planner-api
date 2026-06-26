@@ -1,5 +1,3 @@
-using System.Collections.ObjectModel;
-
 namespace TacticusPlanner.GameCatalog;
 
 /// <summary>
@@ -61,17 +59,40 @@ internal static class GameCatalogDenormalizer
         return characters;
     }
 
+    // Project the raw mow upgrade-cost ladder into level-keyed rungs: the flat array's nth entry (0-based)
+    // is the cost to raise a MoW ability to level n + 2 (level 1 is the starting level, so it has no cost).
+    public static IReadOnlyList<GameCatalogMowUpgradeCostView> BuildMowUpgradeCosts(
+        IReadOnlyList<GameCatalogMowUpgradeCost> costs) =>
+        costs
+            .Select((cost, index) => new GameCatalogMowUpgradeCostView(
+                index + 2,
+                cost.Gold,
+                cost.Salvage,
+                cost.Badges,
+                cost.ForgeBadges,
+                cost.Components))
+            .ToArray();
+
     public static IReadOnlyList<GameCatalogNpc> BuildNpcs(IReadOnlyDictionary<string, GameCatalogFactionNpcs> npcsByFaction) =>
         npcsByFaction
             .OrderBy(pair => pair.Key, StringComparer.Ordinal)
             .SelectMany(pair => pair.Value.Npcs)
             .ToArray();
 
+    // A MoW's source record carries no faction/alliance/kind (those live on the parent faction), so enrich
+    // each mow with its faction context here — mirroring how characters are projected.
+    public const string MowUnitKind = "Mow";
+
     public static IReadOnlyList<GameCatalogMow> BuildMows(
         IReadOnlyDictionary<string, GameCatalogFactionUnits> unitsByFaction) =>
         unitsByFaction
             .OrderBy(pair => pair.Key, StringComparer.Ordinal)
-            .SelectMany(pair => pair.Value.Mows)
+            .SelectMany(pair => pair.Value.Mows.Select(mow => mow with
+            {
+                UnitKind = MowUnitKind,
+                Faction = pair.Value.FactionId,
+                Alliance = pair.Value.Alliance,
+            }))
             .ToArray();
 
     public static IReadOnlyList<GameCatalogUpgradeView> BuildUpgrades(
@@ -99,9 +120,8 @@ internal static class GameCatalogDenormalizer
                 upgrade.Stat,
                 upgrade.Icon,
                 upgrade.Craftable,
-                upgrade.Recipe,
-                ResolveLocations(upgrade.Id, rewardLocations, dropChanceById),
-                upgrade.Craftable && upgrade.Recipe.Count > 0 ? ExpandRecipe(upgrade.Id, byId) : null));
+                BuildNestedRecipe(upgrade.Recipe, byId, new HashSet<string>(StringComparer.OrdinalIgnoreCase) { upgrade.Id }),
+                ResolveLocations(upgrade.Id, rewardLocations, dropChanceById)));
         }
 
         return views;
@@ -305,51 +325,31 @@ internal static class GameCatalogDenormalizer
                     : []))
             .ToArray();
 
-    private static GameCatalogUpgradeExpansion ExpandRecipe(
-        string upgradeId,
-        IReadOnlyDictionary<string, GameCatalogUpgrade> byId)
-    {
-        var baseUpgrades = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-        var craftedUpgrades = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
-        Expand(upgradeId, 1, byId, baseUpgrades, craftedUpgrades, []);
-
-        return new GameCatalogUpgradeExpansion(
-            new ReadOnlyDictionary<string, int>(baseUpgrades),
-            new ReadOnlyDictionary<string, int>(craftedUpgrades),
-            baseUpgrades.Values.Sum(),
-            craftedUpgrades.Values.Sum());
-    }
-
-    private static void Expand(
-        string upgradeId,
-        int multiplier,
+    // Builds a recipe tree: each ingredient that is itself a craftable upgrade carries its own nested
+    // recipe (recursively); base materials have a null nested recipe. The stack guards against cycles.
+    private static List<GameCatalogUpgradeRecipeIngredient> BuildNestedRecipe(
+        IReadOnlyList<GameCatalogUpgradeRecipeIngredient> recipe,
         IReadOnlyDictionary<string, GameCatalogUpgrade> byId,
-        IDictionary<string, int> baseUpgrades,
-        IDictionary<string, int> craftedUpgrades,
         HashSet<string> stack)
     {
-        if (!byId.TryGetValue(upgradeId, out var upgrade) || !upgrade.Craftable || upgrade.Recipe.Count == 0
-            || !stack.Add(upgradeId))
+        var ingredients = new List<GameCatalogUpgradeRecipeIngredient>(recipe.Count);
+        foreach (var ingredient in recipe)
         {
-            Accumulate(baseUpgrades, upgradeId, multiplier);
-            return;
-        }
-
-        foreach (var ingredient in upgrade.Recipe)
-        {
-            if (byId.TryGetValue(ingredient.Material, out var sub) && sub.Craftable && sub.Recipe.Count > 0)
+            if (byId.TryGetValue(ingredient.Material, out var sub) && sub.Craftable && sub.Recipe.Count > 0
+                && stack.Add(ingredient.Material))
             {
-                Accumulate(craftedUpgrades, ingredient.Material, multiplier * ingredient.Count);
+                var nested = BuildNestedRecipe(sub.Recipe, byId, stack);
+                stack.Remove(ingredient.Material);
+                ingredients.Add(new GameCatalogUpgradeRecipeIngredient(ingredient.Material, ingredient.Count, nested));
             }
-
-            Expand(ingredient.Material, multiplier * ingredient.Count, byId, baseUpgrades, craftedUpgrades, stack);
+            else
+            {
+                ingredients.Add(new GameCatalogUpgradeRecipeIngredient(ingredient.Material, ingredient.Count));
+            }
         }
 
-        stack.Remove(upgradeId);
+        return ingredients;
     }
-
-    private static void Accumulate(IDictionary<string, int> target, string key, int amount) =>
-        target[key] = target.TryGetValue(key, out var current) ? current + amount : amount;
 
     private static GameCatalogCampaignBattleView BuildBattleView(
         GameCatalogCampaignBattle battle,

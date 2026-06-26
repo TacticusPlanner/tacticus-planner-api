@@ -108,10 +108,14 @@ public sealed class GameCatalogApiSmokeTests : IClassFixture<GameCatalogApiFacto
 
         var upgrades = document.RootElement.GetProperty("data").EnumerateArray().ToArray();
         Assert.NotEmpty(upgrades);
-        // A crafted upgrade exposes its expanded recipe split into base + crafted totals.
-        var crafted = upgrades.First(upgrade => upgrade.GetProperty("craftable").GetBoolean());
-        var expanded = crafted.GetProperty("expanded");
-        Assert.True(expanded.GetProperty("totalBaseCount").GetInt32() > 0);
+        // An upgrade recipe nests a craftable ingredient's own recipe (no separate expansion property).
+        Assert.DoesNotContain(upgrades, upgrade => upgrade.TryGetProperty("expanded", out _));
+        var nested = upgrades
+            .SelectMany(upgrade => upgrade.GetProperty("recipe").EnumerateArray())
+            .First(ingredient => ingredient.TryGetProperty("recipe", out var inner)
+                && inner.ValueKind == JsonValueKind.Array
+                && inner.EnumerateArray().Any());
+        Assert.NotEmpty(nested.GetProperty("recipe").EnumerateArray());
     }
 
     [Fact]
@@ -132,8 +136,10 @@ public sealed class GameCatalogApiSmokeTests : IClassFixture<GameCatalogApiFacto
         var mows = await GetData(client, "/api/v1/game-catalog/mows");
         Assert.NotEmpty(mows.EnumerateArray());
 
+        // The mow upgrade-cost ladder is keyed by ability level, starting at level 2.
         var mowUpgradeCosts = await GetData(client, "/api/v1/game-catalog/mow-upgrade-costs");
         Assert.NotEmpty(mowUpgradeCosts.EnumerateArray());
+        Assert.Equal(2, mowUpgradeCosts.EnumerateArray().First().GetProperty("level").GetInt32());
 
         // equipment is a plain array; each item carries its matched upgrade-cost ladder inlined.
         var equipment = await GetData(client, "/api/v1/game-catalog/equipment");

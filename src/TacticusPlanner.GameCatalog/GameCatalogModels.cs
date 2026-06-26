@@ -204,6 +204,7 @@ public sealed record GameCatalogSnapshot(
     IReadOnlyList<GameCatalogCharacterView> CharacterViews,
     IReadOnlyList<GameCatalogNpc> NpcList,
     IReadOnlyList<GameCatalogMow> MowList,
+    IReadOnlyList<GameCatalogMowUpgradeCostView> MowUpgradeCostViews,
     IReadOnlyList<GameCatalogUpgradeView> UpgradeViews,
     IReadOnlyList<GameCatalogEquipmentView> EquipmentViews,
     IReadOnlyList<GameCatalogCampaignBattleView> CampaignBattleViews,
@@ -421,6 +422,18 @@ public sealed record GameCatalogMowUpgradeCost(
     int Components
 );
 
+// The served projection of a mow upgrade-cost rung, keyed by the ability level it raises a MoW to. The
+// raw ladder is a flat array (cost[0] = level 2 … cost[n] = level n+2), so Level correlates the rung with
+// the in-game ability level rather than an opaque array index.
+public sealed record GameCatalogMowUpgradeCostView(
+    int Level,
+    int Gold,
+    int Salvage,
+    GameCatalogAmountByRarity Badges,
+    GameCatalogAmountByRarity? ForgeBadges,
+    int Components
+);
+
 public sealed record GameCatalogAmountByRarity(
     string Rarity,
     int Amount
@@ -451,7 +464,10 @@ public sealed record GameCatalogUpgrade(
 
 public sealed record GameCatalogUpgradeRecipeIngredient(
     string Material,
-    int Count
+    int Count,
+    // Populated server-side for craftable ingredients: the ingredient's own recipe, nested recursively.
+    // Null for base (non-craftable) materials. Absent in the raw source JSON (which is flat).
+    IReadOnlyList<GameCatalogUpgradeRecipeIngredient>? Recipe = null
 );
 
 public sealed record GameCatalogEquipment(
@@ -683,15 +699,6 @@ public sealed record GameCatalogCharacterView(
     IReadOnlyList<GameCatalogEquipmentSlot> EligibleEquipment
 );
 
-// Recursive recipe expansion split into base (non-craftable leaf) materials and the crafted
-// intermediates consumed along the way, with running totals for each.
-public sealed record GameCatalogUpgradeExpansion(
-    IReadOnlyDictionary<string, int> BaseUpgrades,
-    IReadOnlyDictionary<string, int> CraftedUpgrades,
-    int TotalBaseCount,
-    int TotalCraftedCount
-);
-
 public sealed record GameCatalogUpgradeView(
     string Id,
     string Material,
@@ -701,9 +708,10 @@ public sealed record GameCatalogUpgradeView(
     string Stat,
     string? Icon,
     bool Craftable,
+    // For craftable upgrades each ingredient carries its own nested recipe (recursively), so the client
+    // can walk the full crafting tree without a separate expansion table.
     IReadOnlyList<GameCatalogUpgradeRecipeIngredient> Recipe,
-    IReadOnlyList<GameCatalogFarmLocation> FarmLocations,
-    GameCatalogUpgradeExpansion? Expanded
+    IReadOnlyList<GameCatalogFarmLocation> FarmLocations
 );
 
 // Equipment with its per-rarity upgrade-cost ladder inlined (the matched rarity's levels), so the client

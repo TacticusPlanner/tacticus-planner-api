@@ -82,12 +82,20 @@ public sealed class GameCatalogValidationTests
     {
         var snapshot = LoadSnapshot();
 
-        // A craftable upgrade exposes its expanded recipe split into base vs crafted totals.
-        var crafted = snapshot.UpgradeViews.First(upgrade => upgrade.Craftable && upgrade.Recipe.Count > 0);
-        Assert.NotNull(crafted.Expanded);
-        Assert.True(crafted.Expanded!.TotalBaseCount > 0);
-        Assert.Equal(crafted.Expanded.TotalBaseCount, crafted.Expanded.BaseUpgrades.Values.Sum());
-        Assert.Equal(crafted.Expanded.TotalCraftedCount, crafted.Expanded.CraftedUpgrades.Values.Sum());
+        // The served mow upgrade-cost ladder is keyed by the ability level it raises a MoW to: the rungs
+        // run sequentially from level 2 upward.
+        Assert.NotEmpty(snapshot.MowUpgradeCostViews);
+        Assert.Equal(2, snapshot.MowUpgradeCostViews[0].Level);
+        Assert.Equal(
+            Enumerable.Range(2, snapshot.MowUpgradeCostViews.Count),
+            snapshot.MowUpgradeCostViews.Select(cost => cost.Level));
+
+        // Upgrade recipes carry nested recipes for craftable ingredients (no separate expansion table);
+        // base materials have no nested recipe.
+        var nestedIngredient = snapshot.UpgradeViews
+            .SelectMany(upgrade => upgrade.Recipe)
+            .First(ingredient => ingredient.Recipe is { Count: > 0 });
+        Assert.All(nestedIngredient.Recipe!, ingredient => Assert.False(string.IsNullOrEmpty(ingredient.Material)));
 
         // At least one upgrade is farmable, with inlined drop-chance numbers on potential locations.
         var farmable = snapshot.UpgradeViews.First(upgrade => upgrade.FarmLocations.Count > 0);
