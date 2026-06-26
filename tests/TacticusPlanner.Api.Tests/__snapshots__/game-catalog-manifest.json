@@ -1,8 +1,8 @@
 {
   "version": "dev-2026-06-26",
-  "schemaVersion": 11,
+  "schemaVersion": 12,
   "gameVersion": "1.40",
-  "sourceHash": "244c63ee3e503d2d583c77487cdce36a9dbc4de5cb94d116003c19d86b8ab570",
+  "sourceHash": "f7995485cad0e2aa4da4a2c84c6a75538ae24e2250648057a2db70148c2f82ef",
   "datasets": [
     {
       "key": "campaign-battles",

@@ -1,5 +1,3 @@
-using System.Text.Json;
-
 namespace TacticusPlanner.GameCatalog.Models;
 
 public sealed record GameCatalogEquipmentUpgradeCost(
@@ -13,6 +11,13 @@ public sealed record GameCatalogEquipmentUpgradeLevel(
     int MythicSalvageCost
 );
 
+// A single equipment level: the per-level stat block, keyed by stat name (e.g. armor/hp,
+// blockChance/blockDamage, critChance/critDamage). The set of stat keys varies by equipment type, so the
+// block is a string→int map rather than a fixed record.
+public sealed record GameCatalogEquipmentLevel(
+    IReadOnlyDictionary<string, int> Stats
+);
+
 public sealed record GameCatalogEquipment(
     string Id,
     string Name,
@@ -23,7 +28,7 @@ public sealed record GameCatalogEquipment(
     bool IsUniqueRelic,
     IReadOnlyList<string> AllowedUnits,
     IReadOnlyList<string> AllowedFactions,
-    IReadOnlyList<JsonElement> Levels
+    IReadOnlyList<GameCatalogEquipmentLevel> Levels
 );
 
 // Equipment with its per-rarity upgrade-cost ladder inlined (the matched rarity's levels), so the client
@@ -38,6 +43,6 @@ public sealed record GameCatalogEquipmentView(
     bool IsUniqueRelic,
     IReadOnlyList<string> AllowedUnits,
     IReadOnlyList<string> AllowedFactions,
-    IReadOnlyList<JsonElement> Levels,
+    IReadOnlyList<GameCatalogEquipmentLevel> Levels,
     IReadOnlyList<GameCatalogEquipmentUpgradeLevel> UpgradeLevels
 );

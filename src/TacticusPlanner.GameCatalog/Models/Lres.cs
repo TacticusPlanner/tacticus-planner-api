@@ -1,6 +1,27 @@
-using System.Text.Json;
-
 namespace TacticusPlanner.GameCatalog.Models;
+
+// A point-reward milestone: the cumulative points needed to reach it and the engram payout it grants.
+public sealed record GameCatalogLrePointsMilestone(
+    int Milestone,
+    int CumulativePoints,
+    int EngramPayout
+);
+
+// A chest rung: the chest level and the engram cost to open it.
+public sealed record GameCatalogLreChestsMilestone(
+    int ChestLevel,
+    int EngramCost
+);
+
+// The points awarded for reaching each character progression tier during the event.
+public sealed record GameCatalogLreProgression(
+    int Unlock,
+    int FourStars,
+    int FiveStars,
+    int BlueStar,
+    int Mythic,
+    int TwoBlueStars
+);
 
 public sealed record GameCatalogLre(
     string SourceFile,
@@ -19,10 +40,10 @@ public sealed record GameCatalogLre(
     GameCatalogLreTrack Alpha,
     GameCatalogLreTrack Beta,
     GameCatalogLreTrack Gamma,
-    IReadOnlyList<JsonElement> PointsMilestones,
-    IReadOnlyList<JsonElement> ChestsMilestones,
+    IReadOnlyList<GameCatalogLrePointsMilestone> PointsMilestones,
+    IReadOnlyList<GameCatalogLreChestsMilestone> ChestsMilestones,
     int ShardsPerChest,
-    JsonElement Progression
+    GameCatalogLreProgression Progression
 );
 
 public sealed record GameCatalogLreTrack(
@@ -104,8 +125,8 @@ public sealed record GameCatalogLreView(
     GameCatalogLreTrackView Alpha,
     GameCatalogLreTrackView Beta,
     GameCatalogLreTrackView Gamma,
-    IReadOnlyList<JsonElement> PointsMilestones,
-    IReadOnlyList<JsonElement> ChestsMilestones,
+    IReadOnlyList<GameCatalogLrePointsMilestone> PointsMilestones,
+    IReadOnlyList<GameCatalogLreChestsMilestone> ChestsMilestones,
     int ShardsPerChest,
-    JsonElement Progression
+    GameCatalogLreProgression Progression
 );
