@@ -10,3 +10,6 @@ artifacts/
 TestResults/
 coverage/
 .aspire/
+
+# Verify snapshot testing: received files are transient; only *.verified.* are committed.
+*.received.*
