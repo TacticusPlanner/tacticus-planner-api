@@ -3,6 +3,6 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Data\*.json" />
+    <EmbeddedResource Include="Data\**\*.json" />
   </ItemGroup>
 </Project>

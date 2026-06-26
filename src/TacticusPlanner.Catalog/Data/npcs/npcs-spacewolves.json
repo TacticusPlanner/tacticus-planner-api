@@ -1,0 +1,89 @@
+{
+  "alliance": "Imperial",
+  "factionId": "SpaceWolves",
+  "name": "Space Wolves",
+  "npcs": [
+    {
+      "id": "spaceStormcaller_LHE",
+      "name": "Njal",
+      "meleeDamage": "Psychic",
+      "meleeHits": 3,
+      "rangedDamage": "Psychic",
+      "rangedHits": 2,
+      "distance": 2,
+      "movement": 2,
+      "traits": [
+        "Psyker",
+        "TerminatorArmour",
+        "Unstoppable"
+      ],
+      "activeAbilityDamage": [
+        "Psychic"
+      ],
+      "activeAbilities": [
+        "Stormcaller"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "LordOfTempests"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_space_njal_01.png",
+      "stats": [
+        {
+          "abilityLevel": 8,
+          "damage": 23,
+          "armour": 73,
+          "health": 226,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 17,
+          "damage": 52,
+          "armour": 168,
+          "health": 517,
+          "progressionIndex": 5,
+          "rank": 6,
+          "stars": 4
+        },
+        {
+          "abilityLevel": 26,
+          "damage": 115,
+          "armour": 378,
+          "health": 1162,
+          "progressionIndex": 8,
+          "rank": 9,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 35,
+          "damage": 257,
+          "armour": 834,
+          "health": 2564,
+          "progressionIndex": 11,
+          "rank": 12,
+          "stars": 8
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 920,
+          "armour": 2989,
+          "health": 9201,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 65,
+          "damage": 1397,
+          "armour": 4539,
+          "health": 13968,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
+        }
+      ]
+    }
+  ]
+}

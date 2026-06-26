@@ -1,0 +1,41 @@
+{
+  "alliance": "Imperial",
+  "factionId": "AdeptusAstartes",
+  "name": "Adeptus Astartes",
+  "npcs": [
+    {
+      "id": "astarNpc1HaywireMine",
+      "name": "Haywire Mine",
+      "meleeDamage": "",
+      "meleeHits": 0,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 0,
+      "traits": [
+        "Steppable"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [],
+      "passiveAbilityDamage": [
+        "Blast",
+        "Energy"
+      ],
+      "passiveAbilities": [
+        "HaywireMineSteppable"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_astar_haywiremine_01.png",
+      "stats": [
+        {
+          "abilityLevel": 1,
+          "damage": 0,
+          "armour": 0,
+          "health": 0,
+          "progressionIndex": 0,
+          "rank": 0,
+          "stars": 0
+        }
+      ]
+    }
+  ]
+}

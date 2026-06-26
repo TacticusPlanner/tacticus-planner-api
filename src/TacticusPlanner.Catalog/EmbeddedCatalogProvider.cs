@@ -34,47 +34,103 @@ internal sealed class EmbeddedCatalogProvider : ICatalogProvider
             throw new InvalidOperationException("Catalog manifest schema version must be at least 1.");
         }
 
-        var datasets = manifest.Datasets.ToDictionary(dataset => dataset.Key, StringComparer.Ordinal);
-        var datasetHashes = new Dictionary<string, string>(StringComparer.Ordinal);
+        if (string.IsNullOrWhiteSpace(manifest.GameVersion))
+        {
+            throw new InvalidOperationException("Catalog manifest game version is required.");
+        }
 
-        var units = LoadDataset<IReadOnlyList<CatalogUnit>>(datasets, CatalogDatasets.Units, datasetHashes);
-        var mows = LoadDataset<CatalogMowsDataset>(datasets, CatalogDatasets.Mows, datasetHashes);
-        var upgrades = LoadDataset<IReadOnlyList<CatalogUpgrade>>(datasets, CatalogDatasets.Upgrades, datasetHashes);
-        var equipment = LoadDataset<IReadOnlyList<CatalogEquipment>>(datasets, CatalogDatasets.Equipment, datasetHashes);
-        var campaigns = LoadDataset<IReadOnlyList<CatalogCampaign>>(datasets, CatalogDatasets.Campaigns, datasetHashes);
-        var campaignEvents = LoadDataset<IReadOnlyList<CatalogCampaign>>(
-            datasets,
-            CatalogDatasets.CampaignEvents,
-            datasetHashes
-        );
-        var campaignBattles = LoadDataset<IReadOnlyList<CatalogCampaignBattle>>(
-            datasets,
-            CatalogDatasets.CampaignBattles,
-            datasetHashes
-        );
-        var lres = LoadDataset<IReadOnlyList<CatalogLre>>(datasets, CatalogDatasets.Lres, datasetHashes);
+        var datasets = manifest.Datasets.ToDictionary(dataset => dataset.Key, StringComparer.Ordinal);
+
+        // ---- load raw source collections -------------------------------------------------------
+        var unitsByFaction = new Dictionary<string, CatalogFactionUnits>(StringComparer.Ordinal);
+        foreach (var key in CatalogDatasets.UnitFactions)
+        {
+            unitsByFaction[key] = LoadDataset<CatalogFactionUnits>(datasets, key);
+        }
+
+        var mowUpgradeCosts = LoadDataset<IReadOnlyList<CatalogMowUpgradeCost>>(datasets, CatalogDatasets.MowUpgradeCosts);
+        var equipmentUpgradeCosts = LoadDataset<IReadOnlyList<CatalogEquipmentUpgradeCost>>(datasets, CatalogDatasets.EquipmentUpgradeCosts);
+        var dropChances = LoadDataset<IReadOnlyList<CatalogDropChance>>(datasets, CatalogDatasets.DropChances);
+
+        var npcsByFaction = new Dictionary<string, CatalogFactionNpcs>(StringComparer.Ordinal);
+        foreach (var key in CatalogDatasets.NpcFactions)
+        {
+            npcsByFaction[key] = LoadDataset<CatalogFactionNpcs>(datasets, key);
+        }
+
+        var equipmentByType = new Dictionary<string, IReadOnlyList<CatalogEquipment>>(StringComparer.Ordinal);
+        foreach (var key in CatalogDatasets.EquipmentTypes)
+        {
+            equipmentByType[key] = LoadDataset<IReadOnlyList<CatalogEquipment>>(datasets, key);
+        }
+
+        var upgradesByRarity = new Dictionary<string, IReadOnlyList<CatalogUpgrade>>(StringComparer.Ordinal);
+        foreach (var key in CatalogDatasets.UpgradeRarities)
+        {
+            upgradesByRarity[key] = LoadDataset<IReadOnlyList<CatalogUpgrade>>(datasets, key);
+        }
+
+        var campaignGroups = new Dictionary<string, CatalogCampaignGroup>(StringComparer.Ordinal);
+        foreach (var key in CatalogDatasets.CampaignBattleGroups)
+        {
+            campaignGroups[key] = LoadDataset<CatalogCampaignGroup>(datasets, key);
+        }
+
+        var lresByEvent = new Dictionary<string, CatalogLre>(StringComparer.Ordinal);
+        foreach (var key in CatalogDatasets.LreEvents)
+        {
+            lresByEvent[key] = LoadDataset<CatalogLre>(datasets, key);
+        }
+
+        // ---- build denormalized served datasets ------------------------------------------------
+        var characterViews = CatalogDenormalizer.BuildCharacters(unitsByFaction, equipmentByType, campaignGroups, dropChances);
+        var npcList = CatalogDenormalizer.BuildNpcs(npcsByFaction);
+        var mowDataset = CatalogDenormalizer.BuildMows(unitsByFaction, mowUpgradeCosts);
+        var upgradeViews = CatalogDenormalizer.BuildUpgrades(upgradesByRarity, campaignGroups, dropChances);
+        var equipmentDataset = CatalogDenormalizer.BuildEquipment(equipmentByType, equipmentUpgradeCosts);
+        var campaignGroupViews = CatalogDenormalizer.BuildCampaignGroups(campaignGroups, dropChances);
+        var lreViews = CatalogDenormalizer.BuildLres(lresByEvent, unitsByFaction);
+
+        // Served dataset hashes are computed over the canonical JSON of each denormalized payload.
+        var datasetHashes = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            [CatalogDatasets.Characters] = CatalogHashing.ComputeCanonicalJsonHash(characterViews, JsonOptions),
+            [CatalogDatasets.Npcs] = CatalogHashing.ComputeCanonicalJsonHash(npcList, JsonOptions),
+            [CatalogDatasets.Mows] = CatalogHashing.ComputeCanonicalJsonHash(mowDataset, JsonOptions),
+            [CatalogDatasets.Upgrades] = CatalogHashing.ComputeCanonicalJsonHash(upgradeViews, JsonOptions),
+            [CatalogDatasets.Equipment] = CatalogHashing.ComputeCanonicalJsonHash(equipmentDataset, JsonOptions),
+            [CatalogDatasets.CampaignBattles] = CatalogHashing.ComputeCanonicalJsonHash(campaignGroupViews, JsonOptions),
+            [CatalogDatasets.Lres] = CatalogHashing.ComputeCanonicalJsonHash(lreViews, JsonOptions),
+        };
 
         return new CatalogSnapshot(
             manifest.Version,
             manifest.SchemaVersion,
-            CatalogHashing.ComputeSnapshotHash(manifest.Version, manifest.SchemaVersion, datasetHashes),
+            manifest.GameVersion,
+            CatalogHashing.ComputeSnapshotHash(manifest.Version, manifest.SchemaVersion, manifest.GameVersion, datasetHashes),
             new ReadOnlyDictionary<string, string>(datasetHashes),
-            new ReadOnlyCollection<CatalogUnit>(units.ToArray()),
-            new ReadOnlyCollection<CatalogMow>(mows.Mows.ToArray()),
-            new ReadOnlyCollection<CatalogMowUpgradeCost>(mows.UpgradeCosts.ToArray()),
-            new ReadOnlyCollection<CatalogUpgrade>(upgrades.ToArray()),
-            new ReadOnlyCollection<CatalogEquipment>(equipment.ToArray()),
-            new ReadOnlyCollection<CatalogCampaign>(campaigns.ToArray()),
-            new ReadOnlyCollection<CatalogCampaign>(campaignEvents.ToArray()),
-            new ReadOnlyCollection<CatalogCampaignBattle>(campaignBattles.ToArray()),
-            new ReadOnlyCollection<CatalogLre>(lres.ToArray())
+            new ReadOnlyDictionary<string, CatalogFactionUnits>(unitsByFaction),
+            new ReadOnlyCollection<CatalogMowUpgradeCost>(mowUpgradeCosts.ToArray()),
+            new ReadOnlyCollection<CatalogEquipmentUpgradeCost>(equipmentUpgradeCosts.ToArray()),
+            new ReadOnlyDictionary<string, CatalogFactionNpcs>(npcsByFaction),
+            new ReadOnlyDictionary<string, IReadOnlyList<CatalogEquipment>>(equipmentByType),
+            new ReadOnlyDictionary<string, IReadOnlyList<CatalogUpgrade>>(upgradesByRarity),
+            new ReadOnlyDictionary<string, CatalogCampaignGroup>(campaignGroups),
+            new ReadOnlyCollection<CatalogDropChance>(dropChances.ToArray()),
+            new ReadOnlyDictionary<string, CatalogLre>(lresByEvent),
+            characterViews,
+            npcList,
+            mowDataset,
+            upgradeViews,
+            equipmentDataset,
+            campaignGroupViews,
+            lreViews
         );
     }
 
     private static T LoadDataset<T>(
         IReadOnlyDictionary<string, CatalogDatasetSource> datasets,
-        string key,
-        Dictionary<string, string> datasetHashes
+        string key
     )
     {
         if (!datasets.TryGetValue(key, out var dataset))
@@ -88,20 +144,23 @@ internal sealed class EmbeddedCatalogProvider : ICatalogProvider
         }
 
         using var document = ReadEmbeddedJsonDocument(dataset.File);
-        var value = document.RootElement.Deserialize<T>(JsonOptions)
+        return document.RootElement.Deserialize<T>(JsonOptions)
             ?? throw new InvalidOperationException($"Catalog dataset '{key}' is empty.");
-
-        datasetHashes[key] = CatalogHashing.ComputeCanonicalJsonHash(value, JsonOptions);
-
-        return value;
     }
 
     private static JsonDocument ReadEmbeddedJsonDocument(string fileName)
     {
         var assembly = Assembly.GetExecutingAssembly();
+
+        // Manifest file paths may include subfolders (e.g. "units/units-ultramarines.json").
+        // MSBuild rewrites hyphenated folder names in the resource name (campaign-battles ->
+        // campaign_battles) but keeps file names verbatim. Leaf file names are unique across the
+        // catalog and are always preceded by a '.' segment separator, so match on the leaf.
+        var leafName = fileName.Replace('\\', '/').Split('/')[^1];
+        var resourceSuffix = $".{leafName}";
         var resourceName = assembly
             .GetManifestResourceNames()
-            .SingleOrDefault(name => name.EndsWith($".Data.{fileName}", StringComparison.Ordinal));
+            .SingleOrDefault(name => name.EndsWith(resourceSuffix, StringComparison.Ordinal));
 
         if (resourceName is null)
         {
@@ -117,6 +176,7 @@ internal sealed class EmbeddedCatalogProvider : ICatalogProvider
     private sealed record CatalogManifestSource(
         string Version,
         int SchemaVersion,
+        string GameVersion,
         IReadOnlyList<CatalogDatasetSource> Datasets
     );
 

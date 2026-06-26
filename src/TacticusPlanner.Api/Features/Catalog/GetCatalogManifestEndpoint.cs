@@ -10,18 +10,17 @@ public sealed class GetCatalogManifestEndpoint(ICatalogProvider catalog)
     public override void Configure()
     {
         Get("catalog/manifest");
-        Policies(AuthorizationPolicies.AccessAsUser);
+        AllowAnonymous();
         Summary(summary =>
         {
             summary.Summary = "Gets the active catalog manifest.";
-            summary.Description = "Returns catalog release metadata, source hash, and per-dataset hashes.";
+            summary.Description = "Returns catalog release metadata (version, schema version, game version), "
+                + "source hash, and per-dataset hashes for the denormalized datasets.";
             summary.Response<CatalogManifestResponse>(
                 StatusCodes.Status200OK,
                 "The active catalog manifest."
             );
             summary.Response(StatusCodes.Status304NotModified, "The manifest has not changed.");
-            summary.Response(StatusCodes.Status401Unauthorized, "Authentication is required.");
-            summary.Response(StatusCodes.Status403Forbidden, "The authenticated user is not authorized.");
         });
     }
 
@@ -43,6 +42,7 @@ public sealed class GetCatalogManifestEndpoint(ICatalogProvider catalog)
         var response = new CatalogManifestResponse(
             snapshot.Version,
             snapshot.SchemaVersion,
+            snapshot.GameVersion,
             snapshot.SourceHash,
             snapshot.DatasetHashes
                 .OrderBy(pair => pair.Key, StringComparer.Ordinal)
@@ -53,16 +53,6 @@ public sealed class GetCatalogManifestEndpoint(ICatalogProvider catalog)
         await Send.OkAsync(response, ct);
     }
 
-    private static string GetDatasetUrl(string datasetKey) => datasetKey switch
-    {
-        CatalogDatasets.Units => "/api/v1/catalog/units",
-        CatalogDatasets.Mows => "/api/v1/catalog/mows",
-        CatalogDatasets.Upgrades => "/api/v1/catalog/upgrades",
-        CatalogDatasets.Equipment => "/api/v1/catalog/equipment",
-        CatalogDatasets.Campaigns => "/api/v1/catalog/campaigns",
-        CatalogDatasets.CampaignEvents => "/api/v1/catalog/campaign-events",
-        CatalogDatasets.CampaignBattles => "/api/v1/catalog/campaign-battles",
-        CatalogDatasets.Lres => "/api/v1/catalog/lres",
-        _ => throw new InvalidOperationException($"Unknown catalog dataset '{datasetKey}'."),
-    };
+    // Served datasets are consolidated: each key maps 1:1 onto its route.
+    private static string GetDatasetUrl(string datasetKey) => $"/api/v1/catalog/{datasetKey}";
 }

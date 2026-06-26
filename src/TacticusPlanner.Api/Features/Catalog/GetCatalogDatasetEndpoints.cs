@@ -3,133 +3,124 @@ using TacticusPlanner.Catalog;
 
 namespace TacticusPlanner.Api.Features.Catalog;
 
-public sealed class GetCatalogUnitsEndpoint(ICatalogProvider catalog)
-    : CatalogDatasetEndpoint<CatalogUnit>(catalog, CatalogDatasets.Units)
-{
-    protected override IReadOnlyList<CatalogUnit> Items => Snapshot.Units;
-
-    public override void Configure()
-    {
-        Get("catalog/units");
-        ConfigureSummary("Gets catalog units.", "The active catalog units.");
-    }
-}
-
-public sealed class GetCatalogMowsEndpoint(ICatalogProvider catalog)
-    : CatalogDatasetEndpoint<CatalogMow>(catalog, CatalogDatasets.Mows)
-{
-    protected override IReadOnlyList<CatalogMow> Items => Snapshot.Mows;
-
-    public override void Configure()
-    {
-        Get("catalog/mows");
-        ConfigureSummary("Gets catalog machines of war.", "The active catalog machines of war.");
-    }
-}
-
-public sealed class GetCatalogUpgradesEndpoint(ICatalogProvider catalog)
-    : CatalogDatasetEndpoint<CatalogUpgrade>(catalog, CatalogDatasets.Upgrades)
-{
-    protected override IReadOnlyList<CatalogUpgrade> Items => Snapshot.Upgrades;
-
-    public override void Configure()
-    {
-        Get("catalog/upgrades");
-        ConfigureSummary("Gets catalog upgrade materials.", "The active catalog upgrade materials.");
-    }
-}
-
-public sealed class GetCatalogEquipmentEndpoint(ICatalogProvider catalog)
-    : CatalogDatasetEndpoint<CatalogEquipment>(catalog, CatalogDatasets.Equipment)
-{
-    protected override IReadOnlyList<CatalogEquipment> Items => Snapshot.Equipment;
-
-    public override void Configure()
-    {
-        Get("catalog/equipment");
-        ConfigureSummary("Gets catalog equipment.", "The active catalog equipment.");
-    }
-}
-
-public sealed class GetCatalogCampaignsEndpoint(ICatalogProvider catalog)
-    : CatalogDatasetEndpoint<CatalogCampaign>(catalog, CatalogDatasets.Campaigns)
-{
-    protected override IReadOnlyList<CatalogCampaign> Items => Snapshot.Campaigns;
-
-    public override void Configure()
-    {
-        Get("catalog/campaigns");
-        ConfigureSummary("Gets catalog campaigns.", "The active catalog campaigns.");
-    }
-}
-
-public sealed class GetCatalogCampaignEventsEndpoint(ICatalogProvider catalog)
-    : CatalogDatasetEndpoint<CatalogCampaign>(catalog, CatalogDatasets.CampaignEvents)
-{
-    protected override IReadOnlyList<CatalogCampaign> Items => Snapshot.CampaignEvents;
-
-    public override void Configure()
-    {
-        Get("catalog/campaign-events");
-        ConfigureSummary("Gets catalog campaign events.", "The active catalog campaign events.");
-    }
-}
-
-public sealed class GetCatalogCampaignBattlesEndpoint(ICatalogProvider catalog)
-    : CatalogDatasetEndpoint<CatalogCampaignBattle>(catalog, CatalogDatasets.CampaignBattles)
-{
-    protected override IReadOnlyList<CatalogCampaignBattle> Items => Snapshot.CampaignBattles;
-
-    public override void Configure()
-    {
-        Get("catalog/campaign-battles");
-        ConfigureSummary("Gets catalog campaign battles.", "The active catalog campaign battles.");
-    }
-}
-
-public sealed class GetCatalogLresEndpoint(ICatalogProvider catalog)
-    : CatalogDatasetEndpoint<CatalogLre>(catalog, CatalogDatasets.Lres)
-{
-    protected override IReadOnlyList<CatalogLre> Items => Snapshot.Lres;
-
-    public override void Configure()
-    {
-        Get("catalog/lres");
-        ConfigureSummary("Gets catalog legendary release events.", "The active catalog LREs.");
-    }
-}
-
-public abstract class CatalogDatasetEndpoint<TItem>(ICatalogProvider catalog, string datasetKey)
-    : EndpointWithoutRequest<CatalogItemsResponse<TItem>>
+/// <summary>
+/// Serves one whole denormalized dataset (no route parameter). The payload is already self-contained
+/// (reference tables inlined), so the client consumes it without any cross-dataset joins.
+/// </summary>
+public abstract class ServedDatasetEndpoint<TPayload>(ICatalogProvider catalog, string datasetKey)
+    : EndpointWithoutRequest<CatalogDatasetEnvelope<TPayload>>
 {
     protected CatalogSnapshot Snapshot => catalog.Current;
 
-    protected abstract IReadOnlyList<TItem> Items { get; }
+    protected abstract TPayload Payload { get; }
 
     public override Task HandleAsync(CancellationToken ct)
     {
         var snapshot = Snapshot;
-        var response = new CatalogItemsResponse<TItem>(
+        var response = new CatalogDatasetEnvelope<TPayload>(
             snapshot.Version,
             snapshot.SchemaVersion,
+            snapshot.GameVersion,
             snapshot.SourceHash,
             datasetKey,
             snapshot.DatasetHashes[datasetKey],
-            Items
+            Payload
         );
 
         return Send.OkAsync(response, ct);
     }
 
-    protected void ConfigureSummary(string summary, string okDescription)
+    protected void ConfigureServed(string summary, string okDescription)
     {
-        Policies(AuthorizationPolicies.AccessAsUser);
+        AllowAnonymous();
         Summary(endpointSummary =>
         {
             endpointSummary.Summary = summary;
-            endpointSummary.Response<CatalogItemsResponse<TItem>>(StatusCodes.Status200OK, okDescription);
-            endpointSummary.Response(StatusCodes.Status401Unauthorized, "Authentication is required.");
-            endpointSummary.Response(StatusCodes.Status403Forbidden, "The authenticated user is not authorized.");
+            endpointSummary.Response<CatalogDatasetEnvelope<TPayload>>(StatusCodes.Status200OK, okDescription);
         });
+    }
+}
+
+public sealed class GetCatalogCharactersEndpoint(ICatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<CatalogCharacterView>>(catalog, CatalogDatasets.Characters)
+{
+    protected override IReadOnlyList<CatalogCharacterView> Payload => Snapshot.CharacterViews;
+
+    public override void Configure()
+    {
+        Get("catalog/characters");
+        ConfigureServed("Gets catalog characters.", "All characters with shard farm locations and eligible equipment.");
+    }
+}
+
+public sealed class GetCatalogNpcsEndpoint(ICatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<CatalogNpc>>(catalog, CatalogDatasets.Npcs)
+{
+    protected override IReadOnlyList<CatalogNpc> Payload => Snapshot.NpcList;
+
+    public override void Configure()
+    {
+        Get("catalog/npcs");
+        ConfigureServed("Gets catalog NPCs.", "All non-playable units.");
+    }
+}
+
+public sealed class GetCatalogMowsEndpoint(ICatalogProvider catalog)
+    : ServedDatasetEndpoint<CatalogMowDataset>(catalog, CatalogDatasets.Mows)
+{
+    protected override CatalogMowDataset Payload => Snapshot.MowDataset;
+
+    public override void Configure()
+    {
+        Get("catalog/mows");
+        ConfigureServed("Gets catalog machines of war.", "All machines of war with the shared upgrade-cost ladder.");
+    }
+}
+
+public sealed class GetCatalogUpgradesEndpoint(ICatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<CatalogUpgradeView>>(catalog, CatalogDatasets.Upgrades)
+{
+    protected override IReadOnlyList<CatalogUpgradeView> Payload => Snapshot.UpgradeViews;
+
+    public override void Configure()
+    {
+        Get("catalog/upgrades");
+        ConfigureServed("Gets catalog upgrade materials.", "All upgrades with farm locations and expanded recipes.");
+    }
+}
+
+public sealed class GetCatalogEquipmentEndpoint(ICatalogProvider catalog)
+    : ServedDatasetEndpoint<CatalogEquipmentDataset>(catalog, CatalogDatasets.Equipment)
+{
+    protected override CatalogEquipmentDataset Payload => Snapshot.EquipmentDataset;
+
+    public override void Configure()
+    {
+        Get("catalog/equipment");
+        ConfigureServed("Gets catalog equipment.", "All equipment with the shared per-rarity upgrade-cost ladders.");
+    }
+}
+
+public sealed class GetCatalogCampaignBattlesEndpoint(ICatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<CatalogCampaignGroupView>>(catalog, CatalogDatasets.CampaignBattles)
+{
+    protected override IReadOnlyList<CatalogCampaignGroupView> Payload => Snapshot.CampaignGroupViews;
+
+    public override void Configure()
+    {
+        Get("catalog/campaign-battles");
+        ConfigureServed("Gets catalog campaign battles.", "All campaign groups and battles with inlined reward drop chances.");
+    }
+}
+
+public sealed class GetCatalogLresEndpoint(ICatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<CatalogLreView>>(catalog, CatalogDatasets.Lres)
+{
+    protected override IReadOnlyList<CatalogLreView> Payload => Snapshot.LreViews;
+
+    public override void Configure()
+    {
+        Get("catalog/lres");
+        ConfigureServed("Gets catalog legendary release events.", "All legendary release events with per-track available units.");
     }
 }

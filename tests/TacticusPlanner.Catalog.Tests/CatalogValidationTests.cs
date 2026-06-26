@@ -11,19 +11,111 @@ public sealed class CatalogValidationTests
         var snapshot = LoadSnapshot();
 
         Assert.NotEmpty(snapshot.SourceHash);
-        Assert.NotEmpty(snapshot.Units);
+        Assert.NotEmpty(snapshot.Characters);
         Assert.NotEmpty(snapshot.Mows);
+        Assert.NotEmpty(snapshot.MowUpgradeCosts);
+        Assert.NotEmpty(snapshot.Npcs);
         Assert.NotEmpty(snapshot.Upgrades);
         Assert.NotEmpty(snapshot.Equipment);
-        Assert.NotEmpty(snapshot.Campaigns);
-        Assert.NotEmpty(snapshot.CampaignEvents);
+        Assert.NotEmpty(snapshot.DropChances);
         Assert.NotEmpty(snapshot.CampaignBattles);
         Assert.NotEmpty(snapshot.Lres);
 
-        foreach (var requiredDataset in CatalogDatasets.Required)
+        Assert.All(CatalogDatasets.UnitFactions, key =>
         {
-            Assert.True(snapshot.DatasetHashes.ContainsKey(requiredDataset), $"Missing hash for {requiredDataset}.");
+            Assert.True(snapshot.UnitsByFaction.TryGetValue(key, out var faction), $"Missing unit faction {key}.");
+            Assert.NotEmpty(faction!.Characters);
+        });
+        Assert.All(CatalogDatasets.NpcFactions, key =>
+        {
+            Assert.True(snapshot.NpcsByFaction.TryGetValue(key, out var faction), $"Missing npc faction {key}.");
+            Assert.NotEmpty(faction!.Npcs);
+        });
+        Assert.All(CatalogDatasets.CampaignBattleGroups, key =>
+        {
+            Assert.True(snapshot.CampaignGroups.TryGetValue(key, out var group), $"Missing campaign group {key}.");
+            Assert.NotEmpty(group!.Faction);
+            Assert.NotEmpty(group.CoreCharacters);
+            Assert.NotEmpty(group.Difficulties);
+            Assert.NotEmpty(group.Battles);
+        });
+        Assert.All(CatalogDatasets.EquipmentTypes, key =>
+        {
+            Assert.True(snapshot.EquipmentByType.TryGetValue(key, out var items), $"Missing equipment type {key}.");
+            Assert.NotEmpty(items!);
+        });
+        Assert.All(CatalogDatasets.UpgradeRarities, key =>
+        {
+            Assert.True(snapshot.UpgradesByRarity.TryGetValue(key, out var items), $"Missing upgrade rarity {key}.");
+            Assert.NotEmpty(items!);
+        });
+        Assert.All(CatalogDatasets.LreEvents, key =>
+            Assert.True(snapshot.LresByEvent.ContainsKey(key), $"Missing LRE event {key}."));
+
+        // The manifest now exposes the denormalized served datasets (hashes computed over each projection).
+        foreach (var servedDataset in CatalogDatasets.Served)
+        {
+            Assert.True(snapshot.DatasetHashes.ContainsKey(servedDataset), $"Missing hash for {servedDataset}.");
         }
+
+        Assert.Equal("1.40", snapshot.GameVersion);
+        Assert.NotEmpty(snapshot.CharacterViews);
+        Assert.NotEmpty(snapshot.NpcList);
+        Assert.NotEmpty(snapshot.MowDataset.Items);
+        Assert.NotEmpty(snapshot.MowDataset.UpgradeCosts);
+        Assert.NotEmpty(snapshot.UpgradeViews);
+        Assert.NotEmpty(snapshot.EquipmentDataset.Items);
+        Assert.NotEmpty(snapshot.EquipmentDataset.UpgradeCostsByRarity);
+        Assert.NotEmpty(snapshot.CampaignGroupViews);
+        Assert.NotEmpty(snapshot.LreViews);
+    }
+
+    [Fact]
+    public void DenormalizedViewsResolveCrossReferences()
+    {
+        var snapshot = LoadSnapshot();
+
+        // A craftable upgrade exposes its expanded recipe split into base vs crafted totals.
+        var crafted = snapshot.UpgradeViews.First(upgrade => upgrade.Craftable && upgrade.Recipe.Count > 0);
+        Assert.NotNull(crafted.Expanded);
+        Assert.True(crafted.Expanded!.TotalBaseCount > 0);
+        Assert.Equal(crafted.Expanded.TotalBaseCount, crafted.Expanded.BaseUpgrades.Values.Sum());
+        Assert.Equal(crafted.Expanded.TotalCraftedCount, crafted.Expanded.CraftedUpgrades.Values.Sum());
+
+        // At least one upgrade is farmable, with inlined drop-chance numbers on potential locations.
+        var farmable = snapshot.UpgradeViews.First(upgrade => upgrade.FarmLocations.Count > 0);
+        Assert.All(farmable.FarmLocations, location =>
+            Assert.True(location.Guaranteed || location.EffectiveRate is > 0));
+
+        // Every LRE track resolves a non-empty available-units roster from its allowed-units filter,
+        // and carries the imported static battle/enemy data.
+        Assert.All(snapshot.LreViews, lre =>
+        {
+            Assert.NotEmpty(lre.Alpha.AvailableUnitIds);
+            Assert.NotEmpty(lre.Beta.AvailableUnitIds);
+            Assert.NotEmpty(lre.Gamma.AvailableUnitIds);
+
+            foreach (var track in new[] { lre.Alpha, lre.Beta, lre.Gamma })
+            {
+                Assert.Equal(18, track.Battles.Count);
+                Assert.NotEmpty(track.DefeatAll);
+                Assert.All(track.Battles, battle =>
+                {
+                    Assert.NotEmpty(battle.Waves);
+                    Assert.All(battle.Waves, wave => Assert.NotEmpty(wave.Enemies));
+                });
+            }
+        });
+
+        // Characters carry faction/alliance and at least some have shard locations + eligible equipment.
+        Assert.All(snapshot.CharacterViews, character =>
+        {
+            Assert.NotEmpty(character.Faction);
+            Assert.NotEmpty(character.Alliance);
+        });
+        Assert.Contains(snapshot.CharacterViews, character => character.ShardLocations.Count > 0);
+        Assert.Contains(snapshot.CharacterViews, character =>
+            character.EligibleEquipment.Any(slot => slot.EquipmentIds.Count > 0));
     }
 
     [Fact]
@@ -62,9 +154,13 @@ public sealed class CatalogValidationTests
     {
         var snapshot = LoadSnapshot();
 
-        Assert.NotEmpty(snapshot.CampaignEvents);
-        Assert.All(snapshot.Campaigns, campaign => Assert.NotEqual("event", campaign.ReleaseType));
-        Assert.All(snapshot.CampaignEvents, campaign => Assert.Equal("event", campaign.ReleaseType));
+        Assert.All(snapshot.CampaignGroups.Values, group =>
+        {
+            Assert.NotEmpty(group.Difficulties);
+            Assert.NotEmpty(group.CoreCharacters);
+        });
+        Assert.Contains(snapshot.CampaignGroups.Values, group => string.Equals(group.ReleaseType, "event", StringComparison.Ordinal));
+        Assert.Contains(snapshot.CampaignGroups.Values, group => string.Equals(group.ReleaseType, "standard", StringComparison.Ordinal));
 
         var farmableReward = snapshot.UpgradeFarmLocations.First(pair => pair.Value.Count > 0);
         Assert.NotEmpty(farmableReward.Key);

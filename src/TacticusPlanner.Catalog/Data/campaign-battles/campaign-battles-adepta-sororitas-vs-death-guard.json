@@ -1,0 +1,4340 @@
+{
+  "groupId": "adepta-sororitas-vs-death-guard",
+  "faction": "Sisterhood",
+  "releaseType": "event",
+  "coreCharacters": [
+    "adeptCanoness",
+    "adeptHospitaller",
+    "adeptRetributor"
+  ],
+  "difficulties": [
+    "eventStandard",
+    "eventStandardChallenge",
+    "eventExtremis",
+    "eventExtremisChallenge"
+  ],
+  "battles": [
+    {
+      "id": "DGS01",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 1,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 40,
+            "max": 66
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC013",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 264,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman:6",
+          "count": 6
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 6,
+          "stars": 2,
+          "rank": "Iron2"
+        }
+      ]
+    },
+    {
+      "id": "DGS02",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 2,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 40,
+            "max": 66
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC013",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 308,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman:6",
+          "count": 7
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 7,
+          "stars": 2,
+          "rank": "Iron2"
+        }
+      ]
+    },
+    {
+      "id": "DGS03",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 3,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 40,
+            "max": 66
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC013",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 482,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion",
+        "DeathGuard"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Plague Marine",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman:6",
+          "count": 4
+        },
+        {
+          "id": "deathNpc2PlagueMarine:4",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 4,
+          "stars": 2,
+          "rank": "Iron2"
+        },
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 3,
+          "stars": 1,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "DGSC3B",
+      "difficulty": "eventStandardChallenge",
+      "energyCost": 6,
+      "nodeNumber": 3,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR008",
+            "chanceId": "upgradeRare_eventStandardChallenge"
+          }
+        ]
+      },
+      "enemyPower": 2154,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Plague Marine"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc2PlagueMarine:7",
+          "count": 6
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 6,
+          "stars": 2,
+          "rank": "Iron3"
+        }
+      ]
+    },
+    {
+      "id": "DGS04",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 4,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 40,
+            "max": 66
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC006",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 526,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion",
+        "DeathGuard"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Plague Marine",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman:6",
+          "count": 5
+        },
+        {
+          "id": "deathNpc2PlagueMarine:4",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 5,
+          "stars": 2,
+          "rank": "Iron2"
+        },
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 3,
+          "stars": 1,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "DGS05",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 5,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 40,
+            "max": 66
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC012",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 510,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 5,
+      "enemiesTypes": [
+        "Plague Marine"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc2PlagueMarine:4",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 5,
+          "stars": 1,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "DGS06",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 6,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 45,
+            "max": 75
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_deathBlightlord",
+            "chanceId": "shard_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 1142,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Maladus",
+        "Plague Marine"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc2PlagueMarine:5",
+          "count": 5
+        },
+        {
+          "id": "deathNpcBlightlord:3",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 5,
+          "stars": 2,
+          "rank": "Iron1"
+        },
+        {
+          "id": "deathNpcBlightlord",
+          "name": "Maladus",
+          "count": 1,
+          "stars": 3,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "DGS07",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 7,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 45,
+            "max": 75
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC003",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 217,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Nurglings"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc3Nurglings:4",
+          "count": 7
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 7,
+          "stars": 1,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "DGS08",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 8,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 45,
+            "max": 75
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC010",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 345,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Nurglings",
+        "Plague Marine"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc2PlagueMarine:3",
+          "count": 4
+        },
+        {
+          "id": "deathNpc3Nurglings:3",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 4,
+          "stars": 1,
+          "rank": "Stone3"
+        },
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 3,
+          "stars": 1,
+          "rank": "Stone3"
+        }
+      ]
+    },
+    {
+      "id": "DGS09",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 9,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 45,
+            "max": 75
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC014",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 781,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Nurglings",
+        "Plague Marine"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc2PlagueMarine:5",
+          "count": 4
+        },
+        {
+          "id": "deathNpc3Nurglings:4",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 4,
+          "stars": 2,
+          "rank": "Iron1"
+        },
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 3,
+          "stars": 1,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "DGS10",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 10,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 45,
+            "max": 75
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR024",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 798,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion",
+        "DeathGuard"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Nurglings",
+        "Plague Marine",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman:6",
+          "count": 5
+        },
+        {
+          "id": "deathNpc2PlagueMarine:5",
+          "count": 3
+        },
+        {
+          "id": "deathNpc3Nurglings:4",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 5,
+          "stars": 2,
+          "rank": "Iron2"
+        },
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 3,
+          "stars": 2,
+          "rank": "Iron1"
+        },
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 2,
+          "stars": 1,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "DGS11",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 11,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_deathPutrifier",
+            "chanceId": "shard_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 1166,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion",
+        "DeathGuard"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Nurglings",
+        "Pestillian",
+        "Plague Marine",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman:6",
+          "count": 2
+        },
+        {
+          "id": "deathNpc2PlagueMarine:5",
+          "count": 4
+        },
+        {
+          "id": "deathNpc3Nurglings:6",
+          "count": 2
+        },
+        {
+          "id": "deathNpcPutrifier:3",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 2,
+          "stars": 2,
+          "rank": "Iron2"
+        },
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 4,
+          "stars": 2,
+          "rank": "Iron1"
+        },
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 2,
+          "stars": 2,
+          "rank": "Iron2"
+        },
+        {
+          "id": "deathNpcPutrifier",
+          "name": "Pestillian",
+          "count": 1,
+          "stars": 3,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "DGS12",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 12,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC007",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 1440,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Poxwalker"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker:10",
+          "count": 8
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker",
+          "name": "Poxwalker",
+          "count": 8,
+          "stars": 6,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "DGS13",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 13,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpU016",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 1659,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Poxwalker"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker:11",
+          "count": 7
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker",
+          "name": "Poxwalker",
+          "count": 7,
+          "stars": 6,
+          "rank": "Bronze2"
+        }
+      ]
+    },
+    {
+      "id": "DGSC13B",
+      "difficulty": "eventStandardChallenge",
+      "energyCost": 6,
+      "nodeNumber": 13,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpE015",
+            "chanceId": "upgradeEpic_eventStandardChallenge"
+          }
+        ]
+      },
+      "enemyPower": 10359,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Nurglings",
+        "Plague Marine",
+        "Poxwalker"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker:12",
+          "count": 5
+        },
+        {
+          "id": "deathNpc2PlagueMarine:13",
+          "count": 3
+        },
+        {
+          "id": "deathNpc3Nurglings:11",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker",
+          "name": "Poxwalker",
+          "count": 5,
+          "stars": 5,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 3,
+          "stars": 7,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 2,
+          "stars": 6,
+          "rank": "Bronze2"
+        }
+      ]
+    },
+    {
+      "id": "DGS14",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 14,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgU011",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 4836,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Plague Marine",
+        "Poxwalker"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker:11",
+          "count": 5
+        },
+        {
+          "id": "deathNpc2PlagueMarine:11",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker",
+          "name": "Poxwalker",
+          "count": 5,
+          "stars": 6,
+          "rank": "Bronze2"
+        },
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 3,
+          "stars": 6,
+          "rank": "Bronze2"
+        }
+      ]
+    },
+    {
+      "id": "DGS15",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 15,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmU002",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 5132,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Nurglings",
+        "Plague Marine",
+        "Poxwalker"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker:12",
+          "count": 3
+        },
+        {
+          "id": "deathNpc2PlagueMarine:11",
+          "count": 3
+        },
+        {
+          "id": "deathNpc3Nurglings:11",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker",
+          "name": "Poxwalker",
+          "count": 3,
+          "stars": 5,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 3,
+          "stars": 6,
+          "rank": "Bronze2"
+        },
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 2,
+          "stars": 6,
+          "rank": "Bronze2"
+        }
+      ]
+    },
+    {
+      "id": "DGS16",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 16,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR024",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 3949,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Nurglings",
+        "Plague Marine",
+        "Poxwalker"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker:10",
+          "count": 4
+        },
+        {
+          "id": "deathNpc2PlagueMarine:11",
+          "count": 2
+        },
+        {
+          "id": "deathNpc3Nurglings:11",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker",
+          "name": "Poxwalker",
+          "count": 4,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 2,
+          "stars": 6,
+          "rank": "Bronze2"
+        },
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 3,
+          "stars": 6,
+          "rank": "Bronze2"
+        }
+      ]
+    },
+    {
+      "id": "DGS17",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 17,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 52,
+            "max": 90
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_deathBlightbringer",
+            "chanceId": "shard_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 7958,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Corrodius",
+        "Nurglings",
+        "Poxwalker"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker:12",
+          "count": 7
+        },
+        {
+          "id": "deathNpc3Nurglings:11",
+          "count": 3
+        },
+        {
+          "id": "deathNpcBlightbringer:10",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker",
+          "name": "Poxwalker",
+          "count": 7,
+          "stars": 5,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 3,
+          "stars": 6,
+          "rank": "Bronze2"
+        },
+        {
+          "id": "deathNpcBlightbringer",
+          "name": "Corrodius",
+          "count": 1,
+          "stars": 7,
+          "rank": "Silver1"
+        }
+      ]
+    },
+    {
+      "id": "DGS18",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 18,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 52,
+            "max": 90
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgU009",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 4247,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Blightlord Terminator",
+        "Poxwalker"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker:12",
+          "count": 8
+        },
+        {
+          "id": "deathNpc4BlightlordTerminator:11",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker",
+          "name": "Poxwalker",
+          "count": 8,
+          "stars": 5,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "deathNpc4BlightlordTerminator",
+          "name": "Blightlord Terminator",
+          "count": 1,
+          "stars": 6,
+          "rank": "Bronze2"
+        }
+      ]
+    },
+    {
+      "id": "DGS19",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 19,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 52,
+            "max": 90
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpU012",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 3834,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Blightlord Terminator",
+        "Plague Marine"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc2PlagueMarine:9",
+          "count": 4
+        },
+        {
+          "id": "deathNpc4BlightlordTerminator:9",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 4,
+          "stars": 3,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "deathNpc4BlightlordTerminator",
+          "name": "Blightlord Terminator",
+          "count": 2,
+          "stars": 3,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "DGS20",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 20,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 52,
+            "max": 90
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmU008",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 2370,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Poxwalker"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker:11",
+          "count": 10
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker",
+          "name": "Poxwalker",
+          "count": 10,
+          "stars": 6,
+          "rank": "Bronze2"
+        }
+      ]
+    },
+    {
+      "id": "DGS21",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 21,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 52,
+            "max": 90
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR009",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 4974,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Blightlord Terminator",
+        "Nurglings",
+        "Plague Marine",
+        "Poxwalker"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker:11",
+          "count": 3
+        },
+        {
+          "id": "deathNpc2PlagueMarine:10",
+          "count": 3
+        },
+        {
+          "id": "deathNpc3Nurglings:11",
+          "count": 2
+        },
+        {
+          "id": "deathNpc4BlightlordTerminator:10",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker",
+          "name": "Poxwalker",
+          "count": 3,
+          "stars": 6,
+          "rank": "Bronze2"
+        },
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 3,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 2,
+          "stars": 6,
+          "rank": "Bronze2"
+        },
+        {
+          "id": "deathNpc4BlightlordTerminator",
+          "name": "Blightlord Terminator",
+          "count": 1,
+          "stars": 6,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "DGS22",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 22,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_deathTyphus",
+            "chanceId": "shard_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 8551,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Nurglings",
+        "Plague Marine",
+        "Poxwalker",
+        "Typhus"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker:11",
+          "count": 5
+        },
+        {
+          "id": "deathNpc2PlagueMarine:10",
+          "count": 2
+        },
+        {
+          "id": "deathNpc3Nurglings:9",
+          "count": 2
+        },
+        {
+          "id": "deathNpcTyphus:10",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker",
+          "name": "Poxwalker",
+          "count": 5,
+          "stars": 6,
+          "rank": "Bronze2"
+        },
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 2,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 2,
+          "stars": 3,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "deathNpcTyphus",
+          "name": "Typhus",
+          "count": 1,
+          "stars": 7,
+          "rank": "Silver1"
+        }
+      ]
+    },
+    {
+      "id": "DGS23",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 23,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpU009",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 23834,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion",
+        "DeathGuard"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Nurglings",
+        "Poxwalker",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman:19",
+          "count": 3
+        },
+        {
+          "id": "deathNpc1Poxwalker:18",
+          "count": 5
+        },
+        {
+          "id": "deathNpc3Nurglings:17",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver3"
+        },
+        {
+          "id": "deathNpc1Poxwalker",
+          "name": "Poxwalker",
+          "count": 5,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        }
+      ]
+    },
+    {
+      "id": "DGS24",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 24,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgU019",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 46142,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion",
+        "DeathGuard"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Nurglings",
+        "Plague Marine",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman:19",
+          "count": 2
+        },
+        {
+          "id": "deathNpc2PlagueMarine:17",
+          "count": 4
+        },
+        {
+          "id": "deathNpc3Nurglings:18",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver3"
+        },
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 4,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 3,
+          "stars": 9,
+          "rank": "Silver2"
+        }
+      ]
+    },
+    {
+      "id": "DGS25",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 25,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmU007",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 24110,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Nurglings",
+        "Plague Marine"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc2PlagueMarine:15",
+          "count": 2
+        },
+        {
+          "id": "deathNpc3Nurglings:18",
+          "count": 6
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 2,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 6,
+          "stars": 9,
+          "rank": "Silver2"
+        }
+      ]
+    },
+    {
+      "id": "DGSC25B",
+      "difficulty": "eventStandardChallenge",
+      "energyCost": 6,
+      "nodeNumber": 25,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgE003",
+            "chanceId": "upgradeEpic_eventStandardChallenge"
+          }
+        ]
+      },
+      "enemyPower": 33086,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Corrodius",
+        "Maladus",
+        "Nauseous",
+        "Nurglings",
+        "Pestillian",
+        "Plague Marine",
+        "Typhus"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc2PlagueMarine:14",
+          "count": 2
+        },
+        {
+          "id": "deathNpc3Nurglings:14",
+          "count": 3
+        },
+        {
+          "id": "deathNpcBlightbringer:10",
+          "count": 1
+        },
+        {
+          "id": "deathNpcBlightlord:10",
+          "count": 1
+        },
+        {
+          "id": "deathNpcPutrifier:10",
+          "count": 1
+        },
+        {
+          "id": "deathNpcRotbone:10",
+          "count": 1
+        },
+        {
+          "id": "deathNpcTyphus:10",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 2,
+          "stars": 9,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 3,
+          "stars": 9,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "deathNpcBlightbringer",
+          "name": "Corrodius",
+          "count": 1,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "deathNpcBlightlord",
+          "name": "Maladus",
+          "count": 1,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "deathNpcPutrifier",
+          "name": "Pestillian",
+          "count": 1,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "deathNpcRotbone",
+          "name": "Nauseous",
+          "count": 1,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "deathNpcTyphus",
+          "name": "Typhus",
+          "count": 1,
+          "stars": 7,
+          "rank": "Silver1"
+        }
+      ]
+    },
+    {
+      "id": "DGS26",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 26,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR019",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 19091,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Nurglings",
+        "Plague Marine",
+        "Poxwalker"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker:16",
+          "count": 5
+        },
+        {
+          "id": "deathNpc2PlagueMarine:17",
+          "count": 1
+        },
+        {
+          "id": "deathNpc3Nurglings:17",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker",
+          "name": "Poxwalker",
+          "count": 5,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        }
+      ]
+    },
+    {
+      "id": "DGS27",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 27,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR003",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 38796,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Blightlord Terminator",
+        "Plague Marine"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc2PlagueMarine:16",
+          "count": 5
+        },
+        {
+          "id": "deathNpc4BlightlordTerminator:16",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 5,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "deathNpc4BlightlordTerminator",
+          "name": "Blightlord Terminator",
+          "count": 1,
+          "stars": 9,
+          "rank": "Silver1"
+        }
+      ]
+    },
+    {
+      "id": "DGS28",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 28,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR006",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 54164,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 4,
+      "enemiesTypes": [
+        "Blightlord Terminator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc4BlightlordTerminator:18",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc4BlightlordTerminator",
+          "name": "Blightlord Terminator",
+          "count": 4,
+          "stars": 9,
+          "rank": "Silver2"
+        }
+      ]
+    },
+    {
+      "id": "DGS29",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 29,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL104",
+            "chanceId": "upgradeLegendary_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 46507,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Blightlord Terminator",
+        "Nurglings",
+        "Plague Marine",
+        "Poxwalker"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker:17",
+          "count": 4
+        },
+        {
+          "id": "deathNpc2PlagueMarine:16",
+          "count": 3
+        },
+        {
+          "id": "deathNpc3Nurglings:19",
+          "count": 2
+        },
+        {
+          "id": "deathNpc4BlightlordTerminator:18",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker",
+          "name": "Poxwalker",
+          "count": 4,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 3,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver3"
+        },
+        {
+          "id": "deathNpc4BlightlordTerminator",
+          "name": "Blightlord Terminator",
+          "count": 1,
+          "stars": 9,
+          "rank": "Silver2"
+        }
+      ]
+    },
+    {
+      "id": "DGS30",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 30,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_deathRotbone",
+            "chanceId": "shard_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 145446,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Mortarion",
+        "Poxwalker"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathBossMortarion:2",
+          "count": 1
+        },
+        {
+          "id": "deathNpc1Poxwalker:16",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathBossMortarion",
+          "name": "Mortarion",
+          "count": 1,
+          "stars": 6,
+          "rank": "Silver1"
+        },
+        {
+          "id": "deathNpc1Poxwalker",
+          "name": "Poxwalker",
+          "count": 5,
+          "stars": 9,
+          "rank": "Silver1"
+        }
+      ]
+    },
+    {
+      "id": "DGE01",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 1,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC013",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 22799,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman:20",
+          "count": 7
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 7,
+          "stars": 10,
+          "rank": "Silver3"
+        }
+      ]
+    },
+    {
+      "id": "DGE02",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 2,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC013",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 34019,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion",
+        "DeathGuard"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Poxwalker",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman:21",
+          "count": 7
+        },
+        {
+          "id": "deathNpc1Poxwalker:19",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 7,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "deathNpc1Poxwalker",
+          "name": "Poxwalker",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver3"
+        }
+      ]
+    },
+    {
+      "id": "DGE03",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 3,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC013",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 67355,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion",
+        "DeathGuard"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Plague Marine",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman:21",
+          "count": 3
+        },
+        {
+          "id": "deathNpc2PlagueMarine:19",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 4,
+          "stars": 8,
+          "rank": "Silver3"
+        }
+      ]
+    },
+    {
+      "id": "DGEC3B",
+      "difficulty": "eventExtremisChallenge",
+      "energyCost": 6,
+      "nodeNumber": 3,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmE010",
+            "chanceId": "upgradeEpic_eventExtremisChallenge"
+          }
+        ]
+      },
+      "enemyPower": 225169,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Plague Marine"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc2PlagueMarine:22",
+          "count": 7
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 7,
+          "stars": 11,
+          "rank": "Gold1"
+        }
+      ]
+    },
+    {
+      "id": "DGE04",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 4,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC006",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 75891,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion",
+        "DeathGuard"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Plague Marine",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman:21",
+          "count": 8
+        },
+        {
+          "id": "deathNpc2PlagueMarine:19",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 8,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver3"
+        }
+      ]
+    },
+    {
+      "id": "DGE05",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 5,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC012",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 98388,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Plague Marine"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc2PlagueMarine:20",
+          "count": 6
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 6,
+          "stars": 10,
+          "rank": "Silver3"
+        }
+      ]
+    },
+    {
+      "id": "DGE06",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 6,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_deathBlightlord",
+            "chanceId": "shard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 257481,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Maladus",
+        "Plague Marine"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc2PlagueMarine:22",
+          "count": 6
+        },
+        {
+          "id": "deathNpcBlightlord:13",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 6,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "deathNpcBlightlord",
+          "name": "Maladus",
+          "count": 1,
+          "stars": 10,
+          "rank": "Gold3"
+        }
+      ]
+    },
+    {
+      "id": "DGE07",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 7,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC003",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 66564,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Nurglings"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc3Nurglings:22",
+          "count": 9
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 9,
+          "stars": 11,
+          "rank": "Gold1"
+        }
+      ]
+    },
+    {
+      "id": "DGE08",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 8,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC010",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 133481,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Nurglings",
+        "Plague Marine"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc2PlagueMarine:22",
+          "count": 3
+        },
+        {
+          "id": "deathNpc3Nurglings:22",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 5,
+          "stars": 11,
+          "rank": "Gold1"
+        }
+      ]
+    },
+    {
+      "id": "DGE09",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 9,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC014",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 116428,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Nurglings",
+        "Plague Marine"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc2PlagueMarine:21",
+          "count": 4
+        },
+        {
+          "id": "deathNpc3Nurglings:22",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 4,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold1"
+        }
+      ]
+    },
+    {
+      "id": "DGE10",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 10,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC007",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 112739,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion",
+        "DeathGuard"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Nurglings",
+        "Plague Marine",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman:24",
+          "count": 2
+        },
+        {
+          "id": "deathNpc2PlagueMarine:21",
+          "count": 3
+        },
+        {
+          "id": "deathNpc3Nurglings:22",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold2"
+        },
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold1"
+        }
+      ]
+    },
+    {
+      "id": "DGE11",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 11,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 140
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_deathPutrifier",
+            "chanceId": "shard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 241611,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion",
+        "DeathGuard"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Nurglings",
+        "Pestillian",
+        "Plague Marine",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman:22",
+          "count": 4
+        },
+        {
+          "id": "deathNpc2PlagueMarine:23",
+          "count": 4
+        },
+        {
+          "id": "deathNpc3Nurglings:22",
+          "count": 2
+        },
+        {
+          "id": "deathNpcPutrifier:13",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 4,
+          "stars": 10,
+          "rank": "Gold2"
+        },
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "deathNpcPutrifier",
+          "name": "Pestillian",
+          "count": 1,
+          "stars": 10,
+          "rank": "Gold3"
+        }
+      ]
+    },
+    {
+      "id": "DGE12",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 12,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmU008",
+            "chanceId": "upgradeUncommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 53808,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Poxwalker"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker:23",
+          "count": 8
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker",
+          "name": "Poxwalker",
+          "count": 8,
+          "stars": 10,
+          "rank": "Gold2"
+        }
+      ]
+    },
+    {
+      "id": "DGE13",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 13,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpU016",
+            "chanceId": "upgradeUncommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 104317,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Nurglings",
+        "Poxwalker"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker:25",
+          "count": 6
+        },
+        {
+          "id": "deathNpc3Nurglings:24",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker",
+          "name": "Poxwalker",
+          "count": 6,
+          "stars": 10,
+          "rank": "Gold3"
+        },
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 5,
+          "stars": 11,
+          "rank": "Gold2"
+        }
+      ]
+    },
+    {
+      "id": "DGEC13B",
+      "difficulty": "eventExtremisChallenge",
+      "energyCost": 6,
+      "nodeNumber": 13,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmL203",
+            "chanceId": "upgradeLegendary_eventExtremisChallenge"
+          }
+        ]
+      },
+      "enemyPower": 1707750,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Nurglings",
+        "Plague Marine",
+        "Poxwalker"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker:34",
+          "count": 5
+        },
+        {
+          "id": "deathNpc2PlagueMarine:32",
+          "count": 3
+        },
+        {
+          "id": "deathNpc3Nurglings:32",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker",
+          "name": "Poxwalker",
+          "count": 5,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 3,
+          "stars": 11,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 3,
+          "stars": 11,
+          "rank": "Diamond3"
+        }
+      ]
+    },
+    {
+      "id": "DGE14",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 14,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgU011",
+            "chanceId": "upgradeUncommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 406986,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Plague Marine",
+        "Poxwalker"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker:28",
+          "count": 6
+        },
+        {
+          "id": "deathNpc2PlagueMarine:26",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker",
+          "name": "Poxwalker",
+          "count": 6,
+          "stars": 11,
+          "rank": "Diamond1"
+        },
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold3"
+        }
+      ]
+    },
+    {
+      "id": "DGE15",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 15,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR019",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 632859,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Nurglings",
+        "Plague Marine",
+        "Poxwalker"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker:30",
+          "count": 5
+        },
+        {
+          "id": "deathNpc2PlagueMarine:29",
+          "count": 3
+        },
+        {
+          "id": "deathNpc3Nurglings:29",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker",
+          "name": "Poxwalker",
+          "count": 5,
+          "stars": 11,
+          "rank": "Diamond2"
+        },
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 3,
+          "stars": 10,
+          "rank": "Diamond2"
+        },
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 3,
+          "stars": 10,
+          "rank": "Diamond2"
+        }
+      ]
+    },
+    {
+      "id": "DGE16",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 16,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR003",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 1192012,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Nurglings",
+        "Plague Marine",
+        "Poxwalker"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker:32",
+          "count": 3
+        },
+        {
+          "id": "deathNpc2PlagueMarine:31",
+          "count": 4
+        },
+        {
+          "id": "deathNpc3Nurglings:31",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker",
+          "name": "Poxwalker",
+          "count": 3,
+          "stars": 11,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 4,
+          "stars": 10,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 3,
+          "stars": 10,
+          "rank": "Diamond3"
+        }
+      ]
+    },
+    {
+      "id": "DGE17",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 17,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 140
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_deathBlightbringer",
+            "chanceId": "shard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 1154545,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Corrodius",
+        "Nurglings",
+        "Plague Marine",
+        "Poxwalker"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker:30",
+          "count": 8
+        },
+        {
+          "id": "deathNpc2PlagueMarine:31",
+          "count": 1
+        },
+        {
+          "id": "deathNpc3Nurglings:31",
+          "count": 2
+        },
+        {
+          "id": "deathNpcBlightbringer:16",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker",
+          "name": "Poxwalker",
+          "count": 8,
+          "stars": 11,
+          "rank": "Diamond2"
+        },
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 1,
+          "stars": 10,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 2,
+          "stars": 10,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "deathNpcBlightbringer",
+          "name": "Corrodius",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "DGE18",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 18,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR006",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 1075274,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Blightlord Terminator",
+        "Poxwalker"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker:33",
+          "count": 8
+        },
+        {
+          "id": "deathNpc4BlightlordTerminator:30",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker",
+          "name": "Poxwalker",
+          "count": 8,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "deathNpc4BlightlordTerminator",
+          "name": "Blightlord Terminator",
+          "count": 2,
+          "stars": 11,
+          "rank": "Diamond2"
+        }
+      ]
+    },
+    {
+      "id": "DGE19",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 19,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR024",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 2567977,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Blightlord Terminator",
+        "Plague Marine"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc2PlagueMarine:32",
+          "count": 7
+        },
+        {
+          "id": "deathNpc4BlightlordTerminator:31",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 7,
+          "stars": 11,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "deathNpc4BlightlordTerminator",
+          "name": "Blightlord Terminator",
+          "count": 1,
+          "stars": 10,
+          "rank": "Diamond3"
+        }
+      ]
+    },
+    {
+      "id": "DGE20",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 20,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR024",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 467324,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Poxwalker"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker:31",
+          "count": 11
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker",
+          "name": "Poxwalker",
+          "count": 11,
+          "stars": 10,
+          "rank": "Diamond3"
+        }
+      ]
+    },
+    {
+      "id": "DGE21",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 21,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR009",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 2723597,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Blightlord Terminator",
+        "Nurglings",
+        "Plague Marine",
+        "Poxwalker"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker:34",
+          "count": 5
+        },
+        {
+          "id": "deathNpc2PlagueMarine:34",
+          "count": 3
+        },
+        {
+          "id": "deathNpc3Nurglings:34",
+          "count": 3
+        },
+        {
+          "id": "deathNpc4BlightlordTerminator:33",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker",
+          "name": "Poxwalker",
+          "count": 5,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 3,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 3,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "deathNpc4BlightlordTerminator",
+          "name": "Blightlord Terminator",
+          "count": 1,
+          "stars": 11,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "DGE22",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 22,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 140
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_deathTyphus",
+            "chanceId": "shard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 2063009,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Nurglings",
+        "Plague Marine",
+        "Poxwalker",
+        "Typhus"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker:34",
+          "count": 4
+        },
+        {
+          "id": "deathNpc2PlagueMarine:33",
+          "count": 2
+        },
+        {
+          "id": "deathNpc3Nurglings:35",
+          "count": 4
+        },
+        {
+          "id": "deathNpcTyphus:16",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker",
+          "name": "Poxwalker",
+          "count": 4,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 2,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 4,
+          "stars": 13,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "deathNpcTyphus",
+          "name": "Typhus",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "DGE23",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 23,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL104",
+            "chanceId": "upgradeLegendary_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 1288076,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion",
+        "DeathGuard"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Nurglings",
+        "Poxwalker",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman:40",
+          "count": 3
+        },
+        {
+          "id": "deathNpc1Poxwalker:37",
+          "count": 5
+        },
+        {
+          "id": "deathNpc3Nurglings:35",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 3,
+          "stars": 14,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "deathNpc1Poxwalker",
+          "name": "Poxwalker",
+          "count": 5,
+          "stars": 11,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 3,
+          "stars": 13,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "DGE24",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 24,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_deathRotbone",
+            "chanceId": "shard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 2696367,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion",
+        "DeathGuard"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Nurglings",
+        "Plague Marine",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman:40",
+          "count": 4
+        },
+        {
+          "id": "deathNpc2PlagueMarine:36",
+          "count": 3
+        },
+        {
+          "id": "deathNpc3Nurglings:36",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 4,
+          "stars": 14,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 3,
+          "stars": 14,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 4,
+          "stars": 14,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "DGE25",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 25,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "mythicShards_deathBlightlord",
+            "chanceId": "mythicShard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 1823489,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Nurglings",
+        "Plague Marine"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc2PlagueMarine:33",
+          "count": 3
+        },
+        {
+          "id": "deathNpc3Nurglings:36",
+          "count": 7
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 3,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 7,
+          "stars": 14,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "DGEC25B",
+      "difficulty": "eventExtremisChallenge",
+      "energyCost": 6,
+      "nodeNumber": 25,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 90,
+            "max": 155
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgL003",
+            "chanceId": "upgradeLegendary_eventExtremisChallenge"
+          }
+        ]
+      },
+      "enemyPower": 2962900,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Corrodius",
+        "Maladus",
+        "Nauseous",
+        "Pestillian",
+        "Poxwalker",
+        "Typhus"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker:33",
+          "count": 6
+        },
+        {
+          "id": "deathNpcBlightbringer:16",
+          "count": 1
+        },
+        {
+          "id": "deathNpcBlightlord:16",
+          "count": 1
+        },
+        {
+          "id": "deathNpcPutrifier:16",
+          "count": 1
+        },
+        {
+          "id": "deathNpcRotbone:15",
+          "count": 1
+        },
+        {
+          "id": "deathNpcTyphus:17",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker",
+          "name": "Poxwalker",
+          "count": 6,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "deathNpcBlightbringer",
+          "name": "Corrodius",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "deathNpcBlightlord",
+          "name": "Maladus",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "deathNpcPutrifier",
+          "name": "Pestillian",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "deathNpcRotbone",
+          "name": "Nauseous",
+          "count": 1,
+          "stars": 11,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "deathNpcTyphus",
+          "name": "Typhus",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine2"
+        }
+      ]
+    },
+    {
+      "id": "DGE26",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 26,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "mythicShards_deathPutrifier",
+            "chanceId": "mythicShard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 1811556,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Nurglings",
+        "Plague Marine",
+        "Poxwalker"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker:35",
+          "count": 5
+        },
+        {
+          "id": "deathNpc2PlagueMarine:34",
+          "count": 2
+        },
+        {
+          "id": "deathNpc3Nurglings:34",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker",
+          "name": "Poxwalker",
+          "count": 5,
+          "stars": 13,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 2,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 3,
+          "stars": 12,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "DGE27",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 27,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "mythicShards_deathBlightbringer",
+            "chanceId": "mythicShard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 3322184,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion",
+        "DeathGuard"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Blightlord Terminator",
+        "Plague Marine",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman:40",
+          "count": 4
+        },
+        {
+          "id": "deathNpc2PlagueMarine:35",
+          "count": 4
+        },
+        {
+          "id": "deathNpc4BlightlordTerminator:34",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 4,
+          "stars": 14,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 4,
+          "stars": 13,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "deathNpc4BlightlordTerminator",
+          "name": "Blightlord Terminator",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "DGE28",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 28,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "mythicShards_deathTyphus",
+            "chanceId": "mythicShard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 2629152,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 4,
+      "enemiesTypes": [
+        "Blightlord Terminator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc4BlightlordTerminator:34",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc4BlightlordTerminator",
+          "name": "Blightlord Terminator",
+          "count": 4,
+          "stars": 12,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "DGE29",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 29,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "mythicShards_deathRotbone",
+            "chanceId": "mythicShard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 2556283,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Blightlord Terminator",
+        "Nurglings",
+        "Plague Marine",
+        "Poxwalker"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker:38",
+          "count": 4
+        },
+        {
+          "id": "deathNpc2PlagueMarine:35",
+          "count": 2
+        },
+        {
+          "id": "deathNpc3Nurglings:35",
+          "count": 3
+        },
+        {
+          "id": "deathNpc4BlightlordTerminator:35",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathNpc1Poxwalker",
+          "name": "Poxwalker",
+          "count": 4,
+          "stars": 12,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 2,
+          "stars": 13,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 3,
+          "stars": 13,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "deathNpc4BlightlordTerminator",
+          "name": "Blightlord Terminator",
+          "count": 1,
+          "stars": 13,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "DGE30",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 30,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 90,
+            "max": 155
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpM004",
+            "chanceId": "upgradeMythic_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 12166165,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "DeathGuard"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Mortarion",
+        "Nurglings",
+        "Plague Marine",
+        "Poxwalker"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "deathBossMortarion:3",
+          "count": 1
+        },
+        {
+          "id": "deathNpc1Poxwalker:34",
+          "count": 3
+        },
+        {
+          "id": "deathNpc2PlagueMarine:32",
+          "count": 2
+        },
+        {
+          "id": "deathNpc3Nurglings:33",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "deathBossMortarion",
+          "name": "Mortarion",
+          "count": 1,
+          "stars": 11,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "deathNpc1Poxwalker",
+          "name": "Poxwalker",
+          "count": 3,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "deathNpc2PlagueMarine",
+          "name": "Plague Marine",
+          "count": 2,
+          "stars": 11,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "deathNpc3Nurglings",
+          "name": "Nurglings",
+          "count": 1,
+          "stars": 11,
+          "rank": "Adamantine1"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 10,
+  "gameVersion": "1.40",
+  "datasets": [
+    {
+      "key": "campaign-battles",
+      "url": "/api/v1/catalog/campaign-battles"
+    },
+    {
+      "key": "characters",
+      "url": "/api/v1/catalog/characters"
+    },
+    {
+      "key": "equipment",
+      "url": "/api/v1/catalog/equipment"
+    },
+    {
+      "key": "lres",
+      "url": "/api/v1/catalog/lres"
+    },
+    {
+      "key": "mows",
+      "url": "/api/v1/catalog/mows"
+    },
+    {
+      "key": "npcs",
+      "url": "/api/v1/catalog/npcs"
+    },
+    {
+      "key": "upgrades",
+      "url": "/api/v1/catalog/upgrades"
+    }
+  ]
+}

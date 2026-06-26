@@ -1,0 +1,189 @@
+[
+  {
+    "id": "upgArmE008",
+    "material": "Hypermaterial Shifter",
+    "snowprintId": "upgArmE008",
+    "label": "Hypermaterial Shifter",
+    "rarity": "Epic",
+    "stat": "Armour",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgArmE008.png",
+    "craftable": false,
+    "recipe": []
+  },
+  {
+    "id": "upgArmE009",
+    "material": "Revered Talisman",
+    "snowprintId": "upgArmE009",
+    "label": "Revered Talisman",
+    "rarity": "Epic",
+    "stat": "Armour",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgArmE009.png",
+    "craftable": false,
+    "recipe": []
+  },
+  {
+    "id": "upgArmE010",
+    "material": "Unyielding Rivets",
+    "snowprintId": "upgArmE010",
+    "label": "Unyielding Rivets",
+    "rarity": "Epic",
+    "stat": "Armour",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgArmE010.png",
+    "craftable": false,
+    "recipe": []
+  },
+  {
+    "id": "upgArmE013",
+    "material": "Duplicate Organ",
+    "snowprintId": "upgArmE013",
+    "label": "Duplicate Organ",
+    "rarity": "Epic",
+    "stat": "Armour",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgArmE013.png",
+    "craftable": false,
+    "recipe": []
+  },
+  {
+    "id": "upgArmECS",
+    "material": "Coming soon",
+    "snowprintId": "upgArmECS",
+    "label": "Coming soon",
+    "rarity": "Epic",
+    "stat": "Armour",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgArmECS.png",
+    "craftable": false,
+    "recipe": []
+  },
+  {
+    "id": "upgDmgE001",
+    "material": "Special Issue Ammo",
+    "snowprintId": "upgDmgE001",
+    "label": "Special Issue Ammo",
+    "rarity": "Epic",
+    "stat": "Damage",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgDmgE001.png",
+    "craftable": false,
+    "recipe": []
+  },
+  {
+    "id": "upgDmgE003",
+    "material": "Blessed Promethium Canister",
+    "snowprintId": "upgDmgE003",
+    "label": "Blessed Promethium Canister",
+    "rarity": "Epic",
+    "stat": "Damage",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgDmgE003.png",
+    "craftable": false,
+    "recipe": []
+  },
+  {
+    "id": "upgDmgE004",
+    "material": "Bionic Neural Pathways",
+    "snowprintId": "upgDmgE004",
+    "label": "Bionic Neural Pathways",
+    "rarity": "Epic",
+    "stat": "Damage",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgDmgE004.png",
+    "craftable": false,
+    "recipe": []
+  },
+  {
+    "id": "upgDmgE005",
+    "material": "Greater Reliquary of Vengeance",
+    "snowprintId": "upgDmgE005",
+    "label": "Greater Reliquary of Vengeance",
+    "rarity": "Epic",
+    "stat": "Damage",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgDmgE005.png",
+    "craftable": false,
+    "recipe": []
+  },
+  {
+    "id": "upgDmgE010",
+    "material": "Warp Locus",
+    "snowprintId": "upgDmgE010",
+    "label": "Warp Locus",
+    "rarity": "Epic",
+    "stat": "Damage",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgDmgE010.png",
+    "craftable": false,
+    "recipe": []
+  },
+  {
+    "id": "upgDmgE011",
+    "material": "Elaborate Hilt",
+    "snowprintId": "upgDmgE011",
+    "label": "Elaborate Hilt",
+    "rarity": "Epic",
+    "stat": "Damage",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgDmgE011.png",
+    "craftable": false,
+    "recipe": []
+  },
+  {
+    "id": "upgDmgECS",
+    "material": "Coming soon",
+    "snowprintId": "upgDmgECS",
+    "label": "Coming soon",
+    "rarity": "Epic",
+    "stat": "Damage",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgDmgECS.png",
+    "craftable": false,
+    "recipe": []
+  },
+  {
+    "id": "upgHpE003",
+    "material": "Terminator Honours",
+    "snowprintId": "upgHpE003",
+    "label": "Terminator Honours",
+    "rarity": "Epic",
+    "stat": "Health",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgHpE003.png",
+    "craftable": false,
+    "recipe": []
+  },
+  {
+    "id": "upgHpE012",
+    "material": "Golden Ornamental Skull",
+    "snowprintId": "upgHpE012",
+    "label": "Golden Ornamental Skull",
+    "rarity": "Epic",
+    "stat": "Health",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgHpE012.png",
+    "craftable": false,
+    "recipe": []
+  },
+  {
+    "id": "upgHpE015",
+    "material": "Weathering",
+    "snowprintId": "upgHpE015",
+    "label": "Weathering",
+    "rarity": "Epic",
+    "stat": "Health",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgHpE015.png",
+    "craftable": false,
+    "recipe": []
+  },
+  {
+    "id": "upgHpE017",
+    "material": "Secret Agenda",
+    "snowprintId": "upgHpE017",
+    "label": "Secret Agenda",
+    "rarity": "Epic",
+    "stat": "Health",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgHpE017.png",
+    "craftable": false,
+    "recipe": []
+  },
+  {
+    "id": "upgHpECS",
+    "material": "Coming soon",
+    "snowprintId": "upgHpECS",
+    "label": "Coming soon",
+    "rarity": "Epic",
+    "stat": "Health",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgHpECS.png",
+    "craftable": false,
+    "recipe": []
+  }
+]

@@ -1,0 +1,46 @@
+[
+  {
+    "id": "upgHpM001",
+    "material": "Imperial Aquila",
+    "snowprintId": "upgHpM001",
+    "label": "Imperial Aquila",
+    "rarity": "Mythic",
+    "stat": "Health",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgHpM001.png",
+    "craftable": false,
+    "recipe": []
+  },
+  {
+    "id": "upgHpM002",
+    "material": "Mutant Form",
+    "snowprintId": "upgHpM002",
+    "label": "Mutant Form",
+    "rarity": "Mythic",
+    "stat": "Health",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgHpM002.png",
+    "craftable": false,
+    "recipe": []
+  },
+  {
+    "id": "upgHpM003",
+    "material": "Ancient Inscription",
+    "snowprintId": "upgHpM003",
+    "label": "Ancient Inscription",
+    "rarity": "Mythic",
+    "stat": "Health",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgHpM003.png",
+    "craftable": false,
+    "recipe": []
+  },
+  {
+    "id": "upgHpM004",
+    "material": "Venerable Battle Mark",
+    "snowprintId": "upgHpM004",
+    "label": "Venerable Battle Mark",
+    "rarity": "Mythic",
+    "stat": "Health",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgHpM004.png",
+    "craftable": false,
+    "recipe": []
+  }
+]

@@ -1,0 +1,913 @@
+[
+  {
+    "id": "I_Booster_Block_C001",
+    "name": "_I_Booster_Block_C001",
+    "rarity": "Common",
+    "type": "I_Booster_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "blockChanceBonus": 1,
+          "blockDamageBonus": 5
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 1,
+          "blockDamageBonus": 9
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 1,
+          "blockDamageBonus": 12
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Block_C002",
+    "name": "Basic Forcefield Amplifier",
+    "rarity": "Common",
+    "type": "I_Booster_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "Necrons",
+      "Sisterhood",
+      "AstraMilitarum",
+      "BlackLegion",
+      "DeathGuard",
+      "Tyranids",
+      "Orks",
+      "BlackTemplars",
+      "Aeldari",
+      "Tau",
+      "SpaceWolves",
+      "ThousandSons",
+      "DarkAngels",
+      "AdeptusMechanicus",
+      "WorldEaters",
+      "BloodAngels",
+      "Genestealers",
+      "Custodes",
+      "EmperorsChildren",
+      "LeaguesOfVotann",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "blockChanceBonus": 1,
+          "blockDamageBonus": 5
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 1,
+          "blockDamageBonus": 9
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 1,
+          "blockDamageBonus": 12
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Block_E001",
+    "name": "_I_Booster_Block_E001",
+    "rarity": "Epic",
+    "type": "I_Booster_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "blockChanceBonus": 4,
+          "blockDamageBonus": 69
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 4,
+          "blockDamageBonus": 87
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 4,
+          "blockDamageBonus": 104
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 4,
+          "blockDamageBonus": 121
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 4,
+          "blockDamageBonus": 138
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 4,
+          "blockDamageBonus": 155
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 4,
+          "blockDamageBonus": 172
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 4,
+          "blockDamageBonus": 189
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 4,
+          "blockDamageBonus": 207
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Block_E002",
+    "name": "Advanced Force Field Amplifier",
+    "rarity": "Epic",
+    "type": "I_Booster_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "Necrons",
+      "Sisterhood",
+      "AstraMilitarum",
+      "BlackLegion",
+      "DeathGuard",
+      "Tyranids",
+      "Orks",
+      "BlackTemplars",
+      "Aeldari",
+      "Tau",
+      "SpaceWolves",
+      "ThousandSons",
+      "DarkAngels",
+      "AdeptusMechanicus",
+      "WorldEaters",
+      "BloodAngels",
+      "Genestealers",
+      "Custodes",
+      "EmperorsChildren",
+      "LeaguesOfVotann",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "blockChanceBonus": 4,
+          "blockDamageBonus": 69
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 4,
+          "blockDamageBonus": 87
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 4,
+          "blockDamageBonus": 104
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 4,
+          "blockDamageBonus": 121
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 4,
+          "blockDamageBonus": 138
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 4,
+          "blockDamageBonus": 155
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 4,
+          "blockDamageBonus": 172
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 4,
+          "blockDamageBonus": 189
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 4,
+          "blockDamageBonus": 207
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Block_L001",
+    "name": "_I_Booster_Block_L001",
+    "rarity": "Legendary",
+    "type": "I_Booster_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "blockChanceBonus": 5,
+          "blockDamageBonus": 210
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 5,
+          "blockDamageBonus": 223
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 5,
+          "blockDamageBonus": 235
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 5,
+          "blockDamageBonus": 247
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 5,
+          "blockDamageBonus": 259
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 5,
+          "blockDamageBonus": 271
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 5,
+          "blockDamageBonus": 284
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 5,
+          "blockDamageBonus": 296
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 5,
+          "blockDamageBonus": 308
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 5,
+          "blockDamageBonus": 320
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 5,
+          "blockDamageBonus": 332
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Block_L002",
+    "name": "Optimal Force Field Amplifier",
+    "rarity": "Legendary",
+    "type": "I_Booster_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "Necrons",
+      "Sisterhood",
+      "AstraMilitarum",
+      "BlackLegion",
+      "DeathGuard",
+      "Tyranids",
+      "Orks",
+      "BlackTemplars",
+      "Aeldari",
+      "Tau",
+      "SpaceWolves",
+      "ThousandSons",
+      "DarkAngels",
+      "AdeptusMechanicus",
+      "WorldEaters",
+      "BloodAngels",
+      "Genestealers",
+      "Custodes",
+      "EmperorsChildren",
+      "LeaguesOfVotann",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "blockChanceBonus": 5,
+          "blockDamageBonus": 210
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 5,
+          "blockDamageBonus": 223
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 5,
+          "blockDamageBonus": 235
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 5,
+          "blockDamageBonus": 247
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 5,
+          "blockDamageBonus": 259
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 5,
+          "blockDamageBonus": 271
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 5,
+          "blockDamageBonus": 284
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 5,
+          "blockDamageBonus": 296
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 5,
+          "blockDamageBonus": 308
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 5,
+          "blockDamageBonus": 320
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 5,
+          "blockDamageBonus": 332
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Block_M002",
+    "name": "Perfected Force Field Amplifier",
+    "rarity": "Mythic",
+    "type": "I_Booster_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "Necrons",
+      "Sisterhood",
+      "AstraMilitarum",
+      "BlackLegion",
+      "DeathGuard",
+      "Tyranids",
+      "Orks",
+      "BlackTemplars",
+      "Aeldari",
+      "Tau",
+      "SpaceWolves",
+      "ThousandSons",
+      "DarkAngels",
+      "AdeptusMechanicus",
+      "WorldEaters",
+      "BloodAngels",
+      "Genestealers",
+      "Custodes",
+      "EmperorsChildren",
+      "LeaguesOfVotann",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 350
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 369
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 388
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 407
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 426
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 445
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 464
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 483
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 502
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 521
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Block_R001",
+    "name": "_I_Booster_Block_R001",
+    "rarity": "Rare",
+    "type": "I_Booster_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "blockChanceBonus": 3,
+          "blockDamageBonus": 31
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 3,
+          "blockDamageBonus": 38
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 3,
+          "blockDamageBonus": 45
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 3,
+          "blockDamageBonus": 51
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 3,
+          "blockDamageBonus": 58
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 3,
+          "blockDamageBonus": 65
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 3,
+          "blockDamageBonus": 71
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Block_R002",
+    "name": "Refined Force Field Amplifier",
+    "rarity": "Rare",
+    "type": "I_Booster_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "Necrons",
+      "Sisterhood",
+      "AstraMilitarum",
+      "BlackLegion",
+      "DeathGuard",
+      "Tyranids",
+      "Orks",
+      "BlackTemplars",
+      "Aeldari",
+      "Tau",
+      "SpaceWolves",
+      "ThousandSons",
+      "DarkAngels",
+      "AdeptusMechanicus",
+      "WorldEaters",
+      "BloodAngels",
+      "Genestealers",
+      "Custodes",
+      "EmperorsChildren",
+      "LeaguesOfVotann",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "blockChanceBonus": 3,
+          "blockDamageBonus": 31
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 3,
+          "blockDamageBonus": 38
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 3,
+          "blockDamageBonus": 45
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 3,
+          "blockDamageBonus": 51
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 3,
+          "blockDamageBonus": 58
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 3,
+          "blockDamageBonus": 65
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 3,
+          "blockDamageBonus": 71
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Block_U001",
+    "name": "_I_Booster_Block_U001",
+    "rarity": "Uncommon",
+    "type": "I_Booster_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "blockChanceBonus": 2,
+          "blockDamageBonus": 13
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 2,
+          "blockDamageBonus": 18
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 2,
+          "blockDamageBonus": 22
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 2,
+          "blockDamageBonus": 26
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 2,
+          "blockDamageBonus": 30
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Block_U002",
+    "name": "Improved Force Field Amplifier",
+    "rarity": "Uncommon",
+    "type": "I_Booster_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "Necrons",
+      "Sisterhood",
+      "AstraMilitarum",
+      "BlackLegion",
+      "DeathGuard",
+      "Tyranids",
+      "Orks",
+      "BlackTemplars",
+      "Aeldari",
+      "Tau",
+      "SpaceWolves",
+      "ThousandSons",
+      "DarkAngels",
+      "AdeptusMechanicus",
+      "WorldEaters",
+      "BloodAngels",
+      "Genestealers",
+      "Custodes",
+      "EmperorsChildren",
+      "LeaguesOfVotann",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "blockChanceBonus": 2,
+          "blockDamageBonus": 13
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 2,
+          "blockDamageBonus": 18
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 2,
+          "blockDamageBonus": 22
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 2,
+          "blockDamageBonus": 26
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 2,
+          "blockDamageBonus": 30
+        }
+      }
+    ]
+  },
+  {
+    "id": "R_Booster_Block_NornCrown",
+    "name": "Norn Crown",
+    "rarity": "Mythic",
+    "type": "I_Booster_Block",
+    "abilityId": "NornCrown",
+    "isRelic": true,
+    "isUniqueRelic": true,
+    "allowedUnits": [
+      "tyranNeurothrope"
+    ],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 350
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 369
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 388
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 407
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 426
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 445
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 464
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 483
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 502
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 521
+        }
+      }
+    ]
+  },
+  {
+    "id": "R_Booster_Block_PhoenixGem",
+    "name": "Phoenix Gem",
+    "rarity": "Mythic",
+    "type": "I_Booster_Block",
+    "abilityId": "PhoenixGem",
+    "isRelic": true,
+    "isUniqueRelic": true,
+    "allowedUnits": [
+      "eldarAutarch"
+    ],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 350
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 369
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 388
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 407
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 426
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 445
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 464
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 483
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 502
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 521
+        }
+      }
+    ]
+  }
+]

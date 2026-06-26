@@ -15,39 +15,36 @@ var catalogOpenApiRoutes = new Dictionary<string, CatalogOpenApiRoute>(StringCom
 {
     ["api/v1/catalog/manifest"] = new(
         "Gets the active catalog manifest.",
-        "Returns catalog release metadata, source hash, per-dataset hashes, and dataset download URLs."
+        "Returns catalog release metadata (version, schema version, game version), source hash, and the "
+            + "denormalized dataset hashes + download URLs."
     ),
-    ["api/v1/catalog/units"] = new(
-        "Gets catalog units.",
-        "Returns the complete active catalog units chunk."
+    ["api/v1/catalog/characters"] = new(
+        "Gets catalog characters.",
+        "Returns all characters with faction/alliance, shard farm locations (drop chances inlined), and eligible equipment per slot."
+    ),
+    ["api/v1/catalog/npcs"] = new(
+        "Gets catalog NPCs.",
+        "Returns all non-playable units."
     ),
     ["api/v1/catalog/mows"] = new(
         "Gets catalog machines of war.",
-        "Returns the complete active catalog machines of war chunk."
+        "Returns all machines of war with the shared upgrade-cost ladder inlined on the dataset."
     ),
     ["api/v1/catalog/upgrades"] = new(
         "Gets catalog upgrade materials.",
-        "Returns the complete active catalog upgrade materials chunk."
+        "Returns all upgrades with farm locations (drop chances inlined) and, for craftable items, the recursively expanded recipe split into base and crafted totals."
     ),
     ["api/v1/catalog/equipment"] = new(
         "Gets catalog equipment.",
-        "Returns the complete active catalog equipment chunk."
-    ),
-    ["api/v1/catalog/campaigns"] = new(
-        "Gets catalog campaigns.",
-        "Returns the complete active regular catalog campaigns chunk."
-    ),
-    ["api/v1/catalog/campaign-events"] = new(
-        "Gets catalog campaign events.",
-        "Returns the complete active catalog campaign events chunk."
+        "Returns all equipment with the shared per-rarity upgrade-cost ladders inlined on the dataset."
     ),
     ["api/v1/catalog/campaign-battles"] = new(
         "Gets catalog campaign battles.",
-        "Returns the complete active catalog campaign battles chunk."
+        "Returns all campaign groups and battles with reward drop chances inlined on each potential reward."
     ),
     ["api/v1/catalog/lres"] = new(
         "Gets catalog legendary release events.",
-        "Returns the complete active catalog legendary release events chunk."
+        "Returns all legendary release events with per-track available unit ids resolved from the allowed-units filter."
     ),
 };
 
@@ -159,6 +156,13 @@ app.UseFastEndpoints(options =>
     options.Endpoints.RoutePrefix = "api/v1";
     options.Endpoints.Configurator = endpoint =>
     {
+        // Catalog endpoints are public (static game data) and opt out via AllowAnonymous in their own
+        // Configure(); every other endpoint defaults to the authenticated AccessAsUser policy.
+        if (endpoint.Routes?.Any(route => route.Contains("catalog", StringComparison.OrdinalIgnoreCase)) == true)
+        {
+            return;
+        }
+
         endpoint.Policies(AuthorizationPolicies.AccessAsUser);
     };
 });

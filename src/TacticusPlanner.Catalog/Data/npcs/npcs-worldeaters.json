@@ -1,0 +1,198 @@
+{
+  "alliance": "Chaos",
+  "factionId": "WorldEaters",
+  "name": "World Eaters",
+  "npcs": [
+    {
+      "id": "worldBossEightboundLHE",
+      "name": "Azkor",
+      "meleeDamage": "Eviscerate",
+      "meleeHits": 2,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [
+        "BlessingsOfKhorne",
+        "Daemon",
+        "Resilient",
+        "Terrifying",
+        "Unstoppable"
+      ],
+      "activeAbilityDamage": [
+        "Eviscerate"
+      ],
+      "activeAbilities": [
+        "OverwhelmingWrath"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "BeaconOfRage"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_world_eightbound_01.png",
+      "stats": [
+        {
+          "abilityLevel": 8,
+          "damage": 57,
+          "armour": 47,
+          "health": 236,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        }
+      ]
+    },
+    {
+      "id": "worldBossExecutionsLHE",
+      "name": "Tarvakh",
+      "meleeDamage": "Piercing",
+      "meleeHits": 1,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [
+        "BlessingsOfKhorne",
+        "RapidAssault"
+      ],
+      "activeAbilityDamage": [
+        "Piercing"
+      ],
+      "activeAbilities": [
+        "MurderousSwing"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "TrophyTaker"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_world_executions_01.png",
+      "stats": [
+        {
+          "abilityLevel": 8,
+          "damage": 113,
+          "armour": 57,
+          "health": 224,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        }
+      ]
+    },
+    {
+      "id": "worldBossJakhalLHE",
+      "name": "Macer",
+      "meleeDamage": "Chain",
+      "meleeHits": 3,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [
+        "BlessingsOfKhorne",
+        "Resilient"
+      ],
+      "activeAbilityDamage": [
+        "Physical"
+      ],
+      "activeAbilities": [
+        "JakhalStimms"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "Skullsmasher"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_world_jakhal_01.png",
+      "stats": [
+        {
+          "abilityLevel": 8,
+          "damage": 71,
+          "armour": 24,
+          "health": 212,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        }
+      ]
+    },
+    {
+      "id": "worldBossKharnLHE",
+      "name": "Kharn",
+      "meleeDamage": "Eviscerate",
+      "meleeHits": 4,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [
+        "BlessingsOfKhorne",
+        "RapidAssault",
+        "FinalJustice"
+      ],
+      "activeAbilityDamage": [
+        "Eviscerate",
+        "Piercing",
+        "Plasma"
+      ],
+      "activeAbilities": [
+        "KillMaimBurn"
+      ],
+      "passiveAbilityDamage": [
+        "Eviscerate"
+      ],
+      "passiveAbilities": [
+        "TheBetrayer"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_world_kharn_01.png",
+      "stats": [
+        {
+          "abilityLevel": 8,
+          "damage": 59,
+          "armour": 47,
+          "health": 212,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        }
+      ]
+    },
+    {
+      "id": "worldBossTerminatorLHE",
+      "name": "Wrask",
+      "meleeDamage": "Flame",
+      "meleeHits": 4,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 2,
+      "traits": [
+        "BlessingsOfKhorne",
+        "TeleportStrike",
+        "RapidAssault",
+        "TerminatorArmour",
+        "Unstoppable"
+      ],
+      "activeAbilityDamage": [
+        "Chain"
+      ],
+      "activeAbilities": [
+        "BloodyFury"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "WrathfulDevotion"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_world_terminator_01.png",
+      "stats": [
+        {
+          "abilityLevel": 8,
+          "damage": 47,
+          "armour": 66,
+          "health": 224,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        }
+      ]
+    }
+  ]
+}

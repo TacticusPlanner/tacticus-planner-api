@@ -28,6 +28,7 @@ public static class CatalogHashing
     public static string ComputeSnapshotHash(
         string version,
         int schemaVersion,
+        string gameVersion,
         IReadOnlyDictionary<string, string> datasetHashes
     )
     {
@@ -37,6 +38,9 @@ public static class CatalogHashing
             .Append('\n')
             .Append("schemaVersion:")
             .Append(schemaVersion.ToString(CultureInfo.InvariantCulture))
+            .Append('\n')
+            .Append("gameVersion:")
+            .Append(gameVersion)
             .Append('\n');
 
         foreach (var (key, hash) in datasetHashes.OrderBy(pair => pair.Key, StringComparer.Ordinal))

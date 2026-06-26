@@ -1,38 +1,323 @@
 {
-  "version": "dev-2026-06-24",
-  "schemaVersion": 1,
+  "version": "dev-2026-06-25",
+  "schemaVersion": 10,
+  "gameVersion": "1.40",
   "datasets": [
     {
-      "key": "units",
-      "file": "units.json"
+      "key": "units-adeptusastartes",
+      "file": "units/units-adeptusastartes.json"
     },
     {
-      "key": "mows",
-      "file": "mows.json"
+      "key": "units-adeptusmechanicus",
+      "file": "units/units-adeptusmechanicus.json"
     },
     {
-      "key": "upgrades",
-      "file": "upgrades.json"
+      "key": "units-aeldari",
+      "file": "units/units-aeldari.json"
     },
     {
-      "key": "equipment",
-      "file": "equipment.json"
+      "key": "units-astramilitarum",
+      "file": "units/units-astramilitarum.json"
     },
     {
-      "key": "campaigns",
-      "file": "campaigns.json"
+      "key": "units-blacklegion",
+      "file": "units/units-blacklegion.json"
     },
     {
-      "key": "campaign-events",
-      "file": "campaign-events.json"
+      "key": "units-blacktemplars",
+      "file": "units/units-blacktemplars.json"
     },
     {
-      "key": "campaign-battles",
-      "file": "campaign-battles.json"
+      "key": "units-bloodangels",
+      "file": "units/units-bloodangels.json"
     },
     {
-      "key": "lres",
-      "file": "lres.json"
+      "key": "units-custodes",
+      "file": "units/units-custodes.json"
+    },
+    {
+      "key": "units-darkangels",
+      "file": "units/units-darkangels.json"
+    },
+    {
+      "key": "units-deathguard",
+      "file": "units/units-deathguard.json"
+    },
+    {
+      "key": "units-emperorschildren",
+      "file": "units/units-emperorschildren.json"
+    },
+    {
+      "key": "units-genestealers",
+      "file": "units/units-genestealers.json"
+    },
+    {
+      "key": "units-leaguesofvotann",
+      "file": "units/units-leaguesofvotann.json"
+    },
+    {
+      "key": "units-necrons",
+      "file": "units/units-necrons.json"
+    },
+    {
+      "key": "units-orks",
+      "file": "units/units-orks.json"
+    },
+    {
+      "key": "units-sisterhood",
+      "file": "units/units-sisterhood.json"
+    },
+    {
+      "key": "units-spacewolves",
+      "file": "units/units-spacewolves.json"
+    },
+    {
+      "key": "units-tau",
+      "file": "units/units-tau.json"
+    },
+    {
+      "key": "units-thousandsons",
+      "file": "units/units-thousandsons.json"
+    },
+    {
+      "key": "units-tyranids",
+      "file": "units/units-tyranids.json"
+    },
+    {
+      "key": "units-ultramarines",
+      "file": "units/units-ultramarines.json"
+    },
+    {
+      "key": "units-worldeaters",
+      "file": "units/units-worldeaters.json"
+    },
+    {
+      "key": "mow-upgrade-costs",
+      "file": "mow-upgrade-costs.json"
+    },
+    {
+      "key": "equipment-upgrade-costs",
+      "file": "equipment-upgrade-costs.json"
+    },
+    {
+      "key": "drop-chances",
+      "file": "drop-chances.json"
+    },
+    {
+      "key": "npcs-adeptusastartes",
+      "file": "npcs/npcs-adeptusastartes.json"
+    },
+    {
+      "key": "npcs-adeptusmechanicus",
+      "file": "npcs/npcs-adeptusmechanicus.json"
+    },
+    {
+      "key": "npcs-aeldari",
+      "file": "npcs/npcs-aeldari.json"
+    },
+    {
+      "key": "npcs-astramilitarum",
+      "file": "npcs/npcs-astramilitarum.json"
+    },
+    {
+      "key": "npcs-blacklegion",
+      "file": "npcs/npcs-blacklegion.json"
+    },
+    {
+      "key": "npcs-blacktemplars",
+      "file": "npcs/npcs-blacktemplars.json"
+    },
+    {
+      "key": "npcs-bloodangels",
+      "file": "npcs/npcs-bloodangels.json"
+    },
+    {
+      "key": "npcs-darkangels",
+      "file": "npcs/npcs-darkangels.json"
+    },
+    {
+      "key": "npcs-deathguard",
+      "file": "npcs/npcs-deathguard.json"
+    },
+    {
+      "key": "npcs-genestealers",
+      "file": "npcs/npcs-genestealers.json"
+    },
+    {
+      "key": "npcs-leaguesofvotann",
+      "file": "npcs/npcs-leaguesofvotann.json"
+    },
+    {
+      "key": "npcs-necrons",
+      "file": "npcs/npcs-necrons.json"
+    },
+    {
+      "key": "npcs-objects",
+      "file": "npcs/npcs-objects.json"
+    },
+    {
+      "key": "npcs-orks",
+      "file": "npcs/npcs-orks.json"
+    },
+    {
+      "key": "npcs-sisterhood",
+      "file": "npcs/npcs-sisterhood.json"
+    },
+    {
+      "key": "npcs-spacewolves",
+      "file": "npcs/npcs-spacewolves.json"
+    },
+    {
+      "key": "npcs-tau",
+      "file": "npcs/npcs-tau.json"
+    },
+    {
+      "key": "npcs-thousandsons",
+      "file": "npcs/npcs-thousandsons.json"
+    },
+    {
+      "key": "npcs-tyranids",
+      "file": "npcs/npcs-tyranids.json"
+    },
+    {
+      "key": "npcs-ultramarines",
+      "file": "npcs/npcs-ultramarines.json"
+    },
+    {
+      "key": "npcs-worldeaters",
+      "file": "npcs/npcs-worldeaters.json"
+    },
+    {
+      "key": "equipment-block",
+      "file": "equipment/equipment-block.json"
+    },
+    {
+      "key": "equipment-booster-block",
+      "file": "equipment/equipment-booster-block.json"
+    },
+    {
+      "key": "equipment-booster-crit",
+      "file": "equipment/equipment-booster-crit.json"
+    },
+    {
+      "key": "equipment-crit",
+      "file": "equipment/equipment-crit.json"
+    },
+    {
+      "key": "equipment-defensive",
+      "file": "equipment/equipment-defensive.json"
+    },
+    {
+      "key": "upgrades-common",
+      "file": "upgrades/upgrades-common.json"
+    },
+    {
+      "key": "upgrades-epic-crafted",
+      "file": "upgrades/upgrades-epic-crafted.json"
+    },
+    {
+      "key": "upgrades-epic",
+      "file": "upgrades/upgrades-epic.json"
+    },
+    {
+      "key": "upgrades-legendary-crafted",
+      "file": "upgrades/upgrades-legendary-crafted.json"
+    },
+    {
+      "key": "upgrades-legendary",
+      "file": "upgrades/upgrades-legendary.json"
+    },
+    {
+      "key": "upgrades-mythic-crafted",
+      "file": "upgrades/upgrades-mythic-crafted.json"
+    },
+    {
+      "key": "upgrades-mythic",
+      "file": "upgrades/upgrades-mythic.json"
+    },
+    {
+      "key": "upgrades-rare-crafted",
+      "file": "upgrades/upgrades-rare-crafted.json"
+    },
+    {
+      "key": "upgrades-rare",
+      "file": "upgrades/upgrades-rare.json"
+    },
+    {
+      "key": "upgrades-uncommon-crafted",
+      "file": "upgrades/upgrades-uncommon-crafted.json"
+    },
+    {
+      "key": "upgrades-uncommon",
+      "file": "upgrades/upgrades-uncommon.json"
+    },
+    {
+      "key": "campaign-battles-adepta-sororitas-vs-death-guard",
+      "file": "campaign-battles/campaign-battles-adepta-sororitas-vs-death-guard.json"
+    },
+    {
+      "key": "campaign-battles-death-guard-vs-admech",
+      "file": "campaign-battles/campaign-battles-death-guard-vs-admech.json"
+    },
+    {
+      "key": "campaign-battles-fall-of-cadia-mirror",
+      "file": "campaign-battles/campaign-battles-fall-of-cadia-mirror.json"
+    },
+    {
+      "key": "campaign-battles-fall-of-cadia",
+      "file": "campaign-battles/campaign-battles-fall-of-cadia.json"
+    },
+    {
+      "key": "campaign-battles-genestealers-vs-tau-empire",
+      "file": "campaign-battles/campaign-battles-genestealers-vs-tau-empire.json"
+    },
+    {
+      "key": "campaign-battles-indomitus-mirror",
+      "file": "campaign-battles/campaign-battles-indomitus-mirror.json"
+    },
+    {
+      "key": "campaign-battles-indomitus",
+      "file": "campaign-battles/campaign-battles-indomitus.json"
+    },
+    {
+      "key": "campaign-battles-necrons-vs-dark-angels",
+      "file": "campaign-battles/campaign-battles-necrons-vs-dark-angels.json"
+    },
+    {
+      "key": "campaign-battles-octarius-mirror",
+      "file": "campaign-battles/campaign-battles-octarius-mirror.json"
+    },
+    {
+      "key": "campaign-battles-octarius",
+      "file": "campaign-battles/campaign-battles-octarius.json"
+    },
+    {
+      "key": "campaign-battles-saim-hann-mirror",
+      "file": "campaign-battles/campaign-battles-saim-hann-mirror.json"
+    },
+    {
+      "key": "campaign-battles-saim-hann",
+      "file": "campaign-battles/campaign-battles-saim-hann.json"
+    },
+    {
+      "key": "campaign-battles-ultramarines-vs-tyranids",
+      "file": "campaign-battles/campaign-battles-ultramarines-vs-tyranids.json"
+    },
+    {
+      "key": "campaign-battles-world-eaters-vs-adepta-sororitas",
+      "file": "campaign-battles/campaign-battles-world-eaters-vs-adepta-sororitas.json"
+    },
+    {
+      "key": "lres-emperlucius",
+      "file": "lres/lres-emperlucius.json"
+    },
+    {
+      "key": "lres-taufarsight",
+      "file": "lres/lres-taufarsight.json"
+    },
+    {
+      "key": "lres-votanuthar",
+      "file": "lres/lres-votanuthar.json"
     }
   ]
 }

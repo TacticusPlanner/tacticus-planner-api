@@ -1,0 +1,2563 @@
+{
+  "alliance": "Imperial",
+  "factionId": "AdeptusMechanicus",
+  "name": "Adeptus Mechanicus",
+  "npcs": [
+    {
+      "id": "admecBossBelisarius",
+      "name": "Belisarius Cawl",
+      "meleeDamage": "Power",
+      "meleeHits": 3,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [
+        "Boss",
+        "Immune",
+        "BigTarget",
+        "Mechanical"
+      ],
+      "activeAbilityDamage": [
+        "Melta",
+        "Particle"
+      ],
+      "activeAbilities": [
+        "ArcScourge",
+        "InvocationOfMachineVengeance",
+        "SolarAtomizer"
+      ],
+      "passiveAbilityDamage": [
+        "Toxic"
+      ],
+      "passiveAbilities": [
+        "PreCalibratedPurgeSolution",
+        "SelfRepairMechanismReworked",
+        "ShroudPsalm"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_guild_belisarius_01.png",
+      "stats": [
+        {
+          "abilityLevel": 1,
+          "damage": 30,
+          "armour": 20,
+          "health": 300,
+          "progressionIndex": 1,
+          "rank": 0,
+          "stars": 1
+        },
+        {
+          "abilityLevel": 26,
+          "damage": 330,
+          "armour": 220,
+          "health": 3298,
+          "progressionIndex": 8,
+          "rank": 9,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 2615,
+          "armour": 1743,
+          "health": 26133,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 3430,
+          "armour": 2286,
+          "health": 34277,
+          "progressionIndex": 17,
+          "rank": 18,
+          "stars": 12
+        }
+      ]
+    },
+    {
+      "id": "admecBossDestroyer",
+      "name": "Sy-gex",
+      "meleeDamage": "Flame",
+      "meleeHits": 4,
+      "rangedDamage": "Physical",
+      "rangedHits": 4,
+      "distance": 3,
+      "movement": 2,
+      "traits": [
+        "Mechanical",
+        "HeavyWeapon",
+        "Overwatch",
+        "Vehicle"
+      ],
+      "activeAbilityDamage": [
+        "Physical"
+      ],
+      "activeAbilities": [
+        "SentinelDirectives"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "HeavyGravCannon"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_admec_destroyer_01.png",
+      "stats": [
+        {
+          "abilityLevel": 17,
+          "damage": 135,
+          "armour": 92,
+          "health": 512,
+          "progressionIndex": 5,
+          "rank": 6,
+          "stars": 4
+        },
+        {
+          "abilityLevel": 14,
+          "damage": 123,
+          "armour": 84,
+          "health": 468,
+          "progressionIndex": 8,
+          "rank": 5,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 23,
+          "damage": 226,
+          "armour": 154,
+          "health": 860,
+          "progressionIndex": 7,
+          "rank": 8,
+          "stars": 5
+        },
+        {
+          "abilityLevel": 29,
+          "damage": 402,
+          "armour": 273,
+          "health": 1528,
+          "progressionIndex": 10,
+          "rank": 10,
+          "stars": 7
+        },
+        {
+          "abilityLevel": 32,
+          "damage": 592,
+          "armour": 403,
+          "health": 2251,
+          "progressionIndex": 14,
+          "rank": 11,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 38,
+          "damage": 975,
+          "armour": 663,
+          "health": 3705,
+          "progressionIndex": 15,
+          "rank": 13,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 44,
+          "damage": 1528,
+          "armour": 1039,
+          "health": 5808,
+          "progressionIndex": 15,
+          "rank": 15,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 47,
+          "damage": 1914,
+          "armour": 1301,
+          "health": 7271,
+          "progressionIndex": 15,
+          "rank": 16,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 2396,
+          "armour": 1629,
+          "health": 9104,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        }
+      ]
+    },
+    {
+      "id": "admecBossDestroyerCE",
+      "name": "Sy-gex",
+      "meleeDamage": "Flame",
+      "meleeHits": 4,
+      "rangedDamage": "Physical",
+      "rangedHits": 4,
+      "distance": 3,
+      "movement": 2,
+      "traits": [
+        "Mechanical",
+        "HeavyWeapon",
+        "Overwatch",
+        "Vehicle"
+      ],
+      "activeAbilityDamage": [
+        "Physical"
+      ],
+      "activeAbilities": [
+        "SentinelDirectives"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "HeavyGravCannon"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_admec_destroyer_01.png",
+      "stats": [
+        {
+          "abilityLevel": 14,
+          "damage": 100,
+          "armour": 68,
+          "health": 380,
+          "progressionIndex": 4,
+          "rank": 5,
+          "stars": 3
+        },
+        {
+          "abilityLevel": 17,
+          "damage": 144,
+          "armour": 98,
+          "health": 549,
+          "progressionIndex": 7,
+          "rank": 6,
+          "stars": 5
+        },
+        {
+          "abilityLevel": 38,
+          "damage": 929,
+          "armour": 631,
+          "health": 3529,
+          "progressionIndex": 14,
+          "rank": 13,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 47,
+          "damage": 1914,
+          "armour": 1301,
+          "health": 7271,
+          "progressionIndex": 15,
+          "rank": 16,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 44,
+          "damage": 1383,
+          "armour": 940,
+          "health": 5255,
+          "progressionIndex": 13,
+          "rank": 15,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 55,
+          "damage": 3285,
+          "armour": 2234,
+          "health": 12483,
+          "progressionIndex": 18,
+          "rank": 18,
+          "stars": 13
+        }
+      ]
+    },
+    {
+      "id": "admecBossDestroyerLHE",
+      "name": "Sy-gex",
+      "meleeDamage": "Flame",
+      "meleeHits": 4,
+      "rangedDamage": "Physical",
+      "rangedHits": 4,
+      "distance": 3,
+      "movement": 2,
+      "traits": [
+        "Mechanical",
+        "HeavyWeapon",
+        "Overwatch",
+        "Vehicle"
+      ],
+      "activeAbilityDamage": [
+        "Physical"
+      ],
+      "activeAbilities": [
+        "SentinelDirectives"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "HeavyGravCannon"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_admec_destroyer_01.png",
+      "stats": [
+        {
+          "abilityLevel": 17,
+          "damage": 135,
+          "armour": 92,
+          "health": 512,
+          "progressionIndex": 5,
+          "rank": 6,
+          "stars": 4
+        }
+      ]
+    },
+    {
+      "id": "admecBossDominus",
+      "name": "Vitruvius",
+      "meleeDamage": "Power",
+      "meleeHits": 1,
+      "rangedDamage": "Gauss",
+      "rangedHits": 1,
+      "distance": 2,
+      "movement": 3,
+      "traits": [
+        "Mechanical",
+        "Mechanic"
+      ],
+      "activeAbilityDamage": [
+        "Toxic"
+      ],
+      "activeAbilities": [
+        "RadBombardment"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "MasterAnnihilator"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_admec_dominus_01.png",
+      "stats": [
+        {
+          "abilityLevel": 3,
+          "damage": 50,
+          "armour": 18,
+          "health": 90,
+          "progressionIndex": 0,
+          "rank": 1,
+          "stars": 0
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 4791,
+          "armour": 1725,
+          "health": 8625,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 55,
+          "damage": 6284,
+          "armour": 2262,
+          "health": 11312,
+          "progressionIndex": 17,
+          "rank": 18,
+          "stars": 12
+        }
+      ]
+    },
+    {
+      "id": "admecBossDominusCE",
+      "name": "Vitruvius",
+      "meleeDamage": "Power",
+      "meleeHits": 1,
+      "rangedDamage": "Gauss",
+      "rangedHits": 1,
+      "distance": 2,
+      "movement": 3,
+      "traits": [
+        "Mechanical",
+        "Mechanic"
+      ],
+      "activeAbilityDamage": [
+        "Toxic"
+      ],
+      "activeAbilities": [
+        "RadBombardment"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "MasterAnnihilator"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_admec_dominus_01.png",
+      "stats": [
+        {
+          "abilityLevel": 17,
+          "damage": 217,
+          "armour": 69,
+          "health": 780,
+          "progressionIndex": 7,
+          "rank": 6,
+          "stars": 5
+        },
+        {
+          "abilityLevel": 47,
+          "damage": 2870,
+          "armour": 909,
+          "health": 10333,
+          "progressionIndex": 15,
+          "rank": 16,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 3594,
+          "armour": 1138,
+          "health": 12937,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 47,
+          "damage": 2870,
+          "armour": 909,
+          "health": 10333,
+          "progressionIndex": 15,
+          "rank": 16,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 55,
+          "damage": 4928,
+          "armour": 1561,
+          "health": 17739,
+          "progressionIndex": 18,
+          "rank": 18,
+          "stars": 13
+        }
+      ]
+    },
+    {
+      "id": "admecBossDominusLEG",
+      "name": "Vitruvius",
+      "meleeDamage": "Power",
+      "meleeHits": 1,
+      "rangedDamage": "Gauss",
+      "rangedHits": 1,
+      "distance": 2,
+      "movement": 3,
+      "traits": [
+        "Mechanical",
+        "Mechanic"
+      ],
+      "activeAbilityDamage": [
+        "Toxic"
+      ],
+      "activeAbilities": [
+        "RadBombardment"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "MasterAnnihilator"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_admec_dominus_01.png",
+      "stats": [
+        {
+          "abilityLevel": 44,
+          "damage": 3057,
+          "armour": 1100,
+          "health": 5502,
+          "progressionIndex": 15,
+          "rank": 15,
+          "stars": 11
+        }
+      ]
+    },
+    {
+      "id": "admecBossDominusLHE",
+      "name": "Vitruvius",
+      "meleeDamage": "Power",
+      "meleeHits": 1,
+      "rangedDamage": "Gauss",
+      "rangedHits": 1,
+      "distance": 2,
+      "movement": 3,
+      "traits": [
+        "Mechanical",
+        "Mechanic"
+      ],
+      "activeAbilityDamage": [
+        "Toxic"
+      ],
+      "activeAbilities": [
+        "RadBombardment"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "MasterAnnihilator"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_admec_dominus_01.png",
+      "stats": [
+        {
+          "abilityLevel": 44,
+          "damage": 3057,
+          "armour": 1100,
+          "health": 5502,
+          "progressionIndex": 15,
+          "rank": 15,
+          "stars": 11
+        }
+      ]
+    },
+    {
+      "id": "admecBossDominusSurv",
+      "name": "Vitruvius",
+      "meleeDamage": "Power",
+      "meleeHits": 1,
+      "rangedDamage": "Gauss",
+      "rangedHits": 1,
+      "distance": 2,
+      "movement": 3,
+      "traits": [
+        "Mechanical",
+        "Mechanic"
+      ],
+      "activeAbilityDamage": [
+        "Toxic"
+      ],
+      "activeAbilities": [
+        "RadBombardment"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "MasterAnnihilator"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_admec_dominus_01.png",
+      "stats": [
+        {
+          "abilityLevel": 50,
+          "damage": 4791,
+          "armour": 1725,
+          "health": 8625,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        }
+      ]
+    },
+    {
+      "id": "admecBossManipulus",
+      "name": "Actus",
+      "meleeDamage": "Energy",
+      "meleeHits": 2,
+      "rangedDamage": "Energy",
+      "rangedHits": 2,
+      "distance": 2,
+      "movement": 3,
+      "traits": [
+        "Mechanical",
+        "Mechanic",
+        "Flying"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "DefendTheDivineWork"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "GalvanicField"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_admec_manipulus_01.png",
+      "stats": [
+        {
+          "abilityLevel": 3,
+          "damage": 25,
+          "armour": 19,
+          "health": 95,
+          "progressionIndex": 0,
+          "rank": 1,
+          "stars": 0
+        },
+        {
+          "abilityLevel": 44,
+          "damage": 1528,
+          "armour": 1162,
+          "health": 5808,
+          "progressionIndex": 15,
+          "rank": 15,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 2396,
+          "armour": 1821,
+          "health": 9104,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        }
+      ]
+    },
+    {
+      "id": "admecBossManipulusCE",
+      "name": "Actus",
+      "meleeDamage": "Energy",
+      "meleeHits": 2,
+      "rangedDamage": "Energy",
+      "rangedHits": 2,
+      "distance": 2,
+      "movement": 3,
+      "traits": [
+        "Mechanical",
+        "Mechanic",
+        "Flying"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "DefendTheDivineWork"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "GalvanicField"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_admec_manipulus_01.png",
+      "stats": [
+        {
+          "abilityLevel": 17,
+          "damage": 101,
+          "armour": 68,
+          "health": 768,
+          "progressionIndex": 5,
+          "rank": 6,
+          "stars": 4
+        },
+        {
+          "abilityLevel": 44,
+          "damage": 1037,
+          "armour": 694,
+          "health": 7882,
+          "progressionIndex": 13,
+          "rank": 15,
+          "stars": 9
+        }
+      ]
+    },
+    {
+      "id": "admecBossManipulusLEG",
+      "name": "Actus",
+      "meleeDamage": "Energy",
+      "meleeHits": 2,
+      "rangedDamage": "Energy",
+      "rangedHits": 2,
+      "distance": 2,
+      "movement": 3,
+      "traits": [
+        "Mechanical",
+        "Mechanic",
+        "Flying"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "DefendTheDivineWork"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "GalvanicField"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_admec_manipulus_01.png",
+      "stats": [
+        {
+          "abilityLevel": 32,
+          "damage": 592,
+          "armour": 450,
+          "health": 2251,
+          "progressionIndex": 14,
+          "rank": 11,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 38,
+          "damage": 975,
+          "armour": 741,
+          "health": 3705,
+          "progressionIndex": 15,
+          "rank": 13,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 44,
+          "damage": 1528,
+          "armour": 1162,
+          "health": 5808,
+          "progressionIndex": 15,
+          "rank": 15,
+          "stars": 11
+        }
+      ]
+    },
+    {
+      "id": "admecBossManipulusLHE",
+      "name": "Actus",
+      "meleeDamage": "Energy",
+      "meleeHits": 2,
+      "rangedDamage": "Energy",
+      "rangedHits": 2,
+      "distance": 2,
+      "movement": 3,
+      "traits": [
+        "Mechanical",
+        "Mechanic",
+        "Flying"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "DefendTheDivineWork"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "GalvanicField"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_admec_manipulus_01.png",
+      "stats": [
+        {
+          "abilityLevel": 35,
+          "damage": 630,
+          "armour": 479,
+          "health": 2396,
+          "progressionIndex": 10,
+          "rank": 12,
+          "stars": 7
+        }
+      ]
+    },
+    {
+      "id": "admecBossManipulusSurv",
+      "name": "Actus",
+      "meleeDamage": "Energy",
+      "meleeHits": 2,
+      "rangedDamage": "Energy",
+      "rangedHits": 2,
+      "distance": 2,
+      "movement": 3,
+      "traits": [
+        "Mechanical",
+        "Mechanic",
+        "Flying"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "DefendTheDivineWork"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "GalvanicField"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_admec_manipulus_01.png",
+      "stats": [
+        {
+          "abilityLevel": 44,
+          "damage": 1528,
+          "armour": 1162,
+          "health": 5808,
+          "progressionIndex": 15,
+          "rank": 15,
+          "stars": 11
+        }
+      ]
+    },
+    {
+      "id": "admecBossMarshall",
+      "name": "Tan Gi'da",
+      "meleeDamage": "Physical",
+      "meleeHits": 2,
+      "rangedDamage": "Toxic",
+      "rangedHits": 1,
+      "distance": 2,
+      "movement": 3,
+      "traits": [
+        "Mechanical"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "DoctrinaImperatives"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "ControlEdict"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_admec_marshall_01.png",
+      "stats": [
+        {
+          "abilityLevel": 3,
+          "damage": 35,
+          "armour": 16,
+          "health": 85,
+          "progressionIndex": 0,
+          "rank": 1,
+          "stars": 0
+        },
+        {
+          "abilityLevel": 44,
+          "damage": 2140,
+          "armour": 978,
+          "health": 5196,
+          "progressionIndex": 15,
+          "rank": 15,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 3354,
+          "armour": 1533,
+          "health": 8145,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        }
+      ]
+    },
+    {
+      "id": "admecBossMarshallCE",
+      "name": "Tan Gi'da",
+      "meleeDamage": "Physical",
+      "meleeHits": 2,
+      "rangedDamage": "Toxic",
+      "rangedHits": 1,
+      "distance": 2,
+      "movement": 3,
+      "traits": [
+        "Mechanical"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "DoctrinaImperatives"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "ControlEdict"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_admec_marshall_01.png",
+      "stats": [
+        {
+          "abilityLevel": 8,
+          "damage": 62,
+          "armour": 25,
+          "health": 300,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 35,
+          "damage": 662,
+          "armour": 266,
+          "health": 3215,
+          "progressionIndex": 10,
+          "rank": 12,
+          "stars": 7
+        }
+      ]
+    },
+    {
+      "id": "admecBossMarshallLEG",
+      "name": "Tan Gi'da",
+      "meleeDamage": "Physical",
+      "meleeHits": 2,
+      "rangedDamage": "Toxic",
+      "rangedHits": 1,
+      "distance": 2,
+      "movement": 3,
+      "traits": [
+        "Mechanical"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "DoctrinaImperatives"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "ControlEdict"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_admec_marshall_01.png",
+      "stats": [
+        {
+          "abilityLevel": 32,
+          "damage": 829,
+          "armour": 379,
+          "health": 2014,
+          "progressionIndex": 14,
+          "rank": 11,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 38,
+          "damage": 1365,
+          "armour": 624,
+          "health": 3315,
+          "progressionIndex": 15,
+          "rank": 13,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 44,
+          "damage": 2140,
+          "armour": 978,
+          "health": 5196,
+          "progressionIndex": 15,
+          "rank": 15,
+          "stars": 11
+        }
+      ]
+    },
+    {
+      "id": "admecBossMarshallLHE",
+      "name": "Tan Gi'da",
+      "meleeDamage": "Physical",
+      "meleeHits": 2,
+      "rangedDamage": "Toxic",
+      "rangedHits": 1,
+      "distance": 2,
+      "movement": 3,
+      "traits": [
+        "Mechanical"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "DoctrinaImperatives"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "ControlEdict"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_admec_marshall_01.png",
+      "stats": [
+        {
+          "abilityLevel": 26,
+          "damage": 423,
+          "armour": 193,
+          "health": 1028,
+          "progressionIndex": 8,
+          "rank": 9,
+          "stars": 6
+        }
+      ]
+    },
+    {
+      "id": "admecBossMarshallSurv",
+      "name": "Tan Gi'da",
+      "meleeDamage": "Physical",
+      "meleeHits": 2,
+      "rangedDamage": "Toxic",
+      "rangedHits": 1,
+      "distance": 2,
+      "movement": 3,
+      "traits": [
+        "Mechanical"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "DoctrinaImperatives"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "ControlEdict"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_admec_marshall_01.png",
+      "stats": [
+        {
+          "abilityLevel": 44,
+          "damage": 2140,
+          "armour": 978,
+          "health": 5196,
+          "progressionIndex": 15,
+          "rank": 15,
+          "stars": 11
+        }
+      ]
+    },
+    {
+      "id": "admecBossRuststalker",
+      "name": "Exitor-Rho",
+      "meleeDamage": "Energy",
+      "meleeHits": 2,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 4,
+      "traits": [
+        "Mechanical",
+        "Camouflage",
+        "Infiltrate",
+        "Unstoppable"
+      ],
+      "activeAbilityDamage": [
+        "DirectDamage"
+      ],
+      "activeAbilities": [
+        "CordClaw"
+      ],
+      "passiveAbilityDamage": [
+        "Energy"
+      ],
+      "passiveAbilities": [
+        "OptimizedGait"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_admec_ruststalker_01.png",
+      "stats": [
+        {
+          "abilityLevel": 3,
+          "damage": 30,
+          "armour": 17,
+          "health": 80,
+          "progressionIndex": 0,
+          "rank": 1,
+          "stars": 0
+        },
+        {
+          "abilityLevel": 8,
+          "damage": 56,
+          "armour": 32,
+          "health": 150,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 2279,
+          "armour": 1302,
+          "health": 6104,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        }
+      ]
+    },
+    {
+      "id": "admecBossRuststalkerCE",
+      "name": "Exitor-Rho",
+      "meleeDamage": "Energy",
+      "meleeHits": 2,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 4,
+      "traits": [
+        "Mechanical",
+        "Camouflage",
+        "Infiltrate",
+        "Unstoppable"
+      ],
+      "activeAbilityDamage": [
+        "DirectDamage"
+      ],
+      "activeAbilities": [
+        "CordClaw"
+      ],
+      "passiveAbilityDamage": [
+        "Energy"
+      ],
+      "passiveAbilities": [
+        "OptimizedGait"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_admec_ruststalker_01.png",
+      "stats": [
+        {
+          "abilityLevel": 11,
+          "damage": 66,
+          "armour": 33,
+          "health": 354,
+          "progressionIndex": 3,
+          "rank": 4,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 35,
+          "damage": 601,
+          "armour": 300,
+          "health": 3204,
+          "progressionIndex": 11,
+          "rank": 12,
+          "stars": 8
+        }
+      ]
+    },
+    {
+      "id": "admecBossRuststalkerLEG",
+      "name": "Exitor-Rho",
+      "meleeDamage": "Energy",
+      "meleeHits": 2,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 4,
+      "traits": [
+        "Mechanical",
+        "Camouflage",
+        "Infiltrate",
+        "Unstoppable"
+      ],
+      "activeAbilityDamage": [
+        "DirectDamage"
+      ],
+      "activeAbilities": [
+        "CordClaw"
+      ],
+      "passiveAbilityDamage": [
+        "Energy"
+      ],
+      "passiveAbilities": [
+        "OptimizedGait"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_admec_ruststalker_01.png",
+      "stats": [
+        {
+          "abilityLevel": 44,
+          "damage": 1454,
+          "armour": 831,
+          "health": 3894,
+          "progressionIndex": 15,
+          "rank": 15,
+          "stars": 11
+        }
+      ]
+    },
+    {
+      "id": "admecBossRuststalkerLHE",
+      "name": "Exitor-Rho",
+      "meleeDamage": "Energy",
+      "meleeHits": 2,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 4,
+      "traits": [
+        "Mechanical",
+        "Camouflage",
+        "Infiltrate",
+        "Unstoppable"
+      ],
+      "activeAbilityDamage": [
+        "DirectDamage"
+      ],
+      "activeAbilities": [
+        "CordClaw"
+      ],
+      "passiveAbilityDamage": [
+        "Energy"
+      ],
+      "passiveAbilities": [
+        "OptimizedGait"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_admec_ruststalker_01.png",
+      "stats": [
+        {
+          "abilityLevel": 8,
+          "damage": 71,
+          "armour": 40,
+          "health": 188,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        }
+      ]
+    },
+    {
+      "id": "admecBossRuststalkerSurv",
+      "name": "Exitor-Rho",
+      "meleeDamage": "Energy",
+      "meleeHits": 2,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 4,
+      "traits": [
+        "Mechanical",
+        "Camouflage",
+        "Infiltrate",
+        "Unstoppable"
+      ],
+      "activeAbilityDamage": [
+        "DirectDamage"
+      ],
+      "activeAbilities": [
+        "CordClaw"
+      ],
+      "passiveAbilityDamage": [
+        "Energy"
+      ],
+      "passiveAbilities": [
+        "OptimizedGait"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_admec_ruststalker_01.png",
+      "stats": [
+        {
+          "abilityLevel": 50,
+          "damage": 2875,
+          "armour": 1629,
+          "health": 7666,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 2279,
+          "armour": 1302,
+          "health": 6104,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        }
+      ]
+    },
+    {
+      "id": "admecNpc1Vanguard",
+      "name": "Skitarii Vanguard",
+      "meleeDamage": "Physical",
+      "meleeHits": 1,
+      "rangedDamage": "Toxic",
+      "rangedHits": 3,
+      "distance": 2,
+      "movement": 3,
+      "traits": [
+        "Mechanical"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "RadSaturation"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_admec_vanguard_01.png",
+      "stats": [
+        {
+          "abilityLevel": 1,
+          "damage": 10,
+          "armour": 15,
+          "health": 36,
+          "progressionIndex": 0,
+          "rank": 0,
+          "stars": 0
+        },
+        {
+          "abilityLevel": 3,
+          "damage": 13,
+          "armour": 19,
+          "health": 45,
+          "progressionIndex": 0,
+          "rank": 1,
+          "stars": 0
+        },
+        {
+          "abilityLevel": 3,
+          "damage": 14,
+          "armour": 21,
+          "health": 50,
+          "progressionIndex": 1,
+          "rank": 1,
+          "stars": 1
+        },
+        {
+          "abilityLevel": 5,
+          "damage": 18,
+          "armour": 26,
+          "health": 63,
+          "progressionIndex": 1,
+          "rank": 2,
+          "stars": 1
+        },
+        {
+          "abilityLevel": 8,
+          "damage": 23,
+          "armour": 33,
+          "health": 79,
+          "progressionIndex": 1,
+          "rank": 3,
+          "stars": 1
+        },
+        {
+          "abilityLevel": 8,
+          "damage": 25,
+          "armour": 36,
+          "health": 86,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 11,
+          "damage": 31,
+          "armour": 45,
+          "health": 108,
+          "progressionIndex": 3,
+          "rank": 4,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 14,
+          "damage": 39,
+          "armour": 56,
+          "health": 135,
+          "progressionIndex": 3,
+          "rank": 5,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 14,
+          "damage": 42,
+          "armour": 61,
+          "health": 146,
+          "progressionIndex": 4,
+          "rank": 5,
+          "stars": 3
+        },
+        {
+          "abilityLevel": 17,
+          "damage": 53,
+          "armour": 76,
+          "health": 183,
+          "progressionIndex": 4,
+          "rank": 6,
+          "stars": 3
+        },
+        {
+          "abilityLevel": 17,
+          "damage": 65,
+          "armour": 94,
+          "health": 225,
+          "progressionIndex": 8,
+          "rank": 6,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 20,
+          "damage": 81,
+          "armour": 118,
+          "health": 282,
+          "progressionIndex": 8,
+          "rank": 7,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 23,
+          "damage": 95,
+          "armour": 139,
+          "health": 331,
+          "progressionIndex": 7,
+          "rank": 8,
+          "stars": 5
+        },
+        {
+          "abilityLevel": 23,
+          "damage": 108,
+          "armour": 158,
+          "health": 375,
+          "progressionIndex": 10,
+          "rank": 8,
+          "stars": 7
+        },
+        {
+          "abilityLevel": 23,
+          "damage": 121,
+          "armour": 177,
+          "health": 419,
+          "progressionIndex": 13,
+          "rank": 8,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 26,
+          "damage": 136,
+          "armour": 198,
+          "health": 469,
+          "progressionIndex": 10,
+          "rank": 9,
+          "stars": 7
+        },
+        {
+          "abilityLevel": 26,
+          "damage": 152,
+          "armour": 221,
+          "health": 524,
+          "progressionIndex": 13,
+          "rank": 9,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 29,
+          "damage": 180,
+          "armour": 262,
+          "health": 622,
+          "progressionIndex": 11,
+          "rank": 10,
+          "stars": 8
+        },
+        {
+          "abilityLevel": 29,
+          "damage": 190,
+          "armour": 277,
+          "health": 657,
+          "progressionIndex": 13,
+          "rank": 10,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 32,
+          "damage": 225,
+          "armour": 329,
+          "health": 779,
+          "progressionIndex": 11,
+          "rank": 11,
+          "stars": 8
+        },
+        {
+          "abilityLevel": 32,
+          "damage": 250,
+          "armour": 366,
+          "health": 866,
+          "progressionIndex": 14,
+          "rank": 11,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 35,
+          "damage": 313,
+          "armour": 458,
+          "health": 1084,
+          "progressionIndex": 14,
+          "rank": 12,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 35,
+          "damage": 329,
+          "armour": 481,
+          "health": 1138,
+          "progressionIndex": 15,
+          "rank": 12,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 38,
+          "damage": 392,
+          "armour": 574,
+          "health": 1357,
+          "progressionIndex": 14,
+          "rank": 13,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 38,
+          "damage": 412,
+          "armour": 603,
+          "health": 1425,
+          "progressionIndex": 15,
+          "rank": 13,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 41,
+          "damage": 491,
+          "armour": 719,
+          "health": 1699,
+          "progressionIndex": 14,
+          "rank": 14,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 41,
+          "damage": 516,
+          "armour": 755,
+          "health": 1784,
+          "progressionIndex": 15,
+          "rank": 14,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 44,
+          "damage": 615,
+          "armour": 900,
+          "health": 2127,
+          "progressionIndex": 14,
+          "rank": 15,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 44,
+          "damage": 646,
+          "armour": 945,
+          "health": 2233,
+          "progressionIndex": 15,
+          "rank": 15,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 47,
+          "damage": 770,
+          "armour": 1127,
+          "health": 2663,
+          "progressionIndex": 14,
+          "rank": 16,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 47,
+          "damage": 809,
+          "armour": 1183,
+          "health": 2796,
+          "progressionIndex": 15,
+          "rank": 16,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 965,
+          "armour": 1411,
+          "health": 3334,
+          "progressionIndex": 14,
+          "rank": 17,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 1013,
+          "armour": 1482,
+          "health": 3501,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 52,
+          "damage": 1268,
+          "armour": 1855,
+          "health": 4383,
+          "progressionIndex": 16,
+          "rank": 18,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 53,
+          "damage": 1328,
+          "armour": 1943,
+          "health": 4592,
+          "progressionIndex": 17,
+          "rank": 18,
+          "stars": 12
+        },
+        {
+          "abilityLevel": 54,
+          "damage": 1388,
+          "armour": 2031,
+          "health": 4801,
+          "progressionIndex": 18,
+          "rank": 18,
+          "stars": 13
+        },
+        {
+          "abilityLevel": 55,
+          "damage": 1448,
+          "armour": 2119,
+          "health": 5010,
+          "progressionIndex": 19,
+          "rank": 18,
+          "stars": 14
+        },
+        {
+          "abilityLevel": 57,
+          "damage": 1586,
+          "armour": 2321,
+          "health": 5488,
+          "progressionIndex": 16,
+          "rank": 19,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 58,
+          "damage": 1662,
+          "armour": 2432,
+          "health": 5749,
+          "progressionIndex": 17,
+          "rank": 19,
+          "stars": 12
+        },
+        {
+          "abilityLevel": 59,
+          "damage": 1738,
+          "armour": 2543,
+          "health": 6010,
+          "progressionIndex": 18,
+          "rank": 19,
+          "stars": 13
+        },
+        {
+          "abilityLevel": 60,
+          "damage": 1814,
+          "armour": 2654,
+          "health": 6271,
+          "progressionIndex": 19,
+          "rank": 19,
+          "stars": 14
+        },
+        {
+          "abilityLevel": 62,
+          "damage": 1987,
+          "armour": 2907,
+          "health": 6870,
+          "progressionIndex": 16,
+          "rank": 20,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 63,
+          "damage": 2082,
+          "armour": 3045,
+          "health": 7197,
+          "progressionIndex": 17,
+          "rank": 20,
+          "stars": 12
+        },
+        {
+          "abilityLevel": 64,
+          "damage": 2177,
+          "armour": 3183,
+          "health": 7524,
+          "progressionIndex": 18,
+          "rank": 20,
+          "stars": 13
+        },
+        {
+          "abilityLevel": 65,
+          "damage": 2272,
+          "armour": 3321,
+          "health": 7851,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
+        }
+      ]
+    },
+    {
+      "id": "admecNpc1VanguardSurv",
+      "name": "Skitarii Vanguard",
+      "meleeDamage": "Physical",
+      "meleeHits": 1,
+      "rangedDamage": "Toxic",
+      "rangedHits": 3,
+      "distance": 2,
+      "movement": 3,
+      "traits": [
+        "Mechanical"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "RadSaturation"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_admec_vanguard_01.png",
+      "stats": [
+        {
+          "abilityLevel": 50,
+          "damage": 49646,
+          "armour": 18228,
+          "health": 71226,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        }
+      ]
+    },
+    {
+      "id": "admecNpc2Techpriest",
+      "name": "Tech-Priest Enginseer",
+      "meleeDamage": "Power",
+      "meleeHits": 3,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [
+        "Mechanical",
+        "Mechanic"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "OmnissiahsBlessing",
+        "VengeanceForTheOmnissiah"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_admec_techpriest_01.png",
+      "stats": [
+        {
+          "abilityLevel": 1,
+          "damage": 16,
+          "armour": 20,
+          "health": 60,
+          "progressionIndex": 0,
+          "rank": 0,
+          "stars": 0
+        },
+        {
+          "abilityLevel": 3,
+          "damage": 20,
+          "armour": 25,
+          "health": 75,
+          "progressionIndex": 0,
+          "rank": 1,
+          "stars": 0
+        },
+        {
+          "abilityLevel": 3,
+          "damage": 22,
+          "armour": 28,
+          "health": 83,
+          "progressionIndex": 1,
+          "rank": 1,
+          "stars": 1
+        },
+        {
+          "abilityLevel": 5,
+          "damage": 28,
+          "armour": 35,
+          "health": 104,
+          "progressionIndex": 1,
+          "rank": 2,
+          "stars": 1
+        },
+        {
+          "abilityLevel": 8,
+          "damage": 35,
+          "armour": 44,
+          "health": 130,
+          "progressionIndex": 1,
+          "rank": 3,
+          "stars": 1
+        },
+        {
+          "abilityLevel": 8,
+          "damage": 38,
+          "armour": 48,
+          "health": 142,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 11,
+          "damage": 48,
+          "armour": 60,
+          "health": 178,
+          "progressionIndex": 3,
+          "rank": 4,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 14,
+          "damage": 60,
+          "armour": 75,
+          "health": 223,
+          "progressionIndex": 3,
+          "rank": 5,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 14,
+          "damage": 65,
+          "armour": 81,
+          "health": 242,
+          "progressionIndex": 4,
+          "rank": 5,
+          "stars": 3
+        },
+        {
+          "abilityLevel": 17,
+          "damage": 81,
+          "armour": 101,
+          "health": 303,
+          "progressionIndex": 4,
+          "rank": 6,
+          "stars": 3
+        },
+        {
+          "abilityLevel": 17,
+          "damage": 100,
+          "armour": 124,
+          "health": 373,
+          "progressionIndex": 8,
+          "rank": 6,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 20,
+          "damage": 125,
+          "armour": 155,
+          "health": 467,
+          "progressionIndex": 8,
+          "rank": 7,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 23,
+          "damage": 147,
+          "armour": 182,
+          "health": 548,
+          "progressionIndex": 7,
+          "rank": 8,
+          "stars": 5
+        },
+        {
+          "abilityLevel": 23,
+          "damage": 167,
+          "armour": 206,
+          "health": 621,
+          "progressionIndex": 10,
+          "rank": 8,
+          "stars": 7
+        },
+        {
+          "abilityLevel": 23,
+          "damage": 187,
+          "armour": 230,
+          "health": 694,
+          "progressionIndex": 13,
+          "rank": 8,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 26,
+          "damage": 209,
+          "armour": 258,
+          "health": 777,
+          "progressionIndex": 10,
+          "rank": 9,
+          "stars": 7
+        },
+        {
+          "abilityLevel": 26,
+          "damage": 234,
+          "armour": 288,
+          "health": 868,
+          "progressionIndex": 13,
+          "rank": 9,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 29,
+          "damage": 278,
+          "armour": 342,
+          "health": 1030,
+          "progressionIndex": 11,
+          "rank": 10,
+          "stars": 8
+        },
+        {
+          "abilityLevel": 29,
+          "damage": 293,
+          "armour": 361,
+          "health": 1087,
+          "progressionIndex": 13,
+          "rank": 10,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 32,
+          "damage": 348,
+          "armour": 428,
+          "health": 1289,
+          "progressionIndex": 11,
+          "rank": 11,
+          "stars": 8
+        },
+        {
+          "abilityLevel": 32,
+          "damage": 387,
+          "armour": 476,
+          "health": 1432,
+          "progressionIndex": 14,
+          "rank": 11,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 35,
+          "damage": 485,
+          "armour": 596,
+          "health": 1793,
+          "progressionIndex": 14,
+          "rank": 12,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 35,
+          "damage": 509,
+          "armour": 626,
+          "health": 1883,
+          "progressionIndex": 15,
+          "rank": 12,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 38,
+          "damage": 607,
+          "armour": 746,
+          "health": 2245,
+          "progressionIndex": 14,
+          "rank": 13,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 38,
+          "damage": 637,
+          "armour": 783,
+          "health": 2357,
+          "progressionIndex": 15,
+          "rank": 13,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 41,
+          "damage": 760,
+          "armour": 934,
+          "health": 2810,
+          "progressionIndex": 14,
+          "rank": 14,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 41,
+          "damage": 798,
+          "armour": 981,
+          "health": 2951,
+          "progressionIndex": 15,
+          "rank": 14,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 44,
+          "damage": 952,
+          "armour": 1170,
+          "health": 3519,
+          "progressionIndex": 14,
+          "rank": 15,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 44,
+          "damage": 1000,
+          "armour": 1229,
+          "health": 3695,
+          "progressionIndex": 15,
+          "rank": 15,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 47,
+          "damage": 1192,
+          "armour": 1465,
+          "health": 4406,
+          "progressionIndex": 14,
+          "rank": 16,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 47,
+          "damage": 1252,
+          "armour": 1538,
+          "health": 4626,
+          "progressionIndex": 15,
+          "rank": 16,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 1493,
+          "armour": 1834,
+          "health": 5516,
+          "progressionIndex": 14,
+          "rank": 17,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 1568,
+          "armour": 1926,
+          "health": 5792,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 52,
+          "damage": 1963,
+          "armour": 2411,
+          "health": 7252,
+          "progressionIndex": 16,
+          "rank": 18,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 53,
+          "damage": 2056,
+          "armour": 2526,
+          "health": 7597,
+          "progressionIndex": 17,
+          "rank": 18,
+          "stars": 12
+        },
+        {
+          "abilityLevel": 54,
+          "damage": 2149,
+          "armour": 2641,
+          "health": 7942,
+          "progressionIndex": 18,
+          "rank": 18,
+          "stars": 13
+        },
+        {
+          "abilityLevel": 55,
+          "damage": 2242,
+          "armour": 2756,
+          "health": 8287,
+          "progressionIndex": 19,
+          "rank": 18,
+          "stars": 14
+        },
+        {
+          "abilityLevel": 57,
+          "damage": 2456,
+          "armour": 3019,
+          "health": 9078,
+          "progressionIndex": 16,
+          "rank": 19,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 58,
+          "damage": 2573,
+          "armour": 3163,
+          "health": 9510,
+          "progressionIndex": 17,
+          "rank": 19,
+          "stars": 12
+        },
+        {
+          "abilityLevel": 59,
+          "damage": 2690,
+          "armour": 3307,
+          "health": 9942,
+          "progressionIndex": 18,
+          "rank": 19,
+          "stars": 13
+        },
+        {
+          "abilityLevel": 60,
+          "damage": 2807,
+          "armour": 3451,
+          "health": 10374,
+          "progressionIndex": 19,
+          "rank": 19,
+          "stars": 14
+        },
+        {
+          "abilityLevel": 62,
+          "damage": 3075,
+          "armour": 3781,
+          "health": 11365,
+          "progressionIndex": 16,
+          "rank": 20,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 63,
+          "damage": 3221,
+          "armour": 3961,
+          "health": 11906,
+          "progressionIndex": 17,
+          "rank": 20,
+          "stars": 12
+        },
+        {
+          "abilityLevel": 64,
+          "damage": 3367,
+          "armour": 4141,
+          "health": 12447,
+          "progressionIndex": 18,
+          "rank": 20,
+          "stars": 13
+        },
+        {
+          "abilityLevel": 65,
+          "damage": 3513,
+          "armour": 4321,
+          "health": 12988,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
+        }
+      ]
+    },
+    {
+      "id": "admecNpc3Electropriest",
+      "name": "Electro-priest",
+      "meleeDamage": "Particle",
+      "meleeHits": 3,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [
+        "Mechanical",
+        "Resilient"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [],
+      "passiveAbilityDamage": [
+        "Particle"
+      ],
+      "passiveAbilities": [
+        "ElectroShock",
+        "VoltagheistField"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_admec_electropriest_01.png",
+      "stats": [
+        {
+          "abilityLevel": 1,
+          "damage": 18,
+          "armour": 4,
+          "health": 55,
+          "progressionIndex": 0,
+          "rank": 0,
+          "stars": 0
+        },
+        {
+          "abilityLevel": 3,
+          "damage": 23,
+          "armour": 5,
+          "health": 69,
+          "progressionIndex": 0,
+          "rank": 1,
+          "stars": 0
+        },
+        {
+          "abilityLevel": 3,
+          "damage": 25,
+          "armour": 6,
+          "health": 76,
+          "progressionIndex": 1,
+          "rank": 1,
+          "stars": 1
+        },
+        {
+          "abilityLevel": 5,
+          "damage": 31,
+          "armour": 8,
+          "health": 95,
+          "progressionIndex": 1,
+          "rank": 2,
+          "stars": 1
+        },
+        {
+          "abilityLevel": 8,
+          "damage": 39,
+          "armour": 10,
+          "health": 119,
+          "progressionIndex": 1,
+          "rank": 3,
+          "stars": 1
+        },
+        {
+          "abilityLevel": 8,
+          "damage": 43,
+          "armour": 11,
+          "health": 130,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 11,
+          "damage": 54,
+          "armour": 14,
+          "health": 163,
+          "progressionIndex": 3,
+          "rank": 4,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 14,
+          "damage": 68,
+          "armour": 18,
+          "health": 204,
+          "progressionIndex": 3,
+          "rank": 5,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 14,
+          "damage": 74,
+          "armour": 20,
+          "health": 221,
+          "progressionIndex": 4,
+          "rank": 5,
+          "stars": 3
+        },
+        {
+          "abilityLevel": 17,
+          "damage": 93,
+          "armour": 25,
+          "health": 277,
+          "progressionIndex": 4,
+          "rank": 6,
+          "stars": 3
+        },
+        {
+          "abilityLevel": 17,
+          "damage": 114,
+          "armour": 31,
+          "health": 341,
+          "progressionIndex": 8,
+          "rank": 6,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 20,
+          "damage": 143,
+          "armour": 39,
+          "health": 427,
+          "progressionIndex": 8,
+          "rank": 7,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 23,
+          "damage": 168,
+          "armour": 46,
+          "health": 501,
+          "progressionIndex": 7,
+          "rank": 8,
+          "stars": 5
+        },
+        {
+          "abilityLevel": 23,
+          "damage": 190,
+          "armour": 52,
+          "health": 568,
+          "progressionIndex": 10,
+          "rank": 8,
+          "stars": 7
+        },
+        {
+          "abilityLevel": 23,
+          "damage": 212,
+          "armour": 58,
+          "health": 635,
+          "progressionIndex": 13,
+          "rank": 8,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 26,
+          "damage": 237,
+          "armour": 65,
+          "health": 711,
+          "progressionIndex": 10,
+          "rank": 9,
+          "stars": 7
+        },
+        {
+          "abilityLevel": 26,
+          "damage": 265,
+          "armour": 73,
+          "health": 795,
+          "progressionIndex": 13,
+          "rank": 9,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 29,
+          "damage": 314,
+          "armour": 87,
+          "health": 943,
+          "progressionIndex": 11,
+          "rank": 10,
+          "stars": 8
+        },
+        {
+          "abilityLevel": 29,
+          "damage": 331,
+          "armour": 92,
+          "health": 995,
+          "progressionIndex": 13,
+          "rank": 10,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 32,
+          "damage": 393,
+          "armour": 109,
+          "health": 1180,
+          "progressionIndex": 11,
+          "rank": 11,
+          "stars": 8
+        },
+        {
+          "abilityLevel": 32,
+          "damage": 437,
+          "armour": 121,
+          "health": 1311,
+          "progressionIndex": 14,
+          "rank": 11,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 35,
+          "damage": 547,
+          "armour": 151,
+          "health": 1641,
+          "progressionIndex": 14,
+          "rank": 12,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 35,
+          "damage": 574,
+          "armour": 159,
+          "health": 1723,
+          "progressionIndex": 15,
+          "rank": 12,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 38,
+          "damage": 684,
+          "armour": 190,
+          "health": 2054,
+          "progressionIndex": 14,
+          "rank": 13,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 38,
+          "damage": 718,
+          "armour": 200,
+          "health": 2157,
+          "progressionIndex": 15,
+          "rank": 13,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 41,
+          "damage": 856,
+          "armour": 238,
+          "health": 2572,
+          "progressionIndex": 14,
+          "rank": 14,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 41,
+          "damage": 899,
+          "armour": 250,
+          "health": 2701,
+          "progressionIndex": 15,
+          "rank": 14,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 44,
+          "damage": 1072,
+          "armour": 298,
+          "health": 3221,
+          "progressionIndex": 14,
+          "rank": 15,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 44,
+          "damage": 1126,
+          "armour": 313,
+          "health": 3382,
+          "progressionIndex": 15,
+          "rank": 15,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 47,
+          "damage": 1343,
+          "armour": 373,
+          "health": 4033,
+          "progressionIndex": 14,
+          "rank": 16,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 47,
+          "damage": 1410,
+          "armour": 392,
+          "health": 4235,
+          "progressionIndex": 15,
+          "rank": 16,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 1681,
+          "armour": 467,
+          "health": 5050,
+          "progressionIndex": 14,
+          "rank": 17,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 1765,
+          "armour": 490,
+          "health": 5303,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 52,
+          "damage": 2210,
+          "armour": 613,
+          "health": 6639,
+          "progressionIndex": 16,
+          "rank": 18,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 53,
+          "damage": 2315,
+          "armour": 642,
+          "health": 6955,
+          "progressionIndex": 17,
+          "rank": 18,
+          "stars": 12
+        },
+        {
+          "abilityLevel": 54,
+          "damage": 2420,
+          "armour": 671,
+          "health": 7271,
+          "progressionIndex": 18,
+          "rank": 18,
+          "stars": 13
+        },
+        {
+          "abilityLevel": 55,
+          "damage": 2525,
+          "armour": 700,
+          "health": 7587,
+          "progressionIndex": 19,
+          "rank": 18,
+          "stars": 14
+        },
+        {
+          "abilityLevel": 57,
+          "damage": 2766,
+          "armour": 767,
+          "health": 8312,
+          "progressionIndex": 16,
+          "rank": 19,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 58,
+          "damage": 2898,
+          "armour": 804,
+          "health": 8708,
+          "progressionIndex": 17,
+          "rank": 19,
+          "stars": 12
+        },
+        {
+          "abilityLevel": 59,
+          "damage": 3030,
+          "armour": 841,
+          "health": 9104,
+          "progressionIndex": 18,
+          "rank": 19,
+          "stars": 13
+        },
+        {
+          "abilityLevel": 60,
+          "damage": 3162,
+          "armour": 878,
+          "health": 9500,
+          "progressionIndex": 19,
+          "rank": 19,
+          "stars": 14
+        },
+        {
+          "abilityLevel": 62,
+          "damage": 3464,
+          "armour": 962,
+          "health": 10407,
+          "progressionIndex": 16,
+          "rank": 20,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 63,
+          "damage": 3629,
+          "armour": 1008,
+          "health": 10903,
+          "progressionIndex": 17,
+          "rank": 20,
+          "stars": 12
+        },
+        {
+          "abilityLevel": 64,
+          "damage": 3794,
+          "armour": 1054,
+          "health": 11399,
+          "progressionIndex": 18,
+          "rank": 20,
+          "stars": 13
+        },
+        {
+          "abilityLevel": 65,
+          "damage": 3959,
+          "armour": 1100,
+          "health": 11895,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
+        }
+      ]
+    },
+    {
+      "id": "admecNpc3ElectropriestSurv",
+      "name": "Electro-priest",
+      "meleeDamage": "Particle",
+      "meleeHits": 3,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [
+        "Mechanical",
+        "Resilient"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [],
+      "passiveAbilityDamage": [
+        "Particle"
+      ],
+      "passiveAbilities": [
+        "ElectroShock",
+        "VoltagheistField"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_admec_electropriest_01.png",
+      "stats": [
+        {
+          "abilityLevel": 50,
+          "damage": 47656,
+          "armour": 16248,
+          "health": 69238,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        }
+      ]
+    }
+  ]
+}
