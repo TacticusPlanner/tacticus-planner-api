@@ -25,8 +25,6 @@ public sealed record GameCatalogCharacter(
     IReadOnlyList<string> ActiveAbilityNames,
     IReadOnlyList<string> PassiveAbilityNames,
     IReadOnlyList<string> EquipmentSlots,
-    string Icon,
-    string RoundIcon,
     IReadOnlyList<GameCatalogCharacterRankUp> RankUpUpgrades
 );
 
@@ -72,8 +70,6 @@ public sealed record GameCatalogCharacterView(
     IReadOnlyList<string> ActiveAbilityNames,
     IReadOnlyList<string> PassiveAbilityNames,
     IReadOnlyList<string> EquipmentSlots,
-    string Icon,
-    string RoundIcon,
     IReadOnlyList<GameCatalogCharacterRankUp> RankUpUpgrades,
     IReadOnlyList<GameCatalogFarmLocation> ShardLocations,
     IReadOnlyList<GameCatalogEquipmentSlot> EligibleEquipment

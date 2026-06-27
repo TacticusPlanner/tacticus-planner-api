@@ -7,7 +7,6 @@ public sealed record GameCatalogUpgrade(
     string Label,
     string Rarity,
     string Stat,
-    string? Icon,
     bool Craftable,
     IReadOnlyList<GameCatalogUpgradeRecipeIngredient> Recipe
 );
@@ -27,7 +26,6 @@ public sealed record GameCatalogUpgradeView(
     string Label,
     string Rarity,
     string Stat,
-    string? Icon,
     bool Craftable,
     // For craftable upgrades each ingredient carries its own nested recipe (recursively), so the client
     // can walk the full crafting tree without a separate expansion table.

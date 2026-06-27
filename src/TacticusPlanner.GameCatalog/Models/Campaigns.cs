@@ -38,8 +38,8 @@ public sealed record GameCatalogCampaignRewards(
 
 public sealed record GameCatalogCampaignGuaranteedReward(
     string Id,
-    int? Min,
-    int? Max
+    int Min,
+    int Max
 );
 
 public sealed record GameCatalogCampaignPotentialReward(

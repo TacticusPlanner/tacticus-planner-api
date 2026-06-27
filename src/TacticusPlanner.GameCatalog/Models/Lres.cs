@@ -28,10 +28,8 @@ public sealed record GameCatalogLre(
     int Id,
     string UnitSnowprintId,
     string Name,
-    string WikiLink,
-    int EventStage,
     bool Finished,
-    string? NextEventDate,
+    // Kept only as the input to the served EventStageStartDatesUtc array; not served directly.
     string? NextEventDateUtc,
     int BattlesCount,
     int ConstraintsCount,
@@ -86,7 +84,6 @@ public sealed record GameCatalogLreTrackEnemies(
 public sealed record GameCatalogLreRestriction(
     string Name,
     int Points,
-    string? IconId,
     int Index,
     GameCatalogLreFilter Filter
 );
@@ -113,11 +110,9 @@ public sealed record GameCatalogLreView(
     // The event's unit snowprint id (e.g. "emperLucius") — used as the stable string id of the LRE.
     string Id,
     string Name,
-    string WikiLink,
-    int EventStage,
     bool Finished,
-    string? NextEventDate,
-    string? NextEventDateUtc,
+    // Per-event-stage start dates in ISO 8601 UTC. The client derives the current stage from this array.
+    IReadOnlyList<string> EventStageStartDatesUtc,
     int BattlesCount,
     int ConstraintsCount,
     IReadOnlyList<string> RegularMissions,

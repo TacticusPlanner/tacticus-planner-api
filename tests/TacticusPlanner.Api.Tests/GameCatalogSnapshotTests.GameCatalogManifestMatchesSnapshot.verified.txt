@@ -1,8 +1,8 @@
 ﻿{
   version: dev-2026-06-26,
-  schemaVersion: 12,
+  schemaVersion: 13,
   gameVersion: 1.40,
-  sourceHash: f7995485cad0e2aa4da4a2c84c6a75538ae24e2250648057a2db70148c2f82ef,
+  sourceHash: d876507b577cce98afc9c77c0f374bd880ab3c145b11440277991520f61f6e7c,
   datasets: [
     {
       key: campaign-battles,
@@ -16,7 +16,7 @@
     },
     {
       key: characters,
-      hash: 968814583010ff7e8ae81787513e7ef98269934b5944a6da2e11a65f845e2938,
+      hash: b18a43820805cc051bbfb76c9cbd74f4bc7a580c569e37f355411991573af671,
       url: /api/v1/game-catalog/characters
     },
     {
@@ -26,7 +26,7 @@
     },
     {
       key: lres,
-      hash: e69c7b2197feff03f176f71b21386d5c61cd6d29dae31f4a4e4f59f127c8400c,
+      hash: fd82d2581adfa918b3dc810f9ce4e59760f2d976177c20ef3be0087b809b32f5,
       url: /api/v1/game-catalog/lres
     },
     {
@@ -36,17 +36,17 @@
     },
     {
       key: mows,
-      hash: b5c7d2a3c4c02b5f8a8ac5b10d48e3da7d7bc3b75e0e61dcfb57493aee2d9937,
+      hash: 27fc202591942b4a328453b3ae1e022ef5eb1cd58f116d52172a5d3d5a171772,
       url: /api/v1/game-catalog/mows
     },
     {
       key: npcs,
-      hash: 4c7f757ab4cd5e1a603acb769b3c16d02e4d312f6ed5c7cf8759d4bd2bbe68c1,
+      hash: 25232db3a36692434209a6c905497b4c14c3e538dc16ebaab6db8c1bdc7e78f6,
       url: /api/v1/game-catalog/npcs
     },
     {
       key: upgrades,
-      hash: b84819f0a8c18ea1419015321228fc6807c6fbd0d5a15005315800d21ca7ec72,
+      hash: ee593ea7bc00474601d1b890f3bf3916034b687bb1d18c48612bb07a28ff92fb,
       url: /api/v1/game-catalog/upgrades
     }
   ]

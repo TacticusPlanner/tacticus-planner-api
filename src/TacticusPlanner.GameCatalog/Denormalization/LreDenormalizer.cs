@@ -1,3 +1,4 @@
+using System.Globalization;
 using TacticusPlanner.GameCatalog.Models;
 
 namespace TacticusPlanner.GameCatalog.Denormalization;
@@ -21,11 +22,8 @@ internal static partial class GameCatalogDenormalizer
             .Select(lre => new GameCatalogLreView(
                 lre.UnitSnowprintId,
                 lre.Name,
-                lre.WikiLink,
-                lre.EventStage,
                 lre.Finished,
-                lre.NextEventDate,
-                lre.NextEventDateUtc,
+                BuildEventStageStartDates(lre.NextEventDateUtc),
                 lre.BattlesCount,
                 lre.ConstraintsCount,
                 lre.RegularMissions,
@@ -38,6 +36,21 @@ internal static partial class GameCatalogDenormalizer
                 lre.ShardsPerChest,
                 lre.Progression))
             .ToArray();
+    }
+
+    // The source carries one upcoming-event date (e.g. "Sun, 01 February 2026 00:00:00 GMT"). Normalize it
+    // to ISO 8601 UTC and expose it as the per-event-stage start-date array (one element today); the client
+    // derives the current event stage from this array.
+    private static IReadOnlyList<string> BuildEventStageStartDates(string? nextEventDateUtc)
+    {
+        if (string.IsNullOrWhiteSpace(nextEventDateUtc)
+            || !DateTimeOffset.TryParse(nextEventDateUtc, CultureInfo.InvariantCulture,
+                DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal, out var parsed))
+        {
+            return [];
+        }
+
+        return [parsed.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture)];
     }
 
     private static GameCatalogLreTrackView BuildTrackView(

@@ -41,8 +41,6 @@ internal static partial class GameCatalogDenormalizer
                     character.ActiveAbilityNames,
                     character.PassiveAbilityNames,
                     character.EquipmentSlots,
-                    character.Icon,
-                    character.RoundIcon,
                     character.RankUpUpgrades,
                     BuildShardLocations(character.Id, rewardLocations, dropChanceById),
                     BuildEligibleEquipment(character, faction.FactionId, equipmentByTypeName)));

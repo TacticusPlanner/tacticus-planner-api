@@ -27,7 +27,6 @@ internal static partial class GameCatalogDenormalizer
                 upgrade.Label,
                 upgrade.Rarity,
                 upgrade.Stat,
-                upgrade.Icon,
                 upgrade.Craftable,
                 BuildNestedRecipe(upgrade.Recipe, byId, new HashSet<string>(StringComparer.OrdinalIgnoreCase) { upgrade.Id }),
                 ResolveLocations(upgrade.Id, rewardLocations, dropChanceById)));

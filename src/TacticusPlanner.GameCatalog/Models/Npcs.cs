@@ -21,7 +21,6 @@ public sealed record GameCatalogNpc(
     IReadOnlyList<string> ActiveAbilities,
     IReadOnlyList<string> PassiveAbilityDamage,
     IReadOnlyList<string> PassiveAbilities,
-    string? Icon,
     IReadOnlyList<GameCatalogNpcStat> Stats
 );
 

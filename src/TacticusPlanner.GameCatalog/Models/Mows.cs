@@ -6,8 +6,6 @@ public sealed record GameCatalogMow(
     string UnitKind,
     string Faction,
     string Alliance,
-    string Icon,
-    string RoundIcon,
     GameCatalogMowAbility PrimaryAbility,
     GameCatalogMowAbility SecondaryAbility
 );
