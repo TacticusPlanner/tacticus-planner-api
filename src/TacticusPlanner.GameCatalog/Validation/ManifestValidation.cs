@@ -26,6 +26,8 @@ public static partial class GameCatalogValidator
         RequireNonEmpty(GameCatalogDatasets.CampaignBattles, snapshot.CampaignBattleViews.Count, errors);
         RequireNonEmpty(GameCatalogDatasets.CampaignDefinitions, snapshot.CampaignDefinitionViews.Count, errors);
         RequireNonEmpty(GameCatalogDatasets.Lres, snapshot.LreViews.Count, errors);
+        RequireNonEmpty(GameCatalogDatasets.LreBattles, snapshot.LreBattleViews.Count, errors);
+        RequireNonEmpty(GameCatalogDatasets.LreCommon, snapshot.LreCommonViews.Count, errors);
 
         // Every battle id referenced by a campaign definition must resolve to a served campaign battle.
         var battleIds = new HashSet<string>(
@@ -37,6 +39,21 @@ public static partial class GameCatalogValidator
             {
                 RequireReference(
                     GameCatalogDatasets.CampaignDefinitions, definition.GroupId, "battleIds", battleId, battleIds, errors);
+            }
+        }
+
+        // Every battle id referenced by an LRE track must resolve to a served LRE battle.
+        var lreBattleIds = new HashSet<string>(
+            snapshot.LreBattleViews.Select(battle => battle.Id), StringComparer.Ordinal);
+
+        foreach (var lre in snapshot.LreViews)
+        {
+            foreach (var track in new[] { lre.Alpha, lre.Beta, lre.Gamma })
+            {
+                foreach (var battleId in track.BattleIds)
+                {
+                    RequireReference(GameCatalogDatasets.Lres, lre.Id, "battleIds", battleId, lreBattleIds, errors);
+                }
             }
         }
     }

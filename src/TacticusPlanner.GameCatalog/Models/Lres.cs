@@ -102,7 +102,8 @@ public sealed record GameCatalogLreTrackView(
     IReadOnlyList<int> DefeatAll,
     IReadOnlyList<GameCatalogLreFilter> AllowedUnitsFilter,
     IReadOnlyList<GameCatalogLreRestriction> UnitsRestrictions,
-    IReadOnlyList<GameCatalogLreBattle> Battles,
+    // Ids of this track's battles in the lre-battles dataset (ordered); the battle bodies live there.
+    IReadOnlyList<string> BattleIds,
     IReadOnlyList<string> AvailableUnitIds
 );
 
@@ -119,9 +120,28 @@ public sealed record GameCatalogLreView(
     IReadOnlyList<string> PremiumMissions,
     GameCatalogLreTrackView Alpha,
     GameCatalogLreTrackView Beta,
-    GameCatalogLreTrackView Gamma,
+    GameCatalogLreTrackView Gamma
+);
+
+// A single LRE battle in the lre-battles dataset. Keyed by "{lreId}-{track}-{number}" and tagged with its
+// owning event/track so the bulky wave data is fetched independently of the lightweight lres list.
+public sealed record GameCatalogLreBattleView(
+    string Id,
+    string LreId,
+    string Track,
+    string MapId,
+    int Number,
+    int Power,
+    int Tier,
+    IReadOnlyList<string> DisallowedFactions,
+    IReadOnlyList<GameCatalogLreWave> Waves
+);
+
+// The shared, event-independent LRE reward ladder, served once as the single lre-common record.
+public sealed record GameCatalogLreCommon(
+    string Id,
     IReadOnlyList<GameCatalogLrePointsMilestone> PointsMilestones,
     IReadOnlyList<GameCatalogLreChestsMilestone> ChestsMilestones,
-    int ShardsPerChest,
-    GameCatalogLreProgression Progression
+    GameCatalogLreProgression Progression,
+    int ShardsPerChest
 );

@@ -1,8 +1,8 @@
 ﻿{
   version: dev-2026-06-26,
-  schemaVersion: 13,
+  schemaVersion: 14,
   gameVersion: 1.40,
-  sourceHash: d876507b577cce98afc9c77c0f374bd880ab3c145b11440277991520f61f6e7c,
+  sourceHash: 7684e2bc9d2c2763fc2496ddaf02fcfdd6c20a892830870956e1234e60e4feb3,
   datasets: [
     {
       key: campaign-battles,
@@ -25,8 +25,18 @@
       url: /api/v1/game-catalog/equipment
     },
     {
+      key: lre-battles,
+      hash: 5c4892990513833be413c44074902f9d929a0424abe6d27d45a644494ef31a3c,
+      url: /api/v1/game-catalog/lre-battles
+    },
+    {
+      key: lre-common,
+      hash: d2bc1a84c1cd502dd2bf1f291d50495b27423edc8073b8b1203be08f2bc20694,
+      url: /api/v1/game-catalog/lre-common
+    },
+    {
       key: lres,
-      hash: fd82d2581adfa918b3dc810f9ce4e59760f2d976177c20ef3be0087b809b32f5,
+      hash: adf6232e0b0a5bce75536db2cdc0bb1840d3d3fc96cd300e1d0734c7c8531f78,
       url: /api/v1/game-catalog/lres
     },
     {

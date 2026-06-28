@@ -25,7 +25,9 @@ public sealed record GameCatalogSnapshot(
     IReadOnlyList<GameCatalogEquipmentView> EquipmentViews,
     IReadOnlyList<GameCatalogCampaignBattleView> CampaignBattleViews,
     IReadOnlyList<GameCatalogCampaignDefinitionView> CampaignDefinitionViews,
-    IReadOnlyList<GameCatalogLreView> LreViews
+    IReadOnlyList<GameCatalogLreView> LreViews,
+    IReadOnlyList<GameCatalogLreBattleView> LreBattleViews,
+    IReadOnlyList<GameCatalogLreCommon> LreCommonViews
 )
 {
     // The manifest served to clients: release metadata + per-dataset hash and download url. Built from the

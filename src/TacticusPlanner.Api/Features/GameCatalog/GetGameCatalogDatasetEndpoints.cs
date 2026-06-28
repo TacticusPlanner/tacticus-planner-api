@@ -146,6 +146,30 @@ public sealed class GetGameCatalogLresEndpoint(IGameCatalogProvider catalog)
     public override void Configure()
     {
         Get("game-catalog/lres");
-        ConfigureServed("Gets game catalog legendary release events.", "All legendary release events with per-track available units.");
+        ConfigureServed("Gets game catalog legendary release events.", "All legendary release events (keyed by id) with per-track metadata and the ids of their battles.");
+    }
+}
+
+public sealed class GetGameCatalogLreBattlesEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogLreBattleView>>(catalog, GameCatalogDatasets.LreBattles)
+{
+    protected override IReadOnlyList<GameCatalogLreBattleView> Payload => Snapshot.LreBattleViews;
+
+    public override void Configure()
+    {
+        Get("game-catalog/lre-battles");
+        ConfigureServed("Gets game catalog LRE battles.", "All LRE battles (keyed \"{lreId}-{track}-{number}\", each tagged with its lreId and track) with their waves.");
+    }
+}
+
+public sealed class GetGameCatalogLreCommonEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogLreCommon>>(catalog, GameCatalogDatasets.LreCommon)
+{
+    protected override IReadOnlyList<GameCatalogLreCommon> Payload => Snapshot.LreCommonViews;
+
+    public override void Configure()
+    {
+        Get("game-catalog/lre-common");
+        ConfigureServed("Gets the shared LRE reward ladder.", "The single shared LRE reward ladder (points/chests milestones, progression, shards per chest).");
     }
 }

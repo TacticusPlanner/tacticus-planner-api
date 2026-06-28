@@ -28,14 +28,59 @@ internal static partial class GameCatalogDenormalizer
                 lre.ConstraintsCount,
                 lre.RegularMissions,
                 lre.PremiumMissions,
-                BuildTrackView(lre.Alpha, roster),
-                BuildTrackView(lre.Beta, roster),
-                BuildTrackView(lre.Gamma, roster),
-                lre.PointsMilestones,
-                lre.ChestsMilestones,
-                lre.ShardsPerChest,
-                lre.Progression))
+                BuildTrackView(lre.UnitSnowprintId, "alpha", lre.Alpha, roster),
+                BuildTrackView(lre.UnitSnowprintId, "beta", lre.Beta, roster),
+                BuildTrackView(lre.UnitSnowprintId, "gamma", lre.Gamma, roster)))
             .ToArray();
+    }
+
+    private static readonly (string Key, Func<GameCatalogLre, GameCatalogLreTrack> Track)[] LreTrackSelectors =
+    [
+        ("alpha", lre => lre.Alpha),
+        ("beta", lre => lre.Beta),
+        ("gamma", lre => lre.Gamma),
+    ];
+
+    private static string LreBattleId(string lreId, string track, int number) => $"{lreId}-{track}-{number}";
+
+    // lre-battles: every battle flattened across all events × tracks, each carrying its lreId + track and a
+    // composite id that the owning track's BattleIds resolve to.
+    public static IReadOnlyList<GameCatalogLreBattleView> BuildLreBattles(
+        IReadOnlyDictionary<string, GameCatalogLre> lresByEvent) =>
+        lresByEvent
+            .OrderBy(pair => pair.Key, StringComparer.Ordinal)
+            .Select(pair => pair.Value)
+            .SelectMany(lre => LreTrackSelectors.SelectMany(selector =>
+                selector.Track(lre).Battles.Select(battle => new GameCatalogLreBattleView(
+                    LreBattleId(lre.UnitSnowprintId, selector.Key, battle.Number),
+                    lre.UnitSnowprintId,
+                    selector.Key,
+                    battle.MapId,
+                    battle.Number,
+                    battle.Power,
+                    battle.Tier,
+                    battle.DisallowedFactions,
+                    battle.Waves))))
+            .ToArray();
+
+    // lre-common: the reward ladder is identical across every event, so serve it once as a single record.
+    public static IReadOnlyList<GameCatalogLreCommon> BuildLreCommon(
+        IReadOnlyDictionary<string, GameCatalogLre> lresByEvent)
+    {
+        var source = lresByEvent
+            .OrderBy(pair => pair.Key, StringComparer.Ordinal)
+            .Select(pair => pair.Value)
+            .First();
+
+        return
+        [
+            new GameCatalogLreCommon(
+                GameCatalogDatasets.LreCommon,
+                source.PointsMilestones,
+                source.ChestsMilestones,
+                source.Progression,
+                source.ShardsPerChest),
+        ];
     }
 
     // The source carries one upcoming-event date (e.g. "Sun, 01 February 2026 00:00:00 GMT"). Normalize it
@@ -54,6 +99,8 @@ internal static partial class GameCatalogDenormalizer
     }
 
     private static GameCatalogLreTrackView BuildTrackView(
+        string lreId,
+        string trackKey,
         GameCatalogLreTrack track,
         IReadOnlyList<(string Id, string Faction, string Alliance)> roster)
     {
@@ -70,7 +117,7 @@ internal static partial class GameCatalogDenormalizer
             track.DefeatAll,
             track.AllowedUnitsFilter,
             track.UnitsRestrictions,
-            track.Battles,
+            track.Battles.Select(battle => LreBattleId(lreId, trackKey, battle.Number)).ToArray(),
             availableUnitIds);
     }
 

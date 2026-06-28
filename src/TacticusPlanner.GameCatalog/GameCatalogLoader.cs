@@ -73,6 +73,8 @@ public static class GameCatalogLoader
         var campaignBattleViews = GameCatalogDenormalizer.BuildCampaignBattles(campaignGroups, dropChances);
         var campaignDefinitionViews = GameCatalogDenormalizer.BuildCampaignDefinitions(campaignGroups);
         var lreViews = GameCatalogDenormalizer.BuildLres(lresByEvent, unitsByFaction);
+        var lreBattleViews = GameCatalogDenormalizer.BuildLreBattles(lresByEvent);
+        var lreCommonViews = GameCatalogDenormalizer.BuildLreCommon(lresByEvent);
 
         // Served dataset hashes are computed over the canonical JSON of each denormalized payload.
         var datasetHashes = new Dictionary<string, string>(StringComparer.Ordinal)
@@ -86,6 +88,8 @@ public static class GameCatalogLoader
             [GameCatalogDatasets.CampaignBattles] = GameCatalogHashing.ComputeCanonicalJsonHash(campaignBattleViews, JsonOptions),
             [GameCatalogDatasets.CampaignDefinitions] = GameCatalogHashing.ComputeCanonicalJsonHash(campaignDefinitionViews, JsonOptions),
             [GameCatalogDatasets.Lres] = GameCatalogHashing.ComputeCanonicalJsonHash(lreViews, JsonOptions),
+            [GameCatalogDatasets.LreBattles] = GameCatalogHashing.ComputeCanonicalJsonHash(lreBattleViews, JsonOptions),
+            [GameCatalogDatasets.LreCommon] = GameCatalogHashing.ComputeCanonicalJsonHash(lreCommonViews, JsonOptions),
         };
 
         var snapshot = new GameCatalogSnapshot(
@@ -112,7 +116,9 @@ public static class GameCatalogLoader
             equipmentViews,
             campaignBattleViews,
             campaignDefinitionViews,
-            lreViews);
+            lreViews,
+            lreBattleViews,
+            lreCommonViews);
 
         var errors = GameCatalogValidator.Validate(snapshot);
         if (errors.Count > 0)

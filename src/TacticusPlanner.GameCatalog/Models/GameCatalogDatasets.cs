@@ -154,7 +154,12 @@ public static class GameCatalogDatasets
     // keyed by groupId and references only the battle ids belonging to the group.
     public const string CampaignBattles = "campaign-battles";
     public const string CampaignDefinitions = "campaign-definitions";
+    // lres is the lightweight per-event list (tracks reference their battles by id); lre-battles holds the
+    // bulky per-battle wave data (keyed "{lreId}-{track}-{number}"); lre-common is the single shared reward
+    // ladder (identical across every event).
     public const string Lres = "lres";
+    public const string LreBattles = "lre-battles";
+    public const string LreCommon = "lre-common";
 
     /// <summary>The denormalized datasets exposed by the manifest / served by the catalog endpoints.</summary>
     public static readonly IReadOnlyList<string> Served =
@@ -168,5 +173,7 @@ public static class GameCatalogDatasets
         CampaignBattles,
         CampaignDefinitions,
         Lres,
+        LreBattles,
+        LreCommon,
     ];
 }
