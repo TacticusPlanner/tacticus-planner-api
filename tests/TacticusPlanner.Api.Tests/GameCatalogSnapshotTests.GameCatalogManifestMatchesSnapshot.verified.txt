@@ -1,8 +1,8 @@
 ﻿{
   version: dev-2026-06-26,
-  schemaVersion: 14,
+  schemaVersion: 1,
   gameVersion: 1.40,
-  sourceHash: 7684e2bc9d2c2763fc2496ddaf02fcfdd6c20a892830870956e1234e60e4feb3,
+  sourceHash: 7bfc8d6f0f1b15ba20fe89318de2c03fda367a586b50338f18eca4c8a4431dde,
   datasets: [
     {
       key: campaign-battles,
