@@ -20,9 +20,14 @@
         "Parry",
         "Terrifying"
       ],
+      "activeAbilityDamage": [
+        "DirectDamage",
+        "Power"
+      ],
       "activeAbilityNames": [
         "TalonsOfTheEmperor"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "DaughterOfTheAbyss"
       ],
@@ -276,8 +281,15 @@
         "Parry",
         "Resilient"
       ],
+      "activeAbilityDamage": [
+        "Eviscerate"
+      ],
       "activeAbilityNames": [
         "MartialInspiration"
+      ],
+      "passiveAbilityDamage": [
+        "Piercing",
+        "Power"
       ],
       "passiveAbilityNames": [
         "LegacyOfCombat"
@@ -529,8 +541,14 @@
         "MartialKatah",
         "Resilient"
       ],
+      "activeAbilityDamage": [
+        "Power"
+      ],
       "activeAbilityNames": [
         "VigilanceEternal"
+      ],
+      "passiveAbilityDamage": [
+        "Bolter"
       ],
       "passiveAbilityNames": [
         "UnwaveringSentinel"
@@ -783,9 +801,13 @@
         "CrushingStrike",
         "Resilient"
       ],
+      "activeAbilityDamage": [
+        "Bolter"
+      ],
       "activeAbilityNames": [
         "MomentShackle"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "LegendaryCommander"
       ],
@@ -1037,9 +1059,13 @@
         "BigTarget",
         "Resilient"
       ],
+      "activeAbilityDamage": [
+        "Physical"
+      ],
       "activeAbilityNames": [
         "VexillaMagnifica"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "StandVigil"
       ],

@@ -21,9 +21,13 @@
         "Flying",
         "Psyker"
       ],
+      "activeAbilityDamage": [
+        "Psychic"
+      ],
       "activeAbilityNames": [
         "Doombolt"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "PsychicStalk"
       ],
@@ -274,9 +278,11 @@
         "WeaverOfFate",
         "Psyker"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "MasterOfTheTutelaries"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "InfernalPacts"
       ],
@@ -528,9 +534,11 @@
         "Flying",
         "Psyker"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "AttemptedPossession"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "ArcaneShield"
       ],
@@ -782,9 +790,13 @@
         "SuppressiveFire",
         "TerminatorArmour"
       ],
+      "activeAbilityDamage": [
+        "HeavyRound"
+      ],
       "activeAbilityNames": [
         "HellfyreMissileRack"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "TimeFlux"
       ],
@@ -1035,9 +1047,13 @@
         "WeaverOfFate",
         "Flying"
       ],
+      "activeAbilityDamage": [
+        "Psychic"
+      ],
       "activeAbilityNames": [
         "SorcerousFacade"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "RealityUnbound"
       ],

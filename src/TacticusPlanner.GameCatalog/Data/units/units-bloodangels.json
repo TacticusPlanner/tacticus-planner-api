@@ -23,9 +23,13 @@
         "RapidAssault",
         "Terrifying"
       ],
+      "activeAbilityDamage": [
+        "Melta"
+      ],
       "activeAbilityNames": [
         "LightOfSanguinius"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "LordOfTheHost"
       ],
@@ -277,8 +281,12 @@
         "Resilient",
         "Unstoppable"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "BlackRage"
+      ],
+      "passiveAbilityDamage": [
+        "Bolter"
       ],
       "passiveAbilityNames": [
         "VisionsOfHeresy"
@@ -531,9 +539,14 @@
         "Flying",
         "RapidAssault"
       ],
+      "activeAbilityDamage": [
+        "Physical",
+        "Power"
+      ],
       "activeAbilityNames": [
         "HammerOfWrath"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "AggressiveOnslaught"
       ],
@@ -785,8 +798,12 @@
         "RapidAssault",
         "Terrifying"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "TheQuickening"
+      ],
+      "passiveAbilityDamage": [
+        "Psychic"
       ],
       "passiveAbilityNames": [
         "FuryOfTheAncients"
@@ -1038,9 +1055,11 @@
         "Healer",
         "RapidAssault"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "BloodChalice"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "SanguinaryPriest"
       ],
@@ -1292,8 +1311,14 @@
         "TerminatorArmour",
         "RapidAssault"
       ],
+      "activeAbilityDamage": [
+        "Eviscerate"
+      ],
       "activeAbilityNames": [
         "SavageEchoes"
+      ],
+      "passiveAbilityDamage": [
+        "Power"
       ],
       "passiveAbilityNames": [
         "RedRampage"

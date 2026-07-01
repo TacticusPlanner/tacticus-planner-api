@@ -17,9 +17,11 @@
       "rangeDistance": null,
       "movement": 3,
       "traits": [],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "InspiredToGreatness"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "SereneUnifier"
       ],
@@ -272,8 +274,12 @@
         "Mechanical",
         "RangedSpecialist"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "EarlyWarningOverride"
+      ],
+      "passiveAbilityDamage": [
+        "Particle"
       ],
       "passiveAbilityNames": [
         "CyclicIonBlaster"
@@ -526,9 +532,11 @@
         "RangedSpecialist",
         "SuppressiveFire"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "FightingRetreat"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "StructuralAnalyser"
       ],
@@ -781,9 +789,11 @@
         "Flying",
         "Mechanical"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "ExemplarOfTheMontka"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "WayOfTheShortBlade"
       ],
@@ -1034,9 +1044,13 @@
         "Camouflage",
         "RangedSpecialist"
       ],
+      "activeAbilityDamage": [
+        "HeavyRound"
+      ],
       "activeAbilityNames": [
         "SeekerMissileFrequencyLock"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "MV71SniperDroneSquad"
       ],
@@ -1289,9 +1303,13 @@
         "Infiltrate",
         "RangedSpecialist"
       ],
+      "activeAbilityDamage": [
+        "Blast"
+      ],
       "activeAbilityNames": [
         "ExemplarOfTheKauyon"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "DefenderOfTheGreaterGood"
       ],

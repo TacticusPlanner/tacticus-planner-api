@@ -20,9 +20,11 @@
         "GetStuckIn",
         "Mechanic"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "GrotTank"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "KustomForceFieldReworked"
       ],
@@ -275,9 +277,13 @@
         "Explodes",
         "Mechanical"
       ],
+      "activeAbilityDamage": [
+        "Projectile"
+      ],
       "activeAbilityNames": [
         "DakkaDakkaDakka"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "PowerTrip"
       ],
@@ -529,9 +535,13 @@
         "BeastSlayer",
         "Unstoppable"
       ],
+      "activeAbilityDamage": [
+        "DirectDamage"
+      ],
       "activeAbilityNames": [
         "UnstoppableMomentumReworked"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "SmashaEad"
       ],
@@ -782,8 +792,12 @@
         "GetStuckIn",
         "BeastSlayer"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "GetEmRuntz"
+      ],
+      "passiveAbilityDamage": [
+        "Physical"
       ],
       "passiveAbilityNames": [
         "SquigHound"
@@ -1038,8 +1052,12 @@
         "FinalJustice",
         "Mechanical"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "Waaagh"
+      ],
+      "passiveAbilityDamage": [
+        "Projectile"
       ],
       "passiveAbilityNames": [
         "LightImUp"

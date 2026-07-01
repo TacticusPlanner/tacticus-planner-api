@@ -21,8 +21,14 @@
         "MkXGravis",
         "SuppressiveFire"
       ],
+      "activeAbilityDamage": [
+        "Blast"
+      ],
       "activeAbilityNames": [
         "FragstormGrenadeLauncher"
+      ],
+      "passiveAbilityDamage": [
+        "Bolter"
       ],
       "passiveAbilityNames": [
         "Boltstorm"
@@ -274,9 +280,11 @@
         "FinalJustice",
         "Parry"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "UnbreakableDuty"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "AstartesBanner"
       ],
@@ -528,8 +536,12 @@
         "Parry",
         "RapidAssault"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "HolyDuel"
+      ],
+      "passiveAbilityDamage": [
+        "Power"
       ],
       "passiveAbilityNames": [
         "MartialSuperiority"
@@ -781,9 +793,11 @@
         "FinalJustice",
         "Parry"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "CrusadeOfWrath"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "DestroyTheWitch"
       ],
@@ -1034,8 +1048,14 @@
         "Parry",
         "RapidAssault"
       ],
+      "activeAbilityDamage": [
+        "Power"
+      ],
       "activeAbilityNames": [
         "ThunderousAssault"
+      ],
+      "passiveAbilityDamage": [
+        "Power"
       ],
       "passiveAbilityNames": [
         "ChampionOfTheFeast"

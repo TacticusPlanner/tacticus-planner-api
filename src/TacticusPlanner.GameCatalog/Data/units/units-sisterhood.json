@@ -19,9 +19,13 @@
       "traits": [
         "ActOfFaith"
       ],
+      "activeAbilityDamage": [
+        "Flame"
+      ],
       "activeAbilityNames": [
         "BrazierOfHolyFire"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "CondemnorStake"
       ],
@@ -272,9 +276,11 @@
         "ActOfFaith",
         "Flying"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "SkyStrike"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "GeminaeSuperia"
       ],
@@ -525,9 +531,11 @@
         "ActOfFaith",
         "Healer"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "RitesOfRestoration"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "MedicusMinistorum"
       ],
@@ -780,8 +788,14 @@
         "Explodes",
         "Mechanical"
       ],
+      "activeAbilityDamage": [
+        "Blast"
+      ],
       "activeAbilityNames": [
         "SanctorumMissile"
+      ],
+      "passiveAbilityDamage": [
+        "Power"
       ],
       "passiveAbilityNames": [
         "RighteousRepugnance"
@@ -1033,8 +1047,14 @@
         "ActOfFaith",
         "HeavyWeapon"
       ],
+      "activeAbilityDamage": [
+        "Flame"
+      ],
       "activeAbilityNames": [
         "ArmoriumCherub"
+      ],
+      "passiveAbilityDamage": [
+        "Flame"
       ],
       "passiveAbilityNames": [
         "FireOfAbsolution"

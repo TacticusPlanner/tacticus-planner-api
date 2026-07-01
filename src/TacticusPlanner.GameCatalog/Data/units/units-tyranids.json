@@ -22,9 +22,13 @@
         "Infiltrate",
         "Terrifying"
       ],
+      "activeAbilityDamage": [
+        "DirectDamage"
+      ],
       "activeAbilityNames": [
         "FearOfTheUnseen"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "FeederTendrils"
       ],
@@ -278,9 +282,13 @@
         "ShadowInTheWarp",
         "Synapse"
       ],
+      "activeAbilityDamage": [
+        "Psychic"
+      ],
       "activeAbilityNames": [
         "SpiritLeech"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "Neuroparasite"
       ],
@@ -531,9 +539,11 @@
         "Flying",
         "Synapse"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "ItItches"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "BarbedOvipositor"
       ],
@@ -784,9 +794,14 @@
         "BigTarget",
         "CrushingStrike"
       ],
+      "activeAbilityDamage": [
+        "Physical",
+        "Piercing"
+      ],
       "activeAbilityNames": [
         "CrushingClaws"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "GuardianOrganism"
       ],
@@ -1038,9 +1053,11 @@
         "Flying",
         "FinalJustice"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "AlphaWarrior"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "SynapticLinchpin"
       ],

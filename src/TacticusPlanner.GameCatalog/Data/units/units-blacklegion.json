@@ -21,9 +21,13 @@
         "Resilient",
         "TerminatorArmour"
       ],
+      "activeAbilityDamage": [
+        "Piercing"
+      ],
       "activeAbilityNames": [
         "Drachnyen"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "FirstAmongTraitors"
       ],
@@ -275,9 +279,13 @@
         "Flying",
         "Terrifying"
       ],
+      "activeAbilityDamage": [
+        "Piercing"
+      ],
       "activeAbilityNames": [
         "HeraldOfTheApocalypse"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "HeadClaimer"
       ],
@@ -531,8 +539,16 @@
         "HeavyWeapon",
         "SuppressiveFire"
       ],
+      "activeAbilityDamage": [
+        "HeavyRound"
+      ],
       "activeAbilityNames": [
         "FrenziedFiring"
+      ],
+      "passiveAbilityDamage": [
+        "Flame",
+        "HeavyRound",
+        "Melta"
       ],
       "passiveAbilityNames": [
         "FleshmetalGuns"
@@ -784,9 +800,11 @@
         "LetTheGalaxyBurn",
         "Psyker"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "Incursion"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "Possession"
       ],
@@ -1038,9 +1056,13 @@
         "TeleportStrike",
         "TerminatorArmour"
       ],
+      "activeAbilityDamage": [
+        "Power"
+      ],
       "activeAbilityNames": [
         "BringerOfDespair"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "HatefulAssault"
       ],

@@ -22,9 +22,13 @@
         "Overwatch",
         "Vehicle"
       ],
+      "activeAbilityDamage": [
+        "Physical"
+      ],
       "activeAbilityNames": [
         "SentinelDirectives"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "HeavyGravCannon"
       ],
@@ -275,9 +279,13 @@
         "Mechanical",
         "Mechanic"
       ],
+      "activeAbilityDamage": [
+        "Toxic"
+      ],
       "activeAbilityNames": [
         "RadBombardment"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "MasterAnnihilator"
       ],
@@ -529,9 +537,11 @@
         "Mechanic",
         "Flying"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "DefendTheDivineWork"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "GalvanicField"
       ],
@@ -781,9 +791,11 @@
       "traits": [
         "Mechanical"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "DoctrinaImperatives"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "ControlEdict"
       ],
@@ -1036,8 +1048,14 @@
         "Infiltrate",
         "Unstoppable"
       ],
+      "activeAbilityDamage": [
+        "DirectDamage"
+      ],
       "activeAbilityNames": [
         "CordClaw"
+      ],
+      "passiveAbilityDamage": [
+        "Energy"
       ],
       "passiveAbilityNames": [
         "OptimizedGait"

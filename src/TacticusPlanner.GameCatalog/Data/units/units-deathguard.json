@@ -20,9 +20,11 @@
         "ContagionsOfNurgle",
         "Resilient"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "Poxwalkers"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "CursedPlagueBell"
       ],
@@ -274,8 +276,14 @@
         "Resilient",
         "TerminatorArmour"
       ],
+      "activeAbilityDamage": [
+        "Power"
+      ],
       "activeAbilityNames": [
         "FlailSwing"
+      ],
+      "passiveAbilityDamage": [
+        "Toxic"
       ],
       "passiveAbilityNames": [
         "HazeOfCorruption"
@@ -528,9 +536,13 @@
         "Resilient",
         "PutridExplosion"
       ],
+      "activeAbilityDamage": [
+        "Toxic"
+      ],
       "activeAbilityNames": [
         "FoulInfusion"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "ExplosiveMaladies"
       ],
@@ -782,9 +794,11 @@
         "Resilient",
         "Healer"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "RevitalizingMalignancy"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "TaintedNarthecium"
       ],
@@ -1037,8 +1051,14 @@
         "Psyker",
         "TerminatorArmour"
       ],
+      "activeAbilityDamage": [
+        "Psychic"
+      ],
       "activeAbilityNames": [
         "PlagueWind"
+      ],
+      "passiveAbilityDamage": [
+        "DirectDamage"
       ],
       "passiveAbilityNames": [
         "DestroyerHive"

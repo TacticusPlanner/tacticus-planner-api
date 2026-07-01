@@ -20,9 +20,13 @@
         "Flying",
         "TeleportStrike"
       ],
+      "activeAbilityDamage": [
+        "Piercing"
+      ],
       "activeAbilityNames": [
         "Loki_SwoopingHawk"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "PathOfCommand"
       ],
@@ -272,9 +276,11 @@
       "traits": [
         "Psyker"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "Executioner"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "Doom"
       ],
@@ -524,9 +530,13 @@
       "traits": [
         "Infiltrate"
       ],
+      "activeAbilityDamage": [
+        "Piercing"
+      ],
       "activeAbilityNames": [
         "SilentDeath"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "TerrorsLament"
       ],
@@ -778,9 +788,11 @@
         "HeavyWeapon",
         "Overwatch"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "HarvesterOfSouls"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "InescapableAccuracy"
       ],
@@ -1031,8 +1043,12 @@
         "HeavyWeapon",
         "Overwatch"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "FireAndReposition"
+      ],
+      "passiveAbilityDamage": [
+        "Piercing"
       ],
       "passiveAbilityNames": [
         "WireweaveNet"

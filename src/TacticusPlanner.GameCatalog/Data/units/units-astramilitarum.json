@@ -19,9 +19,13 @@
       "traits": [
         "BigTarget"
       ],
+      "activeAbilityDamage": [
+        "Blast"
+      ],
       "activeAbilityNames": [
         "FragBomb"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "AvalancheOfMuscle"
       ],
@@ -269,9 +273,11 @@
       "rangeDistance": null,
       "movement": 3,
       "traits": [],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "SupremeCommander"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "SwornProtector"
       ],
@@ -522,9 +528,13 @@
         "Resilient",
         "Unstoppable"
       ],
+      "activeAbilityDamage": [
+        "Power"
+      ],
       "activeAbilityNames": [
         "LeadingTheCharge"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "ToughToKill"
       ],
@@ -775,9 +785,13 @@
         "SuppressiveFire",
         "IndirectFire"
       ],
+      "activeAbilityDamage": [
+        "Blast"
+      ],
       "activeAbilityNames": [
         "BasiliskBarrage"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "SpotterReworked"
       ],
@@ -1027,9 +1041,13 @@
       "traits": [
         "Psyker"
       ],
+      "activeAbilityDamage": [
+        "Psychic"
+      ],
       "activeAbilityNames": [
         "PsychicMaelstrom"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "Nightshroud"
       ],
@@ -1279,9 +1297,11 @@
       "traits": [
         "Resilient"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "SendInTheNextWave"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "SummaryExecution"
       ],

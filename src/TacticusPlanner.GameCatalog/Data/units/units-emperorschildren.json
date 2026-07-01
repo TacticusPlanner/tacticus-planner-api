@@ -20,9 +20,13 @@
         "ThrillSeekers",
         "CrushingStrike"
       ],
+      "activeAbilityDamage": [
+        "Power"
+      ],
       "activeAbilityNames": [
         "EuphoricStrikes"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "RefusalToBeOutdone"
       ],
@@ -273,8 +277,12 @@
         "ThrillSeekers",
         "Parry"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "DaemonicPatrons"
+      ],
+      "passiveAbilityDamage": [
+        "Eviscerate"
       ],
       "passiveAbilityNames": [
         "EcstaticSlaughter"
@@ -525,9 +533,13 @@
       "traits": [
         "ThrillSeekers"
       ],
+      "activeAbilityDamage": [
+        "DirectDamage"
+      ],
       "activeAbilityNames": [
         "DoomSiren"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "ObsessiveAnnunciation"
       ],
@@ -778,9 +790,13 @@
         "ThrillSeekers",
         "Parry"
       ],
+      "activeAbilityDamage": [
+        "Eviscerate"
+      ],
       "activeAbilityNames": [
         "LashOfTorment"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "ArmourOfShriekingSouls"
       ],
@@ -1032,9 +1048,13 @@
         "HeavyWeapon",
         "SuppressiveFire"
       ],
+      "activeAbilityDamage": [
+        "Blast"
+      ],
       "activeAbilityNames": [
         "ExcruciatingFrequencies"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "TerrifyingCrescendo"
       ],

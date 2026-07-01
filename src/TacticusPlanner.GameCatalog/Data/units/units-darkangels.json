@@ -19,9 +19,11 @@
       "traits": [
         "Terrifying"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "ExemplarOfHate"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "FearedInterrogator"
       ],
@@ -272,9 +274,14 @@
         "FinalJustice",
         "Overwatch"
       ],
+      "activeAbilityDamage": [
+        "Bolter",
+        "DirectDamage"
+      ],
       "activeAbilityNames": [
         "DarkTalonStrike"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "LionHelm"
       ],
@@ -525,9 +532,13 @@
         "Camouflage",
         "Parry"
       ],
+      "activeAbilityDamage": [
+        "Power"
+      ],
       "activeAbilityNames": [
         "CalibaniteGreatsword"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "EnmityForTheUnworthy"
       ],
@@ -779,8 +790,14 @@
         "Overwatch",
         "HeavyWeapon"
       ],
+      "activeAbilityDamage": [
+        "Plasma"
+      ],
       "activeAbilityNames": [
         "Supercharge"
+      ],
+      "passiveAbilityDamage": [
+        "Plasma"
       ],
       "passiveAbilityNames": [
         "GrimRetribution"
@@ -1031,8 +1048,12 @@
       "traits": [
         "Overwatch"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "SternguardFocus"
+      ],
+      "passiveAbilityDamage": [
+        "Bolter"
       ],
       "passiveAbilityNames": [
         "SpecialIssueCombiMelta"
@@ -1286,9 +1307,13 @@
         "HeavyWeapon",
         "TerminatorArmour"
       ],
+      "activeAbilityDamage": [
+        "Plasma"
+      ],
       "activeAbilityNames": [
         "PlasmaCannon"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "Deathwing"
       ],

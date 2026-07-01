@@ -19,9 +19,11 @@
       "traits": [
         "Healer"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "CombatRestoratives"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "Narthecium"
       ],
@@ -273,9 +275,13 @@
         "FinalJustice",
         "MkXGravis"
       ],
+      "activeAbilityDamage": [
+        "Bolter"
+      ],
       "activeAbilityNames": [
         "GauntletsOfUltramar"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "RitesOfBattle"
       ],
@@ -527,8 +533,14 @@
         "HeavyWeapon",
         "Infiltrate"
       ],
+      "activeAbilityDamage": [
+        "HeavyRound"
+      ],
       "activeAbilityNames": [
         "MortisRound"
+      ],
+      "passiveAbilityDamage": [
+        "Bolter"
       ],
       "passiveAbilityNames": [
         "CamoCloak"
@@ -780,9 +792,11 @@
         "Flying",
         "MkXGravis"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "DeathFromAbove"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "ShockAssault"
       ],
@@ -1032,9 +1046,13 @@
       "traits": [
         "Psyker"
       ],
+      "activeAbilityDamage": [
+        "Psychic"
+      ],
       "activeAbilityNames": [
         "StormOfWrath"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "PsychicFortress"
       ],
@@ -1285,9 +1303,14 @@
         "BeastSlayer",
         "FinalJustice"
       ],
+      "activeAbilityDamage": [
+        "Bolter",
+        "Chain"
+      ],
       "activeAbilityNames": [
         "TacticalPrecision"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "FuelledByFury"
       ],

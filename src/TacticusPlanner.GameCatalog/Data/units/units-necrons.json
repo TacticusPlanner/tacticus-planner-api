@@ -22,9 +22,11 @@
         "Flying",
         "SuppressiveFire"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "Chronometron"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "TimesplinterMantle"
       ],
@@ -276,9 +278,13 @@
         "LivingMetal",
         "Mechanical"
       ],
+      "activeAbilityDamage": [
+        "Gauss"
+      ],
       "activeAbilityNames": [
         "MultiThreatEliminator"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "InescapableDeath"
       ],
@@ -529,8 +535,12 @@
         "LivingMetal",
         "Mechanical"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "ResurrectionOrb"
+      ],
+      "passiveAbilityDamage": [
+        "Energy"
       ],
       "passiveAbilityNames": [
         "MartialApotheosis"
@@ -783,8 +793,14 @@
         "Mechanical",
         "Flying"
       ],
+      "activeAbilityDamage": [
+        "DirectDamage"
+      ],
       "activeAbilityNames": [
         "HarbingerOfDestruction"
+      ],
+      "passiveAbilityDamage": [
+        "DirectDamage"
       ],
       "passiveAbilityNames": [
         "LivingLightning"
@@ -1039,9 +1055,11 @@
         "Flying",
         "Mechanic"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "ScarabHive"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "FabricatorClawArray"
       ],
@@ -1292,9 +1310,11 @@
         "LivingMetal",
         "Mechanical"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "AdaptiveStrategy"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "RelentlessMarch"
       ],

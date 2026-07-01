@@ -21,9 +21,11 @@
         "FinalJustice",
         "RapidAssault"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "WarHowl"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "SagaOfTheWarriorBorn"
       ],
@@ -274,9 +276,13 @@
         "Infiltrate",
         "Terrifying"
       ],
+      "activeAbilityDamage": [
+        "Physical"
+      ],
       "activeAbilityNames": [
         "GrapnelLauncher"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "HuntersBeyondDeath"
       ],
@@ -529,9 +535,13 @@
         "TerminatorArmour",
         "Unstoppable"
       ],
+      "activeAbilityDamage": [
+        "Power"
+      ],
       "activeAbilityNames": [
         "Foehammer"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "AnvilShield"
       ],
@@ -783,9 +793,13 @@
         "TerminatorArmour",
         "Unstoppable"
       ],
+      "activeAbilityDamage": [
+        "Psychic"
+      ],
       "activeAbilityNames": [
         "Stormcaller"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "LordOfTempests"
       ],
@@ -1037,9 +1051,11 @@
         "FinalJustice",
         "Terrifying"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "RitesOfMorkai"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "HealingBalms"
       ],
@@ -1290,8 +1306,14 @@
         "FinalJustice",
         "Unstoppable"
       ],
+      "activeAbilityDamage": [
+        "Piercing"
+      ],
       "activeAbilityNames": [
         "GreatFrostAxe"
+      ],
+      "passiveAbilityDamage": [
+        "Power"
       ],
       "passiveAbilityNames": [
         "SavageKiller"

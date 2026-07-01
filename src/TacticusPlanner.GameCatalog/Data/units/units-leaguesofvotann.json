@@ -21,8 +21,14 @@
         "Resilient",
         "CrushingStrike"
       ],
+      "activeAbilityDamage": [
+        "Eviscerate"
+      ],
       "activeAbilityNames": [
         "AugmentedAssault"
+      ],
+      "passiveAbilityDamage": [
+        "Eviscerate"
       ],
       "passiveAbilityNames": [
         "FuryFromTheDelve"
@@ -274,9 +280,13 @@
         "PrioritisedEfficiency",
         "Mechanic"
       ],
+      "activeAbilityDamage": [
+        "Physical"
+      ],
       "activeAbilityNames": [
         "GravitonRifle"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "EcogSupport"
       ],
@@ -527,9 +537,11 @@
         "PrioritisedEfficiency",
         "Mechanical"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "IronkinSteeljack"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "PredictiveGuidance"
       ],
@@ -780,9 +792,13 @@
         "PrioritisedEfficiency",
         "Resilient"
       ],
+      "activeAbilityDamage": [
+        "Plasma"
+      ],
       "activeAbilityNames": [
         "AncestralFortune"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "GrimEfficiency"
       ],

@@ -23,9 +23,13 @@
         "Terrifying",
         "Unstoppable"
       ],
+      "activeAbilityDamage": [
+        "Eviscerate"
+      ],
       "activeAbilityNames": [
         "OverwhelmingWrath"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "BeaconOfRage"
       ],
@@ -276,9 +280,13 @@
         "BlessingsOfKhorne",
         "RapidAssault"
       ],
+      "activeAbilityDamage": [
+        "Piercing"
+      ],
       "activeAbilityNames": [
         "MurderousSwing"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "TrophyTaker"
       ],
@@ -529,9 +537,13 @@
         "BlessingsOfKhorne",
         "Resilient"
       ],
+      "activeAbilityDamage": [
+        "Physical"
+      ],
       "activeAbilityNames": [
         "JakhalStimms"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "Skullsmasher"
       ],
@@ -783,8 +795,16 @@
         "RapidAssault",
         "FinalJustice"
       ],
+      "activeAbilityDamage": [
+        "Eviscerate",
+        "Piercing",
+        "Plasma"
+      ],
       "activeAbilityNames": [
         "KillMaimBurn"
+      ],
+      "passiveAbilityDamage": [
+        "Eviscerate"
       ],
       "passiveAbilityNames": [
         "TheBetrayer"
@@ -1039,9 +1059,13 @@
         "TerminatorArmour",
         "Unstoppable"
       ],
+      "activeAbilityDamage": [
+        "Chain"
+      ],
       "activeAbilityNames": [
         "BloodyFury"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "WrathfulDevotion"
       ],

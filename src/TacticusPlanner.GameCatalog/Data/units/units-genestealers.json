@@ -20,9 +20,11 @@
         "Ambush",
         "Healer"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "AberrantHypermorph"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "TwistedScience"
       ],
@@ -273,8 +275,14 @@
         "Ambush",
         "BeastSlayer"
       ],
+      "activeAbilityDamage": [
+        "Projectile"
+      ],
       "activeAbilityNames": [
         "HeroicFusillade"
+      ],
+      "passiveAbilityDamage": [
+        "Projectile"
       ],
       "passiveAbilityNames": [
         "HypersensoryAbilities"
@@ -526,9 +534,11 @@
         "Ambush",
         "Psyker"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "MindControl"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "SpiritualLeader"
       ],
@@ -781,9 +791,13 @@
         "Terrifying",
         "Unstoppable"
       ],
+      "activeAbilityDamage": [
+        "Psychic"
+      ],
       "activeAbilityNames": [
         "MightFromBelow"
       ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "CosmicHorror"
       ],
@@ -1033,8 +1047,12 @@
       "traits": [
         "Ambush"
       ],
+      "activeAbilityDamage": [],
       "activeAbilityNames": [
         "CultDemagogue"
+      ],
+      "passiveAbilityDamage": [
+        "Blast"
       ],
       "passiveAbilityNames": [
         "DecoysAndMisdirection"

@@ -21,8 +21,15 @@
         "Infiltrate",
         "SuppressiveFire"
       ],
+      "activeAbilityDamage": [
+        "Bolter"
+      ],
       "activeAbilityNames": [
         "StrikeFromTheShadows"
+      ],
+      "passiveAbilityDamage": [
+        "Blast",
+        "Energy"
       ],
       "passiveAbilityNames": [
         "HaywireMine"
