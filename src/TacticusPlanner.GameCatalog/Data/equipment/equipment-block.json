@@ -1,0 +1,2328 @@
+[
+  {
+    "id": "I_Block_C002",
+    "name": "Refractor Field",
+    "rarity": "Common",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Sisterhood",
+      "AstraMilitarum",
+      "AdeptusMechanicus",
+      "Custodes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 23
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 38
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 53
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_C003",
+    "name": "Force Field",
+    "rarity": "Common",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "Necrons",
+      "Sisterhood",
+      "AstraMilitarum",
+      "BlackLegion",
+      "DeathGuard",
+      "Tyranids",
+      "Orks",
+      "BlackTemplars",
+      "Aeldari",
+      "Tau",
+      "SpaceWolves",
+      "ThousandSons",
+      "DarkAngels",
+      "AdeptusMechanicus",
+      "WorldEaters",
+      "BloodAngels",
+      "Genestealers",
+      "Custodes",
+      "EmperorsChildren",
+      "LeaguesOfVotann",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 15
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 25
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 34
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_C004",
+    "name": "Iron Halo",
+    "rarity": "Common",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "BlackTemplars",
+      "SpaceWolves",
+      "DarkAngels",
+      "BloodAngels",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 13
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 22
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 30
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_C005",
+    "name": "_I_Block_C005",
+    "rarity": "Common",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 18
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 30
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 41
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_C006",
+    "name": "Blemished Sigil of Corruption",
+    "rarity": "Common",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "BlackLegion",
+      "DeathGuard",
+      "ThousandSons",
+      "WorldEaters",
+      "EmperorsChildren"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 23
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 38
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 53
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_C007",
+    "name": "Quantum Shield",
+    "rarity": "Common",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 13
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 22
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 30
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_C008",
+    "name": "Illusion Imagafier",
+    "rarity": "Common",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Necrons",
+      "Aeldari",
+      "Tau"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 23
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 38
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 53
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_E002",
+    "name": "Master-Crafted Refractor Field",
+    "rarity": "Epic",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Sisterhood",
+      "AstraMilitarum",
+      "AdeptusMechanicus",
+      "Custodes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 352
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 440
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 527
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 615
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 702
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 789
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 877
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 964
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1052
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_E003",
+    "name": "Advanced Force Field",
+    "rarity": "Epic",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "Necrons",
+      "Sisterhood",
+      "AstraMilitarum",
+      "BlackLegion",
+      "DeathGuard",
+      "Tyranids",
+      "Orks",
+      "BlackTemplars",
+      "Aeldari",
+      "Tau",
+      "SpaceWolves",
+      "ThousandSons",
+      "DarkAngels",
+      "AdeptusMechanicus",
+      "WorldEaters",
+      "BloodAngels",
+      "Genestealers",
+      "Custodes",
+      "EmperorsChildren",
+      "LeaguesOfVotann",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 238
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 298
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 357
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 416
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 475
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 534
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 593
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 652
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 711
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_E004",
+    "name": "Master-Crafted Iron Halo",
+    "rarity": "Epic",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "BlackTemplars",
+      "SpaceWolves",
+      "DarkAngels",
+      "BloodAngels",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 202
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 253
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 303
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 353
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 403
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 453
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 503
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 554
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 604
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_E005",
+    "name": "Master-Crafted Power Field",
+    "rarity": "Epic",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 287
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 359
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 430
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 501
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 573
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 644
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 715
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 786
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 858
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_E006",
+    "name": "Malefic Sigil of Corruption",
+    "rarity": "Epic",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "BlackLegion",
+      "DeathGuard",
+      "ThousandSons",
+      "WorldEaters",
+      "EmperorsChildren"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 352
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 440
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 527
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 615
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 702
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 789
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 877
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 964
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1052
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_E007",
+    "name": "Ancient Quantum Shield",
+    "rarity": "Epic",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 202
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 253
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 303
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 353
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 403
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 453
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 503
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 554
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 604
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_E008",
+    "name": "Advanced Illusion Imagafier",
+    "rarity": "Epic",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Necrons",
+      "Aeldari",
+      "Tau"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 352
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 440
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 527
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 615
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 702
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 789
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 877
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 964
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1052
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_L002",
+    "name": "Artificer Refractor Field",
+    "rarity": "Legendary",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Sisterhood",
+      "AstraMilitarum",
+      "AdeptusMechanicus",
+      "Custodes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1144
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1211
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1277
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1344
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1410
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1476
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1543
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1609
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1675
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1742
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1808
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_L003",
+    "name": "Optimal Force Field",
+    "rarity": "Legendary",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "Necrons",
+      "Sisterhood",
+      "AstraMilitarum",
+      "BlackLegion",
+      "DeathGuard",
+      "Tyranids",
+      "Orks",
+      "BlackTemplars",
+      "Aeldari",
+      "Tau",
+      "SpaceWolves",
+      "ThousandSons",
+      "DarkAngels",
+      "AdeptusMechanicus",
+      "WorldEaters",
+      "BloodAngels",
+      "Genestealers",
+      "Custodes",
+      "EmperorsChildren",
+      "LeaguesOfVotann",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 762
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 807
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 851
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 895
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 939
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 983
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 1028
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 1072
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 1116
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 1160
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 1204
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_L004",
+    "name": "Artificer Iron Halo",
+    "rarity": "Legendary",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "BlackTemplars",
+      "SpaceWolves",
+      "DarkAngels",
+      "BloodAngels",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 648
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 686
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 724
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 761
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 799
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 836
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 874
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 912
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 949
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 987
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 1024
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_L005",
+    "name": "Artificer Power Field",
+    "rarity": "Legendary",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 954
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 1010
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 1065
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 1121
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 1176
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 1231
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 1287
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 1342
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 1397
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 1453
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 1508
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_L006",
+    "name": "Warpforged Sigil of Corruption",
+    "rarity": "Legendary",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "BlackLegion",
+      "DeathGuard",
+      "ThousandSons",
+      "WorldEaters",
+      "EmperorsChildren"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1144
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1211
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1277
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1344
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1410
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1476
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1543
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1609
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1675
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1742
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1808
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_L007",
+    "name": "Transdimensional Quantum Shield",
+    "rarity": "Legendary",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 648
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 686
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 724
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 761
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 799
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 836
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 874
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 912
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 949
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 987
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 1024
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_L008",
+    "name": "Optimal Illusion Imagafier",
+    "rarity": "Legendary",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Necrons",
+      "Aeldari",
+      "Tau"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1144
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1211
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1277
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1344
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1410
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1476
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1543
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1609
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1675
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1742
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 1808
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_M003",
+    "name": "Perfected Force Field",
+    "rarity": "Mythic",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "Necrons",
+      "Sisterhood",
+      "AstraMilitarum",
+      "BlackLegion",
+      "DeathGuard",
+      "Tyranids",
+      "Orks",
+      "BlackTemplars",
+      "Aeldari",
+      "Tau",
+      "SpaceWolves",
+      "ThousandSons",
+      "DarkAngels",
+      "AdeptusMechanicus",
+      "WorldEaters",
+      "BloodAngels",
+      "Genestealers",
+      "Custodes",
+      "EmperorsChildren",
+      "LeaguesOfVotann",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 1230
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 1297
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 1363
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 1430
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 1496
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 1562
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 1629
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 1695
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 1762
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 1828
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_R002",
+    "name": "Sanctified Field",
+    "rarity": "Rare",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Sisterhood",
+      "AstraMilitarum",
+      "AdeptusMechanicus",
+      "Custodes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 138
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 168
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 197
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 227
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 256
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 286
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 315
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_R003",
+    "name": "Refined Force Field",
+    "rarity": "Rare",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "Necrons",
+      "Sisterhood",
+      "AstraMilitarum",
+      "BlackLegion",
+      "DeathGuard",
+      "Tyranids",
+      "Orks",
+      "BlackTemplars",
+      "Aeldari",
+      "Tau",
+      "SpaceWolves",
+      "ThousandSons",
+      "DarkAngels",
+      "AdeptusMechanicus",
+      "WorldEaters",
+      "BloodAngels",
+      "Genestealers",
+      "Custodes",
+      "EmperorsChildren",
+      "LeaguesOfVotann",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 93
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 113
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 133
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 153
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 173
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 193
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 213
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_R004",
+    "name": "Sanctified Iron Halo",
+    "rarity": "Rare",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "BlackTemplars",
+      "SpaceWolves",
+      "DarkAngels",
+      "BloodAngels",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 80
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 98
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 115
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 132
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 149
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 166
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 183
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_R005",
+    "name": "Power Field",
+    "rarity": "Rare",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "AstraMilitarum"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 108
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 132
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 155
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 178
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 201
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 224
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 247
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_R006",
+    "name": "Heretical Sigil of Corruption",
+    "rarity": "Rare",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "BlackLegion",
+      "DeathGuard",
+      "ThousandSons",
+      "WorldEaters",
+      "EmperorsChildren"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 138
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 168
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 197
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 227
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 256
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 286
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 315
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_R007",
+    "name": "Phasing Quantum Shield",
+    "rarity": "Rare",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 80
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 98
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 115
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 132
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 149
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 166
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 183
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_R008",
+    "name": "Refined Illusion Imagafier",
+    "rarity": "Rare",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Necrons",
+      "Aeldari",
+      "Tau"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 138
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 168
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 197
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 227
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 256
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 286
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 315
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_U002",
+    "name": "Battle-Hardened Refractor Field",
+    "rarity": "Uncommon",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Sisterhood",
+      "AstraMilitarum",
+      "AdeptusMechanicus",
+      "Custodes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 55
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 73
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 91
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 109
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 126
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_U003",
+    "name": "Improved Force Field",
+    "rarity": "Uncommon",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "Necrons",
+      "Sisterhood",
+      "AstraMilitarum",
+      "BlackLegion",
+      "DeathGuard",
+      "Tyranids",
+      "Orks",
+      "BlackTemplars",
+      "Aeldari",
+      "Tau",
+      "SpaceWolves",
+      "ThousandSons",
+      "DarkAngels",
+      "AdeptusMechanicus",
+      "WorldEaters",
+      "BloodAngels",
+      "Genestealers",
+      "Custodes",
+      "EmperorsChildren",
+      "LeaguesOfVotann",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 37
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 49
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 61
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 73
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 85
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_U004",
+    "name": "Battle-Hardened Iron Halo",
+    "rarity": "Uncommon",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "BlackTemplars",
+      "SpaceWolves",
+      "DarkAngels",
+      "BloodAngels",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 32
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 43
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 53
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 63
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 74
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_U005",
+    "name": "_I_Block_U005",
+    "rarity": "Uncommon",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 44
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 59
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 73
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 87
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 25,
+          "blockDamage": 101
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_U006",
+    "name": "Twisted Sigil of Corruption",
+    "rarity": "Uncommon",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "BlackLegion",
+      "DeathGuard",
+      "ThousandSons",
+      "WorldEaters",
+      "EmperorsChildren"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 55
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 73
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 91
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 109
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 126
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_U007",
+    "name": "Royal Quantum Shield",
+    "rarity": "Uncommon",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 32
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 43
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 53
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 63
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 35,
+          "blockDamage": 74
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Block_U008",
+    "name": "Improved Illusion Imagafier",
+    "rarity": "Uncommon",
+    "type": "I_Block",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Necrons",
+      "Aeldari",
+      "Tau"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 55
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 73
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 91
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 109
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 20,
+          "blockDamage": 126
+        }
+      }
+    ]
+  },
+  {
+    "id": "R_Block_DaemonfleshPlate",
+    "name": "Daemonflesh Plate",
+    "rarity": "Mythic",
+    "type": "I_Block",
+    "abilityId": "DaemonfleshPlate",
+    "isRelic": true,
+    "isUniqueRelic": false,
+    "allowedUnits": [
+      "blackTerminator",
+      "deathBlightlord",
+      "thousTerminator",
+      "worldTerminator"
+    ],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 1230
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 1297
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 1363
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 1430
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 1496
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 1562
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 1629
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 1695
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 1762
+        }
+      },
+      {
+        "stats": {
+          "blockChance": 30,
+          "blockDamage": 1828
+        }
+      }
+    ]
+  }
+]

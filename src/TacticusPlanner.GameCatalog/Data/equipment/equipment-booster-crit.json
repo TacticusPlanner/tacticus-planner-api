@@ -1,0 +1,2948 @@
+[
+  {
+    "id": "I_Booster_Crit_C001",
+    "name": "Standard-Issue Frag Grenades",
+    "rarity": "Common",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "Sisterhood",
+      "AstraMilitarum",
+      "BlackTemplars",
+      "SpaceWolves",
+      "DarkAngels",
+      "AdeptusMechanicus",
+      "BloodAngels",
+      "Custodes",
+      "LeaguesOfVotann",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 1,
+          "critDamageBonus": 5
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 1,
+          "critDamageBonus": 9
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 1,
+          "critDamageBonus": 12
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_C002",
+    "name": "Disruption Fields",
+    "rarity": "Common",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Necrons"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 1,
+          "critDamageBonus": 5
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 1,
+          "critDamageBonus": 9
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 1,
+          "critDamageBonus": 12
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_C003",
+    "name": "Blemished Frag Grenades",
+    "rarity": "Common",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "BlackLegion",
+      "DeathGuard",
+      "ThousandSons",
+      "WorldEaters",
+      "EmperorsChildren"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 1,
+          "critDamageBonus": 5
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 1,
+          "critDamageBonus": 9
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 1,
+          "critDamageBonus": 12
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_C004",
+    "name": "Stikkbomz",
+    "rarity": "Common",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Orks"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 1,
+          "critDamageBonus": 5
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 1,
+          "critDamageBonus": 9
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 1,
+          "critDamageBonus": 12
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_C005",
+    "name": "Fusion Charges",
+    "rarity": "Common",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Aeldari",
+      "Tau"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 1,
+          "critDamageBonus": 5
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 1,
+          "critDamageBonus": 9
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 1,
+          "critDamageBonus": 12
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_C006",
+    "name": "Lash-Whip",
+    "rarity": "Common",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Tyranids",
+      "Genestealers"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 1,
+          "critDamageBonus": 5
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 1,
+          "critDamageBonus": 9
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 1,
+          "critDamageBonus": 12
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_E001",
+    "name": "Master-Crafted Frag Grenades",
+    "rarity": "Epic",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "Sisterhood",
+      "AstraMilitarum",
+      "BlackTemplars",
+      "SpaceWolves",
+      "DarkAngels",
+      "AdeptusMechanicus",
+      "BloodAngels",
+      "Custodes",
+      "LeaguesOfVotann",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 69
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 87
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 104
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 121
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 138
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 155
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 172
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 189
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 207
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_E002",
+    "name": "Hyperphasing Disruption Fields",
+    "rarity": "Epic",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Necrons"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 69
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 87
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 104
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 121
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 138
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 155
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 172
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 189
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 207
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_E003",
+    "name": "Malefic Frag Grenades",
+    "rarity": "Epic",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "BlackLegion",
+      "DeathGuard",
+      "ThousandSons",
+      "WorldEaters",
+      "EmperorsChildren"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 69
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 87
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 104
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 121
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 138
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 155
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 172
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 189
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 207
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_E004",
+    "name": "Ded Killy Stikkbomz",
+    "rarity": "Epic",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Orks"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 69
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 87
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 104
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 121
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 138
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 155
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 172
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 189
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 207
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_E005",
+    "name": "Advanced Fusion Charges",
+    "rarity": "Epic",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Aeldari",
+      "Tau"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 69
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 87
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 104
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 121
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 138
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 155
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 172
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 189
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 207
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_E006",
+    "name": "Symbiotic Lash-Whip",
+    "rarity": "Epic",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Tyranids",
+      "Genestealers"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 69
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 87
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 104
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 121
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 138
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 155
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 172
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 189
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 4,
+          "critDamageBonus": 207
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_L001",
+    "name": "Artificer Frag Grenades",
+    "rarity": "Legendary",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "Sisterhood",
+      "AstraMilitarum",
+      "BlackTemplars",
+      "SpaceWolves",
+      "DarkAngels",
+      "AdeptusMechanicus",
+      "BloodAngels",
+      "Custodes",
+      "LeaguesOfVotann",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 210
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 223
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 235
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 247
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 259
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 271
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 284
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 296
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 308
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 320
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 332
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_L002",
+    "name": "Transdimensional Disruption Fields",
+    "rarity": "Legendary",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Necrons"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 210
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 223
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 235
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 247
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 259
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 271
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 284
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 296
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 308
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 320
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 332
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_L003",
+    "name": "Warpforged Frag Grenades",
+    "rarity": "Legendary",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "BlackLegion",
+      "DeathGuard",
+      "ThousandSons",
+      "WorldEaters",
+      "EmperorsChildren"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 210
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 223
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 235
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 247
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 259
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 271
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 284
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 296
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 308
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 320
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 332
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_L004",
+    "name": "Ded Shiny Stikkbomz",
+    "rarity": "Legendary",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Orks"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 210
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 223
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 235
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 247
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 259
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 271
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 284
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 296
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 308
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 320
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 332
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_L005",
+    "name": "Optimal Fusion Charges",
+    "rarity": "Legendary",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Aeldari",
+      "Tau"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 210
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 223
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 235
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 247
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 259
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 271
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 284
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 296
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 308
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 320
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 332
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_L006",
+    "name": "Monstrous Lash-Whip",
+    "rarity": "Legendary",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Tyranids",
+      "Genestealers"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 210
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 223
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 235
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 247
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 259
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 271
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 284
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 296
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 308
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 320
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 5,
+          "critDamageBonus": 332
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_M001",
+    "name": "Archeotech Frag Grenades",
+    "rarity": "Mythic",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "Sisterhood",
+      "AstraMilitarum",
+      "BlackTemplars",
+      "SpaceWolves",
+      "DarkAngels",
+      "AdeptusMechanicus",
+      "BloodAngels",
+      "Custodes",
+      "LeaguesOfVotann",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 350
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 369
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 388
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 407
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 426
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 445
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 464
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 483
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 502
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 521
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_M002",
+    "name": "Eternal Disruption Fields",
+    "rarity": "Mythic",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Necrons"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 350
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 369
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 388
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 407
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 426
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 445
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 464
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 483
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 502
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 521
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_M003",
+    "name": "Daemonic Frag Grenades",
+    "rarity": "Mythic",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "BlackLegion",
+      "DeathGuard",
+      "ThousandSons",
+      "WorldEaters",
+      "EmperorsChildren"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 350
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 369
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 388
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 407
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 426
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 445
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 464
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 483
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 502
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 521
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_M004",
+    "name": "Supa-Killy Stikkbomz",
+    "rarity": "Mythic",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Orks"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 350
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 369
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 388
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 407
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 426
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 445
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 464
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 483
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 502
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 521
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_M005",
+    "name": "Perfected Fusion Charges",
+    "rarity": "Mythic",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Aeldari",
+      "Tau"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 350
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 369
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 388
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 407
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 426
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 445
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 464
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 483
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 502
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 521
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_M006",
+    "name": "Apex Lash-Whip",
+    "rarity": "Mythic",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Tyranids",
+      "Genestealers"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 350
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 369
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 388
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 407
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 426
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 445
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 464
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 483
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 502
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 521
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_R001",
+    "name": "Sanctified Frag Grenades",
+    "rarity": "Rare",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "Sisterhood",
+      "AstraMilitarum",
+      "BlackTemplars",
+      "SpaceWolves",
+      "DarkAngels",
+      "AdeptusMechanicus",
+      "BloodAngels",
+      "Custodes",
+      "LeaguesOfVotann",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 30
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 37
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 43
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 50
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 56
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 62
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 69
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_R002",
+    "name": "Royal Disruption Fields",
+    "rarity": "Rare",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Necrons"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 30
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 37
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 43
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 50
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 56
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 62
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 69
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_R003",
+    "name": "Heretical Frag Grenades",
+    "rarity": "Rare",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "BlackLegion",
+      "DeathGuard",
+      "ThousandSons",
+      "WorldEaters",
+      "EmperorsChildren"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 30
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 37
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 43
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 50
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 56
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 62
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 69
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_R004",
+    "name": "Speshul Killy Stikkbomz",
+    "rarity": "Rare",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Orks"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 30
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 37
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 43
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 50
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 56
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 62
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 69
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_R005",
+    "name": "Refined Fusion Charges",
+    "rarity": "Rare",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Aeldari",
+      "Tau"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 30
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 37
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 43
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 50
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 56
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 62
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 69
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_R006",
+    "name": "Augmented Lash-Whip",
+    "rarity": "Rare",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Tyranids",
+      "Genestealers"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 30
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 37
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 43
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 50
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 56
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 62
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 3,
+          "critDamageBonus": 69
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_U001",
+    "name": "Battle Hardened Frag Grenades",
+    "rarity": "Uncommon",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "Sisterhood",
+      "AstraMilitarum",
+      "BlackTemplars",
+      "SpaceWolves",
+      "DarkAngels",
+      "AdeptusMechanicus",
+      "BloodAngels",
+      "Custodes",
+      "LeaguesOfVotann",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 2,
+          "critDamageBonus": 13
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 2,
+          "critDamageBonus": 18
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 2,
+          "critDamageBonus": 22
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 2,
+          "critDamageBonus": 26
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 2,
+          "critDamageBonus": 30
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_U002",
+    "name": "Subjugating Disruption Fields",
+    "rarity": "Uncommon",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Necrons"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 2,
+          "critDamageBonus": 13
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 2,
+          "critDamageBonus": 18
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 2,
+          "critDamageBonus": 22
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 2,
+          "critDamageBonus": 26
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 2,
+          "critDamageBonus": 30
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_U003",
+    "name": "Twisted Frag Grenades",
+    "rarity": "Uncommon",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "BlackLegion",
+      "DeathGuard",
+      "ThousandSons",
+      "WorldEaters",
+      "EmperorsChildren"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 2,
+          "critDamageBonus": 13
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 2,
+          "critDamageBonus": 18
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 2,
+          "critDamageBonus": 22
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 2,
+          "critDamageBonus": 26
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 2,
+          "critDamageBonus": 30
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_U004",
+    "name": "Killy Stikkbomz",
+    "rarity": "Uncommon",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Orks"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 2,
+          "critDamageBonus": 13
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 2,
+          "critDamageBonus": 18
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 2,
+          "critDamageBonus": 22
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 2,
+          "critDamageBonus": 26
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 2,
+          "critDamageBonus": 30
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_U005",
+    "name": "Improved Fusion Charges",
+    "rarity": "Uncommon",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Aeldari",
+      "Tau"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 2,
+          "critDamageBonus": 13
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 2,
+          "critDamageBonus": 18
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 2,
+          "critDamageBonus": 22
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 2,
+          "critDamageBonus": 26
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 2,
+          "critDamageBonus": 30
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Booster_Crit_U006",
+    "name": "Evolved Lash-Whip",
+    "rarity": "Uncommon",
+    "type": "I_Booster_Crit",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Tyranids",
+      "Genestealers"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 2,
+          "critDamageBonus": 13
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 2,
+          "critDamageBonus": 18
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 2,
+          "critDamageBonus": 22
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 2,
+          "critDamageBonus": 26
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 2,
+          "critDamageBonus": 30
+        }
+      }
+    ]
+  },
+  {
+    "id": "R_Booster_Crit_AmuletOfTheVoidwyrm",
+    "name": "Amulet of the Voidwyrm",
+    "rarity": "Mythic",
+    "type": "I_Booster_Crit",
+    "abilityId": "AmuletOfTheVoidwyrm",
+    "isRelic": true,
+    "isUniqueRelic": false,
+    "allowedUnits": [
+      "genesBiophagus",
+      "genesPrimus",
+      "genesKelermorph"
+    ],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 350
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 369
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 388
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 407
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 426
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 445
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 464
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 483
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 502
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 521
+        }
+      }
+    ]
+  },
+  {
+    "id": "R_Booster_Crit_BookOfFate",
+    "name": "Book of Fate",
+    "rarity": "Mythic",
+    "type": "I_Booster_Crit",
+    "abilityId": "BookOfFate",
+    "isRelic": true,
+    "isUniqueRelic": false,
+    "allowedUnits": [
+      "blackPossession",
+      "thousInfernalMaster",
+      "thousSorcerer"
+    ],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 350
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 369
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 388
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 407
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 426
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 445
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 464
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 483
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 502
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 521
+        }
+      }
+    ]
+  },
+  {
+    "id": "R_Booster_Crit_ChaliceOfBaal",
+    "name": "Chalice of Baal",
+    "rarity": "Mythic",
+    "type": "I_Booster_Crit",
+    "abilityId": "ChaliceOfBaal",
+    "isRelic": true,
+    "isUniqueRelic": true,
+    "allowedUnits": [
+      "bloodSanguinary"
+    ],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 350
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 369
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 388
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 407
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 426
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 445
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 464
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 483
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 502
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 521
+        }
+      }
+    ]
+  },
+  {
+    "id": "R_Booster_Crit_IntoxicatingElixir",
+    "name": "Intoxicating Elixir",
+    "rarity": "Mythic",
+    "type": "I_Booster_Crit",
+    "abilityId": "IntoxicatingElixir",
+    "isRelic": true,
+    "isUniqueRelic": false,
+    "allowedUnits": [
+      "emperNoiseMarine",
+      "emperKakophonist",
+      "emperFlawlessBlade",
+      "emperExultant"
+    ],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 350
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 369
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 388
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 407
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 426
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 445
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 464
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 483
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 502
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 521
+        }
+      }
+    ]
+  },
+  {
+    "id": "R_Booster_Crit_KardiocoreGalvanus",
+    "name": "Kardiocore Galvanus",
+    "rarity": "Mythic",
+    "type": "I_Booster_Crit",
+    "abilityId": "KardiocoreGalvanus",
+    "isRelic": true,
+    "isUniqueRelic": false,
+    "allowedUnits": [
+      "admecDestroyer",
+      "admecRuststalker",
+      "admecMarshall"
+    ],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 350
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 369
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 388
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 407
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 426
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 445
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 464
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 483
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 502
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 521
+        }
+      }
+    ]
+  },
+  {
+    "id": "R_Booster_Crit_NetherRealmCasket",
+    "name": "Nether-Realm Casket",
+    "rarity": "Mythic",
+    "type": "I_Booster_Crit",
+    "abilityId": "NetherRealmCasket",
+    "isRelic": true,
+    "isUniqueRelic": false,
+    "allowedUnits": [
+      "necroWarden",
+      "necroSpyder",
+      "necroDestroyer"
+    ],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 350
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 369
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 388
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 407
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 426
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 445
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 464
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 483
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 502
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 521
+        }
+      }
+    ]
+  },
+  {
+    "id": "R_Booster_Crit_OrbsOfDecay",
+    "name": "Orbs of Decay",
+    "rarity": "Mythic",
+    "type": "I_Booster_Crit",
+    "abilityId": "OrbsOfDecay",
+    "isRelic": true,
+    "isUniqueRelic": false,
+    "allowedUnits": [
+      "deathRotbone",
+      "deathPutrifier",
+      "deathBlightbringer"
+    ],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 350
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 369
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 388
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 407
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 426
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 445
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 464
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 483
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 502
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 521
+        }
+      }
+    ]
+  },
+  {
+    "id": "R_Booster_Crit_TalismanOfRage",
+    "name": "Talisman of Rage",
+    "rarity": "Mythic",
+    "type": "I_Booster_Crit",
+    "abilityId": "TalismanOfRage",
+    "isRelic": true,
+    "isUniqueRelic": false,
+    "allowedUnits": [
+      "worldJakhal",
+      "worldEightbound",
+      "worldExecutions"
+    ],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 350
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 369
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 388
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 407
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 426
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 445
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 464
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 483
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 502
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 521
+        }
+      }
+    ]
+  },
+  {
+    "id": "R_Booster_Crit_WyrdmakersHelm",
+    "name": "Wyrdmaker's Helm",
+    "rarity": "Mythic",
+    "type": "I_Booster_Crit",
+    "abilityId": "WyrdmakersHelm",
+    "isRelic": true,
+    "isUniqueRelic": true,
+    "allowedUnits": [
+      "spaceWolfPriest"
+    ],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 350
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 369
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 388
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 407
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 426
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 445
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 464
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 483
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 502
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 521
+        }
+      }
+    ]
+  }
+]

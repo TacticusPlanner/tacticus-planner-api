@@ -72,8 +72,18 @@ The `web` resource uses pnpm and the Vite `dev` script from the client app.
 Because the client app is part of a Turborepo workspace, AppHost derives the
 workspace root from `ClientAppPath` and runs the root `dev:web` Turbo script.
 AppHost passes the API's local HTTP endpoint to the client as
-`VITE_API_BASE_URL`, sets the web resource `PORT`, and configures the API CORS
-origin from the Aspire-managed client endpoint.
+`VITE_API_BASE_URL`, sets the web resource `PORT`, exposes the web resource at
+the configured `WebPort` value, and configures the API CORS origin from the
+Aspire-managed client endpoint.
+
+The web resource defaults to `http://localhost:5173` through the `WebPort`
+setting in `orchestration/TacticusPlanner.AppHost/appsettings.json`. Override
+it when that port is already in use:
+
+```powershell
+$env:WebPort = "5174"
+dotnet run --project orchestration/TacticusPlanner.AppHost
+```
 
 PostgreSQL uses a persistent container lifetime and a named Docker volume.
 Stopping AppHost leaves the container available for the next run, and the

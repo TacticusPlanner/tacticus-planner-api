@@ -1,0 +1,4607 @@
+{
+  "groupId": "death-guard-vs-admech",
+  "faction": "DeathGuard",
+  "releaseType": "event",
+  "coreCharacters": [
+    "deathBlightlord",
+    "deathPutrifier",
+    "deathBlightbringer"
+  ],
+  "difficulties": [
+    "eventStandard",
+    "eventStandardChallenge",
+    "eventExtremis",
+    "eventExtremisChallenge"
+  ],
+  "battles": [
+    {
+      "id": "AMS01",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 1,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 40,
+            "max": 66
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC015",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 231,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Cadian Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:8",
+          "count": 7
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 7,
+          "stars": 3,
+          "rank": "Iron3"
+        }
+      ]
+    },
+    {
+      "id": "AMS02",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 2,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 40,
+            "max": 66
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC009",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 228,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Cadian Lascannon Team"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:8",
+          "count": 4
+        },
+        {
+          "id": "astraNpc2Lascannon:7",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 4,
+          "stars": 3,
+          "rank": "Iron3"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 2,
+          "rank": "Iron3"
+        }
+      ]
+    },
+    {
+      "id": "AMS03",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 3,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 40,
+            "max": 66
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC004",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 478,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Cadian Lascannon Team",
+        "Cadian Vox-caster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:8",
+          "count": 4
+        },
+        {
+          "id": "astraNpc2Lascannon:7",
+          "count": 1
+        },
+        {
+          "id": "astraNpc3Voxcaster:7",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 4,
+          "stars": 3,
+          "rank": "Iron3"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 1,
+          "stars": 2,
+          "rank": "Iron3"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 2,
+          "stars": 2,
+          "rank": "Iron3"
+        }
+      ]
+    },
+    {
+      "id": "AMSC3B",
+      "difficulty": "eventStandardChallenge",
+      "energyCost": 6,
+      "nodeNumber": 3,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR005",
+            "chanceId": "upgradeRare_eventStandardChallenge"
+          }
+        ]
+      },
+      "enemyPower": 849,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Cadian Lascannon Team",
+        "Cadian Vox-caster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:10",
+          "count": 6
+        },
+        {
+          "id": "astraNpc2Lascannon:10",
+          "count": 3
+        },
+        {
+          "id": "astraNpc3Voxcaster:9",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 6,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 3,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 1,
+          "stars": 3,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "AMS04",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 4,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 40,
+            "max": 66
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC014",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 787,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus",
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Skitarii Vanguard"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard:7",
+          "count": 4
+        },
+        {
+          "id": "astraNpc1Guardsman:9",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 4,
+          "stars": 2,
+          "rank": "Iron3"
+        },
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 3,
+          "stars": 3,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "AMS05",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 5,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 40,
+            "max": 66
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC010",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 900,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Skitarii Vanguard"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard:6",
+          "count": 9
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 9,
+          "stars": 2,
+          "rank": "Iron2"
+        }
+      ]
+    },
+    {
+      "id": "AMS06",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 6,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 45,
+            "max": 75
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_admecMarshall",
+            "chanceId": "shard_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 879,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Skitarii Vanguard",
+        "Tan Gi'da"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecBossMarshallCE:1",
+          "count": 1
+        },
+        {
+          "id": "admecNpc1Vanguard:5",
+          "count": 7
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecBossMarshallCE",
+          "name": "Tan Gi'da",
+          "count": 1,
+          "stars": 2,
+          "rank": "Iron1"
+        },
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 7,
+          "stars": 2,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "AMS07",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 7,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 45,
+            "max": 75
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC001",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 1014,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Skitarii Vanguard"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard:7",
+          "count": 6
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 6,
+          "stars": 2,
+          "rank": "Iron3"
+        }
+      ]
+    },
+    {
+      "id": "AMS08",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 8,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 45,
+            "max": 75
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC002",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 794,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Skitarii Vanguard",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard:6",
+          "count": 5
+        },
+        {
+          "id": "admecNpc2Techpriest:6",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 5,
+          "stars": 2,
+          "rank": "Iron2"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 2,
+          "stars": 2,
+          "rank": "Iron2"
+        }
+      ]
+    },
+    {
+      "id": "AMS09",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 9,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 45,
+            "max": 75
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC013",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 936,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Skitarii Vanguard",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard:6",
+          "count": 4
+        },
+        {
+          "id": "admecNpc2Techpriest:5",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 4,
+          "stars": 2,
+          "rank": "Iron2"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 4,
+          "stars": 2,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "AMS10",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 10,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 45,
+            "max": 75
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR001",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 1041,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Skitarii Vanguard",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard:6",
+          "count": 6
+        },
+        {
+          "id": "admecNpc2Techpriest:6",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 6,
+          "stars": 2,
+          "rank": "Iron2"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 3,
+          "stars": 2,
+          "rank": "Iron2"
+        }
+      ]
+    },
+    {
+      "id": "AMS11",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 11,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_admecRuststalker",
+            "chanceId": "shard_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 1298,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Exitor-Rho",
+        "Skitarii Vanguard",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecBossRuststalkerCE:1",
+          "count": 1
+        },
+        {
+          "id": "admecNpc1Vanguard:5",
+          "count": 3
+        },
+        {
+          "id": "admecNpc2Techpriest:7",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecBossRuststalkerCE",
+          "name": "Exitor-Rho",
+          "count": 1,
+          "stars": 2,
+          "rank": "Iron2"
+        },
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 3,
+          "stars": 2,
+          "rank": "Iron1"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 2,
+          "stars": 2,
+          "rank": "Iron3"
+        }
+      ]
+    },
+    {
+      "id": "AMS12",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 12,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC006",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 1650,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 5,
+      "enemiesTypes": [
+        "Electro-priest"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc3Electropriest:8",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 5,
+          "stars": 3,
+          "rank": "Iron3"
+        }
+      ]
+    },
+    {
+      "id": "AMS13",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 13,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpU014",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 2970,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Electro-priest"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc3Electropriest:8",
+          "count": 9
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 9,
+          "stars": 3,
+          "rank": "Iron3"
+        }
+      ]
+    },
+    {
+      "id": "AMSC13B",
+      "difficulty": "eventStandardChallenge",
+      "energyCost": 6,
+      "nodeNumber": 13,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpE012",
+            "chanceId": "upgradeEpic_eventStandardChallenge"
+          }
+        ]
+      },
+      "enemyPower": 10247,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Electro-priest",
+        "Skitarii Vanguard",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard:13",
+          "count": 4
+        },
+        {
+          "id": "admecNpc2Techpriest:12",
+          "count": 2
+        },
+        {
+          "id": "admecNpc3Electropriest:11",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 4,
+          "stars": 7,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 2,
+          "stars": 5,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 3,
+          "stars": 6,
+          "rank": "Bronze2"
+        }
+      ]
+    },
+    {
+      "id": "AMS14",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 14,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgU009",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 3054,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Electro-priest",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc2Techpriest:10",
+          "count": 2
+        },
+        {
+          "id": "admecNpc3Electropriest:9",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 2,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 5,
+          "stars": 3,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "AMS15",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 15,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmU001",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 3075,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Electro-priest",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc2Techpriest:9",
+          "count": 3
+        },
+        {
+          "id": "admecNpc3Electropriest:9",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 3,
+          "stars": 3,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 5,
+          "stars": 3,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "AMS16",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 16,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR034",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 5641,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 4,
+      "enemiesTypes": [
+        "Electro-priest",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc2Techpriest:14",
+          "count": 1
+        },
+        {
+          "id": "admecNpc3Electropriest:12",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 1,
+          "stars": 9,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 3,
+          "stars": 5,
+          "rank": "Bronze3"
+        }
+      ]
+    },
+    {
+      "id": "AMS17",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 17,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 52,
+            "max": 90
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_admecManipulus",
+            "chanceId": "shard_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 7513,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Actus",
+        "Electro-priest",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecBossManipulusCE:1",
+          "count": 1
+        },
+        {
+          "id": "admecNpc2Techpriest:11",
+          "count": 3
+        },
+        {
+          "id": "admecNpc3Electropriest:11",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecBossManipulusCE",
+          "name": "Actus",
+          "count": 1,
+          "stars": 4,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 3,
+          "stars": 6,
+          "rank": "Bronze2"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 5,
+          "stars": 6,
+          "rank": "Bronze2"
+        }
+      ]
+    },
+    {
+      "id": "AMS18",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 18,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 52,
+            "max": 90
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgU010",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 6175,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Electro-priest",
+        "Skitarii Vanguard"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard:13",
+          "count": 2
+        },
+        {
+          "id": "admecNpc3Electropriest:11",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 2,
+          "stars": 7,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 5,
+          "stars": 6,
+          "rank": "Bronze2"
+        }
+      ]
+    },
+    {
+      "id": "AMS19",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 19,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 52,
+            "max": 90
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpU006",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 8772,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Electro-priest",
+        "Skitarii Vanguard",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard:12",
+          "count": 4
+        },
+        {
+          "id": "admecNpc2Techpriest:13",
+          "count": 1
+        },
+        {
+          "id": "admecNpc3Electropriest:12",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 4,
+          "stars": 5,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 1,
+          "stars": 7,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 3,
+          "stars": 5,
+          "rank": "Bronze3"
+        }
+      ]
+    },
+    {
+      "id": "AMS20",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 20,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 52,
+            "max": 90
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmU013",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 5742,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Electro-priest",
+        "Skitarii Vanguard"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard:12",
+          "count": 3
+        },
+        {
+          "id": "admecNpc3Electropriest:12",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 3,
+          "stars": 5,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 3,
+          "stars": 5,
+          "rank": "Bronze3"
+        }
+      ]
+    },
+    {
+      "id": "AMS21",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 21,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 52,
+            "max": 90
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR034",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 9612,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Electro-priest",
+        "Skitarii Vanguard",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard:12",
+          "count": 2
+        },
+        {
+          "id": "admecNpc2Techpriest:11",
+          "count": 3
+        },
+        {
+          "id": "admecNpc3Electropriest:12",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 2,
+          "stars": 5,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 3,
+          "stars": 6,
+          "rank": "Bronze2"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 5,
+          "stars": 5,
+          "rank": "Bronze3"
+        }
+      ]
+    },
+    {
+      "id": "AMS22",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 22,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_admecDominus",
+            "chanceId": "shard_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 6460,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Electro-priest",
+        "Skitarii Vanguard",
+        "Sy-gex",
+        "Tech-Priest Enginseer",
+        "Vitruvius"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecBossDestroyerCE:2",
+          "count": 1
+        },
+        {
+          "id": "admecBossDominusCE:1",
+          "count": 1
+        },
+        {
+          "id": "admecNpc1Vanguard:10",
+          "count": 4
+        },
+        {
+          "id": "admecNpc2Techpriest:9",
+          "count": 2
+        },
+        {
+          "id": "admecNpc3Electropriest:9",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecBossDestroyerCE",
+          "name": "Sy-gex",
+          "count": 1,
+          "stars": 5,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "admecBossDominusCE",
+          "name": "Vitruvius",
+          "count": 1,
+          "stars": 5,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 4,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 2,
+          "stars": 3,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 2,
+          "stars": 3,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "AMS23",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 23,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpU016",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 26807,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus",
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Cadian Vox-caster",
+        "Electro-priest",
+        "Skitarii Vanguard",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard:16",
+          "count": 3
+        },
+        {
+          "id": "admecNpc2Techpriest:16",
+          "count": 1
+        },
+        {
+          "id": "admecNpc3Electropriest:15",
+          "count": 2
+        },
+        {
+          "id": "astraNpc3Voxcaster:18",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 3,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 1,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 2,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver2"
+        }
+      ]
+    },
+    {
+      "id": "AMS24",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 24,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgU011",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 35512,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus",
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Cadian Lascannon Team",
+        "Electro-priest",
+        "Skitarii Vanguard",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard:18",
+          "count": 2
+        },
+        {
+          "id": "admecNpc2Techpriest:17",
+          "count": 2
+        },
+        {
+          "id": "admecNpc3Electropriest:17",
+          "count": 2
+        },
+        {
+          "id": "astraNpc2Lascannon:20",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 10,
+          "rank": "Silver3"
+        }
+      ]
+    },
+    {
+      "id": "AMS25",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 25,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmU006",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 35966,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus",
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Cadian Mortar Team",
+        "Electro-priest",
+        "Skitarii Vanguard",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard:17",
+          "count": 2
+        },
+        {
+          "id": "admecNpc2Techpriest:17",
+          "count": 1
+        },
+        {
+          "id": "admecNpc3Electropriest:17",
+          "count": 2
+        },
+        {
+          "id": "astraNpc4Mortar:18",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 3,
+          "stars": 9,
+          "rank": "Silver2"
+        }
+      ]
+    },
+    {
+      "id": "AMSC25B",
+      "difficulty": "eventStandardChallenge",
+      "energyCost": 6,
+      "nodeNumber": 25,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgE004",
+            "chanceId": "upgradeEpic_eventStandardChallenge"
+          }
+        ]
+      },
+      "enemyPower": 51623,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus",
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Cadian Mortar Team",
+        "Electro-priest",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc2Techpriest:17",
+          "count": 3
+        },
+        {
+          "id": "admecNpc3Electropriest:19",
+          "count": 3
+        },
+        {
+          "id": "astraNpc4Mortar:18",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver3"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver2"
+        }
+      ]
+    },
+    {
+      "id": "AMS26",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 26,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR002",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 47491,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus",
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Cadian Mortar Team",
+        "Cadian Vox-caster",
+        "Electro-priest",
+        "Skitarii Vanguard",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard:16",
+          "count": 2
+        },
+        {
+          "id": "admecNpc2Techpriest:17",
+          "count": 3
+        },
+        {
+          "id": "admecNpc3Electropriest:17",
+          "count": 2
+        },
+        {
+          "id": "astraNpc3Voxcaster:17",
+          "count": 2
+        },
+        {
+          "id": "astraNpc4Mortar:17",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        }
+      ]
+    },
+    {
+      "id": "AMS27",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 27,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR006",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 30915,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 5,
+      "enemiesTypes": [
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc2Techpriest:17",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 5,
+          "stars": 8,
+          "rank": "Silver2"
+        }
+      ]
+    },
+    {
+      "id": "AMS28",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 28,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR006",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 37468,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus",
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Cadian Mortar Team",
+        "Cadian Vox-caster",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc2Techpriest:17",
+          "count": 3
+        },
+        {
+          "id": "astraNpc3Voxcaster:19",
+          "count": 3
+        },
+        {
+          "id": "astraNpc4Mortar:16",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver3"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 1,
+          "stars": 9,
+          "rank": "Silver1"
+        }
+      ]
+    },
+    {
+      "id": "AMS29",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 29,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL114",
+            "chanceId": "upgradeLegendary_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 42575,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus",
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Cadian Lascannon Team",
+        "Cadian Mortar Team",
+        "Cadian Vox-caster",
+        "Electro-priest",
+        "Skitarii Vanguard",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard:17",
+          "count": 2
+        },
+        {
+          "id": "admecNpc2Techpriest:17",
+          "count": 2
+        },
+        {
+          "id": "admecNpc3Electropriest:16",
+          "count": 3
+        },
+        {
+          "id": "astraNpc2Lascannon:16",
+          "count": 2
+        },
+        {
+          "id": "astraNpc3Voxcaster:18",
+          "count": 2
+        },
+        {
+          "id": "astraNpc4Mortar:16",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 3,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 1,
+          "stars": 9,
+          "rank": "Silver1"
+        }
+      ]
+    },
+    {
+      "id": "AMS30",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 30,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_admecDestroyer",
+            "chanceId": "shard_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 46986,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Belisarius Cawl",
+        "Electro-priest",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecBossBelisarius:2",
+          "count": 1
+        },
+        {
+          "id": "admecNpc2Techpriest:17",
+          "count": 4
+        },
+        {
+          "id": "admecNpc3Electropriest:16",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecBossBelisarius",
+          "name": "Belisarius Cawl",
+          "count": 1,
+          "stars": 6,
+          "rank": "Silver1"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 4,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver1"
+        }
+      ]
+    },
+    {
+      "id": "AME01",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 1,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC015",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 19887,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Cadian Lascannon Team"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:23",
+          "count": 7
+        },
+        {
+          "id": "astraNpc2Lascannon:22",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 7,
+          "stars": 10,
+          "rank": "Gold2"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold1"
+        }
+      ]
+    },
+    {
+      "id": "AME02",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 2,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC009",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 44513,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Cadian Lascannon Team",
+        "Cadian Vox-caster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:23",
+          "count": 3
+        },
+        {
+          "id": "astraNpc2Lascannon:22",
+          "count": 2
+        },
+        {
+          "id": "astraNpc3Voxcaster:21",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold2"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 4,
+          "stars": 10,
+          "rank": "Gold1"
+        }
+      ]
+    },
+    {
+      "id": "AME03",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 3,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC004",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 50648,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Cadian Lascannon Team",
+        "Cadian Mortar Team",
+        "Cadian Vox-caster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc2Lascannon:22",
+          "count": 2
+        },
+        {
+          "id": "astraNpc3Voxcaster:21",
+          "count": 4
+        },
+        {
+          "id": "astraNpc4Mortar:19",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 4,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver3"
+        }
+      ]
+    },
+    {
+      "id": "AMEC3B",
+      "difficulty": "eventExtremisChallenge",
+      "energyCost": 6,
+      "nodeNumber": 3,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmE010",
+            "chanceId": "upgradeEpic_eventExtremisChallenge"
+          }
+        ]
+      },
+      "enemyPower": 160796,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus",
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Cadian Lascannon Team",
+        "Cadian Vox-caster",
+        "Skitarii Vanguard"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard:26",
+          "count": 2
+        },
+        {
+          "id": "astraNpc1Guardsman:28",
+          "count": 3
+        },
+        {
+          "id": "astraNpc2Lascannon:29",
+          "count": 2
+        },
+        {
+          "id": "astraNpc3Voxcaster:27",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold3"
+        },
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 3,
+          "stars": 11,
+          "rank": "Diamond1"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 10,
+          "rank": "Diamond2"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 2,
+          "stars": 10,
+          "rank": "Diamond1"
+        }
+      ]
+    },
+    {
+      "id": "AME04",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 4,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC014",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 53519,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus",
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Cadian Lascannon Team",
+        "Cadian Vox-caster",
+        "Skitarii Vanguard"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard:20",
+          "count": 3
+        },
+        {
+          "id": "astraNpc2Lascannon:22",
+          "count": 2
+        },
+        {
+          "id": "astraNpc3Voxcaster:22",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 3,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold1"
+        }
+      ]
+    },
+    {
+      "id": "AME05",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 5,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC010",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 77590,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Skitarii Vanguard"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard:20",
+          "count": 10
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 10,
+          "stars": 10,
+          "rank": "Silver3"
+        }
+      ]
+    },
+    {
+      "id": "AME06",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 6,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_admecMarshall",
+            "chanceId": "shard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 136224,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Skitarii Vanguard",
+        "Tan Gi'da"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecBossMarshallCE:2",
+          "count": 1
+        },
+        {
+          "id": "admecNpc1Vanguard:22",
+          "count": 7
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecBossMarshallCE",
+          "name": "Tan Gi'da",
+          "count": 1,
+          "stars": 7,
+          "rank": "Gold1"
+        },
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 7,
+          "stars": 11,
+          "rank": "Gold1"
+        }
+      ]
+    },
+    {
+      "id": "AME07",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 7,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC001",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 120936,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Skitarii Vanguard"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard:22",
+          "count": 8
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 8,
+          "stars": 11,
+          "rank": "Gold1"
+        }
+      ]
+    },
+    {
+      "id": "AME08",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 8,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC002",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 125583,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Skitarii Vanguard",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard:23",
+          "count": 3
+        },
+        {
+          "id": "admecNpc2Techpriest:23",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold2"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold2"
+        }
+      ]
+    },
+    {
+      "id": "AME09",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 9,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC013",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 132355,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Skitarii Vanguard",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard:23",
+          "count": 5
+        },
+        {
+          "id": "admecNpc2Techpriest:23",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 5,
+          "stars": 10,
+          "rank": "Gold2"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold2"
+        }
+      ]
+    },
+    {
+      "id": "AME10",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 10,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC006",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 186515,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Skitarii Vanguard",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard:23",
+          "count": 7
+        },
+        {
+          "id": "admecNpc2Techpriest:22",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 7,
+          "stars": 10,
+          "rank": "Gold2"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold1"
+        }
+      ]
+    },
+    {
+      "id": "AME11",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 11,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 140
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_admecRuststalker",
+            "chanceId": "shard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 200090,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Exitor-Rho",
+        "Skitarii Vanguard",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecBossRuststalkerCE:2",
+          "count": 1
+        },
+        {
+          "id": "admecNpc1Vanguard:24",
+          "count": 4
+        },
+        {
+          "id": "admecNpc2Techpriest:23",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecBossRuststalkerCE",
+          "name": "Exitor-Rho",
+          "count": 1,
+          "stars": 8,
+          "rank": "Gold1"
+        },
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold2"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold2"
+        }
+      ]
+    },
+    {
+      "id": "AME12",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 12,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmU013",
+            "chanceId": "upgradeUncommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 139330,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 5,
+      "enemiesTypes": [
+        "Electro-priest"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc3Electropriest:25",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 5,
+          "stars": 10,
+          "rank": "Gold3"
+        }
+      ]
+    },
+    {
+      "id": "AME13",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 13,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpU014",
+            "chanceId": "upgradeUncommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 195062,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Electro-priest"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc3Electropriest:25",
+          "count": 7
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 7,
+          "stars": 10,
+          "rank": "Gold3"
+        }
+      ]
+    },
+    {
+      "id": "AMEC13B",
+      "difficulty": "eventExtremisChallenge",
+      "energyCost": 6,
+      "nodeNumber": 13,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmL203",
+            "chanceId": "upgradeLegendary_eventExtremisChallenge"
+          }
+        ]
+      },
+      "enemyPower": 2512896,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Electro-priest",
+        "Exitor-Rho",
+        "Skitarii Vanguard",
+        "Tan Gi'da",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecBossMarshall:3",
+          "count": 1
+        },
+        {
+          "id": "admecBossRuststalker:3",
+          "count": 1
+        },
+        {
+          "id": "admecNpc1Vanguard:33",
+          "count": 3
+        },
+        {
+          "id": "admecNpc2Techpriest:33",
+          "count": 2
+        },
+        {
+          "id": "admecNpc3Electropriest:33",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecBossMarshall",
+          "name": "Tan Gi'da",
+          "count": 1,
+          "stars": 11,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "admecBossRuststalker",
+          "name": "Exitor-Rho",
+          "count": 1,
+          "stars": 11,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 3,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 2,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 3,
+          "stars": 11,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "AME14",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 14,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgU009",
+            "chanceId": "upgradeUncommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 308524,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Electro-priest",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc2Techpriest:26",
+          "count": 2
+        },
+        {
+          "id": "admecNpc3Electropriest:26",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold3"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 5,
+          "stars": 11,
+          "rank": "Gold3"
+        }
+      ]
+    },
+    {
+      "id": "AME15",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 15,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR002",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 464147,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Electro-priest",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc2Techpriest:28",
+          "count": 3
+        },
+        {
+          "id": "admecNpc3Electropriest:27",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 3,
+          "stars": 11,
+          "rank": "Diamond1"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 5,
+          "stars": 10,
+          "rank": "Diamond1"
+        }
+      ]
+    },
+    {
+      "id": "AME16",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 16,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR006",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 305750,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 5,
+      "enemiesTypes": [
+        "Electro-priest",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc2Techpriest:27",
+          "count": 2
+        },
+        {
+          "id": "admecNpc3Electropriest:28",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 2,
+          "stars": 10,
+          "rank": "Diamond1"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 3,
+          "stars": 11,
+          "rank": "Diamond1"
+        }
+      ]
+    },
+    {
+      "id": "AME17",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 17,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 140
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_admecManipulus",
+            "chanceId": "shard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 754748,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Actus",
+        "Electro-priest",
+        "Skitarii Vanguard",
+        "Sy-gex",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecBossDestroyerCE:5",
+          "count": 1
+        },
+        {
+          "id": "admecBossManipulusCE:2",
+          "count": 1
+        },
+        {
+          "id": "admecNpc1Vanguard:28",
+          "count": 3
+        },
+        {
+          "id": "admecNpc2Techpriest:28",
+          "count": 2
+        },
+        {
+          "id": "admecNpc3Electropriest:28",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecBossDestroyerCE",
+          "name": "Sy-gex",
+          "count": 1,
+          "stars": 9,
+          "rank": "Diamond1"
+        },
+        {
+          "id": "admecBossManipulusCE",
+          "name": "Actus",
+          "count": 1,
+          "stars": 9,
+          "rank": "Diamond1"
+        },
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 3,
+          "stars": 11,
+          "rank": "Diamond1"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 2,
+          "stars": 11,
+          "rank": "Diamond1"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 2,
+          "stars": 11,
+          "rank": "Diamond1"
+        }
+      ]
+    },
+    {
+      "id": "AME18",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 18,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR006",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 655860,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Electro-priest",
+        "Skitarii Vanguard"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard:31",
+          "count": 3
+        },
+        {
+          "id": "admecNpc3Electropriest:30",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 3,
+          "stars": 10,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 3,
+          "stars": 11,
+          "rank": "Diamond2"
+        }
+      ]
+    },
+    {
+      "id": "AME19",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 19,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR001",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 965123,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Electro-priest",
+        "Skitarii Vanguard"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard:32",
+          "count": 4
+        },
+        {
+          "id": "admecNpc3Electropriest:31",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 4,
+          "stars": 11,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 3,
+          "stars": 10,
+          "rank": "Diamond3"
+        }
+      ]
+    },
+    {
+      "id": "AME20",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 20,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR034",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 1113811,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Skitarii Vanguard",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard:33",
+          "count": 4
+        },
+        {
+          "id": "admecNpc2Techpriest:31",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 4,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 3,
+          "stars": 10,
+          "rank": "Diamond3"
+        }
+      ]
+    },
+    {
+      "id": "AME21",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 21,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR034",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 1404483,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Electro-priest",
+        "Skitarii Vanguard",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard:31",
+          "count": 3
+        },
+        {
+          "id": "admecNpc2Techpriest:32",
+          "count": 3
+        },
+        {
+          "id": "admecNpc3Electropriest:31",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 3,
+          "stars": 10,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 3,
+          "stars": 11,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 3,
+          "stars": 10,
+          "rank": "Diamond3"
+        }
+      ]
+    },
+    {
+      "id": "AME22",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 22,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 140
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_admecDominus",
+            "chanceId": "shard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 1850457,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Electro-priest",
+        "Skitarii Vanguard",
+        "Sy-gex",
+        "Tech-Priest Enginseer",
+        "Vitruvius"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecBossDestroyerCE:4",
+          "count": 1
+        },
+        {
+          "id": "admecBossDominusCE:3",
+          "count": 1
+        },
+        {
+          "id": "admecNpc1Vanguard:32",
+          "count": 2
+        },
+        {
+          "id": "admecNpc2Techpriest:31",
+          "count": 2
+        },
+        {
+          "id": "admecNpc3Electropriest:31",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecBossDestroyerCE",
+          "name": "Sy-gex",
+          "count": 1,
+          "stars": 11,
+          "rank": "Diamond2"
+        },
+        {
+          "id": "admecBossDominusCE",
+          "name": "Vitruvius",
+          "count": 1,
+          "stars": 11,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 2,
+          "stars": 11,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 2,
+          "stars": 10,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 4,
+          "stars": 10,
+          "rank": "Diamond3"
+        }
+      ]
+    },
+    {
+      "id": "AME23",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 23,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL114",
+            "chanceId": "upgradeLegendary_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 2033757,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus",
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Cadian Vox-caster",
+        "Electro-priest",
+        "Skitarii Vanguard",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard:34",
+          "count": 3
+        },
+        {
+          "id": "admecNpc2Techpriest:33",
+          "count": 2
+        },
+        {
+          "id": "admecNpc3Electropriest:33",
+          "count": 2
+        },
+        {
+          "id": "astraNpc3Voxcaster:33",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 3,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 2,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 2,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 3,
+          "stars": 11,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "AME24",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 24,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_admecDestroyer",
+            "chanceId": "shard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 1379548,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus",
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Cadian Lascannon Team",
+        "Electro-priest",
+        "Skitarii Vanguard",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard:33",
+          "count": 3
+        },
+        {
+          "id": "admecNpc2Techpriest:33",
+          "count": 2
+        },
+        {
+          "id": "admecNpc3Electropriest:34",
+          "count": 1
+        },
+        {
+          "id": "astraNpc2Lascannon:34",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 3,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 2,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 12,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "AME25",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 25,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "mythicShards_admecMarshall",
+            "chanceId": "mythicShard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 2269446,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus",
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Cadian Mortar Team",
+        "Electro-priest",
+        "Skitarii Vanguard",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard:33",
+          "count": 3
+        },
+        {
+          "id": "admecNpc2Techpriest:35",
+          "count": 2
+        },
+        {
+          "id": "admecNpc3Electropriest:34",
+          "count": 2
+        },
+        {
+          "id": "astraNpc4Mortar:36",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 3,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 2,
+          "stars": 13,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 2,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 2,
+          "stars": 14,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "AMEC25B",
+      "difficulty": "eventExtremisChallenge",
+      "energyCost": 6,
+      "nodeNumber": 25,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 90,
+            "max": 155
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgL003",
+            "chanceId": "upgradeLegendary_eventExtremisChallenge"
+          }
+        ]
+      },
+      "enemyPower": 3379388,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus",
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Cadian Mortar Team",
+        "Electro-priest",
+        "Skitarii Vanguard",
+        "Sy-gex",
+        "Tech-Priest Enginseer",
+        "Vitruvius"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecBossDestroyerCE:4",
+          "count": 1
+        },
+        {
+          "id": "admecBossDominus:3",
+          "count": 1
+        },
+        {
+          "id": "admecNpc1Vanguard:35",
+          "count": 2
+        },
+        {
+          "id": "admecNpc2Techpriest:33",
+          "count": 3
+        },
+        {
+          "id": "admecNpc3Electropriest:33",
+          "count": 3
+        },
+        {
+          "id": "astraNpc4Mortar:34",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecBossDestroyerCE",
+          "name": "Sy-gex",
+          "count": 1,
+          "stars": 11,
+          "rank": "Diamond2"
+        },
+        {
+          "id": "admecBossDominus",
+          "name": "Vitruvius",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 2,
+          "stars": 13,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 3,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 3,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 2,
+          "stars": 12,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "AME26",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 26,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "mythicShards_admecRuststalker",
+            "chanceId": "mythicShard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 2405339,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus",
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Cadian Mortar Team",
+        "Cadian Vox-caster",
+        "Electro-priest",
+        "Skitarii Vanguard",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard:34",
+          "count": 3
+        },
+        {
+          "id": "admecNpc2Techpriest:34",
+          "count": 1
+        },
+        {
+          "id": "admecNpc3Electropriest:36",
+          "count": 2
+        },
+        {
+          "id": "astraNpc3Voxcaster:33",
+          "count": 2
+        },
+        {
+          "id": "astraNpc4Mortar:36",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 3,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 2,
+          "stars": 14,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 2,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 2,
+          "stars": 14,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "AME27",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 27,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "mythicShards_admecManipulus",
+            "chanceId": "mythicShard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 2598332,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Electro-priest",
+        "Skitarii Vanguard",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard:36",
+          "count": 3
+        },
+        {
+          "id": "admecNpc2Techpriest:35",
+          "count": 2
+        },
+        {
+          "id": "admecNpc3Electropriest:36",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 3,
+          "stars": 14,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 2,
+          "stars": 13,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 3,
+          "stars": 14,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "AME28",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 28,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "mythicShards_admecDominus",
+            "chanceId": "mythicShard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 2622978,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus",
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Cadian Mortar Team",
+        "Cadian Vox-caster",
+        "Electro-priest"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc3Electropriest:37",
+          "count": 5
+        },
+        {
+          "id": "astraNpc3Voxcaster:39",
+          "count": 3
+        },
+        {
+          "id": "astraNpc4Mortar:38",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 5,
+          "stars": 11,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 3,
+          "stars": 13,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine2"
+        }
+      ]
+    },
+    {
+      "id": "AME29",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 29,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "mythicShards_admecDestroyer",
+            "chanceId": "mythicShard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 2924306,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus",
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Cadian Lascannon Team",
+        "Cadian Vox-caster",
+        "Electro-priest",
+        "Skitarii Vanguard",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard:37",
+          "count": 3
+        },
+        {
+          "id": "admecNpc2Techpriest:37",
+          "count": 2
+        },
+        {
+          "id": "admecNpc3Electropriest:36",
+          "count": 2
+        },
+        {
+          "id": "astraNpc2Lascannon:37",
+          "count": 1
+        },
+        {
+          "id": "astraNpc3Voxcaster:37",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc1Vanguard",
+          "name": "Skitarii Vanguard",
+          "count": 3,
+          "stars": 11,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 2,
+          "stars": 11,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 2,
+          "stars": 14,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 1,
+          "stars": 11,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 2,
+          "stars": 11,
+          "rank": "Adamantine2"
+        }
+      ]
+    },
+    {
+      "id": "AME30",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 30,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 90,
+            "max": 155
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpM001",
+            "chanceId": "upgradeMythic_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 3372749,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Belisarius Cawl",
+        "Electro-priest",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecBossBelisarius:4",
+          "count": 1
+        },
+        {
+          "id": "admecNpc2Techpriest:34",
+          "count": 2
+        },
+        {
+          "id": "admecNpc3Electropriest:34",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecBossBelisarius",
+          "name": "Belisarius Cawl",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 2,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "admecNpc3Electropriest",
+          "name": "Electro-priest",
+          "count": 4,
+          "stars": 12,
+          "rank": "Adamantine1"
+        }
+      ]
+    }
+  ]
+}

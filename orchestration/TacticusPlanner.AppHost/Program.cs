@@ -1,3 +1,5 @@
+using System.Globalization;
+
 var builder = DistributedApplication.CreateBuilder(args);
 
 var postgres = builder
@@ -19,12 +21,15 @@ var clientWorkspacePath = Path.GetFullPath(
     Path.Combine(clientAppPath, "..", ".."),
     builder.AppHostDirectory
 );
+var webPort = builder.Configuration["WebPort"] is { } configuredWebPort
+    ? int.Parse(configuredWebPort, CultureInfo.InvariantCulture)
+    : 5173;
 
 var web = builder
     .AddJavaScriptApp("web", clientWorkspacePath)
     .WithPnpm()
     .WithRunScript("dev:web")
-    .WithHttpEndpoint(env: "PORT")
+    .WithHttpEndpoint(port: webPort, env: "PORT")
     .WithExternalHttpEndpoints()
     .WithReference(api)
     .WithEnvironment("VITE_API_BASE_URL", api.GetEndpoint("http"));

@@ -1,0 +1,2386 @@
+{
+  "alliance": "Imperial",
+  "factionId": "BlackTemplars",
+  "name": "Black Templars",
+  "npcs": [
+    {
+      "id": "templBossAggressor",
+      "name": "Burchard",
+      "meleeDamage": "Power",
+      "meleeHits": 3,
+      "rangedDamage": "Bolter",
+      "rangedHits": 3,
+      "distance": 2,
+      "movement": 2,
+      "traits": [
+        "CrushingStrike",
+        "MkXGravis",
+        "SuppressiveFire"
+      ],
+      "activeAbilityDamage": [
+        "Blast"
+      ],
+      "activeAbilities": [
+        "FragstormGrenadeLauncher"
+      ],
+      "passiveAbilityDamage": [
+        "Bolter"
+      ],
+      "passiveAbilities": [
+        "Boltstorm"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_templ_aggressor_01.png",
+      "stats": [
+        {
+          "abilityLevel": 3,
+          "damage": 27,
+          "armour": 33,
+          "health": 180,
+          "progressionIndex": 3,
+          "rank": 1,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 23,
+          "damage": 163,
+          "armour": 199,
+          "health": 1087,
+          "progressionIndex": 7,
+          "rank": 8,
+          "stars": 5
+        },
+        {
+          "abilityLevel": 29,
+          "damage": 290,
+          "armour": 354,
+          "health": 1931,
+          "progressionIndex": 10,
+          "rank": 10,
+          "stars": 7
+        },
+        {
+          "abilityLevel": 32,
+          "damage": 427,
+          "armour": 521,
+          "health": 2844,
+          "progressionIndex": 14,
+          "rank": 11,
+          "stars": 10
+        }
+      ]
+    },
+    {
+      "id": "templBossAggressorCamp",
+      "name": "Burchard",
+      "meleeDamage": "Power",
+      "meleeHits": 3,
+      "rangedDamage": "Bolter",
+      "rangedHits": 3,
+      "distance": 2,
+      "movement": 2,
+      "traits": [
+        "CrushingStrike",
+        "MkXGravis",
+        "SuppressiveFire"
+      ],
+      "activeAbilityDamage": [
+        "Blast"
+      ],
+      "activeAbilities": [
+        "FragstormGrenadeLauncher"
+      ],
+      "passiveAbilityDamage": [
+        "Bolter"
+      ],
+      "passiveAbilities": [
+        "Boltstorm"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_templ_aggressor_01.png",
+      "stats": [
+        {
+          "abilityLevel": 1,
+          "damage": 27,
+          "armour": 33,
+          "health": 180,
+          "progressionIndex": 3,
+          "rank": 1,
+          "stars": 2
+        }
+      ]
+    },
+    {
+      "id": "templBossAggressor_LHE",
+      "name": "Burchard",
+      "meleeDamage": "Power",
+      "meleeHits": 3,
+      "rangedDamage": "Bolter",
+      "rangedHits": 3,
+      "distance": 2,
+      "movement": 2,
+      "traits": [
+        "CrushingStrike",
+        "MkXGravis",
+        "SuppressiveFire"
+      ],
+      "activeAbilityDamage": [
+        "Blast"
+      ],
+      "activeAbilities": [
+        "FragstormGrenadeLauncher"
+      ],
+      "passiveAbilityDamage": [
+        "Bolter"
+      ],
+      "passiveAbilities": [
+        "Boltstorm"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_templ_aggressor_01.png",
+      "stats": [
+        {
+          "abilityLevel": 35,
+          "damage": 454,
+          "armour": 555,
+          "health": 3026,
+          "progressionIndex": 10,
+          "rank": 12,
+          "stars": 7
+        },
+        {
+          "abilityLevel": 38,
+          "damage": 702,
+          "armour": 858,
+          "health": 4680,
+          "progressionIndex": 15,
+          "rank": 13,
+          "stars": 11
+        }
+      ]
+    },
+    {
+      "id": "templBossAncient",
+      "name": "Thoread",
+      "meleeDamage": "Power",
+      "meleeHits": 2,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [
+        "FinalJustice",
+        "Parry"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "UnbreakableDuty"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "AstartesBanner"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_templ_ancient_01.png",
+      "stats": [
+        {
+          "abilityLevel": 14,
+          "damage": 152,
+          "armour": 102,
+          "health": 461,
+          "progressionIndex": 7,
+          "rank": 5,
+          "stars": 5
+        },
+        {
+          "abilityLevel": 29,
+          "damage": 531,
+          "armour": 354,
+          "health": 1609,
+          "progressionIndex": 10,
+          "rank": 10,
+          "stars": 7
+        },
+        {
+          "abilityLevel": 32,
+          "damage": 782,
+          "armour": 521,
+          "health": 2370,
+          "progressionIndex": 14,
+          "rank": 11,
+          "stars": 10
+        }
+      ]
+    },
+    {
+      "id": "templBossAncientCamp",
+      "name": "Thoread",
+      "meleeDamage": "Power",
+      "meleeHits": 2,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [
+        "FinalJustice",
+        "Parry"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "UnbreakableDuty"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "AstartesBanner"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_templ_ancient_01.png",
+      "stats": [
+        {
+          "abilityLevel": 14,
+          "damage": 122,
+          "armour": 81,
+          "health": 369,
+          "progressionIndex": 7,
+          "rank": 4,
+          "stars": 5
+        }
+      ]
+    },
+    {
+      "id": "templBossAncient_LHE",
+      "name": "Thoread",
+      "meleeDamage": "Power",
+      "meleeHits": 2,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [
+        "FinalJustice",
+        "Parry"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "UnbreakableDuty"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "AstartesBanner"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_templ_ancient_01.png",
+      "stats": [
+        {
+          "abilityLevel": 8,
+          "damage": 78,
+          "armour": 52,
+          "health": 236,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        }
+      ]
+    },
+    {
+      "id": "templBossChampion",
+      "name": "Jaeger",
+      "meleeDamage": "Power",
+      "meleeHits": 3,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [
+        "FinalJustice",
+        "Parry",
+        "RapidAssault"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "HolyDuel"
+      ],
+      "passiveAbilityDamage": [
+        "Power"
+      ],
+      "passiveAbilities": [
+        "MartialSuperiority"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_templ_champion_01.png",
+      "stats": [
+        {
+          "abilityLevel": 20,
+          "damage": 193,
+          "armour": 193,
+          "health": 849,
+          "progressionIndex": 9,
+          "rank": 7,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 32,
+          "damage": 592,
+          "armour": 592,
+          "health": 2607,
+          "progressionIndex": 14,
+          "rank": 11,
+          "stars": 10
+        }
+      ]
+    },
+    {
+      "id": "templBossChampionCamp",
+      "name": "Jaeger",
+      "meleeDamage": "Power",
+      "meleeHits": 3,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [
+        "FinalJustice",
+        "Parry",
+        "RapidAssault"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "HolyDuel"
+      ],
+      "passiveAbilityDamage": [
+        "Power"
+      ],
+      "passiveAbilities": [
+        "MartialSuperiority"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_templ_champion_01.png",
+      "stats": [
+        {
+          "abilityLevel": 20,
+          "damage": 154,
+          "armour": 154,
+          "health": 678,
+          "progressionIndex": 9,
+          "rank": 6,
+          "stars": 6
+        }
+      ]
+    },
+    {
+      "id": "templBossChampion_LHE",
+      "name": "Jaeger",
+      "meleeDamage": "Power",
+      "meleeHits": 3,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [
+        "FinalJustice",
+        "Parry",
+        "RapidAssault"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "HolyDuel"
+      ],
+      "passiveAbilityDamage": [
+        "Power"
+      ],
+      "passiveAbilities": [
+        "MartialSuperiority"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_templ_champion_01.png",
+      "stats": [
+        {
+          "abilityLevel": 29,
+          "damage": 402,
+          "armour": 402,
+          "health": 1770,
+          "progressionIndex": 10,
+          "rank": 10,
+          "stars": 7
+        }
+      ]
+    },
+    {
+      "id": "templBossChampion_Surv",
+      "name": "Jaeger",
+      "meleeDamage": "Power",
+      "meleeHits": 3,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [
+        "FinalJustice",
+        "Parry",
+        "RapidAssault"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "HolyDuel"
+      ],
+      "passiveAbilityDamage": [
+        "Power"
+      ],
+      "passiveAbilities": [
+        "MartialSuperiority"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_templ_champion_01.png",
+      "stats": [
+        {
+          "abilityLevel": 32,
+          "damage": 533,
+          "armour": 533,
+          "health": 2346,
+          "progressionIndex": 11,
+          "rank": 11,
+          "stars": 8
+        }
+      ]
+    },
+    {
+      "id": "templBossHelbrecht",
+      "name": "Helbrecht",
+      "meleeDamage": "Power",
+      "meleeHits": 6,
+      "rangedDamage": "Bolter",
+      "rangedHits": 3,
+      "distance": 2,
+      "movement": 3,
+      "traits": [
+        "FinalJustice",
+        "Parry"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "CrusadeOfWrath"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "DestroyTheWitch"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_templ_helbrecht_01.png",
+      "stats": [
+        {
+          "abilityLevel": 23,
+          "damage": 163,
+          "armour": 239,
+          "health": 1032,
+          "progressionIndex": 12,
+          "rank": 8,
+          "stars": 8
+        },
+        {
+          "abilityLevel": 32,
+          "damage": 355,
+          "armour": 521,
+          "health": 2251,
+          "progressionIndex": 14,
+          "rank": 11,
+          "stars": 10
+        }
+      ]
+    },
+    {
+      "id": "templBossHelbrecht_LHE",
+      "name": "Helbrecht",
+      "meleeDamage": "Power",
+      "meleeHits": 6,
+      "rangedDamage": "Bolter",
+      "rangedHits": 3,
+      "distance": 2,
+      "movement": 3,
+      "traits": [
+        "FinalJustice",
+        "Parry"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "CrusadeOfWrath"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "DestroyTheWitch"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_templ_helbrecht_01.png",
+      "stats": [
+        {
+          "abilityLevel": 50,
+          "damage": 1437,
+          "armour": 2108,
+          "health": 9104,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 60,
+          "damage": 2468,
+          "armour": 3619,
+          "health": 15629,
+          "progressionIndex": 18,
+          "rank": 19,
+          "stars": 13
+        }
+      ]
+    },
+    {
+      "id": "templBossSwordBrother",
+      "name": "Godswyl",
+      "meleeDamage": "Power",
+      "meleeHits": 1,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [
+        "Parry",
+        "RapidAssault"
+      ],
+      "activeAbilityDamage": [
+        "Power"
+      ],
+      "activeAbilities": [
+        "ThunderousAssault"
+      ],
+      "passiveAbilityDamage": [
+        "Power"
+      ],
+      "passiveAbilities": [
+        "ChampionOfTheFeast"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_templ_brother_01.png",
+      "stats": [
+        {
+          "abilityLevel": 1,
+          "damage": 72,
+          "armour": 29,
+          "health": 114,
+          "progressionIndex": 2,
+          "rank": 0,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 8,
+          "damage": 141,
+          "armour": 57,
+          "health": 224,
+          "progressionIndex": 3,
+          "rank": 3,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 23,
+          "damage": 543,
+          "armour": 217,
+          "health": 860,
+          "progressionIndex": 7,
+          "rank": 8,
+          "stars": 5
+        },
+        {
+          "abilityLevel": 29,
+          "damage": 965,
+          "armour": 386,
+          "health": 1528,
+          "progressionIndex": 10,
+          "rank": 10,
+          "stars": 7
+        },
+        {
+          "abilityLevel": 32,
+          "damage": 1422,
+          "armour": 569,
+          "health": 2251,
+          "progressionIndex": 14,
+          "rank": 11,
+          "stars": 10
+        }
+      ]
+    },
+    {
+      "id": "templBossSwordBrotherCamp",
+      "name": "Godswyl",
+      "meleeDamage": "Power",
+      "meleeHits": 1,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [
+        "Parry",
+        "RapidAssault"
+      ],
+      "activeAbilityDamage": [
+        "Power"
+      ],
+      "activeAbilities": [
+        "ThunderousAssault"
+      ],
+      "passiveAbilityDamage": [
+        "Power"
+      ],
+      "passiveAbilities": [
+        "ChampionOfTheFeast"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_templ_brother_01.png",
+      "stats": [
+        {
+          "abilityLevel": 6,
+          "damage": 141,
+          "armour": 57,
+          "health": 224,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        }
+      ]
+    },
+    {
+      "id": "templBossSwordBrother_LHE",
+      "name": "Godswyl",
+      "meleeDamage": "Power",
+      "meleeHits": 1,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [
+        "Parry",
+        "RapidAssault"
+      ],
+      "activeAbilityDamage": [
+        "Power"
+      ],
+      "activeAbilities": [
+        "ThunderousAssault"
+      ],
+      "passiveAbilityDamage": [
+        "Power"
+      ],
+      "passiveAbilities": [
+        "ChampionOfTheFeast"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_templ_brother_01.png",
+      "stats": [
+        {
+          "abilityLevel": 17,
+          "damage": 324,
+          "armour": 129,
+          "health": 512,
+          "progressionIndex": 5,
+          "rank": 6,
+          "stars": 4
+        }
+      ]
+    },
+    {
+      "id": "templNpc1Initiate",
+      "name": "Initiate",
+      "meleeDamage": "Chain",
+      "meleeHits": 2,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "DevoutPush"
+      ],
+      "passiveAbilityDamage": [
+        "Bolter"
+      ],
+      "passiveAbilities": [
+        "HeavyBoltPistol"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_templ_initiate_01.png",
+      "stats": [
+        {
+          "abilityLevel": 1,
+          "damage": 24,
+          "armour": 12,
+          "health": 60,
+          "progressionIndex": 0,
+          "rank": 0,
+          "stars": 0
+        },
+        {
+          "abilityLevel": 3,
+          "damage": 30,
+          "armour": 15,
+          "health": 75,
+          "progressionIndex": 0,
+          "rank": 1,
+          "stars": 0
+        },
+        {
+          "abilityLevel": 3,
+          "damage": 33,
+          "armour": 17,
+          "health": 83,
+          "progressionIndex": 1,
+          "rank": 1,
+          "stars": 1
+        },
+        {
+          "abilityLevel": 5,
+          "damage": 41,
+          "armour": 21,
+          "health": 104,
+          "progressionIndex": 1,
+          "rank": 2,
+          "stars": 1
+        },
+        {
+          "abilityLevel": 8,
+          "damage": 51,
+          "armour": 26,
+          "health": 130,
+          "progressionIndex": 1,
+          "rank": 3,
+          "stars": 1
+        },
+        {
+          "abilityLevel": 8,
+          "damage": 56,
+          "armour": 28,
+          "health": 142,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 11,
+          "damage": 70,
+          "armour": 35,
+          "health": 178,
+          "progressionIndex": 3,
+          "rank": 4,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 14,
+          "damage": 88,
+          "armour": 44,
+          "health": 223,
+          "progressionIndex": 3,
+          "rank": 5,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 14,
+          "damage": 95,
+          "armour": 48,
+          "health": 242,
+          "progressionIndex": 4,
+          "rank": 5,
+          "stars": 3
+        },
+        {
+          "abilityLevel": 17,
+          "damage": 119,
+          "armour": 60,
+          "health": 303,
+          "progressionIndex": 4,
+          "rank": 6,
+          "stars": 3
+        },
+        {
+          "abilityLevel": 17,
+          "damage": 146,
+          "armour": 74,
+          "health": 373,
+          "progressionIndex": 8,
+          "rank": 6,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 20,
+          "damage": 183,
+          "armour": 93,
+          "health": 467,
+          "progressionIndex": 8,
+          "rank": 7,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 23,
+          "damage": 215,
+          "armour": 109,
+          "health": 548,
+          "progressionIndex": 7,
+          "rank": 8,
+          "stars": 5
+        },
+        {
+          "abilityLevel": 23,
+          "damage": 244,
+          "armour": 124,
+          "health": 621,
+          "progressionIndex": 10,
+          "rank": 8,
+          "stars": 7
+        },
+        {
+          "abilityLevel": 23,
+          "damage": 273,
+          "armour": 139,
+          "health": 694,
+          "progressionIndex": 13,
+          "rank": 8,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 26,
+          "damage": 306,
+          "armour": 156,
+          "health": 777,
+          "progressionIndex": 10,
+          "rank": 9,
+          "stars": 7
+        },
+        {
+          "abilityLevel": 26,
+          "damage": 342,
+          "armour": 174,
+          "health": 868,
+          "progressionIndex": 13,
+          "rank": 9,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 29,
+          "damage": 406,
+          "armour": 206,
+          "health": 1030,
+          "progressionIndex": 11,
+          "rank": 10,
+          "stars": 8
+        },
+        {
+          "abilityLevel": 29,
+          "damage": 429,
+          "armour": 217,
+          "health": 1087,
+          "progressionIndex": 13,
+          "rank": 10,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 32,
+          "damage": 509,
+          "armour": 257,
+          "health": 1289,
+          "progressionIndex": 11,
+          "rank": 11,
+          "stars": 8
+        },
+        {
+          "abilityLevel": 32,
+          "damage": 566,
+          "armour": 286,
+          "health": 1432,
+          "progressionIndex": 14,
+          "rank": 11,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 35,
+          "damage": 709,
+          "armour": 358,
+          "health": 1793,
+          "progressionIndex": 14,
+          "rank": 12,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 35,
+          "damage": 744,
+          "armour": 376,
+          "health": 1883,
+          "progressionIndex": 15,
+          "rank": 12,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 38,
+          "damage": 887,
+          "armour": 448,
+          "health": 2245,
+          "progressionIndex": 14,
+          "rank": 13,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 38,
+          "damage": 931,
+          "armour": 470,
+          "health": 2357,
+          "progressionIndex": 15,
+          "rank": 13,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 41,
+          "damage": 1110,
+          "armour": 560,
+          "health": 2810,
+          "progressionIndex": 14,
+          "rank": 14,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 41,
+          "damage": 1166,
+          "armour": 588,
+          "health": 2951,
+          "progressionIndex": 15,
+          "rank": 14,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 44,
+          "damage": 1390,
+          "armour": 701,
+          "health": 3519,
+          "progressionIndex": 14,
+          "rank": 15,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 44,
+          "damage": 1460,
+          "armour": 736,
+          "health": 3695,
+          "progressionIndex": 15,
+          "rank": 15,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 47,
+          "damage": 1741,
+          "armour": 878,
+          "health": 4406,
+          "progressionIndex": 14,
+          "rank": 16,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 47,
+          "damage": 1828,
+          "armour": 922,
+          "health": 4626,
+          "progressionIndex": 15,
+          "rank": 16,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 2180,
+          "armour": 1099,
+          "health": 5516,
+          "progressionIndex": 14,
+          "rank": 17,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 2289,
+          "armour": 1154,
+          "health": 5792,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 52,
+          "damage": 2866,
+          "armour": 1445,
+          "health": 7252,
+          "progressionIndex": 16,
+          "rank": 18,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 53,
+          "damage": 3002,
+          "armour": 1514,
+          "health": 7597,
+          "progressionIndex": 17,
+          "rank": 18,
+          "stars": 12
+        },
+        {
+          "abilityLevel": 54,
+          "damage": 3138,
+          "armour": 1583,
+          "health": 7942,
+          "progressionIndex": 18,
+          "rank": 18,
+          "stars": 13
+        },
+        {
+          "abilityLevel": 55,
+          "damage": 3274,
+          "armour": 1652,
+          "health": 8287,
+          "progressionIndex": 19,
+          "rank": 18,
+          "stars": 14
+        },
+        {
+          "abilityLevel": 57,
+          "damage": 3587,
+          "armour": 1810,
+          "health": 9078,
+          "progressionIndex": 16,
+          "rank": 19,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 58,
+          "damage": 3758,
+          "armour": 1896,
+          "health": 9510,
+          "progressionIndex": 17,
+          "rank": 19,
+          "stars": 12
+        },
+        {
+          "abilityLevel": 59,
+          "damage": 3929,
+          "armour": 1982,
+          "health": 9942,
+          "progressionIndex": 18,
+          "rank": 19,
+          "stars": 13
+        },
+        {
+          "abilityLevel": 60,
+          "damage": 4100,
+          "armour": 2068,
+          "health": 10374,
+          "progressionIndex": 19,
+          "rank": 19,
+          "stars": 14
+        },
+        {
+          "abilityLevel": 62,
+          "damage": 4492,
+          "armour": 2265,
+          "health": 11365,
+          "progressionIndex": 16,
+          "rank": 20,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 63,
+          "damage": 4706,
+          "armour": 2373,
+          "health": 11906,
+          "progressionIndex": 17,
+          "rank": 20,
+          "stars": 12
+        },
+        {
+          "abilityLevel": 64,
+          "damage": 4920,
+          "armour": 2481,
+          "health": 12447,
+          "progressionIndex": 18,
+          "rank": 20,
+          "stars": 13
+        },
+        {
+          "abilityLevel": 65,
+          "damage": 5134,
+          "armour": 2589,
+          "health": 12988,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
+        }
+      ]
+    },
+    {
+      "id": "templNpc2Neophyte",
+      "name": "Neophyte",
+      "meleeDamage": "Physical",
+      "meleeHits": 1,
+      "rangedDamage": "Projectile",
+      "rangedHits": 2,
+      "distance": 2,
+      "movement": 3,
+      "traits": [],
+      "activeAbilityDamage": [
+        "Flame"
+      ],
+      "activeAbilities": [
+        "IncendiaryShells"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [],
+      "icon": "snowprint_assets/characters/ui_image_portrait_templ_neophyte_01.png",
+      "stats": [
+        {
+          "abilityLevel": 1,
+          "damage": 30,
+          "armour": 9,
+          "health": 45,
+          "progressionIndex": 0,
+          "rank": 0,
+          "stars": 0
+        },
+        {
+          "abilityLevel": 3,
+          "damage": 38,
+          "armour": 11,
+          "health": 56,
+          "progressionIndex": 0,
+          "rank": 1,
+          "stars": 0
+        },
+        {
+          "abilityLevel": 3,
+          "damage": 42,
+          "armour": 12,
+          "health": 62,
+          "progressionIndex": 1,
+          "rank": 1,
+          "stars": 1
+        },
+        {
+          "abilityLevel": 5,
+          "damage": 53,
+          "armour": 15,
+          "health": 78,
+          "progressionIndex": 1,
+          "rank": 2,
+          "stars": 1
+        },
+        {
+          "abilityLevel": 8,
+          "damage": 66,
+          "armour": 19,
+          "health": 98,
+          "progressionIndex": 1,
+          "rank": 3,
+          "stars": 1
+        },
+        {
+          "abilityLevel": 8,
+          "damage": 72,
+          "armour": 21,
+          "health": 107,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 11,
+          "damage": 90,
+          "armour": 26,
+          "health": 134,
+          "progressionIndex": 3,
+          "rank": 4,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 14,
+          "damage": 113,
+          "armour": 33,
+          "health": 168,
+          "progressionIndex": 3,
+          "rank": 5,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 14,
+          "damage": 122,
+          "armour": 36,
+          "health": 182,
+          "progressionIndex": 4,
+          "rank": 5,
+          "stars": 3
+        },
+        {
+          "abilityLevel": 17,
+          "damage": 153,
+          "armour": 45,
+          "health": 228,
+          "progressionIndex": 4,
+          "rank": 6,
+          "stars": 3
+        },
+        {
+          "abilityLevel": 17,
+          "damage": 188,
+          "armour": 55,
+          "health": 281,
+          "progressionIndex": 8,
+          "rank": 6,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 20,
+          "damage": 235,
+          "armour": 69,
+          "health": 352,
+          "progressionIndex": 8,
+          "rank": 7,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 23,
+          "damage": 276,
+          "armour": 81,
+          "health": 413,
+          "progressionIndex": 7,
+          "rank": 8,
+          "stars": 5
+        },
+        {
+          "abilityLevel": 23,
+          "damage": 313,
+          "armour": 92,
+          "health": 468,
+          "progressionIndex": 10,
+          "rank": 8,
+          "stars": 7
+        },
+        {
+          "abilityLevel": 23,
+          "damage": 350,
+          "armour": 103,
+          "health": 523,
+          "progressionIndex": 13,
+          "rank": 8,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 26,
+          "damage": 392,
+          "armour": 115,
+          "health": 586,
+          "progressionIndex": 10,
+          "rank": 9,
+          "stars": 7
+        },
+        {
+          "abilityLevel": 26,
+          "damage": 438,
+          "armour": 129,
+          "health": 655,
+          "progressionIndex": 13,
+          "rank": 9,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 29,
+          "damage": 520,
+          "armour": 153,
+          "health": 777,
+          "progressionIndex": 11,
+          "rank": 10,
+          "stars": 8
+        },
+        {
+          "abilityLevel": 29,
+          "damage": 549,
+          "armour": 162,
+          "health": 820,
+          "progressionIndex": 13,
+          "rank": 10,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 32,
+          "damage": 651,
+          "armour": 192,
+          "health": 973,
+          "progressionIndex": 11,
+          "rank": 11,
+          "stars": 8
+        },
+        {
+          "abilityLevel": 32,
+          "damage": 723,
+          "armour": 213,
+          "health": 1081,
+          "progressionIndex": 14,
+          "rank": 11,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 35,
+          "damage": 905,
+          "armour": 267,
+          "health": 1353,
+          "progressionIndex": 14,
+          "rank": 12,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 35,
+          "damage": 950,
+          "armour": 280,
+          "health": 1421,
+          "progressionIndex": 15,
+          "rank": 12,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 38,
+          "damage": 1133,
+          "armour": 334,
+          "health": 1694,
+          "progressionIndex": 14,
+          "rank": 13,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 38,
+          "damage": 1190,
+          "armour": 351,
+          "health": 1779,
+          "progressionIndex": 15,
+          "rank": 13,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 41,
+          "damage": 1419,
+          "armour": 419,
+          "health": 2121,
+          "progressionIndex": 14,
+          "rank": 14,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 41,
+          "damage": 1490,
+          "armour": 440,
+          "health": 2227,
+          "progressionIndex": 15,
+          "rank": 14,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 44,
+          "damage": 1777,
+          "armour": 525,
+          "health": 2655,
+          "progressionIndex": 14,
+          "rank": 15,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 44,
+          "damage": 1866,
+          "armour": 551,
+          "health": 2788,
+          "progressionIndex": 15,
+          "rank": 15,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 47,
+          "damage": 2225,
+          "armour": 657,
+          "health": 3324,
+          "progressionIndex": 14,
+          "rank": 16,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 47,
+          "damage": 2336,
+          "armour": 690,
+          "health": 3490,
+          "progressionIndex": 15,
+          "rank": 16,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 2785,
+          "armour": 823,
+          "health": 4161,
+          "progressionIndex": 14,
+          "rank": 17,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 2924,
+          "armour": 864,
+          "health": 4369,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 52,
+          "damage": 3661,
+          "armour": 1082,
+          "health": 5470,
+          "progressionIndex": 16,
+          "rank": 18,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 53,
+          "damage": 3835,
+          "armour": 1134,
+          "health": 5730,
+          "progressionIndex": 17,
+          "rank": 18,
+          "stars": 12
+        },
+        {
+          "abilityLevel": 54,
+          "damage": 4009,
+          "armour": 1186,
+          "health": 5990,
+          "progressionIndex": 18,
+          "rank": 18,
+          "stars": 13
+        },
+        {
+          "abilityLevel": 55,
+          "damage": 4183,
+          "armour": 1238,
+          "health": 6250,
+          "progressionIndex": 19,
+          "rank": 18,
+          "stars": 14
+        },
+        {
+          "abilityLevel": 57,
+          "damage": 4582,
+          "armour": 1356,
+          "health": 6847,
+          "progressionIndex": 16,
+          "rank": 19,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 58,
+          "damage": 4800,
+          "armour": 1421,
+          "health": 7173,
+          "progressionIndex": 17,
+          "rank": 19,
+          "stars": 12
+        },
+        {
+          "abilityLevel": 59,
+          "damage": 5018,
+          "armour": 1486,
+          "health": 7499,
+          "progressionIndex": 18,
+          "rank": 19,
+          "stars": 13
+        },
+        {
+          "abilityLevel": 60,
+          "damage": 5236,
+          "armour": 1551,
+          "health": 7825,
+          "progressionIndex": 19,
+          "rank": 19,
+          "stars": 14
+        },
+        {
+          "abilityLevel": 62,
+          "damage": 5736,
+          "armour": 1699,
+          "health": 8572,
+          "progressionIndex": 16,
+          "rank": 20,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 63,
+          "damage": 6009,
+          "armour": 1780,
+          "health": 8980,
+          "progressionIndex": 17,
+          "rank": 20,
+          "stars": 12
+        },
+        {
+          "abilityLevel": 64,
+          "damage": 6282,
+          "armour": 1861,
+          "health": 9388,
+          "progressionIndex": 18,
+          "rank": 20,
+          "stars": 13
+        },
+        {
+          "abilityLevel": 65,
+          "damage": 6555,
+          "armour": 1942,
+          "health": 9796,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
+        }
+      ]
+    },
+    {
+      "id": "templNpc3InitiatePyreblaster",
+      "name": "Initiate with Pyreblaster",
+      "meleeDamage": "Physical",
+      "meleeHits": 1,
+      "rangedDamage": "Flame",
+      "rangedHits": 3,
+      "distance": 2,
+      "movement": 3,
+      "traits": [],
+      "activeAbilityDamage": [],
+      "activeAbilities": [],
+      "passiveAbilityDamage": [
+        "Flame"
+      ],
+      "passiveAbilities": [
+        "Pyreblaster"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_templ_pyreblaster_01.png",
+      "stats": [
+        {
+          "abilityLevel": 1,
+          "damage": 24,
+          "armour": 12,
+          "health": 60,
+          "progressionIndex": 0,
+          "rank": 0,
+          "stars": 0
+        },
+        {
+          "abilityLevel": 3,
+          "damage": 30,
+          "armour": 15,
+          "health": 75,
+          "progressionIndex": 0,
+          "rank": 1,
+          "stars": 0
+        },
+        {
+          "abilityLevel": 3,
+          "damage": 33,
+          "armour": 17,
+          "health": 83,
+          "progressionIndex": 1,
+          "rank": 1,
+          "stars": 1
+        },
+        {
+          "abilityLevel": 5,
+          "damage": 41,
+          "armour": 21,
+          "health": 104,
+          "progressionIndex": 1,
+          "rank": 2,
+          "stars": 1
+        },
+        {
+          "abilityLevel": 8,
+          "damage": 51,
+          "armour": 26,
+          "health": 130,
+          "progressionIndex": 1,
+          "rank": 3,
+          "stars": 1
+        },
+        {
+          "abilityLevel": 8,
+          "damage": 56,
+          "armour": 28,
+          "health": 142,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 11,
+          "damage": 70,
+          "armour": 35,
+          "health": 178,
+          "progressionIndex": 3,
+          "rank": 4,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 14,
+          "damage": 88,
+          "armour": 44,
+          "health": 223,
+          "progressionIndex": 3,
+          "rank": 5,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 14,
+          "damage": 95,
+          "armour": 48,
+          "health": 242,
+          "progressionIndex": 4,
+          "rank": 5,
+          "stars": 3
+        },
+        {
+          "abilityLevel": 17,
+          "damage": 119,
+          "armour": 60,
+          "health": 303,
+          "progressionIndex": 4,
+          "rank": 6,
+          "stars": 3
+        },
+        {
+          "abilityLevel": 17,
+          "damage": 146,
+          "armour": 74,
+          "health": 373,
+          "progressionIndex": 8,
+          "rank": 6,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 20,
+          "damage": 183,
+          "armour": 93,
+          "health": 467,
+          "progressionIndex": 8,
+          "rank": 7,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 23,
+          "damage": 215,
+          "armour": 109,
+          "health": 548,
+          "progressionIndex": 7,
+          "rank": 8,
+          "stars": 5
+        },
+        {
+          "abilityLevel": 23,
+          "damage": 244,
+          "armour": 124,
+          "health": 621,
+          "progressionIndex": 10,
+          "rank": 8,
+          "stars": 7
+        },
+        {
+          "abilityLevel": 23,
+          "damage": 273,
+          "armour": 139,
+          "health": 694,
+          "progressionIndex": 13,
+          "rank": 8,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 26,
+          "damage": 306,
+          "armour": 156,
+          "health": 777,
+          "progressionIndex": 10,
+          "rank": 9,
+          "stars": 7
+        },
+        {
+          "abilityLevel": 26,
+          "damage": 342,
+          "armour": 174,
+          "health": 868,
+          "progressionIndex": 13,
+          "rank": 9,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 29,
+          "damage": 406,
+          "armour": 206,
+          "health": 1030,
+          "progressionIndex": 11,
+          "rank": 10,
+          "stars": 8
+        },
+        {
+          "abilityLevel": 29,
+          "damage": 429,
+          "armour": 217,
+          "health": 1087,
+          "progressionIndex": 13,
+          "rank": 10,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 32,
+          "damage": 509,
+          "armour": 257,
+          "health": 1289,
+          "progressionIndex": 11,
+          "rank": 11,
+          "stars": 8
+        },
+        {
+          "abilityLevel": 32,
+          "damage": 566,
+          "armour": 286,
+          "health": 1432,
+          "progressionIndex": 14,
+          "rank": 11,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 35,
+          "damage": 709,
+          "armour": 358,
+          "health": 1793,
+          "progressionIndex": 14,
+          "rank": 12,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 35,
+          "damage": 744,
+          "armour": 376,
+          "health": 1883,
+          "progressionIndex": 15,
+          "rank": 12,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 38,
+          "damage": 887,
+          "armour": 448,
+          "health": 2245,
+          "progressionIndex": 14,
+          "rank": 13,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 38,
+          "damage": 931,
+          "armour": 470,
+          "health": 2357,
+          "progressionIndex": 15,
+          "rank": 13,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 41,
+          "damage": 1110,
+          "armour": 560,
+          "health": 2810,
+          "progressionIndex": 14,
+          "rank": 14,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 41,
+          "damage": 1166,
+          "armour": 588,
+          "health": 2951,
+          "progressionIndex": 15,
+          "rank": 14,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 44,
+          "damage": 1390,
+          "armour": 701,
+          "health": 3519,
+          "progressionIndex": 14,
+          "rank": 15,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 44,
+          "damage": 1460,
+          "armour": 736,
+          "health": 3695,
+          "progressionIndex": 15,
+          "rank": 15,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 47,
+          "damage": 1741,
+          "armour": 878,
+          "health": 4406,
+          "progressionIndex": 14,
+          "rank": 16,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 47,
+          "damage": 1828,
+          "armour": 922,
+          "health": 4626,
+          "progressionIndex": 15,
+          "rank": 16,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 2180,
+          "armour": 1099,
+          "health": 5516,
+          "progressionIndex": 14,
+          "rank": 17,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 2289,
+          "armour": 1154,
+          "health": 5792,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 52,
+          "damage": 2866,
+          "armour": 1445,
+          "health": 7252,
+          "progressionIndex": 16,
+          "rank": 18,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 53,
+          "damage": 3002,
+          "armour": 1514,
+          "health": 7597,
+          "progressionIndex": 17,
+          "rank": 18,
+          "stars": 12
+        },
+        {
+          "abilityLevel": 54,
+          "damage": 3138,
+          "armour": 1583,
+          "health": 7942,
+          "progressionIndex": 18,
+          "rank": 18,
+          "stars": 13
+        },
+        {
+          "abilityLevel": 55,
+          "damage": 3274,
+          "armour": 1652,
+          "health": 8287,
+          "progressionIndex": 19,
+          "rank": 18,
+          "stars": 14
+        },
+        {
+          "abilityLevel": 57,
+          "damage": 3587,
+          "armour": 1810,
+          "health": 9078,
+          "progressionIndex": 16,
+          "rank": 19,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 58,
+          "damage": 3758,
+          "armour": 1896,
+          "health": 9510,
+          "progressionIndex": 17,
+          "rank": 19,
+          "stars": 12
+        },
+        {
+          "abilityLevel": 59,
+          "damage": 3929,
+          "armour": 1982,
+          "health": 9942,
+          "progressionIndex": 18,
+          "rank": 19,
+          "stars": 13
+        },
+        {
+          "abilityLevel": 60,
+          "damage": 4100,
+          "armour": 2068,
+          "health": 10374,
+          "progressionIndex": 19,
+          "rank": 19,
+          "stars": 14
+        },
+        {
+          "abilityLevel": 62,
+          "damage": 4492,
+          "armour": 2265,
+          "health": 11365,
+          "progressionIndex": 16,
+          "rank": 20,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 63,
+          "damage": 4706,
+          "armour": 2373,
+          "health": 11906,
+          "progressionIndex": 17,
+          "rank": 20,
+          "stars": 12
+        },
+        {
+          "abilityLevel": 64,
+          "damage": 4920,
+          "armour": 2481,
+          "health": 12447,
+          "progressionIndex": 18,
+          "rank": 20,
+          "stars": 13
+        },
+        {
+          "abilityLevel": 65,
+          "damage": 5134,
+          "armour": 2589,
+          "health": 12988,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
+        }
+      ]
+    },
+    {
+      "id": "templNpc4Aggressor",
+      "name": "Aggressor",
+      "meleeDamage": "Power",
+      "meleeHits": 3,
+      "rangedDamage": "Bolter",
+      "rangedHits": 6,
+      "distance": 2,
+      "movement": 2,
+      "traits": [
+        "MkXGravis",
+        "SuppressiveFire"
+      ],
+      "activeAbilityDamage": [
+        "Blast"
+      ],
+      "activeAbilities": [
+        "Fragstorm"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [],
+      "icon": "snowprint_assets/characters/ui_image_portrait_templ_aggressor_02.png",
+      "stats": [
+        {
+          "abilityLevel": 1,
+          "damage": 9,
+          "armour": 20,
+          "health": 135,
+          "progressionIndex": 0,
+          "rank": 0,
+          "stars": 0
+        },
+        {
+          "abilityLevel": 3,
+          "damage": 11,
+          "armour": 25,
+          "health": 169,
+          "progressionIndex": 0,
+          "rank": 1,
+          "stars": 0
+        },
+        {
+          "abilityLevel": 3,
+          "damage": 12,
+          "armour": 28,
+          "health": 186,
+          "progressionIndex": 1,
+          "rank": 1,
+          "stars": 1
+        },
+        {
+          "abilityLevel": 5,
+          "damage": 15,
+          "armour": 35,
+          "health": 233,
+          "progressionIndex": 1,
+          "rank": 2,
+          "stars": 1
+        },
+        {
+          "abilityLevel": 8,
+          "damage": 19,
+          "armour": 44,
+          "health": 292,
+          "progressionIndex": 1,
+          "rank": 3,
+          "stars": 1
+        },
+        {
+          "abilityLevel": 8,
+          "damage": 21,
+          "armour": 48,
+          "health": 319,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 11,
+          "damage": 26,
+          "armour": 60,
+          "health": 399,
+          "progressionIndex": 3,
+          "rank": 4,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 14,
+          "damage": 33,
+          "armour": 75,
+          "health": 500,
+          "progressionIndex": 3,
+          "rank": 5,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 14,
+          "damage": 36,
+          "armour": 81,
+          "health": 542,
+          "progressionIndex": 4,
+          "rank": 5,
+          "stars": 3
+        },
+        {
+          "abilityLevel": 17,
+          "damage": 45,
+          "armour": 101,
+          "health": 679,
+          "progressionIndex": 4,
+          "rank": 6,
+          "stars": 3
+        },
+        {
+          "abilityLevel": 17,
+          "damage": 55,
+          "armour": 124,
+          "health": 836,
+          "progressionIndex": 8,
+          "rank": 6,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 20,
+          "damage": 69,
+          "armour": 155,
+          "health": 1047,
+          "progressionIndex": 8,
+          "rank": 7,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 23,
+          "damage": 81,
+          "armour": 182,
+          "health": 1229,
+          "progressionIndex": 7,
+          "rank": 8,
+          "stars": 5
+        },
+        {
+          "abilityLevel": 23,
+          "damage": 92,
+          "armour": 206,
+          "health": 1393,
+          "progressionIndex": 10,
+          "rank": 8,
+          "stars": 7
+        },
+        {
+          "abilityLevel": 23,
+          "damage": 103,
+          "armour": 230,
+          "health": 1557,
+          "progressionIndex": 13,
+          "rank": 8,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 26,
+          "damage": 115,
+          "armour": 258,
+          "health": 1744,
+          "progressionIndex": 10,
+          "rank": 9,
+          "stars": 7
+        },
+        {
+          "abilityLevel": 26,
+          "damage": 129,
+          "armour": 288,
+          "health": 1949,
+          "progressionIndex": 13,
+          "rank": 9,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 29,
+          "damage": 153,
+          "armour": 342,
+          "health": 2312,
+          "progressionIndex": 11,
+          "rank": 10,
+          "stars": 8
+        },
+        {
+          "abilityLevel": 29,
+          "damage": 162,
+          "armour": 361,
+          "health": 2440,
+          "progressionIndex": 13,
+          "rank": 10,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 32,
+          "damage": 192,
+          "armour": 428,
+          "health": 2894,
+          "progressionIndex": 11,
+          "rank": 11,
+          "stars": 8
+        },
+        {
+          "abilityLevel": 32,
+          "damage": 213,
+          "armour": 476,
+          "health": 3216,
+          "progressionIndex": 14,
+          "rank": 11,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 35,
+          "damage": 267,
+          "armour": 596,
+          "health": 4026,
+          "progressionIndex": 14,
+          "rank": 12,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 35,
+          "damage": 280,
+          "armour": 626,
+          "health": 4227,
+          "progressionIndex": 15,
+          "rank": 12,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 38,
+          "damage": 334,
+          "armour": 746,
+          "health": 5040,
+          "progressionIndex": 14,
+          "rank": 13,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 38,
+          "damage": 351,
+          "armour": 783,
+          "health": 5292,
+          "progressionIndex": 15,
+          "rank": 13,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 41,
+          "damage": 419,
+          "armour": 934,
+          "health": 6310,
+          "progressionIndex": 14,
+          "rank": 14,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 41,
+          "damage": 440,
+          "armour": 981,
+          "health": 6626,
+          "progressionIndex": 15,
+          "rank": 14,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 44,
+          "damage": 525,
+          "armour": 1170,
+          "health": 7901,
+          "progressionIndex": 14,
+          "rank": 15,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 44,
+          "damage": 551,
+          "armour": 1229,
+          "health": 8296,
+          "progressionIndex": 15,
+          "rank": 15,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 47,
+          "damage": 657,
+          "armour": 1465,
+          "health": 9892,
+          "progressionIndex": 14,
+          "rank": 16,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 47,
+          "damage": 690,
+          "armour": 1538,
+          "health": 10387,
+          "progressionIndex": 15,
+          "rank": 16,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 823,
+          "armour": 1834,
+          "health": 12385,
+          "progressionIndex": 14,
+          "rank": 17,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 864,
+          "armour": 1926,
+          "health": 13004,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 52,
+          "damage": 1082,
+          "armour": 2411,
+          "health": 16281,
+          "progressionIndex": 16,
+          "rank": 18,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 53,
+          "damage": 1134,
+          "armour": 2526,
+          "health": 17056,
+          "progressionIndex": 17,
+          "rank": 18,
+          "stars": 12
+        },
+        {
+          "abilityLevel": 54,
+          "damage": 1186,
+          "armour": 2641,
+          "health": 17831,
+          "progressionIndex": 18,
+          "rank": 18,
+          "stars": 13
+        },
+        {
+          "abilityLevel": 55,
+          "damage": 1238,
+          "armour": 2756,
+          "health": 18606,
+          "progressionIndex": 19,
+          "rank": 18,
+          "stars": 14
+        },
+        {
+          "abilityLevel": 57,
+          "damage": 1356,
+          "armour": 3019,
+          "health": 20383,
+          "progressionIndex": 16,
+          "rank": 19,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 58,
+          "damage": 1421,
+          "armour": 3163,
+          "health": 21354,
+          "progressionIndex": 17,
+          "rank": 19,
+          "stars": 12
+        },
+        {
+          "abilityLevel": 59,
+          "damage": 1486,
+          "armour": 3307,
+          "health": 22325,
+          "progressionIndex": 18,
+          "rank": 19,
+          "stars": 13
+        },
+        {
+          "abilityLevel": 60,
+          "damage": 1551,
+          "armour": 3451,
+          "health": 23296,
+          "progressionIndex": 19,
+          "rank": 19,
+          "stars": 14
+        },
+        {
+          "abilityLevel": 62,
+          "damage": 1699,
+          "armour": 3781,
+          "health": 25521,
+          "progressionIndex": 16,
+          "rank": 20,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 63,
+          "damage": 1780,
+          "armour": 3961,
+          "health": 26736,
+          "progressionIndex": 17,
+          "rank": 20,
+          "stars": 12
+        },
+        {
+          "abilityLevel": 64,
+          "damage": 1861,
+          "armour": 4141,
+          "health": 27951,
+          "progressionIndex": 18,
+          "rank": 20,
+          "stars": 13
+        },
+        {
+          "abilityLevel": 65,
+          "damage": 1942,
+          "armour": 4321,
+          "health": 29166,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
+        }
+      ]
+    }
+  ]
+}

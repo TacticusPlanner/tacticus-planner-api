@@ -1,0 +1,4824 @@
+{
+  "groupId": "world-eaters-vs-adepta-sororitas",
+  "faction": "WorldEaters",
+  "releaseType": "event",
+  "coreCharacters": [
+    "worldEightbound",
+    "worldExecutions",
+    "worldTerminator"
+  ],
+  "difficulties": [
+    "eventStandard",
+    "eventStandardChallenge",
+    "eventExtremis",
+    "eventExtremisChallenge"
+  ],
+  "battles": [
+    {
+      "id": "ASS01",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 1,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 40,
+            "max": 66
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC016",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 125,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 5,
+      "enemiesTypes": [
+        "Cadian Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:7",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 5,
+          "stars": 2,
+          "rank": "Iron3"
+        }
+      ]
+    },
+    {
+      "id": "ASS02",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 2,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 40,
+            "max": 66
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC003",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 250,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 5,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:6",
+          "count": 3
+        },
+        {
+          "id": "astraNpc1Guardsman:6",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 3,
+          "stars": 2,
+          "rank": "Iron2"
+        },
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 2,
+          "stars": 2,
+          "rank": "Iron2"
+        }
+      ]
+    },
+    {
+      "id": "ASS03",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 3,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 40,
+            "max": 66
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC001",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 300,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "Sisterhood"
+      ],
+      "enemiesTotal": 5,
+      "enemiesTypes": [
+        "Battle Sister"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:5",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 5,
+          "stars": 2,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "ASSC3B",
+      "difficulty": "eventStandardChallenge",
+      "energyCost": 6,
+      "nodeNumber": 3,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR005",
+            "chanceId": "upgradeRare_eventStandardChallenge"
+          }
+        ]
+      },
+      "enemyPower": 1212,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Lascannon Team",
+        "Cadian Vox-caster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:6",
+          "count": 3
+        },
+        {
+          "id": "astraNpc2Lascannon:8",
+          "count": 2
+        },
+        {
+          "id": "astraNpc3Voxcaster:8",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 3,
+          "stars": 2,
+          "rank": "Iron2"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 3,
+          "rank": "Iron3"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 4,
+          "stars": 3,
+          "rank": "Iron3"
+        }
+      ]
+    },
+    {
+      "id": "ASS04",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 4,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 40,
+            "max": 66
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC007",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 420,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "Sisterhood"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Battle Sister"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:5",
+          "count": 7
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 7,
+          "stars": 2,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "ASS05",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 5,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 40,
+            "max": 66
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC011",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 410,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Guardsman",
+        "Cadian Vox-caster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:6",
+          "count": 3
+        },
+        {
+          "id": "astraNpc1Guardsman:6",
+          "count": 3
+        },
+        {
+          "id": "astraNpc3Voxcaster:6",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 3,
+          "stars": 2,
+          "rank": "Iron2"
+        },
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 3,
+          "stars": 2,
+          "rank": "Iron2"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 2,
+          "stars": 2,
+          "rank": "Iron2"
+        }
+      ]
+    },
+    {
+      "id": "ASS06",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 6,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 45,
+            "max": 75
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_adeptRetributor",
+            "chanceId": "shard_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 813,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Guardsman",
+        "Vindicta"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:7",
+          "count": 4
+        },
+        {
+          "id": "adeptNpcRetributor:4",
+          "count": 1
+        },
+        {
+          "id": "astraNpc1Guardsman:8",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 4,
+          "stars": 2,
+          "rank": "Iron3"
+        },
+        {
+          "id": "adeptNpcRetributor",
+          "name": "Vindicta",
+          "count": 1,
+          "stars": 3,
+          "rank": "Iron2"
+        },
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 3,
+          "stars": 3,
+          "rank": "Iron3"
+        }
+      ]
+    },
+    {
+      "id": "ASS07",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 7,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 45,
+            "max": 75
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC006",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 378,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Guardsman",
+        "Cadian Lascannon Team"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:6",
+          "count": 3
+        },
+        {
+          "id": "astraNpc1Guardsman:7",
+          "count": 4
+        },
+        {
+          "id": "astraNpc2Lascannon:5",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 3,
+          "stars": 2,
+          "rank": "Iron2"
+        },
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 4,
+          "stars": 2,
+          "rank": "Iron3"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 2,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "ASS08",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 8,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 45,
+            "max": 75
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC003",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 358,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Guardsman",
+        "Cadian Lascannon Team"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:6",
+          "count": 3
+        },
+        {
+          "id": "astraNpc1Guardsman:4",
+          "count": 6
+        },
+        {
+          "id": "astraNpc2Lascannon:4",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 3,
+          "stars": 2,
+          "rank": "Iron2"
+        },
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 6,
+          "stars": 1,
+          "rank": "Iron1"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 1,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "ASS09",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 9,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 45,
+            "max": 75
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC010",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 522,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Lascannon Team"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:6",
+          "count": 6
+        },
+        {
+          "id": "astraNpc2Lascannon:5",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 6,
+          "stars": 2,
+          "rank": "Iron2"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 3,
+          "stars": 2,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "ASS10",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 10,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 45,
+            "max": 75
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR022",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 391,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Lascannon Team"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:6",
+          "count": 4
+        },
+        {
+          "id": "astraNpc2Lascannon:6",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 4,
+          "stars": 2,
+          "rank": "Iron2"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 3,
+          "stars": 2,
+          "rank": "Iron2"
+        }
+      ]
+    },
+    {
+      "id": "ASS11",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 11,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_adeptCanoness",
+            "chanceId": "shard_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 844,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Lascannon Team",
+        "Cadian Vox-caster",
+        "Roswitha"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:6",
+          "count": 5
+        },
+        {
+          "id": "adeptNpcCanoness:3",
+          "count": 1
+        },
+        {
+          "id": "astraNpc2Lascannon:5",
+          "count": 2
+        },
+        {
+          "id": "astraNpc3Voxcaster:5",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 5,
+          "stars": 2,
+          "rank": "Iron2"
+        },
+        {
+          "id": "adeptNpcCanoness",
+          "name": "Roswitha",
+          "count": 1,
+          "stars": 3,
+          "rank": "Iron1"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 2,
+          "rank": "Iron1"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 3,
+          "stars": 2,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "ASS12",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 12,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC002",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 1457,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "Sisterhood"
+      ],
+      "enemiesTotal": 5,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:9",
+          "count": 3
+        },
+        {
+          "id": "adeptNpc2Zephyrim:10",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 3,
+          "stars": 3,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 2,
+          "stars": 6,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "ASS13",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 13,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpU007",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 2270,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "Sisterhood"
+      ],
+      "enemiesTotal": 5,
+      "enemiesTypes": [
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc2Zephyrim:10",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 5,
+          "stars": 6,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "ASSC13B",
+      "difficulty": "eventStandardChallenge",
+      "energyCost": 6,
+      "nodeNumber": 13,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpE012",
+            "chanceId": "upgradeEpic_eventStandardChallenge"
+          }
+        ]
+      },
+      "enemyPower": 11177,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Mortar Team",
+        "Cadian Vox-caster",
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:14",
+          "count": 2
+        },
+        {
+          "id": "adeptNpc2Zephyrim:13",
+          "count": 3
+        },
+        {
+          "id": "astraNpc3Voxcaster:13",
+          "count": 4
+        },
+        {
+          "id": "astraNpc4Mortar:10",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 2,
+          "stars": 9,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 3,
+          "stars": 7,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 4,
+          "stars": 7,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 2,
+          "stars": 6,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "ASS14",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 14,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgU003",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 2202,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "Sisterhood"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:10",
+          "count": 3
+        },
+        {
+          "id": "adeptNpc2Zephyrim:10",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 3,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 3,
+          "stars": 6,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "ASS15",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 15,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmU005",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 2656,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "Sisterhood"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:10",
+          "count": 3
+        },
+        {
+          "id": "adeptNpc2Zephyrim:10",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 3,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 4,
+          "stars": 6,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "ASS16",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 16,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR022",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 3215,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Lascannon Team",
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:10",
+          "count": 4
+        },
+        {
+          "id": "adeptNpc2Zephyrim:11",
+          "count": 3
+        },
+        {
+          "id": "astraNpc2Lascannon:9",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 4,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 3,
+          "stars": 6,
+          "rank": "Bronze2"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 3,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "ASS17",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 17,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 52,
+            "max": 90
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_adeptHospitaller",
+            "chanceId": "shard_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 5026,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Vox-caster",
+        "Isabella",
+        "Roswitha",
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:10",
+          "count": 4
+        },
+        {
+          "id": "adeptNpc2Zephyrim:10",
+          "count": 4
+        },
+        {
+          "id": "adeptNpcCanoness:8",
+          "count": 1
+        },
+        {
+          "id": "adeptNpcHospitaller:9",
+          "count": 1
+        },
+        {
+          "id": "astraNpc3Voxcaster:10",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 4,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 4,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "adeptNpcCanoness",
+          "name": "Roswitha",
+          "count": 1,
+          "stars": 6,
+          "rank": "Iron3"
+        },
+        {
+          "id": "adeptNpcHospitaller",
+          "name": "Isabella",
+          "count": 1,
+          "stars": 6,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 1,
+          "stars": 6,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "ASS18",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 18,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 52,
+            "max": 90
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgU014",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 3869,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus",
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Cadian Lascannon Team",
+        "Cadian Vox-caster",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc2Techpriest:10",
+          "count": 3
+        },
+        {
+          "id": "astraNpc2Lascannon:10",
+          "count": 2
+        },
+        {
+          "id": "astraNpc3Voxcaster:11",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 3,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 4,
+          "stars": 6,
+          "rank": "Bronze2"
+        }
+      ]
+    },
+    {
+      "id": "ASS19",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 19,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 52,
+            "max": 90
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpU016",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 4395,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus",
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Cadian Lascannon Team",
+        "Cadian Vox-caster",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc2Techpriest:11",
+          "count": 3
+        },
+        {
+          "id": "astraNpc2Lascannon:10",
+          "count": 3
+        },
+        {
+          "id": "astraNpc3Voxcaster:11",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 3,
+          "stars": 6,
+          "rank": "Bronze2"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 3,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 3,
+          "stars": 6,
+          "rank": "Bronze2"
+        }
+      ]
+    },
+    {
+      "id": "ASS20",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 20,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 52,
+            "max": 90
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmU001",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 2280,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 5,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Vox-caster",
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:10",
+          "count": 2
+        },
+        {
+          "id": "adeptNpc2Zephyrim:11",
+          "count": 2
+        },
+        {
+          "id": "astraNpc3Voxcaster:11",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 2,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 2,
+          "stars": 6,
+          "rank": "Bronze2"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 1,
+          "stars": 6,
+          "rank": "Bronze2"
+        }
+      ]
+    },
+    {
+      "id": "ASS21",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 21,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 52,
+            "max": 90
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR022",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 5081,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus",
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Vox-caster",
+        "Tech-Priest Enginseer",
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:10",
+          "count": 4
+        },
+        {
+          "id": "adeptNpc2Zephyrim:10",
+          "count": 3
+        },
+        {
+          "id": "admecNpc2Techpriest:10",
+          "count": 3
+        },
+        {
+          "id": "astraNpc3Voxcaster:10",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 4,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 3,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 3,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 2,
+          "stars": 6,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "ASS22",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 22,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_adeptMorvenn",
+            "chanceId": "shard_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 5794,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Morvenn Vahl",
+        "Tech-Priest Enginseer",
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:10",
+          "count": 3
+        },
+        {
+          "id": "adeptNpc2Zephyrim:10",
+          "count": 4
+        },
+        {
+          "id": "adeptNpcMorvenn:9",
+          "count": 1
+        },
+        {
+          "id": "admecNpc2Techpriest:10",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 3,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 4,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "adeptNpcMorvenn",
+          "name": "Morvenn Vahl",
+          "count": 1,
+          "stars": 6,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 2,
+          "stars": 6,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "ASS23",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 23,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpU002",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 7956,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "Sisterhood"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Battle Sister"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:13",
+          "count": 9
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 9,
+          "stars": 7,
+          "rank": "Bronze3"
+        }
+      ]
+    },
+    {
+      "id": "ASS24",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 24,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgU012",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 7148,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 5,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Vox-caster",
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:14",
+          "count": 2
+        },
+        {
+          "id": "adeptNpc2Zephyrim:14",
+          "count": 2
+        },
+        {
+          "id": "astraNpc3Voxcaster:14",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 2,
+          "stars": 9,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 2,
+          "stars": 9,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 1,
+          "stars": 9,
+          "rank": "Bronze3"
+        }
+      ]
+    },
+    {
+      "id": "ASS25",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 25,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmU013",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 10764,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Mortar Team",
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:14",
+          "count": 4
+        },
+        {
+          "id": "adeptNpc2Zephyrim:14",
+          "count": 2
+        },
+        {
+          "id": "astraNpc4Mortar:14",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 4,
+          "stars": 9,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 2,
+          "stars": 9,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 2,
+          "stars": 9,
+          "rank": "Bronze3"
+        }
+      ]
+    },
+    {
+      "id": "ASSC25B",
+      "difficulty": "eventStandardChallenge",
+      "energyCost": 6,
+      "nodeNumber": 25,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgE003",
+            "chanceId": "upgradeEpic_eventStandardChallenge"
+          }
+        ]
+      },
+      "enemyPower": 68416,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Isabella",
+        "Morvenn Vahl",
+        "Roswitha",
+        "Tech-Priest Enginseer",
+        "Vindicta",
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:19",
+          "count": 3
+        },
+        {
+          "id": "adeptNpc2Zephyrim:17",
+          "count": 2
+        },
+        {
+          "id": "adeptNpcCanoness:10",
+          "count": 1
+        },
+        {
+          "id": "adeptNpcHospitaller:11",
+          "count": 1
+        },
+        {
+          "id": "adeptNpcMorvenn:12",
+          "count": 1
+        },
+        {
+          "id": "adeptNpcRetributor:10",
+          "count": 1
+        },
+        {
+          "id": "admecNpc2Techpriest:19",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver3"
+        },
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "adeptNpcCanoness",
+          "name": "Roswitha",
+          "count": 1,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "adeptNpcHospitaller",
+          "name": "Isabella",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "adeptNpcMorvenn",
+          "name": "Morvenn Vahl",
+          "count": 1,
+          "stars": 9,
+          "rank": "Gold2"
+        },
+        {
+          "id": "adeptNpcRetributor",
+          "name": "Vindicta",
+          "count": 1,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver3"
+        }
+      ]
+    },
+    {
+      "id": "ASS26",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 26,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR002",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 22023,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus",
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Mortar Team",
+        "Tech-Priest Enginseer",
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:16",
+          "count": 3
+        },
+        {
+          "id": "adeptNpc2Zephyrim:16",
+          "count": 3
+        },
+        {
+          "id": "admecNpc2Techpriest:16",
+          "count": 1
+        },
+        {
+          "id": "astraNpc4Mortar:14",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 3,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 3,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 1,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 2,
+          "stars": 9,
+          "rank": "Bronze3"
+        }
+      ]
+    },
+    {
+      "id": "ASS27",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 27,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR006",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 19789,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Lascannon Team",
+        "Cadian Mortar Team",
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:17",
+          "count": 3
+        },
+        {
+          "id": "adeptNpc2Zephyrim:17",
+          "count": 2
+        },
+        {
+          "id": "astraNpc2Lascannon:17",
+          "count": 2
+        },
+        {
+          "id": "astraNpc4Mortar:15",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 2,
+          "stars": 7,
+          "rank": "Silver1"
+        }
+      ]
+    },
+    {
+      "id": "ASS28",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 28,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR005",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 31831,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Lascannon Team",
+        "Cadian Mortar Team",
+        "Cadian Vox-caster",
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:18",
+          "count": 3
+        },
+        {
+          "id": "adeptNpc2Zephyrim:17",
+          "count": 2
+        },
+        {
+          "id": "astraNpc2Lascannon:17",
+          "count": 2
+        },
+        {
+          "id": "astraNpc3Voxcaster:18",
+          "count": 2
+        },
+        {
+          "id": "astraNpc4Mortar:16",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 3,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver1"
+        }
+      ]
+    },
+    {
+      "id": "ASS29",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 29,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL102",
+            "chanceId": "upgradeLegendary_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 29806,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Lascannon Team",
+        "Cadian Mortar Team",
+        "Cadian Vox-caster",
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:17",
+          "count": 3
+        },
+        {
+          "id": "adeptNpc2Zephyrim:17",
+          "count": 3
+        },
+        {
+          "id": "astraNpc2Lascannon:17",
+          "count": 1
+        },
+        {
+          "id": "astraNpc3Voxcaster:17",
+          "count": 2
+        },
+        {
+          "id": "astraNpc4Mortar:15",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 2,
+          "stars": 7,
+          "rank": "Silver1"
+        }
+      ]
+    },
+    {
+      "id": "ASS30",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 30,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_adeptCelestine",
+            "chanceId": "shard_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 35806,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Mortar Team",
+        "Celestine",
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptBossCelestineCE:2",
+          "count": 1
+        },
+        {
+          "id": "adeptNpc1BattleSister:16",
+          "count": 4
+        },
+        {
+          "id": "adeptNpc2Zephyrim:16",
+          "count": 2
+        },
+        {
+          "id": "astraNpc4Mortar:16",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptBossCelestineCE",
+          "name": "Celestine",
+          "count": 1,
+          "stars": 6,
+          "rank": "Silver1"
+        },
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 4,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver1"
+        }
+      ]
+    },
+    {
+      "id": "ASE01",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 1,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC016",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 13873,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 5,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:20",
+          "count": 2
+        },
+        {
+          "id": "astraNpc1Guardsman:22",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 2,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold1"
+        }
+      ]
+    },
+    {
+      "id": "ASE02",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 2,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC003",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 27470,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:22",
+          "count": 2
+        },
+        {
+          "id": "astraNpc1Guardsman:24",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold2"
+        }
+      ]
+    },
+    {
+      "id": "ASE03",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 3,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC001",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 61530,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "Sisterhood"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Battle Sister"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:23",
+          "count": 6
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 6,
+          "stars": 10,
+          "rank": "Gold2"
+        }
+      ]
+    },
+    {
+      "id": "ASEC3B",
+      "difficulty": "eventExtremisChallenge",
+      "energyCost": 6,
+      "nodeNumber": 3,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmE010",
+            "chanceId": "upgradeEpic_eventExtremisChallenge"
+          }
+        ]
+      },
+      "enemyPower": 130314,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Lascannon Team",
+        "Cadian Vox-caster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:25",
+          "count": 3
+        },
+        {
+          "id": "astraNpc2Lascannon:26",
+          "count": 2
+        },
+        {
+          "id": "astraNpc3Voxcaster:25",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold3"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold3"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 4,
+          "stars": 10,
+          "rank": "Gold3"
+        }
+      ]
+    },
+    {
+      "id": "ASE04",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 4,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC007",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 87378,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "Sisterhood"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Battle Sister"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:24",
+          "count": 6
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 6,
+          "stars": 11,
+          "rank": "Gold2"
+        }
+      ]
+    },
+    {
+      "id": "ASE05",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 5,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC011",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 84364,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Guardsman",
+        "Cadian Vox-caster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:24",
+          "count": 3
+        },
+        {
+          "id": "astraNpc1Guardsman:25",
+          "count": 3
+        },
+        {
+          "id": "astraNpc3Voxcaster:24",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold2"
+        },
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold3"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold2"
+        }
+      ]
+    },
+    {
+      "id": "ASE06",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 6,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_adeptRetributor",
+            "chanceId": "shard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 129045,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Guardsman",
+        "Vindicta"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:24",
+          "count": 4
+        },
+        {
+          "id": "adeptNpcRetributor:13",
+          "count": 1
+        },
+        {
+          "id": "astraNpc1Guardsman:25",
+          "count": 7
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold2"
+        },
+        {
+          "id": "adeptNpcRetributor",
+          "name": "Vindicta",
+          "count": 1,
+          "stars": 10,
+          "rank": "Gold3"
+        },
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 7,
+          "stars": 10,
+          "rank": "Gold3"
+        }
+      ]
+    },
+    {
+      "id": "ASE07",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 7,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC006",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 48196,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Guardsman",
+        "Cadian Lascannon Team"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:24",
+          "count": 2
+        },
+        {
+          "id": "astraNpc1Guardsman:25",
+          "count": 4
+        },
+        {
+          "id": "astraNpc2Lascannon:24",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold2"
+        },
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 4,
+          "stars": 10,
+          "rank": "Gold3"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold2"
+        }
+      ]
+    },
+    {
+      "id": "ASE08",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 8,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC003",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 73034,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Guardsman",
+        "Cadian Lascannon Team"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:25",
+          "count": 3
+        },
+        {
+          "id": "astraNpc1Guardsman:25",
+          "count": 6
+        },
+        {
+          "id": "astraNpc2Lascannon:25",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold3"
+        },
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 6,
+          "stars": 10,
+          "rank": "Gold3"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold3"
+        }
+      ]
+    },
+    {
+      "id": "ASE09",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 9,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC010",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 111648,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Lascannon Team"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:25",
+          "count": 6
+        },
+        {
+          "id": "astraNpc2Lascannon:25",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 6,
+          "stars": 10,
+          "rank": "Gold3"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold3"
+        }
+      ]
+    },
+    {
+      "id": "ASE10",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 10,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC002",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 128587,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Lascannon Team"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:26",
+          "count": 5
+        },
+        {
+          "id": "astraNpc2Lascannon:26",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 5,
+          "stars": 11,
+          "rank": "Gold3"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold3"
+        }
+      ]
+    },
+    {
+      "id": "ASE11",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 11,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 140
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_adeptCanoness",
+            "chanceId": "shard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 210760,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Lascannon Team",
+        "Cadian Vox-caster",
+        "Roswitha"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:25",
+          "count": 5
+        },
+        {
+          "id": "adeptNpcCanoness:14",
+          "count": 1
+        },
+        {
+          "id": "astraNpc2Lascannon:25",
+          "count": 3
+        },
+        {
+          "id": "astraNpc3Voxcaster:25",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 5,
+          "stars": 10,
+          "rank": "Gold3"
+        },
+        {
+          "id": "adeptNpcCanoness",
+          "name": "Roswitha",
+          "count": 1,
+          "stars": 10,
+          "rank": "Diamond1"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold3"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold3"
+        }
+      ]
+    },
+    {
+      "id": "ASE12",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 12,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmU001",
+            "chanceId": "upgradeUncommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 225336,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "Sisterhood"
+      ],
+      "enemiesTotal": 5,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:27",
+          "count": 2
+        },
+        {
+          "id": "adeptNpc2Zephyrim:28",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 2,
+          "stars": 10,
+          "rank": "Diamond1"
+        },
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 3,
+          "stars": 11,
+          "rank": "Diamond1"
+        }
+      ]
+    },
+    {
+      "id": "ASE13",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 13,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpU007",
+            "chanceId": "upgradeUncommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 291730,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "Sisterhood"
+      ],
+      "enemiesTotal": 5,
+      "enemiesTypes": [
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc2Zephyrim:28",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 5,
+          "stars": 11,
+          "rank": "Diamond1"
+        }
+      ]
+    },
+    {
+      "id": "ASEC13B",
+      "difficulty": "eventExtremisChallenge",
+      "energyCost": 6,
+      "nodeNumber": 13,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmL001",
+            "chanceId": "upgradeLegendary_eventExtremisChallenge"
+          }
+        ]
+      },
+      "enemyPower": 1650798,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Mortar Team",
+        "Cadian Vox-caster",
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:35",
+          "count": 3
+        },
+        {
+          "id": "adeptNpc2Zephyrim:33",
+          "count": 2
+        },
+        {
+          "id": "astraNpc3Voxcaster:34",
+          "count": 3
+        },
+        {
+          "id": "astraNpc4Mortar:33",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 3,
+          "stars": 13,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 2,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 3,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 2,
+          "stars": 11,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "ASE14",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 14,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgU003",
+            "chanceId": "upgradeUncommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 485022,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "Sisterhood"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:29",
+          "count": 6
+        },
+        {
+          "id": "adeptNpc2Zephyrim:29",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 6,
+          "stars": 10,
+          "rank": "Diamond2"
+        },
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 4,
+          "stars": 10,
+          "rank": "Diamond2"
+        }
+      ]
+    },
+    {
+      "id": "ASE15",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 15,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR002",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 445591,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "Sisterhood"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:29",
+          "count": 5
+        },
+        {
+          "id": "adeptNpc2Zephyrim:29",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 5,
+          "stars": 10,
+          "rank": "Diamond2"
+        },
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 4,
+          "stars": 10,
+          "rank": "Diamond2"
+        }
+      ]
+    },
+    {
+      "id": "ASE16",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 16,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR006",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 508414,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Lascannon Team",
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:30",
+          "count": 5
+        },
+        {
+          "id": "adeptNpc2Zephyrim:30",
+          "count": 2
+        },
+        {
+          "id": "astraNpc2Lascannon:29",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 5,
+          "stars": 11,
+          "rank": "Diamond2"
+        },
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 2,
+          "stars": 11,
+          "rank": "Diamond2"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 10,
+          "rank": "Diamond2"
+        }
+      ]
+    },
+    {
+      "id": "ASE17",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 17,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 140
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_adeptHospitaller",
+            "chanceId": "shard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 1129087,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Vox-caster",
+        "Isabella",
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:31",
+          "count": 5
+        },
+        {
+          "id": "adeptNpc2Zephyrim:30",
+          "count": 2
+        },
+        {
+          "id": "adeptNpcHospitaller:16",
+          "count": 1
+        },
+        {
+          "id": "astraNpc3Voxcaster:31",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 5,
+          "stars": 10,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 2,
+          "stars": 11,
+          "rank": "Diamond2"
+        },
+        {
+          "id": "adeptNpcHospitaller",
+          "name": "Isabella",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 3,
+          "stars": 10,
+          "rank": "Diamond3"
+        }
+      ]
+    },
+    {
+      "id": "ASE18",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 18,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR005",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 1424304,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus",
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Cadian Lascannon Team",
+        "Cadian Vox-caster",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc2Techpriest:33",
+          "count": 2
+        },
+        {
+          "id": "astraNpc2Lascannon:33",
+          "count": 4
+        },
+        {
+          "id": "astraNpc3Voxcaster:33",
+          "count": 6
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 2,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 4,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 6,
+          "stars": 11,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "ASE19",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 19,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR022",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 2025598,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus",
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Cadian Lascannon Team",
+        "Cadian Vox-caster",
+        "Tech-Priest Enginseer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "admecNpc2Techpriest:33",
+          "count": 4
+        },
+        {
+          "id": "astraNpc2Lascannon:33",
+          "count": 3
+        },
+        {
+          "id": "astraNpc3Voxcaster:34",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 4,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 3,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 5,
+          "stars": 12,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "ASE20",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 20,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR022",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 1248208,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Vox-caster",
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:33",
+          "count": 3
+        },
+        {
+          "id": "adeptNpc2Zephyrim:33",
+          "count": 4
+        },
+        {
+          "id": "astraNpc3Voxcaster:33",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 3,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 4,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 2,
+          "stars": 11,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "ASE21",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 21,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR022",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 1852254,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus",
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Vox-caster",
+        "Tech-Priest Enginseer",
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:33",
+          "count": 3
+        },
+        {
+          "id": "adeptNpc2Zephyrim:33",
+          "count": 3
+        },
+        {
+          "id": "admecNpc2Techpriest:33",
+          "count": 2
+        },
+        {
+          "id": "astraNpc3Voxcaster:33",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 3,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 3,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 2,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 4,
+          "stars": 11,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "ASE22",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 22,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 140
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_adeptMorvenn",
+            "chanceId": "shard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 2165136,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Morvenn Vahl",
+        "Tech-Priest Enginseer",
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:33",
+          "count": 4
+        },
+        {
+          "id": "adeptNpc2Zephyrim:33",
+          "count": 3
+        },
+        {
+          "id": "adeptNpcMorvenn:16",
+          "count": 1
+        },
+        {
+          "id": "admecNpc2Techpriest:33",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 4,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 3,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "adeptNpcMorvenn",
+          "name": "Morvenn Vahl",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 3,
+          "stars": 11,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "ASE23",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 23,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL102",
+            "chanceId": "upgradeLegendary_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 1820664,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "Sisterhood"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Battle Sister"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:34",
+          "count": 12
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 12,
+          "stars": 12,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "ASE24",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 24,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_adeptCelestine",
+            "chanceId": "shard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 1373355,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "Sisterhood"
+      ],
+      "enemiesTotal": 5,
+      "enemiesTypes": [
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc2Zephyrim:35",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 5,
+          "stars": 13,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "ASE25",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 25,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "mythicShards_adeptRetributor",
+            "chanceId": "mythicShard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 2103842,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Mortar Team",
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:35",
+          "count": 5
+        },
+        {
+          "id": "adeptNpc2Zephyrim:36",
+          "count": 3
+        },
+        {
+          "id": "astraNpc4Mortar:35",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 5,
+          "stars": 13,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 3,
+          "stars": 14,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 2,
+          "stars": 13,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "ASEC25B",
+      "difficulty": "eventExtremisChallenge",
+      "energyCost": 6,
+      "nodeNumber": 25,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 90,
+            "max": 155
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgL001",
+            "chanceId": "upgradeLegendary_eventExtremisChallenge"
+          }
+        ]
+      },
+      "enemyPower": 4404153,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Isabella",
+        "Morvenn Vahl",
+        "Roswitha",
+        "Tech-Priest Enginseer",
+        "Vindicta",
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:34",
+          "count": 3
+        },
+        {
+          "id": "adeptNpc2Zephyrim:34",
+          "count": 2
+        },
+        {
+          "id": "adeptNpcCanoness:17",
+          "count": 1
+        },
+        {
+          "id": "adeptNpcHospitaller:17",
+          "count": 1
+        },
+        {
+          "id": "adeptNpcMorvenn:17",
+          "count": 1
+        },
+        {
+          "id": "adeptNpcRetributor:17",
+          "count": 1
+        },
+        {
+          "id": "admecNpc2Techpriest:34",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 3,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 2,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "adeptNpcCanoness",
+          "name": "Roswitha",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "adeptNpcHospitaller",
+          "name": "Isabella",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "adeptNpcMorvenn",
+          "name": "Morvenn Vahl",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "adeptNpcRetributor",
+          "name": "Vindicta",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 2,
+          "stars": 12,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "ASE26",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 26,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "mythicShards_adeptCanoness",
+            "chanceId": "mythicShard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 2691700,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AdeptusMechanicus",
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Mortar Team",
+        "Tech-Priest Enginseer",
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:35",
+          "count": 5
+        },
+        {
+          "id": "adeptNpc2Zephyrim:36",
+          "count": 2
+        },
+        {
+          "id": "admecNpc2Techpriest:36",
+          "count": 2
+        },
+        {
+          "id": "astraNpc4Mortar:36",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 5,
+          "stars": 13,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 2,
+          "stars": 14,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "admecNpc2Techpriest",
+          "name": "Tech-Priest Enginseer",
+          "count": 2,
+          "stars": 14,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 2,
+          "stars": 14,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "ASE27",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 27,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "mythicShards_adeptHospitaller",
+            "chanceId": "mythicShard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 1781358,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Lascannon Team",
+        "Cadian Mortar Team",
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:38",
+          "count": 3
+        },
+        {
+          "id": "adeptNpc2Zephyrim:38",
+          "count": 2
+        },
+        {
+          "id": "astraNpc2Lascannon:37",
+          "count": 2
+        },
+        {
+          "id": "astraNpc4Mortar:37",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 3,
+          "stars": 12,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 2,
+          "stars": 12,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 11,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 1,
+          "stars": 11,
+          "rank": "Adamantine2"
+        }
+      ]
+    },
+    {
+      "id": "ASE28",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 28,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "mythicShards_adeptMorvenn",
+            "chanceId": "mythicShard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 3132635,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Lascannon Team",
+        "Cadian Mortar Team",
+        "Cadian Vox-caster",
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:40",
+          "count": 3
+        },
+        {
+          "id": "adeptNpc2Zephyrim:40",
+          "count": 2
+        },
+        {
+          "id": "astraNpc2Lascannon:40",
+          "count": 2
+        },
+        {
+          "id": "astraNpc3Voxcaster:40",
+          "count": 4
+        },
+        {
+          "id": "astraNpc4Mortar:40",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 3,
+          "stars": 14,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 2,
+          "stars": 14,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 14,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 4,
+          "stars": 14,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 1,
+          "stars": 14,
+          "rank": "Adamantine2"
+        }
+      ]
+    },
+    {
+      "id": "ASE29",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 29,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "mythicShards_adeptCelestine",
+            "chanceId": "mythicShard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 2613913,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Lascannon Team",
+        "Cadian Mortar Team",
+        "Cadian Vox-caster",
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister:38",
+          "count": 3
+        },
+        {
+          "id": "adeptNpc2Zephyrim:40",
+          "count": 2
+        },
+        {
+          "id": "astraNpc2Lascannon:36",
+          "count": 2
+        },
+        {
+          "id": "astraNpc3Voxcaster:40",
+          "count": 3
+        },
+        {
+          "id": "astraNpc4Mortar:36",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 3,
+          "stars": 12,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 2,
+          "stars": 14,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 14,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 3,
+          "stars": 14,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 1,
+          "stars": 14,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "ASE30",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 30,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 90,
+            "max": 155
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpM001",
+            "chanceId": "upgradeMythic_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 3863547,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Battle Sister",
+        "Cadian Mortar Team",
+        "Celestine",
+        "Zephyrim"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptBossCelestineCE:4",
+          "count": 1
+        },
+        {
+          "id": "adeptNpc1BattleSister:34",
+          "count": 6
+        },
+        {
+          "id": "adeptNpc2Zephyrim:35",
+          "count": 2
+        },
+        {
+          "id": "astraNpc4Mortar:34",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptBossCelestineCE",
+          "name": "Celestine",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "adeptNpc1BattleSister",
+          "name": "Battle Sister",
+          "count": 6,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "adeptNpc2Zephyrim",
+          "name": "Zephyrim",
+          "count": 2,
+          "stars": 13,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine1"
+        }
+      ]
+    }
+  ]
+}

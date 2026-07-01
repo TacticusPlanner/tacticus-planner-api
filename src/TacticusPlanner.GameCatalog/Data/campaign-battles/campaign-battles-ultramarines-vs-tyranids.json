@@ -1,0 +1,4564 @@
+{
+  "groupId": "ultramarines-vs-tyranids",
+  "faction": "Ultramarines",
+  "releaseType": "event",
+  "coreCharacters": [
+    "ultraInceptorSgt",
+    "ultraApothecary",
+    "ultraTitus"
+  ],
+  "difficulties": [
+    "eventStandard",
+    "eventStandardChallenge",
+    "eventExtremis",
+    "eventExtremisChallenge"
+  ],
+  "battles": [
+    {
+      "id": "TS01",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 1,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 40,
+            "max": 66
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC009",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 288,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Hormagaunt"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt:5",
+          "count": 6
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt",
+          "name": "Hormagaunt",
+          "count": 6,
+          "stars": 2,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "TS02",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 2,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 40,
+            "max": 66
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC003",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 350,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Hormagaunt"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt:6",
+          "count": 7
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt",
+          "name": "Hormagaunt",
+          "count": 7,
+          "stars": 2,
+          "rank": "Iron2"
+        }
+      ]
+    },
+    {
+      "id": "TS03",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 3,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 40,
+            "max": 66
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC005",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 420,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Hormagaunt",
+        "Termagant"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt:6",
+          "count": 4
+        },
+        {
+          "id": "tyranNpc3Termagant:6",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt",
+          "name": "Hormagaunt",
+          "count": 4,
+          "stars": 2,
+          "rank": "Iron2"
+        },
+        {
+          "id": "tyranNpc3Termagant",
+          "name": "Termagant",
+          "count": 5,
+          "stars": 2,
+          "rank": "Iron2"
+        }
+      ]
+    },
+    {
+      "id": "TSC3B",
+      "difficulty": "eventStandardChallenge",
+      "energyCost": 6,
+      "nodeNumber": 3,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR008",
+            "chanceId": "upgradeRare_eventStandardChallenge"
+          }
+        ]
+      },
+      "enemyPower": 1682,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Hormagaunt",
+        "Termagant",
+        "Tyranid Prime"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc1HormagauntKronos:8",
+          "count": 4
+        },
+        {
+          "id": "tyranNpc3TermagantKronos:7",
+          "count": 4
+        },
+        {
+          "id": "tyranNpc4WarriorCE2Kronos:6",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc1HormagauntKronos",
+          "name": "Hormagaunt",
+          "count": 4,
+          "stars": 3,
+          "rank": "Iron3"
+        },
+        {
+          "id": "tyranNpc3TermagantKronos",
+          "name": "Termagant",
+          "count": 4,
+          "stars": 2,
+          "rank": "Iron3"
+        },
+        {
+          "id": "tyranNpc4WarriorCE2Kronos",
+          "name": "Tyranid Prime",
+          "count": 2,
+          "stars": 2,
+          "rank": "Iron2"
+        }
+      ]
+    },
+    {
+      "id": "TS04",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 4,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 40,
+            "max": 66
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC010",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 574,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Hormagaunt",
+        "Termagant"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt:6",
+          "count": 2
+        },
+        {
+          "id": "tyranNpc3Termagant:7",
+          "count": 6
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt",
+          "name": "Hormagaunt",
+          "count": 2,
+          "stars": 2,
+          "rank": "Iron2"
+        },
+        {
+          "id": "tyranNpc3Termagant",
+          "name": "Termagant",
+          "count": 6,
+          "stars": 2,
+          "rank": "Iron3"
+        }
+      ]
+    },
+    {
+      "id": "TS05",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 5,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 40,
+            "max": 66
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC008",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 634,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Hormagaunt",
+        "Termagant",
+        "Tyranid Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt:6",
+          "count": 2
+        },
+        {
+          "id": "tyranNpc3Termagant:7",
+          "count": 4
+        },
+        {
+          "id": "tyranNpc4Warrior:5",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt",
+          "name": "Hormagaunt",
+          "count": 2,
+          "stars": 2,
+          "rank": "Iron2"
+        },
+        {
+          "id": "tyranNpc3Termagant",
+          "name": "Termagant",
+          "count": 4,
+          "stars": 2,
+          "rank": "Iron3"
+        },
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 1,
+          "stars": 2,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "TS06",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 6,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 45,
+            "max": 75
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_tyranDeathleaper",
+            "chanceId": "shard_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 774,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Deathleaper",
+        "Hormagaunt",
+        "Termagant"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranBossDeathleaperCE:1",
+          "count": 1
+        },
+        {
+          "id": "tyranNpc1Hormagaunt:6",
+          "count": 8
+        },
+        {
+          "id": "tyranNpc3Termagant:6",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranBossDeathleaperCE",
+          "name": "Deathleaper",
+          "count": 1,
+          "stars": 2,
+          "rank": "Iron1"
+        },
+        {
+          "id": "tyranNpc1Hormagaunt",
+          "name": "Hormagaunt",
+          "count": 8,
+          "stars": 2,
+          "rank": "Iron2"
+        },
+        {
+          "id": "tyranNpc3Termagant",
+          "name": "Termagant",
+          "count": 3,
+          "stars": 2,
+          "rank": "Iron2"
+        }
+      ]
+    },
+    {
+      "id": "TS07",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 7,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 45,
+            "max": 75
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC007",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 595,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Hormagaunt",
+        "Spore Mine"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt:7",
+          "count": 5
+        },
+        {
+          "id": "tyranNpc6SporeMine:4",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt",
+          "name": "Hormagaunt",
+          "count": 5,
+          "stars": 2,
+          "rank": "Iron3"
+        },
+        {
+          "id": "tyranNpc6SporeMine",
+          "name": "Spore Mine",
+          "count": 5,
+          "stars": 1,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "TS08",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 8,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 45,
+            "max": 75
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC001",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 814,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Hormagaunt",
+        "Spore Mine",
+        "Tyranid Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt:7",
+          "count": 3
+        },
+        {
+          "id": "tyranNpc4Warrior:5",
+          "count": 2
+        },
+        {
+          "id": "tyranNpc6SporeMine:4",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt",
+          "name": "Hormagaunt",
+          "count": 3,
+          "stars": 2,
+          "rank": "Iron3"
+        },
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 2,
+          "stars": 2,
+          "rank": "Iron1"
+        },
+        {
+          "id": "tyranNpc6SporeMine",
+          "name": "Spore Mine",
+          "count": 4,
+          "stars": 1,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "TS09",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 9,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 45,
+            "max": 75
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC014",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 956,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Spore Mine",
+        "Tyranid Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc4Warrior:5",
+          "count": 4
+        },
+        {
+          "id": "tyranNpc6SporeMine:4",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 4,
+          "stars": 2,
+          "rank": "Iron1"
+        },
+        {
+          "id": "tyranNpc6SporeMine",
+          "name": "Spore Mine",
+          "count": 4,
+          "stars": 1,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "TS10",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 10,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 45,
+            "max": 75
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR033",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 834,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Hormagaunt",
+        "Termagant",
+        "Tyranid Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt:6",
+          "count": 5
+        },
+        {
+          "id": "tyranNpc3Termagant:6",
+          "count": 4
+        },
+        {
+          "id": "tyranNpc4Warrior:4",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt",
+          "name": "Hormagaunt",
+          "count": 5,
+          "stars": 2,
+          "rank": "Iron2"
+        },
+        {
+          "id": "tyranNpc3Termagant",
+          "name": "Termagant",
+          "count": 4,
+          "stars": 2,
+          "rank": "Iron2"
+        },
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 3,
+          "stars": 1,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "TS11",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 11,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_tyranWingedPrime",
+            "chanceId": "shard_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 707,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 4,
+      "enemiesTypes": [
+        "Tyranid Warrior",
+        "Winged Prime"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranBossWingedPrimeCE:1",
+          "count": 1
+        },
+        {
+          "id": "tyranNpc4Warrior:4",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranBossWingedPrimeCE",
+          "name": "Winged Prime",
+          "count": 1,
+          "stars": 3,
+          "rank": "Iron1"
+        },
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 3,
+          "stars": 1,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "TS12",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 12,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC003",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 1852,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Spore Mine",
+        "Termagant"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc3Termagant:12",
+          "count": 4
+        },
+        {
+          "id": "tyranNpc6SporeMine:10",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc3Termagant",
+          "name": "Termagant",
+          "count": 4,
+          "stars": 5,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "tyranNpc6SporeMine",
+          "name": "Spore Mine",
+          "count": 4,
+          "stars": 6,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "TS13",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 13,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpU001",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 2057,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Termagant",
+        "Tyranid Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc3Termagant:11",
+          "count": 5
+        },
+        {
+          "id": "tyranNpc4Warrior:7",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc3Termagant",
+          "name": "Termagant",
+          "count": 5,
+          "stars": 6,
+          "rank": "Bronze2"
+        },
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 2,
+          "stars": 2,
+          "rank": "Iron3"
+        }
+      ]
+    },
+    {
+      "id": "TSC13B",
+      "difficulty": "eventStandardChallenge",
+      "energyCost": 6,
+      "nodeNumber": 13,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpE015",
+            "chanceId": "upgradeEpic_eventStandardChallenge"
+          }
+        ]
+      },
+      "enemyPower": 6677,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Hormagaunt",
+        "Termagant",
+        "Tyranid Prime"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc1HormagauntGorgon:12",
+          "count": 4
+        },
+        {
+          "id": "tyranNpc3TermagantGorgon:10",
+          "count": 1
+        },
+        {
+          "id": "tyranNpc3TermagantGorgon:11",
+          "count": 3
+        },
+        {
+          "id": "tyranNpc4WarriorCE2Gorgon:11",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc1HormagauntGorgon",
+          "name": "Hormagaunt",
+          "count": 4,
+          "stars": 5,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "tyranNpc3TermagantGorgon",
+          "name": "Termagant",
+          "count": 1,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "tyranNpc3TermagantGorgon",
+          "name": "Termagant",
+          "count": 3,
+          "stars": 6,
+          "rank": "Bronze2"
+        },
+        {
+          "id": "tyranNpc4WarriorCE2Gorgon",
+          "name": "Tyranid Prime",
+          "count": 2,
+          "stars": 6,
+          "rank": "Bronze2"
+        }
+      ]
+    },
+    {
+      "id": "TS14",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 14,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgU014",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 2310,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Termagant",
+        "Tyranid Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc3Termagant:12",
+          "count": 3
+        },
+        {
+          "id": "tyranNpc4Warrior:7",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc3Termagant",
+          "name": "Termagant",
+          "count": 3,
+          "stars": 5,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 3,
+          "stars": 2,
+          "rank": "Iron3"
+        }
+      ]
+    },
+    {
+      "id": "TS15",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 15,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmU007",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 2292,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Barbgaunt",
+        "Termagant",
+        "Tyranid Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc3Termagant:12",
+          "count": 3
+        },
+        {
+          "id": "tyranNpc4Warrior:7",
+          "count": 2
+        },
+        {
+          "id": "tyranNpc5Barbgaunt:8",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc3Termagant",
+          "name": "Termagant",
+          "count": 3,
+          "stars": 5,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 2,
+          "stars": 2,
+          "rank": "Iron3"
+        },
+        {
+          "id": "tyranNpc5Barbgaunt",
+          "name": "Barbgaunt",
+          "count": 2,
+          "stars": 3,
+          "rank": "Iron3"
+        }
+      ]
+    },
+    {
+      "id": "TS16",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 16,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR033",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 2522,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Barbgaunt",
+        "Termagant",
+        "Tyranid Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc3Termagant:12",
+          "count": 4
+        },
+        {
+          "id": "tyranNpc4Warrior:6",
+          "count": 3
+        },
+        {
+          "id": "tyranNpc5Barbgaunt:8",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc3Termagant",
+          "name": "Termagant",
+          "count": 4,
+          "stars": 5,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 3,
+          "stars": 2,
+          "rank": "Iron2"
+        },
+        {
+          "id": "tyranNpc5Barbgaunt",
+          "name": "Barbgaunt",
+          "count": 2,
+          "stars": 3,
+          "rank": "Iron3"
+        }
+      ]
+    },
+    {
+      "id": "TS17",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 17,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 52,
+            "max": 90
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_tyranNeurothrope",
+            "chanceId": "shard_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 3738,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Barbgaunt",
+        "Hormagaunt",
+        "Neurothrope",
+        "Termagant"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranBossNeurothropeCE:1",
+          "count": 1
+        },
+        {
+          "id": "tyranNpc1Hormagaunt:11",
+          "count": 4
+        },
+        {
+          "id": "tyranNpc3Termagant:12",
+          "count": 2
+        },
+        {
+          "id": "tyranNpc5Barbgaunt:9",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranBossNeurothropeCE",
+          "name": "Neurothrope",
+          "count": 1,
+          "stars": 4,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "tyranNpc1Hormagaunt",
+          "name": "Hormagaunt",
+          "count": 4,
+          "stars": 6,
+          "rank": "Bronze2"
+        },
+        {
+          "id": "tyranNpc3Termagant",
+          "name": "Termagant",
+          "count": 2,
+          "stars": 5,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "tyranNpc5Barbgaunt",
+          "name": "Barbgaunt",
+          "count": 2,
+          "stars": 3,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "TS18",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 18,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 52,
+            "max": 90
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgU019",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 1638,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Ripper Swarm",
+        "Spore Mine"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc2RipperSwarm:8",
+          "count": 5
+        },
+        {
+          "id": "tyranNpc6SporeMine:10",
+          "count": 7
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc2RipperSwarm",
+          "name": "Ripper Swarm",
+          "count": 5,
+          "stars": 3,
+          "rank": "Iron3"
+        },
+        {
+          "id": "tyranNpc6SporeMine",
+          "name": "Spore Mine",
+          "count": 7,
+          "stars": 6,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "TS19",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 19,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 52,
+            "max": 90
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpU017",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 2261,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Ripper Swarm",
+        "Tyranid Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc2RipperSwarm:8",
+          "count": 5
+        },
+        {
+          "id": "tyranNpc4Warrior:9",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc2RipperSwarm",
+          "name": "Ripper Swarm",
+          "count": 5,
+          "stars": 3,
+          "rank": "Iron3"
+        },
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 2,
+          "stars": 3,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "TS20",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 20,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 52,
+            "max": 90
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmU006",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 2769,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Barbgaunt",
+        "Ripper Swarm",
+        "Tyranid Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc2RipperSwarm:8",
+          "count": 4
+        },
+        {
+          "id": "tyranNpc4Warrior:9",
+          "count": 2
+        },
+        {
+          "id": "tyranNpc5Barbgaunt:9",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc2RipperSwarm",
+          "name": "Ripper Swarm",
+          "count": 4,
+          "stars": 3,
+          "rank": "Iron3"
+        },
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 2,
+          "stars": 3,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "tyranNpc5Barbgaunt",
+          "name": "Barbgaunt",
+          "count": 3,
+          "stars": 3,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "TS21",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 21,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 52,
+            "max": 90
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR033",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 3048,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Ripper Swarm",
+        "Spore Mine",
+        "Tyranid Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc2RipperSwarm:9",
+          "count": 3
+        },
+        {
+          "id": "tyranNpc4Warrior:9",
+          "count": 3
+        },
+        {
+          "id": "tyranNpc6SporeMine:9",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc2RipperSwarm",
+          "name": "Ripper Swarm",
+          "count": 3,
+          "stars": 3,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 3,
+          "stars": 3,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "tyranNpc6SporeMine",
+          "name": "Spore Mine",
+          "count": 4,
+          "stars": 3,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "TS22",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 22,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_tyranParasite",
+            "chanceId": "shard_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 4819,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Barbgaunt",
+        "Parasite of Mortrex",
+        "Tyranid Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranBossParasiteCE:1",
+          "count": 1
+        },
+        {
+          "id": "tyranNpc4Warrior:9",
+          "count": 4
+        },
+        {
+          "id": "tyranNpc5Barbgaunt:10",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranBossParasiteCE",
+          "name": "Parasite of Mortrex",
+          "count": 1,
+          "stars": 4,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 4,
+          "stars": 3,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "tyranNpc5Barbgaunt",
+          "name": "Barbgaunt",
+          "count": 2,
+          "stars": 6,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "TS23",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 23,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpU009",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 21246,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Tyranid Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc4Warrior:13",
+          "count": 6
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 6,
+          "stars": 7,
+          "rank": "Bronze3"
+        }
+      ]
+    },
+    {
+      "id": "TS24",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 24,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgU003",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 27381,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Barbgaunt",
+        "Ripper Swarm",
+        "Tyranid Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc2RipperSwarm:15",
+          "count": 2
+        },
+        {
+          "id": "tyranNpc4Warrior:14",
+          "count": 4
+        },
+        {
+          "id": "tyranNpc5Barbgaunt:16",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc2RipperSwarm",
+          "name": "Ripper Swarm",
+          "count": 2,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 4,
+          "stars": 9,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "tyranNpc5Barbgaunt",
+          "name": "Barbgaunt",
+          "count": 3,
+          "stars": 9,
+          "rank": "Silver1"
+        }
+      ]
+    },
+    {
+      "id": "TS25",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 25,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmU002",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 23938,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Barbgaunt",
+        "Ripper Swarm",
+        "Spore Mine",
+        "Tyranid Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc2RipperSwarm:13",
+          "count": 2
+        },
+        {
+          "id": "tyranNpc2RipperSwarm:15",
+          "count": 1
+        },
+        {
+          "id": "tyranNpc4Warrior:15",
+          "count": 2
+        },
+        {
+          "id": "tyranNpc5Barbgaunt:17",
+          "count": 3
+        },
+        {
+          "id": "tyranNpc6SporeMine:13",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc2RipperSwarm",
+          "name": "Ripper Swarm",
+          "count": 2,
+          "stars": 7,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "tyranNpc2RipperSwarm",
+          "name": "Ripper Swarm",
+          "count": 1,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 2,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "tyranNpc5Barbgaunt",
+          "name": "Barbgaunt",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "tyranNpc6SporeMine",
+          "name": "Spore Mine",
+          "count": 2,
+          "stars": 7,
+          "rank": "Bronze3"
+        }
+      ]
+    },
+    {
+      "id": "TSC25B",
+      "difficulty": "eventStandardChallenge",
+      "energyCost": 6,
+      "nodeNumber": 25,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgE010",
+            "chanceId": "upgradeEpic_eventStandardChallenge"
+          }
+        ]
+      },
+      "enemyPower": 47447,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Deathleaper",
+        "Neurothrope",
+        "Parasite of Mortrex",
+        "Tyrant Guard",
+        "Winged Prime"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpcDeathleaper:11",
+          "count": 1
+        },
+        {
+          "id": "tyranNpcNeurothrope:11",
+          "count": 1
+        },
+        {
+          "id": "tyranNpcParasite:11",
+          "count": 1
+        },
+        {
+          "id": "tyranNpcTyrantGuard:9",
+          "count": 4
+        },
+        {
+          "id": "tyranNpcWingedPrime:11",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpcDeathleaper",
+          "name": "Deathleaper",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "tyranNpcNeurothrope",
+          "name": "Neurothrope",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "tyranNpcParasite",
+          "name": "Parasite of Mortrex",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "tyranNpcTyrantGuard",
+          "name": "Tyrant Guard",
+          "count": 4,
+          "stars": 6,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "tyranNpcWingedPrime",
+          "name": "Winged Prime",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        }
+      ]
+    },
+    {
+      "id": "TS26",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 26,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR019",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 14140,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Barbgaunt",
+        "Spore Mine"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc5Barbgaunt:17",
+          "count": 4
+        },
+        {
+          "id": "tyranNpc6SporeMine:15",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc5Barbgaunt",
+          "name": "Barbgaunt",
+          "count": 4,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "tyranNpc6SporeMine",
+          "name": "Spore Mine",
+          "count": 4,
+          "stars": 7,
+          "rank": "Silver1"
+        }
+      ]
+    },
+    {
+      "id": "TS27",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 27,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR005",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 22299,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Barbgaunt",
+        "Tyranid Warrior",
+        "Tyrant Guard"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc4Warrior:12",
+          "count": 3
+        },
+        {
+          "id": "tyranNpc5Barbgaunt:15",
+          "count": 4
+        },
+        {
+          "id": "tyranNpcTyrantGuard:11",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 3,
+          "stars": 5,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "tyranNpc5Barbgaunt",
+          "name": "Barbgaunt",
+          "count": 4,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "tyranNpcTyrantGuard",
+          "name": "Tyrant Guard",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        }
+      ]
+    },
+    {
+      "id": "TS28",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 28,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR015",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 23326,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Neurothrope",
+        "Ripper Swarm",
+        "Winged Prime"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc2RipperSwarm:14",
+          "count": 4
+        },
+        {
+          "id": "tyranNpcNeurothrope:11",
+          "count": 1
+        },
+        {
+          "id": "tyranNpcWingedPrime:11",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc2RipperSwarm",
+          "name": "Ripper Swarm",
+          "count": 4,
+          "stars": 9,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "tyranNpcNeurothrope",
+          "name": "Neurothrope",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "tyranNpcWingedPrime",
+          "name": "Winged Prime",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        }
+      ]
+    },
+    {
+      "id": "TS29",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 29,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL113",
+            "chanceId": "upgradeLegendary_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 33225,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Barbgaunt",
+        "Neurothrope",
+        "Tyrant Guard"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc5Barbgaunt:16",
+          "count": 4
+        },
+        {
+          "id": "tyranNpcNeurothrope:11",
+          "count": 1
+        },
+        {
+          "id": "tyranNpcTyrantGuard:10",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc5Barbgaunt",
+          "name": "Barbgaunt",
+          "count": 4,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "tyranNpcNeurothrope",
+          "name": "Neurothrope",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "tyranNpcTyrantGuard",
+          "name": "Tyrant Guard",
+          "count": 3,
+          "stars": 7,
+          "rank": "Silver1"
+        }
+      ]
+    },
+    {
+      "id": "TS30",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 30,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_tyranTyrantGuard",
+            "chanceId": "shard_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 40884,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Hive Tyrant",
+        "Termagant",
+        "Tyrant Guard"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranBossHiveTyrantLeviathan:2",
+          "count": 1
+        },
+        {
+          "id": "tyranBossTyrantGuardCE:1",
+          "count": 1
+        },
+        {
+          "id": "tyranNpc3Termagant:16",
+          "count": 9
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranBossHiveTyrantLeviathan",
+          "name": "Hive Tyrant",
+          "count": 1,
+          "stars": 6,
+          "rank": "Silver1"
+        },
+        {
+          "id": "tyranBossTyrantGuardCE",
+          "name": "Tyrant Guard",
+          "count": 1,
+          "stars": 6,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "tyranNpc3Termagant",
+          "name": "Termagant",
+          "count": 9,
+          "stars": 9,
+          "rank": "Silver1"
+        }
+      ]
+    },
+    {
+      "id": "TE01",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 1,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC009",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 37226,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Hormagaunt"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt:21",
+          "count": 7
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt",
+          "name": "Hormagaunt",
+          "count": 7,
+          "stars": 10,
+          "rank": "Gold1"
+        }
+      ]
+    },
+    {
+      "id": "TE02",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 2,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC003",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 47862,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Hormagaunt"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt:21",
+          "count": 9
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt",
+          "name": "Hormagaunt",
+          "count": 9,
+          "stars": 10,
+          "rank": "Gold1"
+        }
+      ]
+    },
+    {
+      "id": "TE03",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 3,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC005",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 54146,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Hormagaunt",
+        "Termagant"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt:22",
+          "count": 3
+        },
+        {
+          "id": "tyranNpc3Termagant:22",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt",
+          "name": "Hormagaunt",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "tyranNpc3Termagant",
+          "name": "Termagant",
+          "count": 5,
+          "stars": 11,
+          "rank": "Gold1"
+        }
+      ]
+    },
+    {
+      "id": "TEC3B",
+      "difficulty": "eventExtremisChallenge",
+      "energyCost": 6,
+      "nodeNumber": 3,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmE013",
+            "chanceId": "upgradeEpic_eventExtremisChallenge"
+          }
+        ]
+      },
+      "enemyPower": 113558,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Hormagaunt",
+        "Ripper Swarm",
+        "Termagant",
+        "Tyranid Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt:24",
+          "count": 2
+        },
+        {
+          "id": "tyranNpc2RipperSwarm:22",
+          "count": 2
+        },
+        {
+          "id": "tyranNpc3Termagant:24",
+          "count": 6
+        },
+        {
+          "id": "tyranNpc4Warrior:20",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt",
+          "name": "Hormagaunt",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold2"
+        },
+        {
+          "id": "tyranNpc2RipperSwarm",
+          "name": "Ripper Swarm",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "tyranNpc3Termagant",
+          "name": "Termagant",
+          "count": 6,
+          "stars": 11,
+          "rank": "Gold2"
+        },
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 1,
+          "stars": 10,
+          "rank": "Silver3"
+        }
+      ]
+    },
+    {
+      "id": "TE04",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 4,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC010",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 57198,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Hormagaunt",
+        "Termagant"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt:22",
+          "count": 5
+        },
+        {
+          "id": "tyranNpc3Termagant:22",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt",
+          "name": "Hormagaunt",
+          "count": 5,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "tyranNpc3Termagant",
+          "name": "Termagant",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold1"
+        }
+      ]
+    },
+    {
+      "id": "TE05",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 5,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC008",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 56394,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Hormagaunt",
+        "Termagant",
+        "Tyranid Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt:22",
+          "count": 4
+        },
+        {
+          "id": "tyranNpc3Termagant:22",
+          "count": 2
+        },
+        {
+          "id": "tyranNpc4Warrior:18",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt",
+          "name": "Hormagaunt",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "tyranNpc3Termagant",
+          "name": "Termagant",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 1,
+          "stars": 9,
+          "rank": "Silver2"
+        }
+      ]
+    },
+    {
+      "id": "TE06",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 6,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_tyranDeathleaper",
+            "chanceId": "shard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 83361,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Deathleaper",
+        "Hormagaunt",
+        "Termagant"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranBossDeathleaperCE:2",
+          "count": 1
+        },
+        {
+          "id": "tyranNpc1Hormagaunt:22",
+          "count": 4
+        },
+        {
+          "id": "tyranNpc3Termagant:22",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranBossDeathleaperCE",
+          "name": "Deathleaper",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver3"
+        },
+        {
+          "id": "tyranNpc1Hormagaunt",
+          "name": "Hormagaunt",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "tyranNpc3Termagant",
+          "name": "Termagant",
+          "count": 5,
+          "stars": 11,
+          "rank": "Gold1"
+        }
+      ]
+    },
+    {
+      "id": "TE07",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 7,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC007",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 46970,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Hormagaunt",
+        "Spore Mine"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt:22",
+          "count": 5
+        },
+        {
+          "id": "tyranNpc6SporeMine:19",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt",
+          "name": "Hormagaunt",
+          "count": 5,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "tyranNpc6SporeMine",
+          "name": "Spore Mine",
+          "count": 4,
+          "stars": 8,
+          "rank": "Silver3"
+        }
+      ]
+    },
+    {
+      "id": "TE08",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 8,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC001",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 47870,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Hormagaunt",
+        "Spore Mine",
+        "Tyranid Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt:22",
+          "count": 3
+        },
+        {
+          "id": "tyranNpc4Warrior:19",
+          "count": 1
+        },
+        {
+          "id": "tyranNpc6SporeMine:20",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt",
+          "name": "Hormagaunt",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver3"
+        },
+        {
+          "id": "tyranNpc6SporeMine",
+          "name": "Spore Mine",
+          "count": 4,
+          "stars": 10,
+          "rank": "Silver3"
+        }
+      ]
+    },
+    {
+      "id": "TE09",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 9,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC014",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 60510,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Spore Mine",
+        "Tyranid Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc4Warrior:19",
+          "count": 3
+        },
+        {
+          "id": "tyranNpc6SporeMine:20",
+          "count": 6
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver3"
+        },
+        {
+          "id": "tyranNpc6SporeMine",
+          "name": "Spore Mine",
+          "count": 6,
+          "stars": 10,
+          "rank": "Silver3"
+        }
+      ]
+    },
+    {
+      "id": "TE10",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 10,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC003",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 73026,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Hormagaunt",
+        "Termagant",
+        "Tyranid Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt:22",
+          "count": 3
+        },
+        {
+          "id": "tyranNpc3Termagant:22",
+          "count": 3
+        },
+        {
+          "id": "tyranNpc4Warrior:19",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt",
+          "name": "Hormagaunt",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "tyranNpc3Termagant",
+          "name": "Termagant",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver3"
+        }
+      ]
+    },
+    {
+      "id": "TE11",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 11,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 140
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_tyranWingedPrime",
+            "chanceId": "shard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 65748,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Tyranid Warrior",
+        "Tyrant Guard",
+        "Winged Prime"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranBossWingedPrimeCE:2",
+          "count": 1
+        },
+        {
+          "id": "tyranNpc4Warrior:17",
+          "count": 3
+        },
+        {
+          "id": "tyranNpcTyrantGuard:11",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranBossWingedPrimeCE",
+          "name": "Winged Prime",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver3"
+        },
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "tyranNpcTyrantGuard",
+          "name": "Tyrant Guard",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        }
+      ]
+    },
+    {
+      "id": "TE12",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 12,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmU006",
+            "chanceId": "upgradeUncommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 104498,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Spore Mine",
+        "Termagant"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc3Termagant:26",
+          "count": 6
+        },
+        {
+          "id": "tyranNpc6SporeMine:25",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc3Termagant",
+          "name": "Termagant",
+          "count": 6,
+          "stars": 11,
+          "rank": "Gold3"
+        },
+        {
+          "id": "tyranNpc6SporeMine",
+          "name": "Spore Mine",
+          "count": 4,
+          "stars": 10,
+          "rank": "Gold3"
+        }
+      ]
+    },
+    {
+      "id": "TE13",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 13,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpU001",
+            "chanceId": "upgradeUncommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 108112,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Termagant",
+        "Tyranid Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc3Termagant:27",
+          "count": 4
+        },
+        {
+          "id": "tyranNpc4Warrior:21",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc3Termagant",
+          "name": "Termagant",
+          "count": 4,
+          "stars": 10,
+          "rank": "Diamond1"
+        },
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold1"
+        }
+      ]
+    },
+    {
+      "id": "TEC13B",
+      "difficulty": "eventExtremisChallenge",
+      "energyCost": 6,
+      "nodeNumber": 13,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmL202",
+            "chanceId": "upgradeLegendary_eventExtremisChallenge"
+          }
+        ]
+      },
+      "enemyPower": 1297766,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Hormagaunt",
+        "Ripper Swarm",
+        "Termagant",
+        "Tyranid Prime"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc1HormagauntGorgon:33",
+          "count": 3
+        },
+        {
+          "id": "tyranNpc2RipperSwarmGorgon:33",
+          "count": 1
+        },
+        {
+          "id": "tyranNpc3TermagantGorgon:33",
+          "count": 4
+        },
+        {
+          "id": "tyranNpc4WarriorCE2Gorgon:31",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc1HormagauntGorgon",
+          "name": "Hormagaunt",
+          "count": 3,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tyranNpc2RipperSwarmGorgon",
+          "name": "Ripper Swarm",
+          "count": 1,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tyranNpc3TermagantGorgon",
+          "name": "Termagant",
+          "count": 4,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tyranNpc4WarriorCE2Gorgon",
+          "name": "Tyranid Prime",
+          "count": 2,
+          "stars": 10,
+          "rank": "Diamond3"
+        }
+      ]
+    },
+    {
+      "id": "TE14",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 14,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgU014",
+            "chanceId": "upgradeUncommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 209264,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Termagant",
+        "Tyranid Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc3Termagant:28",
+          "count": 8
+        },
+        {
+          "id": "tyranNpc4Warrior:22",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc3Termagant",
+          "name": "Termagant",
+          "count": 8,
+          "stars": 11,
+          "rank": "Diamond1"
+        },
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 1,
+          "stars": 11,
+          "rank": "Gold1"
+        }
+      ]
+    },
+    {
+      "id": "TE15",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 15,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR019",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 226935,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Barbgaunt",
+        "Termagant",
+        "Tyranid Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc3Termagant:29",
+          "count": 6
+        },
+        {
+          "id": "tyranNpc4Warrior:23",
+          "count": 1
+        },
+        {
+          "id": "tyranNpc5Barbgaunt:24",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc3Termagant",
+          "name": "Termagant",
+          "count": 6,
+          "stars": 10,
+          "rank": "Diamond2"
+        },
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 1,
+          "stars": 10,
+          "rank": "Gold2"
+        },
+        {
+          "id": "tyranNpc5Barbgaunt",
+          "name": "Barbgaunt",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold2"
+        }
+      ]
+    },
+    {
+      "id": "TE16",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 16,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR005",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 309770,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Barbgaunt",
+        "Termagant",
+        "Tyranid Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc3Termagant:30",
+          "count": 2
+        },
+        {
+          "id": "tyranNpc4Warrior:25",
+          "count": 2
+        },
+        {
+          "id": "tyranNpc5Barbgaunt:26",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc3Termagant",
+          "name": "Termagant",
+          "count": 2,
+          "stars": 11,
+          "rank": "Diamond2"
+        },
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold3"
+        },
+        {
+          "id": "tyranNpc5Barbgaunt",
+          "name": "Barbgaunt",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold3"
+        }
+      ]
+    },
+    {
+      "id": "TE17",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 17,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 140
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_tyranNeurothrope",
+            "chanceId": "shard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 467846,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Barbgaunt",
+        "Neurothrope",
+        "Termagant",
+        "Tyrant Guard"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranBossNeurothropeCE:2",
+          "count": 1
+        },
+        {
+          "id": "tyranBossTyrantGuardCE:2",
+          "count": 2
+        },
+        {
+          "id": "tyranNpc3Termagant:29",
+          "count": 6
+        },
+        {
+          "id": "tyranNpc5Barbgaunt:25",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranBossNeurothropeCE",
+          "name": "Neurothrope",
+          "count": 1,
+          "stars": 9,
+          "rank": "Diamond1"
+        },
+        {
+          "id": "tyranBossTyrantGuardCE",
+          "name": "Tyrant Guard",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold2"
+        },
+        {
+          "id": "tyranNpc3Termagant",
+          "name": "Termagant",
+          "count": 6,
+          "stars": 10,
+          "rank": "Diamond2"
+        },
+        {
+          "id": "tyranNpc5Barbgaunt",
+          "name": "Barbgaunt",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold3"
+        }
+      ]
+    },
+    {
+      "id": "TE18",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 18,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR015",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 320357,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Ripper Swarm",
+        "Spore Mine"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc2RipperSwarm:31",
+          "count": 3
+        },
+        {
+          "id": "tyranNpc6SporeMine:30",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc2RipperSwarm",
+          "name": "Ripper Swarm",
+          "count": 3,
+          "stars": 10,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "tyranNpc6SporeMine",
+          "name": "Spore Mine",
+          "count": 5,
+          "stars": 11,
+          "rank": "Diamond2"
+        }
+      ]
+    },
+    {
+      "id": "TE19",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 19,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR033",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 565852,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Ripper Swarm",
+        "Tyranid Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc2RipperSwarm:29",
+          "count": 4
+        },
+        {
+          "id": "tyranNpc4Warrior:28",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc2RipperSwarm",
+          "name": "Ripper Swarm",
+          "count": 4,
+          "stars": 10,
+          "rank": "Diamond2"
+        },
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 3,
+          "stars": 11,
+          "rank": "Diamond1"
+        }
+      ]
+    },
+    {
+      "id": "TE20",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 20,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR033",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 1156860,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Barbgaunt",
+        "Ripper Swarm",
+        "Tyranid Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc2RipperSwarm:32",
+          "count": 3
+        },
+        {
+          "id": "tyranNpc4Warrior:32",
+          "count": 1
+        },
+        {
+          "id": "tyranNpc5Barbgaunt:33",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc2RipperSwarm",
+          "name": "Ripper Swarm",
+          "count": 3,
+          "stars": 11,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 1,
+          "stars": 11,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "tyranNpc5Barbgaunt",
+          "name": "Barbgaunt",
+          "count": 4,
+          "stars": 11,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "TE21",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 21,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR033",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 1129896,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Ripper Swarm",
+        "Spore Mine",
+        "Tyranid Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc2RipperSwarm:31",
+          "count": 1
+        },
+        {
+          "id": "tyranNpc4Warrior:32",
+          "count": 2
+        },
+        {
+          "id": "tyranNpc6SporeMine:33",
+          "count": 6
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc2RipperSwarm",
+          "name": "Ripper Swarm",
+          "count": 1,
+          "stars": 10,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 2,
+          "stars": 11,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "tyranNpc6SporeMine",
+          "name": "Spore Mine",
+          "count": 6,
+          "stars": 11,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "TE22",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 22,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 140
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_tyranParasite",
+            "chanceId": "shard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 2193026,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Barbgaunt",
+        "Parasite of Mortrex",
+        "Tyranid Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranBossParasiteCE:2",
+          "count": 1
+        },
+        {
+          "id": "tyranNpc4Warrior:33",
+          "count": 3
+        },
+        {
+          "id": "tyranNpc5Barbgaunt:33",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranBossParasiteCE",
+          "name": "Parasite of Mortrex",
+          "count": 1,
+          "stars": 11,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 3,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tyranNpc5Barbgaunt",
+          "name": "Barbgaunt",
+          "count": 4,
+          "stars": 11,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "TE23",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 23,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL113",
+            "chanceId": "upgradeLegendary_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 2923277,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Tyranid Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc4Warrior:33",
+          "count": 7
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 7,
+          "stars": 11,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "TE24",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 24,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_tyranTyrantGuard",
+            "chanceId": "shard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 1992817,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Barbgaunt",
+        "Ripper Swarm",
+        "Tyranid Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc2RipperSwarm:33",
+          "count": 2
+        },
+        {
+          "id": "tyranNpc4Warrior:34",
+          "count": 2
+        },
+        {
+          "id": "tyranNpc5Barbgaunt:34",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc2RipperSwarm",
+          "name": "Ripper Swarm",
+          "count": 2,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 2,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tyranNpc5Barbgaunt",
+          "name": "Barbgaunt",
+          "count": 3,
+          "stars": 12,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "TE25",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 25,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "mythicShards_tyranDeathleaper",
+            "chanceId": "mythicShard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 2914603,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Barbgaunt",
+        "Ripper Swarm",
+        "Spore Mine",
+        "Tyranid Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc2RipperSwarm:34",
+          "count": 1
+        },
+        {
+          "id": "tyranNpc4Warrior:35",
+          "count": 3
+        },
+        {
+          "id": "tyranNpc5Barbgaunt:34",
+          "count": 3
+        },
+        {
+          "id": "tyranNpc6SporeMine:34",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc2RipperSwarm",
+          "name": "Ripper Swarm",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 3,
+          "stars": 13,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tyranNpc5Barbgaunt",
+          "name": "Barbgaunt",
+          "count": 3,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tyranNpc6SporeMine",
+          "name": "Spore Mine",
+          "count": 3,
+          "stars": 12,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "TEC25B",
+      "difficulty": "eventExtremisChallenge",
+      "energyCost": 6,
+      "nodeNumber": 25,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 90,
+            "max": 155
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgL202",
+            "chanceId": "upgradeLegendary_eventExtremisChallenge"
+          }
+        ]
+      },
+      "enemyPower": 3635885,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Deathleaper",
+        "Neurothrope",
+        "Parasite of Mortrex",
+        "Tyrant Guard",
+        "Winged Prime"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpcDeathleaper:17",
+          "count": 1
+        },
+        {
+          "id": "tyranNpcNeurothrope:17",
+          "count": 1
+        },
+        {
+          "id": "tyranNpcParasite:16",
+          "count": 1
+        },
+        {
+          "id": "tyranNpcTyrantGuard:16",
+          "count": 2
+        },
+        {
+          "id": "tyranNpcWingedPrime:16",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpcDeathleaper",
+          "name": "Deathleaper",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "tyranNpcNeurothrope",
+          "name": "Neurothrope",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "tyranNpcParasite",
+          "name": "Parasite of Mortrex",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tyranNpcTyrantGuard",
+          "name": "Tyrant Guard",
+          "count": 2,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tyranNpcWingedPrime",
+          "name": "Winged Prime",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "TE26",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 26,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "mythicShards_tyranWingedPrime",
+            "chanceId": "mythicShard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 2912464,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Barbgaunt",
+        "Spore Mine",
+        "Tyranid Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc4Warrior:35",
+          "count": 2
+        },
+        {
+          "id": "tyranNpc5Barbgaunt:35",
+          "count": 7
+        },
+        {
+          "id": "tyranNpc6SporeMine:35",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 2,
+          "stars": 13,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tyranNpc5Barbgaunt",
+          "name": "Barbgaunt",
+          "count": 7,
+          "stars": 13,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tyranNpc6SporeMine",
+          "name": "Spore Mine",
+          "count": 3,
+          "stars": 13,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "TE27",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 27,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "mythicShards_tyranNeurothrope",
+            "chanceId": "mythicShard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 3206059,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Barbgaunt",
+        "Tyranid Warrior",
+        "Tyrant Guard"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc4Warrior:34",
+          "count": 3
+        },
+        {
+          "id": "tyranNpc5Barbgaunt:35",
+          "count": 3
+        },
+        {
+          "id": "tyranNpcTyrantGuard:17",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 3,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tyranNpc5Barbgaunt",
+          "name": "Barbgaunt",
+          "count": 3,
+          "stars": 13,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tyranNpcTyrantGuard",
+          "name": "Tyrant Guard",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine2"
+        }
+      ]
+    },
+    {
+      "id": "TE28",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 28,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "mythicShards_tyranParasite",
+            "chanceId": "mythicShard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 3134374,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Barbgaunt",
+        "Hormagaunt",
+        "Neurothrope",
+        "Termagant",
+        "Tyranid Warrior",
+        "Winged Prime"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt:34",
+          "count": 2
+        },
+        {
+          "id": "tyranNpc3Termagant:34",
+          "count": 2
+        },
+        {
+          "id": "tyranNpc4Warrior:34",
+          "count": 1
+        },
+        {
+          "id": "tyranNpc5Barbgaunt:34",
+          "count": 2
+        },
+        {
+          "id": "tyranNpcNeurothrope:17",
+          "count": 1
+        },
+        {
+          "id": "tyranNpcWingedPrime:17",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc1Hormagaunt",
+          "name": "Hormagaunt",
+          "count": 2,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tyranNpc3Termagant",
+          "name": "Termagant",
+          "count": 2,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tyranNpc4Warrior",
+          "name": "Tyranid Warrior",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tyranNpc5Barbgaunt",
+          "name": "Barbgaunt",
+          "count": 2,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tyranNpcNeurothrope",
+          "name": "Neurothrope",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "tyranNpcWingedPrime",
+          "name": "Winged Prime",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine2"
+        }
+      ]
+    },
+    {
+      "id": "TE29",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 29,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "mythicShards_tyranTyrantGuard",
+            "chanceId": "mythicShard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 2961240,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Barbgaunt",
+        "Neurothrope",
+        "Tyrant Guard"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranNpc5Barbgaunt:34",
+          "count": 6
+        },
+        {
+          "id": "tyranNpcNeurothrope:17",
+          "count": 1
+        },
+        {
+          "id": "tyranNpcTyrantGuard:16",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranNpc5Barbgaunt",
+          "name": "Barbgaunt",
+          "count": 6,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tyranNpcNeurothrope",
+          "name": "Neurothrope",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "tyranNpcTyrantGuard",
+          "name": "Tyrant Guard",
+          "count": 2,
+          "stars": 12,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "TE30",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 30,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 90,
+            "max": 155
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpM002",
+            "chanceId": "upgradeMythic_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 4200920,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tyranids"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Hive Tyrant",
+        "Termagant",
+        "Tyrant Guard"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tyranBossHiveTyrantLeviathan:4",
+          "count": 1
+        },
+        {
+          "id": "tyranNpc3Termagant:34",
+          "count": 6
+        },
+        {
+          "id": "tyranNpcTyrantGuard:16",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tyranBossHiveTyrantLeviathan",
+          "name": "Hive Tyrant",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tyranNpc3Termagant",
+          "name": "Termagant",
+          "count": 6,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tyranNpcTyrantGuard",
+          "name": "Tyrant Guard",
+          "count": 2,
+          "stars": 12,
+          "rank": "Adamantine1"
+        }
+      ]
+    }
+  ]
+}

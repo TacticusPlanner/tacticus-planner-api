@@ -1,0 +1,294 @@
+[
+  {
+    "id": "upgArmU003C",
+    "material": "Adamantium Lump",
+    "snowprintId": "upgArmU003C",
+    "label": "Adamantium Lump",
+    "rarity": "Uncommon",
+    "stat": "Armour",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgArmU003C.png",
+    "craftable": true,
+    "recipe": [
+      {
+        "material": "upgArmC004",
+        "count": 6
+      }
+    ]
+  },
+  {
+    "id": "upgArmU004C",
+    "material": "Sophisticated Material Ingot",
+    "snowprintId": "upgArmU004C",
+    "label": "Sophisticated Material Ingot",
+    "rarity": "Uncommon",
+    "stat": "Armour",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgArmU004C.png",
+    "craftable": true,
+    "recipe": [
+      {
+        "material": "upgArmC005",
+        "count": 6
+      }
+    ]
+  },
+  {
+    "id": "upgArmU010C",
+    "material": "Blessed Ceramite",
+    "snowprintId": "upgArmU010C",
+    "label": "Blessed Ceramite",
+    "rarity": "Uncommon",
+    "stat": "Armour",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgArmU010C.png",
+    "craftable": true,
+    "recipe": [
+      {
+        "material": "upgArmC002",
+        "count": 6
+      }
+    ]
+  },
+  {
+    "id": "upgArmU012C",
+    "material": "Sturdy Pieces",
+    "snowprintId": "upgArmU012C",
+    "label": "Sturdy Pieces",
+    "rarity": "Uncommon",
+    "stat": "Armour",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgArmU012C.png",
+    "craftable": true,
+    "recipe": [
+      {
+        "material": "upgArmC003",
+        "count": 6
+      }
+    ]
+  },
+  {
+    "id": "upgDmgU001C",
+    "material": "Magazine",
+    "snowprintId": "upgDmgU001C",
+    "label": "Magazine",
+    "rarity": "Uncommon",
+    "stat": "Damage",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgDmgU001C.png",
+    "craftable": true,
+    "recipe": [
+      {
+        "material": "upgDmgC001",
+        "count": 6
+      }
+    ]
+  },
+  {
+    "id": "upgDmgU002C",
+    "material": "Belt of Frag Grenades",
+    "snowprintId": "upgDmgU002C",
+    "label": "Belt of Frag Grenades",
+    "rarity": "Uncommon",
+    "stat": "Damage",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgDmgU002C.png",
+    "craftable": true,
+    "recipe": [
+      {
+        "material": "upgDmgC002",
+        "count": 6
+      }
+    ]
+  },
+  {
+    "id": "upgDmgU007C",
+    "material": "Power Pack Bundle",
+    "snowprintId": "upgDmgU007C",
+    "label": "Power Pack Bundle",
+    "rarity": "Uncommon",
+    "stat": "Damage",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgDmgU007C.png",
+    "craftable": true,
+    "recipe": [
+      {
+        "material": "upgDmgC007",
+        "count": 6
+      }
+    ]
+  },
+  {
+    "id": "upgDmgU008C",
+    "material": "Otherworldly Energy Reservoir",
+    "snowprintId": "upgDmgU008C",
+    "label": "Otherworldly Energy Reservoir",
+    "rarity": "Uncommon",
+    "stat": "Damage",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgDmgU008C.png",
+    "craftable": true,
+    "recipe": [
+      {
+        "material": "upgDmgC008",
+        "count": 6
+      }
+    ]
+  },
+  {
+    "id": "upgDmgU013C",
+    "material": "Fine Auxiliary Core",
+    "snowprintId": "upgDmgU013C",
+    "label": "Fine Auxiliary Core",
+    "rarity": "Uncommon",
+    "stat": "Damage",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgDmgU013C.png",
+    "craftable": true,
+    "recipe": [
+      {
+        "material": "upgDmgC009",
+        "count": 6
+      }
+    ]
+  },
+  {
+    "id": "upgDmgU015C",
+    "material": "Blessed Weapon Oils",
+    "snowprintId": "upgDmgU015C",
+    "label": "Blessed Weapon Oils",
+    "rarity": "Uncommon",
+    "stat": "Damage",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgDmgU015C.png",
+    "craftable": true,
+    "recipe": [
+      {
+        "material": "upgDmgC011",
+        "count": 4
+      },
+      {
+        "material": "upgDmgC003",
+        "count": 2
+      }
+    ]
+  },
+  {
+    "id": "upgDmgU016C",
+    "material": "Razor-sharp Spikes",
+    "snowprintId": "upgDmgU016C",
+    "label": "Razor-sharp Spikes",
+    "rarity": "Uncommon",
+    "stat": "Damage",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgDmgU016C.png",
+    "craftable": true,
+    "recipe": [
+      {
+        "material": "upgDmgC014",
+        "count": 4
+      },
+      {
+        "material": "upgDmgC012",
+        "count": 2
+      }
+    ]
+  },
+  {
+    "id": "upgDmgU017C",
+    "material": "Targeting Matrix",
+    "snowprintId": "upgDmgU017C",
+    "label": "Targeting Matrix",
+    "rarity": "Uncommon",
+    "stat": "Damage",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgDmgU017C.png",
+    "craftable": true,
+    "recipe": [
+      {
+        "material": "upgDmgC015",
+        "count": 4
+      },
+      {
+        "material": "upgDmgC005",
+        "count": 2
+      }
+    ]
+  },
+  {
+    "id": "upgDmgU018C",
+    "material": "Adamantium Blades",
+    "snowprintId": "upgDmgU018C",
+    "label": "Adamantium Blades",
+    "rarity": "Uncommon",
+    "stat": "Damage",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgDmgU018C.png",
+    "craftable": true,
+    "recipe": [
+      {
+        "material": "upgDmgC012",
+        "count": 4
+      },
+      {
+        "material": "upgHpC013",
+        "count": 2
+      }
+    ]
+  },
+  {
+    "id": "upgHpU004C",
+    "material": "Bionic Enhancement",
+    "snowprintId": "upgHpU004C",
+    "label": "Bionic Enhancement",
+    "rarity": "Uncommon",
+    "stat": "Health",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgHpU004C.png",
+    "craftable": true,
+    "recipe": [
+      {
+        "material": "upgHpC002",
+        "count": 6
+      }
+    ]
+  },
+  {
+    "id": "upgHpU005C",
+    "material": "First Aid Kit",
+    "snowprintId": "upgHpU005C",
+    "label": "First Aid Kit",
+    "rarity": "Uncommon",
+    "stat": "Health",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgHpU005C.png",
+    "craftable": true,
+    "recipe": [
+      {
+        "material": "upgHpC007",
+        "count": 6
+      }
+    ]
+  },
+  {
+    "id": "upgHpU010C",
+    "material": "Regenerating Nano Swarm",
+    "snowprintId": "upgHpU010C",
+    "label": "Regenerating Nano Swarm",
+    "rarity": "Uncommon",
+    "stat": "Health",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgHpU010C.png",
+    "craftable": true,
+    "recipe": [
+      {
+        "material": "upgHpC009",
+        "count": 6
+      }
+    ]
+  },
+  {
+    "id": "upgHpU018C",
+    "material": "Holster and Pockets",
+    "snowprintId": "upgHpU018C",
+    "label": "Holster and Pockets",
+    "rarity": "Uncommon",
+    "stat": "Health",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgHpU018C.png",
+    "craftable": true,
+    "recipe": [
+      {
+        "material": "upgHpC015",
+        "count": 3
+      },
+      {
+        "material": "upgHpC006",
+        "count": 3
+      }
+    ]
+  }
+]

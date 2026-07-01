@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <RootNamespace>TacticusPlanner.TacticusApi</RootNamespace>
+    <NoWarn>$(NoWarn);CS8618;CA1707;CA1716</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Refit" />
+    <PackageReference Include="Refit.HttpClientFactory" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- The upstream Tacticus game API OpenAPI document, embedded as the source of truth for the
+         hand-written Refit client/models in this project. -->
+    <EmbeddedResource Include="OpenApi\tacticus-api-docs.json" />
+  </ItemGroup>
+</Project>

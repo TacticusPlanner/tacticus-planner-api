@@ -1,0 +1,257 @@
+[
+  {
+    "rarity": "Common",
+    "levels": [
+      {
+        "goldCost": 0,
+        "salvageCost": 10,
+        "mythicSalvageCost": 0
+      },
+      {
+        "goldCost": 50,
+        "salvageCost": 5,
+        "mythicSalvageCost": 0
+      },
+      {
+        "goldCost": 100,
+        "salvageCost": 10,
+        "mythicSalvageCost": 0
+      }
+    ]
+  },
+  {
+    "rarity": "Uncommon",
+    "levels": [
+      {
+        "goldCost": 0,
+        "salvageCost": 25,
+        "mythicSalvageCost": 0
+      },
+      {
+        "goldCost": 100,
+        "salvageCost": 10,
+        "mythicSalvageCost": 0
+      },
+      {
+        "goldCost": 150,
+        "salvageCost": 15,
+        "mythicSalvageCost": 0
+      },
+      {
+        "goldCost": 200,
+        "salvageCost": 20,
+        "mythicSalvageCost": 0
+      },
+      {
+        "goldCost": 250,
+        "salvageCost": 30,
+        "mythicSalvageCost": 0
+      }
+    ]
+  },
+  {
+    "rarity": "Rare",
+    "levels": [
+      {
+        "goldCost": 0,
+        "salvageCost": 60,
+        "mythicSalvageCost": 0
+      },
+      {
+        "goldCost": 250,
+        "salvageCost": 30,
+        "mythicSalvageCost": 0
+      },
+      {
+        "goldCost": 350,
+        "salvageCost": 40,
+        "mythicSalvageCost": 0
+      },
+      {
+        "goldCost": 450,
+        "salvageCost": 60,
+        "mythicSalvageCost": 0
+      },
+      {
+        "goldCost": 550,
+        "salvageCost": 90,
+        "mythicSalvageCost": 0
+      },
+      {
+        "goldCost": 650,
+        "salvageCost": 120,
+        "mythicSalvageCost": 0
+      },
+      {
+        "goldCost": 750,
+        "salvageCost": 150,
+        "mythicSalvageCost": 0
+      }
+    ]
+  },
+  {
+    "rarity": "Epic",
+    "levels": [
+      {
+        "goldCost": 0,
+        "salvageCost": 150,
+        "mythicSalvageCost": 0
+      },
+      {
+        "goldCost": 750,
+        "salvageCost": 90,
+        "mythicSalvageCost": 0
+      },
+      {
+        "goldCost": 1000,
+        "salvageCost": 120,
+        "mythicSalvageCost": 0
+      },
+      {
+        "goldCost": 1250,
+        "salvageCost": 150,
+        "mythicSalvageCost": 0
+      },
+      {
+        "goldCost": 1500,
+        "salvageCost": 200,
+        "mythicSalvageCost": 0
+      },
+      {
+        "goldCost": 1750,
+        "salvageCost": 250,
+        "mythicSalvageCost": 0
+      },
+      {
+        "goldCost": 2000,
+        "salvageCost": 300,
+        "mythicSalvageCost": 0
+      },
+      {
+        "goldCost": 2250,
+        "salvageCost": 350,
+        "mythicSalvageCost": 0
+      },
+      {
+        "goldCost": 2500,
+        "salvageCost": 400,
+        "mythicSalvageCost": 0
+      }
+    ]
+  },
+  {
+    "rarity": "Legendary",
+    "levels": [
+      {
+        "goldCost": 0,
+        "salvageCost": 400,
+        "mythicSalvageCost": 0
+      },
+      {
+        "goldCost": 2000,
+        "salvageCost": 250,
+        "mythicSalvageCost": 0
+      },
+      {
+        "goldCost": 3000,
+        "salvageCost": 350,
+        "mythicSalvageCost": 0
+      },
+      {
+        "goldCost": 4000,
+        "salvageCost": 450,
+        "mythicSalvageCost": 0
+      },
+      {
+        "goldCost": 6000,
+        "salvageCost": 600,
+        "mythicSalvageCost": 0
+      },
+      {
+        "goldCost": 8000,
+        "salvageCost": 800,
+        "mythicSalvageCost": 0
+      },
+      {
+        "goldCost": 10000,
+        "salvageCost": 1000,
+        "mythicSalvageCost": 0
+      },
+      {
+        "goldCost": 15000,
+        "salvageCost": 1250,
+        "mythicSalvageCost": 0
+      },
+      {
+        "goldCost": 20000,
+        "salvageCost": 1500,
+        "mythicSalvageCost": 0
+      },
+      {
+        "goldCost": 30000,
+        "salvageCost": 2000,
+        "mythicSalvageCost": 0
+      },
+      {
+        "goldCost": 50000,
+        "salvageCost": 3000,
+        "mythicSalvageCost": 0
+      }
+    ]
+  },
+  {
+    "rarity": "Mythic",
+    "levels": [
+      {
+        "goldCost": 0,
+        "salvageCost": 0,
+        "mythicSalvageCost": 100
+      },
+      {
+        "goldCost": 50000,
+        "salvageCost": 0,
+        "mythicSalvageCost": 50
+      },
+      {
+        "goldCost": 60000,
+        "salvageCost": 0,
+        "mythicSalvageCost": 75
+      },
+      {
+        "goldCost": 70000,
+        "salvageCost": 0,
+        "mythicSalvageCost": 100
+      },
+      {
+        "goldCost": 85000,
+        "salvageCost": 0,
+        "mythicSalvageCost": 125
+      },
+      {
+        "goldCost": 100000,
+        "salvageCost": 0,
+        "mythicSalvageCost": 150
+      },
+      {
+        "goldCost": 125000,
+        "salvageCost": 0,
+        "mythicSalvageCost": 200
+      },
+      {
+        "goldCost": 150000,
+        "salvageCost": 0,
+        "mythicSalvageCost": 300
+      },
+      {
+        "goldCost": 175000,
+        "salvageCost": 0,
+        "mythicSalvageCost": 500
+      },
+      {
+        "goldCost": 200000,
+        "salvageCost": 0,
+        "mythicSalvageCost": 1000
+      }
+    ]
+  }
+]

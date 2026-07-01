@@ -1,0 +1,266 @@
+[
+  {
+    "id": "mythicShard_eventExtremis",
+    "rewardKind": "mythicShard",
+    "difficulty": "eventExtremis",
+    "numerator": 3,
+    "denominator": 14,
+    "effectiveRate": 0.266
+  },
+  {
+    "id": "shard_elite",
+    "rewardKind": "shard",
+    "difficulty": "elite",
+    "numerator": 1,
+    "denominator": 24,
+    "effectiveRate": 0.079
+  },
+  {
+    "id": "shard_eventExtremis",
+    "rewardKind": "shard",
+    "difficulty": "eventExtremis",
+    "numerator": 8,
+    "denominator": 13,
+    "effectiveRate": 0.642
+  },
+  {
+    "id": "shard_eventStandard",
+    "rewardKind": "shard",
+    "difficulty": "eventStandard",
+    "numerator": 2,
+    "denominator": 6,
+    "effectiveRate": 0.428
+  },
+  {
+    "id": "shard_mirror",
+    "rewardKind": "shard",
+    "difficulty": "mirror",
+    "numerator": 2,
+    "denominator": 6,
+    "effectiveRate": 0.428
+  },
+  {
+    "id": "shard_standard",
+    "rewardKind": "shard",
+    "difficulty": "standard",
+    "numerator": 2,
+    "denominator": 6,
+    "effectiveRate": 0.428
+  },
+  {
+    "id": "upgradeCommon_elite",
+    "rewardKind": "upgradeCommon",
+    "difficulty": "elite",
+    "numerator": 3,
+    "denominator": 6,
+    "effectiveRate": 0.571
+  },
+  {
+    "id": "upgradeCommon_eventExtremis",
+    "rewardKind": "upgradeCommon",
+    "difficulty": "eventExtremis",
+    "numerator": 15,
+    "denominator": 16,
+    "effectiveRate": 0.941
+  },
+  {
+    "id": "upgradeCommon_eventStandard",
+    "rewardKind": "upgradeCommon",
+    "difficulty": "eventStandard",
+    "numerator": 12,
+    "denominator": 13,
+    "effectiveRate": 0.928
+  },
+  {
+    "id": "upgradeCommon_mirror",
+    "rewardKind": "upgradeCommon",
+    "difficulty": "mirror",
+    "numerator": 12,
+    "denominator": 13,
+    "effectiveRate": 0.928
+  },
+  {
+    "id": "upgradeCommon_standard",
+    "rewardKind": "upgradeCommon",
+    "difficulty": "standard",
+    "numerator": 6,
+    "denominator": 7,
+    "effectiveRate": 0.874
+  },
+  {
+    "id": "upgradeEpic_elite",
+    "rewardKind": "upgradeEpic",
+    "difficulty": "elite",
+    "numerator": 4,
+    "denominator": 6,
+    "effectiveRate": 0.714
+  },
+  {
+    "id": "upgradeEpic_eventExtremisChallenge",
+    "rewardKind": "upgradeEpic",
+    "difficulty": "eventExtremisChallenge",
+    "numerator": 2,
+    "denominator": 6,
+    "effectiveRate": 0.428
+  },
+  {
+    "id": "upgradeEpic_eventStandardChallenge",
+    "rewardKind": "upgradeEpic",
+    "difficulty": "eventStandardChallenge",
+    "numerator": 1,
+    "denominator": 4,
+    "effectiveRate": 0.4
+  },
+  {
+    "id": "upgradeEpic_mirror",
+    "rewardKind": "upgradeEpic",
+    "difficulty": "mirror",
+    "numerator": 1,
+    "denominator": 4,
+    "effectiveRate": 0.4
+  },
+  {
+    "id": "upgradeEpic_standard",
+    "rewardKind": "upgradeEpic",
+    "difficulty": "standard",
+    "numerator": 1,
+    "denominator": 6,
+    "effectiveRate": 0.285
+  },
+  {
+    "id": "upgradeLegendary_elite",
+    "rewardKind": "upgradeLegendary",
+    "difficulty": "elite",
+    "numerator": 2,
+    "denominator": 6,
+    "effectiveRate": 0.428
+  },
+  {
+    "id": "upgradeLegendary_eventExtremis",
+    "rewardKind": "upgradeLegendary",
+    "difficulty": "eventExtremis",
+    "numerator": 1,
+    "denominator": 7,
+    "effectiveRate": 0.25
+  },
+  {
+    "id": "upgradeLegendary_eventExtremisChallenge",
+    "rewardKind": "upgradeLegendary",
+    "difficulty": "eventExtremisChallenge",
+    "numerator": 1,
+    "denominator": 7,
+    "effectiveRate": 0.25
+  },
+  {
+    "id": "upgradeLegendary_eventStandard",
+    "rewardKind": "upgradeLegendary",
+    "difficulty": "eventStandard",
+    "numerator": 1,
+    "denominator": 9,
+    "effectiveRate": 0.199
+  },
+  {
+    "id": "upgradeLegendary_mirror",
+    "rewardKind": "upgradeLegendary",
+    "difficulty": "mirror",
+    "numerator": 1,
+    "denominator": 9,
+    "effectiveRate": 0.199
+  },
+  {
+    "id": "upgradeMythic_eventExtremis",
+    "rewardKind": "upgradeMythic",
+    "difficulty": "eventExtremis",
+    "numerator": 3,
+    "denominator": 25,
+    "effectiveRate": 0.153
+  },
+  {
+    "id": "upgradeRare_elite",
+    "rewardKind": "upgradeRare",
+    "difficulty": "elite",
+    "numerator": 1,
+    "denominator": 12,
+    "effectiveRate": 0.153
+  },
+  {
+    "id": "upgradeRare_eventExtremis",
+    "rewardKind": "upgradeRare",
+    "difficulty": "eventExtremis",
+    "numerator": 8,
+    "denominator": 12,
+    "effectiveRate": 0.692
+  },
+  {
+    "id": "upgradeRare_eventStandard",
+    "rewardKind": "upgradeRare",
+    "difficulty": "eventStandard",
+    "numerator": 3,
+    "denominator": 6,
+    "effectiveRate": 0.571
+  },
+  {
+    "id": "upgradeRare_eventStandardChallenge",
+    "rewardKind": "upgradeRare",
+    "difficulty": "eventStandardChallenge",
+    "numerator": 3,
+    "denominator": 6,
+    "effectiveRate": 0.571
+  },
+  {
+    "id": "upgradeRare_mirror",
+    "rewardKind": "upgradeRare",
+    "difficulty": "mirror",
+    "numerator": 3,
+    "denominator": 6,
+    "effectiveRate": 0.571
+  },
+  {
+    "id": "upgradeRare_standard",
+    "rewardKind": "upgradeRare",
+    "difficulty": "standard",
+    "numerator": 2,
+    "denominator": 5,
+    "effectiveRate": 0.5
+  },
+  {
+    "id": "upgradeUncommon_elite",
+    "rewardKind": "upgradeUncommon",
+    "difficulty": "elite",
+    "numerator": 2,
+    "denominator": 8,
+    "effectiveRate": 0.333
+  },
+  {
+    "id": "upgradeUncommon_eventExtremis",
+    "rewardKind": "upgradeUncommon",
+    "difficulty": "eventExtremis",
+    "numerator": 4,
+    "denominator": 5,
+    "effectiveRate": 0.833
+  },
+  {
+    "id": "upgradeUncommon_eventStandard",
+    "rewardKind": "upgradeUncommon",
+    "difficulty": "eventStandard",
+    "numerator": 3,
+    "denominator": 4,
+    "effectiveRate": 0.799
+  },
+  {
+    "id": "upgradeUncommon_mirror",
+    "rewardKind": "upgradeUncommon",
+    "difficulty": "mirror",
+    "numerator": 3,
+    "denominator": 4,
+    "effectiveRate": 0.799
+  },
+  {
+    "id": "upgradeUncommon_standard",
+    "rewardKind": "upgradeUncommon",
+    "difficulty": "standard",
+    "numerator": 4,
+    "denominator": 6,
+    "effectiveRate": 0.714
+  }
+]

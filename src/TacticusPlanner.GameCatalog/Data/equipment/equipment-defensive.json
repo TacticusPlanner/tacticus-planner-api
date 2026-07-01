@@ -1,0 +1,2518 @@
+[
+  {
+    "id": "I_Defensive_C001",
+    "name": "_I_Defensive_C001",
+    "rarity": "Common",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "armor": 3,
+          "hp": 12
+        }
+      },
+      {
+        "stats": {
+          "armor": 5,
+          "hp": 20
+        }
+      },
+      {
+        "stats": {
+          "armor": 7,
+          "hp": 28
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_C002",
+    "name": "Standard-Issue MK X Pauldron",
+    "rarity": "Common",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "BlackTemplars",
+      "SpaceWolves",
+      "DarkAngels",
+      "BloodAngels",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "armor": 4,
+          "hp": 7
+        }
+      },
+      {
+        "stats": {
+          "armor": 7,
+          "hp": 12
+        }
+      },
+      {
+        "stats": {
+          "armor": 10,
+          "hp": 16
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_C003",
+    "name": "Plated Greaves",
+    "rarity": "Common",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "Necrons",
+      "Sisterhood",
+      "AstraMilitarum",
+      "BlackLegion",
+      "DeathGuard",
+      "Orks",
+      "BlackTemplars",
+      "Aeldari",
+      "Tau",
+      "SpaceWolves",
+      "ThousandSons",
+      "DarkAngels",
+      "AdeptusMechanicus",
+      "WorldEaters",
+      "BloodAngels",
+      "Genestealers",
+      "Custodes",
+      "EmperorsChildren",
+      "LeaguesOfVotann",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "armor": 6
+        }
+      },
+      {
+        "stats": {
+          "armor": 10
+        }
+      },
+      {
+        "stats": {
+          "armor": 14
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_C004",
+    "name": "Mantle",
+    "rarity": "Common",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Sisterhood",
+      "AstraMilitarum",
+      "AdeptusMechanicus",
+      "Custodes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "armor": 4,
+          "hp": 7
+        }
+      },
+      {
+        "stats": {
+          "armor": 7,
+          "hp": 12
+        }
+      },
+      {
+        "stats": {
+          "armor": 10,
+          "hp": 16
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_C005",
+    "name": "Nanocrystalline Plating",
+    "rarity": "Common",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Necrons",
+      "Tau"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "armor": 4,
+          "hp": 7
+        }
+      },
+      {
+        "stats": {
+          "armor": 7,
+          "hp": 12
+        }
+      },
+      {
+        "stats": {
+          "armor": 10,
+          "hp": 16
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_C006",
+    "name": "Exoskeleton",
+    "rarity": "Common",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Tyranids",
+      "Genestealers"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "armor": 4,
+          "hp": 7
+        }
+      },
+      {
+        "stats": {
+          "armor": 7,
+          "hp": 12
+        }
+      },
+      {
+        "stats": {
+          "armor": 10,
+          "hp": 16
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_C007",
+    "name": "Blooded Spiked Pauldron",
+    "rarity": "Common",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "BlackLegion",
+      "DeathGuard",
+      "Orks",
+      "ThousandSons",
+      "WorldEaters",
+      "EmperorsChildren"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "armor": 4,
+          "hp": 7
+        }
+      },
+      {
+        "stats": {
+          "armor": 7,
+          "hp": 12
+        }
+      },
+      {
+        "stats": {
+          "armor": 10,
+          "hp": 16
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_E001",
+    "name": "_I_Defensive_E001",
+    "rarity": "Epic",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "armor": 46,
+          "hp": 187
+        }
+      },
+      {
+        "stats": {
+          "armor": 58,
+          "hp": 234
+        }
+      },
+      {
+        "stats": {
+          "armor": 69,
+          "hp": 280
+        }
+      },
+      {
+        "stats": {
+          "armor": 81,
+          "hp": 327
+        }
+      },
+      {
+        "stats": {
+          "armor": 92,
+          "hp": 373
+        }
+      },
+      {
+        "stats": {
+          "armor": 104,
+          "hp": 420
+        }
+      },
+      {
+        "stats": {
+          "armor": 115,
+          "hp": 466
+        }
+      },
+      {
+        "stats": {
+          "armor": 126,
+          "hp": 512
+        }
+      },
+      {
+        "stats": {
+          "armor": 138,
+          "hp": 559
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_E002",
+    "name": "Master-Crafted MK X Pauldron",
+    "rarity": "Epic",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "BlackTemplars",
+      "SpaceWolves",
+      "DarkAngels",
+      "BloodAngels",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "armor": 62,
+          "hp": 111
+        }
+      },
+      {
+        "stats": {
+          "armor": 78,
+          "hp": 139
+        }
+      },
+      {
+        "stats": {
+          "armor": 93,
+          "hp": 167
+        }
+      },
+      {
+        "stats": {
+          "armor": 109,
+          "hp": 194
+        }
+      },
+      {
+        "stats": {
+          "armor": 124,
+          "hp": 222
+        }
+      },
+      {
+        "stats": {
+          "armor": 139,
+          "hp": 249
+        }
+      },
+      {
+        "stats": {
+          "armor": 155,
+          "hp": 277
+        }
+      },
+      {
+        "stats": {
+          "armor": 170,
+          "hp": 304
+        }
+      },
+      {
+        "stats": {
+          "armor": 186,
+          "hp": 332
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_E003",
+    "name": "Adorned Plated Greaves",
+    "rarity": "Epic",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "Necrons",
+      "Sisterhood",
+      "AstraMilitarum",
+      "BlackLegion",
+      "DeathGuard",
+      "Orks",
+      "BlackTemplars",
+      "Aeldari",
+      "Tau",
+      "SpaceWolves",
+      "ThousandSons",
+      "DarkAngels",
+      "AdeptusMechanicus",
+      "WorldEaters",
+      "BloodAngels",
+      "Genestealers",
+      "Custodes",
+      "EmperorsChildren",
+      "LeaguesOfVotann",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "armor": 87
+        }
+      },
+      {
+        "stats": {
+          "armor": 109
+        }
+      },
+      {
+        "stats": {
+          "armor": 131
+        }
+      },
+      {
+        "stats": {
+          "armor": 152
+        }
+      },
+      {
+        "stats": {
+          "armor": 174
+        }
+      },
+      {
+        "stats": {
+          "armor": 195
+        }
+      },
+      {
+        "stats": {
+          "armor": 217
+        }
+      },
+      {
+        "stats": {
+          "armor": 239
+        }
+      },
+      {
+        "stats": {
+          "armor": 260
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_E004",
+    "name": "Adorned Mantle",
+    "rarity": "Epic",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Sisterhood",
+      "AstraMilitarum",
+      "AdeptusMechanicus",
+      "Custodes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "armor": 62,
+          "hp": 111
+        }
+      },
+      {
+        "stats": {
+          "armor": 78,
+          "hp": 139
+        }
+      },
+      {
+        "stats": {
+          "armor": 93,
+          "hp": 167
+        }
+      },
+      {
+        "stats": {
+          "armor": 109,
+          "hp": 194
+        }
+      },
+      {
+        "stats": {
+          "armor": 124,
+          "hp": 222
+        }
+      },
+      {
+        "stats": {
+          "armor": 139,
+          "hp": 249
+        }
+      },
+      {
+        "stats": {
+          "armor": 155,
+          "hp": 277
+        }
+      },
+      {
+        "stats": {
+          "armor": 170,
+          "hp": 304
+        }
+      },
+      {
+        "stats": {
+          "armor": 186,
+          "hp": 332
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_E005",
+    "name": "Advanced Nanocrystalline Plating",
+    "rarity": "Epic",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Necrons",
+      "Tau"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "armor": 62,
+          "hp": 111
+        }
+      },
+      {
+        "stats": {
+          "armor": 78,
+          "hp": 139
+        }
+      },
+      {
+        "stats": {
+          "armor": 93,
+          "hp": 167
+        }
+      },
+      {
+        "stats": {
+          "armor": 109,
+          "hp": 194
+        }
+      },
+      {
+        "stats": {
+          "armor": 124,
+          "hp": 222
+        }
+      },
+      {
+        "stats": {
+          "armor": 139,
+          "hp": 249
+        }
+      },
+      {
+        "stats": {
+          "armor": 155,
+          "hp": 277
+        }
+      },
+      {
+        "stats": {
+          "armor": 170,
+          "hp": 304
+        }
+      },
+      {
+        "stats": {
+          "armor": 186,
+          "hp": 332
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_E006",
+    "name": "Symbiotic Exoskeleton",
+    "rarity": "Epic",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Tyranids",
+      "Genestealers"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "armor": 62,
+          "hp": 111
+        }
+      },
+      {
+        "stats": {
+          "armor": 78,
+          "hp": 139
+        }
+      },
+      {
+        "stats": {
+          "armor": 93,
+          "hp": 167
+        }
+      },
+      {
+        "stats": {
+          "armor": 109,
+          "hp": 194
+        }
+      },
+      {
+        "stats": {
+          "armor": 124,
+          "hp": 222
+        }
+      },
+      {
+        "stats": {
+          "armor": 139,
+          "hp": 249
+        }
+      },
+      {
+        "stats": {
+          "armor": 155,
+          "hp": 277
+        }
+      },
+      {
+        "stats": {
+          "armor": 170,
+          "hp": 304
+        }
+      },
+      {
+        "stats": {
+          "armor": 186,
+          "hp": 332
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_E007",
+    "name": "Merciless Spiked Pauldron",
+    "rarity": "Epic",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "BlackLegion",
+      "DeathGuard",
+      "Orks",
+      "ThousandSons",
+      "WorldEaters",
+      "EmperorsChildren"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "armor": 62,
+          "hp": 111
+        }
+      },
+      {
+        "stats": {
+          "armor": 78,
+          "hp": 139
+        }
+      },
+      {
+        "stats": {
+          "armor": 93,
+          "hp": 167
+        }
+      },
+      {
+        "stats": {
+          "armor": 109,
+          "hp": 194
+        }
+      },
+      {
+        "stats": {
+          "armor": 124,
+          "hp": 222
+        }
+      },
+      {
+        "stats": {
+          "armor": 139,
+          "hp": 249
+        }
+      },
+      {
+        "stats": {
+          "armor": 155,
+          "hp": 277
+        }
+      },
+      {
+        "stats": {
+          "armor": 170,
+          "hp": 304
+        }
+      },
+      {
+        "stats": {
+          "armor": 186,
+          "hp": 332
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_L001",
+    "name": "_I_Defensive_L001",
+    "rarity": "Legendary",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "armor": 153,
+          "hp": 610
+        }
+      },
+      {
+        "stats": {
+          "armor": 162,
+          "hp": 646
+        }
+      },
+      {
+        "stats": {
+          "armor": 171,
+          "hp": 681
+        }
+      },
+      {
+        "stats": {
+          "armor": 180,
+          "hp": 717
+        }
+      },
+      {
+        "stats": {
+          "armor": 189,
+          "hp": 752
+        }
+      },
+      {
+        "stats": {
+          "armor": 198,
+          "hp": 787
+        }
+      },
+      {
+        "stats": {
+          "armor": 207,
+          "hp": 823
+        }
+      },
+      {
+        "stats": {
+          "armor": 216,
+          "hp": 858
+        }
+      },
+      {
+        "stats": {
+          "armor": 224,
+          "hp": 894
+        }
+      },
+      {
+        "stats": {
+          "armor": 233,
+          "hp": 929
+        }
+      },
+      {
+        "stats": {
+          "armor": 242,
+          "hp": 964
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_L002",
+    "name": "Artificer MK X Pauldron",
+    "rarity": "Legendary",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "BlackTemplars",
+      "SpaceWolves",
+      "DarkAngels",
+      "BloodAngels",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "armor": 201,
+          "hp": 359
+        }
+      },
+      {
+        "stats": {
+          "armor": 213,
+          "hp": 380
+        }
+      },
+      {
+        "stats": {
+          "armor": 225,
+          "hp": 401
+        }
+      },
+      {
+        "stats": {
+          "armor": 236,
+          "hp": 422
+        }
+      },
+      {
+        "stats": {
+          "armor": 248,
+          "hp": 443
+        }
+      },
+      {
+        "stats": {
+          "armor": 260,
+          "hp": 464
+        }
+      },
+      {
+        "stats": {
+          "armor": 271,
+          "hp": 484
+        }
+      },
+      {
+        "stats": {
+          "armor": 283,
+          "hp": 505
+        }
+      },
+      {
+        "stats": {
+          "armor": 295,
+          "hp": 526
+        }
+      },
+      {
+        "stats": {
+          "armor": 306,
+          "hp": 547
+        }
+      },
+      {
+        "stats": {
+          "armor": 318,
+          "hp": 568
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_L003",
+    "name": "Grand Plated Greaves",
+    "rarity": "Legendary",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "Necrons",
+      "Sisterhood",
+      "AstraMilitarum",
+      "BlackLegion",
+      "DeathGuard",
+      "Orks",
+      "BlackTemplars",
+      "Aeldari",
+      "Tau",
+      "SpaceWolves",
+      "ThousandSons",
+      "DarkAngels",
+      "AdeptusMechanicus",
+      "WorldEaters",
+      "BloodAngels",
+      "Genestealers",
+      "Custodes",
+      "EmperorsChildren",
+      "LeaguesOfVotann",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "armor": 277
+        }
+      },
+      {
+        "stats": {
+          "armor": 294
+        }
+      },
+      {
+        "stats": {
+          "armor": 310
+        }
+      },
+      {
+        "stats": {
+          "armor": 326
+        }
+      },
+      {
+        "stats": {
+          "armor": 342
+        }
+      },
+      {
+        "stats": {
+          "armor": 358
+        }
+      },
+      {
+        "stats": {
+          "armor": 374
+        }
+      },
+      {
+        "stats": {
+          "armor": 390
+        }
+      },
+      {
+        "stats": {
+          "armor": 406
+        }
+      },
+      {
+        "stats": {
+          "armor": 422
+        }
+      },
+      {
+        "stats": {
+          "armor": 438
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_L004",
+    "name": "Grand Mantle",
+    "rarity": "Legendary",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Sisterhood",
+      "AstraMilitarum",
+      "AdeptusMechanicus",
+      "Custodes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "armor": 201,
+          "hp": 359
+        }
+      },
+      {
+        "stats": {
+          "armor": 213,
+          "hp": 380
+        }
+      },
+      {
+        "stats": {
+          "armor": 225,
+          "hp": 401
+        }
+      },
+      {
+        "stats": {
+          "armor": 236,
+          "hp": 422
+        }
+      },
+      {
+        "stats": {
+          "armor": 248,
+          "hp": 443
+        }
+      },
+      {
+        "stats": {
+          "armor": 260,
+          "hp": 464
+        }
+      },
+      {
+        "stats": {
+          "armor": 271,
+          "hp": 484
+        }
+      },
+      {
+        "stats": {
+          "armor": 283,
+          "hp": 505
+        }
+      },
+      {
+        "stats": {
+          "armor": 295,
+          "hp": 526
+        }
+      },
+      {
+        "stats": {
+          "armor": 306,
+          "hp": 547
+        }
+      },
+      {
+        "stats": {
+          "armor": 318,
+          "hp": 568
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_L005",
+    "name": "Optimal Nanocrystalline Plating",
+    "rarity": "Legendary",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Necrons",
+      "Tau"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "armor": 201,
+          "hp": 359
+        }
+      },
+      {
+        "stats": {
+          "armor": 213,
+          "hp": 380
+        }
+      },
+      {
+        "stats": {
+          "armor": 225,
+          "hp": 401
+        }
+      },
+      {
+        "stats": {
+          "armor": 236,
+          "hp": 422
+        }
+      },
+      {
+        "stats": {
+          "armor": 248,
+          "hp": 443
+        }
+      },
+      {
+        "stats": {
+          "armor": 260,
+          "hp": 464
+        }
+      },
+      {
+        "stats": {
+          "armor": 271,
+          "hp": 484
+        }
+      },
+      {
+        "stats": {
+          "armor": 283,
+          "hp": 505
+        }
+      },
+      {
+        "stats": {
+          "armor": 295,
+          "hp": 526
+        }
+      },
+      {
+        "stats": {
+          "armor": 306,
+          "hp": 547
+        }
+      },
+      {
+        "stats": {
+          "armor": 318,
+          "hp": 568
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_L006",
+    "name": "Monstrous Exoskeleton",
+    "rarity": "Legendary",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Tyranids",
+      "Genestealers"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "armor": 201,
+          "hp": 359
+        }
+      },
+      {
+        "stats": {
+          "armor": 213,
+          "hp": 380
+        }
+      },
+      {
+        "stats": {
+          "armor": 225,
+          "hp": 401
+        }
+      },
+      {
+        "stats": {
+          "armor": 236,
+          "hp": 422
+        }
+      },
+      {
+        "stats": {
+          "armor": 248,
+          "hp": 443
+        }
+      },
+      {
+        "stats": {
+          "armor": 260,
+          "hp": 464
+        }
+      },
+      {
+        "stats": {
+          "armor": 271,
+          "hp": 484
+        }
+      },
+      {
+        "stats": {
+          "armor": 283,
+          "hp": 505
+        }
+      },
+      {
+        "stats": {
+          "armor": 295,
+          "hp": 526
+        }
+      },
+      {
+        "stats": {
+          "armor": 306,
+          "hp": 547
+        }
+      },
+      {
+        "stats": {
+          "armor": 318,
+          "hp": 568
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_L007",
+    "name": "Monstrous Spiked Pauldron",
+    "rarity": "Legendary",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "BlackLegion",
+      "DeathGuard",
+      "Orks",
+      "ThousandSons",
+      "WorldEaters",
+      "EmperorsChildren"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "armor": 201,
+          "hp": 359
+        }
+      },
+      {
+        "stats": {
+          "armor": 213,
+          "hp": 380
+        }
+      },
+      {
+        "stats": {
+          "armor": 225,
+          "hp": 401
+        }
+      },
+      {
+        "stats": {
+          "armor": 236,
+          "hp": 422
+        }
+      },
+      {
+        "stats": {
+          "armor": 248,
+          "hp": 443
+        }
+      },
+      {
+        "stats": {
+          "armor": 260,
+          "hp": 464
+        }
+      },
+      {
+        "stats": {
+          "armor": 271,
+          "hp": 484
+        }
+      },
+      {
+        "stats": {
+          "armor": 283,
+          "hp": 505
+        }
+      },
+      {
+        "stats": {
+          "armor": 295,
+          "hp": 526
+        }
+      },
+      {
+        "stats": {
+          "armor": 306,
+          "hp": 547
+        }
+      },
+      {
+        "stats": {
+          "armor": 318,
+          "hp": 568
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_M003",
+    "name": "Ancient Plated Greaves",
+    "rarity": "Mythic",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "Necrons",
+      "Sisterhood",
+      "AstraMilitarum",
+      "BlackLegion",
+      "DeathGuard",
+      "Orks",
+      "BlackTemplars",
+      "Aeldari",
+      "Tau",
+      "SpaceWolves",
+      "ThousandSons",
+      "DarkAngels",
+      "AdeptusMechanicus",
+      "WorldEaters",
+      "BloodAngels",
+      "Genestealers",
+      "Custodes",
+      "EmperorsChildren",
+      "LeaguesOfVotann",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "armor": 440
+        }
+      },
+      {
+        "stats": {
+          "armor": 464
+        }
+      },
+      {
+        "stats": {
+          "armor": 488
+        }
+      },
+      {
+        "stats": {
+          "armor": 512
+        }
+      },
+      {
+        "stats": {
+          "armor": 536
+        }
+      },
+      {
+        "stats": {
+          "armor": 559
+        }
+      },
+      {
+        "stats": {
+          "armor": 583
+        }
+      },
+      {
+        "stats": {
+          "armor": 607
+        }
+      },
+      {
+        "stats": {
+          "armor": 631
+        }
+      },
+      {
+        "stats": {
+          "armor": 654
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_M005",
+    "name": "Perfected Nanocrystalline Plating",
+    "rarity": "Mythic",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Necrons",
+      "Tau"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "armor": 320,
+          "hp": 600
+        }
+      },
+      {
+        "stats": {
+          "armor": 338,
+          "hp": 633
+        }
+      },
+      {
+        "stats": {
+          "armor": 355,
+          "hp": 665
+        }
+      },
+      {
+        "stats": {
+          "armor": 372,
+          "hp": 698
+        }
+      },
+      {
+        "stats": {
+          "armor": 390,
+          "hp": 730
+        }
+      },
+      {
+        "stats": {
+          "armor": 407,
+          "hp": 762
+        }
+      },
+      {
+        "stats": {
+          "armor": 424,
+          "hp": 795
+        }
+      },
+      {
+        "stats": {
+          "armor": 441,
+          "hp": 827
+        }
+      },
+      {
+        "stats": {
+          "armor": 459,
+          "hp": 860
+        }
+      },
+      {
+        "stats": {
+          "armor": 476,
+          "hp": 892
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_M006",
+    "name": "Apex Symbiotic Exoskeleton",
+    "rarity": "Mythic",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Tyranids",
+      "Genestealers"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "armor": 320,
+          "hp": 600
+        }
+      },
+      {
+        "stats": {
+          "armor": 338,
+          "hp": 633
+        }
+      },
+      {
+        "stats": {
+          "armor": 355,
+          "hp": 665
+        }
+      },
+      {
+        "stats": {
+          "armor": 372,
+          "hp": 698
+        }
+      },
+      {
+        "stats": {
+          "armor": 390,
+          "hp": 730
+        }
+      },
+      {
+        "stats": {
+          "armor": 407,
+          "hp": 762
+        }
+      },
+      {
+        "stats": {
+          "armor": 424,
+          "hp": 795
+        }
+      },
+      {
+        "stats": {
+          "armor": 441,
+          "hp": 827
+        }
+      },
+      {
+        "stats": {
+          "armor": 459,
+          "hp": 860
+        }
+      },
+      {
+        "stats": {
+          "armor": 476,
+          "hp": 892
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_R001",
+    "name": "_I_Defensive_R001",
+    "rarity": "Rare",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "armor": 20,
+          "hp": 72
+        }
+      },
+      {
+        "stats": {
+          "armor": 25,
+          "hp": 88
+        }
+      },
+      {
+        "stats": {
+          "armor": 29,
+          "hp": 103
+        }
+      },
+      {
+        "stats": {
+          "armor": 33,
+          "hp": 119
+        }
+      },
+      {
+        "stats": {
+          "armor": 38,
+          "hp": 134
+        }
+      },
+      {
+        "stats": {
+          "armor": 42,
+          "hp": 149
+        }
+      },
+      {
+        "stats": {
+          "armor": 46,
+          "hp": 165
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_R002",
+    "name": "Sanctified MK X Pauldron",
+    "rarity": "Rare",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "BlackTemplars",
+      "SpaceWolves",
+      "DarkAngels",
+      "BloodAngels",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "armor": 25,
+          "hp": 46
+        }
+      },
+      {
+        "stats": {
+          "armor": 31,
+          "hp": 56
+        }
+      },
+      {
+        "stats": {
+          "armor": 36,
+          "hp": 66
+        }
+      },
+      {
+        "stats": {
+          "armor": 41,
+          "hp": 76
+        }
+      },
+      {
+        "stats": {
+          "armor": 47,
+          "hp": 86
+        }
+      },
+      {
+        "stats": {
+          "armor": 52,
+          "hp": 96
+        }
+      },
+      {
+        "stats": {
+          "armor": 57,
+          "hp": 105
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_R003",
+    "name": "Fine Plated Greaves",
+    "rarity": "Rare",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "Necrons",
+      "Sisterhood",
+      "AstraMilitarum",
+      "BlackLegion",
+      "DeathGuard",
+      "Orks",
+      "BlackTemplars",
+      "Aeldari",
+      "Tau",
+      "SpaceWolves",
+      "ThousandSons",
+      "DarkAngels",
+      "AdeptusMechanicus",
+      "WorldEaters",
+      "BloodAngels",
+      "Genestealers",
+      "Custodes",
+      "EmperorsChildren",
+      "LeaguesOfVotann",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "armor": 34
+        }
+      },
+      {
+        "stats": {
+          "armor": 42
+        }
+      },
+      {
+        "stats": {
+          "armor": 49
+        }
+      },
+      {
+        "stats": {
+          "armor": 56
+        }
+      },
+      {
+        "stats": {
+          "armor": 64
+        }
+      },
+      {
+        "stats": {
+          "armor": 71
+        }
+      },
+      {
+        "stats": {
+          "armor": 78
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_R004",
+    "name": "Fine Mantle",
+    "rarity": "Rare",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Sisterhood",
+      "AstraMilitarum",
+      "AdeptusMechanicus",
+      "Custodes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "armor": 25,
+          "hp": 46
+        }
+      },
+      {
+        "stats": {
+          "armor": 31,
+          "hp": 56
+        }
+      },
+      {
+        "stats": {
+          "armor": 36,
+          "hp": 66
+        }
+      },
+      {
+        "stats": {
+          "armor": 41,
+          "hp": 76
+        }
+      },
+      {
+        "stats": {
+          "armor": 47,
+          "hp": 86
+        }
+      },
+      {
+        "stats": {
+          "armor": 52,
+          "hp": 96
+        }
+      },
+      {
+        "stats": {
+          "armor": 57,
+          "hp": 105
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_R005",
+    "name": "Refined Nanocrystalline Plating",
+    "rarity": "Rare",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Necrons",
+      "Tau"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "armor": 25,
+          "hp": 46
+        }
+      },
+      {
+        "stats": {
+          "armor": 31,
+          "hp": 56
+        }
+      },
+      {
+        "stats": {
+          "armor": 36,
+          "hp": 66
+        }
+      },
+      {
+        "stats": {
+          "armor": 41,
+          "hp": 76
+        }
+      },
+      {
+        "stats": {
+          "armor": 47,
+          "hp": 86
+        }
+      },
+      {
+        "stats": {
+          "armor": 52,
+          "hp": 96
+        }
+      },
+      {
+        "stats": {
+          "armor": 57,
+          "hp": 105
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_R006",
+    "name": "Augmented Exoskeleton",
+    "rarity": "Rare",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Tyranids",
+      "Genestealers"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "armor": 25,
+          "hp": 46
+        }
+      },
+      {
+        "stats": {
+          "armor": 31,
+          "hp": 56
+        }
+      },
+      {
+        "stats": {
+          "armor": 36,
+          "hp": 66
+        }
+      },
+      {
+        "stats": {
+          "armor": 41,
+          "hp": 76
+        }
+      },
+      {
+        "stats": {
+          "armor": 47,
+          "hp": 86
+        }
+      },
+      {
+        "stats": {
+          "armor": 52,
+          "hp": 96
+        }
+      },
+      {
+        "stats": {
+          "armor": 57,
+          "hp": 105
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_R007",
+    "name": "Brutal Spiked Pauldron",
+    "rarity": "Rare",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "BlackLegion",
+      "DeathGuard",
+      "Orks",
+      "ThousandSons",
+      "WorldEaters",
+      "EmperorsChildren"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "armor": 25,
+          "hp": 46
+        }
+      },
+      {
+        "stats": {
+          "armor": 31,
+          "hp": 56
+        }
+      },
+      {
+        "stats": {
+          "armor": 36,
+          "hp": 66
+        }
+      },
+      {
+        "stats": {
+          "armor": 41,
+          "hp": 76
+        }
+      },
+      {
+        "stats": {
+          "armor": 47,
+          "hp": 86
+        }
+      },
+      {
+        "stats": {
+          "armor": 52,
+          "hp": 96
+        }
+      },
+      {
+        "stats": {
+          "armor": 57,
+          "hp": 105
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_U001",
+    "name": "_I_Defensive_U001",
+    "rarity": "Uncommon",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "armor": 8,
+          "hp": 29
+        }
+      },
+      {
+        "stats": {
+          "armor": 11,
+          "hp": 39
+        }
+      },
+      {
+        "stats": {
+          "armor": 14,
+          "hp": 48
+        }
+      },
+      {
+        "stats": {
+          "armor": 16,
+          "hp": 58
+        }
+      },
+      {
+        "stats": {
+          "armor": 19,
+          "hp": 67
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_U002",
+    "name": "Battle-Hardened MK X Pauldron",
+    "rarity": "Uncommon",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "BlackTemplars",
+      "SpaceWolves",
+      "DarkAngels",
+      "BloodAngels",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "armor": 10,
+          "hp": 17
+        }
+      },
+      {
+        "stats": {
+          "armor": 14,
+          "hp": 23
+        }
+      },
+      {
+        "stats": {
+          "armor": 17,
+          "hp": 28
+        }
+      },
+      {
+        "stats": {
+          "armor": 20,
+          "hp": 34
+        }
+      },
+      {
+        "stats": {
+          "armor": 23,
+          "hp": 39
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_U003",
+    "name": "Good Plated Greaves",
+    "rarity": "Uncommon",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Ultramarines",
+      "Necrons",
+      "Sisterhood",
+      "AstraMilitarum",
+      "BlackLegion",
+      "DeathGuard",
+      "Orks",
+      "BlackTemplars",
+      "Aeldari",
+      "Tau",
+      "SpaceWolves",
+      "ThousandSons",
+      "DarkAngels",
+      "AdeptusMechanicus",
+      "WorldEaters",
+      "BloodAngels",
+      "Genestealers",
+      "Custodes",
+      "EmperorsChildren",
+      "LeaguesOfVotann",
+      "AdeptusAstartes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "armor": 14
+        }
+      },
+      {
+        "stats": {
+          "armor": 19
+        }
+      },
+      {
+        "stats": {
+          "armor": 24
+        }
+      },
+      {
+        "stats": {
+          "armor": 28
+        }
+      },
+      {
+        "stats": {
+          "armor": 33
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_U004",
+    "name": "Good Mantle",
+    "rarity": "Uncommon",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Sisterhood",
+      "AstraMilitarum",
+      "AdeptusMechanicus",
+      "Custodes"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "armor": 10,
+          "hp": 17
+        }
+      },
+      {
+        "stats": {
+          "armor": 14,
+          "hp": 23
+        }
+      },
+      {
+        "stats": {
+          "armor": 17,
+          "hp": 28
+        }
+      },
+      {
+        "stats": {
+          "armor": 20,
+          "hp": 34
+        }
+      },
+      {
+        "stats": {
+          "armor": 23,
+          "hp": 39
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_U005",
+    "name": "Improved Nanocrystalline Plating",
+    "rarity": "Uncommon",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Necrons",
+      "Tau"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "armor": 10,
+          "hp": 17
+        }
+      },
+      {
+        "stats": {
+          "armor": 14,
+          "hp": 23
+        }
+      },
+      {
+        "stats": {
+          "armor": 17,
+          "hp": 28
+        }
+      },
+      {
+        "stats": {
+          "armor": 20,
+          "hp": 34
+        }
+      },
+      {
+        "stats": {
+          "armor": 23,
+          "hp": 39
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_U006",
+    "name": "Evolved Exoskeleton",
+    "rarity": "Uncommon",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "Tyranids",
+      "Genestealers"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "armor": 10,
+          "hp": 17
+        }
+      },
+      {
+        "stats": {
+          "armor": 14,
+          "hp": 23
+        }
+      },
+      {
+        "stats": {
+          "armor": 17,
+          "hp": 28
+        }
+      },
+      {
+        "stats": {
+          "armor": 20,
+          "hp": 34
+        }
+      },
+      {
+        "stats": {
+          "armor": 23,
+          "hp": 39
+        }
+      }
+    ]
+  },
+  {
+    "id": "I_Defensive_U007",
+    "name": "Savage Spiked Pauldron",
+    "rarity": "Uncommon",
+    "type": "I_Defensive",
+    "abilityId": "",
+    "isRelic": false,
+    "isUniqueRelic": false,
+    "allowedUnits": [],
+    "allowedFactions": [
+      "BlackLegion",
+      "DeathGuard",
+      "Orks",
+      "ThousandSons",
+      "WorldEaters",
+      "EmperorsChildren"
+    ],
+    "levels": [
+      {
+        "stats": {
+          "armor": 10,
+          "hp": 17
+        }
+      },
+      {
+        "stats": {
+          "armor": 14,
+          "hp": 23
+        }
+      },
+      {
+        "stats": {
+          "armor": 17,
+          "hp": 28
+        }
+      },
+      {
+        "stats": {
+          "armor": 20,
+          "hp": 34
+        }
+      },
+      {
+        "stats": {
+          "armor": 23,
+          "hp": 39
+        }
+      }
+    ]
+  },
+  {
+    "id": "R_Defensive_RelicOfLostCadia",
+    "name": "Relic of Lost Cadia",
+    "rarity": "Mythic",
+    "type": "I_Defensive",
+    "abilityId": "RelicOfLostCadia",
+    "isRelic": true,
+    "isUniqueRelic": false,
+    "allowedUnits": [
+      "astraPrimarisPsy",
+      "astraBullgryn",
+      "astraOrdnance"
+    ],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "armor": 320,
+          "hp": 600
+        }
+      },
+      {
+        "stats": {
+          "armor": 338,
+          "hp": 633
+        }
+      },
+      {
+        "stats": {
+          "armor": 355,
+          "hp": 665
+        }
+      },
+      {
+        "stats": {
+          "armor": 372,
+          "hp": 698
+        }
+      },
+      {
+        "stats": {
+          "armor": 390,
+          "hp": 730
+        }
+      },
+      {
+        "stats": {
+          "armor": 407,
+          "hp": 762
+        }
+      },
+      {
+        "stats": {
+          "armor": 424,
+          "hp": 795
+        }
+      },
+      {
+        "stats": {
+          "armor": 441,
+          "hp": 827
+        }
+      },
+      {
+        "stats": {
+          "armor": 459,
+          "hp": 860
+        }
+      },
+      {
+        "stats": {
+          "armor": 476,
+          "hp": 892
+        }
+      }
+    ]
+  },
+  {
+    "id": "R_Defensive_SupaCyborkBody",
+    "name": "Supa-Cybork Body",
+    "rarity": "Mythic",
+    "type": "I_Defensive",
+    "abilityId": "SupaCyborkBody",
+    "isRelic": true,
+    "isUniqueRelic": false,
+    "allowedUnits": [
+      "orksRuntherd",
+      "orksBigMek",
+      "orksNob"
+    ],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "armor": 320,
+          "hp": 600
+        }
+      },
+      {
+        "stats": {
+          "armor": 338,
+          "hp": 633
+        }
+      },
+      {
+        "stats": {
+          "armor": 355,
+          "hp": 665
+        }
+      },
+      {
+        "stats": {
+          "armor": 372,
+          "hp": 698
+        }
+      },
+      {
+        "stats": {
+          "armor": 390,
+          "hp": 730
+        }
+      },
+      {
+        "stats": {
+          "armor": 407,
+          "hp": 762
+        }
+      },
+      {
+        "stats": {
+          "armor": 424,
+          "hp": 795
+        }
+      },
+      {
+        "stats": {
+          "armor": 441,
+          "hp": 827
+        }
+      },
+      {
+        "stats": {
+          "armor": 459,
+          "hp": 860
+        }
+      },
+      {
+        "stats": {
+          "armor": 476,
+          "hp": 892
+        }
+      }
+    ]
+  }
+]

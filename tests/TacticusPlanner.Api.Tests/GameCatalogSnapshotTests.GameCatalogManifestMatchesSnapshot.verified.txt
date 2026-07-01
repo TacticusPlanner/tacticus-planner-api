@@ -1,0 +1,63 @@
+﻿{
+  version: dev-2026-06-26,
+  schemaVersion: 1,
+  gameVersion: 1.40,
+  sourceHash: 7bfc8d6f0f1b15ba20fe89318de2c03fda367a586b50338f18eca4c8a4431dde,
+  datasets: [
+    {
+      key: campaign-battles,
+      hash: 571b086822a7c8bd6104f9ee57d4fa80486fff561bc534d78f1365626f20464e,
+      url: /api/v1/game-catalog/campaign-battles
+    },
+    {
+      key: campaign-definitions,
+      hash: 2284581e07455cce7c06a97608f7bbee8db604bea30b741c7a8c065d94d508f4,
+      url: /api/v1/game-catalog/campaign-definitions
+    },
+    {
+      key: characters,
+      hash: b18a43820805cc051bbfb76c9cbd74f4bc7a580c569e37f355411991573af671,
+      url: /api/v1/game-catalog/characters
+    },
+    {
+      key: equipment,
+      hash: c6ed2fc2937ae0964b05ad7e92e12ec0b6df51057120c196986cd4e89a06b19b,
+      url: /api/v1/game-catalog/equipment
+    },
+    {
+      key: lre-battles,
+      hash: 5c4892990513833be413c44074902f9d929a0424abe6d27d45a644494ef31a3c,
+      url: /api/v1/game-catalog/lre-battles
+    },
+    {
+      key: lre-common,
+      hash: d2bc1a84c1cd502dd2bf1f291d50495b27423edc8073b8b1203be08f2bc20694,
+      url: /api/v1/game-catalog/lre-common
+    },
+    {
+      key: lres,
+      hash: adf6232e0b0a5bce75536db2cdc0bb1840d3d3fc96cd300e1d0734c7c8531f78,
+      url: /api/v1/game-catalog/lres
+    },
+    {
+      key: mow-upgrade-costs,
+      hash: f9edae42b150a95319c1e5725264a8fff950e42caa2914b17bc57e535f873ee7,
+      url: /api/v1/game-catalog/mow-upgrade-costs
+    },
+    {
+      key: mows,
+      hash: 27fc202591942b4a328453b3ae1e022ef5eb1cd58f116d52172a5d3d5a171772,
+      url: /api/v1/game-catalog/mows
+    },
+    {
+      key: npcs,
+      hash: 25232db3a36692434209a6c905497b4c14c3e538dc16ebaab6db8c1bdc7e78f6,
+      url: /api/v1/game-catalog/npcs
+    },
+    {
+      key: upgrades,
+      hash: ee593ea7bc00474601d1b890f3bf3916034b687bb1d18c48612bb07a28ff92fb,
+      url: /api/v1/game-catalog/upgrades
+    }
+  ]
+}

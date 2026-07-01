@@ -1,0 +1,4686 @@
+{
+  "groupId": "genestealers-vs-tau-empire",
+  "faction": "Genestealers",
+  "releaseType": "event",
+  "coreCharacters": [
+    "genesBiophagus",
+    "genesMagus",
+    "genesKelermorph"
+  ],
+  "difficulties": [
+    "eventStandard",
+    "eventStandardChallenge",
+    "eventExtremis",
+    "eventExtremisChallenge"
+  ],
+  "battles": [
+    {
+      "id": "TAS01",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 1,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 40,
+            "max": 66
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC017",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 120,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Cadian Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:4",
+          "count": 8
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 8,
+          "stars": 1,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "TAS02",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 2,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 40,
+            "max": 66
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC015",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 246,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Cadian Lascannon Team"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:7",
+          "count": 6
+        },
+        {
+          "id": "astraNpc2Lascannon:7",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 6,
+          "stars": 2,
+          "rank": "Iron3"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 2,
+          "rank": "Iron3"
+        }
+      ]
+    },
+    {
+      "id": "TAS03",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 3,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 40,
+            "max": 66
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC012",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 1004,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Cadian Vox-caster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:8",
+          "count": 4
+        },
+        {
+          "id": "astraNpc3Voxcaster:8",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 4,
+          "stars": 3,
+          "rank": "Iron3"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 4,
+          "stars": 3,
+          "rank": "Iron3"
+        }
+      ]
+    },
+    {
+      "id": "TASC3B",
+      "difficulty": "eventStandardChallenge",
+      "energyCost": 6,
+      "nodeNumber": 3,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR014",
+            "chanceId": "upgradeRare_eventStandardChallenge"
+          }
+        ]
+      },
+      "enemyPower": 2023,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Cadian Lascannon Team",
+        "Cadian Mortar Team",
+        "Cadian Vox-caster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:8",
+          "count": 3
+        },
+        {
+          "id": "astraNpc2Lascannon:8",
+          "count": 2
+        },
+        {
+          "id": "astraNpc3Voxcaster:10",
+          "count": 5
+        },
+        {
+          "id": "astraNpc4Mortar:8",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 3,
+          "stars": 3,
+          "rank": "Iron3"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 3,
+          "rank": "Iron3"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 5,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 1,
+          "stars": 3,
+          "rank": "Iron3"
+        }
+      ]
+    },
+    {
+      "id": "TAS04",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 4,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 40,
+            "max": 66
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC014",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 1072,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Cadian Lascannon Team",
+        "Cadian Vox-caster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:8",
+          "count": 4
+        },
+        {
+          "id": "astraNpc2Lascannon:5",
+          "count": 2
+        },
+        {
+          "id": "astraNpc3Voxcaster:8",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 4,
+          "stars": 3,
+          "rank": "Iron3"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 2,
+          "rank": "Iron1"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 4,
+          "stars": 3,
+          "rank": "Iron3"
+        }
+      ]
+    },
+    {
+      "id": "TAS05",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 5,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 40,
+            "max": 66
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC009",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 426,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Fire Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior:6",
+          "count": 6
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 6,
+          "stars": 2,
+          "rank": "Iron2"
+        }
+      ]
+    },
+    {
+      "id": "TAS06",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 6,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 45,
+            "max": 75
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_tauCrisis",
+            "chanceId": "shard_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 719,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Fire Warrior",
+        "Re'vas"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior:6",
+          "count": 7
+        },
+        {
+          "id": "tauNpcCrisis:3",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 7,
+          "stars": 2,
+          "rank": "Iron2"
+        },
+        {
+          "id": "tauNpcCrisis",
+          "name": "Re'vas",
+          "count": 1,
+          "stars": 3,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "TAS07",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 7,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 45,
+            "max": 75
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC005",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 496,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Fire Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior:5",
+          "count": 8
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 8,
+          "stars": 2,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "TAS08",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 8,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 45,
+            "max": 75
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC008",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 381,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Fire Warrior",
+        "Shield Drone"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior:6",
+          "count": 3
+        },
+        {
+          "id": "tauNpc3DroneShield:5",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 3,
+          "stars": 2,
+          "rank": "Iron2"
+        },
+        {
+          "id": "tauNpc3DroneShield",
+          "name": "Shield Drone",
+          "count": 3,
+          "stars": 2,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "TAS09",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 9,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 45,
+            "max": 75
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC007",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 386,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Fire Warrior",
+        "Shield Drone"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior:6",
+          "count": 4
+        },
+        {
+          "id": "tauNpc3DroneShield:4",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 4,
+          "stars": 2,
+          "rank": "Iron2"
+        },
+        {
+          "id": "tauNpc3DroneShield",
+          "name": "Shield Drone",
+          "count": 3,
+          "stars": 1,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "TAS10",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 10,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 45,
+            "max": 75
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR027",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 804,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Fire Warrior",
+        "Shield Drone"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior:7",
+          "count": 6
+        },
+        {
+          "id": "tauNpc3DroneShield:5",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 6,
+          "stars": 2,
+          "rank": "Iron3"
+        },
+        {
+          "id": "tauNpc3DroneShield",
+          "name": "Shield Drone",
+          "count": 3,
+          "stars": 2,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "TAS11",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 11,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_tauMarksman",
+            "chanceId": "shard_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 1330,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Fire Warrior",
+        "Shield Drone",
+        "Sho'syl"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior:6",
+          "count": 5
+        },
+        {
+          "id": "tauNpc3DroneShield:7",
+          "count": 4
+        },
+        {
+          "id": "tauNpcMarksman:5",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 5,
+          "stars": 2,
+          "rank": "Iron2"
+        },
+        {
+          "id": "tauNpc3DroneShield",
+          "name": "Shield Drone",
+          "count": 4,
+          "stars": 2,
+          "rank": "Iron3"
+        },
+        {
+          "id": "tauNpcMarksman",
+          "name": "Sho'syl",
+          "count": 1,
+          "stars": 4,
+          "rank": "Iron2"
+        }
+      ]
+    },
+    {
+      "id": "TAS12",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 12,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC004",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 1422,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Kroot"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc6Carnivore:9",
+          "count": 6
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc6Carnivore",
+          "name": "Kroot",
+          "count": 6,
+          "stars": 3,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "TAS13",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 13,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpU017",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 1896,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Kroot"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc6Carnivore:9",
+          "count": 8
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc6Carnivore",
+          "name": "Kroot",
+          "count": 8,
+          "stars": 3,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "TASC13B",
+      "difficulty": "eventStandardChallenge",
+      "energyCost": 6,
+      "nodeNumber": 13,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpE017",
+            "chanceId": "upgradeEpic_eventStandardChallenge"
+          }
+        ]
+      },
+      "enemyPower": 4407,
+      "enemiesAlliances": [
+        "Imperial",
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Tau"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Cadian Lascannon Team",
+        "Cadian Mortar Team",
+        "Cadian Vox-caster",
+        "Fire Warrior",
+        "Shield Drone",
+        "Stealth Battlesuit"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc2Lascannon:10",
+          "count": 2
+        },
+        {
+          "id": "astraNpc3Voxcaster:10",
+          "count": 3
+        },
+        {
+          "id": "astraNpc4Mortar:10",
+          "count": 1
+        },
+        {
+          "id": "tauNpc1FireWarrior:11",
+          "count": 2
+        },
+        {
+          "id": "tauNpc3DroneShield:10",
+          "count": 2
+        },
+        {
+          "id": "tauNpc5StealthSuit:8",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 3,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 1,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 2,
+          "stars": 6,
+          "rank": "Bronze2"
+        },
+        {
+          "id": "tauNpc3DroneShield",
+          "name": "Shield Drone",
+          "count": 2,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "tauNpc5StealthSuit",
+          "name": "Stealth Battlesuit",
+          "count": 2,
+          "stars": 3,
+          "rank": "Iron3"
+        }
+      ]
+    },
+    {
+      "id": "TAS14",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 14,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgU004",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 1652,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Fire Warrior",
+        "Kroot"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior:9",
+          "count": 3
+        },
+        {
+          "id": "tauNpc6Carnivore:8",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 3,
+          "stars": 3,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "tauNpc6Carnivore",
+          "name": "Kroot",
+          "count": 5,
+          "stars": 3,
+          "rank": "Iron3"
+        }
+      ]
+    },
+    {
+      "id": "TAS15",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 15,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmU002",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 1210,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Fire Warrior",
+        "Kroot"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior:10",
+          "count": 2
+        },
+        {
+          "id": "tauNpc6Carnivore:6",
+          "count": 8
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 2,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "tauNpc6Carnivore",
+          "name": "Kroot",
+          "count": 8,
+          "stars": 2,
+          "rank": "Iron2"
+        }
+      ]
+    },
+    {
+      "id": "TAS16",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 16,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR027",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 1590,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Fire Warrior",
+        "Kroot",
+        "Shield Drone"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior:10",
+          "count": 3
+        },
+        {
+          "id": "tauNpc3DroneShield:8",
+          "count": 3
+        },
+        {
+          "id": "tauNpc6Carnivore:6",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 3,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "tauNpc3DroneShield",
+          "name": "Shield Drone",
+          "count": 3,
+          "stars": 3,
+          "rank": "Iron3"
+        },
+        {
+          "id": "tauNpc6Carnivore",
+          "name": "Kroot",
+          "count": 3,
+          "stars": 2,
+          "rank": "Iron2"
+        }
+      ]
+    },
+    {
+      "id": "TAS17",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 17,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 52,
+            "max": 90
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_tauDarkstrider",
+            "chanceId": "shard_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 5456,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Darkstrider",
+        "Fire Warrior",
+        "Sniper Drone",
+        "Stealth Battlesuit"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior:10",
+          "count": 3
+        },
+        {
+          "id": "tauNpc2DroneSniper:10",
+          "count": 4
+        },
+        {
+          "id": "tauNpc5StealthSuit:9",
+          "count": 2
+        },
+        {
+          "id": "tauNpcDarkstrider:9",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 3,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "tauNpc2DroneSniper",
+          "name": "Sniper Drone",
+          "count": 4,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "tauNpc5StealthSuit",
+          "name": "Stealth Battlesuit",
+          "count": 2,
+          "stars": 3,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "tauNpcDarkstrider",
+          "name": "Darkstrider",
+          "count": 1,
+          "stars": 6,
+          "rank": "Bronze3"
+        }
+      ]
+    },
+    {
+      "id": "TAS18",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 18,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 52,
+            "max": 90
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgU012",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 4335,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 5,
+      "enemiesTypes": [
+        "Stealth Battlesuit"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc5StealthSuit:9",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc5StealthSuit",
+          "name": "Stealth Battlesuit",
+          "count": 5,
+          "stars": 3,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "TAS19",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 19,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 52,
+            "max": 90
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpU013",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 3554,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Fire Warrior",
+        "Shield Drone",
+        "Stealth Battlesuit"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior:10",
+          "count": 4
+        },
+        {
+          "id": "tauNpc3DroneShield:9",
+          "count": 4
+        },
+        {
+          "id": "tauNpc5StealthSuit:9",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 4,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "tauNpc3DroneShield",
+          "name": "Shield Drone",
+          "count": 4,
+          "stars": 3,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "tauNpc5StealthSuit",
+          "name": "Stealth Battlesuit",
+          "count": 2,
+          "stars": 3,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "TAS20",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 20,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 52,
+            "max": 90
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmU014",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 4409,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Fire Warrior",
+        "Sniper Drone",
+        "Stealth Battlesuit"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior:11",
+          "count": 2
+        },
+        {
+          "id": "tauNpc2DroneSniper:10",
+          "count": 3
+        },
+        {
+          "id": "tauNpc5StealthSuit:9",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 2,
+          "stars": 6,
+          "rank": "Bronze2"
+        },
+        {
+          "id": "tauNpc2DroneSniper",
+          "name": "Sniper Drone",
+          "count": 3,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "tauNpc5StealthSuit",
+          "name": "Stealth Battlesuit",
+          "count": 3,
+          "stars": 3,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "TAS21",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 21,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 52,
+            "max": 90
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR027",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 5346,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Fire Warrior",
+        "Shield Drone",
+        "Sniper Drone",
+        "Stealth Battlesuit"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior:10",
+          "count": 4
+        },
+        {
+          "id": "tauNpc2DroneSniper:10",
+          "count": 2
+        },
+        {
+          "id": "tauNpc3DroneShield:10",
+          "count": 4
+        },
+        {
+          "id": "tauNpc5StealthSuit:10",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 4,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "tauNpc2DroneSniper",
+          "name": "Sniper Drone",
+          "count": 2,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "tauNpc3DroneShield",
+          "name": "Shield Drone",
+          "count": 4,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "tauNpc5StealthSuit",
+          "name": "Stealth Battlesuit",
+          "count": 2,
+          "stars": 6,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "TAS22",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 22,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_tauShadowsun",
+            "chanceId": "shard_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 5711,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Fire Warrior",
+        "Shadowsun",
+        "Shield Drone",
+        "Sniper Drone",
+        "Stealth Battlesuit"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior:10",
+          "count": 3
+        },
+        {
+          "id": "tauNpc2DroneSniper:10",
+          "count": 2
+        },
+        {
+          "id": "tauNpc3DroneShield:10",
+          "count": 3
+        },
+        {
+          "id": "tauNpc5StealthSuit:9",
+          "count": 2
+        },
+        {
+          "id": "tauNpcShadowsun:9",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 3,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "tauNpc2DroneSniper",
+          "name": "Sniper Drone",
+          "count": 2,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "tauNpc3DroneShield",
+          "name": "Shield Drone",
+          "count": 3,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "tauNpc5StealthSuit",
+          "name": "Stealth Battlesuit",
+          "count": 2,
+          "stars": 3,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "tauNpcShadowsun",
+          "name": "Shadowsun",
+          "count": 1,
+          "stars": 6,
+          "rank": "Bronze3"
+        }
+      ]
+    },
+    {
+      "id": "TAS23",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 23,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpU007",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 4602,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Kroot",
+        "Stealth Battlesuit"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc5StealthSuit:10",
+          "count": 3
+        },
+        {
+          "id": "tauNpc6Carnivore:9",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc5StealthSuit",
+          "name": "Stealth Battlesuit",
+          "count": 3,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "tauNpc6Carnivore",
+          "name": "Kroot",
+          "count": 3,
+          "stars": 3,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "TAS24",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 24,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgU003",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 12971,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Cadian Lascannon Team",
+        "Cadian Vox-caster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:17",
+          "count": 5
+        },
+        {
+          "id": "astraNpc2Lascannon:16",
+          "count": 3
+        },
+        {
+          "id": "astraNpc3Voxcaster:16",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 5,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 3,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 4,
+          "stars": 9,
+          "rank": "Silver1"
+        }
+      ]
+    },
+    {
+      "id": "TAS25",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 25,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmU006",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 5707,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Cadian Lascannon Team",
+        "Cadian Vox-caster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:15",
+          "count": 4
+        },
+        {
+          "id": "astraNpc2Lascannon:14",
+          "count": 3
+        },
+        {
+          "id": "astraNpc3Voxcaster:14",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 4,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 3,
+          "stars": 9,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 3,
+          "stars": 9,
+          "rank": "Bronze3"
+        }
+      ]
+    },
+    {
+      "id": "TASC25B",
+      "difficulty": "eventStandardChallenge",
+      "energyCost": 6,
+      "nodeNumber": 25,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgE004",
+            "chanceId": "upgradeEpic_eventStandardChallenge"
+          }
+        ]
+      },
+      "enemyPower": 70074,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Aun'Shi",
+        "Darkstrider",
+        "Fire Warrior",
+        "Re'vas",
+        "Shadowsun",
+        "Shield Drone",
+        "Sho'syl",
+        "Sniper Drone",
+        "Stealth Battlesuit"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior:17",
+          "count": 1
+        },
+        {
+          "id": "tauNpc2DroneSniper:17",
+          "count": 2
+        },
+        {
+          "id": "tauNpc3DroneShield:17",
+          "count": 1
+        },
+        {
+          "id": "tauNpc5StealthSuit:16",
+          "count": 2
+        },
+        {
+          "id": "tauNpcAunShi:11",
+          "count": 1
+        },
+        {
+          "id": "tauNpcCrisis:11",
+          "count": 1
+        },
+        {
+          "id": "tauNpcDarkstrider:11",
+          "count": 1
+        },
+        {
+          "id": "tauNpcMarksman:11",
+          "count": 1
+        },
+        {
+          "id": "tauNpcShadowsun:11",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "tauNpc2DroneSniper",
+          "name": "Sniper Drone",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "tauNpc3DroneShield",
+          "name": "Shield Drone",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "tauNpc5StealthSuit",
+          "name": "Stealth Battlesuit",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "tauNpcAunShi",
+          "name": "Aun'Shi",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "tauNpcCrisis",
+          "name": "Re'vas",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "tauNpcDarkstrider",
+          "name": "Darkstrider",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "tauNpcMarksman",
+          "name": "Sho'syl",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "tauNpcShadowsun",
+          "name": "Shadowsun",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        }
+      ]
+    },
+    {
+      "id": "TAS26",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 26,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR018",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 39667,
+      "enemiesAlliances": [
+        "Imperial",
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Tau"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Cadian Lascannon Team",
+        "Cadian Vox-caster",
+        "Fire Warrior",
+        "Kroot",
+        "Shield Drone"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc2Lascannon:18",
+          "count": 2
+        },
+        {
+          "id": "astraNpc3Voxcaster:19",
+          "count": 4
+        },
+        {
+          "id": "tauNpc1FireWarrior:17",
+          "count": 3
+        },
+        {
+          "id": "tauNpc3DroneShield:17",
+          "count": 1
+        },
+        {
+          "id": "tauNpc6Carnivore:17",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 4,
+          "stars": 8,
+          "rank": "Silver3"
+        },
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "tauNpc3DroneShield",
+          "name": "Shield Drone",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "tauNpc6Carnivore",
+          "name": "Kroot",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        }
+      ]
+    },
+    {
+      "id": "TAS27",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 27,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR003",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 71468,
+      "enemiesAlliances": [
+        "Imperial",
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Tau"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Cadian Lascannon Team",
+        "Cadian Mortar Team",
+        "Cadian Vox-caster",
+        "Fire Warrior",
+        "Shield Drone",
+        "Stealth Battlesuit"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc2Lascannon:20",
+          "count": 1
+        },
+        {
+          "id": "astraNpc3Voxcaster:20",
+          "count": 2
+        },
+        {
+          "id": "astraNpc4Mortar:19",
+          "count": 2
+        },
+        {
+          "id": "tauNpc1FireWarrior:18",
+          "count": 4
+        },
+        {
+          "id": "tauNpc3DroneShield:17",
+          "count": 1
+        },
+        {
+          "id": "tauNpc5StealthSuit:18",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 1,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 2,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver3"
+        },
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 4,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "tauNpc3DroneShield",
+          "name": "Shield Drone",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "tauNpc5StealthSuit",
+          "name": "Stealth Battlesuit",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver2"
+        }
+      ]
+    },
+    {
+      "id": "TAS28",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 28,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR010",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 42998,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Fire Warrior",
+        "Sniper Drone",
+        "Stealth Battlesuit"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior:18",
+          "count": 2
+        },
+        {
+          "id": "tauNpc2DroneSniper:17",
+          "count": 4
+        },
+        {
+          "id": "tauNpc5StealthSuit:17",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "tauNpc2DroneSniper",
+          "name": "Sniper Drone",
+          "count": 4,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "tauNpc5StealthSuit",
+          "name": "Stealth Battlesuit",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        }
+      ]
+    },
+    {
+      "id": "TAS29",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 29,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL107",
+            "chanceId": "upgradeLegendary_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 55850,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Fire Warrior",
+        "Kroot",
+        "Sniper Drone",
+        "Stealth Battlesuit"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior:18",
+          "count": 4
+        },
+        {
+          "id": "tauNpc2DroneSniper:17",
+          "count": 3
+        },
+        {
+          "id": "tauNpc5StealthSuit:17",
+          "count": 2
+        },
+        {
+          "id": "tauNpc6Carnivore:17",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 4,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "tauNpc2DroneSniper",
+          "name": "Sniper Drone",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "tauNpc5StealthSuit",
+          "name": "Stealth Battlesuit",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "tauNpc6Carnivore",
+          "name": "Kroot",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver2"
+        }
+      ]
+    },
+    {
+      "id": "TAS30",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 30,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_tauAunShi",
+            "chanceId": "shard_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 60306,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Fire Warrior",
+        "Riptide",
+        "Shield Drone",
+        "Stealth Battlesuit"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauBossRiptide:2",
+          "count": 1
+        },
+        {
+          "id": "tauNpc1FireWarrior:17",
+          "count": 2
+        },
+        {
+          "id": "tauNpc3DroneShield:17",
+          "count": 2
+        },
+        {
+          "id": "tauNpc5StealthSuit:17",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauBossRiptide",
+          "name": "Riptide",
+          "count": 1,
+          "stars": 6,
+          "rank": "Silver1"
+        },
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "tauNpc3DroneShield",
+          "name": "Shield Drone",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "tauNpc5StealthSuit",
+          "name": "Stealth Battlesuit",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        }
+      ]
+    },
+    {
+      "id": "TAE01",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 1,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC017",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 9919,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Cadian Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:22",
+          "count": 7
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 7,
+          "stars": 11,
+          "rank": "Gold1"
+        }
+      ]
+    },
+    {
+      "id": "TAE02",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 2,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC015",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 18968,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Cadian Lascannon Team"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:22",
+          "count": 8
+        },
+        {
+          "id": "astraNpc2Lascannon:21",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 8,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 4,
+          "stars": 10,
+          "rank": "Gold1"
+        }
+      ]
+    },
+    {
+      "id": "TAE03",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 3,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC012",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 65526,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Cadian Vox-caster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:24",
+          "count": 7
+        },
+        {
+          "id": "astraNpc3Voxcaster:24",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 7,
+          "stars": 11,
+          "rank": "Gold2"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold2"
+        }
+      ]
+    },
+    {
+      "id": "TAEC3B",
+      "difficulty": "eventExtremisChallenge",
+      "energyCost": 6,
+      "nodeNumber": 3,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmE009",
+            "chanceId": "upgradeEpic_eventExtremisChallenge"
+          }
+        ]
+      },
+      "enemyPower": 93735,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Cadian Lascannon Team",
+        "Cadian Mortar Team",
+        "Cadian Vox-caster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:26",
+          "count": 6
+        },
+        {
+          "id": "astraNpc2Lascannon:26",
+          "count": 3
+        },
+        {
+          "id": "astraNpc3Voxcaster:25",
+          "count": 2
+        },
+        {
+          "id": "astraNpc4Mortar:24",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 6,
+          "stars": 11,
+          "rank": "Gold3"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold3"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold3"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 1,
+          "stars": 11,
+          "rank": "Gold2"
+        }
+      ]
+    },
+    {
+      "id": "TAE04",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 4,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC014",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 55422,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Cadian Lascannon Team",
+        "Cadian Vox-caster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:24",
+          "count": 3
+        },
+        {
+          "id": "astraNpc2Lascannon:22",
+          "count": 4
+        },
+        {
+          "id": "astraNpc3Voxcaster:23",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold2"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold2"
+        }
+      ]
+    },
+    {
+      "id": "TAE05",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 5,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC009",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 73234,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Fire Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior:23",
+          "count": 7
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 7,
+          "stars": 10,
+          "rank": "Gold2"
+        }
+      ]
+    },
+    {
+      "id": "TAE06",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 6,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_tauCrisis",
+            "chanceId": "shard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 124517,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Fire Warrior",
+        "Re'vas"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior:23",
+          "count": 7
+        },
+        {
+          "id": "tauNpcCrisis:13",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 7,
+          "stars": 10,
+          "rank": "Gold2"
+        },
+        {
+          "id": "tauNpcCrisis",
+          "name": "Re'vas",
+          "count": 1,
+          "stars": 10,
+          "rank": "Gold3"
+        }
+      ]
+    },
+    {
+      "id": "TAE07",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 7,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC005",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 83696,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Fire Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior:23",
+          "count": 8
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 8,
+          "stars": 10,
+          "rank": "Gold2"
+        }
+      ]
+    },
+    {
+      "id": "TAE08",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 8,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC008",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 56601,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Fire Warrior",
+        "Shield Drone"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior:22",
+          "count": 3
+        },
+        {
+          "id": "tauNpc3DroneShield:22",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "tauNpc3DroneShield",
+          "name": "Shield Drone",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold1"
+        }
+      ]
+    },
+    {
+      "id": "TAE09",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 9,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC007",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 77260,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Fire Warrior",
+        "Shield Drone"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior:22",
+          "count": 4
+        },
+        {
+          "id": "tauNpc3DroneShield:24",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "tauNpc3DroneShield",
+          "name": "Shield Drone",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold2"
+        }
+      ]
+    },
+    {
+      "id": "TAE10",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 10,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC004",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 104699,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Fire Warrior",
+        "Shield Drone"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior:22",
+          "count": 8
+        },
+        {
+          "id": "tauNpc3DroneShield:23",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 8,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "tauNpc3DroneShield",
+          "name": "Shield Drone",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold2"
+        }
+      ]
+    },
+    {
+      "id": "TAE11",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 11,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 140
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_tauMarksman",
+            "chanceId": "shard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 177773,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Fire Warrior",
+        "Shield Drone",
+        "Sho'syl",
+        "Sniper Drone"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior:23",
+          "count": 6
+        },
+        {
+          "id": "tauNpc2DroneSniper:23",
+          "count": 3
+        },
+        {
+          "id": "tauNpc3DroneShield:23",
+          "count": 2
+        },
+        {
+          "id": "tauNpcMarksman:13",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 6,
+          "stars": 10,
+          "rank": "Gold2"
+        },
+        {
+          "id": "tauNpc2DroneSniper",
+          "name": "Sniper Drone",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold2"
+        },
+        {
+          "id": "tauNpc3DroneShield",
+          "name": "Shield Drone",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold2"
+        },
+        {
+          "id": "tauNpcMarksman",
+          "name": "Sho'syl",
+          "count": 1,
+          "stars": 10,
+          "rank": "Gold3"
+        }
+      ]
+    },
+    {
+      "id": "TAE12",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 12,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmU014",
+            "chanceId": "upgradeUncommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 109196,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 4,
+      "enemiesTypes": [
+        "Kroot"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc6Carnivore:26",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc6Carnivore",
+          "name": "Kroot",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold3"
+        }
+      ]
+    },
+    {
+      "id": "TAE13",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 13,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpU017",
+            "chanceId": "upgradeUncommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 389286,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Kroot"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc6Carnivore:28",
+          "count": 9
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc6Carnivore",
+          "name": "Kroot",
+          "count": 9,
+          "stars": 11,
+          "rank": "Diamond1"
+        }
+      ]
+    },
+    {
+      "id": "TAEC13B",
+      "difficulty": "eventExtremisChallenge",
+      "energyCost": 6,
+      "nodeNumber": 13,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmL203",
+            "chanceId": "upgradeLegendary_eventExtremisChallenge"
+          }
+        ]
+      },
+      "enemyPower": 989708,
+      "enemiesAlliances": [
+        "Imperial",
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Tau"
+      ],
+      "enemiesTotal": 13,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Cadian Mortar Team",
+        "Cadian Vox-caster",
+        "Fire Warrior",
+        "Shield Drone",
+        "Stealth Battlesuit"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:33",
+          "count": 2
+        },
+        {
+          "id": "astraNpc3Voxcaster:33",
+          "count": 2
+        },
+        {
+          "id": "astraNpc4Mortar:31",
+          "count": 2
+        },
+        {
+          "id": "tauNpc1FireWarrior:31",
+          "count": 4
+        },
+        {
+          "id": "tauNpc3DroneShield:30",
+          "count": 2
+        },
+        {
+          "id": "tauNpc5StealthSuit:28",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 2,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 2,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 2,
+          "stars": 10,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 4,
+          "stars": 10,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "tauNpc3DroneShield",
+          "name": "Shield Drone",
+          "count": 2,
+          "stars": 11,
+          "rank": "Diamond2"
+        },
+        {
+          "id": "tauNpc5StealthSuit",
+          "name": "Stealth Battlesuit",
+          "count": 1,
+          "stars": 11,
+          "rank": "Diamond1"
+        }
+      ]
+    },
+    {
+      "id": "TAE14",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 14,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgU004",
+            "chanceId": "upgradeUncommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 301401,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Fire Warrior",
+        "Kroot"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior:27",
+          "count": 5
+        },
+        {
+          "id": "tauNpc6Carnivore:28",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 5,
+          "stars": 10,
+          "rank": "Diamond1"
+        },
+        {
+          "id": "tauNpc6Carnivore",
+          "name": "Kroot",
+          "count": 4,
+          "stars": 11,
+          "rank": "Diamond1"
+        }
+      ]
+    },
+    {
+      "id": "TAE15",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 15,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR018",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 509828,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Fire Warrior",
+        "Kroot"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior:28",
+          "count": 4
+        },
+        {
+          "id": "tauNpc6Carnivore:29",
+          "count": 8
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 4,
+          "stars": 11,
+          "rank": "Diamond1"
+        },
+        {
+          "id": "tauNpc6Carnivore",
+          "name": "Kroot",
+          "count": 8,
+          "stars": 10,
+          "rank": "Diamond2"
+        }
+      ]
+    },
+    {
+      "id": "TAE16",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 16,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR003",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 713056,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Kroot",
+        "Shield Drone"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc3DroneShield:29",
+          "count": 2
+        },
+        {
+          "id": "tauNpc6Carnivore:31",
+          "count": 8
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc3DroneShield",
+          "name": "Shield Drone",
+          "count": 2,
+          "stars": 10,
+          "rank": "Diamond2"
+        },
+        {
+          "id": "tauNpc6Carnivore",
+          "name": "Kroot",
+          "count": 8,
+          "stars": 10,
+          "rank": "Diamond3"
+        }
+      ]
+    },
+    {
+      "id": "TAE17",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 17,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 140
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_tauDarkstrider",
+            "chanceId": "shard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 1004742,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Darkstrider",
+        "Fire Warrior",
+        "Kroot",
+        "Shield Drone"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior:31",
+          "count": 4
+        },
+        {
+          "id": "tauNpc3DroneShield:29",
+          "count": 1
+        },
+        {
+          "id": "tauNpc6Carnivore:29",
+          "count": 6
+        },
+        {
+          "id": "tauNpcDarkstrider:16",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 4,
+          "stars": 10,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "tauNpc3DroneShield",
+          "name": "Shield Drone",
+          "count": 1,
+          "stars": 10,
+          "rank": "Diamond2"
+        },
+        {
+          "id": "tauNpc6Carnivore",
+          "name": "Kroot",
+          "count": 6,
+          "stars": 10,
+          "rank": "Diamond2"
+        },
+        {
+          "id": "tauNpcDarkstrider",
+          "name": "Darkstrider",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "TAE18",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 18,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR010",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 1446008,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Stealth Battlesuit"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc5StealthSuit:29",
+          "count": 8
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc5StealthSuit",
+          "name": "Stealth Battlesuit",
+          "count": 8,
+          "stars": 10,
+          "rank": "Diamond2"
+        }
+      ]
+    },
+    {
+      "id": "TAE19",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 19,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR027",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 704748,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Fire Warrior",
+        "Stealth Battlesuit"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior:30",
+          "count": 6
+        },
+        {
+          "id": "tauNpc5StealthSuit:29",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 6,
+          "stars": 11,
+          "rank": "Diamond2"
+        },
+        {
+          "id": "tauNpc5StealthSuit",
+          "name": "Stealth Battlesuit",
+          "count": 2,
+          "stars": 10,
+          "rank": "Diamond2"
+        }
+      ]
+    },
+    {
+      "id": "TAE20",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 20,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR027",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 1293950,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Fire Warrior",
+        "Stealth Battlesuit"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior:30",
+          "count": 7
+        },
+        {
+          "id": "tauNpc5StealthSuit:30",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 7,
+          "stars": 11,
+          "rank": "Diamond2"
+        },
+        {
+          "id": "tauNpc5StealthSuit",
+          "name": "Stealth Battlesuit",
+          "count": 3,
+          "stars": 11,
+          "rank": "Diamond2"
+        }
+      ]
+    },
+    {
+      "id": "TAE21",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 21,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR027",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 1913422,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Fire Warrior",
+        "Shield Drone",
+        "Stealth Battlesuit"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior:32",
+          "count": 6
+        },
+        {
+          "id": "tauNpc3DroneShield:30",
+          "count": 2
+        },
+        {
+          "id": "tauNpc5StealthSuit:31",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 6,
+          "stars": 11,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "tauNpc3DroneShield",
+          "name": "Shield Drone",
+          "count": 2,
+          "stars": 11,
+          "rank": "Diamond2"
+        },
+        {
+          "id": "tauNpc5StealthSuit",
+          "name": "Stealth Battlesuit",
+          "count": 4,
+          "stars": 10,
+          "rank": "Diamond3"
+        }
+      ]
+    },
+    {
+      "id": "TAE22",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 22,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 140
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_tauShadowsun",
+            "chanceId": "shard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 2278414,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Fire Warrior",
+        "Shadowsun",
+        "Shield Drone",
+        "Stealth Battlesuit"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior:33",
+          "count": 6
+        },
+        {
+          "id": "tauNpc3DroneShield:33",
+          "count": 2
+        },
+        {
+          "id": "tauNpc5StealthSuit:33",
+          "count": 2
+        },
+        {
+          "id": "tauNpcShadowsun:16",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 6,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tauNpc3DroneShield",
+          "name": "Shield Drone",
+          "count": 2,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tauNpc5StealthSuit",
+          "name": "Stealth Battlesuit",
+          "count": 2,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tauNpcShadowsun",
+          "name": "Shadowsun",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "TAE23",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 23,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL107",
+            "chanceId": "upgradeLegendary_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 2300601,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Kroot",
+        "Stealth Battlesuit"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc5StealthSuit:33",
+          "count": 3
+        },
+        {
+          "id": "tauNpc6Carnivore:34",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc5StealthSuit",
+          "name": "Stealth Battlesuit",
+          "count": 3,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tauNpc6Carnivore",
+          "name": "Kroot",
+          "count": 4,
+          "stars": 12,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "TAE24",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 24,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_tauAunShi",
+            "chanceId": "shard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 617015,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Cadian Lascannon Team",
+        "Cadian Vox-caster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:34",
+          "count": 7
+        },
+        {
+          "id": "astraNpc2Lascannon:34",
+          "count": 2
+        },
+        {
+          "id": "astraNpc3Voxcaster:34",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 7,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 2,
+          "stars": 12,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "TAE25",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 25,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "mythicShards_tauCrisis",
+            "chanceId": "mythicShard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 1077210,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Cadian Lascannon Team",
+        "Cadian Mortar Team",
+        "Cadian Vox-caster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:35",
+          "count": 3
+        },
+        {
+          "id": "astraNpc2Lascannon:34",
+          "count": 2
+        },
+        {
+          "id": "astraNpc3Voxcaster:34",
+          "count": 4
+        },
+        {
+          "id": "astraNpc4Mortar:34",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 3,
+          "stars": 13,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 4,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "TAEC25B",
+      "difficulty": "eventExtremisChallenge",
+      "energyCost": 6,
+      "nodeNumber": 25,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 90,
+            "max": 155
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgL001",
+            "chanceId": "upgradeLegendary_eventExtremisChallenge"
+          }
+        ]
+      },
+      "enemyPower": 4230677,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Aun'Shi",
+        "Darkstrider",
+        "Re'vas",
+        "Shadowsun",
+        "Sho'syl",
+        "Sniper Drone",
+        "Stealth Battlesuit"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc2DroneSniper:32",
+          "count": 2
+        },
+        {
+          "id": "tauNpc5StealthSuit:30",
+          "count": 3
+        },
+        {
+          "id": "tauNpcAunShi:17",
+          "count": 1
+        },
+        {
+          "id": "tauNpcCrisis:16",
+          "count": 1
+        },
+        {
+          "id": "tauNpcDarkstrider:17",
+          "count": 1
+        },
+        {
+          "id": "tauNpcMarksman:16",
+          "count": 1
+        },
+        {
+          "id": "tauNpcShadowsun:17",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc2DroneSniper",
+          "name": "Sniper Drone",
+          "count": 2,
+          "stars": 11,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "tauNpc5StealthSuit",
+          "name": "Stealth Battlesuit",
+          "count": 3,
+          "stars": 11,
+          "rank": "Diamond2"
+        },
+        {
+          "id": "tauNpcAunShi",
+          "name": "Aun'Shi",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tauNpcCrisis",
+          "name": "Re'vas",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tauNpcDarkstrider",
+          "name": "Darkstrider",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tauNpcMarksman",
+          "name": "Sho'syl",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tauNpcShadowsun",
+          "name": "Shadowsun",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "TAE26",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 26,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "mythicShards_tauMarksman",
+            "chanceId": "mythicShard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 1783475,
+      "enemiesAlliances": [
+        "Imperial",
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Tau"
+      ],
+      "enemiesTotal": 13,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Cadian Lascannon Team",
+        "Cadian Vox-caster",
+        "Fire Warrior",
+        "Kroot"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:33",
+          "count": 1
+        },
+        {
+          "id": "astraNpc2Lascannon:33",
+          "count": 1
+        },
+        {
+          "id": "astraNpc3Voxcaster:34",
+          "count": 4
+        },
+        {
+          "id": "tauNpc1FireWarrior:34",
+          "count": 4
+        },
+        {
+          "id": "tauNpc6Carnivore:33",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 1,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 1,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 4,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 4,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tauNpc6Carnivore",
+          "name": "Kroot",
+          "count": 3,
+          "stars": 11,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "TAE27",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 27,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "mythicShards_tauDarkstrider",
+            "chanceId": "mythicShard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 2961946,
+      "enemiesAlliances": [
+        "Imperial",
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Tau"
+      ],
+      "enemiesTotal": 13,
+      "enemiesTypes": [
+        "Cadian Mortar Team",
+        "Cadian Vox-caster",
+        "Fire Warrior",
+        "Shield Drone",
+        "Stealth Battlesuit"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc3Voxcaster:33",
+          "count": 5
+        },
+        {
+          "id": "astraNpc4Mortar:34",
+          "count": 2
+        },
+        {
+          "id": "tauNpc1FireWarrior:33",
+          "count": 3
+        },
+        {
+          "id": "tauNpc3DroneShield:34",
+          "count": 1
+        },
+        {
+          "id": "tauNpc5StealthSuit:34",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 5,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 2,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 3,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tauNpc3DroneShield",
+          "name": "Shield Drone",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tauNpc5StealthSuit",
+          "name": "Stealth Battlesuit",
+          "count": 2,
+          "stars": 12,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "TAE28",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 28,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "mythicShards_tauShadowsun",
+            "chanceId": "mythicShard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 2978360,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Stealth Battlesuit"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc5StealthSuit:30",
+          "count": 10
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc5StealthSuit",
+          "name": "Stealth Battlesuit",
+          "count": 10,
+          "stars": 11,
+          "rank": "Diamond2"
+        }
+      ]
+    },
+    {
+      "id": "TAE29",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 29,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "mythicShards_tauAunShi",
+            "chanceId": "mythicShard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 3728608,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Fire Warrior",
+        "Kroot",
+        "Shield Drone",
+        "Stealth Battlesuit"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior:34",
+          "count": 4
+        },
+        {
+          "id": "tauNpc3DroneShield:34",
+          "count": 2
+        },
+        {
+          "id": "tauNpc5StealthSuit:34",
+          "count": 3
+        },
+        {
+          "id": "tauNpc6Carnivore:34",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 4,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tauNpc3DroneShield",
+          "name": "Shield Drone",
+          "count": 2,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tauNpc5StealthSuit",
+          "name": "Stealth Battlesuit",
+          "count": 3,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tauNpc6Carnivore",
+          "name": "Kroot",
+          "count": 3,
+          "stars": 12,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "TAE30",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 30,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 90,
+            "max": 155
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpM003",
+            "chanceId": "upgradeMythic_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 3422786,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Tau"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Fire Warrior",
+        "Riptide",
+        "Shield Drone",
+        "Stealth Battlesuit"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "tauBossRiptide:3",
+          "count": 1
+        },
+        {
+          "id": "tauNpc1FireWarrior:35",
+          "count": 3
+        },
+        {
+          "id": "tauNpc3DroneShield:33",
+          "count": 2
+        },
+        {
+          "id": "tauNpc5StealthSuit:31",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "tauBossRiptide",
+          "name": "Riptide",
+          "count": 1,
+          "stars": 11,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "tauNpc1FireWarrior",
+          "name": "Fire Warrior",
+          "count": 3,
+          "stars": 13,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tauNpc3DroneShield",
+          "name": "Shield Drone",
+          "count": 2,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "tauNpc5StealthSuit",
+          "name": "Stealth Battlesuit",
+          "count": 2,
+          "stars": 10,
+          "rank": "Diamond3"
+        }
+      ]
+    }
+  ]
+}

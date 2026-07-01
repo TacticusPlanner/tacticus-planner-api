@@ -1,0 +1,1280 @@
+{
+  "alliance": "Chaos",
+  "factionId": "WorldEaters",
+  "name": "World Eaters",
+  "characters": [
+    {
+      "id": "worldEightbound",
+      "name": "Azkor",
+      "health": 100,
+      "damage": 24,
+      "armour": 20,
+      "initialRarity": "Rare",
+      "meleeDamage": "Eviscerate",
+      "meleeHits": 2,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "rangeDistance": null,
+      "movement": 3,
+      "traits": [
+        "BlessingsOfKhorne",
+        "Daemon",
+        "Resilient",
+        "Terrifying",
+        "Unstoppable"
+      ],
+      "activeAbilityNames": [
+        "OverwhelmingWrath"
+      ],
+      "passiveAbilityNames": [
+        "BeaconOfRage"
+      ],
+      "equipmentSlots": [
+        "I_Crit",
+        "I_Defensive",
+        "I_Booster_Crit"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_world_eightbound_01.png",
+      "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_world_eightbound_01.png",
+      "rankUpUpgrades": [
+        {
+          "rank": "Stone1",
+          "upgradeIds": [
+            "upgHpC015",
+            "upgHpC010",
+            "upgDmgC003",
+            "upgDmgC014",
+            "upgArmC013",
+            "upgArmC006"
+          ]
+        },
+        {
+          "rank": "Stone2",
+          "upgradeIds": [
+            "upgHpC013",
+            "upgHpC002",
+            "upgDmgU014",
+            "upgDmgU016C",
+            "upgArmC007",
+            "upgArmC007"
+          ]
+        },
+        {
+          "rank": "Stone3",
+          "upgradeIds": [
+            "upgHpU012",
+            "upgHpU004C",
+            "upgDmgC008",
+            "upgDmgC003",
+            "upgArmU009",
+            "upgArmU007"
+          ]
+        },
+        {
+          "rank": "Iron1",
+          "upgradeIds": [
+            "upgHpU018C",
+            "upgHpU012",
+            "upgDmgU014",
+            "upgDmgU014",
+            "upgArmU007",
+            "upgArmU003C"
+          ]
+        },
+        {
+          "rank": "Iron2",
+          "upgradeIds": [
+            "upgHpU012",
+            "upgHpR015C",
+            "upgDmgU008C",
+            "upgDmgU019",
+            "upgArmR006",
+            "upgArmU007"
+          ]
+        },
+        {
+          "rank": "Iron3",
+          "upgradeIds": [
+            "upgHpR015C",
+            "upgHpU009",
+            "upgDmgR038",
+            "upgDmgR012C",
+            "upgArmU003C",
+            "upgArmR015"
+          ]
+        },
+        {
+          "rank": "Bronze1",
+          "upgradeIds": [
+            "upgHpR038",
+            "upgHpR008",
+            "upgDmgR14C",
+            "upgDmgR006",
+            "upgArmR004C",
+            "upgArmR003C"
+          ]
+        },
+        {
+          "rank": "Bronze2",
+          "upgradeIds": [
+            "upgHpE038C",
+            "upgHpR004C",
+            "upgDmgR005",
+            "upgDmgE009C",
+            "upgArmR038",
+            "upgArmR004C"
+          ]
+        },
+        {
+          "rank": "Bronze3",
+          "upgradeIds": [
+            "upgHpR018",
+            "upgHpE001C",
+            "upgDmgE038C",
+            "upgDmgR016C",
+            "upgArmE038C",
+            "upgArmE013"
+          ]
+        },
+        {
+          "rank": "Silver1",
+          "upgradeIds": [
+            "upgHpE038C",
+            "upgHpE015",
+            "upgDmgE038C",
+            "upgDmgE004",
+            "upgArmE038C",
+            "upgArmE004C"
+          ]
+        },
+        {
+          "rank": "Silver2",
+          "upgradeIds": [
+            "upgHpL118",
+            "upgHpE008C",
+            "upgDmgL038C",
+            "upgDmgE009C",
+            "upgArmE038C",
+            "upgArmE005C"
+          ]
+        },
+        {
+          "rank": "Silver3",
+          "upgradeIds": [
+            "upgHpE038C",
+            "upgHpL009C",
+            "upgDmgE038C",
+            "upgDmgL016C",
+            "upgArmL203",
+            "upgArmL004C"
+          ]
+        },
+        {
+          "rank": "Gold1",
+          "upgradeIds": [
+            "upgHpL038C",
+            "upgHpL001C",
+            "upgDmgL003",
+            "upgDmgL009C",
+            "upgArmL038C",
+            "upgArmL005C"
+          ]
+        },
+        {
+          "rank": "Gold2",
+          "upgradeIds": [
+            "upgHpL138C",
+            "upgHpL012C",
+            "upgDmgL038C",
+            "upgDmgL016C",
+            "upgArmL038C",
+            "upgArmL005C"
+          ]
+        },
+        {
+          "rank": "Gold3",
+          "upgradeIds": [
+            "upgHpL038C",
+            "upgHpL009C",
+            "upgDmgL138C",
+            "upgDmgL010C",
+            "upgArmL138C",
+            "upgArmL005C"
+          ]
+        },
+        {
+          "rank": "Diamond1",
+          "upgradeIds": [
+            "upgHpL138C",
+            "upgHpL009C",
+            "upgDmgL138C",
+            "upgDmgL009C",
+            "upgArmL138C",
+            "upgArmL004C"
+          ]
+        },
+        {
+          "rank": "Diamond2",
+          "upgradeIds": [
+            "upgHpL138C",
+            "upgHpL212C",
+            "upgDmgL138C",
+            "upgDmgL212C",
+            "upgArmL138C",
+            "upgArmL212C"
+          ]
+        },
+        {
+          "rank": "Diamond3",
+          "upgradeIds": [
+            "upgHpL138C",
+            "upgHpL212C",
+            "upgDmgM212C",
+            "upgDmgL212C",
+            "upgArmM214C",
+            "upgArmL212C"
+          ]
+        },
+        {
+          "rank": "Adamantine1",
+          "upgradeIds": [
+            "upgHpM138C",
+            "upgHpL212C",
+            "upgDmgM212C",
+            "upgDmgL212C",
+            "upgArmM214C",
+            "upgArmL212C"
+          ]
+        },
+        {
+          "rank": "Adamantine2",
+          "upgradeIds": [
+            "upgHpECS",
+            "upgHpCS",
+            "upgDmgECS",
+            "upgDmgCS",
+            "upgArmECS",
+            "upgArmCS"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "worldExecutions",
+      "name": "Tarvakh",
+      "health": 95,
+      "damage": 48,
+      "armour": 24,
+      "initialRarity": "Rare",
+      "meleeDamage": "Piercing",
+      "meleeHits": 1,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "rangeDistance": null,
+      "movement": 3,
+      "traits": [
+        "BlessingsOfKhorne",
+        "RapidAssault"
+      ],
+      "activeAbilityNames": [
+        "MurderousSwing"
+      ],
+      "passiveAbilityNames": [
+        "TrophyTaker"
+      ],
+      "equipmentSlots": [
+        "I_Crit",
+        "I_Crit",
+        "I_Booster_Crit"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_world_executions_01.png",
+      "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_world_executions_01.png",
+      "rankUpUpgrades": [
+        {
+          "rank": "Stone1",
+          "upgradeIds": [
+            "upgHpC015",
+            "upgHpC010",
+            "upgDmgC010",
+            "upgDmgC014",
+            "upgArmC013",
+            "upgArmC006"
+          ]
+        },
+        {
+          "rank": "Stone2",
+          "upgradeIds": [
+            "upgHpC013",
+            "upgHpC002",
+            "upgDmgU010",
+            "upgDmgU016C",
+            "upgArmC007",
+            "upgArmC007"
+          ]
+        },
+        {
+          "rank": "Stone3",
+          "upgradeIds": [
+            "upgHpU012",
+            "upgHpU004C",
+            "upgDmgC008",
+            "upgDmgC003",
+            "upgArmU009",
+            "upgArmU007"
+          ]
+        },
+        {
+          "rank": "Iron1",
+          "upgradeIds": [
+            "upgHpU018C",
+            "upgHpU012",
+            "upgDmgU010",
+            "upgDmgU014",
+            "upgArmU007",
+            "upgArmU003C"
+          ]
+        },
+        {
+          "rank": "Iron2",
+          "upgradeIds": [
+            "upgHpU012",
+            "upgHpR015C",
+            "upgDmgU008C",
+            "upgDmgU019",
+            "upgArmR005",
+            "upgArmU007"
+          ]
+        },
+        {
+          "rank": "Iron3",
+          "upgradeIds": [
+            "upgHpR015C",
+            "upgHpU009",
+            "upgDmgR038",
+            "upgDmgR012C",
+            "upgArmU003C",
+            "upgArmR015"
+          ]
+        },
+        {
+          "rank": "Bronze1",
+          "upgradeIds": [
+            "upgHpR038",
+            "upgHpR008",
+            "upgDmgR14C",
+            "upgDmgR006",
+            "upgArmR004C",
+            "upgArmR003C"
+          ]
+        },
+        {
+          "rank": "Bronze2",
+          "upgradeIds": [
+            "upgHpE038C",
+            "upgHpR004C",
+            "upgDmgR002",
+            "upgDmgE009C",
+            "upgArmR038",
+            "upgArmR004C"
+          ]
+        },
+        {
+          "rank": "Bronze3",
+          "upgradeIds": [
+            "upgHpR018",
+            "upgHpE001C",
+            "upgDmgE038C",
+            "upgDmgR016C",
+            "upgArmE038C",
+            "upgArmE013"
+          ]
+        },
+        {
+          "rank": "Silver1",
+          "upgradeIds": [
+            "upgHpE038C",
+            "upgHpE012",
+            "upgDmgE038C",
+            "upgDmgE004",
+            "upgArmE038C",
+            "upgArmE004C"
+          ]
+        },
+        {
+          "rank": "Silver2",
+          "upgradeIds": [
+            "upgHpL118",
+            "upgHpE008C",
+            "upgDmgL038C",
+            "upgDmgE009C",
+            "upgArmE038C",
+            "upgArmE005C"
+          ]
+        },
+        {
+          "rank": "Silver3",
+          "upgradeIds": [
+            "upgHpE038C",
+            "upgHpL009C",
+            "upgDmgE038C",
+            "upgDmgL016C",
+            "upgArmL203",
+            "upgArmL004C"
+          ]
+        },
+        {
+          "rank": "Gold1",
+          "upgradeIds": [
+            "upgHpL038C",
+            "upgHpL001C",
+            "upgDmgL003",
+            "upgDmgL009C",
+            "upgArmL038C",
+            "upgArmL005C"
+          ]
+        },
+        {
+          "rank": "Gold2",
+          "upgradeIds": [
+            "upgHpL138C",
+            "upgHpL012C",
+            "upgDmgL038C",
+            "upgDmgL016C",
+            "upgArmL038C",
+            "upgArmL005C"
+          ]
+        },
+        {
+          "rank": "Gold3",
+          "upgradeIds": [
+            "upgHpL038C",
+            "upgHpL009C",
+            "upgDmgL138C",
+            "upgDmgL010C",
+            "upgArmL138C",
+            "upgArmL005C"
+          ]
+        },
+        {
+          "rank": "Diamond1",
+          "upgradeIds": [
+            "upgHpL138C",
+            "upgHpL009C",
+            "upgDmgL138C",
+            "upgDmgL005C",
+            "upgArmL138C",
+            "upgArmL004C"
+          ]
+        },
+        {
+          "rank": "Diamond2",
+          "upgradeIds": [
+            "upgHpL138C",
+            "upgHpL213C",
+            "upgDmgL138C",
+            "upgDmgL213C",
+            "upgArmL138C",
+            "upgArmL213C"
+          ]
+        },
+        {
+          "rank": "Diamond3",
+          "upgradeIds": [
+            "upgHpL138C",
+            "upgHpL213C",
+            "upgDmgM213C",
+            "upgDmgL213C",
+            "upgArmM214C",
+            "upgArmL213C"
+          ]
+        },
+        {
+          "rank": "Adamantine1",
+          "upgradeIds": [
+            "upgHpM138C",
+            "upgHpL213C",
+            "upgDmgM213C",
+            "upgDmgL213C",
+            "upgArmM214C",
+            "upgArmL213C"
+          ]
+        },
+        {
+          "rank": "Adamantine2",
+          "upgradeIds": [
+            "upgHpECS",
+            "upgHpCS",
+            "upgDmgECS",
+            "upgDmgCS",
+            "upgArmECS",
+            "upgArmCS"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "worldJakhal",
+      "name": "Macer",
+      "health": 90,
+      "damage": 30,
+      "armour": 10,
+      "initialRarity": "Uncommon",
+      "meleeDamage": "Chain",
+      "meleeHits": 3,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "rangeDistance": null,
+      "movement": 3,
+      "traits": [
+        "BlessingsOfKhorne",
+        "Resilient"
+      ],
+      "activeAbilityNames": [
+        "JakhalStimms"
+      ],
+      "passiveAbilityNames": [
+        "Skullsmasher"
+      ],
+      "equipmentSlots": [
+        "I_Crit",
+        "I_Defensive",
+        "I_Booster_Crit"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_world_jakhal_01.png",
+      "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_world_jakhal_01.png",
+      "rankUpUpgrades": [
+        {
+          "rank": "Stone1",
+          "upgradeIds": [
+            "upgHpC015",
+            "upgHpC010",
+            "upgDmgC003",
+            "upgDmgC014",
+            "upgArmC003",
+            "upgArmC003"
+          ]
+        },
+        {
+          "rank": "Stone2",
+          "upgradeIds": [
+            "upgHpC001",
+            "upgHpC002",
+            "upgDmgU014",
+            "upgDmgU016C",
+            "upgArmC007",
+            "upgArmC007"
+          ]
+        },
+        {
+          "rank": "Stone3",
+          "upgradeIds": [
+            "upgHpU001",
+            "upgHpU004C",
+            "upgDmgC013",
+            "upgDmgC003",
+            "upgArmU002",
+            "upgArmU007"
+          ]
+        },
+        {
+          "rank": "Iron1",
+          "upgradeIds": [
+            "upgHpU018C",
+            "upgHpU012",
+            "upgDmgU014",
+            "upgDmgU014",
+            "upgArmU007",
+            "upgArmU003C"
+          ]
+        },
+        {
+          "rank": "Iron2",
+          "upgradeIds": [
+            "upgHpU001",
+            "upgHpR015C",
+            "upgDmgU018C",
+            "upgDmgU019",
+            "upgArmR006",
+            "upgArmU007"
+          ]
+        },
+        {
+          "rank": "Iron3",
+          "upgradeIds": [
+            "upgHpR003C",
+            "upgHpU009",
+            "upgDmgR038",
+            "upgDmgR012C",
+            "upgArmU003C",
+            "upgArmR006"
+          ]
+        },
+        {
+          "rank": "Bronze1",
+          "upgradeIds": [
+            "upgHpR038",
+            "upgHpR008",
+            "upgDmgR13C",
+            "upgDmgR006",
+            "upgArmR004C",
+            "upgArmR007C"
+          ]
+        },
+        {
+          "rank": "Bronze2",
+          "upgradeIds": [
+            "upgHpE038C",
+            "upgHpR004C",
+            "upgDmgR003",
+            "upgDmgE009C",
+            "upgArmR038",
+            "upgArmR004C"
+          ]
+        },
+        {
+          "rank": "Bronze3",
+          "upgradeIds": [
+            "upgHpR018",
+            "upgHpE001C",
+            "upgDmgE038C",
+            "upgDmgR016C",
+            "upgArmE038C",
+            "upgArmE009"
+          ]
+        },
+        {
+          "rank": "Silver1",
+          "upgradeIds": [
+            "upgHpE038C",
+            "upgHpE015",
+            "upgDmgE038C",
+            "upgDmgE004",
+            "upgArmE038C",
+            "upgArmE002C"
+          ]
+        },
+        {
+          "rank": "Silver2",
+          "upgradeIds": [
+            "upgHpL118",
+            "upgHpE008C",
+            "upgDmgL038C",
+            "upgDmgE009C",
+            "upgArmE038C",
+            "upgArmE005C"
+          ]
+        },
+        {
+          "rank": "Silver3",
+          "upgradeIds": [
+            "upgHpE038C",
+            "upgHpL009C",
+            "upgDmgE038C",
+            "upgDmgL016C",
+            "upgArmL203",
+            "upgArmL002C"
+          ]
+        },
+        {
+          "rank": "Gold1",
+          "upgradeIds": [
+            "upgHpL038C",
+            "upgHpL001C",
+            "upgDmgL003",
+            "upgDmgL009C",
+            "upgArmL038C",
+            "upgArmL005C"
+          ]
+        },
+        {
+          "rank": "Gold2",
+          "upgradeIds": [
+            "upgHpL138C",
+            "upgHpL012C",
+            "upgDmgL038C",
+            "upgDmgL016C",
+            "upgArmL038C",
+            "upgArmL005C"
+          ]
+        },
+        {
+          "rank": "Gold3",
+          "upgradeIds": [
+            "upgHpL038C",
+            "upgHpL009C",
+            "upgDmgL138C",
+            "upgDmgL008C",
+            "upgArmL138C",
+            "upgArmL005C"
+          ]
+        },
+        {
+          "rank": "Diamond1",
+          "upgradeIds": [
+            "upgHpL138C",
+            "upgHpL017C",
+            "upgDmgL138C",
+            "upgDmgL009C",
+            "upgArmL138C",
+            "upgArmL002C"
+          ]
+        },
+        {
+          "rank": "Diamond2",
+          "upgradeIds": [
+            "upgHpL138C",
+            "upgHpL211C",
+            "upgDmgL138C",
+            "upgDmgL211C",
+            "upgArmL138C",
+            "upgArmL211C"
+          ]
+        },
+        {
+          "rank": "Diamond3",
+          "upgradeIds": [
+            "upgHpL138C",
+            "upgHpL211C",
+            "upgDmgM212C",
+            "upgDmgL211C",
+            "upgArmM212C",
+            "upgArmL211C"
+          ]
+        },
+        {
+          "rank": "Adamantine1",
+          "upgradeIds": [
+            "upgHpM138C",
+            "upgHpL211C",
+            "upgDmgM212C",
+            "upgDmgL211C",
+            "upgArmM212C",
+            "upgArmL211C"
+          ]
+        },
+        {
+          "rank": "Adamantine2",
+          "upgradeIds": [
+            "upgHpECS",
+            "upgHpCS",
+            "upgDmgECS",
+            "upgDmgCS",
+            "upgArmECS",
+            "upgArmCS"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "worldKharn",
+      "name": "Kharn",
+      "health": 90,
+      "damage": 25,
+      "armour": 20,
+      "initialRarity": "Legendary",
+      "meleeDamage": "Eviscerate",
+      "meleeHits": 4,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "rangeDistance": null,
+      "movement": 3,
+      "traits": [
+        "BlessingsOfKhorne",
+        "RapidAssault",
+        "FinalJustice"
+      ],
+      "activeAbilityNames": [
+        "KillMaimBurn"
+      ],
+      "passiveAbilityNames": [
+        "TheBetrayer"
+      ],
+      "equipmentSlots": [
+        "I_Crit",
+        "I_Block",
+        "I_Booster_Crit"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_world_kharn_01.png",
+      "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_world_kharn_01.png",
+      "rankUpUpgrades": [
+        {
+          "rank": "Stone1",
+          "upgradeIds": [
+            "upgHpC015",
+            "upgHpC010",
+            "upgDmgC012",
+            "upgDmgC014",
+            "upgArmC013",
+            "upgArmC006"
+          ]
+        },
+        {
+          "rank": "Stone2",
+          "upgradeIds": [
+            "upgHpC013",
+            "upgHpC002",
+            "upgDmgU009",
+            "upgDmgU016C",
+            "upgArmC007",
+            "upgArmC007"
+          ]
+        },
+        {
+          "rank": "Stone3",
+          "upgradeIds": [
+            "upgHpU012",
+            "upgHpU004C",
+            "upgDmgC013",
+            "upgDmgC003",
+            "upgArmU009",
+            "upgArmU007"
+          ]
+        },
+        {
+          "rank": "Iron1",
+          "upgradeIds": [
+            "upgHpU018C",
+            "upgHpU012",
+            "upgDmgU009",
+            "upgDmgU014",
+            "upgArmU007",
+            "upgArmU003C"
+          ]
+        },
+        {
+          "rank": "Iron2",
+          "upgradeIds": [
+            "upgHpU012",
+            "upgHpR015C",
+            "upgDmgU018C",
+            "upgDmgU019",
+            "upgArmR005",
+            "upgArmU007"
+          ]
+        },
+        {
+          "rank": "Iron3",
+          "upgradeIds": [
+            "upgHpR015C",
+            "upgHpU009",
+            "upgDmgR038",
+            "upgDmgR012C",
+            "upgArmU003C",
+            "upgArmR015"
+          ]
+        },
+        {
+          "rank": "Bronze1",
+          "upgradeIds": [
+            "upgHpR038",
+            "upgHpR008",
+            "upgDmgR13C",
+            "upgDmgR006",
+            "upgArmR004C",
+            "upgArmR003C"
+          ]
+        },
+        {
+          "rank": "Bronze2",
+          "upgradeIds": [
+            "upgHpE038C",
+            "upgHpR004C",
+            "upgDmgR002",
+            "upgDmgE009C",
+            "upgArmR038",
+            "upgArmR004C"
+          ]
+        },
+        {
+          "rank": "Bronze3",
+          "upgradeIds": [
+            "upgHpR018",
+            "upgHpE001C",
+            "upgDmgE038C",
+            "upgDmgR016C",
+            "upgArmE038C",
+            "upgArmE013"
+          ]
+        },
+        {
+          "rank": "Silver1",
+          "upgradeIds": [
+            "upgHpE038C",
+            "upgHpE012",
+            "upgDmgE038C",
+            "upgDmgE004",
+            "upgArmE038C",
+            "upgArmE004C"
+          ]
+        },
+        {
+          "rank": "Silver2",
+          "upgradeIds": [
+            "upgHpL118",
+            "upgHpE008C",
+            "upgDmgL038C",
+            "upgDmgE009C",
+            "upgArmE038C",
+            "upgArmE005C"
+          ]
+        },
+        {
+          "rank": "Silver3",
+          "upgradeIds": [
+            "upgHpE038C",
+            "upgHpL009C",
+            "upgDmgE038C",
+            "upgDmgL016C",
+            "upgArmL203",
+            "upgArmL004C"
+          ]
+        },
+        {
+          "rank": "Gold1",
+          "upgradeIds": [
+            "upgHpL038C",
+            "upgHpL001C",
+            "upgDmgL003",
+            "upgDmgL009C",
+            "upgArmL038C",
+            "upgArmL005C"
+          ]
+        },
+        {
+          "rank": "Gold2",
+          "upgradeIds": [
+            "upgHpL138C",
+            "upgHpL012C",
+            "upgDmgL038C",
+            "upgDmgL016C",
+            "upgArmL038C",
+            "upgArmL005C"
+          ]
+        },
+        {
+          "rank": "Gold3",
+          "upgradeIds": [
+            "upgHpL038C",
+            "upgHpL009C",
+            "upgDmgL138C",
+            "upgDmgL008C",
+            "upgArmL138C",
+            "upgArmL005C"
+          ]
+        },
+        {
+          "rank": "Diamond1",
+          "upgradeIds": [
+            "upgHpL138C",
+            "upgHpL009C",
+            "upgDmgL138C",
+            "upgDmgL012C",
+            "upgArmL138C",
+            "upgArmL004C"
+          ]
+        },
+        {
+          "rank": "Diamond2",
+          "upgradeIds": [
+            "upgHpL138C",
+            "upgHpL211C",
+            "upgDmgL138C",
+            "upgDmgL211C",
+            "upgArmL138C",
+            "upgArmL211C"
+          ]
+        },
+        {
+          "rank": "Diamond3",
+          "upgradeIds": [
+            "upgHpL138C",
+            "upgHpL211C",
+            "upgDmgM213C",
+            "upgDmgL211C",
+            "upgArmM214C",
+            "upgArmL211C"
+          ]
+        },
+        {
+          "rank": "Adamantine1",
+          "upgradeIds": [
+            "upgHpM138C",
+            "upgHpL211C",
+            "upgDmgM213C",
+            "upgDmgL211C",
+            "upgArmM214C",
+            "upgArmL211C"
+          ]
+        },
+        {
+          "rank": "Adamantine2",
+          "upgradeIds": [
+            "upgHpECS",
+            "upgHpCS",
+            "upgDmgECS",
+            "upgDmgCS",
+            "upgArmECS",
+            "upgArmCS"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "worldTerminator",
+      "name": "Wrask",
+      "health": 95,
+      "damage": 20,
+      "armour": 28,
+      "initialRarity": "Uncommon",
+      "meleeDamage": "Flame",
+      "meleeHits": 4,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "rangeDistance": null,
+      "movement": 2,
+      "traits": [
+        "BlessingsOfKhorne",
+        "TeleportStrike",
+        "RapidAssault",
+        "TerminatorArmour",
+        "Unstoppable"
+      ],
+      "activeAbilityNames": [
+        "BloodyFury"
+      ],
+      "passiveAbilityNames": [
+        "WrathfulDevotion"
+      ],
+      "equipmentSlots": [
+        "I_Crit",
+        "I_Block",
+        "I_Booster_Block"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_world_terminator_01.png",
+      "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_world_terminator_01.png",
+      "rankUpUpgrades": [
+        {
+          "rank": "Stone1",
+          "upgradeIds": [
+            "upgHpC002",
+            "upgHpC010",
+            "upgDmgC009",
+            "upgDmgC014",
+            "upgArmC013",
+            "upgArmC006"
+          ]
+        },
+        {
+          "rank": "Stone2",
+          "upgradeIds": [
+            "upgHpC014",
+            "upgHpC002",
+            "upgDmgU012",
+            "upgDmgU016C",
+            "upgArmC007",
+            "upgArmC007"
+          ]
+        },
+        {
+          "rank": "Stone3",
+          "upgradeIds": [
+            "upgHpU014",
+            "upgHpU004C",
+            "upgDmgC013",
+            "upgDmgC003",
+            "upgArmU009",
+            "upgArmU007"
+          ]
+        },
+        {
+          "rank": "Iron1",
+          "upgradeIds": [
+            "upgHpU004C",
+            "upgHpU012",
+            "upgDmgU012",
+            "upgDmgU014",
+            "upgArmU007",
+            "upgArmU003C"
+          ]
+        },
+        {
+          "rank": "Iron2",
+          "upgradeIds": [
+            "upgHpU014",
+            "upgHpR015C",
+            "upgDmgU018C",
+            "upgDmgU019",
+            "upgArmR005",
+            "upgArmU007"
+          ]
+        },
+        {
+          "rank": "Iron3",
+          "upgradeIds": [
+            "upgHpR012C",
+            "upgHpU009",
+            "upgDmgR038",
+            "upgDmgR012C",
+            "upgArmU003C",
+            "upgArmR015"
+          ]
+        },
+        {
+          "rank": "Bronze1",
+          "upgradeIds": [
+            "upgHpR038",
+            "upgHpR008",
+            "upgDmgR13C",
+            "upgDmgR006",
+            "upgArmR004C",
+            "upgArmR003C"
+          ]
+        },
+        {
+          "rank": "Bronze2",
+          "upgradeIds": [
+            "upgHpE038C",
+            "upgHpR004C",
+            "upgDmgR005",
+            "upgDmgE009C",
+            "upgArmR038",
+            "upgArmR004C"
+          ]
+        },
+        {
+          "rank": "Bronze3",
+          "upgradeIds": [
+            "upgHpR018",
+            "upgHpE001C",
+            "upgDmgE038C",
+            "upgDmgR016C",
+            "upgArmE038C",
+            "upgArmE013"
+          ]
+        },
+        {
+          "rank": "Silver1",
+          "upgradeIds": [
+            "upgHpE038C",
+            "upgHpE003",
+            "upgDmgE038C",
+            "upgDmgE004",
+            "upgArmE038C",
+            "upgArmE004C"
+          ]
+        },
+        {
+          "rank": "Silver2",
+          "upgradeIds": [
+            "upgHpL118",
+            "upgHpE008C",
+            "upgDmgL038C",
+            "upgDmgE009C",
+            "upgArmE038C",
+            "upgArmE005C"
+          ]
+        },
+        {
+          "rank": "Silver3",
+          "upgradeIds": [
+            "upgHpE038C",
+            "upgHpL009C",
+            "upgDmgE038C",
+            "upgDmgL016C",
+            "upgArmL203",
+            "upgArmL004C"
+          ]
+        },
+        {
+          "rank": "Gold1",
+          "upgradeIds": [
+            "upgHpL038C",
+            "upgHpL001C",
+            "upgDmgL003",
+            "upgDmgL009C",
+            "upgArmL038C",
+            "upgArmL005C"
+          ]
+        },
+        {
+          "rank": "Gold2",
+          "upgradeIds": [
+            "upgHpL138C",
+            "upgHpL012C",
+            "upgDmgL038C",
+            "upgDmgL016C",
+            "upgArmL038C",
+            "upgArmL005C"
+          ]
+        },
+        {
+          "rank": "Gold3",
+          "upgradeIds": [
+            "upgHpL038C",
+            "upgHpL001C",
+            "upgDmgL138C",
+            "upgDmgL008C",
+            "upgArmL138C",
+            "upgArmL005C"
+          ]
+        },
+        {
+          "rank": "Diamond1",
+          "upgradeIds": [
+            "upgHpL138C",
+            "upgHpL017C",
+            "upgDmgL138C",
+            "upgDmgL006C",
+            "upgArmL138C",
+            "upgArmL004C"
+          ]
+        },
+        {
+          "rank": "Diamond2",
+          "upgradeIds": [
+            "upgHpL138C",
+            "upgHpL213C",
+            "upgDmgL138C",
+            "upgDmgL213C",
+            "upgArmL138C",
+            "upgArmL213C"
+          ]
+        },
+        {
+          "rank": "Diamond3",
+          "upgradeIds": [
+            "upgHpL138C",
+            "upgHpL213C",
+            "upgDmgM214C",
+            "upgDmgL213C",
+            "upgArmM214C",
+            "upgArmL213C"
+          ]
+        },
+        {
+          "rank": "Adamantine1",
+          "upgradeIds": [
+            "upgHpM138C",
+            "upgHpL213C",
+            "upgDmgM214C",
+            "upgDmgL213C",
+            "upgArmM214C",
+            "upgArmL213C"
+          ]
+        },
+        {
+          "rank": "Adamantine2",
+          "upgradeIds": [
+            "upgHpECS",
+            "upgHpCS",
+            "upgDmgECS",
+            "upgDmgCS",
+            "upgArmECS",
+            "upgArmCS"
+          ]
+        }
+      ]
+    }
+  ],
+  "mows": []
+}

@@ -1,0 +1,456 @@
+{
+  "ranks": [
+    {
+      "id": "Stone1",
+      "displayName": "Stone I"
+    },
+    {
+      "id": "Stone2",
+      "displayName": "Stone II"
+    },
+    {
+      "id": "Stone3",
+      "displayName": "Stone III"
+    },
+    {
+      "id": "Iron1",
+      "displayName": "Iron I"
+    },
+    {
+      "id": "Iron2",
+      "displayName": "Iron II"
+    },
+    {
+      "id": "Iron3",
+      "displayName": "Iron III"
+    },
+    {
+      "id": "Bronze1",
+      "displayName": "Bronze I"
+    },
+    {
+      "id": "Bronze2",
+      "displayName": "Bronze II"
+    },
+    {
+      "id": "Bronze3",
+      "displayName": "Bronze III"
+    },
+    {
+      "id": "Silver1",
+      "displayName": "Silver I"
+    },
+    {
+      "id": "Silver2",
+      "displayName": "Silver II"
+    },
+    {
+      "id": "Silver3",
+      "displayName": "Silver III"
+    },
+    {
+      "id": "Gold1",
+      "displayName": "Gold I"
+    },
+    {
+      "id": "Gold2",
+      "displayName": "Gold II"
+    },
+    {
+      "id": "Gold3",
+      "displayName": "Gold III"
+    },
+    {
+      "id": "Diamond1",
+      "displayName": "Diamond I"
+    },
+    {
+      "id": "Diamond2",
+      "displayName": "Diamond II"
+    },
+    {
+      "id": "Diamond3",
+      "displayName": "Diamond III"
+    },
+    {
+      "id": "Adamantine1",
+      "displayName": "Adamantine I"
+    },
+    {
+      "id": "Adamantine2",
+      "displayName": "Adamantine II"
+    }
+  ],
+  "rarities": [
+    {
+      "id": "Common",
+      "displayName": "Common"
+    },
+    {
+      "id": "Epic",
+      "displayName": "Epic"
+    },
+    {
+      "id": "Legendary",
+      "displayName": "Legendary"
+    },
+    {
+      "id": "Mythic",
+      "displayName": "Mythic"
+    },
+    {
+      "id": "Rare",
+      "displayName": "Rare"
+    },
+    {
+      "id": "Uncommon",
+      "displayName": "Uncommon"
+    }
+  ],
+  "factions": [
+    {
+      "id": "AdeptusAstartes",
+      "displayName": "Adeptus Astartes"
+    },
+    {
+      "id": "AdeptusMechanicus",
+      "displayName": "Adeptus Mechanicus"
+    },
+    {
+      "id": "Aeldari",
+      "displayName": "Aeldari"
+    },
+    {
+      "id": "AstraMilitarum",
+      "displayName": "Astra Militarum"
+    },
+    {
+      "id": "BlackLegion",
+      "displayName": "Black Legion"
+    },
+    {
+      "id": "BlackTemplars",
+      "displayName": "Black Templars"
+    },
+    {
+      "id": "BloodAngels",
+      "displayName": "Blood Angels"
+    },
+    {
+      "id": "Custodes",
+      "displayName": "Adeptus Custodes"
+    },
+    {
+      "id": "DarkAngels",
+      "displayName": "Dark Angels"
+    },
+    {
+      "id": "DeathGuard",
+      "displayName": "Death Guard"
+    },
+    {
+      "id": "EmperorsChildren",
+      "displayName": "Emperor's Children"
+    },
+    {
+      "id": "Genestealers",
+      "displayName": "Genestealer Cults"
+    },
+    {
+      "id": "LeaguesOfVotann",
+      "displayName": "Leagues of Votann"
+    },
+    {
+      "id": "Necrons",
+      "displayName": "Necrons"
+    },
+    {
+      "id": "Orks",
+      "displayName": "Orks"
+    },
+    {
+      "id": "Sisterhood",
+      "displayName": "Adepta Sororitas"
+    },
+    {
+      "id": "SpaceWolves",
+      "displayName": "Space Wolves"
+    },
+    {
+      "id": "Tau",
+      "displayName": "T'au Empire"
+    },
+    {
+      "id": "ThousandSons",
+      "displayName": "Thousand Sons"
+    },
+    {
+      "id": "Tyranids",
+      "displayName": "Tyranids"
+    },
+    {
+      "id": "Ultramarines",
+      "displayName": "Ultramarines"
+    },
+    {
+      "id": "WorldEaters",
+      "displayName": "World Eaters"
+    }
+  ],
+  "traits": [
+    {
+      "id": "ActOfFaith",
+      "displayName": "Act Of Faith"
+    },
+    {
+      "id": "Ambush",
+      "displayName": "Ambush"
+    },
+    {
+      "id": "BattleFatigue",
+      "displayName": "Battle Fatigue"
+    },
+    {
+      "id": "BeastSlayer",
+      "displayName": "Beast Slayer"
+    },
+    {
+      "id": "BeastSnagga",
+      "displayName": "Beast Snagga"
+    },
+    {
+      "id": "BigTarget",
+      "displayName": "Big Target"
+    },
+    {
+      "id": "BlessingsOfKhorne",
+      "displayName": "Blessings Of Khorne"
+    },
+    {
+      "id": "Boss",
+      "displayName": "Boss"
+    },
+    {
+      "id": "Camouflage",
+      "displayName": "Camouflage"
+    },
+    {
+      "id": "CloseCombatWeakness",
+      "displayName": "Close Combat Weakness"
+    },
+    {
+      "id": "ContagionsOfNurgle",
+      "displayName": "Contagions Of Nurgle"
+    },
+    {
+      "id": "CrushingStrike",
+      "displayName": "Crushing Strike"
+    },
+    {
+      "id": "Daemon",
+      "displayName": "Daemon"
+    },
+    {
+      "id": "Decoy",
+      "displayName": "Decoy"
+    },
+    {
+      "id": "Diminutive",
+      "displayName": "Diminutive"
+    },
+    {
+      "id": "Emplacement",
+      "displayName": "Emplacement"
+    },
+    {
+      "id": "Explodes",
+      "displayName": "Explodes"
+    },
+    {
+      "id": "FinalJustice",
+      "displayName": "Final Justice"
+    },
+    {
+      "id": "Flying",
+      "displayName": "Flying"
+    },
+    {
+      "id": "GetStuckIn",
+      "displayName": "Get Stuck In"
+    },
+    {
+      "id": "Healer",
+      "displayName": "Healer"
+    },
+    {
+      "id": "HeavyWeapon",
+      "displayName": "Heavy Weapon"
+    },
+    {
+      "id": "Immune",
+      "displayName": "Immune"
+    },
+    {
+      "id": "Impervious",
+      "displayName": "Impervious"
+    },
+    {
+      "id": "IndirectFire",
+      "displayName": "Indirect Fire"
+    },
+    {
+      "id": "Infiltrate",
+      "displayName": "Infiltrate"
+    },
+    {
+      "id": "InstinctiveBehaviour",
+      "displayName": "Instinctive Behaviour"
+    },
+    {
+      "id": "Invincible",
+      "displayName": "Invincible"
+    },
+    {
+      "id": "LetTheGalaxyBurn",
+      "displayName": "Let The Galaxy Burn"
+    },
+    {
+      "id": "LivingMetal",
+      "displayName": "Living Metal"
+    },
+    {
+      "id": "MachineOfWar",
+      "displayName": "Machine Of War"
+    },
+    {
+      "id": "MartialKatah",
+      "displayName": "Martial Katah"
+    },
+    {
+      "id": "Mechanic",
+      "displayName": "Mechanic"
+    },
+    {
+      "id": "Mechanical",
+      "displayName": "Mechanical"
+    },
+    {
+      "id": "MkXGravis",
+      "displayName": "Mk X Gravis"
+    },
+    {
+      "id": "NonAttacking",
+      "displayName": "Non Attacking"
+    },
+    {
+      "id": "Object",
+      "displayName": "Object"
+    },
+    {
+      "id": "Overwatch",
+      "displayName": "Overwatch"
+    },
+    {
+      "id": "Parry",
+      "displayName": "Parry"
+    },
+    {
+      "id": "PermaDeath",
+      "displayName": "Perma Death"
+    },
+    {
+      "id": "PrioritisedEfficiency",
+      "displayName": "Prioritised Efficiency"
+    },
+    {
+      "id": "Psyker",
+      "displayName": "Psyker"
+    },
+    {
+      "id": "PutridExplosion",
+      "displayName": "Putrid Explosion"
+    },
+    {
+      "id": "RangedSpecialist",
+      "displayName": "Ranged Specialist"
+    },
+    {
+      "id": "RapidAssault",
+      "displayName": "Rapid Assault"
+    },
+    {
+      "id": "Resilient",
+      "displayName": "Resilient"
+    },
+    {
+      "id": "ShadowInTheWarp",
+      "displayName": "Shadow In The Warp"
+    },
+    {
+      "id": "Steppable",
+      "displayName": "Steppable"
+    },
+    {
+      "id": "SuppressiveFire",
+      "displayName": "Suppressive Fire"
+    },
+    {
+      "id": "Swarm",
+      "displayName": "Swarm"
+    },
+    {
+      "id": "Synapse",
+      "displayName": "Synapse"
+    },
+    {
+      "id": "TeleportStrike",
+      "displayName": "Teleport Strike"
+    },
+    {
+      "id": "TerminatorArmour",
+      "displayName": "Terminator Armour"
+    },
+    {
+      "id": "Terrifying",
+      "displayName": "Terrifying"
+    },
+    {
+      "id": "ThrillSeekers",
+      "displayName": "Thrill Seekers"
+    },
+    {
+      "id": "TwoManTeam",
+      "displayName": "Two Man Team"
+    },
+    {
+      "id": "Unstoppable",
+      "displayName": "Unstoppable"
+    },
+    {
+      "id": "Vehicle",
+      "displayName": "Vehicle"
+    },
+    {
+      "id": "WeaverOfFate",
+      "displayName": "Weaver Of Fate"
+    }
+  ],
+  "alliances": [
+    {
+      "id": "Chaos",
+      "displayName": "Chaos"
+    },
+    {
+      "id": "Imperial",
+      "displayName": "Imperial"
+    },
+    {
+      "id": "Neutral",
+      "displayName": "Neutral"
+    },
+    {
+      "id": "Xenos",
+      "displayName": "Xenos"
+    }
+  ]
+}

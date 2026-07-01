@@ -1,0 +1,4649 @@
+{
+  "groupId": "necrons-vs-dark-angels",
+  "faction": "Necrons",
+  "releaseType": "event",
+  "coreCharacters": [
+    "necroSpyder",
+    "necroDestroyer",
+    "necroPlasmancer"
+  ],
+  "difficulties": [
+    "eventStandard",
+    "eventStandardChallenge",
+    "eventExtremis",
+    "eventExtremisChallenge"
+  ],
+  "battles": [
+    {
+      "id": "DAS01",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 1,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 40,
+            "max": 66
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC002",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 225,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 5,
+      "enemiesTypes": [
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator:3",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 5,
+          "stars": 1,
+          "rank": "Stone3"
+        }
+      ]
+    },
+    {
+      "id": "DAS02",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 2,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 40,
+            "max": 66
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC012",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 260,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 4,
+      "enemiesTypes": [
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator:4",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 4,
+          "stars": 1,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "DAS03",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 3,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 40,
+            "max": 66
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC002",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 270,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator:3",
+          "count": 6
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 6,
+          "stars": 1,
+          "rank": "Stone3"
+        }
+      ]
+    },
+    {
+      "id": "DASC3B",
+      "difficulty": "eventStandardChallenge",
+      "energyCost": 6,
+      "nodeNumber": 3,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR005",
+            "chanceId": "upgradeRare_eventStandardChallenge"
+          }
+        ]
+      },
+      "enemyPower": 1133,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "DarkAngels"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Cadian Lascannon Team",
+        "Cadian Vox-caster",
+        "Hellblaster",
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc2Lascannon:7",
+          "count": 1
+        },
+        {
+          "id": "astraNpc3Voxcaster:6",
+          "count": 2
+        },
+        {
+          "id": "darkaNpc1Infiltrator:7",
+          "count": 3
+        },
+        {
+          "id": "darkaNpc2Hellblaster:6",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 1,
+          "stars": 2,
+          "rank": "Iron3"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 2,
+          "stars": 2,
+          "rank": "Iron2"
+        },
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 3,
+          "stars": 2,
+          "rank": "Iron3"
+        },
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 3,
+          "stars": 2,
+          "rank": "Iron2"
+        }
+      ]
+    },
+    {
+      "id": "DAS04",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 4,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 40,
+            "max": 66
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC017",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 366,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Hellblaster",
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator:4",
+          "count": 3
+        },
+        {
+          "id": "darkaNpc2Hellblaster:3",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 3,
+          "stars": 1,
+          "rank": "Iron1"
+        },
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 3,
+          "stars": 1,
+          "rank": "Stone3"
+        }
+      ]
+    },
+    {
+      "id": "DAS05",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 5,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 40,
+            "max": 66
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC003",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 399,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Hellblaster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc2Hellblaster:3",
+          "count": 7
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 7,
+          "stars": 1,
+          "rank": "Stone3"
+        }
+      ]
+    },
+    {
+      "id": "DAS06",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 6,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 45,
+            "max": 75
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_darkaHellblaster",
+            "chanceId": "shard_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 655,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Hellblaster",
+        "Infiltrator",
+        "Sarquael",
+        "Watcher"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator:3",
+          "count": 4
+        },
+        {
+          "id": "darkaNpc2Hellblaster:3",
+          "count": 3
+        },
+        {
+          "id": "darkaNpc4Watcher:3",
+          "count": 1
+        },
+        {
+          "id": "darkaNpcHellblaster:3",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 4,
+          "stars": 1,
+          "rank": "Stone3"
+        },
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 3,
+          "stars": 1,
+          "rank": "Stone3"
+        },
+        {
+          "id": "darkaNpc4Watcher",
+          "name": "Watcher",
+          "count": 1,
+          "stars": 1,
+          "rank": "Stone3"
+        },
+        {
+          "id": "darkaNpcHellblaster",
+          "name": "Sarquael",
+          "count": 1,
+          "stars": 3,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "DAS07",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 7,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 45,
+            "max": 75
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC013",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 404,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 4,
+      "enemiesTypes": [
+        "Deathwing Knight"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc3Terminator:4",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 4,
+          "stars": 1,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "DAS08",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 8,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 45,
+            "max": 75
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC015",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 563,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Deathwing Knight",
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator:4",
+          "count": 4
+        },
+        {
+          "id": "darkaNpc3Terminator:4",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 4,
+          "stars": 1,
+          "rank": "Iron1"
+        },
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 3,
+          "stars": 1,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "DAS09",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 9,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 45,
+            "max": 75
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC002",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 563,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Deathwing Knight",
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator:4",
+          "count": 4
+        },
+        {
+          "id": "darkaNpc3Terminator:4",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 4,
+          "stars": 1,
+          "rank": "Iron1"
+        },
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 3,
+          "stars": 1,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "DAS10",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 10,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 45,
+            "max": 75
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR032",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 544,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Deathwing Knight",
+        "Hellblaster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc2Hellblaster:3",
+          "count": 4
+        },
+        {
+          "id": "darkaNpc3Terminator:5",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 4,
+          "stars": 1,
+          "rank": "Stone3"
+        },
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 2,
+          "stars": 2,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "DAS11",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 11,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_darkaTerminator",
+            "chanceId": "shard_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 769,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Baraqiel",
+        "Deathwing Knight",
+        "Hellblaster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc2Hellblaster:3",
+          "count": 5
+        },
+        {
+          "id": "darkaNpc3Terminator:4",
+          "count": 2
+        },
+        {
+          "id": "darkaNpcTerminator:3",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 5,
+          "stars": 1,
+          "rank": "Stone3"
+        },
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 2,
+          "stars": 1,
+          "rank": "Iron1"
+        },
+        {
+          "id": "darkaNpcTerminator",
+          "name": "Baraqiel",
+          "count": 1,
+          "stars": 3,
+          "rank": "Iron1"
+        }
+      ]
+    },
+    {
+      "id": "DAS12",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 12,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC006",
+            "chanceId": "upgradeCommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 724,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "DarkAngels"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Cadian Vox-caster",
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc3Voxcaster:6",
+          "count": 4
+        },
+        {
+          "id": "darkaNpc1Infiltrator:6",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 4,
+          "stars": 2,
+          "rank": "Iron2"
+        },
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 4,
+          "stars": 2,
+          "rank": "Iron2"
+        }
+      ]
+    },
+    {
+      "id": "DAS13",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 13,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpU002",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 1305,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "DarkAngels"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Cadian Lascannon Team",
+        "Cadian Vox-caster",
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc2Lascannon:7",
+          "count": 3
+        },
+        {
+          "id": "astraNpc3Voxcaster:8",
+          "count": 3
+        },
+        {
+          "id": "darkaNpc1Infiltrator:7",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 3,
+          "stars": 2,
+          "rank": "Iron3"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 3,
+          "stars": 3,
+          "rank": "Iron3"
+        },
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 3,
+          "stars": 2,
+          "rank": "Iron3"
+        }
+      ]
+    },
+    {
+      "id": "DASC13B",
+      "difficulty": "eventStandardChallenge",
+      "energyCost": 6,
+      "nodeNumber": 13,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpE003",
+            "chanceId": "upgradeEpic_eventStandardChallenge"
+          }
+        ]
+      },
+      "enemyPower": 5309,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "DarkAngels"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Baraqiel",
+        "Cadian Lascannon Team",
+        "Deathwing Knight"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc2Lascannon:12",
+          "count": 2
+        },
+        {
+          "id": "darkaNpc3Terminator:10",
+          "count": 4
+        },
+        {
+          "id": "darkaNpcTerminator:8",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 5,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 4,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "darkaNpcTerminator",
+          "name": "Baraqiel",
+          "count": 1,
+          "stars": 6,
+          "rank": "Bronze2"
+        }
+      ]
+    },
+    {
+      "id": "DAS14",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 14,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgU009",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 2074,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "DarkAngels"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Cadian Lascannon Team",
+        "Cadian Vox-caster",
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc2Lascannon:8",
+          "count": 2
+        },
+        {
+          "id": "astraNpc3Voxcaster:8",
+          "count": 3
+        },
+        {
+          "id": "darkaNpc1Infiltrator:8",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 3,
+          "rank": "Iron3"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 3,
+          "stars": 3,
+          "rank": "Iron3"
+        },
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 5,
+          "stars": 3,
+          "rank": "Iron3"
+        }
+      ]
+    },
+    {
+      "id": "DAS15",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 15,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmU005",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 2901,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "DarkAngels"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Cadian Lascannon Team",
+        "Cadian Vox-caster",
+        "Hellblaster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc2Lascannon:8",
+          "count": 3
+        },
+        {
+          "id": "astraNpc3Voxcaster:8",
+          "count": 3
+        },
+        {
+          "id": "darkaNpc2Hellblaster:8",
+          "count": 6
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 3,
+          "stars": 3,
+          "rank": "Iron3"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 3,
+          "stars": 3,
+          "rank": "Iron3"
+        },
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 6,
+          "stars": 3,
+          "rank": "Iron3"
+        }
+      ]
+    },
+    {
+      "id": "DAS16",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 16,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 48,
+            "max": 82
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR032",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 2753,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "DarkAngels"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Cadian Vox-caster",
+        "Hellblaster",
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc3Voxcaster:10",
+          "count": 2
+        },
+        {
+          "id": "darkaNpc1Infiltrator:10",
+          "count": 2
+        },
+        {
+          "id": "darkaNpc2Hellblaster:9",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 2,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 2,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 3,
+          "stars": 3,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "DAS17",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 17,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 52,
+            "max": 90
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_darkaCompanion",
+            "chanceId": "shard_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 4298,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Forcas",
+        "Hellblaster",
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator:11",
+          "count": 3
+        },
+        {
+          "id": "darkaNpc2Hellblaster:10",
+          "count": 2
+        },
+        {
+          "id": "darkaNpcCompanion:7",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 3,
+          "stars": 6,
+          "rank": "Bronze2"
+        },
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 2,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "darkaNpcCompanion",
+          "name": "Forcas",
+          "count": 1,
+          "stars": 5,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "DAS18",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 18,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 52,
+            "max": 90
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgU012",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 3119,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 5,
+      "enemiesTypes": [
+        "Deathwing Knight",
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator:11",
+          "count": 3
+        },
+        {
+          "id": "darkaNpc3Terminator:9",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 3,
+          "stars": 6,
+          "rank": "Bronze2"
+        },
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 2,
+          "stars": 3,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "DAS19",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 19,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 52,
+            "max": 90
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpU014",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 3308,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Deathwing Knight",
+        "Hellblaster",
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator:10",
+          "count": 2
+        },
+        {
+          "id": "darkaNpc2Hellblaster:10",
+          "count": 3
+        },
+        {
+          "id": "darkaNpc3Terminator:9",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 2,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 3,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 1,
+          "stars": 3,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "DAS20",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 20,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 52,
+            "max": 90
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmU013",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 7440,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Deathwing Knight",
+        "Hellblaster",
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator:12",
+          "count": 2
+        },
+        {
+          "id": "darkaNpc2Hellblaster:11",
+          "count": 4
+        },
+        {
+          "id": "darkaNpc3Terminator:9",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 2,
+          "stars": 5,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 4,
+          "stars": 6,
+          "rank": "Bronze2"
+        },
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 3,
+          "stars": 3,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "DAS21",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 21,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 52,
+            "max": 90
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR032",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 7288,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Deathwing Knight",
+        "Hellblaster",
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator:11",
+          "count": 4
+        },
+        {
+          "id": "darkaNpc2Hellblaster:11",
+          "count": 4
+        },
+        {
+          "id": "darkaNpc3Terminator:10",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 4,
+          "stars": 6,
+          "rank": "Bronze2"
+        },
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 4,
+          "stars": 6,
+          "rank": "Bronze2"
+        },
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 1,
+          "stars": 6,
+          "rank": "Bronze1"
+        }
+      ]
+    },
+    {
+      "id": "DAS22",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 22,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_darkaAsmodai",
+            "chanceId": "shard_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 6682,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Asmodai",
+        "Deathwing Knight",
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator:11",
+          "count": 5
+        },
+        {
+          "id": "darkaNpc3Terminator:10",
+          "count": 2
+        },
+        {
+          "id": "darkaNpcAsmodai:8",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 5,
+          "stars": 6,
+          "rank": "Bronze2"
+        },
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 2,
+          "stars": 6,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "darkaNpcAsmodai",
+          "name": "Asmodai",
+          "count": 1,
+          "stars": 6,
+          "rank": "Bronze2"
+        }
+      ]
+    },
+    {
+      "id": "DAS23",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 23,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpU017",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 5401,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "DarkAngels"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Cadian Lascannon Team",
+        "Cadian Vox-caster",
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc2Lascannon:12",
+          "count": 2
+        },
+        {
+          "id": "astraNpc3Voxcaster:12",
+          "count": 3
+        },
+        {
+          "id": "darkaNpc1Infiltrator:12",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 5,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 3,
+          "stars": 5,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 3,
+          "stars": 5,
+          "rank": "Bronze3"
+        }
+      ]
+    },
+    {
+      "id": "DAS24",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 24,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgU003",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 7964,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 4,
+      "enemiesTypes": [
+        "Hellblaster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc2Hellblaster:13",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 4,
+          "stars": 7,
+          "rank": "Bronze3"
+        }
+      ]
+    },
+    {
+      "id": "DAS25",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 25,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmU001",
+            "chanceId": "upgradeUncommon_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 12468,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 3,
+      "enemiesTypes": [
+        "Deathwing Knight"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc3Terminator:15",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 3,
+          "stars": 7,
+          "rank": "Silver1"
+        }
+      ]
+    },
+    {
+      "id": "DASC25B",
+      "difficulty": "eventStandardChallenge",
+      "energyCost": 6,
+      "nodeNumber": 25,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgE011",
+            "chanceId": "upgradeEpic_eventStandardChallenge"
+          }
+        ]
+      },
+      "enemyPower": 50103,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "DarkAngels"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Asmodai",
+        "Azrael",
+        "Baraqiel",
+        "Cadian Vox-caster",
+        "Forcas",
+        "Sarquael"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc3Voxcaster:15",
+          "count": 4
+        },
+        {
+          "id": "darkaNpcAsmodai:11",
+          "count": 1
+        },
+        {
+          "id": "darkaNpcAzrael:11",
+          "count": 1
+        },
+        {
+          "id": "darkaNpcCompanion:11",
+          "count": 1
+        },
+        {
+          "id": "darkaNpcHellblaster:11",
+          "count": 1
+        },
+        {
+          "id": "darkaNpcTerminator:11",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 4,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "darkaNpcAsmodai",
+          "name": "Asmodai",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "darkaNpcAzrael",
+          "name": "Azrael",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "darkaNpcCompanion",
+          "name": "Forcas",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "darkaNpcHellblaster",
+          "name": "Sarquael",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "darkaNpcTerminator",
+          "name": "Baraqiel",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        }
+      ]
+    },
+    {
+      "id": "DAS26",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 26,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR018",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 17864,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 5,
+      "enemiesTypes": [
+        "Deathwing Knight",
+        "Watcher"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc3Terminator:15",
+          "count": 4
+        },
+        {
+          "id": "darkaNpc4Watcher:14",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 4,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "darkaNpc4Watcher",
+          "name": "Watcher",
+          "count": 1,
+          "stars": 9,
+          "rank": "Bronze3"
+        }
+      ]
+    },
+    {
+      "id": "DAS27",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 27,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR005",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 25938,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Deathwing Knight",
+        "Hellblaster",
+        "Watcher"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc2Hellblaster:15",
+          "count": 5
+        },
+        {
+          "id": "darkaNpc3Terminator:15",
+          "count": 2
+        },
+        {
+          "id": "darkaNpc4Watcher:15",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 5,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 2,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "darkaNpc4Watcher",
+          "name": "Watcher",
+          "count": 1,
+          "stars": 7,
+          "rank": "Silver1"
+        }
+      ]
+    },
+    {
+      "id": "DAS28",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 28,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR015",
+            "chanceId": "upgradeRare_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 29587,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "DarkAngels"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Cadian Lascannon Team",
+        "Deathwing Knight",
+        "Hellblaster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc2Lascannon:15",
+          "count": 3
+        },
+        {
+          "id": "darkaNpc2Hellblaster:16",
+          "count": 5
+        },
+        {
+          "id": "darkaNpc3Terminator:15",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 3,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 5,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 2,
+          "stars": 7,
+          "rank": "Silver1"
+        }
+      ]
+    },
+    {
+      "id": "DAS29",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 29,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL112",
+            "chanceId": "upgradeLegendary_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 33421,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "DarkAngels"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Cadian Lascannon Team",
+        "Cadian Vox-caster",
+        "Deathwing Knight",
+        "Hellblaster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc2Lascannon:15",
+          "count": 1
+        },
+        {
+          "id": "astraNpc3Voxcaster:16",
+          "count": 2
+        },
+        {
+          "id": "darkaNpc2Hellblaster:16",
+          "count": 5
+        },
+        {
+          "id": "darkaNpc3Terminator:15",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 1,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 5,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 2,
+          "stars": 7,
+          "rank": "Silver1"
+        }
+      ]
+    },
+    {
+      "id": "DAS30",
+      "difficulty": "eventStandard",
+      "energyCost": 6,
+      "nodeNumber": 30,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_darkaAzrael",
+            "chanceId": "shard_eventStandard"
+          }
+        ]
+      },
+      "enemyPower": 51276,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Deathwing Knight",
+        "Hellblaster",
+        "Lion El'Jonson",
+        "Watcher"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaBossLion:2",
+          "count": 1
+        },
+        {
+          "id": "darkaNpc2Hellblaster:16",
+          "count": 3
+        },
+        {
+          "id": "darkaNpc3Terminator:15",
+          "count": 1
+        },
+        {
+          "id": "darkaNpc4Watcher:15",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaBossLion",
+          "name": "Lion El'Jonson",
+          "count": 1,
+          "stars": 6,
+          "rank": "Silver1"
+        },
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 3,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 1,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "darkaNpc4Watcher",
+          "name": "Watcher",
+          "count": 1,
+          "stars": 7,
+          "rank": "Silver1"
+        }
+      ]
+    },
+    {
+      "id": "DAE01",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 1,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC002",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 17772,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator:16",
+          "count": 6
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 6,
+          "stars": 9,
+          "rank": "Silver1"
+        }
+      ]
+    },
+    {
+      "id": "DAE02",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 2,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC012",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 36058,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 5,
+      "enemiesTypes": [
+        "Deathwing Knight",
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator:19",
+          "count": 3
+        },
+        {
+          "id": "darkaNpc3Terminator:18",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver3"
+        },
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver2"
+        }
+      ]
+    },
+    {
+      "id": "DAE03",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 3,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC002",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 55160,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 5,
+      "enemiesTypes": [
+        "Deathwing Knight"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc3Terminator:19",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 5,
+          "stars": 8,
+          "rank": "Silver3"
+        }
+      ]
+    },
+    {
+      "id": "DAEC3B",
+      "difficulty": "eventExtremisChallenge",
+      "energyCost": 6,
+      "nodeNumber": 3,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmE013",
+            "chanceId": "upgradeEpic_eventExtremisChallenge"
+          }
+        ]
+      },
+      "enemyPower": 164781,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "DarkAngels"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Cadian Mortar Team",
+        "Cadian Vox-caster",
+        "Hellblaster",
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc3Voxcaster:22",
+          "count": 3
+        },
+        {
+          "id": "astraNpc4Mortar:20",
+          "count": 2
+        },
+        {
+          "id": "darkaNpc1Infiltrator:22",
+          "count": 2
+        },
+        {
+          "id": "darkaNpc2Hellblaster:22",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 2,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold1"
+        }
+      ]
+    },
+    {
+      "id": "DAE04",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 4,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC017",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 108798,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Hellblaster",
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator:20",
+          "count": 3
+        },
+        {
+          "id": "darkaNpc2Hellblaster:22",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 3,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold1"
+        }
+      ]
+    },
+    {
+      "id": "DAE05",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 5,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC003",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 126576,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Hellblaster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc2Hellblaster:22",
+          "count": 6
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 6,
+          "stars": 11,
+          "rank": "Gold1"
+        }
+      ]
+    },
+    {
+      "id": "DAE06",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 6,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_darkaHellblaster",
+            "chanceId": "shard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 186709,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Hellblaster",
+        "Infiltrator",
+        "Sarquael",
+        "Watcher"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator:22",
+          "count": 3
+        },
+        {
+          "id": "darkaNpc2Hellblaster:22",
+          "count": 4
+        },
+        {
+          "id": "darkaNpc4Watcher:22",
+          "count": 1
+        },
+        {
+          "id": "darkaNpcHellblaster:14",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "darkaNpc4Watcher",
+          "name": "Watcher",
+          "count": 1,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "darkaNpcHellblaster",
+          "name": "Sarquael",
+          "count": 1,
+          "stars": 9,
+          "rank": "Gold2"
+        }
+      ]
+    },
+    {
+      "id": "DAE07",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 7,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC013",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 119846,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 5,
+      "enemiesTypes": [
+        "Deathwing Knight",
+        "Hellblaster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc2Hellblaster:22",
+          "count": 3
+        },
+        {
+          "id": "darkaNpc3Terminator:22",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold1"
+        }
+      ]
+    },
+    {
+      "id": "DAE08",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 8,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC015",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 138345,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Deathwing Knight",
+        "Hellblaster",
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator:22",
+          "count": 2
+        },
+        {
+          "id": "darkaNpc2Hellblaster:22",
+          "count": 3
+        },
+        {
+          "id": "darkaNpc3Terminator:20",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 3,
+          "stars": 10,
+          "rank": "Silver3"
+        }
+      ]
+    },
+    {
+      "id": "DAE09",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 9,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC002",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 89352,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Deathwing Knight",
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator:21",
+          "count": 6
+        },
+        {
+          "id": "darkaNpc3Terminator:20",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 6,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 2,
+          "stars": 10,
+          "rank": "Silver3"
+        }
+      ]
+    },
+    {
+      "id": "DAE10",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 10,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 56,
+            "max": 98
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC006",
+            "chanceId": "upgradeCommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 133759,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Deathwing Knight",
+        "Hellblaster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc2Hellblaster:22",
+          "count": 5
+        },
+        {
+          "id": "darkaNpc3Terminator:22",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 5,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 1,
+          "stars": 11,
+          "rank": "Gold1"
+        }
+      ]
+    },
+    {
+      "id": "DAE11",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 11,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 140
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_darkaTerminator",
+            "chanceId": "shard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 185033,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Baraqiel",
+        "Deathwing Knight",
+        "Hellblaster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc2Hellblaster:22",
+          "count": 6
+        },
+        {
+          "id": "darkaNpc3Terminator:20",
+          "count": 2
+        },
+        {
+          "id": "darkaNpcTerminator:13",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 6,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 2,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "darkaNpcTerminator",
+          "name": "Baraqiel",
+          "count": 1,
+          "stars": 9,
+          "rank": "Gold1"
+        }
+      ]
+    },
+    {
+      "id": "DAE12",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 12,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmU013",
+            "chanceId": "upgradeUncommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 147732,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "DarkAngels"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Cadian Vox-caster",
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc3Voxcaster:23",
+          "count": 4
+        },
+        {
+          "id": "darkaNpc1Infiltrator:24",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 4,
+          "stars": 10,
+          "rank": "Gold2"
+        },
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold2"
+        }
+      ]
+    },
+    {
+      "id": "DAE13",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 13,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpU002",
+            "chanceId": "upgradeUncommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 165542,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "DarkAngels"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Cadian Mortar Team",
+        "Cadian Vox-caster",
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc3Voxcaster:24",
+          "count": 3
+        },
+        {
+          "id": "astraNpc4Mortar:21",
+          "count": 2
+        },
+        {
+          "id": "darkaNpc1Infiltrator:24",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold2"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold2"
+        }
+      ]
+    },
+    {
+      "id": "DAEC13B",
+      "difficulty": "eventExtremisChallenge",
+      "energyCost": 6,
+      "nodeNumber": 13,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 60,
+            "max": 106
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmL204",
+            "chanceId": "upgradeLegendary_eventExtremisChallenge"
+          }
+        ]
+      },
+      "enemyPower": 1412146,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "DarkAngels"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Baraqiel",
+        "Cadian Lascannon Team",
+        "Deathwing Knight",
+        "Watcher"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc2Lascannon:33",
+          "count": 4
+        },
+        {
+          "id": "darkaNpc3Terminator:30",
+          "count": 3
+        },
+        {
+          "id": "darkaNpc4Watcher:33",
+          "count": 2
+        },
+        {
+          "id": "darkaNpcTerminator:18",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 4,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 3,
+          "stars": 11,
+          "rank": "Diamond2"
+        },
+        {
+          "id": "darkaNpc4Watcher",
+          "name": "Watcher",
+          "count": 2,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "darkaNpcTerminator",
+          "name": "Baraqiel",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "DAE14",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 14,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgU009",
+            "chanceId": "upgradeUncommon_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 247720,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "DarkAngels"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Cadian Vox-caster",
+        "Hellblaster",
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc3Voxcaster:24",
+          "count": 3
+        },
+        {
+          "id": "darkaNpc1Infiltrator:24",
+          "count": 4
+        },
+        {
+          "id": "darkaNpc2Hellblaster:24",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold2"
+        },
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold2"
+        },
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold2"
+        }
+      ]
+    },
+    {
+      "id": "DAE15",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 15,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR018",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 289135,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "DarkAngels"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Cadian Vox-caster",
+        "Hellblaster",
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc3Voxcaster:24",
+          "count": 3
+        },
+        {
+          "id": "darkaNpc1Infiltrator:24",
+          "count": 3
+        },
+        {
+          "id": "darkaNpc2Hellblaster:24",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold2"
+        },
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold2"
+        },
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 5,
+          "stars": 11,
+          "rank": "Gold2"
+        }
+      ]
+    },
+    {
+      "id": "DAE16",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 16,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR005",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 255303,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "DarkAngels"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Cadian Mortar Team",
+        "Cadian Vox-caster",
+        "Hellblaster",
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc3Voxcaster:26",
+          "count": 2
+        },
+        {
+          "id": "astraNpc4Mortar:26",
+          "count": 1
+        },
+        {
+          "id": "darkaNpc1Infiltrator:26",
+          "count": 2
+        },
+        {
+          "id": "darkaNpc2Hellblaster:26",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold3"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 1,
+          "stars": 11,
+          "rank": "Gold3"
+        },
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold3"
+        },
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold3"
+        }
+      ]
+    },
+    {
+      "id": "DAE17",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 17,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 140
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_darkaCompanion",
+            "chanceId": "shard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 639554,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Forcas",
+        "Hellblaster",
+        "Infiltrator",
+        "Watcher"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator:26",
+          "count": 1
+        },
+        {
+          "id": "darkaNpc2Hellblaster:28",
+          "count": 5
+        },
+        {
+          "id": "darkaNpc4Watcher:28",
+          "count": 1
+        },
+        {
+          "id": "darkaNpcCompanion:17",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 1,
+          "stars": 11,
+          "rank": "Gold3"
+        },
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 5,
+          "stars": 11,
+          "rank": "Diamond1"
+        },
+        {
+          "id": "darkaNpc4Watcher",
+          "name": "Watcher",
+          "count": 1,
+          "stars": 11,
+          "rank": "Diamond1"
+        },
+        {
+          "id": "darkaNpcCompanion",
+          "name": "Forcas",
+          "count": 1,
+          "stars": 11,
+          "rank": "Diamond3"
+        }
+      ]
+    },
+    {
+      "id": "DAE18",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 18,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR015",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 475198,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Deathwing Knight",
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator:29",
+          "count": 4
+        },
+        {
+          "id": "darkaNpc3Terminator:28",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 4,
+          "stars": 10,
+          "rank": "Diamond2"
+        },
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 2,
+          "stars": 11,
+          "rank": "Diamond1"
+        }
+      ]
+    },
+    {
+      "id": "DAE19",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 19,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR032",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 633804,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Hellblaster",
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator:30",
+          "count": 4
+        },
+        {
+          "id": "darkaNpc2Hellblaster:30",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 4,
+          "stars": 11,
+          "rank": "Diamond2"
+        },
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 2,
+          "stars": 11,
+          "rank": "Diamond2"
+        }
+      ]
+    },
+    {
+      "id": "DAE20",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 20,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR032",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 1573100,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "DarkAngels"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Cadian Vox-caster",
+        "Deathwing Knight",
+        "Hellblaster",
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc3Voxcaster:33",
+          "count": 2
+        },
+        {
+          "id": "darkaNpc1Infiltrator:32",
+          "count": 4
+        },
+        {
+          "id": "darkaNpc2Hellblaster:30",
+          "count": 4
+        },
+        {
+          "id": "darkaNpc3Terminator:28",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 2,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 4,
+          "stars": 11,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 4,
+          "stars": 11,
+          "rank": "Diamond2"
+        },
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 2,
+          "stars": 11,
+          "rank": "Diamond1"
+        }
+      ]
+    },
+    {
+      "id": "DAE21",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 21,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 74,
+            "max": 123
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR032",
+            "chanceId": "upgradeRare_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 1625096,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "DarkAngels"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Cadian Vox-caster",
+        "Deathwing Knight",
+        "Hellblaster",
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc3Voxcaster:33",
+          "count": 2
+        },
+        {
+          "id": "darkaNpc1Infiltrator:32",
+          "count": 4
+        },
+        {
+          "id": "darkaNpc2Hellblaster:31",
+          "count": 4
+        },
+        {
+          "id": "darkaNpc3Terminator:28",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 2,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 4,
+          "stars": 11,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 4,
+          "stars": 10,
+          "rank": "Diamond3"
+        },
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 2,
+          "stars": 11,
+          "rank": "Diamond1"
+        }
+      ]
+    },
+    {
+      "id": "DAE22",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 22,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 140
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_darkaAsmodai",
+            "chanceId": "shard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 1965448,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Asmodai",
+        "Deathwing Knight",
+        "Infiltrator",
+        "Watcher"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator:33",
+          "count": 7
+        },
+        {
+          "id": "darkaNpc3Terminator:28",
+          "count": 2
+        },
+        {
+          "id": "darkaNpc4Watcher:33",
+          "count": 1
+        },
+        {
+          "id": "darkaNpcAsmodai:18",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 7,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 2,
+          "stars": 11,
+          "rank": "Diamond1"
+        },
+        {
+          "id": "darkaNpc4Watcher",
+          "name": "Watcher",
+          "count": 1,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "darkaNpcAsmodai",
+          "name": "Asmodai",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "DAE23",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 23,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL112",
+            "chanceId": "upgradeLegendary_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 1664415,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "DarkAngels"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Cadian Lascannon Team",
+        "Cadian Mortar Team",
+        "Cadian Vox-caster",
+        "Hellblaster",
+        "Infiltrator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc2Lascannon:33",
+          "count": 2
+        },
+        {
+          "id": "astraNpc3Voxcaster:34",
+          "count": 3
+        },
+        {
+          "id": "astraNpc4Mortar:33",
+          "count": 1
+        },
+        {
+          "id": "darkaNpc1Infiltrator:33",
+          "count": 3
+        },
+        {
+          "id": "darkaNpc2Hellblaster:33",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 3,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "astraNpc4Mortar",
+          "name": "Cadian Mortar Team",
+          "count": 1,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 3,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 2,
+          "stars": 11,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "DAE24",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 24,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_darkaAzrael",
+            "chanceId": "shard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 2264592,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Hellblaster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc2Hellblaster:35",
+          "count": 6
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 6,
+          "stars": 13,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "DAE25",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 25,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "mythicShards_darkaHellblaster",
+            "chanceId": "mythicShard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 2104346,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Deathwing Knight",
+        "Hellblaster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc2Hellblaster:35",
+          "count": 4
+        },
+        {
+          "id": "darkaNpc3Terminator:33",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 4,
+          "stars": 13,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 2,
+          "stars": 11,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "DAEC25B",
+      "difficulty": "eventExtremisChallenge",
+      "energyCost": 6,
+      "nodeNumber": 25,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 90,
+            "max": 155
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgL204",
+            "chanceId": "upgradeLegendary_eventExtremisChallenge"
+          }
+        ]
+      },
+      "enemyPower": 4259108,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Asmodai",
+        "Azrael",
+        "Baraqiel",
+        "Forcas",
+        "Hellblaster",
+        "Infiltrator",
+        "Sarquael",
+        "Watcher"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator:33",
+          "count": 2
+        },
+        {
+          "id": "darkaNpc2Hellblaster:33",
+          "count": 2
+        },
+        {
+          "id": "darkaNpc4Watcher:35",
+          "count": 1
+        },
+        {
+          "id": "darkaNpcAsmodai:19",
+          "count": 1
+        },
+        {
+          "id": "darkaNpcAzrael:19",
+          "count": 1
+        },
+        {
+          "id": "darkaNpcCompanion:19",
+          "count": 1
+        },
+        {
+          "id": "darkaNpcHellblaster:18",
+          "count": 1
+        },
+        {
+          "id": "darkaNpcTerminator:18",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 2,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 2,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "darkaNpc4Watcher",
+          "name": "Watcher",
+          "count": 1,
+          "stars": 13,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "darkaNpcAsmodai",
+          "name": "Asmodai",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "darkaNpcAzrael",
+          "name": "Azrael",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "darkaNpcCompanion",
+          "name": "Forcas",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "darkaNpcHellblaster",
+          "name": "Sarquael",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "darkaNpcTerminator",
+          "name": "Baraqiel",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "DAE26",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 26,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "mythicShards_darkaTerminator",
+            "chanceId": "mythicShard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 2919090,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Deathwing Knight",
+        "Hellblaster",
+        "Infiltrator",
+        "Watcher"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator:33",
+          "count": 2
+        },
+        {
+          "id": "darkaNpc2Hellblaster:35",
+          "count": 4
+        },
+        {
+          "id": "darkaNpc3Terminator:33",
+          "count": 3
+        },
+        {
+          "id": "darkaNpc4Watcher:35",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 2,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 4,
+          "stars": 13,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 3,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "darkaNpc4Watcher",
+          "name": "Watcher",
+          "count": 1,
+          "stars": 13,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "DAE27",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 27,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "mythicShards_darkaCompanion",
+            "chanceId": "mythicShard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 3105191,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Deathwing Knight",
+        "Hellblaster",
+        "Infiltrator",
+        "Watcher"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator:37",
+          "count": 2
+        },
+        {
+          "id": "darkaNpc2Hellblaster:36",
+          "count": 4
+        },
+        {
+          "id": "darkaNpc3Terminator:33",
+          "count": 2
+        },
+        {
+          "id": "darkaNpc4Watcher:35",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaNpc1Infiltrator",
+          "name": "Infiltrator",
+          "count": 2,
+          "stars": 11,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 4,
+          "stars": 14,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 2,
+          "stars": 11,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "darkaNpc4Watcher",
+          "name": "Watcher",
+          "count": 1,
+          "stars": 13,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "DAE28",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 28,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "mythicShards_darkaAsmodai",
+            "chanceId": "mythicShard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 3137088,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "DarkAngels"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Cadian Lascannon Team",
+        "Deathwing Knight",
+        "Hellblaster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc2Lascannon:36",
+          "count": 3
+        },
+        {
+          "id": "darkaNpc2Hellblaster:36",
+          "count": 5
+        },
+        {
+          "id": "darkaNpc3Terminator:34",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 3,
+          "stars": 14,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 5,
+          "stars": 14,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 2,
+          "stars": 12,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "DAE29",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 29,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 84,
+            "max": 147
+          }
+        ],
+        "potential": [
+          {
+            "id": "mythicShards_darkaAzrael",
+            "chanceId": "mythicShard_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 3299024,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "DarkAngels"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Cadian Lascannon Team",
+        "Cadian Vox-caster",
+        "Deathwing Knight",
+        "Hellblaster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc2Lascannon:38",
+          "count": 2
+        },
+        {
+          "id": "astraNpc3Voxcaster:38",
+          "count": 2
+        },
+        {
+          "id": "darkaNpc2Hellblaster:36",
+          "count": 4
+        },
+        {
+          "id": "darkaNpc3Terminator:36",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 2,
+          "stars": 12,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 2,
+          "stars": 12,
+          "rank": "Adamantine2"
+        },
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 4,
+          "stars": 14,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 2,
+          "stars": 14,
+          "rank": "Adamantine1"
+        }
+      ]
+    },
+    {
+      "id": "DAE30",
+      "difficulty": "eventExtremis",
+      "energyCost": 6,
+      "nodeNumber": 30,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 90,
+            "max": 155
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpM004",
+            "chanceId": "upgradeMythic_eventExtremis"
+          }
+        ]
+      },
+      "enemyPower": 6024196,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "DarkAngels"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Deathwing Knight",
+        "Hellblaster",
+        "Lion El'Jonson",
+        "Watcher"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "darkaBossLion:4",
+          "count": 1
+        },
+        {
+          "id": "darkaNpc2Hellblaster:35",
+          "count": 4
+        },
+        {
+          "id": "darkaNpc3Terminator:35",
+          "count": 1
+        },
+        {
+          "id": "darkaNpc4Watcher:35",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "darkaBossLion",
+          "name": "Lion El'Jonson",
+          "count": 1,
+          "stars": 12,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "darkaNpc2Hellblaster",
+          "name": "Hellblaster",
+          "count": 4,
+          "stars": 13,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "darkaNpc3Terminator",
+          "name": "Deathwing Knight",
+          "count": 1,
+          "stars": 13,
+          "rank": "Adamantine1"
+        },
+        {
+          "id": "darkaNpc4Watcher",
+          "name": "Watcher",
+          "count": 2,
+          "stars": 13,
+          "rank": "Adamantine1"
+        }
+      ]
+    }
+  ]
+}
