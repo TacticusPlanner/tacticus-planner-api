@@ -1,6 +1,4 @@
 using System.Net;
-using Xunit;
-using static VerifyXunit.Verifier;
 
 namespace TacticusPlanner.Api.Tests;
 
