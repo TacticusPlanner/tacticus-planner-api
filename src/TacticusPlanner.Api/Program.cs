@@ -106,6 +106,23 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+if ((app.Environment.IsStaging() || app.Environment.IsProduction())
+    && app.Configuration.GetValue<bool>("Database:ApplyMigrationsOnStartup"))
+{
+    await using var scope = app.Services.CreateAsyncScope();
+    var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
+    var logger = scope.ServiceProvider
+        .GetRequiredService<ILoggerFactory>()
+        .CreateLogger("DatabaseMigration");
+    var environmentName = app.Environment.EnvironmentName;
+
+    ApplyingDatabaseMigrations(logger, environmentName);
+
+    await db.Database.MigrateAsync();
+
+    DatabaseMigrationsApplied(logger, environmentName);
+}
+
 app.UseExceptionHandler();
 app.UseCors("Frontend");
 app.UseAuthentication();
@@ -138,4 +155,20 @@ _ = app.Services.GetRequiredService<IGameCatalogProvider>();
 
 app.Run();
 
-public partial class Program;
+public partial class Program
+{
+    [LoggerMessage(
+        EventId = 2,
+        Level = LogLevel.Information,
+        Message = "Applying database migrations for {EnvironmentName}."
+    )]
+    private static partial void ApplyingDatabaseMigrations(ILogger logger, string environmentName);
+
+    [LoggerMessage(
+        EventId = 3,
+        Level = LogLevel.Information,
+        Message = "Database migrations applied for {EnvironmentName}."
+    )]
+    private static partial void DatabaseMigrationsApplied(ILogger logger, string environmentName);
+
+}

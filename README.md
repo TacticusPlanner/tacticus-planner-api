@@ -156,16 +156,20 @@ dotnet build src/TacticusPlanner.Api -c Release --no-restore
 
 ## Database migrations
 
-The initial context has no entities, so it intentionally has no migration.
-After adding the first persisted model, create and apply migrations explicitly:
+Create migrations when the persisted model changes:
 
 ```powershell
 dotnet ef migrations add <MigrationName> --project src/TacticusPlanner.Api
-dotnet ef database update --project src/TacticusPlanner.Api
 ```
 
-The API never applies migrations automatically during startup. Production
-migrations must be an explicit deployment operation.
+The API applies pending migrations automatically during startup when
+`ASPNETCORE_ENVIRONMENT`/`DOTNET_ENVIRONMENT` is `Staging` or `Production` and
+`Database__ApplyMigrationsOnStartup=true`. Local `Development` runs do not
+apply migrations automatically; apply them explicitly when needed:
+
+```powershell
+dotnet ef database update --project src/TacticusPlanner.Api
+```
 
 ## Container image
 
