@@ -89,6 +89,12 @@
         "resolved": "2.16.4",
         "contentHash": "ZDD3CHXn1OR4yHQ55NcXsU+aRzSIc1kwkpgPVM9LaK0XKuEzRqZWZ/4WS9tLI3dur6OMlcpXjGIDk/Pe3fniXQ=="
       },
+      "Vogen": {
+        "type": "Direct",
+        "requested": "[8.0.5, )",
+        "resolved": "8.0.5",
+        "contentHash": "hUGafk0LpUn3ooZNOOczByhVSGqBaI96bCn0DkreSd2bwHGrMfdRoCqNrB4w0/y5bufyYaABqQ8wWBPgx5QdNw=="
+      },
       "Azure.Core": {
         "type": "Transitive",
         "resolved": "1.54.0",

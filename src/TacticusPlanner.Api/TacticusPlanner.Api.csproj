@@ -16,6 +16,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.ApiDescription.Server" PrivateAssets="all" />
     <PackageReference Include="Scalar.AspNetCore" />
+    <PackageReference Include="Vogen" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\orchestration\TacticusPlanner.ServiceDefaults\TacticusPlanner.ServiceDefaults.csproj" />

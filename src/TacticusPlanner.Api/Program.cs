@@ -2,9 +2,14 @@ using FastEndpoints;
 using FastEndpoints.OpenApi;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using TacticusPlanner.Api.Features;
+using TacticusPlanner.Api.Features.TacticusIntegration;
+using TacticusPlanner.Api.Http;
+using TacticusPlanner.Api.Persistence.Interceptors;
+using TacticusPlanner.Api.Persistence.Encryption;
 using TacticusPlanner.Api.Persistence;
 using TacticusPlanner.GameCatalog;
 using TacticusPlanner.ServiceDefaults;
@@ -13,9 +18,22 @@ using TacticusPlanner.TacticusApi;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
+builder.Services.AddSingleton(TimeProvider.System);
+builder.Services.AddSingleton<EntityMetadataInterceptor>();
 builder.AddNpgsqlDbContext<PlannerDbContext>("planner-db");
+builder.Services.ConfigureDbContext<PlannerDbContext>((sp, options) =>
+{
+    options.AddInterceptors(sp.GetRequiredService<EntityMetadataInterceptor>());
+});
 
 builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.Configure<ColumnEncryptionOptions>(
+    builder.Configuration.GetSection(ColumnEncryptionOptions.SectionName)
+);
+builder.Services.AddSingleton<IColumnEncryptionService, AesGcmColumnEncryptionService>();
+builder.Services.AddSingleton<IColumnHashService, HmacColumnHashService>();
+builder.Services.AddScoped<TacticusApiKeyValidator>();
 builder.Services.AddGameCatalog();
 builder.Services.AddTacticusApi(builder.Configuration["TacticusApi:BaseUrl"]);
 
@@ -113,7 +131,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapDefaultEndpoints();
-app.MapApiEndpoints();
 
 // Eagerly load + validate the embedded game catalog at startup so bad data fails fast (rather than on the
 // first catalog request).
