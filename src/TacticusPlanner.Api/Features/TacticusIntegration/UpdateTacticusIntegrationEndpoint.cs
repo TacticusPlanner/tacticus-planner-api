@@ -84,7 +84,6 @@ public sealed class UpdateTacticusIntegrationEndpoint
         }
 
         integration.TacticusApiKey = tacticusApiKey;
-        integration.TacticusSourceUpdatedAt = validation.SourceUpdatedAt;
 
         await db.SaveChangesAsync(ct);
 

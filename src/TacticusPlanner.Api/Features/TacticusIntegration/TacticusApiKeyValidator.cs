@@ -20,12 +20,9 @@ public sealed class TacticusApiKeyValidator(ITacticusApi tacticusApi)
                 return null;
             }
 
-            var lastUpdatedOn = response.Metadata?.LastUpdatedOn ?? 0;
-
             return new TacticusApiKeyValidationResult(
                 details.Name,
-                details.PowerLevel,
-                lastUpdatedOn > 0 ? DateTimeOffset.FromUnixTimeSeconds(lastUpdatedOn) : null
+                details.PowerLevel
             );
         }
         catch (ApiException exception) when ((int)exception.StatusCode is 400 or 401 or 403 or 404)
@@ -37,6 +34,5 @@ public sealed class TacticusApiKeyValidator(ITacticusApi tacticusApi)
 
 public sealed record TacticusApiKeyValidationResult(
     string PlayerName,
-    int PowerLevel,
-    DateTimeOffset? SourceUpdatedAt
+    int PowerLevel
 );

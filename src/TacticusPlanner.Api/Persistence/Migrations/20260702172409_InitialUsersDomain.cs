@@ -72,8 +72,6 @@ namespace TacticusPlanner.Api.Persistence.Migrations
                     tacticus_api_key = table.Column<string>(type: "text", nullable: true),
                     tacticus_sync_last_attempted_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     tacticus_sync_last_succeeded_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                    tacticus_sync_last_result_code = table.Column<string>(type: "text", nullable: true),
-                    tacticus_source_updated_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     updated_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
                 },

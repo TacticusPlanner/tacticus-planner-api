@@ -78,7 +78,6 @@ public sealed class SignupEndpoint : Endpoint<SignupRequest, SignupResponse>
                     {
                         Id = profileId,
                         TacticusApiKey = tacticusApiKey,
-                        TacticusSourceUpdatedAt = tacticusValidation?.SourceUpdatedAt,
                     },
             },
         };

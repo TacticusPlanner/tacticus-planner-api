@@ -12,9 +12,5 @@ public class TacticusIntegration : BaseEntity<ProfileId>
 
     public DateTimeOffset? TacticusSyncLastSucceededAt { get; set; }
 
-    public string? TacticusSyncLastResultCode { get; set; }
-
-    public DateTimeOffset? TacticusSourceUpdatedAt { get; set; }
-
     public virtual Profile? Profile { get; set; }
 }

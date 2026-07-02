@@ -17,8 +17,6 @@ public sealed class TacticusIntegrationConfiguration : IEntityTypeConfiguration<
         builder.Property(entity => entity.TacticusApiKey).HasColumnName("tacticus_api_key");
         builder.Property(entity => entity.TacticusSyncLastAttemptedAt).HasColumnName("tacticus_sync_last_attempted_at");
         builder.Property(entity => entity.TacticusSyncLastSucceededAt).HasColumnName("tacticus_sync_last_succeeded_at");
-        builder.Property(entity => entity.TacticusSyncLastResultCode).HasColumnName("tacticus_sync_last_result_code");
-        builder.Property(entity => entity.TacticusSourceUpdatedAt).HasColumnName("tacticus_source_updated_at");
         builder.Property(entity => entity.CreatedAt).HasColumnName("created_at").IsRequired();
         builder.Property(entity => entity.UpdatedAt).HasColumnName("updated_at").IsRequired();
 

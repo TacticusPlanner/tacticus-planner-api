@@ -112,17 +112,9 @@ namespace TacticusPlanner.Api.Persistence.Migrations
                         .HasColumnType("text")
                         .HasColumnName("tacticus_api_key");
 
-                    b.Property<DateTimeOffset?>("TacticusSourceUpdatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("tacticus_source_updated_at");
-
                     b.Property<DateTimeOffset?>("TacticusSyncLastAttemptedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("tacticus_sync_last_attempted_at");
-
-                    b.Property<string>("TacticusSyncLastResultCode")
-                        .HasColumnType("text")
-                        .HasColumnName("tacticus_sync_last_result_code");
 
                     b.Property<DateTimeOffset?>("TacticusSyncLastSucceededAt")
                         .HasColumnType("timestamp with time zone")
