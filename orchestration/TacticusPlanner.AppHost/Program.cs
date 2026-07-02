@@ -17,13 +17,25 @@ var api = builder
 
 var clientAppPath = builder.Configuration["ClientAppPath"]
     ?? "../../../tacticus-planner-apps/apps/web";
+var clientAppFullPath = Path.GetFullPath(clientAppPath, builder.AppHostDirectory);
 var clientWorkspacePath = Path.GetFullPath(
-    Path.Combine(clientAppPath, "..", ".."),
-    builder.AppHostDirectory
+    Path.Combine(clientAppFullPath, "..", "..")
 );
 var webPort = builder.Configuration["WebPort"] is { } configuredWebPort
     ? int.Parse(configuredWebPort, CultureInfo.InvariantCulture)
     : 5173;
+var apiProjectPath = Path.GetFullPath(
+    Path.Combine(
+        builder.AppHostDirectory,
+        "..",
+        "..",
+        "src",
+        "TacticusPlanner.Api",
+        "TacticusPlanner.Api.csproj"
+    )
+);
+var webEnvPath = Path.Combine(clientAppFullPath, ".env.local");
+builder.AddLocalSetupHealthChecks(apiProjectPath, webEnvPath);
 
 var web = builder
     .AddJavaScriptApp("web", clientWorkspacePath)
@@ -35,5 +47,7 @@ var web = builder
     .WithEnvironment("VITE_API_BASE_URL", api.GetEndpoint("http"));
 
 api.WithEnvironment("Cors__AllowedOrigins__0", web.GetEndpoint("http"));
+api.WithHealthCheck(LocalSetupHealthChecks.ApiHealthCheckName);
+web.WithHealthCheck(LocalSetupHealthChecks.WebHealthCheckName);
 
 builder.Build().Run();
