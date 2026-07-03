@@ -3,7 +3,6 @@ using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Persistence;
 using TacticusPlanner.Persistence.Encryption;
-using TacticusPlanner.Persistence.Users;
 using TacticusIntegrationEntity = TacticusPlanner.Persistence.Users.TacticusIntegration;
 
 namespace TacticusPlanner.Api.Features.TacticusIntegration;
