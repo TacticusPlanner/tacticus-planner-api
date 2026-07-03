@@ -1,8 +1,8 @@
 ﻿{
-  version: dev-2026-06-26,
+  version: dev-2026-07-01,
   schemaVersion: 1,
   gameVersion: 1.40,
-  sourceHash: 7bfc8d6f0f1b15ba20fe89318de2c03fda367a586b50338f18eca4c8a4431dde,
+  sourceHash: 129617a410d8bc7414c0d7e2e265e7874dd4f7feae02dff3ffa30ebadae7867b,
   datasets: [
     {
       key: campaign-battles,
@@ -16,7 +16,7 @@
     },
     {
       key: characters,
-      hash: b18a43820805cc051bbfb76c9cbd74f4bc7a580c569e37f355411991573af671,
+      hash: b9ac10dbec72bac9487243da42ebd3cbad9551725bd42eb2a1cd750a088318a9,
       url: /api/v1/game-catalog/characters
     },
     {
