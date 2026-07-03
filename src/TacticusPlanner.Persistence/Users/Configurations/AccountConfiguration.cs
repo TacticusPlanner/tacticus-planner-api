@@ -1,13 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace TacticusPlanner.Api.Persistence.Users.Configurations;
+namespace TacticusPlanner.Persistence.Users.Configurations;
 
 public sealed class AccountConfiguration : IEntityTypeConfiguration<Account>
 {
     public void Configure(EntityTypeBuilder<Account> builder)
     {
-        builder.ToTable("accounts", "identity");
+        builder.ToTable("accounts");
         builder.HasKey(entity => entity.Id);
 
         builder.Property(entity => entity.Id)

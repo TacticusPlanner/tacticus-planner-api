@@ -1,7 +1,7 @@
-using TacticusPlanner.Api.Persistence.Encryption;
-using TacticusPlanner.Api.Persistence.Model;
+using TacticusPlanner.Persistence.Encryption;
+using TacticusPlanner.Persistence.Model;
 
-namespace TacticusPlanner.Api.Persistence.Users;
+namespace TacticusPlanner.Persistence.Users;
 
 public class TacticusIntegration : BaseEntity<ProfileId>
 {

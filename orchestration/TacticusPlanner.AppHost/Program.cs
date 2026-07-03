@@ -13,11 +13,29 @@ var postgres = builder
 
 var plannerDatabase = postgres.AddDatabase("planner-db", "tacticus_planner");
 
+var persistenceProjectPath = Path.GetFullPath(
+    Path.Combine(
+        builder.AppHostDirectory,
+        "..",
+        "..",
+        "src",
+        "TacticusPlanner.Persistence",
+        "TacticusPlanner.Persistence.csproj"
+    )
+);
+
 var api = builder
     .AddProject<Projects.TacticusPlanner_Api>("api")
     .WithReference(plannerDatabase)
     .WaitFor(plannerDatabase)
     .WithHttpHealthCheck("/health/ready");
+
+api.AddEFMigrations(
+    "api-migrations",
+    "TacticusPlanner.Persistence.PlannerDbContext",
+    tool => tool.WithEnvironment("ASPNETCORE_URLS", string.Empty)
+)
+.WithMigrationsProject(persistenceProjectPath);
 
 var clientAppPath = builder.Configuration["ClientAppPath"]
     ?? "../../../tacticus-planner-apps/apps/web";

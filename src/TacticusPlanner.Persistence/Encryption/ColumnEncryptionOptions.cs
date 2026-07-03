@@ -1,4 +1,4 @@
-namespace TacticusPlanner.Api.Persistence.Encryption;
+namespace TacticusPlanner.Persistence.Encryption;
 
 public sealed class ColumnEncryptionOptions
 {

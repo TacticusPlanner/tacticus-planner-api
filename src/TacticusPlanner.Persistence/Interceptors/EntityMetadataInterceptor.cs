@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using TacticusPlanner.Api.Persistence.Model;
+using TacticusPlanner.Persistence.Model;
 
-namespace TacticusPlanner.Api.Persistence.Interceptors;
+namespace TacticusPlanner.Persistence.Interceptors;
 
 public sealed class EntityMetadataInterceptor(TimeProvider timeProvider)
     : SaveChangesInterceptor

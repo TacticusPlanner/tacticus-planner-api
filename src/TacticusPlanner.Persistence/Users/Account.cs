@@ -1,6 +1,6 @@
-using TacticusPlanner.Api.Persistence.Model;
+using TacticusPlanner.Persistence.Model;
 
-namespace TacticusPlanner.Api.Persistence.Users;
+namespace TacticusPlanner.Persistence.Users;
 
 public class Account : BaseEntity<AccountId>
 {

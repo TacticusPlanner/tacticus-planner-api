@@ -1,9 +1,10 @@
 using System.Security.Claims;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
-using TacticusPlanner.Api.Persistence;
-using TacticusPlanner.Api.Persistence.Encryption;
-using TacticusPlanner.Api.Persistence.Users;
+using TacticusPlanner.Persistence;
+using TacticusPlanner.Persistence.Encryption;
+using TacticusPlanner.Persistence.Users;
+using TacticusIntegrationEntity = TacticusPlanner.Persistence.Users.TacticusIntegration;
 
 namespace TacticusPlanner.Api.Features.TacticusIntegration;
 
@@ -75,7 +76,7 @@ public sealed class UpdateTacticusIntegrationEndpoint
         var integration = account.Profile.TacticusIntegration;
         if (integration is null)
         {
-            integration = new Persistence.Users.TacticusIntegration
+            integration = new TacticusIntegrationEntity
             {
                 Id = account.Profile.Id,
             };

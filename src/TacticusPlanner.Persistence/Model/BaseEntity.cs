@@ -1,4 +1,4 @@
-namespace TacticusPlanner.Api.Persistence.Model;
+namespace TacticusPlanner.Persistence.Model;
 
 public interface IGuidValueObject
 {

@@ -168,7 +168,7 @@ dotnet build src/TacticusPlanner.Api -c Release --no-restore
 Create migrations when the persisted model changes:
 
 ```powershell
-dotnet ef migrations add <MigrationName> --project src/TacticusPlanner.Api
+dotnet ef migrations add <MigrationName> --project src/TacticusPlanner.Persistence --startup-project src/TacticusPlanner.Api
 ```
 
 The API applies pending migrations automatically during startup when
@@ -184,20 +184,43 @@ apply migrations automatically.
 }
 ```
 
-Run `dotnet ef database update` from the repository root:
+For local manual execution through Aspire, start the AppHost:
 
 ```powershell
-dotnet ef database update --project src/TacticusPlanner.Api/TacticusPlanner.Api.csproj --startup-project src/TacticusPlanner.Api/TacticusPlanner.Api.csproj
+aspire run --project orchestration/TacticusPlanner.AppHost/TacticusPlanner.AppHost.csproj
 ```
 
-Aspire configures the local PostgreSQL port as `51441` and password as
-`postgres-admin` unless overridden.
+Then open the Aspire Dashboard, find the `api-migrations` resource, and run
+the `Update Database` command from its actions menu. The AppHost registers this
+manual migration resource without running migrations on startup and without
+making the API wait for the migration resource to complete.
+
+You can also invoke the resource command from the CLI:
+
+```powershell
+aspire resource api-migrations update-database --apphost orchestration/TacticusPlanner.AppHost/TacticusPlanner.AppHost.csproj
+```
+
+Aspire configures the local PostgreSQL host port as `51441` and password as
+`postgres-admin` unless overridden. Docker may still show an internal random
+proxy port, but local tools should use `localhost:51441`.
+
+[pgAdmin](https://www.pgadmin.org/) can be used as a GUI for the local
+PostgreSQL instance with the same host, port, username, password, and database.
 
 If the local Aspire PostgreSQL volume already existed before this password was
 configured, PostgreSQL keeps the original password stored in the data volume.
 Either use the password shown in the Aspire dashboard for that existing
 resource, change the database password manually, or reset the local
 `tacticus-planner-postgres-data` Docker volume and let Aspire recreate it.
+
+If `Update Database` fails with an error such as
+`42P07: relation "accounts" already exists`, the local database already has
+tables but does not have matching EF migration history. For this greenfield
+project, reset the local database instead of trying to preserve that partial
+state: use the `api-migrations` resource `Reset Database` command in the
+Aspire Dashboard, or run the `Drop Database` command followed by
+`Update Database`.
 
 ## Container image
 

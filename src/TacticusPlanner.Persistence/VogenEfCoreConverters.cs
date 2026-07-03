@@ -1,7 +1,7 @@
-using TacticusPlanner.Api.Persistence.Users;
+using TacticusPlanner.Persistence.Users;
 using Vogen;
 
-namespace TacticusPlanner.Api.Persistence;
+namespace TacticusPlanner.Persistence;
 
 [EfCoreConverter<AccountId>]
 [EfCoreConverter<ProfileId>]

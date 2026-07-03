@@ -1,13 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace TacticusPlanner.Api.Persistence.Users.Configurations;
+namespace TacticusPlanner.Persistence.Users.Configurations;
 
 public sealed class ProfileConfiguration : IEntityTypeConfiguration<Profile>
 {
     public void Configure(EntityTypeBuilder<Profile> builder)
     {
-        builder.ToTable("profiles", "player");
+        builder.ToTable("profiles");
         builder.HasKey(entity => entity.Id);
 
         builder.Property(entity => entity.Id)

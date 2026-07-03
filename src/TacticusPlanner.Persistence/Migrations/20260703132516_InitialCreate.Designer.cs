@@ -2,18 +2,21 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using TacticusPlanner.Api.Persistence;
+using TacticusPlanner.Persistence;
 
 #nullable disable
 
-namespace TacticusPlanner.Api.Persistence.Migrations
+namespace TacticusPlanner.Persistence.Migrations
 {
     [DbContext(typeof(PlannerDbContext))]
-    partial class PlannerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260703132516_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,7 @@ namespace TacticusPlanner.Api.Persistence.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("TacticusPlanner.Api.Persistence.Users.Account", b =>
+            modelBuilder.Entity("TacticusPlanner.Persistence.Users.Account", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
@@ -51,10 +54,10 @@ namespace TacticusPlanner.Api.Persistence.Migrations
                     b.HasIndex("Issuer", "Subject")
                         .IsUnique();
 
-                    b.ToTable("accounts", "identity");
+                    b.ToTable("accounts", (string)null);
                 });
 
-            modelBuilder.Entity("TacticusPlanner.Api.Persistence.Users.Profile", b =>
+            modelBuilder.Entity("TacticusPlanner.Persistence.Users.Profile", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
@@ -95,10 +98,10 @@ namespace TacticusPlanner.Api.Persistence.Migrations
                         .IsUnique()
                         .HasFilter("tacticus_user_id_hash IS NOT NULL");
 
-                    b.ToTable("profiles", "player");
+                    b.ToTable("profiles", (string)null);
                 });
 
-            modelBuilder.Entity("TacticusPlanner.Api.Persistence.Users.TacticusIntegration", b =>
+            modelBuilder.Entity("TacticusPlanner.Persistence.Users.TacticusIntegration", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
@@ -126,37 +129,37 @@ namespace TacticusPlanner.Api.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("tacticus_integrations", "integration");
+                    b.ToTable("tacticus_integrations", (string)null);
                 });
 
-            modelBuilder.Entity("TacticusPlanner.Api.Persistence.Users.Profile", b =>
+            modelBuilder.Entity("TacticusPlanner.Persistence.Users.Profile", b =>
                 {
-                    b.HasOne("TacticusPlanner.Api.Persistence.Users.Account", "Account")
+                    b.HasOne("TacticusPlanner.Persistence.Users.Account", "Account")
                         .WithOne("Profile")
-                        .HasForeignKey("TacticusPlanner.Api.Persistence.Users.Profile", "AccountId")
+                        .HasForeignKey("TacticusPlanner.Persistence.Users.Profile", "AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Account");
                 });
 
-            modelBuilder.Entity("TacticusPlanner.Api.Persistence.Users.TacticusIntegration", b =>
+            modelBuilder.Entity("TacticusPlanner.Persistence.Users.TacticusIntegration", b =>
                 {
-                    b.HasOne("TacticusPlanner.Api.Persistence.Users.Profile", "Profile")
+                    b.HasOne("TacticusPlanner.Persistence.Users.Profile", "Profile")
                         .WithOne("TacticusIntegration")
-                        .HasForeignKey("TacticusPlanner.Api.Persistence.Users.TacticusIntegration", "Id")
+                        .HasForeignKey("TacticusPlanner.Persistence.Users.TacticusIntegration", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Profile");
                 });
 
-            modelBuilder.Entity("TacticusPlanner.Api.Persistence.Users.Account", b =>
+            modelBuilder.Entity("TacticusPlanner.Persistence.Users.Account", b =>
                 {
                     b.Navigation("Profile");
                 });
 
-            modelBuilder.Entity("TacticusPlanner.Api.Persistence.Users.Profile", b =>
+            modelBuilder.Entity("TacticusPlanner.Persistence.Users.Profile", b =>
                 {
                     b.Navigation("TacticusIntegration");
                 });

@@ -3,28 +3,18 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace TacticusPlanner.Api.Persistence.Migrations
+namespace TacticusPlanner.Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialUsersDomain : Migration
+    public partial class InitialCreate : Migration
     {
         private static readonly string[] AccountIdentityIndexColumns = ["issuer", "subject"];
 
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.EnsureSchema(
-                name: "identity");
-
-            migrationBuilder.EnsureSchema(
-                name: "player");
-
-            migrationBuilder.EnsureSchema(
-                name: "integration");
-
             migrationBuilder.CreateTable(
                 name: "accounts",
-                schema: "identity",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -40,7 +30,6 @@ namespace TacticusPlanner.Api.Persistence.Migrations
 
             migrationBuilder.CreateTable(
                 name: "profiles",
-                schema: "player",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -57,7 +46,6 @@ namespace TacticusPlanner.Api.Persistence.Migrations
                     table.ForeignKey(
                         name: "FK_profiles_accounts_account_id",
                         column: x => x.account_id,
-                        principalSchema: "identity",
                         principalTable: "accounts",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -65,7 +53,6 @@ namespace TacticusPlanner.Api.Persistence.Migrations
 
             migrationBuilder.CreateTable(
                 name: "tacticus_integrations",
-                schema: "integration",
                 columns: table => new
                 {
                     profile_id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -81,7 +68,6 @@ namespace TacticusPlanner.Api.Persistence.Migrations
                     table.ForeignKey(
                         name: "FK_tacticus_integrations_profiles_profile_id",
                         column: x => x.profile_id,
-                        principalSchema: "player",
                         principalTable: "profiles",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
@@ -89,21 +75,18 @@ namespace TacticusPlanner.Api.Persistence.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_accounts_issuer_subject",
-                schema: "identity",
                 table: "accounts",
                 columns: AccountIdentityIndexColumns,
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_profiles_account_id",
-                schema: "player",
                 table: "profiles",
                 column: "account_id",
                 unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_profiles_tacticus_user_id_hash",
-                schema: "player",
                 table: "profiles",
                 column: "tacticus_user_id_hash",
                 unique: true,
@@ -114,16 +97,13 @@ namespace TacticusPlanner.Api.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "tacticus_integrations",
-                schema: "integration");
+                name: "tacticus_integrations");
 
             migrationBuilder.DropTable(
-                name: "profiles",
-                schema: "player");
+                name: "profiles");
 
             migrationBuilder.DropTable(
-                name: "accounts",
-                schema: "identity");
+                name: "accounts");
         }
     }
 }

@@ -1,7 +1,7 @@
-using TacticusPlanner.Api.Persistence.Model;
+using TacticusPlanner.Persistence.Model;
 using Vogen;
 
-namespace TacticusPlanner.Api.Persistence.Users;
+namespace TacticusPlanner.Persistence.Users;
 
 [ValueObject<Guid>]
 public readonly partial struct AccountId : IGuidValueObject;

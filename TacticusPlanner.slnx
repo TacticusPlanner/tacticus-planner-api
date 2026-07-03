@@ -2,6 +2,7 @@
   <Folder Name="/src/">
     <Project Path="src/TacticusPlanner.Api/TacticusPlanner.Api.csproj" />
     <Project Path="src/TacticusPlanner.GameCatalog/TacticusPlanner.GameCatalog.csproj" />
+    <Project Path="src/TacticusPlanner.Persistence/TacticusPlanner.Persistence.csproj" />
     <Project Path="src/TacticusPlanner.TacticusApi/TacticusPlanner.TacticusApi.csproj" />
   </Folder>
   <Folder Name="/orchestration/">

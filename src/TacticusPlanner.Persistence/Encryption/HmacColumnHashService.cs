@@ -1,7 +1,7 @@
 using System.Security.Cryptography;
 using Microsoft.Extensions.Options;
 
-namespace TacticusPlanner.Api.Persistence.Encryption;
+namespace TacticusPlanner.Persistence.Encryption;
 
 public sealed class HmacColumnHashService(IOptions<ColumnEncryptionOptions> options)
     : IColumnHashService

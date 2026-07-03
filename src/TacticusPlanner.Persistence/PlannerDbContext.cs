@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TacticusPlanner.Api.Persistence.Encryption;
-using TacticusPlanner.Api.Persistence.Users;
+using TacticusPlanner.Persistence.Encryption;
+using TacticusPlanner.Persistence.Users;
 
-namespace TacticusPlanner.Api.Persistence;
+namespace TacticusPlanner.Persistence;
 
 public sealed class PlannerDbContext(
     DbContextOptions<PlannerDbContext> options,

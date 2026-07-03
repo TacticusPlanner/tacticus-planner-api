@@ -2,9 +2,10 @@ using System.Security.Claims;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.TacticusIntegration;
-using TacticusPlanner.Api.Persistence;
-using TacticusPlanner.Api.Persistence.Encryption;
-using TacticusPlanner.Api.Persistence.Users;
+using TacticusPlanner.Persistence;
+using TacticusPlanner.Persistence.Encryption;
+using TacticusPlanner.Persistence.Users;
+using TacticusIntegrationEntity = TacticusPlanner.Persistence.Users.TacticusIntegration;
 
 namespace TacticusPlanner.Api.Features.Signup;
 
@@ -74,7 +75,7 @@ public sealed class SignupEndpoint : Endpoint<SignupRequest, SignupResponse>
                 TacticusUserIdHash = columnHash.ComputeHash(tacticusUserId),
                 TacticusIntegration = tacticusApiKey is null
                     ? null
-                    : new Persistence.Users.TacticusIntegration
+                    : new TacticusIntegrationEntity
                     {
                         Id = profileId,
                         TacticusApiKey = tacticusApiKey,
