@@ -165,11 +165,20 @@ dotnet ef migrations add <MigrationName> --project src/TacticusPlanner.Api
 The API applies pending migrations automatically during startup when
 `ASPNETCORE_ENVIRONMENT`/`DOTNET_ENVIRONMENT` is `Staging` or `Production` and
 `Database__ApplyMigrationsOnStartup=true`. Local `Development` runs do not
-apply migrations automatically; apply them explicitly when needed:
+apply migrations automatically.
+
+To apply migrations against a local PostgreSQL database manually, set the
+connection string for the target database and run `dotnet ef database update`
+from the repository root:
 
 ```powershell
-dotnet ef database update --project src/TacticusPlanner.Api
+$env:ConnectionStrings__planner-db = "Host=localhost;Port=5432;Database=tacticus_planner;Username=postgres;Password=<password>"
+dotnet ef database update --project src/TacticusPlanner.Api/TacticusPlanner.Api.csproj --startup-project src/TacticusPlanner.Api/TacticusPlanner.Api.csproj
 ```
+
+When using Aspire, use the PostgreSQL host, port, database, username, and
+password shown for the `planner-db` resource in the Aspire dashboard, then run
+the same `dotnet ef database update` command with that connection string.
 
 ## Container image
 
