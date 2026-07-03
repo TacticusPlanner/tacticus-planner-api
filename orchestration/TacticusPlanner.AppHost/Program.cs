@@ -2,8 +2,9 @@ using System.Globalization;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
+var postgresPassword = builder.AddParameter("postgres-password", "postgres-admin", secret: true);
 var postgres = builder
-    .AddPostgres("postgres")
+    .AddPostgres("postgres", password: postgresPassword)
     .WithPersistentLifetime()
     .WithDataVolume("tacticus-planner-postgres-data");
 

@@ -167,18 +167,29 @@ The API applies pending migrations automatically during startup when
 `Database__ApplyMigrationsOnStartup=true`. Local `Development` runs do not
 apply migrations automatically.
 
-To apply migrations against a local PostgreSQL database manually, set the
-connection string for the target database and run `dotnet ef database update`
-from the repository root:
+`appsettings.Development.json` contains a placeholder local connection string:
+
+```json
+"ConnectionStrings": {
+  "planner-db": "Host=localhost;Port=51441;Username=postgres;Password=postgres-admin;Database=tacticus_planner"
+}
+```
+
+Update the port to match the Aspire `planner-db` endpoint shown in the
+dashboard, then run `dotnet ef database update` from the repository root:
 
 ```powershell
-$env:ConnectionStrings__planner-db = "Host=localhost;Port=5432;Database=tacticus_planner;Username=postgres;Password=<password>"
 dotnet ef database update --project src/TacticusPlanner.Api/TacticusPlanner.Api.csproj --startup-project src/TacticusPlanner.Api/TacticusPlanner.Api.csproj
 ```
 
-When using Aspire, use the PostgreSQL host, port, database, username, and
-password shown for the `planner-db` resource in the Aspire dashboard, then run
-the same `dotnet ef database update` command with that connection string.
+Aspire configures the local PostgreSQL password as `postgres-admin`; the port
+remains assigned by Aspire unless explicitly changed.
+
+If the local Aspire PostgreSQL volume already existed before this password was
+configured, PostgreSQL keeps the original password stored in the data volume.
+Either use the password shown in the Aspire dashboard for that existing
+resource, change the database password manually, or reset the local
+`tacticus-planner-postgres-data` Docker volume and let Aspire recreate it.
 
 ## Container image
 
