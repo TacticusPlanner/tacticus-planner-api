@@ -8,7 +8,10 @@ namespace TacticusPlanner.TacticusApi;
 public interface ITacticusApi
 {
     [Get("/api/v1/player")]
-    Task<PlayerResponse> GetPlayerAsync([Header("X-API-KEY")] string personalApiToken);
+    Task<PlayerResponse> GetPlayerAsync(
+        [Header("X-API-KEY")] string personalApiToken,
+        CancellationToken cancellationToken = default
+    );
 
     [Get("/api/v1/guild")]
     Task<GuildResponse> GetGuildAsync([Header("X-API-KEY")] string guildApiToken);

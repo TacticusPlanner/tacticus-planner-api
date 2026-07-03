@@ -16,10 +16,12 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.ApiDescription.Server" PrivateAssets="all" />
     <PackageReference Include="Scalar.AspNetCore" />
+    <PackageReference Include="Vogen" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\orchestration\TacticusPlanner.ServiceDefaults\TacticusPlanner.ServiceDefaults.csproj" />
     <ProjectReference Include="..\TacticusPlanner.GameCatalog\TacticusPlanner.GameCatalog.csproj" />
+    <ProjectReference Include="..\TacticusPlanner.Persistence\TacticusPlanner.Persistence.csproj" />
     <ProjectReference Include="..\TacticusPlanner.TacticusApi\TacticusPlanner.TacticusApi.csproj" />
   </ItemGroup>
 </Project>

@@ -2,18 +2,40 @@ using System.Globalization;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
+var postgresPort = builder.Configuration["PostgresPort"] is { } configuredPostgresPort
+    ? int.Parse(configuredPostgresPort, CultureInfo.InvariantCulture)
+    : 51441;
+var postgresPassword = builder.AddParameter("postgres-password", "postgres-admin", secret: true);
 var postgres = builder
-    .AddPostgres("postgres")
+    .AddPostgres("postgres", password: postgresPassword, port: postgresPort)
     .WithPersistentLifetime()
     .WithDataVolume("tacticus-planner-postgres-data");
 
 var plannerDatabase = postgres.AddDatabase("planner-db", "tacticus_planner");
+
+var persistenceProjectPath = Path.GetFullPath(
+    Path.Combine(
+        builder.AppHostDirectory,
+        "..",
+        "..",
+        "src",
+        "TacticusPlanner.Persistence",
+        "TacticusPlanner.Persistence.csproj"
+    )
+);
 
 var api = builder
     .AddProject<Projects.TacticusPlanner_Api>("api")
     .WithReference(plannerDatabase)
     .WaitFor(plannerDatabase)
     .WithHttpHealthCheck("/health/ready");
+
+api.AddEFMigrations(
+    "api-migrations",
+    "TacticusPlanner.Persistence.PlannerDbContext",
+    tool => tool.WithEnvironment("ASPNETCORE_URLS", string.Empty)
+)
+.WithMigrationsProject(persistenceProjectPath);
 
 var clientAppPath = builder.Configuration["ClientAppPath"]
     ?? "../../../tacticus-planner-apps/apps/web";
