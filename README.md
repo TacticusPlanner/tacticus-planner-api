@@ -85,6 +85,15 @@ $env:WebPort = "5174"
 dotnet run --project orchestration/TacticusPlanner.AppHost
 ```
 
+The local PostgreSQL resource uses fixed host port `51441` through the
+`PostgresPort` setting in `orchestration/TacticusPlanner.AppHost/appsettings.json`.
+Override it only when that port is already in use:
+
+```powershell
+$env:PostgresPort = "51442"
+dotnet run --project orchestration/TacticusPlanner.AppHost
+```
+
 PostgreSQL uses a persistent container lifetime and a named Docker volume.
 Stopping AppHost leaves the container available for the next run, and the
 database data survives both AppHost and container restarts. Aspire supplies the
@@ -175,15 +184,14 @@ apply migrations automatically.
 }
 ```
 
-Update the port to match the Aspire `planner-db` endpoint shown in the
-dashboard, then run `dotnet ef database update` from the repository root:
+Run `dotnet ef database update` from the repository root:
 
 ```powershell
 dotnet ef database update --project src/TacticusPlanner.Api/TacticusPlanner.Api.csproj --startup-project src/TacticusPlanner.Api/TacticusPlanner.Api.csproj
 ```
 
-Aspire configures the local PostgreSQL password as `postgres-admin`; the port
-remains assigned by Aspire unless explicitly changed.
+Aspire configures the local PostgreSQL port as `51441` and password as
+`postgres-admin` unless overridden.
 
 If the local Aspire PostgreSQL volume already existed before this password was
 configured, PostgreSQL keeps the original password stored in the data volume.

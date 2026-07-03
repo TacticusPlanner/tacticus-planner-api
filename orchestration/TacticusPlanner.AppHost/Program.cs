@@ -2,9 +2,12 @@ using System.Globalization;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
+var postgresPort = builder.Configuration["PostgresPort"] is { } configuredPostgresPort
+    ? int.Parse(configuredPostgresPort, CultureInfo.InvariantCulture)
+    : 51441;
 var postgresPassword = builder.AddParameter("postgres-password", "postgres-admin", secret: true);
 var postgres = builder
-    .AddPostgres("postgres", password: postgresPassword)
+    .AddPostgres("postgres", password: postgresPassword, port: postgresPort)
     .WithPersistentLifetime()
     .WithDataVolume("tacticus-planner-postgres-data");
 
