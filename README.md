@@ -123,8 +123,19 @@ do not commit secrets.
 | `Authentication__Authority` | Microsoft Entra External ID token authority |
 | `Authentication__Audience` | Exact access-token `aud` claim for the API |
 | `Cors__AllowedOrigins__0` | First allowed frontend origin; add more by index |
+| `TacticusApi__BaseUrl` | Base URL of the upstream Tacticus game API used to validate personal API keys |
+| `V1Api__BaseUrl` | Base URL of the legacy V1 planner backend used by V1 profile import |
+| `V1Api__FunctionsKey` | Azure Functions `x-functions-key` for the V1 backend's `LoginUser`/`GetUserData` HTTP triggers (`AuthorizationLevel.Function`); sent as a header on every V1 request when set |
+| `ColumnEncryption__CurrentKeyVersion` | Logical key version used to encrypt new/updated sensitive columns |
+| `ColumnEncryption__Keys__<version>` | Base64/base64url 32-byte AES-256 key for the matching key version |
 | `APPLICATIONINSIGHTS_CONNECTION_STRING` | Enables Azure Monitor telemetry |
 | `OTEL_EXPORTER_OTLP_ENDPOINT` | Sends local telemetry to an OTLP collector |
+
+`appsettings.Development.json` ships a fixed, throwaway `ColumnEncryption` key
+so `dotnet run`/`dotnet test` work locally with no setup. It only ever
+protects data in a local database and must never be reused outside
+`Development`. Staging/production supply their own key(s) via deployment
+configuration (Key Vault-backed), never through a committed `appsettings*.json`.
 
 Use user-secrets for local identity values:
 
@@ -152,10 +163,16 @@ issuer and audience.
 - Interactive API reference in Development: `/docs`
 - Liveness: `/health/live`
 - Readiness, including PostgreSQL: `/health/ready`
-- Authenticated user: `/api/v1/me`
+- Authenticated user (auto-provisions the account/profile on first call): `GET /api/v1/me`
+- Purge the authenticated user's account and all related data: `DELETE /api/v1/me`
+- Save/update the authenticated user's Tacticus integration: `PUT /api/v1/me/tacticus-integration`
+- Import a Tacticus API key/user id from a V1 profile: `POST /api/v1/me/v1-import`
+- Validate a Tacticus API key without persisting it: `POST /api/v1/tacticus-api-key/validate`
 
 Future feature endpoints belong under `/api/v1` and require the delegated
-`access_as_user` scope by default.
+`access_as_user` scope by default. Tacticus API keys, Tacticus user ids, and V1 credentials are never returned to
+the client in full — only masked previews (see `SecretMasker`) or onboarding-completion flags. V1 usernames and
+passwords are used once, in-request, to acquire a V1 access token and are never persisted.
 
 Every API build generates the OpenAPI artifact under `artifacts/openapi`:
 
@@ -240,10 +257,17 @@ dotnet restore src/TacticusPlanner.Api --locked-mode
 dotnet restore orchestration/TacticusPlanner.AppHost
 dotnet format TacticusPlanner.slnx --verify-no-changes --no-restore
 dotnet build TacticusPlanner.slnx -c Release --no-restore
+dotnet test TacticusPlanner.slnx -c Release --no-build
 docker build -f src/TacticusPlanner.Api/Dockerfile -t tacticus-planner-api:local .
 ```
 
-No automated test project is configured in this foundation.
+`tests/TacticusPlanner.Api.Tests` covers the account/Tacticus-integration/V1-import/purge endpoints against an
+EF Core InMemory-backed `PlannerDbContext` and fake Tacticus/V1 clients (no live PostgreSQL or outbound network
+calls required), plus a snapshot test for the public game catalog manifest. Run it with:
+
+```powershell
+dotnet test TacticusPlanner.slnx --no-build
+```
 
 ## Azure staging deployment
 

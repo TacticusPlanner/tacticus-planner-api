@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
+using TacticusPlanner.Api.Http;
 using TacticusPlanner.Persistence;
 using TacticusPlanner.Persistence.Encryption;
 using TacticusIntegrationEntity = TacticusPlanner.Persistence.Users.TacticusIntegration;
@@ -16,6 +17,9 @@ public sealed class UpdateTacticusIntegrationEndpoint
         Summary(summary =>
         {
             summary.Summary = "Updates the authenticated user's Tacticus integration settings.";
+            summary.Description = "The Tacticus API key is only revalidated and updated when a new value is "
+                + "supplied; omit it to change only the Tacticus user id. The user id can be updated or removed "
+                + "independently — set clearTacticusUserId to remove it without touching the stored API key.";
             summary.Response<UpdateTacticusIntegrationResponse>(
                 StatusCodes.Status200OK,
                 "The saved Tacticus integration summary."
@@ -29,22 +33,6 @@ public sealed class UpdateTacticusIntegrationEndpoint
 
     public override async Task HandleAsync(UpdateTacticusIntegrationRequest req, CancellationToken ct)
     {
-        var tacticusApiKey = Normalize(req.TacticusApiKey);
-        if (tacticusApiKey is null)
-        {
-            AddError(request => request.TacticusApiKey, "The Tacticus API key is required.");
-            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
-            return;
-        }
-
-        var validation = await Resolve<TacticusApiKeyValidator>().ValidateAsync(tacticusApiKey, ct);
-        if (validation is null)
-        {
-            AddError(request => request.TacticusApiKey, "The Tacticus API key could not be validated.");
-            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
-            return;
-        }
-
         var issuer = User.FindFirstValue("iss");
         var subject = User.FindFirstValue("sub");
         if (string.IsNullOrWhiteSpace(issuer) || string.IsNullOrWhiteSpace(subject))
@@ -68,31 +56,64 @@ public sealed class UpdateTacticusIntegrationEndpoint
             return;
         }
 
-        var tacticusUserId = Normalize(req.TacticusUserId);
-        account.Profile.TacticusUserId = tacticusUserId;
-        account.Profile.TacticusUserIdHash = Resolve<IColumnHashService>().ComputeHash(tacticusUserId);
-
         var integration = account.Profile.TacticusIntegration;
-        if (integration is null)
-        {
-            integration = new TacticusIntegrationEntity
-            {
-                Id = account.Profile.Id,
-            };
+        var newApiKey = Normalize(req.TacticusApiKey);
 
-            db.TacticusIntegrations.Add(integration);
+        string? playerName = null;
+        int? powerLevel = null;
+
+        if (newApiKey is not null)
+        {
+            var validation = await Resolve<TacticusApiKeyValidator>().ValidateAsync(newApiKey, ct);
+            if (validation is null)
+            {
+                AddError(request => request.TacticusApiKey, "The Tacticus API key could not be validated.");
+                await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+                return;
+            }
+
+            playerName = validation.PlayerName;
+            powerLevel = validation.PowerLevel;
+
+            if (integration is null)
+            {
+                integration = new TacticusIntegrationEntity { Id = account.Profile.Id };
+                db.TacticusIntegrations.Add(integration);
+            }
+
+            var now = Resolve<TimeProvider>().GetUtcNow();
+            integration.TacticusApiKey = newApiKey;
+            integration.TacticusSyncLastAttemptedAt = now;
+            integration.TacticusSyncLastSucceededAt = now;
+        }
+        else if (integration?.TacticusApiKey is null)
+        {
+            AddError(request => request.TacticusApiKey, "The Tacticus API key is required.");
+            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+            return;
         }
 
-        integration.TacticusApiKey = tacticusApiKey;
+        if (req.ClearTacticusUserId)
+        {
+            account.Profile.TacticusUserId = null;
+            account.Profile.TacticusUserIdHash = null;
+        }
+        else if (Normalize(req.TacticusUserId) is { } tacticusUserId)
+        {
+            account.Profile.TacticusUserId = tacticusUserId;
+            account.Profile.TacticusUserIdHash = Resolve<IColumnHashService>().ComputeHash(tacticusUserId);
+        }
 
         await db.SaveChangesAsync(ct);
 
         await Send.OkAsync(new UpdateTacticusIntegrationResponse(
             account.Profile.Id.Value,
-            tacticusUserId is not null,
-            true,
-            validation.PlayerName,
-            validation.PowerLevel
+            account.Profile.TacticusUserId is not null,
+            integration?.TacticusApiKey is not null,
+            playerName,
+            powerLevel,
+            SecretMasker.Mask(integration?.TacticusApiKey),
+            SecretMasker.Mask(account.Profile.TacticusUserId)
         ), ct);
     }
 
@@ -103,14 +124,17 @@ public sealed class UpdateTacticusIntegrationEndpoint
 }
 
 public sealed record UpdateTacticusIntegrationRequest(
+    string? TacticusApiKey,
     string? TacticusUserId,
-    string? TacticusApiKey
+    bool ClearTacticusUserId = false
 );
 
 public sealed record UpdateTacticusIntegrationResponse(
     Guid ProfileId,
     bool TacticusUserIdConfigured,
     bool TacticusApiKeyConfigured,
-    string PlayerName,
-    int PowerLevel
+    string? PlayerName,
+    int? PowerLevel,
+    string? TacticusApiKeyMasked,
+    string? TacticusUserIdMasked
 );

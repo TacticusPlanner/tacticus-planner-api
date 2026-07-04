@@ -28,6 +28,7 @@ public sealed class GameCatalogApiFactory : WebApplicationFactory<Program>
                 ["Authentication:Authority"] = "https://example.ciamlogin.com/example.onmicrosoft.com/v2.0",
                 ["Authentication:Audience"] = "api://tacticus-planner-api-test",
                 ["TacticusApi:BaseUrl"] = "https://api.tacticusgame.com",
+                ["V1Api:BaseUrl"] = "https://tacticus.example.com",
             });
         });
         builder.ConfigureTestServices(services =>
