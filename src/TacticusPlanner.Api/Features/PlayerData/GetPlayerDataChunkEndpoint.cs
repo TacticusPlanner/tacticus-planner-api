@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
 using TacticusPlanner.Api.Http;
 using TacticusPlanner.Persistence;
-using PlayerDataSnapshotEntity = TacticusPlanner.Persistence.Users.PlayerData.PlayerDataSnapshot;
+using TacticusPlanner.Persistence.Users;
 
 namespace TacticusPlanner.Api.Features.PlayerData;
 
@@ -48,20 +48,30 @@ public sealed class GetPlayerDataChunkEndpoint : Endpoint<GetPlayerDataChunkRequ
         }
 
         var db = Resolve<PlannerDbContext>();
-        var snapshot = await db.PlayerDataSnapshots
-            .Include(entity => entity.Profile)
-            .ThenInclude(entity => entity!.Account)
-            .SingleOrDefaultAsync(
-                entity => entity.Profile!.Account!.Issuer == issuer && entity.Profile.Account.Subject == subject,
-                ct);
 
-        if (snapshot is null)
+        // Step 1: project only the hash/metadata columns (AsNoTracking) — never touch any of the ten
+        // jsonb chunk payload columns yet. Includes the entity's own id so a 200 path can re-query by
+        // primary key instead of re-joining through Profile/Account again.
+        var metadata = await db.PlayerDataSnapshots
+            .AsNoTracking()
+            .Where(entity => entity.Profile!.Account!.Issuer == issuer && entity.Profile.Account.Subject == subject)
+            .Select(entity => new
+            {
+                entity.Id,
+                entity.SchemaVersion,
+                entity.ConfigHash,
+                entity.SourceHash,
+                entity.ChunkHashes,
+            })
+            .SingleOrDefaultAsync(ct);
+
+        if (metadata is null)
         {
             await Send.NotFoundAsync(ct);
             return;
         }
 
-        var chunkHash = snapshot.ChunkHashes.GetValueOrDefault(req.Chunk, string.Empty);
+        var chunkHash = metadata.ChunkHashes.GetValueOrDefault(req.Chunk, string.Empty);
         var etag = ETagHelper.CreateEtag(chunkHash);
         if (ETagHelper.TryApplyNotModified(HttpContext, etag))
         {
@@ -69,34 +79,56 @@ public sealed class GetPlayerDataChunkEndpoint : Endpoint<GetPlayerDataChunkRequ
             return;
         }
 
+        // Step 2: only reached when the chunk actually changed — fetch just the one requested jsonb
+        // column via its own projected query, so the other nine never leave the database.
+        var payload = await FetchChunkPayloadAsync(db, metadata.Id, req.Chunk, ct);
+
         HttpContext.Response.Headers.ETag = etag;
         HttpContext.Response.Headers.CacheControl = "private, must-revalidate";
         HttpContext.Response.Headers.Vary = HeaderNames.Authorization;
 
-        var payload = SelectPayload(snapshot, req.Chunk);
         var response = new PlayerDataChunkEnvelope<object>(
-            snapshot.SchemaVersion,
-            snapshot.ConfigHash,
-            snapshot.SourceHash,
+            metadata.SchemaVersion,
+            metadata.ConfigHash,
+            metadata.SourceHash,
             req.Chunk,
             chunkHash,
-            payload);
+            payload!);
 
         await Send.OkAsync(response, ct);
     }
 
-    private static object SelectPayload(PlayerDataSnapshotEntity snapshot, string chunk) => chunk switch
+    private static Task<object?> FetchChunkPayloadAsync(
+        PlannerDbContext db,
+        ProfileId id,
+        string chunk,
+        CancellationToken ct)
     {
-        PlayerDataChunkKeys.PlayerDetails => snapshot.PlayerDetails,
-        PlayerDataChunkKeys.Characters => snapshot.Characters,
-        PlayerDataChunkKeys.Mows => snapshot.Mows,
-        PlayerDataChunkKeys.InventoryUpgrades => snapshot.InventoryUpgrades,
-        PlayerDataChunkKeys.InventoryItems => snapshot.InventoryItems,
-        PlayerDataChunkKeys.Inventory => snapshot.Inventory,
-        PlayerDataChunkKeys.CampaignProgress => snapshot.CampaignProgress,
-        PlayerDataChunkKeys.CampaignEventsProgress => snapshot.CampaignEventsProgress,
-        PlayerDataChunkKeys.GameModeTokens => snapshot.GameModeTokens,
-        PlayerDataChunkKeys.LreProgress => snapshot.LreProgress,
-        _ => throw new ArgumentOutOfRangeException(nameof(chunk), chunk, "Unknown player-data chunk key."),
-    };
+        var snapshots = db.PlayerDataSnapshots.AsNoTracking().Where(entity => entity.Id == id);
+
+        return chunk switch
+        {
+            PlayerDataChunkKeys.PlayerDetails =>
+                snapshots.Select(entity => (object?)entity.PlayerDetails).SingleOrDefaultAsync(ct),
+            PlayerDataChunkKeys.Characters =>
+                snapshots.Select(entity => (object?)entity.Characters).SingleOrDefaultAsync(ct),
+            PlayerDataChunkKeys.Mows =>
+                snapshots.Select(entity => (object?)entity.Mows).SingleOrDefaultAsync(ct),
+            PlayerDataChunkKeys.InventoryUpgrades =>
+                snapshots.Select(entity => (object?)entity.InventoryUpgrades).SingleOrDefaultAsync(ct),
+            PlayerDataChunkKeys.InventoryItems =>
+                snapshots.Select(entity => (object?)entity.InventoryItems).SingleOrDefaultAsync(ct),
+            PlayerDataChunkKeys.Inventory =>
+                snapshots.Select(entity => (object?)entity.Inventory).SingleOrDefaultAsync(ct),
+            PlayerDataChunkKeys.CampaignProgress =>
+                snapshots.Select(entity => (object?)entity.CampaignProgress).SingleOrDefaultAsync(ct),
+            PlayerDataChunkKeys.CampaignEventsProgress =>
+                snapshots.Select(entity => (object?)entity.CampaignEventsProgress).SingleOrDefaultAsync(ct),
+            PlayerDataChunkKeys.LiveProgress =>
+                snapshots.Select(entity => (object?)entity.LiveProgress).SingleOrDefaultAsync(ct),
+            PlayerDataChunkKeys.LreProgress =>
+                snapshots.Select(entity => (object?)entity.LreProgress).SingleOrDefaultAsync(ct),
+            _ => throw new ArgumentOutOfRangeException(nameof(chunk), chunk, "Unknown player-data chunk key."),
+        };
+    }
 }

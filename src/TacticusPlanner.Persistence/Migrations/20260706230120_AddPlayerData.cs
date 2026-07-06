@@ -20,8 +20,7 @@ namespace TacticusPlanner.Persistence.Migrations
                     created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     updated_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     battle_result_overrides = table.Column<string>(type: "jsonb", nullable: true),
-                    campaign_progress_overrides = table.Column<string>(type: "jsonb", nullable: true),
-                    lre_overrides = table.Column<string>(type: "jsonb", nullable: true)
+                    campaign_progress_overrides = table.Column<string>(type: "jsonb", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -51,10 +50,10 @@ namespace TacticusPlanner.Persistence.Migrations
                     campaign_events_progress = table.Column<string>(type: "jsonb", nullable: true),
                     campaign_progress = table.Column<string>(type: "jsonb", nullable: true),
                     characters = table.Column<string>(type: "jsonb", nullable: true),
-                    game_mode_tokens = table.Column<string>(type: "jsonb", nullable: false),
                     inventory = table.Column<string>(type: "jsonb", nullable: false),
                     inventory_items = table.Column<string>(type: "jsonb", nullable: true),
                     inventory_upgrades = table.Column<string>(type: "jsonb", nullable: true),
+                    live_progress = table.Column<string>(type: "jsonb", nullable: false),
                     lre_progress = table.Column<string>(type: "jsonb", nullable: true),
                     mows = table.Column<string>(type: "jsonb", nullable: true),
                     player_details = table.Column<string>(type: "jsonb", nullable: false)

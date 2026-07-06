@@ -18,7 +18,9 @@ public static class PlayerDataChunkKeys
     public const string Inventory = "inventory";
     public const string CampaignProgress = "campaign-progress";
     public const string CampaignEventsProgress = "campaign-events-progress";
-    public const string GameModeTokens = "game-mode-tokens";
+    // Battle attempts, the active campaign-event id, and game-mode tokens — the often-changing data,
+    // kept in its own chunk so it can be re-synced independently of the much less volatile chunks above.
+    public const string LiveProgress = "live-progress";
     public const string LreProgress = "lre-progress";
 
     /// <summary>The full set of chunk keys the manifest advertises, in served order.</summary>
@@ -32,7 +34,7 @@ public static class PlayerDataChunkKeys
         Inventory,
         CampaignProgress,
         CampaignEventsProgress,
-        GameModeTokens,
+        LiveProgress,
         LreProgress,
     ];
 }

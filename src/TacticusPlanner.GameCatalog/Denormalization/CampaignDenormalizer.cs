@@ -31,7 +31,7 @@ internal static partial class GameCatalogDenormalizer
                 group.Faction,
                 group.ReleaseType,
                 group.CoreCharacters,
-                group.Difficulties,
+                group.Types,
                 group.Battles.Select(battle => battle.Id).ToArray()))
             .ToArray();
 
@@ -54,7 +54,8 @@ internal static partial class GameCatalogDenormalizer
         return new GameCatalogCampaignBattleView(
             battle.Id,
             campaignGroupId,
-            battle.Difficulty,
+            battle.Type,
+            battle.Challenge,
             battle.EnergyCost,
             battle.NodeNumber,
             battle.Slots,

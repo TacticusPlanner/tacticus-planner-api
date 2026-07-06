@@ -7,14 +7,12 @@
     "thousTerminator",
     "thousInfernalMaster"
   ],
-  "difficulties": [
-    "mirror",
-    "elite"
+  "types": [
+    "Mirror"
   ],
   "battles": [
     {
       "id": "SHM01",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 1,
       "slots": 3,
@@ -58,11 +56,12 @@
           "stars": 1,
           "rank": "Stone3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM02",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 2,
       "slots": 3,
@@ -106,11 +105,12 @@
           "stars": 1,
           "rank": "Stone3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM03",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 3,
       "slots": 3,
@@ -154,11 +154,12 @@
           "stars": 1,
           "rank": "Stone3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM04",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 4,
       "slots": 3,
@@ -202,11 +203,12 @@
           "stars": 1,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM05",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 5,
       "slots": 3,
@@ -250,11 +252,12 @@
           "stars": 1,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM06",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 6,
       "slots": 3,
@@ -310,11 +313,12 @@
           "stars": 1,
           "rank": "Stone3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM07",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 7,
       "slots": 3,
@@ -358,11 +362,12 @@
           "stars": 1,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM08",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 8,
       "slots": 3,
@@ -418,11 +423,12 @@
           "stars": 1,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM09",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 9,
       "slots": 3,
@@ -478,11 +484,12 @@
           "stars": 1,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM10",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 10,
       "slots": 3,
@@ -526,11 +533,12 @@
           "stars": 1,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM11",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 11,
       "slots": 3,
@@ -586,11 +594,12 @@
           "stars": 1,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM12",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 12,
       "slots": 3,
@@ -634,11 +643,12 @@
           "stars": 2,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM13",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 13,
       "slots": 3,
@@ -694,11 +704,12 @@
           "stars": 0,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM14",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 14,
       "slots": 3,
@@ -754,11 +765,12 @@
           "stars": 1,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM15",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 15,
       "slots": 3,
@@ -826,11 +838,12 @@
           "stars": 0,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM16",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 16,
       "slots": 3,
@@ -886,11 +899,12 @@
           "stars": 1,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM17",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 17,
       "slots": 5,
@@ -946,11 +960,12 @@
           "stars": 1,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM18",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 18,
       "slots": 4,
@@ -1018,11 +1033,12 @@
           "stars": 1,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM19",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 19,
       "slots": 4,
@@ -1078,11 +1094,12 @@
           "stars": 1,
           "rank": "Stone3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM20",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 20,
       "slots": 4,
@@ -1138,11 +1155,12 @@
           "stars": 2,
           "rank": "Iron2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM21",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 21,
       "slots": 4,
@@ -1210,11 +1228,12 @@
           "stars": 2,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM22",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 22,
       "slots": 4,
@@ -1282,11 +1301,12 @@
           "stars": 2,
           "rank": "Iron2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM23",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 23,
       "slots": 4,
@@ -1342,11 +1362,12 @@
           "stars": 2,
           "rank": "Iron2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM24",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 24,
       "slots": 4,
@@ -1402,11 +1423,12 @@
           "stars": 2,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM25",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 25,
       "slots": 3,
@@ -1474,11 +1496,12 @@
           "stars": 2,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM26",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 26,
       "slots": 5,
@@ -1534,11 +1557,12 @@
           "stars": 2,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM27",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 27,
       "slots": 5,
@@ -1606,11 +1630,12 @@
           "stars": 2,
           "rank": "Iron2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM28",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 28,
       "slots": 4,
@@ -1678,11 +1703,12 @@
           "stars": 2,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM29",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 29,
       "slots": 5,
@@ -1750,11 +1776,12 @@
           "stars": 2,
           "rank": "Iron2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM30",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 30,
       "slots": 5,
@@ -1834,11 +1861,12 @@
           "stars": 2,
           "rank": "Iron2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM31",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 31,
       "slots": 4,
@@ -1882,11 +1910,12 @@
           "stars": 2,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM32",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 32,
       "slots": 5,
@@ -1954,11 +1983,12 @@
           "stars": 2,
           "rank": "Iron2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM33",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 33,
       "slots": 5,
@@ -2026,11 +2056,12 @@
           "stars": 2,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM34",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 34,
       "slots": 5,
@@ -2074,11 +2105,12 @@
           "stars": 2,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM35",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 35,
       "slots": 5,
@@ -2134,11 +2166,12 @@
           "stars": 2,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM36",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 36,
       "slots": 4,
@@ -2206,11 +2239,12 @@
           "stars": 2,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM37",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 37,
       "slots": 3,
@@ -2266,11 +2300,12 @@
           "stars": 4,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM38",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 38,
       "slots": 5,
@@ -2326,11 +2361,12 @@
           "stars": 4,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM39",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 39,
       "slots": 4,
@@ -2374,11 +2410,12 @@
           "stars": 6,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM40",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 40,
       "slots": 4,
@@ -2422,11 +2459,12 @@
           "stars": 4,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM41",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 41,
       "slots": 5,
@@ -2494,11 +2532,12 @@
           "stars": 4,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM42",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 42,
       "slots": 5,
@@ -2554,11 +2593,12 @@
           "stars": 6,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM43",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 43,
       "slots": 5,
@@ -2626,11 +2666,12 @@
           "stars": 6,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM44",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 44,
       "slots": 5,
@@ -2698,11 +2739,12 @@
           "stars": 4,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM45",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 45,
       "slots": 5,
@@ -2782,11 +2824,12 @@
           "stars": 2,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM46",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 46,
       "slots": 5,
@@ -2854,11 +2897,12 @@
           "stars": 6,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM47",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 47,
       "slots": 4,
@@ -2952,11 +2996,12 @@
           "stars": 4,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM48",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 48,
       "slots": 4,
@@ -3050,11 +3095,12 @@
           "stars": 3,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM49",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 49,
       "slots": 3,
@@ -3110,11 +3156,12 @@
           "stars": 7,
           "rank": "Silver1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM50",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 50,
       "slots": 3,
@@ -3170,11 +3217,12 @@
           "stars": 6,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM51",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 51,
       "slots": 3,
@@ -3218,11 +3266,12 @@
           "stars": 4,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM52",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 52,
       "slots": 4,
@@ -3278,11 +3327,12 @@
           "stars": 3,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM53",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 53,
       "slots": 5,
@@ -3350,11 +3400,12 @@
           "stars": 6,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM54",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 54,
       "slots": 3,
@@ -3398,11 +3449,12 @@
           "stars": 6,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM55",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 55,
       "slots": 3,
@@ -3470,11 +3522,12 @@
           "stars": 6,
           "rank": "Bronze2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM56",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 56,
       "slots": 4,
@@ -3530,11 +3583,12 @@
           "stars": 6,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM57",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 57,
       "slots": 4,
@@ -3590,11 +3644,12 @@
           "stars": 5,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM58",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 58,
       "slots": 5,
@@ -3662,11 +3717,12 @@
           "stars": 6,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM59",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 59,
       "slots": 5,
@@ -3710,11 +3766,12 @@
           "stars": 5,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM60",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 60,
       "slots": 5,
@@ -3794,11 +3851,12 @@
           "stars": 3,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM61",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 61,
       "slots": 5,
@@ -3854,11 +3912,12 @@
           "stars": 6,
           "rank": "Bronze2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM62",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 62,
       "slots": 5,
@@ -3926,11 +3985,12 @@
           "stars": 7,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM63",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 63,
       "slots": 4,
@@ -3986,11 +4046,12 @@
           "stars": 5,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM64",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 64,
       "slots": 4,
@@ -4058,11 +4119,12 @@
           "stars": 5,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM65",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 65,
       "slots": 5,
@@ -4118,11 +4180,12 @@
           "stars": 5,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM66",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 66,
       "slots": 4,
@@ -4166,11 +4229,12 @@
           "stars": 9,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM67",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 67,
       "slots": 3,
@@ -4226,11 +4290,12 @@
           "stars": 7,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM68",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 68,
       "slots": 5,
@@ -4274,11 +4339,12 @@
           "stars": 5,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM69",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 69,
       "slots": 5,
@@ -4334,11 +4400,12 @@
           "stars": 7,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM70",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 70,
       "slots": 5,
@@ -4382,11 +4449,12 @@
           "stars": 9,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM71",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 71,
       "slots": 5,
@@ -4454,11 +4522,12 @@
           "stars": 5,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM72",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 72,
       "slots": 5,
@@ -4526,11 +4595,12 @@
           "stars": 9,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM73",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 73,
       "slots": 5,
@@ -4586,11 +4656,12 @@
           "stars": 9,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM74",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 74,
       "slots": 5,
@@ -4658,11 +4729,12 @@
           "stars": 9,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "SHM75",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 75,
       "slots": 5,
@@ -4742,2876 +4814,9 @@
           "stars": 5,
           "rank": "Bronze3"
         }
-      ]
-    },
-    {
-      "id": "SHME01",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 1,
-      "slots": 3,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 93,
-            "max": 160
-          },
-          {
-            "id": "upgArmC004",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmC004",
-            "chanceId": "upgradeCommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 14778,
-      "enemiesAlliances": [
-        "Xenos"
       ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 6,
-      "enemiesTypes": [
-        "Guardian",
-        "Warlock"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian:15",
-          "count": 4
-        },
-        {
-          "id": "eldarNpc2Warlock:13",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 4,
-          "stars": 7,
-          "rank": "Silver1"
-        },
-        {
-          "id": "eldarNpc2Warlock",
-          "name": "Warlock",
-          "count": 2,
-          "stars": 7,
-          "rank": "Bronze3"
-        }
-      ]
-    },
-    {
-      "id": "SHME02",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 2,
-      "slots": 3,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 93,
-            "max": 160
-          },
-          {
-            "id": "upgHpR029",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpR029",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 16755,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 7,
-      "enemiesTypes": [
-        "Guardian",
-        "Harlequin Player"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian:13",
-          "count": 3
-        },
-        {
-          "id": "eldarNpc3Harlequin:14",
-          "count": 4
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 3,
-          "stars": 7,
-          "rank": "Bronze3"
-        },
-        {
-          "id": "eldarNpc3Harlequin",
-          "name": "Harlequin Player",
-          "count": 4,
-          "stars": 9,
-          "rank": "Bronze3"
-        }
-      ]
-    },
-    {
-      "id": "SHME03",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 3,
-      "slots": 4,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 93,
-            "max": 160
-          },
-          {
-            "id": "upgDmgR029",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgR029",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 23218,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 8,
-      "enemiesTypes": [
-        "Guardian",
-        "Warlock"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian:15",
-          "count": 6
-        },
-        {
-          "id": "eldarNpc2Warlock:15",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 6,
-          "stars": 7,
-          "rank": "Silver1"
-        },
-        {
-          "id": "eldarNpc2Warlock",
-          "name": "Warlock",
-          "count": 2,
-          "stars": 7,
-          "rank": "Silver1"
-        }
-      ]
-    },
-    {
-      "id": "SHME04",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 4,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 93,
-            "max": 160
-          },
-          {
-            "id": "upgArmR029",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmR029",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 31311,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 10,
-      "enemiesTypes": [
-        "Guardian",
-        "Harlequin Player",
-        "Warlock",
-        "Wraithguard"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian:14",
-          "count": 4
-        },
-        {
-          "id": "eldarNpc2Warlock:14",
-          "count": 2
-        },
-        {
-          "id": "eldarNpc3Harlequin:13",
-          "count": 3
-        },
-        {
-          "id": "eldarNpc4Wraithguard:16",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 4,
-          "stars": 9,
-          "rank": "Bronze3"
-        },
-        {
-          "id": "eldarNpc2Warlock",
-          "name": "Warlock",
-          "count": 2,
-          "stars": 9,
-          "rank": "Bronze3"
-        },
-        {
-          "id": "eldarNpc3Harlequin",
-          "name": "Harlequin Player",
-          "count": 3,
-          "stars": 7,
-          "rank": "Bronze3"
-        },
-        {
-          "id": "eldarNpc4Wraithguard",
-          "name": "Wraithguard",
-          "count": 1,
-          "stars": 9,
-          "rank": "Silver1"
-        }
-      ]
-    },
-    {
-      "id": "SHME05",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 5,
-      "slots": 4,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 93,
-            "max": 160
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgE010",
-            "chanceId": "upgradeEpic_elite"
-          }
-        ]
-      },
-      "enemyPower": 26357,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 5,
-      "enemiesTypes": [
-        "Guardian",
-        "Harlequin Player"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian:18",
-          "count": 3
-        },
-        {
-          "id": "eldarNpc3Harlequin:16",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 3,
-          "stars": 9,
-          "rank": "Silver2"
-        },
-        {
-          "id": "eldarNpc3Harlequin",
-          "name": "Harlequin Player",
-          "count": 2,
-          "stars": 9,
-          "rank": "Silver1"
-        }
-      ]
-    },
-    {
-      "id": "SHME06",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 6,
-      "slots": 4,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 93,
-            "max": 160
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpL109",
-            "chanceId": "upgradeLegendary_elite"
-          }
-        ]
-      },
-      "enemyPower": 28671,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 7,
-      "enemiesTypes": [
-        "Guardian",
-        "Wraithguard"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian:15",
-          "count": 5
-        },
-        {
-          "id": "eldarNpc4Wraithguard:16",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 5,
-          "stars": 7,
-          "rank": "Silver1"
-        },
-        {
-          "id": "eldarNpc4Wraithguard",
-          "name": "Wraithguard",
-          "count": 2,
-          "stars": 9,
-          "rank": "Silver1"
-        }
-      ]
-    },
-    {
-      "id": "SHME07",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 7,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 93,
-            "max": 160
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmL204",
-            "chanceId": "upgradeLegendary_elite"
-          }
-        ]
-      },
-      "enemyPower": 35088,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 9,
-      "enemiesTypes": [
-        "Guardian",
-        "Harlequin Player",
-        "Warlock"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian:16",
-          "count": 2
-        },
-        {
-          "id": "eldarNpc2Warlock:15",
-          "count": 3
-        },
-        {
-          "id": "eldarNpc3Harlequin:14",
-          "count": 4
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 2,
-          "stars": 9,
-          "rank": "Silver1"
-        },
-        {
-          "id": "eldarNpc2Warlock",
-          "name": "Warlock",
-          "count": 3,
-          "stars": 7,
-          "rank": "Silver1"
-        },
-        {
-          "id": "eldarNpc3Harlequin",
-          "name": "Harlequin Player",
-          "count": 4,
-          "stars": 9,
-          "rank": "Bronze3"
-        }
-      ]
-    },
-    {
-      "id": "SHME08",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 8,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 93,
-            "max": 160
-          },
-          {
-            "id": "shards_eldarRanger",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "shards_eldarRanger",
-            "chanceId": "shard_elite"
-          }
-        ]
-      },
-      "enemyPower": 37310,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 12,
-      "enemiesTypes": [
-        "Calandis",
-        "Guardian",
-        "Harlequin Player",
-        "Warlock",
-        "Wraithguard"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarBossRangerCamp:1",
-          "count": 1
-        },
-        {
-          "id": "eldarNpc1Guardian:13",
-          "count": 6
-        },
-        {
-          "id": "eldarNpc2Warlock:14",
-          "count": 2
-        },
-        {
-          "id": "eldarNpc3Harlequin:11",
-          "count": 2
-        },
-        {
-          "id": "eldarNpc4Wraithguard:16",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarBossRangerCamp",
-          "name": "Calandis",
-          "count": 1,
-          "stars": 8,
-          "rank": "Silver1"
-        },
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 6,
-          "stars": 7,
-          "rank": "Bronze3"
-        },
-        {
-          "id": "eldarNpc2Warlock",
-          "name": "Warlock",
-          "count": 2,
-          "stars": 9,
-          "rank": "Bronze3"
-        },
-        {
-          "id": "eldarNpc3Harlequin",
-          "name": "Harlequin Player",
-          "count": 2,
-          "stars": 6,
-          "rank": "Bronze2"
-        },
-        {
-          "id": "eldarNpc4Wraithguard",
-          "name": "Wraithguard",
-          "count": 1,
-          "stars": 9,
-          "rank": "Silver1"
-        }
-      ]
-    },
-    {
-      "id": "SHME09",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 9,
-      "slots": 4,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          },
-          {
-            "id": "upgDmgC014",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgC014",
-            "chanceId": "upgradeCommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 30345,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 7,
-      "enemiesTypes": [
-        "Harlequin Player"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc3Harlequin:15",
-          "count": 7
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc3Harlequin",
-          "name": "Harlequin Player",
-          "count": 7,
-          "stars": 7,
-          "rank": "Silver1"
-        }
-      ]
-    },
-    {
-      "id": "SHME10",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 10,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          },
-          {
-            "id": "upgDmgC008",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgC008",
-            "chanceId": "upgradeCommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 42313,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 9,
-      "enemiesTypes": [
-        "Guardian",
-        "Warlock",
-        "Wraithguard"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian:16",
-          "count": 5
-        },
-        {
-          "id": "eldarNpc2Warlock:16",
-          "count": 1
-        },
-        {
-          "id": "eldarNpc4Wraithguard:15",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 5,
-          "stars": 9,
-          "rank": "Silver1"
-        },
-        {
-          "id": "eldarNpc2Warlock",
-          "name": "Warlock",
-          "count": 1,
-          "stars": 9,
-          "rank": "Silver1"
-        },
-        {
-          "id": "eldarNpc4Wraithguard",
-          "name": "Wraithguard",
-          "count": 3,
-          "stars": 7,
-          "rank": "Silver1"
-        }
-      ]
-    },
-    {
-      "id": "SHME11",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 11,
-      "slots": 3,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          },
-          {
-            "id": "upgHpR039",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpR039",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 28489,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 7,
-      "enemiesTypes": [
-        "Guardian",
-        "Warlock",
-        "Wraithguard"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian:16",
-          "count": 5
-        },
-        {
-          "id": "eldarNpc2Warlock:16",
-          "count": 1
-        },
-        {
-          "id": "eldarNpc4Wraithguard:15",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 5,
-          "stars": 9,
-          "rank": "Silver1"
-        },
-        {
-          "id": "eldarNpc2Warlock",
-          "name": "Warlock",
-          "count": 1,
-          "stars": 9,
-          "rank": "Silver1"
-        },
-        {
-          "id": "eldarNpc4Wraithguard",
-          "name": "Wraithguard",
-          "count": 1,
-          "stars": 7,
-          "rank": "Silver1"
-        }
-      ]
-    },
-    {
-      "id": "SHME12",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 12,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          },
-          {
-            "id": "upgArmC013",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmC013",
-            "chanceId": "upgradeCommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 48950,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 10,
-      "enemiesTypes": [
-        "Guardian",
-        "Harlequin Player"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian:17",
-          "count": 5
-        },
-        {
-          "id": "eldarNpc3Harlequin:16",
-          "count": 5
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 5,
-          "stars": 8,
-          "rank": "Silver2"
-        },
-        {
-          "id": "eldarNpc3Harlequin",
-          "name": "Harlequin Player",
-          "count": 5,
-          "stars": 9,
-          "rank": "Silver1"
-        }
-      ]
-    },
-    {
-      "id": "SHME13",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 13,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          },
-          {
-            "id": "upgHpR038",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpR038",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 53990,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 8,
-      "enemiesTypes": [
-        "Guardian",
-        "Warlock"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian:18",
-          "count": 6
-        },
-        {
-          "id": "eldarNpc2Warlock:18",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 6,
-          "stars": 9,
-          "rank": "Silver2"
-        },
-        {
-          "id": "eldarNpc2Warlock",
-          "name": "Warlock",
-          "count": 2,
-          "stars": 9,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "SHME14",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 14,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpE015",
-            "chanceId": "upgradeEpic_elite"
-          }
-        ]
-      },
-      "enemyPower": 57141,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 9,
-      "enemiesTypes": [
-        "Guardian",
-        "Harlequin Player",
-        "Warlock",
-        "Wraithguard"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian:16",
-          "count": 1
-        },
-        {
-          "id": "eldarNpc2Warlock:16",
-          "count": 1
-        },
-        {
-          "id": "eldarNpc3Harlequin:16",
-          "count": 6
-        },
-        {
-          "id": "eldarNpc4Wraithguard:17",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 1,
-          "stars": 9,
-          "rank": "Silver1"
-        },
-        {
-          "id": "eldarNpc2Warlock",
-          "name": "Warlock",
-          "count": 1,
-          "stars": 9,
-          "rank": "Silver1"
-        },
-        {
-          "id": "eldarNpc3Harlequin",
-          "name": "Harlequin Player",
-          "count": 6,
-          "stars": 9,
-          "rank": "Silver1"
-        },
-        {
-          "id": "eldarNpc4Wraithguard",
-          "name": "Wraithguard",
-          "count": 1,
-          "stars": 8,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "SHME15",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 15,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgL202",
-            "chanceId": "upgradeLegendary_elite"
-          }
-        ]
-      },
-      "enemyPower": 60398,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 5,
-      "enemiesTypes": [
-        "Harlequin Player",
-        "Warlock"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc2Warlock:19",
-          "count": 2
-        },
-        {
-          "id": "eldarNpc3Harlequin:18",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc2Warlock",
-          "name": "Warlock",
-          "count": 2,
-          "stars": 8,
-          "rank": "Silver3"
-        },
-        {
-          "id": "eldarNpc3Harlequin",
-          "name": "Harlequin Player",
-          "count": 3,
-          "stars": 9,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "SHME16",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 16,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          },
-          {
-            "id": "shards_eldarAutarch",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "shards_eldarAutarch",
-            "chanceId": "shard_elite"
-          }
-        ]
-      },
-      "enemyPower": 62360,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 9,
-      "enemiesTypes": [
-        "Aethana",
-        "Guardian",
-        "Warlock",
-        "Wraithguard"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarBossAutarchCamp:1",
-          "count": 1
-        },
-        {
-          "id": "eldarNpc1Guardian:16",
-          "count": 5
-        },
-        {
-          "id": "eldarNpc2Warlock:17",
-          "count": 1
-        },
-        {
-          "id": "eldarNpc4Wraithguard:16",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarBossAutarchCamp",
-          "name": "Aethana",
-          "count": 1,
-          "stars": 11,
-          "rank": "Silver2"
-        },
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 5,
-          "stars": 9,
-          "rank": "Silver1"
-        },
-        {
-          "id": "eldarNpc2Warlock",
-          "name": "Warlock",
-          "count": 1,
-          "stars": 8,
-          "rank": "Silver2"
-        },
-        {
-          "id": "eldarNpc4Wraithguard",
-          "name": "Wraithguard",
-          "count": 2,
-          "stars": 9,
-          "rank": "Silver1"
-        }
-      ]
-    },
-    {
-      "id": "SHME17",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 17,
-      "slots": 3,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          },
-          {
-            "id": "upgDmgR040",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgR040",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 39709,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 7,
-      "enemiesTypes": [
-        "Guardian",
-        "Harlequin Player"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian:17",
-          "count": 5
-        },
-        {
-          "id": "eldarNpc3Harlequin:18",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 5,
-          "stars": 8,
-          "rank": "Silver2"
-        },
-        {
-          "id": "eldarNpc3Harlequin",
-          "name": "Harlequin Player",
-          "count": 2,
-          "stars": 9,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "SHME18",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 18,
-      "slots": 4,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 123,
-            "max": 180
-          },
-          {
-            "id": "upgDmgR039",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgR039",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 53860,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 8,
-      "enemiesTypes": [
-        "Harlequin Player",
-        "Warlock"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc2Warlock:17",
-          "count": 2
-        },
-        {
-          "id": "eldarNpc3Harlequin:16",
-          "count": 6
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc2Warlock",
-          "name": "Warlock",
-          "count": 2,
-          "stars": 8,
-          "rank": "Silver2"
-        },
-        {
-          "id": "eldarNpc3Harlequin",
-          "name": "Harlequin Player",
-          "count": 6,
-          "stars": 9,
-          "rank": "Silver1"
-        }
-      ]
-    },
-    {
-      "id": "SHME19",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 19,
-      "slots": 4,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 123,
-            "max": 180
-          },
-          {
-            "id": "upgDmgC010",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgC010",
-            "chanceId": "upgradeCommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 61793,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 9,
-      "enemiesTypes": [
-        "Guardian",
-        "Warlock",
-        "Wraithguard"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian:18",
-          "count": 5
-        },
-        {
-          "id": "eldarNpc2Warlock:17",
-          "count": 3
-        },
-        {
-          "id": "eldarNpc4Wraithguard:16",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 5,
-          "stars": 9,
-          "rank": "Silver2"
-        },
-        {
-          "id": "eldarNpc2Warlock",
-          "name": "Warlock",
-          "count": 3,
-          "stars": 8,
-          "rank": "Silver2"
-        },
-        {
-          "id": "eldarNpc4Wraithguard",
-          "name": "Wraithguard",
-          "count": 1,
-          "stars": 9,
-          "rank": "Silver1"
-        }
-      ]
-    },
-    {
-      "id": "SHME20",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 20,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 123,
-            "max": 180
-          },
-          {
-            "id": "upgDmgR038",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgR038",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 81520,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 5,
-      "enemiesTypes": [
-        "Guardian",
-        "Harlequin Player"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian:21",
-          "count": 2
-        },
-        {
-          "id": "eldarNpc3Harlequin:21",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 2,
-          "stars": 10,
-          "rank": "Gold1"
-        },
-        {
-          "id": "eldarNpc3Harlequin",
-          "name": "Harlequin Player",
-          "count": 3,
-          "stars": 10,
-          "rank": "Gold1"
-        }
-      ]
-    },
-    {
-      "id": "SHME21",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 21,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 123,
-            "max": 180
-          },
-          {
-            "id": "upgHpC010",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpC010",
-            "chanceId": "upgradeCommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 89694,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 6,
-      "enemiesTypes": [
-        "Guardian",
-        "Harlequin Player"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian:22",
-          "count": 4
-        },
-        {
-          "id": "eldarNpc3Harlequin:20",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 4,
-          "stars": 11,
-          "rank": "Gold1"
-        },
-        {
-          "id": "eldarNpc3Harlequin",
-          "name": "Harlequin Player",
-          "count": 2,
-          "stars": 10,
-          "rank": "Silver3"
-        }
-      ]
-    },
-    {
-      "id": "SHME22",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 22,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 123,
-            "max": 180
-          },
-          {
-            "id": "upgArmC001",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmC001",
-            "chanceId": "upgradeCommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 93562,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 11,
-      "enemiesTypes": [
-        "Guardian",
-        "Harlequin Player",
-        "Warlock"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian:20",
-          "count": 6
-        },
-        {
-          "id": "eldarNpc2Warlock:17",
-          "count": 2
-        },
-        {
-          "id": "eldarNpc3Harlequin:18",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 6,
-          "stars": 10,
-          "rank": "Silver3"
-        },
-        {
-          "id": "eldarNpc2Warlock",
-          "name": "Warlock",
-          "count": 2,
-          "stars": 8,
-          "rank": "Silver2"
-        },
-        {
-          "id": "eldarNpc3Harlequin",
-          "name": "Harlequin Player",
-          "count": 3,
-          "stars": 9,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "SHME23",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 23,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 123,
-            "max": 180
-          },
-          {
-            "id": "upgArmR039",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmR039",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 103159,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 7,
-      "enemiesTypes": [
-        "Guardian"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian:22",
-          "count": 7
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 7,
-          "stars": 11,
-          "rank": "Gold1"
-        }
-      ]
-    },
-    {
-      "id": "SHME24",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 24,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 123,
-            "max": 180
-          },
-          {
-            "id": "shards_eldarFarseer",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "shards_eldarFarseer",
-            "chanceId": "shard_elite"
-          }
-        ]
-      },
-      "enemyPower": 105262,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 12,
-      "enemiesTypes": [
-        "Eldryon",
-        "Guardian",
-        "Harlequin Player",
-        "Warlock",
-        "Wraithguard"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarBossFarseerCamp:1",
-          "count": 1
-        },
-        {
-          "id": "eldarNpc1Guardian:19",
-          "count": 4
-        },
-        {
-          "id": "eldarNpc2Warlock:17",
-          "count": 2
-        },
-        {
-          "id": "eldarNpc3Harlequin:16",
-          "count": 3
-        },
-        {
-          "id": "eldarNpc4Wraithguard:15",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarBossFarseerCamp",
-          "name": "Eldryon",
-          "count": 1,
-          "stars": 10,
-          "rank": "Silver3"
-        },
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 4,
-          "stars": 8,
-          "rank": "Silver3"
-        },
-        {
-          "id": "eldarNpc2Warlock",
-          "name": "Warlock",
-          "count": 2,
-          "stars": 8,
-          "rank": "Silver2"
-        },
-        {
-          "id": "eldarNpc3Harlequin",
-          "name": "Harlequin Player",
-          "count": 3,
-          "stars": 9,
-          "rank": "Silver1"
-        },
-        {
-          "id": "eldarNpc4Wraithguard",
-          "name": "Wraithguard",
-          "count": 2,
-          "stars": 7,
-          "rank": "Silver1"
-        }
-      ]
-    },
-    {
-      "id": "SHME25",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 25,
-      "slots": 4,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 131,
-            "max": 195
-          },
-          {
-            "id": "upgArmC007",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmC007",
-            "chanceId": "upgradeCommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 89110,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 7,
-      "enemiesTypes": [
-        "Harlequin Player"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc3Harlequin:19",
-          "count": 7
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc3Harlequin",
-          "name": "Harlequin Player",
-          "count": 7,
-          "stars": 8,
-          "rank": "Silver3"
-        }
-      ]
-    },
-    {
-      "id": "SHME26",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 26,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 131,
-            "max": 195
-          },
-          {
-            "id": "upgArmR038",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmR038",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 119318,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 8,
-      "enemiesTypes": [
-        "Guardian",
-        "Warlock"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian:22",
-          "count": 5
-        },
-        {
-          "id": "eldarNpc2Warlock:19",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 5,
-          "stars": 11,
-          "rank": "Gold1"
-        },
-        {
-          "id": "eldarNpc2Warlock",
-          "name": "Warlock",
-          "count": 3,
-          "stars": 8,
-          "rank": "Silver3"
-        }
-      ]
-    },
-    {
-      "id": "SHME27",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 27,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 131,
-            "max": 195
-          },
-          {
-            "id": "upgDmgC003",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgC003",
-            "chanceId": "upgradeCommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 130378,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 10,
-      "enemiesTypes": [
-        "Guardian",
-        "Harlequin Player",
-        "Wraithguard"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian:20",
-          "count": 6
-        },
-        {
-          "id": "eldarNpc3Harlequin:21",
-          "count": 3
-        },
-        {
-          "id": "eldarNpc4Wraithguard:20",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 6,
-          "stars": 10,
-          "rank": "Silver3"
-        },
-        {
-          "id": "eldarNpc3Harlequin",
-          "name": "Harlequin Player",
-          "count": 3,
-          "stars": 10,
-          "rank": "Gold1"
-        },
-        {
-          "id": "eldarNpc4Wraithguard",
-          "name": "Wraithguard",
-          "count": 1,
-          "stars": 10,
-          "rank": "Silver3"
-        }
-      ]
-    },
-    {
-      "id": "SHME28",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 28,
-      "slots": 3,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 131,
-            "max": 195
-          },
-          {
-            "id": "upgArmU001",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmU001",
-            "chanceId": "upgradeUncommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 90390,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 6,
-      "enemiesTypes": [
-        "Guardian",
-        "Harlequin Player",
-        "Warlock"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian:21",
-          "count": 3
-        },
-        {
-          "id": "eldarNpc2Warlock:20",
-          "count": 1
-        },
-        {
-          "id": "eldarNpc3Harlequin:21",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 3,
-          "stars": 10,
-          "rank": "Gold1"
-        },
-        {
-          "id": "eldarNpc2Warlock",
-          "name": "Warlock",
-          "count": 1,
-          "stars": 10,
-          "rank": "Silver3"
-        },
-        {
-          "id": "eldarNpc3Harlequin",
-          "name": "Harlequin Player",
-          "count": 2,
-          "stars": 10,
-          "rank": "Gold1"
-        }
-      ]
-    },
-    {
-      "id": "SHME29",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 29,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 131,
-            "max": 195
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpL119",
-            "chanceId": "upgradeLegendary_elite"
-          }
-        ]
-      },
-      "enemyPower": 145524,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 9,
-      "enemiesTypes": [
-        "Guardian",
-        "Harlequin Player",
-        "Wraithguard"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian:22",
-          "count": 3
-        },
-        {
-          "id": "eldarNpc3Harlequin:20",
-          "count": 5
-        },
-        {
-          "id": "eldarNpc4Wraithguard:20",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 3,
-          "stars": 11,
-          "rank": "Gold1"
-        },
-        {
-          "id": "eldarNpc3Harlequin",
-          "name": "Harlequin Player",
-          "count": 5,
-          "stars": 10,
-          "rank": "Silver3"
-        },
-        {
-          "id": "eldarNpc4Wraithguard",
-          "name": "Wraithguard",
-          "count": 1,
-          "stars": 10,
-          "rank": "Silver3"
-        }
-      ]
-    },
-    {
-      "id": "SHME30",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 30,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 131,
-            "max": 195
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgE011",
-            "chanceId": "upgradeEpic_elite"
-          }
-        ]
-      },
-      "enemyPower": 150625,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 7,
-      "enemiesTypes": [
-        "Guardian",
-        "Harlequin Player"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian:23",
-          "count": 4
-        },
-        {
-          "id": "eldarNpc3Harlequin:22",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 4,
-          "stars": 10,
-          "rank": "Gold2"
-        },
-        {
-          "id": "eldarNpc3Harlequin",
-          "name": "Harlequin Player",
-          "count": 3,
-          "stars": 11,
-          "rank": "Gold1"
-        }
-      ]
-    },
-    {
-      "id": "SHME31",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 31,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 131,
-            "max": 195
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpL118",
-            "chanceId": "upgradeLegendary_elite"
-          }
-        ]
-      },
-      "enemyPower": 168188,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 4,
-      "enemiesTypes": [
-        "Warlock",
-        "Wraithguard"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc2Warlock:21",
-          "count": 1
-        },
-        {
-          "id": "eldarNpc4Wraithguard:22",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc2Warlock",
-          "name": "Warlock",
-          "count": 1,
-          "stars": 10,
-          "rank": "Gold1"
-        },
-        {
-          "id": "eldarNpc4Wraithguard",
-          "name": "Wraithguard",
-          "count": 3,
-          "stars": 11,
-          "rank": "Gold1"
-        }
-      ]
-    },
-    {
-      "id": "SHME32",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 32,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 210
-          },
-          {
-            "id": "shards_eldarJainZar",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "shards_eldarJainZar",
-            "chanceId": "shard_elite"
-          }
-        ]
-      },
-      "enemyPower": 177275,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 11,
-      "enemiesTypes": [
-        "Guardian",
-        "Harlequin Player",
-        "Jain Zar",
-        "Warlock",
-        "Wraithguard"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarBossJainZarCamp:2",
-          "count": 1
-        },
-        {
-          "id": "eldarNpc1Guardian:18",
-          "count": 2
-        },
-        {
-          "id": "eldarNpc2Warlock:19",
-          "count": 2
-        },
-        {
-          "id": "eldarNpc3Harlequin:19",
-          "count": 4
-        },
-        {
-          "id": "eldarNpc4Wraithguard:19",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarBossJainZarCamp",
-          "name": "Jain Zar",
-          "count": 1,
-          "stars": 11,
-          "rank": "Gold1"
-        },
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 2,
-          "stars": 9,
-          "rank": "Silver2"
-        },
-        {
-          "id": "eldarNpc2Warlock",
-          "name": "Warlock",
-          "count": 2,
-          "stars": 8,
-          "rank": "Silver3"
-        },
-        {
-          "id": "eldarNpc3Harlequin",
-          "name": "Harlequin Player",
-          "count": 4,
-          "stars": 8,
-          "rank": "Silver3"
-        },
-        {
-          "id": "eldarNpc4Wraithguard",
-          "name": "Wraithguard",
-          "count": 2,
-          "stars": 8,
-          "rank": "Silver3"
-        }
-      ]
-    },
-    {
-      "id": "SHME33",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 33,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 210
-          },
-          {
-            "id": "upgDmgR003",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgR003",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 179781,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 9,
-      "enemiesTypes": [
-        "Guardian",
-        "Warlock"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian:23",
-          "count": 7
-        },
-        {
-          "id": "eldarNpc2Warlock:22",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 7,
-          "stars": 10,
-          "rank": "Gold2"
-        },
-        {
-          "id": "eldarNpc2Warlock",
-          "name": "Warlock",
-          "count": 2,
-          "stars": 11,
-          "rank": "Gold1"
-        }
-      ]
-    },
-    {
-      "id": "SHME34",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 34,
-      "slots": 4,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 210
-          },
-          {
-            "id": "upgHpR028",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpR028",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 169156,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 6,
-      "enemiesTypes": [
-        "Guardian",
-        "Harlequin Player"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian:24",
-          "count": 4
-        },
-        {
-          "id": "eldarNpc3Harlequin:24",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 4,
-          "stars": 11,
-          "rank": "Gold2"
-        },
-        {
-          "id": "eldarNpc3Harlequin",
-          "name": "Harlequin Player",
-          "count": 2,
-          "stars": 11,
-          "rank": "Gold2"
-        }
-      ]
-    },
-    {
-      "id": "SHME35",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 35,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 210
-          },
-          {
-            "id": "upgDmgR028",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgR028",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 212533,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 9,
-      "enemiesTypes": [
-        "Guardian",
-        "Warlock",
-        "Wraithguard"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian:23",
-          "count": 6
-        },
-        {
-          "id": "eldarNpc2Warlock:22",
-          "count": 2
-        },
-        {
-          "id": "eldarNpc4Wraithguard:22",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 6,
-          "stars": 10,
-          "rank": "Gold2"
-        },
-        {
-          "id": "eldarNpc2Warlock",
-          "name": "Warlock",
-          "count": 2,
-          "stars": 11,
-          "rank": "Gold1"
-        },
-        {
-          "id": "eldarNpc4Wraithguard",
-          "name": "Wraithguard",
-          "count": 1,
-          "stars": 11,
-          "rank": "Gold1"
-        }
-      ]
-    },
-    {
-      "id": "SHME36",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 36,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 210
-          },
-          {
-            "id": "upgArmR028",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmR028",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 230596,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 8,
-      "enemiesTypes": [
-        "Harlequin Player",
-        "Warlock"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc2Warlock:21",
-          "count": 2
-        },
-        {
-          "id": "eldarNpc3Harlequin:22",
-          "count": 6
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc2Warlock",
-          "name": "Warlock",
-          "count": 2,
-          "stars": 10,
-          "rank": "Gold1"
-        },
-        {
-          "id": "eldarNpc3Harlequin",
-          "name": "Harlequin Player",
-          "count": 6,
-          "stars": 11,
-          "rank": "Gold1"
-        }
-      ]
-    },
-    {
-      "id": "SHME37",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 37,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 210
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpL108",
-            "chanceId": "upgradeLegendary_elite"
-          }
-        ]
-      },
-      "enemyPower": 256812,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 6,
-      "enemiesTypes": [
-        "Guardian",
-        "Warlock",
-        "Wraithguard"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian:26",
-          "count": 3
-        },
-        {
-          "id": "eldarNpc2Warlock:21",
-          "count": 1
-        },
-        {
-          "id": "eldarNpc4Wraithguard:24",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 3,
-          "stars": 11,
-          "rank": "Gold3"
-        },
-        {
-          "id": "eldarNpc2Warlock",
-          "name": "Warlock",
-          "count": 1,
-          "stars": 10,
-          "rank": "Gold1"
-        },
-        {
-          "id": "eldarNpc4Wraithguard",
-          "name": "Wraithguard",
-          "count": 2,
-          "stars": 11,
-          "rank": "Gold2"
-        }
-      ]
-    },
-    {
-      "id": "SHME38",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 38,
-      "slots": 3,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 210
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmL204",
-            "chanceId": "upgradeLegendary_elite"
-          }
-        ]
-      },
-      "enemyPower": 168255,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 7,
-      "enemiesTypes": [
-        "Guardian",
-        "Harlequin Player",
-        "Wraithguard"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian:23",
-          "count": 4
-        },
-        {
-          "id": "eldarNpc3Harlequin:22",
-          "count": 2
-        },
-        {
-          "id": "eldarNpc4Wraithguard:22",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 4,
-          "stars": 10,
-          "rank": "Gold2"
-        },
-        {
-          "id": "eldarNpc3Harlequin",
-          "name": "Harlequin Player",
-          "count": 2,
-          "stars": 11,
-          "rank": "Gold1"
-        },
-        {
-          "id": "eldarNpc4Wraithguard",
-          "name": "Wraithguard",
-          "count": 1,
-          "stars": 11,
-          "rank": "Gold1"
-        }
-      ]
-    },
-    {
-      "id": "SHME39",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 39,
-      "slots": 4,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 210
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgL202",
-            "chanceId": "upgradeLegendary_elite"
-          }
-        ]
-      },
-      "enemyPower": 229226,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 10,
-      "enemiesTypes": [
-        "Guardian",
-        "Harlequin Player",
-        "Warlock"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian:22",
-          "count": 4
-        },
-        {
-          "id": "eldarNpc2Warlock:21",
-          "count": 2
-        },
-        {
-          "id": "eldarNpc3Harlequin:22",
-          "count": 4
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 4,
-          "stars": 11,
-          "rank": "Gold1"
-        },
-        {
-          "id": "eldarNpc2Warlock",
-          "name": "Warlock",
-          "count": 2,
-          "stars": 10,
-          "rank": "Gold1"
-        },
-        {
-          "id": "eldarNpc3Harlequin",
-          "name": "Harlequin Player",
-          "count": 4,
-          "stars": 11,
-          "rank": "Gold1"
-        }
-      ]
-    },
-    {
-      "id": "SHME40",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 40,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 225
-          },
-          {
-            "id": "shards_eldarMauganRa",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "shards_eldarMauganRa",
-            "chanceId": "shard_elite"
-          }
-        ]
-      },
-      "enemyPower": 304994,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Aeldari"
-      ],
-      "enemiesTotal": 11,
-      "enemiesTypes": [
-        "Guardian",
-        "Harlequin Player",
-        "Maugan Ra",
-        "Warlock",
-        "Wraithguard"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "eldarBossMauganRaCamp:2",
-          "count": 1
-        },
-        {
-          "id": "eldarNpc1Guardian:22",
-          "count": 4
-        },
-        {
-          "id": "eldarNpc2Warlock:20",
-          "count": 3
-        },
-        {
-          "id": "eldarNpc3Harlequin:21",
-          "count": 2
-        },
-        {
-          "id": "eldarNpc4Wraithguard:22",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "eldarBossMauganRaCamp",
-          "name": "Maugan Ra",
-          "count": 1,
-          "stars": 11,
-          "rank": "Gold3"
-        },
-        {
-          "id": "eldarNpc1Guardian",
-          "name": "Guardian",
-          "count": 4,
-          "stars": 11,
-          "rank": "Gold1"
-        },
-        {
-          "id": "eldarNpc2Warlock",
-          "name": "Warlock",
-          "count": 3,
-          "stars": 10,
-          "rank": "Silver3"
-        },
-        {
-          "id": "eldarNpc3Harlequin",
-          "name": "Harlequin Player",
-          "count": 2,
-          "stars": 10,
-          "rank": "Gold1"
-        },
-        {
-          "id": "eldarNpc4Wraithguard",
-          "name": "Wraithguard",
-          "count": 1,
-          "stars": 11,
-          "rank": "Gold1"
-        }
-      ]
+      "type": "Mirror",
+      "challenge": false
     }
   ]
 }

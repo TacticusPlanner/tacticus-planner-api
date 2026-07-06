@@ -32,8 +32,9 @@ internal sealed class FakeTacticusApi : ITacticusApi
     /// <summary>Catalog campaign group id realigned to the Tacticus API's own id (see ADR 0007 / GameCatalogDatasets).</summary>
     public const string CampaignId = "campaign1";
 
-    /// <summary>A campaign id with no catalog cross-reference (an event id the catalog doesn't map yet).</summary>
-    public const string UnmatchedCampaignId = "eventCampaign1";
+    /// <summary>A campaign-event id — also a real catalog groupId (see GameCatalogDatasets.CampaignBattleGroups'
+    /// remarks: eventCampaign1 -> death-guard-vs-admech).</summary>
+    public const string EventCampaignId = "eventCampaign1";
 
     public Task<PlayerResponse> GetPlayerAsync(string personalApiToken, CancellationToken cancellationToken = default)
     {
@@ -72,9 +73,9 @@ internal sealed class FakeTacticusApi : ITacticusApi
             Battles = [new CampaignLevel { BattleIndex = 0, AttemptsLeft = 3, AttemptsUsed = 0 }],
         };
 
-        var unmatchedCampaign = new CampaignProgress
+        var eventCampaign = new CampaignProgress
         {
-            Id = UnmatchedCampaignId,
+            Id = EventCampaignId,
             Name = string.Empty,
             Type = "Standard",
             Battles = [new CampaignLevel { BattleIndex = 0, AttemptsLeft = 10, AttemptsUsed = 0 }],
@@ -102,7 +103,7 @@ internal sealed class FakeTacticusApi : ITacticusApi
                 },
                 Progress = new Progress
                 {
-                    Campaigns = [campaign, unmatchedCampaign],
+                    Campaigns = [campaign, eventCampaign],
                     LegendaryEvents = [],
                 },
             },

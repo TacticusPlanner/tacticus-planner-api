@@ -41,9 +41,9 @@ public class PlayerDataSnapshot : BaseEntity<ProfileId>, IRevisionedEntity
 
     public PlayerDetailsChunk PlayerDetails { get; set; } = new();
 
-    public List<PlayerUnitRecord> Characters { get; set; } = [];
+    public List<PlayerCharacterRecord> Characters { get; set; } = [];
 
-    public List<PlayerUnitRecord> Mows { get; set; } = [];
+    public List<PlayerMowRecord> Mows { get; set; } = [];
 
     public List<InventoryUpgradeRecord> InventoryUpgrades { get; set; } = [];
 
@@ -58,7 +58,9 @@ public class PlayerDataSnapshot : BaseEntity<ProfileId>, IRevisionedEntity
     /// above (they rotate and are frequently absent from a given player's data).</summary>
     public List<CampaignProgressRecord> CampaignEventsProgress { get; set; } = [];
 
-    public GameModeTokensChunk GameModeTokens { get; set; } = new();
+    /// <summary>Often-changing data (battle attempts, active event id, game-mode tokens) — see
+    /// <see cref="LiveProgressChunk"/>.</summary>
+    public LiveProgressChunk LiveProgress { get; set; } = new();
 
     public List<LreProgressRecord> LreProgress { get; set; } = [];
 

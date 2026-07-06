@@ -7,14 +7,12 @@
     "templAggressor",
     "templAncient"
   ],
-  "difficulties": [
-    "mirror",
-    "elite"
+  "types": [
+    "Mirror"
   ],
   "battles": [
     {
       "id": "OM01",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 1,
       "slots": 3,
@@ -70,11 +68,12 @@
           "stars": 1,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM02",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 2,
       "slots": 3,
@@ -130,11 +129,12 @@
           "stars": 1,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM03",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 3,
       "slots": 3,
@@ -190,11 +190,12 @@
           "stars": 0,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM04",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 4,
       "slots": 3,
@@ -250,11 +251,12 @@
           "stars": 0,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM05",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 5,
       "slots": 3,
@@ -310,11 +312,12 @@
           "stars": 1,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM06",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 6,
       "slots": 3,
@@ -370,11 +373,12 @@
           "stars": 1,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM07",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 7,
       "slots": 3,
@@ -418,11 +422,12 @@
           "stars": 1,
           "rank": "Stone3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM08",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 8,
       "slots": 3,
@@ -478,11 +483,12 @@
           "stars": 1,
           "rank": "Stone3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM09",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 9,
       "slots": 3,
@@ -526,11 +532,12 @@
           "stars": 1,
           "rank": "Stone3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM10",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 10,
       "slots": 3,
@@ -598,11 +605,12 @@
           "stars": 1,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM11",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 11,
       "slots": 4,
@@ -670,11 +678,12 @@
           "stars": 1,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM12",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 12,
       "slots": 4,
@@ -742,11 +751,12 @@
           "stars": 1,
           "rank": "Stone3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM13",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 13,
       "slots": 4,
@@ -790,11 +800,12 @@
           "stars": 1,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM14",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 14,
       "slots": 4,
@@ -850,11 +861,12 @@
           "stars": 1,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM15",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 15,
       "slots": 4,
@@ -922,11 +934,12 @@
           "stars": 1,
           "rank": "Stone3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM16",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 16,
       "slots": 4,
@@ -982,11 +995,12 @@
           "stars": 2,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM17",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 17,
       "slots": 4,
@@ -1054,11 +1068,12 @@
           "stars": 1,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM18",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 18,
       "slots": 4,
@@ -1126,11 +1141,12 @@
           "stars": 1,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM19",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 19,
       "slots": 4,
@@ -1198,11 +1214,12 @@
           "stars": 1,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM20",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 20,
       "slots": 3,
@@ -1270,11 +1287,12 @@
           "stars": 1,
           "rank": "Stone3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM21",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 21,
       "slots": 3,
@@ -1330,11 +1348,12 @@
           "stars": 2,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM22",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 22,
       "slots": 5,
@@ -1390,11 +1409,12 @@
           "stars": 2,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM23",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 23,
       "slots": 5,
@@ -1462,11 +1482,12 @@
           "stars": 2,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM24",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 24,
       "slots": 5,
@@ -1510,11 +1531,12 @@
           "stars": 2,
           "rank": "Iron2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM25",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 25,
       "slots": 5,
@@ -1582,11 +1604,12 @@
           "stars": 2,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM26",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 26,
       "slots": 5,
@@ -1630,11 +1653,12 @@
           "stars": 2,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM27",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 27,
       "slots": 5,
@@ -1702,11 +1726,12 @@
           "stars": 2,
           "rank": "Iron2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM28",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 28,
       "slots": 5,
@@ -1774,11 +1799,12 @@
           "stars": 2,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM29",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 29,
       "slots": 5,
@@ -1846,11 +1872,12 @@
           "stars": 2,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM30",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 30,
       "slots": 5,
@@ -1918,11 +1945,12 @@
           "stars": 2,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM31",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 31,
       "slots": 4,
@@ -1990,11 +2018,12 @@
           "stars": 2,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM32",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 32,
       "slots": 5,
@@ -2062,11 +2091,12 @@
           "stars": 2,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM33",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 33,
       "slots": 5,
@@ -2134,11 +2164,12 @@
           "stars": 4,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM34",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 34,
       "slots": 5,
@@ -2219,11 +2250,12 @@
           "stars": 6,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM35",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 35,
       "slots": 5,
@@ -2267,11 +2299,12 @@
           "stars": 6,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM36",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 36,
       "slots": 5,
@@ -2327,11 +2360,12 @@
           "stars": 6,
           "rank": "Bronze2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM37",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 37,
       "slots": 3,
@@ -2387,11 +2421,12 @@
           "stars": 6,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM38",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 38,
       "slots": 4,
@@ -2447,11 +2482,12 @@
           "stars": 6,
           "rank": "Bronze2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM39",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 39,
       "slots": 5,
@@ -2495,11 +2531,12 @@
           "stars": 6,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM40",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 40,
       "slots": 5,
@@ -2555,11 +2592,12 @@
           "stars": 5,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM41",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 41,
       "slots": 5,
@@ -2627,11 +2665,12 @@
           "stars": 5,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM42",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 42,
       "slots": 5,
@@ -2711,11 +2750,12 @@
           "stars": 6,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM43",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 43,
       "slots": 5,
@@ -2771,11 +2811,12 @@
           "stars": 4,
           "rank": "Bronze2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM44",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 44,
       "slots": 5,
@@ -2819,11 +2860,12 @@
           "stars": 6,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM45",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 45,
       "slots": 5,
@@ -2891,11 +2933,12 @@
           "stars": 4,
           "rank": "Bronze2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM46",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 46,
       "slots": 4,
@@ -2963,11 +3006,12 @@
           "stars": 7,
           "rank": "Bronze2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM47",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 47,
       "slots": 5,
@@ -3035,11 +3079,12 @@
           "stars": 5,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM48",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 48,
       "slots": 5,
@@ -3119,11 +3164,12 @@
           "stars": 6,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM49",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 49,
       "slots": 5,
@@ -3191,11 +3237,12 @@
           "stars": 9,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM50",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 50,
       "slots": 5,
@@ -3263,11 +3310,12 @@
           "stars": 6,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM51",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 51,
       "slots": 5,
@@ -3335,11 +3383,12 @@
           "stars": 7,
           "rank": "Bronze2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM52",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 52,
       "slots": 4,
@@ -3407,11 +3456,12 @@
           "stars": 6,
           "rank": "Bronze2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM53",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 53,
       "slots": 5,
@@ -3504,11 +3554,12 @@
           "stars": 7,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM54",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 54,
       "slots": 5,
@@ -3576,11 +3627,12 @@
           "stars": 6,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM55",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 55,
       "slots": 5,
@@ -3660,11 +3712,12 @@
           "stars": 6,
           "rank": "Bronze2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM56",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 56,
       "slots": 3,
@@ -3708,11 +3761,12 @@
           "stars": 6,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM57",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 57,
       "slots": 4,
@@ -3793,11 +3847,12 @@
           "stars": 7,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM58",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 58,
       "slots": 5,
@@ -3902,11 +3957,12 @@
           "stars": 7,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM59",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 59,
       "slots": 5,
@@ -3974,11 +4030,12 @@
           "stars": 7,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM60",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 60,
       "slots": 5,
@@ -4058,11 +4115,12 @@
           "stars": 7,
           "rank": "Bronze2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM61",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 61,
       "slots": 5,
@@ -4130,11 +4188,12 @@
           "stars": 6,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM62",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 62,
       "slots": 4,
@@ -4202,11 +4261,12 @@
           "stars": 7,
           "rank": "Bronze2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM63",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 63,
       "slots": 3,
@@ -4274,11 +4334,12 @@
           "stars": 7,
           "rank": "Bronze2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM64",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 64,
       "slots": 5,
@@ -4322,11 +4383,12 @@
           "stars": 6,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM65",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 65,
       "slots": 5,
@@ -4419,11 +4481,12 @@
           "stars": 7,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM66",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 66,
       "slots": 5,
@@ -4491,11 +4554,12 @@
           "stars": 7,
           "rank": "Bronze2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM67",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 67,
       "slots": 5,
@@ -4551,11 +4615,12 @@
           "stars": 8,
           "rank": "Silver2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM68",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 68,
       "slots": 5,
@@ -4611,11 +4676,12 @@
           "stars": 7,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM69",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 69,
       "slots": 5,
@@ -4696,11 +4762,12 @@
           "stars": 7,
           "rank": "Silver1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM70",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 70,
       "slots": 5,
@@ -4768,11 +4835,12 @@
           "stars": 9,
           "rank": "Silver2"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM71",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 71,
       "slots": 4,
@@ -4816,11 +4884,12 @@
           "stars": 8,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM72",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 72,
       "slots": 5,
@@ -4888,11 +4957,12 @@
           "stars": 8,
           "rank": "Silver1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM73",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 73,
       "slots": 5,
@@ -4972,11 +5042,12 @@
           "stars": 7,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM74",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 74,
       "slots": 5,
@@ -5044,11 +5115,12 @@
           "stars": 7,
           "rank": "Silver1"
         }
-      ]
+      ],
+      "type": "Mirror",
+      "challenge": false
     },
     {
       "id": "OM75",
-      "difficulty": "mirror",
       "energyCost": 6,
       "nodeNumber": 75,
       "slots": 5,
@@ -5128,3219 +5200,9 @@
           "stars": 7,
           "rank": "Bronze2"
         }
-      ]
-    },
-    {
-      "id": "OME01",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 1,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 93,
-            "max": 160
-          },
-          {
-            "id": "upgArmC002",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmC002",
-            "chanceId": "upgradeCommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 15121,
-      "enemiesAlliances": [
-        "Xenos"
       ],
-      "enemiesFactions": [
-        "Orks"
-      ],
-      "enemiesTotal": 12,
-      "enemiesTypes": [
-        "Grot",
-        "Grot Tank",
-        "Ork Boy",
-        "Stormboy"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksNpc1Grot:18",
-          "count": 3
-        },
-        {
-          "id": "orksNpc2OrkBoy:18",
-          "count": 4
-        },
-        {
-          "id": "orksNpc3GrotTank:17",
-          "count": 2
-        },
-        {
-          "id": "orksNpc6Stormboy:17",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksNpc1Grot",
-          "name": "Grot",
-          "count": 3,
-          "stars": 8,
-          "rank": "Bronze3"
-        },
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 4,
-          "stars": 8,
-          "rank": "Bronze3"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 2,
-          "stars": 7,
-          "rank": "Bronze3"
-        },
-        {
-          "id": "orksNpc6Stormboy",
-          "name": "Stormboy",
-          "count": 3,
-          "stars": 7,
-          "rank": "Bronze3"
-        }
-      ]
-    },
-    {
-      "id": "OME02",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 2,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 93,
-            "max": 160
-          },
-          {
-            "id": "upgHpR021",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpR021",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 17068,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks"
-      ],
-      "enemiesTotal": 11,
-      "enemiesTypes": [
-        "Grot",
-        "Grot Tank",
-        "Ork Boy"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksNpc1Grot:20",
-          "count": 5
-        },
-        {
-          "id": "orksNpc2OrkBoy:20",
-          "count": 4
-        },
-        {
-          "id": "orksNpc3GrotTank:19",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksNpc1Grot",
-          "name": "Grot",
-          "count": 5,
-          "stars": 6,
-          "rank": "Silver1"
-        },
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 4,
-          "stars": 6,
-          "rank": "Silver1"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 2,
-          "stars": 5,
-          "rank": "Silver1"
-        }
-      ]
-    },
-    {
-      "id": "OME03",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 3,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 93,
-            "max": 160
-          },
-          {
-            "id": "upgDmgR021",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgR021",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 21574,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks"
-      ],
-      "enemiesTotal": 11,
-      "enemiesTypes": [
-        "Grot",
-        "Grot Tank",
-        "Ork Boy"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksNpc1Grot:22",
-          "count": 6
-        },
-        {
-          "id": "orksNpc2OrkBoy:20",
-          "count": 2
-        },
-        {
-          "id": "orksNpc3GrotTank:24",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksNpc1Grot",
-          "name": "Grot",
-          "count": 6,
-          "stars": 8,
-          "rank": "Silver1"
-        },
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 2,
-          "stars": 6,
-          "rank": "Silver1"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 3,
-          "stars": 6,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "OME04",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 4,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 93,
-            "max": 160
-          },
-          {
-            "id": "upgArmR021",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmR021",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 24480,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks"
-      ],
-      "enemiesTotal": 9,
-      "enemiesTypes": [
-        "Grot Tank",
-        "Ork Boy",
-        "Stormboy"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksNpc2OrkBoy:20",
-          "count": 4
-        },
-        {
-          "id": "orksNpc3GrotTank:24",
-          "count": 2
-        },
-        {
-          "id": "orksNpc6Stormboy:22",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 4,
-          "stars": 6,
-          "rank": "Silver1"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 2,
-          "stars": 6,
-          "rank": "Silver2"
-        },
-        {
-          "id": "orksNpc6Stormboy",
-          "name": "Stormboy",
-          "count": 3,
-          "stars": 8,
-          "rank": "Silver1"
-        }
-      ]
-    },
-    {
-      "id": "OME05",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 5,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 93,
-            "max": 160
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgE001",
-            "chanceId": "upgradeEpic_elite"
-          }
-        ]
-      },
-      "enemyPower": 25460,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks"
-      ],
-      "enemiesTotal": 10,
-      "enemiesTypes": [
-        "Grot",
-        "Grot Tank",
-        "Ork Boy"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksNpc1Grot:24",
-          "count": 4
-        },
-        {
-          "id": "orksNpc2OrkBoy:22",
-          "count": 3
-        },
-        {
-          "id": "orksNpc3GrotTank:24",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksNpc1Grot",
-          "name": "Grot",
-          "count": 4,
-          "stars": 6,
-          "rank": "Silver2"
-        },
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 3,
-          "stars": 8,
-          "rank": "Silver1"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 3,
-          "stars": 6,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "OME06",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 6,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 93,
-            "max": 160
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpL101",
-            "chanceId": "upgradeLegendary_elite"
-          }
-        ]
-      },
-      "enemyPower": 25674,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks"
-      ],
-      "enemiesTotal": 12,
-      "enemiesTypes": [
-        "Grot",
-        "Grot Tank"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksNpc1Grot:25",
-          "count": 9
-        },
-        {
-          "id": "orksNpc3GrotTank:25",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksNpc1Grot",
-          "name": "Grot",
-          "count": 9,
-          "stars": 7,
-          "rank": "Silver2"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 3,
-          "stars": 7,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "OME07",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 7,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 93,
-            "max": 160
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmL001",
-            "chanceId": "upgradeLegendary_elite"
-          }
-        ]
-      },
-      "enemyPower": 34141,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks"
-      ],
-      "enemiesTotal": 11,
-      "enemiesTypes": [
-        "Grot",
-        "Grot Tank",
-        "Ork Boy"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksNpc1Grot:22",
-          "count": 3
-        },
-        {
-          "id": "orksNpc2OrkBoy:24",
-          "count": 6
-        },
-        {
-          "id": "orksNpc3GrotTank:24",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksNpc1Grot",
-          "name": "Grot",
-          "count": 3,
-          "stars": 8,
-          "rank": "Silver1"
-        },
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 6,
-          "stars": 6,
-          "rank": "Silver2"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 2,
-          "stars": 6,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "OME08",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 8,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 93,
-            "max": 160
-          },
-          {
-            "id": "shards_orksKillaKan",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "shards_orksKillaKan",
-            "chanceId": "shard_elite"
-          }
-        ]
-      },
-      "enemyPower": 42582,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks"
-      ],
-      "enemiesTotal": 11,
-      "enemiesTypes": [
-        "Grot Tank",
-        "Ork Boy",
-        "Snappawrecka",
-        "Stormboy"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksBossKillaKan:4",
-          "count": 1
-        },
-        {
-          "id": "orksNpc2OrkBoy:23",
-          "count": 4
-        },
-        {
-          "id": "orksNpc3GrotTank:23",
-          "count": 3
-        },
-        {
-          "id": "orksNpc6Stormboy:20",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksBossKillaKan",
-          "name": "Snappawrecka",
-          "count": 1,
-          "stars": 7,
-          "rank": "Silver2"
-        },
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 4,
-          "stars": 9,
-          "rank": "Silver1"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 3,
-          "stars": 9,
-          "rank": "Silver1"
-        },
-        {
-          "id": "orksNpc6Stormboy",
-          "name": "Stormboy",
-          "count": 3,
-          "stars": 6,
-          "rank": "Silver1"
-        }
-      ]
-    },
-    {
-      "id": "OME09",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 9,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          },
-          {
-            "id": "upgDmgC011",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgC011",
-            "chanceId": "upgradeCommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 39204,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks"
-      ],
-      "enemiesTotal": 12,
-      "enemiesTypes": [
-        "Grot",
-        "Grot Tank",
-        "Ork Boy"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksNpc1Grot:25",
-          "count": 4
-        },
-        {
-          "id": "orksNpc2OrkBoy:24",
-          "count": 4
-        },
-        {
-          "id": "orksNpc3GrotTank:25",
-          "count": 4
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksNpc1Grot",
-          "name": "Grot",
-          "count": 4,
-          "stars": 7,
-          "rank": "Silver2"
-        },
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 4,
-          "stars": 6,
-          "rank": "Silver2"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 4,
-          "stars": 7,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "OME10",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 10,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          },
-          {
-            "id": "upgHpR033",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpR033",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 45060,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks"
-      ],
-      "enemiesTotal": 12,
-      "enemiesTypes": [
-        "Grot",
-        "Grot Tank",
-        "Ork Boy"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksNpc1Grot:25",
-          "count": 3
-        },
-        {
-          "id": "orksNpc2OrkBoy:25",
-          "count": 6
-        },
-        {
-          "id": "orksNpc3GrotTank:25",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksNpc1Grot",
-          "name": "Grot",
-          "count": 3,
-          "stars": 7,
-          "rank": "Silver2"
-        },
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 6,
-          "stars": 7,
-          "rank": "Silver2"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 3,
-          "stars": 7,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "OME11",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 11,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          },
-          {
-            "id": "upgHpR031",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpR031",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 46674,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks"
-      ],
-      "enemiesTotal": 12,
-      "enemiesTypes": [
-        "Grot",
-        "Grot Tank",
-        "Ork Boy"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksNpc1Grot:26",
-          "count": 3
-        },
-        {
-          "id": "orksNpc2OrkBoy:26",
-          "count": 6
-        },
-        {
-          "id": "orksNpc3GrotTank:25",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksNpc1Grot",
-          "name": "Grot",
-          "count": 3,
-          "stars": 8,
-          "rank": "Silver2"
-        },
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 6,
-          "stars": 8,
-          "rank": "Silver2"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 3,
-          "stars": 7,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "OME12",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 12,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          },
-          {
-            "id": "upgHpR040",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpR040",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 49403,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks"
-      ],
-      "enemiesTotal": 11,
-      "enemiesTypes": [
-        "Grot Tank",
-        "Ork Boy",
-        "Stormboy"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksNpc2OrkBoy:25",
-          "count": 6
-        },
-        {
-          "id": "orksNpc3GrotTank:26",
-          "count": 3
-        },
-        {
-          "id": "orksNpc6Stormboy:25",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 6,
-          "stars": 7,
-          "rank": "Silver2"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 3,
-          "stars": 8,
-          "rank": "Silver2"
-        },
-        {
-          "id": "orksNpc6Stormboy",
-          "name": "Stormboy",
-          "count": 2,
-          "stars": 7,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "OME13",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 13,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          },
-          {
-            "id": "upgHpC016",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpC016",
-            "chanceId": "upgradeCommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 50867,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks"
-      ],
-      "enemiesTotal": 10,
-      "enemiesTypes": [
-        "Grot Tank",
-        "Ork Boy"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksNpc2OrkBoy:27",
-          "count": 7
-        },
-        {
-          "id": "orksNpc3GrotTank:26",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 7,
-          "stars": 9,
-          "rank": "Silver2"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 3,
-          "stars": 8,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "OME14",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 14,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgE011",
-            "chanceId": "upgradeEpic_elite"
-          }
-        ]
-      },
-      "enemyPower": 47530,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks"
-      ],
-      "enemiesTotal": 12,
-      "enemiesTypes": [
-        "Grot",
-        "Grot Tank",
-        "Ork Boy"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksNpc1Grot:25",
-          "count": 4
-        },
-        {
-          "id": "orksNpc2OrkBoy:27",
-          "count": 5
-        },
-        {
-          "id": "orksNpc3GrotTank:27",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksNpc1Grot",
-          "name": "Grot",
-          "count": 4,
-          "stars": 7,
-          "rank": "Silver2"
-        },
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 5,
-          "stars": 9,
-          "rank": "Silver2"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 3,
-          "stars": 9,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "OME15",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 15,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgL003",
-            "chanceId": "upgradeLegendary_elite"
-          }
-        ]
-      },
-      "enemyPower": 59362,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks"
-      ],
-      "enemiesTotal": 12,
-      "enemiesTypes": [
-        "Grot Tank",
-        "Ork Boy",
-        "Stormboy"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksNpc2OrkBoy:27",
-          "count": 7
-        },
-        {
-          "id": "orksNpc3GrotTank:27",
-          "count": 3
-        },
-        {
-          "id": "orksNpc6Stormboy:25",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 7,
-          "stars": 9,
-          "rank": "Silver2"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 3,
-          "stars": 9,
-          "rank": "Silver2"
-        },
-        {
-          "id": "orksNpc6Stormboy",
-          "name": "Stormboy",
-          "count": 2,
-          "stars": 7,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "OME16",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 16,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          },
-          {
-            "id": "shards_orksBigMek",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "shards_orksBigMek",
-            "chanceId": "shard_elite"
-          }
-        ]
-      },
-      "enemyPower": 54333,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks"
-      ],
-      "enemiesTotal": 10,
-      "enemiesTypes": [
-        "Gibbascrapz",
-        "Grot",
-        "Grot Tank",
-        "Ork Boy"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksBossBigMek:5",
-          "count": 1
-        },
-        {
-          "id": "orksNpc1Grot:24",
-          "count": 3
-        },
-        {
-          "id": "orksNpc2OrkBoy:25",
-          "count": 4
-        },
-        {
-          "id": "orksNpc3GrotTank:26",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksBossBigMek",
-          "name": "Gibbascrapz",
-          "count": 1,
-          "stars": 10,
-          "rank": "Silver3"
-        },
-        {
-          "id": "orksNpc1Grot",
-          "name": "Grot",
-          "count": 3,
-          "stars": 6,
-          "rank": "Silver2"
-        },
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 4,
-          "stars": 7,
-          "rank": "Silver2"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 2,
-          "stars": 8,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "OME17",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 17,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          },
-          {
-            "id": "upgDmgR033",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgR033",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 62800,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks"
-      ],
-      "enemiesTotal": 11,
-      "enemiesTypes": [
-        "Grot",
-        "Grot Tank",
-        "Ork Boy"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksNpc1Grot:33",
-          "count": 5
-        },
-        {
-          "id": "orksNpc2OrkBoy:30",
-          "count": 4
-        },
-        {
-          "id": "orksNpc3GrotTank:28",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksNpc1Grot",
-          "name": "Grot",
-          "count": 5,
-          "stars": 11,
-          "rank": "Gold1"
-        },
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 4,
-          "stars": 8,
-          "rank": "Silver3"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 2,
-          "stars": 10,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "OME18",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 18,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 123,
-            "max": 180
-          },
-          {
-            "id": "upgDmgR031",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgR031",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 68399,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks"
-      ],
-      "enemiesTotal": 12,
-      "enemiesTypes": [
-        "Grot",
-        "Grot Tank",
-        "Ork Boy",
-        "Stormboy"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksNpc1Grot:29",
-          "count": 4
-        },
-        {
-          "id": "orksNpc2OrkBoy:32",
-          "count": 3
-        },
-        {
-          "id": "orksNpc3GrotTank:28",
-          "count": 1
-        },
-        {
-          "id": "orksNpc6Stormboy:30",
-          "count": 4
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksNpc1Grot",
-          "name": "Grot",
-          "count": 4,
-          "stars": 7,
-          "rank": "Silver3"
-        },
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 3,
-          "stars": 10,
-          "rank": "Gold1"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 1,
-          "stars": 10,
-          "rank": "Silver2"
-        },
-        {
-          "id": "orksNpc6Stormboy",
-          "name": "Stormboy",
-          "count": 4,
-          "stars": 8,
-          "rank": "Silver3"
-        }
-      ]
-    },
-    {
-      "id": "OME19",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 19,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 123,
-            "max": 180
-          },
-          {
-            "id": "upgHpU012",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpU012",
-            "chanceId": "upgradeUncommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 51391,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks"
-      ],
-      "enemiesTotal": 9,
-      "enemiesTypes": [
-        "Grot",
-        "Grot Tank",
-        "Ork Boy"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksNpc1Grot:29",
-          "count": 4
-        },
-        {
-          "id": "orksNpc2OrkBoy:32",
-          "count": 3
-        },
-        {
-          "id": "orksNpc3GrotTank:28",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksNpc1Grot",
-          "name": "Grot",
-          "count": 4,
-          "stars": 7,
-          "rank": "Silver3"
-        },
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 3,
-          "stars": 10,
-          "rank": "Gold1"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 2,
-          "stars": 10,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "OME20",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 20,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 123,
-            "max": 180
-          },
-          {
-            "id": "upgArmC006",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmC006",
-            "chanceId": "upgradeCommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 59278,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks"
-      ],
-      "enemiesTotal": 12,
-      "enemiesTypes": [
-        "Grot",
-        "Grot Tank",
-        "Ork Boy"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksNpc1Grot:33",
-          "count": 7
-        },
-        {
-          "id": "orksNpc2OrkBoy:27",
-          "count": 2
-        },
-        {
-          "id": "orksNpc3GrotTank:29",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksNpc1Grot",
-          "name": "Grot",
-          "count": 7,
-          "stars": 11,
-          "rank": "Gold1"
-        },
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 2,
-          "stars": 9,
-          "rank": "Silver2"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 3,
-          "stars": 7,
-          "rank": "Silver3"
-        }
-      ]
-    },
-    {
-      "id": "OME21",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 21,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 123,
-            "max": 180
-          },
-          {
-            "id": "upgHpC013",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpC013",
-            "chanceId": "upgradeCommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 81400,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks"
-      ],
-      "enemiesTotal": 12,
-      "enemiesTypes": [
-        "Grot",
-        "Grot Tank",
-        "Ork Boy",
-        "Stormboy"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksNpc1Grot:33",
-          "count": 5
-        },
-        {
-          "id": "orksNpc2OrkBoy:32",
-          "count": 4
-        },
-        {
-          "id": "orksNpc3GrotTank:30",
-          "count": 2
-        },
-        {
-          "id": "orksNpc6Stormboy:27",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksNpc1Grot",
-          "name": "Grot",
-          "count": 5,
-          "stars": 11,
-          "rank": "Gold1"
-        },
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 4,
-          "stars": 10,
-          "rank": "Gold1"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 2,
-          "stars": 8,
-          "rank": "Silver3"
-        },
-        {
-          "id": "orksNpc6Stormboy",
-          "name": "Stormboy",
-          "count": 1,
-          "stars": 9,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "OME22",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 22,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 123,
-            "max": 180
-          },
-          {
-            "id": "upgArmR033",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmR033",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 77872,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks"
-      ],
-      "enemiesTotal": 8,
-      "enemiesTypes": [
-        "Grot Tank",
-        "Ork Boy"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksNpc2OrkBoy:32",
-          "count": 6
-        },
-        {
-          "id": "orksNpc3GrotTank:30",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 6,
-          "stars": 10,
-          "rank": "Gold1"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 2,
-          "stars": 8,
-          "rank": "Silver3"
-        }
-      ]
-    },
-    {
-      "id": "OME23",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 23,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 123,
-            "max": 180
-          },
-          {
-            "id": "upgArmR031",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmR031",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 64049,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks"
-      ],
-      "enemiesTotal": 12,
-      "enemiesTypes": [
-        "Grot",
-        "Grot Tank",
-        "Ork Boy"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksNpc1Grot:32",
-          "count": 7
-        },
-        {
-          "id": "orksNpc2OrkBoy:32",
-          "count": 2
-        },
-        {
-          "id": "orksNpc3GrotTank:30",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksNpc1Grot",
-          "name": "Grot",
-          "count": 7,
-          "stars": 10,
-          "rank": "Gold1"
-        },
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 2,
-          "stars": 10,
-          "rank": "Gold1"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 3,
-          "stars": 8,
-          "rank": "Silver3"
-        }
-      ]
-    },
-    {
-      "id": "OME24",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 24,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 123,
-            "max": 180
-          },
-          {
-            "id": "shards_orksRuntherd",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "shards_orksRuntherd",
-            "chanceId": "shard_elite"
-          }
-        ]
-      },
-      "enemyPower": 107058,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks"
-      ],
-      "enemiesTotal": 12,
-      "enemiesTypes": [
-        "Grot",
-        "Grot Tank",
-        "Ork Boy",
-        "Snotflogga"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksBossRuntherd:4",
-          "count": 1
-        },
-        {
-          "id": "orksNpc1Grot:30",
-          "count": 6
-        },
-        {
-          "id": "orksNpc2OrkBoy:32",
-          "count": 3
-        },
-        {
-          "id": "orksNpc3GrotTank:30",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksBossRuntherd",
-          "name": "Snotflogga",
-          "count": 1,
-          "stars": 10,
-          "rank": "Gold1"
-        },
-        {
-          "id": "orksNpc1Grot",
-          "name": "Grot",
-          "count": 6,
-          "stars": 8,
-          "rank": "Silver3"
-        },
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 3,
-          "stars": 10,
-          "rank": "Gold1"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 2,
-          "stars": 8,
-          "rank": "Silver3"
-        }
-      ]
-    },
-    {
-      "id": "OME25",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 25,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 131,
-            "max": 195
-          },
-          {
-            "id": "upgArmR040",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmR040",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 102445,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks"
-      ],
-      "enemiesTotal": 12,
-      "enemiesTypes": [
-        "Grot",
-        "Grot Tank",
-        "Ork Boy"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksNpc1Grot:30",
-          "count": 6
-        },
-        {
-          "id": "orksNpc2OrkBoy:34",
-          "count": 5
-        },
-        {
-          "id": "orksNpc3GrotTank:31",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksNpc1Grot",
-          "name": "Grot",
-          "count": 6,
-          "stars": 8,
-          "rank": "Silver3"
-        },
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 5,
-          "stars": 10,
-          "rank": "Gold2"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 1,
-          "stars": 10,
-          "rank": "Silver3"
-        }
-      ]
-    },
-    {
-      "id": "OME26",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 26,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 131,
-            "max": 195
-          },
-          {
-            "id": "upgHpC015",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpC015",
-            "chanceId": "upgradeCommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 94406,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks"
-      ],
-      "enemiesTotal": 12,
-      "enemiesTypes": [
-        "Grot",
-        "Grot Tank",
-        "Ork Boy"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksNpc1Grot:33",
-          "count": 7
-        },
-        {
-          "id": "orksNpc2OrkBoy:34",
-          "count": 3
-        },
-        {
-          "id": "orksNpc3GrotTank:31",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksNpc1Grot",
-          "name": "Grot",
-          "count": 7,
-          "stars": 11,
-          "rank": "Gold1"
-        },
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 3,
-          "stars": 10,
-          "rank": "Gold2"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 2,
-          "stars": 10,
-          "rank": "Silver3"
-        }
-      ]
-    },
-    {
-      "id": "OME27",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 27,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 131,
-            "max": 195
-          },
-          {
-            "id": "upgArmC012",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmC012",
-            "chanceId": "upgradeCommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 79588,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Tyranids"
-      ],
-      "enemiesTotal": 9,
-      "enemiesTypes": [
-        "Hormagaunt",
-        "Termagant"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "tyranNpc1Hormagaunt:24",
-          "count": 5
-        },
-        {
-          "id": "tyranNpc3Termagant:23",
-          "count": 4
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "tyranNpc1Hormagaunt",
-          "name": "Hormagaunt",
-          "count": 5,
-          "stars": 11,
-          "rank": "Gold2"
-        },
-        {
-          "id": "tyranNpc3Termagant",
-          "name": "Termagant",
-          "count": 4,
-          "stars": 10,
-          "rank": "Gold2"
-        }
-      ]
-    },
-    {
-      "id": "OME28",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 28,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 131,
-            "max": 195
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpL113",
-            "chanceId": "upgradeLegendary_elite"
-          }
-        ]
-      },
-      "enemyPower": 89340,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Tyranids"
-      ],
-      "enemiesTotal": 10,
-      "enemiesTypes": [
-        "Hormagaunt",
-        "Termagant",
-        "Tyranid Warrior"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "tyranNpc1Hormagaunt:24",
-          "count": 5
-        },
-        {
-          "id": "tyranNpc3Termagant:23",
-          "count": 4
-        },
-        {
-          "id": "tyranNpc4Warrior:17",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "tyranNpc1Hormagaunt",
-          "name": "Hormagaunt",
-          "count": 5,
-          "stars": 11,
-          "rank": "Gold2"
-        },
-        {
-          "id": "tyranNpc3Termagant",
-          "name": "Termagant",
-          "count": 4,
-          "stars": 10,
-          "rank": "Gold2"
-        },
-        {
-          "id": "tyranNpc4Warrior",
-          "name": "Tyranid Warrior",
-          "count": 1,
-          "stars": 8,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "OME29",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 29,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 131,
-            "max": 195
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpL111",
-            "chanceId": "upgradeLegendary_elite"
-          }
-        ]
-      },
-      "enemyPower": 87100,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Tyranids"
-      ],
-      "enemiesTotal": 10,
-      "enemiesTypes": [
-        "Hormagaunt",
-        "Ripper Swarm",
-        "Termagant",
-        "Tyranid Warrior"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "tyranNpc1Hormagaunt:24",
-          "count": 3
-        },
-        {
-          "id": "tyranNpc2RipperSwarm:23",
-          "count": 1
-        },
-        {
-          "id": "tyranNpc3Termagant:23",
-          "count": 4
-        },
-        {
-          "id": "tyranNpc4Warrior:17",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "tyranNpc1Hormagaunt",
-          "name": "Hormagaunt",
-          "count": 3,
-          "stars": 11,
-          "rank": "Gold2"
-        },
-        {
-          "id": "tyranNpc2RipperSwarm",
-          "name": "Ripper Swarm",
-          "count": 1,
-          "stars": 10,
-          "rank": "Gold2"
-        },
-        {
-          "id": "tyranNpc3Termagant",
-          "name": "Termagant",
-          "count": 4,
-          "stars": 10,
-          "rank": "Gold2"
-        },
-        {
-          "id": "tyranNpc4Warrior",
-          "name": "Tyranid Warrior",
-          "count": 2,
-          "stars": 8,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "OME30",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 30,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 131,
-            "max": 195
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpL099",
-            "chanceId": "upgradeLegendary_elite"
-          }
-        ]
-      },
-      "enemyPower": 95824,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Tyranids"
-      ],
-      "enemiesTotal": 12,
-      "enemiesTypes": [
-        "Hormagaunt",
-        "Ripper Swarm",
-        "Termagant",
-        "Tyranid Warrior"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "tyranNpc1Hormagaunt:24",
-          "count": 4
-        },
-        {
-          "id": "tyranNpc2RipperSwarm:20",
-          "count": 3
-        },
-        {
-          "id": "tyranNpc3Termagant:23",
-          "count": 3
-        },
-        {
-          "id": "tyranNpc4Warrior:17",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "tyranNpc1Hormagaunt",
-          "name": "Hormagaunt",
-          "count": 4,
-          "stars": 11,
-          "rank": "Gold2"
-        },
-        {
-          "id": "tyranNpc2RipperSwarm",
-          "name": "Ripper Swarm",
-          "count": 3,
-          "stars": 10,
-          "rank": "Silver3"
-        },
-        {
-          "id": "tyranNpc3Termagant",
-          "name": "Termagant",
-          "count": 3,
-          "stars": 10,
-          "rank": "Gold2"
-        },
-        {
-          "id": "tyranNpc4Warrior",
-          "name": "Tyranid Warrior",
-          "count": 2,
-          "stars": 8,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "OME31",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 31,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 131,
-            "max": 195
-          },
-          {
-            "id": "upgHpC017",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpC017",
-            "chanceId": "upgradeCommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 101180,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Tyranids"
-      ],
-      "enemiesTotal": 10,
-      "enemiesTypes": [
-        "Hormagaunt",
-        "Termagant",
-        "Tyranid Warrior"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "tyranNpc1Hormagaunt:24",
-          "count": 2
-        },
-        {
-          "id": "tyranNpc3Termagant:24",
-          "count": 6
-        },
-        {
-          "id": "tyranNpc4Warrior:18",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "tyranNpc1Hormagaunt",
-          "name": "Hormagaunt",
-          "count": 2,
-          "stars": 11,
-          "rank": "Gold2"
-        },
-        {
-          "id": "tyranNpc3Termagant",
-          "name": "Termagant",
-          "count": 6,
-          "stars": 11,
-          "rank": "Gold2"
-        },
-        {
-          "id": "tyranNpc4Warrior",
-          "name": "Tyranid Warrior",
-          "count": 2,
-          "stars": 9,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "OME32",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 32,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 210
-          },
-          {
-            "id": "shards_orksNob",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "shards_orksNob",
-            "chanceId": "shard_elite"
-          }
-        ]
-      },
-      "enemyPower": 179795,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks"
-      ],
-      "enemiesTotal": 12,
-      "enemiesTypes": [
-        "Grot",
-        "Grot Tank",
-        "Ork Boy",
-        "Tanksmasha"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksBossNob:3",
-          "count": 1
-        },
-        {
-          "id": "orksNpc1Grot:34",
-          "count": 4
-        },
-        {
-          "id": "orksNpc2OrkBoy:34",
-          "count": 5
-        },
-        {
-          "id": "orksNpc3GrotTank:34",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksBossNob",
-          "name": "Tanksmasha",
-          "count": 1,
-          "stars": 10,
-          "rank": "Gold1"
-        },
-        {
-          "id": "orksNpc1Grot",
-          "name": "Grot",
-          "count": 4,
-          "stars": 10,
-          "rank": "Gold2"
-        },
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 5,
-          "stars": 10,
-          "rank": "Gold2"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 2,
-          "stars": 10,
-          "rank": "Gold2"
-        }
-      ]
-    },
-    {
-      "id": "OME33",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 33,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 210
-          },
-          {
-            "id": "upgHpR002",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpR002",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 207471,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks",
-        "Tyranids"
-      ],
-      "enemiesTotal": 13,
-      "enemiesTypes": [
-        "Grot",
-        "Grot Tank",
-        "Hormagaunt",
-        "Ork Boy",
-        "Termagant"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksNpc1Grot:34",
-          "count": 1
-        },
-        {
-          "id": "orksNpc2OrkBoy:35",
-          "count": 3
-        },
-        {
-          "id": "orksNpc3GrotTank:35",
-          "count": 3
-        },
-        {
-          "id": "tyranNpc1Hormagaunt:25",
-          "count": 2
-        },
-        {
-          "id": "tyranNpc3Termagant:25",
-          "count": 4
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksNpc1Grot",
-          "name": "Grot",
-          "count": 1,
-          "stars": 10,
-          "rank": "Gold2"
-        },
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 3,
-          "stars": 11,
-          "rank": "Gold2"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 3,
-          "stars": 11,
-          "rank": "Gold2"
-        },
-        {
-          "id": "tyranNpc1Hormagaunt",
-          "name": "Hormagaunt",
-          "count": 2,
-          "stars": 10,
-          "rank": "Gold3"
-        },
-        {
-          "id": "tyranNpc3Termagant",
-          "name": "Termagant",
-          "count": 4,
-          "stars": 10,
-          "rank": "Gold3"
-        }
-      ]
-    },
-    {
-      "id": "OME34",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 34,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 210
-          },
-          {
-            "id": "upgHpR010",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpR010",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 206787,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks",
-        "Tyranids"
-      ],
-      "enemiesTotal": 12,
-      "enemiesTypes": [
-        "Grot Tank",
-        "Hormagaunt",
-        "Ork Boy",
-        "Tyranid Warrior"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksNpc2OrkBoy:34",
-          "count": 5
-        },
-        {
-          "id": "orksNpc3GrotTank:33",
-          "count": 3
-        },
-        {
-          "id": "tyranNpc1Hormagaunt:25",
-          "count": 3
-        },
-        {
-          "id": "tyranNpc4Warrior:23",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 5,
-          "stars": 10,
-          "rank": "Gold2"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 3,
-          "stars": 11,
-          "rank": "Gold1"
-        },
-        {
-          "id": "tyranNpc1Hormagaunt",
-          "name": "Hormagaunt",
-          "count": 3,
-          "stars": 10,
-          "rank": "Gold3"
-        },
-        {
-          "id": "tyranNpc4Warrior",
-          "name": "Tyranid Warrior",
-          "count": 1,
-          "stars": 10,
-          "rank": "Gold2"
-        }
-      ]
-    },
-    {
-      "id": "OME35",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 35,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 210
-          },
-          {
-            "id": "upgDmgR026",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgR026",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 248828,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks",
-        "Tyranids"
-      ],
-      "enemiesTotal": 13,
-      "enemiesTypes": [
-        "Grot Tank",
-        "Hormagaunt",
-        "Ork Boy",
-        "Tyranid Warrior"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksNpc2OrkBoy:34",
-          "count": 4
-        },
-        {
-          "id": "orksNpc3GrotTank:33",
-          "count": 4
-        },
-        {
-          "id": "tyranNpc1Hormagaunt:24",
-          "count": 3
-        },
-        {
-          "id": "tyranNpc4Warrior:23",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 4,
-          "stars": 10,
-          "rank": "Gold2"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 4,
-          "stars": 11,
-          "rank": "Gold1"
-        },
-        {
-          "id": "tyranNpc1Hormagaunt",
-          "name": "Hormagaunt",
-          "count": 3,
-          "stars": 11,
-          "rank": "Gold2"
-        },
-        {
-          "id": "tyranNpc4Warrior",
-          "name": "Tyranid Warrior",
-          "count": 2,
-          "stars": 10,
-          "rank": "Gold2"
-        }
-      ]
-    },
-    {
-      "id": "OME36",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 36,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 210
-          },
-          {
-            "id": "upgArmR026",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmR026",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 259533,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks",
-        "Tyranids"
-      ],
-      "enemiesTotal": 9,
-      "enemiesTypes": [
-        "Grot Tank",
-        "Hormagaunt",
-        "Ork Boy",
-        "Tyranid Warrior"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksNpc2OrkBoy:34",
-          "count": 2
-        },
-        {
-          "id": "orksNpc3GrotTank:35",
-          "count": 3
-        },
-        {
-          "id": "tyranNpc1Hormagaunt:25",
-          "count": 2
-        },
-        {
-          "id": "tyranNpc4Warrior:25",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 2,
-          "stars": 10,
-          "rank": "Gold2"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 3,
-          "stars": 11,
-          "rank": "Gold2"
-        },
-        {
-          "id": "tyranNpc1Hormagaunt",
-          "name": "Hormagaunt",
-          "count": 2,
-          "stars": 10,
-          "rank": "Gold3"
-        },
-        {
-          "id": "tyranNpc4Warrior",
-          "name": "Tyranid Warrior",
-          "count": 2,
-          "stars": 10,
-          "rank": "Gold3"
-        }
-      ]
-    },
-    {
-      "id": "OME37",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 37,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 210
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpL106",
-            "chanceId": "upgradeLegendary_elite"
-          }
-        ]
-      },
-      "enemyPower": 293064,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks",
-        "Tyranids"
-      ],
-      "enemiesTotal": 13,
-      "enemiesTypes": [
-        "Grot Tank",
-        "Hormagaunt",
-        "Termagant",
-        "Tyranid Warrior"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksNpc3GrotTank:33",
-          "count": 3
-        },
-        {
-          "id": "tyranNpc1Hormagaunt:25",
-          "count": 3
-        },
-        {
-          "id": "tyranNpc3Termagant:26",
-          "count": 3
-        },
-        {
-          "id": "tyranNpc4Warrior:23",
-          "count": 4
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 3,
-          "stars": 11,
-          "rank": "Gold1"
-        },
-        {
-          "id": "tyranNpc1Hormagaunt",
-          "name": "Hormagaunt",
-          "count": 3,
-          "stars": 10,
-          "rank": "Gold3"
-        },
-        {
-          "id": "tyranNpc3Termagant",
-          "name": "Termagant",
-          "count": 3,
-          "stars": 11,
-          "rank": "Gold3"
-        },
-        {
-          "id": "tyranNpc4Warrior",
-          "name": "Tyranid Warrior",
-          "count": 4,
-          "stars": 10,
-          "rank": "Gold2"
-        }
-      ]
-    },
-    {
-      "id": "OME38",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 38,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 210
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmL001",
-            "chanceId": "upgradeLegendary_elite"
-          }
-        ]
-      },
-      "enemyPower": 301555,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks",
-        "Tyranids"
-      ],
-      "enemiesTotal": 12,
-      "enemiesTypes": [
-        "Grot Tank",
-        "Hormagaunt",
-        "Termagant",
-        "Tyranid Warrior"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksNpc3GrotTank:34",
-          "count": 3
-        },
-        {
-          "id": "tyranNpc1Hormagaunt:25",
-          "count": 5
-        },
-        {
-          "id": "tyranNpc3Termagant:26",
-          "count": 1
-        },
-        {
-          "id": "tyranNpc4Warrior:24",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 3,
-          "stars": 10,
-          "rank": "Gold2"
-        },
-        {
-          "id": "tyranNpc1Hormagaunt",
-          "name": "Hormagaunt",
-          "count": 5,
-          "stars": 10,
-          "rank": "Gold3"
-        },
-        {
-          "id": "tyranNpc3Termagant",
-          "name": "Termagant",
-          "count": 1,
-          "stars": 11,
-          "rank": "Gold3"
-        },
-        {
-          "id": "tyranNpc4Warrior",
-          "name": "Tyranid Warrior",
-          "count": 3,
-          "stars": 11,
-          "rank": "Gold2"
-        }
-      ]
-    },
-    {
-      "id": "OME39",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 39,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 210
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgL003",
-            "chanceId": "upgradeLegendary_elite"
-          }
-        ]
-      },
-      "enemyPower": 293074,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks",
-        "Tyranids"
-      ],
-      "enemiesTotal": 12,
-      "enemiesTypes": [
-        "Grot",
-        "Grot Tank",
-        "Hormagaunt",
-        "Ork Boy",
-        "Tyranid Warrior"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksNpc1Grot:34",
-          "count": 2
-        },
-        {
-          "id": "orksNpc2OrkBoy:34",
-          "count": 2
-        },
-        {
-          "id": "orksNpc3GrotTank:35",
-          "count": 4
-        },
-        {
-          "id": "tyranNpc1Hormagaunt:25",
-          "count": 2
-        },
-        {
-          "id": "tyranNpc4Warrior:25",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksNpc1Grot",
-          "name": "Grot",
-          "count": 2,
-          "stars": 10,
-          "rank": "Gold2"
-        },
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 2,
-          "stars": 10,
-          "rank": "Gold2"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 4,
-          "stars": 11,
-          "rank": "Gold2"
-        },
-        {
-          "id": "tyranNpc1Hormagaunt",
-          "name": "Hormagaunt",
-          "count": 2,
-          "stars": 10,
-          "rank": "Gold3"
-        },
-        {
-          "id": "tyranNpc4Warrior",
-          "name": "Tyranid Warrior",
-          "count": 2,
-          "stars": 10,
-          "rank": "Gold3"
-        }
-      ]
-    },
-    {
-      "id": "OME40",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 40,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 225
-          },
-          {
-            "id": "shards_orksWarboss",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "shards_orksWarboss",
-            "chanceId": "shard_elite"
-          }
-        ]
-      },
-      "enemyPower": 248020,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks"
-      ],
-      "enemiesTotal": 12,
-      "enemiesTypes": [
-        "Grot",
-        "Grot Tank",
-        "Gulgortz",
-        "Ork Boy"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksBossWarboss:3",
-          "count": 1
-        },
-        {
-          "id": "orksNpc1Grot:34",
-          "count": 3
-        },
-        {
-          "id": "orksNpc2OrkBoy:35",
-          "count": 5
-        },
-        {
-          "id": "orksNpc3GrotTank:35",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksBossWarboss",
-          "name": "Gulgortz",
-          "count": 1,
-          "stars": 10,
-          "rank": "Gold1"
-        },
-        {
-          "id": "orksNpc1Grot",
-          "name": "Grot",
-          "count": 3,
-          "stars": 10,
-          "rank": "Gold2"
-        },
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 5,
-          "stars": 11,
-          "rank": "Gold2"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 3,
-          "stars": 11,
-          "rank": "Gold2"
-        }
-      ]
+      "type": "Mirror",
+      "challenge": false
     }
   ]
 }

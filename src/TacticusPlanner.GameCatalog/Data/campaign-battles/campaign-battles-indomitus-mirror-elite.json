@@ -1,0 +1,3296 @@
+{
+  "groupId": "eliteMirror1",
+  "faction": "Necrons",
+  "releaseType": "standard",
+  "coreCharacters": [
+    "necroWarden",
+    "necroDestroyer",
+    "necroSpyder"
+  ],
+  "types": [
+    "EliteMirror"
+  ],
+  "battles": [
+    {
+      "id": "IME01",
+      "energyCost": 10,
+      "nodeNumber": 1,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 160
+          },
+          {
+            "id": "upgArmC005",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC005",
+            "chanceId": "upgradeCommon_elite"
+          }
+        ]
+      },
+      "enemyPower": 10602,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Ultramarines"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Eliminator",
+        "Inceptor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:20",
+          "count": 5
+        },
+        {
+          "id": "ultraNpc1Inceptor:16",
+          "count": 2
+        },
+        {
+          "id": "ultraNpc2Eliminator:16",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 5,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 1,
+          "stars": 9,
+          "rank": "Silver1"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME02",
+      "energyCost": 10,
+      "nodeNumber": 2,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 160
+          },
+          {
+            "id": "upgHpR011",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR011",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 13769,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Ultramarines"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Eliminator",
+        "Inceptor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:18",
+          "count": 5
+        },
+        {
+          "id": "ultraNpc1Inceptor:15",
+          "count": 3
+        },
+        {
+          "id": "ultraNpc2Eliminator:15",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 5,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 3,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 3,
+          "stars": 7,
+          "rank": "Silver1"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME03",
+      "energyCost": 10,
+      "nodeNumber": 3,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 160
+          },
+          {
+            "id": "upgDmgR009",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR009",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 16783,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Ultramarines"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Eliminator",
+        "Inceptor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:20",
+          "count": 3
+        },
+        {
+          "id": "ultraNpc1Inceptor:16",
+          "count": 4
+        },
+        {
+          "id": "ultraNpc2Eliminator:15",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 3,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 4,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 3,
+          "stars": 7,
+          "rank": "Silver1"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME04",
+      "energyCost": 10,
+      "nodeNumber": 4,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 160
+          },
+          {
+            "id": "upgArmR030",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR030",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 21147,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Ultramarines"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Eliminator",
+        "Heavy Intercessor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:18",
+          "count": 7
+        },
+        {
+          "id": "ultraNpc2Eliminator:16",
+          "count": 3
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor:16",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 7,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 3,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor",
+          "name": "Heavy Intercessor",
+          "count": 1,
+          "stars": 9,
+          "rank": "Silver1"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME05",
+      "energyCost": 10,
+      "nodeNumber": 5,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 160
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgE004",
+            "chanceId": "upgradeEpic_elite"
+          }
+        ]
+      },
+      "enemyPower": 24108,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "Ultramarines"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Eliminator",
+        "Heavy Intercessor",
+        "Inceptor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "ultraNpc1Inceptor:17",
+          "count": 3
+        },
+        {
+          "id": "ultraNpc2Eliminator:17",
+          "count": 2
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor:16",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor",
+          "name": "Heavy Intercessor",
+          "count": 1,
+          "stars": 9,
+          "rank": "Silver1"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME06",
+      "energyCost": 10,
+      "nodeNumber": 6,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 160
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL010",
+            "chanceId": "upgradeLegendary_elite"
+          }
+        ]
+      },
+      "enemyPower": 26422,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "Ultramarines"
+      ],
+      "enemiesTotal": 5,
+      "enemiesTypes": [
+        "Eliminator",
+        "Heavy Intercessor",
+        "Inceptor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "ultraNpc1Inceptor:18",
+          "count": 2
+        },
+        {
+          "id": "ultraNpc2Eliminator:17",
+          "count": 2
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor:17",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor",
+          "name": "Heavy Intercessor",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME07",
+      "energyCost": 10,
+      "nodeNumber": 7,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 160
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmL203",
+            "chanceId": "upgradeLegendary_elite"
+          }
+        ]
+      },
+      "enemyPower": 28248,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Ultramarines"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Heavy Intercessor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:18",
+          "count": 10
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor:17",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 10,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor",
+          "name": "Heavy Intercessor",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME08",
+      "energyCost": 10,
+      "nodeNumber": 8,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 160
+          },
+          {
+            "id": "shards_adeptRetributor",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_adeptRetributor",
+            "chanceId": "shard_elite"
+          }
+        ]
+      },
+      "enemyPower": 27166,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Sisterhood",
+        "Ultramarines"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Eliminator",
+        "Heavy Intercessor",
+        "Inceptor",
+        "Vindicta"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "adeptBossRetributor:2",
+          "count": 1
+        },
+        {
+          "id": "astraNpc1Guardsman:20",
+          "count": 5
+        },
+        {
+          "id": "ultraNpc1Inceptor:17",
+          "count": 1
+        },
+        {
+          "id": "ultraNpc2Eliminator:16",
+          "count": 2
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor:17",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "adeptBossRetributor",
+          "name": "Vindicta",
+          "count": 1,
+          "stars": 5,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 5,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor",
+          "name": "Heavy Intercessor",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME09",
+      "energyCost": 10,
+      "nodeNumber": 9,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          },
+          {
+            "id": "upgDmgC015",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC015",
+            "chanceId": "upgradeCommon_elite"
+          }
+        ]
+      },
+      "enemyPower": 33394,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "Ultramarines"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Eliminator",
+        "Heavy Intercessor",
+        "Inceptor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "ultraNpc1Inceptor:17",
+          "count": 4
+        },
+        {
+          "id": "ultraNpc2Eliminator:16",
+          "count": 4
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor:17",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 4,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 4,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor",
+          "name": "Heavy Intercessor",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME10",
+      "energyCost": 10,
+      "nodeNumber": 10,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          },
+          {
+            "id": "upgHpR001",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR001",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 30150,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Ultramarines"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Eliminator",
+        "Heavy Intercessor",
+        "Inceptor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:21",
+          "count": 3
+        },
+        {
+          "id": "ultraNpc1Inceptor:18",
+          "count": 2
+        },
+        {
+          "id": "ultraNpc2Eliminator:18",
+          "count": 1
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor:18",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 1,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor",
+          "name": "Heavy Intercessor",
+          "count": 1,
+          "stars": 9,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME11",
+      "energyCost": 10,
+      "nodeNumber": 11,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          },
+          {
+            "id": "upgHpR035",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR035",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 33886,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Ultramarines"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Eliminator",
+        "Heavy Intercessor",
+        "Inceptor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:20",
+          "count": 4
+        },
+        {
+          "id": "ultraNpc1Inceptor:17",
+          "count": 3
+        },
+        {
+          "id": "ultraNpc2Eliminator:16",
+          "count": 4
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor:17",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 4,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 4,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor",
+          "name": "Heavy Intercessor",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME12",
+      "energyCost": 10,
+      "nodeNumber": 12,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          },
+          {
+            "id": "upgHpR037",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR037",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 26891,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Ultramarines"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Eliminator",
+        "Inceptor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:21",
+          "count": 7
+        },
+        {
+          "id": "ultraNpc1Inceptor:18",
+          "count": 3
+        },
+        {
+          "id": "ultraNpc2Eliminator:18",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 7,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 3,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME13",
+      "energyCost": 10,
+      "nodeNumber": 13,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          },
+          {
+            "id": "upgHpR027",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR027",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 43225,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Ultramarines"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Eliminator",
+        "Heavy Intercessor",
+        "Inceptor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:20",
+          "count": 3
+        },
+        {
+          "id": "ultraNpc1Inceptor:17",
+          "count": 3
+        },
+        {
+          "id": "ultraNpc2Eliminator:18",
+          "count": 2
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor:17",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 3,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor",
+          "name": "Heavy Intercessor",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME14",
+      "energyCost": 10,
+      "nodeNumber": 14,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpE017",
+            "chanceId": "upgradeEpic_elite"
+          }
+        ]
+      },
+      "enemyPower": 33269,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Ultramarines"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Eliminator",
+        "Inceptor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:22",
+          "count": 4
+        },
+        {
+          "id": "ultraNpc1Inceptor:18",
+          "count": 1
+        },
+        {
+          "id": "ultraNpc1Inceptor:19",
+          "count": 3
+        },
+        {
+          "id": "ultraNpc2Eliminator:19",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 1,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver3"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver3"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME15",
+      "energyCost": 10,
+      "nodeNumber": 15,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgL001",
+            "chanceId": "upgradeLegendary_elite"
+          }
+        ]
+      },
+      "enemyPower": 47267,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "Ultramarines"
+      ],
+      "enemiesTotal": 5,
+      "enemiesTypes": [
+        "Eliminator",
+        "Heavy Intercessor",
+        "Inceptor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "ultraNpc1Inceptor:20",
+          "count": 2
+        },
+        {
+          "id": "ultraNpc2Eliminator:19",
+          "count": 2
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor:20",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 2,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver3"
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor",
+          "name": "Heavy Intercessor",
+          "count": 1,
+          "stars": 10,
+          "rank": "Silver3"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME16",
+      "energyCost": 10,
+      "nodeNumber": 16,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          },
+          {
+            "id": "shards_ultraInceptorSgt",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_ultraInceptorSgt",
+            "chanceId": "shard_elite"
+          }
+        ]
+      },
+      "enemyPower": 48575,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Ultramarines"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Bellator",
+        "Cadian Guardsman",
+        "Eliminator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:21",
+          "count": 6
+        },
+        {
+          "id": "ultraBossInceptorSgt:4",
+          "count": 1
+        },
+        {
+          "id": "ultraNpc2Eliminator:20",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 6,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "ultraBossInceptorSgt",
+          "name": "Bellator",
+          "count": 1,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 2,
+          "stars": 10,
+          "rank": "Silver3"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME17",
+      "energyCost": 10,
+      "nodeNumber": 17,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          },
+          {
+            "id": "upgDmgR034",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR034",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 36353,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Ultramarines"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Eliminator",
+        "Inceptor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:22",
+          "count": 7
+        },
+        {
+          "id": "ultraNpc1Inceptor:20",
+          "count": 2
+        },
+        {
+          "id": "ultraNpc2Eliminator:20",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 7,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 2,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 2,
+          "stars": 10,
+          "rank": "Silver3"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME18",
+      "energyCost": 10,
+      "nodeNumber": 18,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 123,
+            "max": 180
+          },
+          {
+            "id": "upgDmgR035",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR035",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 63216,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "Ultramarines"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Eliminator",
+        "Heavy Intercessor",
+        "Inceptor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "ultraNpc1Inceptor:19",
+          "count": 2
+        },
+        {
+          "id": "ultraNpc2Eliminator:19",
+          "count": 2
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor:19",
+          "count": 1
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor:20",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver3"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver3"
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor",
+          "name": "Heavy Intercessor",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver3"
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor",
+          "name": "Heavy Intercessor",
+          "count": 1,
+          "stars": 10,
+          "rank": "Silver3"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME19",
+      "energyCost": 10,
+      "nodeNumber": 19,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 123,
+            "max": 180
+          },
+          {
+            "id": "upgDmgR037",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR037",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 45348,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Ultramarines"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Eliminator",
+        "Inceptor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:23",
+          "count": 5
+        },
+        {
+          "id": "ultraNpc1Inceptor:21",
+          "count": 1
+        },
+        {
+          "id": "ultraNpc1Inceptor:22",
+          "count": 1
+        },
+        {
+          "id": "ultraNpc2Eliminator:21",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 5,
+          "stars": 10,
+          "rank": "Gold2"
+        },
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 1,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 1,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold1"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME20",
+      "energyCost": 10,
+      "nodeNumber": 20,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 123,
+            "max": 180
+          },
+          {
+            "id": "upgDmgR027",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR027",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 64672,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Ultramarines"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Heavy Intercessor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:20",
+          "count": 4
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor:18",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 4,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor",
+          "name": "Heavy Intercessor",
+          "count": 4,
+          "stars": 9,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME21",
+      "energyCost": 10,
+      "nodeNumber": 21,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 123,
+            "max": 180
+          },
+          {
+            "id": "upgHpC002",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC002",
+            "chanceId": "upgradeCommon_elite"
+          }
+        ]
+      },
+      "enemyPower": 48914,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Ultramarines"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Eliminator",
+        "Inceptor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:22",
+          "count": 6
+        },
+        {
+          "id": "ultraNpc1Inceptor:21",
+          "count": 3
+        },
+        {
+          "id": "ultraNpc2Eliminator:21",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 6,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold1"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME22",
+      "energyCost": 10,
+      "nodeNumber": 22,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 123,
+            "max": 180
+          },
+          {
+            "id": "upgArmR034",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR034",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 54036,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Ultramarines"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Eliminator",
+        "Inceptor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:21",
+          "count": 3
+        },
+        {
+          "id": "astraNpc1Guardsman:22",
+          "count": 3
+        },
+        {
+          "id": "ultraNpc1Inceptor:21",
+          "count": 4
+        },
+        {
+          "id": "ultraNpc2Eliminator:21",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 4,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold1"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME23",
+      "energyCost": 10,
+      "nodeNumber": 23,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 123,
+            "max": 180
+          },
+          {
+            "id": "upgArmR035",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR035",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 59738,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Ultramarines"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Eliminator",
+        "Heavy Intercessor",
+        "Inceptor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:22",
+          "count": 5
+        },
+        {
+          "id": "ultraNpc1Inceptor:20",
+          "count": 3
+        },
+        {
+          "id": "ultraNpc2Eliminator:19",
+          "count": 2
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor:20",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 5,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 3,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver3"
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor",
+          "name": "Heavy Intercessor",
+          "count": 1,
+          "stars": 10,
+          "rank": "Silver3"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME24",
+      "energyCost": 10,
+      "nodeNumber": 24,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 123,
+            "max": 180
+          },
+          {
+            "id": "shards_ultraEliminatorSgt",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_ultraEliminatorSgt",
+            "chanceId": "shard_elite"
+          }
+        ]
+      },
+      "enemyPower": 89499,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Ultramarines"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Certus",
+        "Eliminator",
+        "Heavy Intercessor",
+        "Inceptor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:22",
+          "count": 4
+        },
+        {
+          "id": "ultraBossEliminatorSgtCamp:1",
+          "count": 1
+        },
+        {
+          "id": "ultraNpc1Inceptor:20",
+          "count": 2
+        },
+        {
+          "id": "ultraNpc2Eliminator:19",
+          "count": 2
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor:20",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "ultraBossEliminatorSgtCamp",
+          "name": "Certus",
+          "count": 1,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 2,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver3"
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor",
+          "name": "Heavy Intercessor",
+          "count": 1,
+          "stars": 10,
+          "rank": "Silver3"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME25",
+      "energyCost": 10,
+      "nodeNumber": 25,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 131,
+            "max": 195
+          },
+          {
+            "id": "upgArmR037",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR037",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 76806,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Ultramarines"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Eliminator",
+        "Heavy Intercessor",
+        "Inceptor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:21",
+          "count": 7
+        },
+        {
+          "id": "ultraNpc1Inceptor:22",
+          "count": 3
+        },
+        {
+          "id": "ultraNpc2Eliminator:22",
+          "count": 1
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor:20",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 7,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 1,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor",
+          "name": "Heavy Intercessor",
+          "count": 1,
+          "stars": 10,
+          "rank": "Silver3"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME26",
+      "energyCost": 10,
+      "nodeNumber": 26,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 131,
+            "max": 195
+          },
+          {
+            "id": "upgArmR027",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR027",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 75090,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Ultramarines"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Eliminator",
+        "Inceptor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:23",
+          "count": 7
+        },
+        {
+          "id": "ultraNpc1Inceptor:22",
+          "count": 4
+        },
+        {
+          "id": "ultraNpc2Eliminator:24",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 7,
+          "stars": 10,
+          "rank": "Gold2"
+        },
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 1,
+          "stars": 11,
+          "rank": "Gold2"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME27",
+      "energyCost": 10,
+      "nodeNumber": 27,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 131,
+            "max": 195
+          },
+          {
+            "id": "upgDmgC009",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC009",
+            "chanceId": "upgradeCommon_elite"
+          }
+        ]
+      },
+      "enemyPower": 110928,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "Ultramarines"
+      ],
+      "enemiesTotal": 5,
+      "enemiesTypes": [
+        "Eliminator",
+        "Heavy Intercessor",
+        "Inceptor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "ultraNpc1Inceptor:24",
+          "count": 1
+        },
+        {
+          "id": "ultraNpc2Eliminator:23",
+          "count": 2
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor:21",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 1,
+          "stars": 11,
+          "rank": "Gold2"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold2"
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor",
+          "name": "Heavy Intercessor",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold1"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME28",
+      "energyCost": 10,
+      "nodeNumber": 28,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 131,
+            "max": 195
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL114",
+            "chanceId": "upgradeLegendary_elite"
+          }
+        ]
+      },
+      "enemyPower": 144689,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "Ultramarines"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Eliminator",
+        "Heavy Intercessor",
+        "Inceptor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "ultraNpc1Inceptor:23",
+          "count": 3
+        },
+        {
+          "id": "ultraNpc2Eliminator:23",
+          "count": 2
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor:21",
+          "count": 1
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor:22",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold2"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold2"
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor",
+          "name": "Heavy Intercessor",
+          "count": 1,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor",
+          "name": "Heavy Intercessor",
+          "count": 1,
+          "stars": 11,
+          "rank": "Gold1"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME29",
+      "energyCost": 10,
+      "nodeNumber": 29,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 131,
+            "max": 195
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL115",
+            "chanceId": "upgradeLegendary_elite"
+          }
+        ]
+      },
+      "enemyPower": 136558,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Ultramarines"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Heavy Intercessor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:23",
+          "count": 2
+        },
+        {
+          "id": "astraNpc1Guardsman:24",
+          "count": 4
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor:21",
+          "count": 1
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor:22",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold2"
+        },
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold2"
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor",
+          "name": "Heavy Intercessor",
+          "count": 1,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor",
+          "name": "Heavy Intercessor",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold1"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME30",
+      "energyCost": 10,
+      "nodeNumber": 30,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 131,
+            "max": 195
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL117",
+            "chanceId": "upgradeLegendary_elite"
+          }
+        ]
+      },
+      "enemyPower": 112400,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Ultramarines"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Eliminator",
+        "Inceptor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:25",
+          "count": 7
+        },
+        {
+          "id": "ultraNpc1Inceptor:24",
+          "count": 3
+        },
+        {
+          "id": "ultraNpc2Eliminator:24",
+          "count": 1
+        },
+        {
+          "id": "ultraNpc2Eliminator:25",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 7,
+          "stars": 10,
+          "rank": "Gold3"
+        },
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold2"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 1,
+          "stars": 11,
+          "rank": "Gold2"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 1,
+          "stars": 10,
+          "rank": "Gold3"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME31",
+      "energyCost": 10,
+      "nodeNumber": 31,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 131,
+            "max": 195
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL107",
+            "chanceId": "upgradeLegendary_elite"
+          }
+        ]
+      },
+      "enemyPower": 179944,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Ultramarines"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Eliminator",
+        "Heavy Intercessor",
+        "Inceptor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:24",
+          "count": 4
+        },
+        {
+          "id": "ultraNpc1Inceptor:24",
+          "count": 2
+        },
+        {
+          "id": "ultraNpc2Eliminator:24",
+          "count": 2
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor:22",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold2"
+        },
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold2"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold2"
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor",
+          "name": "Heavy Intercessor",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold1"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME32",
+      "energyCost": 10,
+      "nodeNumber": 32,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 210
+          },
+          {
+            "id": "shards_ultraTigurius",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_ultraTigurius",
+            "chanceId": "shard_elite"
+          }
+        ]
+      },
+      "enemyPower": 136520,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Ultramarines"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Eliminator",
+        "Inceptor",
+        "Tigurius"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:24",
+          "count": 5
+        },
+        {
+          "id": "ultraBossTigurius:3",
+          "count": 1
+        },
+        {
+          "id": "ultraNpc1Inceptor:24",
+          "count": 1
+        },
+        {
+          "id": "ultraNpc2Eliminator:24",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 5,
+          "stars": 11,
+          "rank": "Gold2"
+        },
+        {
+          "id": "ultraBossTigurius",
+          "name": "Tigurius",
+          "count": 1,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 1,
+          "stars": 11,
+          "rank": "Gold2"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold2"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME33",
+      "energyCost": 10,
+      "nodeNumber": 33,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 210
+          },
+          {
+            "id": "upgArmR006",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR006",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 154149,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Ultramarines"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Eliminator",
+        "Heavy Intercessor",
+        "Inceptor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:25",
+          "count": 3
+        },
+        {
+          "id": "ultraNpc1Inceptor:25",
+          "count": 3
+        },
+        {
+          "id": "ultraNpc2Eliminator:25",
+          "count": 1
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor:24",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold3"
+        },
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold3"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 1,
+          "stars": 10,
+          "rank": "Gold3"
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor",
+          "name": "Heavy Intercessor",
+          "count": 1,
+          "stars": 11,
+          "rank": "Gold2"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME34",
+      "energyCost": 10,
+      "nodeNumber": 34,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 210
+          },
+          {
+            "id": "upgHpC006",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC006",
+            "chanceId": "upgradeCommon_elite"
+          }
+        ]
+      },
+      "enemyPower": 143018,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Ultramarines"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Inceptor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:27",
+          "count": 4
+        },
+        {
+          "id": "ultraNpc1Inceptor:26",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 4,
+          "stars": 10,
+          "rank": "Diamond1"
+        },
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 5,
+          "stars": 11,
+          "rank": "Gold3"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME35",
+      "energyCost": 10,
+      "nodeNumber": 35,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 210
+          },
+          {
+            "id": "upgDmgU010",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgU010",
+            "chanceId": "upgradeUncommon_elite"
+          }
+        ]
+      },
+      "enemyPower": 169712,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Ultramarines"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Heavy Intercessor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:27",
+          "count": 6
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor:25",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 6,
+          "stars": 10,
+          "rank": "Diamond1"
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor",
+          "name": "Heavy Intercessor",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold3"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME36",
+      "energyCost": 10,
+      "nodeNumber": 36,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 210
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpE003",
+            "chanceId": "upgradeEpic_elite"
+          }
+        ]
+      },
+      "enemyPower": 189894,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Ultramarines"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Eliminator",
+        "Heavy Intercessor",
+        "Inceptor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:22",
+          "count": 4
+        },
+        {
+          "id": "ultraNpc1Inceptor:26",
+          "count": 3
+        },
+        {
+          "id": "ultraNpc2Eliminator:26",
+          "count": 1
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor:25",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold3"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 1,
+          "stars": 11,
+          "rank": "Gold3"
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor",
+          "name": "Heavy Intercessor",
+          "count": 1,
+          "stars": 10,
+          "rank": "Gold3"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME37",
+      "energyCost": 10,
+      "nodeNumber": 37,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 210
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL100",
+            "chanceId": "upgradeLegendary_elite"
+          }
+        ]
+      },
+      "enemyPower": 243928,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "Ultramarines"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Eliminator",
+        "Heavy Intercessor",
+        "Inceptor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "ultraNpc1Inceptor:26",
+          "count": 1
+        },
+        {
+          "id": "ultraNpc2Eliminator:25",
+          "count": 3
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor:25",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 1,
+          "stars": 11,
+          "rank": "Gold3"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold3"
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor",
+          "name": "Heavy Intercessor",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold3"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME38",
+      "energyCost": 10,
+      "nodeNumber": 38,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 210
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmL203",
+            "chanceId": "upgradeLegendary_elite"
+          }
+        ]
+      },
+      "enemyPower": 143224,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum",
+        "Ultramarines"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Inceptor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:27",
+          "count": 8
+        },
+        {
+          "id": "ultraNpc1Inceptor:27",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 8,
+          "stars": 10,
+          "rank": "Diamond1"
+        },
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 4,
+          "stars": 10,
+          "rank": "Diamond1"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME39",
+      "energyCost": 10,
+      "nodeNumber": 39,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 210
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgL001",
+            "chanceId": "upgradeLegendary_elite"
+          }
+        ]
+      },
+      "enemyPower": 298206,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "Ultramarines"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Eliminator",
+        "Heavy Intercessor",
+        "Inceptor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "ultraNpc1Inceptor:25",
+          "count": 4
+        },
+        {
+          "id": "ultraNpc2Eliminator:25",
+          "count": 2
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor:25",
+          "count": 1
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor:26",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 4,
+          "stars": 10,
+          "rank": "Gold3"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold3"
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor",
+          "name": "Heavy Intercessor",
+          "count": 1,
+          "stars": 10,
+          "rank": "Gold3"
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor",
+          "name": "Heavy Intercessor",
+          "count": 1,
+          "stars": 11,
+          "rank": "Gold3"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "IME40",
+      "energyCost": 10,
+      "nodeNumber": 40,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 225
+          },
+          {
+            "id": "shards_ultraCalgar",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_ultraCalgar",
+            "chanceId": "shard_elite"
+          }
+        ]
+      },
+      "enemyPower": 313265,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "Ultramarines"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Calgar",
+        "Eliminator",
+        "Heavy Intercessor",
+        "Inceptor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "ultraBossCalgar:3",
+          "count": 1
+        },
+        {
+          "id": "ultraNpc1Inceptor:26",
+          "count": 4
+        },
+        {
+          "id": "ultraNpc2Eliminator:25",
+          "count": 1
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor:24",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "ultraBossCalgar",
+          "name": "Calgar",
+          "count": 1,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "ultraNpc1Inceptor",
+          "name": "Inceptor",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold3"
+        },
+        {
+          "id": "ultraNpc2Eliminator",
+          "name": "Eliminator",
+          "count": 1,
+          "stars": 10,
+          "rank": "Gold3"
+        },
+        {
+          "id": "ultraNpc4HeavyIntercessor",
+          "name": "Heavy Intercessor",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold2"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    }
+  ]
+}

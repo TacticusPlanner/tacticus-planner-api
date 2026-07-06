@@ -1,0 +1,3507 @@
+{
+  "groupId": "elite1",
+  "faction": "Ultramarines",
+  "releaseType": "standard",
+  "coreCharacters": [
+    "ultraTigurius",
+    "ultraEliminatorSgt",
+    "ultraInceptorSgt"
+  ],
+  "types": [
+    "Elite"
+  ],
+  "battles": [
+    {
+      "id": "IE01",
+      "energyCost": 10,
+      "nodeNumber": 1,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 160
+          },
+          {
+            "id": "upgDmgU010",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgU010",
+            "chanceId": "upgradeUncommon_elite"
+          }
+        ]
+      },
+      "enemyPower": 7279,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Flayed One",
+        "Necron Warrior",
+        "Ophydian Destroyer",
+        "Scarab Swarm"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior:8",
+          "count": 2
+        },
+        {
+          "id": "necroNpc2FlayedOne:8",
+          "count": 2
+        },
+        {
+          "id": "necroNpc4Destroyer:9",
+          "count": 1
+        },
+        {
+          "id": "necroNpc5Swarm:7",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 2,
+          "stars": 4,
+          "rank": "Bronze2"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 2,
+          "stars": 4,
+          "rank": "Bronze2"
+        },
+        {
+          "id": "necroNpc4Destroyer",
+          "name": "Ophydian Destroyer",
+          "count": 1,
+          "stars": 5,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "necroNpc5Swarm",
+          "name": "Scarab Swarm",
+          "count": 2,
+          "stars": 5,
+          "rank": "Bronze1"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE02",
+      "energyCost": 10,
+      "nodeNumber": 2,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 160
+          },
+          {
+            "id": "upgDmgC011",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC011",
+            "chanceId": "upgradeCommon_elite"
+          }
+        ]
+      },
+      "enemyPower": 8543,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Deathmark",
+        "Flayed One",
+        "Necron Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior:10",
+          "count": 3
+        },
+        {
+          "id": "necroNpc2FlayedOne:9",
+          "count": 4
+        },
+        {
+          "id": "necroNpc3Deathmark:11",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 3,
+          "stars": 7,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 4,
+          "stars": 4,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "necroNpc3Deathmark",
+          "name": "Deathmark",
+          "count": 2,
+          "stars": 4,
+          "rank": "Silver1"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE03",
+      "energyCost": 10,
+      "nodeNumber": 3,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 160
+          },
+          {
+            "id": "upgHpR043",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR043",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 10592,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Flayed One",
+        "Necron Warrior",
+        "Ophydian Destroyer",
+        "Scarab Swarm"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior:9",
+          "count": 3
+        },
+        {
+          "id": "necroNpc2FlayedOne:10",
+          "count": 2
+        },
+        {
+          "id": "necroNpc4Destroyer:8",
+          "count": 1
+        },
+        {
+          "id": "necroNpc5Swarm:10",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 3,
+          "stars": 4,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 2,
+          "stars": 7,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "necroNpc4Destroyer",
+          "name": "Ophydian Destroyer",
+          "count": 1,
+          "stars": 4,
+          "rank": "Bronze2"
+        },
+        {
+          "id": "necroNpc5Swarm",
+          "name": "Scarab Swarm",
+          "count": 2,
+          "stars": 7,
+          "rank": "Bronze3"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE04",
+      "energyCost": 10,
+      "nodeNumber": 4,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 160
+          },
+          {
+            "id": "upgDmgR007",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR007",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 7606,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Deathmark",
+        "Flayed One",
+        "Necron Warrior",
+        "Scarab Swarm"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior:11",
+          "count": 1
+        },
+        {
+          "id": "necroNpc2FlayedOne:10",
+          "count": 2
+        },
+        {
+          "id": "necroNpc3Deathmark:9",
+          "count": 1
+        },
+        {
+          "id": "necroNpc3Deathmark:10",
+          "count": 1
+        },
+        {
+          "id": "necroNpc5Swarm:10",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 1,
+          "stars": 4,
+          "rank": "Silver1"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 2,
+          "stars": 7,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "necroNpc3Deathmark",
+          "name": "Deathmark",
+          "count": 1,
+          "stars": 4,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "necroNpc3Deathmark",
+          "name": "Deathmark",
+          "count": 1,
+          "stars": 7,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "necroNpc5Swarm",
+          "name": "Scarab Swarm",
+          "count": 1,
+          "stars": 7,
+          "rank": "Bronze3"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE05",
+      "energyCost": 10,
+      "nodeNumber": 5,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 160
+          },
+          {
+            "id": "upgArmC001",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC001",
+            "chanceId": "upgradeCommon_elite"
+          }
+        ]
+      },
+      "enemyPower": 13899,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Deathmark",
+        "Flayed One",
+        "Necron Warrior",
+        "Scarab Swarm"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior:11",
+          "count": 4
+        },
+        {
+          "id": "necroNpc2FlayedOne:11",
+          "count": 2
+        },
+        {
+          "id": "necroNpc3Deathmark:11",
+          "count": 2
+        },
+        {
+          "id": "necroNpc5Swarm:9",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 4,
+          "stars": 4,
+          "rank": "Silver1"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 2,
+          "stars": 4,
+          "rank": "Silver1"
+        },
+        {
+          "id": "necroNpc3Deathmark",
+          "name": "Deathmark",
+          "count": 2,
+          "stars": 4,
+          "rank": "Silver1"
+        },
+        {
+          "id": "necroNpc5Swarm",
+          "name": "Scarab Swarm",
+          "count": 3,
+          "stars": 4,
+          "rank": "Bronze3"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE06",
+      "energyCost": 10,
+      "nodeNumber": 6,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 160
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL100",
+            "chanceId": "upgradeLegendary_elite"
+          }
+        ]
+      },
+      "enemyPower": 14614,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Flayed One",
+        "Necron Warrior",
+        "Ophydian Destroyer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior:12",
+          "count": 5
+        },
+        {
+          "id": "necroNpc2FlayedOne:11",
+          "count": 3
+        },
+        {
+          "id": "necroNpc4Destroyer:8",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 5,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 3,
+          "stars": 4,
+          "rank": "Silver1"
+        },
+        {
+          "id": "necroNpc4Destroyer",
+          "name": "Ophydian Destroyer",
+          "count": 1,
+          "stars": 4,
+          "rank": "Bronze2"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE07",
+      "energyCost": 10,
+      "nodeNumber": 7,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 160
+          },
+          {
+            "id": "upgHpR002",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR002",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 17477,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Flayed One",
+        "Necron Warrior",
+        "Ophydian Destroyer",
+        "Scarab Swarm"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior:11",
+          "count": 3
+        },
+        {
+          "id": "necroNpc2FlayedOne:12",
+          "count": 3
+        },
+        {
+          "id": "necroNpc4Destroyer:7",
+          "count": 2
+        },
+        {
+          "id": "necroNpc5Swarm:9",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 3,
+          "stars": 4,
+          "rank": "Silver1"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 3,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "necroNpc4Destroyer",
+          "name": "Ophydian Destroyer",
+          "count": 2,
+          "stars": 4,
+          "rank": "Bronze1"
+        },
+        {
+          "id": "necroNpc5Swarm",
+          "name": "Scarab Swarm",
+          "count": 2,
+          "stars": 4,
+          "rank": "Bronze3"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE08",
+      "energyCost": 10,
+      "nodeNumber": 8,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 160
+          },
+          {
+            "id": "shards_necroWarden",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_necroWarden",
+            "chanceId": "shard_elite"
+          }
+        ]
+      },
+      "enemyPower": 19415,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Flayed One",
+        "Makhotep",
+        "Necron Warrior",
+        "Ophydian Destroyer",
+        "Scarab Swarm"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroBossC1Warden:2",
+          "count": 1
+        },
+        {
+          "id": "necroNpc1Warrior:10",
+          "count": 3
+        },
+        {
+          "id": "necroNpc2FlayedOne:10",
+          "count": 2
+        },
+        {
+          "id": "necroNpc4Destroyer:9",
+          "count": 1
+        },
+        {
+          "id": "necroNpc5Swarm:10",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroBossC1Warden",
+          "name": "Makhotep",
+          "count": 1,
+          "stars": 6,
+          "rank": "Silver1"
+        },
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 3,
+          "stars": 7,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 2,
+          "stars": 7,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "necroNpc4Destroyer",
+          "name": "Ophydian Destroyer",
+          "count": 1,
+          "stars": 5,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "necroNpc5Swarm",
+          "name": "Scarab Swarm",
+          "count": 2,
+          "stars": 7,
+          "rank": "Bronze3"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE09",
+      "energyCost": 10,
+      "nodeNumber": 9,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          },
+          {
+            "id": "upgArmU001",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmU001",
+            "chanceId": "upgradeUncommon_elite"
+          }
+        ]
+      },
+      "enemyPower": 12074,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 5,
+      "enemiesTypes": [
+        "Flayed One",
+        "Necron Warrior",
+        "Ophydian Destroyer",
+        "Scarab Swarm"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior:13",
+          "count": 1
+        },
+        {
+          "id": "necroNpc2FlayedOne:12",
+          "count": 2
+        },
+        {
+          "id": "necroNpc4Destroyer:8",
+          "count": 1
+        },
+        {
+          "id": "necroNpc5Swarm:11",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 1,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 2,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "necroNpc4Destroyer",
+          "name": "Ophydian Destroyer",
+          "count": 1,
+          "stars": 4,
+          "rank": "Bronze2"
+        },
+        {
+          "id": "necroNpc5Swarm",
+          "name": "Scarab Swarm",
+          "count": 1,
+          "stars": 4,
+          "rank": "Silver1"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE10",
+      "energyCost": 10,
+      "nodeNumber": 10,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          },
+          {
+            "id": "upgHpR022",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR022",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 18722,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Deathmark",
+        "Flayed One",
+        "Necron Warrior",
+        "Ophydian Destroyer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior:12",
+          "count": 4
+        },
+        {
+          "id": "necroNpc2FlayedOne:12",
+          "count": 3
+        },
+        {
+          "id": "necroNpc3Deathmark:10",
+          "count": 1
+        },
+        {
+          "id": "necroNpc4Destroyer:9",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 4,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 3,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "necroNpc3Deathmark",
+          "name": "Deathmark",
+          "count": 1,
+          "stars": 7,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "necroNpc4Destroyer",
+          "name": "Ophydian Destroyer",
+          "count": 1,
+          "stars": 5,
+          "rank": "Bronze3"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE11",
+      "energyCost": 10,
+      "nodeNumber": 11,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          },
+          {
+            "id": "upgHpR027",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR027",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 27298,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Deathmark",
+        "Flayed One",
+        "Scarab Swarm"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc2FlayedOne:13",
+          "count": 3
+        },
+        {
+          "id": "necroNpc3Deathmark:13",
+          "count": 4
+        },
+        {
+          "id": "necroNpc5Swarm:13",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 3,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "necroNpc3Deathmark",
+          "name": "Deathmark",
+          "count": 4,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "necroNpc5Swarm",
+          "name": "Scarab Swarm",
+          "count": 1,
+          "stars": 9,
+          "rank": "Silver1"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE12",
+      "energyCost": 10,
+      "nodeNumber": 12,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          },
+          {
+            "id": "upgHpR040",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR040",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 29542,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Necron Warrior",
+        "Ophydian Destroyer",
+        "Scarab Swarm"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior:15",
+          "count": 2
+        },
+        {
+          "id": "necroNpc4Destroyer:9",
+          "count": 2
+        },
+        {
+          "id": "necroNpc5Swarm:13",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "necroNpc4Destroyer",
+          "name": "Ophydian Destroyer",
+          "count": 2,
+          "stars": 5,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "necroNpc5Swarm",
+          "name": "Scarab Swarm",
+          "count": 3,
+          "stars": 9,
+          "rank": "Silver1"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE13",
+      "energyCost": 10,
+      "nodeNumber": 13,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          },
+          {
+            "id": "upgHpR001",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR001",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 26071,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 5,
+      "enemiesTypes": [
+        "Flayed One",
+        "Necron Warrior",
+        "Ophydian Destroyer",
+        "Scarab Swarm"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior:14",
+          "count": 2
+        },
+        {
+          "id": "necroNpc2FlayedOne:14",
+          "count": 1
+        },
+        {
+          "id": "necroNpc4Destroyer:11",
+          "count": 1
+        },
+        {
+          "id": "necroNpc5Swarm:14",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "necroNpc4Destroyer",
+          "name": "Ophydian Destroyer",
+          "count": 1,
+          "stars": 4,
+          "rank": "Silver1"
+        },
+        {
+          "id": "necroNpc5Swarm",
+          "name": "Scarab Swarm",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE14",
+      "energyCost": 10,
+      "nodeNumber": 14,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          },
+          {
+            "id": "upgDmgU011",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgU011",
+            "chanceId": "upgradeUncommon_elite"
+          }
+        ]
+      },
+      "enemyPower": 21018,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 4,
+      "enemiesTypes": [
+        "Flayed One",
+        "Ophydian Destroyer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc2FlayedOne:14",
+          "count": 3
+        },
+        {
+          "id": "necroNpc4Destroyer:10",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "necroNpc4Destroyer",
+          "name": "Ophydian Destroyer",
+          "count": 1,
+          "stars": 7,
+          "rank": "Bronze3"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE15",
+      "energyCost": 10,
+      "nodeNumber": 15,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          },
+          {
+            "id": "upgDmgR002",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR002",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 35581,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Deathmark",
+        "Flayed One",
+        "Necron Warrior",
+        "Scarab Swarm"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior:14",
+          "count": 2
+        },
+        {
+          "id": "necroNpc2FlayedOne:15",
+          "count": 3
+        },
+        {
+          "id": "necroNpc3Deathmark:14",
+          "count": 1
+        },
+        {
+          "id": "necroNpc5Swarm:13",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 3,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "necroNpc3Deathmark",
+          "name": "Deathmark",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "necroNpc5Swarm",
+          "name": "Scarab Swarm",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver1"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE16",
+      "energyCost": 10,
+      "nodeNumber": 16,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          },
+          {
+            "id": "shards_necroDestroyer",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_necroDestroyer",
+            "chanceId": "shard_elite"
+          }
+        ]
+      },
+      "enemyPower": 36345,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Deathmark",
+        "Flayed One",
+        "Imospekh",
+        "Necron Warrior",
+        "Ophydian Destroyer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroBossC1Destroyer:2",
+          "count": 1
+        },
+        {
+          "id": "necroNpc1Warrior:13",
+          "count": 3
+        },
+        {
+          "id": "necroNpc2FlayedOne:13",
+          "count": 2
+        },
+        {
+          "id": "necroNpc3Deathmark:15",
+          "count": 2
+        },
+        {
+          "id": "necroNpc4Destroyer:9",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroBossC1Destroyer",
+          "name": "Imospekh",
+          "count": 1,
+          "stars": 6,
+          "rank": "Silver2"
+        },
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 3,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "necroNpc3Deathmark",
+          "name": "Deathmark",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "necroNpc4Destroyer",
+          "name": "Ophydian Destroyer",
+          "count": 1,
+          "stars": 5,
+          "rank": "Bronze3"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE17",
+      "energyCost": 10,
+      "nodeNumber": 17,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          },
+          {
+            "id": "upgDmgR022",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR022",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 37774,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Deathmark",
+        "Flayed One",
+        "Necron Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior:15",
+          "count": 3
+        },
+        {
+          "id": "necroNpc2FlayedOne:14",
+          "count": 4
+        },
+        {
+          "id": "necroNpc3Deathmark:15",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 3,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 4,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "necroNpc3Deathmark",
+          "name": "Deathmark",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE18",
+      "energyCost": 10,
+      "nodeNumber": 18,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 123,
+            "max": 180
+          },
+          {
+            "id": "upgDmgR027",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR027",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 41387,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Deathmark",
+        "Flayed One",
+        "Necron Warrior",
+        "Scarab Swarm"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior:14",
+          "count": 1
+        },
+        {
+          "id": "necroNpc2FlayedOne:14",
+          "count": 2
+        },
+        {
+          "id": "necroNpc3Deathmark:15",
+          "count": 3
+        },
+        {
+          "id": "necroNpc5Swarm:14",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "necroNpc3Deathmark",
+          "name": "Deathmark",
+          "count": 3,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "necroNpc5Swarm",
+          "name": "Scarab Swarm",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE19",
+      "energyCost": 10,
+      "nodeNumber": 19,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 123,
+            "max": 180
+          },
+          {
+            "id": "upgDmgR040",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR040",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 29686,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Deathmark",
+        "Flayed One",
+        "Necron Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior:15",
+          "count": 2
+        },
+        {
+          "id": "necroNpc2FlayedOne:15",
+          "count": 3
+        },
+        {
+          "id": "necroNpc3Deathmark:16",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 3,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "necroNpc3Deathmark",
+          "name": "Deathmark",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver3"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE20",
+      "energyCost": 10,
+      "nodeNumber": 20,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 123,
+            "max": 180
+          },
+          {
+            "id": "upgDmgR034",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR034",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 52876,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Deathmark",
+        "Necron Warrior",
+        "Ophydian Destroyer",
+        "Scarab Swarm"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior:16",
+          "count": 3
+        },
+        {
+          "id": "necroNpc3Deathmark:16",
+          "count": 3
+        },
+        {
+          "id": "necroNpc4Destroyer:12",
+          "count": 1
+        },
+        {
+          "id": "necroNpc5Swarm:15",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver3"
+        },
+        {
+          "id": "necroNpc3Deathmark",
+          "name": "Deathmark",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver3"
+        },
+        {
+          "id": "necroNpc4Destroyer",
+          "name": "Ophydian Destroyer",
+          "count": 1,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "necroNpc5Swarm",
+          "name": "Scarab Swarm",
+          "count": 1,
+          "stars": 9,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE21",
+      "energyCost": 10,
+      "nodeNumber": 21,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 123,
+            "max": 180
+          },
+          {
+            "id": "upgHpU002",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpU002",
+            "chanceId": "upgradeUncommon_elite"
+          }
+        ]
+      },
+      "enemyPower": 47582,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Deathmark",
+        "Flayed One",
+        "Necron Warrior",
+        "Ophydian Destroyer",
+        "Scarab Swarm"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior:14",
+          "count": 3
+        },
+        {
+          "id": "necroNpc2FlayedOne:14",
+          "count": 4
+        },
+        {
+          "id": "necroNpc3Deathmark:14",
+          "count": 2
+        },
+        {
+          "id": "necroNpc4Destroyer:11",
+          "count": 1
+        },
+        {
+          "id": "necroNpc5Swarm:12",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 4,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "necroNpc3Deathmark",
+          "name": "Deathmark",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "necroNpc4Destroyer",
+          "name": "Ophydian Destroyer",
+          "count": 1,
+          "stars": 4,
+          "rank": "Silver1"
+        },
+        {
+          "id": "necroNpc5Swarm",
+          "name": "Scarab Swarm",
+          "count": 1,
+          "stars": 7,
+          "rank": "Silver1"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE22",
+      "energyCost": 10,
+      "nodeNumber": 22,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 123,
+            "max": 180
+          },
+          {
+            "id": "upgArmR022",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR022",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 63416,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Deathmark",
+        "Flayed One",
+        "Necron Warrior",
+        "Ophydian Destroyer",
+        "Scarab Swarm"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior:15",
+          "count": 3
+        },
+        {
+          "id": "necroNpc2FlayedOne:16",
+          "count": 1
+        },
+        {
+          "id": "necroNpc3Deathmark:16",
+          "count": 2
+        },
+        {
+          "id": "necroNpc4Destroyer:13",
+          "count": 1
+        },
+        {
+          "id": "necroNpc5Swarm:15",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 3,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver3"
+        },
+        {
+          "id": "necroNpc3Deathmark",
+          "name": "Deathmark",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver3"
+        },
+        {
+          "id": "necroNpc4Destroyer",
+          "name": "Ophydian Destroyer",
+          "count": 1,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "necroNpc5Swarm",
+          "name": "Scarab Swarm",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE23",
+      "energyCost": 10,
+      "nodeNumber": 23,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 123,
+            "max": 180
+          },
+          {
+            "id": "upgArmR027",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR027",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 67828,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Deathmark",
+        "Flayed One",
+        "Necron Warrior",
+        "Ophydian Destroyer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior:16",
+          "count": 4
+        },
+        {
+          "id": "necroNpc2FlayedOne:16",
+          "count": 2
+        },
+        {
+          "id": "necroNpc3Deathmark:15",
+          "count": 1
+        },
+        {
+          "id": "necroNpc4Destroyer:13",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 4,
+          "stars": 8,
+          "rank": "Silver3"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver3"
+        },
+        {
+          "id": "necroNpc3Deathmark",
+          "name": "Deathmark",
+          "count": 1,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "necroNpc4Destroyer",
+          "name": "Ophydian Destroyer",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver1"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE24",
+      "energyCost": 10,
+      "nodeNumber": 24,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 123,
+            "max": 180
+          },
+          {
+            "id": "shards_necroSpyder",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_necroSpyder",
+            "chanceId": "shard_elite"
+          }
+        ]
+      },
+      "enemyPower": 74699,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Aleph-Null",
+        "Deathmark",
+        "Necron Warrior",
+        "Ophydian Destroyer",
+        "Scarab Swarm"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroBossC1Spyder:2",
+          "count": 1
+        },
+        {
+          "id": "necroNpc1Warrior:17",
+          "count": 3
+        },
+        {
+          "id": "necroNpc3Deathmark:14",
+          "count": 1
+        },
+        {
+          "id": "necroNpc4Destroyer:11",
+          "count": 2
+        },
+        {
+          "id": "necroNpc5Swarm:15",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroBossC1Spyder",
+          "name": "Aleph-Null",
+          "count": 1,
+          "stars": 7,
+          "rank": "Silver3"
+        },
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 3,
+          "stars": 11,
+          "rank": "Silver3"
+        },
+        {
+          "id": "necroNpc3Deathmark",
+          "name": "Deathmark",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "necroNpc4Destroyer",
+          "name": "Ophydian Destroyer",
+          "count": 2,
+          "stars": 4,
+          "rank": "Silver1"
+        },
+        {
+          "id": "necroNpc5Swarm",
+          "name": "Scarab Swarm",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE25",
+      "energyCost": 10,
+      "nodeNumber": 25,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 131,
+            "max": 195
+          },
+          {
+            "id": "upgArmC011",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC011",
+            "chanceId": "upgradeCommon_elite"
+          }
+        ]
+      },
+      "enemyPower": 75570,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Deathmark",
+        "Flayed One",
+        "Necron Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior:18",
+          "count": 3
+        },
+        {
+          "id": "necroNpc2FlayedOne:17",
+          "count": 4
+        },
+        {
+          "id": "necroNpc3Deathmark:18",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 4,
+          "stars": 11,
+          "rank": "Silver3"
+        },
+        {
+          "id": "necroNpc3Deathmark",
+          "name": "Deathmark",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold1"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE26",
+      "energyCost": 10,
+      "nodeNumber": 26,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 131,
+            "max": 195
+          },
+          {
+            "id": "upgArmR034",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR034",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 67427,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Flayed One",
+        "Necron Warrior",
+        "Ophydian Destroyer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior:18",
+          "count": 3
+        },
+        {
+          "id": "necroNpc2FlayedOne:17",
+          "count": 2
+        },
+        {
+          "id": "necroNpc4Destroyer:16",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 2,
+          "stars": 11,
+          "rank": "Silver3"
+        },
+        {
+          "id": "necroNpc4Destroyer",
+          "name": "Ophydian Destroyer",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver3"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE27",
+      "energyCost": 10,
+      "nodeNumber": 27,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 131,
+            "max": 195
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmE013",
+            "chanceId": "upgradeEpic_elite"
+          }
+        ]
+      },
+      "enemyPower": 60693,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Deathmark",
+        "Flayed One",
+        "Necron Warrior",
+        "Scarab Swarm"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior:18",
+          "count": 1
+        },
+        {
+          "id": "necroNpc2FlayedOne:17",
+          "count": 3
+        },
+        {
+          "id": "necroNpc3Deathmark:18",
+          "count": 1
+        },
+        {
+          "id": "necroNpc5Swarm:18",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 1,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 3,
+          "stars": 11,
+          "rank": "Silver3"
+        },
+        {
+          "id": "necroNpc3Deathmark",
+          "name": "Deathmark",
+          "count": 1,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "necroNpc5Swarm",
+          "name": "Scarab Swarm",
+          "count": 1,
+          "stars": 10,
+          "rank": "Gold1"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE28",
+      "energyCost": 10,
+      "nodeNumber": 28,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 131,
+            "max": 195
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL102",
+            "chanceId": "upgradeLegendary_elite"
+          }
+        ]
+      },
+      "enemyPower": 83946,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Deathmark",
+        "Flayed One",
+        "Necron Warrior",
+        "Scarab Swarm"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior:17",
+          "count": 2
+        },
+        {
+          "id": "necroNpc2FlayedOne:18",
+          "count": 4
+        },
+        {
+          "id": "necroNpc3Deathmark:17",
+          "count": 2
+        },
+        {
+          "id": "necroNpc5Swarm:16",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 2,
+          "stars": 11,
+          "rank": "Silver3"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 4,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "necroNpc3Deathmark",
+          "name": "Deathmark",
+          "count": 2,
+          "stars": 11,
+          "rank": "Silver3"
+        },
+        {
+          "id": "necroNpc5Swarm",
+          "name": "Scarab Swarm",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver3"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE29",
+      "energyCost": 10,
+      "nodeNumber": 29,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 131,
+            "max": 195
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL107",
+            "chanceId": "upgradeLegendary_elite"
+          }
+        ]
+      },
+      "enemyPower": 113968,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Flayed One",
+        "Necron Warrior",
+        "Ophydian Destroyer",
+        "Scarab Swarm"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior:17",
+          "count": 3
+        },
+        {
+          "id": "necroNpc2FlayedOne:18",
+          "count": 3
+        },
+        {
+          "id": "necroNpc4Destroyer:14",
+          "count": 2
+        },
+        {
+          "id": "necroNpc5Swarm:17",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 3,
+          "stars": 11,
+          "rank": "Silver3"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "necroNpc4Destroyer",
+          "name": "Ophydian Destroyer",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "necroNpc5Swarm",
+          "name": "Scarab Swarm",
+          "count": 2,
+          "stars": 11,
+          "rank": "Silver3"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE30",
+      "energyCost": 10,
+      "nodeNumber": 30,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 131,
+            "max": 195
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL099",
+            "chanceId": "upgradeLegendary_elite"
+          }
+        ]
+      },
+      "enemyPower": 124200,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Deathmark",
+        "Flayed One",
+        "Necron Warrior",
+        "Ophydian Destroyer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior:19",
+          "count": 3
+        },
+        {
+          "id": "necroNpc2FlayedOne:19",
+          "count": 2
+        },
+        {
+          "id": "necroNpc3Deathmark:19",
+          "count": 2
+        },
+        {
+          "id": "necroNpc4Destroyer:16",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "necroNpc3Deathmark",
+          "name": "Deathmark",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "necroNpc4Destroyer",
+          "name": "Ophydian Destroyer",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver3"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE31",
+      "energyCost": 10,
+      "nodeNumber": 31,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 131,
+            "max": 195
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL114",
+            "chanceId": "upgradeLegendary_elite"
+          }
+        ]
+      },
+      "enemyPower": 107643,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Deathmark",
+        "Flayed One",
+        "Necron Warrior",
+        "Ophydian Destroyer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior:19",
+          "count": 1
+        },
+        {
+          "id": "necroNpc2FlayedOne:19",
+          "count": 2
+        },
+        {
+          "id": "necroNpc3Deathmark:18",
+          "count": 3
+        },
+        {
+          "id": "necroNpc4Destroyer:16",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 1,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "necroNpc3Deathmark",
+          "name": "Deathmark",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "necroNpc4Destroyer",
+          "name": "Ophydian Destroyer",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver3"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE32",
+      "energyCost": 10,
+      "nodeNumber": 32,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 210
+          },
+          {
+            "id": "shards_necroPlasmancer",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_necroPlasmancer",
+            "chanceId": "shard_elite"
+          }
+        ]
+      },
+      "enemyPower": 142501,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Deathmark",
+        "Flayed One",
+        "Necron Warrior",
+        "Thutmose"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroBossC1Plasmancer:2",
+          "count": 1
+        },
+        {
+          "id": "necroNpc1Warrior:19",
+          "count": 3
+        },
+        {
+          "id": "necroNpc2FlayedOne:19",
+          "count": 4
+        },
+        {
+          "id": "necroNpc3Deathmark:18",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroBossC1Plasmancer",
+          "name": "Thutmose",
+          "count": 1,
+          "stars": 8,
+          "rank": "Gold1"
+        },
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "necroNpc3Deathmark",
+          "name": "Deathmark",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold1"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE33",
+      "energyCost": 10,
+      "nodeNumber": 33,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 210
+          },
+          {
+            "id": "upgArmU005",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmU005",
+            "chanceId": "upgradeUncommon_elite"
+          }
+        ]
+      },
+      "enemyPower": 151875,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Deathmark",
+        "Flayed One",
+        "Necron Warrior"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior:20",
+          "count": 3
+        },
+        {
+          "id": "necroNpc2FlayedOne:21",
+          "count": 4
+        },
+        {
+          "id": "necroNpc3Deathmark:20",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold2"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold2"
+        },
+        {
+          "id": "necroNpc3Deathmark",
+          "name": "Deathmark",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold2"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE34",
+      "energyCost": 10,
+      "nodeNumber": 34,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 210
+          },
+          {
+            "id": "upgHpR005",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR005",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 143476,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Flayed One",
+        "Necron Warrior",
+        "Ophydian Destroyer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior:22",
+          "count": 3
+        },
+        {
+          "id": "necroNpc2FlayedOne:21",
+          "count": 2
+        },
+        {
+          "id": "necroNpc4Destroyer:18",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold3"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold2"
+        },
+        {
+          "id": "necroNpc4Destroyer",
+          "name": "Ophydian Destroyer",
+          "count": 1,
+          "stars": 11,
+          "rank": "Gold1"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE35",
+      "energyCost": 10,
+      "nodeNumber": 35,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 210
+          },
+          {
+            "id": "upgArmR015",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR015",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 124722,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Deathmark",
+        "Flayed One",
+        "Necron Warrior",
+        "Scarab Swarm"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior:18",
+          "count": 3
+        },
+        {
+          "id": "necroNpc2FlayedOne:18",
+          "count": 6
+        },
+        {
+          "id": "necroNpc3Deathmark:18",
+          "count": 2
+        },
+        {
+          "id": "necroNpc5Swarm:17",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 6,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "necroNpc3Deathmark",
+          "name": "Deathmark",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "necroNpc5Swarm",
+          "name": "Scarab Swarm",
+          "count": 1,
+          "stars": 11,
+          "rank": "Silver3"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE36",
+      "energyCost": 10,
+      "nodeNumber": 36,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 210
+          },
+          {
+            "id": "upgHpR011",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR011",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 179034,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Deathmark",
+        "Flayed One",
+        "Necron Warrior",
+        "Scarab Swarm"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior:21",
+          "count": 3
+        },
+        {
+          "id": "necroNpc2FlayedOne:22",
+          "count": 3
+        },
+        {
+          "id": "necroNpc3Deathmark:22",
+          "count": 2
+        },
+        {
+          "id": "necroNpc5Swarm:20",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold2"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold3"
+        },
+        {
+          "id": "necroNpc3Deathmark",
+          "name": "Deathmark",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold3"
+        },
+        {
+          "id": "necroNpc5Swarm",
+          "name": "Scarab Swarm",
+          "count": 1,
+          "stars": 10,
+          "rank": "Gold2"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE37",
+      "energyCost": 10,
+      "nodeNumber": 37,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 210
+          },
+          {
+            "id": "upgArmR040",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR040",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 198819,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Deathmark",
+        "Flayed One",
+        "Necron Warrior",
+        "Ophydian Destroyer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior:24",
+          "count": 1
+        },
+        {
+          "id": "necroNpc2FlayedOne:24",
+          "count": 1
+        },
+        {
+          "id": "necroNpc3Deathmark:24",
+          "count": 3
+        },
+        {
+          "id": "necroNpc4Destroyer:17",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 1,
+          "stars": 10,
+          "rank": "Diamond1"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 1,
+          "stars": 10,
+          "rank": "Diamond1"
+        },
+        {
+          "id": "necroNpc3Deathmark",
+          "name": "Deathmark",
+          "count": 3,
+          "stars": 10,
+          "rank": "Diamond1"
+        },
+        {
+          "id": "necroNpc4Destroyer",
+          "name": "Ophydian Destroyer",
+          "count": 1,
+          "stars": 11,
+          "rank": "Silver3"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE38",
+      "energyCost": 10,
+      "nodeNumber": 38,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 210
+          },
+          {
+            "id": "upgHpC007",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC007",
+            "chanceId": "upgradeCommon_elite"
+          }
+        ]
+      },
+      "enemyPower": 264994,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Flayed One",
+        "Necron Warrior",
+        "Scarab Swarm"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior:24",
+          "count": 5
+        },
+        {
+          "id": "necroNpc2FlayedOne:24",
+          "count": 2
+        },
+        {
+          "id": "necroNpc5Swarm:23",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 5,
+          "stars": 10,
+          "rank": "Diamond1"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 2,
+          "stars": 10,
+          "rank": "Diamond1"
+        },
+        {
+          "id": "necroNpc5Swarm",
+          "name": "Scarab Swarm",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold3"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE39",
+      "energyCost": 10,
+      "nodeNumber": 39,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 210
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL010",
+            "chanceId": "upgradeLegendary_elite"
+          }
+        ]
+      },
+      "enemyPower": 281913,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Deathmark",
+        "Flayed One",
+        "Necron Warrior",
+        "Scarab Swarm"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior:22",
+          "count": 2
+        },
+        {
+          "id": "necroNpc2FlayedOne:22",
+          "count": 1
+        },
+        {
+          "id": "necroNpc3Deathmark:23",
+          "count": 4
+        },
+        {
+          "id": "necroNpc5Swarm:23",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold3"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 1,
+          "stars": 10,
+          "rank": "Gold3"
+        },
+        {
+          "id": "necroNpc3Deathmark",
+          "name": "Deathmark",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold3"
+        },
+        {
+          "id": "necroNpc5Swarm",
+          "name": "Scarab Swarm",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold3"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "IE40",
+      "energyCost": 10,
+      "nodeNumber": 40,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 225
+          },
+          {
+            "id": "shards_necroOverlord",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_necroOverlord",
+            "chanceId": "shard_elite"
+          }
+        ]
+      },
+      "enemyPower": 298540,
+      "enemiesAlliances": [
+        "Xenos"
+      ],
+      "enemiesFactions": [
+        "Necrons"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Anuphet",
+        "Flayed One",
+        "Necron Warrior",
+        "Ophydian Destroyer",
+        "Scarab Swarm"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "necroBossC1Overlord:2",
+          "count": 1
+        },
+        {
+          "id": "necroNpc1Warrior:18",
+          "count": 5
+        },
+        {
+          "id": "necroNpc2FlayedOne:19",
+          "count": 2
+        },
+        {
+          "id": "necroNpc4Destroyer:18",
+          "count": 2
+        },
+        {
+          "id": "necroNpc5Swarm:19",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "necroBossC1Overlord",
+          "name": "Anuphet",
+          "count": 1,
+          "stars": 9,
+          "rank": "Gold2"
+        },
+        {
+          "id": "necroNpc1Warrior",
+          "name": "Necron Warrior",
+          "count": 5,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "necroNpc2FlayedOne",
+          "name": "Flayed One",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "necroNpc4Destroyer",
+          "name": "Ophydian Destroyer",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "necroNpc5Swarm",
+          "name": "Scarab Swarm",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold1"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    }
+  ]
+}

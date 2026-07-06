@@ -2,21 +2,21 @@
   version: dev-2026-07-01,
   schemaVersion: 1,
   gameVersion: 1.40,
-  sourceHash: 0c06f680a03596260955ee3a422c0debb8a6f7005fbf9b3292b51a8a4b2e8b3f,
+  sourceHash: caf7fcc02885ba0e972f74c15b06db189c6341076b2cd1533354cdbef8e5e3db,
   datasets: [
     {
       key: campaign-battles,
-      hash: 399e3a2cb656343c25b2b83a716d1a0a61e181bae54506e908702ace3672b364,
+      hash: 49fe7b7a3e3da0a14776f03bb3de59b9fce53dac119b42fc6da022c8163746c1,
       url: /api/v1/game-catalog/campaign-battles
     },
     {
       key: campaign-definitions,
-      hash: 1279b0993c22fae54e45ad25d1d79681432ae6981560cad6026f5c3c19443574,
+      hash: 7e52df5f9537053cd6ca8b177cc7cf98fefbc5197d9408794304f1f17d8b5a41,
       url: /api/v1/game-catalog/campaign-definitions
     },
     {
       key: characters,
-      hash: b9ac10dbec72bac9487243da42ebd3cbad9551725bd42eb2a1cd750a088318a9,
+      hash: 9dc3b761b81a3692f645feda253a7f04997dc05e9ce3dbfb5fed06e9be94ea36,
       url: /api/v1/game-catalog/characters
     },
     {
@@ -56,7 +56,7 @@
     },
     {
       key: upgrades,
-      hash: ee593ea7bc00474601d1b890f3bf3916034b687bb1d18c48612bb07a28ff92fb,
+      hash: 6a814e2339308c25102506ac53cb7cbccb40b12d84392bca8c49a97e7335716f,
       url: /api/v1/game-catalog/upgrades
     }
   ]

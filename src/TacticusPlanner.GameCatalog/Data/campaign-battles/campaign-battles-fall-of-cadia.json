@@ -7,14 +7,12 @@
     "blackPossession",
     "blackHaarken"
   ],
-  "difficulties": [
-    "standard",
-    "elite"
+  "types": [
+    "Standard"
   ],
   "battles": [
     {
       "id": "FoC01",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 1,
       "slots": 3,
@@ -58,11 +56,12 @@
           "stars": 0,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC02",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 2,
       "slots": 3,
@@ -118,11 +117,12 @@
           "stars": 1,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC03",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 3,
       "slots": 3,
@@ -189,11 +189,12 @@
           "stars": 1,
           "rank": "Stone3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC04",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 4,
       "slots": 3,
@@ -261,11 +262,12 @@
           "stars": 0,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC05",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 5,
       "slots": 3,
@@ -309,11 +311,12 @@
           "stars": 0,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC06",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 6,
       "slots": 3,
@@ -369,11 +372,12 @@
           "stars": 1,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC07",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 7,
       "slots": 3,
@@ -440,11 +444,12 @@
           "stars": 1,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC08",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 8,
       "slots": 3,
@@ -512,11 +517,12 @@
           "stars": 1,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC09",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 9,
       "slots": 3,
@@ -572,11 +578,12 @@
           "stars": 1,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC10",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 10,
       "slots": 3,
@@ -632,11 +639,12 @@
           "stars": 2,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC11",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 11,
       "slots": 3,
@@ -704,11 +712,12 @@
           "stars": 1,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC12",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 12,
       "slots": 3,
@@ -776,11 +785,12 @@
           "stars": 1,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC13",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 13,
       "slots": 3,
@@ -836,11 +846,12 @@
           "stars": 1,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC14",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 14,
       "slots": 4,
@@ -908,11 +919,12 @@
           "stars": 1,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC15",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 15,
       "slots": 5,
@@ -992,11 +1004,12 @@
           "stars": 0,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC16",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 16,
       "slots": 3,
@@ -1052,11 +1065,12 @@
           "stars": 0,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC17",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 17,
       "slots": 5,
@@ -1112,11 +1126,12 @@
           "stars": 2,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC18",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 18,
       "slots": 5,
@@ -1172,11 +1187,12 @@
           "stars": 1,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC19",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 19,
       "slots": 3,
@@ -1232,11 +1248,12 @@
           "stars": 2,
           "rank": "Iron2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC20",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 20,
       "slots": 4,
@@ -1280,11 +1297,12 @@
           "stars": 3,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC21",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 21,
       "slots": 3,
@@ -1352,11 +1370,12 @@
           "stars": 1,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC22",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 22,
       "slots": 5,
@@ -1412,11 +1431,12 @@
           "stars": 3,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC23",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 23,
       "slots": 5,
@@ -1472,11 +1492,12 @@
           "stars": 3,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC24",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 24,
       "slots": 3,
@@ -1532,11 +1553,12 @@
           "stars": 2,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC25",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 25,
       "slots": 5,
@@ -1604,11 +1626,12 @@
           "stars": 2,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC26",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 26,
       "slots": 3,
@@ -1676,11 +1699,12 @@
           "stars": 1,
           "rank": "Stone3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC27",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 27,
       "slots": 4,
@@ -1736,11 +1760,12 @@
           "stars": 2,
           "rank": "Iron2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC28",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 28,
       "slots": 3,
@@ -1796,11 +1821,12 @@
           "stars": 2,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC29",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 29,
       "slots": 5,
@@ -1868,11 +1894,12 @@
           "stars": 3,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC30",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 30,
       "slots": 5,
@@ -1940,11 +1967,12 @@
           "stars": 2,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC31",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 31,
       "slots": 4,
@@ -2012,11 +2040,12 @@
           "stars": 3,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC32",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 32,
       "slots": 5,
@@ -2084,11 +2113,12 @@
           "stars": 2,
           "rank": "Iron2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC33",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 33,
       "slots": 5,
@@ -2156,11 +2186,12 @@
           "stars": 2,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC34",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 34,
       "slots": 5,
@@ -2216,11 +2247,12 @@
           "stars": 2,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC35",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 35,
       "slots": 5,
@@ -2288,11 +2320,12 @@
           "stars": 2,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC36",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 36,
       "slots": 5,
@@ -2360,11 +2393,12 @@
           "stars": 2,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC37",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 37,
       "slots": 4,
@@ -2432,11 +2466,12 @@
           "stars": 6,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC38",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 38,
       "slots": 3,
@@ -2492,11 +2527,12 @@
           "stars": 5,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC39",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 39,
       "slots": 5,
@@ -2564,11 +2600,12 @@
           "stars": 6,
           "rank": "Bronze2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC40",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 40,
       "slots": 5,
@@ -2624,11 +2661,12 @@
           "stars": 6,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC41",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 41,
       "slots": 5,
@@ -2696,11 +2734,12 @@
           "stars": 6,
           "rank": "Bronze2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC42",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 42,
       "slots": 3,
@@ -2768,11 +2807,12 @@
           "stars": 2,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC43",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 43,
       "slots": 4,
@@ -2840,11 +2880,12 @@
           "stars": 3,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC44",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 44,
       "slots": 5,
@@ -2900,11 +2941,12 @@
           "stars": 3,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC45",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 45,
       "slots": 5,
@@ -2984,11 +3026,12 @@
           "stars": 6,
           "rank": "Bronze2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC46",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 46,
       "slots": 5,
@@ -3056,11 +3099,12 @@
           "stars": 6,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC47",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 47,
       "slots": 5,
@@ -3128,11 +3172,12 @@
           "stars": 5,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC48",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 48,
       "slots": 4,
@@ -3188,11 +3233,12 @@
           "stars": 7,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC49",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 49,
       "slots": 5,
@@ -3271,11 +3317,12 @@
           "stars": 6,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC50",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 50,
       "slots": 5,
@@ -3331,11 +3378,12 @@
           "stars": 6,
           "rank": "Bronze2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC51",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 51,
       "slots": 5,
@@ -3391,11 +3439,12 @@
           "stars": 6,
           "rank": "Bronze2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC52",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 52,
       "slots": 4,
@@ -3463,11 +3512,12 @@
           "stars": 6,
           "rank": "Bronze2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC53",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 53,
       "slots": 5,
@@ -3535,11 +3585,12 @@
           "stars": 6,
           "rank": "Bronze2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC54",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 54,
       "slots": 5,
@@ -3595,11 +3646,12 @@
           "stars": 5,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC55",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 55,
       "slots": 3,
@@ -3655,11 +3707,12 @@
           "stars": 6,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC56",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 56,
       "slots": 5,
@@ -3727,11 +3780,12 @@
           "stars": 5,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC57",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 57,
       "slots": 5,
@@ -3787,11 +3841,12 @@
           "stars": 8,
           "rank": "Silver2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC58",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 58,
       "slots": 5,
@@ -3847,11 +3902,12 @@
           "stars": 6,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC59",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 59,
       "slots": 5,
@@ -3907,11 +3963,12 @@
           "stars": 5,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC60",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 60,
       "slots": 5,
@@ -3980,11 +4037,12 @@
           "stars": 9,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC61",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 61,
       "slots": 3,
@@ -4052,11 +4110,12 @@
           "stars": 8,
           "rank": "Silver2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC62",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 62,
       "slots": 5,
@@ -4124,11 +4183,12 @@
           "stars": 7,
           "rank": "Silver1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC63",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 63,
       "slots": 5,
@@ -4207,11 +4267,12 @@
           "stars": 7,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC64",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 64,
       "slots": 5,
@@ -4255,11 +4316,12 @@
           "stars": 9,
           "rank": "Silver2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC65",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 65,
       "slots": 5,
@@ -4315,11 +4377,12 @@
           "stars": 9,
           "rank": "Silver1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC66",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 66,
       "slots": 5,
@@ -4375,11 +4438,12 @@
           "stars": 9,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC67",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 67,
       "slots": 5,
@@ -4423,11 +4487,12 @@
           "stars": 8,
           "rank": "Silver2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC68",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 68,
       "slots": 5,
@@ -4471,11 +4536,12 @@
           "stars": 8,
           "rank": "Silver2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC69",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 69,
       "slots": 3,
@@ -4543,11 +4609,12 @@
           "stars": 7,
           "rank": "Silver1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC70",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 70,
       "slots": 5,
@@ -4591,11 +4658,12 @@
           "stars": 10,
           "rank": "Silver3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC71",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 71,
       "slots": 5,
@@ -4663,11 +4731,12 @@
           "stars": 7,
           "rank": "Silver1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC72",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 72,
       "slots": 5,
@@ -4723,11 +4792,12 @@
           "stars": 9,
           "rank": "Silver1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC73",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 73,
       "slots": 5,
@@ -4795,11 +4865,12 @@
           "stars": 9,
           "rank": "Silver1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC74",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 74,
       "slots": 5,
@@ -4855,11 +4926,12 @@
           "stars": 8,
           "rank": "Silver3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "FoC75",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 75,
       "slots": 5,
@@ -4939,3015 +5011,9 @@
           "stars": 8,
           "rank": "Silver2"
         }
-      ]
-    },
-    {
-      "id": "FoCE01",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 1,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 93,
-            "max": 160
-          },
-          {
-            "id": "upgDmgU003",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgU003",
-            "chanceId": "upgradeUncommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 18105,
-      "enemiesAlliances": [
-        "Imperial"
       ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 7,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Lascannon Team",
-        "Cadian Vox-caster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman:21",
-          "count": 3
-        },
-        {
-          "id": "astraNpc2Lascannon:20",
-          "count": 2
-        },
-        {
-          "id": "astraNpc3Voxcaster:20",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 3,
-          "stars": 10,
-          "rank": "Gold1"
-        },
-        {
-          "id": "astraNpc2Lascannon",
-          "name": "Cadian Lascannon Team",
-          "count": 2,
-          "stars": 10,
-          "rank": "Silver3"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 2,
-          "stars": 10,
-          "rank": "Silver3"
-        }
-      ]
-    },
-    {
-      "id": "FoCE02",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 2,
-      "slots": 4,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 93,
-            "max": 160
-          },
-          {
-            "id": "upgHpR023",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpR023",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 15033,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 8,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Lascannon Team",
-        "Cadian Vox-caster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman:21",
-          "count": 3
-        },
-        {
-          "id": "astraNpc2Lascannon:21",
-          "count": 3
-        },
-        {
-          "id": "astraNpc3Voxcaster:17",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 3,
-          "stars": 10,
-          "rank": "Gold1"
-        },
-        {
-          "id": "astraNpc2Lascannon",
-          "name": "Cadian Lascannon Team",
-          "count": 3,
-          "stars": 10,
-          "rank": "Gold1"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 2,
-          "stars": 8,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "FoCE03",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 3,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 93,
-            "max": 160
-          },
-          {
-            "id": "upgDmgR023",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgR023",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 19816,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 8,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Mortar Team"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman:24",
-          "count": 6
-        },
-        {
-          "id": "astraNpc4Mortar:17",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 6,
-          "stars": 11,
-          "rank": "Gold2"
-        },
-        {
-          "id": "astraNpc4Mortar",
-          "name": "Cadian Mortar Team",
-          "count": 2,
-          "stars": 8,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "FoCE04",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 4,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 93,
-            "max": 160
-          },
-          {
-            "id": "upgArmR023",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmR023",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 20016,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 8,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Lascannon Team"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman:24",
-          "count": 5
-        },
-        {
-          "id": "astraNpc2Lascannon:22",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 5,
-          "stars": 11,
-          "rank": "Gold2"
-        },
-        {
-          "id": "astraNpc2Lascannon",
-          "name": "Cadian Lascannon Team",
-          "count": 3,
-          "stars": 11,
-          "rank": "Gold1"
-        }
-      ]
-    },
-    {
-      "id": "FoCE05",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 5,
-      "slots": 4,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 93,
-            "max": 160
-          },
-          {
-            "id": "upgHpU009",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpU009",
-            "chanceId": "upgradeUncommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 12753,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 9,
-      "enemiesTypes": [
-        "Cadian Guardsman"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman:22",
-          "count": 9
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 9,
-          "stars": 11,
-          "rank": "Gold1"
-        }
-      ]
-    },
-    {
-      "id": "FoCE06",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 6,
-      "slots": 3,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 93,
-            "max": 160
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpL103",
-            "chanceId": "upgradeLegendary_elite"
-          }
-        ]
-      },
-      "enemyPower": 14160,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 5,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Mortar Team",
-        "Cadian Vox-caster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman:22",
-          "count": 2
-        },
-        {
-          "id": "astraNpc3Voxcaster:18",
-          "count": 2
-        },
-        {
-          "id": "astraNpc4Mortar:17",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 2,
-          "stars": 11,
-          "rank": "Gold1"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 2,
-          "stars": 9,
-          "rank": "Silver2"
-        },
-        {
-          "id": "astraNpc4Mortar",
-          "name": "Cadian Mortar Team",
-          "count": 1,
-          "stars": 8,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "FoCE07",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 7,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 93,
-            "max": 160
-          },
-          {
-            "id": "upgHpR018",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpR018",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 27090,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 7,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Mortar Team",
-        "Cadian Vox-caster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman:24",
-          "count": 3
-        },
-        {
-          "id": "astraNpc3Voxcaster:20",
-          "count": 2
-        },
-        {
-          "id": "astraNpc4Mortar:18",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 3,
-          "stars": 11,
-          "rank": "Gold2"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 2,
-          "stars": 10,
-          "rank": "Silver3"
-        },
-        {
-          "id": "astraNpc4Mortar",
-          "name": "Cadian Mortar Team",
-          "count": 2,
-          "stars": 9,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "FoCE08",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 8,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 93,
-            "max": 160
-          },
-          {
-            "id": "shards_astraBullgryn",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "shards_astraBullgryn",
-            "chanceId": "shard_elite"
-          }
-        ]
-      },
-      "enemyPower": 34581,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 8,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Mortar Team",
-        "Cadian Vox-caster",
-        "Kut"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraBossBullgryn:3",
-          "count": 1
-        },
-        {
-          "id": "astraNpc1Guardsman:25",
-          "count": 4
-        },
-        {
-          "id": "astraNpc3Voxcaster:20",
-          "count": 1
-        },
-        {
-          "id": "astraNpc4Mortar:17",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraBossBullgryn",
-          "name": "Kut",
-          "count": 1,
-          "stars": 7,
-          "rank": "Silver2"
-        },
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 4,
-          "stars": 10,
-          "rank": "Gold3"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 1,
-          "stars": 10,
-          "rank": "Silver3"
-        },
-        {
-          "id": "astraNpc4Mortar",
-          "name": "Cadian Mortar Team",
-          "count": 2,
-          "stars": 8,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "FoCE09",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 9,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          },
-          {
-            "id": "upgArmU007",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmU007",
-            "chanceId": "upgradeUncommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 33830,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 10,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Mortar Team",
-        "Cadian Vox-caster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman:25",
-          "count": 6
-        },
-        {
-          "id": "astraNpc3Voxcaster:19",
-          "count": 2
-        },
-        {
-          "id": "astraNpc4Mortar:18",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 6,
-          "stars": 10,
-          "rank": "Gold3"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 2,
-          "stars": 8,
-          "rank": "Silver3"
-        },
-        {
-          "id": "astraNpc4Mortar",
-          "name": "Cadian Mortar Team",
-          "count": 2,
-          "stars": 9,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "FoCE10",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 10,
-      "slots": 4,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          },
-          {
-            "id": "upgHpR024",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpR024",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 29393,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 8,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Lascannon Team",
-        "Cadian Vox-caster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman:26",
-          "count": 5
-        },
-        {
-          "id": "astraNpc2Lascannon:23",
-          "count": 2
-        },
-        {
-          "id": "astraNpc3Voxcaster:19",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 5,
-          "stars": 11,
-          "rank": "Gold3"
-        },
-        {
-          "id": "astraNpc2Lascannon",
-          "name": "Cadian Lascannon Team",
-          "count": 2,
-          "stars": 10,
-          "rank": "Gold2"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 1,
-          "stars": 8,
-          "rank": "Silver3"
-        }
-      ]
-    },
-    {
-      "id": "FoCE11",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 11,
-      "slots": 3,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          },
-          {
-            "id": "upgHpR038",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpR038",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 24149,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 5,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Vox-caster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman:27",
-          "count": 2
-        },
-        {
-          "id": "astraNpc3Voxcaster:19",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 2,
-          "stars": 10,
-          "rank": "Diamond1"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 3,
-          "stars": 8,
-          "rank": "Silver3"
-        }
-      ]
-    },
-    {
-      "id": "FoCE12",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 12,
-      "slots": 3,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          },
-          {
-            "id": "upgArmC004",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmC004",
-            "chanceId": "upgradeCommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 25094,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 6,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Lascannon Team",
-        "Cadian Vox-caster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman:25",
-          "count": 3
-        },
-        {
-          "id": "astraNpc2Lascannon:24",
-          "count": 2
-        },
-        {
-          "id": "astraNpc3Voxcaster:21",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 3,
-          "stars": 10,
-          "rank": "Gold3"
-        },
-        {
-          "id": "astraNpc2Lascannon",
-          "name": "Cadian Lascannon Team",
-          "count": 2,
-          "stars": 11,
-          "rank": "Gold2"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 1,
-          "stars": 10,
-          "rank": "Gold1"
-        }
-      ]
-    },
-    {
-      "id": "FoCE13",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 13,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          },
-          {
-            "id": "upgDmgC010",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgC010",
-            "chanceId": "upgradeCommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 44995,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 9,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Lascannon Team",
-        "Cadian Vox-caster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman:26",
-          "count": 6
-        },
-        {
-          "id": "astraNpc2Lascannon:26",
-          "count": 1
-        },
-        {
-          "id": "astraNpc3Voxcaster:21",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 6,
-          "stars": 11,
-          "rank": "Gold3"
-        },
-        {
-          "id": "astraNpc2Lascannon",
-          "name": "Cadian Lascannon Team",
-          "count": 1,
-          "stars": 11,
-          "rank": "Gold3"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 2,
-          "stars": 10,
-          "rank": "Gold1"
-        }
-      ]
-    },
-    {
-      "id": "FoCE14",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 14,
-      "slots": 4,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          },
-          {
-            "id": "upgDmgU019",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgU019",
-            "chanceId": "upgradeUncommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 37213,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 9,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Mortar Team",
-        "Cadian Vox-caster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman:27",
-          "count": 6
-        },
-        {
-          "id": "astraNpc3Voxcaster:20",
-          "count": 1
-        },
-        {
-          "id": "astraNpc4Mortar:18",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 6,
-          "stars": 10,
-          "rank": "Diamond1"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 1,
-          "stars": 10,
-          "rank": "Silver3"
-        },
-        {
-          "id": "astraNpc4Mortar",
-          "name": "Cadian Mortar Team",
-          "count": 2,
-          "stars": 9,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "FoCE15",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 15,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          },
-          {
-            "id": "upgDmgR003",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgR003",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 46111,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 9,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Lascannon Team",
-        "Cadian Mortar Team",
-        "Cadian Vox-caster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman:25",
-          "count": 3
-        },
-        {
-          "id": "astraNpc2Lascannon:24",
-          "count": 2
-        },
-        {
-          "id": "astraNpc3Voxcaster:21",
-          "count": 3
-        },
-        {
-          "id": "astraNpc4Mortar:18",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 3,
-          "stars": 10,
-          "rank": "Gold3"
-        },
-        {
-          "id": "astraNpc2Lascannon",
-          "name": "Cadian Lascannon Team",
-          "count": 2,
-          "stars": 11,
-          "rank": "Gold2"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 3,
-          "stars": 10,
-          "rank": "Gold1"
-        },
-        {
-          "id": "astraNpc4Mortar",
-          "name": "Cadian Mortar Team",
-          "count": 1,
-          "stars": 9,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "FoCE16",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 16,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          },
-          {
-            "id": "shards_astraPrimarisPsy",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "shards_astraPrimarisPsy",
-            "chanceId": "shard_elite"
-          }
-        ]
-      },
-      "enemyPower": 56577,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 10,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Lascannon Team",
-        "Cadian Vox-caster",
-        "Sibyll"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraBossPrimarisPsy:3",
-          "count": 1
-        },
-        {
-          "id": "astraNpc1Guardsman:23",
-          "count": 4
-        },
-        {
-          "id": "astraNpc2Lascannon:23",
-          "count": 1
-        },
-        {
-          "id": "astraNpc3Voxcaster:21",
-          "count": 4
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraBossPrimarisPsy",
-          "name": "Sibyll",
-          "count": 1,
-          "stars": 7,
-          "rank": "Silver2"
-        },
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 4,
-          "stars": 10,
-          "rank": "Gold2"
-        },
-        {
-          "id": "astraNpc2Lascannon",
-          "name": "Cadian Lascannon Team",
-          "count": 1,
-          "stars": 10,
-          "rank": "Gold2"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 4,
-          "stars": 10,
-          "rank": "Gold1"
-        }
-      ]
-    },
-    {
-      "id": "FoCE17",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 17,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          },
-          {
-            "id": "upgDmgR024",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgR024",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 47847,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 9,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Lascannon Team",
-        "Cadian Mortar Team"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman:27",
-          "count": 6
-        },
-        {
-          "id": "astraNpc2Lascannon:27",
-          "count": 1
-        },
-        {
-          "id": "astraNpc4Mortar:21",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 6,
-          "stars": 10,
-          "rank": "Diamond1"
-        },
-        {
-          "id": "astraNpc2Lascannon",
-          "name": "Cadian Lascannon Team",
-          "count": 1,
-          "stars": 10,
-          "rank": "Diamond1"
-        },
-        {
-          "id": "astraNpc4Mortar",
-          "name": "Cadian Mortar Team",
-          "count": 2,
-          "stars": 10,
-          "rank": "Gold1"
-        }
-      ]
-    },
-    {
-      "id": "FoCE18",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 18,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 123,
-            "max": 180
-          },
-          {
-            "id": "upgDmgR038",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgR038",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 55502,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 8,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Vox-caster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman:27",
-          "count": 5
-        },
-        {
-          "id": "astraNpc3Voxcaster:22",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 5,
-          "stars": 10,
-          "rank": "Diamond1"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 3,
-          "stars": 11,
-          "rank": "Gold1"
-        }
-      ]
-    },
-    {
-      "id": "FoCE19",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 19,
-      "slots": 4,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 123,
-            "max": 180
-          },
-          {
-            "id": "upgDmgC013",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgC013",
-            "chanceId": "upgradeCommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 52696,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 8,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Lascannon Team",
-        "Cadian Vox-caster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman:26",
-          "count": 4
-        },
-        {
-          "id": "astraNpc2Lascannon:26",
-          "count": 2
-        },
-        {
-          "id": "astraNpc3Voxcaster:22",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 4,
-          "stars": 11,
-          "rank": "Gold3"
-        },
-        {
-          "id": "astraNpc2Lascannon",
-          "name": "Cadian Lascannon Team",
-          "count": 2,
-          "stars": 11,
-          "rank": "Gold3"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 2,
-          "stars": 11,
-          "rank": "Gold1"
-        }
-      ]
-    },
-    {
-      "id": "FoCE20",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 20,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 123,
-            "max": 180
-          },
-          {
-            "id": "upgHpC008",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpC008",
-            "chanceId": "upgradeCommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 59868,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 9,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Lascannon Team",
-        "Cadian Vox-caster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman:26",
-          "count": 3
-        },
-        {
-          "id": "astraNpc2Lascannon:27",
-          "count": 3
-        },
-        {
-          "id": "astraNpc3Voxcaster:21",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 3,
-          "stars": 11,
-          "rank": "Gold3"
-        },
-        {
-          "id": "astraNpc2Lascannon",
-          "name": "Cadian Lascannon Team",
-          "count": 3,
-          "stars": 10,
-          "rank": "Diamond1"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 3,
-          "stars": 10,
-          "rank": "Gold1"
-        }
-      ]
-    },
-    {
-      "id": "FoCE21",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 21,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 123,
-            "max": 180
-          },
-          {
-            "id": "upgHpU017",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpU017",
-            "chanceId": "upgradeUncommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 69403,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 7,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Mortar Team",
-        "Cadian Vox-caster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman:27",
-          "count": 3
-        },
-        {
-          "id": "astraNpc3Voxcaster:24",
-          "count": 2
-        },
-        {
-          "id": "astraNpc4Mortar:22",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 3,
-          "stars": 10,
-          "rank": "Diamond1"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 2,
-          "stars": 11,
-          "rank": "Gold2"
-        },
-        {
-          "id": "astraNpc4Mortar",
-          "name": "Cadian Mortar Team",
-          "count": 2,
-          "stars": 11,
-          "rank": "Gold1"
-        }
-      ]
-    },
-    {
-      "id": "FoCE22",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 22,
-      "slots": 3,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 123,
-            "max": 180
-          },
-          {
-            "id": "upgArmR009",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmR009",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 44244,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 6,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Mortar Team",
-        "Cadian Vox-caster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman:27",
-          "count": 4
-        },
-        {
-          "id": "astraNpc3Voxcaster:24",
-          "count": 1
-        },
-        {
-          "id": "astraNpc4Mortar:22",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 4,
-          "stars": 10,
-          "rank": "Diamond1"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 1,
-          "stars": 11,
-          "rank": "Gold2"
-        },
-        {
-          "id": "astraNpc4Mortar",
-          "name": "Cadian Mortar Team",
-          "count": 1,
-          "stars": 11,
-          "rank": "Gold1"
-        }
-      ]
-    },
-    {
-      "id": "FoCE23",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 23,
-      "slots": 4,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 123,
-            "max": 180
-          },
-          {
-            "id": "upgArmR038",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmR038",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 66854,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 10,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Lascannon Team",
-        "Cadian Vox-caster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman:27",
-          "count": 5
-        },
-        {
-          "id": "astraNpc2Lascannon:24",
-          "count": 3
-        },
-        {
-          "id": "astraNpc3Voxcaster:25",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 5,
-          "stars": 10,
-          "rank": "Diamond1"
-        },
-        {
-          "id": "astraNpc2Lascannon",
-          "name": "Cadian Lascannon Team",
-          "count": 3,
-          "stars": 11,
-          "rank": "Gold2"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 2,
-          "stars": 10,
-          "rank": "Gold3"
-        }
-      ]
-    },
-    {
-      "id": "FoCE24",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 24,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 123,
-            "max": 180
-          },
-          {
-            "id": "shards_astraOrdnance",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "shards_astraOrdnance",
-            "chanceId": "shard_elite"
-          }
-        ]
-      },
-      "enemyPower": 83812,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 10,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Lascannon Team",
-        "Cadian Vox-caster",
-        "Thaddeus"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraBossOrdnance:3",
-          "count": 1
-        },
-        {
-          "id": "astraNpc1Guardsman:25",
-          "count": 4
-        },
-        {
-          "id": "astraNpc2Lascannon:25",
-          "count": 2
-        },
-        {
-          "id": "astraNpc3Voxcaster:24",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraBossOrdnance",
-          "name": "Thaddeus",
-          "count": 1,
-          "stars": 7,
-          "rank": "Silver2"
-        },
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 4,
-          "stars": 10,
-          "rank": "Gold3"
-        },
-        {
-          "id": "astraNpc2Lascannon",
-          "name": "Cadian Lascannon Team",
-          "count": 2,
-          "stars": 10,
-          "rank": "Gold3"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 3,
-          "stars": 11,
-          "rank": "Gold2"
-        }
-      ]
-    },
-    {
-      "id": "FoCE25",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 25,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 131,
-            "max": 195
-          },
-          {
-            "id": "upgArmC003",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmC003",
-            "chanceId": "upgradeCommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 82100,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 9,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Mortar Team",
-        "Cadian Vox-caster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman:27",
-          "count": 5
-        },
-        {
-          "id": "astraNpc3Voxcaster:25",
-          "count": 3
-        },
-        {
-          "id": "astraNpc4Mortar:22",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 5,
-          "stars": 10,
-          "rank": "Diamond1"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 3,
-          "stars": 10,
-          "rank": "Gold3"
-        },
-        {
-          "id": "astraNpc4Mortar",
-          "name": "Cadian Mortar Team",
-          "count": 1,
-          "stars": 11,
-          "rank": "Gold1"
-        }
-      ]
-    },
-    {
-      "id": "FoCE26",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 26,
-      "slots": 3,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 131,
-            "max": 195
-          },
-          {
-            "id": "upgHpC009",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpC009",
-            "chanceId": "upgradeCommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 60910,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 7,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Vox-caster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman:28",
-          "count": 5
-        },
-        {
-          "id": "astraNpc3Voxcaster:25",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 5,
-          "stars": 11,
-          "rank": "Diamond1"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 2,
-          "stars": 10,
-          "rank": "Gold3"
-        }
-      ]
-    },
-    {
-      "id": "FoCE27",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 27,
-      "slots": 4,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 131,
-            "max": 195
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmE009",
-            "chanceId": "upgradeEpic_elite"
-          }
-        ]
-      },
-      "enemyPower": 84353,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 7,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Lascannon Team",
-        "Cadian Vox-caster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman:28",
-          "count": 2
-        },
-        {
-          "id": "astraNpc2Lascannon:28",
-          "count": 2
-        },
-        {
-          "id": "astraNpc3Voxcaster:25",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 2,
-          "stars": 11,
-          "rank": "Diamond1"
-        },
-        {
-          "id": "astraNpc2Lascannon",
-          "name": "Cadian Lascannon Team",
-          "count": 2,
-          "stars": 11,
-          "rank": "Diamond1"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 3,
-          "stars": 10,
-          "rank": "Gold3"
-        }
-      ]
-    },
-    {
-      "id": "FoCE28",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 28,
-      "slots": 4,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 131,
-            "max": 195
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpL104",
-            "chanceId": "upgradeLegendary_elite"
-          }
-        ]
-      },
-      "enemyPower": 93738,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 9,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Mortar Team",
-        "Cadian Vox-caster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman:28",
-          "count": 6
-        },
-        {
-          "id": "astraNpc3Voxcaster:26",
-          "count": 2
-        },
-        {
-          "id": "astraNpc4Mortar:22",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 6,
-          "stars": 11,
-          "rank": "Diamond1"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 2,
-          "stars": 11,
-          "rank": "Gold3"
-        },
-        {
-          "id": "astraNpc4Mortar",
-          "name": "Cadian Mortar Team",
-          "count": 1,
-          "stars": 11,
-          "rank": "Gold1"
-        }
-      ]
-    },
-    {
-      "id": "FoCE29",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 29,
-      "slots": 4,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 131,
-            "max": 195
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpL118",
-            "chanceId": "upgradeLegendary_elite"
-          }
-        ]
-      },
-      "enemyPower": 98324,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 7,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Vox-caster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman:29",
-          "count": 4
-        },
-        {
-          "id": "astraNpc3Voxcaster:27",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 4,
-          "stars": 10,
-          "rank": "Diamond2"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 3,
-          "stars": 10,
-          "rank": "Diamond1"
-        }
-      ]
-    },
-    {
-      "id": "FoCE30",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 30,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 131,
-            "max": 195
-          },
-          {
-            "id": "upgHpC001",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpC001",
-            "chanceId": "upgradeCommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 126980,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 11,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Lascannon Team",
-        "Cadian Vox-caster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman:30",
-          "count": 4
-        },
-        {
-          "id": "astraNpc2Lascannon:24",
-          "count": 4
-        },
-        {
-          "id": "astraNpc3Voxcaster:27",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 4,
-          "stars": 11,
-          "rank": "Diamond2"
-        },
-        {
-          "id": "astraNpc2Lascannon",
-          "name": "Cadian Lascannon Team",
-          "count": 4,
-          "stars": 11,
-          "rank": "Gold2"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 3,
-          "stars": 10,
-          "rank": "Diamond1"
-        }
-      ]
-    },
-    {
-      "id": "FoCE31",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 31,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 131,
-            "max": 195
-          },
-          {
-            "id": "upgHpU016",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpU016",
-            "chanceId": "upgradeUncommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 135300,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 10,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Mortar Team",
-        "Cadian Vox-caster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman:28",
-          "count": 6
-        },
-        {
-          "id": "astraNpc3Voxcaster:28",
-          "count": 2
-        },
-        {
-          "id": "astraNpc4Mortar:22",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 6,
-          "stars": 11,
-          "rank": "Diamond1"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 2,
-          "stars": 11,
-          "rank": "Diamond1"
-        },
-        {
-          "id": "astraNpc4Mortar",
-          "name": "Cadian Mortar Team",
-          "count": 2,
-          "stars": 11,
-          "rank": "Gold1"
-        }
-      ]
-    },
-    {
-      "id": "FoCE32",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 32,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 210
-          },
-          {
-            "id": "shards_adeptCelestine",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "shards_adeptCelestine",
-            "chanceId": "shard_elite"
-          }
-        ]
-      },
-      "enemyPower": 175630,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum",
-        "Sisterhood"
-      ],
-      "enemiesTotal": 11,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Lascannon Team",
-        "Cadian Vox-caster",
-        "Celestine"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "adeptBossCelestine:3",
-          "count": 1
-        },
-        {
-          "id": "astraNpc1Guardsman:27",
-          "count": 3
-        },
-        {
-          "id": "astraNpc2Lascannon:24",
-          "count": 4
-        },
-        {
-          "id": "astraNpc3Voxcaster:28",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "adeptBossCelestine",
-          "name": "Celestine",
-          "count": 1,
-          "stars": 10,
-          "rank": "Silver3"
-        },
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 3,
-          "stars": 10,
-          "rank": "Diamond1"
-        },
-        {
-          "id": "astraNpc2Lascannon",
-          "name": "Cadian Lascannon Team",
-          "count": 4,
-          "stars": 11,
-          "rank": "Gold2"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 3,
-          "stars": 11,
-          "rank": "Diamond1"
-        }
-      ]
-    },
-    {
-      "id": "FoCE33",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 33,
-      "slots": 3,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 210
-          },
-          {
-            "id": "upgArmU008",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmU008",
-            "chanceId": "upgradeUncommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 94720,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 9,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Vox-caster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman:28",
-          "count": 5
-        },
-        {
-          "id": "astraNpc3Voxcaster:25",
-          "count": 4
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 5,
-          "stars": 11,
-          "rank": "Diamond1"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 4,
-          "stars": 10,
-          "rank": "Gold3"
-        }
-      ]
-    },
-    {
-      "id": "FoCE34",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 34,
-      "slots": 4,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 210
-          },
-          {
-            "id": "upgHpR008",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpR008",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 131716,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 7,
-      "enemiesTypes": [
-        "Cadian Lascannon Team",
-        "Cadian Mortar Team",
-        "Cadian Vox-caster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc2Lascannon:27",
-          "count": 2
-        },
-        {
-          "id": "astraNpc3Voxcaster:26",
-          "count": 4
-        },
-        {
-          "id": "astraNpc4Mortar:25",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc2Lascannon",
-          "name": "Cadian Lascannon Team",
-          "count": 2,
-          "stars": 10,
-          "rank": "Diamond1"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 4,
-          "stars": 11,
-          "rank": "Gold3"
-        },
-        {
-          "id": "astraNpc4Mortar",
-          "name": "Cadian Mortar Team",
-          "count": 1,
-          "stars": 10,
-          "rank": "Gold3"
-        }
-      ]
-    },
-    {
-      "id": "FoCE35",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 35,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 210
-          },
-          {
-            "id": "upgArmR005",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmR005",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 160796,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 10,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Lascannon Team",
-        "Cadian Vox-caster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman:30",
-          "count": 5
-        },
-        {
-          "id": "astraNpc2Lascannon:31",
-          "count": 4
-        },
-        {
-          "id": "astraNpc3Voxcaster:29",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 5,
-          "stars": 11,
-          "rank": "Diamond2"
-        },
-        {
-          "id": "astraNpc2Lascannon",
-          "name": "Cadian Lascannon Team",
-          "count": 4,
-          "stars": 10,
-          "rank": "Diamond3"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 1,
-          "stars": 10,
-          "rank": "Diamond2"
-        }
-      ]
-    },
-    {
-      "id": "FoCE36",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 36,
-      "slots": 4,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 210
-          },
-          {
-            "id": "upgHpR007",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpR007",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 141975,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 10,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Lascannon Team",
-        "Cadian Vox-caster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman:30",
-          "count": 5
-        },
-        {
-          "id": "astraNpc2Lascannon:29",
-          "count": 2
-        },
-        {
-          "id": "astraNpc3Voxcaster:27",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 5,
-          "stars": 11,
-          "rank": "Diamond2"
-        },
-        {
-          "id": "astraNpc2Lascannon",
-          "name": "Cadian Lascannon Team",
-          "count": 2,
-          "stars": 10,
-          "rank": "Diamond2"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 3,
-          "stars": 10,
-          "rank": "Diamond1"
-        }
-      ]
-    },
-    {
-      "id": "FoCE37",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 37,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 210
-          },
-          {
-            "id": "upgDmgR025",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgR025",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 190088,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 8,
-      "enemiesTypes": [
-        "Cadian Lascannon Team",
-        "Cadian Mortar Team",
-        "Cadian Vox-caster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc2Lascannon:29",
-          "count": 2
-        },
-        {
-          "id": "astraNpc3Voxcaster:27",
-          "count": 5
-        },
-        {
-          "id": "astraNpc4Mortar:28",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc2Lascannon",
-          "name": "Cadian Lascannon Team",
-          "count": 2,
-          "stars": 10,
-          "rank": "Diamond2"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 5,
-          "stars": 10,
-          "rank": "Diamond1"
-        },
-        {
-          "id": "astraNpc4Mortar",
-          "name": "Cadian Mortar Team",
-          "count": 1,
-          "stars": 11,
-          "rank": "Diamond1"
-        }
-      ]
-    },
-    {
-      "id": "FoCE38",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 38,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 210
-          },
-          {
-            "id": "upgArmR025",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmR025",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 201319,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 11,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Mortar Team"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman:32",
-          "count": 9
-        },
-        {
-          "id": "astraNpc4Mortar:28",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 9,
-          "stars": 11,
-          "rank": "Diamond3"
-        },
-        {
-          "id": "astraNpc4Mortar",
-          "name": "Cadian Mortar Team",
-          "count": 2,
-          "stars": 11,
-          "rank": "Diamond1"
-        }
-      ]
-    },
-    {
-      "id": "FoCE39",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 39,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 210
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpL105",
-            "chanceId": "upgradeLegendary_elite"
-          }
-        ]
-      },
-      "enemyPower": 207927,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 9,
-      "enemiesTypes": [
-        "Cadian Lascannon Team",
-        "Cadian Vox-caster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc2Lascannon:31",
-          "count": 3
-        },
-        {
-          "id": "astraNpc3Voxcaster:27",
-          "count": 6
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc2Lascannon",
-          "name": "Cadian Lascannon Team",
-          "count": 3,
-          "stars": 10,
-          "rank": "Diamond3"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 6,
-          "stars": 10,
-          "rank": "Diamond1"
-        }
-      ]
-    },
-    {
-      "id": "FoCE40",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 40,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 225
-          },
-          {
-            "id": "shards_astraCreed",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "shards_astraCreed",
-            "chanceId": "shard_elite"
-          }
-        ]
-      },
-      "enemyPower": 236220,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum"
-      ],
-      "enemiesTotal": 11,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Lascannon Team",
-        "Cadian Mortar Team",
-        "Cadian Vox-caster",
-        "Creed"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraBossCreed:2",
-          "count": 1
-        },
-        {
-          "id": "astraNpc1Guardsman:32",
-          "count": 4
-        },
-        {
-          "id": "astraNpc2Lascannon:29",
-          "count": 1
-        },
-        {
-          "id": "astraNpc3Voxcaster:29",
-          "count": 3
-        },
-        {
-          "id": "astraNpc4Mortar:23",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraBossCreed",
-          "name": "Creed",
-          "count": 1,
-          "stars": 10,
-          "rank": "Silver3"
-        },
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 4,
-          "stars": 11,
-          "rank": "Diamond3"
-        },
-        {
-          "id": "astraNpc2Lascannon",
-          "name": "Cadian Lascannon Team",
-          "count": 1,
-          "stars": 10,
-          "rank": "Diamond2"
-        },
-        {
-          "id": "astraNpc3Voxcaster",
-          "name": "Cadian Vox-caster",
-          "count": 3,
-          "stars": 10,
-          "rank": "Diamond2"
-        },
-        {
-          "id": "astraNpc4Mortar",
-          "name": "Cadian Mortar Team",
-          "count": 2,
-          "stars": 10,
-          "rank": "Gold2"
-        }
-      ]
+      "type": "Standard",
+      "challenge": false
     }
   ]
 }

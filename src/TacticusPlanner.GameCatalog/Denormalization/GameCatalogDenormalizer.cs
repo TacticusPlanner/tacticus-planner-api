@@ -14,7 +14,7 @@ internal static partial class GameCatalogDenormalizer
 {
     private static readonly string[] ShardPrefixes = ["shards_", "mythicShards_"];
 
-    private readonly record struct RewardLocation(string BattleId, string Difficulty, bool Guaranteed, string? ChanceId);
+    private readonly record struct RewardLocation(string BattleId, string Type, bool Challenge, bool Guaranteed, string? ChanceId);
 
     private static Dictionary<string, GameCatalogDropChance> BuildDropChanceIndex(IReadOnlyList<GameCatalogDropChance> dropChances) =>
         dropChances
@@ -32,12 +32,12 @@ internal static partial class GameCatalogDenormalizer
             {
                 foreach (var reward in battle.Rewards.Guaranteed)
                 {
-                    Add(reward.Id, new RewardLocation(battle.Id, battle.Difficulty, true, null));
+                    Add(reward.Id, new RewardLocation(battle.Id, battle.Type, battle.Challenge, true, null));
                 }
 
                 foreach (var reward in battle.Rewards.Potential)
                 {
-                    Add(reward.Id, new RewardLocation(battle.Id, battle.Difficulty, false, reward.ChanceId));
+                    Add(reward.Id, new RewardLocation(battle.Id, battle.Type, battle.Challenge, false, reward.ChanceId));
                 }
             }
         }
@@ -76,11 +76,11 @@ internal static partial class GameCatalogDenormalizer
             if (location.Guaranteed || location.ChanceId is null
                 || !dropChanceById.TryGetValue(location.ChanceId, out var chance))
             {
-                return new GameCatalogFarmLocation(location.BattleId, location.Difficulty, location.Guaranteed,
+                return new GameCatalogFarmLocation(location.BattleId, location.Type, location.Challenge, location.Guaranteed,
                     location.Guaranteed ? null : location.ChanceId, null, null, null);
             }
 
-            return new GameCatalogFarmLocation(location.BattleId, location.Difficulty, false,
+            return new GameCatalogFarmLocation(location.BattleId, location.Type, location.Challenge, false,
                 location.ChanceId, chance.Numerator, chance.Denominator, chance.EffectiveRate);
         }).ToArray();
     }

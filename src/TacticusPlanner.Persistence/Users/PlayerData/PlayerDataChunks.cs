@@ -1,43 +1,96 @@
+using System.Text.Json.Serialization;
+
 namespace TacticusPlanner.Persistence.Users.PlayerData;
 
 // Normalized, transformed shapes persisted in PlayerDataSnapshot's jsonb chunk columns. These are
 // deliberately NOT the raw TacticusApi.Models.Player.* response types — per ADR 0007 the raw
 // response is never stored as-is. Each type here is owned (via OwnsOne/OwnsMany + ToJson()) by
 // exactly one PlayerDataSnapshot column. See TacticusPlanner.Api's player-data transformation
-// (Phase 1c) for the mapping from TacticusApi.Models.Player.PlayerResponse into these shapes.
+// for the mapping from TacticusApi.Models.Player.PlayerResponse into these shapes.
+//
+// Fields that duplicate what the static game catalog already knows for a given id (display name,
+// rarity, faction/grand alliance) are intentionally omitted — callers cross-reference the catalog
+// by id instead of storing a redundant copy that could drift.
+
+/// <summary>0 = Stone I, 3 = Iron I, 6 = Bronze I, 9 = Silver I, 12 = Gold I, 15 = Diamond I, 18 =
+/// Adamantine I — Tacticus's raw per-unit rank int is a direct 0-based index into this same 21-step
+/// ladder (confirmed against a real player response), matching the client's rankOrder exactly.</summary>
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum PlayerRank
+{
+    Stone1 = 0,
+    Stone2 = 1,
+    Stone3 = 2,
+    Iron1 = 3,
+    Iron2 = 4,
+    Iron3 = 5,
+    Bronze1 = 6,
+    Bronze2 = 7,
+    Bronze3 = 8,
+    Silver1 = 9,
+    Silver2 = 10,
+    Silver3 = 11,
+    Gold1 = 12,
+    Gold2 = 13,
+    Gold3 = 14,
+    Diamond1 = 15,
+    Diamond2 = 16,
+    Diamond3 = 17,
+    Adamantine1 = 18,
+    Adamantine2 = 19,
+    Adamantine3 = 20,
+}
+
+/// <summary>Star level: 0 = Common, 3 = Uncommon, 6 = Rare, 9 = Epic, 12 = Legendary — Tacticus's raw
+/// per-unit progressionIndex int is a direct 0-based index into this same 20-step (rarity, stars)
+/// ladder (confirmed: e.g. index 12 lands exactly on "Legendary:RedThreeStars"), matching the client's
+/// progressionOrder exactly. Member names can't contain the client's "Rarity:Stars" separator, so each
+/// is given its wire string explicitly via <see cref="JsonStringEnumMemberNameAttribute"/>.</summary>
+[JsonConverter(typeof(JsonStringEnumConverter))]
+public enum PlayerProgression
+{
+    [JsonStringEnumMemberName("Common:None")] CommonNone = 0,
+    [JsonStringEnumMemberName("Common:OneStar")] CommonOneStar = 1,
+    [JsonStringEnumMemberName("Common:TwoStars")] CommonTwoStars = 2,
+    [JsonStringEnumMemberName("Uncommon:TwoStars")] UncommonTwoStars = 3,
+    [JsonStringEnumMemberName("Uncommon:ThreeStars")] UncommonThreeStars = 4,
+    [JsonStringEnumMemberName("Uncommon:FourStars")] UncommonFourStars = 5,
+    [JsonStringEnumMemberName("Rare:FourStars")] RareFourStars = 6,
+    [JsonStringEnumMemberName("Rare:FiveStars")] RareFiveStars = 7,
+    [JsonStringEnumMemberName("Rare:RedOneStar")] RareRedOneStar = 8,
+    [JsonStringEnumMemberName("Epic:RedOneStar")] EpicRedOneStar = 9,
+    [JsonStringEnumMemberName("Epic:RedTwoStars")] EpicRedTwoStars = 10,
+    [JsonStringEnumMemberName("Epic:RedThreeStars")] EpicRedThreeStars = 11,
+    [JsonStringEnumMemberName("Legendary:RedThreeStars")] LegendaryRedThreeStars = 12,
+    [JsonStringEnumMemberName("Legendary:RedFourStars")] LegendaryRedFourStars = 13,
+    [JsonStringEnumMemberName("Legendary:RedFiveStars")] LegendaryRedFiveStars = 14,
+    [JsonStringEnumMemberName("Legendary:OneBlueStar")] LegendaryOneBlueStar = 15,
+    [JsonStringEnumMemberName("Mythic:OneBlueStar")] MythicOneBlueStar = 16,
+    [JsonStringEnumMemberName("Mythic:TwoBlueStars")] MythicTwoBlueStars = 17,
+    [JsonStringEnumMemberName("Mythic:ThreeBlueStars")] MythicThreeBlueStars = 18,
+    [JsonStringEnumMemberName("Mythic:MythicWings")] MythicMythicWings = 19,
+}
 
 public sealed class PlayerDetailsChunk
 {
+    // The player's own display name — not catalog-inferable (there is no catalog id for a player).
     public string Name { get; set; } = string.Empty;
 
     public int PowerLevel { get; set; }
 }
 
-/// <summary>
-/// One owned unit (character or MoW). Populates both the <c>characters</c> and <c>mows</c> chunks —
-/// which chunk a given record belongs to is decided during transformation by cross-referencing the
-/// unit id against the game catalog, not by any field on this record.
-/// </summary>
-public sealed class PlayerUnitRecord
+/// <summary>Shared fields for a character or a MoW. MoWs have no rank and no equipment slots, so
+/// those live only on <see cref="PlayerCharacterRecord"/> — see <see cref="PlayerMowRecord"/>.</summary>
+public abstract class PlayerBaseUnitRecord
 {
     /// <summary>Catalog/Tacticus unit id (stable across both systems; no realignment needed here).</summary>
     public string UnitId { get; set; } = string.Empty;
 
-    public string Name { get; set; } = string.Empty;
-
-    public string Faction { get; set; } = string.Empty;
-
-    public string GrandAlliance { get; set; } = string.Empty;
-
-    /// <summary>Star level: 0 = Common, 3 = Uncommon, 6 = Rare, 9 = Epic, 12 = Legendary.</summary>
-    public int ProgressionIndex { get; set; }
+    public PlayerProgression ProgressionIndex { get; set; }
 
     public long Xp { get; set; }
 
     public int XpLevel { get; set; }
-
-    /// <summary>0 = Stone I, 3 = Iron I, 6 = Bronze I, 9 = Silver I, 12 = Gold I, 15 = Diamond I.</summary>
-    public int Rank { get; set; }
 
     public long Shards { get; set; }
 
@@ -52,9 +105,16 @@ public sealed class PlayerUnitRecord
 
     /// <summary>Applied upgrade slot indices (2x3 matrix positions), as returned by the API.</summary>
     public List<int> AppliedUpgradeSlots { get; set; } = [];
+}
+
+public sealed class PlayerCharacterRecord : PlayerBaseUnitRecord
+{
+    public PlayerRank Rank { get; set; }
 
     public List<PlayerUnitEquipmentSlotRecord> EquippedItems { get; set; } = [];
 }
+
+public sealed class PlayerMowRecord : PlayerBaseUnitRecord;
 
 public sealed class PlayerUnitAbilityRecord
 {
@@ -69,10 +129,6 @@ public sealed class PlayerUnitEquipmentSlotRecord
 
     public string EquipmentId { get; set; } = string.Empty;
 
-    public string Name { get; set; } = string.Empty;
-
-    public string Rarity { get; set; } = string.Empty;
-
     public int Level { get; set; }
 }
 
@@ -80,16 +136,12 @@ public sealed class InventoryUpgradeRecord
 {
     public string UpgradeId { get; set; } = string.Empty;
 
-    public string Name { get; set; } = string.Empty;
-
     public long Amount { get; set; }
 }
 
 public sealed class InventoryItemRecord
 {
     public string ItemId { get; set; } = string.Empty;
-
-    public string Name { get; set; } = string.Empty;
 
     public int Level { get; set; }
 
@@ -107,7 +159,7 @@ public sealed class InventoryChunk
 
     public PlayerAbilityBadgesRecord AbilityBadges { get; set; } = new();
 
-    public List<PlayerMowComponentRecord> Components { get; set; } = [];
+    public MowComponentsRecord Components { get; set; } = new();
 
     public List<PlayerNamedRarityAmountRecord> ForgeBadges { get; set; } = [];
 
@@ -122,9 +174,7 @@ public sealed class InventoryChunk
 
 public sealed class InventoryShardRecord
 {
-    public string ShardId { get; set; } = string.Empty;
-
-    public string Name { get; set; } = string.Empty;
+    public string UnitId { get; set; } = string.Empty;
 
     public long Amount { get; set; }
 }
@@ -133,11 +183,11 @@ public sealed class InventoryXpBookRecord
 {
     public string XpBookId { get; set; } = string.Empty;
 
-    public string Rarity { get; set; } = string.Empty;
-
     public long Amount { get; set; }
 }
 
+/// <summary>Badges have no separate catalog id — the name itself is the identifier, so it's kept
+/// (unlike the redundant name fields dropped elsewhere).</summary>
 public sealed class PlayerAbilityBadgesRecord
 {
     public List<PlayerNamedRarityAmountRecord> Imperial { get; set; } = [];
@@ -156,13 +206,15 @@ public sealed class PlayerNamedRarityAmountRecord
     public long Amount { get; set; }
 }
 
-public sealed class PlayerMowComponentRecord
+/// <summary>MoW components have no per-item identity worth tracking — just the total count per
+/// grand alliance, mirroring how Orbs/AbilityBadges are already split.</summary>
+public sealed class MowComponentsRecord
 {
-    public string Name { get; set; } = string.Empty;
+    public long Imperial { get; set; }
 
-    public string GrandAlliance { get; set; } = string.Empty;
+    public long Xenos { get; set; }
 
-    public long Amount { get; set; }
+    public long Chaos { get; set; }
 }
 
 public sealed class PlayerOrbsRecord
@@ -182,56 +234,33 @@ public sealed class PlayerRarityAmountRecord
 }
 
 /// <summary>
-/// One campaign's progress. Used by both the <c>campaign-progress</c> chunk (standard/mirror/elite/
-/// elite-mirror) and the <c>campaign-events-progress</c> chunk (limited-time campaign events).
+/// One campaign's progress identity. Used by both the <c>campaign-progress</c> chunk (standard/
+/// mirror/elite/elite-mirror) and the <c>campaign-events-progress</c> chunk (limited-time campaign
+/// events). <c>TacticusCampaignId</c> is unconditionally also the static catalog's campaign group id
+/// — every Tacticus campaign id now has a matching catalog group (see
+/// <c>GameCatalogDatasets.CampaignBattleGroups</c>), so no separate cross-reference field is needed.
+/// Per-battle attempt data lives in the <c>live-progress</c> chunk instead (it changes far more often
+/// than this identity/high-water-mark record does).
 /// </summary>
 public sealed class CampaignProgressRecord
 {
-    /// <summary>The Tacticus API's own campaign id (e.g. <c>campaign1</c>, <c>mirror1</c>, <c>elite1</c>,
-    /// <c>eliteMirror1</c>, <c>eventCampaign6</c>).</summary>
+    /// <summary>The Tacticus API's own campaign id — also the catalog's groupId (e.g. <c>campaign1</c>,
+    /// <c>mirror1</c>, <c>elite1</c>, <c>eliteMirror1</c>, <c>eventCampaign6</c>).</summary>
     public string TacticusCampaignId { get; set; } = string.Empty;
 
-    /// <summary>
-    /// The matching static catalog campaign group id, when one exists. Null for tiers the catalog does not
-    /// yet model (elite/eliteMirror) or events not yet cross-referenced — see the remarks on
-    /// <c>GameCatalogDatasets.CampaignBattleGroups</c>. Progress is still persisted even when null.
-    /// </summary>
-    public string? CatalogCampaignGroupId { get; set; }
-
-    public string Name { get; set; } = string.Empty;
-
-    /// <summary>Tacticus campaign type, e.g. Standard/Mirror/Elite/EliteMirror/Extremis.</summary>
+    /// <summary>Tacticus campaign type: Standard/Mirror/Elite/EliteMirror for storylines, Standard/Extremis
+    /// for campaign events.</summary>
     public string Type { get; set; } = string.Empty;
 
-    public List<CampaignBattleProgressRecord> Battles { get; set; } = [];
-
-    /// <summary>
-    /// The highest <c>battleIndex</c> present in the response for this campaign. This reflects which
-    /// battles the API currently exposes attempts for, not a confirmed "highest completed node" — the
-    /// exact unlock/completion semantics of the Tacticus battle list have not been empirically confirmed
-    /// (see ADR 0007 consequences). Treat as a best-effort progress signal, not ground truth.
-    /// </summary>
-    public int HighestObservedBattleIndex { get; set; }
+    /// <summary>The highest battle index the player has completed in this campaign.</summary>
+    public int HighestCompletedBattleIndex { get; set; }
 }
 
-public sealed class CampaignBattleProgressRecord
+public sealed class GuildRaidTokensRecord
 {
-    public int BattleIndex { get; set; }
+    public TokenBucketRecord Tokens { get; set; } = new();
 
-    public int AttemptsLeft { get; set; }
-
-    public int AttemptsUsed { get; set; }
-}
-
-public sealed class GameModeTokensChunk
-{
-    public TokenBucketRecord? Arena { get; set; }
-
-    public GuildRaidTokensRecord? GuildRaid { get; set; }
-
-    public TokenBucketRecord? Onslaught { get; set; }
-
-    public TokenBucketRecord? SalvageRun { get; set; }
+    public TokenBucketRecord BombTokens { get; set; } = new();
 }
 
 public sealed class TokenBucketRecord
@@ -245,21 +274,59 @@ public sealed class TokenBucketRecord
     public int RegenDelayInSeconds { get; set; }
 }
 
-public sealed class GuildRaidTokensRecord
+public sealed class GameModeTokensChunk
 {
-    public TokenBucketRecord Tokens { get; set; } = new();
+    public TokenBucketRecord? Arena { get; set; }
 
-    public TokenBucketRecord BombTokens { get; set; } = new();
+    public GuildRaidTokensRecord? GuildRaid { get; set; }
+
+    public TokenBucketRecord? Onslaught { get; set; }
+
+    public TokenBucketRecord? SalvageRun { get; set; }
+}
+
+/// <summary>Often-changing data kept in its own chunk (<c>live-progress</c>) so it can be re-synced/
+/// re-stored independently of the much-less-volatile roster/inventory/campaign-identity chunks.</summary>
+public sealed class LiveProgressChunk
+{
+    /// <summary>Per-battle attempt counters, derived from campaign progress. Replaces the battle list that
+    /// used to live on <see cref="CampaignProgressRecord"/> — this changes daily, that doesn't.</summary>
+    public List<BattleAttemptRecord> BattleAttempts { get; set; } = [];
+
+    /// <summary>The <see cref="CampaignProgressRecord.TacticusCampaignId"/> of whichever event-type
+    /// campaign is currently present in the synced response, if any.</summary>
+    public string? ActiveCampaignEventId { get; set; }
+
+    public GameModeTokensChunk GameModeTokens { get; set; } = new();
+}
+
+public sealed class BattleAttemptRecord
+{
+    /// <summary>Matches <see cref="CampaignProgressRecord.TacticusCampaignId"/>.</summary>
+    public string TacticusCampaignId { get; set; } = string.Empty;
+
+    public int BattleIndex { get; set; }
+
+    public int AttemptsLeft { get; set; }
+
+    public int AttemptsUsed { get; set; }
 }
 
 /// <summary>One Legendary Release Event's player progress. Static event structure (battle configs,
 /// objectives, enemies) already lives in the game catalog's <c>lres</c>/<c>lre-battles</c> datasets and is
-/// intentionally not duplicated here.</summary>
+/// intentionally not duplicated here. Track shape mirrors <c>GameCatalogLreView</c>'s named
+/// Alpha/Beta/Gamma properties (Tacticus's lane ids 1/2/3) rather than a generic indexed list.</summary>
 public sealed class LreProgressRecord
 {
-    public string EventId { get; set; } = string.Empty;
+    /// <summary>The event's unit snowprint id (e.g. <c>"emperLucius"</c>) — matches the catalog's
+    /// <c>GameCatalogLreView.Id</c> directly; no id remapping needed for LRE.</summary>
+    public string Id { get; set; } = string.Empty;
 
-    public List<LreLaneProgressRecord> Lanes { get; set; } = [];
+    public LreTrackProgressRecord? Alpha { get; set; }
+
+    public LreTrackProgressRecord? Beta { get; set; }
+
+    public LreTrackProgressRecord? Gamma { get; set; }
 
     public int CurrentPoints { get; set; }
 
@@ -278,12 +345,8 @@ public sealed class LreProgressRecord
     public int? ExtraCurrencyPerPayout { get; set; }
 }
 
-public sealed class LreLaneProgressRecord
+public sealed class LreTrackProgressRecord
 {
-    public int LaneId { get; set; }
-
-    public string Name { get; set; } = string.Empty;
-
     public List<LreEncounterProgressRecord> Encounters { get; set; } = [];
 }
 

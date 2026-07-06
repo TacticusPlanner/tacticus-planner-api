@@ -1,6 +1,7 @@
 using TacticusPlanner.Api.Features.PlayerData;
 using TacticusPlanner.GameCatalog;
 using TacticusPlanner.GameCatalog.Models;
+using TacticusPlanner.Persistence.Users.PlayerData;
 using TacticusPlanner.TacticusApi.Models.Player;
 
 namespace TacticusPlanner.Api.Tests;
@@ -15,6 +16,9 @@ public sealed class PlayerDataTransformerTests
     {
         public GameCatalogSnapshot Current { get; } = GameCatalogLoader.Load();
     }
+
+    /// <summary>Real catalog MoW id (Ultramarines, see units/units-ultramarines.json).</summary>
+    private const string MowUnitId = "ultraDreadnought";
 
     private static PlayerDataTransformer CreateTransformer() => new(new TestCatalogProvider());
 
@@ -37,6 +41,20 @@ public sealed class PlayerDataTransformerTests
                     MythicShards = 0,
                     Abilities = [new Ability { Id = "StormOfWrath", Level = 35 }],
                     Upgrades = [0, 2, 4],
+                    Items = [new Equipment { SlotId = "Slot3", Id = "I_Booster_Crit_E001", Name = "Crit Booster", Rarity = "Epic", Level = 1 }],
+                },
+                new Unit
+                {
+                    Id = MowUnitId, // real catalog MoW id — no rank/equipment on the mapped record
+                    Name = "Dreadnought",
+                    ProgressionIndex = 5,
+                    Xp = 1000,
+                    XpLevel = 10,
+                    Rank = 0,
+                    Shards = 3,
+                    MythicShards = 0,
+                    Abilities = [],
+                    Upgrades = [],
                     Items = [],
                 },
             ],
@@ -47,7 +65,12 @@ public sealed class PlayerDataTransformerTests
                 MythicShards = [],
                 XpBooks = [],
                 AbilityBadges = new AbilityBadges { Imperial = [], Xenos = [], Chaos = [] },
-                Components = [],
+                Components =
+                [
+                    new MoWComponent { Name = "Plasma Core", GrandAlliance = "Imperial", Amount = 4 },
+                    new MoWComponent { Name = "Void Shield", GrandAlliance = "Imperial", Amount = 6 },
+                    new MoWComponent { Name = "Warp Fragment", GrandAlliance = "Chaos", Amount = 2 },
+                ],
                 ForgeBadges = [],
                 Orbs = new Orbs { Imperial = [], Xenos = [], Chaos = [] },
                 Items = [new InventoryEquipment { Id = "I_Booster_Crit_E001", Name = "Crit Booster", Level = 1, Amount = 2 }],
@@ -60,7 +83,7 @@ public sealed class PlayerDataTransformerTests
                 [
                     new CampaignProgress
                     {
-                        Id = FakeTacticusApi.CampaignId, // realigned catalog id -> should resolve
+                        Id = FakeTacticusApi.CampaignId, // real catalog groupId (see GameCatalogDatasets)
                         Name = "Indomitus",
                         Type = "Standard",
                         Battles =
@@ -71,30 +94,65 @@ public sealed class PlayerDataTransformerTests
                     },
                     new CampaignProgress
                     {
-                        Id = FakeTacticusApi.UnmatchedCampaignId, // no catalog cross-reference yet
+                        Id = FakeTacticusApi.EventCampaignId,
                         Name = string.Empty,
                         Type = "Standard",
                         Battles = [new CampaignLevel { BattleIndex = 0, AttemptsLeft = 10, AttemptsUsed = 0 }],
                     },
                 ],
-                LegendaryEvents = [],
+                LegendaryEvents =
+                [
+                    new LegendaryEvent
+                    {
+                        Id = "emperLucius",
+                        CurrentPoints = 100,
+                        CurrentCurrency = 5,
+                        CurrentShards = 2,
+                        CurrentClaimedChestIndex = 1,
+                        Lanes =
+                        [
+                            new LegendaryEventLane
+                            {
+                                Id = 1,
+                                Name = "Alpha",
+                                Progress =
+                                [
+                                    new LegendaryEventProgress { ObjectivesCleared = [0, 1], HighScore = 25, EncounterPoints = 25 },
+                                ],
+                            },
+                            new LegendaryEventLane
+                            {
+                                Id = 3,
+                                Name = "Gamma",
+                                Progress = [],
+                            },
+                        ],
+                    },
+                ],
             },
         },
         Metadata = new Metadata { ConfigHash = configHash, LastUpdatedOn = 1_780_000_000, Scopes = ["Player"] },
     };
 
     [Fact]
-    public void MapsKnownCatalogUnitIntoCharactersNotMows()
+    public void SplitsUnitsIntoCharactersAndMowsByRealCatalogId()
     {
         var result = CreateTransformer().Transform(BuildResponse());
 
         var character = Assert.Single(result.Characters);
         Assert.Equal(FakeTacticusApi.CharacterUnitId, character.UnitId);
-        Assert.Equal(12, character.Rank);
+        Assert.Equal(PlayerRank.Gold1, character.Rank);
+        Assert.Equal(PlayerProgression.EpicRedThreeStars, character.ProgressionIndex);
         Assert.Single(character.Abilities);
         Assert.Equal("StormOfWrath", character.Abilities[0].AbilityId);
         Assert.Equal([0, 2, 4], character.AppliedUpgradeSlots);
-        Assert.Empty(result.Mows);
+        var equipped = Assert.Single(character.EquippedItems);
+        Assert.Equal("I_Booster_Crit_E001", equipped.EquipmentId);
+
+        var mow = Assert.Single(result.Mows);
+        Assert.Equal(MowUnitId, mow.UnitId);
+        // PlayerMowRecord has no Rank/EquippedItems properties at all — enforced at compile time, not
+        // just by a runtime assertion (MoWs don't have ranks or equipment slots).
     }
 
     [Fact]
@@ -114,16 +172,54 @@ public sealed class PlayerDataTransformerTests
     }
 
     [Fact]
-    public void ResolvesCatalogCampaignGroupIdWhenTheCatalogHasAMatchingGroupAndLeavesItNullOtherwise()
+    public void SumsMowComponentsPerGrandAllianceInsteadOfKeepingPerItemRows()
     {
         var result = CreateTransformer().Transform(BuildResponse());
 
-        var matched = result.CampaignProgress.Single(c => c.TacticusCampaignId == FakeTacticusApi.CampaignId);
-        Assert.Equal(FakeTacticusApi.CampaignId, matched.CatalogCampaignGroupId);
-        Assert.Equal(2, matched.HighestObservedBattleIndex);
+        Assert.Equal(10, result.Inventory.Components.Imperial); // 4 + 6
+        Assert.Equal(0, result.Inventory.Components.Xenos);
+        Assert.Equal(2, result.Inventory.Components.Chaos);
+    }
 
-        var unmatched = result.CampaignEventsProgress.Single(c => c.TacticusCampaignId == FakeTacticusApi.UnmatchedCampaignId);
-        Assert.Null(unmatched.CatalogCampaignGroupId);
+    [Fact]
+    public void SplitsCampaignProgressByEventIdAndSimplifiesToIdentityPlusHighWaterMark()
+    {
+        var result = CreateTransformer().Transform(BuildResponse());
+
+        var standard = Assert.Single(result.CampaignProgress);
+        Assert.Equal(FakeTacticusApi.CampaignId, standard.TacticusCampaignId);
+        Assert.Equal("Standard", standard.Type);
+        Assert.Equal(2, standard.HighestCompletedBattleIndex);
+
+        var evt = Assert.Single(result.CampaignEventsProgress);
+        Assert.Equal(FakeTacticusApi.EventCampaignId, evt.TacticusCampaignId);
+    }
+
+    [Fact]
+    public void PopulatesLiveProgressWithBattleAttemptsAndTheActiveCampaignEventId()
+    {
+        var result = CreateTransformer().Transform(BuildResponse());
+
+        Assert.Equal(3, result.LiveProgress.BattleAttempts.Count); // 2 standard + 1 event battle
+        Assert.Contains(result.LiveProgress.BattleAttempts, b =>
+            b.TacticusCampaignId == FakeTacticusApi.CampaignId && b.BattleIndex == 2 && b.AttemptsLeft == 3);
+
+        Assert.Equal(FakeTacticusApi.EventCampaignId, result.LiveProgress.ActiveCampaignEventId);
+    }
+
+    [Fact]
+    public void MapsLreLanesOntoNamedAlphaBetaGammaTracksMatchingTheCatalogsLreModel()
+    {
+        var result = CreateTransformer().Transform(BuildResponse());
+
+        var lre = Assert.Single(result.LreProgress);
+        Assert.Equal("emperLucius", lre.Id);
+        Assert.NotNull(lre.Alpha);
+        Assert.Single(lre.Alpha!.Encounters);
+        Assert.Equal(25, lre.Alpha.Encounters[0].HighScore);
+        Assert.Null(lre.Beta);
+        Assert.NotNull(lre.Gamma);
+        Assert.Empty(lre.Gamma!.Encounters);
     }
 
     [Fact]

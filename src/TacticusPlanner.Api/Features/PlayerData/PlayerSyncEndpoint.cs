@@ -112,7 +112,7 @@ public sealed class PlayerSyncEndpoint(ITacticusApi tacticusApi, PlayerDataTrans
         snapshot.Inventory = transformed.Inventory;
         snapshot.CampaignProgress = transformed.CampaignProgress;
         snapshot.CampaignEventsProgress = transformed.CampaignEventsProgress;
-        snapshot.GameModeTokens = transformed.GameModeTokens;
+        snapshot.LiveProgress = transformed.LiveProgress;
         snapshot.LreProgress = transformed.LreProgress;
 
         if (existing is null)

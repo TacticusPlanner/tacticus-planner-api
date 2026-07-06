@@ -12,7 +12,7 @@ using TacticusPlanner.Persistence;
 namespace TacticusPlanner.Persistence.Migrations
 {
     [DbContext(typeof(PlannerDbContext))]
-    [Migration("20260706161748_AddPlayerData")]
+    [Migration("20260706230120_AddPlayerData")]
     partial class AddPlayerData
     {
         /// <inheritdoc />
@@ -269,40 +269,9 @@ namespace TacticusPlanner.Persistence.Migrations
                                 .HasForeignKey("PlayerDataOverrideId");
                         });
 
-                    b.OwnsMany("TacticusPlanner.Persistence.Users.PlayerData.LreOverrideRecord", "LreOverrides", b1 =>
-                        {
-                            b1.Property<Guid>("PlayerDataOverrideId");
-
-                            b1.Property<int>("__synthesizedOrdinal")
-                                .ValueGeneratedOnAdd();
-
-                            b1.Property<string>("Annotation")
-                                .IsRequired();
-
-                            b1.Property<int>("EncounterIndex");
-
-                            b1.Property<string>("EventId")
-                                .IsRequired();
-
-                            b1.Property<int>("LaneId");
-
-                            b1.HasKey("PlayerDataOverrideId", "__synthesizedOrdinal");
-
-                            b1.ToTable("player_data_overrides");
-
-                            b1
-                                .ToJson("lre_overrides")
-                                .HasColumnType("jsonb");
-
-                            b1.WithOwner()
-                                .HasForeignKey("PlayerDataOverrideId");
-                        });
-
                     b.Navigation("BattleResultOverrides");
 
                     b.Navigation("CampaignProgressOverrides");
-
-                    b.Navigation("LreOverrides");
 
                     b.Navigation("Profile");
                 });
@@ -314,148 +283,6 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasForeignKey("TacticusPlanner.Persistence.Users.PlayerData.PlayerDataSnapshot", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.OwnsOne("TacticusPlanner.Persistence.Users.PlayerData.GameModeTokensChunk", "GameModeTokens", b1 =>
-                        {
-                            b1.Property<Guid>("PlayerDataSnapshotId");
-
-                            b1.HasKey("PlayerDataSnapshotId");
-
-                            b1.ToTable("player_data_snapshots");
-
-                            b1
-                                .ToJson("game_mode_tokens")
-                                .HasColumnType("jsonb");
-
-                            b1.WithOwner()
-                                .HasForeignKey("PlayerDataSnapshotId");
-
-                            b1.OwnsOne("TacticusPlanner.Persistence.Users.PlayerData.TokenBucketRecord", "Arena", b2 =>
-                                {
-                                    b2.Property<Guid>("GameModeTokensChunkPlayerDataSnapshotId");
-
-                                    b2.Property<int>("Current");
-
-                                    b2.Property<int>("Max");
-
-                                    b2.Property<int>("NextTokenInSeconds");
-
-                                    b2.Property<int>("RegenDelayInSeconds");
-
-                                    b2.HasKey("GameModeTokensChunkPlayerDataSnapshotId");
-
-                                    b2.ToTable("player_data_snapshots");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("GameModeTokensChunkPlayerDataSnapshotId");
-                                });
-
-                            b1.OwnsOne("TacticusPlanner.Persistence.Users.PlayerData.TokenBucketRecord", "Onslaught", b2 =>
-                                {
-                                    b2.Property<Guid>("GameModeTokensChunkPlayerDataSnapshotId");
-
-                                    b2.Property<int>("Current");
-
-                                    b2.Property<int>("Max");
-
-                                    b2.Property<int>("NextTokenInSeconds");
-
-                                    b2.Property<int>("RegenDelayInSeconds");
-
-                                    b2.HasKey("GameModeTokensChunkPlayerDataSnapshotId");
-
-                                    b2.ToTable("player_data_snapshots");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("GameModeTokensChunkPlayerDataSnapshotId");
-                                });
-
-                            b1.OwnsOne("TacticusPlanner.Persistence.Users.PlayerData.TokenBucketRecord", "SalvageRun", b2 =>
-                                {
-                                    b2.Property<Guid>("GameModeTokensChunkPlayerDataSnapshotId");
-
-                                    b2.Property<int>("Current");
-
-                                    b2.Property<int>("Max");
-
-                                    b2.Property<int>("NextTokenInSeconds");
-
-                                    b2.Property<int>("RegenDelayInSeconds");
-
-                                    b2.HasKey("GameModeTokensChunkPlayerDataSnapshotId");
-
-                                    b2.ToTable("player_data_snapshots");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("GameModeTokensChunkPlayerDataSnapshotId");
-                                });
-
-                            b1.OwnsOne("TacticusPlanner.Persistence.Users.PlayerData.GuildRaidTokensRecord", "GuildRaid", b2 =>
-                                {
-                                    b2.Property<Guid>("GameModeTokensChunkPlayerDataSnapshotId");
-
-                                    b2.HasKey("GameModeTokensChunkPlayerDataSnapshotId");
-
-                                    b2.ToTable("player_data_snapshots");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("GameModeTokensChunkPlayerDataSnapshotId");
-
-                                    b2.OwnsOne("TacticusPlanner.Persistence.Users.PlayerData.TokenBucketRecord", "BombTokens", b3 =>
-                                        {
-                                            b3.Property<Guid>("GuildRaidTokensRecordGameModeTokensChunkPlayerDataSnapshotId");
-
-                                            b3.Property<int>("Current");
-
-                                            b3.Property<int>("Max");
-
-                                            b3.Property<int>("NextTokenInSeconds");
-
-                                            b3.Property<int>("RegenDelayInSeconds");
-
-                                            b3.HasKey("GuildRaidTokensRecordGameModeTokensChunkPlayerDataSnapshotId");
-
-                                            b3.ToTable("player_data_snapshots");
-
-                                            b3.WithOwner()
-                                                .HasForeignKey("GuildRaidTokensRecordGameModeTokensChunkPlayerDataSnapshotId");
-                                        });
-
-                                    b2.OwnsOne("TacticusPlanner.Persistence.Users.PlayerData.TokenBucketRecord", "Tokens", b3 =>
-                                        {
-                                            b3.Property<Guid>("GuildRaidTokensRecordGameModeTokensChunkPlayerDataSnapshotId");
-
-                                            b3.Property<int>("Current");
-
-                                            b3.Property<int>("Max");
-
-                                            b3.Property<int>("NextTokenInSeconds");
-
-                                            b3.Property<int>("RegenDelayInSeconds");
-
-                                            b3.HasKey("GuildRaidTokensRecordGameModeTokensChunkPlayerDataSnapshotId");
-
-                                            b3.ToTable("player_data_snapshots");
-
-                                            b3.WithOwner()
-                                                .HasForeignKey("GuildRaidTokensRecordGameModeTokensChunkPlayerDataSnapshotId");
-                                        });
-
-                                    b2.Navigation("BombTokens")
-                                        .IsRequired();
-
-                                    b2.Navigation("Tokens")
-                                        .IsRequired();
-                                });
-
-                            b1.Navigation("Arena");
-
-                            b1.Navigation("GuildRaid");
-
-                            b1.Navigation("Onslaught");
-
-                            b1.Navigation("SalvageRun");
-                        });
 
                     b.OwnsOne("TacticusPlanner.Persistence.Users.PlayerData.InventoryChunk", "Inventory", b1 =>
                         {
@@ -510,10 +337,7 @@ namespace TacticusPlanner.Persistence.Migrations
 
                                     b2.Property<long>("Amount");
 
-                                    b2.Property<string>("Name")
-                                        .IsRequired();
-
-                                    b2.Property<string>("ShardId")
+                                    b2.Property<string>("UnitId")
                                         .IsRequired();
 
                                     b2.HasKey("InventoryChunkPlayerDataSnapshotId", "__synthesizedOrdinal");
@@ -533,10 +357,7 @@ namespace TacticusPlanner.Persistence.Migrations
 
                                     b2.Property<long>("Amount");
 
-                                    b2.Property<string>("Name")
-                                        .IsRequired();
-
-                                    b2.Property<string>("ShardId")
+                                    b2.Property<string>("UnitId")
                                         .IsRequired();
 
                                     b2.HasKey("InventoryChunkPlayerDataSnapshotId", "__synthesizedOrdinal");
@@ -556,13 +377,28 @@ namespace TacticusPlanner.Persistence.Migrations
 
                                     b2.Property<long>("Amount");
 
-                                    b2.Property<string>("Rarity")
-                                        .IsRequired();
-
                                     b2.Property<string>("XpBookId")
                                         .IsRequired();
 
                                     b2.HasKey("InventoryChunkPlayerDataSnapshotId", "__synthesizedOrdinal");
+
+                                    b2.ToTable("player_data_snapshots");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("InventoryChunkPlayerDataSnapshotId");
+                                });
+
+                            b1.OwnsOne("TacticusPlanner.Persistence.Users.PlayerData.MowComponentsRecord", "Components", b2 =>
+                                {
+                                    b2.Property<Guid>("InventoryChunkPlayerDataSnapshotId");
+
+                                    b2.Property<long>("Chaos");
+
+                                    b2.Property<long>("Imperial");
+
+                                    b2.Property<long>("Xenos");
+
+                                    b2.HasKey("InventoryChunkPlayerDataSnapshotId");
 
                                     b2.ToTable("player_data_snapshots");
 
@@ -657,29 +493,6 @@ namespace TacticusPlanner.Persistence.Migrations
                                     b2.Navigation("Xenos");
                                 });
 
-                            b1.OwnsMany("TacticusPlanner.Persistence.Users.PlayerData.PlayerMowComponentRecord", "Components", b2 =>
-                                {
-                                    b2.Property<Guid>("InventoryChunkPlayerDataSnapshotId");
-
-                                    b2.Property<int>("__synthesizedOrdinal")
-                                        .ValueGeneratedOnAdd();
-
-                                    b2.Property<long>("Amount");
-
-                                    b2.Property<string>("GrandAlliance")
-                                        .IsRequired();
-
-                                    b2.Property<string>("Name")
-                                        .IsRequired();
-
-                                    b2.HasKey("InventoryChunkPlayerDataSnapshotId", "__synthesizedOrdinal");
-
-                                    b2.ToTable("player_data_snapshots");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("InventoryChunkPlayerDataSnapshotId");
-                                });
-
                             b1.OwnsOne("TacticusPlanner.Persistence.Users.PlayerData.PlayerOrbsRecord", "Orbs", b2 =>
                                 {
                                     b2.Property<Guid>("InventoryChunkPlayerDataSnapshotId");
@@ -761,7 +574,8 @@ namespace TacticusPlanner.Persistence.Migrations
                             b1.Navigation("AbilityBadges")
                                 .IsRequired();
 
-                            b1.Navigation("Components");
+                            b1.Navigation("Components")
+                                .IsRequired();
 
                             b1.Navigation("ForgeBadges");
 
@@ -789,9 +603,6 @@ namespace TacticusPlanner.Persistence.Migrations
 
                             b1.Property<int>("Level");
 
-                            b1.Property<string>("Name")
-                                .IsRequired();
-
                             b1.HasKey("PlayerDataSnapshotId", "__synthesizedOrdinal");
 
                             b1.ToTable("player_data_snapshots");
@@ -813,9 +624,6 @@ namespace TacticusPlanner.Persistence.Migrations
 
                             b1.Property<long>("Amount");
 
-                            b1.Property<string>("Name")
-                                .IsRequired();
-
                             b1.Property<string>("UpgradeId")
                                 .IsRequired();
 
@@ -829,6 +637,193 @@ namespace TacticusPlanner.Persistence.Migrations
 
                             b1.WithOwner()
                                 .HasForeignKey("PlayerDataSnapshotId");
+                        });
+
+                    b.OwnsOne("TacticusPlanner.Persistence.Users.PlayerData.LiveProgressChunk", "LiveProgress", b1 =>
+                        {
+                            b1.Property<Guid>("PlayerDataSnapshotId");
+
+                            b1.Property<string>("ActiveCampaignEventId");
+
+                            b1.HasKey("PlayerDataSnapshotId");
+
+                            b1.ToTable("player_data_snapshots");
+
+                            b1
+                                .ToJson("live_progress")
+                                .HasColumnType("jsonb");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PlayerDataSnapshotId");
+
+                            b1.OwnsMany("TacticusPlanner.Persistence.Users.PlayerData.BattleAttemptRecord", "BattleAttempts", b2 =>
+                                {
+                                    b2.Property<Guid>("LiveProgressChunkPlayerDataSnapshotId");
+
+                                    b2.Property<int>("__synthesizedOrdinal")
+                                        .ValueGeneratedOnAdd();
+
+                                    b2.Property<int>("AttemptsLeft");
+
+                                    b2.Property<int>("AttemptsUsed");
+
+                                    b2.Property<int>("BattleIndex");
+
+                                    b2.Property<string>("TacticusCampaignId")
+                                        .IsRequired();
+
+                                    b2.HasKey("LiveProgressChunkPlayerDataSnapshotId", "__synthesizedOrdinal");
+
+                                    b2.ToTable("player_data_snapshots");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("LiveProgressChunkPlayerDataSnapshotId");
+                                });
+
+                            b1.OwnsOne("TacticusPlanner.Persistence.Users.PlayerData.GameModeTokensChunk", "GameModeTokens", b2 =>
+                                {
+                                    b2.Property<Guid>("LiveProgressChunkPlayerDataSnapshotId");
+
+                                    b2.HasKey("LiveProgressChunkPlayerDataSnapshotId");
+
+                                    b2.ToTable("player_data_snapshots");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("LiveProgressChunkPlayerDataSnapshotId");
+
+                                    b2.OwnsOne("TacticusPlanner.Persistence.Users.PlayerData.TokenBucketRecord", "Arena", b3 =>
+                                        {
+                                            b3.Property<Guid>("GameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId");
+
+                                            b3.Property<int>("Current");
+
+                                            b3.Property<int>("Max");
+
+                                            b3.Property<int>("NextTokenInSeconds");
+
+                                            b3.Property<int>("RegenDelayInSeconds");
+
+                                            b3.HasKey("GameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId");
+
+                                            b3.ToTable("player_data_snapshots");
+
+                                            b3.WithOwner()
+                                                .HasForeignKey("GameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId");
+                                        });
+
+                                    b2.OwnsOne("TacticusPlanner.Persistence.Users.PlayerData.TokenBucketRecord", "Onslaught", b3 =>
+                                        {
+                                            b3.Property<Guid>("GameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId");
+
+                                            b3.Property<int>("Current");
+
+                                            b3.Property<int>("Max");
+
+                                            b3.Property<int>("NextTokenInSeconds");
+
+                                            b3.Property<int>("RegenDelayInSeconds");
+
+                                            b3.HasKey("GameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId");
+
+                                            b3.ToTable("player_data_snapshots");
+
+                                            b3.WithOwner()
+                                                .HasForeignKey("GameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId");
+                                        });
+
+                                    b2.OwnsOne("TacticusPlanner.Persistence.Users.PlayerData.TokenBucketRecord", "SalvageRun", b3 =>
+                                        {
+                                            b3.Property<Guid>("GameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId");
+
+                                            b3.Property<int>("Current");
+
+                                            b3.Property<int>("Max");
+
+                                            b3.Property<int>("NextTokenInSeconds");
+
+                                            b3.Property<int>("RegenDelayInSeconds");
+
+                                            b3.HasKey("GameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId");
+
+                                            b3.ToTable("player_data_snapshots");
+
+                                            b3.WithOwner()
+                                                .HasForeignKey("GameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId");
+                                        });
+
+                                    b2.OwnsOne("TacticusPlanner.Persistence.Users.PlayerData.GuildRaidTokensRecord", "GuildRaid", b3 =>
+                                        {
+                                            b3.Property<Guid>("GameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId");
+
+                                            b3.HasKey("GameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId");
+
+                                            b3.ToTable("player_data_snapshots");
+
+                                            b3.WithOwner()
+                                                .HasForeignKey("GameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId");
+
+                                            b3.OwnsOne("TacticusPlanner.Persistence.Users.PlayerData.TokenBucketRecord", "BombTokens", b4 =>
+                                                {
+                                                    b4.Property<Guid>("GuildRaidTokensRecordGameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId")
+                                                        .HasColumnName("GuildRaidTokensRecordGameModeTokensChunkLiveProgressChunkPlaye~");
+
+                                                    b4.Property<int>("Current");
+
+                                                    b4.Property<int>("Max");
+
+                                                    b4.Property<int>("NextTokenInSeconds");
+
+                                                    b4.Property<int>("RegenDelayInSeconds");
+
+                                                    b4.HasKey("GuildRaidTokensRecordGameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId");
+
+                                                    b4.ToTable("player_data_snapshots");
+
+                                                    b4.WithOwner()
+                                                        .HasForeignKey("GuildRaidTokensRecordGameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId");
+                                                });
+
+                                            b3.OwnsOne("TacticusPlanner.Persistence.Users.PlayerData.TokenBucketRecord", "Tokens", b4 =>
+                                                {
+                                                    b4.Property<Guid>("GuildRaidTokensRecordGameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId")
+                                                        .HasColumnName("GuildRaidTokensRecordGameModeTokensChunkLiveProgressChunkPlaye~");
+
+                                                    b4.Property<int>("Current");
+
+                                                    b4.Property<int>("Max");
+
+                                                    b4.Property<int>("NextTokenInSeconds");
+
+                                                    b4.Property<int>("RegenDelayInSeconds");
+
+                                                    b4.HasKey("GuildRaidTokensRecordGameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId");
+
+                                                    b4.ToTable("player_data_snapshots");
+
+                                                    b4.WithOwner()
+                                                        .HasForeignKey("GuildRaidTokensRecordGameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId");
+                                                });
+
+                                            b3.Navigation("BombTokens")
+                                                .IsRequired();
+
+                                            b3.Navigation("Tokens")
+                                                .IsRequired();
+                                        });
+
+                                    b2.Navigation("Arena");
+
+                                    b2.Navigation("GuildRaid");
+
+                                    b2.Navigation("Onslaught");
+
+                                    b2.Navigation("SalvageRun");
+                                });
+
+                            b1.Navigation("BattleAttempts");
+
+                            b1.Navigation("GameModeTokens")
+                                .IsRequired();
                         });
 
                     b.OwnsMany("TacticusPlanner.Persistence.Users.PlayerData.LreProgressRecord", "LreProgress", b1 =>
@@ -848,12 +843,11 @@ namespace TacticusPlanner.Persistence.Migrations
 
                             b1.Property<int>("CurrentShards");
 
-                            b1.Property<string>("EventId")
-                                .IsRequired();
-
                             b1.Property<int?>("ExtraCurrencyPerPayout");
 
                             b1.Property<bool?>("HasUsedAdForExtraTokenToday");
+
+                            b1.Property<string>("Id");
 
                             b1.HasKey("PlayerDataSnapshotId", "__synthesizedOrdinal");
 
@@ -866,21 +860,13 @@ namespace TacticusPlanner.Persistence.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("PlayerDataSnapshotId");
 
-                            b1.OwnsMany("TacticusPlanner.Persistence.Users.PlayerData.LreLaneProgressRecord", "Lanes", b2 =>
+                            b1.OwnsOne("TacticusPlanner.Persistence.Users.PlayerData.LreTrackProgressRecord", "Alpha", b2 =>
                                 {
                                     b2.Property<Guid>("LreProgressRecordPlayerDataSnapshotId");
 
                                     b2.Property<int>("LreProgressRecord__synthesizedOrdinal");
 
-                                    b2.Property<int>("__synthesizedOrdinal")
-                                        .ValueGeneratedOnAdd();
-
-                                    b2.Property<int>("LaneId");
-
-                                    b2.Property<string>("Name")
-                                        .IsRequired();
-
-                                    b2.HasKey("LreProgressRecordPlayerDataSnapshotId", "LreProgressRecord__synthesizedOrdinal", "__synthesizedOrdinal");
+                                    b2.HasKey("LreProgressRecordPlayerDataSnapshotId", "LreProgressRecord__synthesizedOrdinal");
 
                                     b2.ToTable("player_data_snapshots");
 
@@ -889,11 +875,9 @@ namespace TacticusPlanner.Persistence.Migrations
 
                                     b2.OwnsMany("TacticusPlanner.Persistence.Users.PlayerData.LreEncounterProgressRecord", "Encounters", b3 =>
                                         {
-                                            b3.Property<Guid>("LreLaneProgressRecordLreProgressRecordPlayerDataSnapshotId");
+                                            b3.Property<Guid>("LreTrackProgressRecordLreProgressRecordPlayerDataSnapshotId");
 
-                                            b3.Property<int>("LreLaneProgressRecordLreProgressRecord__synthesizedOrdinal");
-
-                                            b3.Property<int>("LreLaneProgressRecord__synthesizedOrdinal");
+                                            b3.Property<int>("LreTrackProgressRecordLreProgressRecord__synthesizedOrdinal");
 
                                             b3.Property<int>("__synthesizedOrdinal")
                                                 .ValueGeneratedOnAdd();
@@ -905,12 +889,52 @@ namespace TacticusPlanner.Persistence.Migrations
                                             b3.PrimitiveCollection<string>("ObjectivesCleared")
                                                 .IsRequired();
 
-                                            b3.HasKey("LreLaneProgressRecordLreProgressRecordPlayerDataSnapshotId", "LreLaneProgressRecordLreProgressRecord__synthesizedOrdinal", "LreLaneProgressRecord__synthesizedOrdinal", "__synthesizedOrdinal");
+                                            b3.HasKey("LreTrackProgressRecordLreProgressRecordPlayerDataSnapshotId", "LreTrackProgressRecordLreProgressRecord__synthesizedOrdinal", "__synthesizedOrdinal");
 
                                             b3.ToTable("player_data_snapshots");
 
                                             b3.WithOwner()
-                                                .HasForeignKey("LreLaneProgressRecordLreProgressRecordPlayerDataSnapshotId", "LreLaneProgressRecordLreProgressRecord__synthesizedOrdinal", "LreLaneProgressRecord__synthesizedOrdinal");
+                                                .HasForeignKey("LreTrackProgressRecordLreProgressRecordPlayerDataSnapshotId", "LreTrackProgressRecordLreProgressRecord__synthesizedOrdinal");
+                                        });
+
+                                    b2.Navigation("Encounters");
+                                });
+
+                            b1.OwnsOne("TacticusPlanner.Persistence.Users.PlayerData.LreTrackProgressRecord", "Beta", b2 =>
+                                {
+                                    b2.Property<Guid>("LreProgressRecordPlayerDataSnapshotId");
+
+                                    b2.Property<int>("LreProgressRecord__synthesizedOrdinal");
+
+                                    b2.HasKey("LreProgressRecordPlayerDataSnapshotId", "LreProgressRecord__synthesizedOrdinal");
+
+                                    b2.ToTable("player_data_snapshots");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("LreProgressRecordPlayerDataSnapshotId", "LreProgressRecord__synthesizedOrdinal");
+
+                                    b2.OwnsMany("TacticusPlanner.Persistence.Users.PlayerData.LreEncounterProgressRecord", "Encounters", b3 =>
+                                        {
+                                            b3.Property<Guid>("LreTrackProgressRecordLreProgressRecordPlayerDataSnapshotId");
+
+                                            b3.Property<int>("LreTrackProgressRecordLreProgressRecord__synthesizedOrdinal");
+
+                                            b3.Property<int>("__synthesizedOrdinal")
+                                                .ValueGeneratedOnAdd();
+
+                                            b3.Property<int>("EncounterPoints");
+
+                                            b3.Property<int>("HighScore");
+
+                                            b3.PrimitiveCollection<string>("ObjectivesCleared")
+                                                .IsRequired();
+
+                                            b3.HasKey("LreTrackProgressRecordLreProgressRecordPlayerDataSnapshotId", "LreTrackProgressRecordLreProgressRecord__synthesizedOrdinal", "__synthesizedOrdinal");
+
+                                            b3.ToTable("player_data_snapshots");
+
+                                            b3.WithOwner()
+                                                .HasForeignKey("LreTrackProgressRecordLreProgressRecordPlayerDataSnapshotId", "LreTrackProgressRecordLreProgressRecord__synthesizedOrdinal");
                                         });
 
                                     b2.Navigation("Encounters");
@@ -938,126 +962,56 @@ namespace TacticusPlanner.Persistence.Migrations
                                         .HasForeignKey("LreProgressRecordPlayerDataSnapshotId", "LreProgressRecord__synthesizedOrdinal");
                                 });
 
+                            b1.OwnsOne("TacticusPlanner.Persistence.Users.PlayerData.LreTrackProgressRecord", "Gamma", b2 =>
+                                {
+                                    b2.Property<Guid>("LreProgressRecordPlayerDataSnapshotId");
+
+                                    b2.Property<int>("LreProgressRecord__synthesizedOrdinal");
+
+                                    b2.HasKey("LreProgressRecordPlayerDataSnapshotId", "LreProgressRecord__synthesizedOrdinal");
+
+                                    b2.ToTable("player_data_snapshots");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("LreProgressRecordPlayerDataSnapshotId", "LreProgressRecord__synthesizedOrdinal");
+
+                                    b2.OwnsMany("TacticusPlanner.Persistence.Users.PlayerData.LreEncounterProgressRecord", "Encounters", b3 =>
+                                        {
+                                            b3.Property<Guid>("LreTrackProgressRecordLreProgressRecordPlayerDataSnapshotId");
+
+                                            b3.Property<int>("LreTrackProgressRecordLreProgressRecord__synthesizedOrdinal");
+
+                                            b3.Property<int>("__synthesizedOrdinal")
+                                                .ValueGeneratedOnAdd();
+
+                                            b3.Property<int>("EncounterPoints");
+
+                                            b3.Property<int>("HighScore");
+
+                                            b3.PrimitiveCollection<string>("ObjectivesCleared")
+                                                .IsRequired();
+
+                                            b3.HasKey("LreTrackProgressRecordLreProgressRecordPlayerDataSnapshotId", "LreTrackProgressRecordLreProgressRecord__synthesizedOrdinal", "__synthesizedOrdinal");
+
+                                            b3.ToTable("player_data_snapshots");
+
+                                            b3.WithOwner()
+                                                .HasForeignKey("LreTrackProgressRecordLreProgressRecordPlayerDataSnapshotId", "LreTrackProgressRecordLreProgressRecord__synthesizedOrdinal");
+                                        });
+
+                                    b2.Navigation("Encounters");
+                                });
+
+                            b1.Navigation("Alpha");
+
+                            b1.Navigation("Beta");
+
                             b1.Navigation("CurrentEventTokens");
 
-                            b1.Navigation("Lanes");
+                            b1.Navigation("Gamma");
                         });
 
-                    b.OwnsMany("TacticusPlanner.Persistence.Users.PlayerData.CampaignProgressRecord", "CampaignEventsProgress", b1 =>
-                        {
-                            b1.Property<Guid>("PlayerDataSnapshotId");
-
-                            b1.Property<int>("__synthesizedOrdinal")
-                                .ValueGeneratedOnAdd();
-
-                            b1.Property<string>("CatalogCampaignGroupId");
-
-                            b1.Property<int>("HighestObservedBattleIndex");
-
-                            b1.Property<string>("Name")
-                                .IsRequired();
-
-                            b1.Property<string>("TacticusCampaignId")
-                                .IsRequired();
-
-                            b1.Property<string>("Type")
-                                .IsRequired();
-
-                            b1.HasKey("PlayerDataSnapshotId", "__synthesizedOrdinal");
-
-                            b1.ToTable("player_data_snapshots");
-
-                            b1
-                                .ToJson("campaign_events_progress")
-                                .HasColumnType("jsonb");
-
-                            b1.WithOwner()
-                                .HasForeignKey("PlayerDataSnapshotId");
-
-                            b1.OwnsMany("TacticusPlanner.Persistence.Users.PlayerData.CampaignBattleProgressRecord", "Battles", b2 =>
-                                {
-                                    b2.Property<Guid>("CampaignProgressRecordPlayerDataSnapshotId");
-
-                                    b2.Property<int>("CampaignProgressRecord__synthesizedOrdinal");
-
-                                    b2.Property<int>("__synthesizedOrdinal")
-                                        .ValueGeneratedOnAdd();
-
-                                    b2.Property<int>("AttemptsLeft");
-
-                                    b2.Property<int>("AttemptsUsed");
-
-                                    b2.Property<int>("BattleIndex");
-
-                                    b2.HasKey("CampaignProgressRecordPlayerDataSnapshotId", "CampaignProgressRecord__synthesizedOrdinal", "__synthesizedOrdinal");
-
-                                    b2.ToTable("player_data_snapshots");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("CampaignProgressRecordPlayerDataSnapshotId", "CampaignProgressRecord__synthesizedOrdinal");
-                                });
-
-                            b1.Navigation("Battles");
-                        });
-
-                    b.OwnsMany("TacticusPlanner.Persistence.Users.PlayerData.CampaignProgressRecord", "CampaignProgress", b1 =>
-                        {
-                            b1.Property<Guid>("PlayerDataSnapshotId");
-
-                            b1.Property<int>("__synthesizedOrdinal")
-                                .ValueGeneratedOnAdd();
-
-                            b1.Property<string>("CatalogCampaignGroupId");
-
-                            b1.Property<int>("HighestObservedBattleIndex");
-
-                            b1.Property<string>("Name")
-                                .IsRequired();
-
-                            b1.Property<string>("TacticusCampaignId")
-                                .IsRequired();
-
-                            b1.Property<string>("Type")
-                                .IsRequired();
-
-                            b1.HasKey("PlayerDataSnapshotId", "__synthesizedOrdinal");
-
-                            b1.ToTable("player_data_snapshots");
-
-                            b1
-                                .ToJson("campaign_progress")
-                                .HasColumnType("jsonb");
-
-                            b1.WithOwner()
-                                .HasForeignKey("PlayerDataSnapshotId");
-
-                            b1.OwnsMany("TacticusPlanner.Persistence.Users.PlayerData.CampaignBattleProgressRecord", "Battles", b2 =>
-                                {
-                                    b2.Property<Guid>("CampaignProgressRecordPlayerDataSnapshotId");
-
-                                    b2.Property<int>("CampaignProgressRecord__synthesizedOrdinal");
-
-                                    b2.Property<int>("__synthesizedOrdinal")
-                                        .ValueGeneratedOnAdd();
-
-                                    b2.Property<int>("AttemptsLeft");
-
-                                    b2.Property<int>("AttemptsUsed");
-
-                                    b2.Property<int>("BattleIndex");
-
-                                    b2.HasKey("CampaignProgressRecordPlayerDataSnapshotId", "CampaignProgressRecord__synthesizedOrdinal", "__synthesizedOrdinal");
-
-                                    b2.ToTable("player_data_snapshots");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("CampaignProgressRecordPlayerDataSnapshotId", "CampaignProgressRecord__synthesizedOrdinal");
-                                });
-
-                            b1.Navigation("Battles");
-                        });
-
-                    b.OwnsMany("TacticusPlanner.Persistence.Users.PlayerData.PlayerUnitRecord", "Characters", b1 =>
+                    b.OwnsMany("TacticusPlanner.Persistence.Users.PlayerData.PlayerCharacterRecord", "Characters", b1 =>
                         {
                             b1.Property<Guid>("PlayerDataSnapshotId");
 
@@ -1067,16 +1021,7 @@ namespace TacticusPlanner.Persistence.Migrations
                             b1.PrimitiveCollection<string>("AppliedUpgradeSlots")
                                 .IsRequired();
 
-                            b1.Property<string>("Faction")
-                                .IsRequired();
-
-                            b1.Property<string>("GrandAlliance")
-                                .IsRequired();
-
                             b1.Property<long>("MythicShards");
-
-                            b1.Property<string>("Name")
-                                .IsRequired();
 
                             b1.Property<int>("ProgressionIndex");
 
@@ -1104,9 +1049,9 @@ namespace TacticusPlanner.Persistence.Migrations
 
                             b1.OwnsMany("TacticusPlanner.Persistence.Users.PlayerData.PlayerUnitAbilityRecord", "Abilities", b2 =>
                                 {
-                                    b2.Property<Guid>("PlayerUnitRecordPlayerDataSnapshotId");
+                                    b2.Property<Guid>("PlayerCharacterRecordPlayerDataSnapshotId");
 
-                                    b2.Property<int>("PlayerUnitRecord__synthesizedOrdinal");
+                                    b2.Property<int>("PlayerCharacterRecord__synthesizedOrdinal");
 
                                     b2.Property<int>("__synthesizedOrdinal")
                                         .ValueGeneratedOnAdd();
@@ -1116,19 +1061,19 @@ namespace TacticusPlanner.Persistence.Migrations
 
                                     b2.Property<int>("Level");
 
-                                    b2.HasKey("PlayerUnitRecordPlayerDataSnapshotId", "PlayerUnitRecord__synthesizedOrdinal", "__synthesizedOrdinal");
+                                    b2.HasKey("PlayerCharacterRecordPlayerDataSnapshotId", "PlayerCharacterRecord__synthesizedOrdinal", "__synthesizedOrdinal");
 
                                     b2.ToTable("player_data_snapshots");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("PlayerUnitRecordPlayerDataSnapshotId", "PlayerUnitRecord__synthesizedOrdinal");
+                                        .HasForeignKey("PlayerCharacterRecordPlayerDataSnapshotId", "PlayerCharacterRecord__synthesizedOrdinal");
                                 });
 
                             b1.OwnsMany("TacticusPlanner.Persistence.Users.PlayerData.PlayerUnitEquipmentSlotRecord", "EquippedItems", b2 =>
                                 {
-                                    b2.Property<Guid>("PlayerUnitRecordPlayerDataSnapshotId");
+                                    b2.Property<Guid>("PlayerCharacterRecordPlayerDataSnapshotId");
 
-                                    b2.Property<int>("PlayerUnitRecord__synthesizedOrdinal");
+                                    b2.Property<int>("PlayerCharacterRecord__synthesizedOrdinal");
 
                                     b2.Property<int>("__synthesizedOrdinal")
                                         .ValueGeneratedOnAdd();
@@ -1138,21 +1083,15 @@ namespace TacticusPlanner.Persistence.Migrations
 
                                     b2.Property<int>("Level");
 
-                                    b2.Property<string>("Name")
-                                        .IsRequired();
-
-                                    b2.Property<string>("Rarity")
-                                        .IsRequired();
-
                                     b2.Property<string>("SlotId")
                                         .IsRequired();
 
-                                    b2.HasKey("PlayerUnitRecordPlayerDataSnapshotId", "PlayerUnitRecord__synthesizedOrdinal", "__synthesizedOrdinal");
+                                    b2.HasKey("PlayerCharacterRecordPlayerDataSnapshotId", "PlayerCharacterRecord__synthesizedOrdinal", "__synthesizedOrdinal");
 
                                     b2.ToTable("player_data_snapshots");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("PlayerUnitRecordPlayerDataSnapshotId", "PlayerUnitRecord__synthesizedOrdinal");
+                                        .HasForeignKey("PlayerCharacterRecordPlayerDataSnapshotId", "PlayerCharacterRecord__synthesizedOrdinal");
                                 });
 
                             b1.Navigation("Abilities");
@@ -1160,107 +1099,58 @@ namespace TacticusPlanner.Persistence.Migrations
                             b1.Navigation("EquippedItems");
                         });
 
-                    b.OwnsMany("TacticusPlanner.Persistence.Users.PlayerData.PlayerUnitRecord", "Mows", b1 =>
+                    b.OwnsMany("TacticusPlanner.Persistence.Users.PlayerData.CampaignProgressRecord", "CampaignEventsProgress", b1 =>
                         {
                             b1.Property<Guid>("PlayerDataSnapshotId");
 
                             b1.Property<int>("__synthesizedOrdinal")
                                 .ValueGeneratedOnAdd();
 
-                            b1.PrimitiveCollection<string>("AppliedUpgradeSlots")
+                            b1.Property<int>("HighestCompletedBattleIndex");
+
+                            b1.Property<string>("TacticusCampaignId")
                                 .IsRequired();
 
-                            b1.Property<string>("Faction")
+                            b1.Property<string>("Type")
                                 .IsRequired();
-
-                            b1.Property<string>("GrandAlliance")
-                                .IsRequired();
-
-                            b1.Property<long>("MythicShards");
-
-                            b1.Property<string>("Name")
-                                .IsRequired();
-
-                            b1.Property<int>("ProgressionIndex");
-
-                            b1.Property<int>("Rank");
-
-                            b1.Property<long>("Shards");
-
-                            b1.Property<string>("UnitId")
-                                .IsRequired();
-
-                            b1.Property<long>("Xp");
-
-                            b1.Property<int>("XpLevel");
 
                             b1.HasKey("PlayerDataSnapshotId", "__synthesizedOrdinal");
 
                             b1.ToTable("player_data_snapshots");
 
                             b1
-                                .ToJson("mows")
+                                .ToJson("campaign_events_progress")
                                 .HasColumnType("jsonb");
 
                             b1.WithOwner()
                                 .HasForeignKey("PlayerDataSnapshotId");
+                        });
 
-                            b1.OwnsMany("TacticusPlanner.Persistence.Users.PlayerData.PlayerUnitAbilityRecord", "Abilities", b2 =>
-                                {
-                                    b2.Property<Guid>("PlayerUnitRecordPlayerDataSnapshotId");
+                    b.OwnsMany("TacticusPlanner.Persistence.Users.PlayerData.CampaignProgressRecord", "CampaignProgress", b1 =>
+                        {
+                            b1.Property<Guid>("PlayerDataSnapshotId");
 
-                                    b2.Property<int>("PlayerUnitRecord__synthesizedOrdinal");
+                            b1.Property<int>("__synthesizedOrdinal")
+                                .ValueGeneratedOnAdd();
 
-                                    b2.Property<int>("__synthesizedOrdinal")
-                                        .ValueGeneratedOnAdd();
+                            b1.Property<int>("HighestCompletedBattleIndex");
 
-                                    b2.Property<string>("AbilityId")
-                                        .IsRequired();
+                            b1.Property<string>("TacticusCampaignId")
+                                .IsRequired();
 
-                                    b2.Property<int>("Level");
+                            b1.Property<string>("Type")
+                                .IsRequired();
 
-                                    b2.HasKey("PlayerUnitRecordPlayerDataSnapshotId", "PlayerUnitRecord__synthesizedOrdinal", "__synthesizedOrdinal");
+                            b1.HasKey("PlayerDataSnapshotId", "__synthesizedOrdinal");
 
-                                    b2.ToTable("player_data_snapshots");
+                            b1.ToTable("player_data_snapshots");
 
-                                    b2.WithOwner()
-                                        .HasForeignKey("PlayerUnitRecordPlayerDataSnapshotId", "PlayerUnitRecord__synthesizedOrdinal");
-                                });
+                            b1
+                                .ToJson("campaign_progress")
+                                .HasColumnType("jsonb");
 
-                            b1.OwnsMany("TacticusPlanner.Persistence.Users.PlayerData.PlayerUnitEquipmentSlotRecord", "EquippedItems", b2 =>
-                                {
-                                    b2.Property<Guid>("PlayerUnitRecordPlayerDataSnapshotId");
-
-                                    b2.Property<int>("PlayerUnitRecord__synthesizedOrdinal");
-
-                                    b2.Property<int>("__synthesizedOrdinal")
-                                        .ValueGeneratedOnAdd();
-
-                                    b2.Property<string>("EquipmentId")
-                                        .IsRequired();
-
-                                    b2.Property<int>("Level");
-
-                                    b2.Property<string>("Name")
-                                        .IsRequired();
-
-                                    b2.Property<string>("Rarity")
-                                        .IsRequired();
-
-                                    b2.Property<string>("SlotId")
-                                        .IsRequired();
-
-                                    b2.HasKey("PlayerUnitRecordPlayerDataSnapshotId", "PlayerUnitRecord__synthesizedOrdinal", "__synthesizedOrdinal");
-
-                                    b2.ToTable("player_data_snapshots");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("PlayerUnitRecordPlayerDataSnapshotId", "PlayerUnitRecord__synthesizedOrdinal");
-                                });
-
-                            b1.Navigation("Abilities");
-
-                            b1.Navigation("EquippedItems");
+                            b1.WithOwner()
+                                .HasForeignKey("PlayerDataSnapshotId");
                         });
 
                     b.OwnsOne("TacticusPlanner.Persistence.Users.PlayerData.PlayerDetailsChunk", "PlayerDetails", b1 =>
@@ -1284,14 +1174,70 @@ namespace TacticusPlanner.Persistence.Migrations
                                 .HasForeignKey("PlayerDataSnapshotId");
                         });
 
+                    b.OwnsMany("TacticusPlanner.Persistence.Users.PlayerData.PlayerMowRecord", "Mows", b1 =>
+                        {
+                            b1.Property<Guid>("PlayerDataSnapshotId");
+
+                            b1.Property<int>("__synthesizedOrdinal")
+                                .ValueGeneratedOnAdd();
+
+                            b1.PrimitiveCollection<string>("AppliedUpgradeSlots")
+                                .IsRequired();
+
+                            b1.Property<long>("MythicShards");
+
+                            b1.Property<int>("ProgressionIndex");
+
+                            b1.Property<long>("Shards");
+
+                            b1.Property<string>("UnitId")
+                                .IsRequired();
+
+                            b1.Property<long>("Xp");
+
+                            b1.Property<int>("XpLevel");
+
+                            b1.HasKey("PlayerDataSnapshotId", "__synthesizedOrdinal");
+
+                            b1.ToTable("player_data_snapshots");
+
+                            b1
+                                .ToJson("mows")
+                                .HasColumnType("jsonb");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PlayerDataSnapshotId");
+
+                            b1.OwnsMany("TacticusPlanner.Persistence.Users.PlayerData.PlayerUnitAbilityRecord", "Abilities", b2 =>
+                                {
+                                    b2.Property<Guid>("PlayerMowRecordPlayerDataSnapshotId");
+
+                                    b2.Property<int>("PlayerMowRecord__synthesizedOrdinal");
+
+                                    b2.Property<int>("__synthesizedOrdinal")
+                                        .ValueGeneratedOnAdd();
+
+                                    b2.Property<string>("AbilityId")
+                                        .IsRequired();
+
+                                    b2.Property<int>("Level");
+
+                                    b2.HasKey("PlayerMowRecordPlayerDataSnapshotId", "PlayerMowRecord__synthesizedOrdinal", "__synthesizedOrdinal");
+
+                                    b2.ToTable("player_data_snapshots");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("PlayerMowRecordPlayerDataSnapshotId", "PlayerMowRecord__synthesizedOrdinal");
+                                });
+
+                            b1.Navigation("Abilities");
+                        });
+
                     b.Navigation("CampaignEventsProgress");
 
                     b.Navigation("CampaignProgress");
 
                     b.Navigation("Characters");
-
-                    b.Navigation("GameModeTokens")
-                        .IsRequired();
 
                     b.Navigation("Inventory")
                         .IsRequired();
@@ -1299,6 +1245,9 @@ namespace TacticusPlanner.Persistence.Migrations
                     b.Navigation("InventoryItems");
 
                     b.Navigation("InventoryUpgrades");
+
+                    b.Navigation("LiveProgress")
+                        .IsRequired();
 
                     b.Navigation("LreProgress");
 

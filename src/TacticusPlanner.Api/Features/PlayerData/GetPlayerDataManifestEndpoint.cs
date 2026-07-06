@@ -38,21 +38,29 @@ public sealed class GetPlayerDataManifestEndpoint : EndpointWithoutRequest<Playe
             return;
         }
 
+        // AsNoTracking + a narrow projection: the manifest only needs these five scalar-ish columns, not
+        // the ten jsonb chunk payload columns a fully-materialized PlayerDataSnapshot would pull in.
         var db = Resolve<PlannerDbContext>();
-        var snapshot = await db.PlayerDataSnapshots
-            .Include(entity => entity.Profile)
-            .ThenInclude(entity => entity!.Account)
-            .SingleOrDefaultAsync(
-                entity => entity.Profile!.Account!.Issuer == issuer && entity.Profile.Account.Subject == subject,
-                ct);
+        var projection = await db.PlayerDataSnapshots
+            .AsNoTracking()
+            .Where(entity => entity.Profile!.Account!.Issuer == issuer && entity.Profile.Account.Subject == subject)
+            .Select(entity => new
+            {
+                entity.SchemaVersion,
+                entity.ConfigHash,
+                entity.SourceHash,
+                entity.SyncedAt,
+                entity.ChunkHashes,
+            })
+            .SingleOrDefaultAsync(ct);
 
-        if (snapshot is null)
+        if (projection is null)
         {
             await Send.NotFoundAsync(ct);
             return;
         }
 
-        var etag = ETagHelper.CreateEtag(snapshot.SourceHash);
+        var etag = ETagHelper.CreateEtag(projection.SourceHash);
         if (ETagHelper.TryApplyNotModified(HttpContext, etag))
         {
             await Send.NotModifiedAsync(ct);
@@ -63,6 +71,7 @@ public sealed class GetPlayerDataManifestEndpoint : EndpointWithoutRequest<Playe
         HttpContext.Response.Headers.CacheControl = "private, must-revalidate";
         HttpContext.Response.Headers.Vary = HeaderNames.Authorization;
 
-        await Send.OkAsync(PlayerDataManifestBuilder.Build(snapshot), ct);
+        await Send.OkAsync(PlayerDataManifestBuilder.Build(
+            projection.SchemaVersion, projection.ConfigHash, projection.SourceHash, projection.SyncedAt, projection.ChunkHashes), ct);
     }
 }

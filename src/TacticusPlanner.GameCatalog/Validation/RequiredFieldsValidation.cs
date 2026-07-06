@@ -47,10 +47,10 @@ public static partial class GameCatalogValidator
             Require(GameCatalogDatasets.CampaignBattlesPrefix, key, group.Faction, "faction", errors);
             Require(GameCatalogDatasets.CampaignBattlesPrefix, key, group.ReleaseType, "releaseType", errors);
 
-            if (group.Difficulties.Count == 0)
+            if (group.Types.Count == 0)
             {
                 errors.Add(new GameCatalogValidationError(
-                    GameCatalogDatasets.CampaignBattlesPrefix, "RequiredField", $"'difficulties' is required for '{key}'."));
+                    GameCatalogDatasets.CampaignBattlesPrefix, "RequiredField", $"'types' is required for '{key}'."));
             }
         }
     }

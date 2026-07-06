@@ -63,7 +63,6 @@ public sealed class PlayerDataSnapshotConfiguration : IEntityTypeConfiguration<P
         {
             chunk.ToJson("mows");
             chunk.OwnsMany(unit => unit.Abilities);
-            chunk.OwnsMany(unit => unit.EquippedItems);
         });
 
         builder.OwnsMany(entity => entity.InventoryUpgrades, chunk => chunk.ToJson("inventory_upgrades"));
@@ -81,7 +80,7 @@ public sealed class PlayerDataSnapshotConfiguration : IEntityTypeConfiguration<P
                 badges.OwnsMany(b => b.Xenos);
                 badges.OwnsMany(b => b.Chaos);
             });
-            chunk.OwnsMany(inventory => inventory.Components);
+            chunk.OwnsOne(inventory => inventory.Components);
             chunk.OwnsMany(inventory => inventory.ForgeBadges);
             chunk.OwnsOne(inventory => inventory.Orbs, orbs =>
             {
@@ -91,35 +90,32 @@ public sealed class PlayerDataSnapshotConfiguration : IEntityTypeConfiguration<P
             });
         });
 
-        builder.OwnsMany(entity => entity.CampaignProgress, chunk =>
-        {
-            chunk.ToJson("campaign_progress");
-            chunk.OwnsMany(campaign => campaign.Battles);
-        });
+        builder.OwnsMany(entity => entity.CampaignProgress, chunk => chunk.ToJson("campaign_progress"));
+        builder.OwnsMany(entity => entity.CampaignEventsProgress, chunk => chunk.ToJson("campaign_events_progress"));
 
-        builder.OwnsMany(entity => entity.CampaignEventsProgress, chunk =>
+        builder.OwnsOne(entity => entity.LiveProgress, chunk =>
         {
-            chunk.ToJson("campaign_events_progress");
-            chunk.OwnsMany(campaign => campaign.Battles);
-        });
-
-        builder.OwnsOne(entity => entity.GameModeTokens, chunk =>
-        {
-            chunk.ToJson("game_mode_tokens");
-            chunk.OwnsOne(tokens => tokens.Arena);
-            chunk.OwnsOne(tokens => tokens.GuildRaid, guildRaid =>
+            chunk.ToJson("live_progress");
+            chunk.OwnsMany(live => live.BattleAttempts);
+            chunk.OwnsOne(live => live.GameModeTokens, tokens =>
             {
-                guildRaid.OwnsOne(g => g.Tokens);
-                guildRaid.OwnsOne(g => g.BombTokens);
+                tokens.OwnsOne(t => t.Arena);
+                tokens.OwnsOne(t => t.GuildRaid, guildRaid =>
+                {
+                    guildRaid.OwnsOne(g => g.Tokens);
+                    guildRaid.OwnsOne(g => g.BombTokens);
+                });
+                tokens.OwnsOne(t => t.Onslaught);
+                tokens.OwnsOne(t => t.SalvageRun);
             });
-            chunk.OwnsOne(tokens => tokens.Onslaught);
-            chunk.OwnsOne(tokens => tokens.SalvageRun);
         });
 
         builder.OwnsMany(entity => entity.LreProgress, chunk =>
         {
             chunk.ToJson("lre_progress");
-            chunk.OwnsMany(lre => lre.Lanes, lanes => lanes.OwnsMany(lane => lane.Encounters));
+            chunk.OwnsOne(lre => lre.Alpha, track => track.OwnsMany(t => t.Encounters));
+            chunk.OwnsOne(lre => lre.Beta, track => track.OwnsMany(t => t.Encounters));
+            chunk.OwnsOne(lre => lre.Gamma, track => track.OwnsMany(t => t.Encounters));
             chunk.OwnsOne(lre => lre.CurrentEventTokens);
         });
 

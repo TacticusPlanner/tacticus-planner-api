@@ -27,9 +27,8 @@ public class PlayerDataOverride : BaseEntity<ProfileId>, IRevisionedEntity
     /// </summary>
     public List<CampaignProgressOverrideRecord> CampaignProgressOverrides { get; set; } = [];
 
-    /// <summary>Manual LRE planning annotations (e.g. "maybe"/"stop" per encounter), kept separate from
-    /// synced LRE progress in <see cref="PlayerDataSnapshot.LreProgress"/>.</summary>
-    public List<LreOverrideRecord> LreOverrides { get; set; } = [];
+    // LRE overrides are intentionally excluded for now — the shape of LRE planning annotations
+    // (e.g. "maybe"/"stop" per encounter) isn't settled yet; add them back once it is.
 
     public virtual Profile? Profile { get; set; }
 }
@@ -61,16 +60,4 @@ public sealed class CampaignProgressOverrideRecord
     public string CatalogCampaignGroupId { get; set; } = string.Empty;
 
     public int HighestCompletedNodeNumber { get; set; }
-}
-
-public sealed class LreOverrideRecord
-{
-    public string EventId { get; set; } = string.Empty;
-
-    public int LaneId { get; set; }
-
-    public int EncounterIndex { get; set; }
-
-    /// <summary>Free-form planning annotation, e.g. "maybe" or "stop" (see the events.md planning model).</summary>
-    public string Annotation { get; set; } = string.Empty;
 }
