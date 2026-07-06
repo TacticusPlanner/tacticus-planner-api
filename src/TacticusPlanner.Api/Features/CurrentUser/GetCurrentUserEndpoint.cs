@@ -80,21 +80,10 @@ public sealed class GetCurrentUserEndpoint : EndpointWithoutRequest<CurrentUserR
 
         db.Accounts.Add(account);
 
-        try
-        {
-            await db.SaveChangesAsync(ct);
-        }
-        catch (DbUpdateException)
-        {
-            // A concurrent request (e.g. a duplicate tab finishing sign-in at the same time) may have already
-            // provisioned the account for this (issuer, subject) pair, tripping the unique index. Detach the
-            // losing insert and read back the row the other request created.
-            db.Entry(account).State = EntityState.Detached;
-            db.Entry(account.Profile).State = EntityState.Detached;
+        await db.SaveChangesAsync(ct);
 
-            account = await FindAccountAsync(db, issuer, subject, ct)
-                ?? throw new InvalidOperationException("Account provisioning failed unexpectedly.");
-        }
+        account = await FindAccountAsync(db, issuer, subject, ct)
+                  ?? throw new InvalidOperationException("Account provisioning failed unexpectedly.");
 
         return account;
     }
