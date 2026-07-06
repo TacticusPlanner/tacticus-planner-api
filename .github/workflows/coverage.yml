@@ -1,0 +1,89 @@
+name: Coverage
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  code-quality: write
+  pull-requests: read
+
+concurrency:
+  group: coverage-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  coverage:
+    name: Coverage
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      ConnectionStrings__planner-db: Host=localhost;Port=5432;Database=tacticus_planner;Username=postgres;Password=postgres
+      Authentication__Authority: https://example.ciamlogin.com/example.onmicrosoft.com/v2.0
+      Authentication__Audience: api://tacticus-planner-api-ci
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          global-json-file: global.json
+          cache: true
+          cache-dependency-path: "**/packages.lock.json"
+
+      - name: Restore locked solution dependencies
+        run: dotnet restore TacticusPlanner.slnx --locked-mode
+
+      - name: Restore platform-specific AppHost dependencies
+        run: dotnet restore orchestration/TacticusPlanner.AppHost/TacticusPlanner.AppHost.csproj
+
+      - name: Build
+        run: dotnet build TacticusPlanner.slnx --configuration Release --no-restore
+
+      - name: Test API with coverage
+        run: >
+          dotnet test tests/TacticusPlanner.Api.Tests/TacticusPlanner.Api.Tests.csproj
+          --configuration Release --no-build --collect:"XPlat Code Coverage"
+          --results-directory ./coverage/api
+
+      - name: Test GameCatalog with coverage
+        run: >
+          dotnet test tests/TacticusPlanner.GameCatalog.Tests/TacticusPlanner.GameCatalog.Tests.csproj
+          --configuration Release --no-build --collect:"XPlat Code Coverage"
+          --results-directory ./coverage/game-catalog
+
+      - name: Resolve coverage file paths
+        id: coverage-files
+        shell: bash
+        run: |
+          echo "api=$(find ./coverage/api -name coverage.cobertura.xml)" >> "$GITHUB_OUTPUT"
+          echo "game-catalog=$(find ./coverage/game-catalog -name coverage.cobertura.xml)" >> "$GITHUB_OUTPUT"
+
+      - name: Upload API coverage
+        uses: actions/upload-code-coverage@v1
+        with:
+          file: ${{ steps.coverage-files.outputs.api }}
+          language: C#
+          label: coverage/api
+
+      - name: Upload GameCatalog coverage
+        uses: actions/upload-code-coverage@v1
+        with:
+          file: ${{ steps.coverage-files.outputs.game-catalog }}
+          language: C#
+          label: coverage/game-catalog
