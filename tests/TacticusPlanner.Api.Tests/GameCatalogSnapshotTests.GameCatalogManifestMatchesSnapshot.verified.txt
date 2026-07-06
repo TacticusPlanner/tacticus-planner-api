@@ -2,16 +2,16 @@
   version: dev-2026-07-01,
   schemaVersion: 1,
   gameVersion: 1.40,
-  sourceHash: 129617a410d8bc7414c0d7e2e265e7874dd4f7feae02dff3ffa30ebadae7867b,
+  sourceHash: 0c06f680a03596260955ee3a422c0debb8a6f7005fbf9b3292b51a8a4b2e8b3f,
   datasets: [
     {
       key: campaign-battles,
-      hash: 571b086822a7c8bd6104f9ee57d4fa80486fff561bc534d78f1365626f20464e,
+      hash: 399e3a2cb656343c25b2b83a716d1a0a61e181bae54506e908702ace3672b364,
       url: /api/v1/game-catalog/campaign-battles
     },
     {
       key: campaign-definitions,
-      hash: 2284581e07455cce7c06a97608f7bbee8db604bea30b741c7a8c065d94d508f4,
+      hash: 1279b0993c22fae54e45ad25d1d79681432ae6981560cad6026f5c3c19443574,
       url: /api/v1/game-catalog/campaign-definitions
     },
     {

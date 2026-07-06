@@ -70,7 +70,27 @@ public static class GameCatalogDatasets
         "npcs-objects",
     ];
 
-    /// <summary>Campaign-battle datasets grouped by core characters (storyline x side).</summary>
+    /// <summary>
+    /// Campaign-battle datasets grouped by core characters (storyline x side). These are source-file bucket
+    /// names (dataset keys) and are decoupled from each group's <c>groupId</c> content field.
+    /// </summary>
+    /// <remarks>
+    /// The four standard/mirror storylines' <c>groupId</c> values were realigned to match the Tacticus player
+    /// API's own campaign-progress ids (see ADR 0007 in the docs repo and
+    /// <c>TacticusApi.Models.Player.CampaignProgress</c>): <c>indomitus</c> -&gt; <c>campaign1</c>,
+    /// <c>fall-of-cadia</c> -&gt; <c>campaign2</c>, <c>octarius</c> -&gt; <c>campaign3</c>,
+    /// <c>saim-hann</c> -&gt; <c>campaign4</c>, and their <c>-mirror</c> counterparts -&gt;
+    /// <c>mirror1..4</c> (confirmed against a real player response). The Tacticus API also reports
+    /// <c>elite1..4</c> and <c>eliteMirror1..4</c> progress (types <c>Elite</c>/<c>EliteMirror</c>) for these
+    /// same four storylines, but no catalog battle data exists yet for those tiers — known gap, not modeled
+    /// here. The six campaign-event groups below (types <c>Standard</c>/<c>Extremis</c> in the API, observed
+    /// as <c>eventCampaignN</c> ids) were NOT renamed: a single sample response only exposed one event
+    /// (<c>eventCampaign6</c>, name empty) with no reliable signal for which catalog event it corresponds to,
+    /// so their <c>groupId</c> stays each event's descriptive slug pending confirmation from a live account
+    /// with more events unlocked. The player-data sync/transformation layer must not assume every synced
+    /// campaign id resolves to a catalog group — elite/eliteMirror/unmatched event progress should still be
+    /// persisted, keyed by the raw Tacticus id, even without a catalog cross-reference.
+    /// </remarks>
     public static readonly IReadOnlyList<string> CampaignBattleGroups =
     [
         "campaign-battles-indomitus",
