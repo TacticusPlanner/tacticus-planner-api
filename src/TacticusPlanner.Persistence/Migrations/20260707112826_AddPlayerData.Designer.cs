@@ -12,7 +12,7 @@ using TacticusPlanner.Persistence;
 namespace TacticusPlanner.Persistence.Migrations
 {
     [DbContext(typeof(PlannerDbContext))]
-    [Migration("20260707093607_AddPlayerData")]
+    [Migration("20260707112826_AddPlayerData")]
     partial class AddPlayerData
     {
         /// <inheritdoc />
