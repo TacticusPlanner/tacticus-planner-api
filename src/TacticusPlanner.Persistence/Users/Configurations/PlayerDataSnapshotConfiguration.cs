@@ -80,7 +80,12 @@ public sealed class PlayerDataSnapshotConfiguration : IEntityTypeConfiguration<P
                 badges.OwnsMany(b => b.Xenos);
                 badges.OwnsMany(b => b.Chaos);
             });
-            chunk.OwnsOne(inventory => inventory.Components);
+            chunk.OwnsOne(inventory => inventory.Components, components =>
+            {
+                components.OwnsOne(c => c.Imperial);
+                components.OwnsOne(c => c.Xenos);
+                components.OwnsOne(c => c.Chaos);
+            });
             chunk.OwnsMany(inventory => inventory.ForgeBadges);
             chunk.OwnsOne(inventory => inventory.Orbs, orbs =>
             {

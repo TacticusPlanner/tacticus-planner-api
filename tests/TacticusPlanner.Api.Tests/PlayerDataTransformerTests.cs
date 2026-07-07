@@ -88,8 +88,10 @@ public sealed class PlayerDataTransformerTests
                         Type = "Standard",
                         Battles =
                         [
+                            // BattleIndex 0 has never been attempted (AttemptsUsed 0) — excluded from
+                            // LiveProgress.BattleAttempts, but still counts toward the high-water mark.
                             new CampaignLevel { BattleIndex = 0, AttemptsLeft = 3, AttemptsUsed = 0 },
-                            new CampaignLevel { BattleIndex = 2, AttemptsLeft = 3, AttemptsUsed = 0 },
+                            new CampaignLevel { BattleIndex = 2, AttemptsLeft = 2, AttemptsUsed = 1 },
                         ],
                     },
                     new CampaignProgress
@@ -97,7 +99,7 @@ public sealed class PlayerDataTransformerTests
                         Id = FakeTacticusApi.EventCampaignId,
                         Name = string.Empty,
                         Type = "Standard",
-                        Battles = [new CampaignLevel { BattleIndex = 0, AttemptsLeft = 10, AttemptsUsed = 0 }],
+                        Battles = [new CampaignLevel { BattleIndex = 0, AttemptsLeft = 9, AttemptsUsed = 1 }],
                     },
                 ],
                 LegendaryEvents =
@@ -176,9 +178,9 @@ public sealed class PlayerDataTransformerTests
     {
         var result = CreateTransformer().Transform(BuildResponse());
 
-        Assert.Equal(10, result.Inventory.Components.Imperial); // 4 + 6
-        Assert.Equal(0, result.Inventory.Components.Xenos);
-        Assert.Equal(2, result.Inventory.Components.Chaos);
+        Assert.Equal(10, result.Inventory.Components.Imperial.Amount); // 4 + 6
+        Assert.Equal(0, result.Inventory.Components.Xenos.Amount);
+        Assert.Equal(2, result.Inventory.Components.Chaos.Amount);
     }
 
     [Fact]
@@ -200,9 +202,13 @@ public sealed class PlayerDataTransformerTests
     {
         var result = CreateTransformer().Transform(BuildResponse());
 
-        Assert.Equal(3, result.LiveProgress.BattleAttempts.Count); // 2 standard + 1 event battle
+        // Only battles with AttemptsUsed > 0 are kept: 1 standard + 1 event battle (BattleIndex 0's
+        // untouched standard battle is excluded).
+        Assert.Equal(2, result.LiveProgress.BattleAttempts.Count);
         Assert.Contains(result.LiveProgress.BattleAttempts, b =>
-            b.TacticusCampaignId == FakeTacticusApi.CampaignId && b.BattleIndex == 2 && b.AttemptsLeft == 3);
+            b.TacticusCampaignId == FakeTacticusApi.CampaignId && b.BattleIndex == 2 && b.AttemptsLeft == 2);
+        Assert.DoesNotContain(result.LiveProgress.BattleAttempts, b =>
+            b.TacticusCampaignId == FakeTacticusApi.CampaignId && b.BattleIndex == 0);
 
         Assert.Equal(FakeTacticusApi.EventCampaignId, result.LiveProgress.ActiveCampaignEventId);
     }

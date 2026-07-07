@@ -165,12 +165,12 @@ public sealed class PlayerDataTransformer(IGameCatalogProvider catalog)
             .ToList(),
         AbilityBadges = new PlayerAbilityBadgesRecord
         {
-            Imperial = (inventory?.AbilityBadges?.Imperial ?? []).Select(MapNamedRarityAmount).ToList(),
-            Xenos = (inventory?.AbilityBadges?.Xenos ?? []).Select(MapNamedRarityAmount).ToList(),
-            Chaos = (inventory?.AbilityBadges?.Chaos ?? []).Select(MapNamedRarityAmount).ToList(),
+            Imperial = (inventory?.AbilityBadges?.Imperial ?? []).Select(MapRarityAmount).ToList(),
+            Xenos = (inventory?.AbilityBadges?.Xenos ?? []).Select(MapRarityAmount).ToList(),
+            Chaos = (inventory?.AbilityBadges?.Chaos ?? []).Select(MapRarityAmount).ToList(),
         },
         Components = MapMowComponents(inventory?.Components),
-        ForgeBadges = (inventory?.ForgeBadges ?? []).Select(MapNamedRarityAmount).ToList(),
+        ForgeBadges = (inventory?.ForgeBadges ?? []).Select(MapRarityAmount).ToList(),
         Orbs = new PlayerOrbsRecord
         {
             Imperial = (inventory?.Orbs?.Imperial ?? []).Select(MapRarityAmount).ToList(),
@@ -188,16 +188,14 @@ public sealed class PlayerDataTransformer(IGameCatalogProvider catalog)
         Amount = shard.Amount,
     };
 
-    private static PlayerNamedRarityAmountRecord MapNamedRarityAmount(TacticusApiPlayer.AbilityBadge badge) => new()
+    private static PlayerRarityAmountRecord MapRarityAmount(TacticusApiPlayer.AbilityBadge badge) => new()
     {
-        Name = badge.Name,
         Rarity = badge.Rarity,
         Amount = badge.Amount,
     };
 
-    private static PlayerNamedRarityAmountRecord MapNamedRarityAmount(TacticusApiPlayer.ForgeBadge badge) => new()
+    private static PlayerRarityAmountRecord MapRarityAmount(TacticusApiPlayer.ForgeBadge badge) => new()
     {
-        Name = badge.Name,
         Rarity = badge.Rarity,
         Amount = badge.Amount,
     };
@@ -215,9 +213,9 @@ public sealed class PlayerDataTransformer(IGameCatalogProvider catalog)
         var list = (components ?? []).ToList();
         return new MowComponentsRecord
         {
-            Imperial = list.Where(component => component.GrandAlliance == "Imperial").Sum(component => component.Amount),
-            Xenos = list.Where(component => component.GrandAlliance == "Xenos").Sum(component => component.Amount),
-            Chaos = list.Where(component => component.GrandAlliance == "Chaos").Sum(component => component.Amount),
+            Imperial = new ComponentAmountRecord { Amount = list.Where(component => component.GrandAlliance == "Imperial").Sum(component => component.Amount) },
+            Xenos = new ComponentAmountRecord { Amount = list.Where(component => component.GrandAlliance == "Xenos").Sum(component => component.Amount) },
+            Chaos = new ComponentAmountRecord { Amount = list.Where(component => component.GrandAlliance == "Chaos").Sum(component => component.Amount) },
         };
     }
 
@@ -228,8 +226,12 @@ public sealed class PlayerDataTransformer(IGameCatalogProvider catalog)
         HighestCompletedBattleIndex = HighestBattleIndex(campaign),
     };
 
+    // Only attempts the player has actually spent are worth syncing/storing — an untouched battle
+    // (AttemptsUsed == 0) carries no information beyond "not yet attempted", so keeping it out cuts
+    // this often-changing chunk's size and churn.
     private static IEnumerable<BattleAttemptRecord> MapBattleAttempts(TacticusApiPlayer.CampaignProgress campaign) =>
         (campaign.Battles ?? [])
+            .Where(battle => battle.AttemptsUsed > 0)
             .Select(battle => new BattleAttemptRecord
             {
                 TacticusCampaignId = campaign.Id,

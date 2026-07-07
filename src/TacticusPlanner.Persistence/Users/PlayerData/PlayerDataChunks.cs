@@ -161,7 +161,7 @@ public sealed class InventoryChunk
 
     public MowComponentsRecord Components { get; set; } = new();
 
-    public List<PlayerNamedRarityAmountRecord> ForgeBadges { get; set; } = [];
+    public List<PlayerRarityAmountRecord> ForgeBadges { get; set; } = [];
 
     public PlayerOrbsRecord Orbs { get; set; } = new();
 
@@ -186,35 +186,31 @@ public sealed class InventoryXpBookRecord
     public long Amount { get; set; }
 }
 
-/// <summary>Badges have no separate catalog id — the name itself is the identifier, so it's kept
-/// (unlike the redundant name fields dropped elsewhere).</summary>
+/// <summary>Badge name is resolved from the game catalog by rarity/alliance at read time, so it's
+/// not duplicated here — same reasoning as the other catalog-inferable fields dropped elsewhere.</summary>
 public sealed class PlayerAbilityBadgesRecord
 {
-    public List<PlayerNamedRarityAmountRecord> Imperial { get; set; } = [];
+    public List<PlayerRarityAmountRecord> Imperial { get; set; } = [];
 
-    public List<PlayerNamedRarityAmountRecord> Xenos { get; set; } = [];
+    public List<PlayerRarityAmountRecord> Xenos { get; set; } = [];
 
-    public List<PlayerNamedRarityAmountRecord> Chaos { get; set; } = [];
-}
-
-public sealed class PlayerNamedRarityAmountRecord
-{
-    public string Name { get; set; } = string.Empty;
-
-    public string Rarity { get; set; } = string.Empty;
-
-    public long Amount { get; set; }
+    public List<PlayerRarityAmountRecord> Chaos { get; set; } = [];
 }
 
 /// <summary>MoW components have no per-item identity worth tracking — just the total count per
 /// grand alliance, mirroring how Orbs/AbilityBadges are already split.</summary>
 public sealed class MowComponentsRecord
 {
-    public long Imperial { get; set; }
+    public ComponentAmountRecord Imperial { get; set; } = new();
 
-    public long Xenos { get; set; }
+    public ComponentAmountRecord Xenos { get; set; } = new();
 
-    public long Chaos { get; set; }
+    public ComponentAmountRecord Chaos { get; set; } = new();
+}
+
+public sealed class ComponentAmountRecord
+{
+    public long Amount { get; set; }
 }
 
 public sealed class PlayerOrbsRecord

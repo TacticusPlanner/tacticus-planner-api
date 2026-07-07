@@ -302,7 +302,7 @@ namespace TacticusPlanner.Persistence.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("PlayerDataSnapshotId");
 
-                            b1.OwnsMany("TacticusPlanner.Persistence.Users.PlayerData.PlayerNamedRarityAmountRecord", "ForgeBadges", b2 =>
+                            b1.OwnsMany("TacticusPlanner.Persistence.Users.PlayerData.PlayerRarityAmountRecord", "ForgeBadges", b2 =>
                                 {
                                     b2.Property<Guid>("InventoryChunkPlayerDataSnapshotId");
 
@@ -310,9 +310,6 @@ namespace TacticusPlanner.Persistence.Migrations
                                         .ValueGeneratedOnAdd();
 
                                     b2.Property<long>("Amount");
-
-                                    b2.Property<string>("Name")
-                                        .IsRequired();
 
                                     b2.Property<string>("Rarity")
                                         .IsRequired();
@@ -389,18 +386,63 @@ namespace TacticusPlanner.Persistence.Migrations
                                 {
                                     b2.Property<Guid>("InventoryChunkPlayerDataSnapshotId");
 
-                                    b2.Property<long>("Chaos");
-
-                                    b2.Property<long>("Imperial");
-
-                                    b2.Property<long>("Xenos");
-
                                     b2.HasKey("InventoryChunkPlayerDataSnapshotId");
 
                                     b2.ToTable("player_data_snapshots");
 
                                     b2.WithOwner()
                                         .HasForeignKey("InventoryChunkPlayerDataSnapshotId");
+
+                                    b2.OwnsOne("TacticusPlanner.Persistence.Users.PlayerData.ComponentAmountRecord", "Chaos", b3 =>
+                                        {
+                                            b3.Property<Guid>("MowComponentsRecordInventoryChunkPlayerDataSnapshotId");
+
+                                            b3.Property<long>("Amount");
+
+                                            b3.HasKey("MowComponentsRecordInventoryChunkPlayerDataSnapshotId");
+
+                                            b3.ToTable("player_data_snapshots");
+
+                                            b3.WithOwner()
+                                                .HasForeignKey("MowComponentsRecordInventoryChunkPlayerDataSnapshotId");
+                                        });
+
+                                    b2.OwnsOne("TacticusPlanner.Persistence.Users.PlayerData.ComponentAmountRecord", "Imperial", b3 =>
+                                        {
+                                            b3.Property<Guid>("MowComponentsRecordInventoryChunkPlayerDataSnapshotId");
+
+                                            b3.Property<long>("Amount");
+
+                                            b3.HasKey("MowComponentsRecordInventoryChunkPlayerDataSnapshotId");
+
+                                            b3.ToTable("player_data_snapshots");
+
+                                            b3.WithOwner()
+                                                .HasForeignKey("MowComponentsRecordInventoryChunkPlayerDataSnapshotId");
+                                        });
+
+                                    b2.OwnsOne("TacticusPlanner.Persistence.Users.PlayerData.ComponentAmountRecord", "Xenos", b3 =>
+                                        {
+                                            b3.Property<Guid>("MowComponentsRecordInventoryChunkPlayerDataSnapshotId");
+
+                                            b3.Property<long>("Amount");
+
+                                            b3.HasKey("MowComponentsRecordInventoryChunkPlayerDataSnapshotId");
+
+                                            b3.ToTable("player_data_snapshots");
+
+                                            b3.WithOwner()
+                                                .HasForeignKey("MowComponentsRecordInventoryChunkPlayerDataSnapshotId");
+                                        });
+
+                                    b2.Navigation("Chaos")
+                                        .IsRequired();
+
+                                    b2.Navigation("Imperial")
+                                        .IsRequired();
+
+                                    b2.Navigation("Xenos")
+                                        .IsRequired();
                                 });
 
                             b1.OwnsOne("TacticusPlanner.Persistence.Users.PlayerData.PlayerAbilityBadgesRecord", "AbilityBadges", b2 =>
@@ -414,7 +456,7 @@ namespace TacticusPlanner.Persistence.Migrations
                                     b2.WithOwner()
                                         .HasForeignKey("InventoryChunkPlayerDataSnapshotId");
 
-                                    b2.OwnsMany("TacticusPlanner.Persistence.Users.PlayerData.PlayerNamedRarityAmountRecord", "Chaos", b3 =>
+                                    b2.OwnsMany("TacticusPlanner.Persistence.Users.PlayerData.PlayerRarityAmountRecord", "Chaos", b3 =>
                                         {
                                             b3.Property<Guid>("PlayerAbilityBadgesRecordInventoryChunkPlayerDataSnapshotId");
 
@@ -422,9 +464,6 @@ namespace TacticusPlanner.Persistence.Migrations
                                                 .ValueGeneratedOnAdd();
 
                                             b3.Property<long>("Amount");
-
-                                            b3.Property<string>("Name")
-                                                .IsRequired();
 
                                             b3.Property<string>("Rarity")
                                                 .IsRequired();
@@ -437,7 +476,7 @@ namespace TacticusPlanner.Persistence.Migrations
                                                 .HasForeignKey("PlayerAbilityBadgesRecordInventoryChunkPlayerDataSnapshotId");
                                         });
 
-                                    b2.OwnsMany("TacticusPlanner.Persistence.Users.PlayerData.PlayerNamedRarityAmountRecord", "Imperial", b3 =>
+                                    b2.OwnsMany("TacticusPlanner.Persistence.Users.PlayerData.PlayerRarityAmountRecord", "Imperial", b3 =>
                                         {
                                             b3.Property<Guid>("PlayerAbilityBadgesRecordInventoryChunkPlayerDataSnapshotId");
 
@@ -445,9 +484,6 @@ namespace TacticusPlanner.Persistence.Migrations
                                                 .ValueGeneratedOnAdd();
 
                                             b3.Property<long>("Amount");
-
-                                            b3.Property<string>("Name")
-                                                .IsRequired();
 
                                             b3.Property<string>("Rarity")
                                                 .IsRequired();
@@ -460,7 +496,7 @@ namespace TacticusPlanner.Persistence.Migrations
                                                 .HasForeignKey("PlayerAbilityBadgesRecordInventoryChunkPlayerDataSnapshotId");
                                         });
 
-                                    b2.OwnsMany("TacticusPlanner.Persistence.Users.PlayerData.PlayerNamedRarityAmountRecord", "Xenos", b3 =>
+                                    b2.OwnsMany("TacticusPlanner.Persistence.Users.PlayerData.PlayerRarityAmountRecord", "Xenos", b3 =>
                                         {
                                             b3.Property<Guid>("PlayerAbilityBadgesRecordInventoryChunkPlayerDataSnapshotId");
 
@@ -468,9 +504,6 @@ namespace TacticusPlanner.Persistence.Migrations
                                                 .ValueGeneratedOnAdd();
 
                                             b3.Property<long>("Amount");
-
-                                            b3.Property<string>("Name")
-                                                .IsRequired();
 
                                             b3.Property<string>("Rarity")
                                                 .IsRequired();
