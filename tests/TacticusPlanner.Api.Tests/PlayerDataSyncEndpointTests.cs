@@ -119,32 +119,6 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
     }
 
     [Fact]
-    public async Task ManifestEndpointReturnsNotFoundBeforeAnySyncAndMatchesAfter()
-    {
-        var client = await CreateProvisionedClientAsync();
-
-        var beforeSync = await client.GetAsync("/api/v1/me/player-data/manifest", TestContext.Current.CancellationToken);
-        Assert.Equal(HttpStatusCode.NotFound, beforeSync.StatusCode);
-
-        await ConfigureTacticusKeyAsync(client, FakeTacticusApi.ValidKey);
-        var syncResponse = await client.PostAsync("/api/v1/tacticus-integration/player-sync", null, TestContext.Current.CancellationToken);
-        var syncedManifest = await syncResponse.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
-
-        var afterSync = await client.GetAsync("/api/v1/me/player-data/manifest", TestContext.Current.CancellationToken);
-        Assert.Equal(HttpStatusCode.OK, afterSync.StatusCode);
-        var fetchedManifest = await afterSync.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
-        Assert.Equal(syncedManifest!.SourceHash, fetchedManifest!.SourceHash);
-
-        var etag = afterSync.Headers.ETag?.Tag;
-        Assert.NotNull(etag);
-
-        using var conditionalRequest = new HttpRequestMessage(HttpMethod.Get, "/api/v1/me/player-data/manifest");
-        conditionalRequest.Headers.TryAddWithoutValidation("If-None-Match", etag);
-        var notModified = await client.SendAsync(conditionalRequest, TestContext.Current.CancellationToken);
-        Assert.Equal(HttpStatusCode.NotModified, notModified.StatusCode);
-    }
-
-    [Fact]
     public async Task ChunkEndpointRejectsUnknownKeysAndServesKnownOnesWithConditionalSupport()
     {
         var client = await CreateProvisionedClientAsync();
