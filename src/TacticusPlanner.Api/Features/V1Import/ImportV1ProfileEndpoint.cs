@@ -1,6 +1,6 @@
-using System.Security.Claims;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
+using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Api.Features.TacticusIntegration;
 using TacticusPlanner.Api.Http;
 using TacticusPlanner.Persistence;
@@ -36,30 +36,23 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
 
     public override async Task HandleAsync(ImportV1ProfileRequest req, CancellationToken ct)
     {
-        var issuer = User.FindFirstValue("iss");
-        var subject = User.FindFirstValue("sub");
-        if (string.IsNullOrWhiteSpace(issuer) || string.IsNullOrWhiteSpace(subject))
+        var state = ProcessorState<CurrentUserState>();
+        if (state.ProfileId is not { } profileId)
         {
-            await Send.UnauthorizedAsync(ct);
+            await Send.NotFoundAsync(ct);
             return;
         }
 
-        var username = req.Username?.Trim();
-        var password = req.Password;
-        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrEmpty(password))
-        {
-            AddError(request => request.Username, "The V1 username and password are required.");
-            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
-            return;
-        }
+        // Username/password presence is enforced by ImportV1ProfileValidator; both are guaranteed non-blank here.
+        var username = req.Username!.Trim();
+        var password = req.Password!;
 
         var db = Resolve<PlannerDbContext>();
-        var account = await db.Accounts
-            .Include(entity => entity.Profile)
-            .ThenInclude(entity => entity!.TacticusIntegration)
-            .SingleOrDefaultAsync(entity => entity.Issuer == issuer && entity.Subject == subject, ct);
+        var profile = await db.Profiles
+            .Include(entity => entity.TacticusIntegration)
+            .SingleOrDefaultAsync(entity => entity.Id == profileId, ct);
 
-        if (account?.Profile is null)
+        if (profile is null)
         {
             await Send.NotFoundAsync(ct);
             return;
@@ -93,10 +86,10 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
             return;
         }
 
-        var integration = account.Profile.TacticusIntegration;
+        var integration = profile.TacticusIntegration;
         if (integration is null)
         {
-            integration = new TacticusIntegrationEntity { Id = account.Profile.Id };
+            integration = new TacticusIntegrationEntity { Id = profile.Id };
             db.TacticusIntegrations.Add(integration);
         }
 
@@ -107,18 +100,18 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
 
         if (v1Profile.TacticusUserId is { } tacticusUserId)
         {
-            account.Profile.TacticusUserId = tacticusUserId;
-            account.Profile.TacticusUserIdHash = Resolve<IColumnHashService>().ComputeHash(tacticusUserId);
+            profile.TacticusUserId = tacticusUserId;
+            profile.TacticusUserIdHash = Resolve<IColumnHashService>().ComputeHash(tacticusUserId);
         }
 
         await db.SaveChangesAsync(ct);
 
         await Send.OkAsync(new ImportV1ProfileResponse(
-            account.Profile.Id.Value,
+            profile.Id.Value,
             validation.PlayerName,
             validation.PowerLevel,
             SecretMasker.Mask(integration.TacticusApiKey),
-            SecretMasker.Mask(account.Profile.TacticusUserId)
+            SecretMasker.Mask(profile.TacticusUserId)
         ), ct);
     }
 }

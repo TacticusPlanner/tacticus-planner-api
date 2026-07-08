@@ -1,7 +1,7 @@
-using System.Security.Claims;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
+using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Api.Http;
 using TacticusPlanner.Persistence;
 using TacticusPlanner.Persistence.Users;
@@ -26,35 +26,29 @@ public sealed class GetPlayerDataChunkEndpoint : Endpoint<GetPlayerDataChunkRequ
             summary.Description = "Chunk key must be one of the keys advertised by the player-data manifest.";
             summary.Response<PlayerDataChunkEnvelope<object>>(StatusCodes.Status200OK, "The requested chunk.");
             summary.Response(StatusCodes.Status304NotModified, "The chunk has not changed.");
+            summary.Response(StatusCodes.Status400BadRequest, "Unknown chunk key.");
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
-            summary.Response(StatusCodes.Status404NotFound, "Unknown chunk key, or no player data has been synced yet.");
+            summary.Response(StatusCodes.Status404NotFound, "No player data has been synced yet.");
         });
     }
 
     public override async Task HandleAsync(GetPlayerDataChunkRequest req, CancellationToken ct)
     {
-        if (!PlayerDataChunkKeys.All.Contains(req.Chunk, StringComparer.Ordinal))
+        var state = ProcessorState<CurrentUserState>();
+        if (state.ProfileId is not { } profileId)
         {
             await Send.NotFoundAsync(ct);
-            return;
-        }
-
-        var issuer = User.FindFirstValue("iss");
-        var subject = User.FindFirstValue("sub");
-        if (string.IsNullOrWhiteSpace(issuer) || string.IsNullOrWhiteSpace(subject))
-        {
-            await Send.UnauthorizedAsync(ct);
             return;
         }
 
         var db = Resolve<PlannerDbContext>();
 
         // Step 1: project only the hash/metadata columns (AsNoTracking) — never touch any of the ten
-        // jsonb chunk payload columns yet. Includes the entity's own id so a 200 path can re-query by
-        // primary key instead of re-joining through Profile/Account again.
+        // jsonb chunk payload columns yet. Keyed directly by the profile id already resolved by
+        // CurrentUserPreProcessor, so this is a primary-key lookup rather than a Profile/Account join.
         var metadata = await db.PlayerDataSnapshots
             .AsNoTracking()
-            .Where(entity => entity.Profile!.Account!.Issuer == issuer && entity.Profile.Account.Subject == subject)
+            .Where(entity => entity.Id == profileId)
             .Select(entity => new
             {
                 entity.Id,

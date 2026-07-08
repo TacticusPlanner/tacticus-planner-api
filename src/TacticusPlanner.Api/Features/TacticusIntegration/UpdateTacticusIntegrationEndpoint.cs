@@ -1,6 +1,6 @@
-using System.Security.Claims;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
+using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Api.Http;
 using TacticusPlanner.Persistence;
 using TacticusPlanner.Persistence.Encryption;
@@ -33,30 +33,25 @@ public sealed class UpdateTacticusIntegrationEndpoint
 
     public override async Task HandleAsync(UpdateTacticusIntegrationRequest req, CancellationToken ct)
     {
-        var issuer = User.FindFirstValue("iss");
-        var subject = User.FindFirstValue("sub");
-        if (string.IsNullOrWhiteSpace(issuer) || string.IsNullOrWhiteSpace(subject))
-        {
-            await Send.UnauthorizedAsync(ct);
-            return;
-        }
-
-        var db = Resolve<PlannerDbContext>();
-        var account = await db.Accounts
-            .Include(entity => entity.Profile)
-            .ThenInclude(entity => entity!.TacticusIntegration)
-            .SingleOrDefaultAsync(
-                entity => entity.Issuer == issuer && entity.Subject == subject,
-                ct
-            );
-
-        if (account?.Profile is null)
+        var state = ProcessorState<CurrentUserState>();
+        if (state.ProfileId is not { } profileId)
         {
             await Send.NotFoundAsync(ct);
             return;
         }
 
-        var integration = account.Profile.TacticusIntegration;
+        var db = Resolve<PlannerDbContext>();
+        var profile = await db.Profiles
+            .Include(entity => entity.TacticusIntegration)
+            .SingleOrDefaultAsync(entity => entity.Id == profileId, ct);
+
+        if (profile is null)
+        {
+            await Send.NotFoundAsync(ct);
+            return;
+        }
+
+        var integration = profile.TacticusIntegration;
         var newApiKey = Normalize(req.TacticusApiKey);
 
         string? playerName = null;
@@ -77,7 +72,7 @@ public sealed class UpdateTacticusIntegrationEndpoint
 
             if (integration is null)
             {
-                integration = new TacticusIntegrationEntity { Id = account.Profile.Id };
+                integration = new TacticusIntegrationEntity { Id = profile.Id };
                 db.TacticusIntegrations.Add(integration);
             }
 
@@ -95,25 +90,25 @@ public sealed class UpdateTacticusIntegrationEndpoint
 
         if (req.ClearTacticusUserId)
         {
-            account.Profile.TacticusUserId = null;
-            account.Profile.TacticusUserIdHash = null;
+            profile.TacticusUserId = null;
+            profile.TacticusUserIdHash = null;
         }
         else if (Normalize(req.TacticusUserId) is { } tacticusUserId)
         {
-            account.Profile.TacticusUserId = tacticusUserId;
-            account.Profile.TacticusUserIdHash = Resolve<IColumnHashService>().ComputeHash(tacticusUserId);
+            profile.TacticusUserId = tacticusUserId;
+            profile.TacticusUserIdHash = Resolve<IColumnHashService>().ComputeHash(tacticusUserId);
         }
 
         await db.SaveChangesAsync(ct);
 
         await Send.OkAsync(new UpdateTacticusIntegrationResponse(
-            account.Profile.Id.Value,
-            account.Profile.TacticusUserId is not null,
+            profile.Id.Value,
+            profile.TacticusUserId is not null,
             integration?.TacticusApiKey is not null,
             playerName,
             powerLevel,
             SecretMasker.Mask(integration?.TacticusApiKey),
-            SecretMasker.Mask(account.Profile.TacticusUserId)
+            SecretMasker.Mask(profile.TacticusUserId)
         ), ct);
     }
 

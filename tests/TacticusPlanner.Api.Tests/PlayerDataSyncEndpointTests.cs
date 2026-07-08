@@ -119,14 +119,45 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
     }
 
     [Fact]
+    public async Task SyncWithChangedConfigHashOnlyChangesTheChunksThatActuallyDiffer()
+    {
+        // FakeTacticusApi's V1/V2 responses only differ in the synced unit's progression/xp/rank — every
+        // other chunk (details, inventory, campaigns, live progress, LREs) is byte-identical between the
+        // two. Asserts the sync only rewrites the Characters chunk hash, proving the per-chunk changed-hash
+        // check (not a blanket rewrite of all ten chunks) is what actually drives persistence.
+        var client = await CreateProvisionedClientAsync();
+        await ConfigureTacticusKeyAsync(client, FakeTacticusApi.ValidKey);
+
+        var first = await client.PostAsync("/api/v1/tacticus-integration/player-sync", null, TestContext.Current.CancellationToken);
+        var firstManifest = await first.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
+
+        await ConfigureTacticusKeyAsync(client, FakeTacticusApi.ValidKeyV2);
+        var second = await client.PostAsync("/api/v1/tacticus-integration/player-sync", null, TestContext.Current.CancellationToken);
+        var secondManifest = await second.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.OK, second.StatusCode);
+
+        var firstHashes = firstManifest!.Chunks.ToDictionary(chunk => chunk.Key, chunk => chunk.Hash);
+        var secondHashes = secondManifest!.Chunks.ToDictionary(chunk => chunk.Key, chunk => chunk.Hash);
+
+        Assert.NotEqual(firstHashes[PlayerDataChunkKeys.Characters], secondHashes[PlayerDataChunkKeys.Characters]);
+
+        foreach (var key in PlayerDataChunkKeys.All.Where(key => key != PlayerDataChunkKeys.Characters))
+        {
+            Assert.Equal(firstHashes[key], secondHashes[key]);
+        }
+    }
+
+    [Fact]
     public async Task ChunkEndpointRejectsUnknownKeysAndServesKnownOnesWithConditionalSupport()
     {
         var client = await CreateProvisionedClientAsync();
         await ConfigureTacticusKeyAsync(client, FakeTacticusApi.ValidKey);
         await client.PostAsync("/api/v1/tacticus-integration/player-sync", null, TestContext.Current.CancellationToken);
 
+        // Unknown chunk key is now a validator rejection (malformed request), not a missing-resource 404.
         var unknown = await client.GetAsync("/api/v1/me/player-data/not-a-real-chunk", TestContext.Current.CancellationToken);
-        Assert.Equal(HttpStatusCode.NotFound, unknown.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, unknown.StatusCode);
 
         var chunkResponse = await client.GetAsync(
             $"/api/v1/me/player-data/{PlayerDataChunkKeys.Characters}",

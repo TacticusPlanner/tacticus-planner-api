@@ -1,6 +1,6 @@
-using System.Security.Claims;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
+using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.AccountManagement;
@@ -25,29 +25,25 @@ public sealed class PurgeAccountEndpoint : EndpointWithoutRequest
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        var issuer = User.FindFirstValue("iss");
-        var subject = User.FindFirstValue("sub");
-        if (string.IsNullOrWhiteSpace(issuer) || string.IsNullOrWhiteSpace(subject))
-        {
-            await Send.UnauthorizedAsync(ct);
-            return;
-        }
+        var state = ProcessorState<CurrentUserState>();
 
-        var db = Resolve<PlannerDbContext>();
-        var account = await db.Accounts
-            .SingleOrDefaultAsync(entity => entity.Issuer == issuer && entity.Subject == subject, ct);
-
-        if (account is not null)
+        if (state.AccountId is { } accountId)
         {
-            // Cascade delete (configured in AccountConfiguration/TacticusIntegrationConfiguration) removes the
-            // Profile and TacticusIntegration rows along with the Account.
-            db.Accounts.Remove(account);
-            await db.SaveChangesAsync(ct);
+            var db = Resolve<PlannerDbContext>();
+            var account = await db.Accounts.SingleOrDefaultAsync(entity => entity.Id == accountId, ct);
+
+            if (account is not null)
+            {
+                // Cascade delete (configured in AccountConfiguration/TacticusIntegrationConfiguration) removes
+                // the Profile and TacticusIntegration rows along with the Account.
+                db.Accounts.Remove(account);
+                await db.SaveChangesAsync(ct);
+            }
         }
 
         // Best-effort only: application-side deletion above is authoritative and already complete regardless
         // of whether the external identity could also be removed.
-        await Resolve<IExternalIdentityDeleter>().TryDeleteAsync(issuer, subject, ct);
+        await Resolve<IExternalIdentityDeleter>().TryDeleteAsync(state.Issuer, state.Subject, ct);
 
         await Send.NoContentAsync(ct);
     }
