@@ -67,12 +67,11 @@ public sealed class PlayerDataSnapshotConfiguration : IEntityTypeConfiguration<P
 
         builder.OwnsMany(entity => entity.InventoryUpgrades, chunk => chunk.ToJson("inventory_upgrades"));
         builder.OwnsMany(entity => entity.InventoryItems, chunk => chunk.ToJson("inventory_items"));
+        builder.OwnsMany(entity => entity.InventoryShards, chunk => chunk.ToJson("inventory_shards"));
 
         builder.OwnsOne(entity => entity.Inventory, chunk =>
         {
             chunk.ToJson("inventory");
-            chunk.OwnsMany(inventory => inventory.Shards);
-            chunk.OwnsMany(inventory => inventory.MythicShards);
             chunk.OwnsMany(inventory => inventory.XpBooks);
             chunk.OwnsOne(inventory => inventory.AbilityBadges, badges =>
             {

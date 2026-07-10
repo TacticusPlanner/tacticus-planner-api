@@ -57,7 +57,7 @@ public sealed class GetPlayerDataChunkEndpoint : Endpoint<GetPlayerDataChunkRequ
                 entity.SourceHash,
                 entity.ChunkHashes,
             })
-            .SingleOrDefaultAsync(ct);
+            .FirstOrDefaultAsync(ct);
 
         if (metadata is null)
         {
@@ -103,25 +103,27 @@ public sealed class GetPlayerDataChunkEndpoint : Endpoint<GetPlayerDataChunkRequ
         return chunk switch
         {
             PlayerDataChunkKeys.PlayerDetails =>
-                snapshots.Select(entity => (object?)entity.PlayerDetails).SingleOrDefaultAsync(ct),
+                snapshots.Select(entity => (object?)entity.PlayerDetails).FirstOrDefaultAsync(ct),
             PlayerDataChunkKeys.Characters =>
-                snapshots.Select(entity => (object?)entity.Characters).SingleOrDefaultAsync(ct),
+                snapshots.Select(entity => (object?)entity.Characters).FirstOrDefaultAsync(ct),
             PlayerDataChunkKeys.Mows =>
-                snapshots.Select(entity => (object?)entity.Mows).SingleOrDefaultAsync(ct),
+                snapshots.Select(entity => (object?)entity.Mows).FirstOrDefaultAsync(ct),
             PlayerDataChunkKeys.InventoryUpgrades =>
-                snapshots.Select(entity => (object?)entity.InventoryUpgrades).SingleOrDefaultAsync(ct),
+                snapshots.Select(entity => (object?)entity.InventoryUpgrades).FirstOrDefaultAsync(ct),
             PlayerDataChunkKeys.InventoryItems =>
-                snapshots.Select(entity => (object?)entity.InventoryItems).SingleOrDefaultAsync(ct),
+                snapshots.Select(entity => (object?)entity.InventoryItems).FirstOrDefaultAsync(ct),
+            PlayerDataChunkKeys.InventoryShards =>
+                snapshots.Select(entity => (object?)entity.InventoryShards).FirstOrDefaultAsync(ct),
             PlayerDataChunkKeys.Inventory =>
-                snapshots.Select(entity => (object?)entity.Inventory).SingleOrDefaultAsync(ct),
+                snapshots.Select(entity => (object?)entity.Inventory).FirstOrDefaultAsync(ct),
             PlayerDataChunkKeys.CampaignProgress =>
-                snapshots.Select(entity => (object?)entity.CampaignProgress).SingleOrDefaultAsync(ct),
+                snapshots.Select(entity => (object?)entity.CampaignProgress).FirstOrDefaultAsync(ct),
             PlayerDataChunkKeys.CampaignEventsProgress =>
-                snapshots.Select(entity => (object?)entity.CampaignEventsProgress).SingleOrDefaultAsync(ct),
+                snapshots.Select(entity => (object?)entity.CampaignEventsProgress).FirstOrDefaultAsync(ct),
             PlayerDataChunkKeys.LiveProgress =>
-                snapshots.Select(entity => (object?)entity.LiveProgress).SingleOrDefaultAsync(ct),
+                snapshots.Select(entity => (object?)entity.LiveProgress).FirstOrDefaultAsync(ct),
             PlayerDataChunkKeys.LreProgress =>
-                snapshots.Select(entity => (object?)entity.LreProgress).SingleOrDefaultAsync(ct),
+                snapshots.Select(entity => (object?)entity.LreProgress).FirstOrDefaultAsync(ct),
             _ => throw new ArgumentOutOfRangeException(nameof(chunk), chunk, "Unknown player-data chunk key."),
         };
     }

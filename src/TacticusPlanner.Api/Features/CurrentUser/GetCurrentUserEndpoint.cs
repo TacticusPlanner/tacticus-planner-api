@@ -87,7 +87,7 @@ public sealed class GetCurrentUserEndpoint : EndpointWithoutRequest<CurrentUserR
         return db.Accounts
             .Include(account => account.Profile)
             .ThenInclude(profile => profile!.TacticusIntegration)
-            .SingleOrDefaultAsync(account => account.Id == accountId, ct);
+            .FirstOrDefaultAsync(account => account.Id == accountId, ct);
     }
 
     private static string GetDisplayName(ClaimsPrincipal user)

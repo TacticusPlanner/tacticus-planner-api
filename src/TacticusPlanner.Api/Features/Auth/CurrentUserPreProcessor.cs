@@ -53,7 +53,7 @@ public sealed class CurrentUserPreProcessor : IGlobalPreProcessor
                 account.Id,
                 ProfileId = account.Profile != null ? (ProfileId?)account.Profile.Id : null,
             })
-            .SingleOrDefaultAsync(ct);
+            .FirstOrDefaultAsync(ct);
 
         if (ids is not null)
         {

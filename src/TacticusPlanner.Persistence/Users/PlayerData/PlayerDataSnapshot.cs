@@ -49,6 +49,8 @@ public class PlayerDataSnapshot : BaseEntity<ProfileId>, IRevisionedEntity
 
     public List<InventoryItemRecord> InventoryItems { get; set; } = [];
 
+    public List<InventoryShardRecord> InventoryShards { get; set; } = [];
+
     public InventoryChunk Inventory { get; set; } = new();
 
     /// <summary>Standard/Mirror/Elite/EliteMirror campaign progress.</summary>

@@ -50,7 +50,7 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
         var db = Resolve<PlannerDbContext>();
         var profile = await db.Profiles
             .Include(entity => entity.TacticusIntegration)
-            .SingleOrDefaultAsync(entity => entity.Id == profileId, ct);
+            .FirstOrDefaultAsync(entity => entity.Id == profileId, ct);
 
         if (profile is null)
         {

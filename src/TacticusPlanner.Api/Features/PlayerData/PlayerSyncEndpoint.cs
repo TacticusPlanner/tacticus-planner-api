@@ -44,6 +44,7 @@ public sealed class PlayerSyncEndpoint(ITacticusApi tacticusApi, PlayerDataTrans
             [PlayerDataChunkKeys.Mows] = (s, t) => s.Mows = t.Mows,
             [PlayerDataChunkKeys.InventoryUpgrades] = (s, t) => s.InventoryUpgrades = t.InventoryUpgrades,
             [PlayerDataChunkKeys.InventoryItems] = (s, t) => s.InventoryItems = t.InventoryItems,
+            [PlayerDataChunkKeys.InventoryShards] = (s, t) => s.InventoryShards = t.InventoryShards,
             [PlayerDataChunkKeys.Inventory] = (s, t) => s.Inventory = t.Inventory,
             [PlayerDataChunkKeys.CampaignProgress] = (s, t) => s.CampaignProgress = t.CampaignProgress,
             [PlayerDataChunkKeys.CampaignEventsProgress] = (s, t) => s.CampaignEventsProgress = t.CampaignEventsProgress,
@@ -64,7 +65,7 @@ public sealed class PlayerSyncEndpoint(ITacticusApi tacticusApi, PlayerDataTrans
 
         // TacticusIntegration is keyed 1:1 by the same ProfileId, so this is a direct primary-key lookup —
         // no Account/Profile join, and the (potentially large) PlayerDataSnapshot row isn't touched yet.
-        var integration = await db.TacticusIntegrations.SingleOrDefaultAsync(entity => entity.Id == profileId, ct);
+        var integration = await db.TacticusIntegrations.FirstOrDefaultAsync(entity => entity.Id == profileId, ct);
         if (integration is null || integration.TacticusApiKey is null)
         {
             AddError("No Tacticus API key is configured for this profile.");
@@ -105,7 +106,7 @@ public sealed class PlayerSyncEndpoint(ITacticusApi tacticusApi, PlayerDataTrans
                 entity.SyncedAt,
                 entity.ChunkHashes,
             })
-            .SingleOrDefaultAsync(ct);
+            .FirstOrDefaultAsync(ct);
 
         if (existingMetadata is not null && existingMetadata.ConfigHash == incomingConfigHash)
         {
@@ -128,7 +129,7 @@ public sealed class PlayerSyncEndpoint(ITacticusApi tacticusApi, PlayerDataTrans
         // Step 2: only reached when the config hash actually changed — load (or create) the tracked
         // snapshot, then assign only the chunk properties whose content hash differs from what's already
         // stored, so SaveChangesAsync marks just those owned-json columns dirty instead of all ten.
-        var snapshot = await db.PlayerDataSnapshots.SingleOrDefaultAsync(entity => entity.Id == profileId, ct);
+        var snapshot = await db.PlayerDataSnapshots.FirstOrDefaultAsync(entity => entity.Id == profileId, ct);
         var isNew = snapshot is null;
         snapshot ??= new PlayerDataSnapshotEntity { Id = profileId };
 

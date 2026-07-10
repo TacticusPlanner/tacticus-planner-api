@@ -15,6 +15,7 @@ public static class PlayerDataChunkKeys
     public const string Mows = "mows";
     public const string InventoryUpgrades = "inventory-upgrades";
     public const string InventoryItems = "inventory-items";
+    public const string InventoryShards = "inventory-shards";
     public const string Inventory = "inventory";
     public const string CampaignProgress = "campaign-progress";
     public const string CampaignEventsProgress = "campaign-events-progress";
@@ -31,6 +32,7 @@ public static class PlayerDataChunkKeys
         Mows,
         InventoryUpgrades,
         InventoryItems,
+        InventoryShards,
         Inventory,
         CampaignProgress,
         CampaignEventsProgress,

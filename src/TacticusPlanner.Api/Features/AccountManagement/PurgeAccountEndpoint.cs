@@ -30,7 +30,7 @@ public sealed class PurgeAccountEndpoint : EndpointWithoutRequest
         if (state.AccountId is { } accountId)
         {
             var db = Resolve<PlannerDbContext>();
-            var account = await db.Accounts.SingleOrDefaultAsync(entity => entity.Id == accountId, ct);
+            var account = await db.Accounts.FirstOrDefaultAsync(entity => entity.Id == accountId, ct);
 
             if (account is not null)
             {

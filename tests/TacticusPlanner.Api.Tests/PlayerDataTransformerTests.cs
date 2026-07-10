@@ -61,8 +61,12 @@ public sealed class PlayerDataTransformerTests
             Inventory = new Inventory
             {
                 Upgrades = [new Upgrade { Id = "upgHpC004", Name = "Health Common", Amount = 3 }],
-                Shards = [],
-                MythicShards = [],
+                Shards =
+                [
+                    new Shard { Id = FakeTacticusApi.CharacterUnitId, Amount = 100 },
+                    new Shard { Id = "necroWarden", Amount = 40 },
+                ],
+                MythicShards = [new Shard { Id = FakeTacticusApi.CharacterUnitId, Amount = 5 }],
                 XpBooks = [],
                 AbilityBadges = new AbilityBadges { Imperial = [], Xenos = [], Chaos = [] },
                 Components =
@@ -171,6 +175,24 @@ public sealed class PlayerDataTransformerTests
         Assert.Equal(69, result.Inventory.RequisitionOrdersRegular);
         Assert.Equal(11, result.Inventory.RequisitionOrdersBlessed);
         Assert.Equal(2, result.Inventory.ResetStones);
+    }
+
+    [Fact]
+    public void MergesRegularAndMythicShardsButExcludesAlreadyUnlockedUnits()
+    {
+        var result = CreateTransformer().Transform(BuildResponse());
+
+        // ultraTigurius has both a regular and a mythic shard entry in the raw response, but it's
+        // already unlocked (present in result.Characters) — its shard counts live on that character
+        // record instead (PlayerBaseUnitRecord.Shards/MythicShards), so it must not also appear here.
+        Assert.DoesNotContain(result.InventoryShards, shard => shard.UnitId == FakeTacticusApi.CharacterUnitId);
+
+        // necroWarden has no matching entry in Units at all — not yet unlocked — so its shard progress
+        // is kept, merging the regular-only entry with a defaulted MythicAmount.
+        var necroWarden = Assert.Single(result.InventoryShards);
+        Assert.Equal("necroWarden", necroWarden.UnitId);
+        Assert.Equal(40, necroWarden.Amount);
+        Assert.Equal(0, necroWarden.MythicAmount);
     }
 
     [Fact]
