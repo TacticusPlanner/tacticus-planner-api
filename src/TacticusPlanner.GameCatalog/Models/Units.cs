@@ -40,7 +40,8 @@ public sealed record GameCatalogCharacterRankUp(
 // resolved drop-chance numbers.
 public sealed record GameCatalogFarmLocation(
     string BattleId,
-    string Difficulty,
+    string Type,
+    bool Challenge,
     bool Guaranteed,
     string? ChanceId,
     int? Numerator,

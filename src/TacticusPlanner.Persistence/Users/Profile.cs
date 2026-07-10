@@ -1,5 +1,6 @@
 using TacticusPlanner.Persistence.Encryption;
 using TacticusPlanner.Persistence.Model;
+using TacticusPlanner.Persistence.Users.PlayerData;
 
 namespace TacticusPlanner.Persistence.Users;
 
@@ -17,4 +18,8 @@ public class Profile : BaseEntity<ProfileId>
     public virtual Account? Account { get; set; }
 
     public virtual TacticusIntegration? TacticusIntegration { get; set; }
+
+    public virtual PlayerDataSnapshot? PlayerDataSnapshot { get; set; }
+
+    public virtual PlayerDataOverride? PlayerDataOverride { get; set; }
 }

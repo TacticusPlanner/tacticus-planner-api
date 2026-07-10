@@ -7,13 +7,22 @@ public sealed record GameCatalogCampaignGroup(
     string Faction,
     string ReleaseType,
     IReadOnlyList<string> CoreCharacters,
-    IReadOnlyList<string> Difficulties,
+    // Distinct Tacticus campaign types present in this group's battles — a singleton for
+    // storyline/mirror/elite/eliteMirror groups (which are split one-type-per-group), or
+    // ["Standard", "Extremis"] for a campaign-event group (Tacticus reports event progress as one id
+    // with multiple types, not separate ids — see GameCatalogDatasets.CampaignBattleGroups remarks).
+    IReadOnlyList<string> Types,
     IReadOnlyList<GameCatalogCampaignBattle> Battles
 );
 
 public sealed record GameCatalogCampaignBattle(
     string Id,
-    string Difficulty,
+    // Tacticus's own campaign-type vocabulary (Standard/Mirror/Elite/EliteMirror/Extremis), not the
+    // catalog's old ad-hoc difficulty strings.
+    string Type,
+    // True for the "Challenge" tier of a campaign-event battle — a finer split than Tacticus's own
+    // `type` field, which doesn't distinguish challenge nodes. Always false outside campaign events.
+    bool Challenge,
     int EnergyCost,
     int NodeNumber,
     int Slots,
@@ -81,7 +90,8 @@ public sealed record GameCatalogCampaignRewardsView(
 public sealed record GameCatalogCampaignBattleView(
     string Id,
     string CampaignGroupId,
-    string Difficulty,
+    string Type,
+    bool Challenge,
     int EnergyCost,
     int NodeNumber,
     int Slots,
@@ -101,6 +111,6 @@ public sealed record GameCatalogCampaignDefinitionView(
     string Faction,
     string ReleaseType,
     IReadOnlyList<string> CoreCharacters,
-    IReadOnlyList<string> Difficulties,
+    IReadOnlyList<string> Types,
     IReadOnlyList<string> BattleIds
 );

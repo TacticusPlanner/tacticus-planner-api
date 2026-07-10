@@ -1,5 +1,5 @@
 {
-  "groupId": "octarius",
+  "groupId": "campaign3",
   "faction": "Orks",
   "releaseType": "standard",
   "coreCharacters": [
@@ -7,14 +7,12 @@
     "orksKillaKan",
     "orksWarboss"
   ],
-  "difficulties": [
-    "standard",
-    "elite"
+  "types": [
+    "Standard"
   ],
   "battles": [
     {
       "id": "O01",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 1,
       "slots": 3,
@@ -58,11 +56,12 @@
           "stars": 0,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O02",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 2,
       "slots": 3,
@@ -106,11 +105,12 @@
           "stars": 0,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O03",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 3,
       "slots": 3,
@@ -154,11 +154,12 @@
           "stars": 0,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O04",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 4,
       "slots": 3,
@@ -202,11 +203,12 @@
           "stars": 1,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O05",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 5,
       "slots": 3,
@@ -250,11 +252,12 @@
           "stars": 0,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O06",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 6,
       "slots": 3,
@@ -298,11 +301,12 @@
           "stars": 0,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O07",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 7,
       "slots": 3,
@@ -346,11 +350,12 @@
           "stars": 1,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O08",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 8,
       "slots": 3,
@@ -406,11 +411,12 @@
           "stars": 0,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O09",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 9,
       "slots": 3,
@@ -466,11 +472,12 @@
           "stars": 0,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O10",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 10,
       "slots": 3,
@@ -538,11 +545,12 @@
           "stars": 0,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O11",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 11,
       "slots": 4,
@@ -610,11 +618,12 @@
           "stars": 0,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O12",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 12,
       "slots": 4,
@@ -682,11 +691,12 @@
           "stars": 0,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O13",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 13,
       "slots": 4,
@@ -730,11 +740,12 @@
           "stars": 1,
           "rank": "Stone3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O14",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 14,
       "slots": 4,
@@ -778,11 +789,12 @@
           "stars": 1,
           "rank": "Stone3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O15",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 15,
       "slots": 4,
@@ -838,11 +850,12 @@
           "stars": 1,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O16",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 16,
       "slots": 4,
@@ -886,11 +899,12 @@
           "stars": 1,
           "rank": "Stone3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O17",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 17,
       "slots": 3,
@@ -934,11 +948,12 @@
           "stars": 1,
           "rank": "Stone3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O18",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 18,
       "slots": 4,
@@ -982,11 +997,12 @@
           "stars": 1,
           "rank": "Stone3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O19",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 19,
       "slots": 5,
@@ -1042,11 +1058,12 @@
           "stars": 1,
           "rank": "Stone3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O20",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 20,
       "slots": 5,
@@ -1102,11 +1119,12 @@
           "stars": 1,
           "rank": "Stone3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O21",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 21,
       "slots": 5,
@@ -1162,11 +1180,12 @@
           "stars": 1,
           "rank": "Stone3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O22",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 22,
       "slots": 4,
@@ -1222,11 +1241,12 @@
           "stars": 0,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O23",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 23,
       "slots": 5,
@@ -1282,11 +1302,12 @@
           "stars": 1,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O24",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 24,
       "slots": 3,
@@ -1342,11 +1363,12 @@
           "stars": 1,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O25",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 25,
       "slots": 4,
@@ -1414,11 +1436,12 @@
           "stars": 1,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O26",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 26,
       "slots": 5,
@@ -1486,11 +1509,12 @@
           "stars": 1,
           "rank": "Stone3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O27",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 27,
       "slots": 5,
@@ -1558,11 +1582,12 @@
           "stars": 1,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O28",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 28,
       "slots": 5,
@@ -1630,11 +1655,12 @@
           "stars": 1,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O29",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 29,
       "slots": 5,
@@ -1702,11 +1728,12 @@
           "stars": 1,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O30",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 30,
       "slots": 5,
@@ -1786,11 +1813,12 @@
           "stars": 0,
           "rank": "Stone2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O31",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 31,
       "slots": 5,
@@ -1858,11 +1886,12 @@
           "stars": 2,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O32",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 32,
       "slots": 5,
@@ -1930,11 +1959,12 @@
           "stars": 1,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O33",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 33,
       "slots": 5,
@@ -2002,11 +2032,12 @@
           "stars": 2,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O34",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 34,
       "slots": 5,
@@ -2074,11 +2105,12 @@
           "stars": 2,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O35",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 35,
       "slots": 5,
@@ -2160,11 +2192,12 @@
           "stars": 1,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O36",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 36,
       "slots": 5,
@@ -2208,11 +2241,12 @@
           "stars": 2,
           "rank": "Iron2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O37",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 37,
       "slots": 3,
@@ -2268,11 +2302,12 @@
           "stars": 2,
           "rank": "Iron2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O38",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 38,
       "slots": 4,
@@ -2328,11 +2363,12 @@
           "stars": 2,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O39",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 39,
       "slots": 5,
@@ -2376,11 +2412,12 @@
           "stars": 2,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O40",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 40,
       "slots": 5,
@@ -2424,11 +2461,12 @@
           "stars": 2,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O41",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 41,
       "slots": 5,
@@ -2496,11 +2534,12 @@
           "stars": 2,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O42",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 42,
       "slots": 5,
@@ -2568,11 +2607,12 @@
           "stars": 3,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O43",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 43,
       "slots": 5,
@@ -2666,11 +2706,12 @@
           "stars": 2,
           "rank": "Iron2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O44",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 44,
       "slots": 5,
@@ -2776,11 +2817,12 @@
           "stars": 2,
           "rank": "Iron2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O45",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 45,
       "slots": 5,
@@ -2874,11 +2916,12 @@
           "stars": 1,
           "rank": "Stone3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O46",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 46,
       "slots": 3,
@@ -2934,11 +2977,12 @@
           "stars": 2,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O47",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 47,
       "slots": 5,
@@ -3020,11 +3064,12 @@
           "stars": 2,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O48",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 48,
       "slots": 5,
@@ -3106,11 +3151,12 @@
           "stars": 2,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O49",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 49,
       "slots": 5,
@@ -3166,11 +3212,12 @@
           "stars": 3,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O50",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 50,
       "slots": 4,
@@ -3238,11 +3285,12 @@
           "stars": 3,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O51",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 51,
       "slots": 5,
@@ -3312,11 +3360,12 @@
           "stars": 6,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O52",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 52,
       "slots": 5,
@@ -3374,11 +3423,12 @@
           "stars": 6,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O53",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 53,
       "slots": 5,
@@ -3422,11 +3472,12 @@
           "stars": 6,
           "rank": "Bronze2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O54",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 54,
       "slots": 5,
@@ -3482,11 +3533,12 @@
           "stars": 5,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O55",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 55,
       "slots": 5,
@@ -3555,11 +3607,12 @@
           "stars": 6,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O56",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 56,
       "slots": 5,
@@ -3640,11 +3693,12 @@
           "stars": 6,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O57",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 57,
       "slots": 5,
@@ -3713,11 +3767,12 @@
           "stars": 6,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O58",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 58,
       "slots": 5,
@@ -3786,11 +3841,12 @@
           "stars": 5,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O59",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 59,
       "slots": 5,
@@ -3871,11 +3927,12 @@
           "stars": 6,
           "rank": "Bronze2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O60",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 60,
       "slots": 5,
@@ -3955,11 +4012,12 @@
           "stars": 3,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O61",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 61,
       "slots": 5,
@@ -4027,11 +4085,12 @@
           "stars": 5,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O62",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 62,
       "slots": 3,
@@ -4087,11 +4146,12 @@
           "stars": 9,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O63",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 63,
       "slots": 5,
@@ -4186,11 +4246,12 @@
           "stars": 7,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O64",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 64,
       "slots": 5,
@@ -4258,11 +4319,12 @@
           "stars": 7,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O65",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 65,
       "slots": 5,
@@ -4330,11 +4392,12 @@
           "stars": 5,
           "rank": "Bronze2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O66",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 66,
       "slots": 4,
@@ -4390,11 +4453,12 @@
           "stars": 5,
           "rank": "Bronze2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O67",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 67,
       "slots": 4,
@@ -4464,11 +4528,12 @@
           "stars": 9,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O68",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 68,
       "slots": 5,
@@ -4539,11 +4604,12 @@
           "stars": 7,
           "rank": "Silver1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O69",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 69,
       "slots": 5,
@@ -4614,11 +4680,12 @@
           "stars": 7,
           "rank": "Silver1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O70",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 70,
       "slots": 5,
@@ -4724,11 +4791,12 @@
           "stars": 7,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O71",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 71,
       "slots": 5,
@@ -4796,11 +4864,12 @@
           "stars": 5,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O72",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 72,
       "slots": 5,
@@ -4881,11 +4950,12 @@
           "stars": 7,
           "rank": "Silver1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O73",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 73,
       "slots": 5,
@@ -4966,11 +5036,12 @@
           "stars": 7,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O74",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 74,
       "slots": 5,
@@ -5089,11 +5160,12 @@
           "stars": 7,
           "rank": "Silver1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "O75",
-      "difficulty": "standard",
       "energyCost": 6,
       "nodeNumber": 75,
       "slots": 5,
@@ -5186,3208 +5258,9 @@
           "stars": 7,
           "rank": "Bronze3"
         }
-      ]
-    },
-    {
-      "id": "OE01",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 1,
-      "slots": 4,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 93,
-            "max": 160
-          },
-          {
-            "id": "upgDmgU014",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgU014",
-            "chanceId": "upgradeUncommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 17942,
-      "enemiesAlliances": [
-        "Imperial"
       ],
-      "enemiesFactions": [
-        "BlackTemplars"
-      ],
-      "enemiesTotal": 7,
-      "enemiesTypes": [
-        "Initiate",
-        "Initiate with Pyreblaster",
-        "Neophyte"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "templNpc1Initiate:16",
-          "count": 3
-        },
-        {
-          "id": "templNpc2Neophyte:15",
-          "count": 2
-        },
-        {
-          "id": "templNpc2Neophyte:16",
-          "count": 1
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster:15",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "templNpc1Initiate",
-          "name": "Initiate",
-          "count": 3,
-          "stars": 9,
-          "rank": "Silver1"
-        },
-        {
-          "id": "templNpc2Neophyte",
-          "name": "Neophyte",
-          "count": 2,
-          "stars": 7,
-          "rank": "Silver1"
-        },
-        {
-          "id": "templNpc2Neophyte",
-          "name": "Neophyte",
-          "count": 1,
-          "stars": 9,
-          "rank": "Silver1"
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster",
-          "name": "Initiate with Pyreblaster",
-          "count": 1,
-          "stars": 7,
-          "rank": "Silver1"
-        }
-      ]
-    },
-    {
-      "id": "OE02",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 2,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 93,
-            "max": 160
-          },
-          {
-            "id": "upgHpR010",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpR010",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 25582,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "BlackTemplars"
-      ],
-      "enemiesTotal": 8,
-      "enemiesTypes": [
-        "Aggressor",
-        "Initiate",
-        "Initiate with Pyreblaster",
-        "Neophyte"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "templNpc1Initiate:15",
-          "count": 2
-        },
-        {
-          "id": "templNpc2Neophyte:15",
-          "count": 2
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster:14",
-          "count": 2
-        },
-        {
-          "id": "templNpc4Aggressor:15",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "templNpc1Initiate",
-          "name": "Initiate",
-          "count": 2,
-          "stars": 7,
-          "rank": "Silver1"
-        },
-        {
-          "id": "templNpc2Neophyte",
-          "name": "Neophyte",
-          "count": 2,
-          "stars": 7,
-          "rank": "Silver1"
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster",
-          "name": "Initiate with Pyreblaster",
-          "count": 2,
-          "stars": 9,
-          "rank": "Bronze3"
-        },
-        {
-          "id": "templNpc4Aggressor",
-          "name": "Aggressor",
-          "count": 2,
-          "stars": 7,
-          "rank": "Silver1"
-        }
-      ]
-    },
-    {
-      "id": "OE03",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 3,
-      "slots": 4,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 93,
-            "max": 160
-          },
-          {
-            "id": "upgDmgR026",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgR026",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 24215,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "BlackTemplars"
-      ],
-      "enemiesTotal": 5,
-      "enemiesTypes": [
-        "Initiate with Pyreblaster",
-        "Neophyte"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "templNpc2Neophyte:18",
-          "count": 4
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster:19",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "templNpc2Neophyte",
-          "name": "Neophyte",
-          "count": 4,
-          "stars": 9,
-          "rank": "Silver2"
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster",
-          "name": "Initiate with Pyreblaster",
-          "count": 1,
-          "stars": 8,
-          "rank": "Silver3"
-        }
-      ]
-    },
-    {
-      "id": "OE04",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 4,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 93,
-            "max": 160
-          },
-          {
-            "id": "upgArmR026",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmR026",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 31034,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "BlackTemplars"
-      ],
-      "enemiesTotal": 10,
-      "enemiesTypes": [
-        "Initiate",
-        "Initiate with Pyreblaster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "templNpc1Initiate:16",
-          "count": 8
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster:15",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "templNpc1Initiate",
-          "name": "Initiate",
-          "count": 8,
-          "stars": 9,
-          "rank": "Silver1"
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster",
-          "name": "Initiate with Pyreblaster",
-          "count": 2,
-          "stars": 7,
-          "rank": "Silver1"
-        }
-      ]
-    },
-    {
-      "id": "OE05",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 5,
-      "slots": 3,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 93,
-            "max": 160
-          },
-          {
-            "id": "upgHpU012",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpU012",
-            "chanceId": "upgradeUncommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 20923,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "BlackTemplars"
-      ],
-      "enemiesTotal": 6,
-      "enemiesTypes": [
-        "Aggressor",
-        "Initiate",
-        "Neophyte"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "templNpc1Initiate:16",
-          "count": 3
-        },
-        {
-          "id": "templNpc2Neophyte:16",
-          "count": 1
-        },
-        {
-          "id": "templNpc4Aggressor:14",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "templNpc1Initiate",
-          "name": "Initiate",
-          "count": 3,
-          "stars": 9,
-          "rank": "Silver1"
-        },
-        {
-          "id": "templNpc2Neophyte",
-          "name": "Neophyte",
-          "count": 1,
-          "stars": 9,
-          "rank": "Silver1"
-        },
-        {
-          "id": "templNpc4Aggressor",
-          "name": "Aggressor",
-          "count": 2,
-          "stars": 9,
-          "rank": "Bronze3"
-        }
-      ]
-    },
-    {
-      "id": "OE06",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 6,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 93,
-            "max": 160
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpL106",
-            "chanceId": "upgradeLegendary_elite"
-          }
-        ]
-      },
-      "enemyPower": 35242,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Orks"
-      ],
-      "enemiesTotal": 9,
-      "enemiesTypes": [
-        "Grot",
-        "Grot Tank",
-        "Ork Boy"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksNpc1Grot:27",
-          "count": 3
-        },
-        {
-          "id": "orksNpc2OrkBoy:27",
-          "count": 5
-        },
-        {
-          "id": "orksNpc3GrotTank:27",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksNpc1Grot",
-          "name": "Grot",
-          "count": 3,
-          "stars": 9,
-          "rank": "Silver2"
-        },
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 5,
-          "stars": 9,
-          "rank": "Silver2"
-        },
-        {
-          "id": "orksNpc3GrotTank",
-          "name": "Grot Tank",
-          "count": 1,
-          "stars": 9,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "OE07",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 7,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 93,
-            "max": 160
-          },
-          {
-            "id": "upgHpR019",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpR019",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 42419,
-      "enemiesAlliances": [
-        "Imperial",
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "BlackTemplars",
-        "Orks"
-      ],
-      "enemiesTotal": 12,
-      "enemiesTypes": [
-        "Aggressor",
-        "Grot",
-        "Initiate",
-        "Initiate with Pyreblaster",
-        "Neophyte",
-        "Ork Boy"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksNpc1Grot:24",
-          "count": 2
-        },
-        {
-          "id": "orksNpc2OrkBoy:24",
-          "count": 4
-        },
-        {
-          "id": "templNpc1Initiate:16",
-          "count": 2
-        },
-        {
-          "id": "templNpc2Neophyte:17",
-          "count": 1
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster:17",
-          "count": 1
-        },
-        {
-          "id": "templNpc4Aggressor:14",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksNpc1Grot",
-          "name": "Grot",
-          "count": 2,
-          "stars": 6,
-          "rank": "Silver2"
-        },
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 4,
-          "stars": 6,
-          "rank": "Silver2"
-        },
-        {
-          "id": "templNpc1Initiate",
-          "name": "Initiate",
-          "count": 2,
-          "stars": 9,
-          "rank": "Silver1"
-        },
-        {
-          "id": "templNpc2Neophyte",
-          "name": "Neophyte",
-          "count": 1,
-          "stars": 8,
-          "rank": "Silver2"
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster",
-          "name": "Initiate with Pyreblaster",
-          "count": 1,
-          "stars": 8,
-          "rank": "Silver2"
-        },
-        {
-          "id": "templNpc4Aggressor",
-          "name": "Aggressor",
-          "count": 2,
-          "stars": 9,
-          "rank": "Bronze3"
-        }
-      ]
-    },
-    {
-      "id": "OE08",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 8,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 93,
-            "max": 160
-          },
-          {
-            "id": "shards_templAggressor",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "shards_templAggressor",
-            "chanceId": "shard_elite"
-          }
-        ]
-      },
-      "enemyPower": 38810,
-      "enemiesAlliances": [
-        "Imperial",
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "BlackTemplars",
-        "Orks"
-      ],
-      "enemiesTotal": 9,
-      "enemiesTypes": [
-        "Aggressor",
-        "Burchard",
-        "Initiate",
-        "Neophyte",
-        "Ork Boy"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "orksNpc2OrkBoy:5",
-          "count": 1
-        },
-        {
-          "id": "templBossAggressor:3",
-          "count": 1
-        },
-        {
-          "id": "templNpc1Initiate:18",
-          "count": 3
-        },
-        {
-          "id": "templNpc2Neophyte:17",
-          "count": 2
-        },
-        {
-          "id": "templNpc4Aggressor:11",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "orksNpc2OrkBoy",
-          "name": "Ork Boy",
-          "count": 1,
-          "stars": 2,
-          "rank": "Iron1"
-        },
-        {
-          "id": "templBossAggressor",
-          "name": "Burchard",
-          "count": 1,
-          "stars": 7,
-          "rank": "Silver2"
-        },
-        {
-          "id": "templNpc1Initiate",
-          "name": "Initiate",
-          "count": 3,
-          "stars": 9,
-          "rank": "Silver2"
-        },
-        {
-          "id": "templNpc2Neophyte",
-          "name": "Neophyte",
-          "count": 2,
-          "stars": 8,
-          "rank": "Silver2"
-        },
-        {
-          "id": "templNpc4Aggressor",
-          "name": "Aggressor",
-          "count": 2,
-          "stars": 6,
-          "rank": "Bronze2"
-        }
-      ]
-    },
-    {
-      "id": "OE09",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 9,
-      "slots": 4,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          },
-          {
-            "id": "upgArmU002",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmU002",
-            "chanceId": "upgradeUncommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 33327,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "BlackTemplars"
-      ],
-      "enemiesTotal": 6,
-      "enemiesTypes": [
-        "Initiate",
-        "Neophyte"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "templNpc1Initiate:19",
-          "count": 3
-        },
-        {
-          "id": "templNpc2Neophyte:19",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "templNpc1Initiate",
-          "name": "Initiate",
-          "count": 3,
-          "stars": 8,
-          "rank": "Silver3"
-        },
-        {
-          "id": "templNpc2Neophyte",
-          "name": "Neophyte",
-          "count": 3,
-          "stars": 8,
-          "rank": "Silver3"
-        }
-      ]
-    },
-    {
-      "id": "OE10",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 10,
-      "slots": 3,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          },
-          {
-            "id": "upgHpR032",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpR032",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 27645,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "BlackTemplars"
-      ],
-      "enemiesTotal": 6,
-      "enemiesTypes": [
-        "Aggressor",
-        "Initiate",
-        "Initiate with Pyreblaster",
-        "Neophyte"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "templNpc1Initiate:17",
-          "count": 2
-        },
-        {
-          "id": "templNpc2Neophyte:17",
-          "count": 2
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster:17",
-          "count": 1
-        },
-        {
-          "id": "templNpc4Aggressor:16",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "templNpc1Initiate",
-          "name": "Initiate",
-          "count": 2,
-          "stars": 8,
-          "rank": "Silver2"
-        },
-        {
-          "id": "templNpc2Neophyte",
-          "name": "Neophyte",
-          "count": 2,
-          "stars": 8,
-          "rank": "Silver2"
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster",
-          "name": "Initiate with Pyreblaster",
-          "count": 1,
-          "stars": 8,
-          "rank": "Silver2"
-        },
-        {
-          "id": "templNpc4Aggressor",
-          "name": "Aggressor",
-          "count": 1,
-          "stars": 9,
-          "rank": "Silver1"
-        }
-      ]
-    },
-    {
-      "id": "OE11",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 11,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          },
-          {
-            "id": "upgHpR036",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpR036",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 47369,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "BlackTemplars"
-      ],
-      "enemiesTotal": 7,
-      "enemiesTypes": [
-        "Initiate",
-        "Initiate with Pyreblaster",
-        "Neophyte"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "templNpc1Initiate:19",
-          "count": 3
-        },
-        {
-          "id": "templNpc2Neophyte:19",
-          "count": 1
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster:18",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "templNpc1Initiate",
-          "name": "Initiate",
-          "count": 3,
-          "stars": 8,
-          "rank": "Silver3"
-        },
-        {
-          "id": "templNpc2Neophyte",
-          "name": "Neophyte",
-          "count": 1,
-          "stars": 8,
-          "rank": "Silver3"
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster",
-          "name": "Initiate with Pyreblaster",
-          "count": 3,
-          "stars": 9,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "OE12",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 12,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          },
-          {
-            "id": "upgHpR035",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpR035",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 51092,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "BlackTemplars"
-      ],
-      "enemiesTotal": 10,
-      "enemiesTypes": [
-        "Initiate",
-        "Initiate with Pyreblaster",
-        "Neophyte"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "templNpc1Initiate:18",
-          "count": 4
-        },
-        {
-          "id": "templNpc2Neophyte:18",
-          "count": 4
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster:18",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "templNpc1Initiate",
-          "name": "Initiate",
-          "count": 4,
-          "stars": 9,
-          "rank": "Silver2"
-        },
-        {
-          "id": "templNpc2Neophyte",
-          "name": "Neophyte",
-          "count": 4,
-          "stars": 9,
-          "rank": "Silver2"
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster",
-          "name": "Initiate with Pyreblaster",
-          "count": 2,
-          "stars": 9,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "OE13",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 13,
-      "slots": 4,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          },
-          {
-            "id": "upgHpR033",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpR033",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 45761,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "BlackTemplars"
-      ],
-      "enemiesTotal": 7,
-      "enemiesTypes": [
-        "Aggressor",
-        "Initiate",
-        "Neophyte"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "templNpc1Initiate:20",
-          "count": 3
-        },
-        {
-          "id": "templNpc2Neophyte:19",
-          "count": 3
-        },
-        {
-          "id": "templNpc4Aggressor:16",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "templNpc1Initiate",
-          "name": "Initiate",
-          "count": 3,
-          "stars": 10,
-          "rank": "Silver3"
-        },
-        {
-          "id": "templNpc2Neophyte",
-          "name": "Neophyte",
-          "count": 3,
-          "stars": 8,
-          "rank": "Silver3"
-        },
-        {
-          "id": "templNpc4Aggressor",
-          "name": "Aggressor",
-          "count": 1,
-          "stars": 9,
-          "rank": "Silver1"
-        }
-      ]
-    },
-    {
-      "id": "OE14",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 14,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          },
-          {
-            "id": "upgDmgU012",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgU012",
-            "chanceId": "upgradeUncommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 59028,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "BlackTemplars"
-      ],
-      "enemiesTotal": 10,
-      "enemiesTypes": [
-        "Initiate",
-        "Initiate with Pyreblaster",
-        "Neophyte"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "templNpc1Initiate:20",
-          "count": 4
-        },
-        {
-          "id": "templNpc2Neophyte:19",
-          "count": 4
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster:16",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "templNpc1Initiate",
-          "name": "Initiate",
-          "count": 4,
-          "stars": 10,
-          "rank": "Silver3"
-        },
-        {
-          "id": "templNpc2Neophyte",
-          "name": "Neophyte",
-          "count": 4,
-          "stars": 8,
-          "rank": "Silver3"
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster",
-          "name": "Initiate with Pyreblaster",
-          "count": 2,
-          "stars": 9,
-          "rank": "Silver1"
-        }
-      ]
-    },
-    {
-      "id": "OE15",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 15,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          },
-          {
-            "id": "upgDmgR006",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgR006",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 61564,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "BlackTemplars"
-      ],
-      "enemiesTotal": 8,
-      "enemiesTypes": [
-        "Aggressor",
-        "Initiate",
-        "Initiate with Pyreblaster",
-        "Neophyte"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "templNpc1Initiate:19",
-          "count": 3
-        },
-        {
-          "id": "templNpc2Neophyte:19",
-          "count": 1
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster:18",
-          "count": 3
-        },
-        {
-          "id": "templNpc4Aggressor:18",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "templNpc1Initiate",
-          "name": "Initiate",
-          "count": 3,
-          "stars": 8,
-          "rank": "Silver3"
-        },
-        {
-          "id": "templNpc2Neophyte",
-          "name": "Neophyte",
-          "count": 1,
-          "stars": 8,
-          "rank": "Silver3"
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster",
-          "name": "Initiate with Pyreblaster",
-          "count": 3,
-          "stars": 9,
-          "rank": "Silver2"
-        },
-        {
-          "id": "templNpc4Aggressor",
-          "name": "Aggressor",
-          "count": 1,
-          "stars": 9,
-          "rank": "Silver2"
-        }
-      ]
-    },
-    {
-      "id": "OE16",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 16,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          },
-          {
-            "id": "shards_templSwordBrother",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "shards_templSwordBrother",
-            "chanceId": "shard_elite"
-          }
-        ]
-      },
-      "enemyPower": 65245,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "BlackTemplars"
-      ],
-      "enemiesTotal": 6,
-      "enemiesTypes": [
-        "Godswyl",
-        "Initiate with Pyreblaster",
-        "Neophyte"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "templBossSwordBrother:4",
-          "count": 1
-        },
-        {
-          "id": "templNpc2Neophyte:21",
-          "count": 2
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster:20",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "templBossSwordBrother",
-          "name": "Godswyl",
-          "count": 1,
-          "stars": 7,
-          "rank": "Silver2"
-        },
-        {
-          "id": "templNpc2Neophyte",
-          "name": "Neophyte",
-          "count": 2,
-          "stars": 10,
-          "rank": "Gold1"
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster",
-          "name": "Initiate with Pyreblaster",
-          "count": 3,
-          "stars": 10,
-          "rank": "Silver3"
-        }
-      ]
-    },
-    {
-      "id": "OE17",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 17,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 109,
-            "max": 165
-          },
-          {
-            "id": "upgDmgR032",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgR032",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 68630,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "BlackTemplars"
-      ],
-      "enemiesTotal": 8,
-      "enemiesTypes": [
-        "Initiate",
-        "Initiate with Pyreblaster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "templNpc1Initiate:19",
-          "count": 5
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster:20",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "templNpc1Initiate",
-          "name": "Initiate",
-          "count": 5,
-          "stars": 8,
-          "rank": "Silver3"
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster",
-          "name": "Initiate with Pyreblaster",
-          "count": 3,
-          "stars": 10,
-          "rank": "Silver3"
-        }
-      ]
-    },
-    {
-      "id": "OE18",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 18,
-      "slots": 4,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 123,
-            "max": 180
-          },
-          {
-            "id": "upgDmgR036",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgR036",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 58994,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "BlackTemplars"
-      ],
-      "enemiesTotal": 8,
-      "enemiesTypes": [
-        "Initiate",
-        "Initiate with Pyreblaster",
-        "Neophyte"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "templNpc1Initiate:20",
-          "count": 3
-        },
-        {
-          "id": "templNpc2Neophyte:20",
-          "count": 4
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster:20",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "templNpc1Initiate",
-          "name": "Initiate",
-          "count": 3,
-          "stars": 10,
-          "rank": "Silver3"
-        },
-        {
-          "id": "templNpc2Neophyte",
-          "name": "Neophyte",
-          "count": 4,
-          "stars": 10,
-          "rank": "Silver3"
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster",
-          "name": "Initiate with Pyreblaster",
-          "count": 1,
-          "stars": 10,
-          "rank": "Silver3"
-        }
-      ]
-    },
-    {
-      "id": "OE19",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 19,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 123,
-            "max": 180
-          },
-          {
-            "id": "upgDmgR035",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgR035",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 79196,
-      "enemiesAlliances": [
-        "Imperial",
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "BlackTemplars",
-        "Tyranids"
-      ],
-      "enemiesTotal": 12,
-      "enemiesTypes": [
-        "Hormagaunt",
-        "Initiate",
-        "Neophyte",
-        "Termagant"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "templNpc1Initiate:19",
-          "count": 3
-        },
-        {
-          "id": "templNpc2Neophyte:20",
-          "count": 2
-        },
-        {
-          "id": "tyranNpc1Hormagaunt:22",
-          "count": 3
-        },
-        {
-          "id": "tyranNpc3Termagant:22",
-          "count": 4
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "templNpc1Initiate",
-          "name": "Initiate",
-          "count": 3,
-          "stars": 8,
-          "rank": "Silver3"
-        },
-        {
-          "id": "templNpc2Neophyte",
-          "name": "Neophyte",
-          "count": 2,
-          "stars": 10,
-          "rank": "Silver3"
-        },
-        {
-          "id": "tyranNpc1Hormagaunt",
-          "name": "Hormagaunt",
-          "count": 3,
-          "stars": 11,
-          "rank": "Gold1"
-        },
-        {
-          "id": "tyranNpc3Termagant",
-          "name": "Termagant",
-          "count": 4,
-          "stars": 11,
-          "rank": "Gold1"
-        }
-      ]
-    },
-    {
-      "id": "OE20",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 20,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 123,
-            "max": 180
-          },
-          {
-            "id": "upgDmgR033",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgR033",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 83908,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Tyranids"
-      ],
-      "enemiesTotal": 8,
-      "enemiesTypes": [
-        "Hormagaunt",
-        "Ripper Swarm",
-        "Termagant"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "tyranNpc1Hormagaunt:25",
-          "count": 2
-        },
-        {
-          "id": "tyranNpc2RipperSwarm:24",
-          "count": 2
-        },
-        {
-          "id": "tyranNpc3Termagant:24",
-          "count": 4
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "tyranNpc1Hormagaunt",
-          "name": "Hormagaunt",
-          "count": 2,
-          "stars": 10,
-          "rank": "Gold3"
-        },
-        {
-          "id": "tyranNpc2RipperSwarm",
-          "name": "Ripper Swarm",
-          "count": 2,
-          "stars": 11,
-          "rank": "Gold2"
-        },
-        {
-          "id": "tyranNpc3Termagant",
-          "name": "Termagant",
-          "count": 4,
-          "stars": 11,
-          "rank": "Gold2"
-        }
-      ]
-    },
-    {
-      "id": "OE21",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 21,
-      "slots": 4,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 123,
-            "max": 180
-          },
-          {
-            "id": "upgHpU014",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpU014",
-            "chanceId": "upgradeUncommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 72815,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Tyranids"
-      ],
-      "enemiesTotal": 7,
-      "enemiesTypes": [
-        "Ripper Swarm",
-        "Termagant"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "tyranNpc2RipperSwarm:24",
-          "count": 2
-        },
-        {
-          "id": "tyranNpc3Termagant:25",
-          "count": 5
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "tyranNpc2RipperSwarm",
-          "name": "Ripper Swarm",
-          "count": 2,
-          "stars": 11,
-          "rank": "Gold2"
-        },
-        {
-          "id": "tyranNpc3Termagant",
-          "name": "Termagant",
-          "count": 5,
-          "stars": 10,
-          "rank": "Gold3"
-        }
-      ]
-    },
-    {
-      "id": "OE22",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 22,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 123,
-            "max": 180
-          },
-          {
-            "id": "upgArmR032",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmR032",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 97169,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "BlackTemplars"
-      ],
-      "enemiesTotal": 9,
-      "enemiesTypes": [
-        "Aggressor",
-        "Initiate",
-        "Initiate with Pyreblaster",
-        "Neophyte"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "templNpc1Initiate:21",
-          "count": 4
-        },
-        {
-          "id": "templNpc2Neophyte:20",
-          "count": 3
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster:19",
-          "count": 1
-        },
-        {
-          "id": "templNpc4Aggressor:21",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "templNpc1Initiate",
-          "name": "Initiate",
-          "count": 4,
-          "stars": 10,
-          "rank": "Gold1"
-        },
-        {
-          "id": "templNpc2Neophyte",
-          "name": "Neophyte",
-          "count": 3,
-          "stars": 10,
-          "rank": "Silver3"
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster",
-          "name": "Initiate with Pyreblaster",
-          "count": 1,
-          "stars": 8,
-          "rank": "Silver3"
-        },
-        {
-          "id": "templNpc4Aggressor",
-          "name": "Aggressor",
-          "count": 1,
-          "stars": 10,
-          "rank": "Gold1"
-        }
-      ]
-    },
-    {
-      "id": "OE23",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 23,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 123,
-            "max": 180
-          },
-          {
-            "id": "upgArmR036",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmR036",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 102561,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "BlackTemplars"
-      ],
-      "enemiesTotal": 7,
-      "enemiesTypes": [
-        "Aggressor",
-        "Initiate",
-        "Neophyte"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "templNpc1Initiate:22",
-          "count": 3
-        },
-        {
-          "id": "templNpc2Neophyte:20",
-          "count": 2
-        },
-        {
-          "id": "templNpc4Aggressor:20",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "templNpc1Initiate",
-          "name": "Initiate",
-          "count": 3,
-          "stars": 11,
-          "rank": "Gold1"
-        },
-        {
-          "id": "templNpc2Neophyte",
-          "name": "Neophyte",
-          "count": 2,
-          "stars": 10,
-          "rank": "Silver3"
-        },
-        {
-          "id": "templNpc4Aggressor",
-          "name": "Aggressor",
-          "count": 2,
-          "stars": 10,
-          "rank": "Silver3"
-        }
-      ]
-    },
-    {
-      "id": "OE24",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 24,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 123,
-            "max": 180
-          },
-          {
-            "id": "shards_templAncient",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "shards_templAncient",
-            "chanceId": "shard_elite"
-          }
-        ]
-      },
-      "enemyPower": 114352,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum",
-        "BlackTemplars"
-      ],
-      "enemiesTotal": 11,
-      "enemiesTypes": [
-        "Cadian Lascannon Team",
-        "Initiate",
-        "Initiate with Pyreblaster",
-        "Neophyte",
-        "Thoread"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc2Lascannon:24",
-          "count": 1
-        },
-        {
-          "id": "templBossAncient:3",
-          "count": 1
-        },
-        {
-          "id": "templNpc1Initiate:20",
-          "count": 5
-        },
-        {
-          "id": "templNpc2Neophyte:21",
-          "count": 2
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster:20",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc2Lascannon",
-          "name": "Cadian Lascannon Team",
-          "count": 1,
-          "stars": 11,
-          "rank": "Gold2"
-        },
-        {
-          "id": "templBossAncient",
-          "name": "Thoread",
-          "count": 1,
-          "stars": 10,
-          "rank": "Silver3"
-        },
-        {
-          "id": "templNpc1Initiate",
-          "name": "Initiate",
-          "count": 5,
-          "stars": 10,
-          "rank": "Silver3"
-        },
-        {
-          "id": "templNpc2Neophyte",
-          "name": "Neophyte",
-          "count": 2,
-          "stars": 10,
-          "rank": "Gold1"
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster",
-          "name": "Initiate with Pyreblaster",
-          "count": 2,
-          "stars": 10,
-          "rank": "Silver3"
-        }
-      ]
-    },
-    {
-      "id": "OE25",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 25,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 131,
-            "max": 195
-          },
-          {
-            "id": "upgArmR035",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmR035",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 118893,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "BlackTemplars"
-      ],
-      "enemiesTotal": 9,
-      "enemiesTypes": [
-        "Initiate",
-        "Neophyte"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "templNpc1Initiate:22",
-          "count": 4
-        },
-        {
-          "id": "templNpc2Neophyte:22",
-          "count": 5
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "templNpc1Initiate",
-          "name": "Initiate",
-          "count": 4,
-          "stars": 11,
-          "rank": "Gold1"
-        },
-        {
-          "id": "templNpc2Neophyte",
-          "name": "Neophyte",
-          "count": 5,
-          "stars": 11,
-          "rank": "Gold1"
-        }
-      ]
-    },
-    {
-      "id": "OE26",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 26,
-      "slots": 4,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 131,
-            "max": 195
-          },
-          {
-            "id": "upgArmR033",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmR033",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 109073,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "BlackTemplars"
-      ],
-      "enemiesTotal": 7,
-      "enemiesTypes": [
-        "Aggressor",
-        "Initiate with Pyreblaster",
-        "Neophyte"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "templNpc2Neophyte:22",
-          "count": 3
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster:19",
-          "count": 2
-        },
-        {
-          "id": "templNpc4Aggressor:21",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "templNpc2Neophyte",
-          "name": "Neophyte",
-          "count": 3,
-          "stars": 11,
-          "rank": "Gold1"
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster",
-          "name": "Initiate with Pyreblaster",
-          "count": 2,
-          "stars": 8,
-          "rank": "Silver3"
-        },
-        {
-          "id": "templNpc4Aggressor",
-          "name": "Aggressor",
-          "count": 2,
-          "stars": 10,
-          "rank": "Gold1"
-        }
-      ]
-    },
-    {
-      "id": "OE27",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 27,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 131,
-            "max": 195
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmE010",
-            "chanceId": "upgradeEpic_elite"
-          }
-        ]
-      },
-      "enemyPower": 135445,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "BlackTemplars"
-      ],
-      "enemiesTotal": 7,
-      "enemiesTypes": [
-        "Initiate",
-        "Initiate with Pyreblaster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "templNpc1Initiate:23",
-          "count": 4
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster:22",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "templNpc1Initiate",
-          "name": "Initiate",
-          "count": 4,
-          "stars": 10,
-          "rank": "Gold2"
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster",
-          "name": "Initiate with Pyreblaster",
-          "count": 3,
-          "stars": 11,
-          "rank": "Gold1"
-        }
-      ]
-    },
-    {
-      "id": "OE28",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 28,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 131,
-            "max": 195
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpL112",
-            "chanceId": "upgradeLegendary_elite"
-          }
-        ]
-      },
-      "enemyPower": 148563,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "BlackTemplars"
-      ],
-      "enemiesTotal": 9,
-      "enemiesTypes": [
-        "Initiate",
-        "Neophyte"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "templNpc1Initiate:23",
-          "count": 6
-        },
-        {
-          "id": "templNpc2Neophyte:24",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "templNpc1Initiate",
-          "name": "Initiate",
-          "count": 6,
-          "stars": 10,
-          "rank": "Gold2"
-        },
-        {
-          "id": "templNpc2Neophyte",
-          "name": "Neophyte",
-          "count": 3,
-          "stars": 11,
-          "rank": "Gold2"
-        }
-      ]
-    },
-    {
-      "id": "OE29",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 29,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 131,
-            "max": 195
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpL116",
-            "chanceId": "upgradeLegendary_elite"
-          }
-        ]
-      },
-      "enemyPower": 158409,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "BlackTemplars"
-      ],
-      "enemiesTotal": 7,
-      "enemiesTypes": [
-        "Initiate with Pyreblaster",
-        "Neophyte"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "templNpc2Neophyte:24",
-          "count": 5
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster:25",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "templNpc2Neophyte",
-          "name": "Neophyte",
-          "count": 5,
-          "stars": 11,
-          "rank": "Gold2"
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster",
-          "name": "Initiate with Pyreblaster",
-          "count": 2,
-          "stars": 10,
-          "rank": "Gold3"
-        }
-      ]
-    },
-    {
-      "id": "OE30",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 30,
-      "slots": 4,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 131,
-            "max": 195
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpL115",
-            "chanceId": "upgradeLegendary_elite"
-          }
-        ]
-      },
-      "enemyPower": 137528,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "BlackTemplars"
-      ],
-      "enemiesTotal": 7,
-      "enemiesTypes": [
-        "Aggressor",
-        "Initiate",
-        "Initiate with Pyreblaster"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "templNpc1Initiate:22",
-          "count": 4
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster:22",
-          "count": 2
-        },
-        {
-          "id": "templNpc4Aggressor:21",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "templNpc1Initiate",
-          "name": "Initiate",
-          "count": 4,
-          "stars": 11,
-          "rank": "Gold1"
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster",
-          "name": "Initiate with Pyreblaster",
-          "count": 2,
-          "stars": 11,
-          "rank": "Gold1"
-        },
-        {
-          "id": "templNpc4Aggressor",
-          "name": "Aggressor",
-          "count": 1,
-          "stars": 10,
-          "rank": "Gold1"
-        }
-      ]
-    },
-    {
-      "id": "OE31",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 31,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 131,
-            "max": 195
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpL113",
-            "chanceId": "upgradeLegendary_elite"
-          }
-        ]
-      },
-      "enemyPower": 172983,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum",
-        "BlackTemplars"
-      ],
-      "enemiesTotal": 10,
-      "enemiesTypes": [
-        "Cadian Guardsman",
-        "Cadian Lascannon Team",
-        "Initiate"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman:26",
-          "count": 2
-        },
-        {
-          "id": "astraNpc2Lascannon:26",
-          "count": 1
-        },
-        {
-          "id": "templNpc1Initiate:24",
-          "count": 7
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc1Guardsman",
-          "name": "Cadian Guardsman",
-          "count": 2,
-          "stars": 11,
-          "rank": "Gold3"
-        },
-        {
-          "id": "astraNpc2Lascannon",
-          "name": "Cadian Lascannon Team",
-          "count": 1,
-          "stars": 11,
-          "rank": "Gold3"
-        },
-        {
-          "id": "templNpc1Initiate",
-          "name": "Initiate",
-          "count": 7,
-          "stars": 11,
-          "rank": "Gold2"
-        }
-      ]
-    },
-    {
-      "id": "OE32",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 32,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 210
-          },
-          {
-            "id": "shards_templChampion",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "shards_templChampion",
-            "chanceId": "shard_elite"
-          }
-        ]
-      },
-      "enemyPower": 173415,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "BlackTemplars"
-      ],
-      "enemiesTotal": 11,
-      "enemiesTypes": [
-        "Aggressor",
-        "Initiate",
-        "Initiate with Pyreblaster",
-        "Jaeger",
-        "Neophyte"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "templBossChampion:2",
-          "count": 1
-        },
-        {
-          "id": "templNpc1Initiate:21",
-          "count": 4
-        },
-        {
-          "id": "templNpc2Neophyte:22",
-          "count": 3
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster:22",
-          "count": 1
-        },
-        {
-          "id": "templNpc4Aggressor:20",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "templBossChampion",
-          "name": "Jaeger",
-          "count": 1,
-          "stars": 10,
-          "rank": "Silver3"
-        },
-        {
-          "id": "templNpc1Initiate",
-          "name": "Initiate",
-          "count": 4,
-          "stars": 10,
-          "rank": "Gold1"
-        },
-        {
-          "id": "templNpc2Neophyte",
-          "name": "Neophyte",
-          "count": 3,
-          "stars": 11,
-          "rank": "Gold1"
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster",
-          "name": "Initiate with Pyreblaster",
-          "count": 1,
-          "stars": 11,
-          "rank": "Gold1"
-        },
-        {
-          "id": "templNpc4Aggressor",
-          "name": "Aggressor",
-          "count": 2,
-          "stars": 10,
-          "rank": "Silver3"
-        }
-      ]
-    },
-    {
-      "id": "OE33",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 33,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 210
-          },
-          {
-            "id": "upgArmU009",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmU009",
-            "chanceId": "upgradeUncommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 226859,
-      "enemiesAlliances": [
-        "Imperial",
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "BlackTemplars",
-        "Tyranids"
-      ],
-      "enemiesTotal": 13,
-      "enemiesTypes": [
-        "Hormagaunt",
-        "Initiate",
-        "Initiate with Pyreblaster",
-        "Termagant"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "templNpc1Initiate:25",
-          "count": 4
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster:22",
-          "count": 3
-        },
-        {
-          "id": "tyranNpc1Hormagaunt:24",
-          "count": 4
-        },
-        {
-          "id": "tyranNpc3Termagant:25",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "templNpc1Initiate",
-          "name": "Initiate",
-          "count": 4,
-          "stars": 10,
-          "rank": "Gold3"
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster",
-          "name": "Initiate with Pyreblaster",
-          "count": 3,
-          "stars": 11,
-          "rank": "Gold1"
-        },
-        {
-          "id": "tyranNpc1Hormagaunt",
-          "name": "Hormagaunt",
-          "count": 4,
-          "stars": 11,
-          "rank": "Gold2"
-        },
-        {
-          "id": "tyranNpc3Termagant",
-          "name": "Termagant",
-          "count": 2,
-          "stars": 10,
-          "rank": "Gold3"
-        }
-      ]
-    },
-    {
-      "id": "OE34",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 34,
-      "slots": 4,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 210
-          },
-          {
-            "id": "upgHpU001",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpU001",
-            "chanceId": "upgradeUncommon_elite"
-          }
-        ]
-      },
-      "enemyPower": 168204,
-      "enemiesAlliances": [
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "Tyranids"
-      ],
-      "enemiesTotal": 9,
-      "enemiesTypes": [
-        "Hormagaunt",
-        "Ripper Swarm",
-        "Termagant"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "tyranNpc1Hormagaunt:27",
-          "count": 4
-        },
-        {
-          "id": "tyranNpc2RipperSwarm:26",
-          "count": 2
-        },
-        {
-          "id": "tyranNpc3Termagant:28",
-          "count": 3
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "tyranNpc1Hormagaunt",
-          "name": "Hormagaunt",
-          "count": 4,
-          "stars": 10,
-          "rank": "Diamond1"
-        },
-        {
-          "id": "tyranNpc2RipperSwarm",
-          "name": "Ripper Swarm",
-          "count": 2,
-          "stars": 11,
-          "rank": "Gold3"
-        },
-        {
-          "id": "tyranNpc3Termagant",
-          "name": "Termagant",
-          "count": 3,
-          "stars": 11,
-          "rank": "Diamond1"
-        }
-      ]
-    },
-    {
-      "id": "OE35",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 35,
-      "slots": 4,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 210
-          },
-          {
-            "id": "upgArmR006",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmR006",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 187386,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "BlackTemplars"
-      ],
-      "enemiesTotal": 8,
-      "enemiesTypes": [
-        "Aggressor",
-        "Initiate",
-        "Neophyte"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "templNpc1Initiate:24",
-          "count": 4
-        },
-        {
-          "id": "templNpc2Neophyte:25",
-          "count": 3
-        },
-        {
-          "id": "templNpc4Aggressor:22",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "templNpc1Initiate",
-          "name": "Initiate",
-          "count": 4,
-          "stars": 11,
-          "rank": "Gold2"
-        },
-        {
-          "id": "templNpc2Neophyte",
-          "name": "Neophyte",
-          "count": 3,
-          "stars": 10,
-          "rank": "Gold3"
-        },
-        {
-          "id": "templNpc4Aggressor",
-          "name": "Aggressor",
-          "count": 1,
-          "stars": 11,
-          "rank": "Gold1"
-        }
-      ]
-    },
-    {
-      "id": "OE36",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 36,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 210
-          },
-          {
-            "id": "upgHpR021",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpR021",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 309453,
-      "enemiesAlliances": [
-        "Imperial",
-        "Xenos"
-      ],
-      "enemiesFactions": [
-        "BlackTemplars",
-        "Tyranids"
-      ],
-      "enemiesTotal": 13,
-      "enemiesTypes": [
-        "Aggressor",
-        "Hormagaunt",
-        "Initiate",
-        "Neophyte",
-        "Termagant"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "templNpc1Initiate:26",
-          "count": 2
-        },
-        {
-          "id": "templNpc2Neophyte:26",
-          "count": 3
-        },
-        {
-          "id": "templNpc4Aggressor:21",
-          "count": 2
-        },
-        {
-          "id": "tyranNpc1Hormagaunt:27",
-          "count": 4
-        },
-        {
-          "id": "tyranNpc3Termagant:28",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "templNpc1Initiate",
-          "name": "Initiate",
-          "count": 2,
-          "stars": 11,
-          "rank": "Gold3"
-        },
-        {
-          "id": "templNpc2Neophyte",
-          "name": "Neophyte",
-          "count": 3,
-          "stars": 11,
-          "rank": "Gold3"
-        },
-        {
-          "id": "templNpc4Aggressor",
-          "name": "Aggressor",
-          "count": 2,
-          "stars": 10,
-          "rank": "Gold1"
-        },
-        {
-          "id": "tyranNpc1Hormagaunt",
-          "name": "Hormagaunt",
-          "count": 4,
-          "stars": 10,
-          "rank": "Diamond1"
-        },
-        {
-          "id": "tyranNpc3Termagant",
-          "name": "Termagant",
-          "count": 2,
-          "stars": 11,
-          "rank": "Diamond1"
-        }
-      ]
-    },
-    {
-      "id": "OE37",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 37,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 210
-          },
-          {
-            "id": "upgDmgR021",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgDmgR021",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 259566,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "BlackTemplars"
-      ],
-      "enemiesTotal": 9,
-      "enemiesTypes": [
-        "Initiate",
-        "Initiate with Pyreblaster",
-        "Neophyte"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "templNpc1Initiate:26",
-          "count": 5
-        },
-        {
-          "id": "templNpc2Neophyte:25",
-          "count": 3
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster:24",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "templNpc1Initiate",
-          "name": "Initiate",
-          "count": 5,
-          "stars": 11,
-          "rank": "Gold3"
-        },
-        {
-          "id": "templNpc2Neophyte",
-          "name": "Neophyte",
-          "count": 3,
-          "stars": 10,
-          "rank": "Gold3"
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster",
-          "name": "Initiate with Pyreblaster",
-          "count": 1,
-          "stars": 11,
-          "rank": "Gold2"
-        }
-      ]
-    },
-    {
-      "id": "OE38",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 38,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 210
-          },
-          {
-            "id": "upgArmR021",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgArmR021",
-            "chanceId": "upgradeRare_elite"
-          }
-        ]
-      },
-      "enemyPower": 278068,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "BlackTemplars"
-      ],
-      "enemiesTotal": 10,
-      "enemiesTypes": [
-        "Aggressor",
-        "Initiate",
-        "Initiate with Pyreblaster",
-        "Neophyte"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "templNpc1Initiate:26",
-          "count": 2
-        },
-        {
-          "id": "templNpc2Neophyte:26",
-          "count": 5
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster:23",
-          "count": 1
-        },
-        {
-          "id": "templNpc4Aggressor:21",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "templNpc1Initiate",
-          "name": "Initiate",
-          "count": 2,
-          "stars": 11,
-          "rank": "Gold3"
-        },
-        {
-          "id": "templNpc2Neophyte",
-          "name": "Neophyte",
-          "count": 5,
-          "stars": 11,
-          "rank": "Gold3"
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster",
-          "name": "Initiate with Pyreblaster",
-          "count": 1,
-          "stars": 10,
-          "rank": "Gold2"
-        },
-        {
-          "id": "templNpc4Aggressor",
-          "name": "Aggressor",
-          "count": 2,
-          "stars": 10,
-          "rank": "Gold1"
-        }
-      ]
-    },
-    {
-      "id": "OE39",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 39,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 210
-          }
-        ],
-        "potential": [
-          {
-            "id": "upgHpL101",
-            "chanceId": "upgradeLegendary_elite"
-          }
-        ]
-      },
-      "enemyPower": 286190,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "BlackTemplars"
-      ],
-      "enemiesTotal": 8,
-      "enemiesTypes": [
-        "Initiate",
-        "Initiate with Pyreblaster",
-        "Neophyte"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "templNpc1Initiate:26",
-          "count": 3
-        },
-        {
-          "id": "templNpc2Neophyte:26",
-          "count": 3
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster:26",
-          "count": 2
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "templNpc1Initiate",
-          "name": "Initiate",
-          "count": 3,
-          "stars": 11,
-          "rank": "Gold3"
-        },
-        {
-          "id": "templNpc2Neophyte",
-          "name": "Neophyte",
-          "count": 3,
-          "stars": 11,
-          "rank": "Gold3"
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster",
-          "name": "Initiate with Pyreblaster",
-          "count": 2,
-          "stars": 11,
-          "rank": "Gold3"
-        }
-      ]
-    },
-    {
-      "id": "OE40",
-      "difficulty": "elite",
-      "energyCost": 10,
-      "nodeNumber": 40,
-      "slots": 5,
-      "rewards": {
-        "guaranteed": [
-          {
-            "id": "gold",
-            "min": 140,
-            "max": 225
-          },
-          {
-            "id": "shards_templHelbrecht",
-            "min": 1,
-            "max": 1
-          }
-        ],
-        "potential": [
-          {
-            "id": "shards_templHelbrecht",
-            "chanceId": "shard_elite"
-          }
-        ]
-      },
-      "enemyPower": 298328,
-      "enemiesAlliances": [
-        "Imperial"
-      ],
-      "enemiesFactions": [
-        "AstraMilitarum",
-        "BlackTemplars"
-      ],
-      "enemiesTotal": 11,
-      "enemiesTypes": [
-        "Cadian Lascannon Team",
-        "Helbrecht",
-        "Initiate",
-        "Initiate with Pyreblaster",
-        "Neophyte"
-      ],
-      "rawEnemyTypes": [
-        {
-          "id": "astraNpc2Lascannon:25",
-          "count": 2
-        },
-        {
-          "id": "templBossHelbrecht:2",
-          "count": 1
-        },
-        {
-          "id": "templNpc1Initiate:26",
-          "count": 5
-        },
-        {
-          "id": "templNpc2Neophyte:26",
-          "count": 2
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster:25",
-          "count": 1
-        }
-      ],
-      "detailedEnemyTypes": [
-        {
-          "id": "astraNpc2Lascannon",
-          "name": "Cadian Lascannon Team",
-          "count": 2,
-          "stars": 10,
-          "rank": "Gold3"
-        },
-        {
-          "id": "templBossHelbrecht",
-          "name": "Helbrecht",
-          "count": 1,
-          "stars": 10,
-          "rank": "Silver3"
-        },
-        {
-          "id": "templNpc1Initiate",
-          "name": "Initiate",
-          "count": 5,
-          "stars": 11,
-          "rank": "Gold3"
-        },
-        {
-          "id": "templNpc2Neophyte",
-          "name": "Neophyte",
-          "count": 2,
-          "stars": 11,
-          "rank": "Gold3"
-        },
-        {
-          "id": "templNpc3InitiatePyreblaster",
-          "name": "Initiate with Pyreblaster",
-          "count": 1,
-          "stars": 10,
-          "rank": "Gold3"
-        }
-      ]
+      "type": "Standard",
+      "challenge": false
     }
   ]
 }

@@ -63,6 +63,21 @@ public record Inventory
 
     [JsonPropertyName("items")]
     public IEnumerable<InventoryEquipment> Items { get; set; }
+
+    [JsonPropertyName("requisitionOrders")]
+    public RequisitionOrders? RequisitionOrders { get; set; }
+
+    [JsonPropertyName("resetStones")]
+    public int ResetStones { get; set; }
+}
+
+public record RequisitionOrders
+{
+    [JsonPropertyName("regular")]
+    public int Regular { get; set; }
+
+    [JsonPropertyName("blessed")]
+    public int Blessed { get; set; }
 }
 
 public class Progress

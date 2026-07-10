@@ -1,0 +1,2865 @@
+{
+  "groupId": "elite4",
+  "faction": "Aeldari",
+  "releaseType": "standard",
+  "coreCharacters": [
+    "eldarRanger",
+    "eldarAutarch",
+    "eldarFarseer"
+  ],
+  "types": [
+    "Elite"
+  ],
+  "battles": [
+    {
+      "id": "SHE01",
+      "energyCost": 10,
+      "nodeNumber": 1,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 160
+          },
+          {
+            "id": "upgDmgU009",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgU009",
+            "chanceId": "upgradeUncommon_elite"
+          }
+        ]
+      },
+      "enemyPower": 16058,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 5,
+      "enemiesTypes": [
+        "Rubric Marine",
+        "Screamer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousNpc2Screamer:15",
+          "count": 2
+        },
+        {
+          "id": "thousNpc3RubricMarine:15",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousNpc2Screamer",
+          "name": "Screamer",
+          "count": 2,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "thousNpc3RubricMarine",
+          "name": "Rubric Marine",
+          "count": 3,
+          "stars": 7,
+          "rank": "Silver1"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE02",
+      "energyCost": 10,
+      "nodeNumber": 2,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 160
+          },
+          {
+            "id": "upgHpR028",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR028",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 20342,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Pink Horror"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror:13",
+          "count": 7
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror",
+          "name": "Pink Horror",
+          "count": 7,
+          "stars": 7,
+          "rank": "Bronze3"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE03",
+      "energyCost": 10,
+      "nodeNumber": 3,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 160
+          },
+          {
+            "id": "upgDmgR028",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR028",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 24115,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Pink Horror",
+        "Screamer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror:12",
+          "count": 3
+        },
+        {
+          "id": "thousNpc2Screamer:17",
+          "count": 7
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror",
+          "name": "Pink Horror",
+          "count": 3,
+          "stars": 5,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "thousNpc2Screamer",
+          "name": "Screamer",
+          "count": 7,
+          "stars": 8,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE04",
+      "energyCost": 10,
+      "nodeNumber": 4,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 160
+          },
+          {
+            "id": "upgArmR028",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR028",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 27018,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Pink Horror",
+        "Scarab Occult Terminator",
+        "Screamer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror:14",
+          "count": 3
+        },
+        {
+          "id": "thousNpc2Screamer:17",
+          "count": 3
+        },
+        {
+          "id": "thousNpc4Terminator:15",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror",
+          "name": "Pink Horror",
+          "count": 3,
+          "stars": 9,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "thousNpc2Screamer",
+          "name": "Screamer",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "thousNpc4Terminator",
+          "name": "Scarab Occult Terminator",
+          "count": 1,
+          "stars": 7,
+          "rank": "Silver1"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE05",
+      "energyCost": 10,
+      "nodeNumber": 5,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 160
+          },
+          {
+            "id": "upgHpU007",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpU007",
+            "chanceId": "upgradeUncommon_elite"
+          }
+        ]
+      },
+      "enemyPower": 19955,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Scarab Occult Terminator",
+        "Screamer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousNpc2Screamer:17",
+          "count": 5
+        },
+        {
+          "id": "thousNpc4Terminator:14",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousNpc2Screamer",
+          "name": "Screamer",
+          "count": 5,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "thousNpc4Terminator",
+          "name": "Scarab Occult Terminator",
+          "count": 1,
+          "stars": 9,
+          "rank": "Bronze3"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE06",
+      "energyCost": 10,
+      "nodeNumber": 6,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 160
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL108",
+            "chanceId": "upgradeLegendary_elite"
+          }
+        ]
+      },
+      "enemyPower": 35209,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Pink Horror",
+        "Rubric Marine"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror:14",
+          "count": 5
+        },
+        {
+          "id": "thousNpc3RubricMarine:16",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror",
+          "name": "Pink Horror",
+          "count": 5,
+          "stars": 9,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "thousNpc3RubricMarine",
+          "name": "Rubric Marine",
+          "count": 3,
+          "stars": 9,
+          "rank": "Silver1"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE07",
+      "energyCost": 10,
+      "nodeNumber": 7,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 160
+          },
+          {
+            "id": "upgHpR014",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR014",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 30904,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Pink Horror",
+        "Rubric Marine",
+        "Scarab Occult Terminator",
+        "Screamer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror:13",
+          "count": 2
+        },
+        {
+          "id": "thousNpc2Screamer:17",
+          "count": 5
+        },
+        {
+          "id": "thousNpc3RubricMarine:14",
+          "count": 1
+        },
+        {
+          "id": "thousNpc4Terminator:15",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror",
+          "name": "Pink Horror",
+          "count": 2,
+          "stars": 7,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "thousNpc2Screamer",
+          "name": "Screamer",
+          "count": 5,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "thousNpc3RubricMarine",
+          "name": "Rubric Marine",
+          "count": 1,
+          "stars": 9,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "thousNpc4Terminator",
+          "name": "Scarab Occult Terminator",
+          "count": 1,
+          "stars": 7,
+          "rank": "Silver1"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE08",
+      "energyCost": 10,
+      "nodeNumber": 8,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 160
+          },
+          {
+            "id": "shards_thousTerminator",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_thousTerminator",
+            "chanceId": "shard_elite"
+          }
+        ]
+      },
+      "enemyPower": 41475,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Scarab Occult Terminator",
+        "Screamer",
+        "Toth"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousBossTerminator:3",
+          "count": 1
+        },
+        {
+          "id": "thousNpc2Screamer:15",
+          "count": 9
+        },
+        {
+          "id": "thousNpc4Terminator:15",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousBossTerminator",
+          "name": "Toth",
+          "count": 1,
+          "stars": 7,
+          "rank": "Silver2"
+        },
+        {
+          "id": "thousNpc2Screamer",
+          "name": "Screamer",
+          "count": 9,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "thousNpc4Terminator",
+          "name": "Scarab Occult Terminator",
+          "count": 2,
+          "stars": 7,
+          "rank": "Silver1"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE09",
+      "energyCost": 10,
+      "nodeNumber": 9,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          },
+          {
+            "id": "upgArmU014",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmU014",
+            "chanceId": "upgradeUncommon_elite"
+          }
+        ]
+      },
+      "enemyPower": 34881,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Screamer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousNpc2Screamer:20",
+          "count": 7
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousNpc2Screamer",
+          "name": "Screamer",
+          "count": 7,
+          "stars": 10,
+          "rank": "Silver3"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE10",
+      "energyCost": 10,
+      "nodeNumber": 10,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          },
+          {
+            "id": "upgHpC016",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC016",
+            "chanceId": "upgradeCommon_elite"
+          }
+        ]
+      },
+      "enemyPower": 29635,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Pink Horror",
+        "Rubric Marine",
+        "Screamer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror:15",
+          "count": 1
+        },
+        {
+          "id": "thousNpc2Screamer:18",
+          "count": 4
+        },
+        {
+          "id": "thousNpc3RubricMarine:16",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror",
+          "name": "Pink Horror",
+          "count": 1,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "thousNpc2Screamer",
+          "name": "Screamer",
+          "count": 4,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "thousNpc3RubricMarine",
+          "name": "Rubric Marine",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver1"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE11",
+      "energyCost": 10,
+      "nodeNumber": 11,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          },
+          {
+            "id": "upgHpR037",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR037",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 50098,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Pink Horror",
+        "Scarab Occult Terminator",
+        "Screamer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror:14",
+          "count": 4
+        },
+        {
+          "id": "thousNpc2Screamer:20",
+          "count": 2
+        },
+        {
+          "id": "thousNpc4Terminator:17",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror",
+          "name": "Pink Horror",
+          "count": 4,
+          "stars": 9,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "thousNpc2Screamer",
+          "name": "Screamer",
+          "count": 2,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "thousNpc4Terminator",
+          "name": "Scarab Occult Terminator",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE12",
+      "energyCost": 10,
+      "nodeNumber": 12,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          },
+          {
+            "id": "upgHpR031",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR031",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 53016,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Pink Horror",
+        "Screamer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror:16",
+          "count": 6
+        },
+        {
+          "id": "thousNpc2Screamer:18",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror",
+          "name": "Pink Horror",
+          "count": 6,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "thousNpc2Screamer",
+          "name": "Screamer",
+          "count": 3,
+          "stars": 9,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE13",
+      "energyCost": 10,
+      "nodeNumber": 13,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          },
+          {
+            "id": "upgHpR039",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR039",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 54023,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Pink Horror",
+        "Rubric Marine",
+        "Scarab Occult Terminator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror:15",
+          "count": 3
+        },
+        {
+          "id": "thousNpc3RubricMarine:15",
+          "count": 3
+        },
+        {
+          "id": "thousNpc4Terminator:17",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror",
+          "name": "Pink Horror",
+          "count": 3,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "thousNpc3RubricMarine",
+          "name": "Rubric Marine",
+          "count": 3,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "thousNpc4Terminator",
+          "name": "Scarab Occult Terminator",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE14",
+      "energyCost": 10,
+      "nodeNumber": 14,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          },
+          {
+            "id": "upgDmgU004",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgU004",
+            "chanceId": "upgradeUncommon_elite"
+          }
+        ]
+      },
+      "enemyPower": 58879,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Pink Horror",
+        "Rubric Marine",
+        "Screamer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror:18",
+          "count": 2
+        },
+        {
+          "id": "thousNpc2Screamer:20",
+          "count": 3
+        },
+        {
+          "id": "thousNpc3RubricMarine:18",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror",
+          "name": "Pink Horror",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "thousNpc2Screamer",
+          "name": "Screamer",
+          "count": 3,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "thousNpc3RubricMarine",
+          "name": "Rubric Marine",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE15",
+      "energyCost": 10,
+      "nodeNumber": 15,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          },
+          {
+            "id": "upgDmgR005",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR005",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 60198,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Pink Horror",
+        "Scarab Occult Terminator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror:14",
+          "count": 6
+        },
+        {
+          "id": "thousNpc4Terminator:17",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror",
+          "name": "Pink Horror",
+          "count": 6,
+          "stars": 9,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "thousNpc4Terminator",
+          "name": "Scarab Occult Terminator",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE16",
+      "energyCost": 10,
+      "nodeNumber": 16,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          },
+          {
+            "id": "shards_thousInfernalMaster",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_thousInfernalMaster",
+            "chanceId": "shard_elite"
+          }
+        ]
+      },
+      "enemyPower": 65295,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Abraxas",
+        "Pink Horror",
+        "Screamer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousBossInfernalMaster:3",
+          "count": 1
+        },
+        {
+          "id": "thousNpc1PinkHorror:15",
+          "count": 5
+        },
+        {
+          "id": "thousNpc2Screamer:16",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousBossInfernalMaster",
+          "name": "Abraxas",
+          "count": 1,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "thousNpc1PinkHorror",
+          "name": "Pink Horror",
+          "count": 5,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "thousNpc2Screamer",
+          "name": "Screamer",
+          "count": 5,
+          "stars": 9,
+          "rank": "Silver1"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE17",
+      "energyCost": 10,
+      "nodeNumber": 17,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          },
+          {
+            "id": "upgDmgC005",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC005",
+            "chanceId": "upgradeCommon_elite"
+          }
+        ]
+      },
+      "enemyPower": 23723,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Cadian Lascannon Team"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:25",
+          "count": 4
+        },
+        {
+          "id": "astraNpc2Lascannon:24",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 4,
+          "stars": 10,
+          "rank": "Gold3"
+        },
+        {
+          "id": "astraNpc2Lascannon",
+          "name": "Cadian Lascannon Team",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold2"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE18",
+      "energyCost": 10,
+      "nodeNumber": 18,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 123,
+            "max": 180
+          },
+          {
+            "id": "upgDmgR037",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR037",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 23157,
+      "enemiesAlliances": [
+        "Imperial"
+      ],
+      "enemiesFactions": [
+        "AstraMilitarum"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Cadian Guardsman",
+        "Cadian Vox-caster"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman:24",
+          "count": 3
+        },
+        {
+          "id": "astraNpc3Voxcaster:19",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "astraNpc1Guardsman",
+          "name": "Cadian Guardsman",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold2"
+        },
+        {
+          "id": "astraNpc3Voxcaster",
+          "name": "Cadian Vox-caster",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver3"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE19",
+      "energyCost": 10,
+      "nodeNumber": 19,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 123,
+            "max": 180
+          },
+          {
+            "id": "upgDmgR031",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR031",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 81135,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Pink Horror",
+        "Rubric Marine",
+        "Scarab Occult Terminator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror:18",
+          "count": 3
+        },
+        {
+          "id": "thousNpc3RubricMarine:19",
+          "count": 3
+        },
+        {
+          "id": "thousNpc4Terminator:16",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror",
+          "name": "Pink Horror",
+          "count": 3,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "thousNpc3RubricMarine",
+          "name": "Rubric Marine",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver3"
+        },
+        {
+          "id": "thousNpc4Terminator",
+          "name": "Scarab Occult Terminator",
+          "count": 1,
+          "stars": 9,
+          "rank": "Silver1"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE20",
+      "energyCost": 10,
+      "nodeNumber": 20,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 123,
+            "max": 180
+          },
+          {
+            "id": "upgDmgR039",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR039",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 65716,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Pink Horror",
+        "Scarab Occult Terminator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror:17",
+          "count": 4
+        },
+        {
+          "id": "thousNpc4Terminator:17",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror",
+          "name": "Pink Horror",
+          "count": 4,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "thousNpc4Terminator",
+          "name": "Scarab Occult Terminator",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE21",
+      "energyCost": 10,
+      "nodeNumber": 21,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 123,
+            "max": 180
+          },
+          {
+            "id": "upgHpU016",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpU016",
+            "chanceId": "upgradeUncommon_elite"
+          }
+        ]
+      },
+      "enemyPower": 86765,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Pink Horror",
+        "Rubric Marine",
+        "Screamer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror:19",
+          "count": 3
+        },
+        {
+          "id": "thousNpc2Screamer:18",
+          "count": 5
+        },
+        {
+          "id": "thousNpc3RubricMarine:18",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror",
+          "name": "Pink Horror",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver3"
+        },
+        {
+          "id": "thousNpc2Screamer",
+          "name": "Screamer",
+          "count": 5,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "thousNpc3RubricMarine",
+          "name": "Rubric Marine",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE22",
+      "energyCost": 10,
+      "nodeNumber": 22,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 123,
+            "max": 180
+          },
+          {
+            "id": "upgHpC014",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC014",
+            "chanceId": "upgradeCommon_elite"
+          }
+        ]
+      },
+      "enemyPower": 76830,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 5,
+      "enemiesTypes": [
+        "Rubric Marine"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousNpc3RubricMarine:20",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousNpc3RubricMarine",
+          "name": "Rubric Marine",
+          "count": 5,
+          "stars": 10,
+          "rank": "Silver3"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE23",
+      "energyCost": 10,
+      "nodeNumber": 23,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 123,
+            "max": 180
+          },
+          {
+            "id": "upgArmR037",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR037",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 80326,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Pink Horror",
+        "Scarab Occult Terminator",
+        "Screamer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror:18",
+          "count": 3
+        },
+        {
+          "id": "thousNpc2Screamer:18",
+          "count": 5
+        },
+        {
+          "id": "thousNpc4Terminator:20",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror",
+          "name": "Pink Horror",
+          "count": 3,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "thousNpc2Screamer",
+          "name": "Screamer",
+          "count": 5,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "thousNpc4Terminator",
+          "name": "Scarab Occult Terminator",
+          "count": 1,
+          "stars": 10,
+          "rank": "Silver3"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE24",
+      "energyCost": 10,
+      "nodeNumber": 24,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 123,
+            "max": 180
+          },
+          {
+            "id": "shards_thousTzaangor",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_thousTzaangor",
+            "chanceId": "shard_elite"
+          }
+        ]
+      },
+      "enemyPower": 106993,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Pink Horror",
+        "Rubric Marine",
+        "Scarab Occult Terminator",
+        "Yazaghor"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousBossTzaangor:5",
+          "count": 1
+        },
+        {
+          "id": "thousNpc1PinkHorror:18",
+          "count": 2
+        },
+        {
+          "id": "thousNpc3RubricMarine:16",
+          "count": 6
+        },
+        {
+          "id": "thousNpc4Terminator:18",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousBossTzaangor",
+          "name": "Yazaghor",
+          "count": 1,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "thousNpc1PinkHorror",
+          "name": "Pink Horror",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "thousNpc3RubricMarine",
+          "name": "Rubric Marine",
+          "count": 6,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "thousNpc4Terminator",
+          "name": "Scarab Occult Terminator",
+          "count": 1,
+          "stars": 9,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE25",
+      "energyCost": 10,
+      "nodeNumber": 25,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 131,
+            "max": 195
+          },
+          {
+            "id": "upgArmR031",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR031",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 91828,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Pink Horror",
+        "Rubric Marine",
+        "Screamer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror:20",
+          "count": 1
+        },
+        {
+          "id": "thousNpc2Screamer:21",
+          "count": 5
+        },
+        {
+          "id": "thousNpc3RubricMarine:21",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror",
+          "name": "Pink Horror",
+          "count": 1,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "thousNpc2Screamer",
+          "name": "Screamer",
+          "count": 5,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "thousNpc3RubricMarine",
+          "name": "Rubric Marine",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold1"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE26",
+      "energyCost": 10,
+      "nodeNumber": 26,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 131,
+            "max": 195
+          },
+          {
+            "id": "upgArmR039",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR039",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 86403,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Pink Horror",
+        "Scarab Occult Terminator",
+        "Screamer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror:20",
+          "count": 3
+        },
+        {
+          "id": "thousNpc2Screamer:21",
+          "count": 2
+        },
+        {
+          "id": "thousNpc4Terminator:18",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror",
+          "name": "Pink Horror",
+          "count": 3,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "thousNpc2Screamer",
+          "name": "Screamer",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "thousNpc4Terminator",
+          "name": "Scarab Occult Terminator",
+          "count": 1,
+          "stars": 9,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE27",
+      "energyCost": 10,
+      "nodeNumber": 27,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 131,
+            "max": 195
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmE008",
+            "chanceId": "upgradeEpic_elite"
+          }
+        ]
+      },
+      "enemyPower": 117101,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Pink Horror",
+        "Screamer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror:21",
+          "count": 4
+        },
+        {
+          "id": "thousNpc2Screamer:20",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror",
+          "name": "Pink Horror",
+          "count": 4,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "thousNpc2Screamer",
+          "name": "Screamer",
+          "count": 3,
+          "stars": 10,
+          "rank": "Silver3"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE28",
+      "energyCost": 10,
+      "nodeNumber": 28,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 131,
+            "max": 195
+          },
+          {
+            "id": "upgDmgC001",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC001",
+            "chanceId": "upgradeCommon_elite"
+          }
+        ]
+      },
+      "enemyPower": 154510,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Pink Horror",
+        "Rubric Marine"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror:21",
+          "count": 3
+        },
+        {
+          "id": "thousNpc3RubricMarine:21",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror",
+          "name": "Pink Horror",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "thousNpc3RubricMarine",
+          "name": "Rubric Marine",
+          "count": 4,
+          "stars": 10,
+          "rank": "Gold1"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE29",
+      "energyCost": 10,
+      "nodeNumber": 29,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 131,
+            "max": 195
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL117",
+            "chanceId": "upgradeLegendary_elite"
+          }
+        ]
+      },
+      "enemyPower": 92784,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Pink Horror",
+        "Screamer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror:20",
+          "count": 4
+        },
+        {
+          "id": "thousNpc2Screamer:22",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror",
+          "name": "Pink Horror",
+          "count": 4,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "thousNpc2Screamer",
+          "name": "Screamer",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold1"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE30",
+      "energyCost": 10,
+      "nodeNumber": 30,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 131,
+            "max": 195
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL111",
+            "chanceId": "upgradeLegendary_elite"
+          }
+        ]
+      },
+      "enemyPower": 161852,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Pink Horror",
+        "Rubric Marine",
+        "Scarab Occult Terminator",
+        "Screamer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror:19",
+          "count": 4
+        },
+        {
+          "id": "thousNpc2Screamer:20",
+          "count": 2
+        },
+        {
+          "id": "thousNpc3RubricMarine:20",
+          "count": 1
+        },
+        {
+          "id": "thousNpc4Terminator:21",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror",
+          "name": "Pink Horror",
+          "count": 4,
+          "stars": 8,
+          "rank": "Silver3"
+        },
+        {
+          "id": "thousNpc2Screamer",
+          "name": "Screamer",
+          "count": 2,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "thousNpc3RubricMarine",
+          "name": "Rubric Marine",
+          "count": 1,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "thousNpc4Terminator",
+          "name": "Scarab Occult Terminator",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold1"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE31",
+      "energyCost": 10,
+      "nodeNumber": 31,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 131,
+            "max": 195
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL119",
+            "chanceId": "upgradeLegendary_elite"
+          }
+        ]
+      },
+      "enemyPower": 172142,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 4,
+      "enemiesTypes": [
+        "Rubric Marine",
+        "Scarab Occult Terminator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousNpc3RubricMarine:19",
+          "count": 1
+        },
+        {
+          "id": "thousNpc4Terminator:22",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousNpc3RubricMarine",
+          "name": "Rubric Marine",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver3"
+        },
+        {
+          "id": "thousNpc4Terminator",
+          "name": "Scarab Occult Terminator",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold1"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE32",
+      "energyCost": 10,
+      "nodeNumber": 32,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 210
+          },
+          {
+            "id": "shards_thousSorcerer",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_thousSorcerer",
+            "chanceId": "shard_elite"
+          }
+        ]
+      },
+      "enemyPower": 180648,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Pink Horror",
+        "Rubric Marine",
+        "Screamer",
+        "Thaumachus"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousBossSorcererCamp:2",
+          "count": 1
+        },
+        {
+          "id": "thousNpc1PinkHorror:19",
+          "count": 6
+        },
+        {
+          "id": "thousNpc2Screamer:20",
+          "count": 2
+        },
+        {
+          "id": "thousNpc3RubricMarine:19",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousBossSorcererCamp",
+          "name": "Thaumachus",
+          "count": 1,
+          "stars": 9,
+          "rank": "Silver3"
+        },
+        {
+          "id": "thousNpc1PinkHorror",
+          "name": "Pink Horror",
+          "count": 6,
+          "stars": 8,
+          "rank": "Silver3"
+        },
+        {
+          "id": "thousNpc2Screamer",
+          "name": "Screamer",
+          "count": 2,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "thousNpc3RubricMarine",
+          "name": "Rubric Marine",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver3"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE33",
+      "energyCost": 10,
+      "nodeNumber": 33,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 210
+          },
+          {
+            "id": "upgArmU013",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmU013",
+            "chanceId": "upgradeUncommon_elite"
+          }
+        ]
+      },
+      "enemyPower": 182596,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Pink Horror",
+        "Rubric Marine",
+        "Screamer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror:21",
+          "count": 4
+        },
+        {
+          "id": "thousNpc2Screamer:21",
+          "count": 3
+        },
+        {
+          "id": "thousNpc3RubricMarine:22",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror",
+          "name": "Pink Horror",
+          "count": 4,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "thousNpc2Screamer",
+          "name": "Screamer",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "thousNpc3RubricMarine",
+          "name": "Rubric Marine",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold1"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE34",
+      "energyCost": 10,
+      "nodeNumber": 34,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 210
+          },
+          {
+            "id": "upgArmU006",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmU006",
+            "chanceId": "upgradeUncommon_elite"
+          }
+        ]
+      },
+      "enemyPower": 186150,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Pink Horror",
+        "Screamer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror:24",
+          "count": 3
+        },
+        {
+          "id": "thousNpc2Screamer:24",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror",
+          "name": "Pink Horror",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold2"
+        },
+        {
+          "id": "thousNpc2Screamer",
+          "name": "Screamer",
+          "count": 3,
+          "stars": 11,
+          "rank": "Gold2"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE35",
+      "energyCost": 10,
+      "nodeNumber": 35,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 210
+          },
+          {
+            "id": "upgArmR010",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR010",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 178766,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Pink Horror"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror:21",
+          "count": 7
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror",
+          "name": "Pink Horror",
+          "count": 7,
+          "stars": 10,
+          "rank": "Gold1"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE36",
+      "energyCost": 10,
+      "nodeNumber": 36,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 210
+          },
+          {
+            "id": "upgHpR029",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR029",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 153128,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 5,
+      "enemiesTypes": [
+        "Rubric Marine",
+        "Scarab Occult Terminator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousNpc3RubricMarine:20",
+          "count": 3
+        },
+        {
+          "id": "thousNpc4Terminator:22",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousNpc3RubricMarine",
+          "name": "Rubric Marine",
+          "count": 3,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "thousNpc4Terminator",
+          "name": "Scarab Occult Terminator",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold1"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE37",
+      "energyCost": 10,
+      "nodeNumber": 37,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 210
+          },
+          {
+            "id": "upgDmgR029",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR029",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 243252,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Pink Horror",
+        "Rubric Marine"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror:21",
+          "count": 8
+        },
+        {
+          "id": "thousNpc3RubricMarine:21",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror",
+          "name": "Pink Horror",
+          "count": 8,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "thousNpc3RubricMarine",
+          "name": "Rubric Marine",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold1"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE38",
+      "energyCost": 10,
+      "nodeNumber": 38,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 210
+          },
+          {
+            "id": "upgArmR029",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR029",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 262485,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Pink Horror",
+        "Scarab Occult Terminator",
+        "Screamer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror:25",
+          "count": 3
+        },
+        {
+          "id": "thousNpc2Screamer:27",
+          "count": 3
+        },
+        {
+          "id": "thousNpc4Terminator:23",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousNpc1PinkHorror",
+          "name": "Pink Horror",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold3"
+        },
+        {
+          "id": "thousNpc2Screamer",
+          "name": "Screamer",
+          "count": 3,
+          "stars": 10,
+          "rank": "Diamond1"
+        },
+        {
+          "id": "thousNpc4Terminator",
+          "name": "Scarab Occult Terminator",
+          "count": 1,
+          "stars": 10,
+          "rank": "Gold2"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE39",
+      "energyCost": 10,
+      "nodeNumber": 39,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 210
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL109",
+            "chanceId": "upgradeLegendary_elite"
+          }
+        ]
+      },
+      "enemyPower": 279774,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Rubric Marine",
+        "Screamer"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousNpc2Screamer:28",
+          "count": 6
+        },
+        {
+          "id": "thousNpc3RubricMarine:23",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousNpc2Screamer",
+          "name": "Screamer",
+          "count": 6,
+          "stars": 11,
+          "rank": "Diamond1"
+        },
+        {
+          "id": "thousNpc3RubricMarine",
+          "name": "Rubric Marine",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold2"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    },
+    {
+      "id": "SHE40",
+      "energyCost": 10,
+      "nodeNumber": 40,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 225
+          },
+          {
+            "id": "shards_thousAhriman",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_thousAhriman",
+            "chanceId": "shard_elite"
+          }
+        ]
+      },
+      "enemyPower": 337478,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "ThousandSons"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Ahriman",
+        "Rubric Marine",
+        "Scarab Occult Terminator",
+        "Toth"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "thousBossAhrimanCamp:2",
+          "count": 1
+        },
+        {
+          "id": "thousBossTerminator:6",
+          "count": 1
+        },
+        {
+          "id": "thousNpc3RubricMarine:20",
+          "count": 6
+        },
+        {
+          "id": "thousNpc4Terminator:21",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "thousBossAhrimanCamp",
+          "name": "Ahriman",
+          "count": 1,
+          "stars": 11,
+          "rank": "Gold2"
+        },
+        {
+          "id": "thousBossTerminator",
+          "name": "Toth",
+          "count": 1,
+          "stars": 11,
+          "rank": "Gold3"
+        },
+        {
+          "id": "thousNpc3RubricMarine",
+          "name": "Rubric Marine",
+          "count": 6,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "thousNpc4Terminator",
+          "name": "Scarab Occult Terminator",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold1"
+        }
+      ],
+      "type": "Elite",
+      "challenge": false
+    }
+  ]
+}

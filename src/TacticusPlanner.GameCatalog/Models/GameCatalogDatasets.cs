@@ -70,17 +70,51 @@ public static class GameCatalogDatasets
         "npcs-objects",
     ];
 
-    /// <summary>Campaign-battle datasets grouped by core characters (storyline x side).</summary>
+    /// <summary>
+    /// Campaign-battle datasets grouped by core characters (storyline x side). These are source-file bucket
+    /// names (dataset keys) and are decoupled from each group's <c>groupId</c> content field.
+    /// </summary>
+    /// <remarks>
+    /// Every group's <c>groupId</c> and battle-level <c>type</c> (replacing the old <c>difficulty</c> string)
+    /// are aligned to the Tacticus player API's own campaign-progress ids/types (see ADR 0007 in the docs
+    /// repo and <c>TacticusApi.Models.Player.CampaignProgress</c>). Storylines/mirrors are four fully
+    /// distinct groups per storyline, matching Tacticus's own four distinct ids: <c>campaign1..4</c>
+    /// (type <c>Standard</c>), <c>mirror1..4</c> (type <c>Mirror</c>), <c>elite1..4</c> (type <c>Elite</c>),
+    /// <c>eliteMirror1..4</c> (type <c>EliteMirror</c>) — confirmed against a real player response. Elite and
+    /// EliteMirror battle content was not actually missing: it was embedded as <c>difficulty:"elite"</c>
+    /// battles inside the <c>campaignN</c>/<c>mirrorN</c> files respectively; splitting them into their own
+    /// groups only re-keys existing data, no new content was authored. Campaign events, by contrast, keep a
+    /// single group per event id (confirmed via V1's `campaign-mapper-service.ts` ordinal event-id mapping,
+    /// cross-checked against each group's own faction/enemy-faction fields): <c>death-guard-vs-admech</c> -&gt;
+    /// <c>eventCampaign1</c>, <c>ultramarines-vs-tyranids</c> -&gt; <c>eventCampaign2</c>,
+    /// <c>genestealers-vs-tau-empire</c> -&gt; <c>eventCampaign3</c>,
+    /// <c>adepta-sororitas-vs-death-guard</c> -&gt; <c>eventCampaign4</c>,
+    /// <c>world-eaters-vs-adepta-sororitas</c> -&gt; <c>eventCampaign5</c>,
+    /// <c>necrons-vs-dark-angels</c> -&gt; <c>eventCampaign6</c> — because Tacticus itself reports event
+    /// progress as one id with multiple <c>type</c> values (<c>Standard</c>/<c>Extremis</c>), not separate
+    /// ids. Each event battle carries its own <c>type</c> (<c>Standard</c>/<c>Extremis</c>) plus a
+    /// <c>challenge</c> flag (the old <c>eventStandardChallenge</c>/<c>eventExtremisChallenge</c> tiers) — a
+    /// finer split than Tacticus's own <c>type</c> field, kept battle-level rather than promoted to a fifth
+    /// group per event.
+    /// </remarks>
     public static readonly IReadOnlyList<string> CampaignBattleGroups =
     [
         "campaign-battles-indomitus",
+        "campaign-battles-indomitus-elite",
         "campaign-battles-indomitus-mirror",
+        "campaign-battles-indomitus-mirror-elite",
         "campaign-battles-fall-of-cadia",
+        "campaign-battles-fall-of-cadia-elite",
         "campaign-battles-fall-of-cadia-mirror",
+        "campaign-battles-fall-of-cadia-mirror-elite",
         "campaign-battles-octarius",
+        "campaign-battles-octarius-elite",
         "campaign-battles-octarius-mirror",
+        "campaign-battles-octarius-mirror-elite",
         "campaign-battles-saim-hann",
+        "campaign-battles-saim-hann-elite",
         "campaign-battles-saim-hann-mirror",
+        "campaign-battles-saim-hann-mirror-elite",
         "campaign-battles-death-guard-vs-admech",
         "campaign-battles-adepta-sororitas-vs-death-guard",
         "campaign-battles-ultramarines-vs-tyranids",

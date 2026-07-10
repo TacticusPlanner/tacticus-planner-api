@@ -18,13 +18,104 @@ internal sealed class FakeTacticusApi : ITacticusApi
     public const string PlayerName = "TestPlayer";
     public const int PowerLevel = 12345;
 
+    /// <summary>Same player identity as <see cref="ValidKey"/> but a different <c>configHash</c> and slightly
+    /// different unit/campaign data, so player-sync tests can exercise the "data changed" path deterministically
+    /// (without any shared mutable state between tests).</summary>
+    public const string ValidKeyV2 = "valid-tacticus-api-key-v2";
+
+    public const string ConfigHashV1 = "config-hash-v1";
+    public const string ConfigHashV2 = "config-hash-v2";
+
+    /// <summary>Real catalog character id (Ultramarines core character, see campaign-battles-indomitus.json).</summary>
+    public const string CharacterUnitId = "ultraTigurius";
+
+    /// <summary>Catalog campaign group id realigned to the Tacticus API's own id (see ADR 0007 / GameCatalogDatasets).</summary>
+    public const string CampaignId = "campaign1";
+
+    /// <summary>A campaign-event id — also a real catalog groupId (see GameCatalogDatasets.CampaignBattleGroups'
+    /// remarks: eventCampaign1 -> death-guard-vs-admech).</summary>
+    public const string EventCampaignId = "eventCampaign1";
+
     public Task<PlayerResponse> GetPlayerAsync(string personalApiToken, CancellationToken cancellationToken = default)
     {
-        var details = personalApiToken == ValidKey
+        var isV2 = personalApiToken == ValidKeyV2;
+        var isValid = personalApiToken == ValidKey || isV2;
+
+        var details = isValid
             ? new PlayerDetails { Name = PlayerName, PowerLevel = PowerLevel }
             : null;
 
-        return Task.FromResult(new PlayerResponse { Player = new Player { Details = details! } });
+        if (!isValid)
+        {
+            return Task.FromResult(new PlayerResponse { Player = new Player { Details = details! } });
+        }
+
+        var unit = new Unit
+        {
+            Id = CharacterUnitId,
+            Name = "Tigurius",
+            ProgressionIndex = isV2 ? 12 : 11,
+            Xp = isV2 ? 210000 : 200000,
+            XpLevel = 35,
+            Rank = isV2 ? 13 : 12,
+            Shards = 59,
+            MythicShards = 0,
+            Abilities = [new Ability { Id = "StormOfWrath", Level = 35 }],
+            Upgrades = [0, 2, 4],
+            Items = [],
+        };
+
+        var campaign = new CampaignProgress
+        {
+            Id = CampaignId,
+            Name = "Indomitus",
+            Type = "Standard",
+            Battles = [new CampaignLevel { BattleIndex = 0, AttemptsLeft = 3, AttemptsUsed = 0 }],
+        };
+
+        var eventCampaign = new CampaignProgress
+        {
+            Id = EventCampaignId,
+            Name = string.Empty,
+            Type = "Standard",
+            Battles = [new CampaignLevel { BattleIndex = 0, AttemptsLeft = 10, AttemptsUsed = 0 }],
+        };
+
+        var response = new PlayerResponse
+        {
+            Player = new Player
+            {
+                Details = details!,
+                Units = [unit],
+                Inventory = new Inventory
+                {
+                    Upgrades = [],
+                    Shards = [],
+                    MythicShards = [],
+                    XpBooks = [],
+                    AbilityBadges = new AbilityBadges { Imperial = [], Xenos = [], Chaos = [] },
+                    Components = [],
+                    ForgeBadges = [],
+                    Orbs = new Orbs { Imperial = [], Xenos = [], Chaos = [] },
+                    Items = [],
+                    RequisitionOrders = new RequisitionOrders { Regular = 5, Blessed = 1 },
+                    ResetStones = 2,
+                },
+                Progress = new Progress
+                {
+                    Campaigns = [campaign, eventCampaign],
+                    LegendaryEvents = [],
+                },
+            },
+            Metadata = new Metadata
+            {
+                ConfigHash = isV2 ? ConfigHashV2 : ConfigHashV1,
+                LastUpdatedOn = 1_780_000_000,
+                Scopes = ["Player"],
+            },
+        };
+
+        return Task.FromResult(response);
     }
 
     public Task<GuildResponse> GetGuildAsync(string guildApiToken) => throw new NotSupportedException();

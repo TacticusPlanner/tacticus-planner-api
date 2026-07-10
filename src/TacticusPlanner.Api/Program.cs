@@ -7,6 +7,8 @@ using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using TacticusPlanner.Api.Features;
 using TacticusPlanner.Api.Features.AccountManagement;
+using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Api.Features.PlayerData;
 using TacticusPlanner.Api.Features.TacticusIntegration;
 using TacticusPlanner.Api.Features.V1Import;
 using TacticusPlanner.Api.Http;
@@ -36,6 +38,7 @@ builder.Services.Configure<ColumnEncryptionOptions>(
 builder.Services.AddSingleton<IColumnEncryptionService, AesGcmColumnEncryptionService>();
 builder.Services.AddSingleton<IColumnHashService, HmacColumnHashService>();
 builder.Services.AddScoped<TacticusApiKeyValidator>();
+builder.Services.AddScoped<PlayerDataTransformer>();
 builder.Services.AddSingleton<IExternalIdentityDeleter, NoOpExternalIdentityDeleter>();
 builder.Services.AddGameCatalog();
 builder.Services.AddTacticusApi(builder.Configuration["TacticusApi:BaseUrl"]);
@@ -141,7 +144,15 @@ app.UseFastEndpoints(options =>
     // Every endpoint defaults to the authenticated AccessAsUser policy; public endpoints (e.g. the static
     // game-catalog data) opt out with AllowAnonymous() in their own Configure(), which the authorization
     // middleware honours over the applied policy.
-    options.Endpoints.Configurator = endpoint => endpoint.Policies(AuthorizationPolicies.AccessAsUser);
+    //
+    // CurrentUserPreProcessor also runs for every endpoint (including anonymous ones — it no-ops when the
+    // request isn't authenticated), resolving the caller's iss/sub claims and Account/Profile ids exactly
+    // once per request into CurrentUserState, instead of every endpoint re-deriving them itself.
+    options.Endpoints.Configurator = endpoint =>
+    {
+        endpoint.Policies(AuthorizationPolicies.AccessAsUser);
+        endpoint.PreProcessor<CurrentUserPreProcessor>(Order.Before);
+    };
 });
 
 if (app.Environment.IsDevelopment())

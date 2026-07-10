@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
+using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Api.Http;
 using TacticusPlanner.Persistence;
 using TacticusPlanner.Persistence.Users;
@@ -29,21 +30,16 @@ public sealed class GetCurrentUserEndpoint : EndpointWithoutRequest<CurrentUserR
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        var issuer = User.FindFirstValue("iss");
-        var subject = User.FindFirstValue("sub");
-
-        if (string.IsNullOrWhiteSpace(issuer) || string.IsNullOrWhiteSpace(subject))
-        {
-            await Send.UnauthorizedAsync(ct);
-            return;
-        }
-
+        var state = ProcessorState<CurrentUserState>();
         var db = Resolve<PlannerDbContext>();
-        var account = await FindAccountAsync(db, issuer, subject, ct);
+
+        var account = state.AccountId is { } accountId
+            ? await FindAccountAsync(db, accountId, ct)
+            : null;
 
         if (account?.Profile is null)
         {
-            account = await ProvisionAccountAsync(db, issuer, subject, User, ct);
+            account = await ProvisionAccountAsync(db, state.Issuer, state.Subject, User, ct);
         }
 
         var profile = account.Profile!;
@@ -82,23 +78,16 @@ public sealed class GetCurrentUserEndpoint : EndpointWithoutRequest<CurrentUserR
 
         await db.SaveChangesAsync(ct);
 
-        account = await FindAccountAsync(db, issuer, subject, ct)
-                  ?? throw new InvalidOperationException("Account provisioning failed unexpectedly.");
-
-        return account;
+        return await FindAccountAsync(db, account.Id, ct)
+            ?? throw new InvalidOperationException("Account provisioning failed unexpectedly.");
     }
 
-    private static Task<Account?> FindAccountAsync(
-        PlannerDbContext db,
-        string issuer,
-        string subject,
-        CancellationToken ct
-    )
+    private static Task<Account?> FindAccountAsync(PlannerDbContext db, AccountId accountId, CancellationToken ct)
     {
         return db.Accounts
             .Include(account => account.Profile)
             .ThenInclude(profile => profile!.TacticusIntegration)
-            .SingleOrDefaultAsync(account => account.Issuer == issuer && account.Subject == subject, ct);
+            .FirstOrDefaultAsync(account => account.Id == accountId, ct);
     }
 
     private static string GetDisplayName(ClaimsPrincipal user)

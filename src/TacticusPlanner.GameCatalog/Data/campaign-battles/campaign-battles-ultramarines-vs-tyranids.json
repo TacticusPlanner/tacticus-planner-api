@@ -1,5 +1,5 @@
 {
-  "groupId": "ultramarines-vs-tyranids",
+  "groupId": "eventCampaign2",
   "faction": "Ultramarines",
   "releaseType": "event",
   "coreCharacters": [
@@ -7,16 +7,13 @@
     "ultraApothecary",
     "ultraTitus"
   ],
-  "difficulties": [
-    "eventStandard",
-    "eventStandardChallenge",
-    "eventExtremis",
-    "eventExtremisChallenge"
+  "types": [
+    "Standard",
+    "Extremis"
   ],
   "battles": [
     {
       "id": "TS01",
-      "difficulty": "eventStandard",
       "energyCost": 6,
       "nodeNumber": 1,
       "slots": 3,
@@ -60,11 +57,12 @@
           "stars": 2,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "TS02",
-      "difficulty": "eventStandard",
       "energyCost": 6,
       "nodeNumber": 2,
       "slots": 3,
@@ -108,11 +106,12 @@
           "stars": 2,
           "rank": "Iron2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "TS03",
-      "difficulty": "eventStandard",
       "energyCost": 6,
       "nodeNumber": 3,
       "slots": 3,
@@ -168,11 +167,12 @@
           "stars": 2,
           "rank": "Iron2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "TSC3B",
-      "difficulty": "eventStandardChallenge",
       "energyCost": 6,
       "nodeNumber": 3,
       "slots": 5,
@@ -240,11 +240,12 @@
           "stars": 2,
           "rank": "Iron2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": true
     },
     {
       "id": "TS04",
-      "difficulty": "eventStandard",
       "energyCost": 6,
       "nodeNumber": 4,
       "slots": 4,
@@ -300,11 +301,12 @@
           "stars": 2,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "TS05",
-      "difficulty": "eventStandard",
       "energyCost": 6,
       "nodeNumber": 5,
       "slots": 4,
@@ -372,11 +374,12 @@
           "stars": 2,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "TS06",
-      "difficulty": "eventStandard",
       "energyCost": 6,
       "nodeNumber": 6,
       "slots": 5,
@@ -444,11 +447,12 @@
           "stars": 2,
           "rank": "Iron2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "TS07",
-      "difficulty": "eventStandard",
       "energyCost": 6,
       "nodeNumber": 7,
       "slots": 4,
@@ -504,11 +508,12 @@
           "stars": 1,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "TS08",
-      "difficulty": "eventStandard",
       "energyCost": 6,
       "nodeNumber": 8,
       "slots": 4,
@@ -576,11 +581,12 @@
           "stars": 1,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "TS09",
-      "difficulty": "eventStandard",
       "energyCost": 6,
       "nodeNumber": 9,
       "slots": 4,
@@ -636,11 +642,12 @@
           "stars": 1,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "TS10",
-      "difficulty": "eventStandard",
       "energyCost": 6,
       "nodeNumber": 10,
       "slots": 4,
@@ -708,11 +715,12 @@
           "stars": 1,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "TS11",
-      "difficulty": "eventStandard",
       "energyCost": 6,
       "nodeNumber": 11,
       "slots": 5,
@@ -768,11 +776,12 @@
           "stars": 1,
           "rank": "Iron1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "TS12",
-      "difficulty": "eventStandard",
       "energyCost": 6,
       "nodeNumber": 12,
       "slots": 5,
@@ -828,11 +837,12 @@
           "stars": 6,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "TS13",
-      "difficulty": "eventStandard",
       "energyCost": 6,
       "nodeNumber": 13,
       "slots": 5,
@@ -888,11 +898,12 @@
           "stars": 2,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "TSC13B",
-      "difficulty": "eventStandardChallenge",
       "energyCost": 6,
       "nodeNumber": 13,
       "slots": 5,
@@ -971,11 +982,12 @@
           "stars": 6,
           "rank": "Bronze2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": true
     },
     {
       "id": "TS14",
-      "difficulty": "eventStandard",
       "energyCost": 6,
       "nodeNumber": 14,
       "slots": 5,
@@ -1031,11 +1043,12 @@
           "stars": 2,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "TS15",
-      "difficulty": "eventStandard",
       "energyCost": 6,
       "nodeNumber": 15,
       "slots": 5,
@@ -1103,11 +1116,12 @@
           "stars": 3,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "TS16",
-      "difficulty": "eventStandard",
       "energyCost": 6,
       "nodeNumber": 16,
       "slots": 5,
@@ -1175,11 +1189,12 @@
           "stars": 3,
           "rank": "Iron3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "TS17",
-      "difficulty": "eventStandard",
       "energyCost": 6,
       "nodeNumber": 17,
       "slots": 5,
@@ -1259,11 +1274,12 @@
           "stars": 3,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "TS18",
-      "difficulty": "eventStandard",
       "energyCost": 6,
       "nodeNumber": 18,
       "slots": 5,
@@ -1319,11 +1335,12 @@
           "stars": 6,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "TS19",
-      "difficulty": "eventStandard",
       "energyCost": 6,
       "nodeNumber": 19,
       "slots": 5,
@@ -1379,11 +1396,12 @@
           "stars": 3,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "TS20",
-      "difficulty": "eventStandard",
       "energyCost": 6,
       "nodeNumber": 20,
       "slots": 5,
@@ -1451,11 +1469,12 @@
           "stars": 3,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "TS21",
-      "difficulty": "eventStandard",
       "energyCost": 6,
       "nodeNumber": 21,
       "slots": 3,
@@ -1523,11 +1542,12 @@
           "stars": 3,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "TS22",
-      "difficulty": "eventStandard",
       "energyCost": 6,
       "nodeNumber": 22,
       "slots": 5,
@@ -1595,11 +1615,12 @@
           "stars": 6,
           "rank": "Bronze1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "TS23",
-      "difficulty": "eventStandard",
       "energyCost": 6,
       "nodeNumber": 23,
       "slots": 5,
@@ -1643,11 +1664,12 @@
           "stars": 7,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "TS24",
-      "difficulty": "eventStandard",
       "energyCost": 6,
       "nodeNumber": 24,
       "slots": 5,
@@ -1715,11 +1737,12 @@
           "stars": 9,
           "rank": "Silver1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "TS25",
-      "difficulty": "eventStandard",
       "energyCost": 6,
       "nodeNumber": 25,
       "slots": 5,
@@ -1810,11 +1833,12 @@
           "stars": 7,
           "rank": "Bronze3"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "TSC25B",
-      "difficulty": "eventStandardChallenge",
       "energyCost": 6,
       "nodeNumber": 25,
       "slots": 5,
@@ -1906,11 +1930,12 @@
           "stars": 8,
           "rank": "Silver2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": true
     },
     {
       "id": "TS26",
-      "difficulty": "eventStandard",
       "energyCost": 6,
       "nodeNumber": 26,
       "slots": 4,
@@ -1966,11 +1991,12 @@
           "stars": 7,
           "rank": "Silver1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "TS27",
-      "difficulty": "eventStandard",
       "energyCost": 6,
       "nodeNumber": 27,
       "slots": 4,
@@ -2038,11 +2064,12 @@
           "stars": 8,
           "rank": "Silver2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "TS28",
-      "difficulty": "eventStandard",
       "energyCost": 6,
       "nodeNumber": 28,
       "slots": 5,
@@ -2110,11 +2137,12 @@
           "stars": 8,
           "rank": "Silver2"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "TS29",
-      "difficulty": "eventStandard",
       "energyCost": 6,
       "nodeNumber": 29,
       "slots": 5,
@@ -2182,11 +2210,12 @@
           "stars": 7,
           "rank": "Silver1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "TS30",
-      "difficulty": "eventStandard",
       "energyCost": 6,
       "nodeNumber": 30,
       "slots": 5,
@@ -2254,11 +2283,12 @@
           "stars": 9,
           "rank": "Silver1"
         }
-      ]
+      ],
+      "type": "Standard",
+      "challenge": false
     },
     {
       "id": "TE01",
-      "difficulty": "eventExtremis",
       "energyCost": 6,
       "nodeNumber": 1,
       "slots": 3,
@@ -2302,11 +2332,12 @@
           "stars": 10,
           "rank": "Gold1"
         }
-      ]
+      ],
+      "type": "Extremis",
+      "challenge": false
     },
     {
       "id": "TE02",
-      "difficulty": "eventExtremis",
       "energyCost": 6,
       "nodeNumber": 2,
       "slots": 3,
@@ -2350,11 +2381,12 @@
           "stars": 10,
           "rank": "Gold1"
         }
-      ]
+      ],
+      "type": "Extremis",
+      "challenge": false
     },
     {
       "id": "TE03",
-      "difficulty": "eventExtremis",
       "energyCost": 6,
       "nodeNumber": 3,
       "slots": 3,
@@ -2410,11 +2442,12 @@
           "stars": 11,
           "rank": "Gold1"
         }
-      ]
+      ],
+      "type": "Extremis",
+      "challenge": false
     },
     {
       "id": "TEC3B",
-      "difficulty": "eventExtremisChallenge",
       "energyCost": 6,
       "nodeNumber": 3,
       "slots": 5,
@@ -2494,11 +2527,12 @@
           "stars": 10,
           "rank": "Silver3"
         }
-      ]
+      ],
+      "type": "Extremis",
+      "challenge": true
     },
     {
       "id": "TE04",
-      "difficulty": "eventExtremis",
       "energyCost": 6,
       "nodeNumber": 4,
       "slots": 4,
@@ -2554,11 +2588,12 @@
           "stars": 11,
           "rank": "Gold1"
         }
-      ]
+      ],
+      "type": "Extremis",
+      "challenge": false
     },
     {
       "id": "TE05",
-      "difficulty": "eventExtremis",
       "energyCost": 6,
       "nodeNumber": 5,
       "slots": 4,
@@ -2626,11 +2661,12 @@
           "stars": 9,
           "rank": "Silver2"
         }
-      ]
+      ],
+      "type": "Extremis",
+      "challenge": false
     },
     {
       "id": "TE06",
-      "difficulty": "eventExtremis",
       "energyCost": 6,
       "nodeNumber": 6,
       "slots": 5,
@@ -2698,11 +2734,12 @@
           "stars": 11,
           "rank": "Gold1"
         }
-      ]
+      ],
+      "type": "Extremis",
+      "challenge": false
     },
     {
       "id": "TE07",
-      "difficulty": "eventExtremis",
       "energyCost": 6,
       "nodeNumber": 7,
       "slots": 4,
@@ -2758,11 +2795,12 @@
           "stars": 8,
           "rank": "Silver3"
         }
-      ]
+      ],
+      "type": "Extremis",
+      "challenge": false
     },
     {
       "id": "TE08",
-      "difficulty": "eventExtremis",
       "energyCost": 6,
       "nodeNumber": 8,
       "slots": 4,
@@ -2830,11 +2868,12 @@
           "stars": 10,
           "rank": "Silver3"
         }
-      ]
+      ],
+      "type": "Extremis",
+      "challenge": false
     },
     {
       "id": "TE09",
-      "difficulty": "eventExtremis",
       "energyCost": 6,
       "nodeNumber": 9,
       "slots": 4,
@@ -2890,11 +2929,12 @@
           "stars": 10,
           "rank": "Silver3"
         }
-      ]
+      ],
+      "type": "Extremis",
+      "challenge": false
     },
     {
       "id": "TE10",
-      "difficulty": "eventExtremis",
       "energyCost": 6,
       "nodeNumber": 10,
       "slots": 4,
@@ -2962,11 +3002,12 @@
           "stars": 8,
           "rank": "Silver3"
         }
-      ]
+      ],
+      "type": "Extremis",
+      "challenge": false
     },
     {
       "id": "TE11",
-      "difficulty": "eventExtremis",
       "energyCost": 6,
       "nodeNumber": 11,
       "slots": 5,
@@ -3034,11 +3075,12 @@
           "stars": 8,
           "rank": "Silver2"
         }
-      ]
+      ],
+      "type": "Extremis",
+      "challenge": false
     },
     {
       "id": "TE12",
-      "difficulty": "eventExtremis",
       "energyCost": 6,
       "nodeNumber": 12,
       "slots": 5,
@@ -3094,11 +3136,12 @@
           "stars": 10,
           "rank": "Gold3"
         }
-      ]
+      ],
+      "type": "Extremis",
+      "challenge": false
     },
     {
       "id": "TE13",
-      "difficulty": "eventExtremis",
       "energyCost": 6,
       "nodeNumber": 13,
       "slots": 5,
@@ -3154,11 +3197,12 @@
           "stars": 10,
           "rank": "Gold1"
         }
-      ]
+      ],
+      "type": "Extremis",
+      "challenge": false
     },
     {
       "id": "TEC13B",
-      "difficulty": "eventExtremisChallenge",
       "energyCost": 6,
       "nodeNumber": 13,
       "slots": 5,
@@ -3238,11 +3282,12 @@
           "stars": 10,
           "rank": "Diamond3"
         }
-      ]
+      ],
+      "type": "Extremis",
+      "challenge": true
     },
     {
       "id": "TE14",
-      "difficulty": "eventExtremis",
       "energyCost": 6,
       "nodeNumber": 14,
       "slots": 5,
@@ -3298,11 +3343,12 @@
           "stars": 11,
           "rank": "Gold1"
         }
-      ]
+      ],
+      "type": "Extremis",
+      "challenge": false
     },
     {
       "id": "TE15",
-      "difficulty": "eventExtremis",
       "energyCost": 6,
       "nodeNumber": 15,
       "slots": 5,
@@ -3370,11 +3416,12 @@
           "stars": 11,
           "rank": "Gold2"
         }
-      ]
+      ],
+      "type": "Extremis",
+      "challenge": false
     },
     {
       "id": "TE16",
-      "difficulty": "eventExtremis",
       "energyCost": 6,
       "nodeNumber": 16,
       "slots": 5,
@@ -3442,11 +3489,12 @@
           "stars": 11,
           "rank": "Gold3"
         }
-      ]
+      ],
+      "type": "Extremis",
+      "challenge": false
     },
     {
       "id": "TE17",
-      "difficulty": "eventExtremis",
       "energyCost": 6,
       "nodeNumber": 17,
       "slots": 5,
@@ -3526,11 +3574,12 @@
           "stars": 10,
           "rank": "Gold3"
         }
-      ]
+      ],
+      "type": "Extremis",
+      "challenge": false
     },
     {
       "id": "TE18",
-      "difficulty": "eventExtremis",
       "energyCost": 6,
       "nodeNumber": 18,
       "slots": 5,
@@ -3586,11 +3635,12 @@
           "stars": 11,
           "rank": "Diamond2"
         }
-      ]
+      ],
+      "type": "Extremis",
+      "challenge": false
     },
     {
       "id": "TE19",
-      "difficulty": "eventExtremis",
       "energyCost": 6,
       "nodeNumber": 19,
       "slots": 5,
@@ -3646,11 +3696,12 @@
           "stars": 11,
           "rank": "Diamond1"
         }
-      ]
+      ],
+      "type": "Extremis",
+      "challenge": false
     },
     {
       "id": "TE20",
-      "difficulty": "eventExtremis",
       "energyCost": 6,
       "nodeNumber": 20,
       "slots": 5,
@@ -3718,11 +3769,12 @@
           "stars": 11,
           "rank": "Adamantine1"
         }
-      ]
+      ],
+      "type": "Extremis",
+      "challenge": false
     },
     {
       "id": "TE21",
-      "difficulty": "eventExtremis",
       "energyCost": 6,
       "nodeNumber": 21,
       "slots": 3,
@@ -3790,11 +3842,12 @@
           "stars": 11,
           "rank": "Adamantine1"
         }
-      ]
+      ],
+      "type": "Extremis",
+      "challenge": false
     },
     {
       "id": "TE22",
-      "difficulty": "eventExtremis",
       "energyCost": 6,
       "nodeNumber": 22,
       "slots": 5,
@@ -3862,11 +3915,12 @@
           "stars": 11,
           "rank": "Adamantine1"
         }
-      ]
+      ],
+      "type": "Extremis",
+      "challenge": false
     },
     {
       "id": "TE23",
-      "difficulty": "eventExtremis",
       "energyCost": 6,
       "nodeNumber": 23,
       "slots": 5,
@@ -3910,11 +3964,12 @@
           "stars": 11,
           "rank": "Adamantine1"
         }
-      ]
+      ],
+      "type": "Extremis",
+      "challenge": false
     },
     {
       "id": "TE24",
-      "difficulty": "eventExtremis",
       "energyCost": 6,
       "nodeNumber": 24,
       "slots": 5,
@@ -3982,11 +4037,12 @@
           "stars": 12,
           "rank": "Adamantine1"
         }
-      ]
+      ],
+      "type": "Extremis",
+      "challenge": false
     },
     {
       "id": "TE25",
-      "difficulty": "eventExtremis",
       "energyCost": 6,
       "nodeNumber": 25,
       "slots": 5,
@@ -4066,11 +4122,12 @@
           "stars": 12,
           "rank": "Adamantine1"
         }
-      ]
+      ],
+      "type": "Extremis",
+      "challenge": false
     },
     {
       "id": "TEC25B",
-      "difficulty": "eventExtremisChallenge",
       "energyCost": 6,
       "nodeNumber": 25,
       "slots": 5,
@@ -4162,11 +4219,12 @@
           "stars": 12,
           "rank": "Adamantine1"
         }
-      ]
+      ],
+      "type": "Extremis",
+      "challenge": true
     },
     {
       "id": "TE26",
-      "difficulty": "eventExtremis",
       "energyCost": 6,
       "nodeNumber": 26,
       "slots": 4,
@@ -4234,11 +4292,12 @@
           "stars": 13,
           "rank": "Adamantine1"
         }
-      ]
+      ],
+      "type": "Extremis",
+      "challenge": false
     },
     {
       "id": "TE27",
-      "difficulty": "eventExtremis",
       "energyCost": 6,
       "nodeNumber": 27,
       "slots": 4,
@@ -4306,11 +4365,12 @@
           "stars": 12,
           "rank": "Adamantine2"
         }
-      ]
+      ],
+      "type": "Extremis",
+      "challenge": false
     },
     {
       "id": "TE28",
-      "difficulty": "eventExtremis",
       "energyCost": 6,
       "nodeNumber": 28,
       "slots": 5,
@@ -4414,11 +4474,12 @@
           "stars": 12,
           "rank": "Adamantine2"
         }
-      ]
+      ],
+      "type": "Extremis",
+      "challenge": false
     },
     {
       "id": "TE29",
-      "difficulty": "eventExtremis",
       "energyCost": 6,
       "nodeNumber": 29,
       "slots": 5,
@@ -4486,11 +4547,12 @@
           "stars": 12,
           "rank": "Adamantine1"
         }
-      ]
+      ],
+      "type": "Extremis",
+      "challenge": false
     },
     {
       "id": "TE30",
-      "difficulty": "eventExtremis",
       "energyCost": 6,
       "nodeNumber": 30,
       "slots": 5,
@@ -4558,7 +4620,9 @@
           "stars": 12,
           "rank": "Adamantine1"
         }
-      ]
+      ],
+      "type": "Extremis",
+      "challenge": false
     }
   ]
 }

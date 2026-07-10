@@ -1,0 +1,2871 @@
+{
+  "groupId": "eliteMirror2",
+  "faction": "AstraMilitarum",
+  "releaseType": "standard",
+  "coreCharacters": [
+    "astraPrimarisPsy",
+    "astraBullgryn",
+    "astraOrdnance"
+  ],
+  "types": [
+    "EliteMirror"
+  ],
+  "battles": [
+    {
+      "id": "FoCME01",
+      "energyCost": 10,
+      "nodeNumber": 1,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 160
+          },
+          {
+            "id": "upgArmC003",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmC003",
+            "chanceId": "upgradeCommon_elite"
+          }
+        ]
+      },
+      "enemyPower": 16800,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Bloodletter"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter:16",
+          "count": 7
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter",
+          "name": "Bloodletter",
+          "count": 7,
+          "stars": 9,
+          "rank": "Silver1"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME02",
+      "energyCost": 10,
+      "nodeNumber": 2,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 160
+          },
+          {
+            "id": "upgHpR007",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR007",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 24349,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Chaos Terminator",
+        "Havoc",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc2Terminator:13",
+          "count": 1
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman:19",
+          "count": 6
+        },
+        {
+          "id": "blackNpc4Havoc:13",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc2Terminator",
+          "name": "Chaos Terminator",
+          "count": 1,
+          "stars": 7,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 6,
+          "stars": 8,
+          "rank": "Silver3"
+        },
+        {
+          "id": "blackNpc4Havoc",
+          "name": "Havoc",
+          "count": 1,
+          "stars": 7,
+          "rank": "Bronze3"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME03",
+      "energyCost": 10,
+      "nodeNumber": 3,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 160
+          },
+          {
+            "id": "upgDmgR025",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR025",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 29024,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Bloodletter",
+        "Chaos Terminator",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter:17",
+          "count": 3
+        },
+        {
+          "id": "blackNpc2Terminator:14",
+          "count": 1
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman:19",
+          "count": 5
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter",
+          "name": "Bloodletter",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "blackNpc2Terminator",
+          "name": "Chaos Terminator",
+          "count": 1,
+          "stars": 9,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 5,
+          "stars": 8,
+          "rank": "Silver3"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME04",
+      "energyCost": 10,
+      "nodeNumber": 4,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 160
+          },
+          {
+            "id": "upgArmR025",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR025",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 27204,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Bloodletter",
+        "Havoc"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter:17",
+          "count": 6
+        },
+        {
+          "id": "blackNpc4Havoc:13",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter",
+          "name": "Bloodletter",
+          "count": 6,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "blackNpc4Havoc",
+          "name": "Havoc",
+          "count": 2,
+          "stars": 7,
+          "rank": "Bronze3"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME05",
+      "energyCost": 10,
+      "nodeNumber": 5,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 160
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgE003",
+            "chanceId": "upgradeEpic_elite"
+          }
+        ]
+      },
+      "enemyPower": 28270,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Bloodletter",
+        "Chaos Terminator",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter:17",
+          "count": 3
+        },
+        {
+          "id": "blackNpc2Terminator:14",
+          "count": 2
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman:19",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter",
+          "name": "Bloodletter",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "blackNpc2Terminator",
+          "name": "Chaos Terminator",
+          "count": 2,
+          "stars": 9,
+          "rank": "Bronze3"
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver3"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME06",
+      "energyCost": 10,
+      "nodeNumber": 6,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 160
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL105",
+            "chanceId": "upgradeLegendary_elite"
+          }
+        ]
+      },
+      "enemyPower": 62053,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Bloodletter",
+        "Havoc",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter:18",
+          "count": 2
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman:22",
+          "count": 7
+        },
+        {
+          "id": "blackNpc4Havoc:14",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter",
+          "name": "Bloodletter",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 7,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "blackNpc4Havoc",
+          "name": "Havoc",
+          "count": 2,
+          "stars": 9,
+          "rank": "Bronze3"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME07",
+      "energyCost": 10,
+      "nodeNumber": 7,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 160
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmL202",
+            "chanceId": "upgradeLegendary_elite"
+          }
+        ]
+      },
+      "enemyPower": 35650,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Bloodletter",
+        "Chaos Terminator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter:15",
+          "count": 9
+        },
+        {
+          "id": "blackNpc2Terminator:17",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter",
+          "name": "Bloodletter",
+          "count": 9,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "blackNpc2Terminator",
+          "name": "Chaos Terminator",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME08",
+      "energyCost": 10,
+      "nodeNumber": 8,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 93,
+            "max": 160
+          },
+          {
+            "id": "shards_blackTerminator",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_blackTerminator",
+            "chanceId": "shard_elite"
+          }
+        ]
+      },
+      "enemyPower": 42869,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Angrax",
+        "Bloodletter",
+        "Chaos Terminator",
+        "Havoc",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackBossTerminator:4",
+          "count": 1
+        },
+        {
+          "id": "blackNpc1Bloodletter:17",
+          "count": 2
+        },
+        {
+          "id": "blackNpc2Terminator:15",
+          "count": 2
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman:16",
+          "count": 3
+        },
+        {
+          "id": "blackNpc4Havoc:15",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackBossTerminator",
+          "name": "Angrax",
+          "count": 1,
+          "stars": 7,
+          "rank": "Silver2"
+        },
+        {
+          "id": "blackNpc1Bloodletter",
+          "name": "Bloodletter",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "blackNpc2Terminator",
+          "name": "Chaos Terminator",
+          "count": 2,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 3,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "blackNpc4Havoc",
+          "name": "Havoc",
+          "count": 1,
+          "stars": 7,
+          "rank": "Silver1"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME09",
+      "energyCost": 10,
+      "nodeNumber": 9,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          },
+          {
+            "id": "upgDmgC012",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC012",
+            "chanceId": "upgradeCommon_elite"
+          }
+        ]
+      },
+      "enemyPower": 30800,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Bloodletter",
+        "Havoc"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter:16",
+          "count": 8
+        },
+        {
+          "id": "blackNpc4Havoc:15",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter",
+          "name": "Bloodletter",
+          "count": 8,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "blackNpc4Havoc",
+          "name": "Havoc",
+          "count": 2,
+          "stars": 7,
+          "rank": "Silver1"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME10",
+      "energyCost": 10,
+      "nodeNumber": 10,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          },
+          {
+            "id": "upgHpR022",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR022",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 43556,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Bloodletter",
+        "Chaos Terminator",
+        "Havoc"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter:16",
+          "count": 5
+        },
+        {
+          "id": "blackNpc2Terminator:15",
+          "count": 2
+        },
+        {
+          "id": "blackNpc4Havoc:17",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter",
+          "name": "Bloodletter",
+          "count": 5,
+          "stars": 9,
+          "rank": "Silver1"
+        },
+        {
+          "id": "blackNpc2Terminator",
+          "name": "Chaos Terminator",
+          "count": 2,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "blackNpc4Havoc",
+          "name": "Havoc",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME11",
+      "energyCost": 10,
+      "nodeNumber": 11,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          },
+          {
+            "id": "upgHpR032",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR032",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 58568,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Chaos Terminator",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc2Terminator:17",
+          "count": 4
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman:21",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc2Terminator",
+          "name": "Chaos Terminator",
+          "count": 4,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 4,
+          "stars": 10,
+          "rank": "Gold1"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME12",
+      "energyCost": 10,
+      "nodeNumber": 12,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          },
+          {
+            "id": "upgHpR036",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR036",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 40859,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Havoc",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman:18",
+          "count": 7
+        },
+        {
+          "id": "blackNpc4Havoc:18",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 7,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "blackNpc4Havoc",
+          "name": "Havoc",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME13",
+      "energyCost": 10,
+      "nodeNumber": 13,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          },
+          {
+            "id": "upgHpR024",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR024",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 44912,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Bloodletter",
+        "Chaos Terminator",
+        "Havoc"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter:17",
+          "count": 4
+        },
+        {
+          "id": "blackNpc2Terminator:15",
+          "count": 2
+        },
+        {
+          "id": "blackNpc4Havoc:17",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter",
+          "name": "Bloodletter",
+          "count": 4,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "blackNpc2Terminator",
+          "name": "Chaos Terminator",
+          "count": 2,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "blackNpc4Havoc",
+          "name": "Havoc",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME14",
+      "energyCost": 10,
+      "nodeNumber": 14,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpE012",
+            "chanceId": "upgradeEpic_elite"
+          }
+        ]
+      },
+      "enemyPower": 48433,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Bloodletter",
+        "Chaos Terminator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter:19",
+          "count": 5
+        },
+        {
+          "id": "blackNpc2Terminator:17",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter",
+          "name": "Bloodletter",
+          "count": 5,
+          "stars": 8,
+          "rank": "Silver3"
+        },
+        {
+          "id": "blackNpc2Terminator",
+          "name": "Chaos Terminator",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME15",
+      "energyCost": 10,
+      "nodeNumber": 15,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgL204",
+            "chanceId": "upgradeLegendary_elite"
+          }
+        ]
+      },
+      "enemyPower": 67895,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Chaos Terminator",
+        "Havoc",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc2Terminator:17",
+          "count": 2
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman:18",
+          "count": 4
+        },
+        {
+          "id": "blackNpc4Havoc:18",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc2Terminator",
+          "name": "Chaos Terminator",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 4,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "blackNpc4Havoc",
+          "name": "Havoc",
+          "count": 3,
+          "stars": 9,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME16",
+      "energyCost": 10,
+      "nodeNumber": 16,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          },
+          {
+            "id": "shards_blackPossession",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_blackPossession",
+            "chanceId": "shard_elite"
+          }
+        ]
+      },
+      "enemyPower": 62631,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Archimatos",
+        "Bloodletter",
+        "Havoc",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackBossPossession:4",
+          "count": 1
+        },
+        {
+          "id": "blackNpc1Bloodletter:18",
+          "count": 8
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman:15",
+          "count": 1
+        },
+        {
+          "id": "blackNpc4Havoc:16",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackBossPossession",
+          "name": "Archimatos",
+          "count": 1,
+          "stars": 7,
+          "rank": "Silver2"
+        },
+        {
+          "id": "blackNpc1Bloodletter",
+          "name": "Bloodletter",
+          "count": 8,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 1,
+          "stars": 7,
+          "rank": "Silver1"
+        },
+        {
+          "id": "blackNpc4Havoc",
+          "name": "Havoc",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver1"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME17",
+      "energyCost": 10,
+      "nodeNumber": 17,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 109,
+            "max": 165
+          },
+          {
+            "id": "upgDmgR022",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR022",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 64418,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Bloodletter",
+        "Chaos Terminator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter:20",
+          "count": 6
+        },
+        {
+          "id": "blackNpc2Terminator:18",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter",
+          "name": "Bloodletter",
+          "count": 6,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "blackNpc2Terminator",
+          "name": "Chaos Terminator",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME18",
+      "energyCost": 10,
+      "nodeNumber": 18,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 123,
+            "max": 180
+          },
+          {
+            "id": "upgDmgR032",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR032",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 64422,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Bloodletter",
+        "Havoc",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter:21",
+          "count": 3
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman:20",
+          "count": 4
+        },
+        {
+          "id": "blackNpc4Havoc:18",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter",
+          "name": "Bloodletter",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 4,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "blackNpc4Havoc",
+          "name": "Havoc",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME19",
+      "energyCost": 10,
+      "nodeNumber": 19,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 123,
+            "max": 180
+          },
+          {
+            "id": "upgDmgR036",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR036",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 78031,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Bloodletter",
+        "Havoc",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter:22",
+          "count": 4
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman:20",
+          "count": 3
+        },
+        {
+          "id": "blackNpc4Havoc:20",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter",
+          "name": "Bloodletter",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 3,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "blackNpc4Havoc",
+          "name": "Havoc",
+          "count": 1,
+          "stars": 10,
+          "rank": "Silver3"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME20",
+      "energyCost": 10,
+      "nodeNumber": 20,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 123,
+            "max": 180
+          },
+          {
+            "id": "upgDmgR024",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR024",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 76453,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 6,
+      "enemiesTypes": [
+        "Bloodletter",
+        "Chaos Terminator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter:23",
+          "count": 5
+        },
+        {
+          "id": "blackNpc2Terminator:19",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter",
+          "name": "Bloodletter",
+          "count": 5,
+          "stars": 10,
+          "rank": "Gold2"
+        },
+        {
+          "id": "blackNpc2Terminator",
+          "name": "Chaos Terminator",
+          "count": 1,
+          "stars": 8,
+          "rank": "Silver3"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME21",
+      "energyCost": 10,
+      "nodeNumber": 21,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 123,
+            "max": 180
+          },
+          {
+            "id": "upgHpC003",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpC003",
+            "chanceId": "upgradeCommon_elite"
+          }
+        ]
+      },
+      "enemyPower": 107040,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman:26",
+          "count": 8
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 8,
+          "stars": 11,
+          "rank": "Gold3"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME22",
+      "energyCost": 10,
+      "nodeNumber": 22,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 123,
+            "max": 180
+          },
+          {
+            "id": "upgArmR022",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR022",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 88241,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Bloodletter",
+        "Chaos Terminator",
+        "Havoc"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter:21",
+          "count": 4
+        },
+        {
+          "id": "blackNpc2Terminator:18",
+          "count": 1
+        },
+        {
+          "id": "blackNpc4Havoc:20",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter",
+          "name": "Bloodletter",
+          "count": 4,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "blackNpc2Terminator",
+          "name": "Chaos Terminator",
+          "count": 1,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "blackNpc4Havoc",
+          "name": "Havoc",
+          "count": 2,
+          "stars": 10,
+          "rank": "Silver3"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME23",
+      "energyCost": 10,
+      "nodeNumber": 23,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 123,
+            "max": 180
+          },
+          {
+            "id": "upgArmR032",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR032",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 98085,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Bloodletter",
+        "Chaos Terminator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter:22",
+          "count": 7
+        },
+        {
+          "id": "blackNpc2Terminator:18",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter",
+          "name": "Bloodletter",
+          "count": 7,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "blackNpc2Terminator",
+          "name": "Chaos Terminator",
+          "count": 1,
+          "stars": 9,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME24",
+      "energyCost": 10,
+      "nodeNumber": 24,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 123,
+            "max": 180
+          },
+          {
+            "id": "shards_blackObliterator",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_blackObliterator",
+            "chanceId": "shard_elite"
+          }
+        ]
+      },
+      "enemyPower": 119443,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Bloodletter",
+        "Chaos Terminator",
+        "Havoc",
+        "Volk"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackBossObliteratorCamp:1",
+          "count": 1
+        },
+        {
+          "id": "blackNpc1Bloodletter:18",
+          "count": 6
+        },
+        {
+          "id": "blackNpc2Terminator:17",
+          "count": 2
+        },
+        {
+          "id": "blackNpc4Havoc:17",
+          "count": 3
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackBossObliteratorCamp",
+          "name": "Volk",
+          "count": 1,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "blackNpc1Bloodletter",
+          "name": "Bloodletter",
+          "count": 6,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "blackNpc2Terminator",
+          "name": "Chaos Terminator",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        },
+        {
+          "id": "blackNpc4Havoc",
+          "name": "Havoc",
+          "count": 3,
+          "stars": 8,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME25",
+      "energyCost": 10,
+      "nodeNumber": 25,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 131,
+            "max": 195
+          },
+          {
+            "id": "upgArmR036",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR036",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 140600,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Havoc",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman:26",
+          "count": 9
+        },
+        {
+          "id": "blackNpc4Havoc:20",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 9,
+          "stars": 11,
+          "rank": "Gold3"
+        },
+        {
+          "id": "blackNpc4Havoc",
+          "name": "Havoc",
+          "count": 1,
+          "stars": 10,
+          "rank": "Silver3"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME26",
+      "energyCost": 10,
+      "nodeNumber": 26,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 131,
+            "max": 195
+          },
+          {
+            "id": "upgArmR009",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR009",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 101600,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Bloodletter",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter:22",
+          "count": 4
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman:26",
+          "count": 4
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter",
+          "name": "Bloodletter",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold1"
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold3"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME27",
+      "energyCost": 10,
+      "nodeNumber": 27,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 131,
+            "max": 195
+          },
+          {
+            "id": "upgDmgC007",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgC007",
+            "chanceId": "upgradeCommon_elite"
+          }
+        ]
+      },
+      "enemyPower": 145916,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Bloodletter",
+        "Havoc",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter:26",
+          "count": 4
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman:23",
+          "count": 4
+        },
+        {
+          "id": "blackNpc4Havoc:21",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter",
+          "name": "Bloodletter",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold3"
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 4,
+          "stars": 10,
+          "rank": "Gold2"
+        },
+        {
+          "id": "blackNpc4Havoc",
+          "name": "Havoc",
+          "count": 1,
+          "stars": 10,
+          "rank": "Gold1"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME28",
+      "energyCost": 10,
+      "nodeNumber": 28,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 131,
+            "max": 195
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL102",
+            "chanceId": "upgradeLegendary_elite"
+          }
+        ]
+      },
+      "enemyPower": 125949,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Chaos Terminator",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc2Terminator:23",
+          "count": 1
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman:26",
+          "count": 6
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc2Terminator",
+          "name": "Chaos Terminator",
+          "count": 1,
+          "stars": 10,
+          "rank": "Gold2"
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 6,
+          "stars": 11,
+          "rank": "Gold3"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME29",
+      "energyCost": 10,
+      "nodeNumber": 29,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 131,
+            "max": 195
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL112",
+            "chanceId": "upgradeLegendary_elite"
+          }
+        ]
+      },
+      "enemyPower": 80628,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 7,
+      "enemiesTypes": [
+        "Bloodletter",
+        "Chaos Terminator"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter:23",
+          "count": 5
+        },
+        {
+          "id": "blackNpc2Terminator:17",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter",
+          "name": "Bloodletter",
+          "count": 5,
+          "stars": 10,
+          "rank": "Gold2"
+        },
+        {
+          "id": "blackNpc2Terminator",
+          "name": "Chaos Terminator",
+          "count": 2,
+          "stars": 8,
+          "rank": "Silver2"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME30",
+      "energyCost": 10,
+      "nodeNumber": 30,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 131,
+            "max": 195
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL116",
+            "chanceId": "upgradeLegendary_elite"
+          }
+        ]
+      },
+      "enemyPower": 191574,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Bloodletter",
+        "Havoc",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter:26",
+          "count": 4
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman:25",
+          "count": 5
+        },
+        {
+          "id": "blackNpc4Havoc:21",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter",
+          "name": "Bloodletter",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold3"
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 5,
+          "stars": 10,
+          "rank": "Gold3"
+        },
+        {
+          "id": "blackNpc4Havoc",
+          "name": "Havoc",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold1"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME31",
+      "energyCost": 10,
+      "nodeNumber": 31,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 131,
+            "max": 195
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL104",
+            "chanceId": "upgradeLegendary_elite"
+          }
+        ]
+      },
+      "enemyPower": 187460,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Bloodletter",
+        "Chaos Terminator",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter:26",
+          "count": 6
+        },
+        {
+          "id": "blackNpc2Terminator:18",
+          "count": 2
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman:25",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter",
+          "name": "Bloodletter",
+          "count": 6,
+          "stars": 11,
+          "rank": "Gold3"
+        },
+        {
+          "id": "blackNpc2Terminator",
+          "name": "Chaos Terminator",
+          "count": 2,
+          "stars": 9,
+          "rank": "Silver2"
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold3"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME32",
+      "energyCost": 10,
+      "nodeNumber": 32,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 210
+          },
+          {
+            "id": "shards_blackHaarken",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_blackHaarken",
+            "chanceId": "shard_elite"
+          }
+        ]
+      },
+      "enemyPower": 190365,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 11,
+      "enemiesTypes": [
+        "Bloodletter",
+        "Haarken",
+        "Havoc",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackBossHaarkenCamp:1",
+          "count": 1
+        },
+        {
+          "id": "blackNpc1Bloodletter:21",
+          "count": 6
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman:25",
+          "count": 2
+        },
+        {
+          "id": "blackNpc4Havoc:21",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackBossHaarkenCamp",
+          "name": "Haarken",
+          "count": 1,
+          "stars": 11,
+          "rank": "Gold2"
+        },
+        {
+          "id": "blackNpc1Bloodletter",
+          "name": "Bloodletter",
+          "count": 6,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold3"
+        },
+        {
+          "id": "blackNpc4Havoc",
+          "name": "Havoc",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold1"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME33",
+      "energyCost": 10,
+      "nodeNumber": 33,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 210
+          },
+          {
+            "id": "upgDmgR005",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR005",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 188008,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Bloodletter"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter:26",
+          "count": 8
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter",
+          "name": "Bloodletter",
+          "count": 8,
+          "stars": 11,
+          "rank": "Gold3"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME34",
+      "energyCost": 10,
+      "nodeNumber": 34,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 210
+          },
+          {
+            "id": "upgHpR023",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpR023",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 227434,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Chaos Terminator",
+        "Havoc",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc2Terminator:23",
+          "count": 2
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman:26",
+          "count": 7
+        },
+        {
+          "id": "blackNpc4Havoc:23",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc2Terminator",
+          "name": "Chaos Terminator",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold2"
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 7,
+          "stars": 11,
+          "rank": "Gold3"
+        },
+        {
+          "id": "blackNpc4Havoc",
+          "name": "Havoc",
+          "count": 1,
+          "stars": 10,
+          "rank": "Gold2"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME35",
+      "energyCost": 10,
+      "nodeNumber": 35,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 210
+          },
+          {
+            "id": "upgDmgR023",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgR023",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 226667,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Bloodletter",
+        "Havoc",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter:26",
+          "count": 4
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman:21",
+          "count": 3
+        },
+        {
+          "id": "blackNpc4Havoc:24",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter",
+          "name": "Bloodletter",
+          "count": 4,
+          "stars": 11,
+          "rank": "Gold3"
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 3,
+          "stars": 10,
+          "rank": "Gold1"
+        },
+        {
+          "id": "blackNpc4Havoc",
+          "name": "Havoc",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold2"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME36",
+      "energyCost": 10,
+      "nodeNumber": 36,
+      "slots": 3,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 210
+          },
+          {
+            "id": "upgArmR023",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmR023",
+            "chanceId": "upgradeRare_elite"
+          }
+        ]
+      },
+      "enemyPower": 164164,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Bloodletter",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter:25",
+          "count": 2
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman:29",
+          "count": 6
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter",
+          "name": "Bloodletter",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold3"
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 6,
+          "stars": 10,
+          "rank": "Diamond2"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME37",
+      "energyCost": 10,
+      "nodeNumber": 37,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 210
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgHpL103",
+            "chanceId": "upgradeLegendary_elite"
+          }
+        ]
+      },
+      "enemyPower": 264909,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 9,
+      "enemiesTypes": [
+        "Bloodletter",
+        "Chaos Terminator",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter:27",
+          "count": 5
+        },
+        {
+          "id": "blackNpc2Terminator:24",
+          "count": 2
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman:25",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter",
+          "name": "Bloodletter",
+          "count": 5,
+          "stars": 10,
+          "rank": "Diamond1"
+        },
+        {
+          "id": "blackNpc2Terminator",
+          "name": "Chaos Terminator",
+          "count": 2,
+          "stars": 11,
+          "rank": "Gold2"
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold3"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME38",
+      "energyCost": 10,
+      "nodeNumber": 38,
+      "slots": 4,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 210
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgArmL202",
+            "chanceId": "upgradeLegendary_elite"
+          }
+        ]
+      },
+      "enemyPower": 200204,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 8,
+      "enemiesTypes": [
+        "Bloodletter",
+        "Havoc",
+        "Traitor Guardsman"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter:27",
+          "count": 4
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman:27",
+          "count": 3
+        },
+        {
+          "id": "blackNpc4Havoc:25",
+          "count": 1
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter",
+          "name": "Bloodletter",
+          "count": 4,
+          "stars": 10,
+          "rank": "Diamond1"
+        },
+        {
+          "id": "blackNpc3TraitorGuardsman",
+          "name": "Traitor Guardsman",
+          "count": 3,
+          "stars": 10,
+          "rank": "Diamond1"
+        },
+        {
+          "id": "blackNpc4Havoc",
+          "name": "Havoc",
+          "count": 1,
+          "stars": 10,
+          "rank": "Gold3"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME39",
+      "energyCost": 10,
+      "nodeNumber": 39,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 210
+          }
+        ],
+        "potential": [
+          {
+            "id": "upgDmgL204",
+            "chanceId": "upgradeLegendary_elite"
+          }
+        ]
+      },
+      "enemyPower": 282324,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 12,
+      "enemiesTypes": [
+        "Bloodletter"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter:27",
+          "count": 12
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackNpc1Bloodletter",
+          "name": "Bloodletter",
+          "count": 12,
+          "stars": 10,
+          "rank": "Diamond1"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    },
+    {
+      "id": "FoCME40",
+      "energyCost": 10,
+      "nodeNumber": 40,
+      "slots": 5,
+      "rewards": {
+        "guaranteed": [
+          {
+            "id": "gold",
+            "min": 140,
+            "max": 225
+          },
+          {
+            "id": "shards_blackAbaddon",
+            "min": 1,
+            "max": 1
+          }
+        ],
+        "potential": [
+          {
+            "id": "shards_blackAbaddon",
+            "chanceId": "shard_elite"
+          }
+        ]
+      },
+      "enemyPower": 305142,
+      "enemiesAlliances": [
+        "Chaos"
+      ],
+      "enemiesFactions": [
+        "BlackLegion"
+      ],
+      "enemiesTotal": 10,
+      "enemiesTypes": [
+        "Abaddon",
+        "Chaos Terminator",
+        "Havoc"
+      ],
+      "rawEnemyTypes": [
+        {
+          "id": "blackBossAbaddonCamp:1",
+          "count": 1
+        },
+        {
+          "id": "blackNpc2Terminator:20",
+          "count": 7
+        },
+        {
+          "id": "blackNpc4Havoc:21",
+          "count": 2
+        }
+      ],
+      "detailedEnemyTypes": [
+        {
+          "id": "blackBossAbaddonCamp",
+          "name": "Abaddon",
+          "count": 1,
+          "stars": 10,
+          "rank": "Gold3"
+        },
+        {
+          "id": "blackNpc2Terminator",
+          "name": "Chaos Terminator",
+          "count": 7,
+          "stars": 10,
+          "rank": "Silver3"
+        },
+        {
+          "id": "blackNpc4Havoc",
+          "name": "Havoc",
+          "count": 2,
+          "stars": 10,
+          "rank": "Gold1"
+        }
+      ],
+      "type": "EliteMirror",
+      "challenge": false
+    }
+  ]
+}

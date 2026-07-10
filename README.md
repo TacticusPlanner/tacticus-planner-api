@@ -8,8 +8,28 @@ orchestration and observability.
 
 - .NET SDK 10.0.301 or a newer 10.0 patch
 - Docker Desktop or another OCI-compatible container runtime
+- The Aspire CLI, used to run and manage the local AppHost (see
+  [Install the Aspire CLI](#install-the-aspire-cli) below)
 - The .NET EF Core CLI tool when creating migrations:
   `dotnet tool install --global dotnet-ef --version 10.*`
+
+### Install the Aspire CLI
+
+```powershell
+dotnet tool install -g Aspire.Cli
+```
+
+This is the recommended install path once the .NET 10 SDK is already present: it
+produces a NativeAOT binary with instant startup and no JIT warmup. The
+curl/PowerShell installer (`curl -sSL https://aspire.dev/install.sh | bash`) is
+an equivalent alternative. After installing, verify the toolchain with:
+
+```powershell
+aspire doctor
+```
+
+`aspire doctor` diagnoses missing SDKs, container runtime issues, and other
+environment problems before you try to start the AppHost.
 
 ## Restore and build
 
@@ -27,11 +47,26 @@ packages for Windows, Linux, or macOS during restore.
 ## Run the local full stack with Aspire
 
 Aspire starts PostgreSQL, the API, the external React/Vite client app, and the
-local observability dashboard:
+local observability dashboard. Use the Aspire CLI rather than `dotnet run` — it
+manages the AppHost lifecycle correctly (locks, orphaned processes, and the
+dashboard) instead of leaving a bare `dotnet` process behind:
 
 ```powershell
-dotnet run --project orchestration/TacticusPlanner.AppHost
+aspire run --project orchestration/TacticusPlanner.AppHost/TacticusPlanner.AppHost.csproj
 ```
+
+`aspire run` runs in the foreground and opens the dashboard, which is what you
+want at an interactive terminal. Stop the stack with <kbd>Ctrl+C</kbd>, or with
+`aspire stop` from another terminal.
+
+If you need the AppHost running in the background instead (for example, while
+scripting against it), use `aspire start` with the same `--project` argument,
+and `aspire stop` to shut it down. Check what's running at any point with
+`aspire ps` or `aspire describe`, rather than inspecting `docker ps` directly.
+
+If a build fails with a file-lock error (`MSB3491`, `CS2012`) while Aspire is
+running, it means Aspire still holds a lock on that project's build output —
+run `aspire stop` first, then rebuild.
 
 This integration is for local development only. It does not change staging or
 production deployment, CI/CD workflows, or the client repository's standalone
@@ -59,7 +94,7 @@ Override `ClientAppPath` when your local checkout uses a different layout:
 
 ```powershell
 $env:ClientAppPath = "D:\repos\tacticus\v2\tacticus-planner-apps\apps\web"
-dotnet run --project orchestration/TacticusPlanner.AppHost
+aspire run --project orchestration/TacticusPlanner.AppHost/TacticusPlanner.AppHost.csproj
 ```
 
 You can also store a machine-specific path in AppHost user secrets:
@@ -82,7 +117,7 @@ it when that port is already in use:
 
 ```powershell
 $env:WebPort = "5174"
-dotnet run --project orchestration/TacticusPlanner.AppHost
+aspire run --project orchestration/TacticusPlanner.AppHost/TacticusPlanner.AppHost.csproj
 ```
 
 The local PostgreSQL resource uses fixed host port `51441` through the
@@ -91,7 +126,7 @@ Override it only when that port is already in use:
 
 ```powershell
 $env:PostgresPort = "51442"
-dotnet run --project orchestration/TacticusPlanner.AppHost
+aspire run --project orchestration/TacticusPlanner.AppHost/TacticusPlanner.AppHost.csproj
 ```
 
 PostgreSQL uses a persistent container lifetime and a named Docker volume.
