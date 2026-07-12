@@ -1,3 +1,4 @@
+using TacticusPlanner.Persistence.Encryption;
 using TacticusPlanner.Persistence.Model;
 
 namespace TacticusPlanner.Persistence.Users.Guilds;
@@ -13,10 +14,13 @@ public class GuildMember : BaseEntity<GuildMemberId>, IRevisionedEntity
 
     public GuildId GuildId { get; set; }
 
-    /// <summary>The upstream Tacticus user id. Not encrypted at rest (it identifies a guild-roster
-    /// position, not a credential), but always masked before it leaves the server in any API response —
-    /// see <c>SecretMasker</c> in the API project.</summary>
-    public Guid TacticusUserId { get; set; }
+    /// <summary>The upstream Tacticus user id, encrypted at rest. Stored as the canonical Guid string so
+    /// it can go through the same <see cref="EncryptedAttribute"/> converter as the other encrypted
+    /// columns; <see cref="TacticusUserIdHash"/> provides uniqueness/lookup without decrypting it. Always
+    /// masked before it leaves the server in any API response — see <c>SecretMasker</c> in the API
+    /// project.</summary>
+    [Encrypted]
+    public required string TacticusUserId { get; set; }
 
     /// <summary>HMAC hash of <see cref="TacticusUserId"/>, computed with the same keyed hash service as
     /// <c>Profile.TacticusUserIdHash</c>, so the two can be matched without decrypting either side.</summary>
@@ -30,7 +34,14 @@ public class GuildMember : BaseEntity<GuildMemberId>, IRevisionedEntity
 
     public int Level { get; set; }
 
-    public long? LastActivityOn { get; set; }
+    /// <summary>The upstream Tacticus API's per-member <c>lastActivityOn</c> — last active in the game
+    /// itself, not Planner.</summary>
+    public long? LastActiveInGameOn { get; set; }
+
+    /// <summary>The linked profile's owning <c>Account.LastSeenAt</c> at sync time — last active in
+    /// Tacticus Planner. Null when unlinked, or when the linked account has never made an authenticated
+    /// request.</summary>
+    public DateTimeOffset? LastActiveInPlannerOn { get; set; }
 
     /// <summary>Display name resolved at sync time from the linked profile's player-data snapshot name,
     /// falling back to the profile's display name. Null when unlinked — the upstream guild response does

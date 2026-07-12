@@ -29,14 +29,18 @@ public sealed class GuildMemberConfiguration : IEntityTypeConfiguration<GuildMem
                 value => value.HasValue ? ProfileId.From(value.Value) : (ProfileId?)null);
         builder.Property(entity => entity.Role).HasColumnName("role").HasConversion<string>().IsRequired();
         builder.Property(entity => entity.Level).HasColumnName("level");
-        builder.Property(entity => entity.LastActivityOn).HasColumnName("last_activity_on");
+        builder.Property(entity => entity.LastActiveInGameOn).HasColumnName("last_active_in_game_on");
+        builder.Property(entity => entity.LastActiveInPlannerOn).HasColumnName("last_active_in_planner_on");
         builder.Property(entity => entity.LinkedPlayerName).HasColumnName("linked_player_name");
         builder.Property(entity => entity.LastSyncedAt).HasColumnName("last_synced_at").IsRequired();
         builder.Property(entity => entity.Revision).HasColumnName("revision").IsConcurrencyToken();
         builder.Property(entity => entity.CreatedAt).HasColumnName("created_at").IsRequired();
         builder.Property(entity => entity.UpdatedAt).HasColumnName("updated_at").IsRequired();
 
-        builder.HasIndex(entity => new { entity.GuildId, entity.TacticusUserId }).IsUnique();
+        // TacticusUserId is encrypted (non-deterministically, per ADR 0005), so uniqueness is enforced on
+        // its keyed hash instead — matching ciphertext can't be compared directly, same as Guild's
+        // TacticusGuildId/TacticusGuildIdHash.
+        builder.HasIndex(entity => new { entity.GuildId, entity.TacticusUserIdHash }).IsUnique();
 
         // A profile may currently belong to at most one guild's roster.
         builder

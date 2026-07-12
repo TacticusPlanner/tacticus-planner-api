@@ -55,20 +55,35 @@ public sealed class GetMyGuildEndpoint : EndpointWithoutRequest<MyGuildResponse>
             return;
         }
 
-        var member = await db.GuildMembers
+        var membership = await db.GuildMembers
             .AsNoTracking()
-            .Include(entity => entity.Guild)
-            .ThenInclude(guild => guild!.Members)
-            .FirstOrDefaultAsync(entity => entity.ProfileId == profileId, ct);
+            .Where(entity => entity.ProfileId == profileId)
+            .Select(entity => new { entity.Id, entity.GuildId })
+            .FirstOrDefaultAsync(ct);
 
-        if (member?.Guild is null)
+        if (membership is null)
         {
             await Send.OkAsync(new MyGuildResponse(GuildStateValues.Unregistered, null), ct);
             return;
         }
 
+        // Rooted on Guild (not GuildMember) so the Include tree is a single level (Guild -> Members) rather
+        // than looping back to GuildMember via Guild — EF Core rejects that as a cycle in no-tracking queries.
+        var guild = await db.Guilds
+            .AsNoTracking()
+            .Include(entity => entity.Members)
+            .FirstOrDefaultAsync(entity => entity.Id == membership.GuildId, ct);
+
+        if (guild is null)
+        {
+            await Send.OkAsync(new MyGuildResponse(GuildStateValues.Unregistered, null), ct);
+            return;
+        }
+
+        var callerMember = guild.Members.First(entity => entity.Id == membership.Id);
+
         await Send.OkAsync(
-            new MyGuildResponse(GuildStateValues.Registered, GuildProjection.Build(member.Guild, member)),
+            new MyGuildResponse(GuildStateValues.Registered, GuildProjection.Build(guild, callerMember)),
             ct
         );
     }

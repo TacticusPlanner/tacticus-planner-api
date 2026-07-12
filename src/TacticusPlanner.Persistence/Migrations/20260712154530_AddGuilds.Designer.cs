@@ -12,7 +12,7 @@ using TacticusPlanner.Persistence;
 namespace TacticusPlanner.Persistence.Migrations
 {
     [DbContext(typeof(PlannerDbContext))]
-    [Migration("20260711060246_AddGuilds")]
+    [Migration("20260712154530_AddGuilds")]
     partial class AddGuilds
     {
         /// <inheritdoc />
@@ -97,9 +97,15 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasColumnType("bigint")
                         .HasColumnName("revision");
 
-                    b.Property<Guid>("TacticusGuildId")
-                        .HasColumnType("uuid")
+                    b.Property<string>("TacticusGuildId")
+                        .IsRequired()
+                        .HasColumnType("text")
                         .HasColumnName("tacticus_guild_id");
+
+                    b.Property<byte[]>("TacticusGuildIdHash")
+                        .HasMaxLength(32)
+                        .HasColumnType("bytea")
+                        .HasColumnName("tacticus_guild_id_hash");
 
                     b.Property<string>("Tag")
                         .IsRequired()
@@ -114,8 +120,9 @@ namespace TacticusPlanner.Persistence.Migrations
 
                     b.HasIndex("ConfiguredByProfileId");
 
-                    b.HasIndex("TacticusGuildId")
-                        .IsUnique();
+                    b.HasIndex("TacticusGuildIdHash")
+                        .IsUnique()
+                        .HasFilter("tacticus_guild_id_hash IS NOT NULL");
 
                     b.HasIndex("Tag")
                         .IsUnique();
@@ -137,9 +144,13 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("guild_id");
 
-                    b.Property<long?>("LastActivityOn")
+                    b.Property<long?>("LastActiveInGameOn")
                         .HasColumnType("bigint")
-                        .HasColumnName("last_activity_on");
+                        .HasColumnName("last_active_in_game_on");
+
+                    b.Property<DateTimeOffset?>("LastActiveInPlannerOn")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("last_active_in_planner_on");
 
                     b.Property<DateTimeOffset>("LastSyncedAt")
                         .HasColumnType("timestamp with time zone")
@@ -167,8 +178,9 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasColumnType("text")
                         .HasColumnName("role");
 
-                    b.Property<Guid>("TacticusUserId")
-                        .HasColumnType("uuid")
+                    b.Property<string>("TacticusUserId")
+                        .IsRequired()
+                        .HasColumnType("text")
                         .HasColumnName("tacticus_user_id");
 
                     b.Property<byte[]>("TacticusUserIdHash")
@@ -186,7 +198,7 @@ namespace TacticusPlanner.Persistence.Migrations
                         .IsUnique()
                         .HasFilter("profile_id IS NOT NULL");
 
-                    b.HasIndex("GuildId", "TacticusUserId")
+                    b.HasIndex("GuildId", "TacticusUserIdHash")
                         .IsUnique();
 
                     b.ToTable("guild_members", (string)null);

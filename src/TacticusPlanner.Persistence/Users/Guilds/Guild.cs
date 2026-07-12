@@ -12,8 +12,16 @@ public class Guild : BaseEntity<GuildId>, IRevisionedEntity
 {
     public long Revision { get; set; }
 
-    /// <summary>The upstream Tacticus guild id — unique across registered guilds.</summary>
-    public Guid TacticusGuildId { get; set; }
+    /// <summary>The upstream Tacticus guild id, encrypted at rest. Stored as the canonical Guid string
+    /// so it can go through the same <see cref="EncryptedAttribute"/> converter as the other encrypted
+    /// columns; <see cref="TacticusGuildIdHash"/> provides uniqueness/lookup without decrypting it.</summary>
+    [Encrypted]
+    public required string TacticusGuildId { get; set; }
+
+    /// <summary>HMAC hash of <see cref="TacticusGuildId"/>, computed with the same keyed hash service as
+    /// <c>Profile.TacticusUserIdHash</c> — enforces uniqueness and enables lookup-by-guild-id without
+    /// decrypting <see cref="TacticusGuildId"/>.</summary>
+    public byte[]? TacticusGuildIdHash { get; set; }
 
     public required string Tag { get; set; }
 

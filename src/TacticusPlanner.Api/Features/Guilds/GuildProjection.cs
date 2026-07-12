@@ -20,7 +20,7 @@ public static class GuildProjection
 
         return new RegisteredGuildResponse(
             guild.Id.Value,
-            guild.TacticusGuildId,
+            Guid.Parse(guild.TacticusGuildId),
             guild.Tag,
             guild.Name,
             guild.Level,
@@ -33,7 +33,7 @@ public static class GuildProjection
 
     private static GuildMemberSummary BuildMemberSummary(GuildMember member)
     {
-        var maskedUserId = SecretMasker.Mask(member.TacticusUserId.ToString()) ?? string.Empty;
+        var maskedUserId = SecretMasker.Mask(member.TacticusUserId) ?? string.Empty;
 
         return new GuildMemberSummary(
             member.Id.Value,
@@ -42,14 +42,15 @@ public static class GuildProjection
             member.ProfileId is not null,
             member.Role.ToString(),
             member.Level,
-            member.LastActivityOn,
+            member.LastActiveInGameOn,
+            member.LastActiveInPlannerOn,
             member.LinkedPlayerName ?? maskedUserId
         );
     }
 
     private static string DisplayLabel(GuildMember member)
     {
-        return member.LinkedPlayerName ?? SecretMasker.Mask(member.TacticusUserId.ToString()) ?? string.Empty;
+        return member.LinkedPlayerName ?? SecretMasker.Mask(member.TacticusUserId) ?? string.Empty;
     }
 
     // Leader, Co-Leader, Officer, Member — per the Guild Phase 1 spec's member-ordering rule.
@@ -85,6 +86,7 @@ public sealed record GuildMemberSummary(
     bool IsLinked,
     string Role,
     int Level,
-    long? LastActivityOn,
+    long? LastActiveInGameOn,
+    DateTimeOffset? LastActiveInPlannerOn,
     string DisplayLabel
 );

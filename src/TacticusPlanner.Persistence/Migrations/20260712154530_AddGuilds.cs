@@ -2,8 +2,8 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
-// CA1861 (avoid constant array arguments) fires on the composite-index array literal below; this is
-// scaffolded migration code that runs once, not a hot path, so the analyzer's concern doesn't apply.
+// EF-generated composite-index array literal (guild_id, tacticus_user_id_hash below) trips CA1861;
+// migrations are generated, one-shot code, not a hot path, so the "static readonly" advice doesn't apply.
 #pragma warning disable CA1861
 
 namespace TacticusPlanner.Persistence.Migrations
@@ -20,7 +20,8 @@ namespace TacticusPlanner.Persistence.Migrations
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     revision = table.Column<long>(type: "bigint", nullable: false),
-                    tacticus_guild_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    tacticus_guild_id = table.Column<string>(type: "text", nullable: false),
+                    tacticus_guild_id_hash = table.Column<byte[]>(type: "bytea", maxLength: 32, nullable: true),
                     tag = table.Column<string>(type: "text", nullable: false),
                     name = table.Column<string>(type: "text", nullable: false),
                     level = table.Column<int>(type: "integer", nullable: false),
@@ -49,12 +50,13 @@ namespace TacticusPlanner.Persistence.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     revision = table.Column<long>(type: "bigint", nullable: false),
                     guild_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    tacticus_user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    tacticus_user_id = table.Column<string>(type: "text", nullable: false),
                     tacticus_user_id_hash = table.Column<byte[]>(type: "bytea", maxLength: 32, nullable: true),
                     profile_id = table.Column<Guid>(type: "uuid", nullable: true),
                     role = table.Column<string>(type: "text", nullable: false),
                     level = table.Column<int>(type: "integer", nullable: false),
-                    last_activity_on = table.Column<long>(type: "bigint", nullable: true),
+                    last_active_in_game_on = table.Column<long>(type: "bigint", nullable: true),
+                    last_active_in_planner_on = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
                     linked_player_name = table.Column<string>(type: "text", nullable: true),
                     last_synced_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -78,9 +80,9 @@ namespace TacticusPlanner.Persistence.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_guild_members_guild_id_tacticus_user_id",
+                name: "IX_guild_members_guild_id_tacticus_user_id_hash",
                 table: "guild_members",
-                columns: new[] { "guild_id", "tacticus_user_id" },
+                columns: new[] { "guild_id", "tacticus_user_id_hash" },
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -96,10 +98,11 @@ namespace TacticusPlanner.Persistence.Migrations
                 column: "configured_by_profile_id");
 
             migrationBuilder.CreateIndex(
-                name: "IX_guilds_tacticus_guild_id",
+                name: "IX_guilds_tacticus_guild_id_hash",
                 table: "guilds",
-                column: "tacticus_guild_id",
-                unique: true);
+                column: "tacticus_guild_id_hash",
+                unique: true,
+                filter: "tacticus_guild_id_hash IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_guilds_tag",

@@ -16,6 +16,9 @@ public sealed class GuildConfiguration : IEntityTypeConfiguration<Guild>
             .HasVogenConversion()
             .ValueGeneratedNever();
         builder.Property(entity => entity.TacticusGuildId).HasColumnName("tacticus_guild_id").IsRequired();
+        builder.Property(entity => entity.TacticusGuildIdHash)
+            .HasColumnName("tacticus_guild_id_hash")
+            .HasMaxLength(32);
         builder.Property(entity => entity.Tag).HasColumnName("tag").IsRequired();
         builder.Property(entity => entity.Name).HasColumnName("name").IsRequired();
         builder.Property(entity => entity.Level).HasColumnName("level");
@@ -34,7 +37,10 @@ public sealed class GuildConfiguration : IEntityTypeConfiguration<Guild>
         builder.Property(entity => entity.CreatedAt).HasColumnName("created_at").IsRequired();
         builder.Property(entity => entity.UpdatedAt).HasColumnName("updated_at").IsRequired();
 
-        builder.HasIndex(entity => entity.TacticusGuildId).IsUnique();
+        builder
+            .HasIndex(entity => entity.TacticusGuildIdHash)
+            .IsUnique()
+            .HasFilter("tacticus_guild_id_hash IS NOT NULL");
         builder.HasIndex(entity => entity.Tag).IsUnique();
 
         // Nullable — a profile purge must not take the guild registration down with it.

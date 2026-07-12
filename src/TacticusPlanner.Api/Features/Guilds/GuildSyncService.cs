@@ -78,15 +78,21 @@ public sealed class GuildSyncService(
             );
         }
 
+        // The guild id is encrypted at rest (non-deterministically, per ADR 0005), so it can't be matched
+        // by re-encrypting and comparing ciphertext — look up by the keyed hash instead, same as
+        // Profile/GuildMember's Tacticus user id linking.
+        var tacticusGuildIdHash = hashService.ComputeHash(upstream.GuildId.ToString());
+
         var guild = await db.Guilds
             .Include(entity => entity.Members)
-            .FirstOrDefaultAsync(entity => entity.TacticusGuildId == upstream.GuildId, ct);
+            .FirstOrDefaultAsync(entity => entity.TacticusGuildIdHash == tacticusGuildIdHash, ct);
 
         var isNewGuild = guild is null;
         guild ??= new Guild
         {
             Id = GuildId.From(Guid.CreateVersion7()),
-            TacticusGuildId = upstream.GuildId,
+            TacticusGuildId = upstream.GuildId.ToString(),
+            TacticusGuildIdHash = tacticusGuildIdHash,
             Tag = upstream.GuildTag,
             Name = upstream.Name,
         };
@@ -127,7 +133,8 @@ public sealed class GuildSyncService(
             );
         }
 
-        var callerMember = guild.Members.First(member => member.TacticusUserId == callerTacticusGuid);
+        var callerTacticusUserIdString = callerTacticusGuid.ToString();
+        var callerMember = guild.Members.First(member => member.TacticusUserId == callerTacticusUserIdString);
 
         return new GuildSyncResult.Success(guild, callerMember);
     }
@@ -150,7 +157,13 @@ public sealed class GuildSyncService(
         var linkableProfiles = await db.Profiles
             .AsNoTracking()
             .Where(profile => profile.TacticusUserIdHash != null)
-            .Select(profile => new { profile.Id, profile.TacticusUserIdHash, profile.DisplayName })
+            .Select(profile => new
+            {
+                profile.Id,
+                profile.TacticusUserIdHash,
+                profile.DisplayName,
+                LastSeenAt = profile.Account!.LastSeenAt,
+            })
             .ToListAsync(ct);
 
         var profilesByHash = linkableProfiles
@@ -178,11 +191,12 @@ public sealed class GuildSyncService(
                 .ToDictionaryAsync(snapshot => snapshot.Id, snapshot => snapshot.Name, ct);
 
         var existingByUserId = guild.Members.ToDictionary(member => member.TacticusUserId);
-        var upstreamUserIds = new HashSet<Guid>(upstreamMembers.Select(member => member.UserId));
+        var upstreamUserIds = new HashSet<string>(upstreamMembers.Select(member => member.UserId.ToString()));
         var now = timeProvider.GetUtcNow();
 
         foreach (var upstreamMember in upstreamMembers)
         {
+            var upstreamUserIdString = upstreamMember.UserId.ToString();
             var hash = hashesByUserId[upstreamMember.UserId];
             var hashKey = hash is null ? null : Convert.ToHexString(hash);
             var linkedProfile = hashKey is not null && profilesByHash.TryGetValue(hashKey, out var profile)
@@ -194,13 +208,13 @@ public sealed class GuildSyncService(
                 ? null
                 : snapshotNamesByProfileId.GetValueOrDefault(linkedProfile.Id, linkedProfile.DisplayName);
 
-            if (!existingByUserId.TryGetValue(upstreamMember.UserId, out var member))
+            if (!existingByUserId.TryGetValue(upstreamUserIdString, out var member))
             {
                 member = new GuildMember
                 {
                     Id = GuildMemberId.From(Guid.CreateVersion7()),
                     GuildId = guild.Id,
-                    TacticusUserId = upstreamMember.UserId,
+                    TacticusUserId = upstreamUserIdString,
                 };
                 guild.Members.Add(member);
             }
@@ -209,7 +223,8 @@ public sealed class GuildSyncService(
             member.ProfileId = linkedProfile?.Id;
             member.Role = MapRole(upstreamMember.Role);
             member.Level = upstreamMember.Level;
-            member.LastActivityOn = upstreamMember.LastActivityOn;
+            member.LastActiveInGameOn = upstreamMember.LastActivityOn;
+            member.LastActiveInPlannerOn = linkedProfile?.LastSeenAt;
             member.LinkedPlayerName = linkedName;
             member.LastSyncedAt = now;
         }
