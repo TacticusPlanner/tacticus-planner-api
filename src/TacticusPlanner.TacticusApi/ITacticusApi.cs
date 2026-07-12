@@ -14,11 +14,21 @@ public interface ITacticusApi
     );
 
     [Get("/api/v1/guild")]
-    Task<GuildResponse> GetGuildAsync([Header("X-API-KEY")] string guildApiToken);
+    Task<GuildResponse> GetGuildAsync(
+        [Header("X-API-KEY")] string guildApiToken,
+        CancellationToken cancellationToken = default
+    );
 
     [Get("/api/v1/guildRaid")]
-    Task<GuildRaidResponse> GetGuildRaidsAsync([Header("X-API-KEY")] string guildApiToken);
+    Task<GuildRaidResponse> GetGuildRaidsAsync(
+        [Header("X-API-KEY")] string guildApiToken,
+        CancellationToken cancellationToken = default
+    );
 
     [Get("/api/v1/guildRaid/{season}")]
-    Task<GuildRaidResponse> GetGuildRaidBySeasonAsync([Header("X-API-KEY")] string guildApiToken, int season);
+    Task<GuildRaidResponse> GetGuildRaidBySeasonAsync(
+        [Header("X-API-KEY")] string guildApiToken,
+        int season,
+        CancellationToken cancellationToken = default
+    );
 }

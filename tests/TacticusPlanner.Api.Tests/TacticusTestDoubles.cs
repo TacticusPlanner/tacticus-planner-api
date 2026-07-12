@@ -118,12 +118,17 @@ internal sealed class FakeTacticusApi : ITacticusApi
         return Task.FromResult(response);
     }
 
-    public Task<GuildResponse> GetGuildAsync(string guildApiToken) => throw new NotSupportedException();
-
-    public Task<GuildRaidResponse> GetGuildRaidsAsync(string guildApiToken) => throw new NotSupportedException();
-
-    public Task<GuildRaidResponse> GetGuildRaidBySeasonAsync(string guildApiToken, int season) =>
+    public Task<GuildResponse> GetGuildAsync(string guildApiToken, CancellationToken cancellationToken = default) =>
         throw new NotSupportedException();
+
+    public Task<GuildRaidResponse> GetGuildRaidsAsync(string guildApiToken, CancellationToken cancellationToken = default) =>
+        throw new NotSupportedException();
+
+    public Task<GuildRaidResponse> GetGuildRaidBySeasonAsync(
+        string guildApiToken,
+        int season,
+        CancellationToken cancellationToken = default
+    ) => throw new NotSupportedException();
 }
 
 /// <summary>

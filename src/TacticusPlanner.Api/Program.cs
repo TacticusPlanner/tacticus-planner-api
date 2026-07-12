@@ -8,6 +8,7 @@ using Scalar.AspNetCore;
 using TacticusPlanner.Api.Features;
 using TacticusPlanner.Api.Features.AccountManagement;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Api.Features.Guilds;
 using TacticusPlanner.Api.Features.PlayerData;
 using TacticusPlanner.Api.Features.TacticusIntegration;
 using TacticusPlanner.Api.Features.V1Import;
@@ -39,6 +40,7 @@ builder.Services.AddSingleton<IColumnEncryptionService, AesGcmColumnEncryptionSe
 builder.Services.AddSingleton<IColumnHashService, HmacColumnHashService>();
 builder.Services.AddScoped<TacticusApiKeyValidator>();
 builder.Services.AddScoped<PlayerDataTransformer>();
+builder.Services.AddScoped<GuildSyncService>();
 builder.Services.AddSingleton<IExternalIdentityDeleter, NoOpExternalIdentityDeleter>();
 builder.Services.AddGameCatalog();
 builder.Services.AddTacticusApi(builder.Configuration["TacticusApi:BaseUrl"]);
