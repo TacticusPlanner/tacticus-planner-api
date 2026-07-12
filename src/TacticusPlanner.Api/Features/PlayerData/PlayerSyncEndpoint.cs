@@ -108,9 +108,17 @@ public sealed class PlayerSyncEndpoint(ITacticusApi tacticusApi, PlayerDataTrans
             })
             .FirstOrDefaultAsync(ct);
 
-        if (existingMetadata is not null && existingMetadata.ConfigHash == incomingConfigHash)
+        var canReuseExistingSnapshot = existingMetadata is not null
+            && existingMetadata.ConfigHash == incomingConfigHash
+            && existingMetadata.SchemaVersion == PlayerDataTransformer.CurrentSchemaVersion
+            && PlayerDataChunkKeys.All.All(key =>
+                existingMetadata.ChunkHashes.TryGetValue(key, out var hash) && !string.IsNullOrEmpty(hash));
+
+        if (canReuseExistingSnapshot && existingMetadata is not null)
         {
-            // Unchanged since the last sync: skip persistence entirely and return the current manifest.
+            // Unchanged since the last sync: skip persistence only when the stored snapshot already
+            // matches the current contract and contains every advertised chunk. A matching Tacticus
+            // config hash alone is insufficient after adding a chunk or bumping our schema version.
             integration.TacticusSyncLastSucceededAt = timeProvider.GetUtcNow();
             await db.SaveChangesAsync(ct);
             await Send.OkAsync(

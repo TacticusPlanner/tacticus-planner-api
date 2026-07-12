@@ -1,3 +1,5 @@
+using TacticusPlanner.Persistence.Users.PlayerData;
+
 namespace TacticusPlanner.Api.Features.PlayerData;
 
 /// <summary>
@@ -39,4 +41,37 @@ public static class PlayerDataChunkKeys
         LiveProgress,
         LreProgress,
     ];
+
+    private static readonly Dictionary<string, Func<object>> EmptyPayloadFactories =
+        new Dictionary<string, Func<object>>(StringComparer.Ordinal)
+        {
+            [PlayerDetails] = static () => new PlayerDetailsChunk(),
+            [Characters] = static () => Array.Empty<PlayerCharacterRecord>(),
+            [Mows] = static () => Array.Empty<PlayerMowRecord>(),
+            [InventoryUpgrades] = static () => Array.Empty<InventoryUpgradeRecord>(),
+            [InventoryItems] = static () => Array.Empty<InventoryItemRecord>(),
+            [InventoryShards] = static () => Array.Empty<InventoryShardRecord>(),
+            [Inventory] = static () => new InventoryChunk(),
+            [CampaignProgress] = static () => Array.Empty<CampaignProgressRecord>(),
+            [CampaignEventsProgress] = static () => Array.Empty<CampaignProgressRecord>(),
+            [LiveProgress] = static () => new LiveProgressChunk(),
+            [LreProgress] = static () => Array.Empty<LreProgressRecord>(),
+        };
+
+    static PlayerDataChunkKeys()
+    {
+        var missingDefault = All.FirstOrDefault(key => !EmptyPayloadFactories.ContainsKey(key));
+        if (missingDefault is not null || EmptyPayloadFactories.Count != All.Count)
+        {
+            throw new InvalidOperationException(
+                $"Every player-data chunk must define exactly one empty payload factory. Missing: '{missingDefault}'.");
+        }
+    }
+
+    /// <summary>Creates the non-null wire-contract value used when a legacy snapshot has no persisted
+    /// payload for a chunk introduced by a newer schema.</summary>
+    public static object CreateEmptyPayload(string chunk) =>
+        EmptyPayloadFactories.TryGetValue(chunk, out var factory)
+            ? factory()
+            : throw new ArgumentOutOfRangeException(nameof(chunk), chunk, "Unknown player-data chunk key.");
 }

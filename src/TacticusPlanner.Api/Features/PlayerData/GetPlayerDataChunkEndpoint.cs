@@ -92,7 +92,7 @@ public sealed class GetPlayerDataChunkEndpoint : Endpoint<GetPlayerDataChunkRequ
         await Send.OkAsync(response, ct);
     }
 
-    private static Task<object?> FetchChunkPayloadAsync(
+    private static async Task<object?> FetchChunkPayloadAsync(
         PlannerDbContext db,
         ProfileId id,
         string chunk,
@@ -100,7 +100,7 @@ public sealed class GetPlayerDataChunkEndpoint : Endpoint<GetPlayerDataChunkRequ
     {
         var snapshots = db.PlayerDataSnapshots.AsNoTracking().Where(entity => entity.Id == id);
 
-        return chunk switch
+        var payload = await (chunk switch
         {
             PlayerDataChunkKeys.PlayerDetails =>
                 snapshots.Select(entity => (object?)entity.PlayerDetails).FirstOrDefaultAsync(ct),
@@ -125,6 +125,11 @@ public sealed class GetPlayerDataChunkEndpoint : Endpoint<GetPlayerDataChunkRequ
             PlayerDataChunkKeys.LreProgress =>
                 snapshots.Select(entity => (object?)entity.LreProgress).FirstOrDefaultAsync(ct),
             _ => throw new ArgumentOutOfRangeException(nameof(chunk), chunk, "Unknown player-data chunk key."),
-        };
+        });
+
+        // Rows created before a chunk was introduced can contain SQL/JSON null even though the current
+        // model initializes every payload. Keep every served wire contract non-null while the next player
+        // sync upgrades and re-hashes the legacy snapshot.
+        return payload ?? PlayerDataChunkKeys.CreateEmptyPayload(chunk);
     }
 }
