@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
+namespace TacticusPlanner.AppHost;
+
 internal static class LocalSetupHealthChecks
 {
     public const string ApiHealthCheckName = "api-local-setup";
@@ -272,12 +274,12 @@ internal static class LocalSetupHealthChecks
         }
 
         return !value.Contains('<', StringComparison.Ordinal)
-            && !value.Contains("your-tenant-subdomain", StringComparison.OrdinalIgnoreCase)
-            && !string.Equals(
-                value,
-                "00000000-0000-0000-0000-000000000000",
-            StringComparison.OrdinalIgnoreCase
-        );
+               && !value.Contains("your-tenant-subdomain", StringComparison.OrdinalIgnoreCase)
+               && !string.Equals(
+                   value,
+                   "00000000-0000-0000-0000-000000000000",
+                   StringComparison.OrdinalIgnoreCase
+               );
     }
 
 }
