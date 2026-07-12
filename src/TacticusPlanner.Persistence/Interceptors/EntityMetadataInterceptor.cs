@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using TacticusPlanner.Persistence.Model;
+using TacticusPlanner.Domain.Common;
 
 namespace TacticusPlanner.Persistence.Interceptors;
 

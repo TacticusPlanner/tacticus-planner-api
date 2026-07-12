@@ -1,4 +1,5 @@
-using TacticusPlanner.Persistence.Users.PlayerData;
+using TacticusPlanner.Domain.PlayerData;
+using TacticusPlanner.Domain.PlayerData.Chunks;
 using TacticusApiPlayer = TacticusPlanner.TacticusApi.Models.Player;
 
 namespace TacticusPlanner.Api.Features.PlayerData;
@@ -17,7 +18,7 @@ public sealed partial class PlayerDataTransformer
 
     private static CampaignProgressRecord MapCampaign(TacticusApiPlayer.CampaignProgress campaign) => new()
     {
-        TacticusCampaignId = campaign.Id,
+        TacticusCampaignId = CampaignId.From(campaign.Id),
         Type = campaign.Type,
         HighestCompletedBattleIndex = HighestBattleIndex(campaign),
     };
@@ -30,7 +31,7 @@ public sealed partial class PlayerDataTransformer
             .Where(battle => battle.AttemptsUsed > 0)
             .Select(battle => new BattleAttemptRecord
             {
-                TacticusCampaignId = campaign.Id,
+                TacticusCampaignId = CampaignId.From(campaign.Id),
                 BattleIndex = battle.BattleIndex,
                 AttemptsLeft = battle.AttemptsLeft,
                 AttemptsUsed = battle.AttemptsUsed,
@@ -72,7 +73,7 @@ public sealed partial class PlayerDataTransformer
 
         return new LreProgressRecord
         {
-            Id = lre.Id,
+            Id = UnitId.From(lre.Id),
             Alpha = MapLreTrack(lanesById.GetValueOrDefault(1)),
             Beta = MapLreTrack(lanesById.GetValueOrDefault(2)),
             Gamma = MapLreTrack(lanesById.GetValueOrDefault(3)),

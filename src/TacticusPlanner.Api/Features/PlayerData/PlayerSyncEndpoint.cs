@@ -4,7 +4,7 @@ using Refit;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Persistence;
 using TacticusPlanner.TacticusApi;
-using PlayerDataSnapshotEntity = TacticusPlanner.Persistence.Users.PlayerData.PlayerDataSnapshot;
+using PlayerDataSnapshotEntity = TacticusPlanner.Domain.PlayerData.PlayerDataSnapshot;
 
 namespace TacticusPlanner.Api.Features.PlayerData;
 

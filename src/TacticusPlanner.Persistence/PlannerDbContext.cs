@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using TacticusPlanner.Domain.Accounts;
+using TacticusPlanner.Domain.Guilds;
+using TacticusPlanner.Domain.PlayerData;
+using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Persistence.Encryption;
-using TacticusPlanner.Persistence.Users;
-using TacticusPlanner.Persistence.Users.Guilds;
-using TacticusPlanner.Persistence.Users.PlayerData;
 
 namespace TacticusPlanner.Persistence;
 
@@ -39,28 +40,27 @@ public sealed class PlannerDbContext(
 
     private void ApplyEncryptedConverters(ModelBuilder modelBuilder)
     {
-        var converter = new ValueConverter<string?, string?>(
+        var nullableStringConverter = new ValueConverter<string?, string?>(
             value => columnEncryption.Encrypt(value),
             value => columnEncryption.Decrypt(value)
         );
+        var nullableUserIdConverter = new ValueConverter<TacticusUserId?, string?>(
+            value => columnEncryption.Encrypt(value.HasValue ? value.Value.Value : null),
+            value => value == null ? null : TacticusUserId.From(columnEncryption.Decrypt(value)!)
+        );
+        var requiredUserIdConverter = new ValueConverter<TacticusUserId, string>(
+            value => columnEncryption.Encrypt(value.Value)!,
+            value => TacticusUserId.From(columnEncryption.Decrypt(value)!)
+        );
+        var requiredGuildIdConverter = new ValueConverter<TacticusGuildId, string>(
+            value => columnEncryption.Encrypt(value.Value)!,
+            value => TacticusGuildId.From(columnEncryption.Decrypt(value)!)
+        );
 
-        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-        {
-            var clrType = entityType.ClrType;
-
-            foreach (var property in clrType.GetProperties())
-            {
-                if (property.PropertyType != typeof(string)
-                    || !Attribute.IsDefined(property, typeof(EncryptedAttribute)))
-                {
-                    continue;
-                }
-
-                modelBuilder
-                    .Entity(clrType)
-                    .Property(property.Name)
-                    .HasConversion(converter);
-            }
-        }
+        modelBuilder.Entity<Profile>().Property(entity => entity.TacticusUserId).HasConversion(nullableUserIdConverter);
+        modelBuilder.Entity<TacticusIntegration>().Property(entity => entity.TacticusApiKey).HasConversion(nullableStringConverter);
+        modelBuilder.Entity<Guild>().Property(entity => entity.TacticusGuildId).HasConversion(requiredGuildIdConverter);
+        modelBuilder.Entity<Guild>().Property(entity => entity.GuildApiToken).HasConversion(nullableStringConverter);
+        modelBuilder.Entity<GuildMember>().Property(entity => entity.TacticusUserId).HasConversion(requiredUserIdConverter);
     }
 }

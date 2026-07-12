@@ -984,10 +984,17 @@
           "FastEndpoints.OpenApi": "[8.2.0, )",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "[10.0.9, )",
           "Scalar.AspNetCore": "[2.16.9, )",
+          "TacticusPlanner.Domain": "[1.0.0, )",
           "TacticusPlanner.GameCatalog": "[1.0.0, )",
           "TacticusPlanner.Persistence": "[1.0.0, )",
           "TacticusPlanner.ServiceDefaults": "[1.0.0, )",
           "TacticusPlanner.TacticusApi": "[1.0.0, )",
+          "Vogen": "[8.0.5, )"
+        }
+      },
+      "tacticusplanner.domain": {
+        "type": "Project",
+        "dependencies": {
           "Vogen": "[8.0.5, )"
         }
       },
@@ -1002,6 +1009,7 @@
         "dependencies": {
           "Microsoft.EntityFrameworkCore": "[10.0.9, )",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "[10.0.2, )",
+          "TacticusPlanner.Domain": "[1.0.0, )",
           "Vogen": "[8.0.5, )"
         }
       },

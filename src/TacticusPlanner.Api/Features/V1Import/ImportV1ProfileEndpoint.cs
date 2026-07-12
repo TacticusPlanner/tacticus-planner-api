@@ -3,9 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Api.Features.TacticusIntegration;
 using TacticusPlanner.Api.Http;
+using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Persistence;
 using TacticusPlanner.Persistence.Encryption;
-using TacticusIntegrationEntity = TacticusPlanner.Persistence.Users.TacticusIntegration;
+using TacticusIntegrationEntity = TacticusPlanner.Domain.Profiles.TacticusIntegration;
 
 namespace TacticusPlanner.Api.Features.V1Import;
 
@@ -100,7 +101,7 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
 
         if (v1Profile.TacticusUserId is { } tacticusUserId)
         {
-            profile.TacticusUserId = tacticusUserId;
+            profile.TacticusUserId = TacticusUserId.From(tacticusUserId);
             profile.TacticusUserIdHash = Resolve<IColumnHashService>().ComputeHash(tacticusUserId);
         }
 
@@ -111,7 +112,7 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
             validation.PlayerName,
             validation.PowerLevel,
             SecretMasker.Mask(integration.TacticusApiKey),
-            SecretMasker.Mask(profile.TacticusUserId)
+            SecretMasker.Mask(profile.TacticusUserId?.Value)
         ), ct);
     }
 }

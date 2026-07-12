@@ -1,5 +1,5 @@
 using TacticusPlanner.Api.Http;
-using TacticusPlanner.Persistence.Users.Guilds;
+using TacticusPlanner.Domain.Guilds;
 
 namespace TacticusPlanner.Api.Features.Guilds;
 
@@ -20,7 +20,7 @@ public static class GuildProjection
 
         return new RegisteredGuildResponse(
             guild.Id.Value,
-            Guid.Parse(guild.TacticusGuildId),
+            Guid.Parse(guild.TacticusGuildId.Value),
             guild.Tag,
             guild.Name,
             guild.Level,
@@ -33,7 +33,7 @@ public static class GuildProjection
 
     private static GuildMemberSummary BuildMemberSummary(GuildMember member)
     {
-        var maskedUserId = SecretMasker.Mask(member.TacticusUserId) ?? string.Empty;
+        var maskedUserId = SecretMasker.Mask(member.TacticusUserId.Value) ?? string.Empty;
 
         return new GuildMemberSummary(
             member.Id.Value,
@@ -50,7 +50,7 @@ public static class GuildProjection
 
     private static string DisplayLabel(GuildMember member)
     {
-        return member.LinkedPlayerName ?? SecretMasker.Mask(member.TacticusUserId) ?? string.Empty;
+        return member.LinkedPlayerName ?? SecretMasker.Mask(member.TacticusUserId.Value) ?? string.Empty;
     }
 
     // Leader, Co-Leader, Officer, Member — per the Guild Phase 1 spec's member-ordering rule.

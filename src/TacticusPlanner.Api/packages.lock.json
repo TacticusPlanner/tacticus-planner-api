@@ -582,6 +582,12 @@
         "resolved": "4.5.0",
         "contentHash": "wLBKzFnDCxP12VL9ANydSYhk59fC4cvOr9ypYQLPnAj48NQIhqnjdD2yhP8yEKyBJEjERWS9DisKL7rX5eU25Q=="
       },
+      "tacticusplanner.domain": {
+        "type": "Project",
+        "dependencies": {
+          "Vogen": "[8.0.5, )"
+        }
+      },
       "tacticusplanner.gamecatalog": {
         "type": "Project"
       },
@@ -590,6 +596,7 @@
         "dependencies": {
           "Microsoft.EntityFrameworkCore": "[10.0.9, )",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "[10.0.2, )",
+          "TacticusPlanner.Domain": "[1.0.0, )",
           "Vogen": "[8.0.5, )"
         }
       },

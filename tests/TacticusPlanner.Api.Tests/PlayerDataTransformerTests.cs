@@ -1,7 +1,7 @@
 using TacticusPlanner.Api.Features.PlayerData;
+using TacticusPlanner.Domain.PlayerData.Chunks;
 using TacticusPlanner.GameCatalog;
 using TacticusPlanner.GameCatalog.Models;
-using TacticusPlanner.Persistence.Users.PlayerData;
 using TacticusPlanner.TacticusApi.Models.Player;
 
 namespace TacticusPlanner.Api.Tests;
@@ -146,9 +146,9 @@ public sealed class PlayerDataTransformerTests
         var result = CreateTransformer().Transform(BuildResponse());
 
         var character = Assert.Single(result.Characters);
-        Assert.Equal(FakeTacticusApi.CharacterUnitId, character.UnitId);
-        Assert.Equal(PlayerRank.Gold1, character.Rank);
-        Assert.Equal(PlayerProgression.EpicRedThreeStars, character.ProgressionIndex);
+        Assert.Equal(FakeTacticusApi.CharacterUnitId, character.UnitId.Value);
+        Assert.Equal(UnitRank.Gold1, character.Rank);
+        Assert.Equal(UnitProgression.EpicRedThreeStars, character.ProgressionIndex);
         Assert.Single(character.Abilities);
         Assert.Equal("StormOfWrath", character.Abilities[0].AbilityId);
         Assert.Equal([0, 2, 4], character.AppliedUpgradeSlots);
@@ -156,7 +156,7 @@ public sealed class PlayerDataTransformerTests
         Assert.Equal("I_Booster_Crit_E001", equipped.EquipmentId);
 
         var mow = Assert.Single(result.Mows);
-        Assert.Equal(MowUnitId, mow.UnitId);
+        Assert.Equal(MowUnitId, mow.UnitId.Value);
         // PlayerMowRecord has no Rank/EquippedItems properties at all — enforced at compile time, not
         // just by a runtime assertion (MoWs don't have ranks or equipment slots).
     }
@@ -190,7 +190,7 @@ public sealed class PlayerDataTransformerTests
         // necroWarden has no matching entry in Units at all — not yet unlocked — so its shard progress
         // is kept, merging the regular-only entry with a defaulted MythicAmount.
         var necroWarden = Assert.Single(result.InventoryShards);
-        Assert.Equal("necroWarden", necroWarden.UnitId);
+        Assert.Equal("necroWarden", necroWarden.UnitId.Value);
         Assert.Equal(40, necroWarden.Amount);
         Assert.Equal(0, necroWarden.MythicAmount);
     }
@@ -211,12 +211,12 @@ public sealed class PlayerDataTransformerTests
         var result = CreateTransformer().Transform(BuildResponse());
 
         var standard = Assert.Single(result.CampaignProgress);
-        Assert.Equal(FakeTacticusApi.CampaignId, standard.TacticusCampaignId);
+        Assert.Equal(FakeTacticusApi.CampaignId, standard.TacticusCampaignId.Value);
         Assert.Equal("Standard", standard.Type);
         Assert.Equal(2, standard.HighestCompletedBattleIndex);
 
         var evt = Assert.Single(result.CampaignEventsProgress);
-        Assert.Equal(FakeTacticusApi.EventCampaignId, evt.TacticusCampaignId);
+        Assert.Equal(FakeTacticusApi.EventCampaignId, evt.TacticusCampaignId.Value);
     }
 
     [Fact]
@@ -232,7 +232,7 @@ public sealed class PlayerDataTransformerTests
         Assert.DoesNotContain(result.LiveProgress.BattleAttempts, b =>
             b.TacticusCampaignId == FakeTacticusApi.CampaignId && b.BattleIndex == 0);
 
-        Assert.Equal(FakeTacticusApi.EventCampaignId, result.LiveProgress.ActiveCampaignEventId);
+        Assert.Equal(FakeTacticusApi.EventCampaignId, result.LiveProgress.ActiveCampaignEventId?.Value);
     }
 
     [Fact]
@@ -241,7 +241,7 @@ public sealed class PlayerDataTransformerTests
         var result = CreateTransformer().Transform(BuildResponse());
 
         var lre = Assert.Single(result.LreProgress);
-        Assert.Equal("emperLucius", lre.Id);
+        Assert.Equal("emperLucius", lre.Id.Value);
         Assert.NotNull(lre.Alpha);
         Assert.Single(lre.Alpha!.Encounters);
         Assert.Equal(25, lre.Alpha.Encounters[0].HighScore);

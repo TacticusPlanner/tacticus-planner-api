@@ -1,4 +1,4 @@
-using PlayerDataSnapshotEntity = TacticusPlanner.Persistence.Users.PlayerData.PlayerDataSnapshot;
+using PlayerDataSnapshotEntity = TacticusPlanner.Domain.PlayerData.PlayerDataSnapshot;
 
 namespace TacticusPlanner.Api.Features.PlayerData;
 

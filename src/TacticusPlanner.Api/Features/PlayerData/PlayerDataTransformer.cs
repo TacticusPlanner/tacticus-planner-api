@@ -1,7 +1,8 @@
 using System.Text.Json;
+using TacticusPlanner.Domain.PlayerData;
+using TacticusPlanner.Domain.PlayerData.Chunks;
 using TacticusPlanner.GameCatalog;
 using TacticusPlanner.GameCatalog.Utils;
-using TacticusPlanner.Persistence.Users.PlayerData;
 using TacticusApiPlayer = TacticusPlanner.TacticusApi.Models.Player;
 
 namespace TacticusPlanner.Api.Features.PlayerData;
@@ -50,7 +51,9 @@ public sealed partial class PlayerDataTransformer(IGameCatalogProvider catalog)
         var liveProgress = new LiveProgressChunk
         {
             BattleAttempts = campaigns.SelectMany(MapBattleAttempts).ToList(),
-            ActiveCampaignEventId = campaigns.FirstOrDefault(c => IsEventCampaign(c.Id))?.Id,
+            ActiveCampaignEventId = campaigns.FirstOrDefault(c => IsEventCampaign(c.Id))?.Id is { } activeCampaignId
+                ? CampaignId.From(activeCampaignId)
+                : null,
             GameModeTokens = MapGameModeTokens(response.Player?.Progress),
         };
 
