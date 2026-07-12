@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TacticusPlanner.Persistence.Encryption;
 using TacticusPlanner.Persistence.Users;
+using TacticusPlanner.Persistence.Users.Guilds;
 using TacticusPlanner.Persistence.Users.PlayerData;
 
 namespace TacticusPlanner.Persistence;
@@ -20,6 +21,10 @@ public sealed class PlannerDbContext(
     public DbSet<PlayerDataSnapshot> PlayerDataSnapshots => Set<PlayerDataSnapshot>();
 
     public DbSet<PlayerDataOverride> PlayerDataOverrides => Set<PlayerDataOverride>();
+
+    public DbSet<Guild> Guilds => Set<Guild>();
+
+    public DbSet<GuildMember> GuildMembers => Set<GuildMember>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

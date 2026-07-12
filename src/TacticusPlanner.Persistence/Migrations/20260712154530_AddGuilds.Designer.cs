@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TacticusPlanner.Persistence;
@@ -11,9 +12,11 @@ using TacticusPlanner.Persistence;
 namespace TacticusPlanner.Persistence.Migrations
 {
     [DbContext(typeof(PlannerDbContext))]
-    partial class PlannerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260712154530_AddGuilds")]
+    partial class AddGuilds
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,10 +39,6 @@ namespace TacticusPlanner.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("issuer");
-
-                    b.Property<DateTimeOffset?>("LastSeenAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("last_seen_at");
 
                     b.Property<string>("Subject")
                         .IsRequired()

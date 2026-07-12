@@ -16,6 +16,7 @@ public sealed class AccountConfiguration : IEntityTypeConfiguration<Account>
             .ValueGeneratedNever();
         builder.Property(entity => entity.Issuer).HasColumnName("issuer").IsRequired();
         builder.Property(entity => entity.Subject).HasColumnName("subject").IsRequired();
+        builder.Property(entity => entity.LastSeenAt).HasColumnName("last_seen_at");
         builder.Property(entity => entity.CreatedAt).HasColumnName("created_at").IsRequired();
         builder.Property(entity => entity.UpdatedAt).HasColumnName("updated_at").IsRequired();
 

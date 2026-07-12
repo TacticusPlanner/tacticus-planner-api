@@ -42,6 +42,9 @@ public sealed class GetCurrentUserEndpoint : EndpointWithoutRequest<CurrentUserR
             account = await ProvisionAccountAsync(db, state.Issuer, state.Subject, User, ct);
         }
 
+        account.LastSeenAt = Resolve<TimeProvider>().GetUtcNow();
+        await db.SaveChangesAsync(ct);
+
         var profile = account.Profile!;
         var tacticusApiKey = profile.TacticusIntegration?.TacticusApiKey;
 
