@@ -1,29 +1,27 @@
-﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace TacticusPlanner.Persistence.Migrations
+namespace TacticusPlanner.Persistence.Migrations;
+
+/// <inheritdoc />
+public partial class AddAccountLastSeenAt : Migration
 {
     /// <inheritdoc />
-    public partial class AddAccountLastSeenAt : Migration
+    protected override void Up(MigrationBuilder migrationBuilder)
     {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.AddColumn<DateTimeOffset>(
-                name: "last_seen_at",
-                table: "accounts",
-                type: "timestamp with time zone",
-                nullable: true);
-        }
+        migrationBuilder.AddColumn<DateTimeOffset>(
+            name: "last_seen_at",
+            table: "accounts",
+            type: "timestamp with time zone",
+            nullable: true);
+    }
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropColumn(
-                name: "last_seen_at",
-                table: "accounts");
-        }
+    /// <inheritdoc />
+    protected override void Down(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.DropColumn(
+            name: "last_seen_at",
+            table: "accounts");
     }
 }

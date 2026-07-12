@@ -1,3 +1,6 @@
+using System.Collections.Concurrent;
+using System.Net;
+using Refit;
 using TacticusPlanner.Api.Features.V1Import;
 using TacticusPlanner.TacticusApi;
 using TacticusPlanner.TacticusApi.Models.Guild;
@@ -14,6 +17,68 @@ namespace TacticusPlanner.Api.Tests;
 /// </summary>
 internal sealed class FakeTacticusApi : ITacticusApi
 {
+    // Guild scenarios are configured per-test (keyed by the guild API token each test makes up), unlike the
+    // fixed Valid/ValidV2 player-sync constants above — Guild Phase 1 tests need far more varied rosters
+    // (roles, member counts, malformed data) than a couple of hardcoded fixtures could express. Tokens are
+    // unique per test (typically Guid-derived), so no cross-test cleanup is required.
+    private static readonly ConcurrentDictionary<string, GuildResponse> GuildResponsesByToken = new();
+    private static readonly ConcurrentDictionary<string, HttpStatusCode> GuildRejectionsByToken = new();
+    private static readonly ConcurrentDictionary<string, bool> GuildUnavailableTokens = new();
+
+    /// <summary>Registers the <see cref="GuildResponse"/> <see cref="GetGuildAsync"/> returns for
+    /// <paramref name="guildApiToken"/>. Build the response via <see cref="BuildGuildResponse"/>.</summary>
+    public static void ConfigureGuildResponse(string guildApiToken, GuildResponse response) =>
+        GuildResponsesByToken[guildApiToken] = response;
+
+    /// <summary>Makes <see cref="GetGuildAsync"/> throw a Refit <see cref="ApiException"/> with the given
+    /// status for <paramref name="guildApiToken"/> — simulates the Tacticus API rejecting a bad/expired/
+    /// wrong-scope token (mirrors <see cref="GuildSyncService"/>'s 400/401/403/404 handling).</summary>
+    public static void ConfigureGuildRejection(string guildApiToken, HttpStatusCode statusCode) =>
+        GuildRejectionsByToken[guildApiToken] = statusCode;
+
+    /// <summary>Makes <see cref="GetGuildAsync"/> throw an <see cref="HttpRequestException"/> for
+    /// <paramref name="guildApiToken"/> — simulates the Tacticus API being unreachable.</summary>
+    public static void ConfigureGuildUnavailable(string guildApiToken) =>
+        GuildUnavailableTokens[guildApiToken] = true;
+
+    /// <summary>Builds a <see cref="GuildResponse"/> for <see cref="ConfigureGuildResponse"/> from a
+    /// simple member tuple list, so tests don't have to construct the nested Tacticus wire types by hand.</summary>
+    public static GuildResponse BuildGuildResponse(
+        Guid guildId,
+        string tag,
+        string name,
+        int level,
+        params (Guid UserId, GuildRole Role, int Level, long? LastActivityOn)[] members
+    )
+    {
+        return new GuildResponse
+        {
+            Guild = new Guild
+            {
+                GuildId = guildId,
+                GuildTag = tag,
+                Name = name,
+                Level = level,
+                Members = members
+                    .Select(member => new TacticusApi.Models.Guild.GuildMember
+                    {
+                        UserId = member.UserId,
+                        Role = member.Role,
+                        Level = member.Level,
+                        LastActivityOn = member.LastActivityOn,
+                    })
+                    .ToList(),
+            },
+        };
+    }
+
+    private static async Task<ApiException> CreateGuildApiExceptionAsync(HttpStatusCode statusCode)
+    {
+        using var request = new HttpRequestMessage(HttpMethod.Post, "https://api.tacticusgame.com/guild");
+        using var response = new HttpResponseMessage(statusCode) { RequestMessage = request };
+        return await ApiException.Create(request, HttpMethod.Post, response, new RefitSettings());
+    }
+
     public const string ValidKey = "valid-tacticus-api-key";
     public const string PlayerName = "TestPlayer";
     public const int PowerLevel = 12345;
@@ -118,8 +183,27 @@ internal sealed class FakeTacticusApi : ITacticusApi
         return Task.FromResult(response);
     }
 
-    public Task<GuildResponse> GetGuildAsync(string guildApiToken, CancellationToken cancellationToken = default) =>
-        throw new NotSupportedException();
+    public async Task<GuildResponse> GetGuildAsync(string guildApiToken, CancellationToken cancellationToken = default)
+    {
+        if (GuildUnavailableTokens.ContainsKey(guildApiToken))
+        {
+            throw new HttpRequestException("Simulated Tacticus API outage.");
+        }
+
+        if (GuildRejectionsByToken.TryGetValue(guildApiToken, out var statusCode))
+        {
+            throw await CreateGuildApiExceptionAsync(statusCode);
+        }
+
+        if (GuildResponsesByToken.TryGetValue(guildApiToken, out var response))
+        {
+            return response;
+        }
+
+        throw new InvalidOperationException(
+            $"No guild response configured for token '{guildApiToken}'. Call FakeTacticusApi.ConfigureGuildResponse first."
+        );
+    }
 
     public Task<GuildRaidResponse> GetGuildRaidsAsync(string guildApiToken, CancellationToken cancellationToken = default) =>
         throw new NotSupportedException();
