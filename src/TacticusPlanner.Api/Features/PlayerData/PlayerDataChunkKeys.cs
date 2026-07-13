@@ -1,4 +1,4 @@
-using TacticusPlanner.Persistence.Users.PlayerData;
+using TacticusPlanner.Domain.PlayerData.Chunks;
 
 namespace TacticusPlanner.Api.Features.PlayerData;
 

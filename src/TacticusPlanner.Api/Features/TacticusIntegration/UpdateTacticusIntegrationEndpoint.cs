@@ -2,9 +2,10 @@ using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Api.Http;
+using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Persistence;
 using TacticusPlanner.Persistence.Encryption;
-using TacticusIntegrationEntity = TacticusPlanner.Persistence.Users.TacticusIntegration;
+using TacticusIntegrationEntity = TacticusPlanner.Domain.Profiles.TacticusIntegration;
 
 namespace TacticusPlanner.Api.Features.TacticusIntegration;
 
@@ -95,7 +96,7 @@ public sealed class UpdateTacticusIntegrationEndpoint
         }
         else if (Normalize(req.TacticusUserId) is { } tacticusUserId)
         {
-            profile.TacticusUserId = tacticusUserId;
+            profile.TacticusUserId = TacticusUserId.From(tacticusUserId);
             profile.TacticusUserIdHash = Resolve<IColumnHashService>().ComputeHash(tacticusUserId);
         }
 
@@ -108,7 +109,7 @@ public sealed class UpdateTacticusIntegrationEndpoint
             playerName,
             powerLevel,
             SecretMasker.Mask(integration?.TacticusApiKey),
-            SecretMasker.Mask(profile.TacticusUserId)
+            SecretMasker.Mask(profile.TacticusUserId?.Value)
         ), ct);
     }
 

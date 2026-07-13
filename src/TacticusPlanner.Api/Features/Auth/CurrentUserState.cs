@@ -1,4 +1,5 @@
-using TacticusPlanner.Persistence.Users;
+using TacticusPlanner.Domain.Accounts;
+using TacticusPlanner.Domain.Profiles;
 
 namespace TacticusPlanner.Api.Features.Auth;
 

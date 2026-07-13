@@ -1,8 +1,8 @@
 using System.Security.Claims;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
+using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Persistence;
-using TacticusPlanner.Persistence.Users;
 
 namespace TacticusPlanner.Api.Features.Auth;
 

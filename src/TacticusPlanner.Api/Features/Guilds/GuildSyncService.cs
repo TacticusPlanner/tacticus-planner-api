@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Refit;
+using TacticusPlanner.Domain.Guilds;
+using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Persistence;
 using TacticusPlanner.Persistence.Encryption;
-using TacticusPlanner.Persistence.Users;
-using TacticusPlanner.Persistence.Users.Guilds;
 using TacticusPlanner.TacticusApi;
 
 namespace TacticusPlanner.Api.Features.Guilds;
@@ -24,13 +24,13 @@ public sealed class GuildSyncService(
 {
     public async Task<GuildSyncResult> SynchronizeAsync(
         ProfileId callerProfileId,
-        string callerTacticusUserId,
+        TacticusUserId callerTacticusUserId,
         string guildApiToken,
         bool persistToken,
         CancellationToken ct
     )
     {
-        if (!Guid.TryParse(callerTacticusUserId, out var callerTacticusGuid))
+        if (!Guid.TryParse(callerTacticusUserId.Value, out var callerTacticusGuid))
         {
             return new GuildSyncResult.InvalidRequest("The configured Tacticus User ID is not valid.");
         }
@@ -91,7 +91,7 @@ public sealed class GuildSyncService(
         guild ??= new Guild
         {
             Id = GuildId.From(Guid.CreateVersion7()),
-            TacticusGuildId = upstream.GuildId.ToString(),
+            TacticusGuildId = TacticusGuildId.From(upstream.GuildId.ToString()),
             TacticusGuildIdHash = tacticusGuildIdHash,
             Tag = upstream.GuildTag,
             Name = upstream.Name,
@@ -133,8 +133,8 @@ public sealed class GuildSyncService(
             );
         }
 
-        var callerTacticusUserIdString = callerTacticusGuid.ToString();
-        var callerMember = guild.Members.First(member => member.TacticusUserId == callerTacticusUserIdString);
+        var callerId = TacticusUserId.From(callerTacticusGuid.ToString());
+        var callerMember = guild.Members.First(member => member.TacticusUserId == callerId);
 
         return new GuildSyncResult.Success(guild, callerMember);
     }
@@ -191,12 +191,14 @@ public sealed class GuildSyncService(
                 .ToDictionaryAsync(snapshot => snapshot.Id, snapshot => snapshot.Name, ct);
 
         var existingByUserId = guild.Members.ToDictionary(member => member.TacticusUserId);
-        var upstreamUserIds = new HashSet<string>(upstreamMembers.Select(member => member.UserId.ToString()));
+        var upstreamUserIds = new HashSet<TacticusUserId>(
+            upstreamMembers.Select(member => TacticusUserId.From(member.UserId.ToString()))
+        );
         var now = timeProvider.GetUtcNow();
 
         foreach (var upstreamMember in upstreamMembers)
         {
-            var upstreamUserIdString = upstreamMember.UserId.ToString();
+            var upstreamUserId = TacticusUserId.From(upstreamMember.UserId.ToString());
             var hash = hashesByUserId[upstreamMember.UserId];
             var hashKey = hash is null ? null : Convert.ToHexString(hash);
             var linkedProfile = hashKey is not null && profilesByHash.TryGetValue(hashKey, out var profile)
@@ -208,13 +210,13 @@ public sealed class GuildSyncService(
                 ? null
                 : snapshotNamesByProfileId.GetValueOrDefault(linkedProfile.Id, linkedProfile.DisplayName);
 
-            if (!existingByUserId.TryGetValue(upstreamUserIdString, out var member))
+            if (!existingByUserId.TryGetValue(upstreamUserId, out var member))
             {
                 member = new GuildMember
                 {
                     Id = GuildMemberId.From(Guid.CreateVersion7()),
                     GuildId = guild.Id,
-                    TacticusUserId = upstreamUserIdString,
+                    TacticusUserId = upstreamUserId,
                 };
                 guild.Members.Add(member);
             }

@@ -1,8 +1,8 @@
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Domain.Guilds;
 using TacticusPlanner.Persistence;
-using TacticusPlanner.Persistence.Users.Guilds;
 
 namespace TacticusPlanner.Api.Features.Guilds;
 

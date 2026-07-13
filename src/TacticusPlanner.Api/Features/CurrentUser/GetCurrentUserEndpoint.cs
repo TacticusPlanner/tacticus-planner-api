@@ -3,8 +3,9 @@ using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Api.Http;
+using TacticusPlanner.Domain.Accounts;
+using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Persistence;
-using TacticusPlanner.Persistence.Users;
 
 namespace TacticusPlanner.Api.Features.CurrentUser;
 
@@ -53,7 +54,7 @@ public sealed class GetCurrentUserEndpoint : EndpointWithoutRequest<CurrentUserR
             profile.DisplayName,
             tacticusApiKey is not null,
             SecretMasker.Mask(tacticusApiKey),
-            SecretMasker.Mask(profile.TacticusUserId)
+            SecretMasker.Mask(profile.TacticusUserId?.Value)
         ), ct);
     }
 

@@ -1,4 +1,5 @@
-using TacticusPlanner.Persistence.Users.PlayerData;
+using TacticusPlanner.Domain.PlayerData;
+using TacticusPlanner.Domain.PlayerData.Chunks;
 using TacticusApiPlayer = TacticusPlanner.TacticusApi.Models.Player;
 
 namespace TacticusPlanner.Api.Features.PlayerData;
@@ -8,11 +9,11 @@ public sealed partial class PlayerDataTransformer
 {
     private static PlayerCharacterRecord MapCharacter(TacticusApiPlayer.Unit unit) => new()
     {
-        UnitId = unit.Id,
-        ProgressionIndex = (PlayerProgression)unit.ProgressionIndex,
+        UnitId = UnitId.From(unit.Id),
+        ProgressionIndex = (UnitProgression)unit.ProgressionIndex,
         Xp = unit.Xp,
         XpLevel = unit.XpLevel,
-        Rank = (PlayerRank)unit.Rank,
+        Rank = (UnitRank)unit.Rank,
         Shards = unit.Shards,
         MythicShards = unit.MythicShards,
         Abilities = MapAbilities(unit.Abilities),
@@ -30,8 +31,8 @@ public sealed partial class PlayerDataTransformer
     // MoWs have no rank and no equipment slots — see PlayerBaseUnitRecord/PlayerMowRecord.
     private static PlayerMowRecord MapMow(TacticusApiPlayer.Unit unit) => new()
     {
-        UnitId = unit.Id,
-        ProgressionIndex = (PlayerProgression)unit.ProgressionIndex,
+        UnitId = UnitId.From(unit.Id),
+        ProgressionIndex = (UnitProgression)unit.ProgressionIndex,
         Xp = unit.Xp,
         XpLevel = unit.XpLevel,
         Shards = unit.Shards,

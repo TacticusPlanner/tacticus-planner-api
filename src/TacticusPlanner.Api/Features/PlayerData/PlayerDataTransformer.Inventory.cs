@@ -1,4 +1,5 @@
-using TacticusPlanner.Persistence.Users.PlayerData;
+using TacticusPlanner.Domain.PlayerData;
+using TacticusPlanner.Domain.PlayerData.Chunks;
 using TacticusApiPlayer = TacticusPlanner.TacticusApi.Models.Player;
 
 namespace TacticusPlanner.Api.Features.PlayerData;
@@ -63,7 +64,7 @@ public sealed partial class PlayerDataTransformer
             .Where(unitId => !unlockedUnitIds.Contains(unitId))
             .Select(unitId => new InventoryShardRecord
             {
-                UnitId = unitId,
+                UnitId = UnitId.From(unitId),
                 Amount = regular.GetValueOrDefault(unitId),
                 MythicAmount = mythic.GetValueOrDefault(unitId),
             })

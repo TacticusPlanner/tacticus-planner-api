@@ -3,8 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Api.Http;
+using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Persistence;
-using TacticusPlanner.Persistence.Users;
 
 namespace TacticusPlanner.Api.Features.PlayerData;
 

@@ -280,6 +280,12 @@
           "System.Composition.Runtime": "9.0.0"
         }
       },
+      "tacticusplanner.domain": {
+        "type": "Project",
+        "dependencies": {
+          "Vogen": "[8.0.5, )"
+        }
+      },
       "Microsoft.EntityFrameworkCore.Relational": {
         "type": "CentralTransitive",
         "requested": "[10.0.9, )",
