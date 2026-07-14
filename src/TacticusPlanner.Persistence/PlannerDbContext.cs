@@ -1,9 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TacticusPlanner.Domain.Accounts;
+using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.Guilds;
 using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.Profiles;
+using TacticusPlanner.Domain.Projects;
 using TacticusPlanner.Persistence.Encryption;
 
 namespace TacticusPlanner.Persistence;
@@ -26,6 +28,14 @@ public sealed class PlannerDbContext(
     public DbSet<Guild> Guilds => Set<Guild>();
 
     public DbSet<GuildMember> GuildMembers => Set<GuildMember>();
+
+    public DbSet<Goal> Goals => Set<Goal>();
+
+    public DbSet<Project> Projects => Set<Project>();
+
+    public DbSet<ProjectGoal> ProjectGoals => Set<ProjectGoal>();
+
+    public DbSet<ProjectTeam> ProjectTeams => Set<ProjectTeam>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
