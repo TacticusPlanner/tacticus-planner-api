@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Api.Features.Projects;
 using TacticusPlanner.Domain.Goals;
-using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Domain.Projects;
 using TacticusPlanner.Persistence;
 
