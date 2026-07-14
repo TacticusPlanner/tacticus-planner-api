@@ -44,11 +44,16 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
         goal.Status.ToString(),
         goal.Notes,
         goal.AggregateId,
+        goal.Milestones.Count,
+        goal.Milestones.Count(milestone => milestone.Status == "completed"),
         goal.CreatedAt,
         goal.UpdatedAt
     );
 
-    private static GoalConfig MapConfig(CreateGoalConfigRequest config) => new()
+    /// <summary>Also used directly by <see cref="CreateCombinedGoalsEndpoint"/>, which builds its own
+    /// <see cref="Goal"/> instances (a combined request creates several goals per call, not one, so it
+    /// doesn't go through <see cref="ToEntity"/>).</summary>
+    internal static GoalConfig MapConfig(CreateGoalConfigRequest config) => new()
     {
         Rank = config.Rank is null ? null : new RankTarget
         {
@@ -121,6 +126,10 @@ public sealed record GoalSummaryResponse(
     string Status,
     string? Notes,
     Guid? AggregateId,
+    // Lean milestone counts (not the full list — see GoalDetailResponse.Milestones for that) so a
+    // goals list can show "M/N" without an N+1 detail fetch per row.
+    int MilestonesTotal,
+    int MilestonesCompleted,
     DateTimeOffset CreatedAt,
     DateTimeOffset UpdatedAt
 );
