@@ -168,6 +168,53 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
         Assert.Equal("Completed", untouchedGoal.Status);
     }
 
+    [Fact]
+    public async Task ListProjectGoalsReturnsMembersOrderedByPriority()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var defaultProject = await GetDefaultProjectAsync(client);
+        var first = await CreateGoalAsync(client);
+        var second = await CreateGoalAsync(client);
+
+        await client.PutAsJsonAsync(
+            $"/api/v1/me/projects/{defaultProject.ProjectId}/goals",
+            new UpdateProjectGoalsRequest([
+                new ProjectGoalEntryRequest(first.GoalId, 20),
+                new ProjectGoalEntryRequest(second.GoalId, 10),
+            ]),
+            TestContext.Current.CancellationToken
+        );
+
+        var response = await client.GetAsync(
+            $"/api/v1/me/projects/{defaultProject.ProjectId}/goals",
+            TestContext.Current.CancellationToken
+        );
+        response.EnsureSuccessStatusCode();
+        var body = await response.Content.ReadFromJsonAsync<ListProjectGoalsResponse>(TestContext.Current.CancellationToken);
+
+        Assert.NotNull(body);
+        Assert.Equal(2, body.Goals.Count);
+        Assert.Equal(second.GoalId, body.Goals[0].Goal.GoalId);
+        Assert.Equal(10, body.Goals[0].Priority);
+        Assert.Equal(first.GoalId, body.Goals[1].Goal.GoalId);
+        Assert.Equal(20, body.Goals[1].Priority);
+    }
+
+    [Fact]
+    public async Task ListProjectGoalsForAnotherProfilesProjectIsNotFound()
+    {
+        var ownerClient = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var ownerProject = await GetDefaultProjectAsync(ownerClient);
+
+        var otherClient = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var response = await otherClient.GetAsync(
+            $"/api/v1/me/projects/{ownerProject.ProjectId}/goals",
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
     private static async Task<ProjectSummaryResponse> GetDefaultProjectAsync(HttpClient client)
     {
         var response = await client.GetFromJsonAsync<ListProjectsResponse>(
