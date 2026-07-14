@@ -162,6 +162,58 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
+    [Fact]
+    public async Task MowRequestWithARankGoalIsRejected()
+    {
+        // Machines of War have no rank ladder (plan §16 phase 6) — rejected even when Rank isn't the
+        // only spec in the request.
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var request = UnlockThenRank with { EntityType = "mow", EntityId = "mow-1" };
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals/combined",
+            request,
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task MowUnlockThenAbilityGoalIsAccepted()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var request = new CreateCombinedGoalsRequest(
+            "mow",
+            "mow-1",
+            null,
+            [
+                new CombinedGoalSpec("unlock", new CreateGoalConfigRequest(), []),
+                new CombinedGoalSpec(
+                    "ability",
+                    new CreateGoalConfigRequest(Ability: new AbilityTargetRequest(0, 3, 0, 3)),
+                    [0]
+                ),
+            ]
+        );
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals/combined",
+            request,
+            TestContext.Current.CancellationToken
+        );
+        response.EnsureSuccessStatusCode();
+        var created = await response.Content.ReadFromJsonAsync<CreateCombinedGoalsResponse>(TestContext.Current.CancellationToken);
+
+        Assert.NotNull(created);
+        Assert.Equal(2, created.Goals.Count);
+        Assert.All(created.Goals, goal => Assert.Equal("Mow", goal.EntityType));
+        Assert.Equal("Ability", created.Goals[1].GoalType);
+        Assert.Equal([created.Goals[0].GoalId], created.Goals[1].DependsOn);
+    }
+
     private static async Task<ProjectSummaryResponse> GetDefaultProjectAsync(HttpClient client)
     {
         var response = await client.GetFromJsonAsync<ListProjectsResponse>(

@@ -109,6 +109,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     [Theory]
     [InlineData("upgrade", "rank")]
     [InlineData("character", "material")]
+    [InlineData("mow", "rank")]
     public async Task CreateGoalDeferredGoalTypeOrEntityTypeIsRejected(string entityType, string goalType)
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
@@ -120,6 +121,31 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         );
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task CreateMowAbilityGoalIsAccepted()
+    {
+        // Machines of War have no rank ladder (plan §16 phase 6) — Ability is their natural goal type.
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            new CreateGoalRequest(
+                "mow",
+                "mow-1",
+                "ability",
+                new CreateGoalConfigRequest(Ability: new AbilityTargetRequest(0, 3, 0, 3)),
+                null
+            ),
+            TestContext.Current.CancellationToken
+        );
+        response.EnsureSuccessStatusCode();
+        var created = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+
+        Assert.NotNull(created);
+        Assert.Equal("Mow", created.EntityType);
+        Assert.Equal("Ability", created.GoalType);
     }
 
     [Fact]

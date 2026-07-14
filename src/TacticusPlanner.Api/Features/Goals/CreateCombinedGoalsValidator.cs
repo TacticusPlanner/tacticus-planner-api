@@ -8,8 +8,9 @@ namespace TacticusPlanner.Api.Features.Goals;
 /// Request-shape rules only — entity type must parse to a supported (non-reserved) value (mirrors
 /// <see cref="CreateGoalValidator"/>), each spec's goal type must parse to a supported value, the list
 /// must be non-empty and reasonably small (Unlock + Ascension + Rank + Ability is the largest realistic
-/// combined request), and every <see cref="CombinedGoalSpec.DependsOnIndex"/> must reference a strictly
-/// earlier spec in the same request (no forward or self references). Project ownership stays a
+/// combined request), every <see cref="CombinedGoalSpec.DependsOnIndex"/> must reference a strictly
+/// earlier spec in the same request (no forward or self references), and a Machine of War request may
+/// not include a Rank goal (MoWs have no rank ladder — plan §16 phase 6). Project ownership stays a
 /// handler-level check.
 /// </summary>
 public sealed class CreateCombinedGoalsValidator : Validator<CreateCombinedGoalsRequest>
@@ -56,5 +57,16 @@ public sealed class CreateCombinedGoalsValidator : Validator<CreateCombinedGoals
                     }
                 }
             });
+
+        RuleFor(request => request)
+            .Must(request => !IsMow(request.EntityType) || request.Goals.TrueForAll(spec => !IsRank(spec.GoalType)))
+            .WithMessage("Machines of War have no rank — use an Ability goal instead.");
     }
+
+    private static bool IsMow(string entityType) =>
+        Enum.TryParse<GoalEntityType>(entityType, ignoreCase: true, out var value)
+            && value == GoalEntityType.Mow;
+
+    private static bool IsRank(string goalType) =>
+        Enum.TryParse<GoalType>(goalType, ignoreCase: true, out var value) && value == GoalType.Rank;
 }
