@@ -48,10 +48,7 @@ public sealed class UpdateProjectGoalsStatusEndpoint : Endpoint<UpdateProjectGoa
         var projectId = ProjectId.From(Route<Guid>("projectId"));
         var db = Resolve<PlannerDbContext>();
 
-        var project = await db.Projects.AsNoTracking().FirstOrDefaultAsync(
-            entity => entity.Id == projectId && entity.ProfileId == profileId,
-            ct
-        );
+        var project = await db.Projects.Owned(profileId).AsNoTracking().FirstOrDefaultAsync(entity => entity.Id == projectId, ct);
         if (project is null)
         {
             await Send.NotFoundAsync(ct);
@@ -66,11 +63,10 @@ public sealed class UpdateProjectGoalsStatusEndpoint : Endpoint<UpdateProjectGoa
         var goals = await db.Goals
             .Where(entity => memberGoalIds.Contains(entity.Id)
                 && entity.Status != GoalStatus.Completed
-                && entity.Status != GoalStatus.Archived
-                && entity.Status != GoalStatus.Deleted)
+                && entity.Status != GoalStatus.Archived)
             .ToListAsync(ct);
 
-        var eventType = targetStatus == GoalStatus.Active ? "resumed" : "paused";
+        var eventType = targetStatus == GoalStatus.Active ? GoalEventType.Resumed : GoalEventType.Paused;
         var transitioned = 0;
         var now = DateTimeOffset.UtcNow;
 

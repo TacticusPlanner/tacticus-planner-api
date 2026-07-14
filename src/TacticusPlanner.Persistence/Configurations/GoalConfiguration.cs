@@ -1,8 +1,5 @@
-using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.Profiles;
 
@@ -37,26 +34,22 @@ public sealed class GoalConfiguration : IEntityTypeConfiguration<Goal>
         builder.Property(entity => entity.CreatedAt).HasColumnName("created_at").IsRequired();
         builder.Property(entity => entity.UpdatedAt).HasColumnName("updated_at").IsRequired();
 
-        // A flat Guid list, not an owned object graph — mapped via converter like PlayerDataSnapshot's
-        // ChunkHashes dictionary, which is reserved for the structured jsonb payloads below.
-        var dependsOnComparer = new ValueComparer<List<Guid>>(
-            (left, right) => (left ?? new List<Guid>()).SequenceEqual(right ?? new List<Guid>()),
-            value => value.Aggregate(0, HashCode.Combine),
-            value => new List<Guid>(value));
-
-        builder.Property(entity => entity.DependsOn)
-            .HasColumnName("depends_on")
-            .HasColumnType("jsonb")
-            .HasConversion(
-                new ValueConverter<List<Guid>, string>(
-                    value => JsonSerializer.Serialize(value, (JsonSerializerOptions?)null),
-                    value => JsonSerializer.Deserialize<List<Guid>>(value, (JsonSerializerOptions?)null) ?? new List<Guid>()))
-            .Metadata.SetValueComparer(dependsOnComparer);
+        // A flat Guid list maps to a native Postgres uuid[] column with no custom converter needed —
+        // EF Core's primitive-collection support (8+) handles List<Guid> directly via Npgsql's array
+        // type mapping. Reserved for genuinely structured payloads (below) is the jsonb/OwnsX approach.
+        builder.Property(entity => entity.DependsOn).HasColumnName("depends_on");
 
         // Each jsonb payload below is EF Core's JSON owned-entity mapping (OwnsOne/OwnsMany + ToJson()),
         // per ADR 0002/0007 — config/milestones/snapshot/events are kept as separate columns, not merged
         // into one blob, so each concern (target, stages, baseline, history) can evolve independently.
-        builder.OwnsOne(entity => entity.Config, config => config.ToJson("config"));
+        builder.OwnsOne(entity => entity.Config, config =>
+        {
+            config.ToJson("config");
+            config.OwnsOne(c => c.Rank);
+            config.OwnsOne(c => c.Progression);
+            config.OwnsOne(c => c.Ability);
+            config.OwnsOne(c => c.Shards);
+        });
         builder.OwnsMany(entity => entity.Milestones, milestones => milestones.ToJson("milestones"));
         builder.OwnsOne(entity => entity.Snapshot, snapshot => snapshot.ToJson("snapshot"));
         builder.OwnsMany(entity => entity.Events, events => events.ToJson("events"));

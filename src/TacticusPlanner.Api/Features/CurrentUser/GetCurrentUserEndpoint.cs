@@ -5,6 +5,7 @@ using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Api.Http;
 using TacticusPlanner.Domain.Accounts;
 using TacticusPlanner.Domain.Profiles;
+using TacticusPlanner.Domain.Projects;
 using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.CurrentUser;
@@ -66,6 +67,16 @@ public sealed class GetCurrentUserEndpoint : EndpointWithoutRequest<CurrentUserR
         CancellationToken ct
     )
     {
+        var profileId = ProfileId.From(Guid.CreateVersion7());
+        var defaultProject = new Project
+        {
+            Id = ProjectId.From(Guid.CreateVersion7()),
+            ProfileId = profileId,
+            Name = "My Goals",
+            Status = ProjectStatus.Active,
+            IsDefault = true,
+        };
+
         var account = new Account
         {
             Id = AccountId.From(Guid.CreateVersion7()),
@@ -73,12 +84,14 @@ public sealed class GetCurrentUserEndpoint : EndpointWithoutRequest<CurrentUserR
             Subject = subject,
             Profile = new Profile
             {
-                Id = ProfileId.From(Guid.CreateVersion7()),
+                Id = profileId,
                 DisplayName = GetDisplayName(user),
+                ActiveProjectId = defaultProject.Id,
             },
         };
 
         db.Accounts.Add(account);
+        db.Projects.Add(defaultProject);
 
         await db.SaveChangesAsync(ct);
 

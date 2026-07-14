@@ -7,5 +7,4 @@ public enum GoalStatus
     Paused,
     Completed,
     Archived,
-    Deleted,
 }

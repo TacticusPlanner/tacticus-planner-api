@@ -26,22 +26,12 @@ public sealed class ProjectConfiguration : IEntityTypeConfiguration<Project>
         builder.Property(entity => entity.Description).HasColumnName("description");
         builder.Property(entity => entity.Color).HasColumnName("color");
         builder.Property(entity => entity.Status).HasColumnName("status").HasConversion<string>().IsRequired();
-        builder.Property(entity => entity.IsActivePlan).HasColumnName("is_active_plan").IsRequired();
         builder.Property(entity => entity.IsDefault).HasColumnName("is_default").IsRequired();
         builder.Property(entity => entity.Revision).HasColumnName("revision").IsConcurrencyToken();
         builder.Property(entity => entity.CreatedAt).HasColumnName("created_at").IsRequired();
         builder.Property(entity => entity.UpdatedAt).HasColumnName("updated_at").IsRequired();
 
         builder.HasIndex([nameof(Project.ProfileId)], "ix_projects_profile_id");
-
-        // At most one active plan per profile (plan §3.2). A separate index from the plain lookup above —
-        // EF Core merges two HasIndex calls over the same property list into one unless each is given a
-        // name via the HasIndex(properties, name) overload itself (a later .HasDatabaseName() call is not
-        // enough — it reconfigures the same index rather than declaring a second one).
-        builder
-            .HasIndex([nameof(Project.ProfileId)], "ix_projects_profile_id_active_plan")
-            .IsUnique()
-            .HasFilter("is_active_plan");
 
         builder
             .HasOne(entity => entity.Profile)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -11,6 +12,12 @@ namespace TacticusPlanner.Persistence.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<Guid>(
+                name: "active_project_id",
+                table: "profiles",
+                type: "uuid",
+                nullable: true);
+
             migrationBuilder.CreateTable(
                 name: "goals",
                 columns: table => new
@@ -23,7 +30,7 @@ namespace TacticusPlanner.Persistence.Migrations
                     goal_type = table.Column<string>(type: "text", nullable: false),
                     status = table.Column<string>(type: "text", nullable: false),
                     notes = table.Column<string>(type: "text", nullable: true),
-                    depends_on = table.Column<string>(type: "jsonb", nullable: false),
+                    depends_on = table.Column<List<Guid>>(type: "uuid[]", nullable: false),
                     aggregate_id = table.Column<Guid>(type: "uuid", nullable: true),
                     created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     updated_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -54,7 +61,6 @@ namespace TacticusPlanner.Persistence.Migrations
                     description = table.Column<string>(type: "text", nullable: true),
                     color = table.Column<string>(type: "text", nullable: true),
                     status = table.Column<string>(type: "text", nullable: false),
-                    is_active_plan = table.Column<bool>(type: "boolean", nullable: false),
                     is_default = table.Column<bool>(type: "boolean", nullable: false),
                     created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     updated_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
@@ -129,13 +135,6 @@ namespace TacticusPlanner.Persistence.Migrations
                 name: "ix_projects_profile_id",
                 table: "projects",
                 column: "profile_id");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_projects_profile_id_active_plan",
-                table: "projects",
-                column: "profile_id",
-                unique: true,
-                filter: "is_active_plan");
         }
 
         /// <inheritdoc />
@@ -152,6 +151,10 @@ namespace TacticusPlanner.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "projects");
+
+            migrationBuilder.DropColumn(
+                name: "active_project_id",
+                table: "profiles");
         }
     }
 }

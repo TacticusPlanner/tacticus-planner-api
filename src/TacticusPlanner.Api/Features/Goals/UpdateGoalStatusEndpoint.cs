@@ -6,18 +6,11 @@ using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.Goals;
 
-/// <summary>Transitions a goal's lifecycle status (pause/resume/complete/archive) and appends a lifecycle
-/// event (plan §10). Deletion goes through <see cref="DeleteGoalEndpoint"/>, not this endpoint.</summary>
-public sealed class UpdateGoalStatusEndpoint : Endpoint<UpdateGoalStatusRequest, GoalDetailResponse>
+/// <summary>Transitions a goal's lifecycle status (pause/resume/complete/archive, including un-archiving
+/// back to active) and appends a lifecycle event (plan §10). Deletion goes through
+/// <see cref="DeleteGoalEndpoint"/>, not this endpoint.</summary>
+public sealed class UpdateGoalStatusEndpoint : Endpoint<UpdateGoalStatusRequest, GoalDetailResponse, GoalMapper>
 {
-    private static readonly HashSet<GoalStatus> AllowedTargets =
-    [
-        GoalStatus.Active,
-        GoalStatus.Paused,
-        GoalStatus.Completed,
-        GoalStatus.Archived,
-    ];
-
     public override void Configure()
     {
         Post("me/goals/{goalId}/status");
@@ -40,23 +33,12 @@ public sealed class UpdateGoalStatusEndpoint : Endpoint<UpdateGoalStatusRequest,
             return;
         }
 
-        if (!Enum.TryParse<GoalStatus>(req.Status, ignoreCase: true, out var targetStatus)
-            || !AllowedTargets.Contains(targetStatus))
-        {
-            AddError(request => request.Status, "Unknown or unsupported target status.");
-            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
-            return;
-        }
+        var targetStatus = Enum.Parse<GoalStatus>(req.Status, ignoreCase: true);
 
         var goalId = Route<Guid>("goalId");
         var db = Resolve<PlannerDbContext>();
 
-        var goal = await db.Goals.FirstOrDefaultAsync(
-            entity => entity.Id == GoalId.From(goalId)
-                && entity.ProfileId == profileId
-                && entity.Status != GoalStatus.Deleted,
-            ct
-        );
+        var goal = await db.Goals.Owned(profileId).FirstOrDefaultAsync(entity => entity.Id == GoalId.From(goalId), ct);
 
         if (goal is null)
         {
@@ -72,16 +54,16 @@ public sealed class UpdateGoalStatusEndpoint : Endpoint<UpdateGoalStatusRequest,
 
         await db.SaveChangesAsync(ct);
 
-        await Send.OkAsync(GoalProjection.BuildDetail(goal), ct);
+        await Send.OkAsync(Map.FromEntity(goal), ct);
     }
 
-    private static string EventTypeFor(GoalStatus status) => status switch
+    private static GoalEventType EventTypeFor(GoalStatus status) => status switch
     {
-        GoalStatus.Active => "resumed",
-        GoalStatus.Paused => "paused",
-        GoalStatus.Completed => "completed",
-        GoalStatus.Archived => "archived",
-        _ => status.ToString().ToLowerInvariant(),
+        GoalStatus.Active => GoalEventType.Resumed,
+        GoalStatus.Paused => GoalEventType.Paused,
+        GoalStatus.Completed => GoalEventType.Completed,
+        GoalStatus.Archived => GoalEventType.Archived,
+        _ => throw new ArgumentOutOfRangeException(nameof(status), status, "Unsupported target status."),
     };
 }
 

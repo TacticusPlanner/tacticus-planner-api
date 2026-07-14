@@ -7,7 +7,7 @@ namespace TacticusPlanner.Api.Features.Projects;
 
 /// <summary>Lists the authenticated user's projects, provisioning the default project ("My Goals") on
 /// first access — every profile always has at least one project (plan §5).</summary>
-public sealed class ListProjectsEndpoint : EndpointWithoutRequest<ListProjectsResponse>
+public sealed class ListProjectsEndpoint : EndpointWithoutRequest<ListProjectsResponse, ProjectMapper>
 {
     public override void Configure()
     {
@@ -35,14 +35,18 @@ public sealed class ListProjectsEndpoint : EndpointWithoutRequest<ListProjectsRe
         await Resolve<ProjectsService>().EnsureDefaultProjectAsync(profileId, ct);
 
         var db = Resolve<PlannerDbContext>();
-        var projects = await db.Projects
+        var profile = await db.Profiles.AsNoTracking().FirstAsync(entity => entity.Id == profileId, ct);
+
+        var projects = await db.Projects.Owned(profileId)
             .AsNoTracking()
-            .Where(entity => entity.ProfileId == profileId)
             .OrderByDescending(entity => entity.IsDefault)
             .ThenBy(entity => entity.CreatedAt)
             .ToListAsync(ct);
 
-        await Send.OkAsync(new ListProjectsResponse(projects.Select(ProjectProjection.BuildSummary).ToList()), ct);
+        await Send.OkAsync(
+            new ListProjectsResponse(projects.Select(project => Map.ToSummary(project, profile.ActiveProjectId)).ToList()),
+            ct
+        );
     }
 }
 

@@ -11,7 +11,7 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
         "character",
         "unit-1",
         "rank",
-        new CreateGoalConfigRequest(RankStart: 1, RankEnd: 5),
+        new CreateGoalConfigRequest(Rank: new RankTargetRequest(1, false, 0, 5, false, 0)),
         null
     );
 

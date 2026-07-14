@@ -6,7 +6,7 @@ using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.Goals;
 
-public sealed class GetGoalEndpoint : EndpointWithoutRequest<GoalDetailResponse>
+public sealed class GetGoalEndpoint : EndpointWithoutRequest<GoalDetailResponse, GoalMapper>
 {
     public override void Configure()
     {
@@ -32,14 +32,9 @@ public sealed class GetGoalEndpoint : EndpointWithoutRequest<GoalDetailResponse>
         var goalId = Route<Guid>("goalId");
         var db = Resolve<PlannerDbContext>();
 
-        var goal = await db.Goals
+        var goal = await db.Goals.Owned(profileId)
             .AsNoTracking()
-            .FirstOrDefaultAsync(
-                entity => entity.Id == GoalId.From(goalId)
-                    && entity.ProfileId == profileId
-                    && entity.Status != GoalStatus.Deleted,
-                ct
-            );
+            .FirstOrDefaultAsync(entity => entity.Id == GoalId.From(goalId), ct);
 
         if (goal is null)
         {
@@ -47,6 +42,6 @@ public sealed class GetGoalEndpoint : EndpointWithoutRequest<GoalDetailResponse>
             return;
         }
 
-        await Send.OkAsync(GoalProjection.BuildDetail(goal), ct);
+        await Send.OkAsync(Map.FromEntity(goal), ct);
     }
 }

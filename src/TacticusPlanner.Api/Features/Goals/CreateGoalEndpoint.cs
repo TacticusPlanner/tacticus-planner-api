@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Api.Features.Projects;
 using TacticusPlanner.Domain.Goals;
+using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Domain.Projects;
 using TacticusPlanner.Persistence;
 
@@ -14,7 +15,7 @@ namespace TacticusPlanner.Api.Features.Goals;
 /// first access). The combined-creation flow (multiple goal types + dependency chains for one entity, plan
 /// §6/§8) is not implemented yet — this endpoint only ever creates one independent goal.
 /// </summary>
-public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailResponse>
+public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailResponse, GoalMapper>
 {
     public override void Configure()
     {
@@ -23,7 +24,8 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
         {
             summary.Summary = "Creates a goal for a character, Machine of War, or (reserved) upgrade material.";
             summary.Description = "Assigns the goal to the given project, or the caller's default project "
-                + "(created on first use) when none is given. Upgrade-entity and material-goal types are "
+                + "(created on first use) when none is given. The goal starts Active if that project is the "
+                + "caller's active plan, otherwise Paused. Upgrade-entity and material-goal types are "
                 + "reserved for a later phase and are rejected here.";
             summary.Response<GoalDetailResponse>(StatusCodes.Status200OK, "The newly created goal.");
             summary.Response(StatusCodes.Status400BadRequest, "Invalid entity/goal type, or an unknown project.");
@@ -41,35 +43,16 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
             return;
         }
 
-        if (!Enum.TryParse<GoalEntityType>(req.EntityType, ignoreCase: true, out var entityType)
-            || entityType == GoalEntityType.Upgrade)
-        {
-            AddError(request => request.EntityType, "Unknown or not-yet-supported entity type.");
-        }
-
-        if (!Enum.TryParse<GoalType>(req.GoalType, ignoreCase: true, out var goalType)
-            || goalType == GoalType.Material)
-        {
-            AddError(request => request.GoalType, "Unknown or not-yet-supported goal type.");
-        }
-
-        if (string.IsNullOrWhiteSpace(req.EntityId))
-        {
-            AddError(request => request.EntityId, "An entity id is required.");
-        }
-
-        ThrowIfAnyErrors();
-
         var db = Resolve<PlannerDbContext>();
         var projects = Resolve<ProjectsService>();
+
+        var profile = await db.Profiles.FirstAsync(entity => entity.Id == profileId, ct);
 
         Project project;
         if (req.ProjectId is { } requestedProjectId)
         {
-            var found = await db.Projects.FirstOrDefaultAsync(
-                entity => entity.Id == ProjectId.From(requestedProjectId) && entity.ProfileId == profileId,
-                ct
-            );
+            var found = await db.Projects.Owned(profileId)
+                .FirstOrDefaultAsync(entity => entity.Id == ProjectId.From(requestedProjectId), ct);
             if (found is null)
             {
                 AddError(request => request.ProjectId, "Unknown project.");
@@ -84,17 +67,13 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
             project = await projects.EnsureDefaultProjectAsync(profileId, ct);
         }
 
-        var goal = new Goal
-        {
-            Id = GoalId.From(Guid.CreateVersion7()),
-            ProfileId = profileId,
-            EntityType = entityType,
-            EntityId = req.EntityId!.Trim(),
-            GoalType = goalType,
-            Status = GoalStatus.Active,
-            Config = MapConfig(req.Config),
-            Events = [new GoalEvent { At = DateTimeOffset.UtcNow, Type = "created" }],
-        };
+        var goal = Map.ToEntity(req);
+        goal.Id = GoalId.From(Guid.CreateVersion7());
+        goal.ProfileId = profileId;
+        goal.EntityType = Enum.Parse<GoalEntityType>(req.EntityType, ignoreCase: true);
+        goal.GoalType = Enum.Parse<GoalType>(req.GoalType, ignoreCase: true);
+        goal.Status = project.Id == profile.ActiveProjectId ? GoalStatus.Active : GoalStatus.Paused;
+        goal.Events = [new GoalEvent { At = DateTimeOffset.UtcNow, Type = GoalEventType.Created }];
 
         db.Goals.Add(goal);
 
@@ -107,27 +86,8 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
 
         await db.SaveChangesAsync(ct);
 
-        await Send.OkAsync(GoalProjection.BuildDetail(goal), ct);
+        await Send.OkAsync(Map.FromEntity(goal), ct);
     }
-
-    private static GoalConfig MapConfig(CreateGoalConfigRequest config) => new()
-    {
-        RankStart = config.RankStart,
-        RankStartPointFive = config.RankStartPointFive,
-        RankStartAppliedUpgrades = config.RankStartAppliedUpgrades,
-        RankEnd = config.RankEnd,
-        RankEndPointFive = config.RankEndPointFive,
-        RankEndAppliedUpgrades = config.RankEndAppliedUpgrades,
-        ProgressionStart = config.ProgressionStart,
-        ProgressionEnd = config.ProgressionEnd,
-        AbilityActiveStart = config.AbilityActiveStart,
-        AbilityActiveEnd = config.AbilityActiveEnd,
-        AbilityPassiveStart = config.AbilityPassiveStart,
-        AbilityPassiveEnd = config.AbilityPassiveEnd,
-        ShardsTarget = config.ShardsTarget,
-        FarmingMode = config.FarmingMode,
-        FarmingLocationIds = config.FarmingLocationIds,
-    };
 }
 
 public sealed record CreateGoalRequest(
@@ -139,19 +99,24 @@ public sealed record CreateGoalRequest(
 );
 
 public sealed record CreateGoalConfigRequest(
-    int? RankStart = null,
-    bool? RankStartPointFive = null,
-    int? RankStartAppliedUpgrades = null,
-    int? RankEnd = null,
-    bool? RankEndPointFive = null,
-    int? RankEndAppliedUpgrades = null,
-    string? ProgressionStart = null,
-    string? ProgressionEnd = null,
-    int? AbilityActiveStart = null,
-    int? AbilityActiveEnd = null,
-    int? AbilityPassiveStart = null,
-    int? AbilityPassiveEnd = null,
-    int? ShardsTarget = null,
-    string? FarmingMode = null,
-    List<string>? FarmingLocationIds = null
+    RankTargetRequest? Rank = null,
+    ProgressionTargetRequest? Progression = null,
+    AbilityTargetRequest? Ability = null,
+    ShardTargetRequest? Shards = null,
+    List<CampaignBattleId>? FarmingLocationIds = null
 );
+
+public sealed record RankTargetRequest(
+    int Start,
+    bool StartPointFive,
+    int StartAppliedUpgrades,
+    int End,
+    bool EndPointFive,
+    int EndAppliedUpgrades
+);
+
+public sealed record ProgressionTargetRequest(string Start, string End);
+
+public sealed record AbilityTargetRequest(int ActiveStart, int ActiveEnd, int PassiveStart, int PassiveEnd);
+
+public sealed record ShardTargetRequest(int Count);

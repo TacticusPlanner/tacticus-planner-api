@@ -5,9 +5,10 @@ namespace TacticusPlanner.Domain.Projects;
 
 /// <summary>
 /// A planning container: the unit goals are grouped, prioritized, and bulk-managed within (plan §3/§5).
-/// Doubles as a "plan" — at most one project per profile may have <see cref="IsActivePlan"/> set, and that
-/// project's goals are the set that will (in a future phase) drive Daily-Raids recommendations. Every goal
-/// must belong to at least one project; each profile is provisioned a default project on first access.
+/// Doubles as a "plan" — a profile's current active plan is the project referenced by its
+/// <see cref="Profiles.Profile.ActiveProjectId"/>, and that project's goals are the set that will (in a
+/// future phase) drive Daily-Raids recommendations. Every goal must belong to at least one project; each
+/// profile is provisioned a default project on first access.
 /// </summary>
 public class Project : BaseEntity<ProjectId>, IRevisionedEntity
 {
@@ -22,8 +23,6 @@ public class Project : BaseEntity<ProjectId>, IRevisionedEntity
     public string? Color { get; set; }
 
     public ProjectStatus Status { get; set; }
-
-    public bool IsActivePlan { get; set; }
 
     /// <summary>True for the profile's auto-provisioned default project ("My Goals") — informational only;
     /// it is an ordinary project otherwise (can be renamed, is not specially protected).</summary>

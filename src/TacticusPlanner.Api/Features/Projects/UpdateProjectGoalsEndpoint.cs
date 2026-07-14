@@ -39,10 +39,7 @@ public sealed class UpdateProjectGoalsEndpoint : Endpoint<UpdateProjectGoalsRequ
         var projectId = ProjectId.From(Route<Guid>("projectId"));
         var db = Resolve<PlannerDbContext>();
 
-        var project = await db.Projects.FirstOrDefaultAsync(
-            entity => entity.Id == projectId && entity.ProfileId == profileId,
-            ct
-        );
+        var project = await db.Projects.Owned(profileId).FirstOrDefaultAsync(entity => entity.Id == projectId, ct);
         if (project is null)
         {
             await Send.NotFoundAsync(ct);

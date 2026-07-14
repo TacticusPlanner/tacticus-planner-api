@@ -6,10 +6,11 @@ using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.Projects;
 
-/// <summary>Marks a project as the profile's single active plan (plan §3.2/§5), clearing the flag on any
-/// other project first — the partial unique index on <c>projects(profile_id) WHERE is_active_plan</c>
-/// would otherwise reject setting two projects active at once.</summary>
-public sealed class ActivateProjectEndpoint : EndpointWithoutRequest<ProjectSummaryResponse>
+/// <summary>Marks a project as the profile's single active plan (plan §3.2/§5) by pointing
+/// <see cref="Profiles.Profile.ActiveProjectId"/> at it — a single scalar update, so "at most one active
+/// plan per profile" is structural (there's only one pointer) rather than enforced by a per-project flag
+/// plus a partial unique index and a clear-then-set two-step save.</summary>
+public sealed class ActivateProjectEndpoint : EndpointWithoutRequest<ProjectSummaryResponse, ProjectMapper>
 {
     public override void Configure()
     {
@@ -35,36 +36,18 @@ public sealed class ActivateProjectEndpoint : EndpointWithoutRequest<ProjectSumm
         var projectId = ProjectId.From(Route<Guid>("projectId"));
         var db = Resolve<PlannerDbContext>();
 
-        var project = await db.Projects.FirstOrDefaultAsync(
-            entity => entity.Id == projectId && entity.ProfileId == profileId,
-            ct
-        );
+        var project = await db.Projects.Owned(profileId).FirstOrDefaultAsync(entity => entity.Id == projectId, ct);
         if (project is null)
         {
             await Send.NotFoundAsync(ct);
             return;
         }
 
-        if (!project.IsActivePlan)
-        {
-            var currentlyActive = await db.Projects
-                .Where(entity => entity.ProfileId == profileId && entity.IsActivePlan && entity.Id != projectId)
-                .ToListAsync(ct);
+        var profile = await db.Profiles.FirstAsync(entity => entity.Id == profileId, ct);
+        profile.ActiveProjectId = projectId;
 
-            foreach (var other in currentlyActive)
-            {
-                other.IsActivePlan = false;
-            }
+        await db.SaveChangesAsync(ct);
 
-            if (currentlyActive.Count > 0)
-            {
-                await db.SaveChangesAsync(ct);
-            }
-
-            project.IsActivePlan = true;
-            await db.SaveChangesAsync(ct);
-        }
-
-        await Send.OkAsync(ProjectProjection.BuildSummary(project), ct);
+        await Send.OkAsync(Map.ToSummary(project, projectId), ct);
     }
 }

@@ -9,16 +9,16 @@ namespace TacticusPlanner.Api.Features.Goals;
 /// <summary>
 /// Updates a goal's editable fields only (plan §7). The target end-state in <see cref="Goal.Config"/> and
 /// the creation snapshot are immutable — redefining them means creating a replacement goal, not editing
-/// this one. Only <c>notes</c> and the farming override are writable here.
+/// this one. Only <c>notes</c> and the farming-location override are writable here.
 /// </summary>
-public sealed class UpdateGoalEndpoint : Endpoint<UpdateGoalRequest, GoalDetailResponse>
+public sealed class UpdateGoalEndpoint : Endpoint<UpdateGoalRequest, GoalDetailResponse, GoalMapper>
 {
     public override void Configure()
     {
         Put("me/goals/{goalId}");
         Summary(summary =>
         {
-            summary.Summary = "Updates a goal's editable fields (notes, farming override).";
+            summary.Summary = "Updates a goal's editable fields (notes, farming-location override).";
             summary.Description = "The goal's target end-state and creation snapshot cannot be changed here "
                 + "— create a replacement goal instead.";
             summary.Response<GoalDetailResponse>(StatusCodes.Status200OK, "The updated goal.");
@@ -39,12 +39,7 @@ public sealed class UpdateGoalEndpoint : Endpoint<UpdateGoalRequest, GoalDetailR
         var goalId = Route<Guid>("goalId");
         var db = Resolve<PlannerDbContext>();
 
-        var goal = await db.Goals.FirstOrDefaultAsync(
-            entity => entity.Id == GoalId.From(goalId)
-                && entity.ProfileId == profileId
-                && entity.Status != GoalStatus.Deleted,
-            ct
-        );
+        var goal = await db.Goals.Owned(profileId).FirstOrDefaultAsync(entity => entity.Id == GoalId.From(goalId), ct);
 
         if (goal is null)
         {
@@ -53,13 +48,12 @@ public sealed class UpdateGoalEndpoint : Endpoint<UpdateGoalRequest, GoalDetailR
         }
 
         goal.Notes = req.Notes;
-        goal.Config.FarmingMode = req.FarmingMode;
-        goal.Config.FarmingLocationIds = req.FarmingLocationIds;
+        goal.Config.FarmingLocationIds = req.FarmingLocationIds?.Select(id => id.Value).ToList();
 
         await db.SaveChangesAsync(ct);
 
-        await Send.OkAsync(GoalProjection.BuildDetail(goal), ct);
+        await Send.OkAsync(Map.FromEntity(goal), ct);
     }
 }
 
-public sealed record UpdateGoalRequest(string? Notes, string? FarmingMode, List<string>? FarmingLocationIds);
+public sealed record UpdateGoalRequest(string? Notes, List<CampaignBattleId>? FarmingLocationIds);

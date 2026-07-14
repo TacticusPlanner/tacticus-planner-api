@@ -1,11 +1,12 @@
 using FastEndpoints;
+using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Domain.Projects;
 using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.Projects;
 
-public sealed class CreateProjectEndpoint : Endpoint<CreateProjectRequest, ProjectSummaryResponse>
+public sealed class CreateProjectEndpoint : Endpoint<CreateProjectRequest, ProjectSummaryResponse, ProjectMapper>
 {
     public override void Configure()
     {
@@ -38,21 +39,16 @@ public sealed class CreateProjectEndpoint : Endpoint<CreateProjectRequest, Proje
         }
 
         var db = Resolve<PlannerDbContext>();
+        var profile = await db.Profiles.AsNoTracking().FirstAsync(entity => entity.Id == profileId, ct);
 
-        var project = new Project
-        {
-            Id = ProjectId.From(Guid.CreateVersion7()),
-            ProfileId = profileId,
-            Name = name,
-            Description = req.Description,
-            Color = req.Color,
-            Status = ProjectStatus.Active,
-        };
+        var project = Map.ToEntity(req);
+        project.Id = ProjectId.From(Guid.CreateVersion7());
+        project.ProfileId = profileId;
 
         db.Projects.Add(project);
         await db.SaveChangesAsync(ct);
 
-        await Send.OkAsync(ProjectProjection.BuildSummary(project), ct);
+        await Send.OkAsync(Map.ToSummary(project, profile.ActiveProjectId), ct);
     }
 }
 

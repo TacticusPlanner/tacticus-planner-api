@@ -6,8 +6,10 @@ using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.Goals;
 
-/// <summary>Deletes a goal — soft by default (plan §12), so history/Insights stay coherent; pass
-/// <c>?purge=true</c> to permanently remove the row and its project memberships.</summary>
+/// <summary>Permanently deletes a goal — a hard delete, not a status change. Cascades to its
+/// <c>project_goals</c> memberships (see <c>ProjectGoalConfiguration</c>'s cascade delete on
+/// <c>GoalId</c>). Archived goals are not deleted by this; they stay retrievable via the archived tab
+/// (<c>GET me/goals?archived=true</c>) until explicitly deleted here.</summary>
 public sealed class DeleteGoalEndpoint : EndpointWithoutRequest
 {
     public override void Configure()
@@ -15,9 +17,7 @@ public sealed class DeleteGoalEndpoint : EndpointWithoutRequest
         Delete("me/goals/{goalId}");
         Summary(summary =>
         {
-            summary.Summary = "Deletes a goal.";
-            summary.Description = "Soft-deletes by default (status becomes 'deleted', row is retained for "
-                + "history). Pass ?purge=true to permanently remove the goal and its project memberships.";
+            summary.Summary = "Permanently deletes a goal.";
             summary.Response(StatusCodes.Status204NoContent, "The goal was deleted.");
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
             summary.Response(StatusCodes.Status404NotFound, "No matching goal owned by the caller.");
@@ -34,29 +34,17 @@ public sealed class DeleteGoalEndpoint : EndpointWithoutRequest
         }
 
         var goalId = Route<Guid>("goalId");
-        var purge = Query<bool?>("purge", isRequired: false) ?? false;
         var db = Resolve<PlannerDbContext>();
 
-        var goal = await db.Goals.FirstOrDefaultAsync(
-            entity => entity.Id == GoalId.From(goalId) && entity.ProfileId == profileId,
-            ct
-        );
+        var goal = await db.Goals.Owned(profileId).FirstOrDefaultAsync(entity => entity.Id == GoalId.From(goalId), ct);
 
-        if (goal is null || (!purge && goal.Status == GoalStatus.Deleted))
+        if (goal is null)
         {
             await Send.NotFoundAsync(ct);
             return;
         }
 
-        if (purge)
-        {
-            db.Goals.Remove(goal);
-        }
-        else
-        {
-            goal.Status = GoalStatus.Deleted;
-            goal.Events.Add(new GoalEvent { At = DateTimeOffset.UtcNow, Type = "deleted" });
-        }
+        db.Goals.Remove(goal);
 
         await db.SaveChangesAsync(ct);
 

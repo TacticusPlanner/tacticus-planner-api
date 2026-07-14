@@ -8,6 +8,5 @@ public sealed class GoalEvent
 {
     public DateTimeOffset At { get; set; }
 
-    /// <summary>created | paused | resumed | priorityChanged | completed | archived | deleted.</summary>
-    public required string Type { get; set; }
+    public required GoalEventType Type { get; set; }
 }
