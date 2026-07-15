@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
+using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Api.Features.V1Import;
 
 namespace TacticusPlanner.Api.Tests;
@@ -13,7 +14,7 @@ public sealed class V1ImportEndpointTests(PlannerApiFactory factory) : IClassFix
 
         var response = await client.PostAsJsonAsync(
             "/api/v1/me/v1-import",
-            new ImportV1ProfileRequest(FakeTacticusV1Client.ValidUsername, FakeTacticusV1Client.ValidPassword),
+            OnboardingRequest(FakeTacticusV1Client.ValidUsername, FakeTacticusV1Client.ValidPassword),
             TestContext.Current.CancellationToken
         );
 
@@ -35,7 +36,7 @@ public sealed class V1ImportEndpointTests(PlannerApiFactory factory) : IClassFix
 
         var response = await client.PostAsJsonAsync(
             "/api/v1/me/v1-import",
-            new ImportV1ProfileRequest(FakeTacticusV1Client.ValidUsername, "wrong-password"),
+            OnboardingRequest(FakeTacticusV1Client.ValidUsername, "wrong-password"),
             TestContext.Current.CancellationToken
         );
 
@@ -43,17 +44,23 @@ public sealed class V1ImportEndpointTests(PlannerApiFactory factory) : IClassFix
     }
 
     [Fact]
-    public async Task V1ProfileWithoutATacticusApiKeyIsRejected()
+    public async Task MissingSelectedPartIsReportedWithoutFailingCredentialImport()
     {
         var client = await CreateProvisionedClientAsync();
 
         var response = await client.PostAsJsonAsync(
             "/api/v1/me/v1-import",
-            new ImportV1ProfileRequest(FakeTacticusV1Client.UsernameWithoutTacticusKey, FakeTacticusV1Client.ValidPassword),
+            OnboardingRequest(FakeTacticusV1Client.UsernameWithoutTacticusKey, FakeTacticusV1Client.ValidPassword),
             TestContext.Current.CancellationToken
         );
 
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var body = await response.Content.ReadFromJsonAsync<ImportV1ProfileResponse>(TestContext.Current.CancellationToken);
+        Assert.NotNull(body);
+        Assert.Equal("Skipped", body.PersonalTacticusApiKey.Status);
+        Assert.Equal("missing_personal_api_key", body.PersonalTacticusApiKey.Code);
+        Assert.Equal("Skipped", body.TacticusUserId.Status);
+        Assert.Equal("missing_tacticus_user_id", body.TacticusUserId.Code);
     }
 
     [Fact]
@@ -63,11 +70,76 @@ public sealed class V1ImportEndpointTests(PlannerApiFactory factory) : IClassFix
 
         var response = await client.PostAsJsonAsync(
             "/api/v1/me/v1-import",
-            new ImportV1ProfileRequest(null, null),
+            OnboardingRequest(null, null),
             TestContext.Current.CancellationToken
         );
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task GoalsOnlyImportReplacesMatchingNativeGoalAndReportsUnsupportedGoals()
+    {
+        var client = await CreateProvisionedClientAsync();
+        var nativeResponse = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            new CreateGoalRequest(
+                "character",
+                "ultraInceptorSgt",
+                "rank",
+                new CreateGoalConfigRequest(
+                    Rank: new RankTargetRequest(0, false, 0, 1, false, 0)
+                ),
+                null
+            ),
+            TestContext.Current.CancellationToken
+        );
+        nativeResponse.EnsureSuccessStatusCode();
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/v1-import",
+            new ImportV1ProfileRequest(
+                FakeTacticusV1Client.UsernameWithGoals,
+                FakeTacticusV1Client.ValidPassword,
+                new ImportV1Selection(false, false, false, true)
+            ),
+            TestContext.Current.CancellationToken
+        );
+        response.EnsureSuccessStatusCode();
+        var body = await response.Content.ReadFromJsonAsync<ImportV1ProfileResponse>(TestContext.Current.CancellationToken);
+
+        Assert.NotNull(body);
+        Assert.Equal("Imported", body.Goals.Status);
+        Assert.Equal(1, body.GoalsImported);
+        Assert.Equal(1, body.GoalsReplaced);
+        Assert.Equal(1, body.GoalsSkipped);
+        Assert.Contains(body.GoalIssues, issue => issue.Code == "unsupported_goal_type");
+        Assert.Equal("not_selected", body.PersonalTacticusApiKey.Code);
+
+        var repeatedResponse = await client.PostAsJsonAsync(
+            "/api/v1/me/v1-import",
+            new ImportV1ProfileRequest(
+                FakeTacticusV1Client.UsernameWithGoals,
+                FakeTacticusV1Client.ValidPassword,
+                new ImportV1Selection(false, false, false, true)
+            ),
+            TestContext.Current.CancellationToken
+        );
+        repeatedResponse.EnsureSuccessStatusCode();
+        var repeated = await repeatedResponse.Content.ReadFromJsonAsync<ImportV1ProfileResponse>(TestContext.Current.CancellationToken);
+        Assert.NotNull(repeated);
+        Assert.Equal(1, repeated.GoalsImported);
+        Assert.Equal(1, repeated.GoalsReplaced);
+
+        var goals = await client.GetFromJsonAsync<ListGoalsResponse>(
+            "/api/v1/me/goals",
+            TestContext.Current.CancellationToken
+        );
+        var imported = Assert.Single(goals!.Goals);
+        Assert.Equal("ultraInceptorSgt", imported.EntityId);
+        Assert.Equal("Paused", imported.Status);
+        Assert.Equal("Imported note", imported.Notes);
+        Assert.Equal(1, imported.MilestonesTotal);
     }
 
     private async Task<HttpClient> CreateProvisionedClientAsync()
@@ -79,6 +151,9 @@ public sealed class V1ImportEndpointTests(PlannerApiFactory factory) : IClassFix
 
         return client;
     }
+
+    private static ImportV1ProfileRequest OnboardingRequest(string? username, string? password) =>
+        new(username, password, new ImportV1Selection(true, true, false, false));
 
     private static string NewSubject() => $"v1-import-{Guid.NewGuid()}";
 }

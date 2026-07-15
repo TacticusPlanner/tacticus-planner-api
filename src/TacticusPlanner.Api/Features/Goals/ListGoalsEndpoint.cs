@@ -40,7 +40,9 @@ public sealed class ListGoalsEndpoint : EndpointWithoutRequest<ListGoalsResponse
 
         var goals = await db.Goals.Owned(profileId)
             .AsNoTracking()
-            .Where(entity => archived ? entity.Status == GoalStatus.Archived : entity.Status != GoalStatus.Archived)
+            .Where(entity => archived
+                ? entity.Status == GoalStatus.Archived
+                : entity.Status != GoalStatus.Archived && entity.Status != GoalStatus.Deleted)
             .OrderByDescending(entity => entity.CreatedAt)
             .ToListAsync(ct);
 

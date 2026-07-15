@@ -1,5 +1,6 @@
 using TacticusPlanner.Domain.Accounts;
 using TacticusPlanner.Domain.Common;
+using TacticusPlanner.Domain.Planning;
 using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.Projects;
 
@@ -28,4 +29,6 @@ public class Profile : BaseEntity<ProfileId>
     public virtual PlayerDataSnapshot? PlayerDataSnapshot { get; set; }
 
     public virtual PlayerDataOverride? PlayerDataOverride { get; set; }
+
+    public virtual PlanningSettings? PlanningSettings { get; set; }
 }

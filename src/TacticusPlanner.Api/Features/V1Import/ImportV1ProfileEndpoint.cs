@@ -1,6 +1,7 @@
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Api.Features.Guilds;
 using TacticusPlanner.Api.Features.TacticusIntegration;
 using TacticusPlanner.Api.Http;
 using TacticusPlanner.Domain.Profiles;
@@ -17,112 +18,232 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
         Post("me/v1-import");
         Summary(summary =>
         {
-            summary.Summary = "Imports the Tacticus API key and user id from a V1 planner profile.";
-            summary.Description = "Uses the supplied V1 username and password only to acquire a short-lived V1 "
-                + "access token and read the V1 profile. The V1 credentials are never persisted; only the "
-                + "personal Tacticus API key and Tacticus user id are imported into V2.";
-            summary.Response<ImportV1ProfileResponse>(
-                StatusCodes.Status200OK,
-                "The imported Tacticus integration summary."
-            );
-            summary.Response(
-                StatusCodes.Status400BadRequest,
-                "Invalid V1 credentials, no Tacticus API key on the V1 profile, or the imported key failed validation."
-            );
-            summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
-            summary.Response(StatusCodes.Status403Forbidden, "The authenticated user cannot access the API.");
-            summary.Response(StatusCodes.Status404NotFound, "The authenticated user has not signed up yet.");
+            summary.Summary = "Selectively imports integration data, guild registration, and goals from V1.";
+            summary.Description = "V1 credentials are used once and never persisted. After profile retrieval, "
+                + "each selected part is applied independently and reports Imported, Skipped, or Failed.";
         });
     }
 
     public override async Task HandleAsync(ImportV1ProfileRequest req, CancellationToken ct)
     {
-        var state = ProcessorState<CurrentUserState>();
-        if (state.ProfileId is not { } profileId)
+        var profileId = ProcessorState<CurrentUserState>().ProfileId;
+        if (profileId is null)
         {
             await Send.NotFoundAsync(ct);
             return;
         }
 
-        // Username/password presence is enforced by ImportV1ProfileValidator; both are guaranteed non-blank here.
-        var username = req.Username!.Trim();
-        var password = req.Password!;
-
-        var db = Resolve<PlannerDbContext>();
-        var profile = await db.Profiles
-            .Include(entity => entity.TacticusIntegration)
-            .FirstOrDefaultAsync(entity => entity.Id == profileId, ct);
-
-        if (profile is null)
-        {
-            await Send.NotFoundAsync(ct);
-            return;
-        }
-
-        var v1Client = Resolve<ITacticusV1Client>();
-
-        // The V1 username/password live only in this local scope: they are used once to acquire a V1 access
-        // token and are never written to the database or logs.
-        var v1AccessToken = await v1Client.LoginAsync(username, password, ct);
-        if (v1AccessToken is null)
+        var client = Resolve<ITacticusV1Client>();
+        var accessToken = await client.LoginAsync(req.Username!.Trim(), req.Password!, ct);
+        if (accessToken is null)
         {
             AddError(request => request.Password, "The V1 username or password is invalid.");
             await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
             return;
         }
 
-        var v1Profile = await v1Client.GetProfileAsync(v1AccessToken, ct);
-        if (v1Profile?.TacticusApiKey is not { } tacticusApiKey)
+        var v1 = await client.GetProfileAsync(accessToken, ct);
+        if (v1 is null)
         {
-            AddError(request => request.Username, "The V1 profile does not have a Tacticus API key configured.");
+            AddError(request => request.Username, "The V1 profile could not be retrieved.");
             await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
             return;
         }
 
-        var validation = await Resolve<TacticusApiKeyValidator>().ValidateAsync(tacticusApiKey, ct);
-        if (validation is null)
+        var selection = req.Import!;
+        var userId = selection.TacticusUserId
+            ? await ImportUserIdAsync(profileId.Value, v1.TacticusUserId, ct)
+            : ImportPartResult.NotSelected();
+        var personalKey = selection.PersonalTacticusApiKey
+            ? await ImportPersonalKeyAsync(profileId.Value, v1.TacticusApiKey, ct)
+            : new PersonalKeyImportResult(ImportPartResult.NotSelected(), null, 0);
+        var guild = selection.GuildApiToken
+            ? await ImportGuildAsync(profileId.Value, v1.GuildApiKey, ct)
+            : ImportPartResult.NotSelected();
+
+        V1GoalImportResult goalResult;
+        ImportPartResult goals;
+        if (!selection.Goals)
         {
-            AddError(request => request.Username, "The imported Tacticus API key could not be validated.");
-            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
-            return;
+            goalResult = new V1GoalImportResult(0, 0, 0, []);
+            goals = ImportPartResult.NotSelected();
         }
-
-        var integration = profile.TacticusIntegration;
-        if (integration is null)
+        else
         {
-            integration = new TacticusIntegrationEntity { Id = profile.Id };
-            db.TacticusIntegrations.Add(integration);
+            try
+            {
+                goalResult = await Resolve<V1GoalImportService>().ImportAsync(profileId.Value, v1.Goals, ct);
+                goals = goalResult.Imported > 0
+                    ? new ImportPartResult("Imported", null, null)
+                    : new ImportPartResult("Skipped", "no_importable_goals", "No supported V1 goals were available to import.");
+            }
+            catch (Exception exception) when (exception is DbUpdateException or InvalidOperationException)
+            {
+                goalResult = new V1GoalImportResult(0, 0, v1.Goals.Count, []);
+                goals = new ImportPartResult("Failed", "goal_import_failed", "The translated goals could not be saved.");
+            }
         }
-
-        var now = Resolve<TimeProvider>().GetUtcNow();
-        integration.TacticusApiKey = tacticusApiKey;
-        integration.TacticusSyncLastAttemptedAt = now;
-        integration.TacticusSyncLastSucceededAt = now;
-
-        if (v1Profile.TacticusUserId is { } tacticusUserId)
-        {
-            profile.TacticusUserId = TacticusUserId.From(tacticusUserId);
-            profile.TacticusUserIdHash = Resolve<IColumnHashService>().ComputeHash(tacticusUserId);
-        }
-
-        await db.SaveChangesAsync(ct);
 
         await Send.OkAsync(new ImportV1ProfileResponse(
-            profile.Id.Value,
-            validation.PlayerName,
-            validation.PowerLevel,
-            SecretMasker.Mask(integration.TacticusApiKey),
-            SecretMasker.Mask(profile.TacticusUserId?.Value)
-        ), ct);
+            userId,
+            personalKey.Part,
+            guild,
+            goals,
+            goalResult.Imported,
+            goalResult.Replaced,
+            goalResult.Skipped,
+            goalResult.Issues
+        )
+        {
+            ProfileId = profileId.Value.Value,
+            PlayerName = personalKey.PlayerName,
+            PowerLevel = personalKey.PowerLevel,
+            TacticusApiKeyMasked = personalKey.Part.Status == "Imported"
+                ? SecretMasker.Mask(v1.TacticusApiKey)
+                : null,
+            TacticusUserIdMasked = userId.Status == "Imported"
+                ? SecretMasker.Mask(v1.TacticusUserId)
+                : null,
+        }, ct);
     }
+
+    private async Task<ImportPartResult> ImportUserIdAsync(ProfileId profileId, string? value, CancellationToken ct)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return new ImportPartResult("Skipped", "missing_tacticus_user_id", "The V1 profile has no Tacticus User ID.");
+        }
+
+        var db = Resolve<PlannerDbContext>();
+        var profile = await db.Profiles.FirstAsync(entity => entity.Id == profileId, ct);
+        profile.TacticusUserId = TacticusUserId.From(value);
+        profile.TacticusUserIdHash = Resolve<IColumnHashService>().ComputeHash(value);
+        try
+        {
+            await db.SaveChangesAsync(ct);
+            return new ImportPartResult("Imported", null, null);
+        }
+        catch (DbUpdateException)
+        {
+            db.ChangeTracker.Clear();
+            return new ImportPartResult("Failed", "tacticus_user_id_conflict", "The imported Tacticus User ID is already linked to another profile.");
+        }
+    }
+
+    private async Task<PersonalKeyImportResult> ImportPersonalKeyAsync(
+        ProfileId profileId,
+        string? value,
+        CancellationToken ct
+    )
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return new PersonalKeyImportResult(
+                new ImportPartResult("Skipped", "missing_personal_api_key", "The V1 profile has no personal Tacticus API key."),
+                null,
+                0
+            );
+        }
+
+        var validation = await Resolve<TacticusApiKeyValidator>().ValidateAsync(value, ct);
+        if (validation is null)
+        {
+            return new PersonalKeyImportResult(
+                new ImportPartResult("Failed", "personal_api_key_invalid", "The imported personal API key could not be validated."),
+                null,
+                0
+            );
+        }
+
+        var db = Resolve<PlannerDbContext>();
+        var integration = await db.TacticusIntegrations.FirstOrDefaultAsync(entity => entity.Id == profileId, ct);
+        if (integration is null)
+        {
+            integration = new TacticusIntegrationEntity { Id = profileId };
+            db.TacticusIntegrations.Add(integration);
+        }
+        var now = Resolve<TimeProvider>().GetUtcNow();
+        integration.TacticusApiKey = value;
+        integration.TacticusSyncLastAttemptedAt = now;
+        integration.TacticusSyncLastSucceededAt = now;
+        await db.SaveChangesAsync(ct);
+        return new PersonalKeyImportResult(
+            new ImportPartResult("Imported", null, null),
+            validation.PlayerName,
+            validation.PowerLevel
+        );
+    }
+
+    private async Task<ImportPartResult> ImportGuildAsync(ProfileId profileId, string? token, CancellationToken ct)
+    {
+        if (string.IsNullOrWhiteSpace(token))
+        {
+            return new ImportPartResult("Skipped", "missing_guild_api_token", "The V1 profile has no guild API token.");
+        }
+
+        var db = Resolve<PlannerDbContext>();
+        var userId = await db.Profiles.Where(entity => entity.Id == profileId).Select(entity => entity.TacticusUserId).FirstAsync(ct);
+        if (userId is null)
+        {
+            return new ImportPartResult("Failed", "missing_tacticus_user_id", "A Tacticus User ID is required before guild registration.");
+        }
+
+        var result = await Resolve<GuildSyncService>()
+            .SynchronizeAsync(profileId, userId.Value, token, persistToken: true, ct, persistTokenOnlyIfNew: true);
+        return result switch
+        {
+            GuildSyncResult.Success { WasCreated: true } => new ImportPartResult("Imported", null, null),
+            GuildSyncResult.Success => new ImportPartResult("Skipped", "guild_already_registered", "The guild is already registered."),
+            _ => new ImportPartResult("Failed", result.GetType().Name, GetGuildFailureMessage(result)),
+        };
+    }
+
+    private static string GetGuildFailureMessage(GuildSyncResult result) => result switch
+    {
+        GuildSyncResult.InvalidRequest value => value.Message,
+        GuildSyncResult.UpstreamRejected value => value.Message,
+        GuildSyncResult.UpstreamUnavailable value => value.Message,
+        GuildSyncResult.InvalidUpstreamData value => value.Message,
+        GuildSyncResult.CallerNotAuthorized value => value.Message,
+        GuildSyncResult.Conflict value => value.Message,
+        _ => "Guild registration failed.",
+    };
+
+    private sealed record PersonalKeyImportResult(
+        ImportPartResult Part,
+        string? PlayerName,
+        int PowerLevel
+    );
 }
 
-public sealed record ImportV1ProfileRequest(string? Username, string? Password);
+public sealed record ImportV1Selection(
+    bool PersonalTacticusApiKey,
+    bool TacticusUserId,
+    bool GuildApiToken,
+    bool Goals
+);
+
+public sealed record ImportV1ProfileRequest(string? Username, string? Password, ImportV1Selection? Import);
+
+public sealed record ImportPartResult(string Status, string? Code, string? Message)
+{
+    public static ImportPartResult NotSelected() => new("Skipped", "not_selected", null);
+}
 
 public sealed record ImportV1ProfileResponse(
-    Guid ProfileId,
-    string PlayerName,
-    int PowerLevel,
-    string? TacticusApiKeyMasked,
-    string? TacticusUserIdMasked
-);
+    ImportPartResult TacticusUserId,
+    ImportPartResult PersonalTacticusApiKey,
+    ImportPartResult GuildApiToken,
+    ImportPartResult Goals,
+    int GoalsImported,
+    int GoalsReplaced,
+    int GoalsSkipped,
+    IReadOnlyList<V1ImportIssue> GoalIssues
+)
+{
+    public Guid ProfileId { get; init; }
+    public string? PlayerName { get; init; }
+    public int PowerLevel { get; init; }
+    public string? TacticusApiKeyMasked { get; init; }
+    public string? TacticusUserIdMasked { get; init; }
+}

@@ -15,6 +15,16 @@ namespace TacticusPlanner.Api.Features.Goals;
 /// </summary>
 public static class MilestoneGenerator
 {
+    private static readonly string[] ProgressionOrder =
+    [
+        "Common:None", "Common:OneStar", "Common:TwoStars", "Uncommon:TwoStars",
+        "Uncommon:ThreeStars", "Uncommon:FourStars", "Rare:FourStars", "Rare:FiveStars",
+        "Rare:RedOneStar", "Epic:RedOneStar", "Epic:RedTwoStars", "Epic:RedThreeStars",
+        "Legendary:RedThreeStars", "Legendary:RedFourStars", "Legendary:RedFiveStars",
+        "Legendary:OneBlueStar", "Mythic:OneBlueStar", "Mythic:TwoBlueStars",
+        "Mythic:ThreeBlueStars", "Mythic:MythicWings",
+    ];
+
     private static readonly int[] Breakpoints =
     [
         (int)UnitRank.Bronze1,
@@ -49,6 +59,27 @@ public static class MilestoneGenerator
                 Index = index,
                 Kind = "rank",
                 TargetState = ((UnitRank)rank).ToString(),
+                Source = "calculated",
+                Status = "pending",
+            })
+            .ToList();
+    }
+
+    public static List<GoalMilestone> ForProgression(string start, string end)
+    {
+        var startIndex = Array.IndexOf(ProgressionOrder, start);
+        var endIndex = Array.IndexOf(ProgressionOrder, end);
+        if (startIndex < 0 || endIndex <= startIndex)
+        {
+            return [];
+        }
+
+        return ProgressionOrder[(startIndex + 1)..(endIndex + 1)]
+            .Select((target, index) => new GoalMilestone
+            {
+                Index = index,
+                Kind = "progression",
+                TargetState = target,
                 Source = "calculated",
                 Status = "pending",
             })

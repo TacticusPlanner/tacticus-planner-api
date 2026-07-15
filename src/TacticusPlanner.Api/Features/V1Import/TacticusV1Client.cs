@@ -1,4 +1,5 @@
 using System.Net.Http.Headers;
+using System.Text.Json;
 
 namespace TacticusPlanner.Api.Features.V1Import;
 
@@ -14,11 +15,45 @@ public interface ITacticusV1Client
     Task<TacticusV1Profile?> GetProfileAsync(string accessToken, CancellationToken cancellationToken);
 }
 
-public sealed record TacticusV1Profile(string? TacticusApiKey, string? TacticusUserId);
+public sealed record TacticusV1Profile(
+    string? TacticusApiKey,
+    string? TacticusUserId,
+    string? GuildApiKey,
+    IReadOnlyList<V1Goal> Goals
+)
+{
+    public TacticusV1Profile(string? tacticusApiKey, string? tacticusUserId)
+        : this(tacticusApiKey, tacticusUserId, null, [])
+    {
+    }
+}
+
+public sealed record V1Goal(
+    string? Id,
+    string? Character,
+    int Type,
+    int Priority,
+    bool DailyRaids,
+    string? Notes,
+    int? StartingRank,
+    bool? StartingRankPoint5,
+    int? StartingRankAppliedUpgrades,
+    int? TargetRank,
+    bool? RankPoint5,
+    int? RankAppliedUpgrades,
+    int? StartingRarity,
+    int? StartingStars,
+    int? TargetRarity,
+    int? TargetStars,
+    string? UnitId,
+    int? FirstAbilityLevel,
+    int? SecondAbilityLevel
+);
 
 public sealed class TacticusV1Client(IHttpClientFactory httpClientFactory) : ITacticusV1Client
 {
     public const string HttpClientName = "TacticusV1";
+    private static readonly JsonSerializerOptions WebJsonOptions = new(JsonSerializerDefaults.Web);
 
     public async Task<string?> LoginAsync(string username, string password, CancellationToken cancellationToken)
     {
@@ -63,8 +98,22 @@ public sealed class TacticusV1Client(IHttpClientFactory httpClientFactory) : ITa
 
         return new TacticusV1Profile(
             string.IsNullOrWhiteSpace(payload.TacticusApiKey) ? null : payload.TacticusApiKey,
-            string.IsNullOrWhiteSpace(payload.TacticusUserId) ? null : payload.TacticusUserId
+            string.IsNullOrWhiteSpace(payload.TacticusUserId) ? null : payload.TacticusUserId,
+            string.IsNullOrWhiteSpace(payload.TacticusGuildApiKey) ? null : payload.TacticusGuildApiKey,
+            ReadGoals(payload.Data)
         );
+    }
+
+    private static List<V1Goal> ReadGoals(JsonElement? data)
+    {
+        if (data is not { ValueKind: JsonValueKind.Object } value
+            || !value.TryGetProperty("goals", out var goals)
+            || goals.ValueKind != JsonValueKind.Array)
+        {
+            return [];
+        }
+
+        return goals.Deserialize<List<V1Goal>>(WebJsonOptions) ?? [];
     }
 
     private sealed record V1LoginRequest(string Username, string Password);
@@ -72,7 +121,12 @@ public sealed class TacticusV1Client(IHttpClientFactory httpClientFactory) : ITa
     private sealed record V1LoginResponse(string? AccessToken);
 
     // The V1 `GET users/me` response carries many legacy planner fields; only these two are relevant to import.
-    private sealed record V1UserDataResponse(string? TacticusApiKey, string? TacticusUserId);
+    private sealed record V1UserDataResponse(
+        string? TacticusApiKey,
+        string? TacticusUserId,
+        string? TacticusGuildApiKey,
+        JsonElement? Data
+    );
 }
 
 public static class TacticusV1ClientRegistration

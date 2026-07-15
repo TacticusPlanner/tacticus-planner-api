@@ -27,7 +27,8 @@ public sealed class GuildSyncService(
         TacticusUserId callerTacticusUserId,
         string guildApiToken,
         bool persistToken,
-        CancellationToken ct
+        CancellationToken ct,
+        bool persistTokenOnlyIfNew = false
     )
     {
         if (!Guid.TryParse(callerTacticusUserId.Value, out var callerTacticusGuid))
@@ -101,7 +102,7 @@ public sealed class GuildSyncService(
         guild.Name = upstream.Name;
         guild.Level = upstream.Level;
 
-        if (persistToken)
+        if (persistToken && (!persistTokenOnlyIfNew || isNewGuild))
         {
             guild.GuildApiToken = guildApiToken;
             guild.ConfiguredByProfileId = callerProfileId;
@@ -136,7 +137,7 @@ public sealed class GuildSyncService(
         var callerId = TacticusUserId.From(callerTacticusGuid.ToString());
         var callerMember = guild.Members.First(member => member.TacticusUserId == callerId);
 
-        return new GuildSyncResult.Success(guild, callerMember);
+        return new GuildSyncResult.Success(guild, callerMember, isNewGuild);
     }
 
     private async Task LinkAndUpsertMembersAsync(
@@ -257,7 +258,7 @@ public sealed class GuildSyncService(
 /// HTTP status the Guild Phase 1 spec calls for instead of relying on exceptions for control flow.</summary>
 public abstract record GuildSyncResult
 {
-    public sealed record Success(Guild Guild, GuildMember CallerMember) : GuildSyncResult;
+    public sealed record Success(Guild Guild, GuildMember CallerMember, bool WasCreated) : GuildSyncResult;
 
     /// <summary>The caller's Tacticus User ID is missing/malformed — 400.</summary>
     public sealed record InvalidRequest(string Message) : GuildSyncResult;

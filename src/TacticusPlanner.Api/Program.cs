@@ -42,6 +42,7 @@ builder.Services.AddSingleton<IColumnHashService, HmacColumnHashService>();
 builder.Services.AddScoped<TacticusApiKeyValidator>();
 builder.Services.AddScoped<PlayerDataTransformer>();
 builder.Services.AddScoped<GuildSyncService>();
+builder.Services.AddScoped<V1GoalImportService>();
 builder.Services.AddScoped<ProjectsService>();
 builder.Services.AddSingleton<IExternalIdentityDeleter, NoOpExternalIdentityDeleter>();
 builder.Services.AddGameCatalog();

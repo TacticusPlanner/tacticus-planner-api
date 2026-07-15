@@ -12,4 +12,5 @@ public enum GoalEventType
     PriorityChanged,
     Completed,
     Archived,
+    Deleted,
 }

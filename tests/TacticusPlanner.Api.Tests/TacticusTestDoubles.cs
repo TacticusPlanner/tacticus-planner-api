@@ -224,10 +224,12 @@ internal sealed class FakeTacticusV1Client : ITacticusV1Client
     public const string ValidUsername = "v1-user";
     public const string ValidPassword = "v1-password";
     public const string UsernameWithoutTacticusKey = "v1-user-no-key";
+    public const string UsernameWithGoals = "v1-user-with-goals";
     public const string TacticusUserId = "v1-tacticus-user-id";
 
     private const string AccessToken = "v1-access-token-for-" + ValidUsername;
     private const string AccessTokenNoKey = "v1-access-token-for-" + UsernameWithoutTacticusKey;
+    private const string AccessTokenWithGoals = "v1-access-token-for-" + UsernameWithGoals;
 
     public Task<string?> LoginAsync(string username, string password, CancellationToken cancellationToken)
     {
@@ -240,6 +242,7 @@ internal sealed class FakeTacticusV1Client : ITacticusV1Client
         {
             ValidUsername => Task.FromResult<string?>(AccessToken),
             UsernameWithoutTacticusKey => Task.FromResult<string?>(AccessTokenNoKey),
+            UsernameWithGoals => Task.FromResult<string?>(AccessTokenWithGoals),
             _ => Task.FromResult<string?>(null),
         };
     }
@@ -252,6 +255,57 @@ internal sealed class FakeTacticusV1Client : ITacticusV1Client
                 new TacticusV1Profile(FakeTacticusApi.ValidKey, TacticusUserId)
             ),
             AccessTokenNoKey => Task.FromResult<TacticusV1Profile?>(new TacticusV1Profile(null, null)),
+            AccessTokenWithGoals => Task.FromResult<TacticusV1Profile?>(
+                new TacticusV1Profile(
+                    null,
+                    null,
+                    null,
+                    [
+                        new V1Goal(
+                            "rank-1",
+                            "Bellator",
+                            1,
+                            1,
+                            true,
+                            "Imported note",
+                            1,
+                            false,
+                            0,
+                            3,
+                            false,
+                            0,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null
+                        ),
+                        new V1Goal(
+                            "material-1",
+                            "Bellator",
+                            6,
+                            2,
+                            false,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null
+                        ),
+                    ]
+                )
+            ),
             _ => Task.FromResult<TacticusV1Profile?>(null),
         };
     }
