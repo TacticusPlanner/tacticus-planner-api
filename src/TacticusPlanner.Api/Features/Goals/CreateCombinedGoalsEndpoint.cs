@@ -92,6 +92,7 @@ public sealed class CreateCombinedGoalsEndpoint
                 GoalType = Enum.Parse<GoalType>(spec.GoalType, ignoreCase: true),
                 Status = status,
                 Config = GoalMapper.MapConfig(spec.Config),
+                Snapshot = GoalMapper.MapSnapshot(spec.Snapshot, now),
                 AggregateId = aggregateId,
                 Events = [new GoalEvent { At = now, Type = GoalEventType.Created }],
             };
@@ -138,7 +139,8 @@ public sealed record CreateCombinedGoalsRequest(
 public sealed record CombinedGoalSpec(
     string GoalType,
     CreateGoalConfigRequest Config,
-    List<int> DependsOnIndex
+    List<int> DependsOnIndex,
+    CreateGoalSnapshotRequest? Snapshot = null
 );
 
 public sealed record CreateCombinedGoalsResponse(List<GoalDetailResponse> Goals);

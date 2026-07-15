@@ -32,6 +32,10 @@ public sealed class CreateGoalValidator : Validator<CreateGoalRequest>
         RuleFor(request => request)
             .Must(request => !(IsMow(request.EntityType) && IsRank(request.GoalType)))
             .WithMessage("Machines of War have no rank — use an Ability goal instead.");
+
+        RuleFor(request => request.Snapshot)
+            .Must(IsValidSnapshot)
+            .WithMessage("Snapshot resource ids are required and counts cannot be negative.");
     }
 
     private static bool IsMow(string entityType) =>
@@ -40,4 +44,14 @@ public sealed class CreateGoalValidator : Validator<CreateGoalRequest>
 
     private static bool IsRank(string goalType) =>
         Enum.TryParse<GoalType>(goalType, ignoreCase: true, out var value) && value == GoalType.Rank;
+
+    internal static bool IsValidSnapshot(CreateGoalSnapshotRequest? snapshot)
+    {
+        if (snapshot is null) return true;
+        return snapshot.InitialRequirement?.All(IsValidResource) != false
+            && snapshot.InitialInventoryContribution?.All(IsValidResource) != false;
+    }
+
+    private static bool IsValidResource(GoalSnapshotResourceRequest resource) =>
+        !string.IsNullOrWhiteSpace(resource.ResourceId) && resource.Count >= 0;
 }

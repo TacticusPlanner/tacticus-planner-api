@@ -64,6 +64,46 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
     }
 
     [Fact]
+    public async Task PersistsExpandedImmutableSnapshotFromCombinedSpec()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var snapshot = new CreateGoalSnapshotRequest(
+            InitialRank: "Silver1",
+            InitialProgression: "Rare3Stars",
+            InitialActiveAbilityLevel: 20,
+            InitialPassiveAbilityLevel: 18,
+            InitialShards: 12,
+            InitialUnlocked: true,
+            InitialRequirement: [new GoalSnapshotResourceRequest("material-1", 30)],
+            InitialInventoryContribution: [new GoalSnapshotResourceRequest("material-1", 5)],
+            OriginalEnergyTotal: 120,
+            OriginalRaidsTotal: 20,
+            OriginalEstimateDays: 2,
+            OriginalEstimateDate: new DateTimeOffset(2026, 7, 17, 0, 0, 0, TimeSpan.Zero)
+        );
+        var request = UnlockThenRank with
+        {
+            Goals = [UnlockThenRank.Goals[1] with { DependsOnIndex = [], Snapshot = snapshot }],
+        };
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals/combined",
+            request,
+            TestContext.Current.CancellationToken
+        );
+        response.EnsureSuccessStatusCode();
+        var created = await response.Content.ReadFromJsonAsync<CreateCombinedGoalsResponse>(TestContext.Current.CancellationToken);
+
+        var stored = Assert.Single(created!.Goals).Snapshot;
+        Assert.NotNull(stored);
+        Assert.Equal("Silver1", stored.InitialRank);
+        Assert.Equal(30, Assert.Single(stored.InitialRequirement).Count);
+        Assert.Equal(5, Assert.Single(stored.InitialInventoryContribution).Count);
+        Assert.Equal(120, stored.OriginalEnergyTotal);
+        Assert.Equal(2, stored.OriginalEstimateDays);
+    }
+
+    [Fact]
     public async Task CreateInNonActiveProjectStartsAllGoalsPaused()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);

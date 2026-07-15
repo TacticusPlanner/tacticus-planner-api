@@ -80,6 +80,30 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
         FarmingLocationIds = config.FarmingLocationIds?.Select(id => id.Value).ToList(),
     };
 
+    internal static GoalSnapshot MapSnapshot(CreateGoalSnapshotRequest? snapshot, DateTimeOffset createdAt) => new()
+    {
+        CreatedAt = createdAt,
+        InitialRank = snapshot?.InitialRank,
+        InitialProgression = snapshot?.InitialProgression,
+        InitialActiveAbilityLevel = snapshot?.InitialActiveAbilityLevel,
+        InitialPassiveAbilityLevel = snapshot?.InitialPassiveAbilityLevel,
+        InitialShards = snapshot?.InitialShards,
+        InitialUnlocked = snapshot?.InitialUnlocked,
+        InitialRequirement = MapResources(snapshot?.InitialRequirement),
+        InitialInventoryContribution = MapResources(snapshot?.InitialInventoryContribution),
+        OriginalEnergyTotal = snapshot?.OriginalEnergyTotal,
+        OriginalRaidsTotal = snapshot?.OriginalRaidsTotal,
+        OriginalEstimateDays = snapshot?.OriginalEstimateDays,
+        OriginalEstimateDate = snapshot?.OriginalEstimateDate,
+    };
+
+    private static List<GoalSnapshotResource> MapResources(List<GoalSnapshotResourceRequest>? resources) =>
+        resources?.Select(resource => new GoalSnapshotResource
+        {
+            ResourceId = resource.ResourceId.Trim(),
+            Count = resource.Count,
+        }).ToList() ?? [];
+
     private static GoalConfigResponse BuildConfig(GoalConfig config) => new(
         config.Rank is null ? null : new RankTargetResponse(
             config.Rank.Start,
@@ -111,9 +135,22 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
 
     private static GoalSnapshotResponse BuildSnapshot(GoalSnapshot snapshot) => new(
         snapshot.CreatedAt,
+        snapshot.InitialRank,
+        snapshot.InitialProgression,
+        snapshot.InitialActiveAbilityLevel,
+        snapshot.InitialPassiveAbilityLevel,
+        snapshot.InitialShards,
+        snapshot.InitialUnlocked,
+        snapshot.InitialRequirement.Select(BuildSnapshotResource).ToList(),
+        snapshot.InitialInventoryContribution.Select(BuildSnapshotResource).ToList(),
+        snapshot.OriginalEnergyTotal,
+        snapshot.OriginalRaidsTotal,
         snapshot.OriginalEstimateDays,
         snapshot.OriginalEstimateDate
     );
+
+    private static GoalSnapshotResourceResponse BuildSnapshotResource(GoalSnapshotResource resource) =>
+        new(resource.ResourceId, resource.Count);
 
     private static GoalEventResponse BuildEvent(GoalEvent goalEvent) => new(goalEvent.At, goalEvent.Type);
 }
@@ -185,8 +222,20 @@ public sealed record GoalMilestoneResponse(
 
 public sealed record GoalSnapshotResponse(
     DateTimeOffset CreatedAt,
+    string? InitialRank,
+    string? InitialProgression,
+    int? InitialActiveAbilityLevel,
+    int? InitialPassiveAbilityLevel,
+    int? InitialShards,
+    bool? InitialUnlocked,
+    List<GoalSnapshotResourceResponse> InitialRequirement,
+    List<GoalSnapshotResourceResponse> InitialInventoryContribution,
+    int? OriginalEnergyTotal,
+    int? OriginalRaidsTotal,
     int? OriginalEstimateDays,
     DateTimeOffset? OriginalEstimateDate
 );
+
+public sealed record GoalSnapshotResourceResponse(string ResourceId, int Count);
 
 public sealed record GoalEventResponse(DateTimeOffset At, GoalEventType Type);

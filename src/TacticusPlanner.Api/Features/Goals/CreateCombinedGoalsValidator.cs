@@ -40,6 +40,11 @@ public sealed class CreateCombinedGoalsValidator : Validator<CreateCombinedGoals
                     && goalType != GoalType.Material)
                 .WithMessage("Unknown or not-yet-supported goal type."));
 
+        RuleForEach(request => request.Goals)
+            .ChildRules(goal => goal.RuleFor(spec => spec.Snapshot)
+                .Must(CreateGoalValidator.IsValidSnapshot)
+                .WithMessage("Snapshot resource ids are required and counts cannot be negative."));
+
         RuleFor(request => request.Goals)
             .Custom((goals, context) =>
             {

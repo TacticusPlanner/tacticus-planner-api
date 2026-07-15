@@ -51,7 +51,12 @@ public sealed class GoalConfiguration : IEntityTypeConfiguration<Goal>
             config.OwnsOne(c => c.Shards);
         });
         builder.OwnsMany(entity => entity.Milestones, milestones => milestones.ToJson("milestones"));
-        builder.OwnsOne(entity => entity.Snapshot, snapshot => snapshot.ToJson("snapshot"));
+        builder.OwnsOne(entity => entity.Snapshot, snapshot =>
+        {
+            snapshot.ToJson("snapshot");
+            snapshot.OwnsMany(value => value.InitialRequirement);
+            snapshot.OwnsMany(value => value.InitialInventoryContribution);
+        });
         builder.OwnsMany(entity => entity.Events, events => events.ToJson("events"));
 
         builder.HasIndex(entity => entity.ProfileId);

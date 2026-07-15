@@ -28,6 +28,7 @@ public sealed class ProjectMapper : Mapper<CreateProjectRequest, ProjectSummaryR
         project.Status.ToString(),
         project.Id == activeProjectId,
         project.IsDefault,
+        project.Revision,
         project.CreatedAt,
         project.UpdatedAt
     );
@@ -41,6 +42,7 @@ public sealed record ProjectSummaryResponse(
     string Status,
     bool IsActivePlan,
     bool IsDefault,
+    long Revision,
     DateTimeOffset CreatedAt,
     DateTimeOffset UpdatedAt
 );

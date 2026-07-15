@@ -91,6 +91,65 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
     }
 
     [Fact]
+    public async Task UpdateProjectRenamesAndArchivesContainer()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var createResponse = await client.PostAsJsonAsync(
+            "/api/v1/me/projects",
+            new CreateProjectRequest("Event Prep", null, null),
+            TestContext.Current.CancellationToken
+        );
+        var project = await createResponse.Content.ReadFromJsonAsync<ProjectSummaryResponse>(TestContext.Current.CancellationToken);
+        Assert.NotNull(project);
+
+        var response = await client.PutAsJsonAsync(
+            $"/api/v1/me/projects/{project.ProjectId}",
+            new UpdateProjectRequest("LRE Prep", "Next event", "#6366f1", "Archived", project.Revision),
+            TestContext.Current.CancellationToken
+        );
+        response.EnsureSuccessStatusCode();
+        var updated = await response.Content.ReadFromJsonAsync<ProjectSummaryResponse>(TestContext.Current.CancellationToken);
+        Assert.NotNull(updated);
+        Assert.Equal("LRE Prep", updated.Name);
+        Assert.Equal("Archived", updated.Status);
+        Assert.True(updated.Revision > project.Revision);
+    }
+
+    [Fact]
+    public async Task UpdateProjectRejectsStaleRevisionWithIssueCode()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var project = await GetDefaultProjectAsync(client);
+
+        var response = await client.PutAsJsonAsync(
+            $"/api/v1/me/projects/{project.ProjectId}",
+            new UpdateProjectRequest("Changed", null, null, "Active", project.Revision + 1),
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
+        var conflict = await response.Content.ReadFromJsonAsync<ProjectConflictResponse>(TestContext.Current.CancellationToken);
+        Assert.Equal("staleRevision", conflict?.IssueCode);
+    }
+
+    [Fact]
+    public async Task DefaultProjectCannotBeArchived()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var project = await GetDefaultProjectAsync(client);
+
+        var response = await client.PutAsJsonAsync(
+            $"/api/v1/me/projects/{project.ProjectId}",
+            new UpdateProjectRequest(project.Name, null, null, "Archived", project.Revision),
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
+        var conflict = await response.Content.ReadFromJsonAsync<ProjectConflictResponse>(TestContext.Current.CancellationToken);
+        Assert.Equal("defaultProjectCannotBeArchived", conflict?.IssueCode);
+    }
+
+    [Fact]
     public async Task UpdateProjectGoalsAddsGoalWithPriority()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);

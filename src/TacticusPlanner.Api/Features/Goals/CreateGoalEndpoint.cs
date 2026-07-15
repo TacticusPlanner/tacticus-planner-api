@@ -72,7 +72,9 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
         goal.EntityType = Enum.Parse<GoalEntityType>(req.EntityType, ignoreCase: true);
         goal.GoalType = Enum.Parse<GoalType>(req.GoalType, ignoreCase: true);
         goal.Status = project.Id == profile.ActiveProjectId ? GoalStatus.Active : GoalStatus.Paused;
-        goal.Events = [new GoalEvent { At = DateTimeOffset.UtcNow, Type = GoalEventType.Created }];
+        var now = DateTimeOffset.UtcNow;
+        goal.Snapshot = GoalMapper.MapSnapshot(req.Snapshot, now);
+        goal.Events = [new GoalEvent { At = now, Type = GoalEventType.Created }];
 
         db.Goals.Add(goal);
 
@@ -94,7 +96,8 @@ public sealed record CreateGoalRequest(
     string EntityId,
     string GoalType,
     CreateGoalConfigRequest Config,
-    Guid? ProjectId
+    Guid? ProjectId,
+    CreateGoalSnapshotRequest? Snapshot = null
 );
 
 public sealed record CreateGoalConfigRequest(
@@ -119,3 +122,20 @@ public sealed record ProgressionTargetRequest(string Start, string End);
 public sealed record AbilityTargetRequest(int ActiveStart, int ActiveEnd, int PassiveStart, int PassiveEnd);
 
 public sealed record ShardTargetRequest(int Count);
+
+public sealed record CreateGoalSnapshotRequest(
+    string? InitialRank = null,
+    string? InitialProgression = null,
+    int? InitialActiveAbilityLevel = null,
+    int? InitialPassiveAbilityLevel = null,
+    int? InitialShards = null,
+    bool? InitialUnlocked = null,
+    List<GoalSnapshotResourceRequest>? InitialRequirement = null,
+    List<GoalSnapshotResourceRequest>? InitialInventoryContribution = null,
+    int? OriginalEnergyTotal = null,
+    int? OriginalRaidsTotal = null,
+    int? OriginalEstimateDays = null,
+    DateTimeOffset? OriginalEstimateDate = null
+);
+
+public sealed record GoalSnapshotResourceRequest(string ResourceId, int Count);

@@ -9,7 +9,34 @@ public sealed class GoalSnapshot
 {
     public DateTimeOffset CreatedAt { get; set; }
 
+    public string? InitialRank { get; set; }
+
+    public string? InitialProgression { get; set; }
+
+    public int? InitialActiveAbilityLevel { get; set; }
+
+    public int? InitialPassiveAbilityLevel { get; set; }
+
+    public int? InitialShards { get; set; }
+
+    public bool? InitialUnlocked { get; set; }
+
+    public List<GoalSnapshotResource> InitialRequirement { get; set; } = [];
+
+    public List<GoalSnapshotResource> InitialInventoryContribution { get; set; } = [];
+
+    public int? OriginalEnergyTotal { get; set; }
+
+    public int? OriginalRaidsTotal { get; set; }
+
     public int? OriginalEstimateDays { get; set; }
 
     public DateTimeOffset? OriginalEstimateDate { get; set; }
+}
+
+public sealed class GoalSnapshotResource
+{
+    public required string ResourceId { get; set; }
+
+    public int Count { get; set; }
 }

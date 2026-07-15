@@ -25,7 +25,7 @@ public class Project : BaseEntity<ProjectId>, IRevisionedEntity
     public ProjectStatus Status { get; set; }
 
     /// <summary>True for the profile's auto-provisioned default project ("My Goals") — informational only;
-    /// it is an ordinary project otherwise (can be renamed, is not specially protected).</summary>
+    /// it can be renamed but cannot be archived.</summary>
     public bool IsDefault { get; set; }
 
     public virtual Profile? Profile { get; set; }
