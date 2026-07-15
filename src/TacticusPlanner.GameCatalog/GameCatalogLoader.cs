@@ -32,6 +32,8 @@ public static class GameCatalogLoader
         var mowUpgradeCosts = LoadDataset<IReadOnlyList<GameCatalogMowUpgradeCost>>(GameCatalogDatasets.MowUpgradeCosts);
         var equipmentUpgradeCosts = LoadDataset<IReadOnlyList<GameCatalogEquipmentUpgradeCost>>(GameCatalogDatasets.EquipmentUpgradeCosts);
         var dropChances = LoadDataset<IReadOnlyList<GameCatalogDropChance>>(GameCatalogDatasets.DropChances);
+        var ascensionCosts = LoadDataset<IReadOnlyList<GameCatalogAscensionCost>>(GameCatalogDatasets.AscensionCosts);
+        var unlockShardCosts = LoadDataset<IReadOnlyList<GameCatalogUnlockShardCost>>(GameCatalogDatasets.UnlockShardCosts);
 
         var npcsByFaction = new Dictionary<string, GameCatalogFactionNpcs>(StringComparer.Ordinal);
         foreach (var key in GameCatalogDatasets.NpcFactions)
@@ -68,6 +70,8 @@ public static class GameCatalogLoader
         var npcList = GameCatalogDenormalizer.BuildNpcs(npcsByFaction);
         var mowList = GameCatalogDenormalizer.BuildMows(unitsByFaction);
         var mowUpgradeCostViews = GameCatalogDenormalizer.BuildMowUpgradeCosts(mowUpgradeCosts);
+        var ascensionCostViews = GameCatalogDenormalizer.BuildAscensionCosts(ascensionCosts);
+        var unlockShardCostViews = GameCatalogDenormalizer.BuildUnlockShardCosts(unlockShardCosts);
         var upgradeViews = GameCatalogDenormalizer.BuildUpgrades(upgradesByRarity, campaignGroups, dropChances);
         var equipmentViews = GameCatalogDenormalizer.BuildEquipment(equipmentByType, equipmentUpgradeCosts);
         var campaignBattleViews = GameCatalogDenormalizer.BuildCampaignBattles(campaignGroups, dropChances);
@@ -83,6 +87,8 @@ public static class GameCatalogLoader
             [GameCatalogDatasets.Npcs] = GameCatalogHashing.ComputeCanonicalJsonHash(npcList, JsonOptions),
             [GameCatalogDatasets.Mows] = GameCatalogHashing.ComputeCanonicalJsonHash(mowList, JsonOptions),
             [GameCatalogDatasets.MowUpgradeCostsServed] = GameCatalogHashing.ComputeCanonicalJsonHash(mowUpgradeCostViews, JsonOptions),
+            [GameCatalogDatasets.AscensionCostsServed] = GameCatalogHashing.ComputeCanonicalJsonHash(ascensionCostViews, JsonOptions),
+            [GameCatalogDatasets.UnlockShardCostsServed] = GameCatalogHashing.ComputeCanonicalJsonHash(unlockShardCostViews, JsonOptions),
             [GameCatalogDatasets.Upgrades] = GameCatalogHashing.ComputeCanonicalJsonHash(upgradeViews, JsonOptions),
             [GameCatalogDatasets.Equipment] = GameCatalogHashing.ComputeCanonicalJsonHash(equipmentViews, JsonOptions),
             [GameCatalogDatasets.CampaignBattles] = GameCatalogHashing.ComputeCanonicalJsonHash(campaignBattleViews, JsonOptions),
@@ -102,6 +108,8 @@ public static class GameCatalogLoader
             new ReadOnlyDictionary<string, GameCatalogFactionUnits>(unitsByFaction),
             new ReadOnlyCollection<GameCatalogMowUpgradeCost>(mowUpgradeCosts.ToArray()),
             new ReadOnlyCollection<GameCatalogEquipmentUpgradeCost>(equipmentUpgradeCosts.ToArray()),
+            new ReadOnlyCollection<GameCatalogAscensionCost>(ascensionCosts.ToArray()),
+            new ReadOnlyCollection<GameCatalogUnlockShardCost>(unlockShardCosts.ToArray()),
             new ReadOnlyDictionary<string, GameCatalogFactionNpcs>(npcsByFaction),
             new ReadOnlyDictionary<string, IReadOnlyList<GameCatalogEquipment>>(equipmentByType),
             new ReadOnlyDictionary<string, IReadOnlyList<GameCatalogUpgrade>>(upgradesByRarity),
@@ -112,6 +120,8 @@ public static class GameCatalogLoader
             npcList,
             mowList,
             mowUpgradeCostViews,
+            ascensionCostViews,
+            unlockShardCostViews,
             upgradeViews,
             equipmentViews,
             campaignBattleViews,

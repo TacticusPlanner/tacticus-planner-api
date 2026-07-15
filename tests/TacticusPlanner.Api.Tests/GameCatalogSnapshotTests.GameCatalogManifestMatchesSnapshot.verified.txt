@@ -2,8 +2,13 @@
   version: dev-2026-07-01,
   schemaVersion: 1,
   gameVersion: 1.40,
-  sourceHash: caf7fcc02885ba0e972f74c15b06db189c6341076b2cd1533354cdbef8e5e3db,
+  sourceHash: 492cccbbb3e6781cd614d17930acbce0c3de3ebf948efcb0995496194405216e,
   datasets: [
+    {
+      key: ascension-costs,
+      hash: c94bf0b8e415a5a5632ddcfe709301add1684e1bfadfdd378a8f3479583c6ca1,
+      url: /api/v1/game-catalog/ascension-costs
+    },
     {
       key: campaign-battles,
       hash: 49fe7b7a3e3da0a14776f03bb3de59b9fce53dac119b42fc6da022c8163746c1,
@@ -53,6 +58,11 @@
       key: npcs,
       hash: 25232db3a36692434209a6c905497b4c14c3e538dc16ebaab6db8c1bdc7e78f6,
       url: /api/v1/game-catalog/npcs
+    },
+    {
+      key: unlock-shard-costs,
+      hash: a5d83f0f0fc9cab6c1e4d64380b5ca3598818724696b197d0e544003fdcc45fb,
+      url: /api/v1/game-catalog/unlock-shard-costs
     },
     {
       key: upgrades,

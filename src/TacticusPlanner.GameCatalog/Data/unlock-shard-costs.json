@@ -1,0 +1,8 @@
+[
+  { "rarity": "Common", "shards": 40 },
+  { "rarity": "Uncommon", "shards": 80 },
+  { "rarity": "Rare", "shards": 130 },
+  { "rarity": "Epic", "shards": 250 },
+  { "rarity": "Legendary", "shards": 500 },
+  { "rarity": "Mythic", "shards": 1400 }
+]

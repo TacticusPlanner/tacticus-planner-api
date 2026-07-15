@@ -1,0 +1,22 @@
+[
+  { "progression": "Common:None", "shards": 0, "mythicShards": 0, "orbs": 0, "orbRarity": null },
+  { "progression": "Common:OneStar", "shards": 10, "mythicShards": 0, "orbs": 0, "orbRarity": null },
+  { "progression": "Common:TwoStars", "shards": 15, "mythicShards": 0, "orbs": 0, "orbRarity": null },
+  { "progression": "Uncommon:TwoStars", "shards": 15, "mythicShards": 0, "orbs": 10, "orbRarity": "Uncommon" },
+  { "progression": "Uncommon:ThreeStars", "shards": 15, "mythicShards": 0, "orbs": 0, "orbRarity": null },
+  { "progression": "Uncommon:FourStars", "shards": 15, "mythicShards": 0, "orbs": 0, "orbRarity": null },
+  { "progression": "Rare:FourStars", "shards": 20, "mythicShards": 0, "orbs": 10, "orbRarity": "Rare" },
+  { "progression": "Rare:FiveStars", "shards": 30, "mythicShards": 0, "orbs": 0, "orbRarity": null },
+  { "progression": "Rare:RedOneStar", "shards": 40, "mythicShards": 0, "orbs": 0, "orbRarity": null },
+  { "progression": "Epic:RedOneStar", "shards": 50, "mythicShards": 0, "orbs": 10, "orbRarity": "Epic" },
+  { "progression": "Epic:RedTwoStars", "shards": 65, "mythicShards": 0, "orbs": 0, "orbRarity": null },
+  { "progression": "Epic:RedThreeStars", "shards": 85, "mythicShards": 0, "orbs": 0, "orbRarity": null },
+  { "progression": "Legendary:RedThreeStars", "shards": 100, "mythicShards": 0, "orbs": 10, "orbRarity": "Legendary" },
+  { "progression": "Legendary:RedFourStars", "shards": 150, "mythicShards": 0, "orbs": 10, "orbRarity": "Legendary" },
+  { "progression": "Legendary:RedFiveStars", "shards": 250, "mythicShards": 0, "orbs": 15, "orbRarity": "Legendary" },
+  { "progression": "Legendary:OneBlueStar", "shards": 500, "mythicShards": 0, "orbs": 20, "orbRarity": "Legendary" },
+  { "progression": "Mythic:OneBlueStar", "shards": 0, "mythicShards": 20, "orbs": 10, "orbRarity": "Mythic" },
+  { "progression": "Mythic:TwoBlueStars", "shards": 0, "mythicShards": 30, "orbs": 10, "orbRarity": "Mythic" },
+  { "progression": "Mythic:ThreeBlueStars", "shards": 0, "mythicShards": 50, "orbs": 15, "orbRarity": "Mythic" },
+  { "progression": "Mythic:MythicWings", "shards": 0, "mythicShards": 100, "orbs": 25, "orbRarity": "Mythic" }
+]

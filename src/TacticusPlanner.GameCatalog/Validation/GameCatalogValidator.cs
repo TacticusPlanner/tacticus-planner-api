@@ -21,6 +21,8 @@ public static partial class GameCatalogValidator
         ValidateUniqueIds(GameCatalogDatasets.UpgradesPrefix, snapshot.Upgrades, upgrade => upgrade.Id, errors);
         ValidateUniqueIds(GameCatalogDatasets.EquipmentPrefix, snapshot.Equipment, item => item.Id, errors);
         ValidateUniqueIds(GameCatalogDatasets.DropChances, snapshot.DropChances, chance => chance.Id, errors);
+        ValidateUniqueIds(GameCatalogDatasets.AscensionCostsServed, snapshot.AscensionCostViews, cost => cost.Progression, errors);
+        ValidateUniqueIds(GameCatalogDatasets.UnlockShardCostsServed, snapshot.UnlockShardCostViews, cost => cost.Rarity, errors);
         ValidateUniqueIds(GameCatalogDatasets.CampaignBattlesPrefix, snapshot.CampaignBattles, battle => battle.Id, errors);
         ValidateUniqueIds(GameCatalogDatasets.LresPrefix, snapshot.Lres, lre => lre.Id.ToString(System.Globalization.CultureInfo.InvariantCulture), errors);
         ValidateRequiredFields(snapshot, errors);
