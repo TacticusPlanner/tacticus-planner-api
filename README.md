@@ -223,10 +223,9 @@ Create migrations when the persisted model changes:
 dotnet ef migrations add <MigrationName> --project src/TacticusPlanner.Persistence --startup-project src/TacticusPlanner.Api
 ```
 
-The API applies pending migrations automatically during startup when
-`ASPNETCORE_ENVIRONMENT`/`DOTNET_ENVIRONMENT` is `Staging` or `Production` and
-`Database__ApplyMigrationsOnStartup=true`. Local `Development` runs do not
-apply migrations automatically.
+The API always applies pending migrations before the server accepts requests.
+This behavior is the same in Development, Staging, and Production and does not
+require a configuration flag.
 
 `appsettings.Development.json` contains a placeholder local connection string:
 
@@ -242,10 +241,9 @@ For local manual execution through Aspire, start the AppHost:
 aspire run --project orchestration/TacticusPlanner.AppHost/TacticusPlanner.AppHost.csproj
 ```
 
-Then open the Aspire Dashboard, find the `api-migrations` resource, and run
-the `Update Database` command from its actions menu. The AppHost registers this
-manual migration resource without running migrations on startup and without
-making the API wait for the migration resource to complete.
+The API applies migrations automatically when Aspire starts it. The AppHost
+also exposes an `api-migrations` resource whose `Update Database` command can
+be used when migrations need to be applied without starting the API.
 
 You can also invoke the resource command from the CLI:
 

@@ -1,4 +1,5 @@
 using TacticusPlanner.Api.Features.Goals;
+using TacticusPlanner.Domain.Goals;
 
 namespace TacticusPlanner.Api.Tests;
 
@@ -56,5 +57,23 @@ public sealed class MilestoneGeneratorTests
     public void IsEmptyForAnEmptyOrInvertedRange(int start, int end)
     {
         Assert.Empty(MilestoneGenerator.ForRank(start, end));
+    }
+
+    [Fact]
+    public void EveryStepRankStrategyCreatesEveryTransition()
+    {
+        Assert.Equal(
+            ["Stone2", "Stone3", "Iron1"],
+            MilestoneGenerator.ForRank(0, 3, FarmingStrategy.EveryStep)
+                .Select(milestone => milestone.TargetState));
+    }
+
+    [Fact]
+    public void MowMajorMilestonesAppendTheRequestedFinalTarget()
+    {
+        Assert.Equal(
+            ["35", "50", "55"],
+            MilestoneGenerator.ForAbility(20, 55, FarmingStrategy.MajorMilestones)
+                .Select(milestone => milestone.TargetState));
     }
 }

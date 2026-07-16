@@ -12,6 +12,7 @@ public sealed record GameCatalogSnapshot(
     IReadOnlyList<GameCatalogEquipmentUpgradeCost> EquipmentUpgradeCosts,
     IReadOnlyList<GameCatalogAscensionCost> AscensionCosts,
     IReadOnlyList<GameCatalogUnlockShardCost> UnlockShardCosts,
+    IReadOnlyList<GameCatalogOnslaughtReward> OnslaughtRewards,
     IReadOnlyDictionary<string, GameCatalogFactionNpcs> NpcsByFaction,
     IReadOnlyDictionary<string, IReadOnlyList<GameCatalogEquipment>> EquipmentByType,
     IReadOnlyDictionary<string, IReadOnlyList<GameCatalogUpgrade>> UpgradesByRarity,

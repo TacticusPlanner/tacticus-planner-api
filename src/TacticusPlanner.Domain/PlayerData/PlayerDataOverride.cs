@@ -28,6 +28,12 @@ public class PlayerDataOverride : BaseEntity<ProfileId>, IRevisionedEntity
     /// </summary>
     public List<CampaignProgressOverrideRecord> CampaignProgressOverrides { get; set; } = [];
 
+    /// <summary>
+    /// The player's current Onslaught sector/tier for each alliance. The public player API does not
+    /// expose this progress, so Ascension estimates resolve it from this manual override.
+    /// </summary>
+    public List<OnslaughtProgressOverrideRecord> OnslaughtProgressOverrides { get; set; } = [];
+
     // LRE overrides are intentionally excluded for now — the shape of LRE planning annotations
     // (e.g. "maybe"/"stop" per encounter) isn't settled yet; add them back once it is.
 
@@ -61,4 +67,16 @@ public sealed class CampaignProgressOverrideRecord
     public CampaignId CatalogCampaignGroupId { get; set; } = CampaignId.From(string.Empty);
 
     public int HighestCompletedNodeNumber { get; set; }
+}
+
+public sealed class OnslaughtProgressOverrideRecord
+{
+    /// <summary>Imperial, Xenos, or Chaos.</summary>
+    public string Alliance { get; set; } = string.Empty;
+
+    /// <summary>Stone, Iron, Bronze, Silver, Gold, Diamond, or Adamantine.</summary>
+    public string Sector { get; set; } = "Stone";
+
+    /// <summary>The current reward tier within the sector (1-3).</summary>
+    public int Tier { get; set; } = 1;
 }

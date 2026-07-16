@@ -14,7 +14,5 @@ public class PlanningSettings : BaseEntity<ProfileId>, IRevisionedEntity
 
     public int DailyEnergy { get; set; } = DefaultDailyEnergy;
 
-    public PlanningOrdering Ordering { get; set; } = PlanningOrdering.GoalPriority;
-
     public virtual Profile? Profile { get; set; }
 }

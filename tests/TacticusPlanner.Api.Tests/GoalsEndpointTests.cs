@@ -10,7 +10,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
 {
     private static readonly CreateGoalRequest RankGoal = new(
         "character",
-        "unit-1",
+        "blackTerminator",
         "rank",
         new CreateGoalConfigRequest(Rank: new RankTargetRequest(1, false, 0, 5, false, 0)),
         null
@@ -133,7 +133,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
             "/api/v1/me/goals",
             new CreateGoalRequest(
                 "mow",
-                "mow-1",
+                "astraOrdnanceBattery",
                 "ability",
                 new CreateGoalConfigRequest(Ability: new AbilityTargetRequest(0, 3, 0, 3)),
                 null

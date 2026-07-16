@@ -53,4 +53,19 @@ public sealed class GameCatalogLoaderTests
             },
             byRarity);
     }
+
+    [Fact]
+    public void OnslaughtRewardsCoverAllProgressCombinationsAndExposeMidpoints()
+    {
+        var snapshot = GameCatalogLoader.Load();
+
+        Assert.Equal(21, snapshot.OnslaughtRewards.Count);
+        Assert.All(snapshot.OnslaughtRewards, reward =>
+        {
+            Assert.InRange(reward.Tier, 1, 3);
+            Assert.Equal(5, reward.Regular.Count);
+        });
+        Assert.Equal(15, snapshot.OnslaughtReward("Gold", 1, "Legendary", mythicShards: false).Midpoint);
+        Assert.Equal(2.5, snapshot.OnslaughtReward("Adamantine", 3, "Mythic", mythicShards: true).Midpoint);
+    }
 }

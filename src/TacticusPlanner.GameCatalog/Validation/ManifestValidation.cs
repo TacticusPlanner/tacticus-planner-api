@@ -23,6 +23,19 @@ public static partial class GameCatalogValidator
         RequireNonEmpty(GameCatalogDatasets.MowUpgradeCostsServed, snapshot.MowUpgradeCostViews.Count, errors);
         RequireNonEmpty(GameCatalogDatasets.AscensionCostsServed, snapshot.AscensionCostViews.Count, errors);
         RequireNonEmpty(GameCatalogDatasets.UnlockShardCostsServed, snapshot.UnlockShardCostViews.Count, errors);
+        RequireNonEmpty(GameCatalogDatasets.OnslaughtRewards, snapshot.OnslaughtRewards.Count, errors);
+
+        foreach (var reward in snapshot.OnslaughtRewards)
+        {
+            if (reward.Tier is < 1 or > 3 || reward.Regular.Count != 5
+                || reward.Regular.Append(reward.Mythic).Any(range => range.Min <= 0 || range.Max < range.Min))
+            {
+                errors.Add(new GameCatalogValidationError(
+                    GameCatalogDatasets.OnslaughtRewards,
+                    "InvalidRewardRange",
+                    $"Onslaught reward '{reward.Id}' has an invalid tier or reward range."));
+            }
+        }
         RequireNonEmpty(GameCatalogDatasets.Upgrades, snapshot.UpgradeViews.Count, errors);
         RequireNonEmpty(GameCatalogDatasets.Equipment, snapshot.EquipmentViews.Count, errors);
         RequireNonEmpty(GameCatalogDatasets.CampaignBattles, snapshot.CampaignBattleViews.Count, errors);

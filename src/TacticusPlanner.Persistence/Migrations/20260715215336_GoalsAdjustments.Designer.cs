@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TacticusPlanner.Persistence;
@@ -12,9 +13,11 @@ using TacticusPlanner.Persistence;
 namespace TacticusPlanner.Persistence.Migrations
 {
     [DbContext(typeof(PlannerDbContext))]
-    partial class PlannerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260715215336_GoalsAdjustments")]
+    partial class GoalsAdjustments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -601,6 +604,10 @@ namespace TacticusPlanner.Persistence.Migrations
                                     b2.PrimitiveCollection<string>("MythicShardBattleIds")
                                         .IsRequired();
 
+                                    b2.Property<int>("OnslaughtSector");
+
+                                    b2.Property<int>("OnslaughtTier");
+
                                     b2.PrimitiveCollection<string>("ShardBattleIds")
                                         .IsRequired();
 
@@ -916,38 +923,9 @@ namespace TacticusPlanner.Persistence.Migrations
                                 .HasForeignKey("PlayerDataOverrideId");
                         });
 
-                    b.OwnsMany("TacticusPlanner.Domain.PlayerData.OnslaughtProgressOverrideRecord", "OnslaughtProgressOverrides", b1 =>
-                        {
-                            b1.Property<Guid>("PlayerDataOverrideId");
-
-                            b1.Property<int>("__synthesizedOrdinal")
-                                .ValueGeneratedOnAdd();
-
-                            b1.Property<string>("Alliance")
-                                .IsRequired();
-
-                            b1.Property<string>("Sector")
-                                .IsRequired();
-
-                            b1.Property<int>("Tier");
-
-                            b1.HasKey("PlayerDataOverrideId", "__synthesizedOrdinal");
-
-                            b1.ToTable("player_data_overrides");
-
-                            b1
-                                .ToJson("onslaught_progress_overrides")
-                                .HasColumnType("jsonb");
-
-                            b1.WithOwner()
-                                .HasForeignKey("PlayerDataOverrideId");
-                        });
-
                     b.Navigation("BattleResultOverrides");
 
                     b.Navigation("CampaignProgressOverrides");
-
-                    b.Navigation("OnslaughtProgressOverrides");
 
                     b.Navigation("Profile");
                 });

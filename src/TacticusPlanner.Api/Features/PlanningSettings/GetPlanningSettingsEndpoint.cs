@@ -36,8 +36,8 @@ public sealed class GetPlanningSettingsEndpoint : EndpointWithoutRequest<Plannin
     }
 }
 
-public sealed record PlanningSettingsResponse(int DailyEnergy, string Ordering, long Revision)
+public sealed record PlanningSettingsResponse(int DailyEnergy, long Revision)
 {
     public static PlanningSettingsResponse From(PlanningSettingsEntity settings) =>
-        new(settings.DailyEnergy, settings.Ordering.ToString(), settings.Revision);
+        new(settings.DailyEnergy, settings.Revision);
 }

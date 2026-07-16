@@ -7,9 +7,4 @@ public enum GoalType
     Ascension,
     Ability,
     Unlock,
-    Shards,
-
-    /// <summary>Reserved for the deferred material-goal types. No goal may use this value yet — see the
-    /// plan's §4 "Deferred goal types".</summary>
-    Material,
 }

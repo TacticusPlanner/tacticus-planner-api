@@ -114,6 +114,18 @@ public sealed class GetGameCatalogUnlockShardCostsEndpoint(IGameCatalogProvider 
     }
 }
 
+public sealed class GetGameCatalogOnslaughtRewardsEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogOnslaughtReward>>(catalog, GameCatalogDatasets.OnslaughtRewards)
+{
+    protected override IReadOnlyList<GameCatalogOnslaughtReward> Payload => Snapshot.OnslaughtRewards;
+
+    public override void Configure()
+    {
+        Get("game-catalog/onslaught-rewards");
+        ConfigureServed("Gets the Onslaught reward table.", "Reward ranges by sector, tier, and rarity.");
+    }
+}
+
 public sealed class GetGameCatalogUpgradesEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogUpgradeView>>(catalog, GameCatalogDatasets.Upgrades)
 {

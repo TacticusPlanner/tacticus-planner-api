@@ -5,7 +5,7 @@ using TacticusPlanner.Domain.Goals;
 namespace TacticusPlanner.Api.Features.Goals;
 
 /// <summary>
-/// Request-shape rules only — entity type must parse to a supported (non-reserved) value (mirrors
+/// Request-shape rules only — entity type must parse to a supported value (mirrors
 /// <see cref="CreateGoalValidator"/>), each spec's goal type must parse to a supported value, the list
 /// must be non-empty and reasonably small (Unlock + Ascension + Rank + Ability is the largest realistic
 /// combined request), every <see cref="CombinedGoalSpec.DependsOnIndex"/> must reference a strictly
@@ -20,9 +20,8 @@ public sealed class CreateCombinedGoalsValidator : Validator<CreateCombinedGoals
     public CreateCombinedGoalsValidator()
     {
         RuleFor(request => request.EntityType)
-            .Must(value => Enum.TryParse<GoalEntityType>(value, ignoreCase: true, out var entityType)
-                && entityType != GoalEntityType.Upgrade)
-            .WithMessage("Unknown or not-yet-supported entity type.");
+            .Must(value => Enum.TryParse<GoalEntityType>(value, ignoreCase: true, out _))
+            .WithMessage("Unknown entity type.");
 
         RuleFor(request => request.EntityId)
             .NotEmpty()
@@ -36,14 +35,18 @@ public sealed class CreateCombinedGoalsValidator : Validator<CreateCombinedGoals
 
         RuleForEach(request => request.Goals)
             .ChildRules(goal => goal.RuleFor(spec => spec.GoalType)
-                .Must(value => Enum.TryParse<GoalType>(value, ignoreCase: true, out var goalType)
-                    && goalType != GoalType.Material)
+                .Must(value => Enum.TryParse<GoalType>(value, ignoreCase: true, out _))
                 .WithMessage("Unknown or not-yet-supported goal type."));
 
         RuleForEach(request => request.Goals)
             .ChildRules(goal => goal.RuleFor(spec => spec.Snapshot)
                 .Must(CreateGoalValidator.IsValidSnapshot)
                 .WithMessage("Snapshot resource ids are required and counts cannot be negative."));
+
+        RuleForEach(request => request.Goals)
+            .ChildRules(goal => goal.RuleFor(spec => spec.Config)
+                .Must(CreateGoalValidator.IsValidConfig)
+                .WithMessage("The farming strategy or ascension farming configuration is invalid."));
 
         RuleFor(request => request.Goals)
             .Custom((goals, context) =>

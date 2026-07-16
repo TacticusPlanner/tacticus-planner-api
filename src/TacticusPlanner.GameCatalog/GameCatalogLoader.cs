@@ -34,6 +34,7 @@ public static class GameCatalogLoader
         var dropChances = LoadDataset<IReadOnlyList<GameCatalogDropChance>>(GameCatalogDatasets.DropChances);
         var ascensionCosts = LoadDataset<IReadOnlyList<GameCatalogAscensionCost>>(GameCatalogDatasets.AscensionCosts);
         var unlockShardCosts = LoadDataset<IReadOnlyList<GameCatalogUnlockShardCost>>(GameCatalogDatasets.UnlockShardCosts);
+        var onslaughtRewards = LoadDataset<IReadOnlyList<GameCatalogOnslaughtReward>>(GameCatalogDatasets.OnslaughtRewards);
 
         var npcsByFaction = new Dictionary<string, GameCatalogFactionNpcs>(StringComparer.Ordinal);
         foreach (var key in GameCatalogDatasets.NpcFactions)
@@ -89,6 +90,7 @@ public static class GameCatalogLoader
             [GameCatalogDatasets.MowUpgradeCostsServed] = GameCatalogHashing.ComputeCanonicalJsonHash(mowUpgradeCostViews, JsonOptions),
             [GameCatalogDatasets.AscensionCostsServed] = GameCatalogHashing.ComputeCanonicalJsonHash(ascensionCostViews, JsonOptions),
             [GameCatalogDatasets.UnlockShardCostsServed] = GameCatalogHashing.ComputeCanonicalJsonHash(unlockShardCostViews, JsonOptions),
+            [GameCatalogDatasets.OnslaughtRewards] = GameCatalogHashing.ComputeCanonicalJsonHash(onslaughtRewards, JsonOptions),
             [GameCatalogDatasets.Upgrades] = GameCatalogHashing.ComputeCanonicalJsonHash(upgradeViews, JsonOptions),
             [GameCatalogDatasets.Equipment] = GameCatalogHashing.ComputeCanonicalJsonHash(equipmentViews, JsonOptions),
             [GameCatalogDatasets.CampaignBattles] = GameCatalogHashing.ComputeCanonicalJsonHash(campaignBattleViews, JsonOptions),
@@ -110,6 +112,7 @@ public static class GameCatalogLoader
             new ReadOnlyCollection<GameCatalogEquipmentUpgradeCost>(equipmentUpgradeCosts.ToArray()),
             new ReadOnlyCollection<GameCatalogAscensionCost>(ascensionCosts.ToArray()),
             new ReadOnlyCollection<GameCatalogUnlockShardCost>(unlockShardCosts.ToArray()),
+            new ReadOnlyCollection<GameCatalogOnslaughtReward>(onslaughtRewards.ToArray()),
             new ReadOnlyDictionary<string, GameCatalogFactionNpcs>(npcsByFaction),
             new ReadOnlyDictionary<string, IReadOnlyList<GameCatalogEquipment>>(equipmentByType),
             new ReadOnlyDictionary<string, IReadOnlyList<GameCatalogUpgrade>>(upgradesByRarity),

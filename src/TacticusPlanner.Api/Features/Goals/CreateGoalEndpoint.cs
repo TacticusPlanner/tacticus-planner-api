@@ -44,6 +44,17 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
 
         var db = Resolve<PlannerDbContext>();
         var projects = Resolve<ProjectsService>();
+        var targetValidation = Resolve<GoalTargetValidationService>();
+
+        var entityType = Enum.Parse<GoalEntityType>(req.EntityType, ignoreCase: true);
+        var goalType = Enum.Parse<GoalType>(req.GoalType, ignoreCase: true);
+        var targetError = await targetValidation.ValidateAsync(profileId, entityType, req.EntityId.Trim(), goalType, req.Config, ct);
+        if (targetError is not null)
+        {
+            AddError(targetError);
+            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+            return;
+        }
 
         var profile = await db.Profiles.FirstAsync(entity => entity.Id == profileId, ct);
 
@@ -69,12 +80,25 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
         var goal = Map.ToEntity(req);
         goal.Id = GoalId.From(Guid.CreateVersion7());
         goal.ProfileId = profileId;
-        goal.EntityType = Enum.Parse<GoalEntityType>(req.EntityType, ignoreCase: true);
-        goal.GoalType = Enum.Parse<GoalType>(req.GoalType, ignoreCase: true);
+        goal.EntityType = entityType;
+        goal.GoalType = goalType;
         goal.Status = project.Id == profile.ActiveProjectId ? GoalStatus.Active : GoalStatus.Paused;
         var now = DateTimeOffset.UtcNow;
         goal.Snapshot = GoalMapper.MapSnapshot(req.Snapshot, now);
         goal.Events = [new GoalEvent { At = now, Type = GoalEventType.Created }];
+        if (goal.GoalType == GoalType.Rank && goal.Config.Rank is { } rank)
+        {
+            goal.Milestones = MilestoneGenerator.ForRank(rank.Start, rank.End, goal.Config.FarmingStrategy);
+        }
+        else if (goal.EntityType == GoalEntityType.Mow
+            && goal.GoalType == GoalType.Ability
+            && goal.Config.Ability is { } ability)
+        {
+            var (start, end) = ability.ActiveEnd > ability.ActiveStart
+                ? (ability.ActiveStart, ability.ActiveEnd)
+                : (ability.PassiveStart, ability.PassiveEnd);
+            goal.Milestones = MilestoneGenerator.ForAbility(start, end, goal.Config.FarmingStrategy);
+        }
 
         db.Goals.Add(goal);
 
@@ -104,8 +128,9 @@ public sealed record CreateGoalConfigRequest(
     RankTargetRequest? Rank = null,
     ProgressionTargetRequest? Progression = null,
     AbilityTargetRequest? Ability = null,
-    ShardTargetRequest? Shards = null,
-    List<CampaignBattleId>? FarmingLocationIds = null
+    List<CampaignBattleId>? FarmingLocationIds = null,
+    string? FarmingStrategy = null,
+    AscensionFarmingRequest? AscensionFarming = null
 );
 
 public sealed record RankTargetRequest(
@@ -121,14 +146,17 @@ public sealed record ProgressionTargetRequest(string Start, string End);
 
 public sealed record AbilityTargetRequest(int ActiveStart, int ActiveEnd, int PassiveStart, int PassiveEnd);
 
-public sealed record ShardTargetRequest(int Count);
+public sealed record AscensionFarmingRequest(
+    string Source,
+    List<CampaignBattleId> ShardBattleIds,
+    List<CampaignBattleId> MythicShardBattleIds
+);
 
 public sealed record CreateGoalSnapshotRequest(
     string? InitialRank = null,
     string? InitialProgression = null,
     int? InitialActiveAbilityLevel = null,
     int? InitialPassiveAbilityLevel = null,
-    int? InitialShards = null,
     bool? InitialUnlocked = null,
     List<GoalSnapshotResourceRequest>? InitialRequirement = null,
     List<GoalSnapshotResourceRequest>? InitialInventoryContribution = null,

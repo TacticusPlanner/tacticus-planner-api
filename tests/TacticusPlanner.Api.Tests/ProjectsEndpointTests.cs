@@ -9,7 +9,7 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
 {
     private static readonly CreateGoalRequest RankGoal = new(
         "character",
-        "unit-1",
+        "blackTerminator",
         "rank",
         new CreateGoalConfigRequest(Rank: new RankTargetRequest(1, false, 0, 5, false, 0)),
         null

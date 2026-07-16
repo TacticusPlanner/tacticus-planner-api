@@ -1,4 +1,5 @@
 using FastEndpoints;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Domain.Goals;
@@ -49,6 +50,10 @@ public sealed class UpdateGoalEndpoint : Endpoint<UpdateGoalRequest, GoalDetailR
 
         goal.Notes = req.Notes;
         goal.Config.FarmingLocationIds = req.FarmingLocationIds?.Select(id => id.Value).ToList();
+        if (req.FarmingStrategy is not null)
+        {
+            goal.Config.FarmingStrategy = Enum.Parse<FarmingStrategy>(req.FarmingStrategy, ignoreCase: true);
+        }
 
         await db.SaveChangesAsync(ct);
 
@@ -56,4 +61,18 @@ public sealed class UpdateGoalEndpoint : Endpoint<UpdateGoalRequest, GoalDetailR
     }
 }
 
-public sealed record UpdateGoalRequest(string? Notes, List<CampaignBattleId>? FarmingLocationIds);
+public sealed record UpdateGoalRequest(
+    string? Notes,
+    List<CampaignBattleId>? FarmingLocationIds,
+    string? FarmingStrategy = null
+);
+
+public sealed class UpdateGoalValidator : Validator<UpdateGoalRequest>
+{
+    public UpdateGoalValidator()
+    {
+        RuleFor(request => request.FarmingStrategy)
+            .Must(value => value is null || Enum.TryParse<FarmingStrategy>(value, ignoreCase: true, out _))
+            .WithMessage("Unknown farming strategy.");
+    }
+}

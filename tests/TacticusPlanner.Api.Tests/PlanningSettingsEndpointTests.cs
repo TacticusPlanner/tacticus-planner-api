@@ -18,12 +18,11 @@ public sealed class PlanningSettingsEndpointTests(PlannerApiFactory factory) : I
 
         Assert.NotNull(initial);
         Assert.Equal(288, initial.DailyEnergy);
-        Assert.Equal("GoalPriority", initial.Ordering);
         Assert.Equal(1, initial.Revision);
 
         var response = await client.PutAsJsonAsync(
             "/api/v1/me/planning-settings",
-            new UpdatePlanningSettingsRequest(538, "TotalMaterials", initial.Revision),
+            new UpdatePlanningSettingsRequest(538, initial.Revision),
             TestContext.Current.CancellationToken
         );
         response.EnsureSuccessStatusCode();
@@ -31,20 +30,17 @@ public sealed class PlanningSettingsEndpointTests(PlannerApiFactory factory) : I
 
         Assert.NotNull(updated);
         Assert.Equal(538, updated.DailyEnergy);
-        Assert.Equal("TotalMaterials", updated.Ordering);
         Assert.Equal(2, updated.Revision);
     }
 
-    [Theory]
-    [InlineData(300, "GoalPriority")]
-    [InlineData(288, "CheapestNode")]
-    public async Task PutRejectsUnsupportedSettings(int dailyEnergy, string ordering)
+    [Fact]
+    public async Task PutRejectsUnsupportedEnergy()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
         var response = await client.PutAsJsonAsync(
             "/api/v1/me/planning-settings",
-            new UpdatePlanningSettingsRequest(dailyEnergy, ordering, 0),
+            new UpdatePlanningSettingsRequest(300, 0),
             TestContext.Current.CancellationToken
         );
 
@@ -62,7 +58,7 @@ public sealed class PlanningSettingsEndpointTests(PlannerApiFactory factory) : I
 
         var response = await client.PutAsJsonAsync(
             "/api/v1/me/planning-settings",
-            new UpdatePlanningSettingsRequest(378, "GoalPriority", current!.Revision - 1),
+            new UpdatePlanningSettingsRequest(378, current!.Revision - 1),
             TestContext.Current.CancellationToken
         );
 

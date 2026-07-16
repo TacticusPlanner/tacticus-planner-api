@@ -17,7 +17,6 @@ public sealed class PlanningSettingsConfiguration : IEntityTypeConfiguration<Pla
             .HasConversion(id => id.Value, value => ProfileId.From(value))
             .ValueGeneratedNever();
         builder.Property(entity => entity.DailyEnergy).HasColumnName("daily_energy").IsRequired();
-        builder.Property(entity => entity.Ordering).HasColumnName("ordering").HasConversion<string>().IsRequired();
         builder.Property(entity => entity.Revision).HasColumnName("revision").IsConcurrencyToken();
         builder.Property(entity => entity.CreatedAt).HasColumnName("created_at").IsRequired();
         builder.Property(entity => entity.UpdatedAt).HasColumnName("updated_at").IsRequired();

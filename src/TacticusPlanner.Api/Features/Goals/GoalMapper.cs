@@ -76,8 +76,16 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
             PassiveStart = config.Ability.PassiveStart,
             PassiveEnd = config.Ability.PassiveEnd,
         },
-        Shards = config.Shards is null ? null : new ShardTarget { Count = config.Shards.Count },
         FarmingLocationIds = config.FarmingLocationIds?.Select(id => id.Value).ToList(),
+        FarmingStrategy = Enum.TryParse<FarmingStrategy>(config.FarmingStrategy, ignoreCase: true, out var strategy)
+            ? strategy
+            : FarmingStrategy.TotalUpgrades,
+        AscensionFarming = config.AscensionFarming is null ? null : new AscensionFarmingConfig
+        {
+            Source = Enum.Parse<AscensionFarmingSource>(config.AscensionFarming.Source, ignoreCase: true),
+            ShardBattleIds = config.AscensionFarming.ShardBattleIds.Select(id => id.Value).ToList(),
+            MythicShardBattleIds = config.AscensionFarming.MythicShardBattleIds.Select(id => id.Value).ToList(),
+        },
     };
 
     internal static GoalSnapshot MapSnapshot(CreateGoalSnapshotRequest? snapshot, DateTimeOffset createdAt) => new()
@@ -87,7 +95,6 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
         InitialProgression = snapshot?.InitialProgression,
         InitialActiveAbilityLevel = snapshot?.InitialActiveAbilityLevel,
         InitialPassiveAbilityLevel = snapshot?.InitialPassiveAbilityLevel,
-        InitialShards = snapshot?.InitialShards,
         InitialUnlocked = snapshot?.InitialUnlocked,
         InitialRequirement = MapResources(snapshot?.InitialRequirement),
         InitialInventoryContribution = MapResources(snapshot?.InitialInventoryContribution),
@@ -120,8 +127,12 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
             config.Ability.PassiveStart,
             config.Ability.PassiveEnd
         ),
-        config.Shards is null ? null : new ShardTargetResponse(config.Shards.Count),
-        config.FarmingLocationIds
+        config.FarmingLocationIds,
+        config.FarmingStrategy.ToString(),
+        config.AscensionFarming is null ? null : new AscensionFarmingResponse(
+            config.AscensionFarming.Source.ToString(),
+            config.AscensionFarming.ShardBattleIds,
+            config.AscensionFarming.MythicShardBattleIds)
     );
 
     private static GoalMilestoneResponse BuildMilestone(GoalMilestone milestone) => new(
@@ -139,7 +150,6 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
         snapshot.InitialProgression,
         snapshot.InitialActiveAbilityLevel,
         snapshot.InitialPassiveAbilityLevel,
-        snapshot.InitialShards,
         snapshot.InitialUnlocked,
         snapshot.InitialRequirement.Select(BuildSnapshotResource).ToList(),
         snapshot.InitialInventoryContribution.Select(BuildSnapshotResource).ToList(),
@@ -192,8 +202,9 @@ public sealed record GoalConfigResponse(
     RankTargetResponse? Rank,
     ProgressionTargetResponse? Progression,
     AbilityTargetResponse? Ability,
-    ShardTargetResponse? Shards,
-    List<string>? FarmingLocationIds
+    List<string>? FarmingLocationIds,
+    string FarmingStrategy,
+    AscensionFarmingResponse? AscensionFarming
 );
 
 public sealed record RankTargetResponse(
@@ -209,7 +220,11 @@ public sealed record ProgressionTargetResponse(string Start, string End);
 
 public sealed record AbilityTargetResponse(int ActiveStart, int ActiveEnd, int PassiveStart, int PassiveEnd);
 
-public sealed record ShardTargetResponse(int Count);
+public sealed record AscensionFarmingResponse(
+    string Source,
+    List<string> ShardBattleIds,
+    List<string> MythicShardBattleIds
+);
 
 public sealed record GoalMilestoneResponse(
     int Index,
@@ -226,7 +241,6 @@ public sealed record GoalSnapshotResponse(
     string? InitialProgression,
     int? InitialActiveAbilityLevel,
     int? InitialPassiveAbilityLevel,
-    int? InitialShards,
     bool? InitialUnlocked,
     List<GoalSnapshotResourceResponse> InitialRequirement,
     List<GoalSnapshotResourceResponse> InitialInventoryContribution,

@@ -10,6 +10,7 @@ public static class GameCatalogDatasets
     public const string DropChances = "drop-chances";
     public const string AscensionCosts = "ascension-costs";
     public const string UnlockShardCosts = "unlock-shard-costs";
+    public const string OnslaughtRewards = "onslaught-rewards";
 
     // Route/key prefixes for the split dataset families.
     public const string UnitsPrefix = "units";
@@ -171,6 +172,7 @@ public static class GameCatalogDatasets
         DropChances,
         AscensionCosts,
         UnlockShardCosts,
+        OnslaughtRewards,
         .. NpcFactions,
         .. EquipmentTypes,
         .. UpgradeRarities,
@@ -214,6 +216,7 @@ public static class GameCatalogDatasets
         MowUpgradeCostsServed,
         AscensionCostsServed,
         UnlockShardCostsServed,
+        OnslaughtRewards,
         Upgrades,
         Equipment,
         CampaignBattles,

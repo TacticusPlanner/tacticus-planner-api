@@ -52,40 +52,49 @@ public sealed class V1GoalImportService(
         }
 
         var defaultProject = await projects.EnsureDefaultProjectAsync(profileId, ct);
-        await using var transaction = db.Database.IsRelational()
-            ? await db.Database.BeginTransactionAsync(ct)
-            : null;
-        var now = timeProvider.GetUtcNow();
-        var keys = candidates.Select(candidate => candidate.Key).ToHashSet();
-
-        var existing = await db.Goals
-            .Where(goal => goal.ProfileId == profileId && goal.Status != GoalStatus.Deleted)
-            .ToListAsync(ct);
-        var replaced = existing.Where(goal => keys.Contains(new GoalKey(goal.EntityType, goal.EntityId, goal.GoalType))).ToList();
-        var replacedIds = replaced.Select(goal => goal.Id).ToList();
-
-        if (replacedIds.Count > 0)
+        var strategy = db.Database.CreateExecutionStrategy();
+        return await strategy.ExecuteAsync(async () =>
         {
-            var memberships = await db.ProjectGoals.Where(link => replacedIds.Contains(link.GoalId)).ToListAsync(ct);
-            db.ProjectGoals.RemoveRange(memberships);
-            foreach (var goal in replaced)
+            // A retry reuses this scoped DbContext, so discard entities left in the change tracker by
+            // a failed attempt before rebuilding the complete transactional unit.
+            db.ChangeTracker.Clear();
+            // Production uses Npgsql and always takes this branch; the null path supports the
+            // endpoint test host's EF InMemory provider, which has no transaction implementation.
+            await using var transaction = db.Database.IsRelational()
+                ? await db.Database.BeginTransactionAsync(ct)
+                : null;
+            var now = timeProvider.GetUtcNow();
+            var keys = candidates.Select(candidate => candidate.Key).ToHashSet();
+
+            var existing = await db.Goals
+                .Where(goal => goal.ProfileId == profileId && goal.Status != GoalStatus.Deleted)
+                .ToListAsync(ct);
+            var replaced = existing.Where(goal => keys.Contains(new GoalKey(goal.EntityType, goal.EntityId, goal.GoalType))).ToList();
+            var replacedIds = replaced.Select(goal => goal.Id).ToList();
+
+            if (replacedIds.Count > 0)
             {
-                goal.Status = GoalStatus.Deleted;
-                goal.Events.Add(new GoalEvent { At = now, Type = GoalEventType.Deleted });
+                var memberships = await db.ProjectGoals.Where(link => replacedIds.Contains(link.GoalId)).ToListAsync(ct);
+                db.ProjectGoals.RemoveRange(memberships);
+                foreach (var goal in replaced)
+                {
+                    goal.Status = GoalStatus.Deleted;
+                    goal.Events.Add(new GoalEvent { At = now, Type = GoalEventType.Deleted });
+                }
             }
-        }
 
-        var nextPriority = await projects.GetNextPriorityAsync(defaultProject.Id, ct);
-        var imported = candidates.Select((candidate, index) => BuildGoal(profileId, candidate, now, defaultProject.Id, nextPriority + index)).ToList();
-        db.Goals.AddRange(imported.Select(item => item.Goal));
-        db.ProjectGoals.AddRange(imported.Select(item => item.Link));
-        await db.SaveChangesAsync(ct);
-        if (transaction is not null)
-        {
-            await transaction.CommitAsync(ct);
-        }
+            var nextPriority = await projects.GetNextPriorityAsync(defaultProject.Id, ct);
+            var imported = candidates.Select((candidate, index) => BuildGoal(profileId, candidate, now, defaultProject.Id, nextPriority + index)).ToList();
+            db.Goals.AddRange(imported.Select(item => item.Goal));
+            db.ProjectGoals.AddRange(imported.Select(item => item.Link));
+            await db.SaveChangesAsync(ct);
+            if (transaction is not null)
+            {
+                await transaction.CommitAsync(ct);
+            }
 
-        return new V1GoalImportResult(imported.Count, replaced.Count, skipped, issues);
+            return new V1GoalImportResult(imported.Count, replaced.Count, skipped, issues);
+        });
     }
 
     private TranslatedGoal? Translate(V1Goal source, List<V1ImportIssue> issues)

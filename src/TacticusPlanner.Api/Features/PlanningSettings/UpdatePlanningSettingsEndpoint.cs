@@ -2,7 +2,6 @@ using FastEndpoints;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
-using TacticusPlanner.Domain.Planning;
 using TacticusPlanner.Persistence;
 using PlanningSettingsEntity = TacticusPlanner.Domain.Planning.PlanningSettings;
 
@@ -47,7 +46,6 @@ public sealed class UpdatePlanningSettingsEndpoint
         }
 
         settings.DailyEnergy = req.DailyEnergy;
-        settings.Ordering = Enum.Parse<PlanningOrdering>(req.Ordering, ignoreCase: true);
 
         try
         {
@@ -64,7 +62,7 @@ public sealed class UpdatePlanningSettingsEndpoint
     }
 }
 
-public sealed record UpdatePlanningSettingsRequest(int DailyEnergy, string Ordering, long Revision);
+public sealed record UpdatePlanningSettingsRequest(int DailyEnergy, long Revision);
 
 public sealed class UpdatePlanningSettingsValidator : Validator<UpdatePlanningSettingsRequest>
 {
@@ -73,9 +71,6 @@ public sealed class UpdatePlanningSettingsValidator : Validator<UpdatePlanningSe
         RuleFor(request => request.DailyEnergy)
             .Must(PlanningSettingsEntity.SupportedDailyEnergy.Contains)
             .WithMessage("Daily energy must be one of the supported planning tiers.");
-        RuleFor(request => request.Ordering)
-            .Must(value => Enum.TryParse<PlanningOrdering>(value, ignoreCase: true, out _))
-            .WithMessage("Ordering must be GoalPriority or TotalMaterials.");
         RuleFor(request => request.Revision).GreaterThanOrEqualTo(0);
     }
 }

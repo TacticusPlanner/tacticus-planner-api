@@ -17,8 +17,6 @@ public sealed class GoalSnapshot
 
     public int? InitialPassiveAbilityLevel { get; set; }
 
-    public int? InitialShards { get; set; }
-
     public bool? InitialUnlocked { get; set; }
 
     public List<GoalSnapshotResource> InitialRequirement { get; set; } = [];

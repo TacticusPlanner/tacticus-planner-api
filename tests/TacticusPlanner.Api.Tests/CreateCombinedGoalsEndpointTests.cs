@@ -9,7 +9,7 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
 {
     private static readonly CreateCombinedGoalsRequest UnlockThenRank = new(
         "character",
-        "unit-1",
+        "blackTerminator",
         null,
         [
             new CombinedGoalSpec("unlock", new CreateGoalConfigRequest(), []),
@@ -72,7 +72,6 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
             InitialProgression: "Rare3Stars",
             InitialActiveAbilityLevel: 20,
             InitialPassiveAbilityLevel: 18,
-            InitialShards: 12,
             InitialUnlocked: true,
             InitialRequirement: [new GoalSnapshotResourceRequest("material-1", 30)],
             InitialInventoryContribution: [new GoalSnapshotResourceRequest("material-1", 5)],
@@ -209,7 +208,7 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
         // only spec in the request.
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var request = UnlockThenRank with { EntityType = "mow", EntityId = "mow-1" };
+        var request = UnlockThenRank with { EntityType = "mow", EntityId = "astraOrdnanceBattery" };
 
         var response = await client.PostAsJsonAsync(
             "/api/v1/me/goals/combined",
@@ -221,13 +220,13 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
     }
 
     [Fact]
-    public async Task MowUnlockThenAbilityGoalIsAccepted()
+    public async Task MowUnlockGoalIsRejectedBecauseUnlockRequiresCharacterShardLocations()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
         var request = new CreateCombinedGoalsRequest(
             "mow",
-            "mow-1",
+            "astraOrdnanceBattery",
             null,
             [
                 new CombinedGoalSpec("unlock", new CreateGoalConfigRequest(), []),
@@ -244,14 +243,7 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
             request,
             TestContext.Current.CancellationToken
         );
-        response.EnsureSuccessStatusCode();
-        var created = await response.Content.ReadFromJsonAsync<CreateCombinedGoalsResponse>(TestContext.Current.CancellationToken);
-
-        Assert.NotNull(created);
-        Assert.Equal(2, created.Goals.Count);
-        Assert.All(created.Goals, goal => Assert.Equal("Mow", goal.EntityType));
-        Assert.Equal("Ability", created.Goals[1].GoalType);
-        Assert.Equal([created.Goals[0].GoalId], created.Goals[1].DependsOn);
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
     private static async Task<ProjectSummaryResponse> GetDefaultProjectAsync(HttpClient client)

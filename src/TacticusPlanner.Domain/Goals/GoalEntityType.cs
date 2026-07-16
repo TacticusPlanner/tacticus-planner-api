@@ -9,8 +9,4 @@ public enum GoalEntityType
 {
     Character,
     Mow,
-
-    /// <summary>Reserved for the deferred material-goal types (V1's UpgradeMaterial/PreFarmMaterialForGoals).
-    /// No goal may use this value yet — see the plan's §4 "Deferred goal types".</summary>
-    Upgrade,
 }

@@ -2,7 +2,7 @@
   version: dev-2026-07-01,
   schemaVersion: 1,
   gameVersion: 1.40,
-  sourceHash: 492cccbbb3e6781cd614d17930acbce0c3de3ebf948efcb0995496194405216e,
+  sourceHash: 52363df0950fd0ff602c970cfd01be8ec8bec0aae1f40f307fde2ee7dcd2b761,
   datasets: [
     {
       key: ascension-costs,
@@ -58,6 +58,11 @@
       key: npcs,
       hash: 25232db3a36692434209a6c905497b4c14c3e538dc16ebaab6db8c1bdc7e78f6,
       url: /api/v1/game-catalog/npcs
+    },
+    {
+      key: onslaught-rewards,
+      hash: c83f0f0ee9077fa3d8df1a2d8777faf7e32b36a652ee316fa07acf4709ccb2cf,
+      url: /api/v1/game-catalog/onslaught-rewards
     },
     {
       key: unlock-shard-costs,

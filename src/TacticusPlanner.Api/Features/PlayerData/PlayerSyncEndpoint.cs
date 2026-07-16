@@ -2,6 +2,7 @@ using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using Refit;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Persistence;
 using TacticusPlanner.TacticusApi;
 using PlayerDataSnapshotEntity = TacticusPlanner.Domain.PlayerData.PlayerDataSnapshot;
@@ -62,6 +63,7 @@ public sealed class PlayerSyncEndpoint(ITacticusApi tacticusApi, PlayerDataTrans
         }
 
         var db = Resolve<PlannerDbContext>();
+        var goalAchievementEvaluator = Resolve<GoalAchievementEvaluator>();
 
         // TacticusIntegration is keyed 1:1 by the same ProfileId, so this is a direct primary-key lookup —
         // no Account/Profile join, and the (potentially large) PlayerDataSnapshot row isn't touched yet.
@@ -120,6 +122,8 @@ public sealed class PlayerSyncEndpoint(ITacticusApi tacticusApi, PlayerDataTrans
             // matches the current contract and contains every advertised chunk. A matching Tacticus
             // config hash alone is insufficient after adding a chunk or bumping our schema version.
             integration.TacticusSyncLastSucceededAt = timeProvider.GetUtcNow();
+            var currentSnapshot = await db.PlayerDataSnapshots.FirstAsync(entity => entity.Id == profileId, ct);
+            await goalAchievementEvaluator.EvaluateAsync(profileId, currentSnapshot, ct);
             await db.SaveChangesAsync(ct);
             await Send.OkAsync(
                 PlayerDataManifestBuilder.Build(
@@ -165,6 +169,7 @@ public sealed class PlayerSyncEndpoint(ITacticusApi tacticusApi, PlayerDataTrans
         }
 
         integration.TacticusSyncLastSucceededAt = timeProvider.GetUtcNow();
+        await goalAchievementEvaluator.EvaluateAsync(profileId, snapshot, ct);
         await db.SaveChangesAsync(ct);
 
         await Send.OkAsync(PlayerDataManifestBuilder.Build(snapshot), ct);

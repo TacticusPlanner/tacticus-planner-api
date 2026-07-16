@@ -16,7 +16,9 @@ public sealed class GoalConfig
 
     public AbilityTarget? Ability { get; set; }
 
-    public ShardTarget? Shards { get; set; }
+    public FarmingStrategy FarmingStrategy { get; set; } = FarmingStrategy.TotalUpgrades;
+
+    public AscensionFarmingConfig? AscensionFarming { get; set; }
 
     /// <summary>Per-goal farming location override (plan §6), as raw <see cref="CampaignBattleId"/> values
     /// — stored unwrapped since it's a scalar list nested in the <c>config</c> jsonb column (Vogen's
@@ -52,7 +54,27 @@ public sealed class AbilityTarget
     public int PassiveEnd { get; set; }
 }
 
-public sealed class ShardTarget
+public enum FarmingStrategy
 {
-    public required int Count { get; set; }
+    TotalUpgrades,
+    EveryStep,
+    Milestones,
+    MajorMilestones,
+}
+
+public enum AscensionFarmingSource
+{
+    Campaign,
+    Onslaught,
+    Both,
+}
+
+public sealed class AscensionFarmingConfig
+{
+    public AscensionFarmingSource Source { get; set; } = AscensionFarmingSource.Campaign;
+
+    public List<string> ShardBattleIds { get; set; } = [];
+
+    public List<string> MythicShardBattleIds { get; set; } = [];
+
 }
