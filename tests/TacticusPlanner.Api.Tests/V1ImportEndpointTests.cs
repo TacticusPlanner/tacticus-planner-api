@@ -78,7 +78,44 @@ public sealed class V1ImportEndpointTests(PlannerApiFactory factory) : IClassFix
     }
 
     [Fact]
-    public async Task GoalsOnlyImportReplacesMatchingNativeGoalAndReportsUnsupportedGoals()
+    public async Task GoalsOnlyImportReturnsSpecsForTheClientToCreateAndReportsUnsupportedGoals()
+    {
+        var client = await CreateProvisionedClientAsync();
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/v1-import",
+            new ImportV1ProfileRequest(
+                FakeTacticusV1Client.UsernameWithGoals,
+                FakeTacticusV1Client.ValidPassword,
+                new ImportV1Selection(false, false, false, true)
+            ),
+            TestContext.Current.CancellationToken
+        );
+        response.EnsureSuccessStatusCode();
+        var body = await response.Content.ReadFromJsonAsync<ImportV1ProfileResponse>(TestContext.Current.CancellationToken);
+
+        Assert.NotNull(body);
+        Assert.Equal("Imported", body.Goals.Status);
+        var spec = Assert.Single(body.GoalSpecs);
+        Assert.Equal("Character", spec.EntityType);
+        Assert.Equal("ultraInceptorSgt", spec.EntityId);
+        var goalSpec = Assert.Single(spec.Goals);
+        Assert.Equal("Rank", goalSpec.GoalType);
+        Assert.Equal(1, body.GoalsSkipped);
+        Assert.Contains(body.GoalIssues, issue => issue.Code == "unsupported_goal_type");
+        Assert.Equal("not_selected", body.PersonalTacticusApiKey.Code);
+
+        // Nothing was created server-side — this is a pure translation. The caller (the web client, in
+        // production) is responsible for submitting the returned specs through POST me/goals/combined.
+        var goals = await client.GetFromJsonAsync<ListGoalsResponse>(
+            "/api/v1/me/goals",
+            TestContext.Current.CancellationToken
+        );
+        Assert.Empty(goals!.Goals);
+    }
+
+    [Fact]
+    public async Task GoalsOnlyImportSkipsCandidatesThatAlreadyHaveAMatchingGoal()
     {
         var client = await CreateProvisionedClientAsync();
         var nativeResponse = await client.PostAsJsonAsync(
@@ -109,37 +146,18 @@ public sealed class V1ImportEndpointTests(PlannerApiFactory factory) : IClassFix
         var body = await response.Content.ReadFromJsonAsync<ImportV1ProfileResponse>(TestContext.Current.CancellationToken);
 
         Assert.NotNull(body);
-        Assert.Equal("Imported", body.Goals.Status);
-        Assert.Equal(1, body.GoalsImported);
-        Assert.Equal(1, body.GoalsReplaced);
-        Assert.Equal(1, body.GoalsSkipped);
+        Assert.Empty(body.GoalSpecs);
+        // 1 unsupported goal + 1 skipped as already-existing.
+        Assert.Equal(2, body.GoalsSkipped);
+        Assert.Contains(body.GoalIssues, issue => issue.Code == "goal_already_exists");
         Assert.Contains(body.GoalIssues, issue => issue.Code == "unsupported_goal_type");
-        Assert.Equal("not_selected", body.PersonalTacticusApiKey.Code);
-
-        var repeatedResponse = await client.PostAsJsonAsync(
-            "/api/v1/me/v1-import",
-            new ImportV1ProfileRequest(
-                FakeTacticusV1Client.UsernameWithGoals,
-                FakeTacticusV1Client.ValidPassword,
-                new ImportV1Selection(false, false, false, true)
-            ),
-            TestContext.Current.CancellationToken
-        );
-        repeatedResponse.EnsureSuccessStatusCode();
-        var repeated = await repeatedResponse.Content.ReadFromJsonAsync<ImportV1ProfileResponse>(TestContext.Current.CancellationToken);
-        Assert.NotNull(repeated);
-        Assert.Equal(1, repeated.GoalsImported);
-        Assert.Equal(1, repeated.GoalsReplaced);
 
         var goals = await client.GetFromJsonAsync<ListGoalsResponse>(
             "/api/v1/me/goals",
             TestContext.Current.CancellationToken
         );
-        var imported = Assert.Single(goals!.Goals);
-        Assert.Equal("ultraInceptorSgt", imported.EntityId);
-        Assert.Equal("Paused", imported.Status);
-        Assert.Equal("Imported note", imported.Notes);
-        Assert.Equal(1, imported.MilestonesTotal);
+        var existing = Assert.Single(goals!.Goals);
+        Assert.Equal("ultraInceptorSgt", existing.EntityId);
     }
 
     private async Task<HttpClient> CreateProvisionedClientAsync()

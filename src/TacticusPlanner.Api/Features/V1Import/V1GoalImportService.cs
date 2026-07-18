@@ -1,20 +1,31 @@
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Goals;
-using TacticusPlanner.Api.Features.Projects;
 using TacticusPlanner.Domain.Goals;
+using TacticusPlanner.Domain.PlayerData;
+using TacticusPlanner.Domain.PlayerData.Chunks;
 using TacticusPlanner.Domain.Profiles;
-using TacticusPlanner.Domain.Projects;
 using TacticusPlanner.GameCatalog;
 using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.V1Import;
 
-public sealed class V1GoalImportService(
-    PlannerDbContext db,
-    ProjectsService projects,
-    IGameCatalogProvider catalog,
-    TimeProvider timeProvider
-)
+/// <summary>
+/// Translates V1 goals into V2 create-request specs — this service does not persist any goals itself.
+/// V1 only ever supplies target/end values (V1 has no notion of a tracked starting point beyond the
+/// character's state at goal-creation time, which is exactly what "current" means here too); every
+/// goal's starting point is read fresh from the account's live <see cref="PlayerDataSnapshot"/> instead
+/// of whatever stale starting values the V1 record happened to carry. The account's existing
+/// (non-deleted) goals are also read, to skip candidates that already have a matching
+/// (EntityType, EntityId, GoalType) goal. Each returned spec's <c>Snapshot</c> is left null — same as
+/// the goal's Start values are read from live player data rather than V1, the initial-state snapshot
+/// is resolved client-side, by the same <c>buildCreateGoalSnapshot</c> the regular create-goal flow
+/// uses, once the client has this spec plus its own live player data and estimate engine to build it
+/// against. The result is handed back to <see cref="ImportV1ProfileEndpoint"/> as
+/// <see cref="CreateCombinedGoalsRequest"/> specs — one per unit — for the client to submit through the
+/// same <c>POST me/goals/combined</c> endpoint the regular create-goal flow uses. Keeping goal creation
+/// entirely client-side avoids a second, server-only creation path.
+/// </summary>
+public sealed class V1GoalImportService(PlannerDbContext db, IGameCatalogProvider catalog)
 {
     private static readonly string[] Rarities = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic"];
     private static readonly string[] Stars =
@@ -34,12 +45,14 @@ public sealed class V1GoalImportService(
     ];
     private static readonly HashSet<string> Progressions = [.. ProgressionOrder];
 
-    public async Task<V1GoalImportResult> ImportAsync(ProfileId profileId, IReadOnlyList<V1Goal> source, CancellationToken ct)
+    public async Task<V1GoalImportResult> TranslateAsync(ProfileId profileId, IReadOnlyList<V1Goal> source, CancellationToken ct)
     {
         var issues = new List<V1ImportIssue>();
+        var playerSnapshot = await db.PlayerDataSnapshots.AsNoTracking()
+            .FirstOrDefaultAsync(item => item.Id == profileId, ct);
         var translated = source
             .OrderBy(goal => goal.Priority)
-            .Select(goal => Translate(goal, issues))
+            .Select(goal => Translate(goal, playerSnapshot, issues))
             .Where(goal => goal is not null)
             .Cast<TranslatedGoal>()
             .ToList();
@@ -48,56 +61,52 @@ public sealed class V1GoalImportService(
         var candidates = CollapseProgressionGoals(translated);
         if (candidates.Count == 0)
         {
-            return new V1GoalImportResult(0, 0, skipped, issues);
+            return new V1GoalImportResult([], skipped, issues);
         }
 
-        var defaultProject = await projects.EnsureDefaultProjectAsync(profileId, ct);
-        var strategy = db.Database.CreateExecutionStrategy();
-        return await strategy.ExecuteAsync(async () =>
+        var existingKeys = await db.Goals
+            .Where(goal => goal.ProfileId == profileId && goal.Status != GoalStatus.Deleted)
+            .Select(goal => new { goal.EntityType, goal.EntityId, goal.GoalType })
+            .ToListAsync(ct);
+        var existing = existingKeys.Select(key => new GoalKey(key.EntityType, key.EntityId, key.GoalType)).ToHashSet();
+
+        var creatable = new List<TranslatedGoal>();
+        foreach (var candidate in candidates)
         {
-            // A retry reuses this scoped DbContext, so discard entities left in the change tracker by
-            // a failed attempt before rebuilding the complete transactional unit.
-            db.ChangeTracker.Clear();
-            // Production uses Npgsql and always takes this branch; the null path supports the
-            // endpoint test host's EF InMemory provider, which has no transaction implementation.
-            await using var transaction = db.Database.IsRelational()
-                ? await db.Database.BeginTransactionAsync(ct)
-                : null;
-            var now = timeProvider.GetUtcNow();
-            var keys = candidates.Select(candidate => candidate.Key).ToHashSet();
-
-            var existing = await db.Goals
-                .Where(goal => goal.ProfileId == profileId && goal.Status != GoalStatus.Deleted)
-                .ToListAsync(ct);
-            var replaced = existing.Where(goal => keys.Contains(new GoalKey(goal.EntityType, goal.EntityId, goal.GoalType))).ToList();
-            var replacedIds = replaced.Select(goal => goal.Id).ToList();
-
-            if (replacedIds.Count > 0)
+            if (existing.Contains(candidate.Key))
             {
-                var memberships = await db.ProjectGoals.Where(link => replacedIds.Contains(link.GoalId)).ToListAsync(ct);
-                db.ProjectGoals.RemoveRange(memberships);
-                foreach (var goal in replaced)
-                {
-                    goal.Status = GoalStatus.Deleted;
-                    goal.Events.Add(new GoalEvent { At = now, Type = GoalEventType.Deleted });
-                }
+                skipped++;
+                issues.Add(new V1ImportIssue(
+                    "goal_already_exists", candidate.SourceId, "A goal of this type already exists for this entity."));
             }
-
-            var nextPriority = await projects.GetNextPriorityAsync(defaultProject.Id, ct);
-            var imported = candidates.Select((candidate, index) => BuildGoal(profileId, candidate, now, defaultProject.Id, nextPriority + index)).ToList();
-            db.Goals.AddRange(imported.Select(item => item.Goal));
-            db.ProjectGoals.AddRange(imported.Select(item => item.Link));
-            await db.SaveChangesAsync(ct);
-            if (transaction is not null)
+            else
             {
-                await transaction.CommitAsync(ct);
+                creatable.Add(candidate);
             }
+        }
 
-            return new V1GoalImportResult(imported.Count, replaced.Count, skipped, issues);
-        });
+        // Snapshot is deliberately left null here — same as every other field this service doesn't
+        // build (it's the client's job, via the same buildCreateGoalSnapshot the regular create-goal
+        // flow uses once it has this spec plus live player data to resolve it against).
+        var specs = creatable
+            .GroupBy(candidate => (candidate.Key.EntityType, candidate.Key.EntityId))
+            .Select(group => new CreateCombinedGoalsRequest(
+                group.Key.EntityType.ToString(),
+                group.Key.EntityId,
+                null,
+                group.Select(candidate => new CombinedGoalSpec(
+                    candidate.Key.GoalType.ToString(),
+                    candidate.Config,
+                    [],
+                    null
+                )).ToList()
+            ))
+            .ToList();
+
+        return new V1GoalImportResult(specs, skipped, issues);
     }
 
-    private TranslatedGoal? Translate(V1Goal source, List<V1ImportIssue> issues)
+    private TranslatedGoal? Translate(V1Goal source, PlayerDataSnapshot? playerSnapshot, List<V1ImportIssue> issues)
     {
         if (source.Type is 6 or 7)
         {
@@ -118,62 +127,83 @@ public sealed class V1GoalImportService(
         }
 
         var entityType = isMow ? GoalEntityType.Mow : GoalEntityType.Character;
+        var playerCharacter = isMow ? null : ResolvePlayerCharacter(entityId, playerSnapshot);
+        var playerMow = isMow ? ResolvePlayerMow(entityId, playerSnapshot) : null;
+        var playerUnit = (PlayerBaseUnitRecord?)playerCharacter ?? playerMow;
         GoalType goalType;
-        GoalConfig config;
+        CreateGoalConfigRequest config;
 
         switch (source.Type)
         {
-            case 1 when source.StartingRank is >= 1
-                && source.TargetRank.HasValue
-                && source.TargetRank.Value > source.StartingRank.Value:
+            case 1 when source.TargetRank.HasValue:
                 goalType = GoalType.Rank;
-                config = new GoalConfig
+                var currentRank = (int)(playerCharacter?.Rank ?? UnitRank.Stone1);
+                var targetRank = source.TargetRank.Value - 1;
+                if (targetRank <= currentRank)
                 {
-                    Rank = new RankTarget
-                    {
-                        Start = source.StartingRank.Value - 1,
-                        StartPointFive = source.StartingRankPoint5 ?? false,
-                        StartAppliedUpgrades = source.StartingRankAppliedUpgrades ?? 0,
-                        End = source.TargetRank!.Value - 1,
-                        EndPointFive = source.RankPoint5 ?? false,
-                        EndAppliedUpgrades = source.RankAppliedUpgrades ?? 0,
-                    }
-                };
+                    issues.Add(new V1ImportIssue(
+                        "rank_target_already_reached", source.Id, "The target rank is at or below the character's current rank."));
+                    return null;
+                }
+                config = new CreateGoalConfigRequest(
+                    Rank: new RankTargetRequest(
+                        currentRank,
+                        false,
+                        0,
+                        targetRank,
+                        source.RankPoint5 ?? false,
+                        source.RankAppliedUpgrades ?? 0
+                    )
+                );
                 break;
             case 2:
-                var start = Progression(source.StartingRarity, source.StartingStars);
+                var currentProgression = CurrentProgression(playerUnit);
                 var end = Progression(source.TargetRarity, source.TargetStars);
-                if (start is null || end is null)
+                if (end is null)
                 {
                     issues.Add(new V1ImportIssue("invalid_progression", source.Id, "The ascension target is not on the V2 progression ladder."));
                     return null;
                 }
+                if (Array.IndexOf(ProgressionOrder, end) <= Array.IndexOf(ProgressionOrder, currentProgression))
+                {
+                    issues.Add(new V1ImportIssue(
+                        "ascension_target_already_reached", source.Id, "The target progression is at or below the unit's current progression."));
+                    return null;
+                }
                 goalType = GoalType.Ascension;
-                config = new GoalConfig { Progression = new ProgressionTarget { Start = start, End = end } };
+                config = new CreateGoalConfigRequest(Progression: new ProgressionTargetRequest(currentProgression, end));
                 break;
             case 3:
+                if (playerUnit is not null)
+                {
+                    issues.Add(new V1ImportIssue("already_unlocked", source.Id, "The character is already unlocked."));
+                    return null;
+                }
                 goalType = GoalType.Unlock;
-                config = new GoalConfig();
+                config = new CreateGoalConfigRequest();
                 break;
             case 4 or 5 when source.FirstAbilityLevel is not null || source.SecondAbilityLevel is not null:
-                goalType = GoalType.Ability;
-                config = new GoalConfig
+                var activeStart = playerUnit?.Abilities.ElementAtOrDefault(0)?.Level ?? 0;
+                var passiveStart = playerUnit?.Abilities.ElementAtOrDefault(1)?.Level ?? 0;
+                var activeEnd = source.FirstAbilityLevel ?? 0;
+                var passiveEnd = source.SecondAbilityLevel ?? 0;
+                if (activeEnd <= activeStart && passiveEnd <= passiveStart)
                 {
-                    Ability = new AbilityTarget
-                    {
-                        ActiveStart = 0,
-                        ActiveEnd = source.FirstAbilityLevel ?? 0,
-                        PassiveStart = 0,
-                        PassiveEnd = source.SecondAbilityLevel ?? 0,
-                    }
-                };
+                    issues.Add(new V1ImportIssue(
+                        "ability_target_already_reached", source.Id, "The ability targets are at or below the unit's current levels."));
+                    return null;
+                }
+                goalType = GoalType.Ability;
+                config = new CreateGoalConfigRequest(
+                    Ability: new AbilityTargetRequest(activeStart, activeEnd, passiveStart, passiveEnd)
+                );
                 break;
             default:
                 issues.Add(new V1ImportIssue("malformed_goal", source.Id, "The goal is missing a required target."));
                 return null;
         }
 
-        return new TranslatedGoal(new GoalKey(entityType, entityId, goalType), config, source.Priority, source.Notes);
+        return new TranslatedGoal(new GoalKey(entityType, entityId, goalType), config, source.Priority, source.Notes, source.Id);
     }
 
     private static List<TranslatedGoal> CollapseProgressionGoals(List<TranslatedGoal> goals)
@@ -189,18 +219,16 @@ public sealed class V1GoalImportService(
                 var last = ranks.MaxBy(rank => rank.End)!;
                 collapsed.Add(ordered[0] with
                 {
-                    Config = new GoalConfig
-                    {
-                        Rank = new RankTarget
-                        {
-                            Start = first.Start,
-                            StartPointFive = first.StartPointFive,
-                            StartAppliedUpgrades = first.StartAppliedUpgrades,
-                            End = last.End,
-                            EndPointFive = last.EndPointFive,
-                            EndAppliedUpgrades = last.EndAppliedUpgrades,
-                        }
-                    },
+                    Config = new CreateGoalConfigRequest(
+                        Rank: new RankTargetRequest(
+                            first.Start,
+                            first.StartPointFive,
+                            first.StartAppliedUpgrades,
+                            last.End,
+                            last.EndPointFive,
+                            last.EndAppliedUpgrades
+                        )
+                    ),
                     Notes = JoinNotes(ordered),
                 });
             }
@@ -210,14 +238,12 @@ public sealed class V1GoalImportService(
                 var last = ordered.MaxBy(goal => Array.IndexOf(ProgressionOrder, goal.Config.Progression!.End))!;
                 collapsed.Add(ordered[0] with
                 {
-                    Config = new GoalConfig
-                    {
-                        Progression = new ProgressionTarget
-                        {
-                            Start = first.Config.Progression!.Start,
-                            End = last.Config.Progression!.End,
-                        }
-                    },
+                    Config = new CreateGoalConfigRequest(
+                        Progression: new ProgressionTargetRequest(
+                            first.Config.Progression!.Start,
+                            last.Config.Progression!.End
+                        )
+                    ),
                     Notes = JoinNotes(ordered),
                 });
             }
@@ -230,36 +256,6 @@ public sealed class V1GoalImportService(
         return collapsed.OrderBy(goal => goal.Priority).ToList();
     }
 
-    private static (Goal Goal, ProjectGoal Link) BuildGoal(
-        ProfileId profileId,
-        TranslatedGoal translated,
-        DateTimeOffset now,
-        ProjectId projectId,
-        int priority)
-    {
-        var goal = new Goal
-        {
-            Id = GoalId.From(Guid.CreateVersion7()),
-            ProfileId = profileId,
-            EntityType = translated.Key.EntityType,
-            EntityId = translated.Key.EntityId,
-            GoalType = translated.Key.GoalType,
-            Status = GoalStatus.Paused,
-            Notes = translated.Notes,
-            Config = translated.Config,
-            Snapshot = new GoalSnapshot { CreatedAt = now },
-            Events = [new GoalEvent { At = now, Type = GoalEventType.Created }],
-        };
-        goal.Milestones = goal.GoalType switch
-        {
-            GoalType.Rank => MilestoneGenerator.ForRank(goal.Config.Rank!.Start, goal.Config.Rank.End),
-            GoalType.Ascension => MilestoneGenerator.ForProgression(goal.Config.Progression!.Start, goal.Config.Progression.End),
-            _ => [],
-        };
-
-        return (goal, new ProjectGoal { ProjectId = projectId, GoalId = goal.Id, Priority = priority, CreatedAt = now });
-    }
-
     private static string? Progression(int? rarity, int? stars)
     {
         if (rarity is null || stars is null || rarity < 0 || rarity >= Rarities.Length || stars < 0 || stars >= Stars.Length)
@@ -269,6 +265,21 @@ public sealed class V1GoalImportService(
         var value = $"{Rarities[rarity.Value]}:{Stars[stars.Value]}";
         return Progressions.Contains(value) ? value : null;
     }
+
+    /// <summary>The unit's live progression as a "Rarity:Stars" key — the same wire format
+    /// <see cref="ProgressionOrder"/> and <see cref="ProgressionTargetRequest"/> use. Defaults to the
+    /// bottom of the ladder when the account has no synced player data for this unit yet.</summary>
+    private static string CurrentProgression(PlayerBaseUnitRecord? playerUnit)
+    {
+        var index = playerUnit is null ? 0 : (int)playerUnit.ProgressionIndex;
+        return index >= 0 && index < ProgressionOrder.Length ? ProgressionOrder[index] : ProgressionOrder[0];
+    }
+
+    private static PlayerCharacterRecord? ResolvePlayerCharacter(string entityId, PlayerDataSnapshot? playerSnapshot) =>
+        playerSnapshot?.Characters.FirstOrDefault(item => item.UnitId.Value == entityId);
+
+    private static PlayerMowRecord? ResolvePlayerMow(string entityId, PlayerDataSnapshot? playerSnapshot) =>
+        playerSnapshot?.Mows.FirstOrDefault(item => item.UnitId.Value == entityId);
 
     private static bool Matches(string id, string name, string? source) =>
         !string.IsNullOrWhiteSpace(source)
@@ -283,9 +294,13 @@ public sealed class V1GoalImportService(
     }
 
     private sealed record GoalKey(GoalEntityType EntityType, string EntityId, GoalType GoalType);
-    private sealed record TranslatedGoal(GoalKey Key, GoalConfig Config, int Priority, string? Notes);
+    private sealed record TranslatedGoal(GoalKey Key, CreateGoalConfigRequest Config, int Priority, string? Notes, string? SourceId);
 }
 
-public sealed record V1GoalImportResult(int Imported, int Replaced, int Skipped, IReadOnlyList<V1ImportIssue> Issues);
+public sealed record V1GoalImportResult(
+    IReadOnlyList<CreateCombinedGoalsRequest> GoalSpecs,
+    int Skipped,
+    IReadOnlyList<V1ImportIssue> Issues
+);
 
 public sealed record V1ImportIssue(string Code, string? SourceGoalId, string Message);

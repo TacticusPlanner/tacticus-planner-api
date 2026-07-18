@@ -1,6 +1,7 @@
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Api.Features.Guilds;
 using TacticusPlanner.Api.Features.TacticusIntegration;
 using TacticusPlanner.Api.Http;
@@ -20,7 +21,11 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
         {
             summary.Summary = "Selectively imports integration data, guild registration, and goals from V1.";
             summary.Description = "V1 credentials are used once and never persisted. After profile retrieval, "
-                + "each selected part is applied independently and reports Imported, Skipped, or Failed.";
+                + "each selected part is applied independently and reports Imported, Skipped, or Failed. "
+                + "Goals are translated into V2 create-goal specs (GoalSpecs) rather than created here — the "
+                + "caller submits each spec through POST me/goals/combined, the same endpoint the regular "
+                + "create-goal flow uses. A V1 goal is skipped when it can't be translated or when the account "
+                + "already has a goal of that type for that entity.";
         });
     }
 
@@ -65,23 +70,15 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
         ImportPartResult goals;
         if (!selection.Goals)
         {
-            goalResult = new V1GoalImportResult(0, 0, 0, []);
+            goalResult = new V1GoalImportResult([], 0, []);
             goals = ImportPartResult.NotSelected();
         }
         else
         {
-            try
-            {
-                goalResult = await Resolve<V1GoalImportService>().ImportAsync(profileId.Value, v1.Goals, ct);
-                goals = goalResult.Imported > 0
-                    ? new ImportPartResult("Imported", null, null)
-                    : new ImportPartResult("Skipped", "no_importable_goals", "No supported V1 goals were available to import.");
-            }
-            catch (Exception exception) when (exception is DbUpdateException or InvalidOperationException)
-            {
-                goalResult = new V1GoalImportResult(0, 0, v1.Goals.Count, []);
-                goals = new ImportPartResult("Failed", "goal_import_failed", "The translated goals could not be saved.");
-            }
+            goalResult = await Resolve<V1GoalImportService>().TranslateAsync(profileId.Value, v1.Goals, ct);
+            goals = goalResult.GoalSpecs.Count > 0
+                ? new ImportPartResult("Imported", null, null)
+                : new ImportPartResult("Skipped", "no_importable_goals", "No supported V1 goals were available to import.");
         }
 
         await Send.OkAsync(new ImportV1ProfileResponse(
@@ -89,8 +86,7 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
             personalKey.Part,
             guild,
             goals,
-            goalResult.Imported,
-            goalResult.Replaced,
+            goalResult.GoalSpecs,
             goalResult.Skipped,
             goalResult.Issues
         )
@@ -235,8 +231,9 @@ public sealed record ImportV1ProfileResponse(
     ImportPartResult PersonalTacticusApiKey,
     ImportPartResult GuildApiToken,
     ImportPartResult Goals,
-    int GoalsImported,
-    int GoalsReplaced,
+    // Parsed V1 goals, already shaped as create requests — one per unit. The caller submits each of
+    // these through POST me/goals/combined; this endpoint no longer creates goals itself.
+    IReadOnlyList<CreateCombinedGoalsRequest> GoalSpecs,
     int GoalsSkipped,
     IReadOnlyList<V1ImportIssue> GoalIssues
 )
