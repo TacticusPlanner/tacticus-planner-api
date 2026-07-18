@@ -19,7 +19,16 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
         Config = MapConfig(r.Config),
     };
 
-    public override GoalDetailResponse FromEntity(Goal goal) => new(
+    /// <summary>Satisfies the base <c>Mapper</c> contract only — every real call site knows the goal's
+    /// current project membership and should call <see cref="ToDetail"/> instead, which is why this
+    /// override delegates with an empty <c>ProjectIds</c> rather than being used directly.</summary>
+    public override GoalDetailResponse FromEntity(Goal goal) => ToDetail(goal, []);
+
+    /// <summary>The actual goal->response mapping. Takes <paramref name="projectIds"/> as a parameter —
+    /// like <see cref="Projects.ProjectMapper.ToSummary"/> takes the active-project id — because
+    /// <see cref="Goal"/> itself has no navigation to its <c>ProjectGoal</c> memberships (plan §5: that
+    /// join lives entirely on the project side).</summary>
+    public GoalDetailResponse ToDetail(Goal goal, List<Guid> projectIds) => new(
         goal.Id.Value,
         goal.EntityType.ToString(),
         goal.EntityId,
@@ -31,6 +40,7 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
         goal.Snapshot is null ? null : BuildSnapshot(goal.Snapshot),
         goal.Events.Select(BuildEvent).ToList(),
         goal.DependsOn.ToList(),
+        projectIds,
         goal.AggregateId,
         goal.CreatedAt,
         goal.UpdatedAt
@@ -86,6 +96,18 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
             ShardBattleIds = config.AscensionFarming.ShardBattleIds.Select(id => id.Value).ToList(),
             MythicShardBattleIds = config.AscensionFarming.MythicShardBattleIds.Select(id => id.Value).ToList(),
         },
+        Upgrade = config.Upgrade is null ? null : new UpgradeTarget
+        {
+            Targets = config.Upgrade.Targets.Select(target => new UpgradeItemTarget
+            {
+                UpgradeId = target.UpgradeId.Trim(),
+                Quantity = target.Quantity,
+            }).ToList(),
+        },
+        Equipment = config.Equipment is null ? null : new EquipmentTarget
+        {
+            TargetLevel = config.Equipment.TargetLevel,
+        },
     };
 
     internal static GoalSnapshot MapSnapshot(CreateGoalSnapshotRequest? snapshot, DateTimeOffset createdAt) => new()
@@ -132,7 +154,10 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
         config.AscensionFarming is null ? null : new AscensionFarmingResponse(
             config.AscensionFarming.Source.ToString(),
             config.AscensionFarming.ShardBattleIds,
-            config.AscensionFarming.MythicShardBattleIds)
+            config.AscensionFarming.MythicShardBattleIds),
+        config.Upgrade is null ? null : new UpgradeTargetResponse(
+            config.Upgrade.Targets.Select(target => new UpgradeItemTargetResponse(target.UpgradeId, target.Quantity)).ToList()),
+        config.Equipment is null ? null : new EquipmentTargetResponse(config.Equipment.TargetLevel)
     );
 
     private static GoalMilestoneResponse BuildMilestone(GoalMilestone milestone) => new(
@@ -193,6 +218,10 @@ public sealed record GoalDetailResponse(
     GoalSnapshotResponse? Snapshot,
     List<GoalEventResponse> Events,
     List<Guid> DependsOn,
+    // The ids of every project this goal currently belongs to (plan: a goal may belong to several
+    // projects at once). Populated by the caller via GoalMapper.ToDetail — Goal itself has no navigation
+    // to ProjectGoal, so this can't be filled in by FromEntity(Goal) alone.
+    List<Guid> ProjectIds,
     Guid? AggregateId,
     DateTimeOffset CreatedAt,
     DateTimeOffset UpdatedAt
@@ -204,8 +233,16 @@ public sealed record GoalConfigResponse(
     AbilityTargetResponse? Ability,
     List<string>? FarmingLocationIds,
     string FarmingStrategy,
-    AscensionFarmingResponse? AscensionFarming
+    AscensionFarmingResponse? AscensionFarming,
+    UpgradeTargetResponse? Upgrade,
+    EquipmentTargetResponse? Equipment
 );
+
+public sealed record UpgradeTargetResponse(List<UpgradeItemTargetResponse> Targets);
+
+public sealed record UpgradeItemTargetResponse(string UpgradeId, int Quantity);
+
+public sealed record EquipmentTargetResponse(int TargetLevel);
 
 public sealed record RankTargetResponse(
     int Start,

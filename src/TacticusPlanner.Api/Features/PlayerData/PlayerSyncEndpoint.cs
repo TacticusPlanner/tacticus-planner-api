@@ -13,7 +13,7 @@ namespace TacticusPlanner.Api.Features.PlayerData;
 /// Syncs the authenticated profile's player data from the Tacticus API: fetches the player endpoint,
 /// transforms and normalizes the response (never storing it raw — ADR 0007), and persists it as a
 /// <see cref="PlayerDataSnapshotEntity"/> unless the incoming <c>configHash</c> matches what is already
-/// stored, in which case persistence is skipped and the current manifest is returned unchanged.
+/// stored. A successful unchanged sync still advances the snapshot's sync timestamp.
 /// </summary>
 public sealed class PlayerSyncEndpoint(ITacticusApi tacticusApi, PlayerDataTransformer transformer)
     : EndpointWithoutRequest<PlayerDataManifest>
@@ -26,7 +26,7 @@ public sealed class PlayerSyncEndpoint(ITacticusApi tacticusApi, PlayerDataTrans
             summary.Summary = "Syncs the authenticated user's player data from the Tacticus API.";
             summary.Description = "Fetches the current player from the Tacticus API, transforms it into "
                 + "normalized chunks, and persists it. If the incoming configHash matches the last synced "
-                + "value, persistence is skipped and the current manifest is returned unchanged.";
+                + "value, chunk persistence is skipped but the snapshot sync timestamp is advanced.";
             summary.Response<PlayerDataManifest>(StatusCodes.Status200OK, "The current player-data manifest.");
             summary.Response(StatusCodes.Status400BadRequest, "No Tacticus API key is configured, or the Tacticus API rejected it.");
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
@@ -95,8 +95,8 @@ public sealed class PlayerSyncEndpoint(ITacticusApi tacticusApi, PlayerDataTrans
 
         var incomingConfigHash = response.Metadata?.ConfigHash ?? string.Empty;
 
-        // Step 1: compare against just the hash/metadata columns (AsNoTracking) — none of the ten jsonb
-        // chunk payload columns are read unless a chunk actually changed.
+        // Step 1: compare against just the hash/metadata columns (AsNoTracking) — none of the jsonb
+        // chunk payload columns are read unless the game configuration actually changed.
         var existingMetadata = await db.PlayerDataSnapshots
             .AsNoTracking()
             .Where(entity => entity.Id == profileId)
@@ -118,27 +118,21 @@ public sealed class PlayerSyncEndpoint(ITacticusApi tacticusApi, PlayerDataTrans
 
         if (canReuseExistingSnapshot && existingMetadata is not null)
         {
-            // Unchanged since the last sync: skip persistence only when the stored snapshot already
-            // matches the current contract and contains every advertised chunk. A matching Tacticus
-            // config hash alone is insufficient after adding a chunk or bumping our schema version.
-            integration.TacticusSyncLastSucceededAt = timeProvider.GetUtcNow();
+            // The game configuration is unchanged, but this was still a successful upstream sync.
+            // Advance the user-visible timestamp while retaining the existing normalized chunks.
+            var syncedAt = timeProvider.GetUtcNow();
+            integration.TacticusSyncLastSucceededAt = syncedAt;
             var currentSnapshot = await db.PlayerDataSnapshots.FirstAsync(entity => entity.Id == profileId, ct);
+            currentSnapshot.SyncedAt = syncedAt;
             await goalAchievementEvaluator.EvaluateAsync(profileId, currentSnapshot, ct);
             await db.SaveChangesAsync(ct);
-            await Send.OkAsync(
-                PlayerDataManifestBuilder.Build(
-                    existingMetadata.SchemaVersion,
-                    existingMetadata.ConfigHash,
-                    existingMetadata.SourceHash,
-                    existingMetadata.SyncedAt,
-                    existingMetadata.ChunkHashes),
-                ct);
+            await Send.OkAsync(PlayerDataManifestBuilder.Build(currentSnapshot), ct);
             return;
         }
 
         var transformed = transformer.Transform(response);
 
-        // Step 2: only reached when the config hash actually changed — load (or create) the tracked
+        // Step 2: only reached when the game configuration changed — load (or create) the tracked
         // snapshot, then assign only the chunk properties whose content hash differs from what's already
         // stored, so SaveChangesAsync marks just those owned-json columns dirty instead of all ten.
         var snapshot = await db.PlayerDataSnapshots.FirstOrDefaultAsync(entity => entity.Id == profileId, ct);

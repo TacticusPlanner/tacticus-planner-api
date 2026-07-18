@@ -64,6 +64,47 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         var list = await listResponse.Content.ReadFromJsonAsync<ListGoalsResponse>(TestContext.Current.CancellationToken);
         Assert.NotNull(list);
         Assert.Contains(list.Goals, goal => goal.GoalId == created.GoalId);
+
+        var defaultProject = await GetDefaultProjectAsync(client);
+        Assert.Equal([defaultProject.ProjectId], created.ProjectIds);
+    }
+
+    [Fact]
+    public async Task CreateGoalWithMultipleProjectIdsAddsToEachProject()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var defaultProject = await GetDefaultProjectAsync(client);
+        var otherProjectResponse = await client.PostAsJsonAsync(
+            "/api/v1/me/projects",
+            new CreateProjectRequest("Event Prep", null, null),
+            TestContext.Current.CancellationToken
+        );
+        var otherProject = await otherProjectResponse.Content.ReadFromJsonAsync<ProjectSummaryResponse>(TestContext.Current.CancellationToken);
+        Assert.NotNull(otherProject);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            RankGoal with { ProjectIds = [defaultProject.ProjectId, otherProject.ProjectId] },
+            TestContext.Current.CancellationToken
+        );
+        response.EnsureSuccessStatusCode();
+        var created = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+
+        Assert.NotNull(created);
+        Assert.Equal(
+            new HashSet<Guid> { defaultProject.ProjectId, otherProject.ProjectId },
+            created.ProjectIds.ToHashSet()
+        );
+        // The default project is the active plan, so the goal starts Active even though the second
+        // project isn't — membership in any active-plan project is enough.
+        Assert.Equal("Active", created.Status);
+
+        var otherMembers = await client.GetFromJsonAsync<ListProjectGoalsResponse>(
+            $"/api/v1/me/projects/{otherProject.ProjectId}/goals",
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(otherMembers);
+        Assert.Contains(otherMembers.Goals, entry => entry.Goal.GoalId == created.GoalId);
     }
 
     [Fact]
@@ -82,7 +123,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
 
         var response = await client.PostAsJsonAsync(
             "/api/v1/me/goals",
-            RankGoal with { ProjectId = otherProject.ProjectId },
+            RankGoal with { ProjectIds = [otherProject.ProjectId] },
             TestContext.Current.CancellationToken
         );
         response.EnsureSuccessStatusCode();
@@ -280,6 +321,132 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
+    [Fact]
+    public async Task UpdateGoalProjectsAddsGoalToAnotherProject()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var defaultProject = await GetDefaultProjectAsync(client);
+        var created = await CreateGoalAsync(client); // starts in the default project only
+
+        var otherProjectResponse = await client.PostAsJsonAsync(
+            "/api/v1/me/projects",
+            new CreateProjectRequest("Event Prep", null, null),
+            TestContext.Current.CancellationToken
+        );
+        var otherProject = await otherProjectResponse.Content.ReadFromJsonAsync<ProjectSummaryResponse>(TestContext.Current.CancellationToken);
+        Assert.NotNull(otherProject);
+
+        var response = await client.PutAsJsonAsync(
+            $"/api/v1/me/goals/{created.GoalId}/projects",
+            new UpdateGoalProjectsRequest([defaultProject.ProjectId, otherProject.ProjectId]),
+            TestContext.Current.CancellationToken
+        );
+        response.EnsureSuccessStatusCode();
+        var updated = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+
+        Assert.NotNull(updated);
+        Assert.Equal(
+            new HashSet<Guid> { defaultProject.ProjectId, otherProject.ProjectId },
+            updated.ProjectIds.ToHashSet()
+        );
+
+        var otherMembers = await client.GetFromJsonAsync<ListProjectGoalsResponse>(
+            $"/api/v1/me/projects/{otherProject.ProjectId}/goals",
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(otherMembers);
+        Assert.Contains(otherMembers.Goals, entry => entry.Goal.GoalId == created.GoalId);
+    }
+
+    [Fact]
+    public async Task UpdateGoalProjectsRemovesGoalFromProjectKeepingItInAnother()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var defaultProject = await GetDefaultProjectAsync(client);
+        var otherProjectResponse = await client.PostAsJsonAsync(
+            "/api/v1/me/projects",
+            new CreateProjectRequest("Event Prep", null, null),
+            TestContext.Current.CancellationToken
+        );
+        var otherProject = await otherProjectResponse.Content.ReadFromJsonAsync<ProjectSummaryResponse>(TestContext.Current.CancellationToken);
+        Assert.NotNull(otherProject);
+
+        var createResponse = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            RankGoal with { ProjectIds = [defaultProject.ProjectId, otherProject.ProjectId] },
+            TestContext.Current.CancellationToken
+        );
+        createResponse.EnsureSuccessStatusCode();
+        var created = await createResponse.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        Assert.NotNull(created);
+
+        var response = await client.PutAsJsonAsync(
+            $"/api/v1/me/goals/{created.GoalId}/projects",
+            new UpdateGoalProjectsRequest([otherProject.ProjectId]),
+            TestContext.Current.CancellationToken
+        );
+        response.EnsureSuccessStatusCode();
+        var updated = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+
+        Assert.NotNull(updated);
+        Assert.Equal([otherProject.ProjectId], updated.ProjectIds);
+
+        var defaultMembers = await client.GetFromJsonAsync<ListProjectGoalsResponse>(
+            $"/api/v1/me/projects/{defaultProject.ProjectId}/goals",
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(defaultMembers);
+        Assert.DoesNotContain(defaultMembers.Goals, entry => entry.Goal.GoalId == created.GoalId);
+    }
+
+    [Fact]
+    public async Task UpdateGoalProjectsEmptyListIsRejected()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var created = await CreateGoalAsync(client);
+
+        var response = await client.PutAsJsonAsync(
+            $"/api/v1/me/goals/{created.GoalId}/projects",
+            new UpdateGoalProjectsRequest([]),
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task UpdateGoalProjectsUnknownProjectIsRejected()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var created = await CreateGoalAsync(client);
+
+        var response = await client.PutAsJsonAsync(
+            $"/api/v1/me/goals/{created.GoalId}/projects",
+            new UpdateGoalProjectsRequest([Guid.NewGuid()]),
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task UpdateGoalProjectsForAnotherProfilesGoalIsNotFound()
+    {
+        var ownerClient = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var created = await CreateGoalAsync(ownerClient);
+
+        var otherClient = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var otherDefaultProject = await GetDefaultProjectAsync(otherClient);
+
+        var response = await otherClient.PutAsJsonAsync(
+            $"/api/v1/me/goals/{created.GoalId}/projects",
+            new UpdateGoalProjectsRequest([otherDefaultProject.ProjectId]),
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
     private static async Task<GoalDetailResponse> CreateGoalAsync(HttpClient client)
     {
         var response = await client.PostAsJsonAsync("/api/v1/me/goals", RankGoal, TestContext.Current.CancellationToken);
@@ -287,5 +454,15 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         var goal = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
         Assert.NotNull(goal);
         return goal;
+    }
+
+    private static async Task<ProjectSummaryResponse> GetDefaultProjectAsync(HttpClient client)
+    {
+        var response = await client.GetFromJsonAsync<ListProjectsResponse>(
+            "/api/v1/me/projects",
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(response);
+        return response.Projects.Single(project => project.IsDefault);
     }
 }

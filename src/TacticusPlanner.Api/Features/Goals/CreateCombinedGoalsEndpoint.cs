@@ -16,8 +16,8 @@ namespace TacticusPlanner.Api.Features.Goals;
 /// one shared <see cref="Goal.AggregateId"/>, and each spec's <see cref="CombinedGoalSpec.DependsOnIndex"/>
 /// resolved into real <see cref="Goal.DependsOn"/> edges. Detection/ordering itself stays client-side (it
 /// needs live player-data the server doesn't hold); this endpoint only persists what it's given. Every
-/// goal lands in the same project as <see cref="CreateGoalEndpoint"/> uses (the given
-/// <see cref="CreateCombinedGoalsRequest.ProjectId"/>, or the caller's default project).
+/// goal lands in the same project(s) as <see cref="CreateGoalEndpoint"/> uses (the given
+/// <see cref="CreateCombinedGoalsRequest.ProjectIds"/>, or the caller's default project).
 /// </summary>
 public sealed class CreateCombinedGoalsEndpoint
     : Endpoint<CreateCombinedGoalsRequest, CreateCombinedGoalsResponse, GoalMapper>
@@ -31,7 +31,7 @@ public sealed class CreateCombinedGoalsEndpoint
             summary.Description = "Every goal shares one AggregateId; each spec's DependsOnIndex (indices "
                 + "into this same request's Goals list, referencing only earlier entries) is resolved into "
                 + "real DependsOn edges. Rank goals get their milestone breakpoints generated. Assigns the "
-                + "whole set to the given project, or the caller's default project (created on first use) "
+                + "whole set to the given project(s), or the caller's default project (created on first use) "
                 + "when none is given, same as POST me/goals.";
             summary.Response<CreateCombinedGoalsResponse>(StatusCodes.Status200OK, "The newly created goals, in request order.");
             summary.Response(StatusCodes.Status400BadRequest, "Invalid entity/goal type, a bad DependsOnIndex, or an unknown project.");
@@ -57,9 +57,8 @@ public sealed class CreateCombinedGoalsEndpoint
         foreach (var spec in req.Goals)
         {
             var goalType = Enum.Parse<GoalType>(spec.GoalType, ignoreCase: true);
-            var targetError = await targetValidation.ValidateAsync(
-                profileId, entityType, req.EntityId.Trim(), goalType, spec.Config, ct);
-            if (targetError is not null)
+            if (await targetValidation.ValidateAsync(
+                profileId, entityType, req.EntityId.Trim(), goalType, spec.Config, ct) is { } targetError)
             {
                 AddError(targetError);
                 await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
@@ -69,29 +68,32 @@ public sealed class CreateCombinedGoalsEndpoint
 
         var profile = await db.Profiles.FirstAsync(entity => entity.Id == profileId, ct);
 
-        Project project;
-        if (req.ProjectId is { } requestedProjectId)
+        List<Project> targetProjects;
+        if (req.ProjectIds is { Count: > 0 } requestedProjectIds)
         {
+            var distinctIds = requestedProjectIds.Distinct().Select(ProjectId.From).ToList();
             var found = await db.Projects.Owned(profileId)
-                .FirstOrDefaultAsync(entity => entity.Id == ProjectId.From(requestedProjectId), ct);
-            if (found is null)
+                .Where(entity => distinctIds.Contains(entity.Id))
+                .ToListAsync(ct);
+            if (found.Count != distinctIds.Count)
             {
-                AddError(request => request.ProjectId, "Unknown project.");
+                AddError(request => request.ProjectIds, "Unknown project.");
                 await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
                 return;
             }
 
-            project = found;
+            targetProjects = found;
         }
         else
         {
-            project = await projects.EnsureDefaultProjectAsync(profileId, ct);
+            targetProjects = [await projects.EnsureDefaultProjectAsync(profileId, ct)];
         }
 
-        var status = project.Id == profile.ActiveProjectId ? GoalStatus.Active : GoalStatus.Paused;
+        var status = targetProjects.Any(project => project.Id == profile.ActiveProjectId)
+            ? GoalStatus.Active
+            : GoalStatus.Paused;
         var aggregateId = Guid.NewGuid();
         var now = DateTimeOffset.UtcNow;
-        var nextPriority = await projects.GetNextPriorityAsync(project.Id, ct);
 
         // First pass: build every goal (so each spec's index has a real GoalId to resolve dependencies
         // against), deferring DependsOn assignment to the second pass below.
@@ -135,24 +137,30 @@ public sealed class CreateCombinedGoalsEndpoint
         }
 
         db.Goals.AddRange(goals);
-        db.ProjectGoals.AddRange(goals.Select((goal, i) => new ProjectGoal
+        foreach (var project in targetProjects)
         {
-            ProjectId = project.Id,
-            GoalId = goal.Id,
-            Priority = nextPriority + i,
-            CreatedAt = now,
-        }));
+            var nextPriority = await projects.GetNextPriorityAsync(project.Id, ct);
+            db.ProjectGoals.AddRange(goals.Select((goal, i) => new ProjectGoal
+            {
+                ProjectId = project.Id,
+                GoalId = goal.Id,
+                Priority = nextPriority + i,
+                CreatedAt = now,
+            }));
+        }
 
         await db.SaveChangesAsync(ct);
 
-        await Send.OkAsync(new CreateCombinedGoalsResponse(goals.Select(Map.FromEntity).ToList()), ct);
+        var projectIds = targetProjects.Select(project => project.Id.Value).ToList();
+        await Send.OkAsync(
+            new CreateCombinedGoalsResponse(goals.Select(goal => Map.ToDetail(goal, projectIds)).ToList()), ct);
     }
 }
 
 public sealed record CreateCombinedGoalsRequest(
     string EntityType,
     string EntityId,
-    Guid? ProjectId,
+    List<Guid>? ProjectIds,
     List<CombinedGoalSpec> Goals
 );
 

@@ -10,9 +10,10 @@ namespace TacticusPlanner.Api.Features.Goals;
 
 /// <summary>
 /// Creates a single goal. Every goal must belong to at least one project (plan §5): if
-/// <see cref="CreateGoalRequest.ProjectId"/> is omitted, the caller's default project is used (created on
-/// first access). The combined-creation flow (multiple goal types + dependency chains for one entity, plan
-/// §6/§8) is not implemented yet — this endpoint only ever creates one independent goal.
+/// <see cref="CreateGoalRequest.ProjectIds"/> is omitted or empty, the caller's default project is used
+/// (created on first access); otherwise the goal is added to every listed project (a goal may belong to
+/// several projects at once). The combined-creation flow (multiple goal types + dependency chains for one
+/// entity, plan §6/§8) is not implemented here — this endpoint only ever creates one independent goal.
 /// </summary>
 public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailResponse, GoalMapper>
 {
@@ -21,11 +22,10 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
         Post("me/goals");
         Summary(summary =>
         {
-            summary.Summary = "Creates a goal for a character, Machine of War, or (reserved) upgrade material.";
-            summary.Description = "Assigns the goal to the given project, or the caller's default project "
-                + "(created on first use) when none is given. The goal starts Active if that project is the "
-                + "caller's active plan, otherwise Paused. Upgrade-entity and material-goal types are "
-                + "reserved for a later phase and are rejected here.";
+            summary.Summary = "Creates a goal for a character, Machine of War, or equipment.";
+            summary.Description = "Assigns the goal to the given project(s), or the caller's default project "
+                + "(created on first use) when none is given. The goal starts Active if any target project is "
+                + "the caller's active plan, otherwise Paused.";
             summary.Response<GoalDetailResponse>(StatusCodes.Status200OK, "The newly created goal.");
             summary.Response(StatusCodes.Status400BadRequest, "Invalid entity/goal type, or an unknown project.");
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
@@ -48,8 +48,7 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
 
         var entityType = Enum.Parse<GoalEntityType>(req.EntityType, ignoreCase: true);
         var goalType = Enum.Parse<GoalType>(req.GoalType, ignoreCase: true);
-        var targetError = await targetValidation.ValidateAsync(profileId, entityType, req.EntityId.Trim(), goalType, req.Config, ct);
-        if (targetError is not null)
+        if (await targetValidation.ValidateAsync(profileId, entityType, req.EntityId.Trim(), goalType, req.Config, ct) is { } targetError)
         {
             AddError(targetError);
             await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
@@ -58,23 +57,25 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
 
         var profile = await db.Profiles.FirstAsync(entity => entity.Id == profileId, ct);
 
-        Project project;
-        if (req.ProjectId is { } requestedProjectId)
+        List<Project> targetProjects;
+        if (req.ProjectIds is { Count: > 0 } requestedProjectIds)
         {
+            var distinctIds = requestedProjectIds.Distinct().Select(ProjectId.From).ToList();
             var found = await db.Projects.Owned(profileId)
-                .FirstOrDefaultAsync(entity => entity.Id == ProjectId.From(requestedProjectId), ct);
-            if (found is null)
+                .Where(entity => distinctIds.Contains(entity.Id))
+                .ToListAsync(ct);
+            if (found.Count != distinctIds.Count)
             {
-                AddError(request => request.ProjectId, "Unknown project.");
+                AddError(request => request.ProjectIds, "Unknown project.");
                 await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
                 return;
             }
 
-            project = found;
+            targetProjects = found;
         }
         else
         {
-            project = await projects.EnsureDefaultProjectAsync(profileId, ct);
+            targetProjects = [await projects.EnsureDefaultProjectAsync(profileId, ct)];
         }
 
         var goal = Map.ToEntity(req);
@@ -82,7 +83,9 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
         goal.ProfileId = profileId;
         goal.EntityType = entityType;
         goal.GoalType = goalType;
-        goal.Status = project.Id == profile.ActiveProjectId ? GoalStatus.Active : GoalStatus.Paused;
+        goal.Status = targetProjects.Any(project => project.Id == profile.ActiveProjectId)
+            ? GoalStatus.Active
+            : GoalStatus.Paused;
         var now = DateTimeOffset.UtcNow;
         goal.Snapshot = GoalMapper.MapSnapshot(req.Snapshot, now);
         goal.Events = [new GoalEvent { At = now, Type = GoalEventType.Created }];
@@ -102,16 +105,20 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
 
         db.Goals.Add(goal);
 
-        db.ProjectGoals.Add(new ProjectGoal
+        foreach (var project in targetProjects)
         {
-            ProjectId = project.Id,
-            GoalId = goal.Id,
-            Priority = await projects.GetNextPriorityAsync(project.Id, ct),
-        });
+            db.ProjectGoals.Add(new ProjectGoal
+            {
+                ProjectId = project.Id,
+                GoalId = goal.Id,
+                Priority = await projects.GetNextPriorityAsync(project.Id, ct),
+            });
+        }
 
         await db.SaveChangesAsync(ct);
 
-        await Send.OkAsync(Map.FromEntity(goal), ct);
+        var projectIds = targetProjects.Select(project => project.Id.Value).ToList();
+        await Send.OkAsync(Map.ToDetail(goal, projectIds), ct);
     }
 }
 
@@ -120,7 +127,7 @@ public sealed record CreateGoalRequest(
     string EntityId,
     string GoalType,
     CreateGoalConfigRequest Config,
-    Guid? ProjectId,
+    List<Guid>? ProjectIds,
     CreateGoalSnapshotRequest? Snapshot = null
 );
 
@@ -130,7 +137,9 @@ public sealed record CreateGoalConfigRequest(
     AbilityTargetRequest? Ability = null,
     List<CampaignBattleId>? FarmingLocationIds = null,
     string? FarmingStrategy = null,
-    AscensionFarmingRequest? AscensionFarming = null
+    AscensionFarmingRequest? AscensionFarming = null,
+    UpgradeTargetRequest? Upgrade = null,
+    EquipmentTargetRequest? Equipment = null
 );
 
 public sealed record RankTargetRequest(
@@ -151,6 +160,12 @@ public sealed record AscensionFarmingRequest(
     List<CampaignBattleId> ShardBattleIds,
     List<CampaignBattleId> MythicShardBattleIds
 );
+
+public sealed record UpgradeTargetRequest(List<UpgradeItemTargetRequest> Targets);
+
+public sealed record UpgradeItemTargetRequest(string UpgradeId, int Quantity);
+
+public sealed record EquipmentTargetRequest(int TargetLevel);
 
 public sealed record CreateGoalSnapshotRequest(
     string? InitialRank = null,

@@ -54,7 +54,8 @@ public sealed class UpdateGoalStatusEndpoint : Endpoint<UpdateGoalStatusRequest,
 
         await db.SaveChangesAsync(ct);
 
-        await Send.OkAsync(Map.FromEntity(goal), ct);
+        var projectIds = await db.ProjectIdsAsync(goal.Id, ct);
+        await Send.OkAsync(Map.ToDetail(goal, projectIds), ct);
     }
 
     private static GoalEventType EventTypeFor(GoalStatus status) => status switch

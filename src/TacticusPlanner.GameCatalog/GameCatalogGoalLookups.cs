@@ -73,6 +73,29 @@ public static class GameCatalogGoalLookups
             .ToArray()
         ?? [];
 
+    /// <summary>The upgrade ids relevant to a Character's own progression — its whole rank ladder — used
+    /// to bound what an Upgrade goal on that character may target. Empty for an unknown id.
+    /// This project has no reference to the Goals domain, so entity-type branching lives in the
+    /// caller (<c>GoalTargetValidationService</c>); this and <see cref="MowRelevantUpgradeIds"/> are
+    /// its two per-entity-type halves.</summary>
+    public static IReadOnlySet<string> CharacterRelevantUpgradeIds(this GameCatalogSnapshot catalog, string characterId)
+    {
+        var character = catalog.CharacterViews.FirstOrDefault(item => item.Id == characterId);
+        return (character?.RankUpUpgrades.SelectMany(step => step.UpgradeIds) ?? [])
+            .ToHashSet(StringComparer.Ordinal);
+    }
+
+    /// <summary>The upgrade ids relevant to a Mow's own progression — its whole primary+secondary
+    /// ability ladder. Empty for an unknown id. See <see cref="CharacterRelevantUpgradeIds"/>.</summary>
+    public static IReadOnlySet<string> MowRelevantUpgradeIds(this GameCatalogSnapshot catalog, string mowId)
+    {
+        var mow = catalog.MowList.FirstOrDefault(item => item.Id == mowId);
+        if (mow is null) return new HashSet<string>(StringComparer.Ordinal);
+        return mow.PrimaryAbility.Recipes.SelectMany(recipe => recipe)
+            .Concat(mow.SecondaryAbility.Recipes.SelectMany(recipe => recipe))
+            .ToHashSet(StringComparer.Ordinal);
+    }
+
     public static IReadOnlyDictionary<string, IReadOnlyDictionary<string, int>>
         UpgradeRequirementsByRarity(
             this GameCatalogSnapshot catalog,

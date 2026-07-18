@@ -117,7 +117,7 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
 
         var response = await client.PostAsJsonAsync(
             "/api/v1/me/goals/combined",
-            UnlockThenRank with { ProjectId = otherProject.ProjectId },
+            UnlockThenRank with { ProjectIds = [otherProject.ProjectId] },
             TestContext.Current.CancellationToken
         );
         response.EnsureSuccessStatusCode();
@@ -134,11 +134,49 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
 
         var response = await client.PostAsJsonAsync(
             "/api/v1/me/goals/combined",
-            UnlockThenRank with { ProjectId = Guid.NewGuid() },
+            UnlockThenRank with { ProjectIds = [Guid.NewGuid()] },
             TestContext.Current.CancellationToken
         );
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task CreateWithMultipleProjectIdsAddsEveryGoalToEachProject()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var defaultProject = await GetDefaultProjectAsync(client);
+        var otherProjectResponse = await client.PostAsJsonAsync(
+            "/api/v1/me/projects",
+            new CreateProjectRequest("Event Prep", null, null),
+            TestContext.Current.CancellationToken
+        );
+        var otherProject = await otherProjectResponse.Content.ReadFromJsonAsync<ProjectSummaryResponse>(TestContext.Current.CancellationToken);
+        Assert.NotNull(otherProject);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals/combined",
+            UnlockThenRank with { ProjectIds = [defaultProject.ProjectId, otherProject.ProjectId] },
+            TestContext.Current.CancellationToken
+        );
+        response.EnsureSuccessStatusCode();
+        var created = await response.Content.ReadFromJsonAsync<CreateCombinedGoalsResponse>(TestContext.Current.CancellationToken);
+
+        Assert.NotNull(created);
+        Assert.All(
+            created.Goals,
+            goal => Assert.Equal(
+                new HashSet<Guid> { defaultProject.ProjectId, otherProject.ProjectId },
+                goal.ProjectIds.ToHashSet()
+            )
+        );
+
+        var otherMembers = await client.GetFromJsonAsync<ListProjectGoalsResponse>(
+            $"/api/v1/me/projects/{otherProject.ProjectId}/goals",
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(otherMembers);
+        Assert.Equal(created.Goals.Count, otherMembers.Goals.Count);
     }
 
     [Fact]

@@ -16,6 +16,10 @@ public sealed class GoalConfig
 
     public AbilityTarget? Ability { get; set; }
 
+    public UpgradeTarget? Upgrade { get; set; }
+
+    public EquipmentTarget? Equipment { get; set; }
+
     public FarmingStrategy FarmingStrategy { get; set; } = FarmingStrategy.TotalUpgrades;
 
     public AscensionFarmingConfig? AscensionFarming { get; set; }
@@ -52,6 +56,29 @@ public sealed class AbilityTarget
     public int ActiveEnd { get; set; }
     public int PassiveStart { get; set; }
     public int PassiveEnd { get; set; }
+}
+
+/// <summary>One or more specific upgrade materials, each with its own target quantity — the owning
+/// unit's own Rank (Character) or Ability (Mow) requirements bound which upgrade ids are relevant
+/// (enforced server-side, see <c>GoalTargetValidationService</c>).</summary>
+public sealed class UpgradeTarget
+{
+    public List<UpgradeItemTarget> Targets { get; set; } = [];
+}
+
+public sealed class UpgradeItemTarget
+{
+    public required string UpgradeId { get; set; }
+    public required int Quantity { get; set; }
+}
+
+/// <summary>Target level for a specific piece of equipment/relic gear (see
+/// <see cref="GoalEntityType.Equipment"/>). Uncosted for now — no gold/salvage/mythic-salvage
+/// farming or accrual engine exists anywhere in this app yet; "complete" is simply the player's
+/// synced level for this equipment reaching <see cref="TargetLevel"/>.</summary>
+public sealed class EquipmentTarget
+{
+    public required int TargetLevel { get; set; }
 }
 
 public enum FarmingStrategy

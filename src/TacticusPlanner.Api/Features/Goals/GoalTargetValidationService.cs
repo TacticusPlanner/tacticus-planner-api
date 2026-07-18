@@ -9,6 +9,7 @@ namespace TacticusPlanner.Api.Features.Goals;
 
 public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalogProvider catalog)
 {
+    /// <summary>Returns an error message when the target is invalid, or null when it's valid.</summary>
     public async Task<string?> ValidateAsync(
         ProfileId profileId,
         GoalEntityType entityType,
@@ -19,8 +20,10 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
     {
         var character = catalog.Current.CharacterViews.FirstOrDefault(item => item.Id == entityId);
         var mow = catalog.Current.MowList.FirstOrDefault(item => item.Id == entityId);
+        var equipment = catalog.Current.EquipmentViews.FirstOrDefault(item => item.Id == entityId);
         if (entityType == GoalEntityType.Character && character is null
-            || entityType == GoalEntityType.Mow && mow is null)
+            || entityType == GoalEntityType.Mow && mow is null
+            || entityType == GoalEntityType.Equipment && equipment is null)
         {
             return "The selected unit is not present in the Game Catalog.";
         }
@@ -31,16 +34,30 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
         var playerMow = snapshot?.Mows.FirstOrDefault(item => item.UnitId.Value == entityId);
         var playerUnit = (PlayerBaseUnitRecord?)playerCharacter ?? playerMow;
 
+        // Each goal type is only ever valid for one entity type (Rank/Unlock: Character only;
+        // Ascension/Ability/Upgrade: Character or Mow; UpgradeEquipment: Equipment only) — checked once
+        // up front so every branch below can assume the pairing already makes sense.
+        var entityTypeMismatch = (goalType, entityType) switch
+        {
+            (GoalType.Rank or GoalType.Unlock, not GoalEntityType.Character) => true,
+            (GoalType.Ascension or GoalType.Ability or GoalType.Upgrade, GoalEntityType.Equipment) => true,
+            (GoalType.UpgradeEquipment, not GoalEntityType.Equipment) => true,
+            (not GoalType.UpgradeEquipment, GoalEntityType.Equipment) => true,
+            _ => false,
+        };
+        if (entityTypeMismatch)
+            return "This goal type is not valid for the selected entity type.";
+
         if (goalType == GoalType.Unlock)
         {
-            if (entityType != GoalEntityType.Character || !catalog.Current.IsUnlockEligible(entityId))
+            if (!catalog.Current.IsUnlockEligible(entityId))
                 return "Unlock is unavailable because the catalog has no shard-upgrade data for this character.";
             if (playerUnit is not null) return "The selected character is already unlocked.";
         }
 
         if (goalType == GoalType.Rank)
         {
-            if (entityType != GoalEntityType.Character || config.Rank is null) return "Rank requires a character rank target.";
+            if (config.Rank is null) return "Rank requires a character rank target.";
             var current = (int?)playerCharacter?.Rank ?? config.Rank.Start;
             if (config.Rank.Start < current) return "The starting rank cannot be lower than the current rank.";
             if (config.Rank.End <= Math.Max(config.Rank.Start, current) || config.Rank.End > (int)UnitRank.Adamantine3)
@@ -79,6 +96,31 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
                 : GameCatalogGoalLookups.AbilityCapForRarity(RarityFor(playerUnit.ProgressionIndex));
             if (config.Ability.ActiveEnd > cap || config.Ability.PassiveEnd > cap)
                 return $"Ability targets cannot exceed the current rarity cap of {cap}.";
+        }
+
+        if (goalType == GoalType.Upgrade)
+        {
+            if (config.Upgrade is not { Targets.Count: > 0 })
+                return "Upgrade requires at least one target.";
+            var relevant = entityType == GoalEntityType.Character
+                ? catalog.Current.CharacterRelevantUpgradeIds(entityId)
+                : catalog.Current.MowRelevantUpgradeIds(entityId);
+            var seen = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var target in config.Upgrade.Targets)
+            {
+                if (target.Quantity <= 0) return "Every upgrade target quantity must be positive.";
+                if (!seen.Add(target.UpgradeId)) return "Upgrade targets must use unique upgrade ids.";
+                if (!relevant.Contains(target.UpgradeId))
+                    return "An upgrade target is not relevant to the selected unit's own requirements.";
+            }
+        }
+
+        if (goalType == GoalType.UpgradeEquipment)
+        {
+            if (config.Equipment is null) return "UpgradeEquipment requires a target level.";
+            if (equipment is null) return "The selected equipment is not present in the Game Catalog.";
+            if (config.Equipment.TargetLevel <= 1 || config.Equipment.TargetLevel > equipment.Levels.Count)
+                return $"The target level must be between 2 and {equipment.Levels.Count}.";
         }
 
         var strategy = Enum.TryParse<FarmingStrategy>(config.FarmingStrategy, true, out var parsed)

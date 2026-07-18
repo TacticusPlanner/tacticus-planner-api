@@ -9,4 +9,10 @@ public enum GoalEntityType
 {
     Character,
     Mow,
+
+    /// <summary>An equipment/relic catalog id (the game-catalog <c>equipment</c> dataset's id) —
+    /// unlike Character/Mow this isn't synced player-owned-unit state directly; progress is matched
+    /// against the player-data <c>inventory-items</c> chunk instead. Only valid with
+    /// <see cref="GoalType.UpgradeEquipment"/>.</summary>
+    Equipment,
 }
