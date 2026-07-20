@@ -139,7 +139,8 @@ public sealed record CreateGoalConfigRequest(
     string? FarmingStrategy = null,
     AscensionFarmingRequest? AscensionFarming = null,
     UpgradeTargetRequest? Upgrade = null,
-    EquipmentTargetRequest? Equipment = null
+    EquipmentTargetRequest? Equipment = null,
+    LevelTargetRequest? Level = null
 );
 
 public sealed record RankTargetRequest(
@@ -166,6 +167,8 @@ public sealed record UpgradeTargetRequest(List<UpgradeItemTargetRequest> Targets
 public sealed record UpgradeItemTargetRequest(string UpgradeId, int Quantity);
 
 public sealed record EquipmentTargetRequest(int TargetLevel);
+
+public sealed record LevelTargetRequest(int Start, int End);
 
 public sealed record CreateGoalSnapshotRequest(
     string? InitialRank = null,

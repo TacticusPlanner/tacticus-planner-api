@@ -108,6 +108,11 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
         {
             TargetLevel = config.Equipment.TargetLevel,
         },
+        Level = config.Level is null ? null : new LevelTarget
+        {
+            Start = config.Level.Start,
+            End = config.Level.End,
+        },
     };
 
     internal static GoalSnapshot MapSnapshot(CreateGoalSnapshotRequest? snapshot, DateTimeOffset createdAt) => new()
@@ -157,7 +162,8 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
             config.AscensionFarming.MythicShardBattleIds),
         config.Upgrade is null ? null : new UpgradeTargetResponse(
             config.Upgrade.Targets.Select(target => new UpgradeItemTargetResponse(target.UpgradeId, target.Quantity)).ToList()),
-        config.Equipment is null ? null : new EquipmentTargetResponse(config.Equipment.TargetLevel)
+        config.Equipment is null ? null : new EquipmentTargetResponse(config.Equipment.TargetLevel),
+        config.Level is null ? null : new LevelTargetResponse(config.Level.Start, config.Level.End)
     );
 
     private static GoalMilestoneResponse BuildMilestone(GoalMilestone milestone) => new(
@@ -235,7 +241,8 @@ public sealed record GoalConfigResponse(
     string FarmingStrategy,
     AscensionFarmingResponse? AscensionFarming,
     UpgradeTargetResponse? Upgrade,
-    EquipmentTargetResponse? Equipment
+    EquipmentTargetResponse? Equipment,
+    LevelTargetResponse? Level
 );
 
 public sealed record UpgradeTargetResponse(List<UpgradeItemTargetResponse> Targets);
@@ -243,6 +250,8 @@ public sealed record UpgradeTargetResponse(List<UpgradeItemTargetResponse> Targe
 public sealed record UpgradeItemTargetResponse(string UpgradeId, int Quantity);
 
 public sealed record EquipmentTargetResponse(int TargetLevel);
+
+public sealed record LevelTargetResponse(int Start, int End);
 
 public sealed record RankTargetResponse(
     int Start,

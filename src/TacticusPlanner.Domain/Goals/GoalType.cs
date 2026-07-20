@@ -16,4 +16,9 @@ public enum GoalType
     /// <summary>Level up a specific piece of equipment/relic gear. <see cref="GoalEntityType.Equipment"/>
     /// only — see <see cref="GoalConfig.Equipment"/>.</summary>
     UpgradeEquipment,
+
+    /// <summary>Reach a target character level. Uncosted (no resource estimate — no XP-cost curve
+    /// exists yet). <see cref="GoalEntityType.Character"/> only — see
+    /// <see cref="GoalConfig.Level"/>.</summary>
+    Level,
 }

@@ -9,6 +9,11 @@ namespace TacticusPlanner.Api.Features.Goals;
 
 public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalogProvider catalog)
 {
+    /// <summary>The highest character level a Level goal can ever target (Adamantine2, the frontend's
+    /// current rank-ladder ceiling — mirrors the frontend's own MAX_CHARACTER_LEVEL in
+    /// goal-validation.ts).</summary>
+    private const int MaxCharacterLevel = 60;
+
     /// <summary>Returns an error message when the target is invalid, or null when it's valid.</summary>
     public async Task<string?> ValidateAsync(
         ProfileId profileId,
@@ -34,12 +39,12 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
         var playerMow = snapshot?.Mows.FirstOrDefault(item => item.UnitId.Value == entityId);
         var playerUnit = (PlayerBaseUnitRecord?)playerCharacter ?? playerMow;
 
-        // Each goal type is only ever valid for one entity type (Rank/Unlock: Character only;
+        // Each goal type is only ever valid for one entity type (Rank/Unlock/Level: Character only;
         // Ascension/Ability/Upgrade: Character or Mow; UpgradeEquipment: Equipment only) — checked once
         // up front so every branch below can assume the pairing already makes sense.
         var entityTypeMismatch = (goalType, entityType) switch
         {
-            (GoalType.Rank or GoalType.Unlock, not GoalEntityType.Character) => true,
+            (GoalType.Rank or GoalType.Unlock or GoalType.Level, not GoalEntityType.Character) => true,
             (GoalType.Ascension or GoalType.Ability or GoalType.Upgrade, GoalEntityType.Equipment) => true,
             (GoalType.UpgradeEquipment, not GoalEntityType.Equipment) => true,
             (not GoalType.UpgradeEquipment, GoalEntityType.Equipment) => true,
@@ -113,6 +118,15 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
                 if (!relevant.Contains(target.UpgradeId))
                     return "An upgrade target is not relevant to the selected unit's own requirements.";
             }
+        }
+
+        if (goalType == GoalType.Level)
+        {
+            if (config.Level is null) return "Level requires a target level.";
+            var current = playerCharacter?.XpLevel ?? config.Level.Start;
+            if (config.Level.Start < current) return "The starting level cannot be lower than the current level.";
+            if (config.Level.End <= Math.Max(config.Level.Start, current) || config.Level.End > MaxCharacterLevel)
+                return $"The target level must be above the effective starting level and no higher than {MaxCharacterLevel}.";
         }
 
         if (goalType == GoalType.UpgradeEquipment)

@@ -45,6 +45,27 @@ public sealed class GoalAchievementEvaluatorTests
     }
 
     [Fact]
+    public void LevelGoalIsAchievedOnceSyncedXpLevelReachesTheTarget()
+    {
+        var snapshot = new PlayerDataSnapshot
+        {
+            Characters =
+            [
+                new PlayerCharacterRecord { UnitId = UnitId.From("char"), XpLevel = 42 },
+            ],
+        };
+
+        Assert.True(GoalAchievementEvaluator.IsAchieved(Goal(GoalType.Level, config: new GoalConfig
+        {
+            Level = new LevelTarget { Start = 31, End = 42 },
+        }), snapshot));
+        Assert.False(GoalAchievementEvaluator.IsAchieved(Goal(GoalType.Level, config: new GoalConfig
+        {
+            Level = new LevelTarget { Start = 31, End = 43 },
+        }), snapshot));
+    }
+
+    [Fact]
     public void RankPointFiveRequiresThreeAppliedSlotsAtTheTargetRank()
     {
         var snapshot = new PlayerDataSnapshot

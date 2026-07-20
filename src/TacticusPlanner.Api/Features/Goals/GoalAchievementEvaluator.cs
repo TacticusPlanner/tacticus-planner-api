@@ -95,6 +95,8 @@ public sealed class GoalAchievementEvaluator(PlannerDbContext db, TimeProvider t
             GoalType.Rank => character is not null && RankAchieved(character, goal.Config.Rank),
             GoalType.Ascension => unit is not null && ProgressionAchieved(unit.ProgressionIndex, goal.Config.Progression),
             GoalType.Ability => unit is not null && AbilityAchieved(unit, goal.Config.Ability),
+            // Character-only (plan scope decision) — mirrors RankAchieved's own character-scoped check.
+            GoalType.Level => character is not null && LevelAchieved(character, goal.Config.Level),
             _ => false,
         };
     }
@@ -121,6 +123,12 @@ public sealed class GoalAchievementEvaluator(PlannerDbContext db, TimeProvider t
         var first = unit.Abilities.ElementAtOrDefault(0)?.Level ?? 1;
         var second = unit.Abilities.ElementAtOrDefault(1)?.Level ?? 1;
         return first >= target.ActiveEnd && second >= target.PassiveEnd;
+    }
+
+    private static bool LevelAchieved(PlayerCharacterRecord character, LevelTarget? target)
+    {
+        if (target is null) return false;
+        return character.XpLevel >= target.End;
     }
 
     private static int SelectedAbilityLevel(PlayerBaseUnitRecord unit, AbilityTarget? target)

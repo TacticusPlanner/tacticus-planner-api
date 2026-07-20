@@ -20,6 +20,8 @@ public sealed class GoalConfig
 
     public EquipmentTarget? Equipment { get; set; }
 
+    public LevelTarget? Level { get; set; }
+
     public FarmingStrategy FarmingStrategy { get; set; } = FarmingStrategy.TotalUpgrades;
 
     public AscensionFarmingConfig? AscensionFarming { get; set; }
@@ -79,6 +81,15 @@ public sealed class UpgradeItemTarget
 public sealed class EquipmentTarget
 {
     public required int TargetLevel { get; set; }
+}
+
+/// <summary>Target character level (see <see cref="GoalEntityType.Character"/>). Uncosted — no
+/// XP-cost curve/XP-book farming engine exists anywhere in this app yet; "complete" is simply the
+/// unit's synced <c>XpLevel</c> reaching <see cref="End"/>.</summary>
+public sealed class LevelTarget
+{
+    public required int Start { get; set; }
+    public required int End { get; set; }
 }
 
 public enum FarmingStrategy
