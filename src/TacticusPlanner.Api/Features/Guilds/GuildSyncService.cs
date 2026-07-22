@@ -155,7 +155,12 @@ public sealed class GuildSyncService(
 
         // Loaded once per sync and matched in memory: byte[] equality does not translate cleanly to SQL,
         // and Planner's total linkable-profile count is modest, so this avoids one query per member.
+        // IgnoreQueryFilters: linking deliberately spans every profile, not just the caller's — guild
+        // membership is its own authorization boundary (see PlannerDbContext.ApplyProfileQueryFilters'
+        // note on Guild/GuildMember), so the global profile query filter must not narrow this to the
+        // caller alone.
         var linkableProfiles = await db.Profiles
+            .IgnoreQueryFilters()
             .AsNoTracking()
             .Where(profile => profile.TacticusUserIdHash != null)
             .Select(profile => new
@@ -182,9 +187,12 @@ public sealed class GuildSyncService(
 
         // The linked player-data snapshot name takes precedence over the profile's display name — see
         // Guild Phase 1 spec's name-resolution rule. Only non-empty synced names are considered.
+        // IgnoreQueryFilters: same reasoning as linkableProfiles above — these snapshots belong to other
+        // linked members, not the caller.
         var snapshotNamesByProfileId = linkedProfileIds.Count == 0
             ? new Dictionary<ProfileId, string>()
             : await db.PlayerDataSnapshots
+                .IgnoreQueryFilters()
                 .AsNoTracking()
                 .Where(snapshot => linkedProfileIds.Contains(snapshot.Id))
                 .Select(snapshot => new { snapshot.Id, snapshot.PlayerDetails.Name })

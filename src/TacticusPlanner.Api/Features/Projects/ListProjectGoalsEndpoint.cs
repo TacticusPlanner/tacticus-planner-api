@@ -27,7 +27,7 @@ public sealed class ListProjectGoalsEndpoint : EndpointWithoutRequest<ListProjec
     public override async Task HandleAsync(CancellationToken ct)
     {
         var state = ProcessorState<CurrentUserState>();
-        if (state.ProfileId is not { } profileId)
+        if (state.ProfileId is null)
         {
             await Send.NotFoundAsync(ct);
             return;
@@ -36,7 +36,8 @@ public sealed class ListProjectGoalsEndpoint : EndpointWithoutRequest<ListProjec
         var projectId = ProjectId.From(Route<Guid>("projectId"));
         var db = Resolve<PlannerDbContext>();
 
-        var project = await db.Projects.Owned(profileId).AsNoTracking().FirstOrDefaultAsync(entity => entity.Id == projectId, ct);
+        // All three queries below are scoped to the caller's profile by PlannerDbContext's global query filter.
+        var project = await db.Projects.AsNoTracking().FirstOrDefaultAsync(entity => entity.Id == projectId, ct);
         if (project is null)
         {
             await Send.NotFoundAsync(ct);
@@ -46,7 +47,7 @@ public sealed class ListProjectGoalsEndpoint : EndpointWithoutRequest<ListProjec
         var members = await db.ProjectGoals
             .AsNoTracking()
             .Where(entity => entity.ProjectId == projectId)
-            .Join(db.Goals.Owned(profileId), pg => pg.GoalId, goal => goal.Id, (pg, goal) => new { pg.Priority, Goal = goal })
+            .Join(db.Goals, pg => pg.GoalId, goal => goal.Id, (pg, goal) => new { pg.Priority, Goal = goal })
             .OrderBy(entity => entity.Priority)
             .ToListAsync(ct);
 

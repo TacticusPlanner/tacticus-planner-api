@@ -28,6 +28,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddSingleton<EntityMetadataInterceptor>();
+builder.Services.AddHttpContextAccessor();
+// PlannerDbContext is pooled (AddNpgsqlDbContext below) and so cannot depend on a scoped service; this
+// singleton resolves the current request's profile via IHttpContextAccessor instead — see
+// ICurrentProfileProvider and PlannerDbContext.ApplyProfileQueryFilters for the global tenant-isolation
+// filters this feeds.
+builder.Services.AddSingleton<ICurrentProfileProvider, HttpContextCurrentProfileProvider>();
 builder.AddNpgsqlDbContext<PlannerDbContext>("planner-db");
 builder.Services.ConfigureDbContext<PlannerDbContext>((sp, options) =>
 {

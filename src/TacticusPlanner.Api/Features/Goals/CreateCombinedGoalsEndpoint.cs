@@ -80,7 +80,7 @@ public sealed class CreateCombinedGoalsEndpoint
         }
 
         // At most one Active/Paused goal per (entity, goal type) — mirrors CreateGoalEndpoint's check.
-        var conflictingGoalType = await db.Goals.Owned(profileId)
+        var conflictingGoalType = await db.Goals
             .Where(entity => entity.EntityType == entityType
                 && entity.EntityId == req.EntityId.Trim()
                 && requestGoalTypes.Contains(entity.GoalType)
@@ -101,7 +101,7 @@ public sealed class CreateCombinedGoalsEndpoint
         if (req.Projects is { Count: > 0 } requestedProjects)
         {
             var distinctIds = requestedProjects.Select(entry => entry.ProjectId).Distinct().Select(ProjectId.From).ToList();
-            var found = await db.Projects.Owned(profileId)
+            var found = await db.Projects
                 .Where(entity => distinctIds.Contains(entity.Id))
                 .ToListAsync(ct);
             if (found.Count != distinctIds.Count)

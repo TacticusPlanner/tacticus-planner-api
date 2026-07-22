@@ -183,7 +183,10 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
     {
         using var scope = factory.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
+        // IgnoreQueryFilters: this scope has no HttpContext, so PlannerDbContext's global profile query
+        // filter (see ApplyProfileQueryFilters) has no current profile to scope to.
         var snapshot = await db.PlayerDataSnapshots
+            .IgnoreQueryFilters()
             .Include(entity => entity.Profile)
             .ThenInclude(entity => entity!.Account)
             .SingleAsync(

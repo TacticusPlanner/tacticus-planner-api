@@ -45,7 +45,10 @@ public sealed class CurrentUserPreProcessor : IGlobalPreProcessor
         state.Subject = subject;
 
         var db = httpContext.Resolve<PlannerDbContext>();
+        // IgnoreQueryFilters: the profile is not known yet — that's what this query is resolving — so the
+        // global profile query filter (which would hide the Profile navigation entirely) must not apply here.
         var ids = await db.Accounts
+            .IgnoreQueryFilters()
             .AsNoTracking()
             .Where(account => account.Issuer == issuer && account.Subject == subject)
             .Select(account => new
@@ -59,6 +62,13 @@ public sealed class CurrentUserPreProcessor : IGlobalPreProcessor
         {
             state.AccountId = ids.Id;
             state.ProfileId = ids.ProfileId;
+
+            if (ids.ProfileId is { } profileId)
+            {
+                // Feeds PlannerDbContext's global query filters for the rest of this request — see
+                // HttpContextCurrentProfileProvider.
+                httpContext.Items[HttpContextCurrentProfileProvider.ProfileIdItemKey] = profileId;
+            }
         }
     }
 }

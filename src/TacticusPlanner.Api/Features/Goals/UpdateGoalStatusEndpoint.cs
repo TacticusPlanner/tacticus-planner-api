@@ -28,7 +28,7 @@ public sealed class UpdateGoalStatusEndpoint : Endpoint<UpdateGoalStatusRequest,
     public override async Task HandleAsync(UpdateGoalStatusRequest req, CancellationToken ct)
     {
         var state = ProcessorState<CurrentUserState>();
-        if (state.ProfileId is not { } profileId)
+        if (state.ProfileId is null)
         {
             await Send.NotFoundAsync(ct);
             return;
@@ -39,7 +39,9 @@ public sealed class UpdateGoalStatusEndpoint : Endpoint<UpdateGoalStatusRequest,
         var goalId = Route<Guid>("goalId");
         var db = Resolve<PlannerDbContext>();
 
-        var goal = await db.Goals.Owned(profileId).FirstOrDefaultAsync(entity => entity.Id == GoalId.From(goalId), ct);
+        // Scoped to the caller's profile by PlannerDbContext's global query filter (see
+        // PlannerDbContext.ApplyProfileQueryFilters) — no manual ProfileId filtering needed here.
+        var goal = await db.Goals.FirstOrDefaultAsync(entity => entity.Id == GoalId.From(goalId), ct);
 
         if (goal is null)
         {
@@ -55,7 +57,7 @@ public sealed class UpdateGoalStatusEndpoint : Endpoint<UpdateGoalStatusRequest,
             // itself out of the count, so it can't conflict with itself.
             if (targetStatus is GoalStatus.Active or GoalStatus.Paused)
             {
-                var hasConflictingGoal = await db.Goals.Owned(profileId)
+                var hasConflictingGoal = await db.Goals
                     .Where(entity => entity.Id != goal.Id
                         && entity.EntityType == goal.EntityType
                         && entity.EntityId == goal.EntityId

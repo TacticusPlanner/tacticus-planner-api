@@ -31,7 +31,8 @@ public sealed class UpdateProjectEndpoint : Endpoint<UpdateProjectRequest, Proje
 
         var db = Resolve<PlannerDbContext>();
         var projectId = ProjectId.From(Route<Guid>("projectId"));
-        var project = await db.Projects.Owned(profileId)
+        // Scoped to the caller's profile by PlannerDbContext's global query filter.
+        var project = await db.Projects
             .FirstOrDefaultAsync(entity => entity.Id == projectId, ct);
         if (project is null)
         {

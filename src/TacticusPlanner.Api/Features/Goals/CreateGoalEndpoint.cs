@@ -60,7 +60,7 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
         // At most one Active/Paused goal per (entity, goal type) — a unit may still accumulate several
         // Completed/Archived goals of the same type, but only one "in flight" at a time (see the mirrored
         // check in UpdateGoalStatusEndpoint, and the partial unique index backing this invariant).
-        var hasConflictingGoal = await db.Goals.Owned(profileId)
+        var hasConflictingGoal = await db.Goals
             .Where(entity => entity.EntityType == entityType
                 && entity.EntityId == req.EntityId.Trim()
                 && entity.GoalType == goalType
@@ -80,7 +80,7 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
         if (req.Projects is { Count: > 0 } requestedProjects)
         {
             var distinctIds = requestedProjects.Select(entry => entry.ProjectId).Distinct().Select(ProjectId.From).ToList();
-            var found = await db.Projects.Owned(profileId)
+            var found = await db.Projects
                 .Where(entity => distinctIds.Contains(entity.Id))
                 .ToListAsync(ct);
             if (found.Count != distinctIds.Count)

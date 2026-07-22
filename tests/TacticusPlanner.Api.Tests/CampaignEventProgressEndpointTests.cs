@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TacticusPlanner.Api.Features.PlayerDataOverrides;
 using TacticusPlanner.Persistence;
@@ -36,7 +37,9 @@ public sealed class CampaignEventProgressEndpointTests(PlannerApiFactory factory
 
         using var scope = factory.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
-        Assert.Contains(db.PlayerDataOverrides, row => row.OnslaughtProgressOverrides.Count == 3);
+        // IgnoreQueryFilters: this scope has no HttpContext, so PlannerDbContext's global profile query
+        // filter (see ApplyProfileQueryFilters) has no current profile to scope to.
+        Assert.Contains(db.PlayerDataOverrides.IgnoreQueryFilters(), row => row.OnslaughtProgressOverrides.Count == 3);
     }
 
     [Theory]

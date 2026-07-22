@@ -37,7 +37,8 @@ public sealed class ListProjectsEndpoint : EndpointWithoutRequest<ListProjectsRe
         var db = Resolve<PlannerDbContext>();
         var profile = await db.Profiles.AsNoTracking().FirstAsync(entity => entity.Id == profileId, ct);
 
-        var projects = await db.Projects.Owned(profileId)
+        // Scoped to the caller's profile by PlannerDbContext's global query filter.
+        var projects = await db.Projects
             .AsNoTracking()
             .OrderByDescending(entity => entity.IsDefault)
             .ThenBy(entity => entity.CreatedAt)

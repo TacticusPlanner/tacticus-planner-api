@@ -23,7 +23,7 @@ public sealed class GetGoalEndpoint : EndpointWithoutRequest<GoalDetailResponse,
     public override async Task HandleAsync(CancellationToken ct)
     {
         var state = ProcessorState<CurrentUserState>();
-        if (state.ProfileId is not { } profileId)
+        if (state.ProfileId is null)
         {
             await Send.NotFoundAsync(ct);
             return;
@@ -32,7 +32,8 @@ public sealed class GetGoalEndpoint : EndpointWithoutRequest<GoalDetailResponse,
         var goalId = Route<Guid>("goalId");
         var db = Resolve<PlannerDbContext>();
 
-        var goal = await db.Goals.Owned(profileId)
+        // Scoped to the caller's profile by PlannerDbContext's global query filter.
+        var goal = await db.Goals
             .AsNoTracking()
             .FirstOrDefaultAsync(entity => entity.Id == GoalId.From(goalId), ct);
 

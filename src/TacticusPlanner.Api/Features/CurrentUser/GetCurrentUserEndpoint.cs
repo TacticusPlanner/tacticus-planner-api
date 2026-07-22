@@ -101,7 +101,11 @@ public sealed class GetCurrentUserEndpoint : EndpointWithoutRequest<CurrentUserR
 
     private static Task<Account?> FindAccountAsync(PlannerDbContext db, AccountId accountId, CancellationToken ct)
     {
+        // IgnoreQueryFilters: this runs during first-access provisioning, before CurrentUserPreProcessor has
+        // a profile to feed the global query filter — without this, the Profile/TacticusIntegration
+        // navigations would look empty even right after they're created below.
         return db.Accounts
+            .IgnoreQueryFilters()
             .Include(account => account.Profile)
             .ThenInclude(profile => profile!.TacticusIntegration)
             .FirstOrDefaultAsync(account => account.Id == accountId, ct);

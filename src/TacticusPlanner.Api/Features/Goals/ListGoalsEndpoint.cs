@@ -29,7 +29,7 @@ public sealed class ListGoalsEndpoint : EndpointWithoutRequest<ListGoalsResponse
     public override async Task HandleAsync(CancellationToken ct)
     {
         var state = ProcessorState<CurrentUserState>();
-        if (state.ProfileId is not { } profileId)
+        if (state.ProfileId is null)
         {
             await Send.NotFoundAsync(ct);
             return;
@@ -38,7 +38,8 @@ public sealed class ListGoalsEndpoint : EndpointWithoutRequest<ListGoalsResponse
         var archived = Query<bool?>("archived", isRequired: false) ?? false;
         var db = Resolve<PlannerDbContext>();
 
-        var goals = await db.Goals.Owned(profileId)
+        // Scoped to the caller's profile by PlannerDbContext's global query filter.
+        var goals = await db.Goals
             .AsNoTracking()
             .Where(entity => archived
                 ? entity.Status == GoalStatus.Archived

@@ -30,7 +30,7 @@ public sealed class UpdateProjectGoalsEndpoint : Endpoint<UpdateProjectGoalsRequ
     public override async Task HandleAsync(UpdateProjectGoalsRequest req, CancellationToken ct)
     {
         var state = ProcessorState<CurrentUserState>();
-        if (state.ProfileId is not { } profileId)
+        if (state.ProfileId is null)
         {
             await Send.NotFoundAsync(ct);
             return;
@@ -39,7 +39,8 @@ public sealed class UpdateProjectGoalsEndpoint : Endpoint<UpdateProjectGoalsRequ
         var projectId = ProjectId.From(Route<Guid>("projectId"));
         var db = Resolve<PlannerDbContext>();
 
-        var project = await db.Projects.Owned(profileId).FirstOrDefaultAsync(entity => entity.Id == projectId, ct);
+        // Both queries below are scoped to the caller's profile by PlannerDbContext's global query filter.
+        var project = await db.Projects.FirstOrDefaultAsync(entity => entity.Id == projectId, ct);
         if (project is null)
         {
             await Send.NotFoundAsync(ct);
@@ -49,7 +50,7 @@ public sealed class UpdateProjectGoalsEndpoint : Endpoint<UpdateProjectGoalsRequ
         var requestedGoalIds = req.Goals.Select(entry => GoalId.From(entry.GoalId)).ToHashSet();
 
         var ownedGoalIds = await db.Goals
-            .Where(entity => entity.ProfileId == profileId && requestedGoalIds.Contains(entity.Id))
+            .Where(entity => requestedGoalIds.Contains(entity.Id))
             .Select(entity => entity.Id)
             .ToListAsync(ct);
 

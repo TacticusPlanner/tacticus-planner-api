@@ -36,7 +36,8 @@ public sealed class ActivateProjectEndpoint : EndpointWithoutRequest<ProjectSumm
         var projectId = ProjectId.From(Route<Guid>("projectId"));
         var db = Resolve<PlannerDbContext>();
 
-        var project = await db.Projects.Owned(profileId).FirstOrDefaultAsync(entity => entity.Id == projectId, ct);
+        // Scoped to the caller's profile by PlannerDbContext's global query filter.
+        var project = await db.Projects.FirstOrDefaultAsync(entity => entity.Id == projectId, ct);
         if (project is null)
         {
             await Send.NotFoundAsync(ct);
