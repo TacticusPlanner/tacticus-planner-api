@@ -25,8 +25,9 @@ public sealed class UpdatePlanningSettingsEndpoint
             return;
         }
 
+        var profileIdValue = profileId.Value;
         var db = Resolve<PlannerDbContext>();
-        var settings = await db.PlanningSettings.FirstOrDefaultAsync(entity => entity.Id == profileId.Value, ct);
+        var settings = await db.PlanningSettings.FirstOrDefaultAsync(entity => entity.Id == profileIdValue, ct);
         if (settings is null)
         {
             if (req.Revision != 0)
@@ -35,7 +36,7 @@ public sealed class UpdatePlanningSettingsEndpoint
                 return;
             }
 
-            settings = new PlanningSettingsEntity { Id = profileId.Value };
+            settings = new PlanningSettingsEntity { Id = profileIdValue };
             db.PlanningSettings.Add(settings);
         }
         else if (settings.Revision != req.Revision)

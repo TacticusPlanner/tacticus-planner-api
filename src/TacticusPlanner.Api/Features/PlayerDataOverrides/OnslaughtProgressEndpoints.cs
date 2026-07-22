@@ -24,11 +24,12 @@ public sealed class GetOnslaughtProgressEndpoint : EndpointWithoutRequest<Onslau
             return;
         }
 
+        var profileIdValue = profileId.Value;
         var db = Resolve<PlannerDbContext>();
-        var overrides = await db.PlayerDataOverrides.FirstOrDefaultAsync(entity => entity.Id == profileId.Value, ct);
+        var overrides = await db.PlayerDataOverrides.FirstOrDefaultAsync(entity => entity.Id == profileIdValue, ct);
         if (overrides is null)
         {
-            overrides = new PlayerDataOverride { Id = profileId.Value };
+            overrides = new PlayerDataOverride { Id = profileIdValue };
             db.PlayerDataOverrides.Add(overrides);
             await db.SaveChangesAsync(ct);
         }
@@ -55,8 +56,9 @@ public sealed class UpdateOnslaughtProgressEndpoint
             return;
         }
 
+        var profileIdValue = profileId.Value;
         var db = Resolve<PlannerDbContext>();
-        var overrides = await db.PlayerDataOverrides.FirstOrDefaultAsync(entity => entity.Id == profileId.Value, ct);
+        var overrides = await db.PlayerDataOverrides.FirstOrDefaultAsync(entity => entity.Id == profileIdValue, ct);
         if (overrides is null)
         {
             if (req.Revision != 0)
@@ -66,7 +68,7 @@ public sealed class UpdateOnslaughtProgressEndpoint
                 return;
             }
 
-            overrides = new PlayerDataOverride { Id = profileId.Value };
+            overrides = new PlayerDataOverride { Id = profileIdValue };
             db.PlayerDataOverrides.Add(overrides);
         }
         else if (overrides.Revision != req.Revision)

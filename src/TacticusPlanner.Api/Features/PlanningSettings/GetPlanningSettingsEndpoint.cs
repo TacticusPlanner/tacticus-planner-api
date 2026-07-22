@@ -23,11 +23,12 @@ public sealed class GetPlanningSettingsEndpoint : EndpointWithoutRequest<Plannin
             return;
         }
 
+        var profileIdValue = profileId.Value;
         var db = Resolve<PlannerDbContext>();
-        var settings = await db.PlanningSettings.FirstOrDefaultAsync(entity => entity.Id == profileId.Value, ct);
+        var settings = await db.PlanningSettings.FirstOrDefaultAsync(entity => entity.Id == profileIdValue, ct);
         if (settings is null)
         {
-            settings = new PlanningSettingsEntity { Id = profileId.Value };
+            settings = new PlanningSettingsEntity { Id = profileIdValue };
             db.PlanningSettings.Add(settings);
             await db.SaveChangesAsync(ct);
         }

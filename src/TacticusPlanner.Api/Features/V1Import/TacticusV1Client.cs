@@ -237,13 +237,11 @@ public sealed class TacticusV1Client(IHttpClientFactory httpClientFactory) : ITa
 
     private static bool TryGetProperty(JsonElement value, string name, out JsonElement property)
     {
-        foreach (var candidate in value.EnumerateObject())
+        foreach (var candidate in value.EnumerateObject().Where(candidate =>
+            string.Equals(candidate.Name, name, StringComparison.OrdinalIgnoreCase)))
         {
-            if (string.Equals(candidate.Name, name, StringComparison.OrdinalIgnoreCase))
-            {
-                property = candidate.Value;
-                return true;
-            }
+            property = candidate.Value;
+            return true;
         }
 
         property = default;

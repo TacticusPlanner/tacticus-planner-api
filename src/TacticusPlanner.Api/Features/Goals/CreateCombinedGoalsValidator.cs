@@ -53,15 +53,12 @@ public sealed class CreateCombinedGoalsValidator : Validator<CreateCombinedGoals
             {
                 for (var i = 0; i < goals.Count; i++)
                 {
-                    foreach (var dependsOnIndex in goals[i].DependsOnIndex)
+                    foreach (var dependsOnIndex in goals[i].DependsOnIndex.Where(dependsOnIndex => dependsOnIndex < 0 || dependsOnIndex >= i))
                     {
-                        if (dependsOnIndex < 0 || dependsOnIndex >= i)
-                        {
-                            context.AddFailure(
-                                $"Goals[{i}].DependsOnIndex",
-                                "Each DependsOnIndex must reference an earlier goal in the same request."
-                            );
-                        }
+                        context.AddFailure(
+                            $"Goals[{i}].DependsOnIndex",
+                            "Each DependsOnIndex must reference an earlier goal in the same request."
+                        );
                     }
                 }
             });

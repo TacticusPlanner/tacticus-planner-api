@@ -91,12 +91,9 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
             }
 
             targetProjects = found;
-            foreach (var entry in requestedProjects)
+            foreach (var entry in requestedProjects.Where(entry => entry.Priority is not null))
             {
-                if (entry.Priority is { } priority)
-                {
-                    requestedPriorities[ProjectId.From(entry.ProjectId)] = priority;
-                }
+                requestedPriorities[ProjectId.From(entry.ProjectId)] = entry.Priority!.Value;
             }
         }
         else

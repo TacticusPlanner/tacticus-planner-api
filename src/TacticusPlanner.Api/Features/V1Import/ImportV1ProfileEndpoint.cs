@@ -265,11 +265,11 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
     private static OnslaughtProgressOverrideRecord ToOnslaughtRecord(
         string alliance,
         V1OnslaughtAllianceProgress source) => new()
-    {
-        Alliance = alliance,
-        Sector = source.Sector,
-        Tier = source.Tier,
-    };
+        {
+            Alliance = alliance,
+            Sector = source.Sector,
+            Tier = source.Tier,
+        };
 
     private async Task<ImportPartResult> ImportCampaignEventProgressAsync(
         ProfileId profileId,
