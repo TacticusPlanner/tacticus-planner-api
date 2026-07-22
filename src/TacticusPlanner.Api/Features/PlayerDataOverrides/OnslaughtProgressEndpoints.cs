@@ -160,7 +160,7 @@ public sealed class UpdateOnslaughtProgressValidator : Validator<UpdateOnslaught
         public AllianceProgressValidator()
         {
             RuleFor(request => request.Sector).Must(sector => SupportedSectors.Contains(sector, StringComparer.OrdinalIgnoreCase));
-            RuleFor(request => request.Tier).InclusiveBetween(1, 3);
+            RuleFor(request => request.Tier).InclusiveBetween(1, 4);
         }
     }
 }

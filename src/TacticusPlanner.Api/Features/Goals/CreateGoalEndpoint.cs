@@ -10,10 +10,12 @@ namespace TacticusPlanner.Api.Features.Goals;
 
 /// <summary>
 /// Creates a single goal. Every goal must belong to at least one project (plan §5): if
-/// <see cref="CreateGoalRequest.ProjectIds"/> is omitted or empty, the caller's default project is used
+/// <see cref="CreateGoalRequest.Projects"/> is omitted or empty, the caller's default project is used
 /// (created on first access); otherwise the goal is added to every listed project (a goal may belong to
-/// several projects at once). The combined-creation flow (multiple goal types + dependency chains for one
-/// entity, plan §6/§8) is not implemented here — this endpoint only ever creates one independent goal.
+/// several projects at once), at that project's given <see cref="ProjectPriorityRequest.Priority"/> when
+/// supplied, or appended after the project's current goals otherwise. The combined-creation flow (multiple
+/// goal types + dependency chains for one entity, plan §6/§8) is not implemented here — this endpoint only
+/// ever creates one independent goal.
 /// </summary>
 public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailResponse, GoalMapper>
 {
@@ -55,23 +57,47 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
             return;
         }
 
+        // At most one Active/Paused goal per (entity, goal type) — a unit may still accumulate several
+        // Completed/Archived goals of the same type, but only one "in flight" at a time (see the mirrored
+        // check in UpdateGoalStatusEndpoint, and the partial unique index backing this invariant).
+        var hasConflictingGoal = await db.Goals.Owned(profileId)
+            .Where(entity => entity.EntityType == entityType
+                && entity.EntityId == req.EntityId.Trim()
+                && entity.GoalType == goalType
+                && (entity.Status == GoalStatus.Active || entity.Status == GoalStatus.Paused))
+            .AnyAsync(ct);
+        if (hasConflictingGoal)
+        {
+            AddError(request => request.GoalType, "An active or paused goal of this type already exists for this unit.");
+            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+            return;
+        }
+
         var profile = await db.Profiles.FirstAsync(entity => entity.Id == profileId, ct);
 
         List<Project> targetProjects;
-        if (req.ProjectIds is { Count: > 0 } requestedProjectIds)
+        Dictionary<ProjectId, int> requestedPriorities = [];
+        if (req.Projects is { Count: > 0 } requestedProjects)
         {
-            var distinctIds = requestedProjectIds.Distinct().Select(ProjectId.From).ToList();
+            var distinctIds = requestedProjects.Select(entry => entry.ProjectId).Distinct().Select(ProjectId.From).ToList();
             var found = await db.Projects.Owned(profileId)
                 .Where(entity => distinctIds.Contains(entity.Id))
                 .ToListAsync(ct);
             if (found.Count != distinctIds.Count)
             {
-                AddError(request => request.ProjectIds, "Unknown project.");
+                AddError(request => request.Projects, "Unknown project.");
                 await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
                 return;
             }
 
             targetProjects = found;
+            foreach (var entry in requestedProjects)
+            {
+                if (entry.Priority is { } priority)
+                {
+                    requestedPriorities[ProjectId.From(entry.ProjectId)] = priority;
+                }
+            }
         }
         else
         {
@@ -111,7 +137,9 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
             {
                 ProjectId = project.Id,
                 GoalId = goal.Id,
-                Priority = await projects.GetNextPriorityAsync(project.Id, ct),
+                Priority = requestedPriorities.TryGetValue(project.Id, out var priority)
+                    ? priority
+                    : await projects.GetNextPriorityAsync(project.Id, ct),
             });
         }
 
@@ -127,9 +155,14 @@ public sealed record CreateGoalRequest(
     string EntityId,
     string GoalType,
     CreateGoalConfigRequest Config,
-    List<Guid>? ProjectIds,
+    List<ProjectPriorityRequest>? Projects,
     CreateGoalSnapshotRequest? Snapshot = null
 );
+
+/// <summary>One target project for a newly created goal, with an optional caller-chosen priority within
+/// that project (plan: per-project priority). <see cref="Priority"/> null means "append after the
+/// project's current goals" — the same behavior as before per-project priority existed.</summary>
+public sealed record ProjectPriorityRequest(Guid ProjectId, int? Priority);
 
 public sealed record CreateGoalConfigRequest(
     RankTargetRequest? Rank = null,

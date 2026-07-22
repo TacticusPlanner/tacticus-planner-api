@@ -84,7 +84,14 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
 
         var response = await client.PostAsJsonAsync(
             "/api/v1/me/goals",
-            RankGoal with { ProjectIds = [defaultProject.ProjectId, otherProject.ProjectId] },
+            RankGoal with
+            {
+                Projects =
+                [
+                    new ProjectPriorityRequest(defaultProject.ProjectId, null),
+                    new ProjectPriorityRequest(otherProject.ProjectId, null),
+                ],
+            },
             TestContext.Current.CancellationToken
         );
         response.EnsureSuccessStatusCode();
@@ -108,6 +115,61 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     }
 
     [Fact]
+    public async Task CreateGoalWithExplicitPriorityIsHonoredOverAutoAppend()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var defaultProject = await GetDefaultProjectAsync(client);
+        // A different goal type for the same character (Level, not Rank) so it doesn't trip the
+        // one-active-or-paused-per-(entity,type) constraint — occupies priority 1 in the default
+        // project via the normal auto-append path, so the Rank goal's explicit priority below is a
+        // deliberate insert-at-the-top, not a coincidence.
+        var levelGoalResponse = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            new CreateGoalRequest(
+                "character",
+                "blackTerminator",
+                "level",
+                new CreateGoalConfigRequest(Level: new LevelTargetRequest(1, 10)),
+                null
+            ),
+            TestContext.Current.CancellationToken
+        );
+        levelGoalResponse.EnsureSuccessStatusCode();
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            RankGoal with { Projects = [new ProjectPriorityRequest(defaultProject.ProjectId, 1)] },
+            TestContext.Current.CancellationToken
+        );
+        response.EnsureSuccessStatusCode();
+        var created = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        Assert.NotNull(created);
+
+        var members = await client.GetFromJsonAsync<ListProjectGoalsResponse>(
+            $"/api/v1/me/projects/{defaultProject.ProjectId}/goals",
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(members);
+        var priority = Assert.Single(members.Goals, entry => entry.Goal.GoalId == created.GoalId).Priority;
+        Assert.Equal(1, priority);
+    }
+
+    [Fact]
+    public async Task CreateGoalWithNonPositivePriorityIsRejected()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var defaultProject = await GetDefaultProjectAsync(client);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            RankGoal with { Projects = [new ProjectPriorityRequest(defaultProject.ProjectId, 0)] },
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
     public async Task CreateGoalInNonActiveProjectStartsPaused()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
@@ -123,7 +185,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
 
         var response = await client.PostAsJsonAsync(
             "/api/v1/me/goals",
-            RankGoal with { ProjectIds = [otherProject.ProjectId] },
+            RankGoal with { Projects = [new ProjectPriorityRequest(otherProject.ProjectId, null)] },
             TestContext.Current.CancellationToken
         );
         response.EnsureSuccessStatusCode();
@@ -131,6 +193,180 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
 
         Assert.NotNull(created);
         Assert.Equal("Paused", created.Status);
+    }
+
+    [Fact]
+    public async Task CreateUnlockGoalWithUnavailableFarmingLocationIsRejected()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            new CreateGoalRequest(
+                "character",
+                "blackTerminator",
+                "unlock",
+                new CreateGoalConfigRequest(
+                    FarmingLocationIds: [CampaignBattleId.From("not-a-real-battle")]
+                ),
+                null
+            ),
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task CreateAscensionGoalWithUnavailableShardBattleIdIsRejected()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            new CreateGoalRequest(
+                "character",
+                "blackTerminator",
+                "ascension",
+                new CreateGoalConfigRequest(
+                    Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar"),
+                    AscensionFarming: new AscensionFarmingRequest(
+                        "Campaign",
+                        [CampaignBattleId.From("not-a-real-battle")],
+                        []
+                    )
+                ),
+                null
+            ),
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    // "deathBlightlord" has a regular-shard campaign node at DGS06 (shards_deathBlightlord) and a
+    // mythic-shard node at DGE25 (mythicShards_deathBlightlord) — used below to prove Unlock and
+    // Ascension's shard-battle validation actually distinguishes the two types rather than accepting
+    // either node for either slot.
+    [Fact]
+    public async Task CreateUnlockGoalRejectsAMythicOnlyShardLocation()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            new CreateGoalRequest(
+                "character",
+                "deathBlightlord",
+                "unlock",
+                new CreateGoalConfigRequest(FarmingLocationIds: [CampaignBattleId.From("DGE25")]),
+                null
+            ),
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task CreateUnlockGoalAcceptsItsOwnRegularShardLocation()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            new CreateGoalRequest(
+                "character",
+                "deathBlightlord",
+                "unlock",
+                new CreateGoalConfigRequest(FarmingLocationIds: [CampaignBattleId.From("DGS06")]),
+                null
+            ),
+            TestContext.Current.CancellationToken
+        );
+
+        response.EnsureSuccessStatusCode();
+    }
+
+    [Fact]
+    public async Task CreateAscensionGoalRejectsAMythicIdInTheRegularShardSlot()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            new CreateGoalRequest(
+                "character",
+                "deathBlightlord",
+                "ascension",
+                new CreateGoalConfigRequest(
+                    Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar"),
+                    AscensionFarming: new AscensionFarmingRequest(
+                        "Campaign",
+                        [CampaignBattleId.From("DGE25")],
+                        []
+                    )
+                ),
+                null
+            ),
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task CreateAscensionGoalRejectsARegularIdInTheMythicShardSlot()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            new CreateGoalRequest(
+                "character",
+                "deathBlightlord",
+                "ascension",
+                new CreateGoalConfigRequest(
+                    Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar"),
+                    AscensionFarming: new AscensionFarmingRequest(
+                        "Campaign",
+                        [],
+                        [CampaignBattleId.From("DGS06")]
+                    )
+                ),
+                null
+            ),
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task CreateAscensionGoalAcceptsEachShardBattleIdInItsMatchingSlot()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            new CreateGoalRequest(
+                "character",
+                "deathBlightlord",
+                "ascension",
+                new CreateGoalConfigRequest(
+                    Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar"),
+                    AscensionFarming: new AscensionFarmingRequest(
+                        "Campaign",
+                        [CampaignBattleId.From("DGS06")],
+                        [CampaignBattleId.From("DGE25")]
+                    )
+                ),
+                null
+            ),
+            TestContext.Current.CancellationToken
+        );
+
+        response.EnsureSuccessStatusCode();
     }
 
     [Fact]
@@ -373,7 +609,14 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
 
         var createResponse = await client.PostAsJsonAsync(
             "/api/v1/me/goals",
-            RankGoal with { ProjectIds = [defaultProject.ProjectId, otherProject.ProjectId] },
+            RankGoal with
+            {
+                Projects =
+                [
+                    new ProjectPriorityRequest(defaultProject.ProjectId, null),
+                    new ProjectPriorityRequest(otherProject.ProjectId, null),
+                ],
+            },
             TestContext.Current.CancellationToken
         );
         createResponse.EnsureSuccessStatusCode();
@@ -445,6 +688,109 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         );
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task CreateGoalConflictingWithActiveSameKindGoalIsRejected()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        await CreateGoalAsync(client); // starts Active in the default/active project
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            RankGoal,
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task CreateGoalConflictingWithPausedSameKindGoalIsRejected()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var created = await CreateGoalAsync(client);
+        var pauseResponse = await client.PostAsJsonAsync(
+            $"/api/v1/me/goals/{created.GoalId}/status",
+            new UpdateGoalStatusRequest("paused"),
+            TestContext.Current.CancellationToken
+        );
+        pauseResponse.EnsureSuccessStatusCode();
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            RankGoal,
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task CreateGoalAllowedWhenSameKindGoalIsCompletedOrArchived()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var created = await CreateGoalAsync(client);
+        var completeResponse = await client.PostAsJsonAsync(
+            $"/api/v1/me/goals/{created.GoalId}/status",
+            new UpdateGoalStatusRequest("completed"),
+            TestContext.Current.CancellationToken
+        );
+        completeResponse.EnsureSuccessStatusCode();
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            RankGoal,
+            TestContext.Current.CancellationToken
+        );
+
+        response.EnsureSuccessStatusCode();
+        var created2 = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        Assert.NotNull(created2);
+        Assert.NotEqual(created.GoalId, created2.GoalId);
+    }
+
+    [Fact]
+    public async Task ResumingGoalConflictingWithAnotherActiveSameKindGoalIsRejected()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var first = await CreateGoalAsync(client); // Active
+        var pauseResponse = await client.PostAsJsonAsync(
+            $"/api/v1/me/goals/{first.GoalId}/status",
+            new UpdateGoalStatusRequest("archived"),
+            TestContext.Current.CancellationToken
+        );
+        pauseResponse.EnsureSuccessStatusCode();
+
+        var secondResponse = await client.PostAsJsonAsync("/api/v1/me/goals", RankGoal, TestContext.Current.CancellationToken);
+        secondResponse.EnsureSuccessStatusCode();
+        var second = await secondResponse.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        Assert.NotNull(second);
+
+        // Un-archiving the first goal back to Active would exceed the one-active-or-paused-per-kind
+        // limit now that the second goal already occupies that slot.
+        var resumeResponse = await client.PostAsJsonAsync(
+            $"/api/v1/me/goals/{first.GoalId}/status",
+            new UpdateGoalStatusRequest("active"),
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, resumeResponse.StatusCode);
+    }
+
+    [Fact]
+    public async Task PausingAlreadyActiveGoalDoesNotConflictWithItself()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var created = await CreateGoalAsync(client); // Active
+
+        var response = await client.PostAsJsonAsync(
+            $"/api/v1/me/goals/{created.GoalId}/status",
+            new UpdateGoalStatusRequest("paused"),
+            TestContext.Current.CancellationToken
+        );
+
+        response.EnsureSuccessStatusCode();
     }
 
     private static async Task<GoalDetailResponse> CreateGoalAsync(HttpClient client)

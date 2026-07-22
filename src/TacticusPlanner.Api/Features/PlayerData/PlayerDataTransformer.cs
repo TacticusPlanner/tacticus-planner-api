@@ -22,7 +22,7 @@ namespace TacticusPlanner.Api.Features.PlayerData;
 public sealed partial class PlayerDataTransformer(IGameCatalogProvider catalog)
 {
     /// <summary>Bumped when the persisted/served chunk shapes change in a way clients must react to.</summary>
-    public const int CurrentSchemaVersion = 2;
+    public const int CurrentSchemaVersion = 3;
 
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
 
@@ -46,7 +46,7 @@ public sealed partial class PlayerDataTransformer(IGameCatalogProvider catalog)
         // GameCatalogDatasets.CampaignBattleGroups) — no lookup/cross-reference needed here.
         var campaigns = response.Player?.Progress?.Campaigns ?? [];
         var campaignProgress = campaigns.Where(c => !IsEventCampaign(c.Id)).Select(MapCampaign).ToList();
-        var campaignEventsProgress = campaigns.Where(c => IsEventCampaign(c.Id)).Select(MapCampaign).ToList();
+        var campaignEventsProgress = campaigns.Where(c => IsEventCampaign(c.Id)).Select(MapCampaignEvent).ToList();
 
         var liveProgress = new LiveProgressChunk
         {
@@ -118,7 +118,7 @@ public sealed record PlayerDataTransformResult(
     List<InventoryShardRecord> InventoryShards,
     InventoryChunk Inventory,
     List<CampaignProgressRecord> CampaignProgress,
-    List<CampaignProgressRecord> CampaignEventsProgress,
+    List<CampaignEventProgressRecord> CampaignEventsProgress,
     LiveProgressChunk LiveProgress,
     List<LreProgressRecord> LreProgress,
     Dictionary<string, string> ChunkHashes,

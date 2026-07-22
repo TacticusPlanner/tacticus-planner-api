@@ -95,6 +95,10 @@ public sealed record GameCatalogCampaignBattleView(
     int EnergyCost,
     int NodeNumber,
     int Slots,
+    // The battle's daily attempt cap, derived from Type (not authored per-battle — see
+    // GameCatalogDenormalizer.DailyAttemptsForType) since it's a fixed game rule per campaign
+    // difficulty, not per-node data.
+    int DailyAttempts,
     GameCatalogCampaignRewardsView Rewards,
     int EnemyPower,
     IReadOnlyList<string> EnemiesAlliances,

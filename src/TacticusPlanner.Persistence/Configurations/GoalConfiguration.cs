@@ -64,6 +64,16 @@ public sealed class GoalConfiguration : IEntityTypeConfiguration<Goal>
 
         builder.HasIndex(entity => entity.ProfileId);
 
+        // At most one Active/Paused goal per (profile, entity, goal type) — the app-level checks in
+        // CreateGoalEndpoint/CreateCombinedGoalsEndpoint/UpdateGoalStatusEndpoint give the friendly 400,
+        // this index is the concurrency backstop that guarantees the invariant even under a race.
+        // Completed/Archived/Draft goals are excluded from the filter, so a unit can freely accumulate
+        // finished goals of the same type.
+        builder.HasIndex(entity => new { entity.ProfileId, entity.EntityType, entity.EntityId, entity.GoalType })
+            .IsUnique()
+            .HasFilter("status IN ('Active', 'Paused')")
+            .HasDatabaseName("ix_goals_one_active_or_paused_per_entity_and_type");
+
         builder
             .HasOne(entity => entity.Profile)
             .WithMany()

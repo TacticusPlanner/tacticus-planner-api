@@ -18,7 +18,8 @@ public sealed class UpdateGoalStatusEndpoint : Endpoint<UpdateGoalStatusRequest,
         {
             summary.Summary = "Transitions a goal's status (active/paused/completed/archived).";
             summary.Response<GoalDetailResponse>(StatusCodes.Status200OK, "The updated goal.");
-            summary.Response(StatusCodes.Status400BadRequest, "Unknown or unsupported target status.");
+            summary.Response(StatusCodes.Status400BadRequest, "Unknown or unsupported target status, or another "
+                + "goal of the same type is already active/paused for this unit.");
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
             summary.Response(StatusCodes.Status404NotFound, "No matching goal owned by the caller.");
         });
@@ -48,6 +49,27 @@ public sealed class UpdateGoalStatusEndpoint : Endpoint<UpdateGoalStatusRequest,
 
         if (goal.Status != targetStatus)
         {
+            // At most one Active/Paused goal per (entity, goal type) — mirrors CreateGoalEndpoint's
+            // check. Only entering the slot (targeting Active/Paused) from outside it needs the check;
+            // pausing an already-active goal (or resuming an already-paused one) never leaves the goal
+            // itself out of the count, so it can't conflict with itself.
+            if (targetStatus is GoalStatus.Active or GoalStatus.Paused)
+            {
+                var hasConflictingGoal = await db.Goals.Owned(profileId)
+                    .Where(entity => entity.Id != goal.Id
+                        && entity.EntityType == goal.EntityType
+                        && entity.EntityId == goal.EntityId
+                        && entity.GoalType == goal.GoalType
+                        && (entity.Status == GoalStatus.Active || entity.Status == GoalStatus.Paused))
+                    .AnyAsync(ct);
+                if (hasConflictingGoal)
+                {
+                    AddError(request => request.Status, "An active or paused goal of this type already exists for this unit.");
+                    await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+                    return;
+                }
+            }
+
             goal.Status = targetStatus;
             goal.Events.Add(new GoalEvent { At = DateTimeOffset.UtcNow, Type = EventTypeFor(targetStatus) });
         }

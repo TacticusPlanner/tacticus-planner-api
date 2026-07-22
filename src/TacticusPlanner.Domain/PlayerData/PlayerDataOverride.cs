@@ -23,10 +23,10 @@ public class PlayerDataOverride : BaseEntity<ProfileId>, IRevisionedEntity
     public List<BattleResultOverrideRecord> BattleResultOverrides { get; set; } = [];
 
     /// <summary>
-    /// Manual campaign-progress entries for campaigns the API sync does not cover for this player
-    /// (e.g. a non-currently-selected campaign track).
+    /// Manual campaign-event progress layered over the currently synchronized event. Regular and
+    /// challenge portions are independently nullable so either can fall back to the synchronized value.
     /// </summary>
-    public List<CampaignProgressOverrideRecord> CampaignProgressOverrides { get; set; } = [];
+    public List<CampaignEventProgressOverrideRecord> CampaignEventProgressOverrides { get; set; } = [];
 
     /// <summary>
     /// The player's current Onslaught sector/tier for each alliance. The public player API does not
@@ -61,12 +61,19 @@ public sealed class BattleResultOverrideRecord
     public bool? VictoryWithoutBorrowed { get; set; }
 }
 
-public sealed class CampaignProgressOverrideRecord
+public sealed class CampaignEventProgressOverrideRecord
 {
-    /// <summary>The catalog campaign group id this manual entry applies to.</summary>
-    public CampaignId CatalogCampaignGroupId { get; set; } = CampaignId.From(string.Empty);
+    /// <summary>The catalog/Tacticus campaign-event group id.</summary>
+    public CampaignId CampaignGroupId { get; set; } = CampaignId.From(string.Empty);
 
-    public int HighestCompletedNodeNumber { get; set; }
+    /// <summary>Standard or Extremis.</summary>
+    public string Type { get; set; } = string.Empty;
+
+    /// <summary>Null means use the synchronized regular-track value.</summary>
+    public int? CompletedBattleCount { get; set; }
+
+    /// <summary>Null means use the synchronized challenge ids.</summary>
+    public List<string>? CompletedChallengeBattlesIds { get; set; }
 }
 
 public sealed class OnslaughtProgressOverrideRecord
@@ -77,6 +84,7 @@ public sealed class OnslaughtProgressOverrideRecord
     /// <summary>Stone, Iron, Bronze, Silver, Gold, Diamond, or Adamantine.</summary>
     public string Sector { get; set; } = "Stone";
 
-    /// <summary>The current reward tier within the sector (1-3).</summary>
+    /// <summary>The current position within the sector (1-4). Tier 4 means the sector is complete
+    /// and uses tier-3 rewards for planning estimates.</summary>
     public int Tier { get; set; } = 1;
 }

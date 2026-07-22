@@ -64,6 +64,56 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
     }
 
     [Fact]
+    public async Task ExplicitProjectPriorityBecomesTheBaseForEveryGoalInTheSet()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var defaultProject = await GetDefaultProjectAsync(client);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals/combined",
+            UnlockThenRank with
+            {
+                Projects = [new ProjectPriorityRequest(defaultProject.ProjectId, 5)],
+            },
+            TestContext.Current.CancellationToken
+        );
+        response.EnsureSuccessStatusCode();
+        var created = await response.Content.ReadFromJsonAsync<CreateCombinedGoalsResponse>(TestContext.Current.CancellationToken);
+        Assert.NotNull(created);
+        var unlock = created.Goals[0];
+        var rank = created.Goals[1];
+
+        var members = await client.GetFromJsonAsync<ListProjectGoalsResponse>(
+            $"/api/v1/me/projects/{defaultProject.ProjectId}/goals",
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(members);
+        // The requested priority (5) is the base for the first goal in request order; each later goal
+        // in the same combined set is placed immediately after (same "+i" spacing as the auto-append
+        // default), not all sharing the one requested number.
+        Assert.Equal(5, members.Goals.Single(entry => entry.Goal.GoalId == unlock.GoalId).Priority);
+        Assert.Equal(6, members.Goals.Single(entry => entry.Goal.GoalId == rank.GoalId).Priority);
+    }
+
+    [Fact]
+    public async Task NonPositiveProjectPriorityIsRejected()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var defaultProject = await GetDefaultProjectAsync(client);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals/combined",
+            UnlockThenRank with
+            {
+                Projects = [new ProjectPriorityRequest(defaultProject.ProjectId, -1)],
+            },
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
     public async Task PersistsExpandedImmutableSnapshotFromCombinedSpec()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
@@ -117,7 +167,7 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
 
         var response = await client.PostAsJsonAsync(
             "/api/v1/me/goals/combined",
-            UnlockThenRank with { ProjectIds = [otherProject.ProjectId] },
+            UnlockThenRank with { Projects = [new ProjectPriorityRequest(otherProject.ProjectId, null)] },
             TestContext.Current.CancellationToken
         );
         response.EnsureSuccessStatusCode();
@@ -134,7 +184,7 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
 
         var response = await client.PostAsJsonAsync(
             "/api/v1/me/goals/combined",
-            UnlockThenRank with { ProjectIds = [Guid.NewGuid()] },
+            UnlockThenRank with { Projects = [new ProjectPriorityRequest(Guid.NewGuid(), null)] },
             TestContext.Current.CancellationToken
         );
 
@@ -156,7 +206,14 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
 
         var response = await client.PostAsJsonAsync(
             "/api/v1/me/goals/combined",
-            UnlockThenRank with { ProjectIds = [defaultProject.ProjectId, otherProject.ProjectId] },
+            UnlockThenRank with
+            {
+                Projects =
+                [
+                    new ProjectPriorityRequest(defaultProject.ProjectId, null),
+                    new ProjectPriorityRequest(otherProject.ProjectId, null),
+                ],
+            },
             TestContext.Current.CancellationToken
         );
         response.EnsureSuccessStatusCode();
@@ -282,6 +339,55 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
             TestContext.Current.CancellationToken
         );
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task DuplicateGoalTypeWithinTheSameRequestIsRejected()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var request = UnlockThenRank with
+        {
+            Goals =
+            [
+                .. UnlockThenRank.Goals,
+                new CombinedGoalSpec(
+                    "rank",
+                    new CreateGoalConfigRequest(Rank: new RankTargetRequest(0, false, 0, 10, false, 0)),
+                    []
+                ),
+            ],
+        };
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals/combined",
+            request,
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task ConflictingWithAnExistingActiveSameKindGoalIsRejected()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var firstResponse = await client.PostAsJsonAsync(
+            "/api/v1/me/goals/combined",
+            UnlockThenRank,
+            TestContext.Current.CancellationToken
+        );
+        firstResponse.EnsureSuccessStatusCode();
+
+        // The character is now unlocked (Unlock goal Active) and has an Active Rank goal — resubmitting
+        // the same combined request would create a second Active goal of each of those same kinds.
+        var secondResponse = await client.PostAsJsonAsync(
+            "/api/v1/me/goals/combined",
+            UnlockThenRank,
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, secondResponse.StatusCode);
     }
 
     private static async Task<ProjectSummaryResponse> GetDefaultProjectAsync(HttpClient client)

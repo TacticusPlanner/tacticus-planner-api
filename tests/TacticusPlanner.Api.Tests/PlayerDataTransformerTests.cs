@@ -103,7 +103,12 @@ public sealed class PlayerDataTransformerTests
                         Id = FakeTacticusApi.EventCampaignId,
                         Name = string.Empty,
                         Type = "Standard",
-                        Battles = [new CampaignLevel { BattleIndex = 0, AttemptsLeft = 9, AttemptsUsed = 1 }],
+                        Battles =
+                        [
+                            new CampaignLevel { BattleIndex = 14, AttemptsLeft = 9, AttemptsUsed = 1 },
+                            new CampaignLevel { BattleIndex = 5, AttemptsLeft = 9, AttemptsUsed = 1 },
+                            new CampaignLevel { BattleIndex = 3, AttemptsLeft = 9, AttemptsUsed = 1 },
+                        ],
                     },
                 ],
                 LegendaryEvents =
@@ -217,6 +222,8 @@ public sealed class PlayerDataTransformerTests
 
         var evt = Assert.Single(result.CampaignEventsProgress);
         Assert.Equal(FakeTacticusApi.EventCampaignId, evt.TacticusCampaignId.Value);
+        Assert.Equal(1, evt.CompletedBattleCount);
+        Assert.Equal(["AMSC3B", "AMSC13B"], evt.CompletedChallengeBattlesIds);
     }
 
     [Fact]
@@ -224,9 +231,9 @@ public sealed class PlayerDataTransformerTests
     {
         var result = CreateTransformer().Transform(BuildResponse());
 
-        // Only battles with AttemptsUsed > 0 are kept: 1 standard + 1 event battle (BattleIndex 0's
+        // Only battles with AttemptsUsed > 0 are kept: 1 standard + 3 event battles (BattleIndex 0's
         // untouched standard battle is excluded).
-        Assert.Equal(2, result.LiveProgress.BattleAttempts.Count);
+        Assert.Equal(4, result.LiveProgress.BattleAttempts.Count);
         Assert.Contains(result.LiveProgress.BattleAttempts, b =>
             b.TacticusCampaignId == FakeTacticusApi.CampaignId && b.BattleIndex == 2 && b.AttemptsLeft == 2);
         Assert.DoesNotContain(result.LiveProgress.BattleAttempts, b =>

@@ -3,6 +3,7 @@ using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.PlayerData.Chunks;
 using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.GameCatalog;
+using TacticusPlanner.GameCatalog.Models;
 using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.Goals;
@@ -58,6 +59,14 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
             if (!catalog.Current.IsUnlockEligible(entityId))
                 return "Unlock is unavailable because the catalog has no shard-upgrade data for this character.";
             if (playerUnit is not null) return "The selected character is already unlocked.";
+            if (config.FarmingLocationIds is { Count: > 0 } unlockLocations)
+            {
+                // Unlock only ever costs regular shards (never mythic — see GoalConfig/GoalMapper), so a
+                // pinned location must be one of the character's non-mythic shard nodes.
+                var availableRegular = RegularShardBattleIds(character);
+                if (unlockLocations.Any(id => !availableRegular.Contains(id.Value)))
+                    return "An unlock shard location is not available for this character.";
+            }
         }
 
         if (goalType == GoalType.Rank)
@@ -79,9 +88,13 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
             if (end <= Math.Max(start, current)) return "The target progression must be above the effective start.";
             if (config.AscensionFarming is { } farming)
             {
-                var available = character?.ShardLocations.Select(location => location.BattleId).ToHashSet(StringComparer.Ordinal) ?? [];
-                if (farming.ShardBattleIds.Any(id => !available.Contains(id.Value))
-                    || farming.MythicShardBattleIds.Any(id => !available.Contains(id.Value)))
+                // Each pinned battle id must be the matching shard type's own node — a mythic-only
+                // location (e.g. an Extremis node dropping mythicShards_x) is never valid as a regular
+                // ShardBattleIds entry, and vice versa.
+                var availableRegular = RegularShardBattleIds(character);
+                var availableMythic = MythicShardBattleIds(character);
+                if (farming.ShardBattleIds.Any(id => !availableRegular.Contains(id.Value))
+                    || farming.MythicShardBattleIds.Any(id => !availableMythic.Contains(id.Value)))
                     return "An ascension farming node is not available for this character.";
             }
         }
@@ -147,6 +160,14 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
 
         return null;
     }
+
+    private static HashSet<string> RegularShardBattleIds(GameCatalogCharacterView? character) =>
+        character?.ShardLocations.Where(location => !location.IsMythic).Select(location => location.BattleId)
+            .ToHashSet(StringComparer.Ordinal) ?? [];
+
+    private static HashSet<string> MythicShardBattleIds(GameCatalogCharacterView? character) =>
+        character?.ShardLocations.Where(location => location.IsMythic).Select(location => location.BattleId)
+            .ToHashSet(StringComparer.Ordinal) ?? [];
 
     private static string RarityFor(UnitProgression progression) => (int)progression switch
     {

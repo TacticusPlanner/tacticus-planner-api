@@ -22,3 +22,22 @@ public sealed class CampaignProgressRecord
     /// <summary>The highest battle index the player has completed in this campaign.</summary>
     public int HighestCompletedBattleIndex { get; set; }
 }
+
+/// <summary>
+/// One campaign-event type's progress. Event challenge battles are optional and can be completed in
+/// any order, so their exact catalog battle ids are retained rather than collapsed into a count or
+/// inferred from the regular-track high-water mark.
+/// </summary>
+public sealed class CampaignEventProgressRecord
+{
+    public CampaignId TacticusCampaignId { get; set; } = CampaignId.From(string.Empty);
+
+    /// <summary>Standard or Extremis.</summary>
+    public string Type { get; set; } = string.Empty;
+
+    /// <summary>Number of sequential, non-challenge battles completed.</summary>
+    public int CompletedBattleCount { get; set; }
+
+    /// <summary>Exact ids of completed optional challenge battles.</summary>
+    public List<string> CompletedChallengeBattlesIds { get; set; } = [];
+}

@@ -17,7 +17,10 @@ namespace TacticusPlanner.Api.Features.Goals;
 /// resolved into real <see cref="Goal.DependsOn"/> edges. Detection/ordering itself stays client-side (it
 /// needs live player-data the server doesn't hold); this endpoint only persists what it's given. Every
 /// goal lands in the same project(s) as <see cref="CreateGoalEndpoint"/> uses (the given
-/// <see cref="CreateCombinedGoalsRequest.ProjectIds"/>, or the caller's default project).
+/// <see cref="CreateCombinedGoalsRequest.Projects"/>, or the caller's default project) — a given
+/// per-project <see cref="ProjectPriorityRequest.Priority"/> becomes that project's base priority for the
+/// whole set, with each subsequent goal in the set placed immediately after (same "+i" spacing used when
+/// no priority is given).
 /// </summary>
 public sealed class CreateCombinedGoalsEndpoint
     : Endpoint<CreateCombinedGoalsRequest, CreateCombinedGoalsResponse, GoalMapper>
@@ -54,6 +57,7 @@ public sealed class CreateCombinedGoalsEndpoint
         var targetValidation = Resolve<GoalTargetValidationService>();
         var entityType = Enum.Parse<GoalEntityType>(req.EntityType, ignoreCase: true);
 
+        var requestGoalTypes = new HashSet<GoalType>();
         foreach (var spec in req.Goals)
         {
             var goalType = Enum.Parse<GoalType>(spec.GoalType, ignoreCase: true);
@@ -64,25 +68,57 @@ public sealed class CreateCombinedGoalsEndpoint
                 await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
                 return;
             }
+
+            // A combined request can't ask for two goals of the same type for the same entity either —
+            // same "at most one in flight" invariant as a single goal type would need against itself.
+            if (!requestGoalTypes.Add(goalType))
+            {
+                AddError(request => request.Goals, "Each goal type may appear at most once in a combined request.");
+                await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+                return;
+            }
+        }
+
+        // At most one Active/Paused goal per (entity, goal type) — mirrors CreateGoalEndpoint's check.
+        var conflictingGoalType = await db.Goals.Owned(profileId)
+            .Where(entity => entity.EntityType == entityType
+                && entity.EntityId == req.EntityId.Trim()
+                && requestGoalTypes.Contains(entity.GoalType)
+                && (entity.Status == GoalStatus.Active || entity.Status == GoalStatus.Paused))
+            .Select(entity => (GoalType?)entity.GoalType)
+            .FirstOrDefaultAsync(ct);
+        if (conflictingGoalType is not null)
+        {
+            AddError(request => request.Goals, "An active or paused goal of this type already exists for this unit.");
+            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+            return;
         }
 
         var profile = await db.Profiles.FirstAsync(entity => entity.Id == profileId, ct);
 
         List<Project> targetProjects;
-        if (req.ProjectIds is { Count: > 0 } requestedProjectIds)
+        Dictionary<ProjectId, int> requestedPriorities = [];
+        if (req.Projects is { Count: > 0 } requestedProjects)
         {
-            var distinctIds = requestedProjectIds.Distinct().Select(ProjectId.From).ToList();
+            var distinctIds = requestedProjects.Select(entry => entry.ProjectId).Distinct().Select(ProjectId.From).ToList();
             var found = await db.Projects.Owned(profileId)
                 .Where(entity => distinctIds.Contains(entity.Id))
                 .ToListAsync(ct);
             if (found.Count != distinctIds.Count)
             {
-                AddError(request => request.ProjectIds, "Unknown project.");
+                AddError(request => request.Projects, "Unknown project.");
                 await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
                 return;
             }
 
             targetProjects = found;
+            foreach (var entry in requestedProjects)
+            {
+                if (entry.Priority is { } priority)
+                {
+                    requestedPriorities[ProjectId.From(entry.ProjectId)] = priority;
+                }
+            }
         }
         else
         {
@@ -139,12 +175,14 @@ public sealed class CreateCombinedGoalsEndpoint
         db.Goals.AddRange(goals);
         foreach (var project in targetProjects)
         {
-            var nextPriority = await projects.GetNextPriorityAsync(project.Id, ct);
+            var basePriority = requestedPriorities.TryGetValue(project.Id, out var priority)
+                ? priority
+                : await projects.GetNextPriorityAsync(project.Id, ct);
             db.ProjectGoals.AddRange(goals.Select((goal, i) => new ProjectGoal
             {
                 ProjectId = project.Id,
                 GoalId = goal.Id,
-                Priority = nextPriority + i,
+                Priority = basePriority + i,
                 CreatedAt = now,
             }));
         }
@@ -160,7 +198,7 @@ public sealed class CreateCombinedGoalsEndpoint
 public sealed record CreateCombinedGoalsRequest(
     string EntityType,
     string EntityId,
-    List<Guid>? ProjectIds,
+    List<ProjectPriorityRequest>? Projects,
     List<CombinedGoalSpec> Goals
 );
 

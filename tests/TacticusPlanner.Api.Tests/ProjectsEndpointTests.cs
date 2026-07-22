@@ -15,6 +15,17 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
         null
     );
 
+    // A second, different-typed goal for the same character — these priority/bulk-status tests need
+    // two distinct goal rows in one project, and two Rank goals for the same character would now trip
+    // the one-active-or-paused-per-(entity,type) constraint (see GoalsEndpointTests).
+    private static readonly CreateGoalRequest LevelGoal = new(
+        "character",
+        "blackTerminator",
+        "level",
+        new CreateGoalConfigRequest(Level: new LevelTargetRequest(1, 10)),
+        null
+    );
+
     [Fact]
     public async Task ListProjectsProvisionsDefaultProjectOnFirstAccess()
     {
@@ -193,7 +204,7 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var defaultProject = await GetDefaultProjectAsync(client);
         var activeGoal = await CreateGoalAsync(client);
-        var completedGoal = await CreateGoalAsync(client);
+        var completedGoal = await CreateGoalAsync(client, LevelGoal);
 
         var completeResponse = await client.PostAsJsonAsync(
             $"/api/v1/me/goals/{completedGoal.GoalId}/status",
@@ -233,7 +244,7 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var defaultProject = await GetDefaultProjectAsync(client);
         var first = await CreateGoalAsync(client);
-        var second = await CreateGoalAsync(client);
+        var second = await CreateGoalAsync(client, LevelGoal);
 
         await client.PutAsJsonAsync(
             $"/api/v1/me/projects/{defaultProject.ProjectId}/goals",
@@ -284,9 +295,13 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
         return response.Projects.Single(project => project.IsDefault);
     }
 
-    private static async Task<GoalDetailResponse> CreateGoalAsync(HttpClient client)
+    private static async Task<GoalDetailResponse> CreateGoalAsync(
+        HttpClient client,
+        CreateGoalRequest? request = null
+    )
     {
-        var response = await client.PostAsJsonAsync("/api/v1/me/goals", RankGoal, TestContext.Current.CancellationToken);
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals", request ?? RankGoal, TestContext.Current.CancellationToken);
         response.EnsureSuccessStatusCode();
         var goal = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
         Assert.NotNull(goal);

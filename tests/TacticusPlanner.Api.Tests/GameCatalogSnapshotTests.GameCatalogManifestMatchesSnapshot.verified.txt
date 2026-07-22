@@ -2,7 +2,7 @@
   version: dev-2026-07-01,
   schemaVersion: 1,
   gameVersion: 1.40,
-  sourceHash: 52363df0950fd0ff602c970cfd01be8ec8bec0aae1f40f307fde2ee7dcd2b761,
+  sourceHash: e15f3fc4d540edf07d481ee135fef7ac8bd3a44c527720c56702119bb4d697e2,
   datasets: [
     {
       key: ascension-costs,
@@ -11,7 +11,7 @@
     },
     {
       key: campaign-battles,
-      hash: 49fe7b7a3e3da0a14776f03bb3de59b9fce53dac119b42fc6da022c8163746c1,
+      hash: c92e7e728875fdd9b4be40d3fb63a78f855f008769647f3fc024dff056bcc4e7,
       url: /api/v1/game-catalog/campaign-battles
     },
     {
@@ -21,7 +21,7 @@
     },
     {
       key: characters,
-      hash: 9dc3b761b81a3692f645feda253a7f04997dc05e9ce3dbfb5fed06e9be94ea36,
+      hash: 3d325e7ff383d609053aa6b77e40e51cbfe1e684a8c71869749ddc2d468f6bb6,
       url: /api/v1/game-catalog/characters
     },
     {
@@ -71,7 +71,7 @@
     },
     {
       key: upgrades,
-      hash: 6a814e2339308c25102506ac53cb7cbccb40b12d84392bca8c49a97e7335716f,
+      hash: 6d982263a690e5cd8b12d6d3d53eeb3c3c44ea0ff4bba30ebb5ff7d425ccf03f,
       url: /api/v1/game-catalog/upgrades
     }
   ]

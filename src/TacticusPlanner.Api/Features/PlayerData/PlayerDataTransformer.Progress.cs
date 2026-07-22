@@ -23,6 +23,52 @@ public sealed partial class PlayerDataTransformer
         HighestCompletedBattleIndex = HighestBattleIndex(campaign),
     };
 
+    private CampaignEventProgressRecord MapCampaignEvent(TacticusApiPlayer.CampaignProgress campaign)
+    {
+        var completedIndices = new HashSet<int>((campaign.Battles ?? []).Select(battle => battle.BattleIndex));
+        var group = catalog.Current.CampaignGroups.Values.FirstOrDefault(value =>
+            string.Equals(value.GroupId, campaign.Id, StringComparison.Ordinal));
+        if (group is null)
+        {
+            return new CampaignEventProgressRecord
+            {
+                TacticusCampaignId = CampaignId.From(campaign.Id),
+                Type = campaign.Type,
+            };
+        }
+
+        var trackBattles = group.Battles
+            .Where(battle => string.Equals(battle.Type, campaign.Type, StringComparison.Ordinal))
+            .ToArray();
+        var completedRegular = 0;
+        var completedChallenges = new List<string>();
+        for (var index = 0; index < trackBattles.Length; index++)
+        {
+            var battle = trackBattles[index];
+            if (!completedIndices.Contains(index))
+            {
+                continue;
+            }
+
+            if (battle.Challenge)
+            {
+                completedChallenges.Add(battle.Id);
+            }
+            else
+            {
+                completedRegular++;
+            }
+        }
+
+        return new CampaignEventProgressRecord
+        {
+            TacticusCampaignId = CampaignId.From(campaign.Id),
+            Type = campaign.Type,
+            CompletedBattleCount = completedRegular,
+            CompletedChallengeBattlesIds = completedChallenges,
+        };
+    }
+
     // Only attempts the player has actually spent are worth syncing/storing — an untouched battle
     // (AttemptsUsed == 0) carries no information beyond "not yet attempted", so keeping it out cuts
     // this often-changing chunk's size and churn.

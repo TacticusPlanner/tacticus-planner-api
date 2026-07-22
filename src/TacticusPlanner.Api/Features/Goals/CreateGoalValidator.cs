@@ -38,6 +38,10 @@ public sealed class CreateGoalValidator : Validator<CreateGoalRequest>
         RuleFor(request => request.Config)
             .Must(IsValidConfig)
             .WithMessage("The farming strategy or ascension farming configuration is invalid.");
+
+        RuleFor(request => request.Projects)
+            .Must(projects => projects is null || projects.All(entry => entry.Priority is null or > 0))
+            .WithMessage("A project priority must be a positive number when given.");
     }
 
     private static bool IsMow(string entityType) =>

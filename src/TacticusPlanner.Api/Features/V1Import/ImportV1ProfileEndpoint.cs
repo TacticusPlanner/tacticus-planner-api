@@ -5,6 +5,7 @@ using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Api.Features.Guilds;
 using TacticusPlanner.Api.Features.TacticusIntegration;
 using TacticusPlanner.Api.Http;
+using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Persistence;
 using TacticusPlanner.Persistence.Encryption;
@@ -19,7 +20,7 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
         Post("me/v1-import");
         Summary(summary =>
         {
-            summary.Summary = "Selectively imports integration data, guild registration, and goals from V1.";
+            summary.Summary = "Selectively imports integration data, progress, and goals from V1.";
             summary.Description = "V1 credentials are used once and never persisted. After profile retrieval, "
                 + "each selected part is applied independently and reports Imported, Skipped, or Failed. "
                 + "Goals are translated into V2 create-goal specs (GoalSpecs) rather than created here — the "
@@ -65,6 +66,12 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
         var guild = selection.GuildApiToken
             ? await ImportGuildAsync(profileId.Value, v1.GuildApiKey, ct)
             : ImportPartResult.NotSelected();
+        var onslaughtProgress = selection.OnslaughtProgress
+            ? await ImportOnslaughtProgressAsync(profileId.Value, v1.OnslaughtProgress, ct)
+            : ImportPartResult.NotSelected();
+        var campaignEventProgress = selection.CampaignEventProgress
+            ? await ImportCampaignEventProgressAsync(profileId.Value, v1.CampaignEventProgress, ct)
+            : ImportPartResult.NotSelected();
 
         V1GoalImportResult goalResult;
         ImportPartResult goals;
@@ -85,6 +92,8 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
             userId,
             personalKey.Part,
             guild,
+            onslaughtProgress,
+            campaignEventProgress,
             goals,
             goalResult.GoalSpecs,
             goalResult.Skipped,
@@ -194,6 +203,146 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
         };
     }
 
+    private async Task<ImportPartResult> ImportOnslaughtProgressAsync(
+        ProfileId profileId,
+        V1OnslaughtImportData source,
+        CancellationToken ct)
+    {
+        if (!source.IsPresent)
+        {
+            return new ImportPartResult(
+                "Skipped",
+                "missing_onslaught_progress",
+                "The V1 profile has no Onslaught progress."
+            );
+        }
+
+        if (source.Progress is null)
+        {
+            return new ImportPartResult(
+                "Failed",
+                "invalid_onslaught_progress",
+                "The V1 Onslaught progress is incomplete or invalid."
+            );
+        }
+
+        var db = Resolve<PlannerDbContext>();
+        var overrides = await db.PlayerDataOverrides.FirstOrDefaultAsync(entity => entity.Id == profileId, ct);
+        if (overrides is null)
+        {
+            overrides = new PlayerDataOverride { Id = profileId };
+            db.PlayerDataOverrides.Add(overrides);
+        }
+
+        overrides.OnslaughtProgressOverrides =
+        [
+            ToOnslaughtRecord("Imperial", source.Progress.Imperial),
+            ToOnslaughtRecord("Xenos", source.Progress.Xenos),
+            ToOnslaughtRecord("Chaos", source.Progress.Chaos),
+        ];
+        if (db.Entry(overrides).State != EntityState.Added)
+        {
+            // Replacing only a JSON-owned collection does not reliably mark its owner Modified.
+            db.Entry(overrides).State = EntityState.Modified;
+        }
+
+        try
+        {
+            await db.SaveChangesAsync(ct);
+            return new ImportPartResult("Imported", null, null);
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            db.ChangeTracker.Clear();
+            return new ImportPartResult(
+                "Failed",
+                "onslaught_progress_conflict",
+                "Onslaught progress changed during import. Try again."
+            );
+        }
+    }
+
+    private static OnslaughtProgressOverrideRecord ToOnslaughtRecord(
+        string alliance,
+        V1OnslaughtAllianceProgress source) => new()
+    {
+        Alliance = alliance,
+        Sector = source.Sector,
+        Tier = source.Tier,
+    };
+
+    private async Task<ImportPartResult> ImportCampaignEventProgressAsync(
+        ProfileId profileId,
+        V1CampaignEventProgressImportData source,
+        CancellationToken ct)
+    {
+        if (!source.IsPresent)
+        {
+            return new ImportPartResult(
+                "Skipped",
+                "missing_campaign_event_progress",
+                "The V1 profile has no regular campaign-event progress to import.");
+        }
+
+        if (source.Progress is null)
+        {
+            return new ImportPartResult(
+                "Failed",
+                "invalid_campaign_event_progress",
+                "The V1 campaign-event progress is invalid.");
+        }
+
+        var db = Resolve<PlannerDbContext>();
+        var overrides = await db.PlayerDataOverrides.FirstOrDefaultAsync(entity => entity.Id == profileId, ct);
+        if (overrides is null)
+        {
+            overrides = new PlayerDataOverride { Id = profileId };
+            db.PlayerDataOverrides.Add(overrides);
+        }
+
+        foreach (var imported in source.Progress)
+        {
+            var existing = overrides.CampaignEventProgressOverrides.FirstOrDefault(item =>
+                item.CampaignGroupId.Value == imported.CampaignGroupId
+                && item.Type == imported.Type);
+            if (existing is null)
+            {
+                overrides.CampaignEventProgressOverrides.Add(new CampaignEventProgressOverrideRecord
+                {
+                    CampaignGroupId = CampaignId.From(imported.CampaignGroupId),
+                    Type = imported.Type,
+                    CompletedBattleCount = imported.CompletedBattleCount,
+                });
+            }
+            else
+            {
+                existing.CompletedBattleCount = imported.CompletedBattleCount;
+            }
+        }
+
+        if (db.Entry(overrides).State != EntityState.Added)
+        {
+            db.Entry(overrides).State = EntityState.Modified;
+        }
+
+        try
+        {
+            await db.SaveChangesAsync(ct);
+            return new ImportPartResult(
+                "Imported",
+                "challenge_progress_not_imported",
+                "Regular event progress was imported. V1 challenge counts were not imported because exact battles are unknown.");
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            db.ChangeTracker.Clear();
+            return new ImportPartResult(
+                "Failed",
+                "campaign_event_progress_conflict",
+                "Campaign-event progress changed during import. Try again.");
+        }
+    }
+
     private static string GetGuildFailureMessage(GuildSyncResult result) => result switch
     {
         GuildSyncResult.InvalidRequest value => value.Message,
@@ -216,7 +365,9 @@ public sealed record ImportV1Selection(
     bool PersonalTacticusApiKey,
     bool TacticusUserId,
     bool GuildApiToken,
-    bool Goals
+    bool Goals,
+    bool OnslaughtProgress,
+    bool CampaignEventProgress
 );
 
 public sealed record ImportV1ProfileRequest(string? Username, string? Password, ImportV1Selection? Import);
@@ -230,6 +381,8 @@ public sealed record ImportV1ProfileResponse(
     ImportPartResult TacticusUserId,
     ImportPartResult PersonalTacticusApiKey,
     ImportPartResult GuildApiToken,
+    ImportPartResult OnslaughtProgress,
+    ImportPartResult CampaignEventProgress,
     ImportPartResult Goals,
     // Parsed V1 goals, already shaped as create requests — one per unit. The caller submits each of
     // these through POST me/goals/combined; this endpoint no longer creates goals itself.
