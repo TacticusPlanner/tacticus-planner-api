@@ -13,8 +13,8 @@ using TacticusPlanner.Persistence;
 namespace TacticusPlanner.Persistence.Migrations
 {
     [DbContext(typeof(PlannerDbContext))]
-    [Migration("20260715215336_GoalsAdjustments")]
-    partial class GoalsAdjustments
+    [Migration("20260722165747_AddGoalsProjectsAndProgress")]
+    partial class AddGoalsProjectsAndProgress
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -121,6 +121,11 @@ namespace TacticusPlanner.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ProfileId");
+
+                    b.HasIndex("ProfileId", "EntityType", "EntityId", "GoalType")
+                        .IsUnique()
+                        .HasDatabaseName("ix_goals_one_active_or_paused_per_entity_and_type")
+                        .HasFilter("status IN ('Active', 'Paused')");
 
                     b.ToTable("goals", (string)null);
                 });
@@ -604,14 +609,40 @@ namespace TacticusPlanner.Persistence.Migrations
                                     b2.PrimitiveCollection<string>("MythicShardBattleIds")
                                         .IsRequired();
 
-                                    b2.Property<int>("OnslaughtSector");
-
-                                    b2.Property<int>("OnslaughtTier");
-
                                     b2.PrimitiveCollection<string>("ShardBattleIds")
                                         .IsRequired();
 
                                     b2.Property<int>("Source");
+
+                                    b2.HasKey("GoalConfigGoalId");
+
+                                    b2.ToTable("goals");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("GoalConfigGoalId");
+                                });
+
+                            b1.OwnsOne("TacticusPlanner.Domain.Goals.EquipmentTarget", "Equipment", b2 =>
+                                {
+                                    b2.Property<Guid>("GoalConfigGoalId");
+
+                                    b2.Property<int>("TargetLevel");
+
+                                    b2.HasKey("GoalConfigGoalId");
+
+                                    b2.ToTable("goals");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("GoalConfigGoalId");
+                                });
+
+                            b1.OwnsOne("TacticusPlanner.Domain.Goals.LevelTarget", "Level", b2 =>
+                                {
+                                    b2.Property<Guid>("GoalConfigGoalId");
+
+                                    b2.Property<int>("End");
+
+                                    b2.Property<int>("Start");
 
                                     b2.HasKey("GoalConfigGoalId");
 
@@ -663,13 +694,53 @@ namespace TacticusPlanner.Persistence.Migrations
                                         .HasForeignKey("GoalConfigGoalId");
                                 });
 
+                            b1.OwnsOne("TacticusPlanner.Domain.Goals.UpgradeTarget", "Upgrade", b2 =>
+                                {
+                                    b2.Property<Guid>("GoalConfigGoalId");
+
+                                    b2.HasKey("GoalConfigGoalId");
+
+                                    b2.ToTable("goals");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("GoalConfigGoalId");
+
+                                    b2.OwnsMany("TacticusPlanner.Domain.Goals.UpgradeItemTarget", "Targets", b3 =>
+                                        {
+                                            b3.Property<Guid>("UpgradeTargetGoalConfigGoalId");
+
+                                            b3.Property<int>("__synthesizedOrdinal")
+                                                .ValueGeneratedOnAdd();
+
+                                            b3.Property<int>("Quantity");
+
+                                            b3.Property<string>("UpgradeId")
+                                                .IsRequired();
+
+                                            b3.HasKey("UpgradeTargetGoalConfigGoalId", "__synthesizedOrdinal");
+
+                                            b3.ToTable("goals");
+
+                                            b3.WithOwner()
+                                                .HasForeignKey("UpgradeTargetGoalConfigGoalId");
+                                        });
+
+                                    b2.Navigation("Targets");
+                                });
+
                             b1.Navigation("Ability");
 
                             b1.Navigation("AscensionFarming");
 
+                            b1.Navigation("Equipment");
+
+                            b1.Navigation("Level");
+
                             b1.Navigation("Progression");
 
                             b1.Navigation("Rank");
+
+                            b1.Navigation("Upgrade");
                         });
 
                     b.OwnsMany("TacticusPlanner.Domain.Goals.GoalEvent", "Events", b1 =>
@@ -899,24 +970,56 @@ namespace TacticusPlanner.Persistence.Migrations
                                 .HasForeignKey("PlayerDataOverrideId");
                         });
 
-                    b.OwnsMany("TacticusPlanner.Domain.PlayerData.CampaignProgressOverrideRecord", "CampaignProgressOverrides", b1 =>
+                    b.OwnsMany("TacticusPlanner.Domain.PlayerData.CampaignEventProgressOverrideRecord", "CampaignEventProgressOverrides", b1 =>
                         {
                             b1.Property<Guid>("PlayerDataOverrideId");
 
                             b1.Property<int>("__synthesizedOrdinal")
                                 .ValueGeneratedOnAdd();
 
-                            b1.Property<string>("CatalogCampaignGroupId")
+                            b1.Property<string>("CampaignGroupId")
                                 .IsRequired();
 
-                            b1.Property<int>("HighestCompletedNodeNumber");
+                            b1.Property<int?>("CompletedBattleCount");
+
+                            b1.PrimitiveCollection<string>("CompletedChallengeBattlesIds");
+
+                            b1.Property<string>("Type")
+                                .IsRequired();
 
                             b1.HasKey("PlayerDataOverrideId", "__synthesizedOrdinal");
 
                             b1.ToTable("player_data_overrides");
 
                             b1
-                                .ToJson("campaign_progress_overrides")
+                                .ToJson("campaign_event_progress_overrides")
+                                .HasColumnType("jsonb");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PlayerDataOverrideId");
+                        });
+
+                    b.OwnsMany("TacticusPlanner.Domain.PlayerData.OnslaughtProgressOverrideRecord", "OnslaughtProgressOverrides", b1 =>
+                        {
+                            b1.Property<Guid>("PlayerDataOverrideId");
+
+                            b1.Property<int>("__synthesizedOrdinal")
+                                .ValueGeneratedOnAdd();
+
+                            b1.Property<string>("Alliance")
+                                .IsRequired();
+
+                            b1.Property<string>("Sector")
+                                .IsRequired();
+
+                            b1.Property<int>("Tier");
+
+                            b1.HasKey("PlayerDataOverrideId", "__synthesizedOrdinal");
+
+                            b1.ToTable("player_data_overrides");
+
+                            b1
+                                .ToJson("onslaught_progress_overrides")
                                 .HasColumnType("jsonb");
 
                             b1.WithOwner()
@@ -925,7 +1028,9 @@ namespace TacticusPlanner.Persistence.Migrations
 
                     b.Navigation("BattleResultOverrides");
 
-                    b.Navigation("CampaignProgressOverrides");
+                    b.Navigation("CampaignEventProgressOverrides");
+
+                    b.Navigation("OnslaughtProgressOverrides");
 
                     b.Navigation("Profile");
                 });
@@ -937,6 +1042,63 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasForeignKey("TacticusPlanner.Domain.PlayerData.PlayerDataSnapshot", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.CampaignEventProgressRecord", "CampaignEventsProgress", b1 =>
+                        {
+                            b1.Property<Guid>("PlayerDataSnapshotId");
+
+                            b1.Property<int>("__synthesizedOrdinal")
+                                .ValueGeneratedOnAdd();
+
+                            b1.Property<int>("CompletedBattleCount");
+
+                            b1.PrimitiveCollection<string>("CompletedChallengeBattlesIds")
+                                .IsRequired();
+
+                            b1.Property<string>("TacticusCampaignId")
+                                .IsRequired();
+
+                            b1.Property<string>("Type")
+                                .IsRequired();
+
+                            b1.HasKey("PlayerDataSnapshotId", "__synthesizedOrdinal");
+
+                            b1.ToTable("player_data_snapshots");
+
+                            b1
+                                .ToJson("campaign_events_progress")
+                                .HasColumnType("jsonb");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PlayerDataSnapshotId");
+                        });
+
+                    b.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.CampaignProgressRecord", "CampaignProgress", b1 =>
+                        {
+                            b1.Property<Guid>("PlayerDataSnapshotId");
+
+                            b1.Property<int>("__synthesizedOrdinal")
+                                .ValueGeneratedOnAdd();
+
+                            b1.Property<int>("HighestCompletedBattleIndex");
+
+                            b1.Property<string>("TacticusCampaignId")
+                                .IsRequired();
+
+                            b1.Property<string>("Type")
+                                .IsRequired();
+
+                            b1.HasKey("PlayerDataSnapshotId", "__synthesizedOrdinal");
+
+                            b1.ToTable("player_data_snapshots");
+
+                            b1
+                                .ToJson("campaign_progress")
+                                .HasColumnType("jsonb");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PlayerDataSnapshotId");
+                        });
 
                     b.OwnsOne("TacticusPlanner.Domain.PlayerData.Chunks.InventoryChunk", "Inventory", b1 =>
                         {
@@ -1847,60 +2009,6 @@ namespace TacticusPlanner.Persistence.Migrations
                                 });
 
                             b1.Navigation("Abilities");
-                        });
-
-                    b.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.CampaignProgressRecord", "CampaignEventsProgress", b1 =>
-                        {
-                            b1.Property<Guid>("PlayerDataSnapshotId");
-
-                            b1.Property<int>("__synthesizedOrdinal")
-                                .ValueGeneratedOnAdd();
-
-                            b1.Property<int>("HighestCompletedBattleIndex");
-
-                            b1.Property<string>("TacticusCampaignId")
-                                .IsRequired();
-
-                            b1.Property<string>("Type")
-                                .IsRequired();
-
-                            b1.HasKey("PlayerDataSnapshotId", "__synthesizedOrdinal");
-
-                            b1.ToTable("player_data_snapshots");
-
-                            b1
-                                .ToJson("campaign_events_progress")
-                                .HasColumnType("jsonb");
-
-                            b1.WithOwner()
-                                .HasForeignKey("PlayerDataSnapshotId");
-                        });
-
-                    b.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.CampaignProgressRecord", "CampaignProgress", b1 =>
-                        {
-                            b1.Property<Guid>("PlayerDataSnapshotId");
-
-                            b1.Property<int>("__synthesizedOrdinal")
-                                .ValueGeneratedOnAdd();
-
-                            b1.Property<int>("HighestCompletedBattleIndex");
-
-                            b1.Property<string>("TacticusCampaignId")
-                                .IsRequired();
-
-                            b1.Property<string>("Type")
-                                .IsRequired();
-
-                            b1.HasKey("PlayerDataSnapshotId", "__synthesizedOrdinal");
-
-                            b1.ToTable("player_data_snapshots");
-
-                            b1
-                                .ToJson("campaign_progress")
-                                .HasColumnType("jsonb");
-
-                            b1.WithOwner()
-                                .HasForeignKey("PlayerDataSnapshotId");
                         });
 
                     b.Navigation("CampaignEventsProgress");
