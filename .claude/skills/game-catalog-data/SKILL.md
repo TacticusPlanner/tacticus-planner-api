@@ -37,14 +37,22 @@ never joins). The served data carries only **structural/identity** fields: prese
   → one endpoint per served entity; manifest in `GetGameCatalogManifestEndpoint` (returns the domain
   `GameCatalogManifest`). All catalog endpoints are `AllowAnonymous()` (static public data).
 
-## The 11 served datasets
-`characters`, `npcs`, `mows`, `mow-upgrade-costs`, `upgrades`, `equipment`, `campaign-battles`,
-`campaign-definitions`, `lres`, `lre-battles`, `lre-common`. Each served at `/api/v1/game-catalog/{key}` in a
+## The 14 served datasets
+`characters`, `npcs`, `mows`, `mow-upgrade-costs`, `ascension-costs`, `unlock-shard-costs`,
+`onslaught-rewards`, `upgrades`, `equipment`, `campaign-battles`, `campaign-definitions`, `lres`,
+`lre-battles`, `lre-common` (`GameCatalogDatasets.Served`). Each served at `/api/v1/game-catalog/{key}` in a
 `GameCatalogDatasetEnvelope<T>` (version/schemaVersion/gameVersion/sourceHash/datasetKey/datasetHash/data).
 
 Non-obvious shapes:
 - **mows** is a plain array; the shared upgrade-cost ladder is its own dataset **`mow-upgrade-costs`**,
   keyed by the ability **level** it raises a MoW to (`level = rawIndex + 2`; level 1 is free).
+- **ascension-costs** is the shared 20-step `(rarity, stars)` ladder — one shared progression, so served
+  as its own dataset rather than inlined per character (ported from V1's `charsProgression`, reconciled
+  against `OrbAscensionCalculator.UPGRADE_PATH`; the two V1 sources disagreed only at
+  `Mythic:MythicWings`, resolved to 25 orbs). **unlock-shard-costs** is the per-starting-rarity shard cost
+  to unlock a character (ported from V1's `charsUnlockShards`) — also a single shared table.
+- **onslaught-rewards** is keyed by sector+tier id; each entry carries a `regular` reward-range list plus
+  one `mythic` range (`{min, max}`, with a computed `midpoint`).
 - **upgrades** carry a **nested recipe** tree: each craftable ingredient embeds its own `recipe`
   (recursively; cycle-guarded); base materials have `recipe: null`. No separate "expanded totals" table.
 - **equipment** is a plain array, each item carrying its matched per-rarity cost ladder inlined as
