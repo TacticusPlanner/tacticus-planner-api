@@ -384,6 +384,68 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     }
 
     [Theory]
+    [InlineData("0", "rank")]
+    [InlineData("999", "rank")]
+    [InlineData("character", "0")]
+    [InlineData("character", "999")]
+    public async Task CreateGoalUndefinedNumericEnumIsRejected(string entityType, string goalType)
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            RankGoal with { EntityType = entityType, GoalType = goalType },
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task CreateGoalUndefinedNumericFarmingStrategyIsRejected()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            RankGoal with { Config = RankGoal.Config with { FarmingStrategy = "0" } },
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task CreateAscensionGoalWithNullBattleCollectionIsRejected(bool nullRegular)
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var farming = new AscensionFarmingRequest(
+            "Campaign",
+            nullRegular ? null! : [],
+            nullRegular ? [] : null!
+        );
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            new CreateGoalRequest(
+                "character",
+                "blackTerminator",
+                "ascension",
+                new CreateGoalConfigRequest(
+                    Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar"),
+                    AscensionFarming: farming
+                ),
+                null
+            ),
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Theory]
     [InlineData("upgrade", "rank")]
     [InlineData("character", "material")]
     [InlineData("mow", "rank")]
@@ -477,6 +539,50 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         var response = await client.PostAsJsonAsync(
             $"/api/v1/me/goals/{created.GoalId}/status",
             new UpdateGoalStatusRequest("not-a-status"),
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task UpdateGoalStatusUndefinedNumericStatusIsRejected()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var created = await CreateGoalAsync(client);
+
+        var response = await client.PostAsJsonAsync(
+            $"/api/v1/me/goals/{created.GoalId}/status",
+            new UpdateGoalStatusRequest("0"),
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task UpdateGoalRejectsUnsupportedFarmingStrategyForGoalType()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var createResponse = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            new CreateGoalRequest(
+                "character",
+                "blackTerminator",
+                "level",
+                new CreateGoalConfigRequest(Level: new LevelTargetRequest(1, 10)),
+                null
+            ),
+            TestContext.Current.CancellationToken
+        );
+        createResponse.EnsureSuccessStatusCode();
+        var created = await createResponse.Content.ReadFromJsonAsync<GoalDetailResponse>(
+            TestContext.Current.CancellationToken);
+        Assert.NotNull(created);
+
+        var response = await client.PutAsJsonAsync(
+            $"/api/v1/me/goals/{created.GoalId}",
+            new UpdateGoalRequest(null, null, "EveryStep"),
             TestContext.Current.CancellationToken
         );
 

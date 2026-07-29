@@ -15,11 +15,15 @@ public sealed class CreateGoalValidator : Validator<CreateGoalRequest>
     public CreateGoalValidator()
     {
         RuleFor(request => request.EntityType)
-            .Must(value => Enum.TryParse<GoalEntityType>(value, ignoreCase: true, out _))
+            .Must(value => Enum.TryParse<GoalEntityType>(value, ignoreCase: true, out var parsed)
+                && Enum.IsDefined(parsed)
+                && !int.TryParse(value, out _))
             .WithMessage("Unknown entity type.");
 
         RuleFor(request => request.GoalType)
-            .Must(value => Enum.TryParse<GoalType>(value, ignoreCase: true, out _))
+            .Must(value => Enum.TryParse<GoalType>(value, ignoreCase: true, out var parsed)
+                && Enum.IsDefined(parsed)
+                && !int.TryParse(value, out _))
             .WithMessage("Unknown or not-yet-supported goal type.");
 
         RuleFor(request => request.EntityId)
@@ -70,13 +74,19 @@ public sealed class CreateGoalValidator : Validator<CreateGoalRequest>
     {
         if (config is null) return true; // NotNull() reports the missing config
         if (config.FarmingStrategy is not null
-            && !Enum.TryParse<FarmingStrategy>(config.FarmingStrategy, ignoreCase: true, out _))
+            && (!Enum.TryParse<FarmingStrategy>(config.FarmingStrategy, ignoreCase: true, out var strategy)
+                || !Enum.IsDefined(strategy)
+                || int.TryParse(config.FarmingStrategy, out _)))
         {
             return false;
         }
 
         var farming = config.AscensionFarming;
         return farming is null
-            || Enum.TryParse<AscensionFarmingSource>(farming.Source, ignoreCase: true, out _);
+            || (farming.ShardBattleIds is not null
+                && farming.MythicShardBattleIds is not null
+                && Enum.TryParse<AscensionFarmingSource>(farming.Source, ignoreCase: true, out var source)
+                && Enum.IsDefined(source)
+                && !int.TryParse(farming.Source, out _));
     }
 }

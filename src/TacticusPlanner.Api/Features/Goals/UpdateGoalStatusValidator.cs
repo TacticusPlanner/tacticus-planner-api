@@ -19,6 +19,8 @@ public sealed class UpdateGoalStatusValidator : Validator<UpdateGoalStatusReques
     {
         RuleFor(request => request.Status)
             .Must(value => Enum.TryParse<GoalStatus>(value, ignoreCase: true, out var status)
+                && Enum.IsDefined(status)
+                && !int.TryParse(value, out _)
                 && AllowedTargets.Contains(status))
             .WithMessage("Unknown or unsupported target status.");
     }

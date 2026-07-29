@@ -34,7 +34,9 @@ public sealed class UpdateGoalStatusEndpoint : Endpoint<UpdateGoalStatusRequest,
             return;
         }
 
-        if (!Enum.TryParse<GoalStatus>(req.Status, ignoreCase: true, out var targetStatus))
+        if (!Enum.TryParse<GoalStatus>(req.Status, ignoreCase: true, out var targetStatus)
+            || !Enum.IsDefined(targetStatus)
+            || int.TryParse(req.Status, out _))
         {
             AddError(request => request.Status, "Unknown or unsupported target status.");
             await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
