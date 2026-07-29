@@ -103,10 +103,17 @@ public sealed class OnslaughtProgressEndpointTests(PlannerApiFactory factory) : 
             "/api/v1/me/player-data-overrides/onslaught-progress",
             TestContext.Current.CancellationToken);
 
+        var firstUpdate = await client.PutAsJsonAsync(
+            "/api/v1/me/player-data-overrides/onslaught-progress",
+            new UpdateOnslaughtProgressRequest(
+                new("Stone", 1), new("Stone", 1), new("Stone", 1), current!.Revision),
+            TestContext.Current.CancellationToken);
+        firstUpdate.EnsureSuccessStatusCode();
+
         var response = await client.PutAsJsonAsync(
             "/api/v1/me/player-data-overrides/onslaught-progress",
             new UpdateOnslaughtProgressRequest(
-                new("Stone", 1), new("Stone", 1), new("Stone", 1), current!.Revision - 1),
+                new("Stone", 1), new("Stone", 1), new("Stone", 1), current.Revision),
             TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
