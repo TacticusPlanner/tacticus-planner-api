@@ -53,6 +53,31 @@ public sealed class UpdateGoalEndpoint : Endpoint<UpdateGoalRequest, GoalDetailR
             return;
         }
 
+        FarmingStrategy? farmingStrategy = null;
+        if (req.FarmingStrategy is not null)
+        {
+            if (!Enum.TryParse<FarmingStrategy>(req.FarmingStrategy, ignoreCase: true, out var parsedStrategy)
+                || !Enum.IsDefined(parsedStrategy)
+                || int.TryParse(req.FarmingStrategy, out _))
+            {
+                AddError(request => request.FarmingStrategy, "Unknown farming strategy.");
+                await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+                return;
+            }
+
+            if (parsedStrategy != FarmingStrategy.TotalUpgrades
+                && goal.GoalType != GoalType.Rank
+                && !(goal.GoalType == GoalType.Ability && goal.EntityType == GoalEntityType.Mow))
+            {
+                AddError(request => request.FarmingStrategy,
+                    "Farming strategy is supported only for Character Rank and Machine of War Ability goals.");
+                await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+                return;
+            }
+
+            farmingStrategy = parsedStrategy;
+        }
+
         var farmingLocationIds = req.FarmingLocationIds?.Select(id => id.Value).ToList();
         if (Resolve<GoalTargetValidationService>()
             .ValidateFarmingLocationOverride(goal.GoalType, goal.EntityId, farmingLocationIds) is { } farmingError)
@@ -64,9 +89,9 @@ public sealed class UpdateGoalEndpoint : Endpoint<UpdateGoalRequest, GoalDetailR
 
         goal.Notes = req.Notes;
         goal.Config.FarmingLocationIds = farmingLocationIds;
-        if (req.FarmingStrategy is not null)
+        if (farmingStrategy is not null)
         {
-            goal.Config.FarmingStrategy = Enum.Parse<FarmingStrategy>(req.FarmingStrategy, ignoreCase: true);
+            goal.Config.FarmingStrategy = farmingStrategy.Value;
         }
 
         await db.SaveChangesAsync(ct);
@@ -90,7 +115,10 @@ public sealed class UpdateGoalValidator : Validator<UpdateGoalRequest>
             .MaximumLength(GoalValidation.MaxNotesLength);
 
         RuleFor(request => request.FarmingStrategy)
-            .Must(value => value is null || Enum.TryParse<FarmingStrategy>(value, ignoreCase: true, out _))
+            .Must(value => value is null
+                || (Enum.TryParse<FarmingStrategy>(value, ignoreCase: true, out var parsed)
+                    && Enum.IsDefined(parsed)
+                    && !int.TryParse(value, out _)))
             .WithMessage("Unknown farming strategy.");
     }
 }
