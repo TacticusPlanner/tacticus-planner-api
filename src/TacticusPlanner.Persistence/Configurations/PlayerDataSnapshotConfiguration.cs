@@ -15,18 +15,17 @@ public sealed class PlayerDataSnapshotConfiguration : IEntityTypeConfiguration<P
         builder.HasKey(entity => entity.Id);
 
         builder.Property(entity => entity.Id)
-            .HasColumnName("profile_id")
             .HasVogenConversion()
             .ValueGeneratedNever();
 
-        builder.Property(entity => entity.ConfigHash).HasColumnName("config_hash").IsRequired();
-        builder.Property(entity => entity.TacticusLastUpdatedOn).HasColumnName("tacticus_last_updated_on");
-        builder.Property(entity => entity.SourceHash).HasColumnName("source_hash").IsRequired();
-        builder.Property(entity => entity.SchemaVersion).HasColumnName("schema_version");
-        builder.Property(entity => entity.SyncedAt).HasColumnName("synced_at").IsRequired();
-        builder.Property(entity => entity.Revision).HasColumnName("revision").IsConcurrencyToken();
-        builder.Property(entity => entity.CreatedAt).HasColumnName("created_at").IsRequired();
-        builder.Property(entity => entity.UpdatedAt).HasColumnName("updated_at").IsRequired();
+        builder.Property(entity => entity.ConfigHash).IsRequired();
+        builder.Property(entity => entity.TacticusLastUpdatedOn);
+        builder.Property(entity => entity.SourceHash).IsRequired();
+        builder.Property(entity => entity.SchemaVersion);
+        builder.Property(entity => entity.SyncedAt).IsRequired();
+        builder.Property(entity => entity.Revision).IsConcurrencyToken();
+        builder.Property(entity => entity.CreatedAt).IsRequired();
+        builder.Property(entity => entity.UpdatedAt).IsRequired();
 
         // A flat string dictionary, not an owned object graph — mapped via converter rather than
         // OwnsOne/ToJson, which is reserved for the structured chunk payloads below.
@@ -38,7 +37,6 @@ public sealed class PlayerDataSnapshotConfiguration : IEntityTypeConfiguration<P
             value => new Dictionary<string, string>(value));
 
         builder.Property(entity => entity.ChunkHashes)
-            .HasColumnName("chunk_hashes")
             .HasColumnType("jsonb")
             .HasConversion(
                 new ValueConverter<Dictionary<string, string>, string>(
@@ -48,7 +46,11 @@ public sealed class PlayerDataSnapshotConfiguration : IEntityTypeConfiguration<P
             .Metadata.SetValueComparer(chunkHashesComparer);
 
         // Each chunk below is its own jsonb column via EF Core's JSON owned-entity mapping
-        // (OwnsOne/OwnsMany + ToJson()) rather than a hand-serialized string, per ADR 0002/0007.
+        // (OwnsOne/OwnsMany + ToJson()) rather than a hand-serialized string, per ADR 0002/0007. Staying
+        // on OwnsOne/OwnsMany rather than EF Core 10's ComplexProperty/ComplexCollection: the latter's
+        // ToJson() compiles but 500s at query time against this stack for even the simplest flat
+        // collection (confirmed empirically — see GoalConfiguration.Events' comment), so it's not worth
+        // risking on this file's much deeper nesting.
 
         builder.OwnsOne(entity => entity.PlayerDetails, chunk => chunk.ToJson("player_details"));
 

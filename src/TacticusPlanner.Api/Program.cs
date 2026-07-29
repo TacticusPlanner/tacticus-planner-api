@@ -5,11 +5,14 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
+using TacticusPlanner.Api;
 using TacticusPlanner.Api.Features;
 using TacticusPlanner.Api.Features.AccountManagement;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Api.Features.Guilds;
 using TacticusPlanner.Api.Features.PlayerData;
+using TacticusPlanner.Api.Features.Projects;
 using TacticusPlanner.Api.Features.TacticusIntegration;
 using TacticusPlanner.Api.Features.V1Import;
 using TacticusPlanner.Api.Http;
@@ -25,11 +28,36 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 builder.Services.AddSingleton(TimeProvider.System);
 builder.Services.AddSingleton<EntityMetadataInterceptor>();
+builder.Services.AddHttpContextAccessor();
+// PlannerDbContext is pooled (AddNpgsqlDbContext below) and so cannot depend on a scoped service; this
+// singleton resolves the current request's profile via IHttpContextAccessor instead — see
+// ICurrentProfileProvider and PlannerDbContext.ApplyProfileQueryFilters for the global tenant-isolation
+// filters this feeds.
+builder.Services.AddSingleton<ICurrentProfileProvider, HttpContextCurrentProfileProvider>();
 builder.AddNpgsqlDbContext<PlannerDbContext>("planner-db");
 builder.Services.ConfigureDbContext<PlannerDbContext>((sp, options) =>
 {
     options.AddInterceptors(sp.GetRequiredService<EntityMetadataInterceptor>());
+
+    // Global snake_case convention (EFCore.NamingConventions) — every explicit HasColumnName in the
+    // Configurations/ classes exists only where it deviates from this (there are none left; it's relied
+    // on for all of them). Without this, columns silently revert to PascalCase. Configured here, not in
+    // PlannerDbContext.OnConfiguring — that method cannot modify options when the context is pooled (see
+    // AddNpgsqlDbContext above), which is exactly what this codepath is.
+    options.UseSnakeCaseNamingConvention();
 });
+
+// The build-time OpenAPI tool starts the host only to inspect endpoint metadata and has no database
+// connection. Every actual API host, in every environment, registers the migration startup service.
+var processAssembly = Path.GetFileName(Environment.GetCommandLineArgs()[0]);
+var isOpenApiDocumentGeneration = processAssembly.StartsWith(
+    "GetDocument.",
+    StringComparison.OrdinalIgnoreCase
+);
+if (!isOpenApiDocumentGeneration)
+{
+    builder.Services.AddHostedService<DatabaseMigrationHostedService>();
+}
 
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
@@ -40,7 +68,10 @@ builder.Services.AddSingleton<IColumnEncryptionService, AesGcmColumnEncryptionSe
 builder.Services.AddSingleton<IColumnHashService, HmacColumnHashService>();
 builder.Services.AddScoped<TacticusApiKeyValidator>();
 builder.Services.AddScoped<PlayerDataTransformer>();
+builder.Services.AddScoped<GoalTargetValidationService>();
 builder.Services.AddScoped<GuildSyncService>();
+builder.Services.AddScoped<V1GoalImportService>();
+builder.Services.AddScoped<ProjectsService>();
 builder.Services.AddSingleton<IExternalIdentityDeleter, NoOpExternalIdentityDeleter>();
 builder.Services.AddGameCatalog();
 builder.Services.AddTacticusApi(builder.Configuration["TacticusApi:BaseUrl"]);
@@ -118,23 +149,6 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-if ((app.Environment.IsStaging() || app.Environment.IsProduction())
-    && app.Configuration.GetValue<bool>("Database:ApplyMigrationsOnStartup"))
-{
-    await using var scope = app.Services.CreateAsyncScope();
-    var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
-    var logger = scope.ServiceProvider
-        .GetRequiredService<ILoggerFactory>()
-        .CreateLogger("DatabaseMigration");
-    var environmentName = app.Environment.EnvironmentName;
-
-    ApplyingDatabaseMigrations(logger, environmentName);
-
-    await db.Database.MigrateAsync();
-
-    DatabaseMigrationsApplied(logger, environmentName);
-}
-
 app.UseExceptionHandler();
 app.UseCors("Frontend");
 app.UseAuthentication();
@@ -175,20 +189,4 @@ _ = app.Services.GetRequiredService<IGameCatalogProvider>();
 
 app.Run();
 
-public partial class Program
-{
-    [LoggerMessage(
-        EventId = 2,
-        Level = LogLevel.Information,
-        Message = "Applying database migrations for {EnvironmentName}."
-    )]
-    private static partial void ApplyingDatabaseMigrations(ILogger logger, string environmentName);
-
-    [LoggerMessage(
-        EventId = 3,
-        Level = LogLevel.Information,
-        Message = "Database migrations applied for {EnvironmentName}."
-    )]
-    private static partial void DatabaseMigrationsApplied(ILogger logger, string environmentName);
-
-}
+public partial class Program;

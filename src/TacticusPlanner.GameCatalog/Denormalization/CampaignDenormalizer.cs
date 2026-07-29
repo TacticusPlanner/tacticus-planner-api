@@ -59,6 +59,7 @@ internal static partial class GameCatalogDenormalizer
             battle.EnergyCost,
             battle.NodeNumber,
             battle.Slots,
+            DailyAttemptsForType(battle.Type),
             new GameCatalogCampaignRewardsView(battle.Rewards.Guaranteed, potential),
             battle.EnemyPower,
             battle.EnemiesAlliances,
@@ -67,4 +68,12 @@ internal static partial class GameCatalogDenormalizer
             battle.EnemiesTypes,
             battle.DetailedEnemyTypes);
     }
+
+    // Fixed daily attempt caps per Tacticus campaign type (product-confirmed): Elite/EliteMirror nodes
+    // cap at 6 attempts/day, every other type (Standard/Mirror/Extremis) caps at 10.
+    private static int DailyAttemptsForType(string type) => type switch
+    {
+        "Elite" or "EliteMirror" => 6,
+        _ => 10,
+    };
 }

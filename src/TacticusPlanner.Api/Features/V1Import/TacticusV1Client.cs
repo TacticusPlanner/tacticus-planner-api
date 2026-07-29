@@ -1,4 +1,5 @@
 using System.Net.Http.Headers;
+using System.Text.Json;
 
 namespace TacticusPlanner.Api.Features.V1Import;
 
@@ -14,11 +15,81 @@ public interface ITacticusV1Client
     Task<TacticusV1Profile?> GetProfileAsync(string accessToken, CancellationToken cancellationToken);
 }
 
-public sealed record TacticusV1Profile(string? TacticusApiKey, string? TacticusUserId);
+public sealed record TacticusV1Profile(
+    string? TacticusApiKey,
+    string? TacticusUserId,
+    string? GuildApiKey,
+    IReadOnlyList<V1Goal> Goals,
+    V1OnslaughtImportData OnslaughtProgress,
+    V1CampaignEventProgressImportData CampaignEventProgress
+)
+{
+    public TacticusV1Profile(string? tacticusApiKey, string? tacticusUserId)
+        : this(tacticusApiKey, tacticusUserId, null, [], V1OnslaughtImportData.Missing(),
+            V1CampaignEventProgressImportData.Missing())
+    {
+    }
+}
+
+public sealed record V1CampaignEventProgress(string CampaignGroupId, string Type, int CompletedBattleCount);
+
+public sealed record V1CampaignEventProgressImportData(
+    bool IsPresent,
+    IReadOnlyList<V1CampaignEventProgress>? Progress)
+{
+    public static V1CampaignEventProgressImportData Missing() => new(false, null);
+
+    public static V1CampaignEventProgressImportData Invalid() => new(true, null);
+
+    public static V1CampaignEventProgressImportData Valid(IReadOnlyList<V1CampaignEventProgress> progress) =>
+        new(true, progress);
+}
+
+public sealed record V1OnslaughtAllianceProgress(string Sector, int Tier);
+
+public sealed record V1OnslaughtProgress(
+    V1OnslaughtAllianceProgress Imperial,
+    V1OnslaughtAllianceProgress Xenos,
+    V1OnslaughtAllianceProgress Chaos
+);
+
+/// <summary>Distinguishes a profile with no legacy Onslaught field from one whose field exists but
+/// cannot be parsed. The import endpoint reports those cases as Skipped and Failed respectively.</summary>
+public sealed record V1OnslaughtImportData(bool IsPresent, V1OnslaughtProgress? Progress)
+{
+    public static V1OnslaughtImportData Missing() => new(false, null);
+
+    public static V1OnslaughtImportData Invalid() => new(true, null);
+
+    public static V1OnslaughtImportData Valid(V1OnslaughtProgress progress) => new(true, progress);
+}
+
+public sealed record V1Goal(
+    string? Id,
+    string? Character,
+    int Type,
+    int Priority,
+    bool DailyRaids,
+    string? Notes,
+    int? StartingRank,
+    bool? StartingRankPoint5,
+    int? StartingRankAppliedUpgrades,
+    int? TargetRank,
+    bool? RankPoint5,
+    int? RankAppliedUpgrades,
+    int? StartingRarity,
+    int? StartingStars,
+    int? TargetRarity,
+    int? TargetStars,
+    string? UnitId,
+    int? FirstAbilityLevel,
+    int? SecondAbilityLevel
+);
 
 public sealed class TacticusV1Client(IHttpClientFactory httpClientFactory) : ITacticusV1Client
 {
     public const string HttpClientName = "TacticusV1";
+    private static readonly JsonSerializerOptions WebJsonOptions = new(JsonSerializerDefaults.Web);
 
     public async Task<string?> LoginAsync(string username, string password, CancellationToken cancellationToken)
     {
@@ -54,7 +125,9 @@ public sealed class TacticusV1Client(IHttpClientFactory httpClientFactory) : ITa
             return null;
         }
 
-        var payload = await response.Content.ReadFromJsonAsync<V1UserDataResponse>(cancellationToken);
+        // The whole envelope — including the nested "data" object — is deserialized once here, directly
+        // into the typed V1UserDataResponse/V1UserData graph below; nothing downstream re-parses raw JSON.
+        var payload = await response.Content.ReadFromJsonAsync<V1UserDataResponse>(WebJsonOptions, cancellationToken);
 
         if (payload is null)
         {
@@ -63,17 +136,136 @@ public sealed class TacticusV1Client(IHttpClientFactory httpClientFactory) : ITa
 
         return new TacticusV1Profile(
             string.IsNullOrWhiteSpace(payload.TacticusApiKey) ? null : payload.TacticusApiKey,
-            string.IsNullOrWhiteSpace(payload.TacticusUserId) ? null : payload.TacticusUserId
+            string.IsNullOrWhiteSpace(payload.TacticusUserId) ? null : payload.TacticusUserId,
+            string.IsNullOrWhiteSpace(payload.TacticusGuildApiKey) ? null : payload.TacticusGuildApiKey,
+            ReadGoals(payload.Data),
+            ReadOnslaughtProgress(payload.Data),
+            ReadCampaignEventProgress(payload.Data)
         );
     }
+
+    private static List<V1Goal> ReadGoals(V1UserData? data) => data?.Goals ?? [];
+
+    internal static V1OnslaughtImportData ReadOnslaughtProgress(V1UserData? data)
+    {
+        if (data?.OnslaughtPreferences is not { } preferences)
+        {
+            return V1OnslaughtImportData.Missing();
+        }
+
+        if (!TryReadAlliance(preferences.Imperial, out var imperial)
+            || !TryReadAlliance(preferences.Xenos, out var xenos)
+            || !TryReadAlliance(preferences.Chaos, out var chaos))
+        {
+            return V1OnslaughtImportData.Invalid();
+        }
+
+        return V1OnslaughtImportData.Valid(new V1OnslaughtProgress(imperial, xenos, chaos));
+    }
+
+    internal static V1CampaignEventProgressImportData ReadCampaignEventProgress(V1UserData? data)
+    {
+        if (data?.CampaignsProgress is not { } campaignsProgress)
+        {
+            return V1CampaignEventProgressImportData.Missing();
+        }
+
+        var result = new List<V1CampaignEventProgress>();
+        foreach (var mapping in V1CampaignEventMappings)
+        {
+            // Matched case-insensitively — same tolerance the old JsonElement walk had for the V1
+            // backend's key casing.
+            var match = campaignsProgress.FirstOrDefault(kvp =>
+                string.Equals(kvp.Key, mapping.V1Key, StringComparison.OrdinalIgnoreCase));
+            if (match.Key is null)
+            {
+                continue;
+            }
+
+            var completed = match.Value;
+            if (completed is < 0 or > 30)
+            {
+                return V1CampaignEventProgressImportData.Invalid();
+            }
+
+            result.Add(new V1CampaignEventProgress(mapping.CampaignGroupId, mapping.Type, completed));
+        }
+
+        return result.Count == 0
+            ? V1CampaignEventProgressImportData.Missing()
+            : V1CampaignEventProgressImportData.Valid(result);
+    }
+
+    private static bool TryReadAlliance(V1OnslaughtAllianceData? allianceData, out V1OnslaughtAllianceProgress progress)
+    {
+        progress = null!;
+        if (allianceData is not { Sector: { } sector, Tier: { } tier })
+        {
+            return false;
+        }
+
+        var normalizedSector = SupportedOnslaughtSectors.FirstOrDefault(candidate =>
+            string.Equals(candidate, sector, StringComparison.OrdinalIgnoreCase));
+        if (normalizedSector is null || tier is < 1 or > 4)
+        {
+            return false;
+        }
+
+        progress = new V1OnslaughtAllianceProgress(normalizedSector, tier);
+        return true;
+    }
+
+    private static readonly string[] SupportedOnslaughtSectors =
+        ["Stone", "Iron", "Bronze", "Silver", "Gold", "Diamond", "Adamantine"];
+
+    private static readonly (string V1Key, string CampaignGroupId, string Type)[] V1CampaignEventMappings =
+    [
+        ("Adeptus Mechanicus Standard", "eventCampaign1", "Standard"),
+        ("Adeptus Mechanicus Extremis", "eventCampaign1", "Extremis"),
+        ("Tyranids Standard", "eventCampaign2", "Standard"),
+        ("Tyranids Extremis", "eventCampaign2", "Extremis"),
+        ("T'au Empire Standard", "eventCampaign3", "Standard"),
+        ("T'au Empire Extremis", "eventCampaign3", "Extremis"),
+        ("Death Guard Standard", "eventCampaign4", "Standard"),
+        ("Death Guard Extremis", "eventCampaign4", "Extremis"),
+        ("Adepta Sororitas Standard", "eventCampaign5", "Standard"),
+        ("Adepta Sororitas Extremis", "eventCampaign5", "Extremis"),
+        ("Dark Angels Standard", "eventCampaign6", "Standard"),
+        ("Dark Angels Extremis", "eventCampaign6", "Extremis"),
+    ];
 
     private sealed record V1LoginRequest(string Username, string Password);
 
     private sealed record V1LoginResponse(string? AccessToken);
 
-    // The V1 `GET users/me` response carries many legacy planner fields; only these two are relevant to import.
-    private sealed record V1UserDataResponse(string? TacticusApiKey, string? TacticusUserId);
+    // The V1 `GET users/me` response carries integration fields plus the planner data used for
+    // selective goal and Onslaught-progress imports. Data is deserialized directly into V1UserData as
+    // part of this same envelope — no separate JsonElement walk downstream.
+    private sealed record V1UserDataResponse(
+        string? TacticusApiKey,
+        string? TacticusUserId,
+        string? TacticusGuildApiKey,
+        V1UserData? Data
+    );
 }
+
+/// <summary>The subset of the V1 `GET users/me` response's <c>data</c> blob this importer reads. Only
+/// <see cref="Goals"/>/<see cref="OnslaughtPreferences"/>/<see cref="CampaignsProgress"/> are modeled —
+/// V1's <c>data</c> object carries plenty else, silently ignored by System.Text.Json's default
+/// unmatched-property behavior.</summary>
+internal sealed record V1UserData(
+    List<V1Goal>? Goals,
+    V1OnslaughtPreferencesData? OnslaughtPreferences,
+    Dictionary<string, int>? CampaignsProgress
+);
+
+internal sealed record V1OnslaughtPreferencesData(
+    V1OnslaughtAllianceData? Imperial,
+    V1OnslaughtAllianceData? Xenos,
+    V1OnslaughtAllianceData? Chaos
+);
+
+internal sealed record V1OnslaughtAllianceData(string? Sector, int? Tier);
 
 public static class TacticusV1ClientRegistration
 {

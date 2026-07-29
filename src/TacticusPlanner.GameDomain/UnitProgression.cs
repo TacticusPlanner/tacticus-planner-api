@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace TacticusPlanner.Domain.PlayerData.Chunks;
+namespace TacticusPlanner.GameDomain;
 
 /// <summary>Star level: 0 = Common, 3 = Uncommon, 6 = Rare, 9 = Epic, 12 = Legendary — Tacticus's raw
 /// per-unit progressionIndex int is a direct 0-based index into this same 20-step (rarity, stars)

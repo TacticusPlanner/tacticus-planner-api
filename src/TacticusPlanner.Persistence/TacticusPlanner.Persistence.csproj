@@ -3,6 +3,7 @@
     <ProjectReference Include="..\TacticusPlanner.Domain\TacticusPlanner.Domain.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="EFCore.NamingConventions" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
       <PrivateAssets>all</PrivateAssets>

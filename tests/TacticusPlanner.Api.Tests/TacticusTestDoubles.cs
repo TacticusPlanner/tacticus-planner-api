@@ -224,10 +224,20 @@ internal sealed class FakeTacticusV1Client : ITacticusV1Client
     public const string ValidUsername = "v1-user";
     public const string ValidPassword = "v1-password";
     public const string UsernameWithoutTacticusKey = "v1-user-no-key";
+    public const string UsernameWithGoals = "v1-user-with-goals";
+    public const string UsernameWithOnslaught = "v1-user-with-onslaught";
+    public const string UsernameWithInvalidOnslaught = "v1-user-with-invalid-onslaught";
+    public const string UsernameWithCampaignEvents = "v1-user-with-campaign-events";
+    public const string UsernameWithInvalidCampaignEvents = "v1-user-with-invalid-campaign-events";
     public const string TacticusUserId = "v1-tacticus-user-id";
 
     private const string AccessToken = "v1-access-token-for-" + ValidUsername;
     private const string AccessTokenNoKey = "v1-access-token-for-" + UsernameWithoutTacticusKey;
+    private const string AccessTokenWithGoals = "v1-access-token-for-" + UsernameWithGoals;
+    private const string AccessTokenWithOnslaught = "v1-access-token-for-" + UsernameWithOnslaught;
+    private const string AccessTokenWithInvalidOnslaught = "v1-access-token-for-" + UsernameWithInvalidOnslaught;
+    private const string AccessTokenWithCampaignEvents = "v1-access-token-for-" + UsernameWithCampaignEvents;
+    private const string AccessTokenWithInvalidCampaignEvents = "v1-access-token-for-" + UsernameWithInvalidCampaignEvents;
 
     public Task<string?> LoginAsync(string username, string password, CancellationToken cancellationToken)
     {
@@ -240,6 +250,11 @@ internal sealed class FakeTacticusV1Client : ITacticusV1Client
         {
             ValidUsername => Task.FromResult<string?>(AccessToken),
             UsernameWithoutTacticusKey => Task.FromResult<string?>(AccessTokenNoKey),
+            UsernameWithGoals => Task.FromResult<string?>(AccessTokenWithGoals),
+            UsernameWithOnslaught => Task.FromResult<string?>(AccessTokenWithOnslaught),
+            UsernameWithInvalidOnslaught => Task.FromResult<string?>(AccessTokenWithInvalidOnslaught),
+            UsernameWithCampaignEvents => Task.FromResult<string?>(AccessTokenWithCampaignEvents),
+            UsernameWithInvalidCampaignEvents => Task.FromResult<string?>(AccessTokenWithInvalidCampaignEvents),
             _ => Task.FromResult<string?>(null),
         };
     }
@@ -252,6 +267,89 @@ internal sealed class FakeTacticusV1Client : ITacticusV1Client
                 new TacticusV1Profile(FakeTacticusApi.ValidKey, TacticusUserId)
             ),
             AccessTokenNoKey => Task.FromResult<TacticusV1Profile?>(new TacticusV1Profile(null, null)),
+            AccessTokenWithGoals => Task.FromResult<TacticusV1Profile?>(
+                new TacticusV1Profile(
+                    null,
+                    null,
+                    null,
+                    [
+                        new V1Goal(
+                            "rank-1",
+                            "Bellator",
+                            1,
+                            1,
+                            true,
+                            "Imported note",
+                            1,
+                            false,
+                            0,
+                            3,
+                            false,
+                            0,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null
+                        ),
+                        new V1Goal(
+                            "material-1",
+                            "Bellator",
+                            6,
+                            2,
+                            false,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null,
+                            null
+                        ),
+                    ],
+                    V1OnslaughtImportData.Missing(),
+                    V1CampaignEventProgressImportData.Missing()
+                )
+            ),
+            AccessTokenWithOnslaught => Task.FromResult<TacticusV1Profile?>(
+                new TacticusV1Profile(
+                    null,
+                    null,
+                    null,
+                    [],
+                    V1OnslaughtImportData.Valid(new V1OnslaughtProgress(
+                        new("Gold", 2),
+                        new("Diamond", 4),
+                        new("Silver", 3)
+                    )),
+                    V1CampaignEventProgressImportData.Missing()
+                )
+            ),
+            AccessTokenWithInvalidOnslaught => Task.FromResult<TacticusV1Profile?>(
+                new TacticusV1Profile(null, null, null, [], V1OnslaughtImportData.Invalid(),
+                    V1CampaignEventProgressImportData.Missing())
+            ),
+            AccessTokenWithCampaignEvents => Task.FromResult<TacticusV1Profile?>(
+                new TacticusV1Profile(null, null, null, [], V1OnslaughtImportData.Missing(),
+                    V1CampaignEventProgressImportData.Valid(
+                    [
+                        new("eventCampaign1", "Standard", 12),
+                        new("eventCampaign1", "Extremis", 7),
+                    ]))
+            ),
+            AccessTokenWithInvalidCampaignEvents => Task.FromResult<TacticusV1Profile?>(
+                new TacticusV1Profile(null, null, null, [], V1OnslaughtImportData.Missing(),
+                    V1CampaignEventProgressImportData.Invalid())
+            ),
             _ => Task.FromResult<TacticusV1Profile?>(null),
         };
     }

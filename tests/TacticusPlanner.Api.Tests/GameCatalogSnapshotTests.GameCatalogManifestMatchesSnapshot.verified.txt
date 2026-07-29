@@ -1,12 +1,17 @@
 ﻿{
   version: dev-2026-07-01,
-  schemaVersion: 1,
+  schemaVersion: 2,
   gameVersion: 1.40,
-  sourceHash: caf7fcc02885ba0e972f74c15b06db189c6341076b2cd1533354cdbef8e5e3db,
+  sourceHash: 8bdfd93847a6f089da2ee80b518e33127f2318bc9c0f6785e725827ab35cf47e,
   datasets: [
     {
+      key: ascension-costs,
+      hash: c94bf0b8e415a5a5632ddcfe709301add1684e1bfadfdd378a8f3479583c6ca1,
+      url: /api/v1/game-catalog/ascension-costs
+    },
+    {
       key: campaign-battles,
-      hash: 49fe7b7a3e3da0a14776f03bb3de59b9fce53dac119b42fc6da022c8163746c1,
+      hash: c92e7e728875fdd9b4be40d3fb63a78f855f008769647f3fc024dff056bcc4e7,
       url: /api/v1/game-catalog/campaign-battles
     },
     {
@@ -16,7 +21,7 @@
     },
     {
       key: characters,
-      hash: 9dc3b761b81a3692f645feda253a7f04997dc05e9ce3dbfb5fed06e9be94ea36,
+      hash: 3d325e7ff383d609053aa6b77e40e51cbfe1e684a8c71869749ddc2d468f6bb6,
       url: /api/v1/game-catalog/characters
     },
     {
@@ -41,7 +46,7 @@
     },
     {
       key: mow-upgrade-costs,
-      hash: f9edae42b150a95319c1e5725264a8fff950e42caa2914b17bc57e535f873ee7,
+      hash: 5898bc72fd3555d361903509c96b3a37f16c41af66c4b4e18cd8c1b008cf2b89,
       url: /api/v1/game-catalog/mow-upgrade-costs
     },
     {
@@ -55,8 +60,18 @@
       url: /api/v1/game-catalog/npcs
     },
     {
+      key: onslaught-rewards,
+      hash: ff136f21e52e557188b7b6c594901db3e809be287c8b61f902966e13d2ad87da,
+      url: /api/v1/game-catalog/onslaught-rewards
+    },
+    {
+      key: unlock-shard-costs,
+      hash: a5d83f0f0fc9cab6c1e4d64380b5ca3598818724696b197d0e544003fdcc45fb,
+      url: /api/v1/game-catalog/unlock-shard-costs
+    },
+    {
       key: upgrades,
-      hash: 6a814e2339308c25102506ac53cb7cbccb40b12d84392bca8c49a97e7335716f,
+      hash: 6d982263a690e5cd8b12d6d3d53eeb3c3c44ea0ff4bba30ebb5ff7d425ccf03f,
       url: /api/v1/game-catalog/upgrades
     }
   ]

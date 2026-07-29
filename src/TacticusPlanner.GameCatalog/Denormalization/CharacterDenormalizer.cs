@@ -60,7 +60,8 @@ internal static partial class GameCatalogDenormalizer
         var result = new List<GameCatalogFarmLocation>();
         foreach (var prefix in ShardPrefixes)
         {
-            foreach (var location in ResolveLocations(prefix + characterId, rewardLocations, dropChanceById))
+            var isMythic = prefix == "mythicShards_";
+            foreach (var location in ResolveLocations(prefix + characterId, rewardLocations, dropChanceById, isMythic))
             {
                 result.Add(location);
             }

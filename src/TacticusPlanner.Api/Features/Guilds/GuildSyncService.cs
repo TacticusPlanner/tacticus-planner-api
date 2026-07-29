@@ -27,7 +27,8 @@ public sealed class GuildSyncService(
         TacticusUserId callerTacticusUserId,
         string guildApiToken,
         bool persistToken,
-        CancellationToken ct
+        bool persistTokenOnlyIfNew = false,
+        CancellationToken ct = default
     )
     {
         if (!Guid.TryParse(callerTacticusUserId.Value, out var callerTacticusGuid))
@@ -101,7 +102,7 @@ public sealed class GuildSyncService(
         guild.Name = upstream.Name;
         guild.Level = upstream.Level;
 
-        if (persistToken)
+        if (persistToken && (!persistTokenOnlyIfNew || isNewGuild))
         {
             guild.GuildApiToken = guildApiToken;
             guild.ConfiguredByProfileId = callerProfileId;
@@ -136,7 +137,7 @@ public sealed class GuildSyncService(
         var callerId = TacticusUserId.From(callerTacticusGuid.ToString());
         var callerMember = guild.Members.First(member => member.TacticusUserId == callerId);
 
-        return new GuildSyncResult.Success(guild, callerMember);
+        return new GuildSyncResult.Success(guild, callerMember, isNewGuild);
     }
 
     private async Task LinkAndUpsertMembersAsync(
@@ -154,7 +155,12 @@ public sealed class GuildSyncService(
 
         // Loaded once per sync and matched in memory: byte[] equality does not translate cleanly to SQL,
         // and Planner's total linkable-profile count is modest, so this avoids one query per member.
+        // IgnoreQueryFilters: linking deliberately spans every profile, not just the caller's — guild
+        // membership is its own authorization boundary (see PlannerDbContext.ApplyProfileQueryFilters'
+        // note on Guild/GuildMember), so the global profile query filter must not narrow this to the
+        // caller alone.
         var linkableProfiles = await db.Profiles
+            .IgnoreQueryFilters()
             .AsNoTracking()
             .Where(profile => profile.TacticusUserIdHash != null)
             .Select(profile => new
@@ -181,9 +187,12 @@ public sealed class GuildSyncService(
 
         // The linked player-data snapshot name takes precedence over the profile's display name — see
         // Guild Phase 1 spec's name-resolution rule. Only non-empty synced names are considered.
+        // IgnoreQueryFilters: same reasoning as linkableProfiles above — these snapshots belong to other
+        // linked members, not the caller.
         var snapshotNamesByProfileId = linkedProfileIds.Count == 0
             ? new Dictionary<ProfileId, string>()
             : await db.PlayerDataSnapshots
+                .IgnoreQueryFilters()
                 .AsNoTracking()
                 .Where(snapshot => linkedProfileIds.Contains(snapshot.Id))
                 .Select(snapshot => new { snapshot.Id, snapshot.PlayerDetails.Name })
@@ -257,7 +266,7 @@ public sealed class GuildSyncService(
 /// HTTP status the Guild Phase 1 spec calls for instead of relying on exceptions for control flow.</summary>
 public abstract record GuildSyncResult
 {
-    public sealed record Success(Guild Guild, GuildMember CallerMember) : GuildSyncResult;
+    public sealed record Success(Guild Guild, GuildMember CallerMember, bool WasCreated) : GuildSyncResult;
 
     /// <summary>The caller's Tacticus User ID is missing/malformed — 400.</summary>
     public sealed record InvalidRequest(string Message) : GuildSyncResult;

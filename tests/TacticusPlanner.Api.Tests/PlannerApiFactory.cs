@@ -5,12 +5,16 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using TacticusPlanner.Api.Features.V1Import;
+using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Persistence;
 using TacticusPlanner.Persistence.Interceptors;
 using TacticusPlanner.TacticusApi;
@@ -46,6 +50,12 @@ public sealed class PlannerApiFactory : WebApplicationFactory<Program>
         });
         builder.ConfigureTestServices(services =>
         {
+            var migrationService = services.Single(descriptor =>
+                descriptor.ServiceType == typeof(IHostedService)
+                && descriptor.ImplementationType == typeof(DatabaseMigrationHostedService)
+            );
+            services.Remove(migrationService);
+
             services
                 .AddAuthentication(options =>
                 {
@@ -76,7 +86,11 @@ public sealed class PlannerApiFactory : WebApplicationFactory<Program>
             services.AddDbContext<PlannerDbContext>((sp, options) =>
             {
                 options.UseInMemoryDatabase(databaseName);
-                options.AddInterceptors(sp.GetRequiredService<EntityMetadataInterceptor>());
+                options.ReplaceService<IExecutionStrategyFactory, TrackingExecutionStrategyFactory>();
+                options.AddInterceptors(
+                    sp.GetRequiredService<EntityMetadataInterceptor>(),
+                    new ImportedGoalExecutionStrategyGuard()
+                );
             });
 
             services.RemoveAll<ITacticusApi>();
@@ -85,6 +99,80 @@ public sealed class PlannerApiFactory : WebApplicationFactory<Program>
             services.RemoveAll<ITacticusV1Client>();
             services.AddScoped<ITacticusV1Client, FakeTacticusV1Client>();
         });
+    }
+}
+
+/// <summary>
+/// Makes execution-strategy scope observable to the import regression guard while retaining the
+/// in-memory provider's no-retry behavior.
+/// </summary>
+internal sealed class TrackingExecutionStrategyFactory(ExecutionStrategyDependencies dependencies)
+    : IExecutionStrategyFactory
+{
+    public IExecutionStrategy Create() => new TrackingExecutionStrategy(dependencies.CurrentContext.Context);
+}
+
+internal sealed class TrackingExecutionStrategy(DbContext context) : IExecutionStrategy
+{
+    private static readonly AsyncLocal<int> Depth = new();
+
+    public static bool IsExecuting => Depth.Value > 0;
+
+    public bool RetriesOnFailure => false;
+
+    public TResult Execute<TState, TResult>(
+        TState state,
+        Func<DbContext, TState, TResult> operation,
+        Func<DbContext, TState, ExecutionResult<TResult>>? verifySucceeded)
+    {
+        Depth.Value++;
+        try
+        {
+            return operation(context, state);
+        }
+        finally
+        {
+            Depth.Value--;
+        }
+    }
+
+    public async Task<TResult> ExecuteAsync<TState, TResult>(
+        TState state,
+        Func<DbContext, TState, CancellationToken, Task<TResult>> operation,
+        Func<DbContext, TState, CancellationToken, Task<ExecutionResult<TResult>>>? verifySucceeded,
+        CancellationToken cancellationToken = default)
+    {
+        Depth.Value++;
+        try
+        {
+            return await operation(context, state, cancellationToken);
+        }
+        finally
+        {
+            Depth.Value--;
+        }
+    }
+}
+
+/// <summary>
+/// Fails the V1 fixture's imported-goal save unless it is inside the configured execution strategy.
+/// This reproduces the production constraint that the in-memory provider does not enforce itself.
+/// </summary>
+internal sealed class ImportedGoalExecutionStrategyGuard : SaveChangesInterceptor
+{
+    public override ValueTask<InterceptionResult<int>> SavingChangesAsync(
+        DbContextEventData eventData,
+        InterceptionResult<int> result,
+        CancellationToken cancellationToken = default)
+    {
+        var importsGoals = eventData.Context?.ChangeTracker.Entries<Goal>()
+            .Any(entry => entry.State == EntityState.Added && entry.Entity.Notes == "Imported note") == true;
+        if (importsGoals && !TrackingExecutionStrategy.IsExecuting)
+        {
+            throw new InvalidOperationException("Imported goals must be saved inside the configured execution strategy.");
+        }
+
+        return base.SavingChangesAsync(eventData, result, cancellationToken);
     }
 }
 

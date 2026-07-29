@@ -585,15 +585,23 @@
       "tacticusplanner.domain": {
         "type": "Project",
         "dependencies": {
+          "TacticusPlanner.GameDomain": "[1.0.0, )",
           "Vogen": "[8.0.5, )"
         }
       },
       "tacticusplanner.gamecatalog": {
+        "type": "Project",
+        "dependencies": {
+          "TacticusPlanner.GameDomain": "[1.0.0, )"
+        }
+      },
+      "tacticusplanner.gamedomain": {
         "type": "Project"
       },
       "tacticusplanner.persistence": {
         "type": "Project",
         "dependencies": {
+          "EFCore.NamingConventions": "[10.0.1, )",
           "Microsoft.EntityFrameworkCore": "[10.0.9, )",
           "Npgsql.EntityFrameworkCore.PostgreSQL": "[10.0.2, )",
           "TacticusPlanner.Domain": "[1.0.0, )",
@@ -618,6 +626,16 @@
         "dependencies": {
           "Refit": "[13.1.0, )",
           "Refit.HttpClientFactory": "[13.1.0, )"
+        }
+      },
+      "EFCore.NamingConventions": {
+        "type": "CentralTransitive",
+        "requested": "[10.0.1, )",
+        "resolved": "10.0.1",
+        "contentHash": "Xs5k8XfNKPkkQSkGmZkmDI1je0prLTdxse+s8PgTFZxyBrlrTLzTBUTVJtQKSsbvu4y+luAv8DdtO5SALJE++A==",
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore": "[10.0.1, 11.0.0)",
+          "Microsoft.EntityFrameworkCore.Relational": "[10.0.1, 11.0.0)"
         }
       },
       "Microsoft.EntityFrameworkCore": {

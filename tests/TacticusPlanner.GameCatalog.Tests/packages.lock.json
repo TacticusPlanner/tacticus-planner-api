@@ -181,8 +181,12 @@
       "tacticusplanner.gamecatalog": {
         "type": "Project",
         "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "[10.0.9, )"
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "[10.0.9, )",
+          "TacticusPlanner.GameDomain": "[1.0.0, )"
         }
+      },
+      "tacticusplanner.gamedomain": {
+        "type": "Project"
       },
       "Microsoft.Extensions.DependencyInjection.Abstractions": {
         "type": "CentralTransitive",

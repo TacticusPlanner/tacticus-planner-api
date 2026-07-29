@@ -60,7 +60,7 @@ public class PlayerDataSnapshot : BaseEntity<ProfileId>, IRevisionedEntity
 
     /// <summary>Limited-time campaign-event progress, kept separate from the always-available campaigns
     /// above (they rotate and are frequently absent from a given player's data).</summary>
-    public List<CampaignProgressRecord> CampaignEventsProgress { get; set; } = [];
+    public List<CampaignEventProgressRecord> CampaignEventsProgress { get; set; } = [];
 
     /// <summary>Often-changing data (battle attempts, active event id, game-mode tokens) — see
     /// <see cref="LiveProgressChunk"/>.</summary>

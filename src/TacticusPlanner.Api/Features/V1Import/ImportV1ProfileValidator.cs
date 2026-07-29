@@ -19,5 +19,16 @@ public sealed class ImportV1ProfileValidator : Validator<ImportV1ProfileRequest>
         RuleFor(request => request.Password)
             .NotEmpty()
             .WithMessage("The V1 username and password are required.");
+
+        RuleFor(request => request.Import)
+            .NotNull()
+            .Must(selection => selection is not null
+                && (selection.PersonalTacticusApiKey
+                    || selection.TacticusUserId
+                    || selection.GuildApiToken
+                    || selection.Goals
+                    || selection.OnslaughtProgress
+                    || selection.CampaignEventProgress))
+            .WithMessage("Select at least one V1 profile part to import.");
     }
 }

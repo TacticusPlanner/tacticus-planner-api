@@ -8,6 +8,9 @@ public static class GameCatalogDatasets
     public const string MowUpgradeCosts = "mow-upgrade-costs";
     public const string EquipmentUpgradeCosts = "equipment-upgrade-costs";
     public const string DropChances = "drop-chances";
+    public const string AscensionCosts = "ascension-costs";
+    public const string UnlockShardCosts = "unlock-shard-costs";
+    public const string OnslaughtRewards = "onslaught-rewards";
 
     // Route/key prefixes for the split dataset families.
     public const string UnitsPrefix = "units";
@@ -167,6 +170,9 @@ public static class GameCatalogDatasets
         MowUpgradeCosts,
         EquipmentUpgradeCosts,
         DropChances,
+        AscensionCosts,
+        UnlockShardCosts,
+        OnslaughtRewards,
         .. NpcFactions,
         .. EquipmentTypes,
         .. UpgradeRarities,
@@ -182,6 +188,12 @@ public static class GameCatalogDatasets
     // The shared mow upgrade-cost ladder, served as its own dataset (it is a single progression shared by
     // every mow, so it is not inlined per record).
     public const string MowUpgradeCostsServed = MowUpgradeCosts;
+    // The shared ascension-orb/shard cost ladder (one entry per progression step, keyed by the same
+    // "{Rarity}:{Stars}" strings the client's Progression type uses) and the per-rarity unlock-shard
+    // cost table — both single shared progressions, so served as their own datasets rather than inlined
+    // per character.
+    public const string AscensionCostsServed = AscensionCosts;
+    public const string UnlockShardCostsServed = UnlockShardCosts;
     public const string Upgrades = "upgrades";
     public const string Equipment = "equipment";
     // campaign-battles is keyed by battle id (each carries its campaignGroupId); campaign-definitions is
@@ -202,6 +214,9 @@ public static class GameCatalogDatasets
         Npcs,
         Mows,
         MowUpgradeCostsServed,
+        AscensionCostsServed,
+        UnlockShardCostsServed,
+        OnslaughtRewards,
         Upgrades,
         Equipment,
         CampaignBattles,

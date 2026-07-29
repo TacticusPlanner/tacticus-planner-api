@@ -12,14 +12,13 @@ public sealed class TacticusIntegrationConfiguration : IEntityTypeConfiguration<
         builder.HasKey(entity => entity.Id);
 
         builder.Property(entity => entity.Id)
-            .HasColumnName("profile_id")
             .HasVogenConversion()
             .ValueGeneratedNever();
-        builder.Property(entity => entity.TacticusApiKey).HasColumnName("tacticus_api_key");
-        builder.Property(entity => entity.TacticusSyncLastAttemptedAt).HasColumnName("tacticus_sync_last_attempted_at");
-        builder.Property(entity => entity.TacticusSyncLastSucceededAt).HasColumnName("tacticus_sync_last_succeeded_at");
-        builder.Property(entity => entity.CreatedAt).HasColumnName("created_at").IsRequired();
-        builder.Property(entity => entity.UpdatedAt).HasColumnName("updated_at").IsRequired();
+        builder.Property(entity => entity.TacticusApiKey);
+        builder.Property(entity => entity.TacticusSyncLastAttemptedAt);
+        builder.Property(entity => entity.TacticusSyncLastSucceededAt);
+        builder.Property(entity => entity.CreatedAt).IsRequired();
+        builder.Property(entity => entity.UpdatedAt).IsRequired();
 
         builder
             .HasOne(entity => entity.Profile)

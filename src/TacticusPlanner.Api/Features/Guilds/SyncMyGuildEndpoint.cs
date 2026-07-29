@@ -98,7 +98,7 @@ public sealed class SyncMyGuildEndpoint : EndpointWithoutRequest<RegisteredGuild
         }
 
         var result = await Resolve<GuildSyncService>()
-            .SynchronizeAsync(profileId, profile.TacticusUserId.Value, storedToken, persistToken: false, ct);
+            .SynchronizeAsync(profileId, profile.TacticusUserId.Value, storedToken, persistToken: false, ct: ct);
 
         if (result is GuildSyncResult.Success success)
         {

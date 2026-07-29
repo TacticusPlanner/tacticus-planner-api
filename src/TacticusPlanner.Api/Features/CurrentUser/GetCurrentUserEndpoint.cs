@@ -5,6 +5,7 @@ using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Api.Http;
 using TacticusPlanner.Domain.Accounts;
 using TacticusPlanner.Domain.Profiles;
+using TacticusPlanner.Domain.Projects;
 using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.CurrentUser;
@@ -66,6 +67,16 @@ public sealed class GetCurrentUserEndpoint : EndpointWithoutRequest<CurrentUserR
         CancellationToken ct
     )
     {
+        var profileId = ProfileId.From(Guid.CreateVersion7());
+        var defaultProject = new Project
+        {
+            Id = ProjectId.From(Guid.CreateVersion7()),
+            ProfileId = profileId,
+            Name = "My Goals",
+            Status = ProjectStatus.Active,
+            Type = ProjectType.Default,
+        };
+
         var account = new Account
         {
             Id = AccountId.From(Guid.CreateVersion7()),
@@ -73,12 +84,14 @@ public sealed class GetCurrentUserEndpoint : EndpointWithoutRequest<CurrentUserR
             Subject = subject,
             Profile = new Profile
             {
-                Id = ProfileId.From(Guid.CreateVersion7()),
+                Id = profileId,
                 DisplayName = GetDisplayName(user),
+                ActiveProjectId = defaultProject.Id,
             },
         };
 
         db.Accounts.Add(account);
+        db.Projects.Add(defaultProject);
 
         await db.SaveChangesAsync(ct);
 
@@ -88,7 +101,11 @@ public sealed class GetCurrentUserEndpoint : EndpointWithoutRequest<CurrentUserR
 
     private static Task<Account?> FindAccountAsync(PlannerDbContext db, AccountId accountId, CancellationToken ct)
     {
+        // IgnoreQueryFilters: this runs during first-access provisioning, before CurrentUserPreProcessor has
+        // a profile to feed the global query filter — without this, the Profile/TacticusIntegration
+        // navigations would look empty even right after they're created below.
         return db.Accounts
+            .IgnoreQueryFilters()
             .Include(account => account.Profile)
             .ThenInclude(profile => profile!.TacticusIntegration)
             .FirstOrDefaultAsync(account => account.Id == accountId, ct);

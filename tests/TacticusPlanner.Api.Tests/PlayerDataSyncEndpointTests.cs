@@ -74,7 +74,7 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
     }
 
     [Fact]
-    public async Task RepeatedSyncWithUnchangedConfigHashSkipsPersistence()
+    public async Task RepeatedSyncWithUnchangedConfigHashAdvancesSuccessfulSyncTimestamp()
     {
         var subject = NewSubject();
         var client = await CreateProvisionedClientAsync(subject);
@@ -83,16 +83,14 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
         var first = await client.PostAsync("/api/v1/tacticus-integration/player-sync", null, TestContext.Current.CancellationToken);
         var firstManifest = await first.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
 
-        var revisionAfterFirst = await GetRevisionAsync(subject);
+        await Task.Delay(10, TestContext.Current.CancellationToken);
 
         var second = await client.PostAsync("/api/v1/tacticus-integration/player-sync", null, TestContext.Current.CancellationToken);
         var secondManifest = await second.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, second.StatusCode);
         Assert.Equal(firstManifest!.SourceHash, secondManifest!.SourceHash);
-
-        var revisionAfterSecond = await GetRevisionAsync(subject);
-        Assert.Equal(revisionAfterFirst, revisionAfterSecond);
+        Assert.True(secondManifest.SyncedAt > firstManifest.SyncedAt);
     }
 
     [Fact]
@@ -185,7 +183,10 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
     {
         using var scope = factory.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
+        // IgnoreQueryFilters: this scope has no HttpContext, so PlannerDbContext's global profile query
+        // filter (see ApplyProfileQueryFilters) has no current profile to scope to.
         var snapshot = await db.PlayerDataSnapshots
+            .IgnoreQueryFilters()
             .Include(entity => entity.Profile)
             .ThenInclude(entity => entity!.Account)
             .SingleAsync(

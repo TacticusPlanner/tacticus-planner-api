@@ -64,7 +64,8 @@ internal static partial class GameCatalogDenormalizer
     private static GameCatalogFarmLocation[] ResolveLocations(
         string rewardId,
         Dictionary<string, List<RewardLocation>> rewardLocations,
-        Dictionary<string, GameCatalogDropChance> dropChanceById)
+        Dictionary<string, GameCatalogDropChance> dropChanceById,
+        bool isMythic = false)
     {
         if (!rewardLocations.TryGetValue(rewardId, out var locations))
         {
@@ -77,11 +78,11 @@ internal static partial class GameCatalogDenormalizer
                 || !dropChanceById.TryGetValue(location.ChanceId, out var chance))
             {
                 return new GameCatalogFarmLocation(location.BattleId, location.Type, location.Challenge, location.Guaranteed,
-                    location.Guaranteed ? null : location.ChanceId, null, null, null);
+                    location.Guaranteed ? null : location.ChanceId, null, null, null, isMythic);
             }
 
             return new GameCatalogFarmLocation(location.BattleId, location.Type, location.Challenge, false,
-                location.ChanceId, chance.Numerator, chance.Denominator, chance.EffectiveRate);
+                location.ChanceId, chance.Numerator, chance.Denominator, chance.EffectiveRate, isMythic);
         }).ToArray();
     }
 }

@@ -90,6 +90,42 @@ public sealed class GetGameCatalogMowUpgradeCostsEndpoint(IGameCatalogProvider c
     }
 }
 
+public sealed class GetGameCatalogAscensionCostsEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogAscensionCostView>>(catalog, GameCatalogDatasets.AscensionCostsServed)
+{
+    protected override IReadOnlyList<GameCatalogAscensionCostView> Payload => Snapshot.AscensionCostViews;
+
+    public override void Configure()
+    {
+        Get("game-catalog/ascension-costs");
+        ConfigureServed("Gets the ascension-orb/shard cost ladder.", "The shared per-progression-step ascension cost ladder (shards, mythic shards, orbs) for all characters.");
+    }
+}
+
+public sealed class GetGameCatalogUnlockShardCostsEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogUnlockShardCostView>>(catalog, GameCatalogDatasets.UnlockShardCostsServed)
+{
+    protected override IReadOnlyList<GameCatalogUnlockShardCostView> Payload => Snapshot.UnlockShardCostViews;
+
+    public override void Configure()
+    {
+        Get("game-catalog/unlock-shard-costs");
+        ConfigureServed("Gets the per-rarity character unlock shard cost table.", "The shard count required to unlock a character of each rarity.");
+    }
+}
+
+public sealed class GetGameCatalogOnslaughtRewardsEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogOnslaughtReward>>(catalog, GameCatalogDatasets.OnslaughtRewards)
+{
+    protected override IReadOnlyList<GameCatalogOnslaughtReward> Payload => Snapshot.OnslaughtRewards;
+
+    public override void Configure()
+    {
+        Get("game-catalog/onslaught-rewards");
+        ConfigureServed("Gets the Onslaught reward table.", "Reward ranges by sector, tier, and rarity.");
+    }
+}
+
 public sealed class GetGameCatalogUpgradesEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogUpgradeView>>(catalog, GameCatalogDatasets.Upgrades)
 {
