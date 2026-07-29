@@ -34,4 +34,18 @@ public static class ProgressionRules
         AbilityCaps.TryGetValue(rarity, out var cap)
             ? cap
             : throw new ArgumentOutOfRangeException(nameof(rarity), rarity, "Unsupported rarity.");
+
+    public static string RarityFor(UnitProgression progression) => progression switch
+    {
+        >= UnitProgression.CommonNone and <= UnitProgression.CommonTwoStars => "Common",
+        >= UnitProgression.UncommonTwoStars and <= UnitProgression.UncommonFourStars => "Uncommon",
+        >= UnitProgression.RareFourStars and <= UnitProgression.RareRedOneStar => "Rare",
+        >= UnitProgression.EpicRedOneStar and <= UnitProgression.EpicRedThreeStars => "Epic",
+        >= UnitProgression.LegendaryRedThreeStars and <= UnitProgression.LegendaryOneBlueStar => "Legendary",
+        >= UnitProgression.MythicOneBlueStar and <= UnitProgression.MythicMythicWings => "Mythic",
+        _ => throw new ArgumentOutOfRangeException(nameof(progression), progression, "Unsupported progression."),
+    };
+
+    public static int AbilityCapForProgression(UnitProgression progression) =>
+        AbilityCapForRarity(RarityFor(progression));
 }

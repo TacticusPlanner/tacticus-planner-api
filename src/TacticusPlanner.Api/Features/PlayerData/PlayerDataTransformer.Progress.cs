@@ -38,14 +38,12 @@ public sealed partial class PlayerDataTransformer
         }
 
         var trackBattles = group.Battles
-            .Where(battle => string.Equals(battle.Type, campaign.Type, StringComparison.Ordinal))
-            .ToArray();
+            .Where(battle => string.Equals(battle.Type, campaign.Type, StringComparison.Ordinal));
         var completedRegular = 0;
         var completedChallenges = new List<string>();
-        for (var index = 0; index < trackBattles.Length; index++)
+        foreach (var battle in trackBattles)
         {
-            var battle = trackBattles[index];
-            if (!completedIndices.Contains(index))
+            if (!completedIndices.Contains(battle.BattleIndex))
             {
                 continue;
             }

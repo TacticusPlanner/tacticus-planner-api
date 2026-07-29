@@ -227,6 +227,18 @@ public sealed class PlayerDataTransformerTests
     }
 
     [Fact]
+    public void CatalogCampaignEventBattleIndicesMatchTheUpstreamPerTrackIndices()
+    {
+        var group = new TestCatalogProvider().Current.CampaignGroups.Values.Single(value =>
+            value.GroupId == FakeTacticusApi.EventCampaignId);
+        var standard = group.Battles.Where(battle => battle.Type == "Standard").ToArray();
+
+        Assert.Equal(3, standard.Single(battle => battle.Id == "AMSC3B").BattleIndex);
+        Assert.Equal(14, standard.Single(battle => battle.Id == "AMSC13B").BattleIndex);
+        Assert.Equal(0, group.Battles.First(battle => battle.Type == "Extremis").BattleIndex);
+    }
+
+    [Fact]
     public void PopulatesLiveProgressWithBattleAttemptsAndTheActiveCampaignEventId()
     {
         var result = CreateTransformer().Transform(BuildResponse());

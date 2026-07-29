@@ -1,6 +1,7 @@
 using FastEndpoints;
 using FluentValidation;
 using TacticusPlanner.Domain.Goals;
+using TacticusPlanner.Domain.Projects;
 
 namespace TacticusPlanner.Api.Features.Goals;
 
@@ -37,12 +38,15 @@ public sealed class CreateGoalValidator : Validator<CreateGoalRequest>
             .WithMessage("Snapshot resource ids are required and counts cannot be negative.");
 
         RuleFor(request => request.Config)
+            .NotNull()
+            .WithMessage("A goal configuration is required.")
             .Must(IsValidConfig)
             .WithMessage("The farming strategy or ascension farming configuration is invalid.");
 
         RuleFor(request => request.Projects)
-            .Must(projects => projects is null || projects.All(entry => entry.Priority is null or > 0))
-            .WithMessage("A project priority must be a positive number when given.");
+            .Must(projects => projects is null
+                || projects.All(entry => entry.Priority is null or (> 0 and <= ProjectValidation.MaxPriority)))
+            .WithMessage($"A project priority must be between 1 and {ProjectValidation.MaxPriority} when given.");
     }
 
     private static bool IsMow(string entityType) =>
@@ -62,8 +66,9 @@ public sealed class CreateGoalValidator : Validator<CreateGoalRequest>
     private static bool IsValidResource(GoalSnapshotResourceRequest resource) =>
         !string.IsNullOrWhiteSpace(resource.ResourceId) && resource.Count >= 0;
 
-    internal static bool IsValidConfig(CreateGoalConfigRequest config)
+    internal static bool IsValidConfig(CreateGoalConfigRequest? config)
     {
+        if (config is null) return true; // NotNull() reports the missing config
         if (config.FarmingStrategy is not null
             && !Enum.TryParse<FarmingStrategy>(config.FarmingStrategy, ignoreCase: true, out _))
         {

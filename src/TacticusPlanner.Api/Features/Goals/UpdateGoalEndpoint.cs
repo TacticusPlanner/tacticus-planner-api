@@ -10,7 +10,11 @@ namespace TacticusPlanner.Api.Features.Goals;
 /// <summary>
 /// Updates a goal's editable fields only (plan §7). The target end-state in <see cref="Goal.Config"/> and
 /// the creation snapshot are immutable — redefining them means creating a replacement goal, not editing
-/// this one. Only <c>notes</c> and the farming-location override are writable here.
+/// this one. Only <c>notes</c> and the farming-location override are writable here. Null semantics differ
+/// deliberately by field: a null <see cref="UpdateGoalRequest.Notes"/> or
+/// <see cref="UpdateGoalRequest.FarmingLocationIds"/> clears that field (there is no other way to clear
+/// it), while a null <see cref="UpdateGoalRequest.FarmingStrategy"/> means "leave unchanged" (it has a
+/// server-assigned default from creation, so there's nothing meaningful to clear it to).
 /// </summary>
 public sealed class UpdateGoalEndpoint : Endpoint<UpdateGoalRequest, GoalDetailResponse, GoalMapper>
 {
@@ -49,8 +53,17 @@ public sealed class UpdateGoalEndpoint : Endpoint<UpdateGoalRequest, GoalDetailR
             return;
         }
 
+        var farmingLocationIds = req.FarmingLocationIds?.Select(id => id.Value).ToList();
+        if (Resolve<GoalTargetValidationService>()
+            .ValidateFarmingLocationOverride(goal.GoalType, goal.EntityId, farmingLocationIds) is { } farmingError)
+        {
+            AddError(request => request.FarmingLocationIds, farmingError);
+            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+            return;
+        }
+
         goal.Notes = req.Notes;
-        goal.Config.FarmingLocationIds = req.FarmingLocationIds?.Select(id => id.Value).ToList();
+        goal.Config.FarmingLocationIds = farmingLocationIds;
         if (req.FarmingStrategy is not null)
         {
             goal.Config.FarmingStrategy = Enum.Parse<FarmingStrategy>(req.FarmingStrategy, ignoreCase: true);

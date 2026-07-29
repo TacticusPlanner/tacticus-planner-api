@@ -53,12 +53,25 @@ public sealed class CreateCombinedGoalsEndpoint
         var db = Resolve<PlannerDbContext>();
         var projects = Resolve<ProjectsService>();
         var targetValidation = Resolve<GoalTargetValidationService>();
-        var entityType = Enum.Parse<GoalEntityType>(req.EntityType, ignoreCase: true);
+        if (!Enum.TryParse<GoalEntityType>(req.EntityType, ignoreCase: true, out var entityType))
+        {
+            AddError(request => request.EntityType, "Unknown entity type.");
+            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+            return;
+        }
 
         var requestGoalTypes = new HashSet<GoalType>();
+        var parsedGoalTypes = new List<GoalType>(req.Goals.Count);
         foreach (var spec in req.Goals)
         {
-            var goalType = Enum.Parse<GoalType>(spec.GoalType, ignoreCase: true);
+            if (!Enum.TryParse<GoalType>(spec.GoalType, ignoreCase: true, out var goalType))
+            {
+                AddError(request => request.Goals, "Unknown or not-yet-supported goal type.");
+                await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+                return;
+            }
+
+            parsedGoalTypes.Add(goalType);
             if (await targetValidation.ValidateAsync(
                 profileId, entityType, req.EntityId.Trim(), goalType, spec.Config, ct) is { } targetError)
             {
@@ -127,13 +140,13 @@ public sealed class CreateCombinedGoalsEndpoint
 
         // Built as a materialized, indexable List (not a lazy .Select) so each spec's index has a real
         // GoalId to resolve dependencies against in the second pass below.
-        var goals = req.Goals.Select(spec => new Goal
+        var goals = req.Goals.Select((spec, i) => new Goal
         {
             Id = GoalId.From(Guid.CreateVersion7()),
             ProfileId = profileId,
             EntityType = entityType,
             EntityId = req.EntityId.Trim(),
-            GoalType = Enum.Parse<GoalType>(spec.GoalType, ignoreCase: true),
+            GoalType = parsedGoalTypes[i],
             Status = status,
             Config = GoalMapper.MapConfig(spec.Config),
             Snapshot = GoalMapper.MapSnapshot(spec.Snapshot),
@@ -141,10 +154,20 @@ public sealed class CreateCombinedGoalsEndpoint
         }).ToList();
 
         // Second pass: DependsOn references another spec's GoalId, only resolvable once every goal in
-        // the set already has one (see the first pass above).
+        // the set already has one (see the first pass above). CreateCombinedGoalsValidator guarantees
+        // strictly-earlier indices, but that's a separate class — re-check here defensively rather than
+        // trust an invariant enforced elsewhere.
         for (var i = 0; i < req.Goals.Count; i++)
         {
-            goals[i].DependsOn = req.Goals[i].DependsOnIndex.Select(index => goals[index].Id.Value).ToList();
+            var indices = req.Goals[i].DependsOnIndex ?? [];
+            if (indices.Any(index => index < 0 || index >= i))
+            {
+                AddError(request => request.Goals, "DependsOnIndex must reference an earlier goal in this request.");
+                await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+                return;
+            }
+
+            goals[i].DependsOn = indices.Select(index => goals[index].Id.Value).ToList();
         }
 
         db.Goals.AddRange(goals);
@@ -162,7 +185,18 @@ public sealed class CreateCombinedGoalsEndpoint
             }));
         }
 
-        await db.SaveChangesAsync(ct);
+        try
+        {
+            await db.SaveChangesAsync(ct);
+        }
+        catch (DbUpdateException ex) when (GoalConflictDetection.IsActiveOrPausedConflict(ex))
+        {
+            // The pre-check above already covers the common case; this is the concurrency backstop for a
+            // conflicting goal created by a racing request between that check and this save.
+            AddError(request => request.Goals, "An active or paused goal of this type already exists for this unit.");
+            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+            return;
+        }
 
         var projectIds = targetProjects.Select(project => project.Id.Value).ToList();
         await Send.OkAsync(

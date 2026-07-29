@@ -59,7 +59,8 @@ public sealed class V1GoalImportService(PlannerDbContext db, IGameCatalogProvide
             .ToList();
 
         var skipped = source.Count - translated.Count;
-        var candidates = CollapseProgressionGoals(translated);
+        var (candidates, duplicatesDropped) = CollapseProgressionGoals(translated, issues);
+        skipped += duplicatesDropped;
         if (candidates.Count == 0)
         {
             return new V1GoalImportResult([], skipped, issues);
@@ -207,9 +208,11 @@ public sealed class V1GoalImportService(PlannerDbContext db, IGameCatalogProvide
         return new TranslatedGoal(new GoalKey(entityType, entityId, goalType), config, source.Priority, source.Notes, source.Id);
     }
 
-    private static List<TranslatedGoal> CollapseProgressionGoals(List<TranslatedGoal> goals)
+    private static (List<TranslatedGoal> Collapsed, int Dropped) CollapseProgressionGoals(
+        List<TranslatedGoal> goals, List<V1ImportIssue> issues)
     {
         var collapsed = new List<TranslatedGoal>();
+        var dropped = 0;
         foreach (var group in goals.GroupBy(goal => goal.Key))
         {
             var ordered = group.OrderBy(goal => goal.Priority).ToList();
@@ -250,11 +253,22 @@ public sealed class V1GoalImportService(PlannerDbContext db, IGameCatalogProvide
             }
             else
             {
-                collapsed.AddRange(ordered);
+                // Rank/Ascension have clear min-start/max-end merge semantics (above); every other goal
+                // type doesn't, so only the highest-priority candidate survives — the rest would otherwise
+                // reach the combined-create request as duplicate (EntityType, EntityId, GoalType) specs.
+                collapsed.Add(ordered[0]);
+                foreach (var extra in ordered.Skip(1))
+                {
+                    dropped++;
+                    issues.Add(new V1ImportIssue(
+                        "duplicate_goal_in_source",
+                        extra.SourceId,
+                        "Another V1 goal of this type for this unit was already imported; this duplicate was skipped."));
+                }
             }
         }
 
-        return collapsed.OrderBy(goal => goal.Priority).ToList();
+        return (collapsed.OrderBy(goal => goal.Priority).ToList(), dropped);
     }
 
     private static string? Progression(int? rarity, int? stars)

@@ -110,9 +110,8 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
             if (config.Ability.ActiveEnd <= config.Ability.ActiveStart
                 && config.Ability.PassiveEnd <= config.Ability.PassiveStart)
                 return "At least one ability target must be above its effective start.";
-            var cap = playerUnit is null
-                ? 60
-                : ProgressionRules.AbilityCapForRarity(RarityFor(playerUnit.ProgressionIndex));
+            var cap = ProgressionRules.AbilityCapForProgression(
+                playerUnit?.ProgressionIndex ?? UnitProgression.MythicMythicWings);
             if (config.Ability.ActiveEnd > cap || config.Ability.PassiveEnd > cap)
                 return $"Ability targets cannot exceed the current rarity cap of {cap}.";
         }
@@ -162,6 +161,23 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
         return null;
     }
 
+    /// <summary>Re-validates a farming-location override against the same catalog rule
+    /// <see cref="ValidateAsync"/> applies at creation — currently only meaningful for Unlock goals (the
+    /// only goal type whose <c>FarmingLocationIds</c> is create-time validated).</summary>
+    public string? ValidateFarmingLocationOverride(GoalType goalType, string entityId, List<string>? farmingLocationIds)
+    {
+        if (goalType != GoalType.Unlock || farmingLocationIds is not { Count: > 0 })
+        {
+            return null;
+        }
+
+        var character = catalog.Current.CharacterViews.FirstOrDefault(item => item.Id == entityId);
+        var availableRegular = RegularShardBattleIds(character);
+        return farmingLocationIds.Any(id => !availableRegular.Contains(id))
+            ? "An unlock shard location is not available for this character."
+            : null;
+    }
+
     private static HashSet<string> RegularShardBattleIds(GameCatalogCharacterView? character) =>
         character?.ShardLocations.Where(location => !location.IsMythic).Select(location => location.BattleId)
             .ToHashSet(StringComparer.Ordinal) ?? [];
@@ -170,13 +186,4 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
         character?.ShardLocations.Where(location => location.IsMythic).Select(location => location.BattleId)
             .ToHashSet(StringComparer.Ordinal) ?? [];
 
-    private static string RarityFor(UnitProgression progression) => (int)progression switch
-    {
-        <= 2 => "Common",
-        <= 5 => "Uncommon",
-        <= 8 => "Rare",
-        <= 11 => "Epic",
-        <= 15 => "Legendary",
-        _ => "Mythic",
-    };
 }

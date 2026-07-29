@@ -22,10 +22,12 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
     /// <c>Enum.TryParse</c> can't match against the C# member names directly.</summary>
     private static readonly Dictionary<string, UnitProgression> ProgressionByWireValue =
         typeof(UnitProgression).GetFields(BindingFlags.Public | BindingFlags.Static)
-            .ToDictionary(
-                field => field.GetCustomAttribute<JsonStringEnumMemberNameAttribute>()!.Name,
-                field => (UnitProgression)field.GetValue(null)!,
-                StringComparer.Ordinal);
+            .Select(field => (
+                Name: field.GetCustomAttribute<JsonStringEnumMemberNameAttribute>()?.Name,
+                Value: (UnitProgression)field.GetValue(null)!))
+            .Where(entry => entry.Name is not null)
+            .GroupBy(entry => entry.Name!, StringComparer.Ordinal)
+            .ToDictionary(group => group.Key, group => group.First().Value, StringComparer.Ordinal);
 
     public override Goal ToEntity(CreateGoalRequest r) => new()
     {

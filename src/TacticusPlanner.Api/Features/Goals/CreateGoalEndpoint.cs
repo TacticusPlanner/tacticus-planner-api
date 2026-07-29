@@ -127,7 +127,18 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
             });
         }
 
-        await db.SaveChangesAsync(ct);
+        try
+        {
+            await db.SaveChangesAsync(ct);
+        }
+        catch (DbUpdateException ex) when (GoalConflictDetection.IsActiveOrPausedConflict(ex))
+        {
+            // The pre-check above already covers the common case; this is the concurrency backstop for a
+            // conflicting goal created by a racing request between that check and this save.
+            AddError(request => request.GoalType, "An active or paused goal of this type already exists for this unit.");
+            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+            return;
+        }
 
         var projectIds = targetProjects.Select(project => project.Id.Value).ToList();
         await Send.OkAsync(Map.ToDetail(goal, projectIds), ct);

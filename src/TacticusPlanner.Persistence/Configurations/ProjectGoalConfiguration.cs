@@ -6,15 +6,13 @@ namespace TacticusPlanner.Persistence.Configurations;
 
 public sealed class ProjectGoalConfiguration : IEntityTypeConfiguration<ProjectGoal>
 {
-    /// <summary>Mirrors the API's <c>CreateGoalValidator</c>/<c>CreateCombinedGoalsValidator</c>
-    /// FluentValidation rule — a DB-level backstop, not the primary enforcement point.</summary>
-    public const int MaxPriority = 10000;
-
     public void Configure(EntityTypeBuilder<ProjectGoal> builder)
     {
+        // A DB-level backstop, not the primary enforcement point — see ProjectValidation.MaxPriority for
+        // the shared value the API's FluentValidation rule also sources.
         builder.ToTable("project_goals", table => table.HasCheckConstraint(
             "ck_project_goals_priority_range",
-            $"priority > 0 AND priority <= {MaxPriority}"
+            $"priority > 0 AND priority <= {ProjectValidation.MaxPriority}"
         ));
         builder.HasKey(entity => new { entity.ProjectId, entity.GoalId });
 

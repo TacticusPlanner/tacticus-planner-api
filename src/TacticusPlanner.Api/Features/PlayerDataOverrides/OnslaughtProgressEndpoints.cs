@@ -26,13 +26,8 @@ public sealed class GetOnslaughtProgressEndpoint : EndpointWithoutRequest<Onslau
 
         var profileIdValue = profileId.Value;
         var db = Resolve<PlannerDbContext>();
-        var overrides = await db.PlayerDataOverrides.FirstOrDefaultAsync(entity => entity.Id == profileIdValue, ct);
-        if (overrides is null)
-        {
-            overrides = new PlayerDataOverride { Id = profileIdValue };
-            db.PlayerDataOverrides.Add(overrides);
-            await db.SaveChangesAsync(ct);
-        }
+        var overrides = await db.PlayerDataOverrides.FirstOrDefaultAsync(entity => entity.Id == profileIdValue, ct)
+            ?? new PlayerDataOverride { Id = profileIdValue };
 
         await Send.OkAsync(OnslaughtProgressResponse.From(overrides), ct);
     }
@@ -84,9 +79,12 @@ public sealed class UpdateOnslaughtProgressEndpoint
             req.Xenos.ToRecord("Xenos"),
             req.Chaos.ToRecord("Chaos"),
         ];
-        // Replacing only a JSON-owned collection does not always mark its owner Modified. The
-        // revision/updated-at interceptor operates on the owner, so make that write explicit.
-        db.Entry(overrides).State = EntityState.Modified;
+        if (db.Entry(overrides).State != EntityState.Added)
+        {
+            // Replacing only a JSON-owned collection does not always mark its owner Modified. The
+            // revision/updated-at interceptor operates on the owner, so make that write explicit.
+            db.Entry(overrides).State = EntityState.Modified;
+        }
 
         try
         {
@@ -151,9 +149,9 @@ public sealed class UpdateOnslaughtProgressValidator : Validator<UpdateOnslaught
 
     public UpdateOnslaughtProgressValidator()
     {
-        RuleFor(request => request.Imperial).SetValidator(new AllianceProgressValidator());
-        RuleFor(request => request.Xenos).SetValidator(new AllianceProgressValidator());
-        RuleFor(request => request.Chaos).SetValidator(new AllianceProgressValidator());
+        RuleFor(request => request.Imperial).NotNull().SetValidator(new AllianceProgressValidator());
+        RuleFor(request => request.Xenos).NotNull().SetValidator(new AllianceProgressValidator());
+        RuleFor(request => request.Chaos).NotNull().SetValidator(new AllianceProgressValidator());
         RuleFor(request => request.Revision).GreaterThanOrEqualTo(0);
     }
 

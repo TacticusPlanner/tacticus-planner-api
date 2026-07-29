@@ -29,13 +29,8 @@ public sealed class GetCampaignEventProgressEndpoint
 
         var profileIdValue = profileId.Value;
         var db = Resolve<PlannerDbContext>();
-        var overrides = await db.PlayerDataOverrides.FirstOrDefaultAsync(entity => entity.Id == profileIdValue, ct);
-        if (overrides is null)
-        {
-            overrides = new PlayerDataOverride { Id = profileIdValue };
-            db.PlayerDataOverrides.Add(overrides);
-            await db.SaveChangesAsync(ct);
-        }
+        var overrides = await db.PlayerDataOverrides.FirstOrDefaultAsync(entity => entity.Id == profileIdValue, ct)
+            ?? new PlayerDataOverride { Id = profileIdValue };
 
         await Send.OkAsync(CampaignEventProgressOverridesResponse.From(overrides), ct);
     }
@@ -224,6 +219,7 @@ public sealed class UpdateCampaignEventProgressValidator : Validator<UpdateCampa
                 .Select(entry => (entry.CampaignGroupId, entry.Type))
                 .Distinct()
                 .Count() == progress.Count)
+            .When(request => request.Progress is not null)
             .WithMessage("Campaign event and type entries must be unique.");
     }
 }

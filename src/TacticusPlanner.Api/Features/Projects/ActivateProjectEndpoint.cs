@@ -44,6 +44,12 @@ public sealed class ActivateProjectEndpoint : EndpointWithoutRequest<ProjectSumm
             return;
         }
 
+        if (project.Status == ProjectStatus.Archived)
+        {
+            await Send.NotFoundAsync(ct);
+            return;
+        }
+
         var profile = await db.Profiles.FirstAsync(entity => entity.Id == profileId, ct);
         profile.ActiveProjectId = projectId;
 

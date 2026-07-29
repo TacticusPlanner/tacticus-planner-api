@@ -171,7 +171,20 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
         integration.TacticusApiKey = value;
         integration.TacticusSyncLastAttemptedAt = now;
         integration.TacticusSyncLastSucceededAt = now;
-        await db.SaveChangesAsync(ct);
+        try
+        {
+            await db.SaveChangesAsync(ct);
+        }
+        catch (DbUpdateException)
+        {
+            db.ChangeTracker.Clear();
+            return new PersonalKeyImportResult(
+                new ImportPartResult("Failed", "personal_api_key_not_saved", "The personal API key could not be saved."),
+                null,
+                0
+            );
+        }
+
         return new PersonalKeyImportResult(
             new ImportPartResult("Imported", null, null),
             validation.PlayerName,
@@ -199,7 +212,7 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
         {
             GuildSyncResult.Success { WasCreated: true } => new ImportPartResult("Imported", null, null),
             GuildSyncResult.Success => new ImportPartResult("Skipped", "guild_already_registered", "The guild is already registered."),
-            _ => new ImportPartResult("Failed", result.GetType().Name, GetGuildFailureMessage(result)),
+            _ => new ImportPartResult("Failed", GetGuildFailureCode(result), GetGuildFailureMessage(result)),
         };
     }
 
@@ -342,6 +355,19 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
                 "Campaign-event progress changed during import. Try again.");
         }
     }
+
+    // Stable, API-contract codes — must not be replaced with result.GetType().Name, which would tie the
+    // public response shape to internal GuildSyncResult record names and break silently on a rename.
+    private static string GetGuildFailureCode(GuildSyncResult result) => result switch
+    {
+        GuildSyncResult.InvalidRequest => "guild_invalid_request",
+        GuildSyncResult.UpstreamRejected => "guild_upstream_rejected",
+        GuildSyncResult.UpstreamUnavailable => "guild_upstream_unavailable",
+        GuildSyncResult.InvalidUpstreamData => "guild_invalid_upstream_data",
+        GuildSyncResult.CallerNotAuthorized => "guild_caller_not_authorized",
+        GuildSyncResult.Conflict => "guild_conflict",
+        _ => "guild_registration_failed",
+    };
 
     private static string GetGuildFailureMessage(GuildSyncResult result) => result switch
     {

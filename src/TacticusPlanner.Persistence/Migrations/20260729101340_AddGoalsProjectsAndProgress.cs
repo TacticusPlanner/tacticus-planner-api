@@ -94,10 +94,20 @@ public partial class AddGoalsProjectsAndProgress : Migration
             table: "player_data_overrides",
             newName: "id");
 
-        migrationBuilder.RenameColumn(
+        // Not a rename: the old campaign-battle override JSON and the new Onslaught alliance/sector/tier
+        // JSON are structurally unrelated payloads. EF's diff inferred a rename here because it was the
+        // simplest edit script, but treating it as one would relabel existing campaign override rows as
+        // Onslaught data and silently drop the real campaign data (which is superseded by the new
+        // campaign_event_progress_overrides column added below, created empty).
+        migrationBuilder.DropColumn(
             name: "campaign_progress_overrides",
+            table: "player_data_overrides");
+
+        migrationBuilder.AddColumn<string>(
+            name: "onslaught_progress_overrides",
             table: "player_data_overrides",
-            newName: "onslaught_progress_overrides");
+            type: "jsonb",
+            nullable: true);
 
         migrationBuilder.RenameIndex(
             name: "IX_guilds_tag",
@@ -463,10 +473,16 @@ public partial class AddGoalsProjectsAndProgress : Migration
             table: "player_data_overrides",
             newName: "profile_id");
 
-        migrationBuilder.RenameColumn(
+        // Mirrors the Up() fix: this is an add/drop, not a rename (see the comment there).
+        migrationBuilder.DropColumn(
             name: "onslaught_progress_overrides",
+            table: "player_data_overrides");
+
+        migrationBuilder.AddColumn<string>(
+            name: "campaign_progress_overrides",
             table: "player_data_overrides",
-            newName: "campaign_progress_overrides");
+            type: "jsonb",
+            nullable: true);
 
         migrationBuilder.RenameIndex(
             name: "ix_guilds_tag",

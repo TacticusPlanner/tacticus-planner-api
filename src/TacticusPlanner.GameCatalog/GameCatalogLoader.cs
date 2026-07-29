@@ -57,7 +57,7 @@ public static class GameCatalogLoader
         var campaignGroups = new Dictionary<string, GameCatalogCampaignGroup>(StringComparer.Ordinal);
         foreach (var key in GameCatalogDatasets.CampaignBattleGroups)
         {
-            campaignGroups[key] = LoadDataset<GameCatalogCampaignGroup>(key);
+            campaignGroups[key] = AssignCampaignBattleIndices(LoadDataset<GameCatalogCampaignGroup>(key));
         }
 
         var lresByEvent = new Dictionary<string, GameCatalogLre>(StringComparer.Ordinal);
@@ -149,6 +149,19 @@ public static class GameCatalogLoader
 
         return document.RootElement.Deserialize<T>(JsonOptions)
             ?? throw new InvalidOperationException($"GameCatalog dataset '{key}' is empty.");
+    }
+
+    private static GameCatalogCampaignGroup AssignCampaignBattleIndices(GameCatalogCampaignGroup group)
+    {
+        var nextIndexByType = new Dictionary<string, int>(StringComparer.Ordinal);
+        var battles = group.Battles.Select(battle =>
+        {
+            var index = nextIndexByType.GetValueOrDefault(battle.Type);
+            nextIndexByType[battle.Type] = index + 1;
+            return battle with { BattleIndex = index };
+        }).ToArray();
+
+        return group with { Battles = battles };
     }
 
     private static JsonDocument ReadEmbeddedJsonDocument(string fileName)

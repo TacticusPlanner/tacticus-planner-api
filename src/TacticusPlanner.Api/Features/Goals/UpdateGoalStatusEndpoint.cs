@@ -34,7 +34,12 @@ public sealed class UpdateGoalStatusEndpoint : Endpoint<UpdateGoalStatusRequest,
             return;
         }
 
-        var targetStatus = Enum.Parse<GoalStatus>(req.Status, ignoreCase: true);
+        if (!Enum.TryParse<GoalStatus>(req.Status, ignoreCase: true, out var targetStatus))
+        {
+            AddError(request => request.Status, "Unknown or unsupported target status.");
+            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+            return;
+        }
 
         var goalId = Route<Guid>("goalId");
         var db = Resolve<PlannerDbContext>();
@@ -76,7 +81,18 @@ public sealed class UpdateGoalStatusEndpoint : Endpoint<UpdateGoalStatusRequest,
             goal.Events.Add(new GoalEvent { At = DateTimeOffset.UtcNow, Type = EventTypeFor(targetStatus) });
         }
 
-        await db.SaveChangesAsync(ct);
+        try
+        {
+            await db.SaveChangesAsync(ct);
+        }
+        catch (DbUpdateException ex) when (GoalConflictDetection.IsActiveOrPausedConflict(ex))
+        {
+            // The pre-check above already covers the common case; this is the concurrency backstop for a
+            // conflicting goal created by a racing request between that check and this save.
+            AddError(request => request.Status, "An active or paused goal of this type already exists for this unit.");
+            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+            return;
+        }
 
         var projectIds = await db.ProjectIdsAsync(goal.Id, ct);
         await Send.OkAsync(Map.ToDetail(goal, projectIds), ct);

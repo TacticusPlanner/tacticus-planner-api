@@ -1,6 +1,7 @@
 using FastEndpoints;
 using FluentValidation;
 using TacticusPlanner.Domain.Goals;
+using TacticusPlanner.Domain.Projects;
 
 namespace TacticusPlanner.Api.Features.Goals;
 
@@ -29,6 +30,7 @@ public sealed class CreateCombinedGoalsValidator : Validator<CreateCombinedGoals
             .MaximumLength(GoalValidation.MaxEntityIdLength);
 
         RuleFor(request => request.Goals)
+            .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .WithMessage("At least one goal is required.")
             .Must(goals => goals.Count <= MaxGoals)
@@ -52,9 +54,11 @@ public sealed class CreateCombinedGoalsValidator : Validator<CreateCombinedGoals
         RuleFor(request => request.Goals)
             .Custom((goals, context) =>
             {
+                if (goals is null) return;
                 for (var i = 0; i < goals.Count; i++)
                 {
-                    if (goals[i].DependsOnIndex.Any(dependsOnIndex => dependsOnIndex < 0 || dependsOnIndex >= i))
+                    var dependsOn = goals[i].DependsOnIndex ?? [];
+                    if (dependsOn.Any(dependsOnIndex => dependsOnIndex < 0 || dependsOnIndex >= i))
                     {
                         context.AddFailure(
                             $"Goals[{i}].DependsOnIndex",
@@ -65,12 +69,15 @@ public sealed class CreateCombinedGoalsValidator : Validator<CreateCombinedGoals
             });
 
         RuleFor(request => request)
-            .Must(request => !IsMow(request.EntityType) || request.Goals.TrueForAll(spec => !IsRank(spec.GoalType)))
+            .Must(request => !IsMow(request.EntityType)
+                || request.Goals is null
+                || request.Goals.TrueForAll(spec => !IsRank(spec.GoalType)))
             .WithMessage("Machines of War have no rank — use an Ability goal instead.");
 
         RuleFor(request => request.Projects)
-            .Must(projects => projects is null || projects.All(entry => entry.Priority is null or > 0))
-            .WithMessage("A project priority must be a positive number when given.");
+            .Must(projects => projects is null
+                || projects.All(entry => entry.Priority is null or (> 0 and <= ProjectValidation.MaxPriority)))
+            .WithMessage($"A project priority must be between 1 and {ProjectValidation.MaxPriority} when given.");
     }
 
     private static bool IsMow(string entityType) =>

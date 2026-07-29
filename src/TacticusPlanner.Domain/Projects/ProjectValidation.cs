@@ -10,4 +10,9 @@ public static class ProjectValidation
 
     /// <summary>A CSS hex color (<c>#rrggbb</c>) plus headroom, not a name.</summary>
     public const int MaxColorLength = 16;
+
+    /// <summary>Mirrors the API's <c>CreateGoalValidator</c>/<c>CreateCombinedGoalsValidator</c>
+    /// FluentValidation rule for <c>ProjectPriorityRequest.Priority</c> — the Persistence project's check
+    /// constraint on this same value sources it from here too, so the two can't drift.</summary>
+    public const int MaxPriority = 10000;
 }

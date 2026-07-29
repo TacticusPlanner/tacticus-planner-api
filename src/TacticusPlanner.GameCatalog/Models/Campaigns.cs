@@ -34,7 +34,12 @@ public sealed record GameCatalogCampaignBattle(
     IReadOnlyList<string> EnemiesTypes,
     IReadOnlyList<JsonElement> RawEnemyTypes,
     IReadOnlyList<GameCatalogCampaignDetailedEnemy> DetailedEnemyTypes
-);
+)
+{
+    // Zero-based index used by Tacticus campaign-progress payloads. Event groups contain multiple
+    // tracks, so this is assigned independently within each Type when the catalog is loaded.
+    public int BattleIndex { get; init; } = -1;
+}
 
 public sealed record GameCatalogCampaignRewards(
     IReadOnlyList<GameCatalogCampaignGuaranteedReward> Guaranteed,
