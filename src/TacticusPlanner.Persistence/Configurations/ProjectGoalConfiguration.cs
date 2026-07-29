@@ -1,27 +1,27 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.Projects;
 
 namespace TacticusPlanner.Persistence.Configurations;
 
 public sealed class ProjectGoalConfiguration : IEntityTypeConfiguration<ProjectGoal>
 {
+    /// <summary>Mirrors the API's <c>CreateGoalValidator</c>/<c>CreateCombinedGoalsValidator</c>
+    /// FluentValidation rule — a DB-level backstop, not the primary enforcement point.</summary>
+    public const int MaxPriority = 10000;
+
     public void Configure(EntityTypeBuilder<ProjectGoal> builder)
     {
-        builder.ToTable("project_goals");
+        builder.ToTable("project_goals", table => table.HasCheckConstraint(
+            "ck_project_goals_priority_range",
+            $"priority > 0 AND priority <= {MaxPriority}"
+        ));
         builder.HasKey(entity => new { entity.ProjectId, entity.GoalId });
 
-        // See GoalConfiguration's comment: Vogen's cross-assembly EFCore generator does not (yet)
-        // discover Goal/Project ids, so the converters are written out by hand.
-        builder.Property(entity => entity.ProjectId)
-            .HasColumnName("project_id")
-            .HasConversion(id => id.Value, value => ProjectId.From(value));
-        builder.Property(entity => entity.GoalId)
-            .HasColumnName("goal_id")
-            .HasConversion(id => id.Value, value => GoalId.From(value));
-        builder.Property(entity => entity.Priority).HasColumnName("priority").IsRequired();
-        builder.Property(entity => entity.CreatedAt).HasColumnName("created_at").IsRequired();
+        builder.Property(entity => entity.ProjectId).HasVogenConversion();
+        builder.Property(entity => entity.GoalId).HasVogenConversion();
+        builder.Property(entity => entity.Priority).IsRequired();
+        builder.Property(entity => entity.CreatedAt).IsRequired();
 
         builder
             .HasOne(entity => entity.Project)

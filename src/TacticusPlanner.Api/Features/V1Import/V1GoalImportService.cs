@@ -5,6 +5,7 @@ using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.PlayerData.Chunks;
 using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.GameCatalog;
+using TacticusPlanner.GameDomain;
 using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.V1Import;
@@ -65,7 +66,7 @@ public sealed class V1GoalImportService(PlannerDbContext db, IGameCatalogProvide
         }
 
         var existingKeys = await db.Goals
-            .Where(goal => goal.ProfileId == profileId && goal.Status != GoalStatus.Deleted)
+            .Where(goal => goal.ProfileId == profileId)
             .Select(goal => new { goal.EntityType, goal.EntityId, goal.GoalType })
             .ToListAsync(ct);
         var existing = existingKeys.Select(key => new GoalKey(key.EntityType, key.EntityId, key.GoalType)).ToHashSet();

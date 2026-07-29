@@ -1,6 +1,7 @@
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Domain.Projects;
 using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.Projects;
@@ -40,7 +41,7 @@ public sealed class ListProjectsEndpoint : EndpointWithoutRequest<ListProjectsRe
         // Scoped to the caller's profile by PlannerDbContext's global query filter.
         var projects = await db.Projects
             .AsNoTracking()
-            .OrderByDescending(entity => entity.IsDefault)
+            .OrderByDescending(entity => entity.Type == ProjectType.Default)
             .ThenBy(entity => entity.CreatedAt)
             .ToListAsync(ct);
 

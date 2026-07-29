@@ -9,10 +9,12 @@ namespace TacticusPlanner.Api.Tests;
 
 public sealed class V1ImportEndpointTests(PlannerApiFactory factory) : IClassFixture<PlannerApiFactory>
 {
+    private static readonly JsonSerializerOptions WebJsonOptions = new(JsonSerializerDefaults.Web);
+
     [Fact]
     public void ParsesCurrentV1OnslaughtPreferencesShapeAndNormalizesSectorNames()
     {
-        using var document = JsonDocument.Parse("""
+        var data = JsonSerializer.Deserialize<V1UserData>("""
             {
               "onslaughtPreferences": {
                 "Imperial": { "sector": "gold", "tier": 2 },
@@ -20,9 +22,9 @@ public sealed class V1ImportEndpointTests(PlannerApiFactory factory) : IClassFix
                 "Chaos": { "sector": "silver", "tier": 3 }
               }
             }
-            """);
+            """, WebJsonOptions);
 
-        var result = TacticusV1Client.ReadOnslaughtProgress(document.RootElement);
+        var result = TacticusV1Client.ReadOnslaughtProgress(data);
 
         Assert.True(result.IsPresent);
         Assert.NotNull(result.Progress);
@@ -34,7 +36,7 @@ public sealed class V1ImportEndpointTests(PlannerApiFactory factory) : IClassFix
     [Fact]
     public void ParsesOnlyRegularCampaignEventProgressFromCurrentV1Shape()
     {
-        using var document = JsonDocument.Parse("""
+        var data = JsonSerializer.Deserialize<V1UserData>("""
             {
               "campaignsProgress": {
                 "Adeptus Mechanicus Standard": 12,
@@ -43,9 +45,9 @@ public sealed class V1ImportEndpointTests(PlannerApiFactory factory) : IClassFix
                 "Indomitus": 75
               }
             }
-            """);
+            """, WebJsonOptions);
 
-        var result = TacticusV1Client.ReadCampaignEventProgress(document.RootElement);
+        var result = TacticusV1Client.ReadCampaignEventProgress(data);
 
         Assert.True(result.IsPresent);
         Assert.Equal(2, result.Progress!.Count);

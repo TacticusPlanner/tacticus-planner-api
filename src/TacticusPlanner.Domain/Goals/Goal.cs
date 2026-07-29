@@ -28,8 +28,6 @@ public class Goal : BaseEntity<GoalId>, IRevisionedEntity
 
     public GoalConfig Config { get; set; } = new();
 
-    public List<GoalMilestone> Milestones { get; set; } = [];
-
     /// <summary>Null until the estimation engine populates it at creation time (a later phase).</summary>
     public GoalSnapshot? Snapshot { get; set; }
 
@@ -38,10 +36,6 @@ public class Goal : BaseEntity<GoalId>, IRevisionedEntity
     /// <summary>Prerequisite edges from combined creation (unlock -> ascend -> rank). Empty until the
     /// combined-creation flow (a later phase) links goals together.</summary>
     public List<Guid> DependsOn { get; set; } = [];
-
-    /// <summary>Groups goals created together in one combined-creation flow. Null for goals created
-    /// individually.</summary>
-    public Guid? AggregateId { get; set; }
 
     public virtual Profile? Profile { get; set; }
 }

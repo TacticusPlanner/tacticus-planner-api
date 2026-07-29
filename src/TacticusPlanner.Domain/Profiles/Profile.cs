@@ -1,8 +1,8 @@
 using TacticusPlanner.Domain.Accounts;
 using TacticusPlanner.Domain.Common;
-using TacticusPlanner.Domain.Planning;
 using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.Projects;
+using UserSettingsEntity = TacticusPlanner.Domain.UserSettings.UserSettings;
 
 namespace TacticusPlanner.Domain.Profiles;
 
@@ -30,5 +30,5 @@ public class Profile : BaseEntity<ProfileId>
 
     public virtual PlayerDataOverride? PlayerDataOverride { get; set; }
 
-    public virtual PlanningSettings? PlanningSettings { get; set; }
+    public virtual UserSettingsEntity? UserSettings { get; set; }
 }

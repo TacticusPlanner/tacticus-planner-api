@@ -10,4 +10,5 @@ public sealed record GameCatalogOnslaughtReward(
     string Sector,
     int Tier,
     IReadOnlyList<GameCatalogRewardRange> Regular,
-    GameCatalogRewardRange Mythic);
+    GameCatalogRewardRange Mythic,
+    IReadOnlyList<GameCatalogAmountByRarity> Badges);

@@ -4,650 +4,397 @@
     "sector": "Stone",
     "tier": 1,
     "regular": [
-      {
-        "min": 2,
-        "max": 3
-      },
-      {
-        "min": 2,
-        "max": 3
-      },
-      {
-        "min": 2,
-        "max": 3
-      },
-      {
-        "min": 2,
-        "max": 3
-      },
-      {
-        "min": 2,
-        "max": 3
-      }
+      { "min": 2, "max": 3 },
+      { "min": 2, "max": 3 },
+      { "min": 2, "max": 3 },
+      { "min": 2, "max": 3 },
+      { "min": 2, "max": 3 }
     ],
-    "mythic": {
-      "min": 1,
-      "max": 1
-    }
+    "mythic": { "min": 1, "max": 1 },
+    "badges": [
+      { "rarity": "Common", "amount": 6 }
+    ]
   },
   {
     "id": "Stone-2",
     "sector": "Stone",
     "tier": 2,
     "regular": [
-      {
-        "min": 2,
-        "max": 4
-      },
-      {
-        "min": 2,
-        "max": 4
-      },
-      {
-        "min": 2,
-        "max": 4
-      },
-      {
-        "min": 2,
-        "max": 4
-      },
-      {
-        "min": 2,
-        "max": 4
-      }
+      { "min": 2, "max": 4 },
+      { "min": 2, "max": 4 },
+      { "min": 2, "max": 4 },
+      { "min": 2, "max": 4 },
+      { "min": 2, "max": 4 }
     ],
-    "mythic": {
-      "min": 1,
-      "max": 1
-    }
+    "mythic": { "min": 1, "max": 1 },
+    "badges": [
+      { "rarity": "Common", "amount": 6 }
+    ]
   },
   {
     "id": "Stone-3",
     "sector": "Stone",
     "tier": 3,
     "regular": [
-      {
-        "min": 3,
-        "max": 4
-      },
-      {
-        "min": 3,
-        "max": 4
-      },
-      {
-        "min": 3,
-        "max": 4
-      },
-      {
-        "min": 3,
-        "max": 4
-      },
-      {
-        "min": 3,
-        "max": 4
-      }
+      { "min": 3, "max": 4 },
+      { "min": 3, "max": 4 },
+      { "min": 3, "max": 4 },
+      { "min": 3, "max": 4 },
+      { "min": 3, "max": 4 }
     ],
-    "mythic": {
-      "min": 1,
-      "max": 1
-    }
+    "mythic": { "min": 1, "max": 1 },
+    "badges": [
+      { "rarity": "Common", "amount": 5 },
+      { "rarity": "Uncommon", "amount": 1 }
+    ]
   },
   {
     "id": "Iron-1",
     "sector": "Iron",
     "tier": 1,
     "regular": [
-      {
-        "min": 3,
-        "max": 4
-      },
-      {
-        "min": 3,
-        "max": 4
-      },
-      {
-        "min": 3,
-        "max": 4
-      },
-      {
-        "min": 3,
-        "max": 4
-      },
-      {
-        "min": 3,
-        "max": 4
-      }
+      { "min": 3, "max": 4 },
+      { "min": 3, "max": 4 },
+      { "min": 3, "max": 4 },
+      { "min": 3, "max": 4 },
+      { "min": 3, "max": 4 }
     ],
-    "mythic": {
-      "min": 1,
-      "max": 1
-    }
+    "mythic": { "min": 1, "max": 1 },
+    "badges": [
+      { "rarity": "Common", "amount": 4 },
+      { "rarity": "Uncommon", "amount": 2 }
+    ]
   },
   {
     "id": "Iron-2",
     "sector": "Iron",
     "tier": 2,
     "regular": [
-      {
-        "min": 3,
-        "max": 4
-      },
-      {
-        "min": 3,
-        "max": 5
-      },
-      {
-        "min": 3,
-        "max": 5
-      },
-      {
-        "min": 3,
-        "max": 5
-      },
-      {
-        "min": 3,
-        "max": 5
-      }
+      { "min": 3, "max": 4 },
+      { "min": 3, "max": 5 },
+      { "min": 3, "max": 5 },
+      { "min": 3, "max": 5 },
+      { "min": 3, "max": 5 }
     ],
-    "mythic": {
-      "min": 1,
-      "max": 1
-    }
+    "mythic": { "min": 1, "max": 1 },
+    "badges": [
+      { "rarity": "Common", "amount": 3 },
+      { "rarity": "Uncommon", "amount": 3 }
+    ]
   },
   {
     "id": "Iron-3",
     "sector": "Iron",
     "tier": 3,
     "regular": [
-      {
-        "min": 3,
-        "max": 4
-      },
-      {
-        "min": 4,
-        "max": 5
-      },
-      {
-        "min": 4,
-        "max": 5
-      },
-      {
-        "min": 4,
-        "max": 5
-      },
-      {
-        "min": 4,
-        "max": 5
-      }
+      { "min": 3, "max": 4 },
+      { "min": 4, "max": 5 },
+      { "min": 4, "max": 5 },
+      { "min": 4, "max": 5 },
+      { "min": 4, "max": 5 }
     ],
-    "mythic": {
-      "min": 1,
-      "max": 1
-    }
+    "mythic": { "min": 1, "max": 1 },
+    "badges": [
+      { "rarity": "Common", "amount": 2 },
+      { "rarity": "Uncommon", "amount": 4 },
+      { "rarity": "Rare", "amount": 1 }
+    ]
   },
   {
     "id": "Bronze-1",
     "sector": "Bronze",
     "tier": 1,
     "regular": [
-      {
-        "min": 3,
-        "max": 4
-      },
-      {
-        "min": 4,
-        "max": 5
-      },
-      {
-        "min": 5,
-        "max": 6
-      },
-      {
-        "min": 5,
-        "max": 6
-      },
-      {
-        "min": 5,
-        "max": 6
-      }
+      { "min": 3, "max": 4 },
+      { "min": 4, "max": 5 },
+      { "min": 5, "max": 6 },
+      { "min": 5, "max": 6 },
+      { "min": 5, "max": 6 }
     ],
-    "mythic": {
-      "min": 1,
-      "max": 1
-    }
+    "mythic": { "min": 1, "max": 1 },
+    "badges": [
+      { "rarity": "Common", "amount": 2 },
+      { "rarity": "Uncommon", "amount": 3 },
+      { "rarity": "Rare", "amount": 2 }
+    ]
   },
   {
     "id": "Bronze-2",
     "sector": "Bronze",
     "tier": 2,
     "regular": [
-      {
-        "min": 3,
-        "max": 4
-      },
-      {
-        "min": 4,
-        "max": 5
-      },
-      {
-        "min": 5,
-        "max": 7
-      },
-      {
-        "min": 5,
-        "max": 7
-      },
-      {
-        "min": 5,
-        "max": 7
-      }
+      { "min": 3, "max": 4 },
+      { "min": 4, "max": 5 },
+      { "min": 5, "max": 7 },
+      { "min": 5, "max": 7 },
+      { "min": 5, "max": 7 }
     ],
-    "mythic": {
-      "min": 1,
-      "max": 1
-    }
+    "mythic": { "min": 1, "max": 1 },
+    "badges": [
+      { "rarity": "Common", "amount": 1 },
+      { "rarity": "Uncommon", "amount": 2 },
+      { "rarity": "Rare", "amount": 3 }
+    ]
   },
   {
     "id": "Bronze-3",
     "sector": "Bronze",
     "tier": 3,
     "regular": [
-      {
-        "min": 3,
-        "max": 4
-      },
-      {
-        "min": 4,
-        "max": 5
-      },
-      {
-        "min": 6,
-        "max": 7
-      },
-      {
-        "min": 6,
-        "max": 7
-      },
-      {
-        "min": 6,
-        "max": 7
-      }
+      { "min": 3, "max": 4 },
+      { "min": 4, "max": 5 },
+      { "min": 6, "max": 7 },
+      { "min": 6, "max": 7 },
+      { "min": 6, "max": 7 }
     ],
-    "mythic": {
-      "min": 1,
-      "max": 1
-    }
+    "mythic": { "min": 1, "max": 1 },
+    "badges": [
+      { "rarity": "Common", "amount": 1 },
+      { "rarity": "Uncommon", "amount": 2 },
+      { "rarity": "Rare", "amount": 3 },
+      { "rarity": "Epic", "amount": 1 }
+    ]
   },
   {
     "id": "Silver-1",
     "sector": "Silver",
     "tier": 1,
     "regular": [
-      {
-        "min": 3,
-        "max": 4
-      },
-      {
-        "min": 4,
-        "max": 5
-      },
-      {
-        "min": 6,
-        "max": 7
-      },
-      {
-        "min": 8,
-        "max": 9
-      },
-      {
-        "min": 8,
-        "max": 9
-      }
+      { "min": 3, "max": 4 },
+      { "min": 4, "max": 5 },
+      { "min": 6, "max": 7 },
+      { "min": 8, "max": 9 },
+      { "min": 8, "max": 9 }
     ],
-    "mythic": {
-      "min": 1,
-      "max": 1
-    }
+    "mythic": { "min": 1, "max": 1 },
+    "badges": [
+      { "rarity": "Common", "amount": 1 },
+      { "rarity": "Uncommon", "amount": 2 },
+      { "rarity": "Rare", "amount": 3 },
+      { "rarity": "Epic", "amount": 2 }
+    ]
   },
   {
     "id": "Silver-2",
     "sector": "Silver",
     "tier": 2,
     "regular": [
-      {
-        "min": 3,
-        "max": 4
-      },
-      {
-        "min": 4,
-        "max": 5
-      },
-      {
-        "min": 6,
-        "max": 7
-      },
-      {
-        "min": 9,
-        "max": 10
-      },
-      {
-        "min": 9,
-        "max": 10
-      }
+      { "min": 3, "max": 4 },
+      { "min": 4, "max": 5 },
+      { "min": 6, "max": 7 },
+      { "min": 9, "max": 10 },
+      { "min": 9, "max": 10 }
     ],
-    "mythic": {
-      "min": 1,
-      "max": 1
-    }
+    "mythic": { "min": 1, "max": 1 },
+    "badges": [
+      { "rarity": "Common", "amount": 1 },
+      { "rarity": "Uncommon", "amount": 2 },
+      { "rarity": "Rare", "amount": 2 },
+      { "rarity": "Epic", "amount": 3 }
+    ]
   },
   {
     "id": "Silver-3",
     "sector": "Silver",
     "tier": 3,
     "regular": [
-      {
-        "min": 3,
-        "max": 4
-      },
-      {
-        "min": 4,
-        "max": 5
-      },
-      {
-        "min": 6,
-        "max": 7
-      },
-      {
-        "min": 10,
-        "max": 11
-      },
-      {
-        "min": 10,
-        "max": 11
-      }
+      { "min": 3, "max": 4 },
+      { "min": 4, "max": 5 },
+      { "min": 6, "max": 7 },
+      { "min": 10, "max": 11 },
+      { "min": 10, "max": 11 }
     ],
-    "mythic": {
-      "min": 1,
-      "max": 1
-    }
+    "mythic": { "min": 1, "max": 1 },
+    "badges": [
+      { "rarity": "Common", "amount": 1 },
+      { "rarity": "Uncommon", "amount": 2 },
+      { "rarity": "Rare", "amount": 2 },
+      { "rarity": "Epic", "amount": 3 },
+      { "rarity": "Legendary", "amount": 1 }
+    ]
   },
   {
     "id": "Gold-1",
     "sector": "Gold",
     "tier": 1,
     "regular": [
-      {
-        "min": 3,
-        "max": 4
-      },
-      {
-        "min": 4,
-        "max": 5
-      },
-      {
-        "min": 6,
-        "max": 7
-      },
-      {
-        "min": 10,
-        "max": 11
-      },
-      {
-        "min": 14,
-        "max": 16
-      }
+      { "min": 3, "max": 4 },
+      { "min": 4, "max": 5 },
+      { "min": 6, "max": 7 },
+      { "min": 10, "max": 11 },
+      { "min": 14, "max": 16 }
     ],
-    "mythic": {
-      "min": 1,
-      "max": 1
-    }
+    "mythic": { "min": 1, "max": 1 },
+    "badges": [
+      { "rarity": "Common", "amount": 1 },
+      { "rarity": "Uncommon", "amount": 2 },
+      { "rarity": "Rare", "amount": 2 },
+      { "rarity": "Epic", "amount": 2 },
+      { "rarity": "Legendary", "amount": 2 }
+    ]
   },
   {
     "id": "Gold-2",
     "sector": "Gold",
     "tier": 2,
     "regular": [
-      {
-        "min": 3,
-        "max": 4
-      },
-      {
-        "min": 4,
-        "max": 5
-      },
-      {
-        "min": 6,
-        "max": 7
-      },
-      {
-        "min": 10,
-        "max": 11
-      },
-      {
-        "min": 15,
-        "max": 17
-      }
+      { "min": 3, "max": 4 },
+      { "min": 4, "max": 5 },
+      { "min": 6, "max": 7 },
+      { "min": 10, "max": 11 },
+      { "min": 15, "max": 17 }
     ],
-    "mythic": {
-      "min": 1,
-      "max": 1
-    }
+    "mythic": { "min": 1, "max": 1 },
+    "badges": [
+      { "rarity": "Common", "amount": 1 },
+      { "rarity": "Uncommon", "amount": 2 },
+      { "rarity": "Rare", "amount": 2 },
+      { "rarity": "Epic", "amount": 2 },
+      { "rarity": "Legendary", "amount": 2 }
+    ]
   },
   {
     "id": "Gold-3",
     "sector": "Gold",
     "tier": 3,
     "regular": [
-      {
-        "min": 3,
-        "max": 4
-      },
-      {
-        "min": 4,
-        "max": 5
-      },
-      {
-        "min": 6,
-        "max": 7
-      },
-      {
-        "min": 10,
-        "max": 11
-      },
-      {
-        "min": 16,
-        "max": 18
-      }
+      { "min": 3, "max": 4 },
+      { "min": 4, "max": 5 },
+      { "min": 6, "max": 7 },
+      { "min": 10, "max": 11 },
+      { "min": 16, "max": 18 }
     ],
-    "mythic": {
-      "min": 1,
-      "max": 1
-    }
+    "mythic": { "min": 1, "max": 1 },
+    "badges": [
+      { "rarity": "Common", "amount": 1 },
+      { "rarity": "Uncommon", "amount": 2 },
+      { "rarity": "Rare", "amount": 2 },
+      { "rarity": "Epic", "amount": 2 },
+      { "rarity": "Legendary", "amount": 2 }
+    ]
   },
   {
     "id": "Diamond-1",
     "sector": "Diamond",
     "tier": 1,
     "regular": [
-      {
-        "min": 3,
-        "max": 4
-      },
-      {
-        "min": 4,
-        "max": 5
-      },
-      {
-        "min": 6,
-        "max": 7
-      },
-      {
-        "min": 10,
-        "max": 11
-      },
-      {
-        "min": 16,
-        "max": 20
-      }
+      { "min": 3, "max": 4 },
+      { "min": 4, "max": 5 },
+      { "min": 6, "max": 7 },
+      { "min": 10, "max": 11 },
+      { "min": 16, "max": 20 }
     ],
-    "mythic": {
-      "min": 1,
-      "max": 2
-    }
+    "mythic": { "min": 1, "max": 2 },
+    "badges": [
+      { "rarity": "Common", "amount": 1 },
+      { "rarity": "Uncommon", "amount": 2 },
+      { "rarity": "Rare", "amount": 2 },
+      { "rarity": "Epic", "amount": 2 },
+      { "rarity": "Legendary", "amount": 2 }
+    ]
   },
   {
     "id": "Diamond-2",
     "sector": "Diamond",
     "tier": 2,
     "regular": [
-      {
-        "min": 3,
-        "max": 4
-      },
-      {
-        "min": 4,
-        "max": 5
-      },
-      {
-        "min": 6,
-        "max": 7
-      },
-      {
-        "min": 10,
-        "max": 11
-      },
-      {
-        "min": 17,
-        "max": 21
-      }
+      { "min": 3, "max": 4 },
+      { "min": 4, "max": 5 },
+      { "min": 6, "max": 7 },
+      { "min": 10, "max": 11 },
+      { "min": 17, "max": 21 }
     ],
-    "mythic": {
-      "min": 1,
-      "max": 2
-    }
+    "mythic": { "min": 1, "max": 2 },
+    "badges": [
+      { "rarity": "Common", "amount": 1 },
+      { "rarity": "Uncommon", "amount": 2 },
+      { "rarity": "Rare", "amount": 2 },
+      { "rarity": "Epic", "amount": 2 },
+      { "rarity": "Legendary", "amount": 2 }
+    ]
   },
   {
     "id": "Diamond-3",
     "sector": "Diamond",
     "tier": 3,
     "regular": [
-      {
-        "min": 3,
-        "max": 4
-      },
-      {
-        "min": 4,
-        "max": 5
-      },
-      {
-        "min": 6,
-        "max": 7
-      },
-      {
-        "min": 10,
-        "max": 11
-      },
-      {
-        "min": 18,
-        "max": 22
-      }
+      { "min": 3, "max": 4 },
+      { "min": 4, "max": 5 },
+      { "min": 6, "max": 7 },
+      { "min": 10, "max": 11 },
+      { "min": 18, "max": 22 }
     ],
-    "mythic": {
-      "min": 1,
-      "max": 2
-    }
+    "mythic": { "min": 1, "max": 2 },
+    "badges": [
+      { "rarity": "Common", "amount": 1 },
+      { "rarity": "Uncommon", "amount": 2 },
+      { "rarity": "Rare", "amount": 2 },
+      { "rarity": "Epic", "amount": 2 },
+      { "rarity": "Legendary", "amount": 2 },
+      { "rarity": "Mythic", "amount": 1 }
+    ]
   },
   {
     "id": "Adamantine-1",
     "sector": "Adamantine",
     "tier": 1,
     "regular": [
-      {
-        "min": 3,
-        "max": 4
-      },
-      {
-        "min": 4,
-        "max": 5
-      },
-      {
-        "min": 6,
-        "max": 7
-      },
-      {
-        "min": 10,
-        "max": 11
-      },
-      {
-        "min": 18,
-        "max": 22
-      }
+      { "min": 3, "max": 4 },
+      { "min": 4, "max": 5 },
+      { "min": 6, "max": 7 },
+      { "min": 10, "max": 11 },
+      { "min": 18, "max": 22 }
     ],
-    "mythic": {
-      "min": 1,
-      "max": 2
-    }
+    "mythic": { "min": 1, "max": 2 },
+    "badges": [
+      { "rarity": "Common", "amount": 1 },
+      { "rarity": "Uncommon", "amount": 2 },
+      { "rarity": "Rare", "amount": 2 },
+      { "rarity": "Epic", "amount": 2 },
+      { "rarity": "Legendary", "amount": 2 },
+      { "rarity": "Mythic", "amount": 1 }
+    ]
   },
   {
     "id": "Adamantine-2",
     "sector": "Adamantine",
     "tier": 2,
     "regular": [
-      {
-        "min": 3,
-        "max": 4
-      },
-      {
-        "min": 4,
-        "max": 5
-      },
-      {
-        "min": 6,
-        "max": 7
-      },
-      {
-        "min": 10,
-        "max": 11
-      },
-      {
-        "min": 18,
-        "max": 22
-      }
+      { "min": 3, "max": 4 },
+      { "min": 4, "max": 5 },
+      { "min": 6, "max": 7 },
+      { "min": 10, "max": 11 },
+      { "min": 18, "max": 22 }
     ],
-    "mythic": {
-      "min": 1,
-      "max": 3
-    }
+    "mythic": { "min": 1, "max": 3 },
+    "badges": [
+      { "rarity": "Common", "amount": 1 },
+      { "rarity": "Uncommon", "amount": 2 },
+      { "rarity": "Rare", "amount": 2 },
+      { "rarity": "Epic", "amount": 2 },
+      { "rarity": "Legendary", "amount": 2 },
+      { "rarity": "Mythic", "amount": 1 }
+    ]
   },
   {
     "id": "Adamantine-3",
     "sector": "Adamantine",
     "tier": 3,
     "regular": [
-      {
-        "min": 3,
-        "max": 4
-      },
-      {
-        "min": 4,
-        "max": 5
-      },
-      {
-        "min": 6,
-        "max": 7
-      },
-      {
-        "min": 10,
-        "max": 11
-      },
-      {
-        "min": 18,
-        "max": 22
-      }
+      { "min": 3, "max": 4 },
+      { "min": 4, "max": 5 },
+      { "min": 6, "max": 7 },
+      { "min": 10, "max": 11 },
+      { "min": 18, "max": 22 }
     ],
-    "mythic": {
-      "min": 2,
-      "max": 3
-    }
+    "mythic": { "min": 2, "max": 3 },
+    "badges": [
+      { "rarity": "Common", "amount": 1 },
+      { "rarity": "Uncommon", "amount": 2 },
+      { "rarity": "Rare", "amount": 2 },
+      { "rarity": "Epic", "amount": 2 },
+      { "rarity": "Legendary", "amount": 2 },
+      { "rarity": "Mythic", "amount": 1 }
+    ]
   }
 ]

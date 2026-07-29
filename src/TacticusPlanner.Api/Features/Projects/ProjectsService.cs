@@ -18,7 +18,8 @@ public sealed class ProjectsService(PlannerDbContext db)
     /// and makes it the profile's active plan if none is set yet.</summary>
     public async Task<Project> EnsureDefaultProjectAsync(ProfileId profileId, CancellationToken ct)
     {
-        var existing = await db.Projects.FirstOrDefaultAsync(entity => entity.ProfileId == profileId && entity.IsDefault, ct);
+        var existing = await db.Projects.FirstOrDefaultAsync(
+            entity => entity.ProfileId == profileId && entity.Type == ProjectType.Default, ct);
 
         var project = existing;
         if (project is null)
@@ -29,7 +30,7 @@ public sealed class ProjectsService(PlannerDbContext db)
                 ProfileId = profileId,
                 Name = "My Goals",
                 Status = ProjectStatus.Active,
-                IsDefault = true,
+                Type = ProjectType.Default,
             };
 
             db.Projects.Add(project);

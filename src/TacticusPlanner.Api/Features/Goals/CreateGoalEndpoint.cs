@@ -110,21 +110,8 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
             ? GoalStatus.Active
             : GoalStatus.Paused;
         var now = DateTimeOffset.UtcNow;
-        goal.Snapshot = GoalMapper.MapSnapshot(req.Snapshot, now);
+        goal.Snapshot = GoalMapper.MapSnapshot(req.Snapshot);
         goal.Events = [new GoalEvent { At = now, Type = GoalEventType.Created }];
-        if (goal.GoalType == GoalType.Rank && goal.Config.Rank is { } rank)
-        {
-            goal.Milestones = MilestoneGenerator.ForRank(rank.Start, rank.End, goal.Config.FarmingStrategy);
-        }
-        else if (goal.EntityType == GoalEntityType.Mow
-            && goal.GoalType == GoalType.Ability
-            && goal.Config.Ability is { } ability)
-        {
-            var (start, end) = ability.ActiveEnd > ability.ActiveStart
-                ? (ability.ActiveStart, ability.ActiveEnd)
-                : (ability.PassiveStart, ability.PassiveEnd);
-            goal.Milestones = MilestoneGenerator.ForAbility(start, end, goal.Config.FarmingStrategy);
-        }
 
         db.Goals.Add(goal);
 
@@ -169,7 +156,7 @@ public sealed record CreateGoalConfigRequest(
     string? FarmingStrategy = null,
     AscensionFarmingRequest? AscensionFarming = null,
     UpgradeTargetRequest? Upgrade = null,
-    EquipmentTargetRequest? Equipment = null,
+    ItemTargetRequest? Item = null,
     LevelTargetRequest? Level = null
 );
 
@@ -196,22 +183,20 @@ public sealed record UpgradeTargetRequest(List<UpgradeItemTargetRequest> Targets
 
 public sealed record UpgradeItemTargetRequest(string UpgradeId, int Quantity);
 
-public sealed record EquipmentTargetRequest(int TargetLevel);
+public sealed record ItemTargetRequest(int TargetLevel);
 
 public sealed record LevelTargetRequest(int Start, int End);
 
+/// <summary><see cref="InitialRank"/>/<see cref="InitialProgression"/> are the client's plain wire strings
+/// (e.g. "Gold2", "Common:TwoStars" — the same values <c>Rank</c>/<c>Progression</c> serialize to); an
+/// unparseable value is dropped rather than rejected, see <c>GoalMapper.MapSnapshot</c>.</summary>
 public sealed record CreateGoalSnapshotRequest(
     string? InitialRank = null,
     string? InitialProgression = null,
     int? InitialActiveAbilityLevel = null,
     int? InitialPassiveAbilityLevel = null,
-    bool? InitialUnlocked = null,
     List<GoalSnapshotResourceRequest>? InitialRequirement = null,
-    List<GoalSnapshotResourceRequest>? InitialInventoryContribution = null,
-    int? OriginalEnergyTotal = null,
-    int? OriginalRaidsTotal = null,
-    int? OriginalEstimateDays = null,
-    DateTimeOffset? OriginalEstimateDate = null
+    List<GoalSnapshotResourceRequest>? InitialInventoryContribution = null
 );
 
 public sealed record GoalSnapshotResourceRequest(string ResourceId, int Count);

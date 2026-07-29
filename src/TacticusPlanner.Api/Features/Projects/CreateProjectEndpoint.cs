@@ -1,4 +1,5 @@
 using FastEndpoints;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Domain.Projects;
@@ -44,6 +45,7 @@ public sealed class CreateProjectEndpoint : Endpoint<CreateProjectRequest, Proje
         var project = Map.ToEntity(req);
         project.Id = ProjectId.From(Guid.CreateVersion7());
         project.ProfileId = profileId;
+        project.Type = ProjectType.Custom;
 
         db.Projects.Add(project);
         await db.SaveChangesAsync(ct);
@@ -53,3 +55,13 @@ public sealed class CreateProjectEndpoint : Endpoint<CreateProjectRequest, Proje
 }
 
 public sealed record CreateProjectRequest(string Name, string? Description, string? Color);
+
+public sealed class CreateProjectValidator : Validator<CreateProjectRequest>
+{
+    public CreateProjectValidator()
+    {
+        RuleFor(request => request.Name).MaximumLength(ProjectValidation.MaxNameLength);
+        RuleFor(request => request.Description).MaximumLength(ProjectValidation.MaxDescriptionLength);
+        RuleFor(request => request.Color).MaximumLength(ProjectValidation.MaxColorLength);
+    }
+}

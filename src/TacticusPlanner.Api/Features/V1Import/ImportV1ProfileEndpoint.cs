@@ -194,7 +194,7 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
         }
 
         var result = await Resolve<GuildSyncService>()
-            .SynchronizeAsync(profileId, userId.Value, token, persistToken: true, ct, persistTokenOnlyIfNew: true);
+            .SynchronizeAsync(profileId, userId.Value, token, persistToken: true, persistTokenOnlyIfNew: true, ct: ct);
         return result switch
         {
             GuildSyncResult.Success { WasCreated: true } => new ImportPartResult("Imported", null, null),

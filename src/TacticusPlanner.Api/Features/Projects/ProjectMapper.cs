@@ -27,7 +27,7 @@ public sealed class ProjectMapper : Mapper<CreateProjectRequest, ProjectSummaryR
         project.Color,
         project.Status.ToString(),
         project.Id == activeProjectId,
-        project.IsDefault,
+        project.Type == ProjectType.Default,
         project.Revision,
         project.CreatedAt,
         project.UpdatedAt

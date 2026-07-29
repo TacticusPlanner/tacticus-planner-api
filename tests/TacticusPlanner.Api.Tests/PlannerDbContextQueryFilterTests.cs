@@ -3,10 +3,9 @@ using Microsoft.Extensions.DependencyInjection;
 using TacticusPlanner.Domain.Accounts;
 using TacticusPlanner.Domain.Common;
 using TacticusPlanner.Domain.Goals;
-using TacticusPlanner.Domain.Planning;
-using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Domain.Projects;
+using TacticusPlanner.Domain.UserSettings;
 using TacticusPlanner.Persistence;
 using TacticusPlanner.Persistence.Encryption;
 
@@ -21,7 +20,7 @@ namespace TacticusPlanner.Api.Tests;
 public sealed class PlannerDbContextQueryFilterTests(PlannerApiFactory factory) : IClassFixture<PlannerApiFactory>
 {
     [Fact]
-    public async Task GoalsProjectsPlanningSettingsAndProjectGoalsAreIsolatedBetweenProfiles()
+    public async Task GoalsProjectsUserSettingsAndProjectGoalsAreIsolatedBetweenProfiles()
     {
         var ct = TestContext.Current.CancellationToken;
         using var scope = factory.Services.CreateScope();
@@ -46,8 +45,9 @@ public sealed class PlannerDbContextQueryFilterTests(PlannerApiFactory factory) 
             ProfileId = profileA,
             Name = "A's project",
             Status = ProjectStatus.Active,
+            Type = ProjectType.Custom,
         };
-        var settingsA = new PlanningSettings { Id = profileA, DailyEnergy = 378 };
+        var settingsA = new UserSettings { Id = profileA, Settings = new UserSettingsData { DailyEnergy = 378 } };
 
         // Seeded through an unfiltered context (CurrentProfileId null) — query filters only ever narrow
         // reads, never writes, so this is just about giving the rows a known owner.
@@ -55,7 +55,7 @@ public sealed class PlannerDbContextQueryFilterTests(PlannerApiFactory factory) 
         {
             seedDb.Goals.Add(goalA);
             seedDb.Projects.Add(projectA);
-            seedDb.PlanningSettings.Add(settingsA);
+            seedDb.UserSettings.Add(settingsA);
             seedDb.ProjectGoals.Add(new ProjectGoal { ProjectId = projectA.Id, GoalId = goalA.Id, Priority = 1 });
             await seedDb.SaveChangesAsync(ct);
         }
@@ -73,10 +73,10 @@ public sealed class PlannerDbContextQueryFilterTests(PlannerApiFactory factory) 
         Assert.Contains(projectsA, project => project.Id == projectA.Id);
         Assert.DoesNotContain(projectsB, project => project.Id == projectA.Id);
 
-        // PlanningSettings' primary key IS the ProfileId — B querying for A's own settings row by A's id
+        // UserSettings' primary key IS the ProfileId — B querying for A's own settings row by A's id
         // must still come back empty, proving the filter (not just the predicate) is what's excluding it.
-        var settingsVisibleToA = await dbA.PlanningSettings.FirstOrDefaultAsync(entity => entity.Id == profileA, ct);
-        var settingsVisibleToB = await dbB.PlanningSettings.FirstOrDefaultAsync(entity => entity.Id == profileA, ct);
+        var settingsVisibleToA = await dbA.UserSettings.FirstOrDefaultAsync(entity => entity.Id == profileA, ct);
+        var settingsVisibleToB = await dbB.UserSettings.FirstOrDefaultAsync(entity => entity.Id == profileA, ct);
         Assert.NotNull(settingsVisibleToA);
         Assert.Null(settingsVisibleToB);
 
@@ -116,11 +116,10 @@ public sealed class PlannerDbContextQueryFilterTests(PlannerApiFactory factory) 
             .ToList();
         Assert.True(unfiltered.Count == 0, $"Missing a global query filter for: {string.Join(", ", unfiltered)}");
 
-        // Profile itself, and the ProfileId-less join tables scoped via a parent navigation, are covered
+        // Profile itself, and the ProfileId-less join table scoped via a parent navigation, are covered
         // by name since they don't match the property-shape check above.
         Assert.NotEmpty(db.Model.FindEntityType(typeof(Profile))!.GetDeclaredQueryFilters());
         Assert.NotEmpty(db.Model.FindEntityType(typeof(ProjectGoal))!.GetDeclaredQueryFilters());
-        Assert.NotEmpty(db.Model.FindEntityType(typeof(ProjectTeam))!.GetDeclaredQueryFilters());
     }
 
     private static PlannerDbContext CreateContext(IServiceScope scope, ProfileId? currentProfileId)

@@ -4,6 +4,7 @@ using TacticusPlanner.Domain.PlayerData.Chunks;
 using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.GameCatalog;
 using TacticusPlanner.GameCatalog.Models;
+using TacticusPlanner.GameDomain;
 using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.Goals;
@@ -29,7 +30,7 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
         var equipment = catalog.Current.EquipmentViews.FirstOrDefault(item => item.Id == entityId);
         if (entityType == GoalEntityType.Character && character is null
             || entityType == GoalEntityType.Mow && mow is null
-            || entityType == GoalEntityType.Equipment && equipment is null)
+            || entityType == GoalEntityType.Item && equipment is null)
         {
             return "The selected unit is not present in the Game Catalog.";
         }
@@ -41,14 +42,14 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
         var playerUnit = (PlayerBaseUnitRecord?)playerCharacter ?? playerMow;
 
         // Each goal type is only ever valid for one entity type (Rank/Unlock/Level: Character only;
-        // Ascension/Ability/Upgrade: Character or Mow; UpgradeEquipment: Equipment only) — checked once
+        // Ascension/Ability/Upgrade: Character or Mow; UpgradeItem: Item only) — checked once
         // up front so every branch below can assume the pairing already makes sense.
         var entityTypeMismatch = (goalType, entityType) switch
         {
             (GoalType.Rank or GoalType.Unlock or GoalType.Level, not GoalEntityType.Character) => true,
-            (GoalType.Ascension or GoalType.Ability or GoalType.Upgrade, GoalEntityType.Equipment) => true,
-            (GoalType.UpgradeEquipment, not GoalEntityType.Equipment) => true,
-            (not GoalType.UpgradeEquipment, GoalEntityType.Equipment) => true,
+            (GoalType.Ascension or GoalType.Ability or GoalType.Upgrade, GoalEntityType.Item) => true,
+            (GoalType.UpgradeItem, not GoalEntityType.Item) => true,
+            (not GoalType.UpgradeItem, GoalEntityType.Item) => true,
             _ => false,
         };
         if (entityTypeMismatch)
@@ -81,8 +82,8 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
         if (goalType == GoalType.Ascension)
         {
             if (config.Progression is null) return "Ascension requires a progression target.";
-            var start = GameCatalogGoalLookups.ProgressionIndex(config.Progression.Start);
-            var end = GameCatalogGoalLookups.ProgressionIndex(config.Progression.End);
+            var start = ProgressionRules.ProgressionIndex(config.Progression.Start);
+            var end = ProgressionRules.ProgressionIndex(config.Progression.End);
             var current = (int?)playerUnit?.ProgressionIndex ?? start;
             if (start < current) return "The starting progression cannot be lower than current progression.";
             if (end <= Math.Max(start, current)) return "The target progression must be above the effective start.";
@@ -111,7 +112,7 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
                 return "At least one ability target must be above its effective start.";
             var cap = playerUnit is null
                 ? 60
-                : GameCatalogGoalLookups.AbilityCapForRarity(RarityFor(playerUnit.ProgressionIndex));
+                : ProgressionRules.AbilityCapForRarity(RarityFor(playerUnit.ProgressionIndex));
             if (config.Ability.ActiveEnd > cap || config.Ability.PassiveEnd > cap)
                 return $"Ability targets cannot exceed the current rarity cap of {cap}.";
         }
@@ -142,11 +143,11 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
                 return $"The target level must be above the effective starting level and no higher than {MaxCharacterLevel}.";
         }
 
-        if (goalType == GoalType.UpgradeEquipment)
+        if (goalType == GoalType.UpgradeItem)
         {
-            if (config.Equipment is null) return "UpgradeEquipment requires a target level.";
+            if (config.Item is null) return "UpgradeItem requires a target level.";
             if (equipment is null) return "The selected equipment is not present in the Game Catalog.";
-            if (config.Equipment.TargetLevel <= 1 || config.Equipment.TargetLevel > equipment.Levels.Count)
+            if (config.Item.TargetLevel <= 1 || config.Item.TargetLevel > equipment.Levels.Count)
                 return $"The target level must be between 2 and {equipment.Levels.Count}.";
         }
 

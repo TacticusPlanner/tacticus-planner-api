@@ -1,8 +1,8 @@
 ﻿{
   version: dev-2026-07-01,
-  schemaVersion: 1,
+  schemaVersion: 2,
   gameVersion: 1.40,
-  sourceHash: e15f3fc4d540edf07d481ee135fef7ac8bd3a44c527720c56702119bb4d697e2,
+  sourceHash: 8bdfd93847a6f089da2ee80b518e33127f2318bc9c0f6785e725827ab35cf47e,
   datasets: [
     {
       key: ascension-costs,
@@ -46,7 +46,7 @@
     },
     {
       key: mow-upgrade-costs,
-      hash: f9edae42b150a95319c1e5725264a8fff950e42caa2914b17bc57e535f873ee7,
+      hash: 5898bc72fd3555d361903509c96b3a37f16c41af66c4b4e18cd8c1b008cf2b89,
       url: /api/v1/game-catalog/mow-upgrade-costs
     },
     {
@@ -61,7 +61,7 @@
     },
     {
       key: onslaught-rewards,
-      hash: c83f0f0ee9077fa3d8df1a2d8777faf7e32b36a652ee316fa07acf4709ccb2cf,
+      hash: ff136f21e52e557188b7b6c594901db3e809be287c8b61f902966e13d2ad87da,
       url: /api/v1/game-catalog/onslaught-rewards
     },
     {

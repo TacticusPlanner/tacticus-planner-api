@@ -1,43 +1,18 @@
 using TacticusPlanner.GameCatalog.Models;
+using TacticusPlanner.GameDomain;
 
 namespace TacticusPlanner.GameCatalog;
 
-/// <summary>Server-authoritative catalog rules shared by goal validation and estimation.</summary>
+/// <summary>Server-authoritative catalog rules shared by goal validation and estimation. Pure
+/// progression/ability ordering (no catalog data involved) lives in <see cref="ProgressionRules"/>
+/// (<c>TacticusPlanner.GameDomain</c>) instead — see that class for <c>ProgressionOrder</c>/
+/// <c>ProgressionIndex</c>/<c>AbilityCapForRarity</c>, re-exposed here only where catalog data is also
+/// needed.</summary>
 public static class GameCatalogGoalLookups
 {
-    public static readonly string[] ProgressionOrder =
-    [
-        "Common:None", "Common:OneStar", "Common:TwoStars",
-        "Uncommon:TwoStars", "Uncommon:ThreeStars", "Uncommon:FourStars",
-        "Rare:FourStars", "Rare:FiveStars", "Rare:RedOneStar",
-        "Epic:RedOneStar", "Epic:RedTwoStars", "Epic:RedThreeStars",
-        "Legendary:RedThreeStars", "Legendary:RedFourStars", "Legendary:RedFiveStars",
-        "Legendary:OneBlueStar", "Mythic:OneBlueStar", "Mythic:TwoBlueStars",
-        "Mythic:ThreeBlueStars", "Mythic:MythicWings",
-    ];
-
-    public static int ProgressionIndex(string progression) =>
-        Array.IndexOf(ProgressionOrder, progression);
-
-    private static readonly Dictionary<string, int> AbilityCaps =
-        new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase)
-        {
-            ["Common"] = 8,
-            ["Uncommon"] = 17,
-            ["Rare"] = 26,
-            ["Epic"] = 35,
-            ["Legendary"] = 50,
-            ["Mythic"] = 60,
-        };
-
     public static bool IsUnlockEligible(this GameCatalogSnapshot catalog, string characterId) =>
         catalog.CharacterViews.Any(character =>
             character.Id == characterId && character.ShardLocations.Count > 0);
-
-    public static int AbilityCapForRarity(string rarity) =>
-        AbilityCaps.TryGetValue(rarity, out var cap)
-            ? cap
-            : throw new ArgumentOutOfRangeException(nameof(rarity), rarity, "Unsupported rarity.");
 
     public static GameCatalogRewardRange OnslaughtReward(
         this GameCatalogSnapshot catalog,

@@ -1,7 +1,7 @@
 using TacticusPlanner.Api.Features.PlayerData;
-using TacticusPlanner.Domain.PlayerData.Chunks;
 using TacticusPlanner.GameCatalog;
 using TacticusPlanner.GameCatalog.Models;
+using TacticusPlanner.GameDomain;
 using TacticusPlanner.TacticusApi.Models.Player;
 
 namespace TacticusPlanner.Api.Tests;

@@ -13,14 +13,13 @@ public sealed class AccountConfiguration : IEntityTypeConfiguration<Account>
         builder.HasKey(entity => entity.Id);
 
         builder.Property(entity => entity.Id)
-            .HasColumnName("id")
             .HasVogenConversion()
             .ValueGeneratedNever();
-        builder.Property(entity => entity.Issuer).HasColumnName("issuer").IsRequired();
-        builder.Property(entity => entity.Subject).HasColumnName("subject").IsRequired();
-        builder.Property(entity => entity.LastSeenAt).HasColumnName("last_seen_at");
-        builder.Property(entity => entity.CreatedAt).HasColumnName("created_at").IsRequired();
-        builder.Property(entity => entity.UpdatedAt).HasColumnName("updated_at").IsRequired();
+        builder.Property(entity => entity.Issuer).IsRequired();
+        builder.Property(entity => entity.Subject).IsRequired();
+        builder.Property(entity => entity.LastSeenAt);
+        builder.Property(entity => entity.CreatedAt).IsRequired();
+        builder.Property(entity => entity.UpdatedAt).IsRequired();
 
         builder.HasIndex(entity => new { entity.Issuer, entity.Subject }).IsUnique();
 

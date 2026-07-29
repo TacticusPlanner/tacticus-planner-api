@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Domain.Projects;
 
 namespace TacticusPlanner.Persistence.Configurations;
@@ -12,24 +11,20 @@ public sealed class ProjectConfiguration : IEntityTypeConfiguration<Project>
         builder.ToTable("projects");
         builder.HasKey(entity => entity.Id);
 
-        // See GoalConfiguration's comment: Vogen's cross-assembly EFCore generator does not (yet)
-        // discover ProjectId, so the converter is written out by hand.
         builder.Property(entity => entity.Id)
-            .HasColumnName("id")
-            .HasConversion(id => id.Value, value => ProjectId.From(value))
+            .HasVogenConversion()
             .ValueGeneratedNever();
         builder.Property(entity => entity.ProfileId)
-            .HasColumnName("profile_id")
-            .HasConversion(id => id.Value, value => ProfileId.From(value))
+            .HasVogenConversion()
             .IsRequired();
-        builder.Property(entity => entity.Name).HasColumnName("name").IsRequired();
-        builder.Property(entity => entity.Description).HasColumnName("description");
-        builder.Property(entity => entity.Color).HasColumnName("color");
-        builder.Property(entity => entity.Status).HasColumnName("status").HasConversion<string>().IsRequired();
-        builder.Property(entity => entity.IsDefault).HasColumnName("is_default").IsRequired();
-        builder.Property(entity => entity.Revision).HasColumnName("revision").IsConcurrencyToken();
-        builder.Property(entity => entity.CreatedAt).HasColumnName("created_at").IsRequired();
-        builder.Property(entity => entity.UpdatedAt).HasColumnName("updated_at").IsRequired();
+        builder.Property(entity => entity.Name).HasMaxLength(ProjectValidation.MaxNameLength).IsRequired();
+        builder.Property(entity => entity.Description).HasMaxLength(ProjectValidation.MaxDescriptionLength);
+        builder.Property(entity => entity.Color).HasMaxLength(ProjectValidation.MaxColorLength);
+        builder.Property(entity => entity.Status).HasConversion<string>().IsRequired();
+        builder.Property(entity => entity.Type).HasConversion<string>().IsRequired();
+        builder.Property(entity => entity.Revision).IsConcurrencyToken();
+        builder.Property(entity => entity.CreatedAt).IsRequired();
+        builder.Property(entity => entity.UpdatedAt).IsRequired();
 
         builder.HasIndex([nameof(Project.ProfileId)], "ix_projects_profile_id");
 

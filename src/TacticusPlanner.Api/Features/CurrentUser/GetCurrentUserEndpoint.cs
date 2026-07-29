@@ -74,7 +74,7 @@ public sealed class GetCurrentUserEndpoint : EndpointWithoutRequest<CurrentUserR
             ProfileId = profileId,
             Name = "My Goals",
             Status = ProjectStatus.Active,
-            IsDefault = true,
+            Type = ProjectType.Default,
         };
 
         var account = new Account

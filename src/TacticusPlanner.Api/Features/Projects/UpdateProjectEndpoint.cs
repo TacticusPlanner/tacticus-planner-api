@@ -48,7 +48,7 @@ public sealed class UpdateProjectEndpoint : Endpoint<UpdateProjectRequest, Proje
 
         var status = Enum.Parse<ProjectStatus>(req.Status, ignoreCase: true);
         var profile = await db.Profiles.FirstAsync(entity => entity.Id == profileId, ct);
-        if (status == ProjectStatus.Archived && project.IsDefault)
+        if (status == ProjectStatus.Archived && project.Type == ProjectType.Default)
         {
             await SendConflictAsync("defaultProjectCannotBeArchived", "The default project cannot be archived.", ct);
             return;

@@ -7,6 +7,9 @@
         "requested": "[8.0.5, )",
         "resolved": "8.0.5",
         "contentHash": "hUGafk0LpUn3ooZNOOczByhVSGqBaI96bCn0DkreSd2bwHGrMfdRoCqNrB4w0/y5bufyYaABqQ8wWBPgx5QdNw=="
+      },
+      "tacticusplanner.gamedomain": {
+        "type": "Project"
       }
     }
   }

@@ -1,5 +1,8 @@
+using System.Reflection;
+using System.Text.Json.Serialization;
 using FastEndpoints;
 using TacticusPlanner.Domain.Goals;
+using TacticusPlanner.GameDomain;
 
 namespace TacticusPlanner.Api.Features.Goals;
 
@@ -13,6 +16,17 @@ namespace TacticusPlanner.Api.Features.Goals;
 /// </summary>
 public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, Goal>
 {
+    /// <summary>Wire-format lookup for <see cref="UnitProgression"/>, built from each member's
+    /// <see cref="JsonStringEnumMemberNameAttribute"/> — the client sends the same "{Rarity}:{Stars}"
+    /// strings the frontend's <c>Progression</c> union uses (e.g. "Common:TwoStars"), which
+    /// <c>Enum.TryParse</c> can't match against the C# member names directly.</summary>
+    private static readonly Dictionary<string, UnitProgression> ProgressionByWireValue =
+        typeof(UnitProgression).GetFields(BindingFlags.Public | BindingFlags.Static)
+            .ToDictionary(
+                field => field.GetCustomAttribute<JsonStringEnumMemberNameAttribute>()!.Name,
+                field => (UnitProgression)field.GetValue(null)!,
+                StringComparer.Ordinal);
+
     public override Goal ToEntity(CreateGoalRequest r) => new()
     {
         EntityId = r.EntityId.Trim(),
@@ -36,12 +50,10 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
         goal.Status.ToString(),
         goal.Notes,
         BuildConfig(goal.Config),
-        goal.Milestones.Select(BuildMilestone).ToList(),
         goal.Snapshot is null ? null : BuildSnapshot(goal.Snapshot),
         goal.Events.Select(BuildEvent).ToList(),
         goal.DependsOn.ToList(),
         projectIds,
-        goal.AggregateId,
         goal.CreatedAt,
         goal.UpdatedAt
     );
@@ -53,9 +65,6 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
         goal.GoalType.ToString(),
         goal.Status.ToString(),
         goal.Notes,
-        goal.AggregateId,
-        goal.Milestones.Count,
-        goal.Milestones.Count(milestone => milestone.Status == "completed"),
         goal.CreatedAt,
         goal.UpdatedAt
     );
@@ -104,9 +113,9 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
                 Quantity = target.Quantity,
             }).ToList(),
         },
-        Equipment = config.Equipment is null ? null : new EquipmentTarget
+        Item = config.Item is null ? null : new ItemTarget
         {
-            TargetLevel = config.Equipment.TargetLevel,
+            TargetLevel = config.Item.TargetLevel,
         },
         Level = config.Level is null ? null : new LevelTarget
         {
@@ -115,21 +124,23 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
         },
     };
 
-    internal static GoalSnapshot MapSnapshot(CreateGoalSnapshotRequest? snapshot, DateTimeOffset createdAt) => new()
+    internal static GoalSnapshot MapSnapshot(CreateGoalSnapshotRequest? snapshot) => new()
     {
-        CreatedAt = createdAt,
-        InitialRank = snapshot?.InitialRank,
-        InitialProgression = snapshot?.InitialProgression,
+        InitialRank = ParseRank(snapshot?.InitialRank),
+        InitialProgression = ParseProgression(snapshot?.InitialProgression),
         InitialActiveAbilityLevel = snapshot?.InitialActiveAbilityLevel,
         InitialPassiveAbilityLevel = snapshot?.InitialPassiveAbilityLevel,
-        InitialUnlocked = snapshot?.InitialUnlocked,
         InitialRequirement = MapResources(snapshot?.InitialRequirement),
         InitialInventoryContribution = MapResources(snapshot?.InitialInventoryContribution),
-        OriginalEnergyTotal = snapshot?.OriginalEnergyTotal,
-        OriginalRaidsTotal = snapshot?.OriginalRaidsTotal,
-        OriginalEstimateDays = snapshot?.OriginalEstimateDays,
-        OriginalEstimateDate = snapshot?.OriginalEstimateDate,
     };
+
+    /// <summary>Best-effort — an unparseable client-supplied value becomes null rather than a 400; the
+    /// snapshot is a display baseline, not authoritative game state.</summary>
+    private static UnitRank? ParseRank(string? value) =>
+        value is not null && Enum.TryParse<UnitRank>(value, ignoreCase: true, out var rank) ? rank : null;
+
+    private static UnitProgression? ParseProgression(string? value) =>
+        value is not null && ProgressionByWireValue.TryGetValue(value, out var progression) ? progression : null;
 
     private static List<GoalSnapshotResource> MapResources(List<GoalSnapshotResourceRequest>? resources) =>
         resources?.Select(resource => new GoalSnapshotResource
@@ -162,32 +173,17 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
             config.AscensionFarming.MythicShardBattleIds),
         config.Upgrade is null ? null : new UpgradeTargetResponse(
             config.Upgrade.Targets.Select(target => new UpgradeItemTargetResponse(target.UpgradeId, target.Quantity)).ToList()),
-        config.Equipment is null ? null : new EquipmentTargetResponse(config.Equipment.TargetLevel),
+        config.Item is null ? null : new ItemTargetResponse(config.Item.TargetLevel),
         config.Level is null ? null : new LevelTargetResponse(config.Level.Start, config.Level.End)
     );
 
-    private static GoalMilestoneResponse BuildMilestone(GoalMilestone milestone) => new(
-        milestone.Index,
-        milestone.Kind,
-        milestone.TargetState,
-        milestone.Source,
-        milestone.Status,
-        milestone.CompletedAt
-    );
-
     private static GoalSnapshotResponse BuildSnapshot(GoalSnapshot snapshot) => new(
-        snapshot.CreatedAt,
         snapshot.InitialRank,
         snapshot.InitialProgression,
         snapshot.InitialActiveAbilityLevel,
         snapshot.InitialPassiveAbilityLevel,
-        snapshot.InitialUnlocked,
         snapshot.InitialRequirement.Select(BuildSnapshotResource).ToList(),
-        snapshot.InitialInventoryContribution.Select(BuildSnapshotResource).ToList(),
-        snapshot.OriginalEnergyTotal,
-        snapshot.OriginalRaidsTotal,
-        snapshot.OriginalEstimateDays,
-        snapshot.OriginalEstimateDate
+        snapshot.InitialInventoryContribution.Select(BuildSnapshotResource).ToList()
     );
 
     private static GoalSnapshotResourceResponse BuildSnapshotResource(GoalSnapshotResource resource) =>
@@ -203,11 +199,6 @@ public sealed record GoalSummaryResponse(
     string GoalType,
     string Status,
     string? Notes,
-    Guid? AggregateId,
-    // Lean milestone counts (not the full list — see GoalDetailResponse.Milestones for that) so a
-    // goals list can show "M/N" without an N+1 detail fetch per row.
-    int MilestonesTotal,
-    int MilestonesCompleted,
     DateTimeOffset CreatedAt,
     DateTimeOffset UpdatedAt
 );
@@ -220,7 +211,6 @@ public sealed record GoalDetailResponse(
     string Status,
     string? Notes,
     GoalConfigResponse Config,
-    List<GoalMilestoneResponse> Milestones,
     GoalSnapshotResponse? Snapshot,
     List<GoalEventResponse> Events,
     List<Guid> DependsOn,
@@ -228,7 +218,6 @@ public sealed record GoalDetailResponse(
     // projects at once). Populated by the caller via GoalMapper.ToDetail — Goal itself has no navigation
     // to ProjectGoal, so this can't be filled in by FromEntity(Goal) alone.
     List<Guid> ProjectIds,
-    Guid? AggregateId,
     DateTimeOffset CreatedAt,
     DateTimeOffset UpdatedAt
 );
@@ -241,7 +230,7 @@ public sealed record GoalConfigResponse(
     string FarmingStrategy,
     AscensionFarmingResponse? AscensionFarming,
     UpgradeTargetResponse? Upgrade,
-    EquipmentTargetResponse? Equipment,
+    ItemTargetResponse? Item,
     LevelTargetResponse? Level
 );
 
@@ -249,7 +238,7 @@ public sealed record UpgradeTargetResponse(List<UpgradeItemTargetResponse> Targe
 
 public sealed record UpgradeItemTargetResponse(string UpgradeId, int Quantity);
 
-public sealed record EquipmentTargetResponse(int TargetLevel);
+public sealed record ItemTargetResponse(int TargetLevel);
 
 public sealed record LevelTargetResponse(int Start, int End);
 
@@ -272,28 +261,13 @@ public sealed record AscensionFarmingResponse(
     List<string> MythicShardBattleIds
 );
 
-public sealed record GoalMilestoneResponse(
-    int Index,
-    string Kind,
-    string TargetState,
-    string Source,
-    string Status,
-    DateTimeOffset? CompletedAt
-);
-
 public sealed record GoalSnapshotResponse(
-    DateTimeOffset CreatedAt,
-    string? InitialRank,
-    string? InitialProgression,
+    UnitRank? InitialRank,
+    UnitProgression? InitialProgression,
     int? InitialActiveAbilityLevel,
     int? InitialPassiveAbilityLevel,
-    bool? InitialUnlocked,
     List<GoalSnapshotResourceResponse> InitialRequirement,
-    List<GoalSnapshotResourceResponse> InitialInventoryContribution,
-    int? OriginalEnergyTotal,
-    int? OriginalRaidsTotal,
-    int? OriginalEstimateDays,
-    DateTimeOffset? OriginalEstimateDate
+    List<GoalSnapshotResourceResponse> InitialInventoryContribution
 );
 
 public sealed record GoalSnapshotResourceResponse(string ResourceId, int Count);

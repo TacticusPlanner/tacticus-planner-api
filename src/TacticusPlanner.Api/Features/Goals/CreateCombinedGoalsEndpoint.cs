@@ -13,14 +13,13 @@ namespace TacticusPlanner.Api.Features.Goals;
 /// (plan §6/§8): pick a character, compose any combination of Unlock/Ascension/Rank/Ability targets, the
 /// client detects unmet prerequisites (a locked entity needs Unlock; an unreachable target Rank needs
 /// Ascension) and orders the request accordingly, then this endpoint persists the whole set atomically —
-/// one shared <see cref="Goal.AggregateId"/>, and each spec's <see cref="CombinedGoalSpec.DependsOnIndex"/>
-/// resolved into real <see cref="Goal.DependsOn"/> edges. Detection/ordering itself stays client-side (it
-/// needs live player-data the server doesn't hold); this endpoint only persists what it's given. Every
-/// goal lands in the same project(s) as <see cref="CreateGoalEndpoint"/> uses (the given
-/// <see cref="CreateCombinedGoalsRequest.Projects"/>, or the caller's default project) — a given
-/// per-project <see cref="ProjectPriorityRequest.Priority"/> becomes that project's base priority for the
-/// whole set, with each subsequent goal in the set placed immediately after (same "+i" spacing used when
-/// no priority is given).
+/// each spec's <see cref="CombinedGoalSpec.DependsOnIndex"/> resolved into real <see cref="Goal.DependsOn"/>
+/// edges. Detection/ordering itself stays client-side (it needs live player-data the server doesn't hold);
+/// this endpoint only persists what it's given. Every goal lands in the same project(s) as
+/// <see cref="CreateGoalEndpoint"/> uses (the given <see cref="CreateCombinedGoalsRequest.Projects"/>, or
+/// the caller's default project) — a given per-project <see cref="ProjectPriorityRequest.Priority"/>
+/// becomes that project's base priority for the whole set, with each subsequent goal in the set placed
+/// immediately after (same "+i" spacing used when no priority is given).
 /// </summary>
 public sealed class CreateCombinedGoalsEndpoint
     : Endpoint<CreateCombinedGoalsRequest, CreateCombinedGoalsResponse, GoalMapper>
@@ -31,9 +30,8 @@ public sealed class CreateCombinedGoalsEndpoint
         Summary(summary =>
         {
             summary.Summary = "Creates several linked goals for one entity in one call (combined creation).";
-            summary.Description = "Every goal shares one AggregateId; each spec's DependsOnIndex (indices "
-                + "into this same request's Goals list, referencing only earlier entries) is resolved into "
-                + "real DependsOn edges. Rank goals get their milestone breakpoints generated. Assigns the "
+            summary.Description = "Each spec's DependsOnIndex (indices into this same request's Goals list, "
+                + "referencing only earlier entries) is resolved into real DependsOn edges. Assigns the "
                 + "whole set to the given project(s), or the caller's default project (created on first use) "
                 + "when none is given, same as POST me/goals.";
             summary.Response<CreateCombinedGoalsResponse>(StatusCodes.Status200OK, "The newly created goals, in request order.");
@@ -125,45 +123,25 @@ public sealed class CreateCombinedGoalsEndpoint
         var status = targetProjects.Any(project => project.Id == profile.ActiveProjectId)
             ? GoalStatus.Active
             : GoalStatus.Paused;
-        var aggregateId = Guid.NewGuid();
         var now = DateTimeOffset.UtcNow;
 
-        // First pass: build every goal (so each spec's index has a real GoalId to resolve dependencies
-        // against), deferring DependsOn assignment to the second pass below.
-        var goals = new List<Goal>(req.Goals.Count);
-        foreach (var spec in req.Goals)
+        // Built as a materialized, indexable List (not a lazy .Select) so each spec's index has a real
+        // GoalId to resolve dependencies against in the second pass below.
+        var goals = req.Goals.Select(spec => new Goal
         {
-            var goal = new Goal
-            {
-                Id = GoalId.From(Guid.CreateVersion7()),
-                ProfileId = profileId,
-                EntityType = entityType,
-                EntityId = req.EntityId.Trim(),
-                GoalType = Enum.Parse<GoalType>(spec.GoalType, ignoreCase: true),
-                Status = status,
-                Config = GoalMapper.MapConfig(spec.Config),
-                Snapshot = GoalMapper.MapSnapshot(spec.Snapshot, now),
-                AggregateId = aggregateId,
-                Events = [new GoalEvent { At = now, Type = GoalEventType.Created }],
-            };
+            Id = GoalId.From(Guid.CreateVersion7()),
+            ProfileId = profileId,
+            EntityType = entityType,
+            EntityId = req.EntityId.Trim(),
+            GoalType = Enum.Parse<GoalType>(spec.GoalType, ignoreCase: true),
+            Status = status,
+            Config = GoalMapper.MapConfig(spec.Config),
+            Snapshot = GoalMapper.MapSnapshot(spec.Snapshot),
+            Events = [new GoalEvent { At = now, Type = GoalEventType.Created }],
+        }).ToList();
 
-            if (goal.GoalType == GoalType.Rank && goal.Config.Rank is { } rank)
-            {
-                goal.Milestones = MilestoneGenerator.ForRank(rank.Start, rank.End, goal.Config.FarmingStrategy);
-            }
-            else if (goal.EntityType == GoalEntityType.Mow
-                && goal.GoalType == GoalType.Ability
-                && goal.Config.Ability is { } ability)
-            {
-                var (start, end) = ability.ActiveEnd > ability.ActiveStart
-                    ? (ability.ActiveStart, ability.ActiveEnd)
-                    : (ability.PassiveStart, ability.PassiveEnd);
-                goal.Milestones = MilestoneGenerator.ForAbility(start, end, goal.Config.FarmingStrategy);
-            }
-
-            goals.Add(goal);
-        }
-
+        // Second pass: DependsOn references another spec's GoalId, only resolvable once every goal in
+        // the set already has one (see the first pass above).
         for (var i = 0; i < req.Goals.Count; i++)
         {
             goals[i].DependsOn = req.Goals[i].DependsOnIndex.Select(index => goals[index].Id.Value).ToList();

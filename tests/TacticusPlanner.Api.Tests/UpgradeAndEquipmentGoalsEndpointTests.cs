@@ -6,8 +6,8 @@ namespace TacticusPlanner.Api.Tests;
 
 /// <summary>Coverage for the two goal types re-introduced/added alongside Rank/Ascension/Ability/Unlock:
 /// <c>Upgrade</c> (farm one or more specific materials to a target quantity, scoped to the owning unit's
-/// own requirements) and <c>UpgradeEquipment</c> (level up a specific piece of equipment, a new
-/// "Equipment" entity type with no Character/Mow owner). Test ids (<c>blackTerminator</c>,
+/// own requirements) and <c>UpgradeItem</c> (level up a specific piece of equipment, a new
+/// "Item" entity type with no Character/Mow owner). Test ids (<c>blackTerminator</c>,
 /// <c>astraOrdnanceBattery</c>, <c>upgHpC014</c>/<c>upgHpC015</c>, <c>I_Block_C002</c>) are real served
 /// game-catalog entries — this project seeds its test catalog from the same data files production serves
 /// (see <see cref="GoalsEndpointTests"/>'s own fixtures for the established precedent of using real ids
@@ -155,10 +155,10 @@ public sealed class UpgradeAndEquipmentGoalsEndpointTests(PlannerApiFactory fact
         var response = await client.PostAsJsonAsync(
             "/api/v1/me/goals",
             new CreateGoalRequest(
-                "equipment",
+                "item",
                 EquipmentId,
-                "upgradeequipment",
-                new CreateGoalConfigRequest(Equipment: new EquipmentTargetRequest(3)),
+                "upgradeitem",
+                new CreateGoalConfigRequest(Item: new ItemTargetRequest(3)),
                 null
             ),
             TestContext.Current.CancellationToken
@@ -167,9 +167,9 @@ public sealed class UpgradeAndEquipmentGoalsEndpointTests(PlannerApiFactory fact
         var created = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
 
         Assert.NotNull(created);
-        Assert.Equal("Equipment", created.EntityType);
-        Assert.Equal("UpgradeEquipment", created.GoalType);
-        Assert.Equal(3, created.Config.Equipment!.TargetLevel);
+        Assert.Equal("Item", created.EntityType);
+        Assert.Equal("UpgradeItem", created.GoalType);
+        Assert.Equal(3, created.Config.Item!.TargetLevel);
     }
 
     [Theory]
@@ -182,8 +182,8 @@ public sealed class UpgradeAndEquipmentGoalsEndpointTests(PlannerApiFactory fact
         var response = await client.PostAsJsonAsync(
             "/api/v1/me/goals",
             new CreateGoalRequest(
-                "equipment", EquipmentId, "upgradeequipment",
-                new CreateGoalConfigRequest(Equipment: new EquipmentTargetRequest(targetLevel)), null),
+                "item", EquipmentId, "upgradeitem",
+                new CreateGoalConfigRequest(Item: new ItemTargetRequest(targetLevel)), null),
             TestContext.Current.CancellationToken
         );
 
@@ -198,8 +198,8 @@ public sealed class UpgradeAndEquipmentGoalsEndpointTests(PlannerApiFactory fact
         var response = await client.PostAsJsonAsync(
             "/api/v1/me/goals",
             new CreateGoalRequest(
-                "equipment", "not-a-real-equipment-id", "upgradeequipment",
-                new CreateGoalConfigRequest(Equipment: new EquipmentTargetRequest(2)), null),
+                "item", "not-a-real-equipment-id", "upgradeitem",
+                new CreateGoalConfigRequest(Item: new ItemTargetRequest(2)), null),
             TestContext.Current.CancellationToken
         );
 
@@ -207,9 +207,9 @@ public sealed class UpgradeAndEquipmentGoalsEndpointTests(PlannerApiFactory fact
     }
 
     [Theory]
-    [InlineData("equipment", "rank")]
-    [InlineData("character", "upgradeequipment")]
-    [InlineData("mow", "upgradeequipment")]
+    [InlineData("item", "rank")]
+    [InlineData("character", "upgradeitem")]
+    [InlineData("mow", "upgradeitem")]
     public async Task MismatchedEntityAndGoalTypeIsRejected(string entityType, string goalType)
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);

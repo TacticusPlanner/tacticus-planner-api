@@ -2,6 +2,7 @@ using System.Net;
 using System.Net.Http.Json;
 using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Api.Features.Projects;
+using TacticusPlanner.GameDomain;
 
 namespace TacticusPlanner.Api.Tests;
 
@@ -42,15 +43,8 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
         Assert.Equal("Unlock", unlock.GoalType);
         Assert.Equal("Rank", rank.GoalType);
 
-        Assert.NotNull(unlock.AggregateId);
-        Assert.Equal(unlock.AggregateId, rank.AggregateId);
-
         Assert.Empty(unlock.DependsOn);
         Assert.Equal([unlock.GoalId], rank.DependsOn);
-
-        Assert.Empty(unlock.Milestones);
-        Assert.NotEmpty(rank.Milestones);
-        Assert.Equal("Diamond1", rank.Milestones[^1].TargetState);
 
         var defaultProject = await GetDefaultProjectAsync(client);
         var membersResponse = await client.GetFromJsonAsync<ListProjectGoalsResponse>(
@@ -119,16 +113,11 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var snapshot = new CreateGoalSnapshotRequest(
             InitialRank: "Silver1",
-            InitialProgression: "Rare3Stars",
+            InitialProgression: "Rare:FourStars",
             InitialActiveAbilityLevel: 20,
             InitialPassiveAbilityLevel: 18,
-            InitialUnlocked: true,
             InitialRequirement: [new GoalSnapshotResourceRequest("material-1", 30)],
-            InitialInventoryContribution: [new GoalSnapshotResourceRequest("material-1", 5)],
-            OriginalEnergyTotal: 120,
-            OriginalRaidsTotal: 20,
-            OriginalEstimateDays: 2,
-            OriginalEstimateDate: new DateTimeOffset(2026, 7, 17, 0, 0, 0, TimeSpan.Zero)
+            InitialInventoryContribution: [new GoalSnapshotResourceRequest("material-1", 5)]
         );
         var request = UnlockThenRank with
         {
@@ -145,11 +134,10 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
 
         var stored = Assert.Single(created!.Goals).Snapshot;
         Assert.NotNull(stored);
-        Assert.Equal("Silver1", stored.InitialRank);
+        Assert.Equal(UnitRank.Silver1, stored.InitialRank);
+        Assert.Equal(UnitProgression.RareFourStars, stored.InitialProgression);
         Assert.Equal(30, Assert.Single(stored.InitialRequirement).Count);
         Assert.Equal(5, Assert.Single(stored.InitialInventoryContribution).Count);
-        Assert.Equal(120, stored.OriginalEnergyTotal);
-        Assert.Equal(2, stored.OriginalEstimateDays);
     }
 
     [Fact]

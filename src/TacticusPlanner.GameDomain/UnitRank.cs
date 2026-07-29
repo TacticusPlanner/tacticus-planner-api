@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace TacticusPlanner.Domain.PlayerData.Chunks;
+namespace TacticusPlanner.GameDomain;
 
 /// <summary>0 = Stone I, 3 = Iron I, 6 = Bronze I, 9 = Silver I, 12 = Gold I, 15 = Diamond I, 18 =
 /// Adamantine I — Tacticus's raw per-unit rank int is a direct 0-based index into this same 21-step

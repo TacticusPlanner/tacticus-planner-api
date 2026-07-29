@@ -23,7 +23,8 @@ public sealed class CreateGoalValidator : Validator<CreateGoalRequest>
 
         RuleFor(request => request.EntityId)
             .NotEmpty()
-            .WithMessage("An entity id is required.");
+            .WithMessage("An entity id is required.")
+            .MaximumLength(GoalValidation.MaxEntityIdLength);
 
         // Machines of War have no rank ladder (plan §16 phase 6) — reject the combination before it
         // reaches MilestoneGenerator, which would otherwise stamp character-rank milestones onto it.

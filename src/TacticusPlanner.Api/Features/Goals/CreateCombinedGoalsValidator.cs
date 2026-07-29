@@ -25,7 +25,8 @@ public sealed class CreateCombinedGoalsValidator : Validator<CreateCombinedGoals
 
         RuleFor(request => request.EntityId)
             .NotEmpty()
-            .WithMessage("An entity id is required.");
+            .WithMessage("An entity id is required.")
+            .MaximumLength(GoalValidation.MaxEntityIdLength);
 
         RuleFor(request => request.Goals)
             .NotEmpty()
@@ -53,7 +54,7 @@ public sealed class CreateCombinedGoalsValidator : Validator<CreateCombinedGoals
             {
                 for (var i = 0; i < goals.Count; i++)
                 {
-                    foreach (var dependsOnIndex in goals[i].DependsOnIndex.Where(dependsOnIndex => dependsOnIndex < 0 || dependsOnIndex >= i))
+                    if (goals[i].DependsOnIndex.Any(dependsOnIndex => dependsOnIndex < 0 || dependsOnIndex >= i))
                     {
                         context.AddFailure(
                             $"Goals[{i}].DependsOnIndex",

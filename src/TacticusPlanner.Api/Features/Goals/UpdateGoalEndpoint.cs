@@ -73,6 +73,9 @@ public sealed class UpdateGoalValidator : Validator<UpdateGoalRequest>
 {
     public UpdateGoalValidator()
     {
+        RuleFor(request => request.Notes)
+            .MaximumLength(GoalValidation.MaxNotesLength);
+
         RuleFor(request => request.FarmingStrategy)
             .Must(value => value is null || Enum.TryParse<FarmingStrategy>(value, ignoreCase: true, out _))
             .WithMessage("Unknown farming strategy.");

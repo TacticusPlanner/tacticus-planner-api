@@ -1,3 +1,5 @@
+using TacticusPlanner.GameDomain;
+
 namespace TacticusPlanner.Domain.PlayerData.Chunks;
 
 /// <summary>Shared fields for a character or a MoW. MoWs have no rank and no equipment slots, so

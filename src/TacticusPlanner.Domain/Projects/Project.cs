@@ -24,13 +24,9 @@ public class Project : BaseEntity<ProjectId>, IRevisionedEntity
 
     public ProjectStatus Status { get; set; }
 
-    /// <summary>True for the profile's auto-provisioned default project ("My Goals") — informational only;
-    /// it can be renamed but cannot be archived.</summary>
-    public bool IsDefault { get; set; }
+    public ProjectType Type { get; set; }
 
     public virtual Profile? Profile { get; set; }
 
     public virtual ICollection<ProjectGoal> ProjectGoals { get; set; } = new List<ProjectGoal>();
-
-    public virtual ICollection<ProjectTeam> ProjectTeams { get; set; } = new List<ProjectTeam>();
 }

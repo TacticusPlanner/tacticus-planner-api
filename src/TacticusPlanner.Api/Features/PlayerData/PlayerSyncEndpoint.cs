@@ -2,7 +2,6 @@ using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using Refit;
 using TacticusPlanner.Api.Features.Auth;
-using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Persistence;
 using TacticusPlanner.TacticusApi;
 using PlayerDataSnapshotEntity = TacticusPlanner.Domain.PlayerData.PlayerDataSnapshot;
@@ -63,7 +62,6 @@ public sealed class PlayerSyncEndpoint(ITacticusApi tacticusApi, PlayerDataTrans
         }
 
         var db = Resolve<PlannerDbContext>();
-        var goalAchievementEvaluator = Resolve<GoalAchievementEvaluator>();
 
         // TacticusIntegration is keyed 1:1 by the same ProfileId, so this is a direct primary-key lookup —
         // no Account/Profile join, and the (potentially large) PlayerDataSnapshot row isn't touched yet.
@@ -124,7 +122,6 @@ public sealed class PlayerSyncEndpoint(ITacticusApi tacticusApi, PlayerDataTrans
             integration.TacticusSyncLastSucceededAt = syncedAt;
             var currentSnapshot = await db.PlayerDataSnapshots.FirstAsync(entity => entity.Id == profileId, ct);
             currentSnapshot.SyncedAt = syncedAt;
-            await goalAchievementEvaluator.EvaluateAsync(profileId, currentSnapshot, ct);
             await db.SaveChangesAsync(ct);
             await Send.OkAsync(PlayerDataManifestBuilder.Build(currentSnapshot), ct);
             return;
@@ -163,7 +160,6 @@ public sealed class PlayerSyncEndpoint(ITacticusApi tacticusApi, PlayerDataTrans
         }
 
         integration.TacticusSyncLastSucceededAt = timeProvider.GetUtcNow();
-        await goalAchievementEvaluator.EvaluateAsync(profileId, snapshot, ct);
         await db.SaveChangesAsync(ct);
 
         await Send.OkAsync(PlayerDataManifestBuilder.Build(snapshot), ct);

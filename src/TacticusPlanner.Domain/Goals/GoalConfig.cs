@@ -18,7 +18,7 @@ public sealed class GoalConfig
 
     public UpgradeTarget? Upgrade { get; set; }
 
-    public EquipmentTarget? Equipment { get; set; }
+    public ItemTarget? Item { get; set; }
 
     public LevelTarget? Level { get; set; }
 
@@ -75,10 +75,10 @@ public sealed class UpgradeItemTarget
 }
 
 /// <summary>Target level for a specific piece of equipment/relic gear (see
-/// <see cref="GoalEntityType.Equipment"/>). Uncosted for now — no gold/salvage/mythic-salvage
+/// <see cref="GoalEntityType.Item"/>). Uncosted for now — no gold/salvage/mythic-salvage
 /// farming or accrual engine exists anywhere in this app yet; "complete" is simply the player's
 /// synced level for this equipment reaching <see cref="TargetLevel"/>.</summary>
-public sealed class EquipmentTarget
+public sealed class ItemTarget
 {
     public required int TargetLevel { get; set; }
 }

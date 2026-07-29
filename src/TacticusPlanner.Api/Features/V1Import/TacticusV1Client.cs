@@ -125,7 +125,9 @@ public sealed class TacticusV1Client(IHttpClientFactory httpClientFactory) : ITa
             return null;
         }
 
-        var payload = await response.Content.ReadFromJsonAsync<V1UserDataResponse>(cancellationToken);
+        // The whole envelope — including the nested "data" object — is deserialized once here, directly
+        // into the typed V1UserDataResponse/V1UserData graph below; nothing downstream re-parses raw JSON.
+        var payload = await response.Content.ReadFromJsonAsync<V1UserDataResponse>(WebJsonOptions, cancellationToken);
 
         if (payload is null)
         {
@@ -142,30 +144,18 @@ public sealed class TacticusV1Client(IHttpClientFactory httpClientFactory) : ITa
         );
     }
 
-    private static List<V1Goal> ReadGoals(JsonElement? data)
-    {
-        if (data is not { ValueKind: JsonValueKind.Object } value
-            || !value.TryGetProperty("goals", out var goals)
-            || goals.ValueKind != JsonValueKind.Array)
-        {
-            return [];
-        }
+    private static List<V1Goal> ReadGoals(V1UserData? data) => data?.Goals ?? [];
 
-        return goals.Deserialize<List<V1Goal>>(WebJsonOptions) ?? [];
-    }
-
-    internal static V1OnslaughtImportData ReadOnslaughtProgress(JsonElement? data)
+    internal static V1OnslaughtImportData ReadOnslaughtProgress(V1UserData? data)
     {
-        if (data is not { ValueKind: JsonValueKind.Object } value
-            || !TryGetProperty(value, "onslaughtPreferences", out var preferences))
+        if (data?.OnslaughtPreferences is not { } preferences)
         {
             return V1OnslaughtImportData.Missing();
         }
 
-        if (preferences.ValueKind != JsonValueKind.Object
-            || !TryReadAlliance(preferences, "Imperial", out var imperial)
-            || !TryReadAlliance(preferences, "Xenos", out var xenos)
-            || !TryReadAlliance(preferences, "Chaos", out var chaos))
+        if (!TryReadAlliance(preferences.Imperial, out var imperial)
+            || !TryReadAlliance(preferences.Xenos, out var xenos)
+            || !TryReadAlliance(preferences.Chaos, out var chaos))
         {
             return V1OnslaughtImportData.Invalid();
         }
@@ -173,28 +163,27 @@ public sealed class TacticusV1Client(IHttpClientFactory httpClientFactory) : ITa
         return V1OnslaughtImportData.Valid(new V1OnslaughtProgress(imperial, xenos, chaos));
     }
 
-    internal static V1CampaignEventProgressImportData ReadCampaignEventProgress(JsonElement? data)
+    internal static V1CampaignEventProgressImportData ReadCampaignEventProgress(V1UserData? data)
     {
-        if (data is not { ValueKind: JsonValueKind.Object } value
-            || !TryGetProperty(value, "campaignsProgress", out var campaignsProgress))
+        if (data?.CampaignsProgress is not { } campaignsProgress)
         {
             return V1CampaignEventProgressImportData.Missing();
-        }
-
-        if (campaignsProgress.ValueKind != JsonValueKind.Object)
-        {
-            return V1CampaignEventProgressImportData.Invalid();
         }
 
         var result = new List<V1CampaignEventProgress>();
         foreach (var mapping in V1CampaignEventMappings)
         {
-            if (!TryGetProperty(campaignsProgress, mapping.V1Key, out var progress))
+            // Matched case-insensitively — same tolerance the old JsonElement walk had for the V1
+            // backend's key casing.
+            var match = campaignsProgress.FirstOrDefault(kvp =>
+                string.Equals(kvp.Key, mapping.V1Key, StringComparison.OrdinalIgnoreCase));
+            if (match.Key is null)
             {
                 continue;
             }
 
-            if (!progress.TryGetInt32(out var completed) || completed is < 0 or > 30)
+            var completed = match.Value;
+            if (completed is < 0 or > 30)
             {
                 return V1CampaignEventProgressImportData.Invalid();
             }
@@ -207,23 +196,14 @@ public sealed class TacticusV1Client(IHttpClientFactory httpClientFactory) : ITa
             : V1CampaignEventProgressImportData.Valid(result);
     }
 
-    private static bool TryReadAlliance(
-        JsonElement preferences,
-        string alliance,
-        out V1OnslaughtAllianceProgress progress)
+    private static bool TryReadAlliance(V1OnslaughtAllianceData? allianceData, out V1OnslaughtAllianceProgress progress)
     {
         progress = null!;
-        if (!TryGetProperty(preferences, alliance, out var value)
-            || value.ValueKind != JsonValueKind.Object
-            || !TryGetProperty(value, "sector", out var sectorElement)
-            || sectorElement.ValueKind != JsonValueKind.String
-            || !TryGetProperty(value, "tier", out var tierElement)
-            || !tierElement.TryGetInt32(out var tier))
+        if (allianceData is not { Sector: { } sector, Tier: { } tier })
         {
             return false;
         }
 
-        var sector = sectorElement.GetString();
         var normalizedSector = SupportedOnslaughtSectors.FirstOrDefault(candidate =>
             string.Equals(candidate, sector, StringComparison.OrdinalIgnoreCase));
         if (normalizedSector is null || tier is < 1 or > 4)
@@ -233,19 +213,6 @@ public sealed class TacticusV1Client(IHttpClientFactory httpClientFactory) : ITa
 
         progress = new V1OnslaughtAllianceProgress(normalizedSector, tier);
         return true;
-    }
-
-    private static bool TryGetProperty(JsonElement value, string name, out JsonElement property)
-    {
-        foreach (var candidate in value.EnumerateObject().Where(candidate =>
-            string.Equals(candidate.Name, name, StringComparison.OrdinalIgnoreCase)))
-        {
-            property = candidate.Value;
-            return true;
-        }
-
-        property = default;
-        return false;
     }
 
     private static readonly string[] SupportedOnslaughtSectors =
@@ -272,14 +239,33 @@ public sealed class TacticusV1Client(IHttpClientFactory httpClientFactory) : ITa
     private sealed record V1LoginResponse(string? AccessToken);
 
     // The V1 `GET users/me` response carries integration fields plus the planner data used for
-    // selective goal and Onslaught-progress imports.
+    // selective goal and Onslaught-progress imports. Data is deserialized directly into V1UserData as
+    // part of this same envelope — no separate JsonElement walk downstream.
     private sealed record V1UserDataResponse(
         string? TacticusApiKey,
         string? TacticusUserId,
         string? TacticusGuildApiKey,
-        JsonElement? Data
+        V1UserData? Data
     );
 }
+
+/// <summary>The subset of the V1 `GET users/me` response's <c>data</c> blob this importer reads. Only
+/// <see cref="Goals"/>/<see cref="OnslaughtPreferences"/>/<see cref="CampaignsProgress"/> are modeled —
+/// V1's <c>data</c> object carries plenty else, silently ignored by System.Text.Json's default
+/// unmatched-property behavior.</summary>
+internal sealed record V1UserData(
+    List<V1Goal>? Goals,
+    V1OnslaughtPreferencesData? OnslaughtPreferences,
+    Dictionary<string, int>? CampaignsProgress
+);
+
+internal sealed record V1OnslaughtPreferencesData(
+    V1OnslaughtAllianceData? Imperial,
+    V1OnslaughtAllianceData? Xenos,
+    V1OnslaughtAllianceData? Chaos
+);
+
+internal sealed record V1OnslaughtAllianceData(string? Sector, int? Tier);
 
 public static class TacticusV1ClientRegistration
 {

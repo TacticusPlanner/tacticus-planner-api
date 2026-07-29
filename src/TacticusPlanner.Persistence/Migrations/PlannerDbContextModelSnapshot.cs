@@ -51,10 +51,12 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_accounts");
 
                     b.HasIndex("Issuer", "Subject")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_accounts_issuer_subject");
 
                     b.ToTable("accounts", (string)null);
                 });
@@ -64,10 +66,6 @@ namespace TacticusPlanner.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
                         .HasColumnName("id");
-
-                    b.Property<Guid?>("AggregateId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("aggregate_id");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
@@ -80,7 +78,8 @@ namespace TacticusPlanner.Persistence.Migrations
 
                     b.Property<string>("EntityId")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
                         .HasColumnName("entity_id");
 
                     b.Property<string>("EntityType")
@@ -94,7 +93,8 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasColumnName("goal_type");
 
                     b.Property<string>("Notes")
-                        .HasColumnType("text")
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)")
                         .HasColumnName("notes");
 
                     b.Property<Guid>("ProfileId")
@@ -115,9 +115,11 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_goals");
 
-                    b.HasIndex("ProfileId");
+                    b.HasIndex("ProfileId")
+                        .HasDatabaseName("ix_goals_profile_id");
 
                     b.HasIndex("ProfileId", "EntityType", "EntityId", "GoalType")
                         .IsUnique()
@@ -186,16 +188,20 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_guilds");
 
-                    b.HasIndex("ConfiguredByProfileId");
+                    b.HasIndex("ConfiguredByProfileId")
+                        .HasDatabaseName("ix_guilds_configured_by_profile_id");
 
                     b.HasIndex("TacticusGuildIdHash")
                         .IsUnique()
+                        .HasDatabaseName("ix_guilds_tacticus_guild_id_hash")
                         .HasFilter("tacticus_guild_id_hash IS NOT NULL");
 
                     b.HasIndex("Tag")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_guilds_tag");
 
                     b.ToTable("guilds", (string)null);
                 });
@@ -262,51 +268,26 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_guild_members");
 
                     b.HasIndex("ProfileId")
                         .IsUnique()
+                        .HasDatabaseName("ix_guild_members_profile_id")
                         .HasFilter("profile_id IS NOT NULL");
 
                     b.HasIndex("GuildId", "TacticusUserIdHash")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_guild_members_guild_id_tacticus_user_id_hash");
 
                     b.ToTable("guild_members", (string)null);
-                });
-
-            modelBuilder.Entity("TacticusPlanner.Domain.Planning.PlanningSettings", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid")
-                        .HasColumnName("profile_id");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at");
-
-                    b.Property<int>("DailyEnergy")
-                        .HasColumnType("integer")
-                        .HasColumnName("daily_energy");
-
-                    b.Property<long>("Revision")
-                        .IsConcurrencyToken()
-                        .HasColumnType("bigint")
-                        .HasColumnName("revision");
-
-                    b.Property<DateTimeOffset>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("updated_at");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("planning_settings", (string)null);
                 });
 
             modelBuilder.Entity("TacticusPlanner.Domain.PlayerData.PlayerDataOverride", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
-                        .HasColumnName("profile_id");
+                        .HasColumnName("id");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
@@ -321,7 +302,8 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_player_data_overrides");
 
                     b.ToTable("player_data_overrides", (string)null);
                 });
@@ -330,7 +312,7 @@ namespace TacticusPlanner.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
-                        .HasColumnName("profile_id");
+                        .HasColumnName("id");
 
                     b.Property<string>("ChunkHashes")
                         .IsRequired()
@@ -372,7 +354,8 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_player_data_snapshots");
 
                     b.ToTable("player_data_snapshots", (string)null);
                 });
@@ -413,13 +396,16 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_profiles");
 
                     b.HasIndex("AccountId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasDatabaseName("ix_profiles_account_id");
 
                     b.HasIndex("TacticusUserIdHash")
                         .IsUnique()
+                        .HasDatabaseName("ix_profiles_tacticus_user_id_hash")
                         .HasFilter("tacticus_user_id_hash IS NOT NULL");
 
                     b.ToTable("profiles", (string)null);
@@ -429,7 +415,7 @@ namespace TacticusPlanner.Persistence.Migrations
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
-                        .HasColumnName("profile_id");
+                        .HasColumnName("id");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
@@ -451,7 +437,8 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_tacticus_integrations");
 
                     b.ToTable("tacticus_integrations", (string)null);
                 });
@@ -463,7 +450,8 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasColumnName("id");
 
                     b.Property<string>("Color")
-                        .HasColumnType("text")
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)")
                         .HasColumnName("color");
 
                     b.Property<DateTimeOffset>("CreatedAt")
@@ -471,16 +459,14 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasColumnName("created_at");
 
                     b.Property<string>("Description")
-                        .HasColumnType("text")
+                        .HasMaxLength(2000)
+                        .HasColumnType("character varying(2000)")
                         .HasColumnName("description");
-
-                    b.Property<bool>("IsDefault")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_default");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(120)
+                        .HasColumnType("character varying(120)")
                         .HasColumnName("name");
 
                     b.Property<Guid>("ProfileId")
@@ -497,13 +483,20 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasColumnType("text")
                         .HasColumnName("status");
 
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("type");
+
                     b.Property<DateTimeOffset>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .HasName("pk_projects");
 
-                    b.HasIndex(new[] { "ProfileId" }, "ix_projects_profile_id");
+                    b.HasIndex(new[] { "ProfileId" }, "ix_projects_profile_id")
+                        .HasDatabaseName("ix_projects_profile_id");
 
                     b.ToTable("projects", (string)null);
                 });
@@ -526,30 +519,41 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("priority");
 
-                    b.HasKey("ProjectId", "GoalId");
+                    b.HasKey("ProjectId", "GoalId")
+                        .HasName("pk_project_goals");
 
-                    b.HasIndex("GoalId");
+                    b.HasIndex("GoalId")
+                        .HasDatabaseName("ix_project_goals_goal_id");
 
-                    b.ToTable("project_goals", (string)null);
+                    b.ToTable("project_goals", null, t =>
+                        {
+                            t.HasCheckConstraint("ck_project_goals_priority_range", "priority > 0 AND priority <= 10000");
+                        });
                 });
 
-            modelBuilder.Entity("TacticusPlanner.Domain.Projects.ProjectTeam", b =>
+            modelBuilder.Entity("TacticusPlanner.Domain.UserSettings.UserSettings", b =>
                 {
-                    b.Property<Guid>("ProjectId")
+                    b.Property<Guid>("Id")
                         .HasColumnType("uuid")
-                        .HasColumnName("project_id");
-
-                    b.Property<Guid>("TeamId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("team_id");
+                        .HasColumnName("id");
 
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
 
-                    b.HasKey("ProjectId", "TeamId");
+                    b.Property<long>("Revision")
+                        .IsConcurrencyToken()
+                        .HasColumnType("bigint")
+                        .HasColumnName("revision");
 
-                    b.ToTable("project_teams", (string)null);
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("pk_user_settings");
+
+                    b.ToTable("user_settings", (string)null);
                 });
 
             modelBuilder.Entity("TacticusPlanner.Domain.Goals.Goal", b =>
@@ -558,7 +562,8 @@ namespace TacticusPlanner.Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("ProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_goals_profiles_profile_id");
 
                     b.OwnsOne("TacticusPlanner.Domain.Goals.GoalConfig", "Config", b1 =>
                         {
@@ -577,7 +582,8 @@ namespace TacticusPlanner.Persistence.Migrations
                                 .HasColumnType("jsonb");
 
                             b1.WithOwner()
-                                .HasForeignKey("GoalId");
+                                .HasForeignKey("GoalId")
+                                .HasConstraintName("fk_goals_goals_id");
 
                             b1.OwnsOne("TacticusPlanner.Domain.Goals.AbilityTarget", "Ability", b2 =>
                                 {
@@ -591,12 +597,14 @@ namespace TacticusPlanner.Persistence.Migrations
 
                                     b2.Property<int>("PassiveStart");
 
-                                    b2.HasKey("GoalConfigGoalId");
+                                    b2.HasKey("GoalConfigGoalId")
+                                        .HasName("pk_goals");
 
                                     b2.ToTable("goals");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("GoalConfigGoalId");
+                                        .HasForeignKey("GoalConfigGoalId")
+                                        .HasConstraintName("fk_goals_goals_goal_config_goal_id");
                                 });
 
                             b1.OwnsOne("TacticusPlanner.Domain.Goals.AscensionFarmingConfig", "AscensionFarming", b2 =>
@@ -611,26 +619,30 @@ namespace TacticusPlanner.Persistence.Migrations
 
                                     b2.Property<int>("Source");
 
-                                    b2.HasKey("GoalConfigGoalId");
+                                    b2.HasKey("GoalConfigGoalId")
+                                        .HasName("pk_goals");
 
                                     b2.ToTable("goals");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("GoalConfigGoalId");
+                                        .HasForeignKey("GoalConfigGoalId")
+                                        .HasConstraintName("fk_goals_goals_goal_config_goal_id");
                                 });
 
-                            b1.OwnsOne("TacticusPlanner.Domain.Goals.EquipmentTarget", "Equipment", b2 =>
+                            b1.OwnsOne("TacticusPlanner.Domain.Goals.ItemTarget", "Item", b2 =>
                                 {
                                     b2.Property<Guid>("GoalConfigGoalId");
 
                                     b2.Property<int>("TargetLevel");
 
-                                    b2.HasKey("GoalConfigGoalId");
+                                    b2.HasKey("GoalConfigGoalId")
+                                        .HasName("pk_goals");
 
                                     b2.ToTable("goals");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("GoalConfigGoalId");
+                                        .HasForeignKey("GoalConfigGoalId")
+                                        .HasConstraintName("fk_goals_goals_goal_config_goal_id");
                                 });
 
                             b1.OwnsOne("TacticusPlanner.Domain.Goals.LevelTarget", "Level", b2 =>
@@ -641,12 +653,14 @@ namespace TacticusPlanner.Persistence.Migrations
 
                                     b2.Property<int>("Start");
 
-                                    b2.HasKey("GoalConfigGoalId");
+                                    b2.HasKey("GoalConfigGoalId")
+                                        .HasName("pk_goals");
 
                                     b2.ToTable("goals");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("GoalConfigGoalId");
+                                        .HasForeignKey("GoalConfigGoalId")
+                                        .HasConstraintName("fk_goals_goals_goal_config_goal_id");
                                 });
 
                             b1.OwnsOne("TacticusPlanner.Domain.Goals.ProgressionTarget", "Progression", b2 =>
@@ -659,12 +673,14 @@ namespace TacticusPlanner.Persistence.Migrations
                                     b2.Property<string>("Start")
                                         .IsRequired();
 
-                                    b2.HasKey("GoalConfigGoalId");
+                                    b2.HasKey("GoalConfigGoalId")
+                                        .HasName("pk_goals");
 
                                     b2.ToTable("goals");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("GoalConfigGoalId");
+                                        .HasForeignKey("GoalConfigGoalId")
+                                        .HasConstraintName("fk_goals_goals_goal_config_goal_id");
                                 });
 
                             b1.OwnsOne("TacticusPlanner.Domain.Goals.RankTarget", "Rank", b2 =>
@@ -683,24 +699,28 @@ namespace TacticusPlanner.Persistence.Migrations
 
                                     b2.Property<bool>("StartPointFive");
 
-                                    b2.HasKey("GoalConfigGoalId");
+                                    b2.HasKey("GoalConfigGoalId")
+                                        .HasName("pk_goals");
 
                                     b2.ToTable("goals");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("GoalConfigGoalId");
+                                        .HasForeignKey("GoalConfigGoalId")
+                                        .HasConstraintName("fk_goals_goals_goal_config_goal_id");
                                 });
 
                             b1.OwnsOne("TacticusPlanner.Domain.Goals.UpgradeTarget", "Upgrade", b2 =>
                                 {
                                     b2.Property<Guid>("GoalConfigGoalId");
 
-                                    b2.HasKey("GoalConfigGoalId");
+                                    b2.HasKey("GoalConfigGoalId")
+                                        .HasName("pk_goals");
 
                                     b2.ToTable("goals");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("GoalConfigGoalId");
+                                        .HasForeignKey("GoalConfigGoalId")
+                                        .HasConstraintName("fk_goals_goals_goal_config_goal_id");
 
                                     b2.OwnsMany("TacticusPlanner.Domain.Goals.UpgradeItemTarget", "Targets", b3 =>
                                         {
@@ -714,12 +734,14 @@ namespace TacticusPlanner.Persistence.Migrations
                                             b3.Property<string>("UpgradeId")
                                                 .IsRequired();
 
-                                            b3.HasKey("UpgradeTargetGoalConfigGoalId", "__synthesizedOrdinal");
+                                            b3.HasKey("UpgradeTargetGoalConfigGoalId", "__synthesizedOrdinal")
+                                                .HasName("pk_goals");
 
                                             b3.ToTable("goals");
 
                                             b3.WithOwner()
-                                                .HasForeignKey("UpgradeTargetGoalConfigGoalId");
+                                                .HasForeignKey("UpgradeTargetGoalConfigGoalId")
+                                                .HasConstraintName("fk_goals_goals_upgrade_target_goal_config_goal_id");
                                         });
 
                                     b2.Navigation("Targets");
@@ -729,7 +751,7 @@ namespace TacticusPlanner.Persistence.Migrations
 
                             b1.Navigation("AscensionFarming");
 
-                            b1.Navigation("Equipment");
+                            b1.Navigation("Item");
 
                             b1.Navigation("Level");
 
@@ -751,7 +773,8 @@ namespace TacticusPlanner.Persistence.Migrations
 
                             b1.Property<int>("Type");
 
-                            b1.HasKey("GoalId", "__synthesizedOrdinal");
+                            b1.HasKey("GoalId", "__synthesizedOrdinal")
+                                .HasName("pk_goals");
 
                             b1.ToTable("goals");
 
@@ -760,67 +783,21 @@ namespace TacticusPlanner.Persistence.Migrations
                                 .HasColumnType("jsonb");
 
                             b1.WithOwner()
-                                .HasForeignKey("GoalId");
-                        });
-
-                    b.OwnsMany("TacticusPlanner.Domain.Goals.GoalMilestone", "Milestones", b1 =>
-                        {
-                            b1.Property<Guid>("GoalId");
-
-                            b1.Property<int>("__synthesizedOrdinal")
-                                .ValueGeneratedOnAdd();
-
-                            b1.Property<DateTimeOffset?>("CompletedAt");
-
-                            b1.Property<int>("Index");
-
-                            b1.Property<string>("Kind")
-                                .IsRequired();
-
-                            b1.Property<string>("Source")
-                                .IsRequired();
-
-                            b1.Property<string>("Status")
-                                .IsRequired();
-
-                            b1.Property<string>("TargetState")
-                                .IsRequired();
-
-                            b1.HasKey("GoalId", "__synthesizedOrdinal");
-
-                            b1.ToTable("goals");
-
-                            b1
-                                .ToJson("milestones")
-                                .HasColumnType("jsonb");
-
-                            b1.WithOwner()
-                                .HasForeignKey("GoalId");
+                                .HasForeignKey("GoalId")
+                                .HasConstraintName("fk_goals_goals_goal_id");
                         });
 
                     b.OwnsOne("TacticusPlanner.Domain.Goals.GoalSnapshot", "Snapshot", b1 =>
                         {
                             b1.Property<Guid>("GoalId");
 
-                            b1.Property<DateTimeOffset>("CreatedAt");
-
                             b1.Property<int?>("InitialActiveAbilityLevel");
 
                             b1.Property<int?>("InitialPassiveAbilityLevel");
 
-                            b1.Property<string>("InitialProgression");
+                            b1.Property<int?>("InitialProgression");
 
-                            b1.Property<string>("InitialRank");
-
-                            b1.Property<bool?>("InitialUnlocked");
-
-                            b1.Property<int?>("OriginalEnergyTotal");
-
-                            b1.Property<DateTimeOffset?>("OriginalEstimateDate");
-
-                            b1.Property<int?>("OriginalEstimateDays");
-
-                            b1.Property<int?>("OriginalRaidsTotal");
+                            b1.Property<int?>("InitialRank");
 
                             b1.HasKey("GoalId");
 
@@ -831,7 +808,8 @@ namespace TacticusPlanner.Persistence.Migrations
                                 .HasColumnType("jsonb");
 
                             b1.WithOwner()
-                                .HasForeignKey("GoalId");
+                                .HasForeignKey("GoalId")
+                                .HasConstraintName("fk_goals_goals_id");
 
                             b1.OwnsMany("TacticusPlanner.Domain.Goals.GoalSnapshotResource", "InitialInventoryContribution", b2 =>
                                 {
@@ -850,7 +828,8 @@ namespace TacticusPlanner.Persistence.Migrations
                                     b2.ToTable("goals");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("GoalSnapshotGoalId");
+                                        .HasForeignKey("GoalSnapshotGoalId")
+                                        .HasConstraintName("fk_goals_goals_goal_snapshot_goal_id");
                                 });
 
                             b1.OwnsMany("TacticusPlanner.Domain.Goals.GoalSnapshotResource", "InitialRequirement", b2 =>
@@ -865,12 +844,14 @@ namespace TacticusPlanner.Persistence.Migrations
                                     b2.Property<string>("ResourceId")
                                         .IsRequired();
 
-                                    b2.HasKey("GoalSnapshotGoalId", "__synthesizedOrdinal");
+                                    b2.HasKey("GoalSnapshotGoalId", "__synthesizedOrdinal")
+                                        .HasName("pk_goals");
 
                                     b2.ToTable("goals");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("GoalSnapshotGoalId");
+                                        .HasForeignKey("GoalSnapshotGoalId")
+                                        .HasConstraintName("fk_goals_goals_goal_snapshot_goal_id");
                                 });
 
                             b1.Navigation("InitialInventoryContribution");
@@ -883,8 +864,6 @@ namespace TacticusPlanner.Persistence.Migrations
 
                     b.Navigation("Events");
 
-                    b.Navigation("Milestones");
-
                     b.Navigation("Profile");
 
                     b.Navigation("Snapshot");
@@ -895,7 +874,8 @@ namespace TacticusPlanner.Persistence.Migrations
                     b.HasOne("TacticusPlanner.Domain.Profiles.Profile", "ConfiguredByProfile")
                         .WithMany()
                         .HasForeignKey("ConfiguredByProfileId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("fk_guilds_profiles_configured_by_profile_id");
 
                     b.Navigation("ConfiguredByProfile");
                 });
@@ -906,25 +886,16 @@ namespace TacticusPlanner.Persistence.Migrations
                         .WithMany("Members")
                         .HasForeignKey("GuildId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_guild_members_guilds_guild_id");
 
                     b.HasOne("TacticusPlanner.Domain.Profiles.Profile", "Profile")
                         .WithMany()
                         .HasForeignKey("ProfileId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .HasConstraintName("fk_guild_members_profiles_profile_id");
 
                     b.Navigation("Guild");
-
-                    b.Navigation("Profile");
-                });
-
-            modelBuilder.Entity("TacticusPlanner.Domain.Planning.PlanningSettings", b =>
-                {
-                    b.HasOne("TacticusPlanner.Domain.Profiles.Profile", "Profile")
-                        .WithOne("PlanningSettings")
-                        .HasForeignKey("TacticusPlanner.Domain.Planning.PlanningSettings", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
 
                     b.Navigation("Profile");
                 });
@@ -935,7 +906,8 @@ namespace TacticusPlanner.Persistence.Migrations
                         .WithOne("PlayerDataOverride")
                         .HasForeignKey("TacticusPlanner.Domain.PlayerData.PlayerDataOverride", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_player_data_overrides_profiles_id");
 
                     b.OwnsMany("TacticusPlanner.Domain.PlayerData.BattleResultOverrideRecord", "BattleResultOverrides", b1 =>
                         {
@@ -955,7 +927,8 @@ namespace TacticusPlanner.Persistence.Migrations
 
                             b1.Property<bool?>("VictoryWithoutBorrowed");
 
-                            b1.HasKey("PlayerDataOverrideId", "__synthesizedOrdinal");
+                            b1.HasKey("PlayerDataOverrideId", "__synthesizedOrdinal")
+                                .HasName("pk_player_data_overrides");
 
                             b1.ToTable("player_data_overrides");
 
@@ -964,7 +937,8 @@ namespace TacticusPlanner.Persistence.Migrations
                                 .HasColumnType("jsonb");
 
                             b1.WithOwner()
-                                .HasForeignKey("PlayerDataOverrideId");
+                                .HasForeignKey("PlayerDataOverrideId")
+                                .HasConstraintName("fk_player_data_overrides_player_data_overrides_player_data_overr");
                         });
 
                     b.OwnsMany("TacticusPlanner.Domain.PlayerData.CampaignEventProgressOverrideRecord", "CampaignEventProgressOverrides", b1 =>
@@ -984,7 +958,8 @@ namespace TacticusPlanner.Persistence.Migrations
                             b1.Property<string>("Type")
                                 .IsRequired();
 
-                            b1.HasKey("PlayerDataOverrideId", "__synthesizedOrdinal");
+                            b1.HasKey("PlayerDataOverrideId", "__synthesizedOrdinal")
+                                .HasName("pk_player_data_overrides");
 
                             b1.ToTable("player_data_overrides");
 
@@ -993,7 +968,8 @@ namespace TacticusPlanner.Persistence.Migrations
                                 .HasColumnType("jsonb");
 
                             b1.WithOwner()
-                                .HasForeignKey("PlayerDataOverrideId");
+                                .HasForeignKey("PlayerDataOverrideId")
+                                .HasConstraintName("fk_player_data_overrides_player_data_overrides_player_data_overr");
                         });
 
                     b.OwnsMany("TacticusPlanner.Domain.PlayerData.OnslaughtProgressOverrideRecord", "OnslaughtProgressOverrides", b1 =>
@@ -1011,7 +987,8 @@ namespace TacticusPlanner.Persistence.Migrations
 
                             b1.Property<int>("Tier");
 
-                            b1.HasKey("PlayerDataOverrideId", "__synthesizedOrdinal");
+                            b1.HasKey("PlayerDataOverrideId", "__synthesizedOrdinal")
+                                .HasName("pk_player_data_overrides");
 
                             b1.ToTable("player_data_overrides");
 
@@ -1020,7 +997,8 @@ namespace TacticusPlanner.Persistence.Migrations
                                 .HasColumnType("jsonb");
 
                             b1.WithOwner()
-                                .HasForeignKey("PlayerDataOverrideId");
+                                .HasForeignKey("PlayerDataOverrideId")
+                                .HasConstraintName("fk_player_data_overrides_player_data_overrides_player_data_overr");
                         });
 
                     b.Navigation("BattleResultOverrides");
@@ -1038,7 +1016,8 @@ namespace TacticusPlanner.Persistence.Migrations
                         .WithOne("PlayerDataSnapshot")
                         .HasForeignKey("TacticusPlanner.Domain.PlayerData.PlayerDataSnapshot", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_player_data_snapshots_profiles_id");
 
                     b.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.CampaignEventProgressRecord", "CampaignEventsProgress", b1 =>
                         {
@@ -1058,7 +1037,8 @@ namespace TacticusPlanner.Persistence.Migrations
                             b1.Property<string>("Type")
                                 .IsRequired();
 
-                            b1.HasKey("PlayerDataSnapshotId", "__synthesizedOrdinal");
+                            b1.HasKey("PlayerDataSnapshotId", "__synthesizedOrdinal")
+                                .HasName("pk_player_data_snapshots");
 
                             b1.ToTable("player_data_snapshots");
 
@@ -1067,7 +1047,8 @@ namespace TacticusPlanner.Persistence.Migrations
                                 .HasColumnType("jsonb");
 
                             b1.WithOwner()
-                                .HasForeignKey("PlayerDataSnapshotId");
+                                .HasForeignKey("PlayerDataSnapshotId")
+                                .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_player_data_snaps");
                         });
 
                     b.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.CampaignProgressRecord", "CampaignProgress", b1 =>
@@ -1085,7 +1066,8 @@ namespace TacticusPlanner.Persistence.Migrations
                             b1.Property<string>("Type")
                                 .IsRequired();
 
-                            b1.HasKey("PlayerDataSnapshotId", "__synthesizedOrdinal");
+                            b1.HasKey("PlayerDataSnapshotId", "__synthesizedOrdinal")
+                                .HasName("pk_player_data_snapshots");
 
                             b1.ToTable("player_data_snapshots");
 
@@ -1094,7 +1076,8 @@ namespace TacticusPlanner.Persistence.Migrations
                                 .HasColumnType("jsonb");
 
                             b1.WithOwner()
-                                .HasForeignKey("PlayerDataSnapshotId");
+                                .HasForeignKey("PlayerDataSnapshotId")
+                                .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_player_data_snaps");
                         });
 
                     b.OwnsOne("TacticusPlanner.Domain.PlayerData.Chunks.InventoryChunk", "Inventory", b1 =>
@@ -1116,7 +1099,8 @@ namespace TacticusPlanner.Persistence.Migrations
                                 .HasColumnType("jsonb");
 
                             b1.WithOwner()
-                                .HasForeignKey("PlayerDataSnapshotId");
+                                .HasForeignKey("PlayerDataSnapshotId")
+                                .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_id");
 
                             b1.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.PlayerRarityAmountRecord", "ForgeBadges", b2 =>
                                 {
@@ -1135,7 +1119,8 @@ namespace TacticusPlanner.Persistence.Migrations
                                     b2.ToTable("player_data_snapshots");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("InventoryChunkPlayerDataSnapshotId");
+                                        .HasForeignKey("InventoryChunkPlayerDataSnapshotId")
+                                        .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_inventory_chunk_p");
                                 });
 
                             b1.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.InventoryXpBookRecord", "XpBooks", b2 =>
@@ -1150,24 +1135,28 @@ namespace TacticusPlanner.Persistence.Migrations
                                     b2.Property<string>("XpBookId")
                                         .IsRequired();
 
-                                    b2.HasKey("InventoryChunkPlayerDataSnapshotId", "__synthesizedOrdinal");
+                                    b2.HasKey("InventoryChunkPlayerDataSnapshotId", "__synthesizedOrdinal")
+                                        .HasName("pk_player_data_snapshots");
 
                                     b2.ToTable("player_data_snapshots");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("InventoryChunkPlayerDataSnapshotId");
+                                        .HasForeignKey("InventoryChunkPlayerDataSnapshotId")
+                                        .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_inventory_chunk_p");
                                 });
 
                             b1.OwnsOne("TacticusPlanner.Domain.PlayerData.Chunks.MowComponentsRecord", "Components", b2 =>
                                 {
                                     b2.Property<Guid>("InventoryChunkPlayerDataSnapshotId");
 
-                                    b2.HasKey("InventoryChunkPlayerDataSnapshotId");
+                                    b2.HasKey("InventoryChunkPlayerDataSnapshotId")
+                                        .HasName("pk_player_data_snapshots");
 
                                     b2.ToTable("player_data_snapshots");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("InventoryChunkPlayerDataSnapshotId");
+                                        .HasForeignKey("InventoryChunkPlayerDataSnapshotId")
+                                        .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_inventory_chunk_p");
 
                                     b2.OwnsOne("TacticusPlanner.Domain.PlayerData.Chunks.ComponentAmountRecord", "Chaos", b3 =>
                                         {
@@ -1175,12 +1164,14 @@ namespace TacticusPlanner.Persistence.Migrations
 
                                             b3.Property<long>("Amount");
 
-                                            b3.HasKey("MowComponentsRecordInventoryChunkPlayerDataSnapshotId");
+                                            b3.HasKey("MowComponentsRecordInventoryChunkPlayerDataSnapshotId")
+                                                .HasName("pk_player_data_snapshots");
 
                                             b3.ToTable("player_data_snapshots");
 
                                             b3.WithOwner()
-                                                .HasForeignKey("MowComponentsRecordInventoryChunkPlayerDataSnapshotId");
+                                                .HasForeignKey("MowComponentsRecordInventoryChunkPlayerDataSnapshotId")
+                                                .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_mow_components_re");
                                         });
 
                                     b2.OwnsOne("TacticusPlanner.Domain.PlayerData.Chunks.ComponentAmountRecord", "Imperial", b3 =>
@@ -1189,12 +1180,14 @@ namespace TacticusPlanner.Persistence.Migrations
 
                                             b3.Property<long>("Amount");
 
-                                            b3.HasKey("MowComponentsRecordInventoryChunkPlayerDataSnapshotId");
+                                            b3.HasKey("MowComponentsRecordInventoryChunkPlayerDataSnapshotId")
+                                                .HasName("pk_player_data_snapshots");
 
                                             b3.ToTable("player_data_snapshots");
 
                                             b3.WithOwner()
-                                                .HasForeignKey("MowComponentsRecordInventoryChunkPlayerDataSnapshotId");
+                                                .HasForeignKey("MowComponentsRecordInventoryChunkPlayerDataSnapshotId")
+                                                .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_mow_components_re");
                                         });
 
                                     b2.OwnsOne("TacticusPlanner.Domain.PlayerData.Chunks.ComponentAmountRecord", "Xenos", b3 =>
@@ -1203,12 +1196,14 @@ namespace TacticusPlanner.Persistence.Migrations
 
                                             b3.Property<long>("Amount");
 
-                                            b3.HasKey("MowComponentsRecordInventoryChunkPlayerDataSnapshotId");
+                                            b3.HasKey("MowComponentsRecordInventoryChunkPlayerDataSnapshotId")
+                                                .HasName("pk_player_data_snapshots");
 
                                             b3.ToTable("player_data_snapshots");
 
                                             b3.WithOwner()
-                                                .HasForeignKey("MowComponentsRecordInventoryChunkPlayerDataSnapshotId");
+                                                .HasForeignKey("MowComponentsRecordInventoryChunkPlayerDataSnapshotId")
+                                                .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_mow_components_re");
                                         });
 
                                     b2.Navigation("Chaos")
@@ -1225,12 +1220,14 @@ namespace TacticusPlanner.Persistence.Migrations
                                 {
                                     b2.Property<Guid>("InventoryChunkPlayerDataSnapshotId");
 
-                                    b2.HasKey("InventoryChunkPlayerDataSnapshotId");
+                                    b2.HasKey("InventoryChunkPlayerDataSnapshotId")
+                                        .HasName("pk_player_data_snapshots");
 
                                     b2.ToTable("player_data_snapshots");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("InventoryChunkPlayerDataSnapshotId");
+                                        .HasForeignKey("InventoryChunkPlayerDataSnapshotId")
+                                        .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_inventory_chunk_p");
 
                                     b2.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.PlayerRarityAmountRecord", "Chaos", b3 =>
                                         {
@@ -1249,7 +1246,8 @@ namespace TacticusPlanner.Persistence.Migrations
                                             b3.ToTable("player_data_snapshots");
 
                                             b3.WithOwner()
-                                                .HasForeignKey("PlayerAbilityBadgesRecordInventoryChunkPlayerDataSnapshotId");
+                                                .HasForeignKey("PlayerAbilityBadgesRecordInventoryChunkPlayerDataSnapshotId")
+                                                .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_player_ability_ba");
                                         });
 
                                     b2.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.PlayerRarityAmountRecord", "Imperial", b3 =>
@@ -1264,12 +1262,14 @@ namespace TacticusPlanner.Persistence.Migrations
                                             b3.Property<string>("Rarity")
                                                 .IsRequired();
 
-                                            b3.HasKey("PlayerAbilityBadgesRecordInventoryChunkPlayerDataSnapshotId", "__synthesizedOrdinal");
+                                            b3.HasKey("PlayerAbilityBadgesRecordInventoryChunkPlayerDataSnapshotId", "__synthesizedOrdinal")
+                                                .HasName("pk_player_data_snapshots");
 
                                             b3.ToTable("player_data_snapshots");
 
                                             b3.WithOwner()
-                                                .HasForeignKey("PlayerAbilityBadgesRecordInventoryChunkPlayerDataSnapshotId");
+                                                .HasForeignKey("PlayerAbilityBadgesRecordInventoryChunkPlayerDataSnapshotId")
+                                                .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_player_ability_ba");
                                         });
 
                                     b2.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.PlayerRarityAmountRecord", "Xenos", b3 =>
@@ -1289,7 +1289,8 @@ namespace TacticusPlanner.Persistence.Migrations
                                             b3.ToTable("player_data_snapshots");
 
                                             b3.WithOwner()
-                                                .HasForeignKey("PlayerAbilityBadgesRecordInventoryChunkPlayerDataSnapshotId");
+                                                .HasForeignKey("PlayerAbilityBadgesRecordInventoryChunkPlayerDataSnapshotId")
+                                                .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_player_ability_ba");
                                         });
 
                                     b2.Navigation("Chaos");
@@ -1303,12 +1304,14 @@ namespace TacticusPlanner.Persistence.Migrations
                                 {
                                     b2.Property<Guid>("InventoryChunkPlayerDataSnapshotId");
 
-                                    b2.HasKey("InventoryChunkPlayerDataSnapshotId");
+                                    b2.HasKey("InventoryChunkPlayerDataSnapshotId")
+                                        .HasName("pk_player_data_snapshots");
 
                                     b2.ToTable("player_data_snapshots");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("InventoryChunkPlayerDataSnapshotId");
+                                        .HasForeignKey("InventoryChunkPlayerDataSnapshotId")
+                                        .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_inventory_chunk_p");
 
                                     b2.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.PlayerRarityAmountRecord", "Chaos", b3 =>
                                         {
@@ -1327,7 +1330,8 @@ namespace TacticusPlanner.Persistence.Migrations
                                             b3.ToTable("player_data_snapshots");
 
                                             b3.WithOwner()
-                                                .HasForeignKey("PlayerOrbsRecordInventoryChunkPlayerDataSnapshotId");
+                                                .HasForeignKey("PlayerOrbsRecordInventoryChunkPlayerDataSnapshotId")
+                                                .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_player_orbs_recor");
                                         });
 
                                     b2.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.PlayerRarityAmountRecord", "Imperial", b3 =>
@@ -1347,7 +1351,8 @@ namespace TacticusPlanner.Persistence.Migrations
                                             b3.ToTable("player_data_snapshots");
 
                                             b3.WithOwner()
-                                                .HasForeignKey("PlayerOrbsRecordInventoryChunkPlayerDataSnapshotId");
+                                                .HasForeignKey("PlayerOrbsRecordInventoryChunkPlayerDataSnapshotId")
+                                                .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_player_orbs_recor");
                                         });
 
                                     b2.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.PlayerRarityAmountRecord", "Xenos", b3 =>
@@ -1367,7 +1372,8 @@ namespace TacticusPlanner.Persistence.Migrations
                                             b3.ToTable("player_data_snapshots");
 
                                             b3.WithOwner()
-                                                .HasForeignKey("PlayerOrbsRecordInventoryChunkPlayerDataSnapshotId");
+                                                .HasForeignKey("PlayerOrbsRecordInventoryChunkPlayerDataSnapshotId")
+                                                .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_player_orbs_recor");
                                         });
 
                                     b2.Navigation("Chaos");
@@ -1405,7 +1411,8 @@ namespace TacticusPlanner.Persistence.Migrations
 
                             b1.Property<int>("Level");
 
-                            b1.HasKey("PlayerDataSnapshotId", "__synthesizedOrdinal");
+                            b1.HasKey("PlayerDataSnapshotId", "__synthesizedOrdinal")
+                                .HasName("pk_player_data_snapshots");
 
                             b1.ToTable("player_data_snapshots");
 
@@ -1414,7 +1421,8 @@ namespace TacticusPlanner.Persistence.Migrations
                                 .HasColumnType("jsonb");
 
                             b1.WithOwner()
-                                .HasForeignKey("PlayerDataSnapshotId");
+                                .HasForeignKey("PlayerDataSnapshotId")
+                                .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_player_data_snaps");
                         });
 
                     b.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.InventoryShardRecord", "InventoryShards", b1 =>
@@ -1431,7 +1439,8 @@ namespace TacticusPlanner.Persistence.Migrations
                             b1.Property<string>("UnitId")
                                 .IsRequired();
 
-                            b1.HasKey("PlayerDataSnapshotId", "__synthesizedOrdinal");
+                            b1.HasKey("PlayerDataSnapshotId", "__synthesizedOrdinal")
+                                .HasName("pk_player_data_snapshots");
 
                             b1.ToTable("player_data_snapshots");
 
@@ -1440,7 +1449,8 @@ namespace TacticusPlanner.Persistence.Migrations
                                 .HasColumnType("jsonb");
 
                             b1.WithOwner()
-                                .HasForeignKey("PlayerDataSnapshotId");
+                                .HasForeignKey("PlayerDataSnapshotId")
+                                .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_player_data_snaps");
                         });
 
                     b.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.InventoryUpgradeRecord", "InventoryUpgrades", b1 =>
@@ -1455,7 +1465,8 @@ namespace TacticusPlanner.Persistence.Migrations
                             b1.Property<string>("UpgradeId")
                                 .IsRequired();
 
-                            b1.HasKey("PlayerDataSnapshotId", "__synthesizedOrdinal");
+                            b1.HasKey("PlayerDataSnapshotId", "__synthesizedOrdinal")
+                                .HasName("pk_player_data_snapshots");
 
                             b1.ToTable("player_data_snapshots");
 
@@ -1464,7 +1475,8 @@ namespace TacticusPlanner.Persistence.Migrations
                                 .HasColumnType("jsonb");
 
                             b1.WithOwner()
-                                .HasForeignKey("PlayerDataSnapshotId");
+                                .HasForeignKey("PlayerDataSnapshotId")
+                                .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_player_data_snaps");
                         });
 
                     b.OwnsOne("TacticusPlanner.Domain.PlayerData.Chunks.LiveProgressChunk", "LiveProgress", b1 =>
@@ -1482,7 +1494,8 @@ namespace TacticusPlanner.Persistence.Migrations
                                 .HasColumnType("jsonb");
 
                             b1.WithOwner()
-                                .HasForeignKey("PlayerDataSnapshotId");
+                                .HasForeignKey("PlayerDataSnapshotId")
+                                .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_id");
 
                             b1.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.BattleAttemptRecord", "BattleAttempts", b2 =>
                                 {
@@ -1500,24 +1513,28 @@ namespace TacticusPlanner.Persistence.Migrations
                                     b2.Property<string>("TacticusCampaignId")
                                         .IsRequired();
 
-                                    b2.HasKey("LiveProgressChunkPlayerDataSnapshotId", "__synthesizedOrdinal");
+                                    b2.HasKey("LiveProgressChunkPlayerDataSnapshotId", "__synthesizedOrdinal")
+                                        .HasName("pk_player_data_snapshots");
 
                                     b2.ToTable("player_data_snapshots");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("LiveProgressChunkPlayerDataSnapshotId");
+                                        .HasForeignKey("LiveProgressChunkPlayerDataSnapshotId")
+                                        .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_live_progress_chu");
                                 });
 
                             b1.OwnsOne("TacticusPlanner.Domain.PlayerData.Chunks.GameModeTokensChunk", "GameModeTokens", b2 =>
                                 {
                                     b2.Property<Guid>("LiveProgressChunkPlayerDataSnapshotId");
 
-                                    b2.HasKey("LiveProgressChunkPlayerDataSnapshotId");
+                                    b2.HasKey("LiveProgressChunkPlayerDataSnapshotId")
+                                        .HasName("pk_player_data_snapshots");
 
                                     b2.ToTable("player_data_snapshots");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("LiveProgressChunkPlayerDataSnapshotId");
+                                        .HasForeignKey("LiveProgressChunkPlayerDataSnapshotId")
+                                        .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_live_progress_chu");
 
                                     b2.OwnsOne("TacticusPlanner.Domain.PlayerData.Chunks.TokenBucketRecord", "Arena", b3 =>
                                         {
@@ -1531,12 +1548,14 @@ namespace TacticusPlanner.Persistence.Migrations
 
                                             b3.Property<int>("RegenDelayInSeconds");
 
-                                            b3.HasKey("GameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId");
+                                            b3.HasKey("GameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId")
+                                                .HasName("pk_player_data_snapshots");
 
                                             b3.ToTable("player_data_snapshots");
 
                                             b3.WithOwner()
-                                                .HasForeignKey("GameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId");
+                                                .HasForeignKey("GameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId")
+                                                .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_game_mode_tokens_c");
                                         });
 
                                     b2.OwnsOne("TacticusPlanner.Domain.PlayerData.Chunks.TokenBucketRecord", "Onslaught", b3 =>
@@ -1551,12 +1570,14 @@ namespace TacticusPlanner.Persistence.Migrations
 
                                             b3.Property<int>("RegenDelayInSeconds");
 
-                                            b3.HasKey("GameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId");
+                                            b3.HasKey("GameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId")
+                                                .HasName("pk_player_data_snapshots");
 
                                             b3.ToTable("player_data_snapshots");
 
                                             b3.WithOwner()
-                                                .HasForeignKey("GameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId");
+                                                .HasForeignKey("GameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId")
+                                                .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_game_mode_tokens_c");
                                         });
 
                                     b2.OwnsOne("TacticusPlanner.Domain.PlayerData.Chunks.TokenBucketRecord", "SalvageRun", b3 =>
@@ -1571,24 +1592,28 @@ namespace TacticusPlanner.Persistence.Migrations
 
                                             b3.Property<int>("RegenDelayInSeconds");
 
-                                            b3.HasKey("GameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId");
+                                            b3.HasKey("GameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId")
+                                                .HasName("pk_player_data_snapshots");
 
                                             b3.ToTable("player_data_snapshots");
 
                                             b3.WithOwner()
-                                                .HasForeignKey("GameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId");
+                                                .HasForeignKey("GameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId")
+                                                .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_game_mode_tokens_c");
                                         });
 
                                     b2.OwnsOne("TacticusPlanner.Domain.PlayerData.Chunks.GuildRaidTokensRecord", "GuildRaid", b3 =>
                                         {
                                             b3.Property<Guid>("GameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId");
 
-                                            b3.HasKey("GameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId");
+                                            b3.HasKey("GameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId")
+                                                .HasName("pk_player_data_snapshots");
 
                                             b3.ToTable("player_data_snapshots");
 
                                             b3.WithOwner()
-                                                .HasForeignKey("GameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId");
+                                                .HasForeignKey("GameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId")
+                                                .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_game_mode_tokens_c");
 
                                             b3.OwnsOne("TacticusPlanner.Domain.PlayerData.Chunks.TokenBucketRecord", "BombTokens", b4 =>
                                                 {
@@ -1603,12 +1628,14 @@ namespace TacticusPlanner.Persistence.Migrations
 
                                                     b4.Property<int>("RegenDelayInSeconds");
 
-                                                    b4.HasKey("GuildRaidTokensRecordGameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId");
+                                                    b4.HasKey("GuildRaidTokensRecordGameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId")
+                                                        .HasName("pk_player_data_snapshots");
 
                                                     b4.ToTable("player_data_snapshots");
 
                                                     b4.WithOwner()
-                                                        .HasForeignKey("GuildRaidTokensRecordGameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId");
+                                                        .HasForeignKey("GuildRaidTokensRecordGameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId")
+                                                        .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_guild_raid_tokens");
                                                 });
 
                                             b3.OwnsOne("TacticusPlanner.Domain.PlayerData.Chunks.TokenBucketRecord", "Tokens", b4 =>
@@ -1624,12 +1651,14 @@ namespace TacticusPlanner.Persistence.Migrations
 
                                                     b4.Property<int>("RegenDelayInSeconds");
 
-                                                    b4.HasKey("GuildRaidTokensRecordGameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId");
+                                                    b4.HasKey("GuildRaidTokensRecordGameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId")
+                                                        .HasName("pk_player_data_snapshots");
 
                                                     b4.ToTable("player_data_snapshots");
 
                                                     b4.WithOwner()
-                                                        .HasForeignKey("GuildRaidTokensRecordGameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId");
+                                                        .HasForeignKey("GuildRaidTokensRecordGameModeTokensChunkLiveProgressChunkPlayerDataSnapshotId")
+                                                        .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_guild_raid_tokens");
                                                 });
 
                                             b3.Navigation("BombTokens")
@@ -1678,7 +1707,8 @@ namespace TacticusPlanner.Persistence.Migrations
                             b1.Property<string>("Id")
                                 .IsRequired();
 
-                            b1.HasKey("PlayerDataSnapshotId", "__synthesizedOrdinal");
+                            b1.HasKey("PlayerDataSnapshotId", "__synthesizedOrdinal")
+                                .HasName("pk_player_data_snapshots");
 
                             b1.ToTable("player_data_snapshots");
 
@@ -1687,7 +1717,8 @@ namespace TacticusPlanner.Persistence.Migrations
                                 .HasColumnType("jsonb");
 
                             b1.WithOwner()
-                                .HasForeignKey("PlayerDataSnapshotId");
+                                .HasForeignKey("PlayerDataSnapshotId")
+                                .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_player_data_snaps");
 
                             b1.OwnsOne("TacticusPlanner.Domain.PlayerData.Chunks.LreTrackProgressRecord", "Alpha", b2 =>
                                 {
@@ -1695,12 +1726,14 @@ namespace TacticusPlanner.Persistence.Migrations
 
                                     b2.Property<int>("LreProgressRecord__synthesizedOrdinal");
 
-                                    b2.HasKey("LreProgressRecordPlayerDataSnapshotId", "LreProgressRecord__synthesizedOrdinal");
+                                    b2.HasKey("LreProgressRecordPlayerDataSnapshotId", "LreProgressRecord__synthesizedOrdinal")
+                                        .HasName("pk_player_data_snapshots");
 
                                     b2.ToTable("player_data_snapshots");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("LreProgressRecordPlayerDataSnapshotId", "LreProgressRecord__synthesizedOrdinal");
+                                        .HasForeignKey("LreProgressRecordPlayerDataSnapshotId", "LreProgressRecord__synthesizedOrdinal")
+                                        .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_lre_progress_reco");
 
                                     b2.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.LreEncounterProgressRecord", "Encounters", b3 =>
                                         {
@@ -1718,12 +1751,14 @@ namespace TacticusPlanner.Persistence.Migrations
                                             b3.PrimitiveCollection<string>("ObjectivesCleared")
                                                 .IsRequired();
 
-                                            b3.HasKey("LreTrackProgressRecordLreProgressRecordPlayerDataSnapshotId", "LreTrackProgressRecordLreProgressRecord__synthesizedOrdinal", "__synthesizedOrdinal");
+                                            b3.HasKey("LreTrackProgressRecordLreProgressRecordPlayerDataSnapshotId", "LreTrackProgressRecordLreProgressRecord__synthesizedOrdinal", "__synthesizedOrdinal")
+                                                .HasName("pk_player_data_snapshots");
 
                                             b3.ToTable("player_data_snapshots");
 
                                             b3.WithOwner()
-                                                .HasForeignKey("LreTrackProgressRecordLreProgressRecordPlayerDataSnapshotId", "LreTrackProgressRecordLreProgressRecord__synthesizedOrdinal");
+                                                .HasForeignKey("LreTrackProgressRecordLreProgressRecordPlayerDataSnapshotId", "LreTrackProgressRecordLreProgressRecord__synthesizedOrdinal")
+                                                .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_lre_track_progres");
                                         });
 
                                     b2.Navigation("Encounters");
@@ -1735,12 +1770,14 @@ namespace TacticusPlanner.Persistence.Migrations
 
                                     b2.Property<int>("LreProgressRecord__synthesizedOrdinal");
 
-                                    b2.HasKey("LreProgressRecordPlayerDataSnapshotId", "LreProgressRecord__synthesizedOrdinal");
+                                    b2.HasKey("LreProgressRecordPlayerDataSnapshotId", "LreProgressRecord__synthesizedOrdinal")
+                                        .HasName("pk_player_data_snapshots");
 
                                     b2.ToTable("player_data_snapshots");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("LreProgressRecordPlayerDataSnapshotId", "LreProgressRecord__synthesizedOrdinal");
+                                        .HasForeignKey("LreProgressRecordPlayerDataSnapshotId", "LreProgressRecord__synthesizedOrdinal")
+                                        .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_lre_progress_reco");
 
                                     b2.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.LreEncounterProgressRecord", "Encounters", b3 =>
                                         {
@@ -1763,7 +1800,8 @@ namespace TacticusPlanner.Persistence.Migrations
                                             b3.ToTable("player_data_snapshots");
 
                                             b3.WithOwner()
-                                                .HasForeignKey("LreTrackProgressRecordLreProgressRecordPlayerDataSnapshotId", "LreTrackProgressRecordLreProgressRecord__synthesizedOrdinal");
+                                                .HasForeignKey("LreTrackProgressRecordLreProgressRecordPlayerDataSnapshotId", "LreTrackProgressRecordLreProgressRecord__synthesizedOrdinal")
+                                                .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_lre_track_progres");
                                         });
 
                                     b2.Navigation("Encounters");
@@ -1783,12 +1821,14 @@ namespace TacticusPlanner.Persistence.Migrations
 
                                     b2.Property<int>("RegenDelayInSeconds");
 
-                                    b2.HasKey("LreProgressRecordPlayerDataSnapshotId", "LreProgressRecord__synthesizedOrdinal");
+                                    b2.HasKey("LreProgressRecordPlayerDataSnapshotId", "LreProgressRecord__synthesizedOrdinal")
+                                        .HasName("pk_player_data_snapshots");
 
                                     b2.ToTable("player_data_snapshots");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("LreProgressRecordPlayerDataSnapshotId", "LreProgressRecord__synthesizedOrdinal");
+                                        .HasForeignKey("LreProgressRecordPlayerDataSnapshotId", "LreProgressRecord__synthesizedOrdinal")
+                                        .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_lre_progress_reco");
                                 });
 
                             b1.OwnsOne("TacticusPlanner.Domain.PlayerData.Chunks.LreTrackProgressRecord", "Gamma", b2 =>
@@ -1797,12 +1837,14 @@ namespace TacticusPlanner.Persistence.Migrations
 
                                     b2.Property<int>("LreProgressRecord__synthesizedOrdinal");
 
-                                    b2.HasKey("LreProgressRecordPlayerDataSnapshotId", "LreProgressRecord__synthesizedOrdinal");
+                                    b2.HasKey("LreProgressRecordPlayerDataSnapshotId", "LreProgressRecord__synthesizedOrdinal")
+                                        .HasName("pk_player_data_snapshots");
 
                                     b2.ToTable("player_data_snapshots");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("LreProgressRecordPlayerDataSnapshotId", "LreProgressRecord__synthesizedOrdinal");
+                                        .HasForeignKey("LreProgressRecordPlayerDataSnapshotId", "LreProgressRecord__synthesizedOrdinal")
+                                        .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_lre_progress_reco");
 
                                     b2.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.LreEncounterProgressRecord", "Encounters", b3 =>
                                         {
@@ -1825,7 +1867,8 @@ namespace TacticusPlanner.Persistence.Migrations
                                             b3.ToTable("player_data_snapshots");
 
                                             b3.WithOwner()
-                                                .HasForeignKey("LreTrackProgressRecordLreProgressRecordPlayerDataSnapshotId", "LreTrackProgressRecordLreProgressRecord__synthesizedOrdinal");
+                                                .HasForeignKey("LreTrackProgressRecordLreProgressRecordPlayerDataSnapshotId", "LreTrackProgressRecordLreProgressRecord__synthesizedOrdinal")
+                                                .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_lre_track_progres");
                                         });
 
                                     b2.Navigation("Encounters");
@@ -1865,7 +1908,8 @@ namespace TacticusPlanner.Persistence.Migrations
 
                             b1.Property<int>("XpLevel");
 
-                            b1.HasKey("PlayerDataSnapshotId", "__synthesizedOrdinal");
+                            b1.HasKey("PlayerDataSnapshotId", "__synthesizedOrdinal")
+                                .HasName("pk_player_data_snapshots");
 
                             b1.ToTable("player_data_snapshots");
 
@@ -1874,7 +1918,8 @@ namespace TacticusPlanner.Persistence.Migrations
                                 .HasColumnType("jsonb");
 
                             b1.WithOwner()
-                                .HasForeignKey("PlayerDataSnapshotId");
+                                .HasForeignKey("PlayerDataSnapshotId")
+                                .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_player_data_snaps");
 
                             b1.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.PlayerUnitAbilityRecord", "Abilities", b2 =>
                                 {
@@ -1890,12 +1935,14 @@ namespace TacticusPlanner.Persistence.Migrations
 
                                     b2.Property<int>("Level");
 
-                                    b2.HasKey("PlayerCharacterRecordPlayerDataSnapshotId", "PlayerCharacterRecord__synthesizedOrdinal", "__synthesizedOrdinal");
+                                    b2.HasKey("PlayerCharacterRecordPlayerDataSnapshotId", "PlayerCharacterRecord__synthesizedOrdinal", "__synthesizedOrdinal")
+                                        .HasName("pk_player_data_snapshots");
 
                                     b2.ToTable("player_data_snapshots");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("PlayerCharacterRecordPlayerDataSnapshotId", "PlayerCharacterRecord__synthesizedOrdinal");
+                                        .HasForeignKey("PlayerCharacterRecordPlayerDataSnapshotId", "PlayerCharacterRecord__synthesizedOrdinal")
+                                        .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_player_character");
                                 });
 
                             b1.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.PlayerUnitEquipmentSlotRecord", "EquippedItems", b2 =>
@@ -1915,12 +1962,14 @@ namespace TacticusPlanner.Persistence.Migrations
                                     b2.Property<string>("SlotId")
                                         .IsRequired();
 
-                                    b2.HasKey("PlayerCharacterRecordPlayerDataSnapshotId", "PlayerCharacterRecord__synthesizedOrdinal", "__synthesizedOrdinal");
+                                    b2.HasKey("PlayerCharacterRecordPlayerDataSnapshotId", "PlayerCharacterRecord__synthesizedOrdinal", "__synthesizedOrdinal")
+                                        .HasName("pk_player_data_snapshots");
 
                                     b2.ToTable("player_data_snapshots");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("PlayerCharacterRecordPlayerDataSnapshotId", "PlayerCharacterRecord__synthesizedOrdinal");
+                                        .HasForeignKey("PlayerCharacterRecordPlayerDataSnapshotId", "PlayerCharacterRecord__synthesizedOrdinal")
+                                        .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_player_character");
                                 });
 
                             b1.Navigation("Abilities");
@@ -1946,7 +1995,8 @@ namespace TacticusPlanner.Persistence.Migrations
                                 .HasColumnType("jsonb");
 
                             b1.WithOwner()
-                                .HasForeignKey("PlayerDataSnapshotId");
+                                .HasForeignKey("PlayerDataSnapshotId")
+                                .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_id");
                         });
 
                     b.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.PlayerMowRecord", "Mows", b1 =>
@@ -1972,7 +2022,8 @@ namespace TacticusPlanner.Persistence.Migrations
 
                             b1.Property<int>("XpLevel");
 
-                            b1.HasKey("PlayerDataSnapshotId", "__synthesizedOrdinal");
+                            b1.HasKey("PlayerDataSnapshotId", "__synthesizedOrdinal")
+                                .HasName("pk_player_data_snapshots");
 
                             b1.ToTable("player_data_snapshots");
 
@@ -1981,7 +2032,8 @@ namespace TacticusPlanner.Persistence.Migrations
                                 .HasColumnType("jsonb");
 
                             b1.WithOwner()
-                                .HasForeignKey("PlayerDataSnapshotId");
+                                .HasForeignKey("PlayerDataSnapshotId")
+                                .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_player_data_snaps");
 
                             b1.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.PlayerUnitAbilityRecord", "Abilities", b2 =>
                                 {
@@ -1997,12 +2049,14 @@ namespace TacticusPlanner.Persistence.Migrations
 
                                     b2.Property<int>("Level");
 
-                                    b2.HasKey("PlayerMowRecordPlayerDataSnapshotId", "PlayerMowRecord__synthesizedOrdinal", "__synthesizedOrdinal");
+                                    b2.HasKey("PlayerMowRecordPlayerDataSnapshotId", "PlayerMowRecord__synthesizedOrdinal", "__synthesizedOrdinal")
+                                        .HasName("pk_player_data_snapshots");
 
                                     b2.ToTable("player_data_snapshots");
 
                                     b2.WithOwner()
-                                        .HasForeignKey("PlayerMowRecordPlayerDataSnapshotId", "PlayerMowRecord__synthesizedOrdinal");
+                                        .HasForeignKey("PlayerMowRecordPlayerDataSnapshotId", "PlayerMowRecord__synthesizedOrdinal")
+                                        .HasConstraintName("fk_player_data_snapshots_player_data_snapshots_player_mow_record");
                                 });
 
                             b1.Navigation("Abilities");
@@ -2042,7 +2096,8 @@ namespace TacticusPlanner.Persistence.Migrations
                         .WithOne("Profile")
                         .HasForeignKey("TacticusPlanner.Domain.Profiles.Profile", "AccountId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_profiles_accounts_account_id");
 
                     b.Navigation("Account");
                 });
@@ -2053,7 +2108,8 @@ namespace TacticusPlanner.Persistence.Migrations
                         .WithOne("TacticusIntegration")
                         .HasForeignKey("TacticusPlanner.Domain.Profiles.TacticusIntegration", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_tacticus_integrations_profiles_id");
 
                     b.Navigation("Profile");
                 });
@@ -2064,7 +2120,8 @@ namespace TacticusPlanner.Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("ProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_projects_profiles_profile_id");
 
                     b.Navigation("Profile");
                 });
@@ -2075,28 +2132,53 @@ namespace TacticusPlanner.Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("GoalId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_project_goals_goals_goal_id");
 
                     b.HasOne("TacticusPlanner.Domain.Projects.Project", "Project")
                         .WithMany("ProjectGoals")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_project_goals_projects_project_id");
 
                     b.Navigation("Goal");
 
                     b.Navigation("Project");
                 });
 
-            modelBuilder.Entity("TacticusPlanner.Domain.Projects.ProjectTeam", b =>
+            modelBuilder.Entity("TacticusPlanner.Domain.UserSettings.UserSettings", b =>
                 {
-                    b.HasOne("TacticusPlanner.Domain.Projects.Project", "Project")
-                        .WithMany("ProjectTeams")
-                        .HasForeignKey("ProjectId")
+                    b.HasOne("TacticusPlanner.Domain.Profiles.Profile", "Profile")
+                        .WithOne("UserSettings")
+                        .HasForeignKey("TacticusPlanner.Domain.UserSettings.UserSettings", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .IsRequired()
+                        .HasConstraintName("fk_user_settings_profiles_id");
 
-                    b.Navigation("Project");
+                    b.OwnsOne("TacticusPlanner.Domain.UserSettings.UserSettingsData", "Settings", b1 =>
+                        {
+                            b1.Property<Guid>("UserSettingsId");
+
+                            b1.Property<int>("DailyEnergy");
+
+                            b1.HasKey("UserSettingsId");
+
+                            b1.ToTable("user_settings");
+
+                            b1
+                                .ToJson("settings")
+                                .HasColumnType("jsonb");
+
+                            b1.WithOwner()
+                                .HasForeignKey("UserSettingsId")
+                                .HasConstraintName("fk_user_settings_user_settings_id");
+                        });
+
+                    b.Navigation("Profile");
+
+                    b.Navigation("Settings")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("TacticusPlanner.Domain.Accounts.Account", b =>
@@ -2111,20 +2193,18 @@ namespace TacticusPlanner.Persistence.Migrations
 
             modelBuilder.Entity("TacticusPlanner.Domain.Profiles.Profile", b =>
                 {
-                    b.Navigation("PlanningSettings");
-
                     b.Navigation("PlayerDataOverride");
 
                     b.Navigation("PlayerDataSnapshot");
 
                     b.Navigation("TacticusIntegration");
+
+                    b.Navigation("UserSettings");
                 });
 
             modelBuilder.Entity("TacticusPlanner.Domain.Projects.Project", b =>
                 {
                     b.Navigation("ProjectGoals");
-
-                    b.Navigation("ProjectTeams");
                 });
 #pragma warning restore 612, 618
         }

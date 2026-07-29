@@ -27,8 +27,8 @@ public sealed class GuildSyncService(
         TacticusUserId callerTacticusUserId,
         string guildApiToken,
         bool persistToken,
-        CancellationToken ct,
-        bool persistTokenOnlyIfNew = false
+        bool persistTokenOnlyIfNew = false,
+        CancellationToken ct = default
     )
     {
         if (!Guid.TryParse(callerTacticusUserId.Value, out var callerTacticusGuid))

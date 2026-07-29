@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TacticusPlanner.Domain.Accounts;
 using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.Guilds;
-using TacticusPlanner.Domain.Planning;
 using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Domain.Projects;
 using TacticusPlanner.Persistence.Encryption;
+using UserSettingsEntity = TacticusPlanner.Domain.UserSettings.UserSettings;
 
 namespace TacticusPlanner.Persistence;
 
@@ -32,7 +32,7 @@ public sealed class PlannerDbContext(
 
     public DbSet<PlayerDataOverride> PlayerDataOverrides => Set<PlayerDataOverride>();
 
-    public DbSet<PlanningSettings> PlanningSettings => Set<PlanningSettings>();
+    public DbSet<UserSettingsEntity> UserSettings => Set<UserSettingsEntity>();
 
     public DbSet<Guild> Guilds => Set<Guild>();
 
@@ -43,8 +43,6 @@ public sealed class PlannerDbContext(
     public DbSet<Project> Projects => Set<Project>();
 
     public DbSet<ProjectGoal> ProjectGoals => Set<ProjectGoal>();
-
-    public DbSet<ProjectTeam> ProjectTeams => Set<ProjectTeam>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -102,14 +100,13 @@ public sealed class PlannerDbContext(
         modelBuilder.Entity<TacticusIntegration>().HasQueryFilter(entity => entity.Id == CurrentProfileId);
         modelBuilder.Entity<PlayerDataSnapshot>().HasQueryFilter(entity => entity.Id == CurrentProfileId);
         modelBuilder.Entity<PlayerDataOverride>().HasQueryFilter(entity => entity.Id == CurrentProfileId);
-        modelBuilder.Entity<PlanningSettings>().HasQueryFilter(entity => entity.Id == CurrentProfileId);
+        modelBuilder.Entity<UserSettingsEntity>().HasQueryFilter(entity => entity.Id == CurrentProfileId);
 
         // ProfileId is a separate foreign key alongside the entity's own primary key.
         modelBuilder.Entity<Goal>().HasQueryFilter(entity => entity.ProfileId == CurrentProfileId);
         modelBuilder.Entity<Project>().HasQueryFilter(entity => entity.ProfileId == CurrentProfileId);
 
-        // Join tables with no ProfileId of their own: scoped through their parent Project.
+        // Join table with no ProfileId of its own: scoped through its parent Project.
         modelBuilder.Entity<ProjectGoal>().HasQueryFilter(entity => entity.Project!.ProfileId == CurrentProfileId);
-        modelBuilder.Entity<ProjectTeam>().HasQueryFilter(entity => entity.Project!.ProfileId == CurrentProfileId);
     }
 }
