@@ -12,7 +12,8 @@ public sealed class ProjectGoalConfiguration : IEntityTypeConfiguration<ProjectG
         // the shared value the API's FluentValidation rule also sources.
         builder.ToTable("project_goals", table => table.HasCheckConstraint(
             "ck_project_goals_priority_range",
-            $"priority > 0 AND priority <= {ProjectValidation.MaxPriority}"
+            $"{PostgresNaming.SnakeCase(nameof(ProjectGoal.Priority))} > 0 AND "
+                + $"{PostgresNaming.SnakeCase(nameof(ProjectGoal.Priority))} <= {ProjectValidation.MaxPriority}"
         ));
         builder.HasKey(entity => new { entity.ProjectId, entity.GoalId });
 

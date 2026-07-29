@@ -95,16 +95,54 @@ jobs:
         shell: bash
         env:
           IMAGE_REFERENCE: ${{ needs.publish.outputs.image }}
+          CONTAINER_APP_NAME: ${{ vars.CONTAINER_APP_NAME }}
+          RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
         run: |
           if az containerapp show \
-            --name "${{ vars.CONTAINER_APP_NAME }}" \
-            --resource-group "${{ vars.RESOURCE_GROUP_NAME }}" \
+            --name "$CONTAINER_APP_NAME" \
+            --resource-group "$RESOURCE_GROUP_NAME" \
             --output none 2>/dev/null; then
             az containerapp update \
-              --name "${{ vars.CONTAINER_APP_NAME }}" \
-              --resource-group "${{ vars.RESOURCE_GROUP_NAME }}" \
+              --name "$CONTAINER_APP_NAME" \
+              --resource-group "$RESOURCE_GROUP_NAME" \
               --image "$IMAGE_REFERENCE" \
               --output none
+
+            revision="$(az containerapp show \
+              --name "$CONTAINER_APP_NAME" \
+              --resource-group "$RESOURCE_GROUP_NAME" \
+              --query properties.latestRevisionName \
+              --output tsv)"
+
+            for attempt in {1..30}; do
+              if ! revision_status="$(az containerapp revision show \
+                --name "$CONTAINER_APP_NAME" \
+                --resource-group "$RESOURCE_GROUP_NAME" \
+                --revision "$revision" \
+                --query '[properties.healthState, properties.runningState, properties.replicas]' \
+                --output tsv)"; then
+                echo "::error::Failed to query revision $revision."
+                exit 1
+              fi
+              read -r health running replicas <<< "$revision_status"
+
+              if [[ "$health" == "Healthy" && "$running" == "Running" && "$replicas" -gt 0 ]]; then
+                break
+              fi
+
+              if [[ "$running" == "ActivationFailed" ]]; then
+                echo "::error::Revision $revision failed to activate."
+                exit 1
+              fi
+
+              if [[ "$attempt" == "30" ]]; then
+                echo "::error::Revision $revision did not become healthy within five minutes."
+                exit 1
+              fi
+
+              sleep 10
+            done
+
             echo "Deployed $IMAGE_REFERENCE" >> "$GITHUB_STEP_SUMMARY"
           else
             echo "Container App does not exist; image publication completed without deployment." >> "$GITHUB_STEP_SUMMARY"

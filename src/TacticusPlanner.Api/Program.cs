@@ -38,12 +38,6 @@ builder.AddNpgsqlDbContext<PlannerDbContext>("planner-db");
 builder.Services.ConfigureDbContext<PlannerDbContext>((sp, options) =>
 {
     options.AddInterceptors(sp.GetRequiredService<EntityMetadataInterceptor>());
-
-    // Global snake_case convention (EFCore.NamingConventions) — every explicit HasColumnName in the
-    // Configurations/ classes exists only where it deviates from this (there are none left; it's relied
-    // on for all of them). Without this, columns silently revert to PascalCase. Configured here, not in
-    // PlannerDbContext.OnConfiguring — that method cannot modify options when the context is pooled (see
-    // AddNpgsqlDbContext above), which is exactly what this codepath is.
     options.UseSnakeCaseNamingConvention();
 });
 
