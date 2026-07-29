@@ -106,33 +106,52 @@ jobs:
               --name "$CONTAINER_APP_NAME" \
               --resource-group "$RESOURCE_GROUP_NAME" \
               --image "$IMAGE_REFERENCE" \
+              --no-wait \
               --output none
 
-            revision="$(az containerapp show \
-              --name "$CONTAINER_APP_NAME" \
-              --resource-group "$RESOURCE_GROUP_NAME" \
-              --query properties.latestRevisionName \
-              --output tsv)"
-
             for attempt in {1..30}; do
-              if ! revision_status="$(az containerapp revision show \
+              revision=""
+              if app_status="$(az containerapp show \
                 --name "$CONTAINER_APP_NAME" \
                 --resource-group "$RESOURCE_GROUP_NAME" \
-                --revision "$revision" \
-                --query '[properties.healthState, properties.runningState, properties.replicas]' \
+                --query '[properties.latestRevisionName, properties.provisioningState]' \
                 --output tsv)"; then
-                echo "::error::Failed to query revision $revision."
-                exit 1
-              fi
-              read -r health running replicas <<< "$revision_status"
+                mapfile -t app_fields <<< "$app_status"
+                revision="${app_fields[0]:-}"
+                provisioning_state="${app_fields[1]:-}"
 
-              if [[ "$health" == "Healthy" && "$running" == "Running" && "$replicas" -gt 0 ]]; then
-                break
+                if [[ "$provisioning_state" == "Failed" ]]; then
+                  echo "::error::Container App deployment failed."
+                  exit 1
+                fi
+              else
+                echo "::warning::Failed to query Container App deployment status; retrying."
               fi
 
-              if [[ "$running" == "ActivationFailed" ]]; then
-                echo "::error::Revision $revision failed to activate."
-                exit 1
+              if [[ -n "$revision" ]]; then
+                if revision_status="$(az containerapp revision show \
+                  --name "$CONTAINER_APP_NAME" \
+                  --resource-group "$RESOURCE_GROUP_NAME" \
+                  --revision "$revision" \
+                  --query '[properties.healthState, properties.runningState, properties.replicas, properties.template.containers[0].image]' \
+                  --output tsv)"; then
+                  mapfile -t revision_fields <<< "$revision_status"
+                  health="${revision_fields[0]:-}"
+                  running="${revision_fields[1]:-}"
+                  replicas="${revision_fields[2]:-0}"
+                  revision_image="${revision_fields[3]:-}"
+
+                  if [[ "$revision_image" == "$IMAGE_REFERENCE" && "$health" == "Healthy" && "$running" == "Running" && "$replicas" -gt 0 ]]; then
+                    break
+                  fi
+
+                  if [[ "$revision_image" == "$IMAGE_REFERENCE" && "$running" == "ActivationFailed" ]]; then
+                    echo "::error::Revision $revision failed to activate."
+                    exit 1
+                  fi
+                else
+                  echo "::warning::Failed to query revision $revision; retrying."
+                fi
               fi
 
               if [[ "$attempt" == "30" ]]; then
