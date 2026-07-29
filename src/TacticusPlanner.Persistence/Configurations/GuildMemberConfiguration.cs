@@ -45,7 +45,7 @@ public sealed class GuildMemberConfiguration : IEntityTypeConfiguration<GuildMem
         builder
             .HasIndex(entity => entity.ProfileId)
             .IsUnique()
-            .HasFilter("profile_id IS NOT NULL");
+            .HasFilter($"{PostgresNaming.SnakeCase(nameof(GuildMember.ProfileId))} IS NOT NULL");
 
         builder
             .HasOne(entity => entity.Guild)

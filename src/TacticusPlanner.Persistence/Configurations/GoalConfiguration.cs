@@ -66,7 +66,7 @@ public sealed class GoalConfiguration : IEntityTypeConfiguration<Goal>
         // finished goals of the same type.
         builder.HasIndex(entity => new { entity.ProfileId, entity.EntityType, entity.EntityId, entity.GoalType })
             .IsUnique()
-            .HasFilter("status IN ('Active', 'Paused')")
+            .HasFilter($"{PostgresNaming.SnakeCase(nameof(Goal.Status))} IN ('Active', 'Paused')")
             .HasDatabaseName("ix_goals_one_active_or_paused_per_entity_and_type");
 
         builder

@@ -38,7 +38,7 @@ public sealed class GuildConfiguration : IEntityTypeConfiguration<Guild>
         builder
             .HasIndex(entity => entity.TacticusGuildIdHash)
             .IsUnique()
-            .HasFilter("tacticus_guild_id_hash IS NOT NULL");
+            .HasFilter($"{PostgresNaming.SnakeCase(nameof(Guild.TacticusGuildIdHash))} IS NOT NULL");
         builder.HasIndex(entity => entity.Tag).IsUnique();
 
         // Nullable — a profile purge must not take the guild registration down with it.

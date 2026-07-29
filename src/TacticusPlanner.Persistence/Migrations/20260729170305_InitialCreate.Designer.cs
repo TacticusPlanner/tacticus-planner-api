@@ -13,8 +13,8 @@ using TacticusPlanner.Persistence;
 namespace TacticusPlanner.Persistence.Migrations
 {
     [DbContext(typeof(PlannerDbContext))]
-    [Migration("20260729101340_AddGoalsProjectsAndProgress")]
-    partial class AddGoalsProjectsAndProgress
+    [Migration("20260729170305_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

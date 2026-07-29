@@ -35,6 +35,6 @@ public sealed class ProfileConfiguration : IEntityTypeConfiguration<Profile>
         builder
             .HasIndex(entity => entity.TacticusUserIdHash)
             .IsUnique()
-            .HasFilter("tacticus_user_id_hash IS NOT NULL");
+            .HasFilter($"{PostgresNaming.SnakeCase(nameof(Profile.TacticusUserIdHash))} IS NOT NULL");
     }
 }
