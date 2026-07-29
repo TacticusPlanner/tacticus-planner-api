@@ -4,6 +4,9 @@ ASP.NET Core API foundation for Tacticus Planner V2. The solution targets
 .NET 10, uses PostgreSQL through EF Core, and uses .NET Aspire for local
 orchestration and observability.
 
+See [RELEASING.md](RELEASING.md) for the branching, versioning, backport,
+container promotion, and coordinated apps/API release process.
+
 ## Prerequisites
 
 - .NET SDK 10.0.301 or a newer 10.0 patch
