@@ -7,8 +7,13 @@ branches. `main` is the integration branch and must remain releasable.
 
 1. Create a short-lived topic branch from `main`.
 2. Open a pull request into `main`.
-3. Obtain the required approval and pass all required checks.
-4. Squash-merge the pull request and delete the topic branch.
+3. Enable squash auto-merge when the pull request is ready.
+4. Obtain the required approval and pass all required checks.
+5. GitHub squash-merges the pull request and deletes the topic branch after
+   every ruleset requirement is satisfied.
+
+Auto-merge does not bypass reviews or checks. New commits dismiss stale
+approvals and must pass the required checks again.
 
 Incomplete functionality merged into `main` must be disabled with a feature
 flag. A push to `main` publishes and deploys the current API to staging.
@@ -64,4 +69,3 @@ release record must identify:
 - the API tag;
 - the immutable API container digest;
 - the deployment timestamp.
-
