@@ -11,8 +11,9 @@ namespace TacticusPlanner.Api.Features.PlayerData;
 /// <summary>
 /// Syncs the authenticated profile's player data from the Tacticus API: fetches the player endpoint,
 /// transforms and normalizes the response (never storing it raw — ADR 0007), and persists it as a
-/// <see cref="PlayerDataSnapshotEntity"/> unless the incoming <c>configHash</c> matches what is already
-/// stored. A successful unchanged sync still advances the snapshot's sync timestamp.
+/// <see cref="PlayerDataSnapshotEntity"/>. Every successful response is transformed and canonically
+/// hashed; only chunks whose transformed content changed are replaced. A successful unchanged sync
+/// still advances the snapshot's sync timestamp.
 /// </summary>
 public sealed class PlayerSyncEndpoint(ITacticusApi tacticusApi, PlayerDataTransformer transformer)
     : EndpointWithoutRequest<PlayerDataManifest>
@@ -24,8 +25,8 @@ public sealed class PlayerSyncEndpoint(ITacticusApi tacticusApi, PlayerDataTrans
         {
             summary.Summary = "Syncs the authenticated user's player data from the Tacticus API.";
             summary.Description = "Fetches the current player from the Tacticus API, transforms it into "
-                + "normalized chunks, and persists it. If the incoming configHash matches the last synced "
-                + "value, chunk persistence is skipped but the snapshot sync timestamp is advanced.";
+                + "normalized chunks, and persists chunks whose canonical content hash changed. The game "
+                + "configuration hash is retained as metadata and does not suppress player-content updates.";
             summary.Response<PlayerDataManifest>(StatusCodes.Status200OK, "The current player-data manifest.");
             summary.Response(StatusCodes.Status400BadRequest, "No Tacticus API key is configured, or the Tacticus API rejected it.");
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
@@ -91,62 +92,28 @@ public sealed class PlayerSyncEndpoint(ITacticusApi tacticusApi, PlayerDataTrans
             return;
         }
 
-        var incomingConfigHash = response.Metadata?.ConfigHash ?? string.Empty;
-
-        // Step 1: compare against just the hash/metadata columns (AsNoTracking) — none of the jsonb
-        // chunk payload columns are read unless the game configuration actually changed.
-        var existingMetadata = await db.PlayerDataSnapshots
-            .AsNoTracking()
-            .Where(entity => entity.Id == profileId)
-            .Select(entity => new
-            {
-                entity.SchemaVersion,
-                entity.ConfigHash,
-                entity.SourceHash,
-                entity.SyncedAt,
-                entity.ChunkHashes,
-            })
-            .FirstOrDefaultAsync(ct);
-
-        var canReuseExistingSnapshot = existingMetadata is not null
-            && existingMetadata.ConfigHash == incomingConfigHash
-            && existingMetadata.SchemaVersion == PlayerDataTransformer.CurrentSchemaVersion
-            && PlayerDataChunkKeys.All.All(key =>
-                existingMetadata.ChunkHashes.TryGetValue(key, out var hash) && !string.IsNullOrEmpty(hash));
-
-        if (canReuseExistingSnapshot && existingMetadata is not null)
-        {
-            // The game configuration is unchanged, but this was still a successful upstream sync.
-            // Advance the user-visible timestamp while retaining the existing normalized chunks.
-            var syncedAt = timeProvider.GetUtcNow();
-            integration.TacticusSyncLastSucceededAt = syncedAt;
-            var currentSnapshot = await db.PlayerDataSnapshots.FirstAsync(entity => entity.Id == profileId, ct);
-            currentSnapshot.SyncedAt = syncedAt;
-            await db.SaveChangesAsync(ct);
-            await Send.OkAsync(PlayerDataManifestBuilder.Build(currentSnapshot), ct);
-            return;
-        }
-
         var transformed = transformer.Transform(response);
 
-        // Step 2: only reached when the game configuration changed — load (or create) the tracked
-        // snapshot, then assign only the chunk properties whose content hash differs from what's already
-        // stored, so SaveChangesAsync marks just those owned-json columns dirty instead of all ten.
+        // Always evaluate transformed player content. configHash identifies the game configuration that
+        // contextualized the response; it is not a player-content version. Per-chunk canonical hashes
+        // remain the write optimization, so unchanged owned-json columns are not replaced.
         var snapshot = await db.PlayerDataSnapshots.FirstOrDefaultAsync(entity => entity.Id == profileId, ct);
         var isNew = snapshot is null;
         snapshot ??= new PlayerDataSnapshotEntity { Id = profileId };
+        var existingChunkHashes = snapshot.ChunkHashes;
+        var syncedAt = timeProvider.GetUtcNow();
 
         snapshot.ConfigHash = transformed.ConfigHash;
         snapshot.TacticusLastUpdatedOn = transformed.TacticusLastUpdatedOn;
         snapshot.SourceHash = transformed.SourceHash;
         snapshot.SchemaVersion = PlayerDataTransformer.CurrentSchemaVersion;
-        snapshot.SyncedAt = timeProvider.GetUtcNow();
+        snapshot.SyncedAt = syncedAt;
         snapshot.ChunkHashes = transformed.ChunkHashes;
 
         foreach (var (key, setter) in ChunkSetters)
         {
             var changed = isNew
-                || existingMetadata!.ChunkHashes.GetValueOrDefault(key, string.Empty) != transformed.ChunkHashes[key];
+                || existingChunkHashes.GetValueOrDefault(key, string.Empty) != transformed.ChunkHashes[key];
 
             if (changed)
             {
@@ -159,7 +126,7 @@ public sealed class PlayerSyncEndpoint(ITacticusApi tacticusApi, PlayerDataTrans
             db.PlayerDataSnapshots.Add(snapshot);
         }
 
-        integration.TacticusSyncLastSucceededAt = timeProvider.GetUtcNow();
+        integration.TacticusSyncLastSucceededAt = syncedAt;
         await db.SaveChangesAsync(ct);
 
         await Send.OkAsync(PlayerDataManifestBuilder.Build(snapshot), ct);

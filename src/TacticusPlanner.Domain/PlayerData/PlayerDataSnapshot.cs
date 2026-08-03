@@ -13,8 +13,9 @@ namespace TacticusPlanner.Domain.PlayerData;
 /// </summary>
 public class PlayerDataSnapshot : BaseEntity<ProfileId>, IRevisionedEntity
 {
-    /// <summary>The Tacticus player endpoint's <c>metaData.configHash</c>. Compared against the incoming
-    /// value on every sync attempt; an unchanged hash skips persistence entirely.</summary>
+    /// <summary>The Tacticus player endpoint's <c>metaData.configHash</c>. This identifies the game
+    /// configuration that contextualized the player response; player-content changes are detected from
+    /// the canonical per-chunk hashes instead.</summary>
     public string ConfigHash { get; set; } = string.Empty;
 
     /// <summary>Unix seconds from the Tacticus player endpoint's <c>metaData.lastUpdatedOn</c> — when the

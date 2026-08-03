@@ -24,6 +24,7 @@ internal sealed class FakeTacticusApi : ITacticusApi
     private static readonly ConcurrentDictionary<string, GuildResponse> GuildResponsesByToken = new();
     private static readonly ConcurrentDictionary<string, HttpStatusCode> GuildRejectionsByToken = new();
     private static readonly ConcurrentDictionary<string, bool> GuildUnavailableTokens = new();
+    private static readonly ConcurrentDictionary<string, PlayerResponse> PlayerResponsesByToken = new();
 
     /// <summary>Registers the <see cref="GuildResponse"/> <see cref="GetGuildAsync"/> returns for
     /// <paramref name="guildApiToken"/>. Build the response via <see cref="BuildGuildResponse"/>.</summary>
@@ -83,13 +84,16 @@ internal sealed class FakeTacticusApi : ITacticusApi
     public const string PlayerName = "TestPlayer";
     public const int PowerLevel = 12345;
 
-    /// <summary>Same player identity as <see cref="ValidKey"/> but a different <c>configHash</c> and slightly
-    /// different unit/campaign data, so player-sync tests can exercise the "data changed" path deterministically
-    /// (without any shared mutable state between tests).</summary>
+    /// <summary>Same player identity as <see cref="ValidKey"/> but a different <c>configHash</c> and unit
+    /// progression, so player-sync tests can exercise the "data changed" path deterministically.</summary>
     public const string ValidKeyV2 = "valid-tacticus-api-key-v2";
 
     public const string ConfigHashV1 = "config-hash-v1";
     public const string ConfigHashV2 = "config-hash-v2";
+    public const long LastUpdatedOnV1 = 1_780_000_000;
+
+    /// <summary>A real catalog character id used as a locked-unit inventory shard fixture.</summary>
+    public const string LockedCharacterUnitId = "astraCreed";
 
     /// <summary>Real catalog character id (Ultramarines core character, see campaign-battles-indomitus.json).</summary>
     public const string CharacterUnitId = "ultraTigurius";
@@ -101,29 +105,31 @@ internal sealed class FakeTacticusApi : ITacticusApi
     /// remarks: eventCampaign1 -> death-guard-vs-admech).</summary>
     public const string EventCampaignId = "eventCampaign1";
 
-    public Task<PlayerResponse> GetPlayerAsync(string personalApiToken, CancellationToken cancellationToken = default)
+    /// <summary>Registers a player response independently of the token, configuration hash, freshness
+    /// timestamp, and content. Tests use unique tokens, so fixtures do not leak between tests.</summary>
+    public static void ConfigurePlayerResponse(string personalApiToken, PlayerResponse response) =>
+        PlayerResponsesByToken[personalApiToken] = response;
+
+    public static PlayerResponse BuildPlayerResponse(
+        string configHash = ConfigHashV1,
+        long lastUpdatedOn = LastUpdatedOnV1,
+        int progressionIndex = 11,
+        int xp = 200000,
+        int rank = 12,
+        int unitShards = 59,
+        int? lockedCharacterShards = null)
     {
-        var isV2 = personalApiToken == ValidKeyV2;
-        var isValid = personalApiToken == ValidKey || isV2;
-
-        var details = isValid
-            ? new PlayerDetails { Name = PlayerName, PowerLevel = PowerLevel }
-            : null;
-
-        if (!isValid)
-        {
-            return Task.FromResult(new PlayerResponse { Player = new Player { Details = details! } });
-        }
+        var details = new PlayerDetails { Name = PlayerName, PowerLevel = PowerLevel };
 
         var unit = new Unit
         {
             Id = CharacterUnitId,
             Name = "Tigurius",
-            ProgressionIndex = isV2 ? 12 : 11,
-            Xp = isV2 ? 210000 : 200000,
+            ProgressionIndex = progressionIndex,
+            Xp = xp,
             XpLevel = 35,
-            Rank = isV2 ? 13 : 12,
-            Shards = 59,
+            Rank = rank,
+            Shards = unitShards,
             MythicShards = 0,
             Abilities = [new Ability { Id = "StormOfWrath", Level = 35 }],
             Upgrades = [0, 2, 4],
@@ -155,7 +161,9 @@ internal sealed class FakeTacticusApi : ITacticusApi
                 Inventory = new Inventory
                 {
                     Upgrades = [],
-                    Shards = [],
+                    Shards = lockedCharacterShards is { } shardAmount
+                        ? [new Shard { Id = LockedCharacterUnitId, Name = "Creed", Amount = shardAmount }]
+                        : [],
                     MythicShards = [],
                     XpBooks = [],
                     AbilityBadges = new AbilityBadges { Imperial = [], Xenos = [], Chaos = [] },
@@ -174,13 +182,37 @@ internal sealed class FakeTacticusApi : ITacticusApi
             },
             Metadata = new Metadata
             {
-                ConfigHash = isV2 ? ConfigHashV2 : ConfigHashV1,
-                LastUpdatedOn = 1_780_000_000,
+                ConfigHash = configHash,
+                LastUpdatedOn = lastUpdatedOn,
                 Scopes = ["Player"],
             },
         };
 
-        return Task.FromResult(response);
+        return response;
+    }
+
+    public Task<PlayerResponse> GetPlayerAsync(string personalApiToken, CancellationToken cancellationToken = default)
+    {
+        if (PlayerResponsesByToken.TryGetValue(personalApiToken, out var configuredResponse))
+        {
+            return Task.FromResult(configuredResponse);
+        }
+
+        if (personalApiToken == ValidKey)
+        {
+            return Task.FromResult(BuildPlayerResponse());
+        }
+
+        if (personalApiToken == ValidKeyV2)
+        {
+            return Task.FromResult(BuildPlayerResponse(
+                configHash: ConfigHashV2,
+                progressionIndex: 12,
+                xp: 210000,
+                rank: 13));
+        }
+
+        return Task.FromResult(new PlayerResponse { Player = new Player { Details = null! } });
     }
 
     public async Task<GuildResponse> GetGuildAsync(string guildApiToken, CancellationToken cancellationToken = default)
