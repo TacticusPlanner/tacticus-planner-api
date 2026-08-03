@@ -33,7 +33,7 @@ Remove the `configHash`-only reuse path. After every successful upstream fetch, 
 
 ### Retain per-chunk hash comparison as the write optimization
 
-Load the tracked snapshot after transformation and invoke a chunk setter only when the newly computed hash differs from the stored hash. Update snapshot metadata—configuration hash, upstream freshness timestamp, aggregate source hash, schema version, synchronization timestamp, and chunk hashes—from the transformed result. A genuinely unchanged response therefore avoids rewriting chunk payloads while still records a successful synchronization.
+Load the tracked snapshot after transformation and invoke a chunk setter only when the newly computed hash differs from the stored hash. Read `configHash` and `lastUpdatedOn` from the upstream response. Update normalized chunk payloads and per-chunk hashes from the transformed result, and compute the aggregate source hash from transformed content plus `configHash`. Record the synchronization timestamp only after the snapshot update succeeds. A genuinely unchanged response therefore avoids rewriting chunk payloads while still recording a successful synchronization.
 
 **Alternative considered:** replace every JSON chunk on every sync. Rejected because the existing hash comparison provides correct, inexpensive write minimization and avoids unnecessary PostgreSQL JSON updates.
 
@@ -47,7 +47,7 @@ No database migration is needed. Existing rows retain valid schema shapes; only 
 
 ### Consolidate repeated reward occurrences by resource and battle
 
-When resolving locations for one resource, group raw occurrences by battle id. Preserve the existing representation for a single occurrence. For a group containing simultaneous occurrences, emit one location whose guaranteed flag is true when any occurrence is guaranteed and whose effective rate is the guaranteed unit yield plus each resolved potential effective rate. Preserve a single potential chance id when available for diagnostics, but do not expose a misleading numerator or denominator for the combined rate.
+When resolving locations for one resource, group raw occurrences by battle id. Preserve the existing representation for a single occurrence, including all resolved chance metadata for one probabilistic occurrence. For a group containing simultaneous occurrences, emit one location whose guaranteed flag is true when any occurrence is guaranteed and whose effective rate is the number of guaranteed occurrences plus each resolved potential effective rate. Set chance id, numerator, and denominator to null for every consolidated location because no single chance definition describes the combined rate.
 
 This keeps the public catalog shape stable while establishing that one farm location represents one raid choice. It also prevents consumers from applying the same battle attempt cap independently to what are actually simultaneous rewards.
 
@@ -59,7 +59,7 @@ This keeps the public catalog shape stable while establishing that one farm loca
 - **[Risk] Upstream still serves cached player data** → Preserve `lastUpdatedOn` so diagnostics can distinguish a current local sync from the age of the upstream player snapshot; the service cannot manufacture data newer than the upstream response.
 - **[Risk] Tests continue coupling content changes to config changes** → Add same-config fixtures that independently vary shards, unit progression, and upstream freshness.
 - **[Risk] Combined rates cannot be expressed as one raw fraction** → Keep numerator and denominator null for a consolidated location and publish the already-supported effective rate.
-- **[Risk] A malformed battle repeats a guaranteed reward** → Count the guaranteed component once, matching V1's `find` semantics, and sum resolved probabilistic components.
+- **[Risk] A battle repeats a guaranteed reward** → Count every authored guaranteed occurrence so the expected yield matches the raw reward list, and sum all resolved probabilistic components.
 
 ## Migration Plan
 

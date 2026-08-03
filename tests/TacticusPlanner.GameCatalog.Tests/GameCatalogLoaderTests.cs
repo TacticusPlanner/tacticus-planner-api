@@ -80,10 +80,10 @@ public sealed class GameCatalogLoaderTests
         var location = Assert.Single(character.ShardLocations, location => location.BattleId == battleId);
 
         Assert.True(location.Guaranteed);
-        Assert.Equal("shard_elite", location.ChanceId);
+        Assert.Null(location.ChanceId);
         Assert.Null(location.Numerator);
         Assert.Null(location.Denominator);
-        Assert.NotNull(location.EffectiveRate);
-        Assert.Equal(1.079, location.EffectiveRate.Value, 3);
+        var effectiveRate = Assert.IsType<double>(location.EffectiveRate);
+        Assert.Equal(1.079, effectiveRate, 3);
     }
 }

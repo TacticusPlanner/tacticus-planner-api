@@ -83,7 +83,8 @@ internal static partial class GameCatalogDenormalizer
             }
 
             var first = groupedLocations[0];
-            var guaranteed = groupedLocations.Any(location => location.Guaranteed);
+            var guaranteedCount = groupedLocations.Count(location => location.Guaranteed);
+            var guaranteed = guaranteedCount > 0;
             var potentialLocations = groupedLocations.Where(location => !location.Guaranteed).ToArray();
             var resolvedPotentialRates = potentialLocations
                 .Select(location => location.ChanceId is not null
@@ -92,20 +93,15 @@ internal static partial class GameCatalogDenormalizer
                         : (double?)null)
                 .ToArray();
             var effectiveRate = resolvedPotentialRates.All(rate => rate.HasValue)
-                ? (guaranteed ? 1d : 0d) + resolvedPotentialRates.Sum(rate => rate!.Value)
+                ? guaranteedCount + resolvedPotentialRates.Sum(rate => rate!.Value)
                 : (double?)null;
-            var chanceIds = potentialLocations
-                .Select(location => location.ChanceId)
-                .Where(chanceId => chanceId is not null)
-                .Distinct(StringComparer.Ordinal)
-                .ToArray();
 
             return new GameCatalogFarmLocation(
                 first.BattleId,
                 first.Type,
                 first.Challenge,
                 guaranteed,
-                chanceIds.Length == 1 ? chanceIds[0] : null,
+                null,
                 null,
                 null,
                 effectiveRate,
