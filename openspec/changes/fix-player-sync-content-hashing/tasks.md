@@ -19,3 +19,13 @@
 - [x] 3.2 Run strict OpenSpec validation, `dotnet format TacticusPlanner.slnx --verify-no-changes --no-restore`, the Release build and full test suite, and `git diff --check`
 - [x] 3.3 Build the API Docker image using the repository Dockerfile
 - [x] 3.4 In the Aspire-hosted signed-in stack, sync a profile whose stored shard snapshot is stale while the game configuration is unchanged; verify the server manifest changes, the web client downloads `inventory-shards`, and Unlock estimates match the in-game/V1 shard counts without clearing IndexedDB
+
+## 4. Consolidate simultaneous catalog rewards
+
+- [x] 4.1 Group occurrences of the same resource and battle during farm-location resolution, retaining single-occurrence semantics and emitting one combined effective rate for simultaneous rewards
+- [x] 4.2 Add catalog regression tests proving elite guaranteed-plus-`shard_elite` locations such as FoCE40 and SHME40 are unique and yield `1.079` expected shards per raid
+- [x] 4.3 Verify consolidated locations retain the existing public schema and update any affected catalog manifest snapshot
+
+## 5. Reward-consolidation verification
+
+- [x] 5.1 Run focused game-catalog tests, strict OpenSpec validation, formatting verification, the Release build, full tests, and `git diff --check`

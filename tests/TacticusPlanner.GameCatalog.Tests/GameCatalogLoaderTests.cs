@@ -68,4 +68,22 @@ public sealed class GameCatalogLoaderTests
         Assert.Equal(15, snapshot.OnslaughtReward("Gold", 1, "Legendary", mythicShards: false).Midpoint);
         Assert.Equal(2.5, snapshot.OnslaughtReward("Adamantine", 3, "Mythic", mythicShards: true).Midpoint);
     }
+
+    [Theory]
+    [InlineData("astraCreed", "FoCE40")]
+    [InlineData("eldarMauganRa", "SHME40")]
+    public void EliteShardLocationsCombineGuaranteedAndPotentialRewards(string characterId, string battleId)
+    {
+        var snapshot = GameCatalogLoader.Load();
+
+        var character = snapshot.CharacterViews.Single(character => character.Id == characterId);
+        var location = Assert.Single(character.ShardLocations, location => location.BattleId == battleId);
+
+        Assert.True(location.Guaranteed);
+        Assert.Equal("shard_elite", location.ChanceId);
+        Assert.Null(location.Numerator);
+        Assert.Null(location.Denominator);
+        Assert.NotNull(location.EffectiveRate);
+        Assert.Equal(1.079, location.EffectiveRate.Value, 3);
+    }
 }

@@ -2,7 +2,7 @@
   version: dev-2026-07-01,
   schemaVersion: 2,
   gameVersion: 1.40,
-  sourceHash: 8bdfd93847a6f089da2ee80b518e33127f2318bc9c0f6785e725827ab35cf47e,
+  sourceHash: 5fdea26421541468e84de4585bae7e8c784b6c32392eaf896d585627a7005fe7,
   datasets: [
     {
       key: ascension-costs,
@@ -21,7 +21,7 @@
     },
     {
       key: characters,
-      hash: 3d325e7ff383d609053aa6b77e40e51cbfe1e684a8c71869749ddc2d468f6bb6,
+      hash: 5201bc4baffb7f57855c7fe07f54104638d36f4de4adb5cfe0426da7ce8f47e5,
       url: /api/v1/game-catalog/characters
     },
     {
@@ -71,7 +71,7 @@
     },
     {
       key: upgrades,
-      hash: 6d982263a690e5cd8b12d6d3d53eeb3c3c44ea0ff4bba30ebb5ff7d425ccf03f,
+      hash: 6951b49d490ef18f6b03e4f30c42d3f84659e996d5c4c4fc39afc583ceef79dd,
       url: /api/v1/game-catalog/upgrades
     }
   ]
