@@ -91,10 +91,10 @@ jobs:
       - name: Install Container Apps CLI extension
         run: az extension add --name containerapp --upgrade
 
-      - name: Deploy image when the Container App exists
+      - name: Check Container App exists
+        id: check
         shell: bash
         env:
-          IMAGE_REFERENCE: ${{ needs.publish.outputs.image }}
           CONTAINER_APP_NAME: ${{ vars.CONTAINER_APP_NAME }}
           RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
         run: |
@@ -102,67 +102,94 @@ jobs:
             --name "$CONTAINER_APP_NAME" \
             --resource-group "$RESOURCE_GROUP_NAME" \
             --output none 2>/dev/null; then
-            az containerapp update \
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Update Container App image
+        if: steps.check.outputs.exists == 'true'
+        shell: bash
+        env:
+          IMAGE_REFERENCE: ${{ needs.publish.outputs.image }}
+          CONTAINER_APP_NAME: ${{ vars.CONTAINER_APP_NAME }}
+          RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
+        run: |
+          az containerapp update \
+            --name "$CONTAINER_APP_NAME" \
+            --resource-group "$RESOURCE_GROUP_NAME" \
+            --image "$IMAGE_REFERENCE" \
+            --no-wait \
+            --output none
+
+      - name: Wait for revision to become healthy
+        if: steps.check.outputs.exists == 'true'
+        shell: bash
+        env:
+          IMAGE_REFERENCE: ${{ needs.publish.outputs.image }}
+          CONTAINER_APP_NAME: ${{ vars.CONTAINER_APP_NAME }}
+          RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
+        run: |
+          for attempt in {1..30}; do
+            revision=""
+            if app_status="$(az containerapp show \
               --name "$CONTAINER_APP_NAME" \
               --resource-group "$RESOURCE_GROUP_NAME" \
-              --image "$IMAGE_REFERENCE" \
-              --no-wait \
-              --output none
+              --query '[properties.latestRevisionName, properties.provisioningState]' \
+              --output tsv)"; then
+              mapfile -t app_fields <<< "$app_status"
+              revision="${app_fields[0]:-}"
+              provisioning_state="${app_fields[1]:-}"
 
-            for attempt in {1..30}; do
-              revision=""
-              if app_status="$(az containerapp show \
+              if [[ "$provisioning_state" == "Failed" ]]; then
+                echo "::error::Container App deployment failed."
+                exit 1
+              fi
+            else
+              echo "::warning::Failed to query Container App deployment status; retrying."
+            fi
+
+            if [[ -n "$revision" ]]; then
+              if revision_status="$(az containerapp revision show \
                 --name "$CONTAINER_APP_NAME" \
                 --resource-group "$RESOURCE_GROUP_NAME" \
-                --query '[properties.latestRevisionName, properties.provisioningState]' \
+                --revision "$revision" \
+                --query '[properties.healthState, properties.runningState, properties.template.containers[0].image]' \
                 --output tsv)"; then
-                mapfile -t app_fields <<< "$app_status"
-                revision="${app_fields[0]:-}"
-                provisioning_state="${app_fields[1]:-}"
+                mapfile -t revision_fields <<< "$revision_status"
+                health="${revision_fields[0]:-}"
+                running="${revision_fields[1]:-}"
+                revision_image="${revision_fields[2]:-}"
 
-                if [[ "$provisioning_state" == "Failed" ]]; then
-                  echo "::error::Container App deployment failed."
+                if [[ "$revision_image" == "$IMAGE_REFERENCE" && "$health" == "Healthy" && "$running" == "Running" ]]; then
+                  break
+                fi
+
+                if [[ "$revision_image" == "$IMAGE_REFERENCE" && "$running" == "ActivationFailed" ]]; then
+                  echo "::error::Revision $revision failed to activate."
                   exit 1
                 fi
               else
-                echo "::warning::Failed to query Container App deployment status; retrying."
+                echo "::warning::Failed to query revision $revision; retrying."
               fi
+            fi
 
-              if [[ -n "$revision" ]]; then
-                if revision_status="$(az containerapp revision show \
-                  --name "$CONTAINER_APP_NAME" \
-                  --resource-group "$RESOURCE_GROUP_NAME" \
-                  --revision "$revision" \
-                  --query '[properties.healthState, properties.runningState, properties.replicas, properties.template.containers[0].image]' \
-                  --output tsv)"; then
-                  mapfile -t revision_fields <<< "$revision_status"
-                  health="${revision_fields[0]:-}"
-                  running="${revision_fields[1]:-}"
-                  replicas="${revision_fields[2]:-0}"
-                  revision_image="${revision_fields[3]:-}"
+            if [[ "$attempt" == "30" ]]; then
+              echo "::error::Revision $revision did not become healthy within five minutes."
+              exit 1
+            fi
 
-                  if [[ "$revision_image" == "$IMAGE_REFERENCE" && "$health" == "Healthy" && "$running" == "Running" && "$replicas" -gt 0 ]]; then
-                    break
-                  fi
+            sleep 10
+          done
 
-                  if [[ "$revision_image" == "$IMAGE_REFERENCE" && "$running" == "ActivationFailed" ]]; then
-                    echo "::error::Revision $revision failed to activate."
-                    exit 1
-                  fi
-                else
-                  echo "::warning::Failed to query revision $revision; retrying."
-                fi
-              fi
+      - name: Record deployment summary
+        if: steps.check.outputs.exists == 'true'
+        shell: bash
+        env:
+          IMAGE_REFERENCE: ${{ needs.publish.outputs.image }}
+        run: echo "Deployed $IMAGE_REFERENCE" >> "$GITHUB_STEP_SUMMARY"
 
-              if [[ "$attempt" == "30" ]]; then
-                echo "::error::Revision $revision did not become healthy within five minutes."
-                exit 1
-              fi
-
-              sleep 10
-            done
-
-            echo "Deployed $IMAGE_REFERENCE" >> "$GITHUB_STEP_SUMMARY"
-          else
-            echo "Container App does not exist; image publication completed without deployment." >> "$GITHUB_STEP_SUMMARY"
-          fi
+      - name: Record skipped deployment
+        if: steps.check.outputs.exists == 'false'
+        shell: bash
+        run: echo "Container App does not exist; image publication completed without deployment." >> "$GITHUB_STEP_SUMMARY"
