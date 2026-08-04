@@ -72,7 +72,44 @@ internal static partial class GameCatalogDenormalizer
             return [];
         }
 
-        return locations.Select(location =>
+        return locations
+            .GroupBy(location => location.BattleId, StringComparer.Ordinal)
+            .Select(group =>
+        {
+            var groupedLocations = group.ToArray();
+            if (groupedLocations.Length == 1)
+            {
+                return ResolveLocation(groupedLocations[0]);
+            }
+
+            var first = groupedLocations[0];
+            var guaranteedCount = groupedLocations.Count(location => location.Guaranteed);
+            var guaranteed = guaranteedCount > 0;
+            var potentialLocations = groupedLocations.Where(location => !location.Guaranteed).ToArray();
+            var resolvedPotentialRates = potentialLocations
+                .Select(location => location.ChanceId is not null
+                    && dropChanceById.TryGetValue(location.ChanceId, out var chance)
+                        ? chance.EffectiveRate
+                        : (double?)null)
+                .ToArray();
+            var effectiveRate = resolvedPotentialRates.All(rate => rate.HasValue)
+                ? guaranteedCount + resolvedPotentialRates.Sum(rate => rate!.Value)
+                : (double?)null;
+
+            return new GameCatalogFarmLocation(
+                first.BattleId,
+                first.Type,
+                first.Challenge,
+                guaranteed,
+                null,
+                null,
+                null,
+                effectiveRate,
+                isMythic);
+        })
+            .ToArray();
+
+        GameCatalogFarmLocation ResolveLocation(RewardLocation location)
         {
             if (location.Guaranteed || location.ChanceId is null
                 || !dropChanceById.TryGetValue(location.ChanceId, out var chance))
@@ -83,6 +120,6 @@ internal static partial class GameCatalogDenormalizer
 
             return new GameCatalogFarmLocation(location.BattleId, location.Type, location.Challenge, false,
                 location.ChanceId, chance.Numerator, chance.Denominator, chance.EffectiveRate, isMythic);
-        }).ToArray();
+        }
     }
 }

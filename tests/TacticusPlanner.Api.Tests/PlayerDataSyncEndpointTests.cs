@@ -74,7 +74,7 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
     }
 
     [Fact]
-    public async Task RepeatedSyncWithUnchangedConfigHashAdvancesSuccessfulSyncTimestamp()
+    public async Task IdenticalRepeatedResponseRetainsChunkHashesAndAdvancesSuccessfulSyncMetadata()
     {
         var subject = NewSubject();
         var client = await CreateProvisionedClientAsync(subject);
@@ -82,15 +82,98 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
 
         var first = await client.PostAsync("/api/v1/tacticus-integration/player-sync", null, TestContext.Current.CancellationToken);
         var firstManifest = await first.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
+        var firstState = await GetStoredStateAsync(subject);
 
         await Task.Delay(10, TestContext.Current.CancellationToken);
 
         var second = await client.PostAsync("/api/v1/tacticus-integration/player-sync", null, TestContext.Current.CancellationToken);
         var secondManifest = await second.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
+        var secondState = await GetStoredStateAsync(subject);
 
         Assert.Equal(HttpStatusCode.OK, second.StatusCode);
         Assert.Equal(firstManifest!.SourceHash, secondManifest!.SourceHash);
+        Assert.Equal(firstState.ChunkHashes, secondState.ChunkHashes);
         Assert.True(secondManifest.SyncedAt > firstManifest.SyncedAt);
+        Assert.True(secondState.LastSucceededAt > firstState.LastSucceededAt);
+    }
+
+    [Fact]
+    public async Task LockedCharacterShardChangesUnderSameConfigHashUpdateOnlyInventoryShards()
+    {
+        var subject = NewSubject();
+        var token = $"same-config-shards-{Guid.NewGuid()}";
+        FakeTacticusApi.ConfigurePlayerResponse(token, FakeTacticusApi.BuildPlayerResponse(
+            lastUpdatedOn: FakeTacticusApi.LastUpdatedOnV1,
+            lockedCharacterShards: 285));
+
+        var client = await CreateProvisionedClientAsync(subject);
+        await ConfigureTacticusKeyAsync(client, token);
+        var first = await client.PostAsync("/api/v1/tacticus-integration/player-sync", null, TestContext.Current.CancellationToken);
+        var firstManifest = await first.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
+
+        FakeTacticusApi.ConfigurePlayerResponse(token, FakeTacticusApi.BuildPlayerResponse(
+            lastUpdatedOn: FakeTacticusApi.LastUpdatedOnV1 + 60,
+            lockedCharacterShards: 298));
+        var second = await client.PostAsync("/api/v1/tacticus-integration/player-sync", null, TestContext.Current.CancellationToken);
+        var secondManifest = await second.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
+        var stored = await GetStoredStateAsync(subject);
+
+        Assert.Equal(HttpStatusCode.OK, second.StatusCode);
+        Assert.Equal(FakeTacticusApi.ConfigHashV1, secondManifest!.GameConfigHash);
+        Assert.Equal(298, stored.LockedCharacterShards);
+        Assert.Equal(FakeTacticusApi.LastUpdatedOnV1 + 60, stored.TacticusLastUpdatedOn);
+        AssertOnlyChunkChanged(firstManifest!, secondManifest, PlayerDataChunkKeys.InventoryShards);
+    }
+
+    [Fact]
+    public async Task RosterProgressionChangesUnderSameConfigHashUpdateOnlyCharacters()
+    {
+        var token = $"same-config-roster-{Guid.NewGuid()}";
+        FakeTacticusApi.ConfigurePlayerResponse(token, FakeTacticusApi.BuildPlayerResponse());
+
+        var client = await CreateProvisionedClientAsync();
+        await ConfigureTacticusKeyAsync(client, token);
+        var first = await client.PostAsync("/api/v1/tacticus-integration/player-sync", null, TestContext.Current.CancellationToken);
+        var firstManifest = await first.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
+
+        FakeTacticusApi.ConfigurePlayerResponse(token, FakeTacticusApi.BuildPlayerResponse(
+            lastUpdatedOn: FakeTacticusApi.LastUpdatedOnV1 + 60,
+            progressionIndex: 12,
+            xp: 210000,
+            rank: 13));
+        var second = await client.PostAsync("/api/v1/tacticus-integration/player-sync", null, TestContext.Current.CancellationToken);
+        var secondManifest = await second.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.OK, second.StatusCode);
+        Assert.Equal(FakeTacticusApi.ConfigHashV1, secondManifest!.GameConfigHash);
+        AssertOnlyChunkChanged(firstManifest!, secondManifest, PlayerDataChunkKeys.Characters);
+    }
+
+    [Fact]
+    public async Task UpstreamFreshnessAdvancesIndependentlyFromConfigAndContentHashes()
+    {
+        var subject = NewSubject();
+        var token = $"freshness-only-{Guid.NewGuid()}";
+        FakeTacticusApi.ConfigurePlayerResponse(token, FakeTacticusApi.BuildPlayerResponse());
+
+        var client = await CreateProvisionedClientAsync(subject);
+        await ConfigureTacticusKeyAsync(client, token);
+        var first = await client.PostAsync("/api/v1/tacticus-integration/player-sync", null, TestContext.Current.CancellationToken);
+        var firstManifest = await first.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
+
+        FakeTacticusApi.ConfigurePlayerResponse(token, FakeTacticusApi.BuildPlayerResponse(
+            lastUpdatedOn: FakeTacticusApi.LastUpdatedOnV1 + 120));
+        var second = await client.PostAsync("/api/v1/tacticus-integration/player-sync", null, TestContext.Current.CancellationToken);
+        var secondManifest = await second.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
+        var stored = await GetStoredStateAsync(subject);
+
+        Assert.Equal(HttpStatusCode.OK, second.StatusCode);
+        Assert.Equal(firstManifest!.GameConfigHash, secondManifest!.GameConfigHash);
+        Assert.Equal(firstManifest.SourceHash, secondManifest.SourceHash);
+        Assert.Equal(
+            firstManifest.Chunks.ToDictionary(chunk => chunk.Key, chunk => chunk.Hash),
+            secondManifest.Chunks.ToDictionary(chunk => chunk.Key, chunk => chunk.Hash));
+        Assert.Equal(FakeTacticusApi.LastUpdatedOnV1 + 120, stored.TacticusLastUpdatedOn);
     }
 
     [Fact]
@@ -196,6 +279,45 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
         return snapshot.Revision;
     }
 
+    private async Task<StoredSyncState> GetStoredStateAsync(string subject)
+    {
+        using var scope = factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
+        var snapshot = await db.PlayerDataSnapshots
+            .IgnoreQueryFilters()
+            .Include(entity => entity.Profile)
+            .ThenInclude(entity => entity!.Account)
+            .SingleAsync(
+                entity => entity.Profile!.Account!.Subject == subject,
+                TestContext.Current.CancellationToken);
+        var lastSucceededAt = await db.TacticusIntegrations
+            .IgnoreQueryFilters()
+            .Where(entity => entity.Id == snapshot.Id)
+            .Select(entity => entity.TacticusSyncLastSucceededAt)
+            .SingleAsync(TestContext.Current.CancellationToken);
+
+        return new StoredSyncState(
+            new Dictionary<string, string>(snapshot.ChunkHashes, StringComparer.Ordinal),
+            snapshot.InventoryShards.SingleOrDefault(shard => shard.UnitId.Value == FakeTacticusApi.LockedCharacterUnitId)?.Amount,
+            snapshot.TacticusLastUpdatedOn,
+            lastSucceededAt);
+    }
+
+    private static void AssertOnlyChunkChanged(
+        PlayerDataManifest first,
+        PlayerDataManifest second,
+        string changedChunk)
+    {
+        var firstHashes = first.Chunks.ToDictionary(chunk => chunk.Key, chunk => chunk.Hash);
+        var secondHashes = second.Chunks.ToDictionary(chunk => chunk.Key, chunk => chunk.Hash);
+
+        Assert.NotEqual(firstHashes[changedChunk], secondHashes[changedChunk]);
+        foreach (var key in PlayerDataChunkKeys.All.Where(key => key != changedChunk))
+        {
+            Assert.Equal(firstHashes[key], secondHashes[key]);
+        }
+    }
+
     private async Task<HttpClient> CreateProvisionedClientAsync(string? subject = null)
     {
         var client = factory.CreateClient();
@@ -218,4 +340,10 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
     }
 
     private static string NewSubject() => $"player-data-sync-{Guid.NewGuid()}";
+
+    private sealed record StoredSyncState(
+        IReadOnlyDictionary<string, string> ChunkHashes,
+        long? LockedCharacterShards,
+        long TacticusLastUpdatedOn,
+        DateTimeOffset? LastSucceededAt);
 }

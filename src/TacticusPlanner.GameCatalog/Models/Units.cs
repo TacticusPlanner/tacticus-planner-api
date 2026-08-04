@@ -36,10 +36,13 @@ public sealed record GameCatalogCharacterRankUp(
 );
 
 // A campaign-battle location that drops a reward (a character shard or an upgrade material), with the
-// drop chance inlined. Guaranteed rewards carry Guaranteed=true and no rate; potential rewards carry the
-// resolved drop-chance numbers. IsMythic is true only for a character's mythicShards_ reward locations
-// (see ShardPrefixes in GameCatalogDenormalizer.cs) — always false for upgrade-material locations, which
-// have no mythic concept at all.
+// drop chance inlined. A single guaranteed reward carries Guaranteed=true and no rate; a single potential
+// reward carries the resolved drop-chance numbers. Simultaneous occurrences of the same resource in one
+// battle are consolidated: Guaranteed reflects whether an occurrence is guaranteed and EffectiveRate is
+// their combined expected yield, while ChanceId/Numerator/Denominator remain null because no single chance
+// definition represents the sum. IsMythic is true only for a character's mythicShards_ reward locations (see
+// ShardPrefixes in GameCatalogDenormalizer.cs) — always false for upgrade-material locations, which have no
+// mythic concept at all.
 public sealed record GameCatalogFarmLocation(
     string BattleId,
     string Type,
