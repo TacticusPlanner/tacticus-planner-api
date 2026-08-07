@@ -45,19 +45,37 @@ the single source of truth for versions.
    Version="..." />` entry in `Directory.Packages.props` (or the per-project
    `.csproj` if it isn't centrally managed) and bump `Version` to the
    advisory's patched version.
+   - **The flagged package is a direct dependency**: bump its
+     `PackageVersion` entry directly.
+   - **The flagged package is transitive** (pulled in by another package,
+     not referenced by any `.csproj` directly): first check whether bumping
+     the *direct* parent package (the one that references it) also brings
+     in a patched version of the transitive one — that's usually the
+     better fix since it stays on a version combination NuGet actually
+     tested together. Only add a standalone `PackageVersion` pin for the
+     transitive package itself if the parent hasn't published a version
+     that resolves it.
    - **Patch/minor bump within the same major**: apply directly.
    - **Fix requires a major-version bump**: do not apply silently. Flag it
      to the user with the advisory, the affected package, and what the
      major bump would touch — that's a judgment call about breaking
      changes (API shape, EF Core migrations, etc.), not a routine
      dependency fix.
-3. **Verify nothing broke:**
-   ```bash
-   dotnet restore TacticusPlanner.slnx
+3. **Verify nothing broke**, matching this repo's actual build commands
+   (root `AGENTS.md` → Build, Test, and Development Commands — locked
+   restore for the API/ServiceDefaults projects, AppHost restore is
+   intentionally unlocked, `Release` config, `--no-restore`/`--no-build`
+   downstream):
+   ```powershell
+   dotnet restore src/TacticusPlanner.Api --locked-mode
+   dotnet restore orchestration/TacticusPlanner.AppHost
    dotnet list TacticusPlanner.slnx package --vulnerable --include-transitive
-   dotnet build TacticusPlanner.slnx
-   dotnet test TacticusPlanner.slnx
+   dotnet build TacticusPlanner.slnx -c Release --no-restore
+   dotnet test TacticusPlanner.slnx -c Release --no-build
    ```
+   Re-running `--locked-mode` restore after a `Directory.Packages.props`
+   edit also confirms the packages actually resolve as expected, not just
+   that the version string changed.
 4. **Commit on a topic branch, not `main`** (this repo's convention — see
    root `AGENTS.md`). Do not push unless the user explicitly asks; creating
    the branch and committing locally is the deliverable of this skill.
