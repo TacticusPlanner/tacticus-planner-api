@@ -27,7 +27,8 @@ and .NET Aspire for local orchestration.
   `tacticus-planner-apps` React/Vite client. `orchestration/TacticusPlanner.ServiceDefaults`
   holds shared Aspire service defaults (telemetry, health checks).
 - `.agents/skills` (canonical) / `.claude/skills` (mirror): local agent skill
-  docs, currently `game-catalog-data`.
+  docs — `game-catalog-data` and `vulnerabilities-scan` (NuGet vulnerability
+  scan + fix process for this repo).
 
 ## Build, Test, and Development Commands
 
