@@ -41,12 +41,9 @@ public sealed class GameCatalogSnapshotTests(GameCatalogApiFactory factory)
         var manifest = JsonNode.Parse(manifestJson)!.AsObject();
         manifest["sourceHash"] = "{time-dependent}";
 
-        foreach (var dataset in manifest["datasets"]!.AsArray())
+        foreach (var dataset in manifest["datasets"]!.AsArray().Where(dataset => dataset!["key"]!.GetValue<string>() == "events-calendar"))
         {
-            if (dataset!["key"]!.GetValue<string>() == "events-calendar")
-            {
-                dataset["hash"] = "{time-dependent}";
-            }
+            dataset!["hash"] = "{time-dependent}";
         }
 
         return manifest.ToJsonString();

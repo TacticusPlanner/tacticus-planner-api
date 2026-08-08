@@ -4,6 +4,8 @@ namespace TacticusPlanner.GameCatalog.Validation;
 
 public static partial class GameCatalogValidator
 {
+    private static readonly HashSet<string> ValidRecurrenceKinds = new(StringComparer.Ordinal) { "Fixed", "None" };
+
     private static void ValidateEvents(GameCatalogSnapshot snapshot, List<GameCatalogValidationError> errors) =>
         ValidateEvents(snapshot.EventDefinitions, snapshot.EventOccurrences, errors);
 
@@ -16,11 +18,25 @@ public static partial class GameCatalogValidator
         IReadOnlyList<GameCatalogEventOccurrence> occurrences,
         List<GameCatalogValidationError> errors)
     {
-        var definitionsById = definitions.ToDictionary(definition => definition.Id, StringComparer.Ordinal);
+        // GroupBy+First (not ToDictionary directly) so a duplicate definition id — already reported by
+        // ValidateUniqueIds — doesn't also throw here and mask that cleaner error with a raw exception.
+        var definitionsById = definitions
+            .GroupBy(definition => definition.Id, StringComparer.Ordinal)
+            .ToDictionary(group => group.Key, group => group.First(), StringComparer.Ordinal);
 
         foreach (var definition in definitions)
         {
             var recurrence = definition.Recurrence;
+
+            if (!ValidRecurrenceKinds.Contains(recurrence.Kind))
+            {
+                errors.Add(new GameCatalogValidationError(
+                    GameCatalogDatasets.EventDefinitions,
+                    "InvalidRecurrenceKind",
+                    $"'{definition.Id}' has unrecognized recurrence kind '{recurrence.Kind}'; expected 'Fixed' or 'None'."));
+                continue;
+            }
+
             if (recurrence.Kind != "Fixed")
             {
                 continue;
@@ -35,6 +51,15 @@ public static partial class GameCatalogValidator
                 continue;
             }
 
+            if (recurrence.IntervalDays <= 0 || recurrence.DurationDays <= 0)
+            {
+                errors.Add(new GameCatalogValidationError(
+                    GameCatalogDatasets.EventDefinitions,
+                    "InvalidRecurrence",
+                    $"'{definition.Id}' has non-positive intervalDays ({recurrence.IntervalDays}) or durationDays ({recurrence.DurationDays})."));
+                continue;
+            }
+
             if (recurrence.DurationDays >= recurrence.IntervalDays)
             {
                 errors.Add(new GameCatalogValidationError(
@@ -46,6 +71,14 @@ public static partial class GameCatalogValidator
 
         foreach (var occurrence in occurrences)
         {
+            if (occurrence.StartUtc >= occurrence.EndUtc)
+            {
+                errors.Add(new GameCatalogValidationError(
+                    GameCatalogDatasets.EventOccurrences,
+                    "InvalidTimeWindow",
+                    $"'{occurrence.Id}' has startUtc ({occurrence.StartUtc:O}) >= endUtc ({occurrence.EndUtc:O})."));
+            }
+
             if (!definitionsById.TryGetValue(occurrence.DefinitionId, out var definition))
             {
                 errors.Add(new GameCatalogValidationError(

@@ -50,13 +50,15 @@ internal static partial class GameCatalogDenormalizer
         {
             var recurrence = definition.Recurrence;
             if (recurrence.Kind != FixedRecurrenceKind
-                || recurrence.IntervalDays is not { } intervalDays
-                || recurrence.DurationDays is not { } durationDays
+                || recurrence.IntervalDays is not { } intervalDays || intervalDays <= 0
+                || recurrence.DurationDays is not { } durationDays || durationDays <= 0
                 || recurrence.AnchorUtc is not { } anchorUtc)
             {
-                // A Fixed-kind definition missing one of its required fields is malformed authored data;
-                // rather than throw here, skip projecting it and let ValidateEvents (Validation/EventsValidation.cs)
-                // surface a proper RequiredField error instead of a raw null-dereference.
+                // A Fixed-kind definition missing one of its required fields, or with a non-positive
+                // interval/duration, is malformed authored data — a non-positive intervalDays would
+                // otherwise make ProjectSlotStarts's loop step away from the horizon forever (hanging
+                // catalog startup). Rather than throw or hang here, skip projecting it and let
+                // ValidateEvents (Validation/EventsValidation.cs) surface a proper error instead.
                 continue;
             }
 

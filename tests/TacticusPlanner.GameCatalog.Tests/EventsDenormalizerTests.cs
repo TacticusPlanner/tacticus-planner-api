@@ -34,6 +34,19 @@ public sealed class EventsDenormalizerTests
         Assert.DoesNotContain(anchor + TimeSpan.FromDays(210), starts); // one interval past the boundary
     }
 
+    [Fact(Timeout = 5000)]
+    public void NegativeIntervalDaysIsSkippedRatherThanHanging()
+    {
+        // A negative interval would otherwise make ProjectSlotStarts's loop step away from the horizon
+        // forever; the denormalizer must skip a malformed Fixed definition defensively (validation is
+        // what actually reports this as an authoring error — see EventsValidationTests).
+        var definition = FixedDefinition("broken", intervalDays: -1, durationDays: 1, anchorUtc: DateTimeOffset.UnixEpoch);
+
+        var calendar = GameCatalogDenormalizer.BuildEventsCalendar([definition], [], DateTimeOffset.UnixEpoch);
+
+        Assert.Empty(calendar.Values.SelectMany(entries => entries));
+    }
+
     [Fact]
     public void NoneRecurrenceDefinitionIsNeverProjected()
     {

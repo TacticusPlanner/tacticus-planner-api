@@ -93,4 +93,80 @@ public sealed class EventsValidationTests
 
         Assert.Contains(errors, error => error.Code == "InvalidRecurrence");
     }
+
+    [Fact]
+    public void FixedRecurrenceWithNegativeIntervalFailsValidationInsteadOfHanging()
+    {
+        var definition = new GameCatalogEventDefinition(
+            "negative-interval", "Test", new GameCatalogEventRecurrence("Fixed", -1, 1, DateTimeOffset.UnixEpoch), [], null);
+        var errors = new List<GameCatalogValidationError>();
+
+        GameCatalogValidator.ValidateEvents([definition], [], errors);
+
+        Assert.Contains(errors, error => error.Code == "InvalidRecurrence");
+    }
+
+    [Fact]
+    public void FixedRecurrenceWithZeroDurationFailsValidation()
+    {
+        var definition = new GameCatalogEventDefinition(
+            "zero-duration", "Test", new GameCatalogEventRecurrence("Fixed", 7, 0, DateTimeOffset.UnixEpoch), [], null);
+        var errors = new List<GameCatalogValidationError>();
+
+        GameCatalogValidator.ValidateEvents([definition], [], errors);
+
+        Assert.Contains(errors, error => error.Code == "InvalidRecurrence");
+    }
+
+    [Fact]
+    public void UnrecognizedRecurrenceKindFailsValidation()
+    {
+        var definition = new GameCatalogEventDefinition(
+            "typo-kind", "Test", new GameCatalogEventRecurrence("Fixd", null, null, null), [], null);
+        var errors = new List<GameCatalogValidationError>();
+
+        GameCatalogValidator.ValidateEvents([definition], [], errors);
+
+        Assert.Contains(errors, error => error.Code == "InvalidRecurrenceKind");
+    }
+
+    [Fact]
+    public void DuplicateDefinitionIdDoesNotThrowAndOccurrenceValidationStillRuns()
+    {
+        var first = Definition("dup-id");
+        var second = Definition("dup-id");
+        var occurrence = Occurrence("occ-1", "does-not-exist");
+        var errors = new List<GameCatalogValidationError>();
+
+        // Must not throw — a duplicate definition id used to crash ToDictionary before this occurrence's
+        // own MissingReference error could ever be collected.
+        GameCatalogValidator.ValidateEvents([first, second], [occurrence], errors);
+
+        Assert.Contains(errors, error => error.Code == "MissingReference");
+    }
+
+    [Fact]
+    public void OccurrenceWithStartAtOrAfterEndFailsValidation()
+    {
+        var definition = Definition("hse-faction-focus");
+        var invalidOccurrence = new GameCatalogEventOccurrence(
+            "occ-inverted", "hse-faction-focus", DateTimeOffset.UnixEpoch, DateTimeOffset.UnixEpoch, null);
+        var errors = new List<GameCatalogValidationError>();
+
+        GameCatalogValidator.ValidateEvents([definition], [invalidOccurrence], errors);
+
+        Assert.Contains(errors, error => error.Code == "InvalidTimeWindow");
+    }
+
+    [Fact]
+    public void OccurrenceWithStartBeforeEndPassesTimeWindowValidation()
+    {
+        var definition = Definition("hse-faction-focus");
+        var occurrence = Occurrence("occ-valid", "hse-faction-focus");
+        var errors = new List<GameCatalogValidationError>();
+
+        GameCatalogValidator.ValidateEvents([definition], [occurrence], errors);
+
+        Assert.DoesNotContain(errors, error => error.Code == "InvalidTimeWindow");
+    }
 }
