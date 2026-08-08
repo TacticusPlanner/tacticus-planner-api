@@ -2,7 +2,7 @@
   version: dev-2026-07-01,
   schemaVersion: 2,
   gameVersion: 1.40,
-  sourceHash: a5bbebcbd86bd1d34db607c3642ee17dcb66567790ab61c8849b133e325c10a3,
+  sourceHash: {time-dependent},
   datasets: [
     {
       key: ascension-costs,
@@ -28,6 +28,16 @@
       key: equipment,
       hash: c6ed2fc2937ae0964b05ad7e92e12ec0b6df51057120c196986cd4e89a06b19b,
       url: /api/v1/game-catalog/equipment
+    },
+    {
+      key: event-definitions,
+      hash: 23523448e9444656090b046f5ba95bedbc1a7c73b9f99ba4983d0863bf2b5cee,
+      url: /api/v1/game-catalog/event-definitions
+    },
+    {
+      key: events-calendar,
+      hash: {time-dependent},
+      url: /api/v1/game-catalog/events-calendar
     },
     {
       key: lre-battles,

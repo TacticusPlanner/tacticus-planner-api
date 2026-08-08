@@ -1,0 +1,44 @@
+[
+  {
+    "id": "occ-2026-07-25-hse-faction-boost-dark-angels",
+    "definitionId": "hse-faction-boost",
+    "startUtc": "2026-07-25T00:00:00Z",
+    "endUtc": "2026-07-29T00:00:00Z",
+    "parameters": { "targetFactionId": "dark-angels" }
+  },
+  {
+    "id": "occ-2026-07-26-legendary-event-lucius-iter3",
+    "definitionId": "legendary-event",
+    "startUtc": "2026-07-26T00:00:00Z",
+    "endUtc": "2026-08-02T00:00:00Z",
+    "parameters": { "featuredCharacterId": "lucius", "seriesId": "le-lucius-series", "iterationNumber": 3 }
+  },
+  {
+    "id": "occ-2026-08-09-new-character-event-sekhetar-robot",
+    "definitionId": "new-character-event",
+    "startUtc": "2026-08-09T00:00:00Z",
+    "endUtc": "2026-08-23T00:00:00Z",
+    "parameters": { "featuredCharacterId": "sekhetar-robot" }
+  },
+  {
+    "id": "occ-2026-09-02-game-version-release-141",
+    "definitionId": "game-version-release",
+    "startUtc": "2026-09-02T00:00:00Z",
+    "endUtc": "2026-09-03T00:00:00Z",
+    "parameters": { "version": "1.41" }
+  },
+  {
+    "id": "occ-2026-05-28-campaign-event-dark-angels-debut",
+    "definitionId": "campaign-event",
+    "startUtc": "2026-05-28T00:00:00Z",
+    "endUtc": "2026-06-11T00:00:00Z",
+    "parameters": { "newContentDebut": true }
+  },
+  {
+    "id": "occ-2026-06-15-incursion-reanimator-debut",
+    "definitionId": "incursion",
+    "startUtc": "2026-06-15T00:00:00Z",
+    "endUtc": "2026-06-20T00:00:00Z",
+    "parameters": { "newContentDebut": true }
+  }
+]

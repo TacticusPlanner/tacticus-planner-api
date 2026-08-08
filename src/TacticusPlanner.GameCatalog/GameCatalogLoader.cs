@@ -35,6 +35,8 @@ public static class GameCatalogLoader
         var ascensionCosts = LoadDataset<IReadOnlyList<GameCatalogAscensionCost>>(GameCatalogDatasets.AscensionCosts);
         var unlockShardCosts = LoadDataset<IReadOnlyList<GameCatalogUnlockShardCost>>(GameCatalogDatasets.UnlockShardCosts);
         var onslaughtRewards = LoadDataset<IReadOnlyList<GameCatalogOnslaughtReward>>(GameCatalogDatasets.OnslaughtRewards);
+        var eventDefinitions = LoadDataset<IReadOnlyList<GameCatalogEventDefinition>>(GameCatalogDatasets.EventDefinitions);
+        var eventOccurrences = LoadDataset<IReadOnlyList<GameCatalogEventOccurrence>>(GameCatalogDatasets.EventOccurrences);
 
         var npcsByFaction = new Dictionary<string, GameCatalogFactionNpcs>(StringComparer.Ordinal);
         foreach (var key in GameCatalogDatasets.NpcFactions)
@@ -80,6 +82,9 @@ public static class GameCatalogLoader
         var lreViews = GameCatalogDenormalizer.BuildLres(lresByEvent, unitsByFaction);
         var lreBattleViews = GameCatalogDenormalizer.BuildLreBattles(lresByEvent);
         var lreCommonViews = GameCatalogDenormalizer.BuildLreCommon(lresByEvent);
+        var eventDefinitionViews = GameCatalogDenormalizer.BuildEventDefinitions(eventDefinitions);
+        var loadTime = DateTimeOffset.UtcNow;
+        var eventsCalendar = GameCatalogDenormalizer.BuildEventsCalendar(eventDefinitions, eventOccurrences, loadTime);
 
         // Served dataset hashes are computed over the canonical JSON of each denormalized payload.
         var datasetHashes = new Dictionary<string, string>(StringComparer.Ordinal)
@@ -98,6 +103,8 @@ public static class GameCatalogLoader
             [GameCatalogDatasets.Lres] = GameCatalogHashing.ComputeCanonicalJsonHash(lreViews, JsonOptions),
             [GameCatalogDatasets.LreBattles] = GameCatalogHashing.ComputeCanonicalJsonHash(lreBattleViews, JsonOptions),
             [GameCatalogDatasets.LreCommon] = GameCatalogHashing.ComputeCanonicalJsonHash(lreCommonViews, JsonOptions),
+            [GameCatalogDatasets.EventDefinitionsServed] = GameCatalogHashing.ComputeCanonicalJsonHash(eventDefinitionViews, JsonOptions),
+            [GameCatalogDatasets.EventsCalendar] = GameCatalogHashing.ComputeCanonicalJsonHash(eventsCalendar, JsonOptions),
         };
 
         var snapshot = new GameCatalogSnapshot(
@@ -113,6 +120,8 @@ public static class GameCatalogLoader
             new ReadOnlyCollection<GameCatalogAscensionCost>(ascensionCosts.ToArray()),
             new ReadOnlyCollection<GameCatalogUnlockShardCost>(unlockShardCosts.ToArray()),
             new ReadOnlyCollection<GameCatalogOnslaughtReward>(onslaughtRewards.ToArray()),
+            eventDefinitions,
+            eventOccurrences,
             new ReadOnlyDictionary<string, GameCatalogFactionNpcs>(npcsByFaction),
             new ReadOnlyDictionary<string, IReadOnlyList<GameCatalogEquipment>>(equipmentByType),
             new ReadOnlyDictionary<string, IReadOnlyList<GameCatalogUpgrade>>(upgradesByRarity),
@@ -131,7 +140,9 @@ public static class GameCatalogLoader
             campaignDefinitionViews,
             lreViews,
             lreBattleViews,
-            lreCommonViews);
+            lreCommonViews,
+            eventDefinitionViews,
+            eventsCalendar);
 
         var errors = GameCatalogValidator.Validate(snapshot);
         if (errors.Count > 0)

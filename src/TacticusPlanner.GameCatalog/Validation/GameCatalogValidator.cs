@@ -25,8 +25,11 @@ public static partial class GameCatalogValidator
         ValidateUniqueIds(GameCatalogDatasets.UnlockShardCostsServed, snapshot.UnlockShardCostViews, cost => cost.Rarity, errors);
         ValidateUniqueIds(GameCatalogDatasets.CampaignBattlesPrefix, snapshot.CampaignBattles, battle => battle.Id, errors);
         ValidateUniqueIds(GameCatalogDatasets.LresPrefix, snapshot.Lres, lre => lre.Id.ToString(System.Globalization.CultureInfo.InvariantCulture), errors);
+        ValidateUniqueIds(GameCatalogDatasets.EventDefinitions, snapshot.EventDefinitions, definition => definition.Id, errors);
+        ValidateUniqueIds(GameCatalogDatasets.EventOccurrences, snapshot.EventOccurrences, occurrence => occurrence.Id, errors);
         ValidateRequiredFields(snapshot, errors);
         ValidateReferences(snapshot, errors);
+        ValidateEvents(snapshot, errors);
         ValidateServedProjections(snapshot, errors);
 
         return errors;
