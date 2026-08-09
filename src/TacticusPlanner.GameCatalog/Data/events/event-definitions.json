@@ -22,7 +22,7 @@
     "type": "BattlePass",
     "recurrence": { "kind": "Fixed", "intervalDays": 35, "durationDays": 34, "anchorUtc": "2026-08-02T00:00:00Z" },
     "requiredParameters": ["featuredCharacterId"],
-    "config": { "seasonLengthDays": 35 }
+    "config": { "seasonLengthDays": 35, "seasonNumberAtAnchor": 40 }
   },
   {
     "id": "quest",
