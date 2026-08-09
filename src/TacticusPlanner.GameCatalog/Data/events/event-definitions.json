@@ -34,14 +34,14 @@
   {
     "id": "guild-raid-season",
     "type": "GuildRaidSeason",
-    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "recurrence": { "kind": "Fixed", "intervalDays": 28, "durationDays": 13, "anchorUtc": "2026-08-24T00:00:00Z" },
     "requiredParameters": [],
     "config": { "seasonLengthDays": 13 }
   },
   {
     "id": "guild-war-season",
     "type": "GuildWarSeason",
-    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "recurrence": { "kind": "Fixed", "intervalDays": 28, "durationDays": 15, "anchorUtc": "2026-08-09T00:00:00Z" },
     "requiredParameters": [],
     "config": { "seasonLengthDays": 15, "warsPerSeason": 6, "preparationPhaseHours": 24, "activeFightingPhaseHours": 36 }
   },
