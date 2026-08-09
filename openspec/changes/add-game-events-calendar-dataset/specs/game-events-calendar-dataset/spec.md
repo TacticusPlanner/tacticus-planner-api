@@ -11,7 +11,7 @@ Consistent with every other served catalog dataset, `event-definitions` records 
 - **WHEN** an `event-definitions` record is served
 - **THEN** it contains only structural/identity fields (id, type, rules, recurrence, references, parameters) and no display-text or icon field
 
-#### Scenario: Occurrence authored shape
+#### Scenario: Authored occurrence shape
 - **WHEN** an `event-occurrences` record is authored
 - **THEN** it contains only structural/identity fields and no display-text or icon field, even though it is never served directly
 

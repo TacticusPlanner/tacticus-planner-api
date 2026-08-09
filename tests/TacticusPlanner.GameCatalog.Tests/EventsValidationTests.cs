@@ -159,6 +159,22 @@ public sealed class EventsValidationTests
     }
 
     [Fact]
+    public void OccurrenceWithStartAfterEndFailsValidation()
+    {
+        // Distinct from the equal-boundary case above — this exercises `startUtc > endUtc`, so a
+        // regression that swapped `>=` for `>` in the comparison would still be caught.
+        var definition = Definition("hse-faction-focus");
+        var invalidOccurrence = new GameCatalogEventOccurrence(
+            "occ-reversed", "hse-faction-focus",
+            DateTimeOffset.UnixEpoch + TimeSpan.FromDays(1), DateTimeOffset.UnixEpoch, null);
+        var errors = new List<GameCatalogValidationError>();
+
+        GameCatalogValidator.ValidateEvents([definition], [invalidOccurrence], errors);
+
+        Assert.Contains(errors, error => error.Code == "InvalidTimeWindow");
+    }
+
+    [Fact]
     public void OccurrenceWithStartBeforeEndPassesTimeWindowValidation()
     {
         var definition = Definition("hse-faction-focus");
