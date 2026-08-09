@@ -15,7 +15,35 @@
     "id": "legendary-event",
     "type": "LegendaryEvent",
     "recurrence": { "kind": "Fixed", "intervalDays": 35, "durationDays": 7, "anchorUtc": "2026-07-26T00:00:00Z" },
-    "requiredParameters": []
+    "requiredParameters": ["featuredCharacterId", "iterationNumber"]
+  },
+  {
+    "id": "battle-pass",
+    "type": "BattlePass",
+    "recurrence": { "kind": "Fixed", "intervalDays": 35, "durationDays": 34, "anchorUtc": "2026-08-02T00:00:00Z" },
+    "requiredParameters": ["featuredCharacterId"],
+    "config": { "seasonLengthDays": 35 }
+  },
+  {
+    "id": "quest",
+    "type": "Quest",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": ["featuredCharacterId"],
+    "config": { "durationHours": 72, "announcementLeadHours": 24, "rewardsClaimWindowHours": 24 }
+  },
+  {
+    "id": "guild-raid-season",
+    "type": "GuildRaidSeason",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": [],
+    "config": { "seasonLengthDays": 13 }
+  },
+  {
+    "id": "guild-war-season",
+    "type": "GuildWarSeason",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": [],
+    "config": { "seasonLengthDays": 15, "warsPerSeason": 6, "preparationPhaseHours": 24, "activeFightingPhaseHours": 36 }
   },
   {
     "id": "always-double-xp-sunday",
