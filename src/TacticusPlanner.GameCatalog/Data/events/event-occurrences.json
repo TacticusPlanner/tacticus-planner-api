@@ -40,5 +40,12 @@
     "startUtc": "2026-06-15T00:00:00Z",
     "endUtc": "2026-06-20T00:00:00Z",
     "parameters": { "newContentDebut": true }
+  },
+  {
+    "id": "occ-2026-08-02-battle-pass-s40-ramus",
+    "definitionId": "battle-pass",
+    "startUtc": "2026-08-02T00:00:00Z",
+    "endUtc": "2026-09-06T00:00:00Z",
+    "parameters": { "featuredCharacterId": "darkaSternguard" }
   }
 ]
