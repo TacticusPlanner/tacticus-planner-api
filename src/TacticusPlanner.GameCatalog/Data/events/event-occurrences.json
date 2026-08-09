@@ -47,5 +47,12 @@
     "startUtc": "2026-08-02T00:00:00Z",
     "endUtc": "2026-09-06T00:00:00Z",
     "parameters": { "featuredCharacterId": "darkaSternguard" }
+  },
+  {
+    "id": "occ-2026-08-09-hse-warp-surge",
+    "definitionId": "hse-warp-surge",
+    "startUtc": "2026-08-09T00:00:00Z",
+    "endUtc": "2026-08-13T00:00:00Z",
+    "parameters": null
   }
 ]
