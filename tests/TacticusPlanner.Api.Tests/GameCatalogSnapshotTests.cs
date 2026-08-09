@@ -1,4 +1,5 @@
 using System.Net;
+using System.Text.Json.Nodes;
 
 namespace TacticusPlanner.Api.Tests;
 
@@ -26,6 +27,25 @@ public sealed class GameCatalogSnapshotTests(GameCatalogApiFactory factory)
 
         var json = await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
 
-        await VerifyJson(json);
+        await VerifyJson(ScrubTimeDependentHashes(json));
+    }
+
+    /// <summary>
+    /// The <c>events-calendar</c> dataset is projected relative to the load-time "now" (see
+    /// add-game-events-calendar-dataset/design.md), so its hash — and the aggregate <c>sourceHash</c> that
+    /// includes it — legitimately differs on every process start. Every other dataset's hash stays
+    /// deterministic and is still snapshot-verified as-is.
+    /// </summary>
+    private static string ScrubTimeDependentHashes(string manifestJson)
+    {
+        var manifest = JsonNode.Parse(manifestJson)!.AsObject();
+        manifest["sourceHash"] = "{time-dependent}";
+
+        foreach (var dataset in manifest["datasets"]!.AsArray().Where(dataset => dataset!["key"]!.GetValue<string>() == "events-calendar"))
+        {
+            dataset!["hash"] = "{time-dependent}";
+        }
+
+        return manifest.ToJsonString();
     }
 }

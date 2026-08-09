@@ -1,0 +1,184 @@
+[
+  {
+    "id": "campaign-event",
+    "type": "CampaignEvent",
+    "recurrence": { "kind": "Fixed", "intervalDays": 35, "durationDays": 14, "anchorUtc": "2026-05-28T00:00:00Z" },
+    "requiredParameters": [],
+    "config": { "eventNumberAtAnchor": 15 }
+  },
+  {
+    "id": "incursion",
+    "type": "Incursion",
+    "recurrence": { "kind": "Fixed", "intervalDays": 35, "durationDays": 5, "anchorUtc": "2026-06-15T00:00:00Z" },
+    "requiredParameters": []
+  },
+  {
+    "id": "legendary-event",
+    "type": "LegendaryEvent",
+    "recurrence": { "kind": "Fixed", "intervalDays": 35, "durationDays": 7, "anchorUtc": "2026-07-26T00:00:00Z" },
+    "requiredParameters": ["featuredCharacterId", "iterationNumber"]
+  },
+  {
+    "id": "battle-pass",
+    "type": "BattlePass",
+    "recurrence": { "kind": "Fixed", "intervalDays": 35, "durationDays": 34, "anchorUtc": "2026-08-02T00:00:00Z" },
+    "requiredParameters": ["featuredCharacterId"],
+    "config": { "seasonLengthDays": 35, "seasonNumberAtAnchor": 40 }
+  },
+  {
+    "id": "quest",
+    "type": "Quest",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": ["featuredCharacterId"],
+    "config": { "durationHours": 72, "announcementLeadHours": 24, "rewardsClaimWindowHours": 24 }
+  },
+  {
+    "id": "guild-raid-season",
+    "type": "GuildRaidSeason",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": [],
+    "config": { "seasonLengthDays": 13 }
+  },
+  {
+    "id": "guild-war-season",
+    "type": "GuildWarSeason",
+    "recurrence": { "kind": "Fixed", "intervalDays": 28, "durationDays": 15, "anchorUtc": "2026-08-15T00:00:00Z" },
+    "requiredParameters": [],
+    "config": { "seasonLengthDays": 15, "warsPerSeason": 6, "preparationPhaseHours": 24, "activeFightingPhaseHours": 36, "seasonNumberAtAnchor": 26 }
+  },
+  {
+    "id": "always-double-xp-sunday",
+    "type": "StandingModifier",
+    "recurrence": { "kind": "Fixed", "intervalDays": 7, "durationDays": 1, "anchorUtc": "2024-01-07T00:00:00Z" },
+    "requiredParameters": [],
+    "config": { "effect": "DoubleXp" }
+  },
+  {
+    "id": "always-double-gold-saturday",
+    "type": "StandingModifier",
+    "recurrence": { "kind": "Fixed", "intervalDays": 7, "durationDays": 1, "anchorUtc": "2024-01-06T00:00:00Z" },
+    "requiredParameters": [],
+    "config": { "effect": "DoubleGold" }
+  },
+  {
+    "id": "new-character-event",
+    "type": "NewCharacterEvent",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": ["featuredCharacterId"]
+  },
+  {
+    "id": "game-version-release",
+    "type": "GameVersionRelease",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": ["version"]
+  },
+  {
+    "id": "hse-faction-boost",
+    "type": "HomeScreenEvent",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": ["targetFactionId"],
+    "config": {
+      "gameModes": ["Arena", "Onslaught", "SalvageRun"],
+      "statBonus": { "gameMode": "Arena", "health": 0.2, "armour": 0.2, "damage": 0.2 },
+      "xpBonusTiers": [1.0, 2.0, 3.0, 4.0, 5.0]
+    }
+  },
+  {
+    "id": "hse-faction-focus",
+    "type": "HomeScreenEvent",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": [],
+    "config": {
+      "gameModes": ["Arena", "TournamentArena", "Onslaught", "SalvageRun"],
+      "statBonus": null,
+      "xpBonusTiers": [1.0, 2.0, 3.0, 4.0, 5.0]
+    }
+  },
+  {
+    "id": "hse-warp-surge",
+    "type": "HomeScreenEvent",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": [],
+    "config": {
+      "gameModes": ["Arena", "Campaign"],
+      "statBonus": { "gameMode": "Arena", "health": 0.2, "armour": 0.2, "damage": 0.2 }
+    }
+  },
+  {
+    "id": "hse-training-rush",
+    "type": "HomeScreenEvent",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": []
+  },
+  {
+    "id": "hse-global-conflict-operations",
+    "type": "HomeScreenEvent",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": []
+  },
+  {
+    "id": "hse-arsenal-of-war",
+    "type": "HomeScreenEvent",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": []
+  },
+  {
+    "id": "hse-machine-hunt",
+    "type": "HomeScreenEvent",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": []
+  },
+  {
+    "id": "hse-terminator-boost",
+    "type": "HomeScreenEvent",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": []
+  },
+  {
+    "id": "anniversary-event",
+    "type": "ShopEvent",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": ["weekNumber"]
+  },
+  {
+    "id": "crusade-season",
+    "type": "CrusadeSeason",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": []
+  },
+  {
+    "id": "ta-faction-war",
+    "type": "TournamentArena",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": [],
+    "config": { "ruleset": "FactionWar" }
+  },
+  {
+    "id": "ta-power-ups",
+    "type": "TournamentArena",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": [],
+    "config": { "ruleset": "PowerUps" }
+  },
+  {
+    "id": "ta-conquest",
+    "type": "TournamentArena",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": [],
+    "config": { "ruleset": "Conquest" }
+  },
+  {
+    "id": "ta-draft-power-ups",
+    "type": "TournamentArena",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": [],
+    "config": { "ruleset": "DraftPowerUps" }
+  },
+  {
+    "id": "ta-infested-power-ups",
+    "type": "TournamentArena",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": [],
+    "config": { "ruleset": "InfestedPowerUps" }
+  }
+]

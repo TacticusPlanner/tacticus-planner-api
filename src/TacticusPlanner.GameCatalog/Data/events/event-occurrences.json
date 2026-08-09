@@ -1,0 +1,142 @@
+[
+  {
+    "id": "occ-2026-07-25-hse-faction-boost-dark-angels",
+    "definitionId": "hse-faction-boost",
+    "startUtc": "2026-07-25T00:00:00Z",
+    "endUtc": "2026-07-29T00:00:00Z",
+    "parameters": { "targetFactionId": "DarkAngels" }
+  },
+  {
+    "id": "occ-2026-07-26-legendary-event-lucius-iter3",
+    "definitionId": "legendary-event",
+    "startUtc": "2026-07-26T00:00:00Z",
+    "endUtc": "2026-08-02T00:00:00Z",
+    "parameters": { "featuredCharacterId": "emperLucius", "seriesId": "le-lucius-series", "iterationNumber": 3 }
+  },
+  {
+    "id": "occ-2026-08-09-new-character-event-sekhetar-robot",
+    "definitionId": "new-character-event",
+    "startUtc": "2026-08-09T00:00:00Z",
+    "endUtc": "2026-08-23T00:00:00Z",
+    "parameters": { "featuredCharacterId": "sekhetar-robot" }
+  },
+  {
+    "id": "occ-2026-09-02-game-version-release-141",
+    "definitionId": "game-version-release",
+    "startUtc": "2026-09-02T00:00:00Z",
+    "endUtc": "2026-09-03T00:00:00Z",
+    "parameters": { "version": "1.41" }
+  },
+  {
+    "id": "occ-2026-05-28-campaign-event-dark-angels-debut",
+    "definitionId": "campaign-event",
+    "startUtc": "2026-05-28T00:00:00Z",
+    "endUtc": "2026-06-11T00:00:00Z",
+    "parameters": { "newContentDebut": true }
+  },
+  {
+    "id": "occ-2026-06-15-incursion-reanimator-debut",
+    "definitionId": "incursion",
+    "startUtc": "2026-06-15T00:00:00Z",
+    "endUtc": "2026-06-20T00:00:00Z",
+    "parameters": { "newContentDebut": true }
+  },
+  {
+    "id": "occ-2026-08-02-battle-pass-s40-ramus",
+    "definitionId": "battle-pass",
+    "startUtc": "2026-08-02T00:00:00Z",
+    "endUtc": "2026-09-06T00:00:00Z",
+    "parameters": { "featuredCharacterId": "darkaSternguard" }
+  },
+  {
+    "id": "occ-2026-08-09-hse-warp-surge",
+    "definitionId": "hse-warp-surge",
+    "startUtc": "2026-08-09T00:00:00Z",
+    "endUtc": "2026-08-13T00:00:00Z",
+    "parameters": null
+  },
+  {
+    "id": "occ-2026-08-02-anniversary-event-week1",
+    "definitionId": "anniversary-event",
+    "startUtc": "2026-08-02T00:00:00Z",
+    "endUtc": "2026-08-09T00:00:00Z",
+    "parameters": { "weekNumber": 1 }
+  },
+  {
+    "id": "occ-2026-08-09-anniversary-event-week2",
+    "definitionId": "anniversary-event",
+    "startUtc": "2026-08-09T00:00:00Z",
+    "endUtc": "2026-08-16T00:00:00Z",
+    "parameters": { "weekNumber": 2 }
+  },
+  {
+    "id": "occ-2026-08-02-hse-training-rush",
+    "definitionId": "hse-training-rush",
+    "startUtc": "2026-08-02T00:00:00Z",
+    "endUtc": "2026-08-09T00:00:00Z",
+    "parameters": null
+  },
+  {
+    "id": "occ-2026-08-09-hse-global-conflict-operations",
+    "definitionId": "hse-global-conflict-operations",
+    "startUtc": "2026-08-09T00:00:00Z",
+    "endUtc": "2026-08-16T00:00:00Z",
+    "parameters": null
+  },
+  {
+    "id": "occ-2026-08-09-hse-arsenal-of-war",
+    "definitionId": "hse-arsenal-of-war",
+    "startUtc": "2026-08-09T00:00:00Z",
+    "endUtc": "2026-08-16T00:00:00Z",
+    "parameters": null
+  },
+  {
+    "id": "occ-2026-08-16-hse-machine-hunt",
+    "definitionId": "hse-machine-hunt",
+    "startUtc": "2026-08-16T00:00:00Z",
+    "endUtc": "2026-08-23T00:00:00Z",
+    "parameters": null
+  },
+  {
+    "id": "occ-2026-08-30-hse-terminator-boost",
+    "definitionId": "hse-terminator-boost",
+    "startUtc": "2026-08-30T00:00:00Z",
+    "endUtc": "2026-09-06T00:00:00Z",
+    "parameters": null
+  },
+  {
+    "id": "occ-2026-08-12-crusade-season-1",
+    "definitionId": "crusade-season",
+    "startUtc": "2026-08-12T00:00:00Z",
+    "endUtc": "2026-08-13T00:00:00Z",
+    "parameters": null
+  },
+  {
+    "id": "occ-2026-08-09-quest-cezare-vs-tyranids",
+    "definitionId": "quest",
+    "startUtc": "2026-08-09T00:00:00Z",
+    "endUtc": "2026-08-16T00:00:00Z",
+    "parameters": { "featuredCharacterId": "bloodTerminator", "enemyFactionId": "Tyranids" }
+  },
+  {
+    "id": "occ-2026-08-30-quest-cyrus-vs-necrons",
+    "definitionId": "quest",
+    "startUtc": "2026-08-30T00:00:00Z",
+    "endUtc": "2026-09-06T00:00:00Z",
+    "parameters": { "featuredCharacterId": "astarCyrus", "enemyFactionId": "Necrons" }
+  },
+  {
+    "id": "occ-2026-08-16-ta-power-ups-legendary-mow",
+    "definitionId": "ta-power-ups",
+    "startUtc": "2026-08-16T00:00:00Z",
+    "endUtc": "2026-08-23T00:00:00Z",
+    "parameters": { "rarityCap": "Legendary", "includesMow": true }
+  },
+  {
+    "id": "occ-2026-08-23-incursion-tau-broadside-revamp",
+    "definitionId": "incursion",
+    "startUtc": "2026-08-23T00:00:00Z",
+    "endUtc": "2026-08-30T00:00:00Z",
+    "parameters": { "newContentDebut": true, "featuredMowId": "tauBroadside" }
+  }
+]

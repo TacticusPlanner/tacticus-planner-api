@@ -209,3 +209,29 @@ public sealed class GetGameCatalogLreCommonEndpoint(IGameCatalogProvider catalog
         ConfigureServed("Gets the shared LRE reward ladder.", "The single shared LRE reward ladder (points/chests milestones, progression, shards per chest).");
     }
 }
+
+public sealed class GetGameCatalogEventDefinitionsEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogEventDefinition>>(catalog, GameCatalogDatasets.EventDefinitionsServed)
+{
+    protected override IReadOnlyList<GameCatalogEventDefinition> Payload => Snapshot.EventDefinitionViews;
+
+    public override void Configure()
+    {
+        Get("game-catalog/event-definitions");
+        ConfigureServed("Gets game catalog event definitions.", "Reusable event mechanics (scoring, applicable game modes, recurrence, required parameters) — no display text or icon; clients resolve those from each definition's id.");
+    }
+}
+
+public sealed class GetGameCatalogEventsCalendarEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyDictionary<string, IReadOnlyList<GameCatalogEventsCalendarEntry>>>(catalog, GameCatalogDatasets.EventsCalendar)
+{
+    protected override IReadOnlyDictionary<string, IReadOnlyList<GameCatalogEventsCalendarEntry>> Payload => Snapshot.EventsCalendar;
+
+    public override void Configure()
+    {
+        Get("game-catalog/events-calendar");
+        ConfigureServed(
+            "Gets the game events calendar.",
+            "Date-indexed (ISO date key) event occurrences and projected placeholders; an entry spanning multiple dates is repeated under every date it spans.");
+    }
+}

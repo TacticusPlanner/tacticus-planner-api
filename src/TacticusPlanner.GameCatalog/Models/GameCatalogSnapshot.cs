@@ -13,6 +13,8 @@ public sealed record GameCatalogSnapshot(
     IReadOnlyList<GameCatalogAscensionCost> AscensionCosts,
     IReadOnlyList<GameCatalogUnlockShardCost> UnlockShardCosts,
     IReadOnlyList<GameCatalogOnslaughtReward> OnslaughtRewards,
+    IReadOnlyList<GameCatalogEventDefinition> EventDefinitions,
+    IReadOnlyList<GameCatalogEventOccurrence> EventOccurrences,
     IReadOnlyDictionary<string, GameCatalogFactionNpcs> NpcsByFaction,
     IReadOnlyDictionary<string, IReadOnlyList<GameCatalogEquipment>> EquipmentByType,
     IReadOnlyDictionary<string, IReadOnlyList<GameCatalogUpgrade>> UpgradesByRarity,
@@ -32,7 +34,9 @@ public sealed record GameCatalogSnapshot(
     IReadOnlyList<GameCatalogCampaignDefinitionView> CampaignDefinitionViews,
     IReadOnlyList<GameCatalogLreView> LreViews,
     IReadOnlyList<GameCatalogLreBattleView> LreBattleViews,
-    IReadOnlyList<GameCatalogLreCommon> LreCommonViews
+    IReadOnlyList<GameCatalogLreCommon> LreCommonViews,
+    IReadOnlyList<GameCatalogEventDefinition> EventDefinitionViews,
+    IReadOnlyDictionary<string, IReadOnlyList<GameCatalogEventsCalendarEntry>> EventsCalendar
 )
 {
     // The manifest served to clients: release metadata + per-dataset hash and download url. Built from the

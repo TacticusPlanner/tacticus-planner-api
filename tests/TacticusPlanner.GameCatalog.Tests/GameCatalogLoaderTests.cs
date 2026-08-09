@@ -86,4 +86,28 @@ public sealed class GameCatalogLoaderTests
         var effectiveRate = Assert.IsType<double>(location.EffectiveRate);
         Assert.Equal(1.079, effectiveRate, 3);
     }
+
+    [Fact]
+    public void EventDefinitionsIncludeFactionBoostAndFocusAsDistinctDefinitions()
+    {
+        var snapshot = GameCatalogLoader.Load();
+
+        var factionBoost = snapshot.EventDefinitionViews.Single(definition => definition.Id == "hse-faction-boost");
+        var factionFocus = snapshot.EventDefinitionViews.Single(definition => definition.Id == "hse-faction-focus");
+
+        Assert.Equal(["targetFactionId"], factionBoost.RequiredParameters);
+        Assert.Empty(factionFocus.RequiredParameters);
+    }
+
+    [Fact]
+    public void EventsCalendarIncludesBothConfirmedAndProjectedEntries()
+    {
+        var snapshot = GameCatalogLoader.Load();
+
+        Assert.NotEmpty(snapshot.EventsCalendar);
+
+        var allEntries = snapshot.EventsCalendar.Values.SelectMany(entries => entries).ToArray();
+        Assert.Contains(allEntries, entry => entry.Confirmed && entry.OccurrenceId is not null);
+        Assert.Contains(allEntries, entry => !entry.Confirmed && entry.OccurrenceId is null);
+    }
 }
