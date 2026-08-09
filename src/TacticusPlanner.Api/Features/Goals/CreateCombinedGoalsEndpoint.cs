@@ -119,6 +119,8 @@ public sealed class CreateCombinedGoalsEndpoint
             : GoalStatus.Paused;
         var now = DateTimeOffset.UtcNow;
         var planning = Resolve<ProjectGoalPlanningService>();
+        await using var transaction = await planning.BeginLockedMutationAsync(
+            targetProjects.Select(project => project.Id), ct);
         foreach (var goalType in requestGoalTypes)
         {
             if (await planning.FindConflictAsync(
@@ -185,6 +187,8 @@ public sealed class CreateCombinedGoalsEndpoint
 
         await planning.NormalizeAsync(targetProjects.Select(project => project.Id), ct);
         await db.SaveChangesAsync(ct);
+        if (transaction is not null)
+            await transaction.CommitAsync(ct);
 
         var projectIds = targetProjects.Select(project => project.Id.Value).ToList();
         await Send.OkAsync(

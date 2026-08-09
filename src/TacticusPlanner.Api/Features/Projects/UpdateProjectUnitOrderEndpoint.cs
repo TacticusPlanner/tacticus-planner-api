@@ -38,7 +38,9 @@ public sealed class UpdateProjectUnitOrderEndpoint : Endpoint<UpdateProjectUnitO
             return;
         }
 
-        if (!await Resolve<ProjectGoalPlanningService>().ApplyUnitOrderAsync(projectId, req.Units, ct))
+        var planning = Resolve<ProjectGoalPlanningService>();
+        await using var transaction = await planning.BeginLockedMutationAsync([projectId], ct);
+        if (!await planning.ApplyUnitOrderAsync(projectId, req.Units, ct))
         {
             AddError(request => request.Units, "Units must be an exact, duplicate-free permutation of the project's current units.");
             await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
@@ -46,6 +48,8 @@ public sealed class UpdateProjectUnitOrderEndpoint : Endpoint<UpdateProjectUnitO
         }
 
         await db.SaveChangesAsync(ct);
+        if (transaction is not null)
+            await transaction.CommitAsync(ct);
         var goals = await db.ProjectGoals.AsNoTracking()
             .Where(entry => entry.ProjectId == projectId)
             .OrderBy(entry => entry.Priority)

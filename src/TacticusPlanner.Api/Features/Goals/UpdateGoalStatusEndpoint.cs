@@ -58,6 +58,13 @@ public sealed class UpdateGoalStatusEndpoint : Endpoint<UpdateGoalStatusRequest,
             return;
         }
 
+        var planning = Resolve<ProjectGoalPlanningService>();
+        var lockedProjectIds = await db.ProjectGoals
+            .Where(entry => entry.GoalId == goal.Id)
+            .Select(entry => entry.ProjectId)
+            .ToListAsync(ct);
+        await using var transaction = await planning.BeginLockedMutationAsync(lockedProjectIds, ct);
+
         if (goal.Status != targetStatus)
         {
             // At most one Active/Paused goal per (entity, goal type) — mirrors CreateGoalEndpoint's
@@ -70,7 +77,7 @@ public sealed class UpdateGoalStatusEndpoint : Endpoint<UpdateGoalStatusRequest,
                     .Where(entry => entry.GoalId == goal.Id)
                     .Select(entry => entry.ProjectId)
                     .ToListAsync(ct);
-                if (await Resolve<ProjectGoalPlanningService>().FindConflictAsync(
+                if (await planning.FindConflictAsync(
                     membershipProjectIds, goal.EntityType, goal.EntityId, goal.GoalType, goal.Id, ct) is { } conflict)
                 {
                     HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
@@ -81,7 +88,7 @@ public sealed class UpdateGoalStatusEndpoint : Endpoint<UpdateGoalStatusRequest,
 
             goal.Status = targetStatus;
             goal.Events.Add(new GoalEvent { At = DateTimeOffset.UtcNow, Type = EventTypeFor(targetStatus) });
-            await Resolve<ProjectGoalPlanningService>().SyncOccupancyAsync(goal, ct);
+            await planning.SyncOccupancyAsync(goal, ct);
         }
 
         try
@@ -98,8 +105,10 @@ public sealed class UpdateGoalStatusEndpoint : Endpoint<UpdateGoalStatusRequest,
         }
 
         var projectIds = await db.ProjectIdsAsync(goal.Id, ct);
-        await Resolve<ProjectGoalPlanningService>().NormalizeAsync(projectIds.Select(ProjectId.From), ct);
+        await planning.NormalizeAsync(projectIds.Select(ProjectId.From), ct);
         await db.SaveChangesAsync(ct);
+        if (transaction is not null)
+            await transaction.CommitAsync(ct);
         await Send.OkAsync(Map.ToDetail(goal, projectIds), ct);
     }
 

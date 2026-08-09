@@ -935,6 +935,54 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         Assert.Equal(first.GoalId, conflict.ExistingGoalId);
     }
 
+    [Fact]
+    public async Task ResumeAcrossSeveralProjectsIsRejectedAtomicallyWhenOneProjectConflicts()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var firstProject = await GetDefaultProjectAsync(client);
+        var secondProjectResponse = await client.PostAsJsonAsync(
+            "/api/v1/me/projects", new CreateProjectRequest("Second plan", null, null),
+            TestContext.Current.CancellationToken);
+        var secondProject = await secondProjectResponse.Content.ReadFromJsonAsync<ProjectSummaryResponse>(
+            TestContext.Current.CancellationToken);
+        Assert.NotNull(secondProject);
+
+        var sharedResponse = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            RankGoal with
+            {
+                Projects = [
+                new ProjectPriorityRequest(firstProject.ProjectId),
+                new ProjectPriorityRequest(secondProject.ProjectId),
+            ]
+            }, TestContext.Current.CancellationToken);
+        sharedResponse.EnsureSuccessStatusCode();
+        var shared = await sharedResponse.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        Assert.NotNull(shared);
+        var archive = await client.PostAsJsonAsync(
+            $"/api/v1/me/goals/{shared.GoalId}/status", new UpdateGoalStatusRequest("archived"),
+            TestContext.Current.CancellationToken);
+        archive.EnsureSuccessStatusCode();
+
+        var competing = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            RankGoal with { Projects = [new ProjectPriorityRequest(secondProject.ProjectId)] },
+            TestContext.Current.CancellationToken);
+        competing.EnsureSuccessStatusCode();
+
+        var resume = await client.PostAsJsonAsync(
+            $"/api/v1/me/goals/{shared.GoalId}/status", new UpdateGoalStatusRequest("active"),
+            TestContext.Current.CancellationToken);
+        Assert.Equal(HttpStatusCode.Conflict, resume.StatusCode);
+        var conflict = await resume.Content.ReadFromJsonAsync<ProjectGoalSlotConflictResponse>(
+            TestContext.Current.CancellationToken);
+        Assert.Equal(secondProject.ProjectId, conflict?.ProjectId);
+
+        var unchanged = await client.GetFromJsonAsync<GoalDetailResponse>(
+            $"/api/v1/me/goals/{shared.GoalId}", TestContext.Current.CancellationToken);
+        Assert.Equal("Archived", unchanged?.Status);
+    }
+
     private static async Task<GoalDetailResponse> CreateGoalAsync(HttpClient client)
     {
         var response = await client.PostAsJsonAsync("/api/v1/me/goals", RankGoal, TestContext.Current.CancellationToken);

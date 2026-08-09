@@ -1,4 +1,6 @@
+using System.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.Projects;
 using TacticusPlanner.Persistence;
@@ -7,6 +9,33 @@ namespace TacticusPlanner.Api.Features.Projects;
 
 public sealed class ProjectGoalPlanningService(PlannerDbContext db)
 {
+    public async Task<IDbContextTransaction?> BeginLockedMutationAsync(
+        IEnumerable<ProjectId> projectIds,
+        CancellationToken ct)
+    {
+        if (!db.Database.IsRelational())
+            return null;
+
+        var transaction = await db.Database.BeginTransactionAsync(IsolationLevel.Serializable, ct);
+        try
+        {
+            foreach (var projectId in projectIds.Distinct().OrderBy(id => id.Value))
+            {
+                _ = await db.Projects
+                    .FromSqlInterpolated($"SELECT * FROM projects WHERE id = {projectId.Value} FOR UPDATE")
+                    .Select(project => project.Id)
+                    .SingleAsync(ct);
+            }
+
+            return transaction;
+        }
+        catch
+        {
+            await transaction.DisposeAsync();
+            throw;
+        }
+    }
+
     public static ProjectGoal CreateMembership(Project project, Goal goal, int priority, DateTimeOffset now) => new()
     {
         ProjectId = project.Id,

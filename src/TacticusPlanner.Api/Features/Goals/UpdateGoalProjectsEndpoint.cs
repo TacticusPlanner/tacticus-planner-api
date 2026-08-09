@@ -72,6 +72,11 @@ public sealed class UpdateGoalProjectsEndpoint : Endpoint<UpdateGoalProjectsRequ
             .ToListAsync(ct);
 
         var planning = Resolve<ProjectGoalPlanningService>();
+        var affectedProjectIds = requestedProjectIds
+            .Concat(existingMemberships.Select(entry => entry.ProjectId))
+            .Distinct()
+            .ToList();
+        await using var transaction = await planning.BeginLockedMutationAsync(affectedProjectIds, ct);
         if (goal.Status is GoalStatus.Active or GoalStatus.Paused
             && await planning.FindConflictAsync(
                 requestedProjectIds, goal.EntityType, goal.EntityId, goal.GoalType, goal.Id, ct) is { } conflict)
@@ -100,6 +105,8 @@ public sealed class UpdateGoalProjectsEndpoint : Endpoint<UpdateGoalProjectsRequ
         await db.SaveChangesAsync(ct);
         await planning.NormalizeAsync(requestedProjectIds, ct);
         await db.SaveChangesAsync(ct);
+        if (transaction is not null)
+            await transaction.CommitAsync(ct);
 
         var projectIds = requestedProjectIds.Select(id => id.Value).ToList();
         await Send.OkAsync(Map.ToDetail(goal, projectIds), ct);

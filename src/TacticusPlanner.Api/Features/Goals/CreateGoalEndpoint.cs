@@ -96,6 +96,8 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
         goal.Events = [new GoalEvent { At = now, Type = GoalEventType.Created }];
 
         var planning = Resolve<ProjectGoalPlanningService>();
+        await using var transaction = await planning.BeginLockedMutationAsync(
+            targetProjects.Select(project => project.Id), ct);
         if (await planning.FindConflictAsync(
             targetProjects.Select(project => project.Id), entityType, goal.EntityId, goalType, null, ct) is { } conflict)
         {
@@ -126,6 +128,8 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
 
         await planning.NormalizeAsync(targetProjects.Select(project => project.Id), ct);
         await db.SaveChangesAsync(ct);
+        if (transaction is not null)
+            await transaction.CommitAsync(ct);
 
         var projectIds = targetProjects.Select(project => project.Id.Value).ToList();
         await Send.OkAsync(Map.ToDetail(goal, projectIds), ct);

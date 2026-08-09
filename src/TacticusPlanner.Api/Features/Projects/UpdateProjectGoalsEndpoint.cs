@@ -47,6 +47,9 @@ public sealed class UpdateProjectGoalsEndpoint : Endpoint<UpdateProjectGoalsRequ
             return;
         }
 
+        var planning = Resolve<ProjectGoalPlanningService>();
+        await using var transaction = await planning.BeginLockedMutationAsync([projectId], ct);
+
         var requestedGoalIds = req.Goals.Select(entry => GoalId.From(entry.GoalId)).ToHashSet();
 
         var ownedGoals = await db.Goals
@@ -121,8 +124,10 @@ public sealed class UpdateProjectGoalsEndpoint : Endpoint<UpdateProjectGoalsRequ
         }
 
         await db.SaveChangesAsync(ct);
-        await Resolve<ProjectGoalPlanningService>().NormalizeAsync([projectId], ct);
+        await planning.NormalizeAsync([projectId], ct);
         await db.SaveChangesAsync(ct);
+        if (transaction is not null)
+            await transaction.CommitAsync(ct);
 
         var updated = await db.ProjectGoals
             .AsNoTracking()

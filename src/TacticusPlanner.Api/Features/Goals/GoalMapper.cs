@@ -67,6 +67,7 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
         goal.GoalType.ToString(),
         goal.Status.ToString(),
         goal.Notes,
+        goal.DependsOn.ToList(),
         goal.CreatedAt,
         goal.UpdatedAt
     );
@@ -196,6 +197,7 @@ public sealed record GoalSummaryResponse(
     string GoalType,
     string Status,
     string? Notes,
+    List<Guid> DependsOn,
     DateTimeOffset CreatedAt,
     DateTimeOffset UpdatedAt
 );
