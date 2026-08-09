@@ -49,15 +49,30 @@ public sealed class UpdateProjectGoalsEndpoint : Endpoint<UpdateProjectGoalsRequ
 
         var requestedGoalIds = req.Goals.Select(entry => GoalId.From(entry.GoalId)).ToHashSet();
 
-        var ownedGoalIds = await db.Goals
+        var ownedGoals = await db.Goals
             .Where(entity => requestedGoalIds.Contains(entity.Id))
-            .Select(entity => entity.Id)
             .ToListAsync(ct);
 
-        if (ownedGoalIds.Count != requestedGoalIds.Count)
+        if (ownedGoals.Count != requestedGoalIds.Count)
         {
             AddError(request => request.Goals, "One or more goals do not exist or are not owned by the caller.");
             await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+            return;
+        }
+
+        var duplicateSlot = ownedGoals
+            .Where(goal => goal.Status is GoalStatus.Active or GoalStatus.Paused)
+            .GroupBy(goal => new { goal.EntityType, goal.EntityId, goal.GoalType })
+            .FirstOrDefault(group => group.Count() > 1);
+        if (duplicateSlot is not null)
+        {
+            var existing = duplicateSlot.First();
+            HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+            await HttpContext.Response.WriteAsJsonAsync(new ProjectGoalSlotConflictResponse(
+                "projectGoalSlotOccupied",
+                $"{project.Name} already contains an active or paused {existing.GoalType} goal for this unit.",
+                project.Id.Value, project.Name, existing.EntityType.ToString(),
+                existing.EntityId, existing.GoalType.ToString(), existing.Id.Value), ct);
             return;
         }
 
@@ -90,6 +105,7 @@ public sealed class UpdateProjectGoalsEndpoint : Endpoint<UpdateProjectGoalsRequ
         }
 
         var existingByGoalId = existingMemberships.ToDictionary(entity => entity.GoalId);
+        var goalsById = ownedGoals.ToDictionary(goal => goal.Id);
         foreach (var entry in req.Goals)
         {
             var goalId = GoalId.From(entry.GoalId);
@@ -99,16 +115,13 @@ public sealed class UpdateProjectGoalsEndpoint : Endpoint<UpdateProjectGoalsRequ
             }
             else
             {
-                db.ProjectGoals.Add(new ProjectGoal
-                {
-                    ProjectId = projectId,
-                    GoalId = goalId,
-                    Priority = entry.Priority,
-                    CreatedAt = DateTimeOffset.UtcNow,
-                });
+                db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(
+                    project, goalsById[goalId], entry.Priority, DateTimeOffset.UtcNow));
             }
         }
 
+        await db.SaveChangesAsync(ct);
+        await Resolve<ProjectGoalPlanningService>().NormalizeAsync([projectId], ct);
         await db.SaveChangesAsync(ct);
 
         var updated = await db.ProjectGoals

@@ -66,6 +66,7 @@ builder.Services.AddScoped<GoalTargetValidationService>();
 builder.Services.AddScoped<GuildSyncService>();
 builder.Services.AddScoped<V1GoalImportService>();
 builder.Services.AddScoped<ProjectsService>();
+builder.Services.AddScoped<ProjectGoalPlanningService>();
 builder.Services.AddSingleton<IExternalIdentityDeleter, NoOpExternalIdentityDeleter>();
 builder.Services.AddGameCatalog();
 builder.Services.AddTacticusApi(builder.Configuration["TacticusApi:BaseUrl"]);

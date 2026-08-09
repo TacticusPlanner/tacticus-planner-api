@@ -4,7 +4,7 @@ using TacticusPlanner.Domain.Profiles;
 namespace TacticusPlanner.Domain.Goals;
 
 /// <summary>
-/// A user-authored planning target for a character, Machine of War, or (reserved) upgrade material.
+/// A user-authored planning target for a character or Machine of War.
 /// Persisted in its own table, not folded into <c>PlayerDataOverride</c> — goals are user-owned planning
 /// data, not synced/overridden player state (see the V2 Goals plan §3).
 /// </summary>
@@ -16,7 +16,7 @@ public class Goal : BaseEntity<GoalId>, IRevisionedEntity
 
     public GoalEntityType EntityType { get; set; }
 
-    /// <summary>unitId / mowId / (materialId, reserved) — the id of the thing this goal targets.</summary>
+    /// <summary>The character or Machine of War id targeted by this goal.</summary>
     public required string EntityId { get; set; }
 
     public GoalType GoalType { get; set; }

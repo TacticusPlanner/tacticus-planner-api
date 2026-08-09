@@ -56,12 +56,11 @@ public sealed class UpdateGoalProjectsEndpoint : Endpoint<UpdateGoalProjectsRequ
 
         var requestedProjectIds = req.ProjectIds.Distinct().Select(ProjectId.From).ToHashSet();
 
-        var ownedProjectIds = await db.Projects
+        var ownedProjects = await db.Projects
             .Where(entity => requestedProjectIds.Contains(entity.Id))
-            .Select(entity => entity.Id)
             .ToListAsync(ct);
 
-        if (ownedProjectIds.Count != requestedProjectIds.Count)
+        if (ownedProjects.Count != requestedProjectIds.Count)
         {
             AddError(request => request.ProjectIds, "Unknown project.");
             await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
@@ -72,6 +71,16 @@ public sealed class UpdateGoalProjectsEndpoint : Endpoint<UpdateGoalProjectsRequ
             .Where(entity => entity.GoalId == goalId)
             .ToListAsync(ct);
 
+        var planning = Resolve<ProjectGoalPlanningService>();
+        if (goal.Status is GoalStatus.Active or GoalStatus.Paused
+            && await planning.FindConflictAsync(
+                requestedProjectIds, goal.EntityType, goal.EntityId, goal.GoalType, goal.Id, ct) is { } conflict)
+        {
+            HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+            await HttpContext.Response.WriteAsJsonAsync(conflict, ct);
+            return;
+        }
+
         var toRemove = existingMemberships.Where(entity => !requestedProjectIds.Contains(entity.ProjectId)).ToList();
         if (toRemove.Count > 0)
         {
@@ -79,20 +88,17 @@ public sealed class UpdateGoalProjectsEndpoint : Endpoint<UpdateGoalProjectsRequ
         }
 
         var existingByProjectId = existingMemberships.ToDictionary(entity => entity.ProjectId);
-        foreach (var projectId in requestedProjectIds)
+        foreach (var project in ownedProjects)
         {
-            if (!existingByProjectId.ContainsKey(projectId))
+            if (!existingByProjectId.ContainsKey(project.Id))
             {
-                db.ProjectGoals.Add(new ProjectGoal
-                {
-                    ProjectId = projectId,
-                    GoalId = goalId,
-                    Priority = await projectsService.GetNextPriorityAsync(projectId, ct),
-                    CreatedAt = DateTimeOffset.UtcNow,
-                });
+                db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(
+                    project, goal, await projectsService.GetNextPriorityAsync(project.Id, ct), DateTimeOffset.UtcNow));
             }
         }
 
+        await db.SaveChangesAsync(ct);
+        await planning.NormalizeAsync(requestedProjectIds, ct);
         await db.SaveChangesAsync(ct);
 
         var projectIds = requestedProjectIds.Select(id => id.Value).ToList();

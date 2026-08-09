@@ -265,9 +265,9 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
         Assert.NotNull(body);
         Assert.Equal(2, body.Goals.Count);
         Assert.Equal(second.GoalId, body.Goals[0].Goal.GoalId);
-        Assert.Equal(10, body.Goals[0].Priority);
+        Assert.Equal(1, body.Goals[0].Priority);
         Assert.Equal(first.GoalId, body.Goals[1].Goal.GoalId);
-        Assert.Equal(20, body.Goals[1].Priority);
+        Assert.Equal(2, body.Goals[1].Priority);
     }
 
     [Fact]
@@ -283,6 +283,36 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
         );
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task UnitOrderEndpointMovesEveryGoalForAUnitAsOneBlock()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var project = await GetDefaultProjectAsync(client);
+        var characterGoal = await CreateGoalAsync(client);
+        var mowGoal = await CreateGoalAsync(client, new CreateGoalRequest(
+            "mow",
+            "astraOrdnanceBattery",
+            "ability",
+            new CreateGoalConfigRequest(Ability: new AbilityTargetRequest(0, 3, 0, 3)),
+            null));
+
+        var response = await client.PutAsJsonAsync(
+            $"/api/v1/me/projects/{project.ProjectId}/unit-order",
+            new UpdateProjectUnitOrderRequest([
+                new UnitOrderEntryRequest("Mow", "astraOrdnanceBattery"),
+                new UnitOrderEntryRequest("Character", "blackTerminator"),
+            ]),
+            TestContext.Current.CancellationToken);
+        response.EnsureSuccessStatusCode();
+
+        var members = await client.GetFromJsonAsync<ListProjectGoalsResponse>(
+            $"/api/v1/me/projects/{project.ProjectId}/goals",
+            TestContext.Current.CancellationToken);
+        Assert.NotNull(members);
+        Assert.Equal(mowGoal.GoalId, members.Goals[0].Goal.GoalId);
+        Assert.Equal(characterGoal.GoalId, members.Goals[1].Goal.GoalId);
     }
 
     private static async Task<ProjectSummaryResponse> GetDefaultProjectAsync(HttpClient client)

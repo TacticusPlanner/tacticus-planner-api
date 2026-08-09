@@ -24,7 +24,7 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
         Post("me/goals");
         Summary(summary =>
         {
-            summary.Summary = "Creates a goal for a character, Machine of War, or equipment.";
+            summary.Summary = "Creates a goal for a character or Machine of War.";
             summary.Description = "Assigns the goal to the given project(s), or the caller's default project "
                 + "(created on first use) when none is given. The goal starts Active if any target project is "
                 + "the caller's active plan, otherwise Paused.";
@@ -60,23 +60,9 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
         // At most one Active/Paused goal per (entity, goal type) — a unit may still accumulate several
         // Completed/Archived goals of the same type, but only one "in flight" at a time (see the mirrored
         // check in UpdateGoalStatusEndpoint, and the partial unique index backing this invariant).
-        var hasConflictingGoal = await db.Goals
-            .Where(entity => entity.EntityType == entityType
-                && entity.EntityId == req.EntityId.Trim()
-                && entity.GoalType == goalType
-                && (entity.Status == GoalStatus.Active || entity.Status == GoalStatus.Paused))
-            .AnyAsync(ct);
-        if (hasConflictingGoal)
-        {
-            AddError(request => request.GoalType, "An active or paused goal of this type already exists for this unit.");
-            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
-            return;
-        }
-
         var profile = await db.Profiles.FirstAsync(entity => entity.Id == profileId, ct);
 
         List<Project> targetProjects;
-        Dictionary<ProjectId, int> requestedPriorities = [];
         if (req.Projects is { Count: > 0 } requestedProjects)
         {
             var distinctIds = requestedProjects.Select(entry => entry.ProjectId).Distinct().Select(ProjectId.From).ToList();
@@ -91,10 +77,6 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
             }
 
             targetProjects = found;
-            foreach (var entry in requestedProjects.Where(entry => entry.Priority is not null))
-            {
-                requestedPriorities[ProjectId.From(entry.ProjectId)] = entry.Priority!.Value;
-            }
         }
         else
         {
@@ -113,35 +95,46 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
         goal.Snapshot = GoalMapper.MapSnapshot(req.Snapshot);
         goal.Events = [new GoalEvent { At = now, Type = GoalEventType.Created }];
 
+        var planning = Resolve<ProjectGoalPlanningService>();
+        if (await planning.FindConflictAsync(
+            targetProjects.Select(project => project.Id), entityType, goal.EntityId, goalType, null, ct) is { } conflict)
+        {
+            await SendSlotConflictAsync(conflict, ct);
+            return;
+        }
+
         db.Goals.Add(goal);
 
         foreach (var project in targetProjects)
         {
-            db.ProjectGoals.Add(new ProjectGoal
-            {
-                ProjectId = project.Id,
-                GoalId = goal.Id,
-                Priority = requestedPriorities.TryGetValue(project.Id, out var priority)
-                    ? priority
-                    : await projects.GetNextPriorityAsync(project.Id, ct),
-            });
+            db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(
+                project, goal, await projects.GetNextPriorityAsync(project.Id, ct), now));
         }
 
         try
         {
             await db.SaveChangesAsync(ct);
         }
-        catch (DbUpdateException ex) when (GoalConflictDetection.IsActiveOrPausedConflict(ex))
+        catch (DbUpdateException ex) when (GoalConflictDetection.IsProjectSlotConflict(ex))
         {
             // The pre-check above already covers the common case; this is the concurrency backstop for a
             // conflicting goal created by a racing request between that check and this save.
-            AddError(request => request.GoalType, "An active or paused goal of this type already exists for this unit.");
-            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+            AddError(request => request.GoalType, "This project already has an active or paused goal of this type for the unit.");
+            await Send.ErrorsAsync(StatusCodes.Status409Conflict, ct);
             return;
         }
 
+        await planning.NormalizeAsync(targetProjects.Select(project => project.Id), ct);
+        await db.SaveChangesAsync(ct);
+
         var projectIds = targetProjects.Select(project => project.Id.Value).ToList();
         await Send.OkAsync(Map.ToDetail(goal, projectIds), ct);
+    }
+
+    private async Task SendSlotConflictAsync(ProjectGoalSlotConflictResponse conflict, CancellationToken ct)
+    {
+        HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+        await HttpContext.Response.WriteAsJsonAsync(conflict, ct);
     }
 }
 
@@ -157,7 +150,7 @@ public sealed record CreateGoalRequest(
 /// <summary>One target project for a newly created goal, with an optional caller-chosen priority within
 /// that project (plan: per-project priority). <see cref="Priority"/> null means "append after the
 /// project's current goals" — the same behavior as before per-project priority existed.</summary>
-public sealed record ProjectPriorityRequest(Guid ProjectId, int? Priority);
+public sealed record ProjectPriorityRequest(Guid ProjectId);
 
 public sealed record CreateGoalConfigRequest(
     RankTargetRequest? Rank = null,
@@ -167,7 +160,6 @@ public sealed record CreateGoalConfigRequest(
     string? FarmingStrategy = null,
     AscensionFarmingRequest? AscensionFarming = null,
     UpgradeTargetRequest? Upgrade = null,
-    ItemTargetRequest? Item = null,
     LevelTargetRequest? Level = null
 );
 
@@ -190,11 +182,9 @@ public sealed record AscensionFarmingRequest(
     List<CampaignBattleId> MythicShardBattleIds
 );
 
-public sealed record UpgradeTargetRequest(List<UpgradeItemTargetRequest> Targets);
+public sealed record UpgradeTargetRequest(List<UpgradeMaterialTargetRequest> Targets);
 
-public sealed record UpgradeItemTargetRequest(string UpgradeId, int Quantity);
-
-public sealed record ItemTargetRequest(int TargetLevel);
+public sealed record UpgradeMaterialTargetRequest(string UpgradeId, int Quantity);
 
 public sealed record LevelTargetRequest(int Start, int End);
 

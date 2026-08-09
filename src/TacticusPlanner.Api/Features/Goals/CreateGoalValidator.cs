@@ -1,7 +1,6 @@
 using FastEndpoints;
 using FluentValidation;
 using TacticusPlanner.Domain.Goals;
-using TacticusPlanner.Domain.Projects;
 
 namespace TacticusPlanner.Api.Features.Goals;
 
@@ -47,10 +46,6 @@ public sealed class CreateGoalValidator : Validator<CreateGoalRequest>
             .Must(IsValidConfig)
             .WithMessage("The farming strategy or ascension farming configuration is invalid.");
 
-        RuleFor(request => request.Projects)
-            .Must(projects => projects is null
-                || projects.All(entry => entry.Priority is null or (> 0 and <= ProjectValidation.MaxPriority)))
-            .WithMessage($"A project priority must be between 1 and {ProjectValidation.MaxPriority} when given.");
     }
 
     private static bool IsMow(string entityType) =>

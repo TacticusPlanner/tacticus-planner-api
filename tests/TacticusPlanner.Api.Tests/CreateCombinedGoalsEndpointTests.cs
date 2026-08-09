@@ -58,7 +58,7 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
     }
 
     [Fact]
-    public async Task ExplicitProjectPriorityBecomesTheBaseForEveryGoalInTheSet()
+    public async Task CombinedGoalsReceiveAutomaticContiguousPriorities()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var defaultProject = await GetDefaultProjectAsync(client);
@@ -67,7 +67,7 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
             "/api/v1/me/goals/combined",
             UnlockThenRank with
             {
-                Projects = [new ProjectPriorityRequest(defaultProject.ProjectId, 5)],
+                Projects = [new ProjectPriorityRequest(defaultProject.ProjectId)],
             },
             TestContext.Current.CancellationToken
         );
@@ -85,12 +85,12 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
         // The requested priority (5) is the base for the first goal in request order; each later goal
         // in the same combined set is placed immediately after (same "+i" spacing as the auto-append
         // default), not all sharing the one requested number.
-        Assert.Equal(5, members.Goals.Single(entry => entry.Goal.GoalId == unlock.GoalId).Priority);
-        Assert.Equal(6, members.Goals.Single(entry => entry.Goal.GoalId == rank.GoalId).Priority);
+        Assert.Equal(1, members.Goals.Single(entry => entry.Goal.GoalId == unlock.GoalId).Priority);
+        Assert.Equal(2, members.Goals.Single(entry => entry.Goal.GoalId == rank.GoalId).Priority);
     }
 
     [Fact]
-    public async Task NonPositiveProjectPriorityIsRejected()
+    public async Task ProjectMembershipWithoutPriorityIsAccepted()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var defaultProject = await GetDefaultProjectAsync(client);
@@ -99,12 +99,12 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
             "/api/v1/me/goals/combined",
             UnlockThenRank with
             {
-                Projects = [new ProjectPriorityRequest(defaultProject.ProjectId, -1)],
+                Projects = [new ProjectPriorityRequest(defaultProject.ProjectId)],
             },
             TestContext.Current.CancellationToken
         );
 
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        response.EnsureSuccessStatusCode();
     }
 
     [Fact]
@@ -155,7 +155,7 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
 
         var response = await client.PostAsJsonAsync(
             "/api/v1/me/goals/combined",
-            UnlockThenRank with { Projects = [new ProjectPriorityRequest(otherProject.ProjectId, null)] },
+            UnlockThenRank with { Projects = [new ProjectPriorityRequest(otherProject.ProjectId)] },
             TestContext.Current.CancellationToken
         );
         response.EnsureSuccessStatusCode();
@@ -172,7 +172,7 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
 
         var response = await client.PostAsJsonAsync(
             "/api/v1/me/goals/combined",
-            UnlockThenRank with { Projects = [new ProjectPriorityRequest(Guid.NewGuid(), null)] },
+            UnlockThenRank with { Projects = [new ProjectPriorityRequest(Guid.NewGuid())] },
             TestContext.Current.CancellationToken
         );
 
@@ -198,8 +198,8 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
             {
                 Projects =
                 [
-                    new ProjectPriorityRequest(defaultProject.ProjectId, null),
-                    new ProjectPriorityRequest(otherProject.ProjectId, null),
+                    new ProjectPriorityRequest(defaultProject.ProjectId),
+                    new ProjectPriorityRequest(otherProject.ProjectId),
                 ],
             },
             TestContext.Current.CancellationToken
@@ -375,7 +375,7 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
             TestContext.Current.CancellationToken
         );
 
-        Assert.Equal(HttpStatusCode.BadRequest, secondResponse.StatusCode);
+        Assert.Equal(HttpStatusCode.Conflict, secondResponse.StatusCode);
     }
 
     private static async Task<ProjectSummaryResponse> GetDefaultProjectAsync(HttpClient client)

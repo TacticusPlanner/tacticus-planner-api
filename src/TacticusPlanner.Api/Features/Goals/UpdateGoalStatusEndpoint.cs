@@ -1,7 +1,9 @@
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Api.Features.Projects;
 using TacticusPlanner.Domain.Goals;
+using TacticusPlanner.Domain.Projects;
 using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.Goals;
@@ -64,39 +66,40 @@ public sealed class UpdateGoalStatusEndpoint : Endpoint<UpdateGoalStatusRequest,
             // itself out of the count, so it can't conflict with itself.
             if (targetStatus is GoalStatus.Active or GoalStatus.Paused)
             {
-                var hasConflictingGoal = await db.Goals
-                    .Where(entity => entity.Id != goal.Id
-                        && entity.EntityType == goal.EntityType
-                        && entity.EntityId == goal.EntityId
-                        && entity.GoalType == goal.GoalType
-                        && (entity.Status == GoalStatus.Active || entity.Status == GoalStatus.Paused))
-                    .AnyAsync(ct);
-                if (hasConflictingGoal)
+                var membershipProjectIds = await db.ProjectGoals
+                    .Where(entry => entry.GoalId == goal.Id)
+                    .Select(entry => entry.ProjectId)
+                    .ToListAsync(ct);
+                if (await Resolve<ProjectGoalPlanningService>().FindConflictAsync(
+                    membershipProjectIds, goal.EntityType, goal.EntityId, goal.GoalType, goal.Id, ct) is { } conflict)
                 {
-                    AddError(request => request.Status, "An active or paused goal of this type already exists for this unit.");
-                    await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+                    HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+                    await HttpContext.Response.WriteAsJsonAsync(conflict, ct);
                     return;
                 }
             }
 
             goal.Status = targetStatus;
             goal.Events.Add(new GoalEvent { At = DateTimeOffset.UtcNow, Type = EventTypeFor(targetStatus) });
+            await Resolve<ProjectGoalPlanningService>().SyncOccupancyAsync(goal, ct);
         }
 
         try
         {
             await db.SaveChangesAsync(ct);
         }
-        catch (DbUpdateException ex) when (GoalConflictDetection.IsActiveOrPausedConflict(ex))
+        catch (DbUpdateException ex) when (GoalConflictDetection.IsProjectSlotConflict(ex))
         {
             // The pre-check above already covers the common case; this is the concurrency backstop for a
             // conflicting goal created by a racing request between that check and this save.
             AddError(request => request.Status, "An active or paused goal of this type already exists for this unit.");
-            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+            await Send.ErrorsAsync(StatusCodes.Status409Conflict, ct);
             return;
         }
 
         var projectIds = await db.ProjectIdsAsync(goal.Id, ct);
+        await Resolve<ProjectGoalPlanningService>().NormalizeAsync(projectIds.Select(ProjectId.From), ct);
+        await db.SaveChangesAsync(ct);
         await Send.OkAsync(Map.ToDetail(goal, projectIds), ct);
     }
 

@@ -1,7 +1,6 @@
 using FastEndpoints;
 using FluentValidation;
 using TacticusPlanner.Domain.Goals;
-using TacticusPlanner.Domain.Projects;
 
 namespace TacticusPlanner.Api.Features.Goals;
 
@@ -74,10 +73,6 @@ public sealed class CreateCombinedGoalsValidator : Validator<CreateCombinedGoals
                 || request.Goals.TrueForAll(spec => !IsRank(spec.GoalType)))
             .WithMessage("Machines of War have no rank — use an Ability goal instead.");
 
-        RuleFor(request => request.Projects)
-            .Must(projects => projects is null
-                || projects.All(entry => entry.Priority is null or (> 0 and <= ProjectValidation.MaxPriority)))
-            .WithMessage($"A project priority must be between 1 and {ProjectValidation.MaxPriority} when given.");
     }
 
     private static bool IsMow(string entityType) =>

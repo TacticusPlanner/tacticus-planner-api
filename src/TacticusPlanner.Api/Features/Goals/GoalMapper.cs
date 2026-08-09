@@ -109,15 +109,11 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
         },
         Upgrade = config.Upgrade is null ? null : new UpgradeTarget
         {
-            Targets = config.Upgrade.Targets.Select(target => new UpgradeItemTarget
+            Targets = config.Upgrade.Targets.Select(target => new UpgradeMaterialTarget
             {
                 UpgradeId = target.UpgradeId.Trim(),
                 Quantity = target.Quantity,
             }).ToList(),
-        },
-        Item = config.Item is null ? null : new ItemTarget
-        {
-            TargetLevel = config.Item.TargetLevel,
         },
         Level = config.Level is null ? null : new LevelTarget
         {
@@ -174,8 +170,7 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
             config.AscensionFarming.ShardBattleIds,
             config.AscensionFarming.MythicShardBattleIds),
         config.Upgrade is null ? null : new UpgradeTargetResponse(
-            config.Upgrade.Targets.Select(target => new UpgradeItemTargetResponse(target.UpgradeId, target.Quantity)).ToList()),
-        config.Item is null ? null : new ItemTargetResponse(config.Item.TargetLevel),
+            config.Upgrade.Targets.Select(target => new UpgradeMaterialTargetResponse(target.UpgradeId, target.Quantity)).ToList()),
         config.Level is null ? null : new LevelTargetResponse(config.Level.Start, config.Level.End)
     );
 
@@ -232,15 +227,12 @@ public sealed record GoalConfigResponse(
     string FarmingStrategy,
     AscensionFarmingResponse? AscensionFarming,
     UpgradeTargetResponse? Upgrade,
-    ItemTargetResponse? Item,
     LevelTargetResponse? Level
 );
 
-public sealed record UpgradeTargetResponse(List<UpgradeItemTargetResponse> Targets);
+public sealed record UpgradeTargetResponse(List<UpgradeMaterialTargetResponse> Targets);
 
-public sealed record UpgradeItemTargetResponse(string UpgradeId, int Quantity);
-
-public sealed record ItemTargetResponse(int TargetLevel);
+public sealed record UpgradeMaterialTargetResponse(string UpgradeId, int Quantity);
 
 public sealed record LevelTargetResponse(int Start, int End);
 

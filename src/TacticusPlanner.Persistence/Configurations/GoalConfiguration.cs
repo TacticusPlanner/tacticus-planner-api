@@ -43,7 +43,6 @@ public sealed class GoalConfiguration : IEntityTypeConfiguration<Goal>
             config.OwnsOne(c => c.Ability);
             config.OwnsOne(c => c.AscensionFarming);
             config.OwnsOne(c => c.Upgrade, upgrade => upgrade.OwnsMany(u => u.Targets));
-            config.OwnsOne(c => c.Item);
             config.OwnsOne(c => c.Level);
         });
         builder.OwnsOne(entity => entity.Snapshot, snapshot =>
@@ -64,11 +63,6 @@ public sealed class GoalConfiguration : IEntityTypeConfiguration<Goal>
         // this index is the concurrency backstop that guarantees the invariant even under a race.
         // Completed/Archived goals are excluded from the filter, so a unit can freely accumulate
         // finished goals of the same type.
-        builder.HasIndex(entity => new { entity.ProfileId, entity.EntityType, entity.EntityId, entity.GoalType })
-            .IsUnique()
-            .HasFilter($"{PostgresNaming.SnakeCase(nameof(Goal.Status))} IN ('Active', 'Paused')")
-            .HasDatabaseName("ix_goals_one_active_or_paused_per_entity_and_type");
-
         builder
             .HasOne(entity => entity.Profile)
             .WithMany()

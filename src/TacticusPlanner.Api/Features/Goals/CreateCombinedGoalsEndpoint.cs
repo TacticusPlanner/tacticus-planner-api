@@ -91,24 +91,9 @@ public sealed class CreateCombinedGoalsEndpoint
         }
 
         // At most one Active/Paused goal per (entity, goal type) — mirrors CreateGoalEndpoint's check.
-        var conflictingGoalType = await db.Goals
-            .Where(entity => entity.EntityType == entityType
-                && entity.EntityId == req.EntityId.Trim()
-                && requestGoalTypes.Contains(entity.GoalType)
-                && (entity.Status == GoalStatus.Active || entity.Status == GoalStatus.Paused))
-            .Select(entity => (GoalType?)entity.GoalType)
-            .FirstOrDefaultAsync(ct);
-        if (conflictingGoalType is not null)
-        {
-            AddError(request => request.Goals, "An active or paused goal of this type already exists for this unit.");
-            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
-            return;
-        }
-
         var profile = await db.Profiles.FirstAsync(entity => entity.Id == profileId, ct);
 
         List<Project> targetProjects;
-        Dictionary<ProjectId, int> requestedPriorities = [];
         if (req.Projects is { Count: > 0 } requestedProjects)
         {
             var distinctIds = requestedProjects.Select(entry => entry.ProjectId).Distinct().Select(ProjectId.From).ToList();
@@ -123,10 +108,6 @@ public sealed class CreateCombinedGoalsEndpoint
             }
 
             targetProjects = found;
-            foreach (var entry in requestedProjects.Where(entry => entry.Priority is not null))
-            {
-                requestedPriorities[ProjectId.From(entry.ProjectId)] = entry.Priority!.Value;
-            }
         }
         else
         {
@@ -137,6 +118,17 @@ public sealed class CreateCombinedGoalsEndpoint
             ? GoalStatus.Active
             : GoalStatus.Paused;
         var now = DateTimeOffset.UtcNow;
+        var planning = Resolve<ProjectGoalPlanningService>();
+        foreach (var goalType in requestGoalTypes)
+        {
+            if (await planning.FindConflictAsync(
+                targetProjects.Select(project => project.Id), entityType, req.EntityId.Trim(), goalType, null, ct) is { } conflict)
+            {
+                HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+                await HttpContext.Response.WriteAsJsonAsync(conflict, ct);
+                return;
+            }
+        }
 
         // Built as a materialized, indexable List (not a lazy .Select) so each spec's index has a real
         // GoalId to resolve dependencies against in the second pass below.
@@ -173,30 +165,26 @@ public sealed class CreateCombinedGoalsEndpoint
         db.Goals.AddRange(goals);
         foreach (var project in targetProjects)
         {
-            var basePriority = requestedPriorities.TryGetValue(project.Id, out var priority)
-                ? priority
-                : await projects.GetNextPriorityAsync(project.Id, ct);
-            db.ProjectGoals.AddRange(goals.Select((goal, i) => new ProjectGoal
-            {
-                ProjectId = project.Id,
-                GoalId = goal.Id,
-                Priority = basePriority + i,
-                CreatedAt = now,
-            }));
+            var basePriority = await projects.GetNextPriorityAsync(project.Id, ct);
+            db.ProjectGoals.AddRange(goals.Select((goal, i) =>
+                ProjectGoalPlanningService.CreateMembership(project, goal, basePriority + i, now)));
         }
 
         try
         {
             await db.SaveChangesAsync(ct);
         }
-        catch (DbUpdateException ex) when (GoalConflictDetection.IsActiveOrPausedConflict(ex))
+        catch (DbUpdateException ex) when (GoalConflictDetection.IsProjectSlotConflict(ex))
         {
             // The pre-check above already covers the common case; this is the concurrency backstop for a
             // conflicting goal created by a racing request between that check and this save.
             AddError(request => request.Goals, "An active or paused goal of this type already exists for this unit.");
-            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+            await Send.ErrorsAsync(StatusCodes.Status409Conflict, ct);
             return;
         }
+
+        await planning.NormalizeAsync(targetProjects.Select(project => project.Id), ct);
+        await db.SaveChangesAsync(ct);
 
         var projectIds = targetProjects.Select(project => project.Id.Value).ToList();
         await Send.OkAsync(
