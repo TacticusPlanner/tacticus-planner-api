@@ -3,7 +3,8 @@
     "id": "campaign-event",
     "type": "CampaignEvent",
     "recurrence": { "kind": "Fixed", "intervalDays": 35, "durationDays": 14, "anchorUtc": "2026-05-28T00:00:00Z" },
-    "requiredParameters": []
+    "requiredParameters": [],
+    "config": { "eventNumberAtAnchor": 15 }
   },
   {
     "id": "incursion",
@@ -34,16 +35,16 @@
   {
     "id": "guild-raid-season",
     "type": "GuildRaidSeason",
-    "recurrence": { "kind": "Fixed", "intervalDays": 28, "durationDays": 13, "anchorUtc": "2026-08-24T00:00:00Z" },
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
     "requiredParameters": [],
     "config": { "seasonLengthDays": 13 }
   },
   {
     "id": "guild-war-season",
     "type": "GuildWarSeason",
-    "recurrence": { "kind": "Fixed", "intervalDays": 28, "durationDays": 15, "anchorUtc": "2026-08-09T00:00:00Z" },
+    "recurrence": { "kind": "Fixed", "intervalDays": 28, "durationDays": 15, "anchorUtc": "2026-08-15T00:00:00Z" },
     "requiredParameters": [],
-    "config": { "seasonLengthDays": 15, "warsPerSeason": 6, "preparationPhaseHours": 24, "activeFightingPhaseHours": 36 }
+    "config": { "seasonLengthDays": 15, "warsPerSeason": 6, "preparationPhaseHours": 24, "activeFightingPhaseHours": 36, "seasonNumberAtAnchor": 26 }
   },
   {
     "id": "always-double-xp-sunday",
@@ -102,6 +103,48 @@
       "gameModes": ["Arena", "Campaign"],
       "statBonus": { "gameMode": "Arena", "health": 0.2, "armour": 0.2, "damage": 0.2 }
     }
+  },
+  {
+    "id": "hse-training-rush",
+    "type": "HomeScreenEvent",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": []
+  },
+  {
+    "id": "hse-global-conflict-operations",
+    "type": "HomeScreenEvent",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": []
+  },
+  {
+    "id": "hse-arsenal-of-war",
+    "type": "HomeScreenEvent",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": []
+  },
+  {
+    "id": "hse-machine-hunt",
+    "type": "HomeScreenEvent",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": []
+  },
+  {
+    "id": "hse-terminator-boost",
+    "type": "HomeScreenEvent",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": []
+  },
+  {
+    "id": "anniversary-event",
+    "type": "ShopEvent",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": ["weekNumber"]
+  },
+  {
+    "id": "crusade-season",
+    "type": "CrusadeSeason",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": []
   },
   {
     "id": "ta-faction-war",

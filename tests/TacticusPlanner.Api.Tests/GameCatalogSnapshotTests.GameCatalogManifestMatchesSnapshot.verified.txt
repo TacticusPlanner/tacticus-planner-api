@@ -31,7 +31,7 @@
     },
     {
       key: event-definitions,
-      hash: 29a7449fb94a685ec80c249967554583d6755146732dc267661083eb7d7afd27,
+      hash: 19244911a4a1227f75458601715c63f6f2fb8ff201c571e1d675834fb06042c7,
       url: /api/v1/game-catalog/event-definitions
     },
     {
