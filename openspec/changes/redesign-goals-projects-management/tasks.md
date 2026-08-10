@@ -44,3 +44,8 @@
 - [x] 6.4 Move PostgreSQL migration/index coverage into a dedicated persistence integration-test project and document its Docker requirement.
 - [x] 6.5 Remove stale priority commentary, reject the inapplicable synchronous `Where` suggestion, and run all non-Docker API verification locally.
 - [x] 6.6 Run the dedicated persistence integration tests and Docker image build with Docker available (CI or a Docker-enabled workstation).
+
+## 7. Runtime follow-up
+
+- [x] 7.1 Execute every explicitly locked project-goal mutation inside the configured EF Core execution strategy and cover the PostgreSQL retrying-strategy path.
+- [x] 7.2 Normalize every affected project after goal membership removal, including projects the goal no longer belongs to, and add regression coverage.

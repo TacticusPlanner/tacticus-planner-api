@@ -121,88 +121,91 @@ public sealed class CreateCombinedGoalsEndpoint
             : GoalStatus.Paused;
         var now = DateTimeOffset.UtcNow;
         var planning = Resolve<ProjectGoalPlanningService>();
-        await using var transaction = await planning.BeginLockedMutationAsync(
-            targetProjects.Select(project => project.Id), ct);
-        foreach (var goalType in requestGoalTypes)
+        await planning.ExecuteLockedMutationAsync(
+            targetProjects.Select(project => project.Id),
+            async transaction =>
         {
-            if (await planning.FindConflictAsync(
-                targetProjects.Select(project => project.Id), entityType, req.EntityId.Trim(), goalType, null, ct) is { } conflict)
+            foreach (var goalType in requestGoalTypes)
             {
+                if (await planning.FindConflictAsync(
+                    targetProjects.Select(project => project.Id), entityType, req.EntityId.Trim(), goalType, null, ct) is { } conflict)
+                {
+                    HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+                    await HttpContext.Response.WriteAsJsonAsync(conflict, ct);
+                    return;
+                }
+            }
+
+            // Built as a materialized, indexable List (not a lazy .Select) so each spec's index has a real
+            // GoalId to resolve dependencies against in the second pass below.
+            var goals = req.Goals.Select((spec, i) => new Goal(
+                entityType,
+                req.EntityId.Trim(),
+                parsedGoalTypes[i])
+            {
+                Id = GoalId.From(Guid.CreateVersion7()),
+                ProfileId = profileId,
+                Status = status,
+                Config = GoalMapper.MapConfig(spec.Config),
+                Snapshot = GoalMapper.MapSnapshot(spec.Snapshot),
+                Events = [new GoalEvent { At = now, Type = GoalEventType.Created }],
+            }).ToList();
+
+            // Second pass: DependsOn references another spec's GoalId, only resolvable once every goal in
+            // the set already has one (see the first pass above). CreateCombinedGoalsValidator guarantees
+            // strictly-earlier indices, but that's a separate class — re-check here defensively rather than
+            // trust an invariant enforced elsewhere.
+            for (var i = 0; i < req.Goals.Count; i++)
+            {
+                var indices = req.Goals[i].DependsOnIndex ?? [];
+                if (indices.Any(index => index < 0 || index >= i))
+                {
+                    AddError(request => request.Goals, "DependsOnIndex must reference an earlier goal in this request.");
+                    await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+                    return;
+                }
+
+                goals[i].DependsOn = indices.Select(index => goals[index].Id.Value).ToList();
+            }
+
+            db.Goals.AddRange(goals);
+            foreach (var project in targetProjects)
+            {
+                var basePriority = await projects.GetNextPriorityAsync(project.Id, ct);
+                db.ProjectGoals.AddRange(goals.Select((goal, i) =>
+                    ProjectGoalPlanningService.CreateMembership(project, goal, basePriority + i, now)));
+            }
+
+            try
+            {
+                await db.SaveChangesAsync(ct);
+            }
+            catch (DbUpdateException ex) when (GoalConflictDetection.IsProjectSlotConflict(ex))
+            {
+                var slotProjectIds = targetProjects.Select(project => project.Id).ToList();
+                var conflict = await planning.FindConflictAfterFailedSaveAsync(
+                    transaction,
+                    requestGoalTypes.Select(goalType => new ProjectGoalSlotLookup(
+                        slotProjectIds,
+                        entityType,
+                        req.EntityId.Trim(),
+                        goalType)),
+                    ct) ?? throw new InvalidOperationException(
+                        "The project slot constraint failed but no conflicting membership was found.", ex);
                 HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
                 await HttpContext.Response.WriteAsJsonAsync(conflict, ct);
                 return;
             }
-        }
 
-        // Built as a materialized, indexable List (not a lazy .Select) so each spec's index has a real
-        // GoalId to resolve dependencies against in the second pass below.
-        var goals = req.Goals.Select((spec, i) => new Goal(
-            entityType,
-            req.EntityId.Trim(),
-            parsedGoalTypes[i])
-        {
-            Id = GoalId.From(Guid.CreateVersion7()),
-            ProfileId = profileId,
-            Status = status,
-            Config = GoalMapper.MapConfig(spec.Config),
-            Snapshot = GoalMapper.MapSnapshot(spec.Snapshot),
-            Events = [new GoalEvent { At = now, Type = GoalEventType.Created }],
-        }).ToList();
-
-        // Second pass: DependsOn references another spec's GoalId, only resolvable once every goal in
-        // the set already has one (see the first pass above). CreateCombinedGoalsValidator guarantees
-        // strictly-earlier indices, but that's a separate class — re-check here defensively rather than
-        // trust an invariant enforced elsewhere.
-        for (var i = 0; i < req.Goals.Count; i++)
-        {
-            var indices = req.Goals[i].DependsOnIndex ?? [];
-            if (indices.Any(index => index < 0 || index >= i))
-            {
-                AddError(request => request.Goals, "DependsOnIndex must reference an earlier goal in this request.");
-                await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
-                return;
-            }
-
-            goals[i].DependsOn = indices.Select(index => goals[index].Id.Value).ToList();
-        }
-
-        db.Goals.AddRange(goals);
-        foreach (var project in targetProjects)
-        {
-            var basePriority = await projects.GetNextPriorityAsync(project.Id, ct);
-            db.ProjectGoals.AddRange(goals.Select((goal, i) =>
-                ProjectGoalPlanningService.CreateMembership(project, goal, basePriority + i, now)));
-        }
-
-        try
-        {
+            await planning.NormalizeAsync(targetProjects.Select(project => project.Id), ct);
             await db.SaveChangesAsync(ct);
-        }
-        catch (DbUpdateException ex) when (GoalConflictDetection.IsProjectSlotConflict(ex))
-        {
-            var slotProjectIds = targetProjects.Select(project => project.Id).ToList();
-            var conflict = await planning.FindConflictAfterFailedSaveAsync(
-                transaction,
-                requestGoalTypes.Select(goalType => new ProjectGoalSlotLookup(
-                    slotProjectIds,
-                    entityType,
-                    req.EntityId.Trim(),
-                    goalType)),
-                ct) ?? throw new InvalidOperationException(
-                    "The project slot constraint failed but no conflicting membership was found.", ex);
-            HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
-            await HttpContext.Response.WriteAsJsonAsync(conflict, ct);
-            return;
-        }
+            if (transaction is not null)
+                await transaction.CommitAsync(ct);
 
-        await planning.NormalizeAsync(targetProjects.Select(project => project.Id), ct);
-        await db.SaveChangesAsync(ct);
-        if (transaction is not null)
-            await transaction.CommitAsync(ct);
-
-        var projectIds = targetProjects.Select(project => project.Id.Value).ToList();
-        await Send.OkAsync(
-            new CreateCombinedGoalsResponse(goals.Select(goal => Map.ToDetail(goal, projectIds)).ToList()), ct);
+            var projectIds = targetProjects.Select(project => project.Id.Value).ToList();
+            await Send.OkAsync(
+                new CreateCombinedGoalsResponse(goals.Select(goal => Map.ToDetail(goal, projectIds)).ToList()), ct);
+        }, ct);
     }
 }
 

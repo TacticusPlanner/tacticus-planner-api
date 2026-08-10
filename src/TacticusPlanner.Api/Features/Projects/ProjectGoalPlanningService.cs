@@ -9,31 +9,33 @@ namespace TacticusPlanner.Api.Features.Projects;
 
 public sealed class ProjectGoalPlanningService(PlannerDbContext db)
 {
-    public async Task<IDbContextTransaction?> BeginLockedMutationAsync(
+    public async Task ExecuteLockedMutationAsync(
         IEnumerable<ProjectId> projectIds,
+        Func<IDbContextTransaction?, Task> mutation,
         CancellationToken ct)
     {
         if (!db.Database.IsRelational())
-            return null;
-
-        var transaction = await db.Database.BeginTransactionAsync(IsolationLevel.Serializable, ct);
-        try
         {
-            foreach (var projectId in projectIds.Distinct().OrderBy(id => id.Value))
+            await mutation(null);
+            return;
+        }
+
+        var orderedProjectIds = projectIds.Distinct().OrderBy(id => id.Value).ToList();
+        var strategy = db.Database.CreateExecutionStrategy();
+        await strategy.ExecuteAsync(async () =>
+        {
+            await using var transaction = await db.Database.BeginTransactionAsync(IsolationLevel.Serializable, ct);
+            foreach (var projectId in orderedProjectIds)
             {
-                _ = await db.Projects
-                    .FromSqlInterpolated($"SELECT * FROM projects WHERE id = {projectId.Value} FOR UPDATE")
-                    .Select(project => project.Id)
+                _ = await db.Database
+                    .SqlQueryRaw<int>(
+                        "SELECT 1 AS \"Value\" FROM projects WHERE id = {0} FOR UPDATE",
+                        projectId.Value)
                     .SingleAsync(ct);
             }
 
-            return transaction;
-        }
-        catch
-        {
-            await transaction.DisposeAsync();
-            throw;
-        }
+            await mutation(transaction);
+        });
     }
 
     public static ProjectGoal CreateMembership(Project project, Goal goal, int priority, DateTimeOffset now) => new()

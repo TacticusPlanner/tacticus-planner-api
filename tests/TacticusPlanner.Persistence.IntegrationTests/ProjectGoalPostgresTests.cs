@@ -3,7 +3,9 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql;
+using TacticusPlanner.Api.Features.Projects;
 using TacticusPlanner.Domain.Profiles;
+using TacticusPlanner.Domain.Projects;
 using TacticusPlanner.Persistence.Encryption;
 using Testcontainers.PostgreSql;
 using Xunit;
@@ -66,6 +68,25 @@ public sealed class ProjectGoalPostgresTests
         }
 
         await migrator.MigrateAsync(cancellationToken: TestContext.Current.CancellationToken);
+
+        var retryOptions = new DbContextOptionsBuilder<PlannerDbContext>()
+            .UseNpgsql(postgres.GetConnectionString(), options => options.EnableRetryOnFailure())
+            .Options;
+        await using (var retryDb = new PlannerDbContext(
+            retryOptions,
+            new PassthroughEncryption(),
+            new StaticProfile(ProfileId.From(profileId))))
+        {
+            var planning = new ProjectGoalPlanningService(retryDb);
+            await planning.ExecuteLockedMutationAsync(
+                [ProjectId.From(firstProjectId)],
+                async transaction =>
+                {
+                    Assert.NotNull(transaction);
+                    await transaction.CommitAsync(TestContext.Current.CancellationToken);
+                },
+                TestContext.Current.CancellationToken);
+        }
 
         await using (var connection = new NpgsqlConnection(postgres.GetConnectionString()))
         {
@@ -155,5 +176,10 @@ public sealed class ProjectGoalPostgresTests
     private sealed class NoProfile : ICurrentProfileProvider
     {
         public ProfileId? ProfileId => null;
+    }
+
+    private sealed class StaticProfile(ProfileId profileId) : ICurrentProfileProvider
+    {
+        public ProfileId? ProfileId { get; } = profileId;
     }
 }

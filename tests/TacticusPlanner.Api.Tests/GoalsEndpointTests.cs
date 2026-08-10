@@ -729,6 +729,23 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         var created = await createResponse.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
         Assert.NotNull(created);
 
+        var remainingGoalResponse = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            new CreateGoalRequest(
+                "character",
+                "blackTerminator",
+                "level",
+                new CreateGoalConfigRequest(Level: new LevelTargetRequest(1, 10)),
+                null
+            ),
+            TestContext.Current.CancellationToken
+        );
+        remainingGoalResponse.EnsureSuccessStatusCode();
+        var remainingGoal = await remainingGoalResponse.Content.ReadFromJsonAsync<GoalDetailResponse>(
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(remainingGoal);
+
         var response = await client.PutAsJsonAsync(
             $"/api/v1/me/goals/{created.GoalId}/projects",
             new UpdateGoalProjectsRequest([otherProject.ProjectId]),
@@ -746,6 +763,10 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         );
         Assert.NotNull(defaultMembers);
         Assert.DoesNotContain(defaultMembers.Goals, entry => entry.Goal.GoalId == created.GoalId);
+        Assert.Equal(
+            1,
+            Assert.Single(defaultMembers.Goals, entry => entry.Goal.GoalId == remainingGoal.GoalId).Priority
+        );
     }
 
     [Fact]

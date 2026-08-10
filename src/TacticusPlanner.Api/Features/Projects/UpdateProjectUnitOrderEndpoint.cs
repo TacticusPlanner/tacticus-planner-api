@@ -39,23 +39,25 @@ public sealed class UpdateProjectUnitOrderEndpoint : Endpoint<UpdateProjectUnitO
         }
 
         var planning = Resolve<ProjectGoalPlanningService>();
-        await using var transaction = await planning.BeginLockedMutationAsync([projectId], ct);
-        if (!await planning.ApplyUnitOrderAsync(projectId, req.Units, ct))
+        await planning.ExecuteLockedMutationAsync([projectId], async transaction =>
         {
-            AddError(request => request.Units, "Units must be an exact, duplicate-free permutation of the project's current units.");
-            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
-            return;
-        }
+            if (!await planning.ApplyUnitOrderAsync(projectId, req.Units, ct))
+            {
+                AddError(request => request.Units, "Units must be an exact, duplicate-free permutation of the project's current units.");
+                await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+                return;
+            }
 
-        await db.SaveChangesAsync(ct);
-        if (transaction is not null)
-            await transaction.CommitAsync(ct);
-        var goals = await db.ProjectGoals.AsNoTracking()
-            .Where(entry => entry.ProjectId == projectId)
-            .OrderBy(entry => entry.Priority)
-            .Select(entry => new ProjectGoalEntryResponse(entry.GoalId.Value, entry.Priority))
-            .ToListAsync(ct);
-        await Send.OkAsync(new ProjectGoalsResponse(goals), ct);
+            await db.SaveChangesAsync(ct);
+            if (transaction is not null)
+                await transaction.CommitAsync(ct);
+            var goals = await db.ProjectGoals.AsNoTracking()
+                .Where(entry => entry.ProjectId == projectId)
+                .OrderBy(entry => entry.Priority)
+                .Select(entry => new ProjectGoalEntryResponse(entry.GoalId.Value, entry.Priority))
+                .ToListAsync(ct);
+            await Send.OkAsync(new ProjectGoalsResponse(goals), ct);
+        }, ct);
     }
 }
 
