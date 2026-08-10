@@ -43,4 +43,4 @@
 - [x] 6.3 Make the destructive migration explicitly irreversible rather than recreating the obsolete profile-wide uniqueness index.
 - [x] 6.4 Move PostgreSQL migration/index coverage into a dedicated persistence integration-test project and document its Docker requirement.
 - [x] 6.5 Remove stale priority commentary, reject the inapplicable synchronous `Where` suggestion, and run all non-Docker API verification locally.
-- [ ] 6.6 Run the dedicated persistence integration tests and Docker image build with Docker available (CI or a Docker-enabled workstation).
+- [x] 6.6 Run the dedicated persistence integration tests and Docker image build with Docker available (CI or a Docker-enabled workstation).
