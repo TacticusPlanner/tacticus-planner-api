@@ -36,6 +36,8 @@ public sealed class CreateCombinedGoalsEndpoint
                 + "when none is given, same as POST me/goals.";
             summary.Response<CreateCombinedGoalsResponse>(StatusCodes.Status200OK, "The newly created goals, in request order.");
             summary.Response(StatusCodes.Status400BadRequest, "Invalid entity/goal type, a bad DependsOnIndex, or an unknown project.");
+            summary.Response<ProjectGoalSlotConflictResponse>(StatusCodes.Status409Conflict,
+                "A target project already contains an active or paused goal in one of the requested slots.");
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
             summary.Response(StatusCodes.Status404NotFound, "The authenticated account/profile has not been provisioned.");
         });
@@ -134,13 +136,13 @@ public sealed class CreateCombinedGoalsEndpoint
 
         // Built as a materialized, indexable List (not a lazy .Select) so each spec's index has a real
         // GoalId to resolve dependencies against in the second pass below.
-        var goals = req.Goals.Select((spec, i) => new Goal
+        var goals = req.Goals.Select((spec, i) => new Goal(
+            entityType,
+            req.EntityId.Trim(),
+            parsedGoalTypes[i])
         {
             Id = GoalId.From(Guid.CreateVersion7()),
             ProfileId = profileId,
-            EntityType = entityType,
-            EntityId = req.EntityId.Trim(),
-            GoalType = parsedGoalTypes[i],
             Status = status,
             Config = GoalMapper.MapConfig(spec.Config),
             Snapshot = GoalMapper.MapSnapshot(spec.Snapshot),
@@ -178,10 +180,18 @@ public sealed class CreateCombinedGoalsEndpoint
         }
         catch (DbUpdateException ex) when (GoalConflictDetection.IsProjectSlotConflict(ex))
         {
-            // The pre-check above already covers the common case; this is the concurrency backstop for a
-            // conflicting goal created by a racing request between that check and this save.
-            AddError(request => request.Goals, "An active or paused goal of this type already exists for this unit.");
-            await Send.ErrorsAsync(StatusCodes.Status409Conflict, ct);
+            var slotProjectIds = targetProjects.Select(project => project.Id).ToList();
+            var conflict = await planning.FindConflictAfterFailedSaveAsync(
+                transaction,
+                requestGoalTypes.Select(goalType => new ProjectGoalSlotLookup(
+                    slotProjectIds,
+                    entityType,
+                    req.EntityId.Trim(),
+                    goalType)),
+                ct) ?? throw new InvalidOperationException(
+                    "The project slot constraint failed but no conflicting membership was found.", ex);
+            HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+            await HttpContext.Response.WriteAsJsonAsync(conflict, ct);
             return;
         }
 

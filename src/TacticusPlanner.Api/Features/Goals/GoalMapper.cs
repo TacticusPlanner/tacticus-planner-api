@@ -29,9 +29,11 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
             .GroupBy(entry => entry.Name!, StringComparer.Ordinal)
             .ToDictionary(group => group.Key, group => group.First().Value, StringComparer.Ordinal);
 
-    public override Goal ToEntity(CreateGoalRequest r) => new()
+    public override Goal ToEntity(CreateGoalRequest r) => new(
+        Enum.Parse<GoalEntityType>(r.EntityType, ignoreCase: true),
+        r.EntityId.Trim(),
+        Enum.Parse<GoalType>(r.GoalType, ignoreCase: true))
     {
-        EntityId = r.EntityId.Trim(),
         Config = MapConfig(r.Config),
     };
 

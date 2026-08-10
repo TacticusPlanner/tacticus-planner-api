@@ -81,6 +81,35 @@ public sealed class ProjectGoalPlanningService(PlannerDbContext db)
             .FirstOrDefaultAsync(ct);
     }
 
+    public async Task<ProjectGoalSlotConflictResponse?> FindConflictAfterFailedSaveAsync(
+        IDbContextTransaction? transaction,
+        IEnumerable<ProjectGoalSlotLookup> slots,
+        CancellationToken ct)
+    {
+        if (transaction is not null)
+        {
+            await transaction.RollbackAsync(ct);
+            await transaction.DisposeAsync();
+        }
+
+        db.ChangeTracker.Clear();
+        foreach (var slot in slots)
+        {
+            if (await FindConflictAsync(
+                slot.ProjectIds,
+                slot.EntityType,
+                slot.EntityId,
+                slot.GoalType,
+                slot.ExcludingGoalId,
+                ct) is { } conflict)
+            {
+                return conflict;
+            }
+        }
+
+        return null;
+    }
+
     public async Task SyncOccupancyAsync(Goal goal, CancellationToken ct)
     {
         var memberships = await db.ProjectGoals.Where(entry => entry.GoalId == goal.Id).ToListAsync(ct);
@@ -180,3 +209,10 @@ public sealed record ProjectGoalSlotConflictResponse(
     string EntityId,
     string GoalType,
     Guid ExistingGoalId);
+
+public sealed record ProjectGoalSlotLookup(
+    IReadOnlyCollection<ProjectId> ProjectIds,
+    GoalEntityType EntityType,
+    string EntityId,
+    GoalType GoalType,
+    GoalId? ExcludingGoalId = null);

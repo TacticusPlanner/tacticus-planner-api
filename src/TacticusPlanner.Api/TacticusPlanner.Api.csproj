@@ -3,6 +3,7 @@
     <RootNamespace>TacticusPlanner.Api</RootNamespace>
     <UserSecretsId>tacticus-planner-api-local</UserSecretsId>
     <ContainerDefaultOS>Linux</ContainerDefaultOS>
+    <OpenApiDocumentsDirectory>$(MSBuildProjectDirectory)\..\..\artifacts\openapi</OpenApiDocumentsDirectory>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" />

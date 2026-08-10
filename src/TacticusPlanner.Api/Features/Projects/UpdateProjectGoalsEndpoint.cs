@@ -1,6 +1,7 @@
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.Projects;
 using TacticusPlanner.Persistence;
@@ -22,6 +23,8 @@ public sealed class UpdateProjectGoalsEndpoint : Endpoint<UpdateProjectGoalsRequ
             summary.Summary = "Replaces a project's goal membership and priority ordering.";
             summary.Response<ProjectGoalsResponse>(StatusCodes.Status200OK, "The project's updated goal membership.");
             summary.Response(StatusCodes.Status400BadRequest, "An unknown goal id, or a removal that would leave a goal in no project.");
+            summary.Response<ProjectGoalSlotConflictResponse>(StatusCodes.Status409Conflict,
+                "The requested membership contains an occupied active or paused goal slot.");
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
             summary.Response(StatusCodes.Status404NotFound, "No matching project owned by the caller.");
         });
@@ -123,7 +126,29 @@ public sealed class UpdateProjectGoalsEndpoint : Endpoint<UpdateProjectGoalsRequ
             }
         }
 
-        await db.SaveChangesAsync(ct);
+        try
+        {
+            await db.SaveChangesAsync(ct);
+        }
+        catch (DbUpdateException ex) when (GoalConflictDetection.IsProjectSlotConflict(ex))
+        {
+            var conflict = await planning.FindConflictAfterFailedSaveAsync(
+                transaction,
+                ownedGoals
+                    .Where(goal => goal.Status is GoalStatus.Active or GoalStatus.Paused)
+                    .Select(goal => new ProjectGoalSlotLookup(
+                        [projectId],
+                        goal.EntityType,
+                        goal.EntityId,
+                        goal.GoalType,
+                        goal.Id)),
+                ct) ?? throw new InvalidOperationException(
+                    "The project slot constraint failed but no conflicting membership was found.", ex);
+            HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+            await HttpContext.Response.WriteAsJsonAsync(conflict, ct);
+            return;
+        }
+
         await planning.NormalizeAsync([projectId], ct);
         await db.SaveChangesAsync(ct);
         if (transaction is not null)

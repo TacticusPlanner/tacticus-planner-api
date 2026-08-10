@@ -2,7 +2,7 @@
 
 `ProjectGoal` is the many-to-many membership and owns per-project numeric priority. `ListProjectGoalsEndpoint` sorts by it, and downstream clients feed that order to priority-sensitive schedulers. Goal identity/type/status live on `Goal`. A partial unique index on `goals` currently enforces one Active/Paused goal per profile/unit/type, independent of project membership.
 
-The new invariant crosses tables, so it cannot be represented by merely changing the existing index columns. Goal target identity/type are immutable after creation, which makes membership denormalization safe. Goal lifecycle remains global; project-specific pause/resume is out of scope.
+The new invariant crosses tables, so it cannot be represented by merely changing the existing index columns. Goal target identity/type are immutable after creation, and the domain model SHALL prevent post-creation changes to `Goal.EntityType`, `Goal.EntityId`, and `Goal.GoalType`. That keeps membership denormalization safe. Goal lifecycle remains global; project-specific pause/resume is out of scope.
 
 ## Goals / Non-Goals
 
@@ -44,7 +44,7 @@ This keeps every existing consumer compatible with ordered project-goal response
 }
 ```
 
-The endpoint locks the owned project row for the transaction, rejects missing/duplicate/unknown/currently stale unit sets, rewrites priority only, and returns the refreshed ordered project goals (or ordered unit summary plus flattened goals if that produces a clearer generated client contract). It never replaces membership.
+The endpoint locks the owned project row for the transaction, rejects missing/duplicate/unknown/currently stale unit sets, rewrites priority only, and returns `ProjectGoalsResponse` as `{ "goals": [{ "goalId": "...", "priority": 1 }] }`. It never replaces membership, and no alternative ordered-unit-summary response is exposed.
 
 - _Alternative:_ reuse `PUT /projects/{id}/goals`. Rejected because that endpoint replaces membership and can drop concurrently added goals when the user's intent is only ordering.
 
@@ -66,6 +66,8 @@ Add denormalized columns:
 - `OccupiesInFlightSlot`
 
 Target columns are copied from immutable `Goal` fields whenever membership is created. `OccupiesInFlightSlot` is true exactly when the owning goal is Active/Paused and is updated across all memberships in the same transaction as lifecycle transitions. Add a partial unique index on `(ProjectId, EntityType, EntityId, GoalType)` where `OccupiesInFlightSlot = true`.
+
+The immutable slot fields are initialized only by the goal creation path. Public update operations cannot replace them; changing a target means creating a replacement goal.
 
 Friendly pre-checks provide project-aware errors; the index is the race backstop. Constraint exception mapping returns the same structured conflict contract.
 

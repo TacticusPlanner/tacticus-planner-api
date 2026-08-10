@@ -28,6 +28,8 @@ public sealed class UpdateGoalProjectsEndpoint : Endpoint<UpdateGoalProjectsRequ
                 + "projects append the goal at the bottom of that project's ordering.";
             summary.Response<GoalDetailResponse>(StatusCodes.Status200OK, "The updated goal.");
             summary.Response(StatusCodes.Status400BadRequest, "An empty list, or an unknown project.");
+            summary.Response<ProjectGoalSlotConflictResponse>(StatusCodes.Status409Conflict,
+                "A target project already contains another active or paused goal in the requested slot.");
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
             summary.Response(StatusCodes.Status404NotFound, "No matching goal owned by the caller.");
         });
@@ -102,7 +104,27 @@ public sealed class UpdateGoalProjectsEndpoint : Endpoint<UpdateGoalProjectsRequ
             }
         }
 
-        await db.SaveChangesAsync(ct);
+        try
+        {
+            await db.SaveChangesAsync(ct);
+        }
+        catch (DbUpdateException ex) when (GoalConflictDetection.IsProjectSlotConflict(ex))
+        {
+            var databaseConflict = await planning.FindConflictAfterFailedSaveAsync(
+                transaction,
+                [new ProjectGoalSlotLookup(
+                    requestedProjectIds,
+                    goal.EntityType,
+                    goal.EntityId,
+                    goal.GoalType,
+                    goal.Id)],
+                ct) ?? throw new InvalidOperationException(
+                    "The project slot constraint failed but no conflicting membership was found.", ex);
+            HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+            await HttpContext.Response.WriteAsJsonAsync(databaseConflict, ct);
+            return;
+        }
+
         await planning.NormalizeAsync(requestedProjectIds, ct);
         await db.SaveChangesAsync(ct);
         if (transaction is not null)

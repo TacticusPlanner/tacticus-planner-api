@@ -10,16 +10,27 @@ namespace TacticusPlanner.Domain.Goals;
 /// </summary>
 public class Goal : BaseEntity<GoalId>, IRevisionedEntity
 {
+    private Goal()
+    {
+    }
+
+    public Goal(GoalEntityType entityType, string entityId, GoalType goalType)
+    {
+        EntityType = entityType;
+        EntityId = entityId;
+        GoalType = goalType;
+    }
+
     public long Revision { get; set; }
 
     public ProfileId ProfileId { get; set; }
 
-    public GoalEntityType EntityType { get; set; }
+    public GoalEntityType EntityType { get; private set; }
 
     /// <summary>The character or Machine of War id targeted by this goal.</summary>
-    public required string EntityId { get; set; }
+    public string EntityId { get; private set; } = string.Empty;
 
-    public GoalType GoalType { get; set; }
+    public GoalType GoalType { get; private set; }
 
     public GoalStatus Status { get; set; }
 

@@ -35,3 +35,12 @@
 - [x] 5.2 Coordinate generated client changes with `tacticus-planner-apps/openspec/changes/redesign-goals-projects-management` before merge.
 - [x] 5.3 Apply/reset the migration through the Aspire `api-migrations` resource and verify a populated local database containing ordinary and equipment goals.
 - [x] 5.4 Run `dotnet format TacticusPlanner.slnx --verify-no-changes --no-restore`, `dotnet build TacticusPlanner.slnx -c Release --no-restore`, `dotnet test TacticusPlanner.slnx -c Release --no-build`, `docker build -f src/TacticusPlanner.Api/Dockerfile -t tacticus-planner-api:local .`, and `git diff --check`.
+
+## 6. Review follow-up
+
+- [x] 6.1 Enforce immutable goal slot identity in the domain creation path and align the unit-order and HTTP 409 OpenSpec contracts.
+- [x] 6.2 Return one structured project-slot conflict shape from every pre-check and database-race path, declare it in endpoint summaries, and verify generated OpenAPI.
+- [x] 6.3 Make the destructive migration explicitly irreversible rather than recreating the obsolete profile-wide uniqueness index.
+- [x] 6.4 Move PostgreSQL migration/index coverage into a dedicated persistence integration-test project and document its Docker requirement.
+- [x] 6.5 Remove stale priority commentary, reject the inapplicable synchronous `Where` suggestion, and run all non-Docker API verification locally.
+- [ ] 6.6 Run the dedicated persistence integration tests and Docker image build with Docker available (CI or a Docker-enabled workstation).

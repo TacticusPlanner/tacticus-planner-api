@@ -43,7 +43,7 @@ The invariant SHALL apply atomically to single creation, combined creation, goal
 
 ### Requirement: Conflicts identify affected projects and goals
 
-A friendly pre-check or database constraint conflict SHALL produce the same structured 400 response containing each conflicting project id/name, entity type/id, goal type, and existing goal id.
+A friendly pre-check or database constraint conflict SHALL produce the same structured HTTP 409 response containing each conflicting project id/name, entity type/id, goal type, and existing goal id.
 
 #### Scenario: Multi-project create partially conflicts
 

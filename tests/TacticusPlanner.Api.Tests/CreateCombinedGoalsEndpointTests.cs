@@ -82,9 +82,8 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
             TestContext.Current.CancellationToken
         );
         Assert.NotNull(members);
-        // The requested priority (5) is the base for the first goal in request order; each later goal
-        // in the same combined set is placed immediately after (same "+i" spacing as the auto-append
-        // default), not all sharing the one requested number.
+        // Priorities are assigned automatically and contiguously in request order, so the combined set
+        // occupies 1 and 2 in the otherwise empty default project.
         Assert.Equal(1, members.Goals.Single(entry => entry.Goal.GoalId == unlock.GoalId).Priority);
         Assert.Equal(2, members.Goals.Single(entry => entry.Goal.GoalId == rank.GoalId).Priority);
     }

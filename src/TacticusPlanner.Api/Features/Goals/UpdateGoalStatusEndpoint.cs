@@ -20,8 +20,9 @@ public sealed class UpdateGoalStatusEndpoint : Endpoint<UpdateGoalStatusRequest,
         {
             summary.Summary = "Transitions a goal's status (active/paused/completed/archived).";
             summary.Response<GoalDetailResponse>(StatusCodes.Status200OK, "The updated goal.");
-            summary.Response(StatusCodes.Status400BadRequest, "Unknown or unsupported target status, or another "
-                + "goal of the same type is already active/paused for this unit.");
+            summary.Response(StatusCodes.Status400BadRequest, "Unknown or unsupported target status.");
+            summary.Response<ProjectGoalSlotConflictResponse>(StatusCodes.Status409Conflict,
+                "A project already contains another active or paused goal in the requested slot.");
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
             summary.Response(StatusCodes.Status404NotFound, "No matching goal owned by the caller.");
         });
@@ -97,10 +98,18 @@ public sealed class UpdateGoalStatusEndpoint : Endpoint<UpdateGoalStatusRequest,
         }
         catch (DbUpdateException ex) when (GoalConflictDetection.IsProjectSlotConflict(ex))
         {
-            // The pre-check above already covers the common case; this is the concurrency backstop for a
-            // conflicting goal created by a racing request between that check and this save.
-            AddError(request => request.Status, "An active or paused goal of this type already exists for this unit.");
-            await Send.ErrorsAsync(StatusCodes.Status409Conflict, ct);
+            var conflict = await planning.FindConflictAfterFailedSaveAsync(
+                transaction,
+                [new ProjectGoalSlotLookup(
+                    lockedProjectIds,
+                    goal.EntityType,
+                    goal.EntityId,
+                    goal.GoalType,
+                    goal.Id)],
+                ct) ?? throw new InvalidOperationException(
+                    "The project slot constraint failed but no conflicting membership was found.", ex);
+            HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+            await HttpContext.Response.WriteAsJsonAsync(conflict, ct);
             return;
         }
 

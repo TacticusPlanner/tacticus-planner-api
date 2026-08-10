@@ -30,6 +30,8 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
                 + "the caller's active plan, otherwise Paused.";
             summary.Response<GoalDetailResponse>(StatusCodes.Status200OK, "The newly created goal.");
             summary.Response(StatusCodes.Status400BadRequest, "Invalid entity/goal type, or an unknown project.");
+            summary.Response<ProjectGoalSlotConflictResponse>(StatusCodes.Status409Conflict,
+                "A target project already contains an active or paused goal in the requested slot.");
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
             summary.Response(StatusCodes.Status404NotFound, "The authenticated account/profile has not been provisioned.");
         });
@@ -86,8 +88,6 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
         var goal = Map.ToEntity(req);
         goal.Id = GoalId.From(Guid.CreateVersion7());
         goal.ProfileId = profileId;
-        goal.EntityType = entityType;
-        goal.GoalType = goalType;
         goal.Status = targetProjects.Any(project => project.Id == profile.ActiveProjectId)
             ? GoalStatus.Active
             : GoalStatus.Paused;
@@ -119,10 +119,16 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
         }
         catch (DbUpdateException ex) when (GoalConflictDetection.IsProjectSlotConflict(ex))
         {
-            // The pre-check above already covers the common case; this is the concurrency backstop for a
-            // conflicting goal created by a racing request between that check and this save.
-            AddError(request => request.GoalType, "This project already has an active or paused goal of this type for the unit.");
-            await Send.ErrorsAsync(StatusCodes.Status409Conflict, ct);
+            var databaseConflict = await planning.FindConflictAfterFailedSaveAsync(
+                transaction,
+                [new ProjectGoalSlotLookup(
+                    targetProjects.Select(project => project.Id).ToList(),
+                    entityType,
+                    goal.EntityId,
+                    goalType)],
+                ct) ?? throw new InvalidOperationException(
+                    "The project slot constraint failed but no conflicting membership was found.", ex);
+            await SendSlotConflictAsync(databaseConflict, ct);
             return;
         }
 

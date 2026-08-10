@@ -8,7 +8,6 @@ namespace TacticusPlanner.Persistence.Migrations;
 public partial class RedesignGoalsProjectsManagement : Migration
 {
     private static readonly string[] ProjectSlotColumns = ["project_id", "entity_type", "entity_id", "goal_type"];
-    private static readonly string[] LegacyGoalSlotColumns = ["profile_id", "entity_type", "entity_id", "goal_type"];
 
     /// <inheritdoc />
     protected override void Up(MigrationBuilder migrationBuilder)
@@ -74,31 +73,8 @@ public partial class RedesignGoalsProjectsManagement : Migration
     /// <inheritdoc />
     protected override void Down(MigrationBuilder migrationBuilder)
     {
-        migrationBuilder.DropIndex(
-            name: "ix_project_goals_one_in_flight_slot",
-            table: "project_goals");
-
-        migrationBuilder.DropColumn(
-            name: "entity_id",
-            table: "project_goals");
-
-        migrationBuilder.DropColumn(
-            name: "entity_type",
-            table: "project_goals");
-
-        migrationBuilder.DropColumn(
-            name: "goal_type",
-            table: "project_goals");
-
-        migrationBuilder.DropColumn(
-            name: "occupies_in_flight_slot",
-            table: "project_goals");
-
-        migrationBuilder.CreateIndex(
-            name: "ix_goals_one_active_or_paused_per_entity_and_type",
-            table: "goals",
-            columns: LegacyGoalSlotColumns,
-            unique: true,
-            filter: "status IN ('Active', 'Paused')");
+        throw new NotSupportedException(
+            "This migration deletes independent equipment goals and permits project-scoped duplicate slots. "
+            + "Restore a database backup instead of attempting an automatic downgrade.");
     }
 }

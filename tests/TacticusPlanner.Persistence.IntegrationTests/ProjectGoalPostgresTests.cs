@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql;
 using TacticusPlanner.Domain.Profiles;
-using TacticusPlanner.Persistence;
 using TacticusPlanner.Persistence.Encryption;
 using Testcontainers.PostgreSql;
+using Xunit;
 
-namespace TacticusPlanner.Api.Tests;
+namespace TacticusPlanner.Persistence.IntegrationTests;
 
 public sealed class ProjectGoalPostgresTests
 {
