@@ -27,10 +27,8 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
     {
         var character = catalog.Current.CharacterViews.FirstOrDefault(item => item.Id == entityId);
         var mow = catalog.Current.MowList.FirstOrDefault(item => item.Id == entityId);
-        var equipment = catalog.Current.EquipmentViews.FirstOrDefault(item => item.Id == entityId);
         if (entityType == GoalEntityType.Character && character is null
-            || entityType == GoalEntityType.Mow && mow is null
-            || entityType == GoalEntityType.Item && equipment is null)
+            || entityType == GoalEntityType.Mow && mow is null)
         {
             return "The selected unit is not present in the Game Catalog.";
         }
@@ -42,14 +40,11 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
         var playerUnit = (PlayerBaseUnitRecord?)playerCharacter ?? playerMow;
 
         // Each goal type is only ever valid for one entity type (Rank/Unlock/Level: Character only;
-        // Ascension/Ability/Upgrade: Character or Mow; UpgradeItem: Item only) — checked once
+        // Ascension/Ability/Upgrade: Character or Mow) — checked once
         // up front so every branch below can assume the pairing already makes sense.
         var entityTypeMismatch = (goalType, entityType) switch
         {
             (GoalType.Rank or GoalType.Unlock or GoalType.Level, not GoalEntityType.Character) => true,
-            (GoalType.Ascension or GoalType.Ability or GoalType.Upgrade, GoalEntityType.Item) => true,
-            (GoalType.UpgradeItem, not GoalEntityType.Item) => true,
-            (not GoalType.UpgradeItem, GoalEntityType.Item) => true,
             _ => false,
         };
         if (entityTypeMismatch)
@@ -140,14 +135,6 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
             if (config.Level.Start < current) return "The starting level cannot be lower than the current level.";
             if (config.Level.End <= Math.Max(config.Level.Start, current) || config.Level.End > MaxCharacterLevel)
                 return $"The target level must be above the effective starting level and no higher than {MaxCharacterLevel}.";
-        }
-
-        if (goalType == GoalType.UpgradeItem)
-        {
-            if (config.Item is null) return "UpgradeItem requires a target level.";
-            if (equipment is null) return "The selected equipment is not present in the Game Catalog.";
-            if (config.Item.TargetLevel <= 1 || config.Item.TargetLevel > equipment.Levels.Count)
-                return $"The target level must be between 2 and {equipment.Levels.Count}.";
         }
 
         var strategy = Enum.TryParse<FarmingStrategy>(config.FarmingStrategy, true, out var parsed)

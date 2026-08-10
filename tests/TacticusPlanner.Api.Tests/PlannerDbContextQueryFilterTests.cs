@@ -30,13 +30,10 @@ public sealed class PlannerDbContextQueryFilterTests(PlannerApiFactory factory) 
         await SeedProfileAsync(scope, profileA, ct);
         await SeedProfileAsync(scope, profileB, ct);
 
-        var goalA = new Goal
+        var goalA = new Goal(GoalEntityType.Character, "blackTerminator", GoalType.Rank)
         {
             Id = GoalId.From(Guid.CreateVersion7()),
             ProfileId = profileA,
-            EntityType = GoalEntityType.Character,
-            EntityId = "blackTerminator",
-            GoalType = GoalType.Rank,
             Status = GoalStatus.Active,
         };
         var projectA = new Project

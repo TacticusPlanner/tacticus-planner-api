@@ -15,6 +15,14 @@ public class ProjectGoal
 
     public int Priority { get; set; }
 
+    public GoalEntityType EntityType { get; set; }
+
+    public string EntityId { get; set; } = string.Empty;
+
+    public GoalType GoalType { get; set; }
+
+    public bool OccupiesInFlightSlot { get; set; }
+
     public DateTimeOffset CreatedAt { get; set; }
 
     public virtual Project? Project { get; set; }

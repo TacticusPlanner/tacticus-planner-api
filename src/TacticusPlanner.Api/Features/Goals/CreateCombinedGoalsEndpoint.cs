@@ -36,6 +36,8 @@ public sealed class CreateCombinedGoalsEndpoint
                 + "when none is given, same as POST me/goals.";
             summary.Response<CreateCombinedGoalsResponse>(StatusCodes.Status200OK, "The newly created goals, in request order.");
             summary.Response(StatusCodes.Status400BadRequest, "Invalid entity/goal type, a bad DependsOnIndex, or an unknown project.");
+            summary.Response<ProjectGoalSlotConflictResponse>(StatusCodes.Status409Conflict,
+                "A target project already contains an active or paused goal in one of the requested slots.");
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
             summary.Response(StatusCodes.Status404NotFound, "The authenticated account/profile has not been provisioned.");
         });
@@ -91,24 +93,9 @@ public sealed class CreateCombinedGoalsEndpoint
         }
 
         // At most one Active/Paused goal per (entity, goal type) — mirrors CreateGoalEndpoint's check.
-        var conflictingGoalType = await db.Goals
-            .Where(entity => entity.EntityType == entityType
-                && entity.EntityId == req.EntityId.Trim()
-                && requestGoalTypes.Contains(entity.GoalType)
-                && (entity.Status == GoalStatus.Active || entity.Status == GoalStatus.Paused))
-            .Select(entity => (GoalType?)entity.GoalType)
-            .FirstOrDefaultAsync(ct);
-        if (conflictingGoalType is not null)
-        {
-            AddError(request => request.Goals, "An active or paused goal of this type already exists for this unit.");
-            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
-            return;
-        }
-
         var profile = await db.Profiles.FirstAsync(entity => entity.Id == profileId, ct);
 
         List<Project> targetProjects;
-        Dictionary<ProjectId, int> requestedPriorities = [];
         if (req.Projects is { Count: > 0 } requestedProjects)
         {
             var distinctIds = requestedProjects.Select(entry => entry.ProjectId).Distinct().Select(ProjectId.From).ToList();
@@ -123,10 +110,6 @@ public sealed class CreateCombinedGoalsEndpoint
             }
 
             targetProjects = found;
-            foreach (var entry in requestedProjects.Where(entry => entry.Priority is not null))
-            {
-                requestedPriorities[ProjectId.From(entry.ProjectId)] = entry.Priority!.Value;
-            }
         }
         else
         {
@@ -137,70 +120,92 @@ public sealed class CreateCombinedGoalsEndpoint
             ? GoalStatus.Active
             : GoalStatus.Paused;
         var now = DateTimeOffset.UtcNow;
-
-        // Built as a materialized, indexable List (not a lazy .Select) so each spec's index has a real
-        // GoalId to resolve dependencies against in the second pass below.
-        var goals = req.Goals.Select((spec, i) => new Goal
+        var planning = Resolve<ProjectGoalPlanningService>();
+        await planning.ExecuteLockedMutationAsync(
+            targetProjects.Select(project => project.Id),
+            async transaction =>
         {
-            Id = GoalId.From(Guid.CreateVersion7()),
-            ProfileId = profileId,
-            EntityType = entityType,
-            EntityId = req.EntityId.Trim(),
-            GoalType = parsedGoalTypes[i],
-            Status = status,
-            Config = GoalMapper.MapConfig(spec.Config),
-            Snapshot = GoalMapper.MapSnapshot(spec.Snapshot),
-            Events = [new GoalEvent { At = now, Type = GoalEventType.Created }],
-        }).ToList();
-
-        // Second pass: DependsOn references another spec's GoalId, only resolvable once every goal in
-        // the set already has one (see the first pass above). CreateCombinedGoalsValidator guarantees
-        // strictly-earlier indices, but that's a separate class — re-check here defensively rather than
-        // trust an invariant enforced elsewhere.
-        for (var i = 0; i < req.Goals.Count; i++)
-        {
-            var indices = req.Goals[i].DependsOnIndex ?? [];
-            if (indices.Any(index => index < 0 || index >= i))
+            foreach (var goalType in requestGoalTypes)
             {
-                AddError(request => request.Goals, "DependsOnIndex must reference an earlier goal in this request.");
-                await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+                if (await planning.FindConflictAsync(
+                    targetProjects.Select(project => project.Id), entityType, req.EntityId.Trim(), goalType, null, ct) is { } conflict)
+                {
+                    HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+                    await HttpContext.Response.WriteAsJsonAsync(conflict, ct);
+                    return;
+                }
+            }
+
+            // Built as a materialized, indexable List (not a lazy .Select) so each spec's index has a real
+            // GoalId to resolve dependencies against in the second pass below.
+            var goals = req.Goals.Select((spec, i) => new Goal(
+                entityType,
+                req.EntityId.Trim(),
+                parsedGoalTypes[i])
+            {
+                Id = GoalId.From(Guid.CreateVersion7()),
+                ProfileId = profileId,
+                Status = status,
+                Config = GoalMapper.MapConfig(spec.Config),
+                Snapshot = GoalMapper.MapSnapshot(spec.Snapshot),
+                Events = [new GoalEvent { At = now, Type = GoalEventType.Created }],
+            }).ToList();
+
+            // Second pass: DependsOn references another spec's GoalId, only resolvable once every goal in
+            // the set already has one (see the first pass above). CreateCombinedGoalsValidator guarantees
+            // strictly-earlier indices, but that's a separate class — re-check here defensively rather than
+            // trust an invariant enforced elsewhere.
+            for (var i = 0; i < req.Goals.Count; i++)
+            {
+                var indices = req.Goals[i].DependsOnIndex ?? [];
+                if (indices.Any(index => index < 0 || index >= i))
+                {
+                    AddError(request => request.Goals, "DependsOnIndex must reference an earlier goal in this request.");
+                    await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+                    return;
+                }
+
+                goals[i].DependsOn = indices.Select(index => goals[index].Id.Value).ToList();
+            }
+
+            db.Goals.AddRange(goals);
+            foreach (var project in targetProjects)
+            {
+                var basePriority = await projects.GetNextPriorityAsync(project.Id, ct);
+                db.ProjectGoals.AddRange(goals.Select((goal, i) =>
+                    ProjectGoalPlanningService.CreateMembership(project, goal, basePriority + i, now)));
+            }
+
+            try
+            {
+                await db.SaveChangesAsync(ct);
+            }
+            catch (DbUpdateException ex) when (GoalConflictDetection.IsProjectSlotConflict(ex))
+            {
+                var slotProjectIds = targetProjects.Select(project => project.Id).ToList();
+                var conflict = await planning.FindConflictAfterFailedSaveAsync(
+                    transaction,
+                    requestGoalTypes.Select(goalType => new ProjectGoalSlotLookup(
+                        slotProjectIds,
+                        entityType,
+                        req.EntityId.Trim(),
+                        goalType)),
+                    ct) ?? throw new InvalidOperationException(
+                        "The project slot constraint failed but no conflicting membership was found.", ex);
+                HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+                await HttpContext.Response.WriteAsJsonAsync(conflict, ct);
                 return;
             }
 
-            goals[i].DependsOn = indices.Select(index => goals[index].Id.Value).ToList();
-        }
-
-        db.Goals.AddRange(goals);
-        foreach (var project in targetProjects)
-        {
-            var basePriority = requestedPriorities.TryGetValue(project.Id, out var priority)
-                ? priority
-                : await projects.GetNextPriorityAsync(project.Id, ct);
-            db.ProjectGoals.AddRange(goals.Select((goal, i) => new ProjectGoal
-            {
-                ProjectId = project.Id,
-                GoalId = goal.Id,
-                Priority = basePriority + i,
-                CreatedAt = now,
-            }));
-        }
-
-        try
-        {
+            await planning.NormalizeAsync(targetProjects.Select(project => project.Id), ct);
             await db.SaveChangesAsync(ct);
-        }
-        catch (DbUpdateException ex) when (GoalConflictDetection.IsActiveOrPausedConflict(ex))
-        {
-            // The pre-check above already covers the common case; this is the concurrency backstop for a
-            // conflicting goal created by a racing request between that check and this save.
-            AddError(request => request.Goals, "An active or paused goal of this type already exists for this unit.");
-            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
-            return;
-        }
+            if (transaction is not null)
+                await transaction.CommitAsync(ct);
 
-        var projectIds = targetProjects.Select(project => project.Id.Value).ToList();
-        await Send.OkAsync(
-            new CreateCombinedGoalsResponse(goals.Select(goal => Map.ToDetail(goal, projectIds)).ToList()), ct);
+            var projectIds = targetProjects.Select(project => project.Id.Value).ToList();
+            await Send.OkAsync(
+                new CreateCombinedGoalsResponse(goals.Select(goal => Map.ToDetail(goal, projectIds)).ToList()), ct);
+        }, ct);
     }
 }
 

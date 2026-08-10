@@ -11,9 +11,9 @@ namespace TacticusPlanner.Api.Features.Goals;
 /// </summary>
 internal static class GoalConflictDetection
 {
-    private const string ActiveOrPausedIndexName = "ix_goals_one_active_or_paused_per_entity_and_type";
+    private const string ProjectSlotIndexName = "ix_project_goals_one_in_flight_slot";
 
-    public static bool IsActiveOrPausedConflict(DbUpdateException exception) =>
+    public static bool IsProjectSlotConflict(DbUpdateException exception) =>
         exception.InnerException is PostgresException { SqlState: PostgresErrorCodes.UniqueViolation } postgres
-            && postgres.ConstraintName == ActiveOrPausedIndexName;
+            && postgres.ConstraintName == ProjectSlotIndexName;
 }

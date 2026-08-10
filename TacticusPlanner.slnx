@@ -14,5 +14,6 @@
   <Folder Name="/tests/">
     <Project Path="tests/TacticusPlanner.Api.Tests/TacticusPlanner.Api.Tests.csproj" />
     <Project Path="tests/TacticusPlanner.GameCatalog.Tests/TacticusPlanner.GameCatalog.Tests.csproj" />
+    <Project Path="tests/TacticusPlanner.Persistence.IntegrationTests/TacticusPlanner.Persistence.IntegrationTests.csproj" />
   </Folder>
 </Solution>

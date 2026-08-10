@@ -48,6 +48,17 @@ public sealed class OnslaughtProgressEndpointTests(PlannerApiFactory factory) : 
         var initial = await client.GetFromJsonAsync<OnslaughtProgressResponse>(
             "/api/v1/me/player-data-overrides/onslaught-progress",
             TestContext.Current.CancellationToken);
+        Assert.NotNull(initial);
+
+        var initializeResponse = await client.PutAsJsonAsync(
+            "/api/v1/me/player-data-overrides/onslaught-progress",
+            new UpdateOnslaughtProgressRequest(
+                new(initial.Imperial.Sector, initial.Imperial.Tier),
+                new(initial.Xenos.Sector, initial.Xenos.Tier),
+                new(initial.Chaos.Sector, initial.Chaos.Tier),
+                initial.Revision),
+            TestContext.Current.CancellationToken);
+        initializeResponse.EnsureSuccessStatusCode();
 
         using (var scope = factory.Services.CreateScope())
         {
