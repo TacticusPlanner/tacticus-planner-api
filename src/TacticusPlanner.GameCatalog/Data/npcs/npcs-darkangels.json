@@ -335,6 +335,44 @@
       ]
     },
     {
+      "id": "darkaBossTerminatorSurv",
+      "name": "Baraqiel",
+      "meleeDamage": "Power",
+      "meleeHits": 3,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 2,
+      "traits": [
+        "TeleportStrike",
+        "CrushingStrike",
+        "HeavyWeapon",
+        "TerminatorArmour"
+      ],
+      "activeAbilityDamage": [
+        "Plasma"
+      ],
+      "activeAbilities": [
+        "PlasmaCannon"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "Deathwing"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_darka_terminator_01.png",
+      "stats": [
+        {
+          "abilityLevel": 60,
+          "damage": 3777,
+          "armour": 4978,
+          "health": 18884,
+          "progressionIndex": 19,
+          "rank": 19,
+          "stars": 14
+        }
+      ]
+    },
+    {
       "id": "darkaNpc1Infiltrator",
       "name": "Infiltrator",
       "meleeDamage": "Physical",
@@ -3278,6 +3316,212 @@
       ]
     },
     {
+      "id": "darkaNpcSternguard",
+      "name": "Ramus",
+      "meleeDamage": "Melta",
+      "meleeHits": 1,
+      "rangedDamage": "Bolter",
+      "rangedHits": 1,
+      "distance": 3,
+      "movement": 3,
+      "traits": [
+        "Overwatch"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "SternguardFocus"
+      ],
+      "passiveAbilityDamage": [
+        "Bolter"
+      ],
+      "passiveAbilities": [
+        "SpecialIssueCombiMelta"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_darka_sternguard_01.png",
+      "stats": [
+        {
+          "abilityLevel": 3,
+          "damage": 55,
+          "armour": 29,
+          "health": 117,
+          "progressionIndex": 1,
+          "rank": 1,
+          "stars": 1
+        },
+        {
+          "abilityLevel": 5,
+          "damage": 69,
+          "armour": 36,
+          "health": 147,
+          "progressionIndex": 1,
+          "rank": 2,
+          "stars": 1
+        },
+        {
+          "abilityLevel": 8,
+          "damage": 94,
+          "armour": 49,
+          "health": 200,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 8,
+          "damage": 102,
+          "armour": 54,
+          "health": 217,
+          "progressionIndex": 4,
+          "rank": 3,
+          "stars": 3
+        },
+        {
+          "abilityLevel": 11,
+          "damage": 128,
+          "armour": 67,
+          "health": 272,
+          "progressionIndex": 4,
+          "rank": 4,
+          "stars": 3
+        },
+        {
+          "abilityLevel": 11,
+          "damage": 138,
+          "armour": 72,
+          "health": 292,
+          "progressionIndex": 5,
+          "rank": 4,
+          "stars": 4
+        },
+        {
+          "abilityLevel": 14,
+          "damage": 172,
+          "armour": 90,
+          "health": 366,
+          "progressionIndex": 6,
+          "rank": 5,
+          "stars": 4
+        },
+        {
+          "abilityLevel": 17,
+          "damage": 231,
+          "armour": 121,
+          "health": 491,
+          "progressionIndex": 7,
+          "rank": 6,
+          "stars": 5
+        },
+        {
+          "abilityLevel": 20,
+          "damage": 309,
+          "armour": 162,
+          "health": 656,
+          "progressionIndex": 8,
+          "rank": 7,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 23,
+          "damage": 386,
+          "armour": 203,
+          "health": 821,
+          "progressionIndex": 9,
+          "rank": 8,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 26,
+          "damage": 514,
+          "armour": 270,
+          "health": 1092,
+          "progressionIndex": 10,
+          "rank": 9,
+          "stars": 7
+        },
+        {
+          "abilityLevel": 29,
+          "damage": 681,
+          "armour": 358,
+          "health": 1448,
+          "progressionIndex": 11,
+          "rank": 10,
+          "stars": 8
+        },
+        {
+          "abilityLevel": 32,
+          "damage": 900,
+          "armour": 473,
+          "health": 1913,
+          "progressionIndex": 13,
+          "rank": 11,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 35,
+          "damage": 1127,
+          "armour": 592,
+          "health": 2396,
+          "progressionIndex": 13,
+          "rank": 12,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 38,
+          "damage": 1411,
+          "armour": 741,
+          "health": 2999,
+          "progressionIndex": 13,
+          "rank": 13,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 41,
+          "damage": 1860,
+          "armour": 977,
+          "health": 3953,
+          "progressionIndex": 14,
+          "rank": 14,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 44,
+          "damage": 2329,
+          "armour": 1223,
+          "health": 4949,
+          "progressionIndex": 14,
+          "rank": 15,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 3833,
+          "armour": 2012,
+          "health": 8145,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 55,
+          "damage": 5028,
+          "armour": 2639,
+          "health": 10684,
+          "progressionIndex": 17,
+          "rank": 18,
+          "stars": 12
+        },
+        {
+          "abilityLevel": 60,
+          "damage": 6295,
+          "armour": 3305,
+          "health": 13376,
+          "progressionIndex": 17,
+          "rank": 19,
+          "stars": 12
+        }
+      ]
+    },
+    {
       "id": "darkaNpcTerminator",
       "name": "Baraqiel",
       "meleeDamage": "Power",
@@ -3483,6 +3727,86 @@
           "progressionIndex": 17,
           "rank": 19,
           "stars": 12
+        }
+      ]
+    },
+    {
+      "id": "darkaSternguard_LHE",
+      "name": "Ramus",
+      "meleeDamage": "Melta",
+      "meleeHits": 1,
+      "rangedDamage": "Bolter",
+      "rangedHits": 1,
+      "distance": 3,
+      "movement": 3,
+      "traits": [
+        "Overwatch"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "SternguardFocus"
+      ],
+      "passiveAbilityDamage": [
+        "Bolter"
+      ],
+      "passiveAbilities": [
+        "SpecialIssueCombiMelta"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_darka_sternguard_01.png",
+      "stats": [
+        {
+          "abilityLevel": 8,
+          "damage": 114,
+          "armour": 59,
+          "health": 297,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 17,
+          "damage": 259,
+          "armour": 136,
+          "health": 688,
+          "progressionIndex": 5,
+          "rank": 6,
+          "stars": 4
+        },
+        {
+          "abilityLevel": 26,
+          "damage": 580,
+          "armour": 305,
+          "health": 1505,
+          "progressionIndex": 8,
+          "rank": 9,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 35,
+          "damage": 1281,
+          "armour": 674,
+          "health": 3355,
+          "progressionIndex": 11,
+          "rank": 12,
+          "stars": 8
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 4599,
+          "armour": 2414,
+          "health": 11931,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 65,
+          "damage": 6984,
+          "armour": 3666,
+          "health": 18114,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
         }
       ]
     }

@@ -521,9 +521,9 @@
     {
       "id": "necroOverlord",
       "name": "Anuphet",
-      "health": 85,
-      "damage": 17,
-      "armour": 19,
+      "health": 90,
+      "damage": 25,
+      "armour": 21,
       "initialRarity": "Epic",
       "meleeDamage": "Energy",
       "meleeHits": 4,
@@ -533,17 +533,16 @@
       "movement": 3,
       "traits": [
         "LivingMetal",
-        "Mechanical"
+        "Mechanical",
+        "Resilient"
       ],
       "activeAbilityDamage": [],
       "activeAbilityNames": [
         "ResurrectionOrb"
       ],
-      "passiveAbilityDamage": [
-        "Energy"
-      ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
-        "MartialApotheosis"
+        "MyWillBeDoneOverlord"
       ],
       "equipmentSlots": [
         "I_Crit",

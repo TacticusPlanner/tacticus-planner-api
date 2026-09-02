@@ -1033,9 +1033,9 @@
     {
       "id": "adeptRetributor",
       "name": "Vindicta",
-      "health": 70,
+      "health": 75,
       "damage": 20,
-      "armour": 12,
+      "armour": 18,
       "initialRarity": "Common",
       "meleeDamage": "Physical",
       "meleeHits": 1,

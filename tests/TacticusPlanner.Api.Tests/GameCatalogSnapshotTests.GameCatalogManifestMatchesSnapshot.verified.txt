@@ -1,7 +1,7 @@
 ﻿{
-  version: dev-2026-07-01,
+  version: dev-2026-09-02,
   schemaVersion: 2,
-  gameVersion: 1.40,
+  gameVersion: 1.42,
   sourceHash: {time-dependent},
   datasets: [
     {
@@ -21,12 +21,12 @@
     },
     {
       key: characters,
-      hash: 3461b05d198d2b8b4c0e5315271214214fd9809e5c93a7cc38d6f8f7dba7b200,
+      hash: 566358670c91d1cfbfffa17175bbd8e2ba5a0e45bc3128e691a19c3bd5b1efa8,
       url: /api/v1/game-catalog/characters
     },
     {
       key: equipment,
-      hash: c6ed2fc2937ae0964b05ad7e92e12ec0b6df51057120c196986cd4e89a06b19b,
+      hash: a1770ad1f5a96d9c98c518059c369e8823267c69b163111e43e63ec1985bfb69,
       url: /api/v1/game-catalog/equipment
     },
     {
@@ -41,17 +41,17 @@
     },
     {
       key: lre-battles,
-      hash: 5c4892990513833be413c44074902f9d929a0424abe6d27d45a644494ef31a3c,
+      hash: b077e016aa11ef3d43ea8b6422e53c42ce4b5e220a1d8b5d80f460ca00146c59,
       url: /api/v1/game-catalog/lre-battles
     },
     {
       key: lre-common,
-      hash: d2bc1a84c1cd502dd2bf1f291d50495b27423edc8073b8b1203be08f2bc20694,
+      hash: 6ea3eb75b4b74ba00353a368c4933aba508a77893da07100f374bf97f1ea03e1,
       url: /api/v1/game-catalog/lre-common
     },
     {
       key: lres,
-      hash: adf6232e0b0a5bce75536db2cdc0bb1840d3d3fc96cd300e1d0734c7c8531f78,
+      hash: 9179d8893555e8ecc4053d8774f0273ef28bcd2bf0f06eb624b32ad3566b02a6,
       url: /api/v1/game-catalog/lres
     },
     {
@@ -61,12 +61,12 @@
     },
     {
       key: mows,
-      hash: 27fc202591942b4a328453b3ae1e022ef5eb1cd58f116d52172a5d3d5a171772,
+      hash: 923b170b21dfe3ed59decd8531c9853f9dac7caabb2751f1bf484d0c501f65b4,
       url: /api/v1/game-catalog/mows
     },
     {
       key: npcs,
-      hash: 25232db3a36692434209a6c905497b4c14c3e538dc16ebaab6db8c1bdc7e78f6,
+      hash: 1344c198eb2656ac1faf6163be4d2c32921ddfb35984e49a8e92286ebbe160f4,
       url: /api/v1/game-catalog/npcs
     },
     {

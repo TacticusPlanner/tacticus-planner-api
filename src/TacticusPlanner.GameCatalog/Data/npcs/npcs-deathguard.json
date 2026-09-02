@@ -81,6 +81,40 @@
       ]
     },
     {
+      "id": "deathBossBlightbringerSurv",
+      "name": "Corrodius",
+      "meleeDamage": "Plasma",
+      "meleeHits": 1,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 2,
+      "traits": [
+        "ContagionsOfNurgle",
+        "Resilient"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "Poxwalkers"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "CursedPlagueBell"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_death_blightbringer_01.png",
+      "stats": [
+        {
+          "abilityLevel": 65,
+          "damage": 8597,
+          "armour": 5373,
+          "health": 26866,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
+        }
+      ]
+    },
+    {
       "id": "deathBossBlightlord",
       "name": "Maladus",
       "meleeDamage": "Power",
@@ -191,6 +225,45 @@
           "progressionIndex": 15,
           "rank": 12,
           "stars": 11
+        }
+      ]
+    },
+    {
+      "id": "deathBossBlightlordSurv",
+      "name": "Maladus",
+      "meleeDamage": "Power",
+      "meleeHits": 3,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 2,
+      "traits": [
+        "ContagionsOfNurgle",
+        "Resilient",
+        "TerminatorArmour"
+      ],
+      "activeAbilityDamage": [
+        "Power"
+      ],
+      "activeAbilities": [
+        "FlailSwing"
+      ],
+      "passiveAbilityDamage": [
+        "Toxic"
+      ],
+      "passiveAbilities": [
+        "HazeOfCorruption"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_death_blightlord_01.png",
+      "stats": [
+        {
+          "abilityLevel": 65,
+          "damage": 5588,
+          "armour": 7093,
+          "health": 25792,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
         }
       ]
     },
@@ -354,6 +427,43 @@
       ]
     },
     {
+      "id": "deathBossPutrifierSurv",
+      "name": "Pestillian",
+      "meleeDamage": "Toxic",
+      "meleeHits": 1,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 2,
+      "traits": [
+        "ContagionsOfNurgle",
+        "Resilient",
+        "PutridExplosion"
+      ],
+      "activeAbilityDamage": [
+        "Toxic"
+      ],
+      "activeAbilities": [
+        "FoulInfusion"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "ExplosiveMaladies"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_death_putrifier_01.png",
+      "stats": [
+        {
+          "abilityLevel": 65,
+          "damage": 8597,
+          "armour": 5803,
+          "health": 25792,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
+        }
+      ]
+    },
+    {
       "id": "deathBossRotbone",
       "name": "Nauseous",
       "meleeDamage": "Power",
@@ -429,6 +539,41 @@
           "progressionIndex": 8,
           "rank": 9,
           "stars": 6
+        }
+      ]
+    },
+    {
+      "id": "deathBossRotboneSurv",
+      "name": "Nauseous",
+      "meleeDamage": "Power",
+      "meleeHits": 4,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 2,
+      "traits": [
+        "ContagionsOfNurgle",
+        "Resilient",
+        "Healer"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "RevitalizingMalignancy"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "TaintedNarthecium"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_death_rotbone_01.png",
+      "stats": [
+        {
+          "abilityLevel": 65,
+          "damage": 3009,
+          "armour": 5803,
+          "health": 25792,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
         }
       ]
     },
@@ -1454,6 +1599,60 @@
           "damage": 4437,
           "armour": 4437,
           "health": 15117,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
+        }
+      ]
+    },
+    {
+      "id": "deathNpc2PlagueMarineSurv",
+      "name": "Plague Marine",
+      "meleeDamage": "Physical",
+      "meleeHits": 2,
+      "rangedDamage": "Bolter",
+      "rangedHits": 2,
+      "distance": 2,
+      "movement": 2,
+      "traits": [
+        "ContagionsOfNurgle",
+        "Resilient"
+      ],
+      "activeAbilityDamage": [
+        "Toxic"
+      ],
+      "activeAbilities": [
+        "BlightGrenades"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "CloudOfFlies"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_death_plaguemarine_01.png",
+      "stats": [
+        {
+          "abilityLevel": 65,
+          "damage": 8874,
+          "armour": 8874,
+          "health": 30234,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
+        },
+        {
+          "abilityLevel": 65,
+          "damage": 44370,
+          "armour": 44370,
+          "health": 151170,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
+        },
+        {
+          "abilityLevel": 65,
+          "damage": 443700,
+          "armour": 443700,
+          "health": 1511700,
           "progressionIndex": 19,
           "rank": 20,
           "stars": 14

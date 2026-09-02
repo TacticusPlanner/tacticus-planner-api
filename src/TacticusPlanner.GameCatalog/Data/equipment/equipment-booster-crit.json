@@ -2794,6 +2794,81 @@
     ]
   },
   {
+    "id": "R_Booster_Crit_PhasalSubjugator",
+    "name": "Phasal Subjugator",
+    "rarity": "Mythic",
+    "type": "I_Booster_Crit",
+    "abilityId": "PhasalSubjugator",
+    "isRelic": true,
+    "isUniqueRelic": true,
+    "allowedUnits": [
+      "necroOverlord"
+    ],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 350
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 369
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 388
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 407
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 426
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 445
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 464
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 483
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 502
+        }
+      },
+      {
+        "stats": {
+          "critChanceBonus": 6,
+          "critDamageBonus": 521
+        }
+      }
+    ]
+  },
+  {
     "id": "R_Booster_Crit_TalismanOfRage",
     "name": "Talisman of Rage",
     "rarity": "Mythic",
