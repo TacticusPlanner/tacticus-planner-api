@@ -771,6 +771,263 @@
       ]
     },
     {
+      "id": "eldarLhykhis",
+      "name": "Lhykhis",
+      "health": 75,
+      "damage": 12,
+      "armour": 22,
+      "initialRarity": "Legendary",
+      "meleeDamage": "Gauss",
+      "meleeHits": 5,
+      "rangedDamage": "Eviscerate",
+      "rangedHits": 5,
+      "rangeDistance": 2,
+      "movement": 4,
+      "traits": [
+        "Infiltrate",
+        "Flying"
+      ],
+      "activeAbilityDamage": [
+        "Eviscerate"
+      ],
+      "activeAbilityNames": [
+        "EmpyricAmbush"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilityNames": [
+        "WhisperingWeb"
+      ],
+      "equipmentSlots": [
+        "I_Crit",
+        "I_Block",
+        "I_Booster_Crit"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_aelda_lhykhis_01.png",
+      "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_aelda_lhykhis_01.png",
+      "rankUpUpgrades": [
+        {
+          "rank": "Stone1",
+          "upgradeIds": [
+            "upgHpC002",
+            "upgHpC002",
+            "upgDmgC009",
+            "upgDmgC015",
+            "upgArmC005",
+            "upgArmC013"
+          ]
+        },
+        {
+          "rank": "Stone2",
+          "upgradeIds": [
+            "upgHpC014",
+            "upgHpC015",
+            "upgDmgU012",
+            "upgDmgU017C",
+            "upgArmC013",
+            "upgArmC011"
+          ]
+        },
+        {
+          "rank": "Stone3",
+          "upgradeIds": [
+            "upgHpU014",
+            "upgHpU018C",
+            "upgDmgC008",
+            "upgDmgC010",
+            "upgArmU006",
+            "upgArmU009"
+          ]
+        },
+        {
+          "rank": "Iron1",
+          "upgradeIds": [
+            "upgHpU004C",
+            "upgHpU017",
+            "upgDmgU012",
+            "upgDmgU010",
+            "upgArmU009",
+            "upgArmU004C"
+          ]
+        },
+        {
+          "rank": "Iron2",
+          "upgradeIds": [
+            "upgHpU014",
+            "upgHpR017C",
+            "upgDmgU008C",
+            "upgDmgU004",
+            "upgArmR005",
+            "upgArmU014"
+          ]
+        },
+        {
+          "rank": "Iron3",
+          "upgradeIds": [
+            "upgHpR012C",
+            "upgHpU007",
+            "upgDmgR028",
+            "upgDmgR010C",
+            "upgArmU004C",
+            "upgArmR010"
+          ]
+        },
+        {
+          "rank": "Bronze1",
+          "upgradeIds": [
+            "upgHpR028",
+            "upgHpR014",
+            "upgDmgR14C",
+            "upgDmgR005",
+            "upgArmR002C",
+            "upgArmR012C"
+          ]
+        },
+        {
+          "rank": "Bronze2",
+          "upgradeIds": [
+            "upgHpE028C",
+            "upgHpR013C",
+            "upgDmgR005",
+            "upgDmgE006C",
+            "upgArmR028",
+            "upgArmR014C"
+          ]
+        },
+        {
+          "rank": "Bronze3",
+          "upgradeIds": [
+            "upgHpR014",
+            "upgHpE007C",
+            "upgDmgE028C",
+            "upgDmgR017C",
+            "upgArmE028C",
+            "upgArmE008"
+          ]
+        },
+        {
+          "rank": "Silver1",
+          "upgradeIds": [
+            "upgHpE028C",
+            "upgHpE017",
+            "upgDmgE028C",
+            "upgDmgE011",
+            "upgArmE028C",
+            "upgArmE003C"
+          ]
+        },
+        {
+          "rank": "Silver2",
+          "upgradeIds": [
+            "upgHpL108",
+            "upgHpE014C",
+            "upgDmgL028C",
+            "upgDmgE006C",
+            "upgArmE028C",
+            "upgArmE006C"
+          ]
+        },
+        {
+          "rank": "Silver3",
+          "upgradeIds": [
+            "upgHpE028C",
+            "upgHpL017C",
+            "upgDmgE028C",
+            "upgDmgL017C",
+            "upgArmL202",
+            "upgArmL003C"
+          ]
+        },
+        {
+          "rank": "Gold1",
+          "upgradeIds": [
+            "upgHpL028C",
+            "upgHpL009C",
+            "upgDmgL003",
+            "upgDmgL005C",
+            "upgArmL028C",
+            "upgArmL006C"
+          ]
+        },
+        {
+          "rank": "Gold2",
+          "upgradeIds": [
+            "upgHpL128C",
+            "upgHpL014C",
+            "upgDmgL028C",
+            "upgDmgL017C",
+            "upgArmL028C",
+            "upgArmL009C"
+          ]
+        },
+        {
+          "rank": "Gold3",
+          "upgradeIds": [
+            "upgHpL028C",
+            "upgHpL001C",
+            "upgDmgL128C",
+            "upgDmgL010C",
+            "upgArmL128C",
+            "upgArmL006C"
+          ]
+        },
+        {
+          "rank": "Diamond1",
+          "upgradeIds": [
+            "upgHpL128C",
+            "upgHpL013C",
+            "upgDmgL128C",
+            "upgDmgL006C",
+            "upgArmL128C",
+            "upgArmL003C"
+          ]
+        },
+        {
+          "rank": "Diamond2",
+          "upgradeIds": [
+            "upgHpL128C",
+            "upgHpL212C",
+            "upgDmgL128C",
+            "upgDmgL212C",
+            "upgArmL128C",
+            "upgArmL212C"
+          ]
+        },
+        {
+          "rank": "Diamond3",
+          "upgradeIds": [
+            "upgHpL128C",
+            "upgHpL212C",
+            "upgDmgM213C",
+            "upgDmgL212C",
+            "upgArmM213C",
+            "upgArmL212C"
+          ]
+        },
+        {
+          "rank": "Adamantine1",
+          "upgradeIds": [
+            "upgHpM128C",
+            "upgHpL212C",
+            "upgDmgM213C",
+            "upgDmgL212C",
+            "upgArmM214C",
+            "upgArmL212C"
+          ]
+        },
+        {
+          "rank": "Adamantine2",
+          "upgradeIds": [
+            "upgHpECS",
+            "upgHpCS",
+            "upgDmgECS",
+            "upgDmgCS",
+            "upgArmECS",
+            "upgArmCS"
+          ]
+        }
+      ]
+    },
+    {
       "id": "eldarMauganRa",
       "name": "Maugan Ra",
       "health": 70,

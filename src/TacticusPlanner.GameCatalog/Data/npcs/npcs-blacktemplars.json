@@ -109,6 +109,45 @@
       ]
     },
     {
+      "id": "templBossAggressorLEG",
+      "name": "Burchard",
+      "meleeDamage": "Power",
+      "meleeHits": 3,
+      "rangedDamage": "Bolter",
+      "rangedHits": 3,
+      "distance": 2,
+      "movement": 2,
+      "traits": [
+        "CrushingStrike",
+        "MkXGravis",
+        "SuppressiveFire"
+      ],
+      "activeAbilityDamage": [
+        "Blast"
+      ],
+      "activeAbilities": [
+        "FragstormGrenadeLauncher"
+      ],
+      "passiveAbilityDamage": [
+        "Bolter"
+      ],
+      "passiveAbilities": [
+        "Boltstorm"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_templ_aggressor_01.png",
+      "stats": [
+        {
+          "abilityLevel": 41,
+          "damage": 837,
+          "armour": 1023,
+          "health": 5580,
+          "progressionIndex": 14,
+          "rank": 14,
+          "stars": 10
+        }
+      ]
+    },
+    {
       "id": "templBossAggressor_LHE",
       "name": "Burchard",
       "meleeDamage": "Power",
@@ -356,6 +395,43 @@
           "progressionIndex": 9,
           "rank": 6,
           "stars": 6
+        }
+      ]
+    },
+    {
+      "id": "templBossChampionLEG",
+      "name": "Jaeger",
+      "meleeDamage": "Power",
+      "meleeHits": 3,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [
+        "FinalJustice",
+        "Parry",
+        "RapidAssault"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "HolyDuel"
+      ],
+      "passiveAbilityDamage": [
+        "Power"
+      ],
+      "passiveAbilities": [
+        "MartialSuperiority"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_templ_champion_01.png",
+      "stats": [
+        {
+          "abilityLevel": 41,
+          "damage": 1163,
+          "armour": 1163,
+          "health": 5115,
+          "progressionIndex": 14,
+          "rank": 14,
+          "stars": 10
         }
       ]
     },

@@ -4,6 +4,91 @@
   "name": "Adeptus Astartes",
   "npcs": [
     {
+      "id": "astarCyrus_LHE",
+      "name": "Cyrus",
+      "meleeDamage": "Bolter",
+      "meleeHits": 3,
+      "rangedDamage": "Bolter",
+      "rangedHits": 3,
+      "distance": 3,
+      "movement": 3,
+      "traits": [
+        "Camouflage",
+        "Infiltrate",
+        "SuppressiveFire"
+      ],
+      "activeAbilityDamage": [
+        "Bolter"
+      ],
+      "activeAbilities": [
+        "StrikeFromTheShadows"
+      ],
+      "passiveAbilityDamage": [
+        "Blast",
+        "Energy"
+      ],
+      "passiveAbilities": [
+        "HaywireMine"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_astar_cyrus_01.png",
+      "stats": [
+        {
+          "abilityLevel": 8,
+          "damage": 79,
+          "armour": 56,
+          "health": 226,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 17,
+          "damage": 181,
+          "armour": 129,
+          "health": 517,
+          "progressionIndex": 5,
+          "rank": 6,
+          "stars": 4
+        },
+        {
+          "abilityLevel": 26,
+          "damage": 407,
+          "armour": 290,
+          "health": 1162,
+          "progressionIndex": 8,
+          "rank": 9,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 35,
+          "damage": 896,
+          "armour": 642,
+          "health": 2564,
+          "progressionIndex": 11,
+          "rank": 12,
+          "stars": 8
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 3221,
+          "armour": 2301,
+          "health": 9201,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 65,
+          "damage": 4890,
+          "armour": 3493,
+          "health": 13968,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
+        }
+      ]
+    },
+    {
       "id": "astarNpc1HaywireMine",
       "name": "Haywire Mine",
       "meleeDamage": "",

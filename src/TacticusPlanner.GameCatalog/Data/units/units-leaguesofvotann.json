@@ -264,6 +264,267 @@
       ]
     },
     {
+      "id": "votanChampion",
+      "name": "Kimm",
+      "health": 100,
+      "damage": 32,
+      "armour": 30,
+      "initialRarity": "Epic",
+      "meleeDamage": "Eviscerate",
+      "meleeHits": 2,
+      "rangedDamage": "Bolter",
+      "rangedHits": 2,
+      "rangeDistance": 2,
+      "movement": 2,
+      "traits": [
+        "PrioritisedEfficiency",
+        "Unstoppable"
+      ],
+      "activeAbilityDamage": [
+        "DirectDamage",
+        "Physical"
+      ],
+      "activeAbilityNames": [
+        "MassDriverAccelerator"
+      ],
+      "passiveAbilityDamage": [
+        "DirectDamage",
+        "Psychic"
+      ],
+      "passiveAbilityNames": [
+        "ModifiedExoarmour"
+      ],
+      "equipmentSlots": [
+        "I_Crit",
+        "I_Block",
+        "I_Booster_Block"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_votan_champion_01.png",
+      "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_votan_champion_01.png",
+      "rankUpUpgrades": [
+        {
+          "rank": "Stone1",
+          "upgradeIds": [
+            "upgHpC015",
+            "upgHpC002",
+            "upgDmgC009",
+            "upgDmgC015",
+            "upgArmC005",
+            "upgArmC012"
+          ]
+        },
+        {
+          "rank": "Stone2",
+          "upgradeIds": [
+            "upgHpC014",
+            "upgHpC002",
+            "upgDmgU012",
+            "upgDmgU017C",
+            "upgArmC012",
+            "upgArmC013"
+          ]
+        },
+        {
+          "rank": "Stone3",
+          "upgradeIds": [
+            "upgHpU014",
+            "upgHpU004C",
+            "upgDmgC013",
+            "upgDmgC010",
+            "upgArmU006",
+            "upgArmU002"
+          ]
+        },
+        {
+          "rank": "Iron1",
+          "upgradeIds": [
+            "upgHpU018C",
+            "upgHpU017",
+            "upgDmgU012",
+            "upgDmgU010",
+            "upgArmU002",
+            "upgArmU004C"
+          ]
+        },
+        {
+          "rank": "Iron2",
+          "upgradeIds": [
+            "upgHpU014",
+            "upgHpR017C",
+            "upgDmgU018C",
+            "upgDmgU004",
+            "upgArmR006",
+            "upgArmU009"
+          ]
+        },
+        {
+          "rank": "Iron3",
+          "upgradeIds": [
+            "upgHpR012C",
+            "upgHpU007",
+            "upgDmgR040",
+            "upgDmgR010C",
+            "upgArmU004C",
+            "upgArmR005"
+          ]
+        },
+        {
+          "rank": "Bronze1",
+          "upgradeIds": [
+            "upgHpR040",
+            "upgHpR014",
+            "upgDmgR13C",
+            "upgDmgR002",
+            "upgArmR002C",
+            "upgArmR008C"
+          ]
+        },
+        {
+          "rank": "Bronze2",
+          "upgradeIds": [
+            "upgHpE040C",
+            "upgHpR004C",
+            "upgDmgR003",
+            "upgDmgE006C",
+            "upgArmR040",
+            "upgArmR012C"
+          ]
+        },
+        {
+          "rank": "Bronze3",
+          "upgradeIds": [
+            "upgHpR019",
+            "upgHpE001C",
+            "upgDmgE040C",
+            "upgDmgR017C",
+            "upgArmE040C",
+            "upgArmE010"
+          ]
+        },
+        {
+          "rank": "Silver1",
+          "upgradeIds": [
+            "upgHpE040C",
+            "upgHpE015",
+            "upgDmgE040C",
+            "upgDmgE011",
+            "upgArmE040C",
+            "upgArmE003C"
+          ]
+        },
+        {
+          "rank": "Silver2",
+          "upgradeIds": [
+            "upgHpL099",
+            "upgHpE014C",
+            "upgDmgL040C",
+            "upgDmgE006C",
+            "upgArmE040C",
+            "upgArmE012C"
+          ]
+        },
+        {
+          "rank": "Silver3",
+          "upgradeIds": [
+            "upgHpE040C",
+            "upgHpL017C",
+            "upgDmgE040C",
+            "upgDmgL017C",
+            "upgArmL203",
+            "upgArmL003C"
+          ]
+        },
+        {
+          "rank": "Gold1",
+          "upgradeIds": [
+            "upgHpL040C",
+            "upgHpL001C",
+            "upgDmgL204",
+            "upgDmgL005C",
+            "upgArmL040C",
+            "upgArmL008C"
+          ]
+        },
+        {
+          "rank": "Gold2",
+          "upgradeIds": [
+            "upgHpL140C",
+            "upgHpL014C",
+            "upgDmgL040C",
+            "upgDmgL017C",
+            "upgArmL040C",
+            "upgArmL006C"
+          ]
+        },
+        {
+          "rank": "Gold3",
+          "upgradeIds": [
+            "upgHpL040C",
+            "upgHpL009C",
+            "upgDmgL140C",
+            "upgDmgL008C",
+            "upgArmL140C",
+            "upgArmL008C"
+          ]
+        },
+        {
+          "rank": "Diamond1",
+          "upgradeIds": [
+            "upgHpL140C",
+            "upgHpL013C",
+            "upgDmgL140C",
+            "upgDmgL006C",
+            "upgArmL140C",
+            "upgArmL003C"
+          ]
+        },
+        {
+          "rank": "Diamond2",
+          "upgradeIds": [
+            "upgHpL140C",
+            "upgHpL214C",
+            "upgDmgL140C",
+            "upgDmgL214C",
+            "upgArmL140C",
+            "upgArmL214C"
+          ]
+        },
+        {
+          "rank": "Diamond3",
+          "upgradeIds": [
+            "upgHpL140C",
+            "upgHpL214C",
+            "upgDmgM213C",
+            "upgDmgL214C",
+            "upgArmM214C",
+            "upgArmL214C"
+          ]
+        },
+        {
+          "rank": "Adamantine1",
+          "upgradeIds": [
+            "upgHpM140C",
+            "upgHpL214C",
+            "upgDmgM213C",
+            "upgDmgL214C",
+            "upgArmM214C",
+            "upgArmL214C"
+          ]
+        },
+        {
+          "rank": "Adamantine2",
+          "upgradeIds": [
+            "upgHpECS",
+            "upgHpCS",
+            "upgDmgECS",
+            "upgDmgCS",
+            "upgArmECS",
+            "upgArmCS"
+          ]
+        }
+      ]
+    },
+    {
       "id": "votanIronmaster",
       "name": "Vynn",
       "health": 80,

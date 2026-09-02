@@ -263,6 +263,263 @@
           ]
         }
       ]
+    },
+    {
+      "id": "astarLysander",
+      "name": "Lysander",
+      "health": 110,
+      "damage": 50,
+      "armour": 28,
+      "initialRarity": "Legendary",
+      "meleeDamage": "Power",
+      "meleeHits": 1,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "rangeDistance": null,
+      "movement": 2,
+      "traits": [
+        "TeleportStrike",
+        "TerminatorArmour",
+        "Resilient",
+        "CrushingStrike"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilityNames": [
+        "TitanhammerSquad"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilityNames": [
+        "IconOfObstinacy"
+      ],
+      "equipmentSlots": [
+        "I_Crit",
+        "I_Block",
+        "I_Booster_Block"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_astar_lysander_01.png",
+      "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_astar_lysander_01.png",
+      "rankUpUpgrades": [
+        {
+          "rank": "Stone1",
+          "upgradeIds": [
+            "upgHpC015",
+            "upgHpC004",
+            "upgDmgC009",
+            "upgDmgC011",
+            "upgArmC002",
+            "upgArmC006"
+          ]
+        },
+        {
+          "rank": "Stone2",
+          "upgradeIds": [
+            "upgHpC003",
+            "upgHpC002",
+            "upgDmgU012",
+            "upgDmgU015C",
+            "upgArmC006",
+            "upgArmC001"
+          ]
+        },
+        {
+          "rank": "Stone3",
+          "upgradeIds": [
+            "upgHpU002",
+            "upgHpU004C",
+            "upgDmgC013",
+            "upgDmgC010",
+            "upgArmU005",
+            "upgArmU013"
+          ]
+        },
+        {
+          "rank": "Iron1",
+          "upgradeIds": [
+            "upgHpU018C",
+            "upgHpU014",
+            "upgDmgU012",
+            "upgDmgU010",
+            "upgArmU013",
+            "upgArmU010C"
+          ]
+        },
+        {
+          "rank": "Iron2",
+          "upgradeIds": [
+            "upgHpU002",
+            "upgHpR012C",
+            "upgDmgU018C",
+            "upgDmgU011",
+            "upgArmR010",
+            "upgArmU001"
+          ]
+        },
+        {
+          "rank": "Iron3",
+          "upgradeIds": [
+            "upgHpR020C",
+            "upgHpU006",
+            "upgDmgR021",
+            "upgDmgR010C",
+            "upgArmU010C",
+            "upgArmR015"
+          ]
+        },
+        {
+          "rank": "Bronze1",
+          "upgradeIds": [
+            "upgHpR043",
+            "upgHpR005",
+            "upgDmgR13C",
+            "upgDmgR005",
+            "upgArmR003C",
+            "upgArmR013C"
+          ]
+        },
+        {
+          "rank": "Bronze2",
+          "upgradeIds": [
+            "upgHpE020C",
+            "upgHpR004C",
+            "upgDmgR006",
+            "upgDmgE006C",
+            "upgArmR005",
+            "upgArmR001C"
+          ]
+        },
+        {
+          "rank": "Bronze3",
+          "upgradeIds": [
+            "upgHpR019",
+            "upgHpE001C",
+            "upgDmgE021C",
+            "upgDmgR015C",
+            "upgArmE020C",
+            "upgArmE013"
+          ]
+        },
+        {
+          "rank": "Silver1",
+          "upgradeIds": [
+            "upgHpE020C",
+            "upgHpE003",
+            "upgDmgE021C",
+            "upgDmgE011",
+            "upgArmE020C",
+            "upgArmE004C"
+          ]
+        },
+        {
+          "rank": "Silver2",
+          "upgradeIds": [
+            "upgHpL100",
+            "upgHpE002C",
+            "upgDmgL021C",
+            "upgDmgE006C",
+            "upgArmE020C",
+            "upgArmE011C"
+          ]
+        },
+        {
+          "rank": "Silver3",
+          "upgradeIds": [
+            "upgHpE020C",
+            "upgHpL013C",
+            "upgDmgE021C",
+            "upgDmgL015C",
+            "upgArmL001",
+            "upgArmL004C"
+          ]
+        },
+        {
+          "rank": "Gold1",
+          "upgradeIds": [
+            "upgHpL020C",
+            "upgHpL001C",
+            "upgDmgL003",
+            "upgDmgL005C",
+            "upgArmL020C",
+            "upgArmL011C"
+          ]
+        },
+        {
+          "rank": "Gold2",
+          "upgradeIds": [
+            "upgHpL120C",
+            "upgHpL002C",
+            "upgDmgL021C",
+            "upgDmgL015C",
+            "upgArmL020C",
+            "upgArmL010C"
+          ]
+        },
+        {
+          "rank": "Gold3",
+          "upgradeIds": [
+            "upgHpL020C",
+            "upgHpL009C",
+            "upgDmgL121C",
+            "upgDmgL008C",
+            "upgArmL120C",
+            "upgArmL011C"
+          ]
+        },
+        {
+          "rank": "Diamond1",
+          "upgradeIds": [
+            "upgHpL120C",
+            "upgHpL002C",
+            "upgDmgL121C",
+            "upgDmgL006C",
+            "upgArmL120C",
+            "upgArmL004C"
+          ]
+        },
+        {
+          "rank": "Diamond2",
+          "upgradeIds": [
+            "upgHpL120C",
+            "upgHpL213C",
+            "upgDmgL121C",
+            "upgDmgL213C",
+            "upgArmL120C",
+            "upgArmL213C"
+          ]
+        },
+        {
+          "rank": "Diamond3",
+          "upgradeIds": [
+            "upgHpL120C",
+            "upgHpL213C",
+            "upgDmgM213C",
+            "upgDmgL213C",
+            "upgArmM211C",
+            "upgArmL213C"
+          ]
+        },
+        {
+          "rank": "Adamantine1",
+          "upgradeIds": [
+            "upgHpM143C",
+            "upgHpL213C",
+            "upgDmgM213C",
+            "upgDmgL213C",
+            "upgArmM213C",
+            "upgArmL213C"
+          ]
+        },
+        {
+          "rank": "Adamantine2",
+          "upgradeIds": [
+            "upgHpECS",
+            "upgHpCS",
+            "upgDmgECS",
+            "upgDmgCS",
+            "upgArmECS",
+            "upgArmCS"
+          ]
+        }
+      ]
     }
   ],
   "mows": []

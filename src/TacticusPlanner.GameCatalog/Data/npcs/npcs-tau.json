@@ -161,6 +161,208 @@
       ]
     },
     {
+      "id": "tauBossAunShiInc",
+      "name": "Aun'Shi",
+      "meleeDamage": "Power",
+      "meleeHits": 5,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "InspiredToGreatness"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "SereneUnifier"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_tauta_aunshi_01.png",
+      "stats": [
+        {
+          "abilityLevel": 3,
+          "damage": 18,
+          "armour": 22,
+          "health": 117,
+          "progressionIndex": 1,
+          "rank": 1,
+          "stars": 1
+        },
+        {
+          "abilityLevel": 5,
+          "damage": 22,
+          "armour": 28,
+          "health": 147,
+          "progressionIndex": 1,
+          "rank": 2,
+          "stars": 1
+        },
+        {
+          "abilityLevel": 8,
+          "damage": 31,
+          "armour": 38,
+          "health": 200,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 8,
+          "damage": 33,
+          "armour": 41,
+          "health": 217,
+          "progressionIndex": 4,
+          "rank": 3,
+          "stars": 3
+        },
+        {
+          "abilityLevel": 11,
+          "damage": 42,
+          "armour": 51,
+          "health": 272,
+          "progressionIndex": 4,
+          "rank": 4,
+          "stars": 3
+        },
+        {
+          "abilityLevel": 11,
+          "damage": 45,
+          "armour": 55,
+          "health": 292,
+          "progressionIndex": 5,
+          "rank": 4,
+          "stars": 4
+        },
+        {
+          "abilityLevel": 14,
+          "damage": 56,
+          "armour": 69,
+          "health": 366,
+          "progressionIndex": 6,
+          "rank": 5,
+          "stars": 4
+        },
+        {
+          "abilityLevel": 17,
+          "damage": 75,
+          "armour": 92,
+          "health": 491,
+          "progressionIndex": 7,
+          "rank": 6,
+          "stars": 5
+        },
+        {
+          "abilityLevel": 20,
+          "damage": 100,
+          "armour": 123,
+          "health": 656,
+          "progressionIndex": 8,
+          "rank": 7,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 23,
+          "damage": 126,
+          "armour": 155,
+          "health": 821,
+          "progressionIndex": 9,
+          "rank": 8,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 26,
+          "damage": 167,
+          "armour": 206,
+          "health": 1092,
+          "progressionIndex": 10,
+          "rank": 9,
+          "stars": 7
+        },
+        {
+          "abilityLevel": 29,
+          "damage": 221,
+          "armour": 273,
+          "health": 1448,
+          "progressionIndex": 11,
+          "rank": 10,
+          "stars": 8
+        },
+        {
+          "abilityLevel": 32,
+          "damage": 293,
+          "armour": 360,
+          "health": 1913,
+          "progressionIndex": 13,
+          "rank": 11,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 35,
+          "damage": 366,
+          "armour": 451,
+          "health": 2396,
+          "progressionIndex": 13,
+          "rank": 12,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 38,
+          "damage": 459,
+          "armour": 565,
+          "health": 2999,
+          "progressionIndex": 13,
+          "rank": 13,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 41,
+          "damage": 605,
+          "armour": 744,
+          "health": 3953,
+          "progressionIndex": 14,
+          "rank": 14,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 44,
+          "damage": 757,
+          "armour": 932,
+          "health": 4949,
+          "progressionIndex": 14,
+          "rank": 15,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 1246,
+          "armour": 1533,
+          "health": 8145,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 55,
+          "damage": 1634,
+          "armour": 2011,
+          "health": 10684,
+          "progressionIndex": 17,
+          "rank": 18,
+          "stars": 12
+        },
+        {
+          "abilityLevel": 60,
+          "damage": 2046,
+          "armour": 2518,
+          "health": 13376,
+          "progressionIndex": 17,
+          "rank": 19,
+          "stars": 12
+        }
+      ]
+    },
+    {
       "id": "tauBossAunShiLHE",
       "name": "Aun'Shi",
       "meleeDamage": "Power",
@@ -780,6 +982,213 @@
       ]
     },
     {
+      "id": "tauBossFarsightInc",
+      "name": "Farsight",
+      "meleeDamage": "Power",
+      "meleeHits": 4,
+      "rangedDamage": "Plasma",
+      "rangedHits": 2,
+      "distance": 2,
+      "movement": 4,
+      "traits": [
+        "BeastSlayer",
+        "BigTarget",
+        "Flying",
+        "Mechanical"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "ExemplarOfTheMontka"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "WayOfTheShortBlade"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_tauta_farsight_01.png",
+      "stats": [
+        {
+          "abilityLevel": 3,
+          "damage": 28,
+          "armour": 28,
+          "health": 138,
+          "progressionIndex": 1,
+          "rank": 1,
+          "stars": 1
+        },
+        {
+          "abilityLevel": 5,
+          "damage": 34,
+          "armour": 34,
+          "health": 172,
+          "progressionIndex": 1,
+          "rank": 2,
+          "stars": 1
+        },
+        {
+          "abilityLevel": 8,
+          "damage": 47,
+          "armour": 47,
+          "health": 236,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 8,
+          "damage": 51,
+          "armour": 51,
+          "health": 255,
+          "progressionIndex": 4,
+          "rank": 3,
+          "stars": 3
+        },
+        {
+          "abilityLevel": 11,
+          "damage": 64,
+          "armour": 64,
+          "health": 319,
+          "progressionIndex": 4,
+          "rank": 4,
+          "stars": 3
+        },
+        {
+          "abilityLevel": 11,
+          "damage": 69,
+          "armour": 69,
+          "health": 344,
+          "progressionIndex": 5,
+          "rank": 4,
+          "stars": 4
+        },
+        {
+          "abilityLevel": 14,
+          "damage": 86,
+          "armour": 86,
+          "health": 431,
+          "progressionIndex": 6,
+          "rank": 5,
+          "stars": 4
+        },
+        {
+          "abilityLevel": 17,
+          "damage": 116,
+          "armour": 116,
+          "health": 578,
+          "progressionIndex": 7,
+          "rank": 6,
+          "stars": 5
+        },
+        {
+          "abilityLevel": 20,
+          "damage": 154,
+          "armour": 154,
+          "health": 772,
+          "progressionIndex": 8,
+          "rank": 7,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 23,
+          "damage": 193,
+          "armour": 193,
+          "health": 966,
+          "progressionIndex": 9,
+          "rank": 8,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 26,
+          "damage": 257,
+          "armour": 257,
+          "health": 1285,
+          "progressionIndex": 10,
+          "rank": 9,
+          "stars": 7
+        },
+        {
+          "abilityLevel": 29,
+          "damage": 341,
+          "armour": 341,
+          "health": 1703,
+          "progressionIndex": 11,
+          "rank": 10,
+          "stars": 8
+        },
+        {
+          "abilityLevel": 32,
+          "damage": 450,
+          "armour": 450,
+          "health": 2251,
+          "progressionIndex": 13,
+          "rank": 11,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 35,
+          "damage": 564,
+          "armour": 564,
+          "health": 2818,
+          "progressionIndex": 13,
+          "rank": 12,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 38,
+          "damage": 706,
+          "armour": 706,
+          "health": 3529,
+          "progressionIndex": 13,
+          "rank": 13,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 41,
+          "damage": 930,
+          "armour": 930,
+          "health": 4650,
+          "progressionIndex": 14,
+          "rank": 14,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 44,
+          "damage": 1164,
+          "armour": 1164,
+          "health": 5822,
+          "progressionIndex": 14,
+          "rank": 15,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 1917,
+          "armour": 1917,
+          "health": 9583,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 55,
+          "damage": 2514,
+          "armour": 2514,
+          "health": 12569,
+          "progressionIndex": 17,
+          "rank": 18,
+          "stars": 12
+        },
+        {
+          "abilityLevel": 60,
+          "damage": 3147,
+          "armour": 3147,
+          "health": 15736,
+          "progressionIndex": 17,
+          "rank": 19,
+          "stars": 12
+        }
+      ]
+    },
+    {
       "id": "tauBossFarsightLHE",
       "name": "Farsight",
       "meleeDamage": "Power",
@@ -1365,6 +1774,215 @@
           "progressionIndex": 14,
           "rank": 15,
           "stars": 10
+        }
+      ]
+    },
+    {
+      "id": "tauBossShadowsunInc",
+      "name": "Shadowsun",
+      "meleeDamage": "Blast",
+      "meleeHits": 2,
+      "rangedDamage": "Melta",
+      "rangedHits": 2,
+      "distance": 2,
+      "movement": 4,
+      "traits": [
+        "CloseCombatWeakness",
+        "Camouflage",
+        "Flying",
+        "Infiltrate"
+      ],
+      "activeAbilityDamage": [
+        "Blast"
+      ],
+      "activeAbilities": [
+        "ExemplarOfTheKauyon"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "DefenderOfTheGreaterGood"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_tauta_shadowsun_01.png",
+      "stats": [
+        {
+          "abilityLevel": 3,
+          "damage": 34,
+          "armour": 25,
+          "health": 110,
+          "progressionIndex": 1,
+          "rank": 1,
+          "stars": 1
+        },
+        {
+          "abilityLevel": 5,
+          "damage": 43,
+          "armour": 31,
+          "health": 138,
+          "progressionIndex": 1,
+          "rank": 2,
+          "stars": 1
+        },
+        {
+          "abilityLevel": 8,
+          "damage": 59,
+          "armour": 42,
+          "health": 188,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 8,
+          "damage": 64,
+          "armour": 46,
+          "health": 204,
+          "progressionIndex": 4,
+          "rank": 3,
+          "stars": 3
+        },
+        {
+          "abilityLevel": 11,
+          "damage": 80,
+          "armour": 57,
+          "health": 256,
+          "progressionIndex": 4,
+          "rank": 4,
+          "stars": 3
+        },
+        {
+          "abilityLevel": 11,
+          "damage": 86,
+          "armour": 62,
+          "health": 275,
+          "progressionIndex": 5,
+          "rank": 4,
+          "stars": 4
+        },
+        {
+          "abilityLevel": 14,
+          "damage": 108,
+          "armour": 78,
+          "health": 345,
+          "progressionIndex": 6,
+          "rank": 5,
+          "stars": 4
+        },
+        {
+          "abilityLevel": 17,
+          "damage": 144,
+          "armour": 104,
+          "health": 462,
+          "progressionIndex": 7,
+          "rank": 6,
+          "stars": 5
+        },
+        {
+          "abilityLevel": 20,
+          "damage": 193,
+          "armour": 139,
+          "health": 617,
+          "progressionIndex": 8,
+          "rank": 7,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 23,
+          "damage": 241,
+          "armour": 174,
+          "health": 773,
+          "progressionIndex": 9,
+          "rank": 8,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 26,
+          "damage": 321,
+          "armour": 231,
+          "health": 1028,
+          "progressionIndex": 10,
+          "rank": 9,
+          "stars": 7
+        },
+        {
+          "abilityLevel": 29,
+          "damage": 426,
+          "armour": 307,
+          "health": 1363,
+          "progressionIndex": 11,
+          "rank": 10,
+          "stars": 8
+        },
+        {
+          "abilityLevel": 32,
+          "damage": 563,
+          "armour": 405,
+          "health": 1801,
+          "progressionIndex": 13,
+          "rank": 11,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 35,
+          "damage": 705,
+          "armour": 507,
+          "health": 2255,
+          "progressionIndex": 13,
+          "rank": 12,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 38,
+          "damage": 882,
+          "armour": 635,
+          "health": 2823,
+          "progressionIndex": 13,
+          "rank": 13,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 41,
+          "damage": 1163,
+          "armour": 837,
+          "health": 3720,
+          "progressionIndex": 14,
+          "rank": 14,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 44,
+          "damage": 1456,
+          "armour": 1048,
+          "health": 4658,
+          "progressionIndex": 14,
+          "rank": 15,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 2396,
+          "armour": 1725,
+          "health": 7666,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 55,
+          "damage": 3142,
+          "armour": 2262,
+          "health": 10055,
+          "progressionIndex": 17,
+          "rank": 18,
+          "stars": 12
+        },
+        {
+          "abilityLevel": 60,
+          "damage": 3934,
+          "armour": 2833,
+          "health": 12589,
+          "progressionIndex": 17,
+          "rank": 19,
+          "stars": 12
         }
       ]
     },

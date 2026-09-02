@@ -160,7 +160,7 @@ public static class GameCatalogDatasets
     /// <summary>Legendary release event datasets, one per active event (keyed by unit snowprintId).</summary>
     public static readonly IReadOnlyList<string> LreEvents =
     [
-        "lres-emperlucius",
+        "lres-astarlysander",
         "lres-taufarsight",
         "lres-votanuthar",
     ];

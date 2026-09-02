@@ -1,0 +1,7402 @@
+{
+  "sourceFile": "15-lysander.json",
+  "id": 15,
+  "unitSnowprintId": "astarLysander",
+  "name": "Lysander",
+  "wikiLink": "https://tacticus.wiki.gg/wiki/Legendary_Character_Events",
+  "eventStage": 1,
+  "nextEventDate": "August 30, 2026",
+  "nextEventDateUtc": "Sun, 30 August 2026 00:00:00 GMT",
+  "finished": false,
+  "regularMissions": [
+    "Defeat 5 waves of enemies in any wave-based game mode, Deal 1000 damage",
+    "Defeat 30 Orks",
+    "Defeat 75 Black Templars",
+    "Defeat 100 Black Legion",
+    "Use abilities 15 times with Chaos units, Deal 10k damage with Abilities",
+    "Use abilities 20 times with Xenos units, Deal 15k damage with Abilities",
+    "Use abilities 25 times with Imperial units, Deal 20k damage with Abilities",
+    "Defeat 15 waves of enemies in any wave-based game mode, Deal 25k Eviscerate damage",
+    "Defeat 15 waves of enemies in any wave-based game mode, Deal 25k Physical damage",
+    "Defeat 15 waves of enemies in any wave-based game mode, Deal 25k Plasma damage"
+  ],
+  "premiumMissions": [
+    "Win 1 battle without Summoning any units",
+    "Defeat 30 enemies with Chaos units",
+    "Defeat 75 enemies with Xenos units",
+    "Defeat 100 enemies with Imperial units",
+    "Win 5 battles without deploying any Flying characters",
+    "Win 5 battles without deploying any Psyker characters",
+    "Win 5 battles without deploying any Rapid Assault characters",
+    "Defeat 75 enemies with Eviscerate Damage",
+    "Defeat 75 enemies with Physical Damage",
+    "Defeat 75 enemies with Plasma Damage"
+  ],
+  "alpha": {
+    "name": "Alpha (No Xenos)",
+    "enemies": {
+      "label": "Orks",
+      "link": "https://tacticus.wiki.gg/wiki/Orks#NPC_Units"
+    },
+    "killPoints": 32,
+    "battlesPoints": [
+      32,
+      28,
+      33,
+      37,
+      44,
+      48,
+      45,
+      48,
+      44,
+      46,
+      48,
+      47,
+      48,
+      49,
+      53,
+      58,
+      64,
+      57
+    ],
+    "defeatAll": [
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      32,
+      48
+    ],
+    "allowedUnitsFilter": [
+      {
+        "kind": "Alliance",
+        "target": "Xenos",
+        "exclude": true
+      }
+    ],
+    "unitsRestrictions": [
+      {
+        "name": "Eviscerate",
+        "points": 75,
+        "iconId": "eviscerate",
+        "filter": {
+          "kind": "DamageType",
+          "target": "Eviscerate",
+          "exclude": false
+        },
+        "index": 0
+      },
+      {
+        "name": "Suppressive Fire",
+        "points": 95,
+        "iconId": "suppressive_fire",
+        "filter": {
+          "kind": "Trait",
+          "target": "SuppressiveFire",
+          "exclude": false
+        },
+        "index": 1
+      },
+      {
+        "name": "Flying",
+        "points": 80,
+        "iconId": "flying",
+        "filter": {
+          "kind": "Trait",
+          "target": "Flying",
+          "exclude": false
+        },
+        "index": 2
+      },
+      {
+        "name": "Min 5 Hits",
+        "points": 85,
+        "iconId": "hits",
+        "filter": {
+          "kind": "MinHits",
+          "target": "5",
+          "exclude": false
+        },
+        "index": 3
+      },
+      {
+        "name": "No Resilient",
+        "points": 40,
+        "iconId": "no_resilient",
+        "filter": {
+          "kind": "Trait",
+          "target": "Resilient",
+          "exclude": true
+        },
+        "index": 4
+      }
+    ],
+    "battles": [
+      {
+        "mapId": "LE1_26",
+        "number": 1,
+        "power": 994,
+        "tier": 1,
+        "disallowedFactions": [
+          "Necrons",
+          "Tyranids",
+          "Orks",
+          "Aeldari",
+          "Tau",
+          "Genestealers",
+          "LeaguesOfVotann"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 147,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 4,
+                "count": 7
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 132,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 5,
+                "count": 3
+              },
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 3,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 171,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 5,
+                "count": 3
+              },
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 3,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 186,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 5,
+                "count": 6
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 156,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 3,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 202,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 5,
+                "count": 4
+              },
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 3,
+                "count": 2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE1_24",
+        "number": 2,
+        "power": 3093,
+        "tier": 1,
+        "disallowedFactions": [
+          "Necrons",
+          "Tyranids",
+          "Orks",
+          "Aeldari",
+          "Tau",
+          "Genestealers",
+          "LeaguesOfVotann"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 624,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 6,
+                "count": 3
+              },
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 7,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 531,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 7,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 600,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 8,
+                "count": 3
+              },
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 7,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 410,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 8,
+                "count": 5
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 518,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 7,
+                "count": 2
+              },
+              {
+                "id": "orksNpc1Grot",
+                "stars": 8,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 410,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 8,
+                "count": 5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE1_12",
+        "number": 3,
+        "power": 7897,
+        "tier": 1,
+        "disallowedFactions": [
+          "Necrons",
+          "Tyranids",
+          "Orks",
+          "Aeldari",
+          "Tau",
+          "Genestealers",
+          "LeaguesOfVotann"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 1177,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 10,
+                "count": 11
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 1357,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 10,
+                "count": 2
+              },
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 10,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 1239,
+            "enemies": [
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 10,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 1147,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 10,
+                "count": 3
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 10,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 1524,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 10,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 1453,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 10,
+                "count": 2
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 10,
+                "count": 3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE1_16",
+        "number": 4,
+        "power": 20101,
+        "tier": 1,
+        "disallowedFactions": [
+          "Necrons",
+          "Tyranids",
+          "Orks",
+          "Aeldari",
+          "Tau",
+          "Genestealers",
+          "LeaguesOfVotann"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 3805,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 13,
+                "count": 5
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 3202,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 16,
+                "count": 7
+              },
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 13,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 3551,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 13,
+                "count": 3
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 12,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 2948,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 16,
+                "count": 7
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 12,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 2790,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 13,
+                "count": 2
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 12,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 3805,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 13,
+                "count": 5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE1_15",
+        "number": 5,
+        "power": 39778,
+        "tier": 1,
+        "disallowedFactions": [
+          "Necrons",
+          "Tyranids",
+          "Orks",
+          "Aeldari",
+          "Tau",
+          "Genestealers",
+          "LeaguesOfVotann"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 7038,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 15,
+                "count": 4
+              },
+              {
+                "id": "orksNpc1Grot",
+                "stars": 20,
+                "count": 2
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 15,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 6724,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 15,
+                "count": 3
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 15,
+                "count": 2
+              },
+              {
+                "id": "orksNpc7Squig",
+                "stars": 16,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 5043,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 15,
+                "count": 2
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 15,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 7617,
+            "enemies": [
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 15,
+                "count": 2
+              },
+              {
+                "id": "orksNpc7Squig",
+                "stars": 16,
+                "count": 3
+              },
+              {
+                "id": "orksNpc1Grot",
+                "stars": 20,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 6537,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 20,
+                "count": 5
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 15,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 6819,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 15,
+                "count": 4
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 15,
+                "count": 3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE1_05",
+        "number": 6,
+        "power": 74342,
+        "tier": 1,
+        "disallowedFactions": [
+          "Necrons",
+          "Tyranids",
+          "Orks",
+          "Aeldari",
+          "Tau",
+          "Genestealers",
+          "LeaguesOfVotann"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 13234,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 19,
+                "count": 6
+              },
+              {
+                "id": "orksNpc1Grot",
+                "stars": 24,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 12224,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 19,
+                "count": 3
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 18,
+                "count": 2
+              },
+              {
+                "id": "orksNpc7Squig",
+                "stars": 16,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 13443,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 19,
+                "count": 2
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 18,
+                "count": 5
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 11257,
+            "enemies": [
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 18,
+                "count": 2
+              },
+              {
+                "id": "orksNpc7Squig",
+                "stars": 16,
+                "count": 3
+              },
+              {
+                "id": "orksNpc1Grot",
+                "stars": 24,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 9040,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 24,
+                "count": 8
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 15144,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 19,
+                "count": 4
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 18,
+                "count": 4
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE1_13",
+        "number": 7,
+        "power": 134710,
+        "tier": 1,
+        "disallowedFactions": [
+          "Necrons",
+          "Tyranids",
+          "Orks",
+          "Aeldari",
+          "Tau",
+          "Genestealers",
+          "LeaguesOfVotann"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 24353,
+            "enemies": [
+              {
+                "id": "orksNpc7Squig",
+                "stars": 24,
+                "count": 7
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 21470,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 24,
+                "count": 4
+              },
+              {
+                "id": "orksNpc1Grot",
+                "stars": 24,
+                "count": 5
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 23854,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 24,
+                "count": 2
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 24,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 24353,
+            "enemies": [
+              {
+                "id": "orksNpc7Squig",
+                "stars": 24,
+                "count": 7
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 19210,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 24,
+                "count": 3
+              },
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 24,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 21470,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 24,
+                "count": 4
+              },
+              {
+                "id": "orksNpc1Grot",
+                "stars": 24,
+                "count": 5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE1_21",
+        "number": 8,
+        "power": 219288,
+        "tier": 1,
+        "disallowedFactions": [
+          "Necrons",
+          "Tyranids",
+          "Orks",
+          "Aeldari",
+          "Tau",
+          "Genestealers",
+          "LeaguesOfVotann"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 41177,
+            "enemies": [
+              {
+                "id": "orksNpc7Squig",
+                "stars": 31,
+                "count": 3
+              },
+              {
+                "id": "orksNpc1Grot",
+                "stars": 32,
+                "count": 7
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 31807,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 32,
+                "count": 5
+              },
+              {
+                "id": "orksNpc6Stormboy",
+                "stars": 30,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 36660,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 32,
+                "count": 2
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 30,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 31807,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 32,
+                "count": 5
+              },
+              {
+                "id": "orksNpc6Stormboy",
+                "stars": 30,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 41177,
+            "enemies": [
+              {
+                "id": "orksNpc7Squig",
+                "stars": 31,
+                "count": 3
+              },
+              {
+                "id": "orksNpc1Grot",
+                "stars": 32,
+                "count": 7
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 36660,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 32,
+                "count": 2
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 30,
+                "count": 4
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE1_12",
+        "number": 9,
+        "power": 343839,
+        "tier": 1,
+        "disallowedFactions": [
+          "Necrons",
+          "Tyranids",
+          "Orks",
+          "Aeldari",
+          "Tau",
+          "Genestealers",
+          "LeaguesOfVotann"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 63651,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 32,
+                "count": 3
+              },
+              {
+                "id": "orksNpc1Grot",
+                "stars": 33,
+                "count": 8
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 57796,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 32,
+                "count": 4
+              },
+              {
+                "id": "orksNpc6Stormboy",
+                "stars": 32,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 52623,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 32,
+                "count": 3
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 32,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 48322,
+            "enemies": [
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 32,
+                "count": 3
+              },
+              {
+                "id": "orksNpc6Stormboy",
+                "stars": 32,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 63651,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 32,
+                "count": 3
+              },
+              {
+                "id": "orksNpc1Grot",
+                "stars": 33,
+                "count": 8
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 57796,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 32,
+                "count": 4
+              },
+              {
+                "id": "orksNpc6Stormboy",
+                "stars": 32,
+                "count": 2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE1_15",
+        "number": 10,
+        "power": 521470,
+        "tier": 1,
+        "disallowedFactions": [
+          "Necrons",
+          "Tyranids",
+          "Orks",
+          "Aeldari",
+          "Tau",
+          "Genestealers",
+          "LeaguesOfVotann"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 60991,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 34,
+                "count": 11
+              },
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 34,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 97920,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 34,
+                "count": 6
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 93216,
+            "enemies": [
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 34,
+                "count": 3
+              },
+              {
+                "id": "orksNpc6Stormboy",
+                "stars": 34,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 84950,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 34,
+                "count": 3
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 34,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 86473,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 34,
+                "count": 8
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 34,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 97920,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 34,
+                "count": 6
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE1_16",
+        "number": 11,
+        "power": 742349,
+        "tier": 1,
+        "disallowedFactions": [
+          "Necrons",
+          "Tyranids",
+          "Orks",
+          "Aeldari",
+          "Tau",
+          "Genestealers",
+          "LeaguesOfVotann"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 89646,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 34,
+                "count": 6
+              },
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 34,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 91539,
+            "enemies": [
+              {
+                "id": "orksNpc6Stormboy",
+                "stars": 34,
+                "count": 7
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 125965,
+            "enemies": [
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 34,
+                "count": 7
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 130560,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 34,
+                "count": 8
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 214993,
+            "enemies": [
+              {
+                "id": "orksBossBigMekLEG",
+                "stars": 1,
+                "count": 1
+              },
+              {
+                "id": "orksBossKillaKanLEG",
+                "stars": 1,
+                "count": 1
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 34,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 89646,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 34,
+                "count": 6
+              },
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 34,
+                "count": 4
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE1_13",
+        "number": 12,
+        "power": 952896,
+        "tier": 1,
+        "disallowedFactions": [
+          "Necrons",
+          "Tyranids",
+          "Orks",
+          "Aeldari",
+          "Tau",
+          "Genestealers",
+          "LeaguesOfVotann"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 175222,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 37,
+                "count": 4
+              },
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 36,
+                "count": 6
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 130695,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 37,
+                "count": 6
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 36,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 219821,
+            "enemies": [
+              {
+                "id": "orksBossNobLEG",
+                "stars": 1,
+                "count": 1
+              },
+              {
+                "id": "orksNpc7Squig",
+                "stars": 36,
+                "count": 5
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 130695,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 37,
+                "count": 6
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 36,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 167433,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 36,
+                "count": 7
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 129030,
+            "enemies": [
+              {
+                "id": "orksNpc7Squig",
+                "stars": 36,
+                "count": 6
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE1_26",
+        "number": 13,
+        "power": 1482504,
+        "tier": 1,
+        "disallowedFactions": [
+          "Necrons",
+          "Tyranids",
+          "Orks",
+          "Aeldari",
+          "Tau",
+          "Genestealers",
+          "LeaguesOfVotann"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 221338,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 39,
+                "count": 6
+              },
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 38,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 248242,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 39,
+                "count": 6
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 38,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 235357,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 38,
+                "count": 4
+              },
+              {
+                "id": "orksNpc6Stormboy",
+                "stars": 38,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 333547,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 38,
+                "count": 2
+              },
+              {
+                "id": "orksBossRuntherdLEG",
+                "stars": 1,
+                "count": 1
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 38,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 235357,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 38,
+                "count": 4
+              },
+              {
+                "id": "orksNpc6Stormboy",
+                "stars": 38,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 208663,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 39,
+                "count": 5
+              },
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 38,
+                "count": 4
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE1_12",
+        "number": 14,
+        "power": 2503866,
+        "tier": 1,
+        "disallowedFactions": [
+          "Necrons",
+          "Tyranids",
+          "Orks",
+          "Aeldari",
+          "Tau",
+          "Genestealers",
+          "LeaguesOfVotann"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 390937,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 40,
+                "count": 5
+              },
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 40,
+                "count": 3
+              },
+              {
+                "id": "orksNpc7Squig",
+                "stars": 40,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 442803,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 40,
+                "count": 3
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 40,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 643658,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 40,
+                "count": 2
+              },
+              {
+                "id": "orksBossWarboss",
+                "stars": 4,
+                "count": 1
+              },
+              {
+                "id": "orksNpc1Grot",
+                "stars": 40,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 360658,
+            "enemies": [
+              {
+                "id": "orksNpc7Squig",
+                "stars": 40,
+                "count": 3
+              },
+              {
+                "id": "orksNpc6Stormboy",
+                "stars": 40,
+                "count": 3
+              },
+              {
+                "id": "orksNpc1Grot",
+                "stars": 40,
+                "count": 5
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 321284,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 40,
+                "count": 4
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 40,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 344526,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 40,
+                "count": 6
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE1_24",
+        "number": 15,
+        "power": 4944844,
+        "tier": 1,
+        "disallowedFactions": [
+          "Necrons",
+          "Tyranids",
+          "Orks",
+          "Aeldari",
+          "Tau",
+          "Genestealers",
+          "LeaguesOfVotann"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 982511,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 42,
+                "count": 5
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 43,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 750736,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 43,
+                "count": 8
+              },
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 42,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 1115779,
+            "enemies": [
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 43,
+                "count": 7
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 739898,
+            "enemies": [
+              {
+                "id": "orksNpc7Squig",
+                "stars": 42,
+                "count": 6
+              },
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 42,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 750736,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 43,
+                "count": 8
+              },
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 42,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 605184,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 42,
+                "count": 6
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE1_16",
+        "number": 16,
+        "power": 9930270,
+        "tier": 1,
+        "disallowedFactions": [
+          "Necrons",
+          "Tyranids",
+          "Orks",
+          "Aeldari",
+          "Tau",
+          "Genestealers",
+          "LeaguesOfVotann"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 1812600,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 45,
+                "count": 5
+              },
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 45,
+                "count": 3
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 45,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 1423804,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 45,
+                "count": 6
+              },
+              {
+                "id": "orksNpc7Squig",
+                "stars": 45,
+                "count": 5
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 1638065,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 45,
+                "count": 3
+              },
+              {
+                "id": "orksNpc6Stormboy",
+                "stars": 45,
+                "count": 2
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 45,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 1638065,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 45,
+                "count": 3
+              },
+              {
+                "id": "orksNpc6Stormboy",
+                "stars": 45,
+                "count": 2
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 45,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 1605136,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 45,
+                "count": 5
+              },
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 45,
+                "count": 1
+              },
+              {
+                "id": "orksNpc7Squig",
+                "stars": 45,
+                "count": 5
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 1812600,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 45,
+                "count": 5
+              },
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 45,
+                "count": 3
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 45,
+                "count": 3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE1_05",
+        "number": 17,
+        "power": 14965680,
+        "tier": 1,
+        "disallowedFactions": [
+          "Necrons",
+          "Tyranids",
+          "Orks",
+          "Aeldari",
+          "Tau",
+          "Genestealers",
+          "LeaguesOfVotann"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 2574776,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 52,
+                "count": 7
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 49,
+                "count": 5
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 2394732,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 50,
+                "count": 6
+              },
+              {
+                "id": "orksNpc1Grot",
+                "stars": 52,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 2249104,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 52,
+                "count": 8
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 49,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 2484396,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 50,
+                "count": 3
+              },
+              {
+                "id": "orksNpc6Stormboy",
+                "stars": 52,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 2631336,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 50,
+                "count": 6
+              },
+              {
+                "id": "orksNpc1Grot",
+                "stars": 52,
+                "count": 6
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 2631336,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 50,
+                "count": 6
+              },
+              {
+                "id": "orksNpc1Grot",
+                "stars": 52,
+                "count": 6
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE1_21",
+        "number": 18,
+        "power": 19836420,
+        "tier": 1,
+        "disallowedFactions": [
+          "Necrons",
+          "Tyranids",
+          "Orks",
+          "Aeldari",
+          "Tau",
+          "Genestealers",
+          "LeaguesOfVotann"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 3018320,
+            "enemies": [
+              {
+                "id": "orksNpc7Squig",
+                "stars": 52,
+                "count": 8
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 3411030,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 53,
+                "count": 6
+              },
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 53,
+                "count": 6
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 3217466,
+            "enemies": [
+              {
+                "id": "orksNpc7Squig",
+                "stars": 52,
+                "count": 3
+              },
+              {
+                "id": "orksNpc3GrotTank",
+                "stars": 52,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 3372684,
+            "enemies": [
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 53,
+                "count": 7
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 3411030,
+            "enemies": [
+              {
+                "id": "orksNpc1Grot",
+                "stars": 53,
+                "count": 6
+              },
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 53,
+                "count": 6
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 3405890,
+            "enemies": [
+              {
+                "id": "orksNpc7Squig",
+                "stars": 52,
+                "count": 3
+              },
+              {
+                "id": "orksNpc2OrkBoy",
+                "stars": 53,
+                "count": 4
+              },
+              {
+                "id": "orksNpc1Grot",
+                "stars": 53,
+                "count": 4
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "beta": {
+    "name": "Beta (No Imperials)",
+    "enemies": {
+      "label": "Black Templars",
+      "link": "https://tacticus.wiki.gg/wiki/Black_Templars#NPC_Units"
+    },
+    "killPoints": 38,
+    "battlesPoints": [
+      31,
+      34,
+      38,
+      32,
+      41,
+      42,
+      39,
+      39,
+      43,
+      43,
+      43,
+      44,
+      47,
+      46,
+      49,
+      57,
+      54,
+      60
+    ],
+    "defeatAll": [
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      38,
+      40
+    ],
+    "allowedUnitsFilter": [
+      {
+        "kind": "Alliance",
+        "target": "Imperial",
+        "exclude": true
+      }
+    ],
+    "unitsRestrictions": [
+      {
+        "name": "Physical",
+        "points": 85,
+        "iconId": "physical",
+        "filter": {
+          "kind": "DamageType",
+          "target": "Physical",
+          "exclude": false
+        },
+        "index": 0
+      },
+      {
+        "name": "Melee",
+        "points": 60,
+        "iconId": "melee",
+        "filter": {
+          "kind": "AttackType",
+          "target": "Ranged",
+          "exclude": true
+        },
+        "index": 1
+      },
+      {
+        "name": "Orks",
+        "points": 100,
+        "iconId": "orks",
+        "filter": {
+          "kind": "Faction",
+          "target": "Orks",
+          "exclude": false
+        },
+        "index": 2
+      },
+      {
+        "name": "Psyker",
+        "points": 90,
+        "iconId": "psyker",
+        "filter": {
+          "kind": "Trait",
+          "target": "Psyker",
+          "exclude": false
+        },
+        "index": 3
+      },
+      {
+        "name": "No Mechanical",
+        "points": 40,
+        "iconId": "no_mechanical",
+        "filter": {
+          "kind": "Trait",
+          "target": "Mechanical",
+          "exclude": true
+        },
+        "index": 4
+      }
+    ],
+    "battles": [
+      {
+        "mapId": "LE2_16",
+        "number": 1,
+        "power": 1004,
+        "tier": 1,
+        "disallowedFactions": [
+          "Ultramarines",
+          "Sisterhood",
+          "AstraMilitarum",
+          "BlackTemplars",
+          "SpaceWolves",
+          "DarkAngels",
+          "AdeptusMechanicus",
+          "BloodAngels",
+          "Custodes",
+          "AdeptusAstartes"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 252,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 2,
+                "count": 7
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 138,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 2,
+                "count": 2
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 1,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 180,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 2,
+                "count": 5
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 116,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 2,
+                "count": 2
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 1,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 180,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 2,
+                "count": 5
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 138,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 2,
+                "count": 2
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 1,
+                "count": 3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE2_12",
+        "number": 2,
+        "power": 3024,
+        "tier": 1,
+        "disallowedFactions": [
+          "Ultramarines",
+          "Sisterhood",
+          "AstraMilitarum",
+          "BlackTemplars",
+          "SpaceWolves",
+          "DarkAngels",
+          "AdeptusMechanicus",
+          "BloodAngels",
+          "Custodes",
+          "AdeptusAstartes"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 536,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 6,
+                "count": 4
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 6,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 480,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 6,
+                "count": 5
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 400,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 6,
+                "count": 1
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 6,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 672,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 6,
+                "count": 7
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 400,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 6,
+                "count": 1
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 6,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 536,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 6,
+                "count": 4
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 6,
+                "count": 2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE2_03",
+        "number": 3,
+        "power": 8050,
+        "tier": 1,
+        "disallowedFactions": [
+          "Ultramarines",
+          "Sisterhood",
+          "AstraMilitarum",
+          "BlackTemplars",
+          "SpaceWolves",
+          "DarkAngels",
+          "AdeptusMechanicus",
+          "BloodAngels",
+          "Custodes",
+          "AdeptusAstartes"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 1432,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 7,
+                "count": 8
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 1698,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 7,
+                "count": 3
+              },
+              {
+                "id": "templNpc3InitiatePyreblaster",
+                "stars": 8,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 1074,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 7,
+                "count": 6
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 1074,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 7,
+                "count": 6
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 1698,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 7,
+                "count": 3
+              },
+              {
+                "id": "templNpc3InitiatePyreblaster",
+                "stars": 8,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 1074,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 7,
+                "count": 6
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE2_13",
+        "number": 4,
+        "power": 20022,
+        "tier": 1,
+        "disallowedFactions": [
+          "Ultramarines",
+          "Sisterhood",
+          "AstraMilitarum",
+          "BlackTemplars",
+          "SpaceWolves",
+          "DarkAngels",
+          "AdeptusMechanicus",
+          "BloodAngels",
+          "Custodes",
+          "AdeptusAstartes"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 3171,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 11,
+                "count": 3
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 11,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 3675,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 11,
+                "count": 3
+              },
+              {
+                "id": "templNpc3InitiatePyreblaster",
+                "stars": 11,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 3335,
+            "enemies": [
+              {
+                "id": "templNpc3InitiatePyreblaster",
+                "stars": 11,
+                "count": 1
+              },
+              {
+                "id": "templNpc1Initiate",
+                "stars": 11,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 2995,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 11,
+                "count": 5
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 3171,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 11,
+                "count": 3
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 11,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 3675,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 11,
+                "count": 3
+              },
+              {
+                "id": "templNpc3InitiatePyreblaster",
+                "stars": 11,
+                "count": 2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE2_06",
+        "number": 5,
+        "power": 39274,
+        "tier": 1,
+        "disallowedFactions": [
+          "Ultramarines",
+          "Sisterhood",
+          "AstraMilitarum",
+          "BlackTemplars",
+          "SpaceWolves",
+          "DarkAngels",
+          "AdeptusMechanicus",
+          "BloodAngels",
+          "Custodes",
+          "AdeptusAstartes"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 5711,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 12,
+                "count": 5
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 12,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 7036,
+            "enemies": [
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 12,
+                "count": 1
+              },
+              {
+                "id": "templNpc1Initiate",
+                "stars": 12,
+                "count": 2
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 12,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 6196,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 12,
+                "count": 4
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 12,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 5294,
+            "enemies": [
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 12,
+                "count": 1
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 12,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 6097,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 12,
+                "count": 7
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 8940,
+            "enemies": [
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 12,
+                "count": 2
+              },
+              {
+                "id": "templNpc1Initiate",
+                "stars": 12,
+                "count": 2
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 12,
+                "count": 3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE2_14",
+        "number": 6,
+        "power": 75528,
+        "tier": 1,
+        "disallowedFactions": [
+          "Ultramarines",
+          "Sisterhood",
+          "AstraMilitarum",
+          "BlackTemplars",
+          "SpaceWolves",
+          "DarkAngels",
+          "AdeptusMechanicus",
+          "BloodAngels",
+          "Custodes",
+          "AdeptusAstartes"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 11568,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 14,
+                "count": 6
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 12,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 14891,
+            "enemies": [
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 14,
+                "count": 1
+              },
+              {
+                "id": "templNpc1Initiate",
+                "stars": 14,
+                "count": 2
+              },
+              {
+                "id": "templNpc3InitiatePyreblaster",
+                "stars": 14,
+                "count": 2
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 12,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 13452,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 14,
+                "count": 4
+              },
+              {
+                "id": "templNpc3InitiatePyreblaster",
+                "stars": 14,
+                "count": 2
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 12,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 7555,
+            "enemies": [
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 14,
+                "count": 1
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 12,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 13616,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 14,
+                "count": 8
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 14446,
+            "enemies": [
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 14,
+                "count": 2
+              },
+              {
+                "id": "templNpc1Initiate",
+                "stars": 14,
+                "count": 2
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 12,
+                "count": 2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE2_04",
+        "number": 7,
+        "power": 133431,
+        "tier": 1,
+        "disallowedFactions": [
+          "Ultramarines",
+          "Sisterhood",
+          "AstraMilitarum",
+          "BlackTemplars",
+          "SpaceWolves",
+          "DarkAngels",
+          "AdeptusMechanicus",
+          "BloodAngels",
+          "Custodes",
+          "AdeptusAstartes"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 27634,
+            "enemies": [
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 16,
+                "count": 1
+              },
+              {
+                "id": "templNpc1Initiate",
+                "stars": 16,
+                "count": 5
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 16,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 19594,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 16,
+                "count": 5
+              },
+              {
+                "id": "templNpc3InitiatePyreblaster",
+                "stars": 16,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 25450,
+            "enemies": [
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 16,
+                "count": 2
+              },
+              {
+                "id": "templNpc1Initiate",
+                "stars": 16,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 19723,
+            "enemies": [
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 16,
+                "count": 5
+              },
+              {
+                "id": "templNpc3InitiatePyreblaster",
+                "stars": 16,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 20290,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 16,
+                "count": 4
+              },
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 16,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 20740,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 16,
+                "count": 4
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 16,
+                "count": 4
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE2_15",
+        "number": 8,
+        "power": 224856,
+        "tier": 1,
+        "disallowedFactions": [
+          "Ultramarines",
+          "Sisterhood",
+          "AstraMilitarum",
+          "BlackTemplars",
+          "SpaceWolves",
+          "DarkAngels",
+          "AdeptusMechanicus",
+          "BloodAngels",
+          "Custodes",
+          "AdeptusAstartes"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 41289,
+            "enemies": [
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 19,
+                "count": 1
+              },
+              {
+                "id": "templNpc1Initiate",
+                "stars": 17,
+                "count": 6
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 33663,
+            "enemies": [
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 19,
+                "count": 1
+              },
+              {
+                "id": "templNpc1Initiate",
+                "stars": 17,
+                "count": 2
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 17,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 33249,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 17,
+                "count": 4
+              },
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 19,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 38885,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 17,
+                "count": 4
+              },
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 19,
+                "count": 1
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 17,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 37269,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 17,
+                "count": 5
+              },
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 19,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 40501,
+            "enemies": [
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 19,
+                "count": 1
+              },
+              {
+                "id": "templNpc1Initiate",
+                "stars": 17,
+                "count": 3
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 17,
+                "count": 4
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE2_16",
+        "number": 9,
+        "power": 350250,
+        "tier": 1,
+        "disallowedFactions": [
+          "Ultramarines",
+          "Sisterhood",
+          "AstraMilitarum",
+          "BlackTemplars",
+          "SpaceWolves",
+          "DarkAngels",
+          "AdeptusMechanicus",
+          "BloodAngels",
+          "Custodes",
+          "AdeptusAstartes"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 70102,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 19,
+                "count": 6
+              },
+              {
+                "id": "templNpc3InitiatePyreblaster",
+                "stars": 21,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 60129,
+            "enemies": [
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 18,
+                "count": 1
+              },
+              {
+                "id": "templNpc1Initiate",
+                "stars": 19,
+                "count": 7
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 56978,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 19,
+                "count": 4
+              },
+              {
+                "id": "templNpc3InitiatePyreblaster",
+                "stars": 21,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 60129,
+            "enemies": [
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 18,
+                "count": 1
+              },
+              {
+                "id": "templNpc1Initiate",
+                "stars": 19,
+                "count": 7
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 56978,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 19,
+                "count": 4
+              },
+              {
+                "id": "templNpc3InitiatePyreblaster",
+                "stars": 21,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 45934,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 19,
+                "count": 7
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE2_13",
+        "number": 10,
+        "power": 520908,
+        "tier": 1,
+        "disallowedFactions": [
+          "Ultramarines",
+          "Sisterhood",
+          "AstraMilitarum",
+          "BlackTemplars",
+          "SpaceWolves",
+          "DarkAngels",
+          "AdeptusMechanicus",
+          "BloodAngels",
+          "Custodes",
+          "AdeptusAstartes"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 85665,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 21,
+                "count": 6
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 21,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 88551,
+            "enemies": [
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 21,
+                "count": 1
+              },
+              {
+                "id": "templNpc1Initiate",
+                "stars": 21,
+                "count": 5
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 21,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 101545,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 21,
+                "count": 4
+              },
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 21,
+                "count": 1
+              },
+              {
+                "id": "templBossAncient",
+                "stars": 3,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 74211,
+            "enemies": [
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 21,
+                "count": 3
+              },
+              {
+                "id": "templNpc1Initiate",
+                "stars": 21,
+                "count": 2
+              },
+              {
+                "id": "templNpc3InitiatePyreblaster",
+                "stars": 21,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 81088,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 21,
+                "count": 5
+              },
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 21,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 89848,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 21,
+                "count": 3
+              },
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 21,
+                "count": 1
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 21,
+                "count": 4
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE2_14",
+        "number": 11,
+        "power": 764192,
+        "tier": 1,
+        "disallowedFactions": [
+          "Ultramarines",
+          "Sisterhood",
+          "AstraMilitarum",
+          "BlackTemplars",
+          "SpaceWolves",
+          "DarkAngels",
+          "AdeptusMechanicus",
+          "BloodAngels",
+          "Custodes",
+          "AdeptusAstartes"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 107632,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 22,
+                "count": 4
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 22,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 151933,
+            "enemies": [
+              {
+                "id": "templBossChampionLEG",
+                "stars": 1,
+                "count": 1
+              },
+              {
+                "id": "templNpc1Initiate",
+                "stars": 22,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 152505,
+            "enemies": [
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 22,
+                "count": 1
+              },
+              {
+                "id": "templNpc1Initiate",
+                "stars": 22,
+                "count": 7
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 123279,
+            "enemies": [
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 22,
+                "count": 4
+              },
+              {
+                "id": "templNpc1Initiate",
+                "stars": 22,
+                "count": 5
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 121211,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 22,
+                "count": 5
+              },
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 22,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 107632,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 22,
+                "count": 4
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 22,
+                "count": 4
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE2_06",
+        "number": 12,
+        "power": 1003538,
+        "tier": 1,
+        "disallowedFactions": [
+          "Ultramarines",
+          "Sisterhood",
+          "AstraMilitarum",
+          "BlackTemplars",
+          "SpaceWolves",
+          "DarkAngels",
+          "AdeptusMechanicus",
+          "BloodAngels",
+          "Custodes",
+          "AdeptusAstartes"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 188719,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 23,
+                "count": 5
+              },
+              {
+                "id": "templNpc3InitiatePyreblaster",
+                "stars": 26,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 135342,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 23,
+                "count": 5
+              },
+              {
+                "id": "templNpc3InitiatePyreblaster",
+                "stars": 26,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 134322,
+            "enemies": [
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 23,
+                "count": 3
+              },
+              {
+                "id": "templNpc1Initiate",
+                "stars": 23,
+                "count": 6
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 226312,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 23,
+                "count": 1
+              },
+              {
+                "id": "templBossAggressorLEG",
+                "stars": 1,
+                "count": 1
+              },
+              {
+                "id": "templNpc3InitiatePyreblaster",
+                "stars": 26,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 134322,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 23,
+                "count": 6
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 23,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 184521,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 23,
+                "count": 8
+              },
+              {
+                "id": "templNpc3InitiatePyreblaster",
+                "stars": 26,
+                "count": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE2_03",
+        "number": 13,
+        "power": 1511953,
+        "tier": 1,
+        "disallowedFactions": [
+          "Ultramarines",
+          "Sisterhood",
+          "AstraMilitarum",
+          "BlackTemplars",
+          "SpaceWolves",
+          "DarkAngels",
+          "AdeptusMechanicus",
+          "BloodAngels",
+          "Custodes",
+          "AdeptusAstartes"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 310440,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 24,
+                "count": 5
+              },
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 26,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 273084,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 24,
+                "count": 3
+              },
+              {
+                "id": "templBossHelbrecht",
+                "stars": 3,
+                "count": 1
+              },
+              {
+                "id": "templNpc3InitiatePyreblaster",
+                "stars": 24,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 225714,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 24,
+                "count": 7
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 24,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 222713,
+            "enemies": [
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 26,
+                "count": 1
+              },
+              {
+                "id": "templNpc1Initiate",
+                "stars": 24,
+                "count": 4
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 24,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 222713,
+            "enemies": [
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 26,
+                "count": 1
+              },
+              {
+                "id": "templNpc1Initiate",
+                "stars": 24,
+                "count": 4
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 24,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 257289,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 24,
+                "count": 7
+              },
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 26,
+                "count": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE2_12",
+        "number": 14,
+        "power": 2506323,
+        "tier": 1,
+        "disallowedFactions": [
+          "Ultramarines",
+          "Sisterhood",
+          "AstraMilitarum",
+          "BlackTemplars",
+          "SpaceWolves",
+          "DarkAngels",
+          "AdeptusMechanicus",
+          "BloodAngels",
+          "Custodes",
+          "AdeptusAstartes"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 487746,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 28,
+                "count": 9
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 262018,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 28,
+                "count": 2
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 26,
+                "count": 6
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 413806,
+            "enemies": [
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 26,
+                "count": 2
+              },
+              {
+                "id": "templNpc1Initiate",
+                "stars": 28,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 421228,
+            "enemies": [
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 26,
+                "count": 1
+              },
+              {
+                "id": "templNpc1Initiate",
+                "stars": 28,
+                "count": 3
+              },
+              {
+                "id": "templNpc3InitiatePyreblaster",
+                "stars": 26,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 443652,
+            "enemies": [
+              {
+                "id": "templBossSwordBrother",
+                "stars": 7,
+                "count": 1
+              },
+              {
+                "id": "templNpc1Initiate",
+                "stars": 28,
+                "count": 3
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 26,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 477873,
+            "enemies": [
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 26,
+                "count": 1
+              },
+              {
+                "id": "templNpc1Initiate",
+                "stars": 28,
+                "count": 7
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE2_13",
+        "number": 15,
+        "power": 5031214,
+        "tier": 1,
+        "disallowedFactions": [
+          "Ultramarines",
+          "Sisterhood",
+          "AstraMilitarum",
+          "BlackTemplars",
+          "SpaceWolves",
+          "DarkAngels",
+          "AdeptusMechanicus",
+          "BloodAngels",
+          "Custodes",
+          "AdeptusAstartes"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 1030000,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 30,
+                "count": 6
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 32,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 736027,
+            "enemies": [
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 29,
+                "count": 1
+              },
+              {
+                "id": "templNpc1Initiate",
+                "stars": 30,
+                "count": 4
+              },
+              {
+                "id": "templNpc3InitiatePyreblaster",
+                "stars": 29,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 932918,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 30,
+                "count": 5
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 32,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 970820,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 30,
+                "count": 10
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 749367,
+            "enemies": [
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 29,
+                "count": 1
+              },
+              {
+                "id": "templNpc1Initiate",
+                "stars": 30,
+                "count": 6
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 612082,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 30,
+                "count": 4
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 32,
+                "count": 2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE2_15",
+        "number": 16,
+        "power": 9739631,
+        "tier": 1,
+        "disallowedFactions": [
+          "Ultramarines",
+          "Sisterhood",
+          "AstraMilitarum",
+          "BlackTemplars",
+          "SpaceWolves",
+          "DarkAngels",
+          "AdeptusMechanicus",
+          "BloodAngels",
+          "Custodes",
+          "AdeptusAstartes"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 1873258,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 32,
+                "count": 6
+              },
+              {
+                "id": "templNpc3InitiatePyreblaster",
+                "stars": 32,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 1805682,
+            "enemies": [
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 32,
+                "count": 2
+              },
+              {
+                "id": "templNpc1Initiate",
+                "stars": 32,
+                "count": 6
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 1448820,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 32,
+                "count": 7
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 32,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 1448820,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 32,
+                "count": 7
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 32,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 1873258,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 32,
+                "count": 6
+              },
+              {
+                "id": "templNpc3InitiatePyreblaster",
+                "stars": 32,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 1289793,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 32,
+                "count": 6
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 32,
+                "count": 3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE2_14",
+        "number": 17,
+        "power": 14544243,
+        "tier": 1,
+        "disallowedFactions": [
+          "Ultramarines",
+          "Sisterhood",
+          "AstraMilitarum",
+          "BlackTemplars",
+          "SpaceWolves",
+          "DarkAngels",
+          "AdeptusMechanicus",
+          "BloodAngels",
+          "Custodes",
+          "AdeptusAstartes"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 2650678,
+            "enemies": [
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 32,
+                "count": 2
+              },
+              {
+                "id": "templNpc1Initiate",
+                "stars": 34,
+                "count": 6
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 34,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 2297202,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 34,
+                "count": 6
+              },
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 32,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 2273238,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 34,
+                "count": 4
+              },
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 32,
+                "count": 1
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 34,
+                "count": 5
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 2364421,
+            "enemies": [
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 32,
+                "count": 1
+              },
+              {
+                "id": "templNpc1Initiate",
+                "stars": 34,
+                "count": 5
+              },
+              {
+                "id": "templNpc3InitiatePyreblaster",
+                "stars": 34,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 2297202,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 34,
+                "count": 6
+              },
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 32,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 2661502,
+            "enemies": [
+              {
+                "id": "templNpc3InitiatePyreblaster",
+                "stars": 34,
+                "count": 2
+              },
+              {
+                "id": "templNpc1Initiate",
+                "stars": 34,
+                "count": 8
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE2_04",
+        "number": 18,
+        "power": 20146738,
+        "tier": 1,
+        "disallowedFactions": [
+          "Ultramarines",
+          "Sisterhood",
+          "AstraMilitarum",
+          "BlackTemplars",
+          "SpaceWolves",
+          "DarkAngels",
+          "AdeptusMechanicus",
+          "BloodAngels",
+          "Custodes",
+          "AdeptusAstartes"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 3638888,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 38,
+                "count": 11
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 3035837,
+            "enemies": [
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 35,
+                "count": 1
+              },
+              {
+                "id": "templNpc1Initiate",
+                "stars": 38,
+                "count": 3
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 37,
+                "count": 6
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 3440453,
+            "enemies": [
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 35,
+                "count": 2
+              },
+              {
+                "id": "templNpc1Initiate",
+                "stars": 38,
+                "count": 4
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 37,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 3638888,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 38,
+                "count": 11
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 3356835,
+            "enemies": [
+              {
+                "id": "templNpc1Initiate",
+                "stars": 38,
+                "count": 6
+              },
+              {
+                "id": "templNpc3InitiatePyreblaster",
+                "stars": 37,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 3035837,
+            "enemies": [
+              {
+                "id": "templNpc4Aggressor",
+                "stars": 35,
+                "count": 1
+              },
+              {
+                "id": "templNpc1Initiate",
+                "stars": 38,
+                "count": 3
+              },
+              {
+                "id": "templNpc2Neophyte",
+                "stars": 37,
+                "count": 6
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "gamma": {
+    "name": "Gamma (No Chaos)",
+    "enemies": {
+      "label": "Black Legion",
+      "link": "https://tacticus.wiki.gg/wiki/Black_Legion#NPC_Units"
+    },
+    "killPoints": 31,
+    "battlesPoints": [
+      32,
+      37,
+      38,
+      38,
+      41,
+      40,
+      45,
+      49,
+      41,
+      50,
+      49,
+      46,
+      55,
+      50,
+      53,
+      59,
+      60,
+      59
+    ],
+    "defeatAll": [
+      31,
+      31,
+      31,
+      31,
+      31,
+      31,
+      31,
+      31,
+      31,
+      31,
+      31,
+      31,
+      31,
+      31,
+      31,
+      31,
+      31,
+      39
+    ],
+    "allowedUnitsFilter": [
+      {
+        "kind": "Alliance",
+        "target": "Chaos",
+        "exclude": true
+      }
+    ],
+    "unitsRestrictions": [
+      {
+        "name": "No Bolter",
+        "points": 40,
+        "iconId": "no_bolter",
+        "filter": {
+          "kind": "DamageType",
+          "target": "Bolter",
+          "exclude": true
+        },
+        "index": 0
+      },
+      {
+        "name": "Healer",
+        "points": 100,
+        "iconId": "healer",
+        "filter": {
+          "kind": "Trait",
+          "target": "Healer",
+          "exclude": false
+        },
+        "index": 1
+      },
+      {
+        "name": "Min 3 Hits",
+        "points": 60,
+        "iconId": "hits",
+        "filter": {
+          "kind": "MinHits",
+          "target": "3",
+          "exclude": false
+        },
+        "index": 2
+      },
+      {
+        "name": "Plasma",
+        "points": 95,
+        "iconId": "plasma",
+        "filter": {
+          "kind": "DamageType",
+          "target": "Plasma",
+          "exclude": false
+        },
+        "index": 3
+      },
+      {
+        "name": "Rapid Assault",
+        "points": 80,
+        "iconId": "rapid_assault",
+        "filter": {
+          "kind": "Trait",
+          "target": "RapidAssault",
+          "exclude": false
+        },
+        "index": 4
+      }
+    ],
+    "battles": [
+      {
+        "mapId": "LE3_06",
+        "number": 1,
+        "power": 1008,
+        "tier": 1,
+        "disallowedFactions": [
+          "BlackLegion",
+          "DeathGuard",
+          "ThousandSons",
+          "WorldEaters",
+          "EmperorsChildren"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 189,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 4,
+                "count": 7
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 173,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 4,
+                "count": 2
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 4,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 138,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 4,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 162,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 4,
+                "count": 7
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 173,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 4,
+                "count": 3
+              },
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 4,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 173,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 4,
+                "count": 2
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 4,
+                "count": 3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE3_08",
+        "number": 2,
+        "power": 2987,
+        "tier": 1,
+        "disallowedFactions": [
+          "BlackLegion",
+          "DeathGuard",
+          "ThousandSons",
+          "WorldEaters",
+          "EmperorsChildren"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 643,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 6,
+                "count": 3
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 7,
+                "count": 5
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 484,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 7,
+                "count": 4
+              },
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 6,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 498,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 7,
+                "count": 6
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 394,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 6,
+                "count": 3
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 7,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 484,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 7,
+                "count": 4
+              },
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 6,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 484,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 7,
+                "count": 4
+              },
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 6,
+                "count": 2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE3_18",
+        "number": 3,
+        "power": 7865,
+        "tier": 1,
+        "disallowedFactions": [
+          "BlackLegion",
+          "DeathGuard",
+          "ThousandSons",
+          "WorldEaters",
+          "EmperorsChildren"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 1316,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 9,
+                "count": 3
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 9,
+                "count": 5
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 1275,
+            "enemies": [
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 9,
+                "count": 1
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 9,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 1599,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 9,
+                "count": 3
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 9,
+                "count": 1
+              },
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 9,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 1116,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 9,
+                "count": 9
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 1084,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 9,
+                "count": 5
+              },
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 9,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 1475,
+            "enemies": [
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 9,
+                "count": 1
+              },
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 9,
+                "count": 3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE3_11",
+        "number": 4,
+        "power": 20086,
+        "tier": 1,
+        "disallowedFactions": [
+          "BlackLegion",
+          "DeathGuard",
+          "ThousandSons",
+          "WorldEaters",
+          "EmperorsChildren"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 1659,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 11,
+                "count": 7
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 4712,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 11,
+                "count": 2
+              },
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 12,
+                "count": 1
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 11,
+                "count": 5
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 3764,
+            "enemies": [
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 12,
+                "count": 1
+              },
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 11,
+                "count": 2
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 11,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 4107,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 11,
+                "count": 6
+              },
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 12,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 2027,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 11,
+                "count": 2
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 11,
+                "count": 5
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 3817,
+            "enemies": [
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 12,
+                "count": 1
+              },
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 11,
+                "count": 1
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 11,
+                "count": 3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE3_22",
+        "number": 5,
+        "power": 39975,
+        "tier": 1,
+        "disallowedFactions": [
+          "BlackLegion",
+          "DeathGuard",
+          "ThousandSons",
+          "WorldEaters",
+          "EmperorsChildren"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 5733,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 13,
+                "count": 2
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 13,
+                "count": 7
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 6280,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 13,
+                "count": 5
+              },
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 13,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 6819,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 13,
+                "count": 6
+              },
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 13,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 5643,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 13,
+                "count": 1
+              },
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 13,
+                "count": 1
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 13,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 5194,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 13,
+                "count": 6
+              },
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 13,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 10306,
+            "enemies": [
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 13,
+                "count": 2
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 13,
+                "count": 4
+              },
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 13,
+                "count": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE3_17",
+        "number": 6,
+        "power": 75227,
+        "tier": 1,
+        "disallowedFactions": [
+          "BlackLegion",
+          "DeathGuard",
+          "ThousandSons",
+          "WorldEaters",
+          "EmperorsChildren"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 14266,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 14,
+                "count": 2
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 14,
+                "count": 4
+              },
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 14,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 13028,
+            "enemies": [
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 14,
+                "count": 2
+              },
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 14,
+                "count": 1
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 14,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 12831,
+            "enemies": [
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 14,
+                "count": 1
+              },
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 14,
+                "count": 1
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 14,
+                "count": 5
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 16786,
+            "enemies": [
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 14,
+                "count": 1
+              },
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 14,
+                "count": 2
+              },
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 14,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 5138,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 14,
+                "count": 4
+              },
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 14,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 13178,
+            "enemies": [
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 14,
+                "count": 2
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 14,
+                "count": 6
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE3_12",
+        "number": 7,
+        "power": 134369,
+        "tier": 1,
+        "disallowedFactions": [
+          "BlackLegion",
+          "DeathGuard",
+          "ThousandSons",
+          "WorldEaters",
+          "EmperorsChildren"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 28682,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 16,
+                "count": 5
+              },
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 16,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 18434,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 16,
+                "count": 3
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 16,
+                "count": 3
+              },
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 16,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 28495,
+            "enemies": [
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 16,
+                "count": 2
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 16,
+                "count": 4
+              },
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 16,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 18968,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 16,
+                "count": 3
+              },
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 16,
+                "count": 1
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 16,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 18043,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 16,
+                "count": 8
+              },
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 16,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 21747,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 16,
+                "count": 5
+              },
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 16,
+                "count": 1
+              },
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 16,
+                "count": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE3_18",
+        "number": 8,
+        "power": 230936,
+        "tier": 1,
+        "disallowedFactions": [
+          "BlackLegion",
+          "DeathGuard",
+          "ThousandSons",
+          "WorldEaters",
+          "EmperorsChildren"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 42100,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 19,
+                "count": 6
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 17,
+                "count": 5
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 33704,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 17,
+                "count": 2
+              },
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 17,
+                "count": 2
+              },
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 19,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 32400,
+            "enemies": [
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 17,
+                "count": 2
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 17,
+                "count": 7
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 33704,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 19,
+                "count": 2
+              },
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 17,
+                "count": 2
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 17,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 50750,
+            "enemies": [
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 17,
+                "count": 2
+              },
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 19,
+                "count": 2
+              },
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 17,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 38278,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 19,
+                "count": 3
+              },
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 17,
+                "count": 1
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 17,
+                "count": 7
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE3_22",
+        "number": 9,
+        "power": 349267,
+        "tier": 1,
+        "disallowedFactions": [
+          "BlackLegion",
+          "DeathGuard",
+          "ThousandSons",
+          "WorldEaters",
+          "EmperorsChildren"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 79288,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 19,
+                "count": 6
+              },
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 19,
+                "count": 2
+              },
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 21,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 52327,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 19,
+                "count": 7
+              },
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 19,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 67996,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 19,
+                "count": 2
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 19,
+                "count": 2
+              },
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 21,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 34049,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 19,
+                "count": 3
+              },
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 21,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 30398,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 19,
+                "count": 5
+              },
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 19,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 85209,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 19,
+                "count": 3
+              },
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 21,
+                "count": 3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE3_06",
+        "number": 10,
+        "power": 525622,
+        "tier": 1,
+        "disallowedFactions": [
+          "BlackLegion",
+          "DeathGuard",
+          "ThousandSons",
+          "WorldEaters",
+          "EmperorsChildren"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 91061,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 21,
+                "count": 7
+              },
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 23,
+                "count": 5
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 79334,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 23,
+                "count": 3
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 21,
+                "count": 4
+              },
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 21,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 81374,
+            "enemies": [
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 21,
+                "count": 2
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 21,
+                "count": 6
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 88467,
+            "enemies": [
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 21,
+                "count": 2
+              },
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 23,
+                "count": 2
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 21,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 99771,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 23,
+                "count": 1
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 21,
+                "count": 4
+              },
+              {
+                "id": "blackBossPossession",
+                "stars": 6,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 85615,
+            "enemies": [
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 21,
+                "count": 1
+              },
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 23,
+                "count": 3
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 21,
+                "count": 5
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE3_11",
+        "number": 11,
+        "power": 688079,
+        "tier": 1,
+        "disallowedFactions": [
+          "BlackLegion",
+          "DeathGuard",
+          "ThousandSons",
+          "WorldEaters",
+          "EmperorsChildren"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 124370,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 23,
+                "count": 6
+              },
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 23,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 145269,
+            "enemies": [
+              {
+                "id": "blackBossTerminatorLEG",
+                "stars": 2,
+                "count": 1
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 23,
+                "count": 5
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 108103,
+            "enemies": [
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 23,
+                "count": 1
+              },
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 23,
+                "count": 3
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 23,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 106002,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 23,
+                "count": 2
+              },
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 23,
+                "count": 1
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 23,
+                "count": 6
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 114437,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 23,
+                "count": 4
+              },
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 23,
+                "count": 1
+              },
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 23,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 89898,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 23,
+                "count": 10
+              },
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 23,
+                "count": 2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE3_13",
+        "number": 12,
+        "power": 1001352,
+        "tier": 1,
+        "disallowedFactions": [
+          "BlackLegion",
+          "DeathGuard",
+          "ThousandSons",
+          "WorldEaters",
+          "EmperorsChildren"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 138958,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 25,
+                "count": 8
+              },
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 25,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 146376,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 25,
+                "count": 3
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 25,
+                "count": 3
+              },
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 25,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 217277,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 25,
+                "count": 2
+              },
+              {
+                "id": "blackBossHaarkenLEG",
+                "stars": 1,
+                "count": 1
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 25,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 166532,
+            "enemies": [
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 25,
+                "count": 2
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 25,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 176551,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 25,
+                "count": 8
+              },
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 25,
+                "count": 1
+              },
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 25,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 155658,
+            "enemies": [
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 25,
+                "count": 1
+              },
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 25,
+                "count": 3
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 25,
+                "count": 4
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE3_18",
+        "number": 13,
+        "power": 1491870,
+        "tier": 1,
+        "disallowedFactions": [
+          "BlackLegion",
+          "DeathGuard",
+          "ThousandSons",
+          "WorldEaters",
+          "EmperorsChildren"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 204492,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 27,
+                "count": 4
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 27,
+                "count": 8
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 343498,
+            "enemies": [
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 27,
+                "count": 1
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 27,
+                "count": 5
+              },
+              {
+                "id": "blackBossObliteratorLEG",
+                "stars": 1,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 271484,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 27,
+                "count": 4
+              },
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 27,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 225847,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 27,
+                "count": 3
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 27,
+                "count": 4
+              },
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 27,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 194763,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 27,
+                "count": 3
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 27,
+                "count": 9
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 251786,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 27,
+                "count": 2
+              },
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 27,
+                "count": 1
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 27,
+                "count": 7
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE3_08",
+        "number": 14,
+        "power": 2509287,
+        "tier": 1,
+        "disallowedFactions": [
+          "BlackLegion",
+          "DeathGuard",
+          "ThousandSons",
+          "WorldEaters",
+          "EmperorsChildren"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 326028,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 29,
+                "count": 8
+              },
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 29,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 427896,
+            "enemies": [
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 29,
+                "count": 2
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 29,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 477830,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 29,
+                "count": 2
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 29,
+                "count": 4
+              },
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 29,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 476010,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 29,
+                "count": 2
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 29,
+                "count": 5
+              },
+              {
+                "id": "blackBossAbaddonLEG",
+                "stars": 2,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 550713,
+            "enemies": [
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 29,
+                "count": 2
+              },
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 29,
+                "count": 1
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 29,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 250810,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 29,
+                "count": 8
+              },
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 29,
+                "count": 2
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE3_17",
+        "number": 15,
+        "power": 4983914,
+        "tier": 1,
+        "disallowedFactions": [
+          "BlackLegion",
+          "DeathGuard",
+          "ThousandSons",
+          "WorldEaters",
+          "EmperorsChildren"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 921966,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 32,
+                "count": 3
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 32,
+                "count": 8
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 915964,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 32,
+                "count": 6
+              },
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 30,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 720906,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 32,
+                "count": 3
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 32,
+                "count": 5
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 787926,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 32,
+                "count": 6
+              },
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 32,
+                "count": 3
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 849226,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 32,
+                "count": 5
+              },
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 32,
+                "count": 2
+              },
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 30,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 787926,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 32,
+                "count": 6
+              },
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 32,
+                "count": 3
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE3_22",
+        "number": 16,
+        "power": 9961075,
+        "tier": 1,
+        "disallowedFactions": [
+          "BlackLegion",
+          "DeathGuard",
+          "ThousandSons",
+          "WorldEaters",
+          "EmperorsChildren"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 2218264,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 34,
+                "count": 10
+              },
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 34,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 1073756,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 31,
+                "count": 3
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 34,
+                "count": 3
+              },
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 31,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 1808253,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 34,
+                "count": 7
+              },
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 31,
+                "count": 1
+              },
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 31,
+                "count": 3
+              },
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 34,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 1483767,
+            "enemies": [
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 31,
+                "count": 1
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 34,
+                "count": 6
+              },
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 34,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 1603648,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 31,
+                "count": 3
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 34,
+                "count": 2
+              },
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 34,
+                "count": 1
+              },
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 31,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 1773387,
+            "enemies": [
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 31,
+                "count": 1
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 34,
+                "count": 9
+              },
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 34,
+                "count": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE3_12",
+        "number": 17,
+        "power": 15054998,
+        "tier": 1,
+        "disallowedFactions": [
+          "BlackLegion",
+          "DeathGuard",
+          "ThousandSons",
+          "WorldEaters",
+          "EmperorsChildren"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 2237754,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 40,
+                "count": 6
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 41,
+                "count": 6
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 2134620,
+            "enemies": [
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 41,
+                "count": 6
+              },
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 37,
+                "count": 1
+              },
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 40,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 2759448,
+            "enemies": [
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 37,
+                "count": 2
+              },
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 40,
+                "count": 2
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 41,
+                "count": 4
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 2656149,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 40,
+                "count": 3
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 41,
+                "count": 8
+              },
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 37,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 2610878,
+            "enemies": [
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 37,
+                "count": 2
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 41,
+                "count": 3
+              },
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 40,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 2656149,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 40,
+                "count": 3
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 41,
+                "count": 8
+              },
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 37,
+                "count": 1
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "mapId": "LE3_13",
+        "number": 18,
+        "power": 20002657,
+        "tier": 1,
+        "disallowedFactions": [
+          "BlackLegion",
+          "DeathGuard",
+          "ThousandSons",
+          "WorldEaters",
+          "EmperorsChildren"
+        ],
+        "waves": [
+          {
+            "round": 1,
+            "power": 4199734,
+            "enemies": [
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 42,
+                "count": 2
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 42,
+                "count": 8
+              }
+            ]
+          },
+          {
+            "round": 3,
+            "power": 3804187,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 40,
+                "count": 2
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 42,
+                "count": 3
+              },
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 42,
+                "count": 2
+              }
+            ]
+          },
+          {
+            "round": 4,
+            "power": 2830787,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 40,
+                "count": 2
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 42,
+                "count": 7
+              },
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 40,
+                "count": 1
+              }
+            ]
+          },
+          {
+            "round": 5,
+            "power": 2944192,
+            "enemies": [
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 42,
+                "count": 1
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 42,
+                "count": 9
+              }
+            ]
+          },
+          {
+            "round": 6,
+            "power": 2137428,
+            "enemies": [
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 40,
+                "count": 2
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 42,
+                "count": 10
+              }
+            ]
+          },
+          {
+            "round": 8,
+            "power": 4086329,
+            "enemies": [
+              {
+                "id": "blackNpc2Terminator",
+                "stars": 40,
+                "count": 1
+              },
+              {
+                "id": "blackNpc3TraitorGuardsman",
+                "stars": 42,
+                "count": 6
+              },
+              {
+                "id": "blackNpc1Bloodletter",
+                "stars": 40,
+                "count": 2
+              },
+              {
+                "id": "blackNpc4Havoc",
+                "stars": 42,
+                "count": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "pointsMilestones": [
+    {
+      "milestone": 1,
+      "cumulativePoints": 100,
+      "engramPayout": 25
+    },
+    {
+      "milestone": 2,
+      "cumulativePoints": 250,
+      "engramPayout": 30
+    },
+    {
+      "milestone": 3,
+      "cumulativePoints": 500,
+      "engramPayout": 35
+    },
+    {
+      "milestone": 4,
+      "cumulativePoints": 1000,
+      "engramPayout": 40
+    },
+    {
+      "milestone": 5,
+      "cumulativePoints": 1500,
+      "engramPayout": 45
+    },
+    {
+      "milestone": 6,
+      "cumulativePoints": 2000,
+      "engramPayout": 50
+    },
+    {
+      "milestone": 7,
+      "cumulativePoints": 2500,
+      "engramPayout": 55
+    },
+    {
+      "milestone": 8,
+      "cumulativePoints": 3000,
+      "engramPayout": 60
+    },
+    {
+      "milestone": 9,
+      "cumulativePoints": 3500,
+      "engramPayout": 65
+    },
+    {
+      "milestone": 10,
+      "cumulativePoints": 4000,
+      "engramPayout": 70
+    },
+    {
+      "milestone": 11,
+      "cumulativePoints": 4500,
+      "engramPayout": 75
+    },
+    {
+      "milestone": 12,
+      "cumulativePoints": 5000,
+      "engramPayout": 80
+    },
+    {
+      "milestone": 13,
+      "cumulativePoints": 5500,
+      "engramPayout": 85
+    },
+    {
+      "milestone": 14,
+      "cumulativePoints": 6000,
+      "engramPayout": 90
+    },
+    {
+      "milestone": 15,
+      "cumulativePoints": 6500,
+      "engramPayout": 95
+    },
+    {
+      "milestone": 16,
+      "cumulativePoints": 7000,
+      "engramPayout": 100
+    },
+    {
+      "milestone": 17,
+      "cumulativePoints": 7500,
+      "engramPayout": 110
+    },
+    {
+      "milestone": 18,
+      "cumulativePoints": 8000,
+      "engramPayout": 120
+    },
+    {
+      "milestone": 19,
+      "cumulativePoints": 8500,
+      "engramPayout": 140
+    },
+    {
+      "milestone": 20,
+      "cumulativePoints": 9000,
+      "engramPayout": 160
+    },
+    {
+      "milestone": 21,
+      "cumulativePoints": 9500,
+      "engramPayout": 180
+    },
+    {
+      "milestone": 22,
+      "cumulativePoints": 10000,
+      "engramPayout": 200
+    },
+    {
+      "milestone": 23,
+      "cumulativePoints": 10500,
+      "engramPayout": 220
+    },
+    {
+      "milestone": 24,
+      "cumulativePoints": 11000,
+      "engramPayout": 240
+    },
+    {
+      "milestone": 25,
+      "cumulativePoints": 11500,
+      "engramPayout": 260
+    },
+    {
+      "milestone": 26,
+      "cumulativePoints": 12000,
+      "engramPayout": 280
+    },
+    {
+      "milestone": 27,
+      "cumulativePoints": 12500,
+      "engramPayout": 300
+    },
+    {
+      "milestone": 28,
+      "cumulativePoints": 13000,
+      "engramPayout": 310
+    },
+    {
+      "milestone": 29,
+      "cumulativePoints": 13500,
+      "engramPayout": 320
+    },
+    {
+      "milestone": 30,
+      "cumulativePoints": 14000,
+      "engramPayout": 330
+    },
+    {
+      "milestone": 31,
+      "cumulativePoints": 14250,
+      "engramPayout": 340
+    },
+    {
+      "milestone": 32,
+      "cumulativePoints": 14500,
+      "engramPayout": 350
+    },
+    {
+      "milestone": 33,
+      "cumulativePoints": 14750,
+      "engramPayout": 355
+    },
+    {
+      "milestone": 34,
+      "cumulativePoints": 15000,
+      "engramPayout": 360
+    },
+    {
+      "milestone": 35,
+      "cumulativePoints": 15250,
+      "engramPayout": 365
+    },
+    {
+      "milestone": 36,
+      "cumulativePoints": 15500,
+      "engramPayout": 370
+    },
+    {
+      "milestone": 37,
+      "cumulativePoints": 15750,
+      "engramPayout": 380
+    },
+    {
+      "milestone": 38,
+      "cumulativePoints": 16000,
+      "engramPayout": 390
+    },
+    {
+      "milestone": 39,
+      "cumulativePoints": 16250,
+      "engramPayout": 400
+    },
+    {
+      "milestone": 40,
+      "cumulativePoints": 16500,
+      "engramPayout": 410
+    },
+    {
+      "milestone": 41,
+      "cumulativePoints": 16750,
+      "engramPayout": 420
+    },
+    {
+      "milestone": 42,
+      "cumulativePoints": 17000,
+      "engramPayout": 430
+    },
+    {
+      "milestone": 43,
+      "cumulativePoints": 17250,
+      "engramPayout": 440
+    },
+    {
+      "milestone": 44,
+      "cumulativePoints": 17500,
+      "engramPayout": 450
+    },
+    {
+      "milestone": 45,
+      "cumulativePoints": 17750,
+      "engramPayout": 460
+    },
+    {
+      "milestone": 46,
+      "cumulativePoints": 18000,
+      "engramPayout": 470
+    },
+    {
+      "milestone": 47,
+      "cumulativePoints": 18250,
+      "engramPayout": 480
+    },
+    {
+      "milestone": 48,
+      "cumulativePoints": 18500,
+      "engramPayout": 490
+    },
+    {
+      "milestone": 49,
+      "cumulativePoints": 18750,
+      "engramPayout": 500
+    },
+    {
+      "milestone": 50,
+      "cumulativePoints": 19000,
+      "engramPayout": 510
+    },
+    {
+      "milestone": 51,
+      "cumulativePoints": 19250,
+      "engramPayout": 520
+    },
+    {
+      "milestone": 52,
+      "cumulativePoints": 19500,
+      "engramPayout": 530
+    },
+    {
+      "milestone": 53,
+      "cumulativePoints": 19750,
+      "engramPayout": 540
+    },
+    {
+      "milestone": 54,
+      "cumulativePoints": 20000,
+      "engramPayout": 550
+    },
+    {
+      "milestone": 55,
+      "cumulativePoints": 20250,
+      "engramPayout": 560
+    },
+    {
+      "milestone": 56,
+      "cumulativePoints": 20500,
+      "engramPayout": 570
+    },
+    {
+      "milestone": 57,
+      "cumulativePoints": 20750,
+      "engramPayout": 580
+    },
+    {
+      "milestone": 58,
+      "cumulativePoints": 21000,
+      "engramPayout": 590
+    },
+    {
+      "milestone": 59,
+      "cumulativePoints": 21250,
+      "engramPayout": 600
+    },
+    {
+      "milestone": 60,
+      "cumulativePoints": 21500,
+      "engramPayout": 605
+    },
+    {
+      "milestone": 61,
+      "cumulativePoints": 21750,
+      "engramPayout": 610
+    },
+    {
+      "milestone": 62,
+      "cumulativePoints": 22000,
+      "engramPayout": 615
+    },
+    {
+      "milestone": 63,
+      "cumulativePoints": 22250,
+      "engramPayout": 620
+    },
+    {
+      "milestone": 64,
+      "cumulativePoints": 22500,
+      "engramPayout": 625
+    },
+    {
+      "milestone": 65,
+      "cumulativePoints": 22750,
+      "engramPayout": 630
+    },
+    {
+      "milestone": 66,
+      "cumulativePoints": 23000,
+      "engramPayout": 635
+    },
+    {
+      "milestone": 67,
+      "cumulativePoints": 23250,
+      "engramPayout": 640
+    },
+    {
+      "milestone": 68,
+      "cumulativePoints": 23500,
+      "engramPayout": 645
+    },
+    {
+      "milestone": 69,
+      "cumulativePoints": 23750,
+      "engramPayout": 650
+    },
+    {
+      "milestone": 70,
+      "cumulativePoints": 24000,
+      "engramPayout": 655
+    },
+    {
+      "milestone": 71,
+      "cumulativePoints": 24250,
+      "engramPayout": 660
+    },
+    {
+      "milestone": 72,
+      "cumulativePoints": 24500,
+      "engramPayout": 665
+    },
+    {
+      "milestone": 73,
+      "cumulativePoints": 24750,
+      "engramPayout": 670
+    },
+    {
+      "milestone": 74,
+      "cumulativePoints": 25000,
+      "engramPayout": 675
+    },
+    {
+      "milestone": 75,
+      "cumulativePoints": 25250,
+      "engramPayout": 680
+    },
+    {
+      "milestone": 76,
+      "cumulativePoints": 25500,
+      "engramPayout": 685
+    },
+    {
+      "milestone": 77,
+      "cumulativePoints": 25750,
+      "engramPayout": 690
+    },
+    {
+      "milestone": 78,
+      "cumulativePoints": 26000,
+      "engramPayout": 695
+    },
+    {
+      "milestone": 79,
+      "cumulativePoints": 26250,
+      "engramPayout": 700
+    },
+    {
+      "milestone": 80,
+      "cumulativePoints": 26500,
+      "engramPayout": 705
+    },
+    {
+      "milestone": 81,
+      "cumulativePoints": 26750,
+      "engramPayout": 710
+    },
+    {
+      "milestone": 82,
+      "cumulativePoints": 27000,
+      "engramPayout": 715
+    }
+  ],
+  "chestsMilestones": [
+    {
+      "chestLevel": 1,
+      "engramCost": 60
+    },
+    {
+      "chestLevel": 2,
+      "engramCost": 80
+    },
+    {
+      "chestLevel": 3,
+      "engramCost": 100
+    },
+    {
+      "chestLevel": 4,
+      "engramCost": 120
+    },
+    {
+      "chestLevel": 5,
+      "engramCost": 140
+    },
+    {
+      "chestLevel": 6,
+      "engramCost": 160
+    },
+    {
+      "chestLevel": 7,
+      "engramCost": 180
+    },
+    {
+      "chestLevel": 8,
+      "engramCost": 200
+    },
+    {
+      "chestLevel": 9,
+      "engramCost": 220
+    },
+    {
+      "chestLevel": 10,
+      "engramCost": 240
+    },
+    {
+      "chestLevel": 11,
+      "engramCost": 260
+    },
+    {
+      "chestLevel": 12,
+      "engramCost": 280
+    },
+    {
+      "chestLevel": 13,
+      "engramCost": 300
+    },
+    {
+      "chestLevel": 14,
+      "engramCost": 320
+    },
+    {
+      "chestLevel": 15,
+      "engramCost": 340
+    },
+    {
+      "chestLevel": 16,
+      "engramCost": 350
+    },
+    {
+      "chestLevel": 17,
+      "engramCost": 360
+    },
+    {
+      "chestLevel": 18,
+      "engramCost": 370
+    },
+    {
+      "chestLevel": 19,
+      "engramCost": 380
+    },
+    {
+      "chestLevel": 20,
+      "engramCost": 390
+    },
+    {
+      "chestLevel": 21,
+      "engramCost": 400
+    },
+    {
+      "chestLevel": 22,
+      "engramCost": 400
+    },
+    {
+      "chestLevel": 23,
+      "engramCost": 400
+    },
+    {
+      "chestLevel": 24,
+      "engramCost": 400
+    },
+    {
+      "chestLevel": 25,
+      "engramCost": 400
+    },
+    {
+      "chestLevel": 26,
+      "engramCost": 400
+    },
+    {
+      "chestLevel": 27,
+      "engramCost": 400
+    },
+    {
+      "chestLevel": 28,
+      "engramCost": 400
+    },
+    {
+      "chestLevel": 29,
+      "engramCost": 400
+    },
+    {
+      "chestLevel": 30,
+      "engramCost": 400
+    },
+    {
+      "chestLevel": 31,
+      "engramCost": 400
+    },
+    {
+      "chestLevel": 32,
+      "engramCost": 400
+    },
+    {
+      "chestLevel": 33,
+      "engramCost": 400
+    },
+    {
+      "chestLevel": 34,
+      "engramCost": 400
+    },
+    {
+      "chestLevel": 35,
+      "engramCost": 400
+    },
+    {
+      "chestLevel": 36,
+      "engramCost": 400
+    },
+    {
+      "chestLevel": 37,
+      "engramCost": 800
+    },
+    {
+      "chestLevel": 38,
+      "engramCost": 900
+    },
+    {
+      "chestLevel": 39,
+      "engramCost": 1000
+    },
+    {
+      "chestLevel": 40,
+      "engramCost": 1100
+    },
+    {
+      "chestLevel": 41,
+      "engramCost": 1200
+    },
+    {
+      "chestLevel": 42,
+      "engramCost": 1300
+    },
+    {
+      "chestLevel": 43,
+      "engramCost": 1400
+    },
+    {
+      "chestLevel": 44,
+      "engramCost": 1500
+    },
+    {
+      "chestLevel": 45,
+      "engramCost": 1500
+    },
+    {
+      "chestLevel": 46,
+      "engramCost": 1500
+    },
+    {
+      "chestLevel": 47,
+      "engramCost": 1500
+    },
+    {
+      "chestLevel": 48,
+      "engramCost": 1500
+    },
+    {
+      "chestLevel": 49,
+      "engramCost": 1500
+    },
+    {
+      "chestLevel": 50,
+      "engramCost": 1500
+    },
+    {
+      "chestLevel": 51,
+      "engramCost": 1500
+    },
+    {
+      "chestLevel": 52,
+      "engramCost": 1500
+    },
+    {
+      "chestLevel": 53,
+      "engramCost": 1500
+    },
+    {
+      "chestLevel": 54,
+      "engramCost": 1500
+    },
+    {
+      "chestLevel": 55,
+      "engramCost": 1500
+    },
+    {
+      "chestLevel": 56,
+      "engramCost": 1500
+    },
+    {
+      "chestLevel": 57,
+      "engramCost": 1500
+    },
+    {
+      "chestLevel": 58,
+      "engramCost": 1500
+    },
+    {
+      "chestLevel": 59,
+      "engramCost": 1500
+    },
+    {
+      "chestLevel": 60,
+      "engramCost": 1500
+    }
+  ],
+  "shardsPerChest": 25,
+  "battlesCount": 18,
+  "constraintsCount": 7,
+  "progression": {
+    "unlock": 400,
+    "fourStars": 120,
+    "fiveStars": 180,
+    "blueStar": 200,
+    "mythic": 250,
+    "twoBlueStars": 150
+  }
+}

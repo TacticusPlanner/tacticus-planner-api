@@ -83,6 +83,40 @@
       ]
     },
     {
+      "id": "orksBossBigMekLEG",
+      "name": "Gibbascrapz",
+      "meleeDamage": "Physical",
+      "meleeHits": 4,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [
+        "GetStuckIn",
+        "Mechanic"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "GrotTank"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "KustomForceFieldReworked"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_orkss_mek_01.png",
+      "stats": [
+        {
+          "abilityLevel": 38,
+          "damage": 975,
+          "armour": 702,
+          "health": 3120,
+          "progressionIndex": 15,
+          "rank": 13,
+          "stars": 11
+        }
+      ]
+    },
+    {
       "id": "orksBossBigMekLHE",
       "name": "Gibbascrapz",
       "meleeDamage": "Physical",
@@ -218,6 +252,44 @@
       ]
     },
     {
+      "id": "orksBossKillaKanLEG",
+      "name": "Snappawrecka",
+      "meleeDamage": "Chain",
+      "meleeHits": 3,
+      "rangedDamage": "Projectile",
+      "rangedHits": 3,
+      "distance": 3,
+      "movement": 3,
+      "traits": [
+        "GetStuckIn",
+        "BigTarget",
+        "Explodes",
+        "Mechanical"
+      ],
+      "activeAbilityDamage": [
+        "Projectile"
+      ],
+      "activeAbilities": [
+        "DakkaDakkaDakka"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "PowerTrip"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_orkss_killakan_01.png",
+      "stats": [
+        {
+          "abilityLevel": 38,
+          "damage": 897,
+          "armour": 780,
+          "health": 3510,
+          "progressionIndex": 15,
+          "rank": 13,
+          "stars": 11
+        }
+      ]
+    },
+    {
       "id": "orksBossKillaKanLHE",
       "name": "Snappawrecka",
       "meleeDamage": "Chain",
@@ -333,6 +405,43 @@
           "health": 9583,
           "progressionIndex": 15,
           "rank": 17,
+          "stars": 11
+        }
+      ]
+    },
+    {
+      "id": "orksBossNobLEG",
+      "name": "Tanksmasha",
+      "meleeDamage": "Eviscerate",
+      "meleeHits": 3,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 4,
+      "traits": [
+        "GetStuckIn",
+        "BeastSlayer",
+        "Unstoppable"
+      ],
+      "activeAbilityDamage": [
+        "DirectDamage"
+      ],
+      "activeAbilities": [
+        "UnstoppableMomentumReworked"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "SmashaEad"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_orkss_nob_01.png",
+      "stats": [
+        {
+          "abilityLevel": 41,
+          "damage": 1172,
+          "armour": 732,
+          "health": 4883,
+          "progressionIndex": 15,
+          "rank": 14,
           "stars": 11
         }
       ]
@@ -460,6 +569,42 @@
           "health": 11499,
           "progressionIndex": 15,
           "rank": 17,
+          "stars": 11
+        }
+      ]
+    },
+    {
+      "id": "orksBossRuntherdLEG",
+      "name": "Snotflogga",
+      "meleeDamage": "Physical",
+      "meleeHits": 3,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [
+        "GetStuckIn",
+        "BeastSlayer"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "GetEmRuntz"
+      ],
+      "passiveAbilityDamage": [
+        "Physical"
+      ],
+      "passiveAbilities": [
+        "SquigHound"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_orkss_runtherd_01.png",
+      "stats": [
+        {
+          "abilityLevel": 44,
+          "damage": 1834,
+          "armour": 1100,
+          "health": 7336,
+          "progressionIndex": 15,
+          "rank": 15,
           "stars": 11
         }
       ]

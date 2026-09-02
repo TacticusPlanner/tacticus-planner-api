@@ -4153,6 +4153,81 @@
     ]
   },
   {
+    "id": "R_Crit_Helspear",
+    "name": "Helspear",
+    "rarity": "Mythic",
+    "type": "I_Crit",
+    "abilityId": "Helspear",
+    "isRelic": true,
+    "isUniqueRelic": true,
+    "allowedUnits": [
+      "blackHaarken"
+    ],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "critChance": 35,
+          "critDamage": 1050
+        }
+      },
+      {
+        "stats": {
+          "critChance": 35,
+          "critDamage": 1107
+        }
+      },
+      {
+        "stats": {
+          "critChance": 35,
+          "critDamage": 1164
+        }
+      },
+      {
+        "stats": {
+          "critChance": 35,
+          "critDamage": 1221
+        }
+      },
+      {
+        "stats": {
+          "critChance": 35,
+          "critDamage": 1277
+        }
+      },
+      {
+        "stats": {
+          "critChance": 35,
+          "critDamage": 1334
+        }
+      },
+      {
+        "stats": {
+          "critChance": 35,
+          "critDamage": 1391
+        }
+      },
+      {
+        "stats": {
+          "critChance": 35,
+          "critDamage": 1447
+        }
+      },
+      {
+        "stats": {
+          "critChance": 35,
+          "critDamage": 1504
+        }
+      },
+      {
+        "stats": {
+          "critChance": 35,
+          "critDamage": 1561
+        }
+      }
+    ]
+  },
+  {
     "id": "R_Crit_Lakrimae",
     "name": "Lakrimae",
     "rarity": "Mythic",

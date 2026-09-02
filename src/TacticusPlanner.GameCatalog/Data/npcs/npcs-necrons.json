@@ -60,17 +60,16 @@
       "movement": 3,
       "traits": [
         "LivingMetal",
-        "Mechanical"
+        "Mechanical",
+        "Resilient"
       ],
       "activeAbilityDamage": [],
       "activeAbilities": [
         "ResurrectionOrb"
       ],
-      "passiveAbilityDamage": [
-        "Energy"
-      ],
+      "passiveAbilityDamage": [],
       "passiveAbilities": [
-        "MartialApotheosis"
+        "MyWillBeDoneOverlord"
       ],
       "icon": "snowprint_assets/characters/ui_image_portrait_necro_overlord_01.png",
       "stats": [
@@ -228,6 +227,42 @@
           "progressionIndex": 8,
           "rank": 9,
           "stars": 6
+        }
+      ]
+    },
+    {
+      "id": "necroBossChronomancerLHE",
+      "name": "Thothmek",
+      "meleeDamage": "Physical",
+      "meleeHits": 1,
+      "rangedDamage": "Energy",
+      "rangedHits": 2,
+      "distance": 2,
+      "movement": 3,
+      "traits": [
+        "LivingMetal",
+        "Mechanical",
+        "Flying",
+        "SuppressiveFire"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "Chronometron"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "TimesplinterMantle"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_necro_chronomancer_01.png",
+      "stats": [
+        {
+          "abilityLevel": 55,
+          "damage": 4731,
+          "armour": 2365,
+          "health": 9855,
+          "progressionIndex": 18,
+          "rank": 18,
+          "stars": 13
         }
       ]
     },
@@ -434,17 +469,16 @@
       "movement": 3,
       "traits": [
         "LivingMetal",
-        "Mechanical"
+        "Mechanical",
+        "Resilient"
       ],
       "activeAbilityDamage": [],
       "activeAbilities": [
         "ResurrectionOrb"
       ],
-      "passiveAbilityDamage": [
-        "Energy"
-      ],
+      "passiveAbilityDamage": [],
       "passiveAbilities": [
-        "MartialApotheosis"
+        "MyWillBeDoneOverlord"
       ],
       "icon": "snowprint_assets/characters/ui_image_portrait_necro_overlord_01.png",
       "stats": [
@@ -497,17 +531,16 @@
       "movement": 3,
       "traits": [
         "LivingMetal",
-        "Mechanical"
+        "Mechanical",
+        "Resilient"
       ],
       "activeAbilityDamage": [],
       "activeAbilities": [
         "ResurrectionOrb"
       ],
-      "passiveAbilityDamage": [
-        "Energy"
-      ],
+      "passiveAbilityDamage": [],
       "passiveAbilities": [
-        "MartialApotheosis"
+        "MyWillBeDoneOverlord"
       ],
       "icon": "snowprint_assets/characters/ui_image_portrait_necro_overlord_01.png",
       "stats": [
@@ -533,17 +566,16 @@
       "movement": 3,
       "traits": [
         "LivingMetal",
-        "Mechanical"
+        "Mechanical",
+        "Resilient"
       ],
       "activeAbilityDamage": [],
       "activeAbilities": [
         "ResurrectionOrb"
       ],
-      "passiveAbilityDamage": [
-        "Energy"
-      ],
+      "passiveAbilityDamage": [],
       "passiveAbilities": [
-        "MartialApotheosis"
+        "MyWillBeDoneOverlord"
       ],
       "icon": "snowprint_assets/characters/ui_image_portrait_necro_overlord_01.png",
       "stats": [
@@ -4788,17 +4820,16 @@
       "movement": 3,
       "traits": [
         "LivingMetal",
-        "Mechanical"
+        "Mechanical",
+        "Resilient"
       ],
       "activeAbilityDamage": [],
       "activeAbilities": [
         "ResurrectionOrb"
       ],
-      "passiveAbilityDamage": [
-        "Energy"
-      ],
+      "passiveAbilityDamage": [],
       "passiveAbilities": [
-        "MartialApotheosis"
+        "MyWillBeDoneOverlord"
       ],
       "icon": "snowprint_assets/characters/ui_image_portrait_necro_overlord_01.png",
       "stats": [
