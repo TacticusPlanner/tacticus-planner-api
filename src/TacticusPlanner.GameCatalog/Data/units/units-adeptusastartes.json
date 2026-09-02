@@ -265,6 +265,263 @@
       ]
     },
     {
+      "id": "astarEradicator",
+      "name": "Nubari",
+      "health": 90,
+      "damage": 24,
+      "armour": 18,
+      "initialRarity": "Uncommon",
+      "meleeDamage": "Melta",
+      "meleeHits": 2,
+      "rangedDamage": "Melta",
+      "rangedHits": 2,
+      "rangeDistance": 2,
+      "movement": 2,
+      "traits": [
+        "MkXGravis",
+        "HeavyWeapon"
+      ],
+      "activeAbilityDamage": [
+        "Melta"
+      ],
+      "activeAbilityNames": [
+        "TotalObliteration"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilityNames": [
+        "CrucibleOfBattle"
+      ],
+      "equipmentSlots": [
+        "I_Crit",
+        "I_Defensive",
+        "I_Booster_Crit"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_astar_eradicator_01.png",
+      "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_astar_eradicator_01.png",
+      "rankUpUpgrades": [
+        {
+          "rank": "Stone1",
+          "upgradeIds": [
+            "upgHpC015",
+            "upgHpC004",
+            "upgDmgC009",
+            "upgDmgC011",
+            "upgArmC002",
+            "upgArmC012"
+          ]
+        },
+        {
+          "rank": "Stone2",
+          "upgradeIds": [
+            "upgHpC017",
+            "upgHpC015",
+            "upgDmgU012",
+            "upgDmgU015C",
+            "upgArmC012",
+            "upgArmC001"
+          ]
+        },
+        {
+          "rank": "Stone3",
+          "upgradeIds": [
+            "upgHpU017",
+            "upgHpU018C",
+            "upgDmgC007",
+            "upgDmgC004",
+            "upgArmU005",
+            "upgArmU002"
+          ]
+        },
+        {
+          "rank": "Iron1",
+          "upgradeIds": [
+            "upgHpU018C",
+            "upgHpU001",
+            "upgDmgU012",
+            "upgDmgU003",
+            "upgArmU002",
+            "upgArmU010C"
+          ]
+        },
+        {
+          "rank": "Iron2",
+          "upgradeIds": [
+            "upgHpU017",
+            "upgHpR003C",
+            "upgDmgU007C",
+            "upgDmgU011",
+            "upgArmR031",
+            "upgArmU001"
+          ]
+        },
+        {
+          "rank": "Iron3",
+          "upgradeIds": [
+            "upgHpR017C",
+            "upgHpU006",
+            "upgDmgR007",
+            "upgDmgR012C",
+            "upgArmU010C",
+            "upgArmR015"
+          ]
+        },
+        {
+          "rank": "Bronze1",
+          "upgradeIds": [
+            "upgHpR021",
+            "upgHpR005",
+            "upgDmgR008C",
+            "upgDmgR003",
+            "upgArmR003C",
+            "upgArmR008C"
+          ]
+        },
+        {
+          "rank": "Bronze2",
+          "upgradeIds": [
+            "upgHpE021C",
+            "upgHpR013C",
+            "upgDmgR003",
+            "upgDmgE002C",
+            "upgArmR035",
+            "upgArmR001C"
+          ]
+        },
+        {
+          "rank": "Bronze3",
+          "upgradeIds": [
+            "upgHpR005",
+            "upgHpE007C",
+            "upgDmgE020C",
+            "upgDmgR015C",
+            "upgArmE035C",
+            "upgArmE013"
+          ]
+        },
+        {
+          "rank": "Silver1",
+          "upgradeIds": [
+            "upgHpE021C",
+            "upgHpE012",
+            "upgDmgE020C",
+            "upgDmgE003",
+            "upgArmE035C",
+            "upgArmE004C"
+          ]
+        },
+        {
+          "rank": "Silver2",
+          "upgradeIds": [
+            "upgHpL100",
+            "upgHpE002C",
+            "upgDmgL004C",
+            "upgDmgE002C",
+            "upgArmE035C",
+            "upgArmE012C"
+          ]
+        },
+        {
+          "rank": "Silver3",
+          "upgradeIds": [
+            "upgHpE021C",
+            "upgHpL017C",
+            "upgDmgE020C",
+            "upgDmgL015C",
+            "upgArmL001",
+            "upgArmL004C"
+          ]
+        },
+        {
+          "rank": "Gold1",
+          "upgradeIds": [
+            "upgHpL021C",
+            "upgHpL009C",
+            "upgDmgL204",
+            "upgDmgL002C",
+            "upgArmL020C",
+            "upgArmL008C"
+          ]
+        },
+        {
+          "rank": "Gold2",
+          "upgradeIds": [
+            "upgHpL120C",
+            "upgHpL002C",
+            "upgDmgL004C",
+            "upgDmgL015C",
+            "upgArmL020C",
+            "upgArmL010C"
+          ]
+        },
+        {
+          "rank": "Gold3",
+          "upgradeIds": [
+            "upgHpL021C",
+            "upgHpL009C",
+            "upgDmgL120C",
+            "upgDmgL012C",
+            "upgArmL120C",
+            "upgArmL008C"
+          ]
+        },
+        {
+          "rank": "Diamond1",
+          "upgradeIds": [
+            "upgHpL120C",
+            "upgHpL017C",
+            "upgDmgL120C",
+            "upgDmgL006C",
+            "upgArmL120C",
+            "upgArmL004C"
+          ]
+        },
+        {
+          "rank": "Diamond2",
+          "upgradeIds": [
+            "upgHpL120C",
+            "upgHpL213C",
+            "upgDmgL120C",
+            "upgDmgL213C",
+            "upgArmL120C",
+            "upgArmL213C"
+          ]
+        },
+        {
+          "rank": "Diamond3",
+          "upgradeIds": [
+            "upgHpL120C",
+            "upgHpL213C",
+            "upgDmgM214C",
+            "upgDmgL213C",
+            "upgArmM211C",
+            "upgArmL213C"
+          ]
+        },
+        {
+          "rank": "Adamantine1",
+          "upgradeIds": [
+            "upgHpM143C",
+            "upgHpL213C",
+            "upgDmgM214C",
+            "upgDmgL213C",
+            "upgArmM214C",
+            "upgArmL213C"
+          ]
+        },
+        {
+          "rank": "Adamantine2",
+          "upgradeIds": [
+            "upgHpECS",
+            "upgHpCS",
+            "upgDmgECS",
+            "upgDmgCS",
+            "upgArmECS",
+            "upgArmCS"
+          ]
+        }
+      ]
+    },
+    {
       "id": "astarLysander",
       "name": "Lysander",
       "health": 110,

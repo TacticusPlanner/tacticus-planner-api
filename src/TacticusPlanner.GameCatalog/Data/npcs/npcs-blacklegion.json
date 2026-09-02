@@ -363,6 +363,43 @@
       ]
     },
     {
+      "id": "blackBossHaarkenSurv",
+      "name": "Haarken",
+      "meleeDamage": "Piercing",
+      "meleeHits": 4,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 4,
+      "traits": [
+        "LetTheGalaxyBurn",
+        "Flying",
+        "Terrifying"
+      ],
+      "activeAbilityDamage": [
+        "Piercing"
+      ],
+      "activeAbilities": [
+        "HeraldOfTheApocalypse"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "HeadClaimer"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_black_haarken_01.png",
+      "stats": [
+        {
+          "abilityLevel": 35,
+          "damage": 326,
+          "armour": 593,
+          "health": 2818,
+          "progressionIndex": 14,
+          "rank": 12,
+          "stars": 10
+        }
+      ]
+    },
+    {
       "id": "blackBossObliterator",
       "name": "Volk",
       "meleeDamage": "Power",
@@ -2720,6 +2757,58 @@
           "damage": 2903,
           "armour": 3959,
           "health": 17297,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
+        }
+      ]
+    },
+    {
+      "id": "blackNpc4HavocSurv",
+      "name": "Havoc",
+      "meleeDamage": "Physical",
+      "meleeHits": 2,
+      "rangedDamage": "Projectile",
+      "rangedHits": 8,
+      "distance": 2,
+      "movement": 3,
+      "traits": [
+        "LetTheGalaxyBurn",
+        "HeavyWeapon",
+        "SuppressiveFire",
+        "Overwatch"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "FiringPosition"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_black_havoc_01.png",
+      "stats": [
+        {
+          "abilityLevel": 65,
+          "damage": 5806,
+          "armour": 7918,
+          "health": 34594,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
+        },
+        {
+          "abilityLevel": 65,
+          "damage": 29030,
+          "armour": 39590,
+          "health": 172970,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
+        },
+        {
+          "abilityLevel": 65,
+          "damage": 290300,
+          "armour": 395900,
+          "health": 1729700,
           "progressionIndex": 19,
           "rank": 20,
           "stars": 14

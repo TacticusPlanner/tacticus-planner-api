@@ -4,6 +4,82 @@
   "name": "Adeptus Astartes",
   "npcs": [
     {
+      "id": "astarBossCyrusSurv",
+      "name": "Cyrus",
+      "meleeDamage": "Bolter",
+      "meleeHits": 3,
+      "rangedDamage": "Bolter",
+      "rangedHits": 3,
+      "distance": 3,
+      "movement": 3,
+      "traits": [
+        "Camouflage",
+        "Infiltrate",
+        "SuppressiveFire"
+      ],
+      "activeAbilityDamage": [
+        "Bolter"
+      ],
+      "activeAbilities": [
+        "StrikeFromTheShadows"
+      ],
+      "passiveAbilityDamage": [
+        "Blast",
+        "Energy"
+      ],
+      "passiveAbilities": [
+        "HaywireMine"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_astar_cyrus_01.png",
+      "stats": [
+        {
+          "abilityLevel": 35,
+          "damage": 748,
+          "armour": 534,
+          "health": 2136,
+          "progressionIndex": 11,
+          "rank": 12,
+          "stars": 8
+        }
+      ]
+    },
+    {
+      "id": "astarBossLysanderSurv",
+      "name": "Lysander",
+      "meleeDamage": "Power",
+      "meleeHits": 1,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 2,
+      "traits": [
+        "TeleportStrike",
+        "TerminatorArmour",
+        "Resilient",
+        "CrushingStrike"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "TitanhammerSquad"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "IconOfObstinacy"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_astar_lysander_01.png",
+      "stats": [
+        {
+          "abilityLevel": 60,
+          "damage": 8583,
+          "armour": 4807,
+          "health": 18884,
+          "progressionIndex": 19,
+          "rank": 19,
+          "stars": 14
+        }
+      ]
+    },
+    {
       "id": "astarCyrus_LHE",
       "name": "Cyrus",
       "meleeDamage": "Bolter",
@@ -82,6 +158,87 @@
           "damage": 4890,
           "armour": 3493,
           "health": 13968,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
+        }
+      ]
+    },
+    {
+      "id": "astarEradicator_LHE",
+      "name": "Nubari",
+      "meleeDamage": "Melta",
+      "meleeHits": 2,
+      "rangedDamage": "Melta",
+      "rangedHits": 2,
+      "distance": 2,
+      "movement": 2,
+      "traits": [
+        "MkXGravis",
+        "HeavyWeapon"
+      ],
+      "activeAbilityDamage": [
+        "Melta"
+      ],
+      "activeAbilities": [
+        "TotalObliteration"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "CrucibleOfBattle"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_astar_eradicator_01.png",
+      "stats": [
+        {
+          "abilityLevel": 8,
+          "damage": 68,
+          "armour": 50,
+          "health": 311,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 17,
+          "damage": 155,
+          "armour": 116,
+          "health": 721,
+          "progressionIndex": 5,
+          "rank": 6,
+          "stars": 4
+        },
+        {
+          "abilityLevel": 26,
+          "damage": 348,
+          "armour": 261,
+          "health": 1578,
+          "progressionIndex": 8,
+          "rank": 9,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 35,
+          "damage": 769,
+          "armour": 577,
+          "health": 3515,
+          "progressionIndex": 11,
+          "rank": 12,
+          "stars": 8
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 2759,
+          "armour": 2069,
+          "health": 12506,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 65,
+          "damage": 4190,
+          "armour": 3142,
+          "health": 18987,
           "progressionIndex": 19,
           "rank": 20,
           "stars": 14

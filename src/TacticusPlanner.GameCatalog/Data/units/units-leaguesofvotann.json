@@ -15,7 +15,7 @@
       "rangedDamage": null,
       "rangedHits": null,
       "rangeDistance": null,
-      "movement": 2,
+      "movement": 3,
       "traits": [
         "PrioritisedEfficiency",
         "Resilient",
@@ -268,7 +268,7 @@
       "name": "Kimm",
       "health": 100,
       "damage": 32,
-      "armour": 30,
+      "armour": 28,
       "initialRarity": "Epic",
       "meleeDamage": "Eviscerate",
       "meleeHits": 2,
@@ -278,6 +278,7 @@
       "movement": 2,
       "traits": [
         "PrioritisedEfficiency",
+        "RapidAssault",
         "Unstoppable"
       ],
       "activeAbilityDamage": [
@@ -287,10 +288,7 @@
       "activeAbilityNames": [
         "MassDriverAccelerator"
       ],
-      "passiveAbilityDamage": [
-        "DirectDamage",
-        "Psychic"
-      ],
+      "passiveAbilityDamage": [],
       "passiveAbilityNames": [
         "ModifiedExoarmour"
       ],
@@ -536,7 +534,7 @@
       "rangedDamage": null,
       "rangedHits": null,
       "rangeDistance": null,
-      "movement": 2,
+      "movement": 3,
       "traits": [
         "PrioritisedEfficiency",
         "Mechanic"
@@ -793,7 +791,7 @@
       "rangedDamage": null,
       "rangedHits": null,
       "rangeDistance": null,
-      "movement": 2,
+      "movement": 3,
       "traits": [
         "PrioritisedEfficiency",
         "Mechanical"
@@ -1048,7 +1046,7 @@
       "rangedDamage": "Energy",
       "rangedHits": 4,
       "rangeDistance": 2,
-      "movement": 2,
+      "movement": 3,
       "traits": [
         "PrioritisedEfficiency",
         "Resilient"

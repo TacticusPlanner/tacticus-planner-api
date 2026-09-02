@@ -4,6 +4,230 @@
   "name": "Blood Angels",
   "npcs": [
     {
+      "id": "bloodBossDanteSurv",
+      "name": "Dante",
+      "meleeDamage": "Piercing",
+      "meleeHits": 4,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 4,
+      "traits": [
+        "TeleportStrike",
+        "FinalJustice",
+        "Flying",
+        "RapidAssault",
+        "Terrifying"
+      ],
+      "activeAbilityDamage": [
+        "Melta"
+      ],
+      "activeAbilities": [
+        "LightOfSanguinius"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "LordOfTheHost"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_blood_dante_01.png",
+      "stats": [
+        {
+          "abilityLevel": 44,
+          "damage": 640,
+          "armour": 1339,
+          "health": 5240,
+          "progressionIndex": 14,
+          "rank": 15,
+          "stars": 10
+        }
+      ]
+    },
+    {
+      "id": "bloodBossDeathCompanySurv",
+      "name": "Lucien",
+      "meleeDamage": "Physical",
+      "meleeHits": 4,
+      "rangedDamage": "Blast",
+      "rangedHits": 3,
+      "distance": 2,
+      "movement": 3,
+      "traits": [
+        "RapidAssault",
+        "Resilient",
+        "Unstoppable"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "BlackRage"
+      ],
+      "passiveAbilityDamage": [
+        "Bolter"
+      ],
+      "passiveAbilities": [
+        "VisionsOfHeresy"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_blood_deathcompany_01.png",
+      "stats": [
+        {
+          "abilityLevel": 26,
+          "damage": 363,
+          "armour": 254,
+          "health": 1088,
+          "progressionIndex": 8,
+          "rank": 9,
+          "stars": 6
+        }
+      ]
+    },
+    {
+      "id": "bloodBossIntercessorSurv",
+      "name": "Mataneo",
+      "meleeDamage": "Plasma",
+      "meleeHits": 1,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 4,
+      "traits": [
+        "TeleportStrike",
+        "Flying",
+        "RapidAssault"
+      ],
+      "activeAbilityDamage": [
+        "Physical",
+        "Power"
+      ],
+      "activeAbilities": [
+        "HammerOfWrath"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "AggressiveOnslaught"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_blood_intercessor_01.png",
+      "stats": [
+        {
+          "abilityLevel": 26,
+          "damage": 484,
+          "armour": 266,
+          "health": 1088,
+          "progressionIndex": 8,
+          "rank": 9,
+          "stars": 6
+        }
+      ]
+    },
+    {
+      "id": "bloodBossMephistonSurv",
+      "name": "Mephiston",
+      "meleeDamage": "Psychic",
+      "meleeHits": 3,
+      "rangedDamage": "Psychic",
+      "rangedHits": 2,
+      "distance": 2,
+      "movement": 3,
+      "traits": [
+        "Psyker",
+        "RapidAssault",
+        "Terrifying"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "TheQuickening"
+      ],
+      "passiveAbilityDamage": [
+        "Psychic"
+      ],
+      "passiveAbilities": [
+        "FuryOfTheAncients"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_blood_mephiston_01.png",
+      "stats": [
+        {
+          "abilityLevel": 44,
+          "damage": 582,
+          "armour": 1164,
+          "health": 5531,
+          "progressionIndex": 14,
+          "rank": 15,
+          "stars": 10
+        }
+      ]
+    },
+    {
+      "id": "bloodBossSanguinarySurv",
+      "name": "Nicodemus",
+      "meleeDamage": "Chain",
+      "meleeHits": 3,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [
+        "Healer",
+        "RapidAssault"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "BloodChalice"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "SanguinaryPriest"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_blood_sanguinary_01.png",
+      "stats": [
+        {
+          "abilityLevel": 44,
+          "damage": 1339,
+          "armour": 1339,
+          "health": 5240,
+          "progressionIndex": 14,
+          "rank": 15,
+          "stars": 10
+        }
+      ]
+    },
+    {
+      "id": "bloodBossTerminatorSurv",
+      "name": "Cezare",
+      "meleeDamage": "Power",
+      "meleeHits": 4,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 2,
+      "traits": [
+        "TeleportStrike",
+        "TerminatorArmour",
+        "RapidAssault"
+      ],
+      "activeAbilityDamage": [
+        "Eviscerate"
+      ],
+      "activeAbilities": [
+        "SavageEchoes"
+      ],
+      "passiveAbilityDamage": [
+        "Power"
+      ],
+      "passiveAbilities": [
+        "RedRampage"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_blood_terminator_01.png",
+      "stats": [
+        {
+          "abilityLevel": 60,
+          "damage": 3262,
+          "armour": 4635,
+          "health": 18025,
+          "progressionIndex": 19,
+          "rank": 19,
+          "stars": 14
+        }
+      ]
+    },
+    {
       "id": "bloodNpc1Intercessor",
       "name": "Jump Pack Intercessor",
       "meleeDamage": "Chain",
@@ -426,6 +650,57 @@
           "damage": 3959,
           "armour": 3959,
           "health": 10731,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
+        }
+      ]
+    },
+    {
+      "id": "bloodNpc1IntercessorSurv",
+      "name": "Jump Pack Intercessor",
+      "meleeDamage": "Chain",
+      "meleeHits": 2,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 4,
+      "traits": [
+        "TeleportStrike",
+        "Flying",
+        "RapidAssault"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "RedThirst"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_blood_intercessor_02.png",
+      "stats": [
+        {
+          "abilityLevel": 65,
+          "damage": 7918,
+          "armour": 7918,
+          "health": 21462,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
+        },
+        {
+          "abilityLevel": 65,
+          "damage": 39590,
+          "armour": 39590,
+          "health": 107310,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
+        },
+        {
+          "abilityLevel": 65,
+          "damage": 395900,
+          "armour": 395900,
+          "health": 1073100,
           "progressionIndex": 19,
           "rank": 20,
           "stars": 14

@@ -1,7 +1,7 @@
 ﻿{
   version: dev-2026-09-02,
   schemaVersion: 2,
-  gameVersion: 1.41,
+  gameVersion: 1.42,
   sourceHash: {time-dependent},
   datasets: [
     {
@@ -21,7 +21,7 @@
     },
     {
       key: characters,
-      hash: 099f877261ef6d28557537ed41f9c6a71be21656a323106cbaaffa61c4c4d484,
+      hash: 566358670c91d1cfbfffa17175bbd8e2ba5a0e45bc3128e691a19c3bd5b1efa8,
       url: /api/v1/game-catalog/characters
     },
     {
@@ -51,7 +51,7 @@
     },
     {
       key: lres,
-      hash: 6c3c23c03693dff71f6b07ffaed246111b4f30db83e17c8ff04a631652f990e8,
+      hash: 9179d8893555e8ecc4053d8774f0273ef28bcd2bf0f06eb624b32ad3566b02a6,
       url: /api/v1/game-catalog/lres
     },
     {
@@ -66,7 +66,7 @@
     },
     {
       key: npcs,
-      hash: 721a51a4b2be4427f1c54f4d5c2d24bb8075199a4731c95843cda814f4a48c47,
+      hash: 1344c198eb2656ac1faf6163be4d2c32921ddfb35984e49a8e92286ebbe160f4,
       url: /api/v1/game-catalog/npcs
     },
     {

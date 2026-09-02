@@ -4,7 +4,116 @@
   "name": "Space Wolves",
   "npcs": [
     {
-      "id": "spaceStormcaller_LHE",
+      "id": "spaceBossBlackmaneSurv",
+      "name": "Ragnar",
+      "meleeDamage": "Chain",
+      "meleeHits": 7,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [
+        "BeastSlayer",
+        "FinalJustice",
+        "RapidAssault"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "WarHowl"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "SagaOfTheWarriorBorn"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_space_ragnar_01.png",
+      "stats": [
+        {
+          "abilityLevel": 50,
+          "damage": 1342,
+          "armour": 2300,
+          "health": 9583,
+          "progressionIndex": 16,
+          "rank": 17,
+          "stars": 11
+        }
+      ]
+    },
+    {
+      "id": "spaceBossHoundSurv",
+      "name": "Tjark",
+      "meleeDamage": "Physical",
+      "meleeHits": 4,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [
+        "Infiltrate",
+        "Terrifying"
+      ],
+      "activeAbilityDamage": [
+        "Physical"
+      ],
+      "activeAbilities": [
+        "GrapnelLauncher"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "HuntersBeyondDeath"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_space_hound_01.png",
+      "stats": [
+        {
+          "abilityLevel": 50,
+          "damage": 3066,
+          "armour": 2204,
+          "health": 8145,
+          "progressionIndex": 16,
+          "rank": 17,
+          "stars": 11
+        }
+      ]
+    },
+    {
+      "id": "spaceBossRockfistSurv",
+      "name": "Arjac",
+      "meleeDamage": "Power",
+      "meleeHits": 3,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 2,
+      "traits": [
+        "Resilient",
+        "TeleportStrike",
+        "TerminatorArmour",
+        "Unstoppable"
+      ],
+      "activeAbilityDamage": [
+        "Power"
+      ],
+      "activeAbilities": [
+        "Foehammer"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "AnvilShield"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_space_arjac_01.png",
+      "stats": [
+        {
+          "abilityLevel": 60,
+          "damage": 3948,
+          "armour": 4463,
+          "health": 18884,
+          "progressionIndex": 19,
+          "rank": 19,
+          "stars": 14
+        }
+      ]
+    },
+    {
+      "id": "spaceBossStormcallerSurv",
       "name": "Njal",
       "meleeDamage": "Psychic",
       "meleeHits": 3,
@@ -30,58 +139,86 @@
       "icon": "snowprint_assets/characters/ui_image_portrait_space_njal_01.png",
       "stats": [
         {
-          "abilityLevel": 8,
-          "damage": 23,
-          "armour": 73,
-          "health": 226,
-          "progressionIndex": 2,
-          "rank": 3,
-          "stars": 2
-        },
-        {
-          "abilityLevel": 17,
-          "damage": 52,
-          "armour": 168,
-          "health": 517,
-          "progressionIndex": 5,
-          "rank": 6,
-          "stars": 4
-        },
-        {
-          "abilityLevel": 26,
-          "damage": 115,
-          "armour": 378,
-          "health": 1162,
-          "progressionIndex": 8,
-          "rank": 9,
-          "stars": 6
-        },
-        {
-          "abilityLevel": 35,
-          "damage": 257,
-          "armour": 834,
-          "health": 2564,
-          "progressionIndex": 11,
-          "rank": 12,
-          "stars": 8
-        },
+          "abilityLevel": 60,
+          "damage": 1373,
+          "armour": 4463,
+          "health": 13734,
+          "progressionIndex": 19,
+          "rank": 19,
+          "stars": 14
+        }
+      ]
+    },
+    {
+      "id": "spaceBossWolfPriestSurv",
+      "name": "Baldr",
+      "meleeDamage": "Power",
+      "meleeHits": 3,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [
+        "Healer",
+        "FinalJustice",
+        "Terrifying"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "RitesOfMorkai"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "HealingBalms"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_space_wolfpriest_01.png",
+      "stats": [
         {
           "abilityLevel": 50,
-          "damage": 920,
-          "armour": 2989,
-          "health": 9201,
-          "progressionIndex": 15,
+          "damage": 2396,
+          "armour": 2012,
+          "health": 8625,
+          "progressionIndex": 16,
           "rank": 17,
           "stars": 11
-        },
+        }
+      ]
+    },
+    {
+      "id": "spaceBossWulfenSurv",
+      "name": "Ulf",
+      "meleeDamage": "Power",
+      "meleeHits": 3,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [
+        "FinalJustice",
+        "Unstoppable"
+      ],
+      "activeAbilityDamage": [
+        "Piercing"
+      ],
+      "activeAbilities": [
+        "GreatFrostAxe"
+      ],
+      "passiveAbilityDamage": [
+        "Power"
+      ],
+      "passiveAbilities": [
+        "SavageKiller"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_space_wulfen_01.png",
+      "stats": [
         {
-          "abilityLevel": 65,
-          "damage": 1397,
-          "armour": 4539,
-          "health": 13968,
-          "progressionIndex": 19,
-          "rank": 20,
-          "stars": 14
+          "abilityLevel": 50,
+          "damage": 3162,
+          "armour": 1917,
+          "health": 8625,
+          "progressionIndex": 16,
+          "rank": 17,
+          "stars": 11
         }
       ]
     }

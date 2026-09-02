@@ -14,5 +14,5 @@ public static class GameCatalogRelease
     public const int SchemaVersion = 2;
 
     /// <summary>The in-game data version the embedded catalog was extracted from.</summary>
-    public const string GameVersion = "1.41";
+    public const string GameVersion = "1.42";
 }

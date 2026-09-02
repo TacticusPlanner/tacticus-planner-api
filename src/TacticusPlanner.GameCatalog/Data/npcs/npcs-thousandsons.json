@@ -2151,6 +2151,55 @@
       ]
     },
     {
+      "id": "thousNpc3RubricMarineSurv",
+      "name": "Rubric Marine",
+      "meleeDamage": "Physical",
+      "meleeHits": 2,
+      "rangedDamage": "Flame",
+      "rangedHits": 2,
+      "distance": 2,
+      "movement": 3,
+      "traits": [
+        "WeaverOfFate"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "AllIsDust"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_thous_rubric_01.png",
+      "stats": [
+        {
+          "abilityLevel": 65,
+          "damage": 11480,
+          "armour": 11480,
+          "health": 25976,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
+        },
+        {
+          "abilityLevel": 65,
+          "damage": 57400,
+          "armour": 57400,
+          "health": 129880,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
+        },
+        {
+          "abilityLevel": 65,
+          "damage": 574000,
+          "armour": 574000,
+          "health": 1298800,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
+        }
+      ]
+    },
+    {
       "id": "thousNpc4Terminator",
       "name": "Scarab Occult Terminator",
       "meleeDamage": "Power",
@@ -2968,8 +3017,7 @@
         "MachineOfWar"
       ],
       "activeAbilityDamage": [
-        "Flame",
-        "Psychic"
+        "Flame"
       ],
       "activeAbilities": [
         "AetherStride",
@@ -3356,6 +3404,198 @@
           "progressionIndex": 19,
           "rank": 0,
           "stars": 14
+        }
+      ]
+    },
+    {
+      "id": "thousNpcSekhetar",
+      "name": "Sekhetar Robot",
+      "meleeDamage": "Power",
+      "meleeHits": 2,
+      "rangedDamage": "HeavyRound",
+      "rangedHits": 2,
+      "distance": 3,
+      "movement": 3,
+      "traits": [
+        "WeaverOfFate",
+        "Mechanical",
+        "Camouflage",
+        "Infiltrate",
+        "Overwatch"
+      ],
+      "activeAbilityDamage": [
+        "Flame"
+      ],
+      "activeAbilities": [
+        "HeavyWarpFlamer"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "PropheticSentinel"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_thous_sekhetar_01.png",
+      "stats": [
+        {
+          "abilityLevel": 3,
+          "damage": 39,
+          "armour": 30,
+          "health": 131,
+          "progressionIndex": 1,
+          "rank": 1,
+          "stars": 1
+        },
+        {
+          "abilityLevel": 5,
+          "damage": 48,
+          "armour": 38,
+          "health": 164,
+          "progressionIndex": 1,
+          "rank": 2,
+          "stars": 1
+        },
+        {
+          "abilityLevel": 8,
+          "damage": 66,
+          "armour": 52,
+          "health": 224,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 8,
+          "damage": 71,
+          "armour": 56,
+          "health": 242,
+          "progressionIndex": 4,
+          "rank": 3,
+          "stars": 3
+        },
+        {
+          "abilityLevel": 11,
+          "damage": 89,
+          "armour": 70,
+          "health": 303,
+          "progressionIndex": 4,
+          "rank": 4,
+          "stars": 3
+        },
+        {
+          "abilityLevel": 11,
+          "damage": 96,
+          "armour": 76,
+          "health": 327,
+          "progressionIndex": 5,
+          "rank": 4,
+          "stars": 4
+        },
+        {
+          "abilityLevel": 14,
+          "damage": 121,
+          "armour": 95,
+          "health": 409,
+          "progressionIndex": 6,
+          "rank": 5,
+          "stars": 4
+        },
+        {
+          "abilityLevel": 17,
+          "damage": 162,
+          "armour": 127,
+          "health": 549,
+          "progressionIndex": 7,
+          "rank": 6,
+          "stars": 5
+        },
+        {
+          "abilityLevel": 20,
+          "damage": 216,
+          "armour": 170,
+          "health": 733,
+          "progressionIndex": 8,
+          "rank": 7,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 23,
+          "damage": 270,
+          "armour": 213,
+          "health": 918,
+          "progressionIndex": 9,
+          "rank": 8,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 26,
+          "damage": 360,
+          "armour": 283,
+          "health": 1221,
+          "progressionIndex": 10,
+          "rank": 9,
+          "stars": 7
+        },
+        {
+          "abilityLevel": 29,
+          "damage": 477,
+          "armour": 375,
+          "health": 1618,
+          "progressionIndex": 11,
+          "rank": 10,
+          "stars": 8
+        },
+        {
+          "abilityLevel": 38,
+          "damage": 988,
+          "armour": 776,
+          "health": 3352,
+          "progressionIndex": 13,
+          "rank": 13,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 41,
+          "damage": 1302,
+          "armour": 1023,
+          "health": 4418,
+          "progressionIndex": 14,
+          "rank": 14,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 44,
+          "damage": 1630,
+          "armour": 1281,
+          "health": 5531,
+          "progressionIndex": 14,
+          "rank": 15,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 2683,
+          "armour": 2108,
+          "health": 9104,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 55,
+          "damage": 3519,
+          "armour": 2765,
+          "health": 11941,
+          "progressionIndex": 17,
+          "rank": 18,
+          "stars": 12
+        },
+        {
+          "abilityLevel": 60,
+          "damage": 4406,
+          "armour": 3462,
+          "health": 14950,
+          "progressionIndex": 17,
+          "rank": 19,
+          "stars": 12
         }
       ]
     },
@@ -3923,6 +4163,90 @@
           "progressionIndex": 17,
           "rank": 19,
           "stars": 12
+        }
+      ]
+    },
+    {
+      "id": "thousSekhetar_LHE",
+      "name": "Sekhetar Robot",
+      "meleeDamage": "Power",
+      "meleeHits": 2,
+      "rangedDamage": "HeavyRound",
+      "rangedHits": 2,
+      "distance": 3,
+      "movement": 3,
+      "traits": [
+        "WeaverOfFate",
+        "Mechanical",
+        "Camouflage",
+        "Infiltrate",
+        "Overwatch"
+      ],
+      "activeAbilityDamage": [
+        "Flame"
+      ],
+      "activeAbilities": [
+        "HeavyWarpFlamer"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "PropheticSentinel"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_thous_sekhetar_01.png",
+      "stats": [
+        {
+          "abilityLevel": 8,
+          "damage": 130,
+          "armour": 45,
+          "health": 215,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 17,
+          "damage": 298,
+          "armour": 103,
+          "health": 492,
+          "progressionIndex": 5,
+          "rank": 6,
+          "stars": 4
+        },
+        {
+          "abilityLevel": 26,
+          "damage": 668,
+          "armour": 231,
+          "health": 1103,
+          "progressionIndex": 8,
+          "rank": 9,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 35,
+          "damage": 1475,
+          "armour": 510,
+          "health": 2435,
+          "progressionIndex": 11,
+          "rank": 12,
+          "stars": 8
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 5294,
+          "armour": 1830,
+          "health": 8739,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 65,
+          "damage": 7099,
+          "armour": 2454,
+          "health": 11718,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
         }
       ]
     }

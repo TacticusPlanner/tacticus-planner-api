@@ -106,6 +106,39 @@
       ]
     },
     {
+      "id": "ultraBossApothecarySurv",
+      "name": "Incisus",
+      "meleeDamage": "Piercing",
+      "meleeHits": 1,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [
+        "Healer"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "CombatRestoratives"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "Narthecium"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_ultra_apothecary_01.png",
+      "stats": [
+        {
+          "abilityLevel": 32,
+          "damage": 981,
+          "armour": 469,
+          "health": 2133,
+          "progressionIndex": 11,
+          "rank": 11,
+          "stars": 8
+        }
+      ]
+    },
+    {
       "id": "ultraBossCalgar",
       "name": "Calgar",
       "meleeDamage": "Power",
@@ -221,6 +254,43 @@
           "progressionIndex": 18,
           "rank": 18,
           "stars": 13
+        }
+      ]
+    },
+    {
+      "id": "ultraBossCalgarSurv",
+      "name": "Calgar",
+      "meleeDamage": "Power",
+      "meleeHits": 2,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [
+        "CrushingStrike",
+        "FinalJustice",
+        "MkXGravis"
+      ],
+      "activeAbilityDamage": [
+        "Bolter"
+      ],
+      "activeAbilities": [
+        "GauntletsOfUltramar"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "RitesOfBattle"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_ultra_calgar_01.png",
+      "stats": [
+        {
+          "abilityLevel": 65,
+          "damage": 6018,
+          "armour": 4299,
+          "health": 20418,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
         }
       ]
     },
@@ -387,6 +457,45 @@
       ]
     },
     {
+      "id": "ultraBossEliminatorSgtSurv",
+      "name": "Certus",
+      "meleeDamage": "Physical",
+      "meleeHits": 1,
+      "rangedDamage": "Bolter",
+      "rangedHits": 1,
+      "distance": 3,
+      "movement": 2,
+      "traits": [
+        "Overwatch",
+        "HeavyWeapon",
+        "Infiltrate"
+      ],
+      "activeAbilityDamage": [
+        "HeavyRound"
+      ],
+      "activeAbilities": [
+        "MortisRound"
+      ],
+      "passiveAbilityDamage": [
+        "Bolter"
+      ],
+      "passiveAbilities": [
+        "CamoCloak"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_ultra_eliminator_01.png",
+      "stats": [
+        {
+          "abilityLevel": 32,
+          "damage": 1173,
+          "armour": 384,
+          "health": 1280,
+          "progressionIndex": 11,
+          "rank": 11,
+          "stars": 8
+        }
+      ]
+    },
+    {
       "id": "ultraBossInceptorSgt",
       "name": "Bellator",
       "meleeDamage": "Bolter",
@@ -509,6 +618,40 @@
       ]
     },
     {
+      "id": "ultraBossInceptorSgtSurv",
+      "name": "Bellator",
+      "meleeDamage": "Bolter",
+      "meleeHits": 6,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 4,
+      "traits": [
+        "Flying",
+        "MkXGravis"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "DeathFromAbove"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "ShockAssault"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_ultra_inceptor_01.png",
+      "stats": [
+        {
+          "abilityLevel": 65,
+          "damage": 2149,
+          "armour": 2794,
+          "health": 18269,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
+        }
+      ]
+    },
+    {
       "id": "ultraBossTigurius",
       "name": "Tigurius",
       "meleeDamage": "Physical",
@@ -602,6 +745,41 @@
           "progressionIndex": 15,
           "rank": 16,
           "stars": 11
+        }
+      ]
+    },
+    {
+      "id": "ultraBossTiguriusSurv",
+      "name": "Tigurius",
+      "meleeDamage": "Physical",
+      "meleeHits": 1,
+      "rangedDamage": "Psychic",
+      "rangedHits": 1,
+      "distance": 2,
+      "movement": 3,
+      "traits": [
+        "Psyker"
+      ],
+      "activeAbilityDamage": [
+        "Psychic"
+      ],
+      "activeAbilities": [
+        "StormOfWrath"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "PsychicFortress"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_ultra_tigurius_01.png",
+      "stats": [
+        {
+          "abilityLevel": 32,
+          "damage": 640,
+          "armour": 299,
+          "health": 1386,
+          "progressionIndex": 11,
+          "rank": 11,
+          "stars": 8
         }
       ]
     },

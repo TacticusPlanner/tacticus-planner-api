@@ -148,6 +148,45 @@
       ]
     },
     {
+      "id": "templBossAggressorSurv",
+      "name": "Burchard",
+      "meleeDamage": "Power",
+      "meleeHits": 3,
+      "rangedDamage": "Bolter",
+      "rangedHits": 3,
+      "distance": 2,
+      "movement": 2,
+      "traits": [
+        "CrushingStrike",
+        "MkXGravis",
+        "SuppressiveFire"
+      ],
+      "activeAbilityDamage": [
+        "Blast"
+      ],
+      "activeAbilities": [
+        "FragstormGrenadeLauncher"
+      ],
+      "passiveAbilityDamage": [
+        "Bolter"
+      ],
+      "passiveAbilities": [
+        "Boltstorm"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_templ_aggressor_01.png",
+      "stats": [
+        {
+          "abilityLevel": 55,
+          "damage": 2365,
+          "armour": 2891,
+          "health": 15768,
+          "progressionIndex": 18,
+          "rank": 18,
+          "stars": 13
+        }
+      ]
+    },
+    {
       "id": "templBossAggressor_LHE",
       "name": "Burchard",
       "meleeDamage": "Power",
@@ -278,6 +317,40 @@
           "progressionIndex": 7,
           "rank": 4,
           "stars": 5
+        }
+      ]
+    },
+    {
+      "id": "templBossAncientSurv",
+      "name": "Thoread",
+      "meleeDamage": "Power",
+      "meleeHits": 2,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [
+        "FinalJustice",
+        "Parry"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "UnbreakableDuty"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "AstartesBanner"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_templ_ancient_01.png",
+      "stats": [
+        {
+          "abilityLevel": 55,
+          "damage": 4336,
+          "armour": 2891,
+          "health": 13140,
+          "progressionIndex": 18,
+          "rank": 18,
+          "stars": 13
         }
       ]
     },
@@ -436,6 +509,43 @@
       ]
     },
     {
+      "id": "templBossChampionSurv",
+      "name": "Jaeger",
+      "meleeDamage": "Power",
+      "meleeHits": 3,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [
+        "FinalJustice",
+        "Parry",
+        "RapidAssault"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "HolyDuel"
+      ],
+      "passiveAbilityDamage": [
+        "Power"
+      ],
+      "passiveAbilities": [
+        "MartialSuperiority"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_templ_champion_01.png",
+      "stats": [
+        {
+          "abilityLevel": 55,
+          "damage": 3285,
+          "armour": 3285,
+          "health": 14454,
+          "progressionIndex": 18,
+          "rank": 18,
+          "stars": 13
+        }
+      ]
+    },
+    {
       "id": "templBossChampion_LHE",
       "name": "Jaeger",
       "meleeDamage": "Power",
@@ -469,43 +579,6 @@
           "progressionIndex": 10,
           "rank": 10,
           "stars": 7
-        }
-      ]
-    },
-    {
-      "id": "templBossChampion_Surv",
-      "name": "Jaeger",
-      "meleeDamage": "Power",
-      "meleeHits": 3,
-      "rangedDamage": null,
-      "rangedHits": null,
-      "distance": null,
-      "movement": 3,
-      "traits": [
-        "FinalJustice",
-        "Parry",
-        "RapidAssault"
-      ],
-      "activeAbilityDamage": [],
-      "activeAbilities": [
-        "HolyDuel"
-      ],
-      "passiveAbilityDamage": [
-        "Power"
-      ],
-      "passiveAbilities": [
-        "MartialSuperiority"
-      ],
-      "icon": "snowprint_assets/characters/ui_image_portrait_templ_champion_01.png",
-      "stats": [
-        {
-          "abilityLevel": 32,
-          "damage": 533,
-          "armour": 533,
-          "health": 2346,
-          "progressionIndex": 11,
-          "rank": 11,
-          "stars": 8
         }
       ]
     },
@@ -549,6 +622,40 @@
           "progressionIndex": 14,
           "rank": 11,
           "stars": 10
+        }
+      ]
+    },
+    {
+      "id": "templBossHelbrechtSurv",
+      "name": "Helbrecht",
+      "meleeDamage": "Power",
+      "meleeHits": 6,
+      "rangedDamage": "Bolter",
+      "rangedHits": 3,
+      "distance": 2,
+      "movement": 3,
+      "traits": [
+        "FinalJustice",
+        "Parry"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "CrusadeOfWrath"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "DestroyTheWitch"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_templ_helbrecht_01.png",
+      "stats": [
+        {
+          "abilityLevel": 55,
+          "damage": 1971,
+          "armour": 2891,
+          "health": 12483,
+          "progressionIndex": 18,
+          "rank": 18,
+          "stars": 13
         }
       ]
     },
@@ -704,6 +811,44 @@
           "progressionIndex": 2,
           "rank": 3,
           "stars": 2
+        }
+      ]
+    },
+    {
+      "id": "templBossSwordBrotherSurv",
+      "name": "Godswyl",
+      "meleeDamage": "Power",
+      "meleeHits": 1,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [
+        "Parry",
+        "RapidAssault"
+      ],
+      "activeAbilityDamage": [
+        "Power"
+      ],
+      "activeAbilities": [
+        "ThunderousAssault"
+      ],
+      "passiveAbilityDamage": [
+        "Power"
+      ],
+      "passiveAbilities": [
+        "ChampionOfTheFeast"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_templ_brother_01.png",
+      "stats": [
+        {
+          "abilityLevel": 55,
+          "damage": 7884,
+          "armour": 3154,
+          "health": 12483,
+          "progressionIndex": 18,
+          "rank": 18,
+          "stars": 13
         }
       ]
     },

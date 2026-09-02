@@ -13357,6 +13357,396 @@
       ]
     },
     {
+      "id": "powupSummonSpawn_necroSmnDeathmark",
+      "name": "Deathmark Power-up",
+      "meleeDamage": "",
+      "meleeHits": 0,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 0,
+      "traits": [
+        "Steppable",
+        "Invincible",
+        "Immune"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "PowerUp_SummonSpawn_necroSmnDeathmark"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_powup_heroSpawn_02_necron.png",
+      "stats": [
+        {
+          "abilityLevel": 8,
+          "damage": 0,
+          "armour": 0,
+          "health": 0,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 17,
+          "damage": 0,
+          "armour": 0,
+          "health": 0,
+          "progressionIndex": 5,
+          "rank": 6,
+          "stars": 4
+        },
+        {
+          "abilityLevel": 26,
+          "damage": 0,
+          "armour": 0,
+          "health": 0,
+          "progressionIndex": 8,
+          "rank": 9,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 35,
+          "damage": 0,
+          "armour": 0,
+          "health": 0,
+          "progressionIndex": 11,
+          "rank": 12,
+          "stars": 8
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 0,
+          "armour": 0,
+          "health": 0,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 65,
+          "damage": 0,
+          "armour": 0,
+          "health": 0,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
+        }
+      ]
+    },
+    {
+      "id": "powupSummonSpawn_necroSmnDestroyer",
+      "name": "Ophydian Destroyer Power-up",
+      "meleeDamage": "",
+      "meleeHits": 0,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 0,
+      "traits": [
+        "Steppable",
+        "Invincible",
+        "Immune"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "PowerUp_SummonSpawn_necroSmnDestroyer"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_powup_heroSpawn_02_necron.png",
+      "stats": [
+        {
+          "abilityLevel": 8,
+          "damage": 0,
+          "armour": 0,
+          "health": 0,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 17,
+          "damage": 0,
+          "armour": 0,
+          "health": 0,
+          "progressionIndex": 5,
+          "rank": 6,
+          "stars": 4
+        },
+        {
+          "abilityLevel": 26,
+          "damage": 0,
+          "armour": 0,
+          "health": 0,
+          "progressionIndex": 8,
+          "rank": 9,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 35,
+          "damage": 0,
+          "armour": 0,
+          "health": 0,
+          "progressionIndex": 11,
+          "rank": 12,
+          "stars": 8
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 0,
+          "armour": 0,
+          "health": 0,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 65,
+          "damage": 0,
+          "armour": 0,
+          "health": 0,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
+        }
+      ]
+    },
+    {
+      "id": "powupSummonSpawn_necroSmnFlayedOne",
+      "name": "Flayed One Power-up",
+      "meleeDamage": "",
+      "meleeHits": 0,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 0,
+      "traits": [
+        "Steppable",
+        "Invincible",
+        "Immune"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "PowerUp_SummonSpawn_necroSmnFlayedOne"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_powup_heroSpawn_02_necron.png",
+      "stats": [
+        {
+          "abilityLevel": 8,
+          "damage": 0,
+          "armour": 0,
+          "health": 0,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 17,
+          "damage": 0,
+          "armour": 0,
+          "health": 0,
+          "progressionIndex": 5,
+          "rank": 6,
+          "stars": 4
+        },
+        {
+          "abilityLevel": 26,
+          "damage": 0,
+          "armour": 0,
+          "health": 0,
+          "progressionIndex": 8,
+          "rank": 9,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 35,
+          "damage": 0,
+          "armour": 0,
+          "health": 0,
+          "progressionIndex": 11,
+          "rank": 12,
+          "stars": 8
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 0,
+          "armour": 0,
+          "health": 0,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 65,
+          "damage": 0,
+          "armour": 0,
+          "health": 0,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
+        }
+      ]
+    },
+    {
+      "id": "powupSummonSpawn_necroSmnSwarm",
+      "name": "Scarab Swarm Power-up",
+      "meleeDamage": "",
+      "meleeHits": 0,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 0,
+      "traits": [
+        "Steppable",
+        "Invincible",
+        "Immune"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "PowerUp_SummonSpawn_necroSmnSwarm"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_powup_heroSpawn_02_necron.png",
+      "stats": [
+        {
+          "abilityLevel": 8,
+          "damage": 0,
+          "armour": 0,
+          "health": 0,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 17,
+          "damage": 0,
+          "armour": 0,
+          "health": 0,
+          "progressionIndex": 5,
+          "rank": 6,
+          "stars": 4
+        },
+        {
+          "abilityLevel": 26,
+          "damage": 0,
+          "armour": 0,
+          "health": 0,
+          "progressionIndex": 8,
+          "rank": 9,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 35,
+          "damage": 0,
+          "armour": 0,
+          "health": 0,
+          "progressionIndex": 11,
+          "rank": 12,
+          "stars": 8
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 0,
+          "armour": 0,
+          "health": 0,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 65,
+          "damage": 0,
+          "armour": 0,
+          "health": 0,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
+        }
+      ]
+    },
+    {
+      "id": "powupSummonSpawn_necroSmnWarrior",
+      "name": "Necron Warrior Power-up",
+      "meleeDamage": "",
+      "meleeHits": 0,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 0,
+      "traits": [
+        "Steppable",
+        "Invincible",
+        "Immune"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "PowerUp_SummonSpawn_necroSmnWarrior"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_powup_heroSpawn_02_necron.png",
+      "stats": [
+        {
+          "abilityLevel": 8,
+          "damage": 0,
+          "armour": 0,
+          "health": 0,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 17,
+          "damage": 0,
+          "armour": 0,
+          "health": 0,
+          "progressionIndex": 5,
+          "rank": 6,
+          "stars": 4
+        },
+        {
+          "abilityLevel": 26,
+          "damage": 0,
+          "armour": 0,
+          "health": 0,
+          "progressionIndex": 8,
+          "rank": 9,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 35,
+          "damage": 0,
+          "armour": 0,
+          "health": 0,
+          "progressionIndex": 11,
+          "rank": 12,
+          "stars": 8
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 0,
+          "armour": 0,
+          "health": 0,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 65,
+          "damage": 0,
+          "armour": 0,
+          "health": 0,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
+        }
+      ]
+    },
+    {
       "id": "powupSummonSpawn_templSmnAggressor",
       "name": "Aggressor Power-up",
       "meleeDamage": "",
