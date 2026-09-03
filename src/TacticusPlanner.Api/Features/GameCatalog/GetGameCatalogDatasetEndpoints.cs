@@ -235,3 +235,17 @@ public sealed class GetGameCatalogEventsCalendarEndpoint(IGameCatalogProvider ca
             "Date-indexed (ISO date key) event occurrences and projected placeholders; an entry spanning multiple dates is repeated under every date it spans.");
     }
 }
+
+public sealed class GetGameCatalogShopsEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogShopView>>(catalog, GameCatalogDatasets.Shops)
+{
+    protected override IReadOnlyList<GameCatalogShopView> Payload => Snapshot.ShopViews;
+
+    public override void Configure()
+    {
+        Get("game-catalog/shops");
+        ConfigureServed(
+            "Gets the always-on daily shops.",
+            "One record per daily shop (guild, war, rogue-trader, crusade) with its rotating slots, structured rewards/costs, explicit day-of-week availability, and opaque lock ids — no display text or icons.");
+    }
+}

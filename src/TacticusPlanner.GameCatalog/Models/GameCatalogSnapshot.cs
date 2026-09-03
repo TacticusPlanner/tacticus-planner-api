@@ -21,6 +21,9 @@ public sealed record GameCatalogSnapshot(
     IReadOnlyDictionary<string, GameCatalogCampaignGroup> CampaignGroups,
     IReadOnlyList<GameCatalogDropChance> DropChances,
     IReadOnlyDictionary<string, GameCatalogLre> LresByEvent,
+    // Raw daily-shop source files, keyed by source dataset key (shops-guild, ...). Kept for validation
+    // (reward/free-offer/cost parse checks run over the raw "type:qty" strings).
+    IReadOnlyDictionary<string, GameCatalogRawShop> RawShopsBySourceKey,
     // Served (denormalized) payloads — the public catalog surface.
     IReadOnlyList<GameCatalogCharacterView> CharacterViews,
     IReadOnlyList<GameCatalogNpc> NpcList,
@@ -36,7 +39,8 @@ public sealed record GameCatalogSnapshot(
     IReadOnlyList<GameCatalogLreBattleView> LreBattleViews,
     IReadOnlyList<GameCatalogLreCommon> LreCommonViews,
     IReadOnlyList<GameCatalogEventDefinition> EventDefinitionViews,
-    IReadOnlyDictionary<string, IReadOnlyList<GameCatalogEventsCalendarEntry>> EventsCalendar
+    IReadOnlyDictionary<string, IReadOnlyList<GameCatalogEventsCalendarEntry>> EventsCalendar,
+    IReadOnlyList<GameCatalogShopView> ShopViews
 )
 {
     // The manifest served to clients: release metadata + per-dataset hash and download url. Built from the

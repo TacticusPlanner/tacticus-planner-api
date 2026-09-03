@@ -75,6 +75,11 @@
       url: /api/v1/game-catalog/onslaught-rewards
     },
     {
+      key: shops,
+      hash: ddee0877e0ee18f085f0a0c974103cae6cd052a1b2f2003416568da73b1c1353,
+      url: /api/v1/game-catalog/shops
+    },
+    {
       key: unlock-shard-costs,
       hash: a5d83f0f0fc9cab6c1e4d64380b5ca3598818724696b197d0e544003fdcc45fb,
       url: /api/v1/game-catalog/unlock-shard-costs

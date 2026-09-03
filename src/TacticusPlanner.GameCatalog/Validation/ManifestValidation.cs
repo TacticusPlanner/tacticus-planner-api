@@ -49,6 +49,7 @@ public static partial class GameCatalogValidator
         RequireNonEmpty(GameCatalogDatasets.LreCommon, snapshot.LreCommonViews.Count, errors);
         RequireNonEmpty(GameCatalogDatasets.EventDefinitionsServed, snapshot.EventDefinitionViews.Count, errors);
         RequireNonEmpty(GameCatalogDatasets.EventsCalendar, snapshot.EventsCalendar.Count, errors);
+        RequireNonEmpty(GameCatalogDatasets.Shops, snapshot.ShopViews.Count, errors);
 
         // Every battle id referenced by a campaign definition must resolve to a served campaign battle.
         var battleIds = new HashSet<string>(

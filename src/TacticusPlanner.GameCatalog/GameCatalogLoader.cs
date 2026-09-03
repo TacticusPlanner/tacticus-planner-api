@@ -68,6 +68,12 @@ public static class GameCatalogLoader
             lresByEvent[key] = LoadDataset<GameCatalogLre>(key);
         }
 
+        var rawShopsBySourceKey = new Dictionary<string, GameCatalogRawShop>(StringComparer.Ordinal);
+        foreach (var key in GameCatalogDatasets.ShopSources)
+        {
+            rawShopsBySourceKey[key] = LoadDataset<GameCatalogRawShop>(key);
+        }
+
         // ---- build denormalized served datasets ------------------------------------------------
         var characterViews = GameCatalogDenormalizer.BuildCharacters(unitsByFaction, equipmentByType, campaignGroups, dropChances);
         var npcList = GameCatalogDenormalizer.BuildNpcs(npcsByFaction);
@@ -85,6 +91,7 @@ public static class GameCatalogLoader
         var eventDefinitionViews = GameCatalogDenormalizer.BuildEventDefinitions(eventDefinitions);
         var loadTime = DateTimeOffset.UtcNow;
         var eventsCalendar = GameCatalogDenormalizer.BuildEventsCalendar(eventDefinitions, eventOccurrences, loadTime);
+        var shopViews = GameCatalogDenormalizer.BuildShops(rawShopsBySourceKey);
 
         // Served dataset hashes are computed over the canonical JSON of each denormalized payload.
         var datasetHashes = new Dictionary<string, string>(StringComparer.Ordinal)
@@ -105,6 +112,7 @@ public static class GameCatalogLoader
             [GameCatalogDatasets.LreCommon] = GameCatalogHashing.ComputeCanonicalJsonHash(lreCommonViews, JsonOptions),
             [GameCatalogDatasets.EventDefinitionsServed] = GameCatalogHashing.ComputeCanonicalJsonHash(eventDefinitionViews, JsonOptions),
             [GameCatalogDatasets.EventsCalendar] = GameCatalogHashing.ComputeCanonicalJsonHash(eventsCalendar, JsonOptions),
+            [GameCatalogDatasets.Shops] = GameCatalogHashing.ComputeCanonicalJsonHash(shopViews, JsonOptions),
         };
 
         var snapshot = new GameCatalogSnapshot(
@@ -128,6 +136,7 @@ public static class GameCatalogLoader
             new ReadOnlyDictionary<string, GameCatalogCampaignGroup>(campaignGroups),
             new ReadOnlyCollection<GameCatalogDropChance>(dropChances.ToArray()),
             new ReadOnlyDictionary<string, GameCatalogLre>(lresByEvent),
+            new ReadOnlyDictionary<string, GameCatalogRawShop>(rawShopsBySourceKey),
             characterViews,
             npcList,
             mowList,
@@ -142,7 +151,8 @@ public static class GameCatalogLoader
             lreBattleViews,
             lreCommonViews,
             eventDefinitionViews,
-            eventsCalendar);
+            eventsCalendar,
+            shopViews);
 
         var errors = GameCatalogValidator.Validate(snapshot);
         if (errors.Count > 0)

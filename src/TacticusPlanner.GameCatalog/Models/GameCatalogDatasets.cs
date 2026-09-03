@@ -16,6 +16,7 @@ public static class GameCatalogDatasets
 
     // Route/key prefixes for the split dataset families.
     public const string UnitsPrefix = "units";
+    public const string ShopsPrefix = "shops";
     public const string NpcsPrefix = "npcs";
     public const string CampaignBattlesPrefix = "campaign-battles";
     public const string EquipmentPrefix = "equipment";
@@ -165,6 +166,19 @@ public static class GameCatalogDatasets
         "lres-votanuthar",
     ];
 
+    /// <summary>
+    /// Daily-shop raw source datasets, one authored file per always-on shop. Consolidated into the single
+    /// served <see cref="Shops"/> array (one record per shop, keyed by the id after the <c>shops-</c>
+    /// prefix). Limited-time event shops (Armageddon / seasonal) are deliberately excluded.
+    /// </summary>
+    public static readonly IReadOnlyList<string> ShopSources =
+    [
+        "shops-guild",
+        "shops-war",
+        "shops-rogue-trader",
+        "shops-crusade",
+    ];
+
     /// <summary>Raw embedded source datasets (one per file) used to build the served catalog.</summary>
     public static readonly IReadOnlyList<string> Required =
     [
@@ -182,6 +196,7 @@ public static class GameCatalogDatasets
         .. UpgradeRarities,
         .. CampaignBattleGroups,
         .. LreEvents,
+        .. ShopSources,
     ];
 
     // Served (denormalized) dataset keys — the public manifest surface. Each is one consolidated,
@@ -217,6 +232,11 @@ public static class GameCatalogDatasets
     // add-game-events-calendar-dataset.
     public const string EventDefinitionsServed = EventDefinitions;
     public const string EventsCalendar = "events-calendar";
+    // shops is a plain array, one record per always-on daily shop (id = guild / war / rogue-trader /
+    // crusade), consolidated from the four ShopSources raw files. The raw per-shop files are never served
+    // directly. Reward/free-offer "type:qty" strings and the Quartz cronSchedule are normalized to
+    // structured values + an explicit day-of-week list at build time (see Denormalization/ShopsDenormalizer.cs).
+    public const string Shops = "shops";
 
     /// <summary>The denormalized datasets exposed by the manifest / served by the catalog endpoints.</summary>
     public static readonly IReadOnlyList<string> Served =
@@ -237,5 +257,6 @@ public static class GameCatalogDatasets
         LreCommon,
         EventDefinitionsServed,
         EventsCalendar,
+        Shops,
     ];
 }

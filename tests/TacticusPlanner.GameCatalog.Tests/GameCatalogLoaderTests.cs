@@ -110,4 +110,72 @@ public sealed class GameCatalogLoaderTests
         Assert.Contains(allEntries, entry => entry.Confirmed && entry.OccurrenceId is not null);
         Assert.Contains(allEntries, entry => !entry.Confirmed && entry.OccurrenceId is null);
     }
+
+    [Fact]
+    public void ShopsDatasetHasExactlyTheFourAlwaysOnDailyShops()
+    {
+        var snapshot = GameCatalogLoader.Load();
+
+        Assert.Equal(
+            ["guild", "war", "rogue-trader", "crusade"],
+            snapshot.ShopViews.Select(shop => shop.Id));
+    }
+
+    [Fact]
+    public void EveryShopVariantIsFullyNormalizedAndCrossReferenced()
+    {
+        var snapshot = GameCatalogLoader.Load();
+        var unitOrMowIds = new HashSet<string>(
+            snapshot.Characters.Select(character => character.Id), StringComparer.OrdinalIgnoreCase);
+        unitOrMowIds.UnionWith(snapshot.Mows.Select(mow => mow.Id));
+
+        var variants = snapshot.ShopViews
+            .SelectMany(shop => shop.Slots)
+            .SelectMany(slot => slot.Variants)
+            .ToArray();
+
+        Assert.NotEmpty(variants);
+        Assert.All(variants, variant =>
+        {
+            Assert.NotEmpty(variant.Days);
+            Assert.True(variant.Reward.Qty >= 1);
+            Assert.False(string.IsNullOrWhiteSpace(variant.Cost.Currency));
+            Assert.True(variant.MaxPurchasesPerDay >= 1);
+
+            var isShard = variant.Reward.Type.StartsWith("shards_", StringComparison.Ordinal)
+                || variant.Reward.Type.StartsWith("mythicShards_", StringComparison.Ordinal);
+            if (isShard)
+            {
+                Assert.NotNull(variant.UnitId);
+                Assert.Contains(variant.UnitId!, unitOrMowIds);
+            }
+            else
+            {
+                Assert.Null(variant.UnitId);
+            }
+        });
+
+        // The Rogue Trader shard rotation is the largest; prove the shard cross-reference actually fired.
+        Assert.Contains(variants, variant => variant.UnitId is not null);
+    }
+
+    [Fact]
+    public void GuildShopRoundTripsRefreshMetadataAndAKnownDayRestrictedShardSlot()
+    {
+        var snapshot = GameCatalogLoader.Load();
+
+        var guild = snapshot.ShopViews.Single(shop => shop.Id == "guild");
+        Assert.Equal("guildMerchant", guild.DisplayLocation);
+        Assert.True(guild.RefreshWithAdWatch);
+        Assert.Equal(1, guild.AllowedRefreshesPerDay);
+        Assert.Equal(new Models.GameCatalogShopRefreshCostView("gems", 50), guild.RefreshCost);
+
+        // Guild slot 4 (0-based 3) rotates space-wolf shards MON,THU / TUE,FRI / WED,SAT with a SUN pair.
+        var spaceWulfen = guild.Slots[3].Variants.Single(variant => variant.Reward.Type == "shards_spaceWulfen");
+        Assert.Equal(["MON", "THU"], spaceWulfen.Days);
+        Assert.Equal(5, spaceWulfen.Reward.Qty);
+        Assert.Equal(2, spaceWulfen.MaxPurchasesPerDay);
+        Assert.Equal("spaceWulfen", spaceWulfen.UnitId);
+        Assert.Equal(new Models.GameCatalogShopCostView("guildCredits", 525), spaceWulfen.Cost);
+    }
 }
