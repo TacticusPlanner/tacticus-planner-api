@@ -51,6 +51,12 @@ public sealed class ShopNormalizationTests
     [InlineData("0 0 0 ? *")]
     [InlineData("0 0 0 ? * BADTOKEN *")]
     [InlineData("0 0 0 ? * 1-5 *")]
+    // A genuine time-of-day / day-of-month / month restriction is not representable as a plain day list —
+    // reducing it would silently drop the restriction, so it must yield empty (and fail validation).
+    [InlineData("0 0 12 ? * MON *")]
+    [InlineData("30 0 0 ? * MON *")]
+    [InlineData("0 0 0 15 * ? *")]
+    [InlineData("0 0 0 ? 6 MON *")]
     public void ReduceCronToDaysYieldsEmptyForUnreducibleOrGarbageCrons(string cron)
     {
         Assert.Empty(ShopNormalization.ReduceCronToDays(cron));

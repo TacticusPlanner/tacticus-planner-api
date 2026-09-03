@@ -70,15 +70,10 @@ public static class ShopNormalization
             return null;
         }
 
-        foreach (var prefix in ShardPrefixes)
-        {
-            if (rewardType.StartsWith(prefix, StringComparison.Ordinal) && rewardType.Length > prefix.Length)
-            {
-                return rewardType[prefix.Length..];
-            }
-        }
+        var prefix = ShardPrefixes.FirstOrDefault(candidate =>
+            rewardType.StartsWith(candidate, StringComparison.Ordinal) && rewardType.Length > candidate.Length);
 
-        return null;
+        return prefix is null ? null : rewardType[prefix.Length..];
     }
 
     /// <summary>
@@ -97,6 +92,18 @@ public static class ShopNormalization
 
         var fields = cronSchedule.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
         if (fields.Length < 6)
+        {
+            return [];
+        }
+
+        // Only a pure day-of-week gate reduces losslessly to a day list: seconds/minutes/hours must all be
+        // 0 and the day-of-month and month fields unrestricted. A cron carrying a genuine time-of-day or
+        // calendar restriction (e.g. "0 0 12 ? * MON *") is not representable as a plain day list — yield an
+        // empty list so Validation/ShopsValidation.cs fails the build instead of silently dropping it.
+        var timeFiresAtMidnight = fields[0] == "0" && fields[1] == "0" && fields[2] == "0";
+        var dayOfMonthUnrestricted = fields[3] is "?" or "*";
+        var monthUnrestricted = fields[4] is "*" or "?";
+        if (!timeFiresAtMidnight || !dayOfMonthUnrestricted || !monthUnrestricted)
         {
             return [];
         }

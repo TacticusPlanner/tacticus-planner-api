@@ -32,7 +32,7 @@ public sealed record GameCatalogRawShopVariant(
     string Reward,
     string? FreeOffer,
     string? MaxPurchases,
-    GameCatalogRawShopCost Cost);
+    GameCatalogRawShopCost? Cost);
 
 public sealed record GameCatalogRawShopConditions(int? MinPowerLevel, int? MaxPowerLevel, string? LockId);
 

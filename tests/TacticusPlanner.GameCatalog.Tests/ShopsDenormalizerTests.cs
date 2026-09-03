@@ -1,5 +1,6 @@
 using TacticusPlanner.GameCatalog.Denormalization;
 using TacticusPlanner.GameCatalog.Models;
+using TacticusPlanner.GameCatalog.Utils;
 using Xunit;
 
 namespace TacticusPlanner.GameCatalog.Tests;
@@ -48,6 +49,22 @@ public sealed class ShopsDenormalizerTests
         Assert.Equal(new GameCatalogShopRewardView("draft_machinesOfWarTokens", 10), variant.FreeOffer);
         Assert.Equal(new GameCatalogShopCostView("guildCredits", 525), variant.Cost);
         Assert.Equal(1, variant.MaxPurchasesPerDay);
+    }
+
+    [Fact]
+    public void AnOmittedCostBecomesAJsonSafeInvalidPlaceholderRatherThanThrowing()
+    {
+        // A source file that omits `cost` deserializes to a null Cost — BuildShops must not NRE; it emits an
+        // unparseable placeholder (empty currency, -1 amount) that Validation/ShopsValidation.cs then rejects.
+        var view = BuildOne(Shop([
+            new GameCatalogRawShopVariant(
+                1, new GameCatalogRawShopConditions(null, null, null), "0 0 0 ? * * *", "gold:1000", null, null, null),
+        ]));
+
+        var cost = view.Slots[0].Variants[0].Cost;
+        Assert.Equal(string.Empty, cost.Currency);
+        Assert.Equal(-1, cost.Amount);
+        Assert.False(ShopNormalization.IsParseableCost(cost.Currency, cost.Amount));
     }
 
     [Fact]

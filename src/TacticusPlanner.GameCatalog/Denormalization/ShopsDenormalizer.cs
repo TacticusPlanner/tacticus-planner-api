@@ -53,7 +53,7 @@ internal static partial class GameCatalogDenormalizer
             reward,
             ShopNormalization.ShardUnitId(reward.Type),
             freeOffer,
-            new GameCatalogShopCostView(raw.Cost.Type, raw.Cost.Amount),
+            ParseCost(raw.Cost),
             ShopNormalization.ParseMaxPurchasesPerDay(raw.MaxPurchases),
             raw.Weight,
             ShopNormalization.ReduceCronToDays(raw.CronSchedule),
@@ -61,6 +61,14 @@ internal static partial class GameCatalogDenormalizer
             conditions?.MaxPowerLevel,
             conditions?.LockId);
     }
+
+    private static GameCatalogShopCostView ParseCost(GameCatalogRawShopCost? raw) =>
+        raw is not null
+            ? new GameCatalogShopCostView(raw.Type, raw.Amount)
+            // Omitted cost — ValidateShops reports UnparseableCost; emit a JSON-safe placeholder (empty
+            // currency, -1 amount, never NaN) so the build reaches validation rather than throwing here,
+            // mirroring ParseReward. The served views are hashed before validation runs.
+            : new GameCatalogShopCostView(string.Empty, -1);
 
     private static GameCatalogShopRewardView ParseReward(string raw) =>
         ShopNormalization.TryParseTypedQuantity(raw, out var type, out var qty)
