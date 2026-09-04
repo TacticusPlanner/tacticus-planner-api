@@ -40,6 +40,7 @@ public sealed class GoalAcquisitionSourcesMigrationTests
         var unlockWithLocationsGoalId = Guid.NewGuid();
         var neitherGoalId = Guid.NewGuid();
         var rankGoalId = Guid.NewGuid();
+        var nullShardIdsGoalId = Guid.NewGuid();
 
         await using (var connection = new NpgsqlConnection(postgres.GetConnectionString()))
         {
@@ -65,7 +66,10 @@ public sealed class GoalAcquisitionSourcesMigrationTests
                 (@neither, 0, @profile, 'Character', 'neither-unit', 'Ascension', 'Active', ARRAY[]::uuid[], now(), now(),
                  '{"AscensionFarming":null,"FarmingLocationIds":null}', '[]'),
                 (@rank, 0, @profile, 'Character', 'rank-unit', 'Rank', 'Active', ARRAY[]::uuid[], now(), now(),
-                 '{"AscensionFarming":null,"FarmingLocationIds":["keep-me"]}', '[]');
+                 '{"AscensionFarming":null,"FarmingLocationIds":["keep-me"]}', '[]'),
+                (@nullShardIds, 0, @profile, 'Character', 'null-shard-ids-unit', 'Ascension', 'Active', ARRAY[]::uuid[], now(), now(),
+                 '{"AscensionFarming":{"Source":0,"ShardBattleIds":null,"MythicShardBattleIds":["m2"]},"FarmingLocationIds":null}',
+                 '[]');
                 """;
             command.Parameters.AddWithValue("profile", profileId);
             command.Parameters.AddWithValue("both", bothGoalId);
@@ -73,6 +77,7 @@ public sealed class GoalAcquisitionSourcesMigrationTests
             command.Parameters.AddWithValue("unlockLocations", unlockWithLocationsGoalId);
             command.Parameters.AddWithValue("neither", neitherGoalId);
             command.Parameters.AddWithValue("rank", rankGoalId);
+            command.Parameters.AddWithValue("nullShardIds", nullShardIdsGoalId);
             await command.ExecuteNonQueryAsync(TestContext.Current.CancellationToken);
         }
 
@@ -107,6 +112,13 @@ public sealed class GoalAcquisitionSourcesMigrationTests
         await AssertConfigAsync(verifyConnection, rankGoalId,
             expectedAcquisitionSources: null,
             expectedFarmingLocationIds: """["keep-me"]""");
+
+        // A legacy row whose ShardBattleIds is a JSON *null* (not an absent key) must not leak that
+        // null into the concatenated Ids array — COALESCE alone doesn't catch a JSON null value, only
+        // an absent key (CodeRabbit review of #44): the union must be exactly the other field's ids.
+        await AssertConfigAsync(verifyConnection, nullShardIdsGoalId,
+            expectedAcquisitionSources: """[{"Ids": ["m2"], "Kind": "Campaign"}]""",
+            expectedFarmingLocationIds: "null");
 
         // The removed key is gone everywhere, including goals that never had it set.
         await using var afCheck = verifyConnection.CreateCommand();

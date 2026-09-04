@@ -98,7 +98,11 @@ public sealed class UpdateGoalEndpoint : Endpoint<UpdateGoalRequest, GoalDetailR
 
         goal.Notes = req.Notes;
         goal.Config.FarmingLocationIds = farmingLocationIds;
-        goal.Config.AcquisitionSources = GoalMapper.MapAcquisitionSources(req.AcquisitionSources);
+        if (req.AcquisitionSources is not null)
+        {
+            goal.Config.AcquisitionSources = GoalMapper.MapAcquisitionSources(req.AcquisitionSources);
+        }
+
         if (farmingStrategy is not null)
         {
             goal.Config.FarmingStrategy = farmingStrategy.Value;

@@ -26,8 +26,8 @@ public partial class AddGoalAcquisitionSources : Migration
                         'Ids', COALESCE(
                             CASE
                                 WHEN jsonb_typeof(config -> 'AscensionFarming') = 'object'
-                                    THEN COALESCE(config -> 'AscensionFarming' -> 'ShardBattleIds', '[]'::jsonb)
-                                       || COALESCE(config -> 'AscensionFarming' -> 'MythicShardBattleIds', '[]'::jsonb)
+                                    THEN COALESCE(NULLIF(config -> 'AscensionFarming' -> 'ShardBattleIds', 'null'::jsonb), '[]'::jsonb)
+                                       || COALESCE(NULLIF(config -> 'AscensionFarming' -> 'MythicShardBattleIds', 'null'::jsonb), '[]'::jsonb)
                                 WHEN goal_type = 'Unlock' AND jsonb_typeof(config -> 'FarmingLocationIds') = 'array'
                                     THEN config -> 'FarmingLocationIds'
                                 ELSE '[]'::jsonb

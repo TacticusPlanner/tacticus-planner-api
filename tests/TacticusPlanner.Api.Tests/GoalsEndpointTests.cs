@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
+using System.Text;
 using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Api.Features.Projects;
 using TacticusPlanner.Domain.Goals;
@@ -438,6 +439,56 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     }
 
     [Fact]
+    public async Task CreateGoalRejectsANullAcquisitionSourceElement()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var json = """
+            {
+              "entityType": "character",
+              "entityId": "deathBlightlord",
+              "goalType": "ascension",
+              "config": {
+                "progression": { "start": "Common:None", "end": "Common:OneStar" },
+                "acquisitionSources": [null]
+              }
+            }
+            """;
+
+        var response = await client.PostAsync(
+            "/api/v1/me/goals",
+            new StringContent(json, Encoding.UTF8, "application/json"),
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task CreateGoalRejectsANullAcquisitionSourceIdsList()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var json = """
+            {
+              "entityType": "character",
+              "entityId": "deathBlightlord",
+              "goalType": "ascension",
+              "config": {
+                "progression": { "start": "Common:None", "end": "Common:OneStar" },
+                "acquisitionSources": [{ "kind": "Campaign", "ids": null }]
+              }
+            }
+            """;
+
+        var response = await client.PostAsync(
+            "/api/v1/me/goals",
+            new StringContent(json, Encoding.UTF8, "application/json"),
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
     public async Task CreateAscensionGoalRejectsAMalformedShopOfferId()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
@@ -675,6 +726,53 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         var updated = await updateResponse.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
 
         Assert.NotNull(updated);
+        var source = Assert.Single(updated.Config.AcquisitionSources!);
+        Assert.Equal("Shop", source.Kind);
+        Assert.Equal(["guild:shards_eldarFarseer"], source.Ids);
+    }
+
+    [Fact]
+    public async Task UpdateGoalOmittingAcquisitionSourcesRetainsTheExistingSelection()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var createResponse = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            new CreateGoalRequest(
+                "character",
+                "eldarFarseer",
+                "ascension",
+                new CreateGoalConfigRequest(Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar")),
+                null
+            ),
+            TestContext.Current.CancellationToken
+        );
+        createResponse.EnsureSuccessStatusCode();
+        var created = await createResponse.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        Assert.NotNull(created);
+
+        var withSource = await client.PutAsJsonAsync(
+            $"/api/v1/me/goals/{created.GoalId}",
+            new UpdateGoalRequest(
+                null,
+                null,
+                AcquisitionSources: [new AcquisitionSourceRequest("Shop", ["guild:shards_eldarFarseer"])]
+            ),
+            TestContext.Current.CancellationToken
+        );
+        withSource.EnsureSuccessStatusCode();
+
+        // A notes-only update — AcquisitionSources omitted (defaults to null) — must not wipe out the
+        // selection set above (tacticus-planner-api CodeRabbit review of #44).
+        var notesOnly = await client.PutAsJsonAsync(
+            $"/api/v1/me/goals/{created.GoalId}",
+            new UpdateGoalRequest("just a note", null),
+            TestContext.Current.CancellationToken
+        );
+        notesOnly.EnsureSuccessStatusCode();
+        var updated = await notesOnly.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+
+        Assert.NotNull(updated);
+        Assert.Equal("just a note", updated.Notes);
         var source = Assert.Single(updated.Config.AcquisitionSources!);
         Assert.Equal("Shop", source.Kind);
         Assert.Equal(["guild:shards_eldarFarseer"], source.Ids);

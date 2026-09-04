@@ -24,16 +24,17 @@ public static partial class AcquisitionSourceRules
 
         foreach (var source in sources)
         {
+            if (source is null) return "An acquisition source must not be null.";
             if (!AcquisitionSourceKinds.IsKnown(source.Kind))
                 return $"Unsupported acquisition source kind '{source.Kind}'.";
+            if (source.Ids is null) return "An acquisition source's ids must not be null.";
+            if (source.Ids.Any(id => id is null)) return "An acquisition source id must not be null.";
 
-            var ids = source.Ids ?? [];
-
-            if (AcquisitionSourceKinds.RunBased.Contains(source.Kind) && ids.Count > 0)
+            if (AcquisitionSourceKinds.RunBased.Contains(source.Kind) && source.Ids.Count > 0)
                 return $"A {source.Kind} acquisition source must not carry ids.";
 
             if (source.Kind == AcquisitionSourceKinds.Shop
-                && ids.Any(id => !ShopOfferIdRegex().IsMatch(id)))
+                && source.Ids.Any(id => !ShopOfferIdRegex().IsMatch(id)))
             {
                 return "A shop acquisition source id must be '<shopId>:<rewardType>'.";
             }
@@ -63,7 +64,7 @@ public static partial class AcquisitionSourceRules
             switch (source.Kind)
             {
                 case AcquisitionSourceKinds.Campaign:
-                    if (source.Ids.Any(id =>
+                    if ((source.Ids ?? []).Any(id =>
                         !regularShardBattleIds.Contains(id) && !mythicShardBattleIds.Contains(id)))
                     {
                         return "A campaign acquisition source is not a shard node for this unit.";
@@ -81,7 +82,7 @@ public static partial class AcquisitionSourceRules
                     if (entityType != GoalEntityType.Character)
                         return "Shop acquisition sources are only available for Character goals.";
 
-                    if (source.Ids.Any(id => !knownShopIds.Contains(id.Split(':', 2)[0])))
+                    if ((source.Ids ?? []).Any(id => !knownShopIds.Contains(id.Split(':', 2)[0])))
                         return "A shop acquisition source names an unknown shop.";
 
                     break;
