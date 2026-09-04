@@ -79,7 +79,8 @@ public sealed class UpdateGoalEndpoint : Endpoint<UpdateGoalRequest, GoalDetailR
         }
 
         var farmingLocationIds = req.FarmingLocationIds?.Select(id => id.Value).ToList();
-        if (Resolve<GoalTargetValidationService>()
+        var targetValidation = Resolve<GoalTargetValidationService>();
+        if (targetValidation
             .ValidateFarmingLocationOverride(goal.GoalType, goal.EntityId, farmingLocationIds) is { } farmingError)
         {
             AddError(request => request.FarmingLocationIds, farmingError);
@@ -87,8 +88,17 @@ public sealed class UpdateGoalEndpoint : Endpoint<UpdateGoalRequest, GoalDetailR
             return;
         }
 
+        if (targetValidation.ValidateAcquisitionSources(
+                goal.GoalType, goal.EntityType, goal.EntityId, req.AcquisitionSources) is { } acquisitionError)
+        {
+            AddError(request => request.AcquisitionSources, acquisitionError);
+            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+            return;
+        }
+
         goal.Notes = req.Notes;
         goal.Config.FarmingLocationIds = farmingLocationIds;
+        goal.Config.AcquisitionSources = GoalMapper.MapAcquisitionSources(req.AcquisitionSources);
         if (farmingStrategy is not null)
         {
             goal.Config.FarmingStrategy = farmingStrategy.Value;
@@ -104,7 +114,8 @@ public sealed class UpdateGoalEndpoint : Endpoint<UpdateGoalRequest, GoalDetailR
 public sealed record UpdateGoalRequest(
     string? Notes,
     List<CampaignBattleId>? FarmingLocationIds,
-    string? FarmingStrategy = null
+    string? FarmingStrategy = null,
+    List<AcquisitionSourceRequest>? AcquisitionSources = null
 );
 
 public sealed class UpdateGoalValidator : Validator<UpdateGoalRequest>
@@ -120,5 +131,11 @@ public sealed class UpdateGoalValidator : Validator<UpdateGoalRequest>
                     && Enum.IsDefined(parsed)
                     && !int.TryParse(value, out _)))
             .WithMessage("Unknown farming strategy.");
+
+        RuleFor(request => request.AcquisitionSources)
+            .Must(sources => AcquisitionSourceRules.ShapeError(sources) is null)
+            .WithMessage(request =>
+                AcquisitionSourceRules.ShapeError(request.AcquisitionSources)
+                ?? "The acquisition sources configuration is invalid.");
     }
 }

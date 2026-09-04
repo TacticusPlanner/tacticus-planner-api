@@ -55,14 +55,6 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
             if (!catalog.Current.IsUnlockEligible(entityId))
                 return "Unlock is unavailable because the catalog has no shard-upgrade data for this character.";
             if (playerUnit is not null) return "The selected character is already unlocked.";
-            if (config.FarmingLocationIds is { Count: > 0 } unlockLocations)
-            {
-                // Unlock only ever costs regular shards (never mythic — see GoalConfig/GoalMapper), so a
-                // pinned location must be one of the character's non-mythic shard nodes.
-                var availableRegular = RegularShardBattleIds(character);
-                if (unlockLocations.Any(id => !availableRegular.Contains(id.Value)))
-                    return "An unlock shard location is not available for this character.";
-            }
         }
 
         if (goalType == GoalType.Rank)
@@ -82,17 +74,6 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
             var current = (int?)playerUnit?.ProgressionIndex ?? start;
             if (start < current) return "The starting progression cannot be lower than current progression.";
             if (end <= Math.Max(start, current)) return "The target progression must be above the effective start.";
-            if (config.AscensionFarming is { } farming)
-            {
-                // Each pinned battle id must be the matching shard type's own node — a mythic-only
-                // location (e.g. an Extremis node dropping mythicShards_x) is never valid as a regular
-                // ShardBattleIds entry, and vice versa.
-                var availableRegular = RegularShardBattleIds(character);
-                var availableMythic = MythicShardBattleIds(character);
-                if (farming.ShardBattleIds.Any(id => !availableRegular.Contains(id.Value))
-                    || farming.MythicShardBattleIds.Any(id => !availableMythic.Contains(id.Value)))
-                    return "An ascension farming node is not available for this character.";
-            }
         }
 
         if (goalType == GoalType.Ability)
@@ -137,6 +118,18 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
                 return $"The target level must be above the effective starting level and no higher than {MaxCharacterLevel}.";
         }
 
+        if (AcquisitionSourceRules.SemanticError(
+                config.AcquisitionSources,
+                goalType,
+                entityType,
+                RegularShardBattleIds(character),
+                MythicShardBattleIds(character),
+                catalog.Current.ShopViews.Select(shop => shop.Id).ToHashSet(StringComparer.Ordinal))
+            is { } acquisitionError)
+        {
+            return acquisitionError;
+        }
+
         var strategy = Enum.TryParse<FarmingStrategy>(config.FarmingStrategy, true, out var parsed)
             ? parsed
             : FarmingStrategy.TotalUpgrades;
@@ -146,6 +139,26 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
             return "Farming strategy is supported only for Character Rank and Machine of War Ability goals.";
 
         return null;
+    }
+
+    /// <summary>Re-validates an acquisition-source set against the same catalog rules
+    /// <see cref="ValidateAsync"/> applies at creation — used by the update endpoint.</summary>
+    public string? ValidateAcquisitionSources(
+        GoalType goalType,
+        GoalEntityType entityType,
+        string entityId,
+        IReadOnlyList<AcquisitionSourceRequest>? sources)
+    {
+        if (AcquisitionSourceRules.ShapeError(sources) is { } shapeError) return shapeError;
+
+        var character = catalog.Current.CharacterViews.FirstOrDefault(item => item.Id == entityId);
+        return AcquisitionSourceRules.SemanticError(
+            sources,
+            goalType,
+            entityType,
+            RegularShardBattleIds(character),
+            MythicShardBattleIds(character),
+            catalog.Current.ShopViews.Select(shop => shop.Id).ToHashSet(StringComparer.Ordinal));
     }
 
     /// <summary>Re-validates a farming-location override against the same catalog rule

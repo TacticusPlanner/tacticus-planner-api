@@ -22,15 +22,21 @@ public sealed class GoalConfig
 
     public FarmingStrategy FarmingStrategy { get; set; } = FarmingStrategy.TotalUpgrades;
 
-    public AscensionFarmingConfig? AscensionFarming { get; set; }
+    /// <summary>The shard acquisition sources chosen for an Unlock/Ascension goal (plan: multi-select
+    /// Campaigns/Onslaught/Shops picker) — an ordered, open set so a later run-based source
+    /// (<c>Incursion</c>, tacticus-planner-apps#106) is an allow-list addition, not a schema break. Null
+    /// means "unrestricted campaign farming", the pre-picker default. Only meaningful for
+    /// <see cref="GoalType.Unlock"/>/<see cref="GoalType.Ascension"/>; other goal types leave it null.</summary>
+    public List<AcquisitionSource>? AcquisitionSources { get; set; }
 
-    /// <summary>Per-goal farming location override (plan §6), as raw <see cref="CampaignBattleId"/> values
-    /// — stored unwrapped since it's a scalar list nested in the <c>config</c> jsonb column (Vogen's
-    /// cross-assembly EFCore discovery gap means custom-struct primitive collections aren't recognized
-    /// there; the strong id is enforced at the API request boundary instead, see
-    /// <c>CreateGoalConfigRequest</c>/<c>UpdateGoalRequest</c>). Null/empty means the lowest-energy valid
-    /// location is chosen dynamically; the snapshot freezes requirements only, never the chosen location
-    /// (plan §10).</summary>
+    /// <summary>Per-goal farming location override (plan §6) for the Rank/Ability <em>upgrade</em>-node
+    /// farm, as raw <see cref="CampaignBattleId"/> values — stored unwrapped since it's a scalar list
+    /// nested in the <c>config</c> jsonb column (Vogen's cross-assembly EFCore discovery gap means
+    /// custom-struct primitive collections aren't recognized there; the strong id is enforced at the API
+    /// request boundary instead, see <c>CreateGoalConfigRequest</c>/<c>UpdateGoalRequest</c>). Null/empty
+    /// means the lowest-energy valid location is chosen dynamically; the snapshot freezes requirements
+    /// only, never the chosen location (plan §10). The Unlock/Ascension <em>shard</em>-node role moved to
+    /// <see cref="AcquisitionSources"/>.</summary>
     public List<string>? FarmingLocationIds { get; set; }
 }
 
@@ -87,21 +93,4 @@ public enum FarmingStrategy
     EveryStep,
     Milestones,
     MajorMilestones,
-}
-
-public enum AscensionFarmingSource
-{
-    Campaign,
-    Onslaught,
-    Both,
-}
-
-public sealed class AscensionFarmingConfig
-{
-    public AscensionFarmingSource Source { get; set; } = AscensionFarmingSource.Campaign;
-
-    public List<string> ShardBattleIds { get; set; } = [];
-
-    public List<string> MythicShardBattleIds { get; set; } = [];
-
 }

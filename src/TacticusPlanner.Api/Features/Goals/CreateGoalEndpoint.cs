@@ -171,10 +171,19 @@ public sealed record CreateGoalConfigRequest(
     AbilityTargetRequest? Ability = null,
     List<CampaignBattleId>? FarmingLocationIds = null,
     string? FarmingStrategy = null,
-    AscensionFarmingRequest? AscensionFarming = null,
+    List<AcquisitionSourceRequest>? AcquisitionSources = null,
     UpgradeTargetRequest? Upgrade = null,
     LevelTargetRequest? Level = null
 );
+
+/// <summary>One selected shard acquisition source (plan: multi-select Campaigns/Onslaught/Shops picker).
+/// <see cref="Kind"/> must be one of <see cref="Domain.Goals.AcquisitionSourceKinds"/>; <see cref="Ids"/>
+/// carries campaign battle ids for <c>Campaign</c>, shop-offer ids
+/// (<c>&lt;shopId&gt;:&lt;rewardType&gt;</c>) for <c>Shop</c>, and must be empty for <c>Onslaught</c>.
+/// Kept as plain strings (not <see cref="CampaignBattleId"/>) because the id type varies by kind; the
+/// campaign ids are validated against the character's shard nodes in
+/// <see cref="GoalTargetValidationService"/>.</summary>
+public sealed record AcquisitionSourceRequest(string Kind, List<string> Ids);
 
 public sealed record RankTargetRequest(
     int Start,
@@ -188,12 +197,6 @@ public sealed record RankTargetRequest(
 public sealed record ProgressionTargetRequest(string Start, string End);
 
 public sealed record AbilityTargetRequest(int ActiveStart, int ActiveEnd, int PassiveStart, int PassiveEnd);
-
-public sealed record AscensionFarmingRequest(
-    string Source,
-    List<CampaignBattleId> ShardBattleIds,
-    List<CampaignBattleId> MythicShardBattleIds
-);
 
 public sealed record UpgradeTargetRequest(List<UpgradeMaterialTargetRequest> Targets);
 

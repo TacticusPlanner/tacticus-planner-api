@@ -17,6 +17,17 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     );
 
     [Fact]
+    public async Task OpenApiDocumentReplacesAscensionFarmingWithAcquisitionSources()
+    {
+        var client = factory.CreateClient();
+
+        var document = await client.GetStringAsync("/openapi/v1.json", TestContext.Current.CancellationToken);
+
+        Assert.DoesNotContain("AscensionFarming", document, StringComparison.Ordinal);
+        Assert.Contains("acquisitionSources", document, StringComparison.Ordinal);
+    }
+
+    [Fact]
     public async Task UnauthenticatedListIsRejected()
     {
         var client = factory.CreateClient();
@@ -196,7 +207,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     }
 
     [Fact]
-    public async Task CreateUnlockGoalWithUnavailableFarmingLocationIsRejected()
+    public async Task CreateUnlockGoalWithUnavailableCampaignAcquisitionSourceIsRejected()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
@@ -207,7 +218,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
                 "blackTerminator",
                 "unlock",
                 new CreateGoalConfigRequest(
-                    FarmingLocationIds: [CampaignBattleId.From("not-a-real-battle")]
+                    AcquisitionSources: [new AcquisitionSourceRequest("Campaign", ["not-a-real-battle"])]
                 ),
                 null
             ),
@@ -218,7 +229,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     }
 
     [Fact]
-    public async Task CreateAscensionGoalWithUnavailableShardBattleIdIsRejected()
+    public async Task CreateAscensionGoalWithUnavailableCampaignAcquisitionSourceIsRejected()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
@@ -230,11 +241,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
                 "ascension",
                 new CreateGoalConfigRequest(
                     Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar"),
-                    AscensionFarming: new AscensionFarmingRequest(
-                        "Campaign",
-                        [CampaignBattleId.From("not-a-real-battle")],
-                        []
-                    )
+                    AcquisitionSources: [new AcquisitionSourceRequest("Campaign", ["not-a-real-battle"])]
                 ),
                 null
             ),
@@ -245,11 +252,12 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     }
 
     // "deathBlightlord" has a regular-shard campaign node at DGS06 (shards_deathBlightlord) and a
-    // mythic-shard node at DGE25 (mythicShards_deathBlightlord) — used below to prove Unlock and
-    // Ascension's shard-battle validation actually distinguishes the two types rather than accepting
-    // either node for either slot.
+    // mythic-shard node at DGE25 (mythicShards_deathBlightlord). A Campaign acquisition source's ids are
+    // validated against the union of the character's regular and mythic shard nodes — the server no
+    // longer distinguishes which slot a goal type needs (the client gates that), so either node is a
+    // valid Campaign id for either goal type.
     [Fact]
-    public async Task CreateUnlockGoalRejectsAMythicOnlyShardLocation()
+    public async Task CreateUnlockGoalAcceptsAMythicShardNodeAsACampaignSource()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
@@ -259,17 +267,19 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
                 "character",
                 "deathBlightlord",
                 "unlock",
-                new CreateGoalConfigRequest(FarmingLocationIds: [CampaignBattleId.From("DGE25")]),
+                new CreateGoalConfigRequest(
+                    AcquisitionSources: [new AcquisitionSourceRequest("Campaign", ["DGE25"])]
+                ),
                 null
             ),
             TestContext.Current.CancellationToken
         );
 
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        response.EnsureSuccessStatusCode();
     }
 
     [Fact]
-    public async Task CreateUnlockGoalAcceptsItsOwnRegularShardLocation()
+    public async Task CreateUnlockGoalAcceptsAKnownShardNodeAsACampaignSource()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
@@ -279,7 +289,9 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
                 "character",
                 "deathBlightlord",
                 "unlock",
-                new CreateGoalConfigRequest(FarmingLocationIds: [CampaignBattleId.From("DGS06")]),
+                new CreateGoalConfigRequest(
+                    AcquisitionSources: [new AcquisitionSourceRequest("Campaign", ["DGS06"])]
+                ),
                 null
             ),
             TestContext.Current.CancellationToken
@@ -289,7 +301,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     }
 
     [Fact]
-    public async Task CreateAscensionGoalRejectsAMythicIdInTheRegularShardSlot()
+    public async Task CreateAscensionGoalAcceptsRegularAndMythicShardNodesInOneCampaignSource()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
@@ -301,11 +313,52 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
                 "ascension",
                 new CreateGoalConfigRequest(
                     Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar"),
-                    AscensionFarming: new AscensionFarmingRequest(
-                        "Campaign",
-                        [CampaignBattleId.From("DGE25")],
-                        []
-                    )
+                    AcquisitionSources: [new AcquisitionSourceRequest("Campaign", ["DGS06", "DGE25"])]
+                ),
+                null
+            ),
+            TestContext.Current.CancellationToken
+        );
+
+        response.EnsureSuccessStatusCode();
+    }
+
+    [Fact]
+    public async Task CreateAscensionGoalAcceptsAnOnslaughtSource()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            new CreateGoalRequest(
+                "character",
+                "deathBlightlord",
+                "ascension",
+                new CreateGoalConfigRequest(
+                    Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar"),
+                    AcquisitionSources: [new AcquisitionSourceRequest("Onslaught", [])]
+                ),
+                null
+            ),
+            TestContext.Current.CancellationToken
+        );
+
+        response.EnsureSuccessStatusCode();
+    }
+
+    [Fact]
+    public async Task CreateUnlockGoalRejectsAnOnslaughtSource()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            new CreateGoalRequest(
+                "character",
+                "deathBlightlord",
+                "unlock",
+                new CreateGoalConfigRequest(
+                    AcquisitionSources: [new AcquisitionSourceRequest("Onslaught", [])]
                 ),
                 null
             ),
@@ -316,23 +369,19 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     }
 
     [Fact]
-    public async Task CreateAscensionGoalRejectsARegularIdInTheMythicShardSlot()
+    public async Task CreateMowAscensionGoalRejectsAnOnslaughtSource()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
         var response = await client.PostAsJsonAsync(
             "/api/v1/me/goals",
             new CreateGoalRequest(
-                "character",
-                "deathBlightlord",
+                "mow",
+                "astraOrdnanceBattery",
                 "ascension",
                 new CreateGoalConfigRequest(
                     Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar"),
-                    AscensionFarming: new AscensionFarmingRequest(
-                        "Campaign",
-                        [],
-                        [CampaignBattleId.From("DGS06")]
-                    )
+                    AcquisitionSources: [new AcquisitionSourceRequest("Onslaught", [])]
                 ),
                 null
             ),
@@ -343,7 +392,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     }
 
     [Fact]
-    public async Task CreateAscensionGoalAcceptsEachShardBattleIdInItsMatchingSlot()
+    public async Task CreateAscensionGoalRejectsAnOnslaughtSourceWithIds()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
@@ -355,11 +404,98 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
                 "ascension",
                 new CreateGoalConfigRequest(
                     Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar"),
-                    AscensionFarming: new AscensionFarmingRequest(
-                        "Campaign",
-                        [CampaignBattleId.From("DGS06")],
-                        [CampaignBattleId.From("DGE25")]
-                    )
+                    AcquisitionSources: [new AcquisitionSourceRequest("Onslaught", ["unexpected"])]
+                ),
+                null
+            ),
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task CreateGoalRejectsAnUnknownAcquisitionSourceKind()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            new CreateGoalRequest(
+                "character",
+                "deathBlightlord",
+                "ascension",
+                new CreateGoalConfigRequest(
+                    Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar"),
+                    AcquisitionSources: [new AcquisitionSourceRequest("Auction", [])]
+                ),
+                null
+            ),
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task CreateAscensionGoalRejectsAMalformedShopOfferId()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            new CreateGoalRequest(
+                "character",
+                "deathBlightlord",
+                "ascension",
+                new CreateGoalConfigRequest(
+                    Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar"),
+                    AcquisitionSources: [new AcquisitionSourceRequest("Shop", ["not-a-shop-offer"])]
+                ),
+                null
+            ),
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task CreateAscensionGoalRejectsAShopOfferNamingAnUnknownShop()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            new CreateGoalRequest(
+                "character",
+                "deathBlightlord",
+                "ascension",
+                new CreateGoalConfigRequest(
+                    Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar"),
+                    AcquisitionSources: [new AcquisitionSourceRequest("Shop", ["not-a-real-shop:shards_deathBlightlord"])]
+                ),
+                null
+            ),
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task CreateCharacterUnlockGoalAcceptsAShopSource()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            new CreateGoalRequest(
+                "character",
+                "eldarFarseer",
+                "unlock",
+                new CreateGoalConfigRequest(
+                    AcquisitionSources: [new AcquisitionSourceRequest("Shop", ["guild:shards_eldarFarseer"])]
                 ),
                 null
             ),
@@ -367,6 +503,31 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         );
 
         response.EnsureSuccessStatusCode();
+    }
+
+    [Fact]
+    public async Task CreateMowUnlockGoalRejectsAShopSource()
+    {
+        // Unlock is Character-only (see CreateGoalDeferredGoalTypeOrEntityTypeIsRejected), so this proves
+        // Shop-source gating for MoW goals via Ascension instead.
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            new CreateGoalRequest(
+                "mow",
+                "astraOrdnanceBattery",
+                "ascension",
+                new CreateGoalConfigRequest(
+                    Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar"),
+                    AcquisitionSources: [new AcquisitionSourceRequest("Shop", ["guild:shards_eldarFarseer"])]
+                ),
+                null
+            ),
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
     [Fact]
@@ -409,36 +570,6 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         var response = await client.PostAsJsonAsync(
             "/api/v1/me/goals",
             RankGoal with { Config = RankGoal.Config with { FarmingStrategy = "0" } },
-            TestContext.Current.CancellationToken
-        );
-
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-    }
-
-    [Theory]
-    [InlineData(true)]
-    [InlineData(false)]
-    public async Task CreateAscensionGoalWithNullBattleCollectionIsRejected(bool nullRegular)
-    {
-        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
-        var farming = new AscensionFarmingRequest(
-            "Campaign",
-            nullRegular ? null! : [],
-            nullRegular ? [] : null!
-        );
-
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            new CreateGoalRequest(
-                "character",
-                "blackTerminator",
-                "ascension",
-                new CreateGoalConfigRequest(
-                    Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar"),
-                    AscensionFarming: farming
-                ),
-                null
-            ),
             TestContext.Current.CancellationToken
         );
 
@@ -509,6 +640,63 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         Assert.NotNull(updated.Config.Rank);
         Assert.Equal(created.Config.Rank.Start, updated.Config.Rank.Start);
         Assert.Equal(created.Config.Rank.End, updated.Config.Rank.End);
+    }
+
+    [Fact]
+    public async Task UpdateGoalAddsAShopAcquisitionSource()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var createResponse = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            new CreateGoalRequest(
+                "character",
+                "eldarFarseer",
+                "ascension",
+                new CreateGoalConfigRequest(Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar")),
+                null
+            ),
+            TestContext.Current.CancellationToken
+        );
+        createResponse.EnsureSuccessStatusCode();
+        var created = await createResponse.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        Assert.NotNull(created);
+        Assert.Null(created.Config.AcquisitionSources);
+
+        var updateResponse = await client.PutAsJsonAsync(
+            $"/api/v1/me/goals/{created.GoalId}",
+            new UpdateGoalRequest(
+                null,
+                null,
+                AcquisitionSources: [new AcquisitionSourceRequest("Shop", ["guild:shards_eldarFarseer"])]
+            ),
+            TestContext.Current.CancellationToken
+        );
+        updateResponse.EnsureSuccessStatusCode();
+        var updated = await updateResponse.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+
+        Assert.NotNull(updated);
+        var source = Assert.Single(updated.Config.AcquisitionSources!);
+        Assert.Equal("Shop", source.Kind);
+        Assert.Equal(["guild:shards_eldarFarseer"], source.Ids);
+    }
+
+    [Fact]
+    public async Task UpdateGoalRejectsAnUnknownAcquisitionSourceKind()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var created = await CreateGoalAsync(client);
+
+        var updateResponse = await client.PutAsJsonAsync(
+            $"/api/v1/me/goals/{created.GoalId}",
+            new UpdateGoalRequest(
+                null,
+                null,
+                AcquisitionSources: [new AcquisitionSourceRequest("Auction", [])]
+            ),
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, updateResponse.StatusCode);
     }
 
     [Fact]
