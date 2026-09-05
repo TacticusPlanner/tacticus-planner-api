@@ -104,12 +104,7 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
         FarmingStrategy = Enum.TryParse<FarmingStrategy>(config.FarmingStrategy, ignoreCase: true, out var strategy)
             ? strategy
             : FarmingStrategy.TotalUpgrades,
-        AscensionFarming = config.AscensionFarming is null ? null : new AscensionFarmingConfig
-        {
-            Source = Enum.Parse<AscensionFarmingSource>(config.AscensionFarming.Source, ignoreCase: true),
-            ShardBattleIds = config.AscensionFarming.ShardBattleIds.Select(id => id.Value).ToList(),
-            MythicShardBattleIds = config.AscensionFarming.MythicShardBattleIds.Select(id => id.Value).ToList(),
-        },
+        AcquisitionSources = MapAcquisitionSources(config.AcquisitionSources),
         Upgrade = config.Upgrade is null ? null : new UpgradeTarget
         {
             Targets = config.Upgrade.Targets.Select(target => new UpgradeMaterialTarget
@@ -124,6 +119,18 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
             End = config.Level.End,
         },
     };
+
+    /// <summary>Maps the wire acquisition-source list to its domain form. Null / empty stays null —
+    /// "unrestricted campaign farming", the pre-picker default. Shared by <see cref="MapConfig"/> and
+    /// <see cref="UpdateGoalEndpoint"/>.</summary>
+    internal static List<AcquisitionSource>? MapAcquisitionSources(List<AcquisitionSourceRequest>? sources) =>
+        sources is not { Count: > 0 }
+            ? null
+            : sources.Select(source => new AcquisitionSource
+            {
+                Kind = source.Kind,
+                Ids = (source.Ids ?? []).Select(id => id.Trim()).ToList(),
+            }).ToList();
 
     internal static GoalSnapshot MapSnapshot(CreateGoalSnapshotRequest? snapshot) => new()
     {
@@ -168,10 +175,12 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
         ),
         config.FarmingLocationIds,
         config.FarmingStrategy.ToString(),
-        config.AscensionFarming is null ? null : new AscensionFarmingResponse(
-            config.AscensionFarming.Source.ToString(),
-            config.AscensionFarming.ShardBattleIds,
-            config.AscensionFarming.MythicShardBattleIds),
+        // Normalize empty-or-null to null (like MapAcquisitionSources does on the way in) — EF's
+        // change-tracking snapshot can coerce a never-set owned collection navigation from null to an
+        // empty list once the entity is tracked, and both mean the same "unrestricted campaign" here.
+        config.AcquisitionSources is not { Count: > 0 }
+            ? null
+            : config.AcquisitionSources.Select(source => new AcquisitionSourceResponse(source.Kind, source.Ids)).ToList(),
         config.Upgrade is null ? null : new UpgradeTargetResponse(
             config.Upgrade.Targets.Select(target => new UpgradeMaterialTargetResponse(target.UpgradeId, target.Quantity)).ToList()),
         config.Level is null ? null : new LevelTargetResponse(config.Level.Start, config.Level.End)
@@ -229,10 +238,12 @@ public sealed record GoalConfigResponse(
     AbilityTargetResponse? Ability,
     List<string>? FarmingLocationIds,
     string FarmingStrategy,
-    AscensionFarmingResponse? AscensionFarming,
+    List<AcquisitionSourceResponse>? AcquisitionSources,
     UpgradeTargetResponse? Upgrade,
     LevelTargetResponse? Level
 );
+
+public sealed record AcquisitionSourceResponse(string Kind, List<string> Ids);
 
 public sealed record UpgradeTargetResponse(List<UpgradeMaterialTargetResponse> Targets);
 
@@ -252,12 +263,6 @@ public sealed record RankTargetResponse(
 public sealed record ProgressionTargetResponse(string Start, string End);
 
 public sealed record AbilityTargetResponse(int ActiveStart, int ActiveEnd, int PassiveStart, int PassiveEnd);
-
-public sealed record AscensionFarmingResponse(
-    string Source,
-    List<string> ShardBattleIds,
-    List<string> MythicShardBattleIds
-);
 
 public sealed record GoalSnapshotResponse(
     UnitRank? InitialRank,

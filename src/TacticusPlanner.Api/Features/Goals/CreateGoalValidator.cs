@@ -44,8 +44,13 @@ public sealed class CreateGoalValidator : Validator<CreateGoalRequest>
             .NotNull()
             .WithMessage("A goal configuration is required.")
             .Must(IsValidConfig)
-            .WithMessage("The farming strategy or ascension farming configuration is invalid.");
+            .WithMessage("The farming strategy configuration is invalid.");
 
+        RuleFor(request => request.Config)
+            .Must(config => AcquisitionSourceRules.ShapeError(config?.AcquisitionSources) is null)
+            .WithMessage(request =>
+                AcquisitionSourceRules.ShapeError(request.Config?.AcquisitionSources)
+                ?? "The acquisition sources configuration is invalid.");
     }
 
     private static bool IsMow(string entityType) =>
@@ -76,12 +81,6 @@ public sealed class CreateGoalValidator : Validator<CreateGoalRequest>
             return false;
         }
 
-        var farming = config.AscensionFarming;
-        return farming is null
-            || (farming.ShardBattleIds is not null
-                && farming.MythicShardBattleIds is not null
-                && Enum.TryParse<AscensionFarmingSource>(farming.Source, ignoreCase: true, out var source)
-                && Enum.IsDefined(source)
-                && !int.TryParse(farming.Source, out _));
+        return true;
     }
 }

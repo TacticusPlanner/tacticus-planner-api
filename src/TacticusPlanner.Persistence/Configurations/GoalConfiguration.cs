@@ -41,7 +41,7 @@ public sealed class GoalConfiguration : IEntityTypeConfiguration<Goal>
             config.OwnsOne(c => c.Rank);
             config.OwnsOne(c => c.Progression);
             config.OwnsOne(c => c.Ability);
-            config.OwnsOne(c => c.AscensionFarming);
+            config.OwnsMany(c => c.AcquisitionSources);
             config.OwnsOne(c => c.Upgrade, upgrade => upgrade.OwnsMany(u => u.Targets));
             config.OwnsOne(c => c.Level);
         });
