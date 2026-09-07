@@ -1,1 +1,101 @@
 schema: spec-driven
+
+# Project context — shown to AI when creating artifacts.
+context: |
+  Tech stack: C# / ASP.NET Core (.NET 10), EF Core + PostgreSQL, .NET Aspire
+  for local orchestration, xUnit. See this repo's AGENTS.md and its
+  .agents/skills for build/test/lint commands and conventions before writing
+  code.
+
+  Almost every change here is the backend half of a cross-repo pair with
+  `tacticus-planner-apps`. The pair carries the same OpenSpec change name in
+  both repos' `openspec/` stores, is authored during the same
+  `/opsx:propose`, and the API half applies first. Name the companion apps
+  change in the proposal and design.
+
+  Game catalog data flows through `src/TacticusPlanner.GameCatalog`: raw
+  embedded datasets -> runtime denormalization into served datasets -> a
+  public manifest with content hashes. The client
+  (`tacticus-planner-apps/packages/game-catalog`) consumes the served
+  datasets into IndexedDB. Read the `game-catalog-data` skill before adding
+  or changing catalog data, the served projections, or the game version.
+
+  Id-only display resolution: served datasets carry stable ids, never
+  display strings or icon/asset paths. The client maps an id to its
+  displayName and icon. A spec that adds catalog data specifies the ids and
+  structured fields it serves and leaves all display resolution to the
+  client.
+
+  EF Core migrations apply automatically on startup in every environment. A
+  schema change is not complete without its migration in the same change.
+
+  Endpoints and endpoint-contract changes regenerate the OpenAPI artifact
+  under `artifacts/openapi` on build; a contract the frontend consumes must
+  be coordinated with the companion apps change.
+
+# Per-artifact rules.
+rules:
+  specs:
+    - For a change that adds or reshapes catalog data, write out the served
+      projection shape explicitly — every field and its type — and state
+      what the client derives from it versus what the server sends. Do not
+      leave the served shape to be settled during implementation.
+    - Never require the server to send display names, icon paths, or other
+      presentational strings. Requirements name stable ids and structured
+      values only; display resolution is the client's.
+    - When data recurs or is projected forward (events, seasons, schedules),
+      state the recurrence rule, the projection window, and how a game
+      version is associated — do not leave the horizon implicit.
+    - Distinguish "dataset absent", "dataset present but empty for this
+      selection", and "stale / hash mismatch" when they drive different
+      client behavior.
+    - When a served value is produced from raw data by denormalization,
+      state the derivation in the spec so the raw-vs-served split is
+      reviewable.
+  design:
+    - Identify which raw datasets change, the denormalization step that
+      produces the served projection, and the impact on the public manifest
+      and its snapshot test.
+    - State whether an EF Core migration is required and, if so, what it
+      changes; call out any backfill or data migration.
+    - Name the companion `tacticus-planner-apps` change and the contract
+      surface (served dataset or endpoint) the two share.
+    - When a projection can be computed more than one way, pick one
+      canonical served structure and derive everything else from it rather
+      than maintaining parallel projection paths.
+  tasks:
+    - Include the migration task (`dotnet ef migrations add ...`) in the
+      same change as any schema change, never as a follow-up.
+    - When the manifest shape changes, include a task to update the catalog
+      manifest snapshot test and the `TacticusPlanner.GameCatalog.Tests`
+      denormalization coverage.
+    - When an endpoint or its contract changes, include a task to verify the
+      regenerated `artifacts/openapi` artifact and to coordinate the
+      companion apps change.
+    - When bumping the in-game catalog version, include tasks for the
+      client-side assets and data that ride along with it (see the
+      `game-catalog-data` skill) so CI does not break on missing assets.
+    - Put work that genuinely cannot finish in this session (manual
+      full-stack verification, cross-team data) under an explicit
+      "Deferred / out-of-session" heading with a tracking issue, so it is
+      not silently checked off and does not block archive.
+    - End non-trivial changes with the repository gates
+      `dotnet format TacticusPlanner.slnx --verify-no-changes --no-restore`,
+      `dotnet build TacticusPlanner.slnx -c Release --no-restore`, and
+      `dotnet test TacticusPlanner.slnx -c Release --no-build`.
+
+operations:
+  apply:
+    guidance:
+      - Run OpenSpec commands from the `tacticus-planner-api` submodule.
+      - Apply this change before its `tacticus-planner-apps` companion.
+      - For live verification, start the stack through Aspire
+        (`aspire run --project orchestration/TacticusPlanner.AppHost/TacticusPlanner.AppHost.csproj`)
+        and wait for the `api` and `api-migrations` resources to be healthy
+        before testing.
+      - Mark a task `[x]` only when its specified behavior is fully
+        implemented and its proportional verification has run. Do not
+        silently narrow, defer, or accept exceptions to specified behavior —
+        surface added scope and pause.
+      - When acting on a review finding, verify it against current code and
+        fix only still-valid issues.
