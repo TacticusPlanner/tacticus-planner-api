@@ -160,6 +160,66 @@ public sealed class GameCatalogLoaderTests
     }
 
     [Fact]
+    public void RaidBossesDatasetSplitsBossesAndPrimesAndPreservesTheSeasonRotation()
+    {
+        var snapshot = GameCatalogLoader.Load();
+        var view = snapshot.RaidBossesView;
+
+        Assert.NotEmpty(view.Bosses);
+        Assert.NotEmpty(view.Primes);
+        Assert.All(view.Bosses, boss => Assert.Equal("boss", boss.Kind));
+        Assert.All(view.Primes, prime => Assert.Equal("prime", prime.Kind));
+
+        Assert.Equal(
+            [
+                "guild_boss_season_config_1", "guild_boss_season_config_2", "guild_boss_season_config_3",
+                "guild_boss_season_config_4", "guild_boss_season_config_5",
+            ],
+            view.SeasonConfigRotation);
+        Assert.All(view.SeasonConfigRotation, id => Assert.True(view.Seasons.ContainsKey(id)));
+
+        // Ghazghkull is a plain boss; Mortarion is a boss flagged as a primarch. Loot objects and field
+        // npcs are referenced by encounters but never surface as top-level bosses/primes.
+        Assert.Contains(view.Bosses, boss => boss.UnitSetId == "GuildBoss4Boss1OrksGhazghkull" && !boss.IsPrimarch);
+        Assert.Contains(view.Bosses, boss => boss.UnitSetId == "GuildBoss5Boss1DeathMortarion" && boss.IsPrimarch);
+        Assert.DoesNotContain(view.Bosses.Concat(view.Primes), unit => unit.UnitSetId.Contains("LootObj"));
+    }
+
+    [Fact]
+    public void RaidBossEncountersResolveTheirUnitProgressionIndexAndInlinedModifiers()
+    {
+        var snapshot = GameCatalogLoader.Load();
+        var view = snapshot.RaidBossesView;
+
+        var bossPrimeIds = new HashSet<string>(
+            view.Bosses.Concat(view.Primes).Select(unit => unit.UnitSetId), StringComparer.Ordinal);
+
+        var encounters = view.Seasons.Values
+            .SelectMany(season => season.Tiers)
+            .SelectMany(tier => tier.Sets)
+            .SelectMany(set => set.Encounters)
+            .ToArray();
+
+        Assert.NotEmpty(encounters);
+        Assert.All(encounters, encounter =>
+        {
+            Assert.False(encounter.UnitSetId.Contains(':'));
+            Assert.True(encounter.ProgressionIndex >= 1);
+            Assert.True(encounter.EncounterType is "Boss" or "Crystal");
+            Assert.All(encounter.FieldNpcIds, npcId => Assert.False(npcId.Contains(':')));
+            Assert.All(encounter.Modifiers, modifier =>
+            {
+                Assert.False(string.IsNullOrWhiteSpace(modifier.ModifierId));
+                Assert.False(string.IsNullOrWhiteSpace(modifier.Type));
+                Assert.False(string.IsNullOrWhiteSpace(modifier.Target));
+            });
+        });
+
+        // At least one encounter references a served boss/prime and carries an inlined modifier definition.
+        Assert.Contains(encounters, encounter => bossPrimeIds.Contains(encounter.UnitSetId) && encounter.Modifiers.Count > 0);
+    }
+
+    [Fact]
     public void GuildShopRoundTripsRefreshMetadataAndAKnownDayRestrictedShardSlot()
     {
         var snapshot = GameCatalogLoader.Load();

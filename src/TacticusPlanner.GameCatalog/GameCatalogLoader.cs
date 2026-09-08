@@ -74,6 +74,8 @@ public static class GameCatalogLoader
             rawShopsBySourceKey[key] = LoadDataset<GameCatalogRawShop>(key);
         }
 
+        var raidBossRawData = LoadDataset<GameCatalogRaidBossRawData>(GameCatalogDatasets.RaidBossData);
+
         // ---- build denormalized served datasets ------------------------------------------------
         var characterViews = GameCatalogDenormalizer.BuildCharacters(unitsByFaction, equipmentByType, campaignGroups, dropChances);
         var npcList = GameCatalogDenormalizer.BuildNpcs(npcsByFaction);
@@ -92,6 +94,7 @@ public static class GameCatalogLoader
         var loadTime = DateTimeOffset.UtcNow;
         var eventsCalendar = GameCatalogDenormalizer.BuildEventsCalendar(eventDefinitions, eventOccurrences, loadTime);
         var shopViews = GameCatalogDenormalizer.BuildShops(rawShopsBySourceKey);
+        var raidBossesView = GameCatalogDenormalizer.BuildRaidBosses(raidBossRawData);
 
         // Served dataset hashes are computed over the canonical JSON of each denormalized payload.
         var datasetHashes = new Dictionary<string, string>(StringComparer.Ordinal)
@@ -113,6 +116,7 @@ public static class GameCatalogLoader
             [GameCatalogDatasets.EventDefinitionsServed] = GameCatalogHashing.ComputeCanonicalJsonHash(eventDefinitionViews, JsonOptions),
             [GameCatalogDatasets.EventsCalendar] = GameCatalogHashing.ComputeCanonicalJsonHash(eventsCalendar, JsonOptions),
             [GameCatalogDatasets.Shops] = GameCatalogHashing.ComputeCanonicalJsonHash(shopViews, JsonOptions),
+            [GameCatalogDatasets.RaidBosses] = GameCatalogHashing.ComputeCanonicalJsonHash(raidBossesView, JsonOptions),
         };
 
         var snapshot = new GameCatalogSnapshot(
@@ -137,6 +141,7 @@ public static class GameCatalogLoader
             new ReadOnlyCollection<GameCatalogDropChance>(dropChances.ToArray()),
             new ReadOnlyDictionary<string, GameCatalogLre>(lresByEvent),
             new ReadOnlyDictionary<string, GameCatalogRawShop>(rawShopsBySourceKey),
+            raidBossRawData,
             characterViews,
             npcList,
             mowList,
@@ -152,7 +157,8 @@ public static class GameCatalogLoader
             lreCommonViews,
             eventDefinitionViews,
             eventsCalendar,
-            shopViews);
+            shopViews,
+            raidBossesView);
 
         var errors = GameCatalogValidator.Validate(snapshot);
         if (errors.Count > 0)

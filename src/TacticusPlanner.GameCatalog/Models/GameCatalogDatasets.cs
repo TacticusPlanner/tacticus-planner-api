@@ -179,6 +179,13 @@ public static class GameCatalogDatasets
         "shops-crusade",
     ];
 
+    /// <summary>
+    /// Raw raid-boss source (one authored file, ported from V1's datamined guild_boss.json — see
+    /// scripts/port-raid-boss-data.mjs). Consolidated into the single served <see cref="RaidBosses"/>
+    /// dataset; the raw file is never served directly.
+    /// </summary>
+    public const string RaidBossData = "raid-boss-data";
+
     /// <summary>Raw embedded source datasets (one per file) used to build the served catalog.</summary>
     public static readonly IReadOnlyList<string> Required =
     [
@@ -197,6 +204,7 @@ public static class GameCatalogDatasets
         .. CampaignBattleGroups,
         .. LreEvents,
         .. ShopSources,
+        RaidBossData,
     ];
 
     // Served (denormalized) dataset keys — the public manifest surface. Each is one consolidated,
@@ -237,6 +245,13 @@ public static class GameCatalogDatasets
     // directly. Reward/free-offer "type:qty" strings and the Quartz cronSchedule are normalized to
     // structured values + an explicit day-of-week list at build time (see Denormalization/ShopsDenormalizer.cs).
     public const string Shops = "shops";
+    // raid-bosses is one consolidated, self-contained dataset built from the single RaidBossData raw file:
+    // the season-config rotation, the raid bosses and raid-boss primes (identity + progression ladder +
+    // weapons + ability/trait ids), and the season configs whose encounters carry their referenced
+    // unit-set id + progression index, field-npc ids, and resolved modifier definitions inlined. Ported
+    // from V1's guild_boss.json; the raw file is never served directly. See
+    // Denormalization/RaidBossDenormalizer.cs and specs/raid-bosses-dataset in raid-bosses-library.
+    public const string RaidBosses = "raid-bosses";
 
     /// <summary>The denormalized datasets exposed by the manifest / served by the catalog endpoints.</summary>
     public static readonly IReadOnlyList<string> Served =
@@ -258,5 +273,6 @@ public static class GameCatalogDatasets
         EventDefinitionsServed,
         EventsCalendar,
         Shops,
+        RaidBosses,
     ];
 }

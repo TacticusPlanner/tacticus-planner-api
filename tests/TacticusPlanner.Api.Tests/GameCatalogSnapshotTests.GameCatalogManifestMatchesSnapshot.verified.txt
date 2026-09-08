@@ -75,6 +75,11 @@
       url: /api/v1/game-catalog/onslaught-rewards
     },
     {
+      key: raid-bosses,
+      hash: 1af2f5080f7a5d9566ab88eaee34f880a8eaea7390b30084b9b96dcfc4f711cb,
+      url: /api/v1/game-catalog/raid-bosses
+    },
+    {
       key: shops,
       hash: ddee0877e0ee18f085f0a0c974103cae6cd052a1b2f2003416568da73b1c1353,
       url: /api/v1/game-catalog/shops

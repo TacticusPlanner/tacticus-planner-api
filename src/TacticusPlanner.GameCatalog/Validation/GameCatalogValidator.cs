@@ -32,6 +32,7 @@ public static partial class GameCatalogValidator
         ValidateReferences(snapshot, errors);
         ValidateEvents(snapshot, errors);
         ValidateShops(snapshot, errors);
+        ValidateRaidBosses(snapshot, errors);
         ValidateServedProjections(snapshot, errors);
 
         return errors;
