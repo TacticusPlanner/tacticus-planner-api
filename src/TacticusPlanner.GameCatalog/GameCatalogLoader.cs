@@ -74,7 +74,7 @@ public static class GameCatalogLoader
             rawShopsBySourceKey[key] = LoadDataset<GameCatalogRawShop>(key);
         }
 
-        var raidBossRawData = LoadDataset<GameCatalogRaidBossRawData>(GameCatalogDatasets.RaidBossData);
+        var raidBossRawData = LoadRaidBossRawData();
 
         // ---- build denormalized served datasets ------------------------------------------------
         var characterViews = GameCatalogDenormalizer.BuildCharacters(unitsByFaction, equipmentByType, campaignGroups, dropChances);
@@ -168,6 +168,43 @@ public static class GameCatalogLoader
         }
 
         return snapshot;
+    }
+
+    /// <summary>
+    /// Assembles the raid-boss raw data from its authored source files: <c>raid-boss-common</c> (rotation,
+    /// primarchs, modifier defs), one <c>raid-boss-{n}</c> file per boss (unit sets, merged), and one
+    /// <c>raid-boss-season-{n}</c> file per season config (keyed by its own <c>GuildBossSeasonConfigId</c>).
+    /// A duplicate unit-set key or season-config id across files throws.
+    /// </summary>
+    private static GameCatalogRaidBossRawData LoadRaidBossRawData()
+    {
+        var common = LoadDataset<GameCatalogRaidBossCommonRawData>(GameCatalogDatasets.RaidBossCommon);
+
+        var unitSets = new Dictionary<string, GameCatalogRaidBossRawUnitSet>(StringComparer.Ordinal);
+        foreach (var key in GameCatalogDatasets.RaidBossGroups)
+        {
+            foreach (var (unitSetId, unitSet) in LoadDataset<GameCatalogRaidBossGroupRawData>(key).UnitSets)
+            {
+                if (!unitSets.TryAdd(unitSetId, unitSet))
+                {
+                    throw new InvalidOperationException(
+                        $"Raid-boss unit-set key '{unitSetId}' is defined in more than one raid-boss-*.json file.");
+                }
+            }
+        }
+
+        var seasons = new Dictionary<string, GameCatalogRaidBossRawSeason>(StringComparer.Ordinal);
+        foreach (var key in GameCatalogDatasets.RaidBossSeasons)
+        {
+            var season = LoadDataset<GameCatalogRaidBossRawSeason>(key);
+            if (!seasons.TryAdd(season.GuildBossSeasonConfigId, season))
+            {
+                throw new InvalidOperationException(
+                    $"Raid-boss season config '{season.GuildBossSeasonConfigId}' is defined in more than one raid-boss-season-*.json file.");
+            }
+        }
+
+        return new GameCatalogRaidBossRawData(common.Rotation, common.Primarchs, unitSets, seasons, common.Modifiers);
     }
 
     private static T LoadDataset<T>(string key)

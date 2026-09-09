@@ -1,12 +1,13 @@
 ## 1. Raw data authoring
 
-- [x] 1.1 Port `guild_boss.json` from `tacticusplanner` into authored raw sources under `Data/raid-bosses/` — season rotation, unit sets, season configs, and modifier definitions. Done as a single `Data/raid-bosses/raid-boss-data.json` via `scripts/port-raid-boss-data.mjs` (drops `misc`/`boards`/`visualId`/`spawnPointsSet`/`seasonEndRewards`; keeps `nrOfMembers` and `relicAbilityLevel`). `dotnet build` loads + validates it without error.
+- [x] 1.1 Port `guild_boss.json` from `tacticusplanner` into authored raw sources under `Data/raid-bosses/` — season rotation, unit sets, season configs, and modifier definitions, via `scripts/port-raid-boss-data.mjs` (drops `misc`/`boards`/`visualId`/`spawnPointsSet`/`seasonEndRewards`; keeps `nrOfMembers` and `relicAbilityLevel`). `dotnet build` loads + validates it without error.
+- [x] 1.1a **File family, not one blob** (Decision 8): authored as `raid-boss-<n>.json` (one per boss, 12), `raid-boss-season-<n>.json` (one per season config, 5), and `raid-boss-common.json` (rotation + primarchs + modifier defs), mirroring `lres-<event>` + `lre-common`. The former single `raid-boss-data.json` (~1.3 MB) is removed. `scripts/port-raid-boss-data.mjs` emits the family and wipes stale `raid-boss-*.json` on each run.
 - [x] 1.2 `GameCatalogRelease.GameVersion` — **left unchanged at `1.42`**. It is a single catalog-wide value and the ported datamine is from the same 1.41→1.42 era as the rest of the embedded data; bumping it would falsely re-tag every other dataset. Recorded here rather than changed.
 - [x] 1.3 No display/presentation fields in the raw source (the port script only emits structural fields). Verified by the shape test in 7.2.
 
 ## 2. Registry & models
 
-- [x] 2.1 Registered raw key `raid-boss-data` (in `Required`) and served key `raid-bosses` (in `Served`) in `Models/GameCatalogDatasets.cs`. `GameCatalogDatasets.Served` enumerates `raid-bosses`.
+- [x] 2.1 Registered the raw source keys `raid-boss-common` + `RaidBossGroups` (`raid-boss-1`..`12`) + `RaidBossSeasons` (`raid-boss-season-1`..`5`) in `Required`, and the served key `raid-bosses` in `Served`, in `Models/GameCatalogDatasets.cs`. `GameCatalogLoader.LoadRaidBossRawData` merges the family into one `GameCatalogRaidBossRawData` (throws on a duplicate unit-set key or season-config id); `GameCatalogRaidBossGroupRawData` / `GameCatalogRaidBossCommonRawData` are the per-file binding records.
 - [x] 2.2 Added served-view records in `Models/RaidBosses.cs`: `GameCatalogRaidBossesView` (`SeasonConfigRotation`, `Bosses`, `Primes`, `Seasons`), `GameCatalogRaidBossView`, `GameCatalogRaidBossStatStepView` (core stats non-nullable; `RelicAbilityLevel`/crit/block optional), `GameCatalogRaidBossWeaponView` (optional `Range`), `GameCatalogRaidBossSeasonView`/`TierView`/`SetView`, `GameCatalogRaidBossEncounterView`, `GameCatalogRaidBossEncounterModifierView`. `subtargets` (plural) dropped — the datamine only carries singular `subtarget`. Project compiles.
 - [x] 2.3 Added the internal raw models (`GameCatalogRaidBossRawData` + nested) in the same file, used only by denormalization/validation.
 
@@ -43,6 +44,7 @@
 - [x] 7.6 `RaidBossValidationTests` — unresolved encounter unit, unresolved field npc, unresolved modifier id, empty progression, unrecognized encounter type, missing faction, empty bosses/primes — each with a clean-data success case.
 - [x] 7.7 `dotnet build TacticusPlanner.slnx -c Release` — passes (catalog load + validation succeed at startup / OpenAPI generation).
 - [x] 7.8 `dotnet test TacticusPlanner.slnx -c Release --no-build` — the Verify manifest snapshot's only diff was the added `raid-bosses` hash entry (every other dataset hash unchanged, confirming additivity); `.received.txt` promoted to `.verified.txt`. Full run: GameCatalog 106/106, Api 200/200, Persistence.Integration 2/2.
+- [x] 7.8a Splitting the single raw file into the per-boss/per-season/common family (Decision 8) left the served `raid-bosses` hash and the manifest snapshot **unchanged** — the canonical-JSON hash sorts object keys and the bosses/primes arrays are `OrderBy`-sorted in `BuildRaidBosses`, so the assembled data is byte-equivalent. `GameCatalogLoaderTests.RaidBossesDataset...` gained assertions that the first (`GuildBoss1Boss…`) and last (`GuildBoss12Boss1DarkaLion`) boss files both merge. Full run still GameCatalog 106/106, Api 200/200.
 - [x] 7.9 Repository gates: `dotnet format --verify-no-changes` clean, `dotnet build -c Release` clean, `dotnet test -c Release` green.
 
 ## 8. Cross-repo coordination

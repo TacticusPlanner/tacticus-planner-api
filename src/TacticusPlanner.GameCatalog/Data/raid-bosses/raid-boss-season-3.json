@@ -1,0 +1,2968 @@
+{
+  "GuildBossSeasonConfigId": "guild_boss_season_config_3",
+  "LoopFromTier": "4",
+  "LoopFromSet": "3",
+  "Tiers": [
+    {
+      "Tier": 0,
+      "Sets": [
+        {
+          "Set": 0,
+          "ChestId": "chest_guildboss_defeated_2_common",
+          "GuildXp": 10,
+          "Encounters": [
+            {
+              "EncounterIndex": 0,
+              "GuildBossEncounterType": "Boss",
+              "BoardId": "GB_01",
+              "MaxNrOfTurns": 6,
+              "BossType": "TervigonLeviathan",
+              "UnitId": "GuildBoss1Boss1TyranTervigonLeviathan:1",
+              "Npc1Id": "GuildBoss1Npc1TyranTermagantLeviathan:1",
+              "DisallowedFactions": [
+                "Tyranids"
+              ]
+            },
+            {
+              "EncounterIndex": 1,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_support_01",
+              "MaxNrOfTurns": 6,
+              "BossType": "TervigonLeviathan",
+              "UnitId": "GuildBoss1MiniBoss1TyranWarriorLeviathan:1",
+              "Enemies": [
+                "GuildBoss1Npc1TyranTermagantLeviathan:1",
+                "GuildBoss1Npc1TyranTermagantLeviathan:1",
+                "GuildBoss2Npc1TyranRipperSwarmLeviathan:1",
+                "GuildBoss1Npc4TyranHormagauntLeviathan:1"
+              ],
+              "DisallowedFactions": [
+                "Tyranids"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 180,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 360,
+                  "Modifier": "boss_debuff_MassiveScythingTalons_15"
+                },
+                {
+                  "HpLost": 540,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 720,
+                  "Modifier": "boss_debuff_MassiveScythingTalons_15"
+                },
+                {
+                  "HpLost": 900,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 1080,
+                  "Modifier": "boss_debuff_MassiveScythingTalons_20"
+                },
+                {
+                  "HpLost": 1260,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 1440,
+                  "Modifier": "boss_debuff_movement_1"
+                }
+              ]
+            },
+            {
+              "EncounterIndex": 2,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_support_02",
+              "MaxNrOfTurns": 6,
+              "BossType": "TervigonLeviathan",
+              "UnitId": "GuildBoss1MiniBoss1TyranWarriorLeviathan:1",
+              "Enemies": [
+                "GuildBoss1Npc1TyranTermagantLeviathan:1",
+                "GuildBoss1Npc1TyranTermagantLeviathan:1",
+                "GuildBoss2Npc1TyranRipperSwarmLeviathan:1",
+                "GuildBoss1Npc4TyranHormagauntLeviathan:1"
+              ],
+              "DisallowedFactions": [
+                "Tyranids"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 180,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 360,
+                  "Modifier": "boss_debuff_SpawnTermagants_15"
+                },
+                {
+                  "HpLost": 540,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 720,
+                  "Modifier": "boss_debuff_SpawnTermagants_15"
+                },
+                {
+                  "HpLost": 900,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 1080,
+                  "Modifier": "boss_debuff_SpawnTermagants_20"
+                },
+                {
+                  "HpLost": 1260,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 1440,
+                  "Modifier": "boss_debuff_movement_1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Set": 1,
+          "ChestId": "chest_guildboss_defeated_2_common",
+          "GuildXp": 10,
+          "Encounters": [
+            {
+              "EncounterIndex": 0,
+              "GuildBossEncounterType": "Boss",
+              "BoardId": "GB_02",
+              "MaxNrOfTurns": 6,
+              "BossType": "HiveTyrantLeviathan",
+              "UnitId": "GuildBoss2Boss1TyranHiveTyrantLeviathan:2",
+              "Npc1Id": "GuildBoss2Npc1TyranRipperSwarmLeviathan:2",
+              "DisallowedFactions": [
+                "Tyranids"
+              ]
+            },
+            {
+              "EncounterIndex": 1,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_support_03",
+              "MaxNrOfTurns": 6,
+              "BossType": "HiveTyrantLeviathan",
+              "UnitId": "GuildBoss1MiniBoss1TyranWarriorLeviathan:2",
+              "Enemies": [
+                "GuildBoss1Npc1TyranTermagantLeviathan:2",
+                "GuildBoss1Npc1TyranTermagantLeviathan:2",
+                "GuildBoss2Npc1TyranRipperSwarmLeviathan:2",
+                "GuildBoss1Npc4TyranHormagauntLeviathan:2"
+              ],
+              "DisallowedFactions": [
+                "Tyranids"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 270,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 540,
+                  "Modifier": "boss_debuff_StranglethornCannon_25"
+                },
+                {
+                  "HpLost": 810,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 1080,
+                  "Modifier": "boss_debuff_CallRipperSwarms_25"
+                },
+                {
+                  "HpLost": 1350,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 1620,
+                  "Modifier": "boss_debuff_StranglethornCannon_25"
+                },
+                {
+                  "HpLost": 1890,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 2160,
+                  "Modifier": "boss_debuff_movement_1"
+                }
+              ]
+            },
+            {
+              "EncounterIndex": 2,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_support_04",
+              "MaxNrOfTurns": 6,
+              "BossType": "HiveTyrantLeviathan",
+              "UnitId": "GuildBoss1MiniBoss1TyranWarriorLeviathan:2",
+              "Enemies": [
+                "GuildBoss1Npc1TyranTermagantLeviathan:2",
+                "GuildBoss1Npc1TyranTermagantLeviathan:2",
+                "GuildBoss2Npc1TyranRipperSwarmLeviathan:2",
+                "GuildBoss1Npc4TyranHormagauntLeviathan:2"
+              ],
+              "DisallowedFactions": [
+                "Tyranids"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 270,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 540,
+                  "Modifier": "boss_debuff_PrehensilePincerTail_25"
+                },
+                {
+                  "HpLost": 810,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 1080,
+                  "Modifier": "boss_debuff_CallRipperSwarms_25"
+                },
+                {
+                  "HpLost": 1350,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 1620,
+                  "Modifier": "boss_debuff_PrehensilePincerTail_25"
+                },
+                {
+                  "HpLost": 1890,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 2160,
+                  "Modifier": "boss_debuff_movement_1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Set": 2,
+          "ChestId": "chest_guildboss_defeated_2_common",
+          "GuildXp": 10,
+          "Encounters": [
+            {
+              "EncounterIndex": 0,
+              "GuildBossEncounterType": "Boss",
+              "BoardId": "GB_03",
+              "MaxNrOfTurns": 6,
+              "BossType": "TervigonGorgon",
+              "UnitId": "GuildBoss1Boss3TyranTervigonGorgon:3",
+              "Npc1Id": "GuildBoss1Npc3TyranTermagantGorgon:3",
+              "DisallowedFactions": [
+                "Tyranids"
+              ]
+            },
+            {
+              "EncounterIndex": 1,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_support_05",
+              "MaxNrOfTurns": 6,
+              "BossType": "TervigonGorgon",
+              "UnitId": "GuildBoss1MiniBoss3TyranWarriorGorgon:3",
+              "Enemies": [
+                "GuildBoss1Npc3TyranTermagantGorgon:3",
+                "GuildBoss1Npc3TyranTermagantGorgon:3",
+                "GuildBoss2Npc3TyranRipperSwarmGorgon:3",
+                "GuildBoss1Npc6TyranHormagauntGorgon:3"
+              ],
+              "DisallowedFactions": [
+                "Tyranids"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 360,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 720,
+                  "Modifier": "boss_debuff_MassiveScythingTalons_15"
+                },
+                {
+                  "HpLost": 1080,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 1440,
+                  "Modifier": "boss_debuff_MassiveScythingTalons_15"
+                },
+                {
+                  "HpLost": 1800,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 2160,
+                  "Modifier": "boss_debuff_MassiveScythingTalons_20"
+                },
+                {
+                  "HpLost": 2520,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 2880,
+                  "Modifier": "boss_debuff_movement_1"
+                }
+              ]
+            },
+            {
+              "EncounterIndex": 2,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_support_06",
+              "MaxNrOfTurns": 6,
+              "BossType": "TervigonGorgon",
+              "UnitId": "GuildBoss1MiniBoss3TyranWarriorGorgon:3",
+              "Enemies": [
+                "GuildBoss1Npc3TyranTermagantGorgon:3",
+                "GuildBoss1Npc3TyranTermagantGorgon:3",
+                "GuildBoss2Npc3TyranRipperSwarmGorgon:3",
+                "GuildBoss1Npc6TyranHormagauntGorgon:3"
+              ],
+              "DisallowedFactions": [
+                "Tyranids"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 360,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 720,
+                  "Modifier": "boss_debuff_SpawnTermagants3_15"
+                },
+                {
+                  "HpLost": 1080,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 1440,
+                  "Modifier": "boss_debuff_SpawnTermagants3_15"
+                },
+                {
+                  "HpLost": 1800,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 2160,
+                  "Modifier": "boss_debuff_SpawnTermagants3_20"
+                },
+                {
+                  "HpLost": 2520,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 2880,
+                  "Modifier": "boss_debuff_movement_1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Set": 3,
+          "ChestId": "chest_guildboss_defeated_2_common",
+          "GuildXp": 10,
+          "Encounters": [
+            {
+              "EncounterIndex": 0,
+              "GuildBossEncounterType": "Boss",
+              "BoardId": "GB_Screamer_03",
+              "MaxNrOfTurns": 6,
+              "BossType": "ScreamerKiller",
+              "UnitId": "GuildBoss6Boss1TyranScreamerKiller:4",
+              "Npc1Id": "GuildBoss6Npc1TyranHormagaunt:4",
+              "Npc2Id": "GuildBoss6Npc5TyranBarbgaunt:4",
+              "Enemies": [
+                "GuildBoss6Npc5TyranBarbgaunt:4",
+                "GuildBoss6Npc5TyranBarbgaunt:4",
+                "GuildBoss6Npc1TyranHormagaunt:4",
+                "GuildBoss6Npc1TyranHormagaunt:4",
+                "GuildBoss6Npc1TyranHormagaunt:4",
+                "GuildBoss6Npc1TyranHormagaunt:4",
+                "GuildBoss6Npc1TyranHormagaunt:4",
+                "GuildBoss6Npc1TyranHormagaunt:4"
+              ],
+              "DisallowedFactions": [
+                "Tyranids"
+              ]
+            },
+            {
+              "EncounterIndex": 1,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Screamer_support_07",
+              "MaxNrOfTurns": 6,
+              "BossType": "ScreamerKiller",
+              "UnitId": "GuildBoss6MiniBoss1TyranNeurothrope:4",
+              "Enemies": [
+                "GuildBoss6Npc5TyranBarbgaunt:4",
+                "GuildBoss6Npc5TyranBarbgaunt:4",
+                "GuildBoss6Npc5TyranBarbgaunt:4",
+                "GuildBoss6Npc5TyranBarbgaunt:4",
+                "GuildBoss6Npc3TyranTermagant:4",
+                "GuildBoss6Npc3TyranTermagant:4",
+                "GuildBoss6Npc3TyranTermagant:4",
+                "GuildBoss6Npc3TyranTermagant:4"
+              ],
+              "DisallowedFactions": [
+                "Tyranids"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 720,
+                  "Modifier": "boss_debuff_BarbgauntUnitReduction"
+                },
+                {
+                  "HpLost": 1440,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 2160,
+                  "Modifier": "boss_debuff_DeathScream_disable"
+                },
+                {
+                  "HpLost": 2880,
+                  "Modifier": "boss_debuff_critDmg_25"
+                },
+                {
+                  "HpLost": 3600,
+                  "Modifier": "boss_debuff_BarbgauntUnitReduction"
+                }
+              ]
+            },
+            {
+              "EncounterIndex": 2,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Screamer_support_08",
+              "MaxNrOfTurns": 6,
+              "BossType": "ScreamerKiller",
+              "UnitId": "GuildBoss6MiniBoss2TyranWingedPrime:4",
+              "Enemies": [
+                "GuildBoss6Npc4TyranWarrior:4",
+                "GuildBoss6Npc4TyranWarrior:4",
+                "GuildBoss6Npc4TyranWarrior:4",
+                "GuildBoss6Npc2TyranRipperSwarm:4",
+                "GuildBoss6Npc2TyranRipperSwarm:4",
+                "GuildBoss6Npc2TyranRipperSwarm:4",
+                "GuildBoss6Npc2TyranRipperSwarm:4"
+              ],
+              "DisallowedFactions": [
+                "Tyranids"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 720,
+                  "Modifier": "boss_debuff_HormagauntUnitReduction"
+                },
+                {
+                  "HpLost": 1440,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 2160,
+                  "Modifier": "boss_debuff_LivingBatteringRam_disable"
+                },
+                {
+                  "HpLost": 2880,
+                  "Modifier": "boss_debuff_critDmg_25"
+                },
+                {
+                  "HpLost": 3600,
+                  "Modifier": "boss_debuff_HormagauntUnitReduction"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Tier": 1,
+      "Sets": [
+        {
+          "Set": 0,
+          "ChestId": "chest_guildboss_defeated_2_uncommon",
+          "GuildXp": 10,
+          "Encounters": [
+            {
+              "EncounterIndex": 0,
+              "GuildBossEncounterType": "Boss",
+              "BoardId": "GB_06",
+              "MaxNrOfTurns": 6,
+              "BossType": "HiveTyrantKronos",
+              "UnitId": "GuildBoss2Boss2TyranHiveTyrantKronos:5",
+              "Npc1Id": "GuildBoss2Npc2TyranRipperSwarmKronos:5",
+              "DisallowedFactions": [
+                "Tyranids"
+              ]
+            },
+            {
+              "EncounterIndex": 1,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_support_07",
+              "MaxNrOfTurns": 6,
+              "BossType": "HiveTyrantKronos",
+              "UnitId": "GuildBoss1MiniBoss2TyranWarriorKronos:5",
+              "Enemies": [
+                "GuildBoss1Npc2TyranTermagantKronos:4",
+                "GuildBoss1Npc2TyranTermagantKronos:4",
+                "GuildBoss2Npc2TyranRipperSwarmKronos:4",
+                "GuildBoss1Npc5TyranHormagauntKronos:4"
+              ],
+              "DisallowedFactions": [
+                "Tyranids"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 900,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 1800,
+                  "Modifier": "boss_debuff_StranglethornCannon_25"
+                },
+                {
+                  "HpLost": 2700,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 3600,
+                  "Modifier": "boss_debuff_CallRipperSwarms2_25"
+                },
+                {
+                  "HpLost": 4500,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 5400,
+                  "Modifier": "boss_debuff_StranglethornCannon_25"
+                },
+                {
+                  "HpLost": 6300,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 7200,
+                  "Modifier": "boss_debuff_movement_1"
+                }
+              ]
+            },
+            {
+              "EncounterIndex": 2,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_support_08",
+              "MaxNrOfTurns": 6,
+              "BossType": "HiveTyrantKronos",
+              "UnitId": "GuildBoss1MiniBoss2TyranWarriorKronos:5",
+              "Enemies": [
+                "GuildBoss1Npc2TyranTermagantKronos:4",
+                "GuildBoss1Npc2TyranTermagantKronos:4",
+                "GuildBoss2Npc2TyranRipperSwarmKronos:4",
+                "GuildBoss1Npc5TyranHormagauntKronos:4"
+              ],
+              "DisallowedFactions": [
+                "Tyranids"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 900,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 1800,
+                  "Modifier": "boss_debuff_PrehensilePincerTail_25"
+                },
+                {
+                  "HpLost": 2700,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 3600,
+                  "Modifier": "boss_debuff_CallRipperSwarms2_25"
+                },
+                {
+                  "HpLost": 4500,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 5400,
+                  "Modifier": "boss_debuff_PrehensilePincerTail_25"
+                },
+                {
+                  "HpLost": 6300,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 7200,
+                  "Modifier": "boss_debuff_movement_1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Set": 1,
+          "ChestId": "chest_guildboss_defeated_2_uncommon",
+          "GuildXp": 10,
+          "Encounters": [
+            {
+              "EncounterIndex": 0,
+              "GuildBossEncounterType": "Boss",
+              "BoardId": "GB_05",
+              "MaxNrOfTurns": 6,
+              "BossType": "TervigonLeviathan",
+              "UnitId": "GuildBoss1Boss1TyranTervigonLeviathan:6",
+              "Npc1Id": "GuildBoss1Npc1TyranTermagantLeviathan:6",
+              "DisallowedFactions": [
+                "Tyranids"
+              ]
+            },
+            {
+              "EncounterIndex": 1,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_support_01",
+              "MaxNrOfTurns": 6,
+              "BossType": "TervigonLeviathan",
+              "UnitId": "GuildBoss1MiniBoss1TyranWarriorLeviathan:6",
+              "Enemies": [
+                "GuildBoss1Npc1TyranTermagantLeviathan:5",
+                "GuildBoss1Npc1TyranTermagantLeviathan:5",
+                "GuildBoss2Npc1TyranRipperSwarmLeviathan:5",
+                "GuildBoss1Npc4TyranHormagauntLeviathan:5"
+              ],
+              "DisallowedFactions": [
+                "Tyranids"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 1200,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 2400,
+                  "Modifier": "boss_debuff_MassiveScythingTalons_15"
+                },
+                {
+                  "HpLost": 3600,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 4800,
+                  "Modifier": "boss_debuff_MassiveScythingTalons_15"
+                },
+                {
+                  "HpLost": 6000,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 7200,
+                  "Modifier": "boss_debuff_MassiveScythingTalons_20"
+                },
+                {
+                  "HpLost": 8400,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 9600,
+                  "Modifier": "boss_debuff_movement_1"
+                }
+              ]
+            },
+            {
+              "EncounterIndex": 2,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_support_02",
+              "MaxNrOfTurns": 6,
+              "BossType": "TervigonLeviathan",
+              "UnitId": "GuildBoss1MiniBoss1TyranWarriorLeviathan:6",
+              "Enemies": [
+                "GuildBoss1Npc1TyranTermagantLeviathan:5",
+                "GuildBoss1Npc1TyranTermagantLeviathan:5",
+                "GuildBoss2Npc1TyranRipperSwarmLeviathan:5",
+                "GuildBoss1Npc4TyranHormagauntLeviathan:5"
+              ],
+              "DisallowedFactions": [
+                "Tyranids"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 1200,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 2400,
+                  "Modifier": "boss_debuff_SpawnTermagants_15"
+                },
+                {
+                  "HpLost": 3600,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 4800,
+                  "Modifier": "boss_debuff_SpawnTermagants_15"
+                },
+                {
+                  "HpLost": 6000,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 7200,
+                  "Modifier": "boss_debuff_SpawnTermagants_20"
+                },
+                {
+                  "HpLost": 8400,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 9600,
+                  "Modifier": "boss_debuff_movement_1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Set": 2,
+          "ChestId": "chest_guildboss_defeated_2_uncommon",
+          "GuildXp": 10,
+          "Encounters": [
+            {
+              "EncounterIndex": 0,
+              "GuildBossEncounterType": "Boss",
+              "BoardId": "GB_04",
+              "MaxNrOfTurns": 6,
+              "BossType": "HiveTyrantGorgon",
+              "UnitId": "GuildBoss2Boss3TyranHiveTyrantGorgon:7",
+              "Npc1Id": "GuildBoss2Npc3TyranRipperSwarmGorgon:7",
+              "DisallowedFactions": [
+                "Tyranids"
+              ]
+            },
+            {
+              "EncounterIndex": 1,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_support_09",
+              "MaxNrOfTurns": 6,
+              "BossType": "HiveTyrantGorgon",
+              "UnitId": "GuildBoss1MiniBoss3TyranWarriorGorgon:7",
+              "Enemies": [
+                "GuildBoss1Npc3TyranTermagantGorgon:6",
+                "GuildBoss1Npc3TyranTermagantGorgon:6",
+                "GuildBoss2Npc3TyranRipperSwarmGorgon:6",
+                "GuildBoss1Npc6TyranHormagauntGorgon:6"
+              ],
+              "DisallowedFactions": [
+                "Tyranids"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 1500,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 3000,
+                  "Modifier": "boss_debuff_StranglethornCannon_25"
+                },
+                {
+                  "HpLost": 4500,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 6000,
+                  "Modifier": "boss_debuff_CallRipperSwarms3_25"
+                },
+                {
+                  "HpLost": 7500,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 9000,
+                  "Modifier": "boss_debuff_StranglethornCannon_25"
+                },
+                {
+                  "HpLost": 10500,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 12000,
+                  "Modifier": "boss_debuff_movement_1"
+                }
+              ]
+            },
+            {
+              "EncounterIndex": 2,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_support_11",
+              "MaxNrOfTurns": 6,
+              "BossType": "HiveTyrantGorgon",
+              "UnitId": "GuildBoss1MiniBoss3TyranWarriorGorgon:7",
+              "Enemies": [
+                "GuildBoss1Npc3TyranTermagantGorgon:6",
+                "GuildBoss1Npc3TyranTermagantGorgon:6",
+                "GuildBoss2Npc3TyranRipperSwarmGorgon:6",
+                "GuildBoss1Npc6TyranHormagauntGorgon:6"
+              ],
+              "DisallowedFactions": [
+                "Tyranids"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 1500,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 3000,
+                  "Modifier": "boss_debuff_PrehensilePincerTail_25"
+                },
+                {
+                  "HpLost": 4500,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 6000,
+                  "Modifier": "boss_debuff_CallRipperSwarms3_25"
+                },
+                {
+                  "HpLost": 7500,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 9000,
+                  "Modifier": "boss_debuff_PrehensilePincerTail_25"
+                },
+                {
+                  "HpLost": 10500,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 12000,
+                  "Modifier": "boss_debuff_movement_1"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Set": 3,
+          "ChestId": "chest_guildboss_defeated_2_uncommon",
+          "GuildXp": 10,
+          "Encounters": [
+            {
+              "EncounterIndex": 0,
+              "GuildBossEncounterType": "Boss",
+              "BoardId": "GB_Screamer_03",
+              "MaxNrOfTurns": 6,
+              "BossType": "ScreamerKiller",
+              "UnitId": "GuildBoss6Boss1TyranScreamerKiller:8",
+              "Npc1Id": "GuildBoss6Npc1TyranHormagaunt:8",
+              "Npc2Id": "GuildBoss6Npc5TyranBarbgaunt:8",
+              "Enemies": [
+                "GuildBoss6Npc5TyranBarbgaunt:8",
+                "GuildBoss6Npc5TyranBarbgaunt:8",
+                "GuildBoss6Npc1TyranHormagaunt:8",
+                "GuildBoss6Npc1TyranHormagaunt:8",
+                "GuildBoss6Npc1TyranHormagaunt:8",
+                "GuildBoss6Npc1TyranHormagaunt:8",
+                "GuildBoss6Npc1TyranHormagaunt:8",
+                "GuildBoss6Npc1TyranHormagaunt:8"
+              ],
+              "DisallowedFactions": [
+                "Tyranids"
+              ]
+            },
+            {
+              "EncounterIndex": 1,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Screamer_support_07",
+              "MaxNrOfTurns": 6,
+              "BossType": "ScreamerKiller",
+              "UnitId": "GuildBoss6MiniBoss1TyranNeurothrope:8",
+              "Enemies": [
+                "GuildBoss6Npc5TyranBarbgaunt:7",
+                "GuildBoss6Npc5TyranBarbgaunt:7",
+                "GuildBoss6Npc5TyranBarbgaunt:7",
+                "GuildBoss6Npc5TyranBarbgaunt:7",
+                "GuildBoss6Npc3TyranTermagant:7",
+                "GuildBoss6Npc3TyranTermagant:7",
+                "GuildBoss6Npc3TyranTermagant:7",
+                "GuildBoss6Npc3TyranTermagant:7"
+              ],
+              "DisallowedFactions": [
+                "Tyranids"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 2880,
+                  "Modifier": "boss_debuff_BarbgauntUnitReduction"
+                },
+                {
+                  "HpLost": 5760,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 8640,
+                  "Modifier": "boss_debuff_DeathScream_disable"
+                },
+                {
+                  "HpLost": 11520,
+                  "Modifier": "boss_debuff_critDmg_25"
+                },
+                {
+                  "HpLost": 14400,
+                  "Modifier": "boss_debuff_BarbgauntUnitReduction"
+                }
+              ]
+            },
+            {
+              "EncounterIndex": 2,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Screamer_support_08",
+              "MaxNrOfTurns": 6,
+              "BossType": "ScreamerKiller",
+              "UnitId": "GuildBoss6MiniBoss2TyranWingedPrime:8",
+              "Enemies": [
+                "GuildBoss6Npc4TyranWarrior:7",
+                "GuildBoss6Npc4TyranWarrior:7",
+                "GuildBoss6Npc4TyranWarrior:7",
+                "GuildBoss6Npc2TyranRipperSwarm:7",
+                "GuildBoss6Npc2TyranRipperSwarm:7",
+                "GuildBoss6Npc2TyranRipperSwarm:7",
+                "GuildBoss6Npc2TyranRipperSwarm:7"
+              ],
+              "DisallowedFactions": [
+                "Tyranids"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 2880,
+                  "Modifier": "boss_debuff_HormagauntUnitReduction"
+                },
+                {
+                  "HpLost": 5760,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 8640,
+                  "Modifier": "boss_debuff_LivingBatteringRam_disable"
+                },
+                {
+                  "HpLost": 11520,
+                  "Modifier": "boss_debuff_critDmg_25"
+                },
+                {
+                  "HpLost": 14400,
+                  "Modifier": "boss_debuff_HormagauntUnitReduction"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Tier": 2,
+      "Sets": [
+        {
+          "Set": 0,
+          "ChestId": "chest_guildboss_defeated_2_rare",
+          "GuildXp": 10,
+          "Encounters": [
+            {
+              "EncounterIndex": 0,
+              "GuildBossEncounterType": "Boss",
+              "BoardId": "GB_Riptide_03",
+              "MaxNrOfTurns": 6,
+              "BossType": "Riptide",
+              "UnitId": "GuildBoss11Boss1TauRiptide:9",
+              "Npc1Id": "GuildBoss4Npc2OrksOrkBoy:7",
+              "Npc2Id": "GuildBoss4Npc4OrksStormboy:7",
+              "Enemies": [
+                "GuildBoss11Npc3TauDroneShield:9",
+                "GuildBoss11Npc3TauDroneShield:9",
+                "GuildBoss11Npc3TauDroneShield:9",
+                "GuildBoss11Npc3TauDroneShield:9",
+                "GuildBoss11Npc1TauFireWarrior:9",
+                "GuildBoss11Npc1TauFireWarrior:9",
+                "GuildBoss11Npc1TauFireWarrior:9"
+              ],
+              "DisallowedFactions": [
+                "Tau"
+              ]
+            },
+            {
+              "EncounterIndex": 1,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Riptide_support_02",
+              "MaxNrOfTurns": 6,
+              "BossType": "Riptide",
+              "UnitId": "GuildBoss11MiniBoss1TauMarksman:9",
+              "Enemies": [
+                "GuildBoss11Npc3TauDroneShield:7",
+                "GuildBoss11Npc1TauFireWarrior:7",
+                "GuildBoss11Npc1TauFireWarrior:7",
+                "GuildBoss11Npc2TauDroneSniper:7"
+              ],
+              "DisallowedFactions": [
+                "Tau"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 4320,
+                  "Modifier": "boss_debuff_TargetLock"
+                },
+                {
+                  "HpLost": 8640,
+                  "Modifier": "boss_debuff_ShieldDroneUnitReduction"
+                },
+                {
+                  "HpLost": 12960,
+                  "Modifier": "boss_debuff_TargetLock"
+                },
+                {
+                  "HpLost": 17280,
+                  "Modifier": "boss_debuff_NovaCharge"
+                },
+                {
+                  "HpLost": 21600,
+                  "Modifier": "boss_debuff_movement_1"
+                }
+              ]
+            },
+            {
+              "EncounterIndex": 2,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Riptide_support_04",
+              "MaxNrOfTurns": 6,
+              "BossType": "Riptide",
+              "UnitId": "GuildBoss11MiniBoss2TauCrisis:9",
+              "Enemies": [
+                "GuildBoss11Npc1TauFireWarrior:7",
+                "GuildBoss11Npc1TauFireWarrior:7",
+                "GuildBoss11Npc1TauFireWarrior:7",
+                "GuildBoss11Npc1TauFireWarrior:7",
+                "GuildBoss11Npc4TauStealthSuit:7",
+                "GuildBoss11Npc4TauStealthSuit:7"
+              ],
+              "DisallowedFactions": [
+                "Tau"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 4320,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 8640,
+                  "Modifier": "boss_debuff_ShieldDroneUnitReduction"
+                },
+                {
+                  "HpLost": 12960,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 17280,
+                  "Modifier": "boss_debuff_NovaCharge"
+                },
+                {
+                  "HpLost": 21600,
+                  "Modifier": "boss_debuff_blockChance_15"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Set": 1,
+          "ChestId": "chest_guildboss_defeated_2_rare",
+          "GuildXp": 10,
+          "Encounters": [
+            {
+              "EncounterIndex": 0,
+              "GuildBossEncounterType": "Boss",
+              "BoardId": "GB_Dakka_03",
+              "MaxNrOfTurns": 6,
+              "BossType": "Ghazghkull",
+              "UnitId": "GuildBoss4Boss1OrksGhazghkull:10",
+              "Npc1Id": "GuildBoss4Npc2OrksOrkBoy:10",
+              "Npc2Id": "GuildBoss4Npc4OrksStormboy:10",
+              "DisallowedFactions": [
+                "Orks"
+              ]
+            },
+            {
+              "EncounterIndex": 1,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Dakka_support_03",
+              "MaxNrOfTurns": 6,
+              "BossType": "Ghazghkull",
+              "UnitId": "GuildBoss4MiniBoss1OrksBigMek:10",
+              "Enemies": [
+                "GuildBoss4Minion1OrksKillaKan:8",
+                "GuildBoss4Npc3OrksGrotTank:8",
+                "GuildBoss4Npc3OrksGrotTank:8",
+                "GuildBoss4Npc3OrksGrotTank:8",
+                "GuildBoss4Npc3OrksGrotTank:8",
+                "GuildBoss4Npc3OrksGrotTank:8",
+                "GuildBoss4Npc3OrksGrotTank:8"
+              ],
+              "DisallowedFactions": [
+                "Orks"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 3750,
+                  "Modifier": "boss_debuff_fixedArmor_10"
+                },
+                {
+                  "HpLost": 7500,
+                  "Modifier": "boss_debuff_NeedsMoreDakka_hits_1"
+                },
+                {
+                  "HpLost": 11250,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 15000,
+                  "Modifier": "boss_debuff_NeedsMoreDakka_hits_1"
+                },
+                {
+                  "HpLost": 18750,
+                  "Modifier": "boss_debuff_ProphetOfGorkAndMork_nrOfAttacks_1"
+                },
+                {
+                  "HpLost": 22500,
+                  "Modifier": "boss_debuff_fixedArmor_25"
+                },
+                {
+                  "HpLost": 26250,
+                  "Modifier": "boss_debuff_NeedsMoreDakka_hits_2"
+                },
+                {
+                  "HpLost": 30000,
+                  "Modifier": "boss_debuff_ProphetOfGorkAndMork_nrOfAttacks_2"
+                }
+              ]
+            },
+            {
+              "EncounterIndex": 2,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Dakka_support_04",
+              "MaxNrOfTurns": 6,
+              "BossType": "Ghazghkull",
+              "UnitId": "GuildBoss4MiniBoss2OrksNob:10",
+              "Enemies": [
+                "GuildBoss4Minion2OrksRuntherd:8",
+                "GuildBoss4Npc1OrksGrot:8",
+                "GuildBoss4Npc1OrksGrot:8",
+                "GuildBoss4Npc1OrksGrot:8",
+                "GuildBoss4Npc1OrksGrot:8",
+                "GuildBoss4Npc1OrksGrot:8",
+                "GuildBoss4Npc1OrksGrot:8"
+              ],
+              "DisallowedFactions": [
+                "Orks"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 3750,
+                  "Modifier": "boss_debuff_DaGreatWaaagh_nrOfSummons_1"
+                },
+                {
+                  "HpLost": 7500,
+                  "Modifier": "boss_debuff_dmg_10"
+                },
+                {
+                  "HpLost": 11250,
+                  "Modifier": "boss_debuff_DaGreatWaaagh_nrOfSummons_1"
+                },
+                {
+                  "HpLost": 15000,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 18750,
+                  "Modifier": "boss_debuff_DaGreatWaaagh_nrOfSummons_1"
+                },
+                {
+                  "HpLost": 22500,
+                  "Modifier": "boss_debuff_dmg_25"
+                },
+                {
+                  "HpLost": 26250,
+                  "Modifier": "boss_debuff_DaGreatWaaagh_nrOfSummons_2"
+                },
+                {
+                  "HpLost": 30000,
+                  "Modifier": "boss_debuff_ProperKilly_disable"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Set": 2,
+          "ChestId": "chest_guildboss_defeated_2_rare",
+          "GuildXp": 10,
+          "Encounters": [
+            {
+              "EncounterIndex": 0,
+              "GuildBossEncounterType": "Boss",
+              "BoardId": "GB_Khaine_01",
+              "MaxNrOfTurns": 6,
+              "BossType": "AvatarOfKhaine",
+              "UnitId": "GuildBoss8Boss1EldarAvatar:11",
+              "Npc1Id": "GuildBoss8Npc1EldarGuardian:11",
+              "Npc2Id": "GuildBoss8Npc2EldarWarlock:11",
+              "Enemies": [
+                "GuildBoss8Npc2EldarWarlock:11",
+                "GuildBoss8Npc2EldarWarlock:11",
+                "GuildBoss8Npc2EldarWarlock:11",
+                "GuildBoss8Npc1EldarGuardian:11",
+                "GuildBoss8Npc1EldarGuardian:11",
+                "GuildBoss8Npc1EldarGuardian:11"
+              ],
+              "DisallowedFactions": [
+                "Aeldari"
+              ]
+            },
+            {
+              "EncounterIndex": 1,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Khaine_support_01",
+              "MaxNrOfTurns": 6,
+              "BossType": "AvatarOfKhaine",
+              "UnitId": "GuildBoss8MiniBoss1EldarAutarch:11",
+              "Enemies": [
+                "GuildBoss8Npc1EldarGuardian:9",
+                "GuildBoss8Npc1EldarGuardian:9",
+                "GuildBoss8Npc1EldarGuardian:9",
+                "GuildBoss8Npc1EldarGuardian:9"
+              ],
+              "DisallowedFactions": [
+                "Aeldari"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 6300,
+                  "Modifier": "boss_debuff_BloodRunsAngerRisesWarCalls_15"
+                },
+                {
+                  "HpLost": 12600,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 18900,
+                  "Modifier": "boss_debuff_GuardianUnitReduction"
+                },
+                {
+                  "HpLost": 25200,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 31500,
+                  "Modifier": "boss_debuff_BloodRunsAngerRisesWarCalls_15"
+                }
+              ]
+            },
+            {
+              "EncounterIndex": 2,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Khaine_support_02",
+              "MaxNrOfTurns": 6,
+              "BossType": "AvatarOfKhaine",
+              "UnitId": "GuildBoss8MiniBoss2EldarFarseer:11",
+              "Enemies": [
+                "GuildBoss8Npc2EldarWarlock:9",
+                "GuildBoss8Npc2EldarWarlock:9",
+                "GuildBoss8Npc2EldarWarlock:9",
+                "GuildBoss8Npc2EldarWarlock:9"
+              ],
+              "DisallowedFactions": [
+                "Aeldari"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 6300,
+                  "Modifier": "boss_debuff_MoltenForm"
+                },
+                {
+                  "HpLost": 12600,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 18900,
+                  "Modifier": "boss_debuff_WarlockUnitReduction"
+                },
+                {
+                  "HpLost": 25200,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 31500,
+                  "Modifier": "boss_debuff_MoltenForm"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Set": 3,
+          "ChestId": "chest_guildboss_defeated_2_rare",
+          "GuildXp": 10,
+          "Encounters": [
+            {
+              "EncounterIndex": 0,
+              "GuildBossEncounterType": "Boss",
+              "BoardId": "GB_Belisarius_01",
+              "MaxNrOfTurns": 6,
+              "BossType": "BelisariusRW",
+              "UnitId": "GuildBoss10Boss1AdmecBelisarius:12",
+              "Npc1Id": "GuildBoss10Npc1AdmecTechpriest:12",
+              "Npc2Id": "GuildBoss10Npc2AdmecElectropriest:12",
+              "Enemies": [
+                "GuildBoss10Npc1AdmecTechpriest:12",
+                "GuildBoss10Npc1AdmecTechpriest:12",
+                "GuildBoss10Npc1AdmecTechpriest:12",
+                "GuildBoss10Npc1AdmecTechpriest:12",
+                "GuildBoss10Npc2AdmecElectropriest:12",
+                "GuildBoss10Npc2AdmecElectropriest:12",
+                "GuildBoss10Npc2AdmecElectropriest:12",
+                "GuildBoss10Npc2AdmecElectropriest:12"
+              ],
+              "DisallowedFactions": [
+                "AdeptusMechanicus"
+              ]
+            },
+            {
+              "EncounterIndex": 1,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Belisarius_support_01",
+              "MaxNrOfTurns": 6,
+              "BossType": "BelisariusRW",
+              "UnitId": "GuildBoss10MiniBoss1AdmecMarshall:12",
+              "Enemies": [
+                "GuildBoss10Minion1AdmecRuststalker:10",
+                "GuildBoss10Npc1AdmecTechpriest:10",
+                "GuildBoss10Npc1AdmecTechpriest:10",
+                "GuildBoss10Npc1AdmecTechpriest:10",
+                "GuildBoss10Npc1AdmecTechpriest:10"
+              ],
+              "DisallowedFactions": [
+                "AdeptusMechanicus"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 7560,
+                  "Modifier": "boss_debuff_InvocationOfMachineVengeance"
+                },
+                {
+                  "HpLost": 15120,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 22680,
+                  "Modifier": "boss_debuff_InvocationOfMachineVengeance"
+                },
+                {
+                  "HpLost": 30240,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 37800,
+                  "Modifier": "boss_debuff_SelfRepairMechanismReworked"
+                }
+              ]
+            },
+            {
+              "EncounterIndex": 2,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Belisarius_support_04",
+              "MaxNrOfTurns": 6,
+              "BossType": "BelisariusRW",
+              "UnitId": "GuildBoss10MiniBoss2AdmecManipulus:12",
+              "Enemies": [
+                "GuildBoss10Minion2AdmecDestroyer:10",
+                "GuildBoss10LootObjArcheotecCrate:10",
+                "GuildBoss10LootObjArcheotecCrate:10",
+                "GuildBoss10LootObjArcheotecCrate:10",
+                "GuildBoss10LootObjArcheotecCrate:10",
+                "GuildBoss10LootObjArcheotecCrate:10",
+                "GuildBoss10Npc2AdmecElectropriest:10"
+              ],
+              "DisallowedFactions": [
+                "AdeptusMechanicus"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 8820,
+                  "Modifier": "boss_debuff_ElectropriestUnitReduction"
+                },
+                {
+                  "HpLost": 17640,
+                  "Modifier": "boss_debuff_ArcScourge"
+                },
+                {
+                  "HpLost": 26460,
+                  "Modifier": "boss_debuff_ElectropriestUnitReduction"
+                },
+                {
+                  "HpLost": 35280,
+                  "Modifier": "boss_debuff_blockChance_15"
+                },
+                {
+                  "HpLost": 44100,
+                  "Modifier": "boss_debuff_SelfRepairMechanismReworked"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Tier": 3,
+      "Sets": [
+        {
+          "Set": 0,
+          "ChestId": "chest_guildboss_defeated_2_epic",
+          "GuildXp": 10,
+          "Encounters": [
+            {
+              "EncounterIndex": 0,
+              "GuildBossEncounterType": "Boss",
+              "BoardId": "GB_Screamer_03",
+              "MaxNrOfTurns": 6,
+              "BossType": "ScreamerKiller",
+              "UnitId": "GuildBoss6Boss1TyranScreamerKiller:13",
+              "Npc1Id": "GuildBoss6Npc1TyranHormagaunt:13",
+              "Npc2Id": "GuildBoss6Npc5TyranBarbgaunt:13",
+              "Enemies": [
+                "GuildBoss6Npc5TyranBarbgaunt:13",
+                "GuildBoss6Npc5TyranBarbgaunt:13",
+                "GuildBoss6Npc1TyranHormagaunt:13",
+                "GuildBoss6Npc1TyranHormagaunt:13",
+                "GuildBoss6Npc1TyranHormagaunt:13",
+                "GuildBoss6Npc1TyranHormagaunt:13",
+                "GuildBoss6Npc1TyranHormagaunt:13",
+                "GuildBoss6Npc1TyranHormagaunt:13",
+                "GuildBoss6Npc4TyranWarrior:13"
+              ],
+              "DisallowedFactions": [
+                "Tyranids"
+              ]
+            },
+            {
+              "EncounterIndex": 1,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Screamer_support_07",
+              "MaxNrOfTurns": 6,
+              "BossType": "ScreamerKiller",
+              "UnitId": "GuildBoss6MiniBoss1TyranNeurothrope:13",
+              "Enemies": [
+                "GuildBoss6Npc5TyranBarbgaunt:11",
+                "GuildBoss6Npc5TyranBarbgaunt:11",
+                "GuildBoss6Npc5TyranBarbgaunt:11",
+                "GuildBoss6Npc5TyranBarbgaunt:11",
+                "GuildBoss6Npc3TyranTermagant:11",
+                "GuildBoss6Npc3TyranTermagant:11",
+                "GuildBoss6Npc3TyranTermagant:11",
+                "GuildBoss6Npc3TyranTermagant:11"
+              ],
+              "DisallowedFactions": [
+                "Tyranids"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 19200,
+                  "Modifier": "boss_debuff_BarbgauntUnitReduction"
+                },
+                {
+                  "HpLost": 38400,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 57600,
+                  "Modifier": "boss_debuff_DeathScream_disable"
+                },
+                {
+                  "HpLost": 76800,
+                  "Modifier": "boss_debuff_critDmg_25"
+                },
+                {
+                  "HpLost": 96000,
+                  "Modifier": "boss_debuff_BarbgauntUnitReduction"
+                }
+              ]
+            },
+            {
+              "EncounterIndex": 2,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Screamer_support_08",
+              "MaxNrOfTurns": 6,
+              "BossType": "ScreamerKiller",
+              "UnitId": "GuildBoss6MiniBoss2TyranWingedPrime:13",
+              "Enemies": [
+                "GuildBoss6Npc4TyranWarrior:11",
+                "GuildBoss6Npc4TyranWarrior:11",
+                "GuildBoss6Npc4TyranWarrior:11",
+                "GuildBoss6Npc2TyranRipperSwarm:11",
+                "GuildBoss6Npc2TyranRipperSwarm:11",
+                "GuildBoss6Npc2TyranRipperSwarm:11",
+                "GuildBoss6Npc2TyranRipperSwarm:11"
+              ],
+              "DisallowedFactions": [
+                "Tyranids"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 19200,
+                  "Modifier": "boss_debuff_HormagauntUnitReduction"
+                },
+                {
+                  "HpLost": 38400,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 57600,
+                  "Modifier": "boss_debuff_LivingBatteringRam_disable"
+                },
+                {
+                  "HpLost": 76800,
+                  "Modifier": "boss_debuff_critDmg_25"
+                },
+                {
+                  "HpLost": 96000,
+                  "Modifier": "boss_debuff_HormagauntUnitReduction"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Set": 1,
+          "ChestId": "chest_guildboss_defeated_2_epic",
+          "GuildXp": 10,
+          "Encounters": [
+            {
+              "EncounterIndex": 0,
+              "GuildBossEncounterType": "Boss",
+              "BoardId": "GB_Riptide_02",
+              "MaxNrOfTurns": 6,
+              "BossType": "Riptide",
+              "UnitId": "GuildBoss11Boss1TauRiptide:14",
+              "Npc1Id": "GuildBoss11Npc1TauFireWarrior:14",
+              "Npc2Id": "GuildBoss11Npc3TauDroneShield:14",
+              "Enemies": [
+                "GuildBoss11Npc3TauDroneShield:14",
+                "GuildBoss11Npc3TauDroneShield:14",
+                "GuildBoss11Npc3TauDroneShield:14",
+                "GuildBoss11Npc3TauDroneShield:14",
+                "GuildBoss11Npc1TauFireWarrior:14",
+                "GuildBoss11Npc1TauFireWarrior:14",
+                "GuildBoss11Npc1TauFireWarrior:14",
+                "GuildBoss11Npc4TauStealthSuit:14"
+              ],
+              "DisallowedFactions": [
+                "Tau"
+              ]
+            },
+            {
+              "EncounterIndex": 1,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Riptide_support_01",
+              "MaxNrOfTurns": 6,
+              "BossType": "Riptide",
+              "UnitId": "GuildBoss11MiniBoss1TauMarksman:14",
+              "Enemies": [
+                "GuildBoss11Npc3TauDroneShield:12",
+                "GuildBoss11Npc1TauFireWarrior:12",
+                "GuildBoss11Npc1TauFireWarrior:12",
+                "GuildBoss11Npc2TauDroneSniper:12",
+                "GuildBoss11Npc2TauDroneSniper:12"
+              ],
+              "DisallowedFactions": [
+                "Tau"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 18000,
+                  "Modifier": "boss_debuff_TargetLock"
+                },
+                {
+                  "HpLost": 36000,
+                  "Modifier": "boss_debuff_ShieldDroneUnitReduction"
+                },
+                {
+                  "HpLost": 54000,
+                  "Modifier": "boss_debuff_TargetLock"
+                },
+                {
+                  "HpLost": 72000,
+                  "Modifier": "boss_debuff_NovaCharge"
+                },
+                {
+                  "HpLost": 90000,
+                  "Modifier": "boss_debuff_movement_1"
+                }
+              ]
+            },
+            {
+              "EncounterIndex": 2,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Riptide_support_03",
+              "MaxNrOfTurns": 6,
+              "BossType": "Riptide",
+              "UnitId": "GuildBoss11MiniBoss2TauCrisis:14",
+              "Enemies": [
+                "GuildBoss11Npc1TauFireWarrior:12",
+                "GuildBoss11Npc1TauFireWarrior:12",
+                "GuildBoss11Npc1TauFireWarrior:12",
+                "GuildBoss11Npc1TauFireWarrior:12",
+                "GuildBoss11Npc1TauFireWarrior:12",
+                "GuildBoss11Npc4TauStealthSuit:12",
+                "GuildBoss11Npc4TauStealthSuit:12"
+              ],
+              "DisallowedFactions": [
+                "Tau"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 18000,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 36000,
+                  "Modifier": "boss_debuff_ShieldDroneUnitReduction"
+                },
+                {
+                  "HpLost": 54000,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 72000,
+                  "Modifier": "boss_debuff_NovaCharge"
+                },
+                {
+                  "HpLost": 90000,
+                  "Modifier": "boss_debuff_blockChance_15"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Set": 2,
+          "ChestId": "chest_guildboss_defeated_2_epic",
+          "GuildXp": 10,
+          "Encounters": [
+            {
+              "EncounterIndex": 0,
+              "GuildBossEncounterType": "Boss",
+              "BoardId": "GB_Dakka_03",
+              "MaxNrOfTurns": 6,
+              "BossType": "Ghazghkull",
+              "UnitId": "GuildBoss4Boss1OrksGhazghkull:15",
+              "Npc1Id": "GuildBoss4Npc2OrksOrkBoy:15",
+              "Npc2Id": "GuildBoss4Npc4OrksStormboy:15",
+              "DisallowedFactions": [
+                "Orks"
+              ]
+            },
+            {
+              "EncounterIndex": 1,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Dakka_support_03",
+              "MaxNrOfTurns": 6,
+              "BossType": "Ghazghkull",
+              "UnitId": "GuildBoss4MiniBoss1OrksBigMek:15",
+              "Enemies": [
+                "GuildBoss4Minion1OrksKillaKan:13",
+                "GuildBoss4Npc3OrksGrotTank:13",
+                "GuildBoss4Npc3OrksGrotTank:13",
+                "GuildBoss4Npc3OrksGrotTank:13",
+                "GuildBoss4Npc3OrksGrotTank:13",
+                "GuildBoss4Npc3OrksGrotTank:13",
+                "GuildBoss4Npc3OrksGrotTank:13"
+              ],
+              "DisallowedFactions": [
+                "Orks"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 15000,
+                  "Modifier": "boss_debuff_fixedArmor_10"
+                },
+                {
+                  "HpLost": 30000,
+                  "Modifier": "boss_debuff_NeedsMoreDakka_hits_1"
+                },
+                {
+                  "HpLost": 45000,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 60000,
+                  "Modifier": "boss_debuff_NeedsMoreDakka_hits_1"
+                },
+                {
+                  "HpLost": 75000,
+                  "Modifier": "boss_debuff_ProphetOfGorkAndMork_nrOfAttacks_1"
+                },
+                {
+                  "HpLost": 90000,
+                  "Modifier": "boss_debuff_fixedArmor_25"
+                },
+                {
+                  "HpLost": 105000,
+                  "Modifier": "boss_debuff_NeedsMoreDakka_hits_2"
+                },
+                {
+                  "HpLost": 120000,
+                  "Modifier": "boss_debuff_ProphetOfGorkAndMork_nrOfAttacks_2"
+                }
+              ]
+            },
+            {
+              "EncounterIndex": 2,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Dakka_support_04",
+              "MaxNrOfTurns": 6,
+              "BossType": "Ghazghkull",
+              "UnitId": "GuildBoss4MiniBoss2OrksNob:15",
+              "Enemies": [
+                "GuildBoss4Minion2OrksRuntherd:13",
+                "GuildBoss4Npc1OrksGrot:13",
+                "GuildBoss4Npc1OrksGrot:13",
+                "GuildBoss4Npc1OrksGrot:13",
+                "GuildBoss4Npc1OrksGrot:13",
+                "GuildBoss4Npc1OrksGrot:13",
+                "GuildBoss4Npc1OrksGrot:13"
+              ],
+              "DisallowedFactions": [
+                "Orks"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 15000,
+                  "Modifier": "boss_debuff_DaGreatWaaagh_nrOfSummons_1"
+                },
+                {
+                  "HpLost": 30000,
+                  "Modifier": "boss_debuff_dmg_10"
+                },
+                {
+                  "HpLost": 45000,
+                  "Modifier": "boss_debuff_DaGreatWaaagh_nrOfSummons_1"
+                },
+                {
+                  "HpLost": 60000,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 75000,
+                  "Modifier": "boss_debuff_DaGreatWaaagh_nrOfSummons_1"
+                },
+                {
+                  "HpLost": 90000,
+                  "Modifier": "boss_debuff_dmg_25"
+                },
+                {
+                  "HpLost": 105000,
+                  "Modifier": "boss_debuff_DaGreatWaaagh_nrOfSummons_2"
+                },
+                {
+                  "HpLost": 120000,
+                  "Modifier": "boss_debuff_ProperKilly_disable"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Set": 3,
+          "ChestId": "chest_guildboss_defeated_2_epic",
+          "GuildXp": 10,
+          "Encounters": [
+            {
+              "EncounterIndex": 0,
+              "GuildBossEncounterType": "Boss",
+              "BoardId": "GB_Khaine_02",
+              "MaxNrOfTurns": 6,
+              "BossType": "AvatarOfKhaine",
+              "UnitId": "GuildBoss8Boss1EldarAvatar:16",
+              "Npc1Id": "GuildBoss8Npc1EldarGuardian:16",
+              "Npc2Id": "GuildBoss8Npc2EldarWarlock:16",
+              "Enemies": [
+                "GuildBoss8Npc2EldarWarlock:16",
+                "GuildBoss8Npc2EldarWarlock:16",
+                "GuildBoss8Npc2EldarWarlock:16",
+                "GuildBoss8Npc1EldarGuardian:16",
+                "GuildBoss8Npc1EldarGuardian:16",
+                "GuildBoss8Npc1EldarGuardian:16"
+              ],
+              "DisallowedFactions": [
+                "Aeldari"
+              ]
+            },
+            {
+              "EncounterIndex": 1,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Khaine_support_05",
+              "MaxNrOfTurns": 6,
+              "BossType": "AvatarOfKhaine",
+              "UnitId": "GuildBoss8MiniBoss1EldarAutarch:16",
+              "Enemies": [
+                "GuildBoss8Npc1EldarGuardian:14",
+                "GuildBoss8Npc1EldarGuardian:14",
+                "GuildBoss8Npc1EldarGuardian:14",
+                "GuildBoss8Npc1EldarGuardian:14",
+                "GuildBoss8Npc3EldarHarlequin:14"
+              ],
+              "DisallowedFactions": [
+                "Aeldari"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 24500,
+                  "Modifier": "boss_debuff_BloodRunsAngerRisesWarCalls_15"
+                },
+                {
+                  "HpLost": 49000,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 73500,
+                  "Modifier": "boss_debuff_GuardianUnitReduction"
+                },
+                {
+                  "HpLost": 98000,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 122500,
+                  "Modifier": "boss_debuff_BloodRunsAngerRisesWarCalls_15"
+                }
+              ]
+            },
+            {
+              "EncounterIndex": 2,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Khaine_support_06",
+              "MaxNrOfTurns": 6,
+              "BossType": "AvatarOfKhaine",
+              "UnitId": "GuildBoss8MiniBoss2EldarFarseer:16",
+              "Enemies": [
+                "GuildBoss8Npc2EldarWarlock:14",
+                "GuildBoss8Npc2EldarWarlock:14",
+                "GuildBoss8Npc2EldarWarlock:14",
+                "GuildBoss8Npc2EldarWarlock:14"
+              ],
+              "DisallowedFactions": [
+                "Aeldari"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 24500,
+                  "Modifier": "boss_debuff_MoltenForm"
+                },
+                {
+                  "HpLost": 49000,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 73500,
+                  "Modifier": "boss_debuff_WarlockUnitReduction"
+                },
+                {
+                  "HpLost": 98000,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 122500,
+                  "Modifier": "boss_debuff_MoltenForm"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Set": 4,
+          "ChestId": "chest_guildboss_defeated_2_epic",
+          "GuildXp": 10,
+          "Encounters": [
+            {
+              "EncounterIndex": 0,
+              "GuildBossEncounterType": "Boss",
+              "BoardId": "GB_Belisarius_02",
+              "MaxNrOfTurns": 6,
+              "BossType": "BelisariusRW",
+              "UnitId": "GuildBoss10Boss1AdmecBelisarius:17",
+              "Npc1Id": "GuildBoss10Npc1AdmecTechpriest:17",
+              "Npc2Id": "GuildBoss10Npc2AdmecElectropriest:17",
+              "Enemies": [
+                "GuildBoss10Npc1AdmecTechpriest:17",
+                "GuildBoss10Npc1AdmecTechpriest:17",
+                "GuildBoss10Npc1AdmecTechpriest:17",
+                "GuildBoss10Npc1AdmecTechpriest:17",
+                "GuildBoss10Npc2AdmecElectropriest:17",
+                "GuildBoss10Npc2AdmecElectropriest:17",
+                "GuildBoss10Npc2AdmecElectropriest:17",
+                "GuildBoss10Npc2AdmecElectropriest:17"
+              ],
+              "DisallowedFactions": [
+                "AdeptusMechanicus"
+              ]
+            },
+            {
+              "EncounterIndex": 1,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Belisarius_support_02",
+              "MaxNrOfTurns": 6,
+              "BossType": "BelisariusRW",
+              "UnitId": "GuildBoss10MiniBoss1AdmecMarshall:17",
+              "Enemies": [
+                "GuildBoss10Minion1AdmecRuststalker:15",
+                "GuildBoss10Npc1AdmecTechpriest:15",
+                "GuildBoss10Npc1AdmecTechpriest:15",
+                "GuildBoss10Npc1AdmecTechpriest:15",
+                "GuildBoss10Npc1AdmecTechpriest:15"
+              ],
+              "DisallowedFactions": [
+                "AdeptusMechanicus"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 30000,
+                  "Modifier": "boss_debuff_InvocationOfMachineVengeance"
+                },
+                {
+                  "HpLost": 60000,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 90000,
+                  "Modifier": "boss_debuff_InvocationOfMachineVengeance"
+                },
+                {
+                  "HpLost": 120000,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 150000,
+                  "Modifier": "boss_debuff_SelfRepairMechanismReworked"
+                }
+              ]
+            },
+            {
+              "EncounterIndex": 2,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Belisarius_support_05",
+              "MaxNrOfTurns": 6,
+              "BossType": "BelisariusRW",
+              "UnitId": "GuildBoss10MiniBoss2AdmecManipulus:17",
+              "Enemies": [
+                "GuildBoss10Minion2AdmecDestroyer:15",
+                "GuildBoss10LootObjArcheotecCrate:15",
+                "GuildBoss10LootObjArcheotecCrate:15",
+                "GuildBoss10LootObjArcheotecCrate:15",
+                "GuildBoss10LootObjArcheotecCrate:15",
+                "GuildBoss10LootObjArcheotecCrate:15",
+                "GuildBoss10Npc2AdmecElectropriest:15",
+                "GuildBoss10Npc2AdmecElectropriest:15"
+              ],
+              "DisallowedFactions": [
+                "AdeptusMechanicus"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 35000,
+                  "Modifier": "boss_debuff_ElectropriestUnitReduction"
+                },
+                {
+                  "HpLost": 70000,
+                  "Modifier": "boss_debuff_ArcScourge"
+                },
+                {
+                  "HpLost": 105000,
+                  "Modifier": "boss_debuff_ElectropriestUnitReduction"
+                },
+                {
+                  "HpLost": 140000,
+                  "Modifier": "boss_debuff_blockChance_15"
+                },
+                {
+                  "HpLost": 175000,
+                  "Modifier": "boss_debuff_SelfRepairMechanismReworked"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Tier": 4,
+      "Sets": [
+        {
+          "Set": 0,
+          "ChestId": "chest_guildboss_defeated_2_legendary",
+          "GuildXp": 10,
+          "Encounters": [
+            {
+              "EncounterIndex": 0,
+              "GuildBossEncounterType": "Boss",
+              "BoardId": "GB_Screamer_01",
+              "MaxNrOfTurns": 6,
+              "BossType": "ScreamerKiller",
+              "UnitId": "GuildBoss6Boss1TyranScreamerKiller:18",
+              "Npc1Id": "GuildBoss6Npc1TyranHormagaunt:18",
+              "Npc2Id": "GuildBoss6Npc5TyranBarbgaunt:18",
+              "Enemies": [
+                "GuildBoss6Npc5TyranBarbgaunt:18",
+                "GuildBoss6Npc5TyranBarbgaunt:18",
+                "GuildBoss6Npc1TyranHormagaunt:18",
+                "GuildBoss6Npc1TyranHormagaunt:18",
+                "GuildBoss6Npc1TyranHormagaunt:18",
+                "GuildBoss6Npc1TyranHormagaunt:18",
+                "GuildBoss6Npc1TyranHormagaunt:18",
+                "GuildBoss6Npc1TyranHormagaunt:18",
+                "GuildBoss6Npc4TyranWarrior:18",
+                "GuildBoss6Npc4TyranWarrior:18"
+              ],
+              "DisallowedFactions": [
+                "Tyranids"
+              ]
+            },
+            {
+              "EncounterIndex": 1,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Screamer_support_01",
+              "MaxNrOfTurns": 6,
+              "BossType": "ScreamerKiller",
+              "UnitId": "GuildBoss6MiniBoss1TyranNeurothrope:18",
+              "Enemies": [
+                "GuildBoss6Npc5TyranBarbgaunt:16",
+                "GuildBoss6Npc5TyranBarbgaunt:16",
+                "GuildBoss6Npc5TyranBarbgaunt:16",
+                "GuildBoss6Npc5TyranBarbgaunt:16",
+                "GuildBoss6Npc3TyranTermagant:16",
+                "GuildBoss6Npc3TyranTermagant:16",
+                "GuildBoss6Npc3TyranTermagant:16",
+                "GuildBoss6Npc3TyranTermagant:16"
+              ],
+              "DisallowedFactions": [
+                "Tyranids"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 80000,
+                  "Modifier": "boss_debuff_BarbgauntUnitReduction"
+                },
+                {
+                  "HpLost": 160000,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 240000,
+                  "Modifier": "boss_debuff_DeathScream_disable"
+                },
+                {
+                  "HpLost": 320000,
+                  "Modifier": "boss_debuff_critDmg_25"
+                },
+                {
+                  "HpLost": 400000,
+                  "Modifier": "boss_debuff_BarbgauntUnitReduction"
+                }
+              ]
+            },
+            {
+              "EncounterIndex": 2,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Screamer_support_02",
+              "MaxNrOfTurns": 6,
+              "BossType": "ScreamerKiller",
+              "UnitId": "GuildBoss6MiniBoss2TyranWingedPrime:18",
+              "Enemies": [
+                "GuildBoss6Npc4TyranWarrior:16",
+                "GuildBoss6Npc4TyranWarrior:16",
+                "GuildBoss6Npc4TyranWarrior:16",
+                "GuildBoss6Npc2TyranRipperSwarm:16",
+                "GuildBoss6Npc2TyranRipperSwarm:16",
+                "GuildBoss6Npc2TyranRipperSwarm:16",
+                "GuildBoss6Npc2TyranRipperSwarm:16"
+              ],
+              "DisallowedFactions": [
+                "Tyranids"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 80000,
+                  "Modifier": "boss_debuff_HormagauntUnitReduction"
+                },
+                {
+                  "HpLost": 160000,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 240000,
+                  "Modifier": "boss_debuff_LivingBatteringRam_disable"
+                },
+                {
+                  "HpLost": 320000,
+                  "Modifier": "boss_debuff_critDmg_25"
+                },
+                {
+                  "HpLost": 400000,
+                  "Modifier": "boss_debuff_HormagauntUnitReduction"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Set": 1,
+          "ChestId": "chest_guildboss_defeated_2_legendary",
+          "GuildXp": 10,
+          "Encounters": [
+            {
+              "EncounterIndex": 0,
+              "GuildBossEncounterType": "Boss",
+              "BoardId": "GB_Riptide_01",
+              "MaxNrOfTurns": 6,
+              "BossType": "Riptide",
+              "UnitId": "GuildBoss11Boss1TauRiptide:19",
+              "Npc1Id": "GuildBoss11Npc1TauFireWarrior:19",
+              "Npc2Id": "GuildBoss11Npc3TauDroneShield:19",
+              "Enemies": [
+                "GuildBoss11Npc3TauDroneShield:19",
+                "GuildBoss11Npc3TauDroneShield:19",
+                "GuildBoss11Npc3TauDroneShield:19",
+                "GuildBoss11Npc3TauDroneShield:19",
+                "GuildBoss11Npc1TauFireWarrior:19",
+                "GuildBoss11Npc1TauFireWarrior:19",
+                "GuildBoss11Npc1TauFireWarrior:19",
+                "GuildBoss11Npc4TauStealthSuit:19",
+                "GuildBoss11Npc4TauStealthSuit:19"
+              ],
+              "DisallowedFactions": [
+                "Tau"
+              ]
+            },
+            {
+              "EncounterIndex": 1,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Riptide_support_02",
+              "MaxNrOfTurns": 6,
+              "BossType": "Riptide",
+              "UnitId": "GuildBoss11MiniBoss1TauMarksman:19",
+              "Enemies": [
+                "GuildBoss11Npc3TauDroneShield:17",
+                "GuildBoss11Npc1TauFireWarrior:17",
+                "GuildBoss11Npc1TauFireWarrior:17",
+                "GuildBoss11Npc2TauDroneSniper:17",
+                "GuildBoss11Npc2TauDroneSniper:17"
+              ],
+              "DisallowedFactions": [
+                "Tau"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 90000,
+                  "Modifier": "boss_debuff_TargetLock"
+                },
+                {
+                  "HpLost": 180000,
+                  "Modifier": "boss_debuff_ShieldDroneUnitReduction"
+                },
+                {
+                  "HpLost": 270000,
+                  "Modifier": "boss_debuff_TargetLock"
+                },
+                {
+                  "HpLost": 360000,
+                  "Modifier": "boss_debuff_NovaCharge"
+                },
+                {
+                  "HpLost": 450000,
+                  "Modifier": "boss_debuff_movement_1"
+                }
+              ]
+            },
+            {
+              "EncounterIndex": 2,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Riptide_support_04",
+              "MaxNrOfTurns": 6,
+              "BossType": "Riptide",
+              "UnitId": "GuildBoss11MiniBoss2TauCrisis:19",
+              "Enemies": [
+                "GuildBoss11Npc1TauFireWarrior:17",
+                "GuildBoss11Npc1TauFireWarrior:17",
+                "GuildBoss11Npc1TauFireWarrior:17",
+                "GuildBoss11Npc1TauFireWarrior:17",
+                "GuildBoss11Npc1TauFireWarrior:17",
+                "GuildBoss11Npc1TauFireWarrior:17",
+                "GuildBoss11Npc4TauStealthSuit:17",
+                "GuildBoss11Npc4TauStealthSuit:17"
+              ],
+              "DisallowedFactions": [
+                "Tau"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 90000,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 180000,
+                  "Modifier": "boss_debuff_ShieldDroneUnitReduction"
+                },
+                {
+                  "HpLost": 270000,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 360000,
+                  "Modifier": "boss_debuff_NovaCharge"
+                },
+                {
+                  "HpLost": 450000,
+                  "Modifier": "boss_debuff_blockChance_15"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Set": 2,
+          "ChestId": "chest_guildboss_defeated_2_legendary",
+          "GuildXp": 10,
+          "Encounters": [
+            {
+              "EncounterIndex": 0,
+              "GuildBossEncounterType": "Boss",
+              "BoardId": "GB_Dakka_05",
+              "MaxNrOfTurns": 6,
+              "BossType": "Ghazghkull",
+              "UnitId": "GuildBoss4Boss1OrksGhazghkull:20",
+              "Npc1Id": "GuildBoss4Npc2OrksOrkBoy:20",
+              "Npc2Id": "GuildBoss4Npc4OrksStormboy:20",
+              "DisallowedFactions": [
+                "Orks"
+              ]
+            },
+            {
+              "EncounterIndex": 1,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Dakka_support_05_1",
+              "MaxNrOfTurns": 6,
+              "BossType": "Ghazghkull",
+              "UnitId": "GuildBoss4MiniBoss1OrksBigMek:20",
+              "Enemies": [
+                "GuildBoss4Minion1OrksKillaKan:18",
+                "GuildBoss4Npc3OrksGrotTank:18",
+                "GuildBoss4Npc3OrksGrotTank:18",
+                "GuildBoss4Npc3OrksGrotTank:18",
+                "GuildBoss4Npc3OrksGrotTank:18",
+                "GuildBoss4Npc3OrksGrotTank:18",
+                "GuildBoss4Npc3OrksGrotTank:18"
+              ],
+              "DisallowedFactions": [
+                "Orks"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 83300,
+                  "Modifier": "boss_debuff_fixedArmor_10"
+                },
+                {
+                  "HpLost": 166600,
+                  "Modifier": "boss_debuff_NeedsMoreDakka_hits_1"
+                },
+                {
+                  "HpLost": 249900,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 333200,
+                  "Modifier": "boss_debuff_NeedsMoreDakka_hits_1"
+                },
+                {
+                  "HpLost": 416500,
+                  "Modifier": "boss_debuff_ProphetOfGorkAndMork_nrOfAttacks_1"
+                },
+                {
+                  "HpLost": 499800,
+                  "Modifier": "boss_debuff_fixedArmor_25"
+                },
+                {
+                  "HpLost": 583100,
+                  "Modifier": "boss_debuff_NeedsMoreDakka_hits_2"
+                },
+                {
+                  "HpLost": 666400,
+                  "Modifier": "boss_debuff_ProphetOfGorkAndMork_nrOfAttacks_2"
+                }
+              ]
+            },
+            {
+              "EncounterIndex": 2,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Dakka_support_06",
+              "MaxNrOfTurns": 6,
+              "BossType": "Ghazghkull",
+              "UnitId": "GuildBoss4MiniBoss2OrksNob:20",
+              "Enemies": [
+                "GuildBoss4Minion2OrksRuntherd:18",
+                "GuildBoss4Npc1OrksGrot:18",
+                "GuildBoss4Npc1OrksGrot:18",
+                "GuildBoss4Npc1OrksGrot:18",
+                "GuildBoss4Npc1OrksGrot:18",
+                "GuildBoss4Npc1OrksGrot:18",
+                "GuildBoss4Npc1OrksGrot:18"
+              ],
+              "DisallowedFactions": [
+                "Orks"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 83300,
+                  "Modifier": "boss_debuff_DaGreatWaaagh_nrOfSummons_1"
+                },
+                {
+                  "HpLost": 166600,
+                  "Modifier": "boss_debuff_dmg_10"
+                },
+                {
+                  "HpLost": 249900,
+                  "Modifier": "boss_debuff_DaGreatWaaagh_nrOfSummons_1"
+                },
+                {
+                  "HpLost": 333200,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 416500,
+                  "Modifier": "boss_debuff_DaGreatWaaagh_nrOfSummons_1"
+                },
+                {
+                  "HpLost": 499800,
+                  "Modifier": "boss_debuff_dmg_25"
+                },
+                {
+                  "HpLost": 583100,
+                  "Modifier": "boss_debuff_DaGreatWaaagh_nrOfSummons_2"
+                },
+                {
+                  "HpLost": 666400,
+                  "Modifier": "boss_debuff_ProperKilly_disable"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Set": 3,
+          "ChestId": "chest_guildboss_defeated_2_legendary",
+          "GuildXp": 10,
+          "Encounters": [
+            {
+              "EncounterIndex": 0,
+              "GuildBossEncounterType": "Boss",
+              "BoardId": "GB_Khaine_02",
+              "MaxNrOfTurns": 6,
+              "BossType": "AvatarOfKhaine",
+              "UnitId": "GuildBoss8Boss1EldarAvatar:21",
+              "Npc1Id": "GuildBoss8Npc1EldarGuardian:21",
+              "Npc2Id": "GuildBoss8Npc2EldarWarlock:21",
+              "Enemies": [
+                "GuildBoss8Npc2EldarWarlock:21",
+                "GuildBoss8Npc2EldarWarlock:21",
+                "GuildBoss8Npc2EldarWarlock:21",
+                "GuildBoss8Npc1EldarGuardian:21",
+                "GuildBoss8Npc1EldarGuardian:21",
+                "GuildBoss8Npc1EldarGuardian:21"
+              ],
+              "DisallowedFactions": [
+                "Aeldari"
+              ]
+            },
+            {
+              "EncounterIndex": 1,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Khaine_support_01",
+              "MaxNrOfTurns": 6,
+              "BossType": "AvatarOfKhaine",
+              "UnitId": "GuildBoss8MiniBoss1EldarAutarch:21",
+              "Enemies": [
+                "GuildBoss8Npc1EldarGuardian:19",
+                "GuildBoss8Npc1EldarGuardian:19",
+                "GuildBoss8Npc1EldarGuardian:19",
+                "GuildBoss8Npc3EldarHarlequin:19",
+                "GuildBoss8Npc3EldarHarlequin:19"
+              ],
+              "DisallowedFactions": [
+                "Aeldari"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 145600,
+                  "Modifier": "boss_debuff_BloodRunsAngerRisesWarCalls_15"
+                },
+                {
+                  "HpLost": 291200,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 436800,
+                  "Modifier": "boss_debuff_GuardianUnitReduction"
+                },
+                {
+                  "HpLost": 582400,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 728000,
+                  "Modifier": "boss_debuff_BloodRunsAngerRisesWarCalls_15"
+                }
+              ]
+            },
+            {
+              "EncounterIndex": 2,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Khaine_support_02",
+              "MaxNrOfTurns": 6,
+              "BossType": "AvatarOfKhaine",
+              "UnitId": "GuildBoss8MiniBoss2EldarFarseer:21",
+              "Enemies": [
+                "GuildBoss8Npc2EldarWarlock:19",
+                "GuildBoss8Npc2EldarWarlock:19",
+                "GuildBoss8Npc2EldarWarlock:19",
+                "GuildBoss8Npc2EldarWarlock:19"
+              ],
+              "DisallowedFactions": [
+                "Aeldari"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 145600,
+                  "Modifier": "boss_debuff_MoltenForm"
+                },
+                {
+                  "HpLost": 291200,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 436800,
+                  "Modifier": "boss_debuff_WarlockUnitReduction"
+                },
+                {
+                  "HpLost": 582400,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 728000,
+                  "Modifier": "boss_debuff_MoltenForm"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Set": 4,
+          "ChestId": "chest_guildboss_defeated_2_legendary",
+          "GuildXp": 10,
+          "Encounters": [
+            {
+              "EncounterIndex": 0,
+              "GuildBossEncounterType": "Boss",
+              "BoardId": "GB_Belisarius_03",
+              "MaxNrOfTurns": 6,
+              "BossType": "BelisariusRW",
+              "UnitId": "GuildBoss10Boss1AdmecBelisarius:22",
+              "Npc1Id": "GuildBoss10Npc1AdmecTechpriest:22",
+              "Npc2Id": "GuildBoss10Npc2AdmecElectropriest:22",
+              "Enemies": [
+                "GuildBoss10Npc1AdmecTechpriest:22",
+                "GuildBoss10Npc1AdmecTechpriest:22",
+                "GuildBoss10Npc1AdmecTechpriest:22",
+                "GuildBoss10Npc1AdmecTechpriest:22",
+                "GuildBoss10Npc2AdmecElectropriest:22",
+                "GuildBoss10Npc2AdmecElectropriest:22",
+                "GuildBoss10Npc2AdmecElectropriest:22",
+                "GuildBoss10Npc2AdmecElectropriest:22"
+              ],
+              "DisallowedFactions": [
+                "AdeptusMechanicus"
+              ]
+            },
+            {
+              "EncounterIndex": 1,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Belisarius_support_03",
+              "MaxNrOfTurns": 6,
+              "BossType": "BelisariusRW",
+              "UnitId": "GuildBoss10MiniBoss1AdmecMarshall:22",
+              "Enemies": [
+                "GuildBoss10Minion1AdmecRuststalker:20",
+                "GuildBoss10Npc1AdmecTechpriest:20",
+                "GuildBoss10Npc1AdmecTechpriest:20",
+                "GuildBoss10Npc1AdmecTechpriest:20",
+                "GuildBoss10Npc1AdmecTechpriest:20"
+              ],
+              "DisallowedFactions": [
+                "AdeptusMechanicus"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 180000,
+                  "Modifier": "boss_debuff_InvocationOfMachineVengeance"
+                },
+                {
+                  "HpLost": 360000,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 540000,
+                  "Modifier": "boss_debuff_InvocationOfMachineVengeance"
+                },
+                {
+                  "HpLost": 720000,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 900000,
+                  "Modifier": "boss_debuff_SelfRepairMechanismReworked"
+                }
+              ]
+            },
+            {
+              "EncounterIndex": 2,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Belisarius_support_06",
+              "MaxNrOfTurns": 6,
+              "BossType": "BelisariusRW",
+              "UnitId": "GuildBoss10MiniBoss2AdmecManipulus:22",
+              "Enemies": [
+                "GuildBoss10Minion2AdmecDestroyer:20",
+                "GuildBoss10LootObjArcheotecCrate:20",
+                "GuildBoss10LootObjArcheotecCrate:20",
+                "GuildBoss10LootObjArcheotecCrate:20",
+                "GuildBoss10LootObjArcheotecCrate:20",
+                "GuildBoss10LootObjArcheotecCrate:20",
+                "GuildBoss10Npc2AdmecElectropriest:20",
+                "GuildBoss10Npc2AdmecElectropriest:20"
+              ],
+              "DisallowedFactions": [
+                "AdeptusMechanicus"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 210000,
+                  "Modifier": "boss_debuff_ElectropriestUnitReduction"
+                },
+                {
+                  "HpLost": 420000,
+                  "Modifier": "boss_debuff_ArcScourge"
+                },
+                {
+                  "HpLost": 630000,
+                  "Modifier": "boss_debuff_ElectropriestUnitReduction"
+                },
+                {
+                  "HpLost": 840000,
+                  "Modifier": "boss_debuff_blockChance_15"
+                },
+                {
+                  "HpLost": 1050000,
+                  "Modifier": "boss_debuff_SelfRepairMechanismReworked"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Tier": 5,
+      "Sets": [
+        {
+          "Set": 0,
+          "ChestId": "chest_guildboss_defeated_2_mythic",
+          "GuildXp": 10,
+          "Encounters": [
+            {
+              "EncounterIndex": 0,
+              "GuildBossEncounterType": "Boss",
+              "BoardId": "GB_SK_03",
+              "MaxNrOfTurns": 6,
+              "BossType": "SilentKing",
+              "UnitId": "GuildBoss3Boss1NecroSilentKing:23",
+              "Npc1Id": "GuildBoss3Npc3NecroDeathmark:23",
+              "Enemies": [
+                "GuildBoss3Minion2NecroHapthatra:23",
+                "GuildBoss3Minion1NecroMesophet:23"
+              ],
+              "DisallowedFactions": [
+                "Necrons"
+              ]
+            },
+            {
+              "EncounterIndex": 1,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_SK_support_04",
+              "MaxNrOfTurns": 6,
+              "BossType": "SilentKing",
+              "UnitId": "GuildBoss3Minion3NecroMenhir:23",
+              "Enemies": [
+                "GuildBoss3Minion2NecroHapthatra:21",
+                "GuildBoss3Npc1NecroWarrior:21",
+                "GuildBoss3Npc1NecroWarrior:21",
+                "GuildBoss3Npc1NecroWarrior:21",
+                "GuildBoss3Npc1NecroWarrior:21",
+                "GuildBoss3Npc3NecroDeathmark:21",
+                "GuildBoss3Npc3NecroDeathmark:21"
+              ],
+              "DisallowedFactions": [
+                "Necrons"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 300000,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 600000,
+                  "Modifier": "boss_debuff_Hapthatra_hp_50"
+                },
+                {
+                  "HpLost": 900000,
+                  "Modifier": "boss_debuff_fixedArmor_25"
+                },
+                {
+                  "HpLost": 1200000,
+                  "Modifier": "boss_debuff_AnnihilatorBeam_2"
+                },
+                {
+                  "HpLost": 1500000,
+                  "Modifier": "boss_debuff_hits_1"
+                },
+                {
+                  "HpLost": 1800000,
+                  "Modifier": "boss_debuff_fixedArmor_25"
+                },
+                {
+                  "HpLost": 2100000,
+                  "Modifier": "boss_debuff_Hapthatra_hp_50"
+                },
+                {
+                  "HpLost": 2400000,
+                  "Modifier": "boss_debuff_AnnihilatorBeam_2"
+                }
+              ]
+            },
+            {
+              "EncounterIndex": 2,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_SK_support_03",
+              "MaxNrOfTurns": 6,
+              "BossType": "SilentKing",
+              "UnitId": "GuildBoss3Minion3NecroMenhir:23",
+              "Enemies": [
+                "GuildBoss3Minion1NecroMesophet:21",
+                "GuildBoss3Npc5NecroSwarm:21",
+                "GuildBoss3Npc2NecroFlayedOne:21",
+                "GuildBoss3Npc2NecroFlayedOne:21",
+                "GuildBoss3Npc2NecroFlayedOne:21",
+                "GuildBoss3Npc2NecroFlayedOne:21",
+                "GuildBoss3Npc2NecroFlayedOne:21",
+                "GuildBoss3Npc2NecroFlayedOne:21"
+              ],
+              "DisallowedFactions": [
+                "Necrons"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 300000,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 600000,
+                  "Modifier": "boss_debuff_Mesophet_hp_50"
+                },
+                {
+                  "HpLost": 900000,
+                  "Modifier": "boss_debuff_dmg_25"
+                },
+                {
+                  "HpLost": 1200000,
+                  "Modifier": "boss_debuff_AnnihilatorBeam_2"
+                },
+                {
+                  "HpLost": 1500000,
+                  "Modifier": "boss_debuff_hits_1"
+                },
+                {
+                  "HpLost": 1800000,
+                  "Modifier": "boss_debuff_dmg_25"
+                },
+                {
+                  "HpLost": 2100000,
+                  "Modifier": "boss_debuff_Mesophet_hp_50"
+                },
+                {
+                  "HpLost": 2400000,
+                  "Modifier": "boss_debuff_AnnihilatorBeam_2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Set": 1,
+          "ChestId": "chest_guildboss_defeated_2_mythic",
+          "GuildXp": 10,
+          "Encounters": [
+            {
+              "EncounterIndex": 0,
+              "GuildBossEncounterType": "Boss",
+              "BoardId": "GB_Lion_01",
+              "MaxNrOfTurns": 6,
+              "BossType": "Lion",
+              "UnitId": "GuildBoss12Boss1DarkaLion:24",
+              "Npc1Id": "GuildBoss12Npc2DarkaHellblaster:24",
+              "Npc2Id": "GuildBoss12Npc3DarkaTerminator:24",
+              "Enemies": [
+                "GuildBoss12Npc4DarkaWatcher:24",
+                "GuildBoss12Npc4DarkaWatcher:24",
+                "GuildBoss12Npc2DarkaHellblaster:24",
+                "GuildBoss12Npc2DarkaHellblaster:24",
+                "GuildBoss12Npc2DarkaHellblaster:24",
+                "GuildBoss12Npc2DarkaHellblaster:24"
+              ],
+              "DisallowedFactions": [
+                "DarkAngels"
+              ]
+            },
+            {
+              "EncounterIndex": 1,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Lion_support_01",
+              "MaxNrOfTurns": 6,
+              "BossType": "Lion",
+              "UnitId": "GuildBoss12MiniBoss1DarkaTerminator:24",
+              "Enemies": [
+                "GuildBoss12Npc3DarkaTerminator:22",
+                "GuildBoss12Npc3DarkaTerminator:22",
+                "GuildBoss12Npc3DarkaTerminator:22",
+                "GuildBoss12Npc3DarkaTerminator:22",
+                "GuildBoss12Npc3DarkaTerminator:22",
+                "GuildBoss12Npc2DarkaHellblaster:22",
+                "GuildBoss12Npc2DarkaHellblaster:22"
+              ],
+              "DisallowedFactions": [
+                "DarkAngels"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 600000,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 1200000,
+                  "Modifier": "boss_debuff_critChance_10"
+                },
+                {
+                  "HpLost": 1800000,
+                  "Modifier": "boss_debuff_HellblasterUnitReduction"
+                },
+                {
+                  "HpLost": 2400000,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 3000000,
+                  "Modifier": "boss_debuff_TheEmperorsShield"
+                }
+              ]
+            },
+            {
+              "EncounterIndex": 2,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Lion_support_03",
+              "MaxNrOfTurns": 6,
+              "BossType": "Lion",
+              "UnitId": "GuildBoss12MiniBoss2DarkaCompanion:24",
+              "Enemies": [
+                "GuildBoss12Npc1DarkaInfiltrator:22",
+                "GuildBoss12Npc1DarkaInfiltrator:22",
+                "GuildBoss12Npc2DarkaHellblaster:22",
+                "GuildBoss12Npc2DarkaHellblaster:22",
+                "GuildBoss12Npc2DarkaHellblaster:22",
+                "GuildBoss12Npc2DarkaHellblaster:22",
+                "GuildBoss12Npc2DarkaHellblaster:22",
+                "GuildBoss12Npc2DarkaHellblaster:22",
+                "GuildBoss12Npc3DarkaTerminator:22",
+                "GuildBoss12Npc3DarkaTerminator:22"
+              ],
+              "DisallowedFactions": [
+                "DarkAngels"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 600000,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 1200000,
+                  "Modifier": "boss_debuff_critChance_10"
+                },
+                {
+                  "HpLost": 1800000,
+                  "Modifier": "boss_debuff_HellblasterUnitReduction"
+                },
+                {
+                  "HpLost": 2400000,
+                  "Modifier": "boss_debuff_dmg_15"
+                },
+                {
+                  "HpLost": 3000000,
+                  "Modifier": "boss_debuff_Fealty_hits_2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "Set": 2,
+          "ChestId": "chest_guildboss_defeated_2_mythic",
+          "GuildXp": 10,
+          "Encounters": [
+            {
+              "EncounterIndex": 0,
+              "GuildBossEncounterType": "Boss",
+              "BoardId": "GB_Mortarion_01",
+              "MaxNrOfTurns": 6,
+              "BossType": "Mortarion",
+              "UnitId": "GuildBoss5Boss1DeathMortarion:25",
+              "Npc1Id": "GuildBoss5Npc1Poxwalker:25",
+              "DisallowedFactions": [
+                "DeathGuard"
+              ]
+            },
+            {
+              "EncounterIndex": 1,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Mortarion_support_03",
+              "MaxNrOfTurns": 6,
+              "BossType": "Mortarion",
+              "UnitId": "GuildBoss5MiniBoss1DeathRotbone:25",
+              "Enemies": [
+                "GuildBoss5Minion1DeathBlightlord:23",
+                "GuildBoss5Minion1DeathBlightlord:23",
+                "GuildBoss5Npc1Poxwalker:23",
+                "GuildBoss5Npc1Poxwalker:23",
+                "GuildBoss5Npc1Poxwalker:23",
+                "GuildBoss5Npc1Poxwalker:23"
+              ],
+              "DisallowedFactions": [
+                "DeathGuard"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 450000,
+                  "Modifier": "boss_debuff_ArchContaminator_hits_2"
+                },
+                {
+                  "HpLost": 900000,
+                  "Modifier": "boss_debuff_fixedArmor_20"
+                },
+                {
+                  "HpLost": 1350000,
+                  "Modifier": "boss_debuff_ArchContaminator_hits_2"
+                },
+                {
+                  "HpLost": 1800000,
+                  "Modifier": "boss_debuff_RevoltinglyResilient_hits_1"
+                },
+                {
+                  "HpLost": 2250000,
+                  "Modifier": "boss_debuff_ArchContaminator_hits_2"
+                },
+                {
+                  "HpLost": 2700000,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 3150000,
+                  "Modifier": "boss_debuff_dmg_25"
+                }
+              ]
+            },
+            {
+              "EncounterIndex": 2,
+              "GuildBossEncounterType": "Crystal",
+              "BoardId": "GB_Mortarion_support_04",
+              "MaxNrOfTurns": 6,
+              "BossType": "Mortarion",
+              "UnitId": "GuildBoss5MiniBoss2DeathBlightbringer:25",
+              "Enemies": [
+                "GuildBoss5Npc1Poxwalker:23",
+                "GuildBoss5Npc1Poxwalker:23",
+                "GuildBoss5Npc1Poxwalker:23",
+                "GuildBoss5Npc1Poxwalker:23",
+                "GuildBoss5Npc1Poxwalker:23",
+                "GuildBoss5Npc1Poxwalker:23",
+                "GuildBoss5Npc1Poxwalker:23"
+              ],
+              "DisallowedFactions": [
+                "DeathGuard"
+              ],
+              "Modifiers": [
+                {
+                  "HpLost": 89700,
+                  "Modifier": "boss_debuff_summonChance_30"
+                },
+                {
+                  "HpLost": 179400,
+                  "Modifier": "boss_debuff_fixedArmor_20"
+                },
+                {
+                  "HpLost": 269100,
+                  "Modifier": "boss_debuff_summonChance_30"
+                },
+                {
+                  "HpLost": 358800,
+                  "Modifier": "boss_debuff_RevoltinglyResilient_hits_1"
+                },
+                {
+                  "HpLost": 448500,
+                  "Modifier": "boss_debuff_summonChance_30"
+                },
+                {
+                  "HpLost": 538200,
+                  "Modifier": "boss_debuff_fixedArmor_15"
+                },
+                {
+                  "HpLost": 627900,
+                  "Modifier": "boss_debuff_movement_1"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
