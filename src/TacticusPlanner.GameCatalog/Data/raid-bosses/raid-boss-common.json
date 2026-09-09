@@ -1,0 +1,406 @@
+{
+  "Rotation": [
+    "guild_boss_season_config_1",
+    "guild_boss_season_config_2",
+    "guild_boss_season_config_3",
+    "guild_boss_season_config_4",
+    "guild_boss_season_config_5"
+  ],
+  "Primarchs": [
+    "GuildBoss5Boss1DeathMortarion",
+    "GuildBoss9Boss1ThousMagnus",
+    "GuildBoss12Boss1DarkaLion"
+  ],
+  "Modifiers": {
+    "boss_debuff_movement_1": {
+      "type": "bossStatDecrease",
+      "target": "movement",
+      "amount": 1
+    },
+    "boss_debuff_dmg_10": {
+      "type": "bossStatPctDecrease",
+      "target": "dmg",
+      "amount": 10
+    },
+    "boss_debuff_dmg_15": {
+      "type": "bossStatPctDecrease",
+      "target": "dmg",
+      "amount": 15
+    },
+    "boss_debuff_dmg_20": {
+      "type": "bossStatPctDecrease",
+      "target": "dmg",
+      "amount": 20
+    },
+    "boss_debuff_dmg_25": {
+      "type": "bossStatPctDecrease",
+      "target": "dmg",
+      "amount": 25
+    },
+    "boss_debuff_fixedArmor_10": {
+      "type": "bossStatPctDecrease",
+      "target": "fixedArmor",
+      "amount": 10
+    },
+    "boss_debuff_fixedArmor_15": {
+      "type": "bossStatPctDecrease",
+      "target": "fixedArmor",
+      "amount": 15
+    },
+    "boss_debuff_fixedArmor_20": {
+      "type": "bossStatPctDecrease",
+      "target": "fixedArmor",
+      "amount": 20
+    },
+    "boss_debuff_fixedArmor_25": {
+      "type": "bossStatPctDecrease",
+      "target": "fixedArmor",
+      "amount": 25
+    },
+    "boss_debuff_SpawnTermagants_15": {
+      "type": "bossAbilityAllStatsPctDecrease",
+      "target": "SpawnTermagants",
+      "amount": 15
+    },
+    "boss_debuff_SpawnTermagants2_15": {
+      "type": "bossAbilityAllStatsPctDecrease",
+      "target": "SpawnTermagants2",
+      "amount": 15
+    },
+    "boss_debuff_SpawnTermagants3_15": {
+      "type": "bossAbilityAllStatsPctDecrease",
+      "target": "SpawnTermagants3",
+      "amount": 15
+    },
+    "boss_debuff_SpawnTermagants_20": {
+      "type": "bossAbilityAllStatsPctDecrease",
+      "target": "SpawnTermagants",
+      "amount": 20
+    },
+    "boss_debuff_SpawnTermagants2_20": {
+      "type": "bossAbilityAllStatsPctDecrease",
+      "target": "SpawnTermagants2",
+      "amount": 20
+    },
+    "boss_debuff_SpawnTermagants3_20": {
+      "type": "bossAbilityAllStatsPctDecrease",
+      "target": "SpawnTermagants3",
+      "amount": 20
+    },
+    "boss_debuff_CallRipperSwarms_25": {
+      "type": "bossAbilityAllStatsPctDecrease",
+      "target": "CallRipperSwarms",
+      "amount": 25
+    },
+    "boss_debuff_CallRipperSwarms2_25": {
+      "type": "bossAbilityAllStatsPctDecrease",
+      "target": "CallRipperSwarms2",
+      "amount": 25
+    },
+    "boss_debuff_CallRipperSwarms3_25": {
+      "type": "bossAbilityAllStatsPctDecrease",
+      "target": "CallRipperSwarms3",
+      "amount": 25
+    },
+    "boss_debuff_MassiveScythingTalons_15": {
+      "type": "bossAbilityAllStatsPctDecrease",
+      "target": "MassiveScythingTalons",
+      "amount": 15
+    },
+    "boss_debuff_MassiveScythingTalons_20": {
+      "type": "bossAbilityAllStatsPctDecrease",
+      "target": "MassiveScythingTalons",
+      "amount": 20
+    },
+    "boss_debuff_StranglethornCannon_25": {
+      "type": "bossAbilityAllStatsPctDecrease",
+      "target": "StranglethornCannon",
+      "amount": 25
+    },
+    "boss_debuff_PrehensilePincerTail_25": {
+      "type": "bossAbilityAllStatsPctDecrease",
+      "target": "PrehensilePincerTail",
+      "amount": 25
+    },
+    "boss_debuff_AnnihilatorBeam_2": {
+      "type": "bossAbilityConstantDecrease",
+      "target": "AnnihilatorBeam",
+      "subtarget": "nrOfTargets",
+      "amount": 2
+    },
+    "boss_debuff_Mesophet_hp_30": {
+      "type": "unitStatPctDecrease",
+      "target": "GuildBoss3Minion1NecroMesophet",
+      "subtarget": "hp",
+      "amount": 30
+    },
+    "boss_debuff_Hapthatra_hp_30": {
+      "type": "unitStatPctDecrease",
+      "target": "GuildBoss3Minion2NecroHapthatra",
+      "subtarget": "hp",
+      "amount": 30
+    },
+    "boss_debuff_Mesophet_hp_50": {
+      "type": "unitStatPctDecrease",
+      "target": "GuildBoss3Minion1NecroMesophet",
+      "subtarget": "hp",
+      "amount": 50
+    },
+    "boss_debuff_Hapthatra_hp_50": {
+      "type": "unitStatPctDecrease",
+      "target": "GuildBoss3Minion2NecroHapthatra",
+      "subtarget": "hp",
+      "amount": 50
+    },
+    "boss_debuff_hits_1": {
+      "type": "bossStatDecrease",
+      "target": "hits",
+      "amount": 1
+    },
+    "boss_debuff_NeedsMoreDakka_hits_1": {
+      "type": "bossAbilityConstantDecrease",
+      "target": "NeedsMoreDakka",
+      "subtarget": "nrOfHits",
+      "amount": 1
+    },
+    "boss_debuff_NeedsMoreDakka_hits_2": {
+      "type": "bossAbilityConstantDecrease",
+      "target": "NeedsMoreDakka",
+      "subtarget": "nrOfHits",
+      "amount": 2
+    },
+    "boss_debuff_ProphetOfGorkAndMork_nrOfAttacks_1": {
+      "type": "bossAbilityConstantIncrease",
+      "target": "ProphetOfGorkAndMork",
+      "subtarget": "nrOfAttacks",
+      "amount": 1
+    },
+    "boss_debuff_ProphetOfGorkAndMork_nrOfAttacks_2": {
+      "type": "bossAbilityConstantIncrease",
+      "target": "ProphetOfGorkAndMork",
+      "subtarget": "nrOfAttacks",
+      "amount": 2
+    },
+    "boss_debuff_DaGreatWaaagh_nrOfSummons_1": {
+      "type": "bossAbilityConstantDecrease",
+      "target": "DaGreatWaaagh",
+      "subtarget": "nrOfSummons",
+      "amount": 1
+    },
+    "boss_debuff_DaGreatWaaagh_nrOfSummons_2": {
+      "type": "bossAbilityConstantDecrease",
+      "target": "DaGreatWaaagh",
+      "subtarget": "nrOfSummons",
+      "amount": 2
+    },
+    "boss_debuff_ProperKilly_disable": {
+      "type": "bossAbilityConstantDecrease",
+      "target": "ProperKilly",
+      "subtarget": "nrOfHits",
+      "amount": 1
+    },
+    "boss_debuff_ArchContaminator_hits_2": {
+      "type": "bossAbilityConstantDecrease",
+      "target": "ArchContaminator",
+      "subtarget": "nrOfHits",
+      "amount": 2
+    },
+    "boss_debuff_RevoltinglyResilient_hits_1": {
+      "type": "bossAbilityConstantIncrease",
+      "target": "RevoltinglyResilient",
+      "subtarget": "nrOfHits",
+      "amount": 1
+    },
+    "boss_debuff_blockChance_15": {
+      "type": "bossStatDecrease",
+      "target": "blockChance",
+      "amount": 15
+    },
+    "boss_debuff_summonChance_30": {
+      "type": "bossAbilityConstantDecrease",
+      "target": "HostOfPlagues",
+      "subtarget": "chance",
+      "amount": 30
+    },
+    "boss_debuff_summonChance_40": {
+      "type": "bossAbilityConstantDecrease",
+      "target": "HostOfPlagues",
+      "subtarget": "chance",
+      "amount": 40
+    },
+    "boss_debuff_BarbgauntUnitReduction": {
+      "type": "unitAmountDecrease",
+      "target": "unitId",
+      "subtarget": "GuildBoss6Npc5TyranBarbgaunt",
+      "amount": 1
+    },
+    "boss_debuff_HormagauntUnitReduction": {
+      "type": "unitAmountDecrease",
+      "target": "unitId",
+      "subtarget": "GuildBoss6Npc1TyranHormagaunt",
+      "amount": 3
+    },
+    "boss_debuff_critDmg_25": {
+      "type": "bossStatPctDecrease",
+      "target": "critDmg",
+      "amount": 25
+    },
+    "boss_debuff_DeathScream_disable": {
+      "type": "bossAbilityConstantDecrease",
+      "target": "DeathScream",
+      "subtarget": "stunChance",
+      "amount": 100
+    },
+    "boss_debuff_LivingBatteringRam_disable": {
+      "type": "bossAbilityConstantDecrease",
+      "target": "LivingBatteringRam",
+      "subtarget": "stunChance",
+      "amount": 100
+    },
+    "boss_debuff_CadianGuardsmenUnitReduction": {
+      "type": "unitAmountDecrease",
+      "target": "unitId",
+      "subtarget": "GuildBoss7Npc1AstraGuardsman",
+      "amount": 4
+    },
+    "boss_debuff_WeakerRearArmour_extraCritChance_10": {
+      "type": "bossAbilityVariableIncrease",
+      "target": "WeakerRearArmour",
+      "subtarget": "extraCritChance",
+      "amount": 10
+    },
+    "boss_debuff_MortarUnitReduction": {
+      "type": "unitAmountDecrease",
+      "target": "unitId",
+      "subtarget": "GuildBoss7Npc4Mortar",
+      "amount": 1
+    },
+    "boss_debuff_GunnersKillOnSite_nrOfCrits_1": {
+      "type": "bossAbilityVariableDecrease",
+      "target": "GunnersKillOnSight",
+      "subtarget": "nrOfCrits",
+      "amount": 1
+    },
+    "boss_debuff_BloodRunsAngerRisesWarCalls_15": {
+      "type": "bossAbilityAllStatsPctDecrease",
+      "target": "BloodRunsAngerRisesWarCallsReworked",
+      "amount": 15
+    },
+    "boss_debuff_GuardianUnitReduction": {
+      "type": "unitAmountDecrease",
+      "target": "unitId",
+      "subtarget": "GuildBoss8Npc1EldarGuardian",
+      "amount": 3
+    },
+    "boss_debuff_WarlockUnitReduction": {
+      "type": "unitAmountDecrease",
+      "target": "unitId",
+      "subtarget": "GuildBoss8Npc2EldarWarlock",
+      "amount": 1
+    },
+    "boss_debuff_MoltenForm": {
+      "type": "bossAbilityConstantDecrease",
+      "target": "MoltenForm",
+      "subtarget": "dmgPctReduction",
+      "amount": 33
+    },
+    "boss_debuff_GazeOfMagnus": {
+      "type": "bossAbilityAllStatsPctDecrease",
+      "target": "GazeOfMagnus",
+      "amount": 20
+    },
+    "boss_debuff_RubricMarineUnitReduction": {
+      "type": "unitAmountDecrease",
+      "target": "unitId",
+      "subtarget": "GuildBoss9Npc3ThousRubricMarine",
+      "amount": 1
+    },
+    "boss_debuff_TerminatorUnitReduction": {
+      "type": "unitAmountDecrease",
+      "target": "unitId",
+      "subtarget": "GuildBoss9Npc4ThousTerminator",
+      "amount": 1
+    },
+    "boss_debuff_TreasonOfTzeentch": {
+      "type": "bossAbilityVariableDecrease",
+      "target": "TreasonOfTzeentch",
+      "subtarget": "hpPct",
+      "amount": 25
+    },
+    "boss_debuff_BladeOfMagnus": {
+      "type": "bossAbilityAllStatsPctDecrease",
+      "target": "BladeOfMagnus",
+      "amount": 25
+    },
+    "boss_debuff_InvocationOfMachineVengeance": {
+      "type": "bossAbilityVariablePctDecrease",
+      "target": "InvocationOfMachineVengeance",
+      "subtarget": "summonHp,summonDmg,summonArmor",
+      "amount": 15
+    },
+    "boss_debuff_ElectropriestUnitReduction": {
+      "type": "unitAmountDecrease",
+      "target": "unitId",
+      "subtarget": "GuildBoss10Npc2AdmecElectropriest",
+      "amount": 1
+    },
+    "boss_debuff_SelfRepairMechanism": {
+      "type": "bossAbilityConstantIncrease",
+      "target": "SelfRepairMechanism",
+      "subtarget": "nrOfRounds",
+      "amount": 1
+    },
+    "boss_debuff_SelfRepairMechanismReworked": {
+      "type": "bossAbilityConstantIncrease",
+      "target": "SelfRepairMechanismReworked",
+      "subtarget": "nrOfRounds",
+      "amount": 1
+    },
+    "boss_debuff_ArcScourge": {
+      "type": "bossAbilityVariablePctDecrease",
+      "target": "ArcScourge",
+      "subtarget": "minDmg,maxDmg",
+      "amount": 30
+    },
+    "boss_debuff_TargetLock": {
+      "type": "bossAbilityAllStatsPctDecrease",
+      "target": "TargetLock",
+      "amount": 15
+    },
+    "boss_debuff_ShieldDroneUnitReduction": {
+      "type": "unitAmountDecrease",
+      "target": "unitId",
+      "subtarget": "GuildBoss11Npc3TauDroneShield",
+      "amount": 1
+    },
+    "boss_debuff_NovaCharge": {
+      "type": "bossAbilityConstantDecrease",
+      "target": "NovaCharge",
+      "subtarget": "nrOfTargets",
+      "amount": 2
+    },
+    "boss_debuff_critChance_10": {
+      "type": "bossStatDecrease",
+      "target": "critChance",
+      "amount": 10
+    },
+    "boss_debuff_HellblasterUnitReduction": {
+      "type": "unitAmountDecrease",
+      "target": "unitId",
+      "subtarget": "GuildBoss12Npc2DarkaHellblaster",
+      "amount": 1
+    },
+    "boss_debuff_TheEmperorsShield": {
+      "type": "bossAbilityVariableIncrease",
+      "target": "TheEmperorsShield",
+      "subtarget": "nrOfAttacks",
+      "amount": 1
+    },
+    "boss_debuff_Fealty_hits_2": {
+      "type": "bossAbilityConstantDecrease",
+      "target": "Fealty",
+      "subtarget": "nrOfHits",
+      "amount": 2
+    }
+  }
+}

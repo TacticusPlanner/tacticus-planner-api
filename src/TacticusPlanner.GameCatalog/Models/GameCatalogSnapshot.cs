@@ -24,6 +24,9 @@ public sealed record GameCatalogSnapshot(
     // Raw daily-shop source files, keyed by source dataset key (shops-guild, ...). Kept for validation
     // (reward/free-offer/cost parse checks run over the raw "type:qty" strings).
     IReadOnlyDictionary<string, GameCatalogRawShop> RawShopsBySourceKey,
+    // Raw raid-boss source (one file, ported from V1's guild_boss.json). Kept for validation — the
+    // encounter unit / field-npc / modifier cross-reference checks run over the raw collections.
+    GameCatalogRaidBossRawData RaidBossRawData,
     // Served (denormalized) payloads — the public catalog surface.
     IReadOnlyList<GameCatalogCharacterView> CharacterViews,
     IReadOnlyList<GameCatalogNpc> NpcList,
@@ -40,7 +43,8 @@ public sealed record GameCatalogSnapshot(
     IReadOnlyList<GameCatalogLreCommon> LreCommonViews,
     IReadOnlyList<GameCatalogEventDefinition> EventDefinitionViews,
     IReadOnlyDictionary<string, IReadOnlyList<GameCatalogEventsCalendarEntry>> EventsCalendar,
-    IReadOnlyList<GameCatalogShopView> ShopViews
+    IReadOnlyList<GameCatalogShopView> ShopViews,
+    GameCatalogRaidBossesView RaidBossesView
 )
 {
     // The manifest served to clients: release metadata + per-dataset hash and download url. Built from the

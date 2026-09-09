@@ -1,0 +1,2449 @@
+{
+  "UnitSets": {
+    "GuildBoss6Boss1TyranScreamerKiller": {
+      "FactionId": "Tyranids",
+      "Movement": 4,
+      "Stats": [
+        {
+          "Health": 18000,
+          "Damage": 25,
+          "FixedArmor": 30,
+          "Rank": 0,
+          "StarLevel": 0,
+          "BaseRarity": "Common",
+          "ProgressionIndex": 0,
+          "AbilityLevel": 1,
+          "CritChance": 5,
+          "CritDamage": 13
+        },
+        {
+          "Health": 27000,
+          "Damage": 34,
+          "FixedArmor": 41,
+          "Rank": 1,
+          "StarLevel": 1,
+          "BaseRarity": "Common",
+          "ProgressionIndex": 1,
+          "AbilityLevel": 3,
+          "CritChance": 5,
+          "CritDamage": 17
+        },
+        {
+          "Health": 36000,
+          "Damage": 43,
+          "FixedArmor": 51,
+          "Rank": 2,
+          "StarLevel": 1,
+          "BaseRarity": "Common",
+          "ProgressionIndex": 1,
+          "AbilityLevel": 5,
+          "CritChance": 5,
+          "CritDamage": 22
+        },
+        {
+          "Health": 45000,
+          "Damage": 54,
+          "FixedArmor": 65,
+          "Rank": 2,
+          "StarLevel": 2,
+          "BaseRarity": "Common",
+          "ProgressionIndex": 2,
+          "AbilityLevel": 7,
+          "CritChance": 5,
+          "CritDamage": 27
+        },
+        {
+          "Health": 90000,
+          "Damage": 63,
+          "FixedArmor": 76,
+          "Rank": 3,
+          "StarLevel": 2,
+          "BaseRarity": "Uncommon",
+          "ProgressionIndex": 3,
+          "AbilityLevel": 9,
+          "CritChance": 5,
+          "CritDamage": 32
+        },
+        {
+          "Health": 120000,
+          "Damage": 79,
+          "FixedArmor": 96,
+          "Rank": 4,
+          "StarLevel": 3,
+          "BaseRarity": "Uncommon",
+          "ProgressionIndex": 4,
+          "AbilityLevel": 11,
+          "CritChance": 5,
+          "CritDamage": 40
+        },
+        {
+          "Health": 150000,
+          "Damage": 92,
+          "FixedArmor": 111,
+          "Rank": 4,
+          "StarLevel": 3,
+          "BaseRarity": "Uncommon",
+          "ProgressionIndex": 4,
+          "AbilityLevel": 13,
+          "CritChance": 5,
+          "CritDamage": 46
+        },
+        {
+          "Health": 180000,
+          "Damage": 115,
+          "FixedArmor": 139,
+          "Rank": 5,
+          "StarLevel": 4,
+          "BaseRarity": "Uncommon",
+          "ProgressionIndex": 5,
+          "AbilityLevel": 15,
+          "CritChance": 5,
+          "CritDamage": 58
+        },
+        {
+          "Health": 360000,
+          "Damage": 154,
+          "FixedArmor": 186,
+          "Rank": 6,
+          "StarLevel": 5,
+          "BaseRarity": "Rare",
+          "ProgressionIndex": 7,
+          "AbilityLevel": 18,
+          "CritChance": 5,
+          "CritDamage": 77
+        },
+        {
+          "Health": 450000,
+          "Damage": 179,
+          "FixedArmor": 216,
+          "Rank": 7,
+          "StarLevel": 5,
+          "BaseRarity": "Rare",
+          "ProgressionIndex": 7,
+          "AbilityLevel": 20,
+          "CritChance": 5,
+          "CritDamage": 90
+        },
+        {
+          "Health": 540000,
+          "Damage": 208,
+          "FixedArmor": 251,
+          "Rank": 7,
+          "StarLevel": 5,
+          "BaseRarity": "Rare",
+          "ProgressionIndex": 7,
+          "AbilityLevel": 22,
+          "CritChance": 5,
+          "CritDamage": 104
+        },
+        {
+          "Health": 630000,
+          "Damage": 258,
+          "FixedArmor": 311,
+          "Rank": 8,
+          "StarLevel": 6,
+          "BaseRarity": "Rare",
+          "ProgressionIndex": 8,
+          "AbilityLevel": 24,
+          "CritChance": 5,
+          "CritDamage": 129
+        },
+        {
+          "Health": 1200000,
+          "Damage": 323,
+          "FixedArmor": 389,
+          "Rank": 9,
+          "StarLevel": 6,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 9,
+          "AbilityLevel": 27,
+          "CritChance": 5,
+          "CritDamage": 162
+        },
+        {
+          "Health": 1500000,
+          "Damage": 399,
+          "FixedArmor": 480,
+          "Rank": 10,
+          "StarLevel": 7,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 10,
+          "AbilityLevel": 29,
+          "CritChance": 5,
+          "CritDamage": 200
+        },
+        {
+          "Health": 1800000,
+          "Damage": 463,
+          "FixedArmor": 557,
+          "Rank": 10,
+          "StarLevel": 7,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 10,
+          "AbilityLevel": 31,
+          "CritChance": 5,
+          "CritDamage": 232
+        },
+        {
+          "Health": 2100000,
+          "Damage": 570,
+          "FixedArmor": 686,
+          "Rank": 11,
+          "StarLevel": 8,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 11,
+          "AbilityLevel": 33,
+          "CritChance": 5,
+          "CritDamage": 285
+        },
+        {
+          "Health": 2500000,
+          "Damage": 663,
+          "FixedArmor": 797,
+          "Rank": 12,
+          "StarLevel": 8,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 11,
+          "AbilityLevel": 35,
+          "CritChance": 5,
+          "CritDamage": 332
+        },
+        {
+          "Health": 5000000,
+          "Damage": 830,
+          "FixedArmor": 998,
+          "Rank": 13,
+          "StarLevel": 8,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 12,
+          "AbilityLevel": 38,
+          "CritChance": 5,
+          "CritDamage": 415
+        },
+        {
+          "Health": 7500000,
+          "Damage": 1097,
+          "FixedArmor": 1319,
+          "Rank": 14,
+          "StarLevel": 9,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 13,
+          "AbilityLevel": 41,
+          "CritChance": 5,
+          "CritDamage": 549
+        },
+        {
+          "Health": 10000000,
+          "Damage": 1373,
+          "FixedArmor": 1651,
+          "Rank": 15,
+          "StarLevel": 9,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 13,
+          "AbilityLevel": 44,
+          "CritChance": 5,
+          "CritDamage": 687
+        },
+        {
+          "Health": 12500000,
+          "Damage": 1809,
+          "FixedArmor": 2176,
+          "Rank": 16,
+          "StarLevel": 10,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 14,
+          "AbilityLevel": 47,
+          "CritChance": 5,
+          "CritDamage": 905
+        },
+        {
+          "Health": 15000000,
+          "Damage": 2378,
+          "FixedArmor": 2861,
+          "Rank": 17,
+          "StarLevel": 11,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 15,
+          "AbilityLevel": 50,
+          "CritChance": 5,
+          "CritDamage": 1189
+        },
+        {
+          "Health": 30000000,
+          "Damage": 2764,
+          "FixedArmor": 3326,
+          "Rank": 18,
+          "StarLevel": 12,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 17,
+          "AbilityLevel": 53,
+          "CritChance": 5,
+          "CritDamage": 1382
+        },
+        {
+          "Health": 37500000,
+          "Damage": 3129,
+          "FixedArmor": 3765,
+          "Rank": 18,
+          "StarLevel": 13,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 18,
+          "AbilityLevel": 56,
+          "CritChance": 5,
+          "CritDamage": 1565
+        },
+        {
+          "Health": 45000000,
+          "Damage": 3400,
+          "FixedArmor": 4091,
+          "Rank": 19,
+          "StarLevel": 13,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 18,
+          "AbilityLevel": 59,
+          "CritChance": 5,
+          "CritDamage": 1700
+        },
+        {
+          "Health": 52500000,
+          "Damage": 3848,
+          "FixedArmor": 4630,
+          "Rank": 19,
+          "StarLevel": 14,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 19,
+          "AbilityLevel": 62,
+          "CritChance": 5,
+          "CritDamage": 1924
+        },
+        {
+          "Health": 65000000,
+          "Damage": 4333,
+          "FixedArmor": 5213,
+          "Rank": 20,
+          "StarLevel": 14,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 19,
+          "AbilityLevel": 65,
+          "CritChance": 5,
+          "CritDamage": 2167
+        }
+      ],
+      "Weapons": [
+        {
+          "hits": 5,
+          "DamageProfile": "Physical"
+        },
+        {
+          "hits": 4,
+          "DamageProfile": "Plasma",
+          "Range": 2
+        }
+      ],
+      "ActiveAbilities": [
+        "DeathScream",
+        "UnparalleledFerocity",
+        "LivingBatteringRam"
+      ],
+      "PassiveAbilities": [
+        "AdrenalSurge",
+        "BlisteringAssault",
+        "HyperAggression",
+        "GuildBossRunAway"
+      ],
+      "Traits": [
+        "Boss",
+        "Immune",
+        "BigTarget",
+        "InstinctiveBehaviour",
+        "SuppressiveFire"
+      ]
+    },
+    "GuildBoss6MiniBoss1TyranNeurothrope": {
+      "FactionId": "Tyranids",
+      "Movement": 2,
+      "Stats": [
+        {
+          "Health": 1440,
+          "Damage": 25,
+          "FixedArmor": 17,
+          "Rank": 0,
+          "StarLevel": 0,
+          "BaseRarity": "Common",
+          "ProgressionIndex": 0,
+          "AbilityLevel": 1
+        },
+        {
+          "Health": 2160,
+          "Damage": 34,
+          "FixedArmor": 23,
+          "Rank": 1,
+          "StarLevel": 1,
+          "BaseRarity": "Common",
+          "ProgressionIndex": 1,
+          "AbilityLevel": 3
+        },
+        {
+          "Health": 2880,
+          "Damage": 43,
+          "FixedArmor": 29,
+          "Rank": 2,
+          "StarLevel": 1,
+          "BaseRarity": "Common",
+          "ProgressionIndex": 1,
+          "AbilityLevel": 5
+        },
+        {
+          "Health": 3600,
+          "Damage": 54,
+          "FixedArmor": 37,
+          "Rank": 2,
+          "StarLevel": 2,
+          "BaseRarity": "Common",
+          "ProgressionIndex": 2,
+          "AbilityLevel": 7
+        },
+        {
+          "Health": 7200,
+          "Damage": 63,
+          "FixedArmor": 43,
+          "Rank": 3,
+          "StarLevel": 2,
+          "BaseRarity": "Uncommon",
+          "ProgressionIndex": 3,
+          "AbilityLevel": 9
+        },
+        {
+          "Health": 9600,
+          "Damage": 79,
+          "FixedArmor": 54,
+          "Rank": 4,
+          "StarLevel": 3,
+          "BaseRarity": "Uncommon",
+          "ProgressionIndex": 4,
+          "AbilityLevel": 11
+        },
+        {
+          "Health": 12000,
+          "Damage": 92,
+          "FixedArmor": 63,
+          "Rank": 4,
+          "StarLevel": 3,
+          "BaseRarity": "Uncommon",
+          "ProgressionIndex": 4,
+          "AbilityLevel": 13
+        },
+        {
+          "Health": 14400,
+          "Damage": 115,
+          "FixedArmor": 79,
+          "Rank": 5,
+          "StarLevel": 4,
+          "BaseRarity": "Uncommon",
+          "ProgressionIndex": 5,
+          "AbilityLevel": 15
+        },
+        {
+          "Health": 28800,
+          "Damage": 154,
+          "FixedArmor": 106,
+          "Rank": 6,
+          "StarLevel": 5,
+          "BaseRarity": "Rare",
+          "ProgressionIndex": 7,
+          "AbilityLevel": 18
+        },
+        {
+          "Health": 36000,
+          "Damage": 179,
+          "FixedArmor": 123,
+          "Rank": 7,
+          "StarLevel": 5,
+          "BaseRarity": "Rare",
+          "ProgressionIndex": 7,
+          "AbilityLevel": 20
+        },
+        {
+          "Health": 43200,
+          "Damage": 208,
+          "FixedArmor": 143,
+          "Rank": 7,
+          "StarLevel": 5,
+          "BaseRarity": "Rare",
+          "ProgressionIndex": 7,
+          "AbilityLevel": 22
+        },
+        {
+          "Health": 50400,
+          "Damage": 258,
+          "FixedArmor": 177,
+          "Rank": 8,
+          "StarLevel": 6,
+          "BaseRarity": "Rare",
+          "ProgressionIndex": 8,
+          "AbilityLevel": 24
+        },
+        {
+          "Health": 96000,
+          "Damage": 323,
+          "FixedArmor": 222,
+          "Rank": 9,
+          "StarLevel": 6,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 9,
+          "AbilityLevel": 27
+        },
+        {
+          "Health": 120000,
+          "Damage": 399,
+          "FixedArmor": 274,
+          "Rank": 10,
+          "StarLevel": 7,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 10,
+          "AbilityLevel": 29
+        },
+        {
+          "Health": 144000,
+          "Damage": 463,
+          "FixedArmor": 318,
+          "Rank": 10,
+          "StarLevel": 7,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 10,
+          "AbilityLevel": 31
+        },
+        {
+          "Health": 168000,
+          "Damage": 570,
+          "FixedArmor": 391,
+          "Rank": 11,
+          "StarLevel": 8,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 11,
+          "AbilityLevel": 33
+        },
+        {
+          "Health": 200000,
+          "Damage": 663,
+          "FixedArmor": 455,
+          "Rank": 12,
+          "StarLevel": 8,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 11,
+          "AbilityLevel": 35
+        },
+        {
+          "Health": 400000,
+          "Damage": 830,
+          "FixedArmor": 570,
+          "Rank": 13,
+          "StarLevel": 8,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 12,
+          "AbilityLevel": 38
+        },
+        {
+          "Health": 600000,
+          "Damage": 1097,
+          "FixedArmor": 753,
+          "Rank": 14,
+          "StarLevel": 9,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 13,
+          "AbilityLevel": 41
+        },
+        {
+          "Health": 800000,
+          "Damage": 1373,
+          "FixedArmor": 943,
+          "Rank": 15,
+          "StarLevel": 9,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 13,
+          "AbilityLevel": 44
+        },
+        {
+          "Health": 1000000,
+          "Damage": 1809,
+          "FixedArmor": 1243,
+          "Rank": 16,
+          "StarLevel": 10,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 14,
+          "AbilityLevel": 47
+        },
+        {
+          "Health": 1200000,
+          "Damage": 2378,
+          "FixedArmor": 1634,
+          "Rank": 17,
+          "StarLevel": 11,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 15,
+          "AbilityLevel": 50
+        },
+        {
+          "Health": 2400000,
+          "Damage": 2764,
+          "FixedArmor": 1899,
+          "Rank": 18,
+          "StarLevel": 12,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 17,
+          "AbilityLevel": 53
+        },
+        {
+          "Health": 3000000,
+          "Damage": 3129,
+          "FixedArmor": 2150,
+          "Rank": 18,
+          "StarLevel": 13,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 18,
+          "AbilityLevel": 56
+        },
+        {
+          "Health": 3600000,
+          "Damage": 3400,
+          "FixedArmor": 2336,
+          "Rank": 19,
+          "StarLevel": 13,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 18,
+          "AbilityLevel": 59
+        },
+        {
+          "Health": 4200000,
+          "Damage": 3848,
+          "FixedArmor": 2644,
+          "Rank": 19,
+          "StarLevel": 14,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 19,
+          "AbilityLevel": 62
+        },
+        {
+          "Health": 5200000,
+          "Damage": 4333,
+          "FixedArmor": 2977,
+          "Rank": 20,
+          "StarLevel": 14,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 19,
+          "AbilityLevel": 65
+        }
+      ],
+      "Weapons": [
+        {
+          "hits": 1,
+          "DamageProfile": "Physical"
+        },
+        {
+          "hits": 1,
+          "DamageProfile": "Psychic",
+          "Range": 3
+        }
+      ],
+      "ActiveAbilities": [
+        "SpiritLeech"
+      ],
+      "PassiveAbilities": [
+        "Neuroparasite",
+        "VulnerableToMelee",
+        "GuildBossRunAway"
+      ],
+      "Traits": [
+        "Boss",
+        "Immune",
+        "Synapse",
+        "Flying",
+        "Psyker",
+        "ShadowInTheWarp",
+        "RangedSpecialist"
+      ]
+    },
+    "GuildBoss6MiniBoss2TyranWingedPrime": {
+      "FactionId": "Tyranids",
+      "Movement": 4,
+      "Stats": [
+        {
+          "Health": 1440,
+          "Damage": 11,
+          "FixedArmor": 19,
+          "Rank": 0,
+          "StarLevel": 0,
+          "BaseRarity": "Common",
+          "ProgressionIndex": 0,
+          "AbilityLevel": 1
+        },
+        {
+          "Health": 2160,
+          "Damage": 15,
+          "FixedArmor": 26,
+          "Rank": 1,
+          "StarLevel": 1,
+          "BaseRarity": "Common",
+          "ProgressionIndex": 1,
+          "AbilityLevel": 3
+        },
+        {
+          "Health": 2880,
+          "Damage": 19,
+          "FixedArmor": 33,
+          "Rank": 2,
+          "StarLevel": 1,
+          "BaseRarity": "Common",
+          "ProgressionIndex": 1,
+          "AbilityLevel": 5
+        },
+        {
+          "Health": 3600,
+          "Damage": 24,
+          "FixedArmor": 42,
+          "Rank": 2,
+          "StarLevel": 2,
+          "BaseRarity": "Common",
+          "ProgressionIndex": 2,
+          "AbilityLevel": 7
+        },
+        {
+          "Health": 7200,
+          "Damage": 28,
+          "FixedArmor": 49,
+          "Rank": 3,
+          "StarLevel": 2,
+          "BaseRarity": "Uncommon",
+          "ProgressionIndex": 3,
+          "AbilityLevel": 9
+        },
+        {
+          "Health": 9600,
+          "Damage": 35,
+          "FixedArmor": 62,
+          "Rank": 4,
+          "StarLevel": 3,
+          "BaseRarity": "Uncommon",
+          "ProgressionIndex": 4,
+          "AbilityLevel": 11
+        },
+        {
+          "Health": 12000,
+          "Damage": 41,
+          "FixedArmor": 72,
+          "Rank": 4,
+          "StarLevel": 3,
+          "BaseRarity": "Uncommon",
+          "ProgressionIndex": 4,
+          "AbilityLevel": 13
+        },
+        {
+          "Health": 14400,
+          "Damage": 51,
+          "FixedArmor": 90,
+          "Rank": 5,
+          "StarLevel": 4,
+          "BaseRarity": "Uncommon",
+          "ProgressionIndex": 5,
+          "AbilityLevel": 15
+        },
+        {
+          "Health": 28800,
+          "Damage": 68,
+          "FixedArmor": 121,
+          "Rank": 6,
+          "StarLevel": 5,
+          "BaseRarity": "Rare",
+          "ProgressionIndex": 7,
+          "AbilityLevel": 18
+        },
+        {
+          "Health": 36000,
+          "Damage": 79,
+          "FixedArmor": 141,
+          "Rank": 7,
+          "StarLevel": 5,
+          "BaseRarity": "Rare",
+          "ProgressionIndex": 7,
+          "AbilityLevel": 20
+        },
+        {
+          "Health": 43200,
+          "Damage": 92,
+          "FixedArmor": 164,
+          "Rank": 7,
+          "StarLevel": 5,
+          "BaseRarity": "Rare",
+          "ProgressionIndex": 7,
+          "AbilityLevel": 22
+        },
+        {
+          "Health": 50400,
+          "Damage": 114,
+          "FixedArmor": 203,
+          "Rank": 8,
+          "StarLevel": 6,
+          "BaseRarity": "Rare",
+          "ProgressionIndex": 8,
+          "AbilityLevel": 24
+        },
+        {
+          "Health": 96000,
+          "Damage": 143,
+          "FixedArmor": 254,
+          "Rank": 9,
+          "StarLevel": 6,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 9,
+          "AbilityLevel": 27
+        },
+        {
+          "Health": 120000,
+          "Damage": 177,
+          "FixedArmor": 314,
+          "Rank": 10,
+          "StarLevel": 7,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 10,
+          "AbilityLevel": 29
+        },
+        {
+          "Health": 144000,
+          "Damage": 205,
+          "FixedArmor": 364,
+          "Rank": 10,
+          "StarLevel": 7,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 10,
+          "AbilityLevel": 31
+        },
+        {
+          "Health": 168000,
+          "Damage": 252,
+          "FixedArmor": 448,
+          "Rank": 11,
+          "StarLevel": 8,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 11,
+          "AbilityLevel": 33
+        },
+        {
+          "Health": 200000,
+          "Damage": 293,
+          "FixedArmor": 521,
+          "Rank": 12,
+          "StarLevel": 8,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 11,
+          "AbilityLevel": 35
+        },
+        {
+          "Health": 400000,
+          "Damage": 367,
+          "FixedArmor": 652,
+          "Rank": 13,
+          "StarLevel": 8,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 12,
+          "AbilityLevel": 38
+        },
+        {
+          "Health": 600000,
+          "Damage": 485,
+          "FixedArmor": 862,
+          "Rank": 14,
+          "StarLevel": 9,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 13,
+          "AbilityLevel": 41
+        },
+        {
+          "Health": 800000,
+          "Damage": 607,
+          "FixedArmor": 1079,
+          "Rank": 15,
+          "StarLevel": 9,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 13,
+          "AbilityLevel": 44
+        },
+        {
+          "Health": 1000000,
+          "Damage": 800,
+          "FixedArmor": 1422,
+          "Rank": 16,
+          "StarLevel": 10,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 14,
+          "AbilityLevel": 47
+        },
+        {
+          "Health": 1200000,
+          "Damage": 1052,
+          "FixedArmor": 1869,
+          "Rank": 17,
+          "StarLevel": 11,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 15,
+          "AbilityLevel": 50
+        },
+        {
+          "Health": 2400000,
+          "Damage": 1223,
+          "FixedArmor": 2173,
+          "Rank": 18,
+          "StarLevel": 12,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 17,
+          "AbilityLevel": 53,
+          "RelicAbilityLevel": 2
+        },
+        {
+          "Health": 3000000,
+          "Damage": 1384,
+          "FixedArmor": 2460,
+          "Rank": 18,
+          "StarLevel": 13,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 18,
+          "AbilityLevel": 56,
+          "RelicAbilityLevel": 4
+        },
+        {
+          "Health": 3600000,
+          "Damage": 1504,
+          "FixedArmor": 2673,
+          "Rank": 19,
+          "StarLevel": 13,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 18,
+          "AbilityLevel": 59,
+          "RelicAbilityLevel": 6
+        },
+        {
+          "Health": 4200000,
+          "Damage": 1702,
+          "FixedArmor": 3025,
+          "Rank": 19,
+          "StarLevel": 14,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 19,
+          "AbilityLevel": 62,
+          "RelicAbilityLevel": 8
+        },
+        {
+          "Health": 5200000,
+          "Damage": 1916,
+          "FixedArmor": 3406,
+          "Rank": 20,
+          "StarLevel": 14,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 19,
+          "AbilityLevel": 65,
+          "RelicAbilityLevel": 10
+        }
+      ],
+      "Weapons": [
+        {
+          "hits": 6,
+          "DamageProfile": "Bio"
+        }
+      ],
+      "ActiveAbilities": [
+        "AlphaWarrior"
+      ],
+      "PassiveAbilities": [
+        "SynapticLinchpin",
+        "VulnerableToFlameAndBlast",
+        "GuildBossRunAway"
+      ],
+      "RelicAbilities": [
+        "MawClawsofThyrax"
+      ],
+      "Traits": [
+        "Boss",
+        "Immune",
+        "Synapse",
+        "Flying",
+        "FinalJustice"
+      ]
+    },
+    "GuildBoss6Npc1TyranHormagaunt": {
+      "FactionId": "Tyranids",
+      "Movement": 3,
+      "QuestUnitId": "tyranNpc1Hormagaunt",
+      "Stats": [
+        {
+          "Health": 42,
+          "Damage": 25,
+          "FixedArmor": 7,
+          "Rank": 0,
+          "StarLevel": 0,
+          "BaseRarity": "Common",
+          "ProgressionIndex": 0,
+          "AbilityLevel": 1
+        },
+        {
+          "Health": 58,
+          "Damage": 34,
+          "FixedArmor": 10,
+          "Rank": 1,
+          "StarLevel": 1,
+          "BaseRarity": "Common",
+          "ProgressionIndex": 1,
+          "AbilityLevel": 3
+        },
+        {
+          "Health": 73,
+          "Damage": 43,
+          "FixedArmor": 13,
+          "Rank": 2,
+          "StarLevel": 1,
+          "BaseRarity": "Common",
+          "ProgressionIndex": 1,
+          "AbilityLevel": 5
+        },
+        {
+          "Health": 92,
+          "Damage": 54,
+          "FixedArmor": 16,
+          "Rank": 2,
+          "StarLevel": 2,
+          "BaseRarity": "Common",
+          "ProgressionIndex": 2,
+          "AbilityLevel": 7
+        },
+        {
+          "Health": 107,
+          "Damage": 63,
+          "FixedArmor": 19,
+          "Rank": 3,
+          "StarLevel": 2,
+          "BaseRarity": "Uncommon",
+          "ProgressionIndex": 3,
+          "AbilityLevel": 9
+        },
+        {
+          "Health": 135,
+          "Damage": 79,
+          "FixedArmor": 24,
+          "Rank": 4,
+          "StarLevel": 3,
+          "BaseRarity": "Uncommon",
+          "ProgressionIndex": 4,
+          "AbilityLevel": 11
+        },
+        {
+          "Health": 157,
+          "Damage": 92,
+          "FixedArmor": 28,
+          "Rank": 4,
+          "StarLevel": 3,
+          "BaseRarity": "Uncommon",
+          "ProgressionIndex": 4,
+          "AbilityLevel": 13
+        },
+        {
+          "Health": 197,
+          "Damage": 115,
+          "FixedArmor": 35,
+          "Rank": 5,
+          "StarLevel": 4,
+          "BaseRarity": "Uncommon",
+          "ProgressionIndex": 5,
+          "AbilityLevel": 15
+        },
+        {
+          "Health": 264,
+          "Damage": 154,
+          "FixedArmor": 47,
+          "Rank": 6,
+          "StarLevel": 5,
+          "BaseRarity": "Rare",
+          "ProgressionIndex": 7,
+          "AbilityLevel": 18
+        },
+        {
+          "Health": 307,
+          "Damage": 179,
+          "FixedArmor": 55,
+          "Rank": 7,
+          "StarLevel": 5,
+          "BaseRarity": "Rare",
+          "ProgressionIndex": 7,
+          "AbilityLevel": 20
+        },
+        {
+          "Health": 356,
+          "Damage": 208,
+          "FixedArmor": 64,
+          "Rank": 7,
+          "StarLevel": 5,
+          "BaseRarity": "Rare",
+          "ProgressionIndex": 7,
+          "AbilityLevel": 22
+        },
+        {
+          "Health": 441,
+          "Damage": 258,
+          "FixedArmor": 79,
+          "Rank": 8,
+          "StarLevel": 6,
+          "BaseRarity": "Rare",
+          "ProgressionIndex": 8,
+          "AbilityLevel": 24
+        },
+        {
+          "Health": 552,
+          "Damage": 323,
+          "FixedArmor": 99,
+          "Rank": 9,
+          "StarLevel": 6,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 9,
+          "AbilityLevel": 27
+        },
+        {
+          "Health": 682,
+          "Damage": 399,
+          "FixedArmor": 122,
+          "Rank": 10,
+          "StarLevel": 7,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 10,
+          "AbilityLevel": 29
+        },
+        {
+          "Health": 791,
+          "Damage": 463,
+          "FixedArmor": 142,
+          "Rank": 10,
+          "StarLevel": 7,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 10,
+          "AbilityLevel": 31
+        },
+        {
+          "Health": 974,
+          "Damage": 570,
+          "FixedArmor": 175,
+          "Rank": 11,
+          "StarLevel": 8,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 11,
+          "AbilityLevel": 33
+        },
+        {
+          "Health": 1132,
+          "Damage": 663,
+          "FixedArmor": 203,
+          "Rank": 12,
+          "StarLevel": 8,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 11,
+          "AbilityLevel": 35
+        },
+        {
+          "Health": 1417,
+          "Damage": 830,
+          "FixedArmor": 254,
+          "Rank": 13,
+          "StarLevel": 8,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 12,
+          "AbilityLevel": 38
+        },
+        {
+          "Health": 1873,
+          "Damage": 1097,
+          "FixedArmor": 336,
+          "Rank": 14,
+          "StarLevel": 9,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 13,
+          "AbilityLevel": 41
+        },
+        {
+          "Health": 2345,
+          "Damage": 1373,
+          "FixedArmor": 421,
+          "Rank": 15,
+          "StarLevel": 9,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 13,
+          "AbilityLevel": 44
+        },
+        {
+          "Health": 3090,
+          "Damage": 1809,
+          "FixedArmor": 555,
+          "Rank": 16,
+          "StarLevel": 10,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 14,
+          "AbilityLevel": 47
+        },
+        {
+          "Health": 4062,
+          "Damage": 2378,
+          "FixedArmor": 730,
+          "Rank": 17,
+          "StarLevel": 11,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 15,
+          "AbilityLevel": 50
+        },
+        {
+          "Health": 4329,
+          "Damage": 2764,
+          "FixedArmor": 849,
+          "Rank": 18,
+          "StarLevel": 12,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 17,
+          "AbilityLevel": 53
+        },
+        {
+          "Health": 4815,
+          "Damage": 3129,
+          "FixedArmor": 961,
+          "Rank": 18,
+          "StarLevel": 13,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 18,
+          "AbilityLevel": 56
+        },
+        {
+          "Health": 5095,
+          "Damage": 3400,
+          "FixedArmor": 1044,
+          "Rank": 19,
+          "StarLevel": 13,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 18,
+          "AbilityLevel": 59
+        },
+        {
+          "Health": 5619,
+          "Damage": 3848,
+          "FixedArmor": 1182,
+          "Rank": 19,
+          "StarLevel": 14,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 19,
+          "AbilityLevel": 62
+        },
+        {
+          "Health": 6169,
+          "Damage": 4333,
+          "FixedArmor": 1331,
+          "Rank": 20,
+          "StarLevel": 14,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 19,
+          "AbilityLevel": 65
+        }
+      ],
+      "Weapons": [
+        {
+          "hits": 2,
+          "DamageProfile": "Physical"
+        }
+      ],
+      "ActiveAbilities": [],
+      "PassiveAbilities": [
+        "AdrenalGlands",
+        "HungeringSwarm"
+      ],
+      "Traits": [
+        "InstinctiveBehaviour",
+        "BattleFatigue"
+      ]
+    },
+    "GuildBoss6Npc2TyranRipperSwarm": {
+      "FactionId": "Tyranids",
+      "Movement": 3,
+      "NrOfMembers": 5,
+      "QuestUnitId": "tyranNpc2RipperSwarm",
+      "Stats": [
+        {
+          "Health": 65,
+          "Damage": 11,
+          "FixedArmor": 15,
+          "Rank": 0,
+          "StarLevel": 0,
+          "BaseRarity": "Common",
+          "ProgressionIndex": 0,
+          "AbilityLevel": 1
+        },
+        {
+          "Health": 85,
+          "Damage": 15,
+          "FixedArmor": 21,
+          "Rank": 1,
+          "StarLevel": 1,
+          "BaseRarity": "Common",
+          "ProgressionIndex": 1,
+          "AbilityLevel": 3
+        },
+        {
+          "Health": 110,
+          "Damage": 19,
+          "FixedArmor": 26,
+          "Rank": 2,
+          "StarLevel": 1,
+          "BaseRarity": "Common",
+          "ProgressionIndex": 1,
+          "AbilityLevel": 5
+        },
+        {
+          "Health": 140,
+          "Damage": 24,
+          "FixedArmor": 33,
+          "Rank": 2,
+          "StarLevel": 2,
+          "BaseRarity": "Common",
+          "ProgressionIndex": 2,
+          "AbilityLevel": 7
+        },
+        {
+          "Health": 160,
+          "Damage": 28,
+          "FixedArmor": 38,
+          "Rank": 3,
+          "StarLevel": 2,
+          "BaseRarity": "Uncommon",
+          "ProgressionIndex": 3,
+          "AbilityLevel": 9
+        },
+        {
+          "Health": 200,
+          "Damage": 35,
+          "FixedArmor": 48,
+          "Rank": 4,
+          "StarLevel": 3,
+          "BaseRarity": "Uncommon",
+          "ProgressionIndex": 4,
+          "AbilityLevel": 11
+        },
+        {
+          "Health": 235,
+          "Damage": 41,
+          "FixedArmor": 56,
+          "Rank": 4,
+          "StarLevel": 3,
+          "BaseRarity": "Uncommon",
+          "ProgressionIndex": 4,
+          "AbilityLevel": 13
+        },
+        {
+          "Health": 295,
+          "Damage": 51,
+          "FixedArmor": 70,
+          "Rank": 5,
+          "StarLevel": 4,
+          "BaseRarity": "Uncommon",
+          "ProgressionIndex": 5,
+          "AbilityLevel": 15
+        },
+        {
+          "Health": 395,
+          "Damage": 68,
+          "FixedArmor": 94,
+          "Rank": 6,
+          "StarLevel": 5,
+          "BaseRarity": "Rare",
+          "ProgressionIndex": 7,
+          "AbilityLevel": 18
+        },
+        {
+          "Health": 455,
+          "Damage": 79,
+          "FixedArmor": 109,
+          "Rank": 7,
+          "StarLevel": 5,
+          "BaseRarity": "Rare",
+          "ProgressionIndex": 7,
+          "AbilityLevel": 20
+        },
+        {
+          "Health": 530,
+          "Damage": 92,
+          "FixedArmor": 126,
+          "Rank": 7,
+          "StarLevel": 5,
+          "BaseRarity": "Rare",
+          "ProgressionIndex": 7,
+          "AbilityLevel": 22
+        },
+        {
+          "Health": 655,
+          "Damage": 114,
+          "FixedArmor": 156,
+          "Rank": 8,
+          "StarLevel": 6,
+          "BaseRarity": "Rare",
+          "ProgressionIndex": 8,
+          "AbilityLevel": 24
+        },
+        {
+          "Health": 825,
+          "Damage": 143,
+          "FixedArmor": 195,
+          "Rank": 9,
+          "StarLevel": 6,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 9,
+          "AbilityLevel": 27
+        },
+        {
+          "Health": 1015,
+          "Damage": 177,
+          "FixedArmor": 241,
+          "Rank": 10,
+          "StarLevel": 7,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 10,
+          "AbilityLevel": 29
+        },
+        {
+          "Health": 1180,
+          "Damage": 205,
+          "FixedArmor": 280,
+          "Rank": 10,
+          "StarLevel": 7,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 10,
+          "AbilityLevel": 31
+        },
+        {
+          "Health": 1450,
+          "Damage": 252,
+          "FixedArmor": 345,
+          "Rank": 11,
+          "StarLevel": 8,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 11,
+          "AbilityLevel": 33
+        },
+        {
+          "Health": 1690,
+          "Damage": 293,
+          "FixedArmor": 401,
+          "Rank": 12,
+          "StarLevel": 8,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 11,
+          "AbilityLevel": 35
+        },
+        {
+          "Health": 2115,
+          "Damage": 367,
+          "FixedArmor": 502,
+          "Rank": 13,
+          "StarLevel": 8,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 12,
+          "AbilityLevel": 38
+        },
+        {
+          "Health": 2790,
+          "Damage": 485,
+          "FixedArmor": 663,
+          "Rank": 14,
+          "StarLevel": 9,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 13,
+          "AbilityLevel": 41
+        },
+        {
+          "Health": 3495,
+          "Damage": 607,
+          "FixedArmor": 830,
+          "Rank": 15,
+          "StarLevel": 9,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 13,
+          "AbilityLevel": 44
+        },
+        {
+          "Health": 4605,
+          "Damage": 800,
+          "FixedArmor": 1094,
+          "Rank": 16,
+          "StarLevel": 10,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 14,
+          "AbilityLevel": 47
+        },
+        {
+          "Health": 6055,
+          "Damage": 1052,
+          "FixedArmor": 1438,
+          "Rank": 17,
+          "StarLevel": 11,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 15,
+          "AbilityLevel": 50
+        },
+        {
+          "Health": 6455,
+          "Damage": 1223,
+          "FixedArmor": 1672,
+          "Rank": 18,
+          "StarLevel": 12,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 17,
+          "AbilityLevel": 53
+        },
+        {
+          "Health": 7180,
+          "Damage": 1384,
+          "FixedArmor": 1893,
+          "Rank": 18,
+          "StarLevel": 13,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 18,
+          "AbilityLevel": 56
+        },
+        {
+          "Health": 7595,
+          "Damage": 1504,
+          "FixedArmor": 2057,
+          "Rank": 19,
+          "StarLevel": 13,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 18,
+          "AbilityLevel": 59
+        },
+        {
+          "Health": 8375,
+          "Damage": 1702,
+          "FixedArmor": 2328,
+          "Rank": 19,
+          "StarLevel": 14,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 19,
+          "AbilityLevel": 62
+        },
+        {
+          "Health": 9195,
+          "Damage": 1916,
+          "FixedArmor": 2621,
+          "Rank": 20,
+          "StarLevel": 14,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 19,
+          "AbilityLevel": 65
+        }
+      ],
+      "Weapons": [
+        {
+          "hits": 5,
+          "DamageProfile": "Physical"
+        }
+      ],
+      "ActiveAbilities": [
+        "Burrowers"
+      ],
+      "PassiveAbilities": [],
+      "Traits": [
+        "InstinctiveBehaviour",
+        "Swarm",
+        "BattleFatigue"
+      ]
+    },
+    "GuildBoss6Npc3TyranTermagant": {
+      "FactionId": "Tyranids",
+      "Movement": 3,
+      "QuestUnitId": "tyranNpc3Termagant",
+      "Stats": [
+        {
+          "Health": 35,
+          "Damage": 20,
+          "FixedArmor": 6,
+          "Rank": 0,
+          "StarLevel": 0,
+          "BaseRarity": "Common",
+          "ProgressionIndex": 0,
+          "AbilityLevel": 1
+        },
+        {
+          "Health": 48,
+          "Damage": 28,
+          "FixedArmor": 8,
+          "Rank": 1,
+          "StarLevel": 1,
+          "BaseRarity": "Common",
+          "ProgressionIndex": 1,
+          "AbilityLevel": 3
+        },
+        {
+          "Health": 60,
+          "Damage": 35,
+          "FixedArmor": 10,
+          "Rank": 2,
+          "StarLevel": 1,
+          "BaseRarity": "Common",
+          "ProgressionIndex": 1,
+          "AbilityLevel": 5
+        },
+        {
+          "Health": 76,
+          "Damage": 44,
+          "FixedArmor": 13,
+          "Rank": 2,
+          "StarLevel": 2,
+          "BaseRarity": "Common",
+          "ProgressionIndex": 2,
+          "AbilityLevel": 7
+        },
+        {
+          "Health": 88,
+          "Damage": 51,
+          "FixedArmor": 15,
+          "Rank": 3,
+          "StarLevel": 2,
+          "BaseRarity": "Uncommon",
+          "ProgressionIndex": 3,
+          "AbilityLevel": 9
+        },
+        {
+          "Health": 111,
+          "Damage": 64,
+          "FixedArmor": 19,
+          "Rank": 4,
+          "StarLevel": 3,
+          "BaseRarity": "Uncommon",
+          "ProgressionIndex": 4,
+          "AbilityLevel": 11
+        },
+        {
+          "Health": 129,
+          "Damage": 74,
+          "FixedArmor": 22,
+          "Rank": 4,
+          "StarLevel": 3,
+          "BaseRarity": "Uncommon",
+          "ProgressionIndex": 4,
+          "AbilityLevel": 13
+        },
+        {
+          "Health": 161,
+          "Damage": 93,
+          "FixedArmor": 28,
+          "Rank": 5,
+          "StarLevel": 4,
+          "BaseRarity": "Uncommon",
+          "ProgressionIndex": 5,
+          "AbilityLevel": 15
+        },
+        {
+          "Health": 216,
+          "Damage": 125,
+          "FixedArmor": 38,
+          "Rank": 6,
+          "StarLevel": 5,
+          "BaseRarity": "Rare",
+          "ProgressionIndex": 7,
+          "AbilityLevel": 18
+        },
+        {
+          "Health": 251,
+          "Damage": 145,
+          "FixedArmor": 44,
+          "Rank": 7,
+          "StarLevel": 5,
+          "BaseRarity": "Rare",
+          "ProgressionIndex": 7,
+          "AbilityLevel": 20
+        },
+        {
+          "Health": 291,
+          "Damage": 168,
+          "FixedArmor": 51,
+          "Rank": 7,
+          "StarLevel": 5,
+          "BaseRarity": "Rare",
+          "ProgressionIndex": 7,
+          "AbilityLevel": 22
+        },
+        {
+          "Health": 361,
+          "Damage": 208,
+          "FixedArmor": 63,
+          "Rank": 8,
+          "StarLevel": 6,
+          "BaseRarity": "Rare",
+          "ProgressionIndex": 8,
+          "AbilityLevel": 24
+        },
+        {
+          "Health": 452,
+          "Damage": 260,
+          "FixedArmor": 79,
+          "Rank": 9,
+          "StarLevel": 6,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 9,
+          "AbilityLevel": 27
+        },
+        {
+          "Health": 558,
+          "Damage": 321,
+          "FixedArmor": 98,
+          "Rank": 10,
+          "StarLevel": 7,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 10,
+          "AbilityLevel": 29
+        },
+        {
+          "Health": 647,
+          "Damage": 372,
+          "FixedArmor": 114,
+          "Rank": 10,
+          "StarLevel": 7,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 10,
+          "AbilityLevel": 31
+        },
+        {
+          "Health": 796,
+          "Damage": 458,
+          "FixedArmor": 140,
+          "Rank": 11,
+          "StarLevel": 8,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 11,
+          "AbilityLevel": 33
+        },
+        {
+          "Health": 925,
+          "Damage": 532,
+          "FixedArmor": 163,
+          "Rank": 12,
+          "StarLevel": 8,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 11,
+          "AbilityLevel": 35
+        },
+        {
+          "Health": 1158,
+          "Damage": 666,
+          "FixedArmor": 204,
+          "Rank": 13,
+          "StarLevel": 8,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 12,
+          "AbilityLevel": 38
+        },
+        {
+          "Health": 1530,
+          "Damage": 880,
+          "FixedArmor": 270,
+          "Rank": 14,
+          "StarLevel": 9,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 13,
+          "AbilityLevel": 41
+        },
+        {
+          "Health": 1916,
+          "Damage": 1102,
+          "FixedArmor": 338,
+          "Rank": 15,
+          "StarLevel": 9,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 13,
+          "AbilityLevel": 44
+        },
+        {
+          "Health": 2525,
+          "Damage": 1452,
+          "FixedArmor": 445,
+          "Rank": 16,
+          "StarLevel": 10,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 14,
+          "AbilityLevel": 47
+        },
+        {
+          "Health": 3319,
+          "Damage": 1909,
+          "FixedArmor": 585,
+          "Rank": 17,
+          "StarLevel": 11,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 15,
+          "AbilityLevel": 50
+        },
+        {
+          "Health": 3537,
+          "Damage": 2219,
+          "FixedArmor": 680,
+          "Rank": 18,
+          "StarLevel": 12,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 17,
+          "AbilityLevel": 53
+        },
+        {
+          "Health": 3934,
+          "Damage": 2512,
+          "FixedArmor": 770,
+          "Rank": 18,
+          "StarLevel": 13,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 18,
+          "AbilityLevel": 56
+        },
+        {
+          "Health": 4163,
+          "Damage": 2730,
+          "FixedArmor": 837,
+          "Rank": 19,
+          "StarLevel": 13,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 18,
+          "AbilityLevel": 59
+        },
+        {
+          "Health": 4591,
+          "Damage": 3090,
+          "FixedArmor": 947,
+          "Rank": 19,
+          "StarLevel": 14,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 19,
+          "AbilityLevel": 62
+        },
+        {
+          "Health": 5040,
+          "Damage": 3479,
+          "FixedArmor": 1066,
+          "Rank": 20,
+          "StarLevel": 14,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 19,
+          "AbilityLevel": 65
+        }
+      ],
+      "Weapons": [
+        {
+          "hits": 1,
+          "DamageProfile": "Physical"
+        },
+        {
+          "hits": 2,
+          "DamageProfile": "Bio",
+          "Range": 2
+        }
+      ],
+      "ActiveAbilities": [],
+      "PassiveAbilities": [
+        "HailOfLivingAmmunition"
+      ],
+      "Traits": [
+        "InstinctiveBehaviour",
+        "BattleFatigue"
+      ]
+    },
+    "GuildBoss6Npc4TyranWarrior": {
+      "FactionId": "Tyranids",
+      "Movement": 3,
+      "QuestUnitId": "tyranNpc4Warrior",
+      "Stats": [
+        {
+          "Health": 80,
+          "Damage": 26,
+          "FixedArmor": 5,
+          "Rank": 0,
+          "StarLevel": 0,
+          "BaseRarity": "Common",
+          "ProgressionIndex": 0,
+          "AbilityLevel": 1
+        },
+        {
+          "Health": 110,
+          "Damage": 36,
+          "FixedArmor": 7,
+          "Rank": 1,
+          "StarLevel": 1,
+          "BaseRarity": "Common",
+          "ProgressionIndex": 1,
+          "AbilityLevel": 3
+        },
+        {
+          "Health": 138,
+          "Damage": 45,
+          "FixedArmor": 9,
+          "Rank": 2,
+          "StarLevel": 1,
+          "BaseRarity": "Common",
+          "ProgressionIndex": 1,
+          "AbilityLevel": 5
+        },
+        {
+          "Health": 175,
+          "Damage": 57,
+          "FixedArmor": 11,
+          "Rank": 2,
+          "StarLevel": 2,
+          "BaseRarity": "Common",
+          "ProgressionIndex": 2,
+          "AbilityLevel": 7
+        },
+        {
+          "Health": 203,
+          "Damage": 66,
+          "FixedArmor": 13,
+          "Rank": 3,
+          "StarLevel": 2,
+          "BaseRarity": "Uncommon",
+          "ProgressionIndex": 3,
+          "AbilityLevel": 9
+        },
+        {
+          "Health": 256,
+          "Damage": 83,
+          "FixedArmor": 16,
+          "Rank": 4,
+          "StarLevel": 3,
+          "BaseRarity": "Uncommon",
+          "ProgressionIndex": 4,
+          "AbilityLevel": 11
+        },
+        {
+          "Health": 297,
+          "Damage": 96,
+          "FixedArmor": 19,
+          "Rank": 4,
+          "StarLevel": 3,
+          "BaseRarity": "Uncommon",
+          "ProgressionIndex": 4,
+          "AbilityLevel": 13
+        },
+        {
+          "Health": 372,
+          "Damage": 120,
+          "FixedArmor": 24,
+          "Rank": 5,
+          "StarLevel": 4,
+          "BaseRarity": "Uncommon",
+          "ProgressionIndex": 5,
+          "AbilityLevel": 15
+        },
+        {
+          "Health": 499,
+          "Damage": 161,
+          "FixedArmor": 32,
+          "Rank": 6,
+          "StarLevel": 5,
+          "BaseRarity": "Rare",
+          "ProgressionIndex": 7,
+          "AbilityLevel": 18
+        },
+        {
+          "Health": 580,
+          "Damage": 187,
+          "FixedArmor": 37,
+          "Rank": 7,
+          "StarLevel": 5,
+          "BaseRarity": "Rare",
+          "ProgressionIndex": 7,
+          "AbilityLevel": 20
+        },
+        {
+          "Health": 673,
+          "Damage": 217,
+          "FixedArmor": 43,
+          "Rank": 7,
+          "StarLevel": 5,
+          "BaseRarity": "Rare",
+          "ProgressionIndex": 7,
+          "AbilityLevel": 22
+        },
+        {
+          "Health": 835,
+          "Damage": 269,
+          "FixedArmor": 53,
+          "Rank": 8,
+          "StarLevel": 6,
+          "BaseRarity": "Rare",
+          "ProgressionIndex": 8,
+          "AbilityLevel": 24
+        },
+        {
+          "Health": 1045,
+          "Damage": 337,
+          "FixedArmor": 66,
+          "Rank": 9,
+          "StarLevel": 6,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 9,
+          "AbilityLevel": 27
+        },
+        {
+          "Health": 1291,
+          "Damage": 416,
+          "FixedArmor": 82,
+          "Rank": 10,
+          "StarLevel": 7,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 10,
+          "AbilityLevel": 29
+        },
+        {
+          "Health": 1497,
+          "Damage": 483,
+          "FixedArmor": 95,
+          "Rank": 10,
+          "StarLevel": 7,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 10,
+          "AbilityLevel": 31
+        },
+        {
+          "Health": 1843,
+          "Damage": 595,
+          "FixedArmor": 117,
+          "Rank": 11,
+          "StarLevel": 8,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 11,
+          "AbilityLevel": 33
+        },
+        {
+          "Health": 2142,
+          "Damage": 692,
+          "FixedArmor": 136,
+          "Rank": 12,
+          "StarLevel": 8,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 11,
+          "AbilityLevel": 35
+        },
+        {
+          "Health": 2682,
+          "Damage": 866,
+          "FixedArmor": 170,
+          "Rank": 13,
+          "StarLevel": 8,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 12,
+          "AbilityLevel": 38
+        },
+        {
+          "Health": 3544,
+          "Damage": 1144,
+          "FixedArmor": 225,
+          "Rank": 14,
+          "StarLevel": 9,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 13,
+          "AbilityLevel": 41
+        },
+        {
+          "Health": 4437,
+          "Damage": 1432,
+          "FixedArmor": 282,
+          "Rank": 15,
+          "StarLevel": 9,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 13,
+          "AbilityLevel": 44
+        },
+        {
+          "Health": 5847,
+          "Damage": 1887,
+          "FixedArmor": 372,
+          "Rank": 16,
+          "StarLevel": 10,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 14,
+          "AbilityLevel": 47
+        },
+        {
+          "Health": 7686,
+          "Damage": 2481,
+          "FixedArmor": 489,
+          "Rank": 17,
+          "StarLevel": 11,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 15,
+          "AbilityLevel": 50
+        },
+        {
+          "Health": 8191,
+          "Damage": 2884,
+          "FixedArmor": 568,
+          "Rank": 18,
+          "StarLevel": 12,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 17,
+          "AbilityLevel": 53
+        },
+        {
+          "Health": 9110,
+          "Damage": 3264,
+          "FixedArmor": 643,
+          "Rank": 18,
+          "StarLevel": 13,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 18,
+          "AbilityLevel": 56
+        },
+        {
+          "Health": 9639,
+          "Damage": 3547,
+          "FixedArmor": 699,
+          "Rank": 19,
+          "StarLevel": 13,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 18,
+          "AbilityLevel": 59
+        },
+        {
+          "Health": 10630,
+          "Damage": 4015,
+          "FixedArmor": 791,
+          "Rank": 19,
+          "StarLevel": 14,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 19,
+          "AbilityLevel": 62
+        },
+        {
+          "Health": 11670,
+          "Damage": 4521,
+          "FixedArmor": 891,
+          "Rank": 20,
+          "StarLevel": 14,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 19,
+          "AbilityLevel": 65
+        }
+      ],
+      "Weapons": [
+        {
+          "hits": 3,
+          "DamageProfile": "Physical"
+        },
+        {
+          "hits": 3,
+          "DamageProfile": "Bio",
+          "Range": 2
+        }
+      ],
+      "ActiveAbilities": [
+        "ScythingTalons"
+      ],
+      "PassiveAbilities": [
+        "ReinforcedHiveNode"
+      ],
+      "Traits": [
+        "Synapse",
+        "BigTarget",
+        "ShadowInTheWarp"
+      ]
+    },
+    "GuildBoss6Npc5TyranBarbgaunt": {
+      "FactionId": "Tyranids",
+      "Movement": 3,
+      "QuestUnitId": "tyranNpc5Barbgaunt",
+      "Stats": [
+        {
+          "Health": 42,
+          "Damage": 25,
+          "FixedArmor": 7,
+          "Rank": 0,
+          "StarLevel": 0,
+          "BaseRarity": "Common",
+          "ProgressionIndex": 0,
+          "AbilityLevel": 1
+        },
+        {
+          "Health": 58,
+          "Damage": 34,
+          "FixedArmor": 10,
+          "Rank": 1,
+          "StarLevel": 1,
+          "BaseRarity": "Common",
+          "ProgressionIndex": 1,
+          "AbilityLevel": 3
+        },
+        {
+          "Health": 73,
+          "Damage": 43,
+          "FixedArmor": 13,
+          "Rank": 2,
+          "StarLevel": 1,
+          "BaseRarity": "Common",
+          "ProgressionIndex": 1,
+          "AbilityLevel": 5
+        },
+        {
+          "Health": 92,
+          "Damage": 54,
+          "FixedArmor": 16,
+          "Rank": 2,
+          "StarLevel": 2,
+          "BaseRarity": "Common",
+          "ProgressionIndex": 2,
+          "AbilityLevel": 7
+        },
+        {
+          "Health": 107,
+          "Damage": 63,
+          "FixedArmor": 19,
+          "Rank": 3,
+          "StarLevel": 2,
+          "BaseRarity": "Uncommon",
+          "ProgressionIndex": 3,
+          "AbilityLevel": 9
+        },
+        {
+          "Health": 135,
+          "Damage": 79,
+          "FixedArmor": 24,
+          "Rank": 4,
+          "StarLevel": 3,
+          "BaseRarity": "Uncommon",
+          "ProgressionIndex": 4,
+          "AbilityLevel": 11
+        },
+        {
+          "Health": 157,
+          "Damage": 92,
+          "FixedArmor": 28,
+          "Rank": 4,
+          "StarLevel": 3,
+          "BaseRarity": "Uncommon",
+          "ProgressionIndex": 4,
+          "AbilityLevel": 13
+        },
+        {
+          "Health": 197,
+          "Damage": 115,
+          "FixedArmor": 35,
+          "Rank": 5,
+          "StarLevel": 4,
+          "BaseRarity": "Uncommon",
+          "ProgressionIndex": 5,
+          "AbilityLevel": 15
+        },
+        {
+          "Health": 264,
+          "Damage": 154,
+          "FixedArmor": 47,
+          "Rank": 6,
+          "StarLevel": 5,
+          "BaseRarity": "Rare",
+          "ProgressionIndex": 7,
+          "AbilityLevel": 18
+        },
+        {
+          "Health": 307,
+          "Damage": 179,
+          "FixedArmor": 55,
+          "Rank": 7,
+          "StarLevel": 5,
+          "BaseRarity": "Rare",
+          "ProgressionIndex": 7,
+          "AbilityLevel": 20
+        },
+        {
+          "Health": 356,
+          "Damage": 208,
+          "FixedArmor": 64,
+          "Rank": 7,
+          "StarLevel": 5,
+          "BaseRarity": "Rare",
+          "ProgressionIndex": 7,
+          "AbilityLevel": 22
+        },
+        {
+          "Health": 441,
+          "Damage": 258,
+          "FixedArmor": 79,
+          "Rank": 8,
+          "StarLevel": 6,
+          "BaseRarity": "Rare",
+          "ProgressionIndex": 8,
+          "AbilityLevel": 24
+        },
+        {
+          "Health": 552,
+          "Damage": 323,
+          "FixedArmor": 99,
+          "Rank": 9,
+          "StarLevel": 6,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 9,
+          "AbilityLevel": 27
+        },
+        {
+          "Health": 682,
+          "Damage": 399,
+          "FixedArmor": 122,
+          "Rank": 10,
+          "StarLevel": 7,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 10,
+          "AbilityLevel": 29
+        },
+        {
+          "Health": 791,
+          "Damage": 463,
+          "FixedArmor": 142,
+          "Rank": 10,
+          "StarLevel": 7,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 10,
+          "AbilityLevel": 31
+        },
+        {
+          "Health": 974,
+          "Damage": 570,
+          "FixedArmor": 175,
+          "Rank": 11,
+          "StarLevel": 8,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 11,
+          "AbilityLevel": 33
+        },
+        {
+          "Health": 1132,
+          "Damage": 663,
+          "FixedArmor": 203,
+          "Rank": 12,
+          "StarLevel": 8,
+          "BaseRarity": "Epic",
+          "ProgressionIndex": 11,
+          "AbilityLevel": 35
+        },
+        {
+          "Health": 1417,
+          "Damage": 830,
+          "FixedArmor": 254,
+          "Rank": 13,
+          "StarLevel": 8,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 12,
+          "AbilityLevel": 38
+        },
+        {
+          "Health": 1873,
+          "Damage": 1097,
+          "FixedArmor": 336,
+          "Rank": 14,
+          "StarLevel": 9,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 13,
+          "AbilityLevel": 41
+        },
+        {
+          "Health": 2345,
+          "Damage": 1373,
+          "FixedArmor": 421,
+          "Rank": 15,
+          "StarLevel": 9,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 13,
+          "AbilityLevel": 44
+        },
+        {
+          "Health": 3090,
+          "Damage": 1809,
+          "FixedArmor": 555,
+          "Rank": 16,
+          "StarLevel": 10,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 14,
+          "AbilityLevel": 47
+        },
+        {
+          "Health": 4062,
+          "Damage": 2378,
+          "FixedArmor": 730,
+          "Rank": 17,
+          "StarLevel": 11,
+          "BaseRarity": "Legendary",
+          "ProgressionIndex": 15,
+          "AbilityLevel": 50
+        },
+        {
+          "Health": 4329,
+          "Damage": 2764,
+          "FixedArmor": 849,
+          "Rank": 18,
+          "StarLevel": 12,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 17,
+          "AbilityLevel": 53
+        },
+        {
+          "Health": 4815,
+          "Damage": 3129,
+          "FixedArmor": 961,
+          "Rank": 18,
+          "StarLevel": 13,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 18,
+          "AbilityLevel": 56
+        },
+        {
+          "Health": 5095,
+          "Damage": 3400,
+          "FixedArmor": 1044,
+          "Rank": 19,
+          "StarLevel": 13,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 18,
+          "AbilityLevel": 59
+        },
+        {
+          "Health": 5619,
+          "Damage": 3848,
+          "FixedArmor": 1182,
+          "Rank": 19,
+          "StarLevel": 14,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 19,
+          "AbilityLevel": 62
+        },
+        {
+          "Health": 6169,
+          "Damage": 4333,
+          "FixedArmor": 1331,
+          "Rank": 20,
+          "StarLevel": 14,
+          "BaseRarity": "Mythic",
+          "ProgressionIndex": 19,
+          "AbilityLevel": 65
+        }
+      ],
+      "Weapons": [
+        {
+          "hits": 1,
+          "DamageProfile": "Physical"
+        },
+        {
+          "hits": 3,
+          "DamageProfile": "Bio",
+          "Range": 3
+        }
+      ],
+      "ActiveAbilities": [],
+      "PassiveAbilities": [
+        "SynapticInsight"
+      ],
+      "Traits": [
+        "InstinctiveBehaviour",
+        "HeavyWeapon",
+        "SuppressiveFire"
+      ]
+    }
+  }
+}

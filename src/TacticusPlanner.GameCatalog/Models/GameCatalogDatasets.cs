@@ -179,6 +179,50 @@ public static class GameCatalogDatasets
         "shops-crusade",
     ];
 
+    /// <summary>
+    /// Shared raid-boss raw source (<c>raid-boss-common.json</c>): the season-config rotation, the
+    /// primarch prime ids, and the modifier definitions. Merged with the per-boss and per-season files
+    /// into the single served <see cref="RaidBosses"/> dataset; no raw raid-boss file is served directly.
+    /// </summary>
+    public const string RaidBossCommon = "raid-boss-common";
+
+    /// <summary>
+    /// Per-boss raw unit-set source files, one per raid boss. Key = <c>raid-boss-{n}-{Type}</c> where
+    /// <c>n</c> is the <c>GuildBoss&lt;n&gt;</c> number and <c>{Type}</c> is that boss's primary
+    /// <c>Boss1</c> unit-set key with the <c>GuildBoss{n}Boss1</c> prefix stripped (e.g. <c>TauRiptide</c>),
+    /// kept verbatim for traceability. Each file's unit sets are merged into the assembled raw data.
+    /// Ported from V1's datamined guild_boss.json — see scripts/port-raid-boss-data.mjs.
+    /// </summary>
+    public static readonly IReadOnlyList<string> RaidBossGroups =
+    [
+        "raid-boss-1-TyranTervigonLeviathan",
+        "raid-boss-2-TyranHiveTyrantLeviathan",
+        "raid-boss-3-NecroSilentKing",
+        "raid-boss-4-OrksGhazghkull",
+        "raid-boss-5-DeathMortarion",
+        "raid-boss-6-TyranScreamerKiller",
+        "raid-boss-7-AstraRogaldorn",
+        "raid-boss-8-EldarAvatar",
+        "raid-boss-9-ThousMagnus",
+        "raid-boss-10-AdmecBelisarius",
+        "raid-boss-11-TauRiptide",
+        "raid-boss-12-DarkaLion",
+    ];
+
+    /// <summary>
+    /// Per-season raid-boss config source files, one per guild-raid season config. Key =
+    /// <c>raid-boss-season-{n}</c>; each file binds to one season config keyed in the assembled data by
+    /// its own <c>GuildBossSeasonConfigId</c>.
+    /// </summary>
+    public static readonly IReadOnlyList<string> RaidBossSeasons =
+    [
+        "raid-boss-season-1",
+        "raid-boss-season-2",
+        "raid-boss-season-3",
+        "raid-boss-season-4",
+        "raid-boss-season-5",
+    ];
+
     /// <summary>Raw embedded source datasets (one per file) used to build the served catalog.</summary>
     public static readonly IReadOnlyList<string> Required =
     [
@@ -197,6 +241,9 @@ public static class GameCatalogDatasets
         .. CampaignBattleGroups,
         .. LreEvents,
         .. ShopSources,
+        RaidBossCommon,
+        .. RaidBossGroups,
+        .. RaidBossSeasons,
     ];
 
     // Served (denormalized) dataset keys — the public manifest surface. Each is one consolidated,
@@ -237,6 +284,14 @@ public static class GameCatalogDatasets
     // directly. Reward/free-offer "type:qty" strings and the Quartz cronSchedule are normalized to
     // structured values + an explicit day-of-week list at build time (see Denormalization/ShopsDenormalizer.cs).
     public const string Shops = "shops";
+    // raid-bosses is one consolidated, self-contained dataset assembled from the RaidBossCommon,
+    // RaidBossGroups (per boss), and RaidBossSeasons (per season config) raw files: the season-config
+    // rotation, the raid bosses and raid-boss primes (identity + progression ladder + weapons +
+    // ability/trait ids), and the season configs whose encounters carry their referenced unit-set id +
+    // progression index, field-npc ids, and resolved modifier definitions inlined. Ported from V1's
+    // guild_boss.json; no raw file is served directly. See Denormalization/RaidBossDenormalizer.cs and
+    // specs/raid-bosses-dataset in raid-bosses-library.
+    public const string RaidBosses = "raid-bosses";
 
     /// <summary>The denormalized datasets exposed by the manifest / served by the catalog endpoints.</summary>
     public static readonly IReadOnlyList<string> Served =
@@ -258,5 +313,6 @@ public static class GameCatalogDatasets
         EventDefinitionsServed,
         EventsCalendar,
         Shops,
+        RaidBosses,
     ];
 }

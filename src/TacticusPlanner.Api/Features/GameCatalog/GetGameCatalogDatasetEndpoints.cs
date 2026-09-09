@@ -249,3 +249,17 @@ public sealed class GetGameCatalogShopsEndpoint(IGameCatalogProvider catalog)
             "One record per daily shop (guild, war, rogue-trader, crusade) with its rotating slots, structured rewards/costs, explicit day-of-week availability, and opaque lock ids — no display text or icons.");
     }
 }
+
+public sealed class GetGameCatalogRaidBossesEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<GameCatalogRaidBossesView>(catalog, GameCatalogDatasets.RaidBosses)
+{
+    protected override GameCatalogRaidBossesView Payload => Snapshot.RaidBossesView;
+
+    public override void Configure()
+    {
+        Get("game-catalog/raid-bosses");
+        ConfigureServed(
+            "Gets the raid bosses and raid-boss primes.",
+            "The season-config rotation, every raid boss and raid-boss prime (progression ladder, weapons, ability/trait ids), and the season configs whose encounters carry their referenced unit-set id, field-npc ids, and modifier definitions inlined — no display text or icons.");
+    }
+}
