@@ -5,13 +5,13 @@ namespace TacticusPlanner.GameCatalog.Models;
 // ---- raw authored shape (internal to denormalization) -------------------------------------------------
 //
 // Ported from V1's datamined guild_boss.json (see scripts/port-raid-boss-data.mjs) and authored under
-// Data/raid-bosses/ as one file per boss (raid-boss-{n}.json), one per season config
+// Data/raid-bosses/ as one file per boss (raid-boss-{n}-{type}.json), one per season config
 // (raid-boss-season-{n}.json), and one shared file (raid-boss-common.json). PascalCase field names are
 // bound case-insensitively by the loader. Numeric stat fields are non-nullable (a missing source value is
 // written as 0 by the port script); genuinely-optional fields stay nullable.
 
 /// <summary>
-/// One authored per-boss raw source file (<c>Data/raid-bosses/raid-boss-{n}.json</c>): the unit sets —
+/// One authored per-boss raw source file (<c>Data/raid-bosses/raid-boss-{n}-{type}.json</c>): the unit sets —
 /// boss, primes, field npcs, loot objects — whose keys start <c>GuildBoss{n}</c>. The loader merges the
 /// <see cref="UnitSets"/> of every boss file into <see cref="GameCatalogRaidBossRawData.UnitSets"/>.
 /// </summary>

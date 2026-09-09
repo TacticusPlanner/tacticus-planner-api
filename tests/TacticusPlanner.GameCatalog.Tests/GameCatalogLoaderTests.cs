@@ -184,7 +184,7 @@ public sealed class GameCatalogLoaderTests
         Assert.Contains(view.Bosses, boss => boss.UnitSetId == "GuildBoss5Boss1DeathMortarion" && boss.IsPrimarch);
         Assert.DoesNotContain(view.Bosses.Concat(view.Primes), unit => unit.UnitSetId.Contains("LootObj"));
 
-        // The raw unit sets are authored one file per boss (raid-boss-{n}.json) and merged at load: the
+        // The raw unit sets are authored one file per boss (raid-boss-{n}-{type}.json) and merged at load: the
         // first and last boss files both have to land, in boss-number order.
         Assert.StartsWith("GuildBoss1Boss", view.Bosses[0].UnitSetId, StringComparison.Ordinal);
         Assert.Contains(view.Bosses, boss => boss.UnitSetId == "GuildBoss12Boss1DarkaLion");

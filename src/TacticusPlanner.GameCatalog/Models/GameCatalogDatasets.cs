@@ -187,24 +187,26 @@ public static class GameCatalogDatasets
     public const string RaidBossCommon = "raid-boss-common";
 
     /// <summary>
-    /// Per-boss raw unit-set source files, one per raid boss. Key = <c>raid-boss-{n}</c> (n = the
-    /// <c>GuildBoss&lt;n&gt;</c> number). Each file's unit sets are merged into the assembled raw data.
+    /// Per-boss raw unit-set source files, one per raid boss. Key = <c>raid-boss-{n}-{Type}</c> where
+    /// <c>n</c> is the <c>GuildBoss&lt;n&gt;</c> number and <c>{Type}</c> is that boss's primary
+    /// <c>Boss1</c> unit-set key with the <c>GuildBoss{n}Boss1</c> prefix stripped (e.g. <c>TauRiptide</c>),
+    /// kept verbatim for traceability. Each file's unit sets are merged into the assembled raw data.
     /// Ported from V1's datamined guild_boss.json — see scripts/port-raid-boss-data.mjs.
     /// </summary>
     public static readonly IReadOnlyList<string> RaidBossGroups =
     [
-        "raid-boss-1",
-        "raid-boss-2",
-        "raid-boss-3",
-        "raid-boss-4",
-        "raid-boss-5",
-        "raid-boss-6",
-        "raid-boss-7",
-        "raid-boss-8",
-        "raid-boss-9",
-        "raid-boss-10",
-        "raid-boss-11",
-        "raid-boss-12",
+        "raid-boss-1-TyranTervigonLeviathan",
+        "raid-boss-2-TyranHiveTyrantLeviathan",
+        "raid-boss-3-NecroSilentKing",
+        "raid-boss-4-OrksGhazghkull",
+        "raid-boss-5-DeathMortarion",
+        "raid-boss-6-TyranScreamerKiller",
+        "raid-boss-7-AstraRogaldorn",
+        "raid-boss-8-EldarAvatar",
+        "raid-boss-9-ThousMagnus",
+        "raid-boss-10-AdmecBelisarius",
+        "raid-boss-11-TauRiptide",
+        "raid-boss-12-DarkaLion",
     ];
 
     /// <summary>

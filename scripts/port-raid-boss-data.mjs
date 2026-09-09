@@ -1,9 +1,10 @@
 // One-off port of V1's datamined guild-boss data into the V2 game-catalog raw source files.
 // Source of truth: tacticusplanner (develop) src/fsd/4-entities/guild_boss/data/guild_boss.json
 // Output: src/TacticusPlanner.GameCatalog/Data/raid-bosses/
-//   raid-boss-common.json         - season-config rotation, primarch prime ids, modifier definitions
-//   raid-boss-<n>.json  (x N)     - one file per raid boss: the unit sets keyed GuildBoss<n>...
-//   raid-boss-season-<n>.json (xM) - one file per guild_boss_season_config_<n>
+//   raid-boss-common.json             - season-config rotation, primarch prime ids, modifier definitions
+//   raid-boss-<n>-<Type>.json  (x N)  - one file per raid boss: the unit sets keyed GuildBoss<n>...;
+//                                       <Type> is the boss's Boss1 key minus the GuildBoss<n>Boss1 prefix
+//   raid-boss-season-<n>.json  (x M)  - one file per guild_boss_season_config_<n>
 //
 // The loader (GameCatalogLoader.LoadRaidBossRawData) merges these back into one GameCatalogRaidBossRawData
 // and denormalizes to the single served `raid-bosses` dataset; no raw file is served directly.
@@ -108,7 +109,13 @@ for (const [key, unitSet] of Object.entries(unitSets)) {
   (bossFiles[Number(m[1])] ??= {})[key] = unitSet;
 }
 const bossNums = Object.keys(bossFiles).map(Number).sort((a, b) => a - b);
-for (const n of bossNums) write(`raid-boss-${n}.json`, { UnitSets: bossFiles[n] });
+for (const n of bossNums) {
+  const keys = Object.keys(bossFiles[n]);
+  const primary = keys.find((k) => new RegExp(`^GuildBoss${n}Boss1`).test(k));
+  if (!primary) throw new Error(`raid boss ${n} has no GuildBoss${n}Boss1 unit set`);
+  const type = primary.replace(new RegExp(`^GuildBoss${n}Boss1`), "");
+  write(`raid-boss-${n}-${type}.json`, { UnitSets: bossFiles[n] });
+}
 
 const seasonNums = [];
 for (const [key, season] of Object.entries(seasons)) {

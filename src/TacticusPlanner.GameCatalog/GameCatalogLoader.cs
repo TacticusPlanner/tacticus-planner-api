@@ -172,7 +172,7 @@ public static class GameCatalogLoader
 
     /// <summary>
     /// Assembles the raid-boss raw data from its authored source files: <c>raid-boss-common</c> (rotation,
-    /// primarchs, modifier defs), one <c>raid-boss-{n}</c> file per boss (unit sets, merged), and one
+    /// primarchs, modifier defs), one <c>raid-boss-{n}-{type}</c> file per boss (unit sets, merged), and one
     /// <c>raid-boss-season-{n}</c> file per season config (keyed by its own <c>GuildBossSeasonConfigId</c>).
     /// A duplicate unit-set key or season-config id across files throws.
     /// </summary>
