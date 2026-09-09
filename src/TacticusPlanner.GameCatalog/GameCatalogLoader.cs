@@ -75,6 +75,7 @@ public static class GameCatalogLoader
         }
 
         var raidBossRawData = LoadRaidBossRawData();
+        var guildRaidMetaRawData = LoadDataset<GameCatalogGuildRaidMetaRawData>(GameCatalogDatasets.GuildRaidMeta);
 
         // ---- build denormalized served datasets ------------------------------------------------
         var characterViews = GameCatalogDenormalizer.BuildCharacters(unitsByFaction, equipmentByType, campaignGroups, dropChances);
@@ -95,6 +96,7 @@ public static class GameCatalogLoader
         var eventsCalendar = GameCatalogDenormalizer.BuildEventsCalendar(eventDefinitions, eventOccurrences, loadTime);
         var shopViews = GameCatalogDenormalizer.BuildShops(rawShopsBySourceKey);
         var raidBossesView = GameCatalogDenormalizer.BuildRaidBosses(raidBossRawData);
+        var guildRaidMetaView = GameCatalogDenormalizer.BuildGuildRaidMeta(guildRaidMetaRawData);
 
         // Served dataset hashes are computed over the canonical JSON of each denormalized payload.
         var datasetHashes = new Dictionary<string, string>(StringComparer.Ordinal)
@@ -117,6 +119,7 @@ public static class GameCatalogLoader
             [GameCatalogDatasets.EventsCalendar] = GameCatalogHashing.ComputeCanonicalJsonHash(eventsCalendar, JsonOptions),
             [GameCatalogDatasets.Shops] = GameCatalogHashing.ComputeCanonicalJsonHash(shopViews, JsonOptions),
             [GameCatalogDatasets.RaidBosses] = GameCatalogHashing.ComputeCanonicalJsonHash(raidBossesView, JsonOptions),
+            [GameCatalogDatasets.GuildRaidMeta] = GameCatalogHashing.ComputeCanonicalJsonHash(guildRaidMetaView, JsonOptions),
         };
 
         var snapshot = new GameCatalogSnapshot(
@@ -142,6 +145,7 @@ public static class GameCatalogLoader
             new ReadOnlyDictionary<string, GameCatalogLre>(lresByEvent),
             new ReadOnlyDictionary<string, GameCatalogRawShop>(rawShopsBySourceKey),
             raidBossRawData,
+            guildRaidMetaRawData,
             characterViews,
             npcList,
             mowList,
@@ -158,7 +162,8 @@ public static class GameCatalogLoader
             eventDefinitionViews,
             eventsCalendar,
             shopViews,
-            raidBossesView);
+            raidBossesView,
+            guildRaidMetaView);
 
         var errors = GameCatalogValidator.Validate(snapshot);
         if (errors.Count > 0)

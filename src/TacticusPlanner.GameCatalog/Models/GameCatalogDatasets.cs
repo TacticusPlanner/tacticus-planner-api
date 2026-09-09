@@ -185,6 +185,7 @@ public static class GameCatalogDatasets
     /// into the single served <see cref="RaidBosses"/> dataset; no raw raid-boss file is served directly.
     /// </summary>
     public const string RaidBossCommon = "raid-boss-common";
+    public const string GuildRaidMeta = "guild-raid-meta";
 
     /// <summary>
     /// Per-boss raw unit-set source files, one per raid boss. Key = <c>raid-boss-{n}-{Type}</c> where
@@ -242,6 +243,7 @@ public static class GameCatalogDatasets
         .. LreEvents,
         .. ShopSources,
         RaidBossCommon,
+        GuildRaidMeta,
         .. RaidBossGroups,
         .. RaidBossSeasons,
     ];
@@ -314,5 +316,6 @@ public static class GameCatalogDatasets
         EventsCalendar,
         Shops,
         RaidBosses,
+        GuildRaidMeta,
     ];
 }

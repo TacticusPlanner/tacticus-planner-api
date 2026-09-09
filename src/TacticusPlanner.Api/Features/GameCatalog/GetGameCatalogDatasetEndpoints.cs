@@ -263,3 +263,17 @@ public sealed class GetGameCatalogRaidBossesEndpoint(IGameCatalogProvider catalo
             "The season-config rotation, every raid boss and raid-boss prime (progression ladder, weapons, ability/trait ids), and the season configs whose encounters carry their referenced unit-set id, field-npc ids, and modifier definitions inlined — no display text or icons.");
     }
 }
+
+public sealed class GetGameCatalogGuildRaidMetaEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<GameCatalogGuildRaidMetaView>(catalog, GameCatalogDatasets.GuildRaidMeta)
+{
+    protected override GameCatalogGuildRaidMetaView Payload => Snapshot.GuildRaidMetaView;
+
+    public override void Configure()
+    {
+        Get("game-catalog/guild-raid-meta");
+        ConfigureServed(
+            "Gets curated Guild Raid Meta recommendations.",
+            "Curated exact Guild Raid Boss teams, Comp guidance, replay evidence, and source/update ids — no display names, icons, or source URLs.");
+    }
+}

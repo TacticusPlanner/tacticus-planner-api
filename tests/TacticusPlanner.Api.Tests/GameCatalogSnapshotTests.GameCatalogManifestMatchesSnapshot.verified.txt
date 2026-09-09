@@ -40,6 +40,11 @@
       url: /api/v1/game-catalog/events-calendar
     },
     {
+      key: guild-raid-meta,
+      hash: 28df2274d92d0fb4aa11377ea4beedad0cfec246c5ed8340d4705360ede284b7,
+      url: /api/v1/game-catalog/guild-raid-meta
+    },
+    {
       key: lre-battles,
       hash: b077e016aa11ef3d43ea8b6422e53c42ce4b5e220a1d8b5d80f460ca00146c59,
       url: /api/v1/game-catalog/lre-battles

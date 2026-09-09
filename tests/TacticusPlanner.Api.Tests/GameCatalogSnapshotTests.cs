@@ -30,6 +30,29 @@ public sealed class GameCatalogSnapshotTests(GameCatalogApiFactory factory)
         await VerifyJson(ScrubTimeDependentHashes(json));
     }
 
+    [Fact]
+    public async Task GuildRaidMetaDatasetIsAnonymousAndIdOnly()
+    {
+        var client = factory.CreateClient();
+
+        using var request = new HttpRequestMessage(HttpMethod.Get, "/api/v1/game-catalog/guild-raid-meta");
+        request.Headers.Add(TestAuthenticationHandler.NoAuthHeader, "1");
+        var response = await client.SendAsync(request, TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var payload = JsonNode.Parse(await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken))!.AsObject();
+        Assert.Equal("guild-raid-meta", payload["datasetKey"]!.GetValue<string>());
+
+        var data = payload["data"]!.AsObject();
+        Assert.Equal("terminus-maximus-guild-raid-boss-meta", data["sourceId"]!.GetValue<string>());
+        Assert.Equal("2026-07-01", data["updatedOn"]!.GetValue<string>());
+        Assert.NotEmpty(data["comps"]!.AsArray());
+        Assert.NotEmpty(data["bosses"]!.AsArray());
+        Assert.Null(data["sourceUrl"]);
+        Assert.Null(data["displayName"]);
+    }
+
     /// <summary>
     /// The <c>events-calendar</c> dataset is projected relative to the load-time "now" (see
     /// add-game-events-calendar-dataset/design.md), so its hash — and the aggregate <c>sourceHash</c> that
