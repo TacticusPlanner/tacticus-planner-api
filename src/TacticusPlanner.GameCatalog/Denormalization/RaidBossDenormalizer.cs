@@ -104,7 +104,8 @@ internal static partial class GameCatalogDenormalizer
             NullIfEmpty(raw.ActiveAbilities),
             NullIfEmpty(raw.PassiveAbilities),
             NullIfEmpty(raw.RelicAbilities),
-            NullIfEmpty(raw.Traits));
+            NullIfEmpty(raw.Traits),
+            string.IsNullOrEmpty(raw.QuestUnitId) ? null : raw.QuestUnitId);
     }
 
     private static string[]? NullIfEmpty(IReadOnlyList<string>? values) =>

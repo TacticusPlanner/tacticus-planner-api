@@ -76,7 +76,7 @@
     },
     {
       key: raid-bosses,
-      hash: 1af2f5080f7a5d9566ab88eaee34f880a8eaea7390b30084b9b96dcfc4f711cb,
+      hash: 9a0cd036bf50c2a1c8ba61ae7f56409d501ee81993c03564ac4f0e36bdba850e,
       url: /api/v1/game-catalog/raid-bosses
     },
     {

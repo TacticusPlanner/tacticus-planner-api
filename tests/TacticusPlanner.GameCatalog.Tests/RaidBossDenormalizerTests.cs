@@ -15,8 +15,9 @@ public sealed class RaidBossDenormalizerTests
         IReadOnlyList<GameCatalogRaidBossRawStat>? stats = null,
         IReadOnlyList<GameCatalogRaidBossRawWeapon>? weapons = null,
         IReadOnlyList<string>? active = null,
-        IReadOnlyList<string>? traits = null) =>
-        new(faction, movement, null, null, stats ?? [Stat(0), Stat(1)], weapons, active, null, null, traits);
+        IReadOnlyList<string>? traits = null,
+        string? questUnitId = null) =>
+        new(faction, movement, null, questUnitId, stats ?? [Stat(0), Stat(1)], weapons, active, null, null, traits);
 
     private static GameCatalogRaidBossRawData Data(
         IReadOnlyDictionary<string, GameCatalogRaidBossRawUnitSet> unitSets,
@@ -103,6 +104,19 @@ public sealed class RaidBossDenormalizerTests
         Assert.Null(boss.Weapons);
         Assert.Null(boss.ActiveAbilityIds);
         Assert.Equal(["trait-a"], boss.TraitIds);
+    }
+
+    [Fact]
+    public void QuestUnitIdPassesThroughWhenPresentAndIsOmittedWhenAbsent()
+    {
+        var view = GameCatalogDenormalizer.BuildRaidBosses(Data(new Dictionary<string, GameCatalogRaidBossRawUnitSet>
+        {
+            ["GuildBoss1Boss1TyranTervigon"] = UnitSet(questUnitId: "tyranNpc3Termagant"),
+            ["GuildBoss1MiniBoss1TyranWarrior"] = UnitSet(),
+        }));
+
+        Assert.Equal("tyranNpc3Termagant", view.Bosses.Single().QuestUnitId);
+        Assert.Null(view.Primes.Single().QuestUnitId);
     }
 
     [Fact]

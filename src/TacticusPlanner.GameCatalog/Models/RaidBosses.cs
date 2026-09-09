@@ -140,7 +140,11 @@ public sealed record GameCatalogRaidBossView(
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     IReadOnlyList<string>? RelicAbilityIds,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    IReadOnlyList<string>? TraitIds);
+    IReadOnlyList<string>? TraitIds,
+    // The canonical npc id this unit set represents, copied verbatim from the raw source. A structural
+    // id only — the client resolves its portrait. Omitted from the payload when the source omits it.
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    string? QuestUnitId);
 
 /// <summary>
 /// One step of a unit's progression ladder. Core stats are non-nullable; crit/block and the relic ability
