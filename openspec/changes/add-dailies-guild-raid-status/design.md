@@ -9,6 +9,7 @@ The companion `tacticus-planner-apps` change consumes `GET /api/v1/guilds/me/rai
 **Goals:**
 
 - Persist normalized Guild Raid source facts by guild and season and produce one small, stable current-status projection from them.
+- Provide an indexed, current-user-scoped read path over persisted hits without materializing the guild's complete hit collection.
 - Keep automatic/manual refresh inexpensive and collapse same-guild concurrency.
 - Make partial source knowledge explicit through nullable fields and stale fallback.
 
@@ -27,6 +28,12 @@ The endpoint will live under the existing Guild route boundary. A refresh servic
 `GuildRaidSyncState`, keyed by guild, records the latest successful active/no-active outcome and observation time so either result can be reused without a process-local cache. `GuildRaidSeason` records the upstream season/config identity, last observation metadata, and guild ownership. Child hit and hit-unit records retain normalized encounter facts needed for current projection and later separately-scoped analytics. A unique guild/season key plus a deterministic hash of each normalized upstream entry makes repeated refreshes idempotent. Derived current boss, modifiers, summaries, rankings, and token counts are not persisted.
 
 This keeps boss-order/loop/modifier cases directly testable without HTTP. Returning raw upstream entries and reproducing V1 calculations in the browser was rejected because it exposes unnecessary member data and creates two normalization paths.
+
+### Make current-user hit reads selective by construction
+
+Each persisted hit stores the same keyed `TacticusUserIdHash` used by `Profile` and `GuildMember`; the upstream user id is not stored as a new plaintext lookup column. The hit table has a composite index beginning with `GuildRaidSeasonId` and `TacticusUserIdHash`, followed by completion time for ordered reads. The deterministic hit identity remains a separate uniqueness constraint.
+
+A dedicated repository query accepts the resolved guild-season id and caller's profile hash, applies both predicates in PostgreSQL, uses a no-tracking projection, and selects only the columns required by its consumer. It does not load the season's hit navigation or other members' hits. When unit details are requested, they are loaded only for the already-filtered hit ids. This prepares later current-player views without adding hit history to the status response in this change.
 
 ### Use the raid-boss season config as the only encounter sequence
 
@@ -54,7 +61,7 @@ Membership/readiness failures return conflict before upstream access. Upstream n
 
 ### Catalog and persistence impact
 
-No raw catalog dataset, denormalizer, public manifest shape, or manifest snapshot changes are required. The endpoint reads the existing `raid-bosses` and current event projections. An additive EF Core migration creates guild raid sync-state, season, hit, and hit-unit storage with guild/season ownership, cascade behavior, uniqueness, and lookup indexes. No backfill is required; the first status refresh populates the current guild state and season.
+No raw catalog dataset, denormalizer, public manifest shape, or manifest snapshot changes are required. The endpoint reads the existing `raid-bosses` and current event projections. An additive EF Core migration creates guild raid sync-state, season, hit, and hit-unit storage with guild/season ownership, cascade behavior, uniqueness, and lookup indexes, including the current-user composite hit index. No backfill is required; the first status refresh populates the current guild state and season.
 
 ## Risks / Trade-offs
 
@@ -62,6 +69,7 @@ No raw catalog dataset, denormalizer, public manifest shape, or manifest snapsho
 - [Risk] A new upstream shape or unknown season config prevents detailed normalization → Fail the refresh rather than pair hit data with the wrong boss; recent cached data may be returned stale.
 - [Risk] Process-local single-flight permits one refresh per deployment instance → Make refresh writes idempotent and enforce relational uniqueness so overlapping instances converge safely.
 - [Risk] Persisted hit facts broaden future data-retention responsibility → Store only normalized raid facts needed for projection, never credentials or derived analytics, and defer retention/analytics policy to a separate change.
+- [Risk] A convenient entity navigation could accidentally load every guild member's hits → Expose a dedicated season-and-user-hash repository projection and test its generated relational query/index usage.
 - [Risk] Explicit season occurrences may be absent → Return `endsAt: null`; the companion UI communicates that countdown is unavailable.
 
 ## Migration Plan

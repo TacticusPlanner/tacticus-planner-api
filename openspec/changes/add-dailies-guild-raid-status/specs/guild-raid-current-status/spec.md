@@ -111,7 +111,9 @@ Guild Raid seasons SHALL NOT be projected from a guessed recurrence. `endsAt` SH
 
 ### Requirement: Status refresh is cached and single-flight
 
-The system SHALL persist each successful normalized Guild Raid observation. A guild-scoped sync-state record SHALL retain whether the latest successful observation was active or no-active, its observation time, and its referenced season when active. Season source facts SHALL be scoped to the registered guild and upstream season and retain the season/config identity, normalized encounter hits, and participating unit facts needed to reproduce the current-status projection. The model SHALL enforce a unique guild/season identity and idempotent hit writes using a deterministic identity derived from the normalized upstream entry. It SHALL NOT persist credentials, derived rankings, performance scores, token summaries, or team recommendations.
+The system SHALL persist each successful normalized Guild Raid observation. A guild-scoped sync-state record SHALL retain whether the latest successful observation was active or no-active, its observation time, and its referenced season when active. Season source facts SHALL be scoped to the registered guild and upstream season and retain the season/config identity, normalized encounter hits, and participating unit facts needed to reproduce the current-status projection. The model SHALL enforce a unique guild/season identity and idempotent hit writes using a deterministic identity derived from the normalized upstream entry. Each hit SHALL retain the keyed Tacticus user-id hash compatible with existing profile/member lookup, not a new plaintext user-id lookup value. It SHALL NOT persist credentials, derived rankings, performance scores, token summaries, or team recommendations.
+
+The persistence layer SHALL provide a current-user hit query filtered in PostgreSQL by the resolved guild season and the authenticated caller's `TacticusUserIdHash`. A composite index SHALL begin with the season foreign key and user-id hash and support completion-time ordering. The query SHALL use a read-only projection and SHALL NOT materialize other members' hits or the complete season hit navigation. Requested unit details SHALL be restricted to the filtered hit ids. This query capability SHALL remain server-side and SHALL NOT add raw hit history to the current-status response.
 
 The endpoint SHALL treat the latest persisted successful observation as fresh for five minutes. A request without explicit refresh SHALL return that observation immediately while fresh and SHALL refresh it after it becomes stale. `refresh=true` SHALL bypass the fresh-age check. Concurrent refresh requests for the same guild in one API instance SHALL share one upstream operation. Successful refresh writes SHALL be transactional and safe when multiple instances overlap.
 
@@ -131,6 +133,16 @@ If refresh fails and a successful persisted observation exists, the endpoint SHA
 
 - **WHEN** the same upstream season and hits are observed again or overlapping API instances complete refresh
 - **THEN** uniqueness constraints prevent duplicate season and hit facts while preserving one reproducible observation
+
+#### Scenario: Current user's hits are queried selectively
+
+- **WHEN** a server-side consumer requests hits for the authenticated caller in one guild raid season
+- **THEN** PostgreSQL filters by that season and the caller's keyed user-id hash and returns only the requested projection for matching hits
+
+#### Scenario: Other guild members have hits in the same season
+
+- **WHEN** the current-user hit query runs for a season containing hits from multiple members
+- **THEN** no other member's hit or unit rows are materialized or returned
 
 #### Scenario: Fresh cached status is reused
 

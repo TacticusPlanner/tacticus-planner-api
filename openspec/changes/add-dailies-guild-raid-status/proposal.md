@@ -6,6 +6,7 @@ The Dailies Guild Raids page cannot show the guild's live raid position because 
 
 - Add an authenticated current Guild Raid status endpoint for the caller's registered guild.
 - Fetch and persist normalized upstream raid source facts per guild and season, then project active-season, no-active-season, and temporarily-unavailable states.
+- Index persisted hits for a server-side current-user query that filters by guild season and the caller's existing hashed Tacticus user identity without loading other members' hits.
 - Derive the current boss, tier/set progress, HP, prime modifiers and remaining thresholds from the persisted season data and raid-boss catalog.
 - Return observation/freshness metadata and nullable season timing; reuse fresh persisted observations, support explicit refresh, and collapse concurrent refreshes.
 - Keep raw hit history, member performance, rankings, and team recommendations outside this contract.
@@ -24,5 +25,5 @@ None.
 ## Impact
 
 - Affects the Guild API feature area, persistence model and migration, the upstream Tacticus API client, raid-boss catalog lookups, dependency injection, endpoint tests, and generated OpenAPI.
-- Uses the existing encrypted guild API token and persisted guild membership; normalized raid source facts are stored by guild and season while derived status remains a read projection.
+- Uses the existing encrypted guild API token, persisted guild membership, and keyed Tacticus user-id hash; normalized raid source facts are stored by guild and season while derived status remains a read projection.
 - Adds a frontend-consumed API contract paired with `tacticus-planner-apps`.
