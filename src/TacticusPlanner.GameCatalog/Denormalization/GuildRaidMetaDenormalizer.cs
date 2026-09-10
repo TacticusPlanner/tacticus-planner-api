@@ -25,13 +25,7 @@ internal static partial class GameCatalogDenormalizer
                             recommendation.Kind,
                             recommendation.HeroIds.ToArray(),
                             recommendation.MowId,
-                            recommendation.CompIds.ToArray(),
-                            recommendation.Evidence is null
-                                ? null
-                                : new GameCatalogGuildRaidMetaEvidenceView(
-                                    recommendation.Evidence.ReplayCount,
-                                    recommendation.Evidence.AverageDamage,
-                                    recommendation.Evidence.MaximumDamage)))
+                            recommendation.CompIds.ToArray()))
                         .ToArray()))
                 .ToArray());
 }

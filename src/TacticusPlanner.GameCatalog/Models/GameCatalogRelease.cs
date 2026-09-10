@@ -11,7 +11,7 @@ public static class GameCatalogRelease
     public const string Version = "dev-2026-09-02";
 
     /// <summary>Denormalized payload schema version; bump when a served dataset's shape changes.</summary>
-    public const int SchemaVersion = 2;
+    public const int SchemaVersion = 3;
 
     /// <summary>The in-game data version the embedded catalog was extracted from.</summary>
     public const string GameVersion = "1.42";

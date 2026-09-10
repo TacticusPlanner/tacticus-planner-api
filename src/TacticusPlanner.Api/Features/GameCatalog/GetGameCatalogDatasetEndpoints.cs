@@ -274,6 +274,6 @@ public sealed class GetGameCatalogGuildRaidMetaEndpoint(IGameCatalogProvider cat
         Get("game-catalog/guild-raid-meta");
         ConfigureServed(
             "Gets curated Guild Raid Meta recommendations.",
-            "Curated exact Guild Raid Boss teams, Comp guidance, replay evidence, and source/update ids — no display names, icons, or source URLs.");
+            "Curated exact Guild Raid Boss teams, Comp guidance, and source/update ids — no display names, icons, or source URLs.");
     }
 }

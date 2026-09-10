@@ -13,7 +13,7 @@ Meta guidance.
 
 - Publish one validated, independently hashable curated Meta dataset through
   the existing anonymous game-catalog pipeline.
-- Keep all team, Comp, and evidence references stable and presentation-free.
+- Keep all team and Comp references stable and presentation-free.
 - Fail fast on stale or invalid relationships to boss, character, and Machine
   of War catalog data.
 
@@ -56,8 +56,10 @@ revision date, not an in-game version or a recurrence schedule.
 Extend the catalog snapshot, loader, validator, manifest validation, and
 endpoint registration for the new dataset. Validate list cardinality and
 uniqueness locally, then resolve references against characters, MoWs, and
-boss-only raid-boss records. Content updates remain additive at the catalog
-schema level, so `SchemaVersion` remains unchanged.
+boss-only raid-boss records. Removing the formerly served replay-evidence
+field is a breaking payload revision, so this change increments
+`SchemaVersion`; subsequent content-only curation updates remain within that
+revision.
 
 Alternative rejected: client-only validation. It would allow a bad curation
 file to reach every browser and create broken portraits or team cards.

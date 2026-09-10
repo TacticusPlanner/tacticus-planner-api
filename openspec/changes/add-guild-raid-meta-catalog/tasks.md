@@ -15,3 +15,7 @@
 - [x] 3.1 Run `dotnet format TacticusPlanner.slnx --verify-no-changes --no-restore` and verify it exits successfully.
 - [x] 3.2 Run `dotnet build TacticusPlanner.slnx -c Release --no-restore` and verify the Release build succeeds.
 - [x] 3.3 Run `dotnet test TacticusPlanner.slnx -c Release --no-build` and verify the full test suite, including catalog validation and manifest coverage, passes.
+
+## Follow-up contract cleanup
+
+- [x] 4.1 Remove replay-evidence metrics from the authored data and served Guild Raid Meta recommendation contract, increment `SchemaVersion`, and regenerate the OpenAPI artifact.

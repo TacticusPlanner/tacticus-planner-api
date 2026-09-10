@@ -3,7 +3,7 @@
 The Guild Raid Boss Library has authoritative game and season data but no
 maintained source for strategy recommendations. A centrally validated, public
 catalog dataset is needed so clients can present current Meta and alternate
-teams, their Comp archetypes, and evidence without hard-coding editorial data
+teams and their Comp archetypes without hard-coding editorial data
 in a page.
 
 ## What Changes
@@ -12,7 +12,7 @@ in a page.
   curated Guild Raid Boss strategy data.
 - Author ordered Comp profiles and boss recommendations using only stable boss,
   character, and Machine of War ids; each recommendation has an exact five-hero
-  team, one Machine of War, one or more Comp ids, and optional replay evidence.
+  team, one Machine of War, and one or more Comp ids.
 - Include source and update identifiers as structured metadata while leaving all
   visible labels, portraits, and outbound links to the client.
 - Validate all cross-references and recommendation invariants at catalog load

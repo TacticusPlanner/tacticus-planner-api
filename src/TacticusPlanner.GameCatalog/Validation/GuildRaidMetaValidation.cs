@@ -93,13 +93,6 @@ public static partial class GameCatalogValidator
                 {
                     RequireReference(dataset, owner, "compIds", compId, compIds, errors);
                 }
-
-                if (recommendation.Evidence is { } evidence
-                    && (evidence.ReplayCount < 0 || evidence.AverageDamage < 0 || evidence.MaximumDamage < 0))
-                {
-                    errors.Add(new GameCatalogValidationError(
-                        dataset, "InvalidEvidence", $"Recommendation '{owner}' has negative replay evidence."));
-                }
             }
         }
     }

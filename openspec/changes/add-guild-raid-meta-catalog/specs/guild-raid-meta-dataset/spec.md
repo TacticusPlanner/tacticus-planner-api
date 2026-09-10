@@ -20,7 +20,8 @@ The served payload SHALL be an object with these fields:
 The payload SHALL participate in manifest hash comparison independently of
 `raid-bosses`. Updating only curated Meta data SHALL change the
 `guild-raid-meta` dataset hash and source hash, without changing the
-`raid-bosses` dataset hash or requiring a catalog schema-version bump.
+`raid-bosses` dataset hash. Content-only updates do not require a catalog
+schema-version bump; a breaking served-field removal does.
 
 The server SHALL send no display names, translated copy, icon paths, image
 asset identifiers, or source URLs. The client SHALL derive those from the
@@ -35,7 +36,7 @@ stable ids and its own presentation resources.
 
 #### Scenario: An editorial update is isolated from game encounter data
 
-- **WHEN** only a recommendation, Comp profile, evidence value, source id, or
+- **WHEN** only a recommendation, Comp profile, source id, or
   update date changes
 - **THEN** the new manifest changes the `guild-raid-meta` hash but leaves the
   `raid-bosses` hash unchanged
@@ -61,7 +62,7 @@ preserve the authored Comp and member ordering.
 - **THEN** it receives its stable signature, ordered core-character,
   flex-character, and Machine-of-War ids without any presentation fields
 
-### Requirement: Boss Meta recommendations provide exact teams and evidence
+### Requirement: Boss Meta recommendations provide exact teams
 
 Every element of `bosses` SHALL have `bossUnitSetId` and an ordered,
 non-empty `recommendations` array. Each recommendation SHALL have:
@@ -69,9 +70,7 @@ non-empty `recommendations` array. Each recommendation SHALL have:
 - `kind`: exactly `meta` or `alternate`;
 - `heroIds`: an ordered array of exactly five distinct character ids;
 - `mowId`: one Machine of War id;
-- `compIds`: an ordered, non-empty array of unique Comp ids;
-- `evidence`: either omitted or an object containing non-negative integer
-  `replayCount`, `averageDamage`, and `maximumDamage` values.
+- `compIds`: an ordered, non-empty array of unique Comp ids.
 
 Within one boss group, recommendation kinds SHALL be unique. A boss may have
 no group when no curated recommendation has been published; its absence is a
@@ -82,7 +81,7 @@ server SHALL preserve authored boss, recommendation, hero, and Comp ordering.
 
 - **WHEN** a boss group contains a `meta` and an `alternate` recommendation
 - **THEN** each recommendation exposes exactly five ordered hero ids, one
-  Machine of War id, one or more Comp ids, and its own evidence when authored
+  Machine of War id, and one or more Comp ids
 
 #### Scenario: A boss has no curated recommendation
 

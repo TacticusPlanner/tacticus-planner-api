@@ -1,4 +1,3 @@
-using TacticusPlanner.GameCatalog.Models;
 using Xunit;
 
 namespace TacticusPlanner.GameCatalog.Tests;
@@ -229,7 +228,6 @@ public sealed class GameCatalogLoaderTests
             ["emperExultant", "custoBladeChampion", "custoTrajann", "orksWarboss", "worldKharn"],
             avatar.Recommendations[0].HeroIds);
         Assert.Equal("tyranBiovore", avatar.Recommendations[0].MowId);
-        Assert.Equal(new GameCatalogGuildRaidMetaEvidenceView(20, 1660000, 2000000), avatar.Recommendations[0].Evidence);
     }
 
     [Fact]

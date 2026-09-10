@@ -56,85 +56,85 @@
     {
       "bossUnitSetId": "GuildBoss8Boss1EldarAvatar",
       "recommendations": [
-        { "kind": "meta", "heroIds": ["emperExultant", "custoBladeChampion", "custoTrajann", "orksWarboss", "worldKharn"], "mowId": "tyranBiovore", "compIds": ["Laviscus"], "evidence": { "replayCount": 20, "averageDamage": 1660000, "maximumDamage": 2000000 } },
-        { "kind": "alternate", "heroIds": ["tyranNeurothrope", "thousInfernalMaster", "thousAhriman", "blackAbaddon", "blackPossession"], "mowId": "thousDaemonPrince", "compIds": ["Neuro"], "evidence": { "replayCount": 11, "averageDamage": 1130000, "maximumDamage": 1550000 } }
+        { "kind": "meta", "heroIds": ["emperExultant", "custoBladeChampion", "custoTrajann", "orksWarboss", "worldKharn"], "mowId": "tyranBiovore", "compIds": ["Laviscus"] },
+        { "kind": "alternate", "heroIds": ["tyranNeurothrope", "thousInfernalMaster", "thousAhriman", "blackAbaddon", "blackPossession"], "mowId": "thousDaemonPrince", "compIds": ["Neuro"] }
       ]
     },
     {
       "bossUnitSetId": "GuildBoss10Boss1AdmecBelisarius",
       "recommendations": [
-        { "kind": "meta", "heroIds": ["emperExultant", "custoBladeChampion", "custoTrajann", "worldKharn", "bloodDante"], "mowId": "tyranBiovore", "compIds": ["Laviscus"], "evidence": { "replayCount": 51, "averageDamage": 1270000, "maximumDamage": 1840000 } },
-        { "kind": "alternate", "heroIds": ["tyranNeurothrope", "thousInfernalMaster", "thousAhriman", "blackAbaddon", "blackPossession"], "mowId": "thousDaemonPrince", "compIds": ["Neuro"], "evidence": { "replayCount": 13, "averageDamage": 1040000, "maximumDamage": 1340000 } }
+        { "kind": "meta", "heroIds": ["emperExultant", "custoBladeChampion", "custoTrajann", "worldKharn", "bloodDante"], "mowId": "tyranBiovore", "compIds": ["Laviscus"] },
+        { "kind": "alternate", "heroIds": ["tyranNeurothrope", "thousInfernalMaster", "thousAhriman", "blackAbaddon", "blackPossession"], "mowId": "thousDaemonPrince", "compIds": ["Neuro"] }
       ]
     },
     {
       "bossUnitSetId": "GuildBoss7Boss1AstraRogaldorn",
       "recommendations": [
-        { "kind": "meta", "heroIds": ["emperExultant", "custoBladeChampion", "custoTrajann", "orksWarboss", "admecDominus"], "mowId": "tyranBiovore", "compIds": ["Laviscus"], "evidence": { "replayCount": 32, "averageDamage": 1270000, "maximumDamage": 1890000 } },
-        { "kind": "alternate", "heroIds": ["admecRuststalker", "admecMarshall", "admecManipulus", "admecDominus", "tauMarksman"], "mowId": "tyranBiovore", "compIds": ["AdMech"], "evidence": { "replayCount": 48, "averageDamage": 1090000, "maximumDamage": 1560000 } }
+        { "kind": "meta", "heroIds": ["emperExultant", "custoBladeChampion", "custoTrajann", "orksWarboss", "admecDominus"], "mowId": "tyranBiovore", "compIds": ["Laviscus"] },
+        { "kind": "alternate", "heroIds": ["admecRuststalker", "admecMarshall", "admecManipulus", "admecDominus", "tauMarksman"], "mowId": "tyranBiovore", "compIds": ["AdMech"] }
       ]
     },
     {
       "bossUnitSetId": "GuildBoss4Boss1OrksGhazghkull",
       "recommendations": [
-        { "kind": "meta", "heroIds": ["emperExultant", "custoBladeChampion", "custoTrajann", "custoVexilusPraetor", "admecDominus"], "mowId": "tyranBiovore", "compIds": ["Laviscus"], "evidence": { "replayCount": 59, "averageDamage": 1770000, "maximumDamage": 2300000 } },
-        { "kind": "alternate", "heroIds": ["tauFarsight", "tauCrisis", "admecManipulus", "tauDarkstrider", "eldarFarseer"], "mowId": "deathCrawler", "compIds": ["Battlesuits"], "evidence": { "replayCount": 29, "averageDamage": 1530000, "maximumDamage": 2120000 } }
+        { "kind": "meta", "heroIds": ["emperExultant", "custoBladeChampion", "custoTrajann", "custoVexilusPraetor", "admecDominus"], "mowId": "tyranBiovore", "compIds": ["Laviscus"] },
+        { "kind": "alternate", "heroIds": ["tauFarsight", "tauCrisis", "admecManipulus", "tauDarkstrider", "eldarFarseer"], "mowId": "deathCrawler", "compIds": ["Battlesuits"] }
       ]
     },
     {
       "bossUnitSetId": "GuildBoss2Boss1TyranHiveTyrantLeviathan",
       "recommendations": [
-        { "kind": "meta", "heroIds": ["admecRuststalker", "admecMarshall", "admecManipulus", "admecDominus", "templHelbrecht"], "mowId": "ultraDreadnought", "compIds": ["AdMech"], "evidence": { "replayCount": 6, "averageDamage": 1650000, "maximumDamage": 1950000 } },
-        { "kind": "alternate", "heroIds": ["custoBladeChampion", "custoTrajann", "worldKharn", "spaceBlackmane", "templHelbrecht"], "mowId": "ultraDreadnought", "compIds": ["Custodes"], "evidence": { "replayCount": 5, "averageDamage": 1540000, "maximumDamage": 1660000 } }
+        { "kind": "meta", "heroIds": ["admecRuststalker", "admecMarshall", "admecManipulus", "admecDominus", "templHelbrecht"], "mowId": "ultraDreadnought", "compIds": ["AdMech"] },
+        { "kind": "alternate", "heroIds": ["custoBladeChampion", "custoTrajann", "worldKharn", "spaceBlackmane", "templHelbrecht"], "mowId": "ultraDreadnought", "compIds": ["Custodes"] }
       ]
     },
     {
       "bossUnitSetId": "GuildBoss12Boss1DarkaLion",
       "recommendations": [
-        { "kind": "meta", "heroIds": ["emperExultant", "custoBladeChampion", "custoTrajann", "orksWarboss", "custoVexilusPraetor"], "mowId": "tyranBiovore", "compIds": ["Laviscus"], "evidence": { "replayCount": 14, "averageDamage": 1080000, "maximumDamage": 1480000 } },
-        { "kind": "alternate", "heroIds": ["tyranNeurothrope", "thousInfernalMaster", "thousAhriman", "blackAbaddon", "blackPossession"], "mowId": "thousDaemonPrince", "compIds": ["Neuro"], "evidence": { "replayCount": 6, "averageDamage": 831000, "maximumDamage": 1000000 } }
+        { "kind": "meta", "heroIds": ["emperExultant", "custoBladeChampion", "custoTrajann", "orksWarboss", "custoVexilusPraetor"], "mowId": "tyranBiovore", "compIds": ["Laviscus"] },
+        { "kind": "alternate", "heroIds": ["tyranNeurothrope", "thousInfernalMaster", "thousAhriman", "blackAbaddon", "blackPossession"], "mowId": "thousDaemonPrince", "compIds": ["Neuro"] }
       ]
     },
     {
       "bossUnitSetId": "GuildBoss9Boss1ThousMagnus",
       "recommendations": [
-        { "kind": "meta", "heroIds": ["custoBladeChampion", "custoTrajann", "worldKharn", "spaceBlackmane", "templHelbrecht"], "mowId": "tyranBiovore", "compIds": ["Custodes"], "evidence": { "replayCount": 23, "averageDamage": 854000, "maximumDamage": 1100000 } },
-        { "kind": "alternate", "heroIds": ["custoBladeChampion", "custoTrajann", "worldKharn", "templHelbrecht", "bloodDante"], "mowId": "tyranBiovore", "compIds": ["Custodes"], "evidence": { "replayCount": 22, "averageDamage": 803000, "maximumDamage": 1150000 } }
+        { "kind": "meta", "heroIds": ["custoBladeChampion", "custoTrajann", "worldKharn", "spaceBlackmane", "templHelbrecht"], "mowId": "tyranBiovore", "compIds": ["Custodes"] },
+        { "kind": "alternate", "heroIds": ["custoBladeChampion", "custoTrajann", "worldKharn", "templHelbrecht", "bloodDante"], "mowId": "tyranBiovore", "compIds": ["Custodes"] }
       ]
     },
     {
       "bossUnitSetId": "GuildBoss5Boss1DeathMortarion",
       "recommendations": [
-        { "kind": "meta", "heroIds": ["emperExultant", "custoBladeChampion", "custoTrajann", "orksWarboss", "custoAtlacoya"], "mowId": "tyranBiovore", "compIds": ["Laviscus"], "evidence": { "replayCount": 36, "averageDamage": 1450000, "maximumDamage": 1900000 } },
-        { "kind": "alternate", "heroIds": ["tyranNeurothrope", "thousInfernalMaster", "thousAhriman", "thousTzaangor", "adeptCanoness"], "mowId": "thousDaemonPrince", "compIds": ["Neuro"], "evidence": { "replayCount": 9, "averageDamage": 1050000, "maximumDamage": 1250000 } }
+        { "kind": "meta", "heroIds": ["emperExultant", "custoBladeChampion", "custoTrajann", "orksWarboss", "custoAtlacoya"], "mowId": "tyranBiovore", "compIds": ["Laviscus"] },
+        { "kind": "alternate", "heroIds": ["tyranNeurothrope", "thousInfernalMaster", "thousAhriman", "thousTzaangor", "adeptCanoness"], "mowId": "thousDaemonPrince", "compIds": ["Neuro"] }
       ]
     },
     {
       "bossUnitSetId": "GuildBoss11Boss1TauRiptide",
       "recommendations": [
-        { "kind": "meta", "heroIds": ["admecRuststalker", "admecMarshall", "admecManipulus", "admecDominus", "custoTrajann"], "mowId": "ultraDreadnought", "compIds": ["AdMech"], "evidence": { "replayCount": 31, "averageDamage": 1120000, "maximumDamage": 1640000 } },
-        { "kind": "alternate", "heroIds": ["tyranNeurothrope", "thousInfernalMaster", "thousAhriman", "blackAbaddon", "blackPossession"], "mowId": "thousDaemonPrince", "compIds": ["Neuro"], "evidence": { "replayCount": 23, "averageDamage": 993000, "maximumDamage": 1220000 } }
+        { "kind": "meta", "heroIds": ["admecRuststalker", "admecMarshall", "admecManipulus", "admecDominus", "custoTrajann"], "mowId": "ultraDreadnought", "compIds": ["AdMech"] },
+        { "kind": "alternate", "heroIds": ["tyranNeurothrope", "thousInfernalMaster", "thousAhriman", "blackAbaddon", "blackPossession"], "mowId": "thousDaemonPrince", "compIds": ["Neuro"] }
       ]
     },
     {
       "bossUnitSetId": "GuildBoss6Boss1TyranScreamerKiller",
       "recommendations": [
-        { "kind": "meta", "heroIds": ["emperExultant", "custoBladeChampion", "custoTrajann", "orksWarboss", "custoVexilusPraetor"], "mowId": "deathCrawler", "compIds": ["Laviscus"], "evidence": { "replayCount": 12, "averageDamage": 2050000, "maximumDamage": 2500000 } },
-        { "kind": "alternate", "heroIds": ["admecRuststalker", "admecMarshall", "admecManipulus", "admecDominus", "custoTrajann"], "mowId": "ultraDreadnought", "compIds": ["AdMech"], "evidence": { "replayCount": 26, "averageDamage": 1540000, "maximumDamage": 1980000 } }
+        { "kind": "meta", "heroIds": ["emperExultant", "custoBladeChampion", "custoTrajann", "orksWarboss", "custoVexilusPraetor"], "mowId": "deathCrawler", "compIds": ["Laviscus"] },
+        { "kind": "alternate", "heroIds": ["admecRuststalker", "admecMarshall", "admecManipulus", "admecDominus", "custoTrajann"], "mowId": "ultraDreadnought", "compIds": ["AdMech"] }
       ]
     },
     {
       "bossUnitSetId": "GuildBoss3Boss1NecroSilentKing",
       "recommendations": [
-        { "kind": "meta", "heroIds": ["emperExultant", "custoBladeChampion", "custoTrajann", "orksWarboss", "custoVexilusPraetor"], "mowId": "tyranBiovore", "compIds": ["Laviscus"], "evidence": { "replayCount": 45, "averageDamage": 2040000, "maximumDamage": 2940000 } },
-        { "kind": "alternate", "heroIds": ["admecRuststalker", "admecMarshall", "admecManipulus", "admecDominus", "orksWarboss"], "mowId": "tyranBiovore", "compIds": ["AdMech"], "evidence": { "replayCount": 20, "averageDamage": 1420000, "maximumDamage": 1900000 } }
+        { "kind": "meta", "heroIds": ["emperExultant", "custoBladeChampion", "custoTrajann", "orksWarboss", "custoVexilusPraetor"], "mowId": "tyranBiovore", "compIds": ["Laviscus"] },
+        { "kind": "alternate", "heroIds": ["admecRuststalker", "admecMarshall", "admecManipulus", "admecDominus", "orksWarboss"], "mowId": "tyranBiovore", "compIds": ["AdMech"] }
       ]
     },
     {
       "bossUnitSetId": "GuildBoss1Boss1TyranTervigonLeviathan",
       "recommendations": [
-        { "kind": "meta", "heroIds": ["admecRuststalker", "admecMarshall", "admecManipulus", "admecDominus", "templHelbrecht"], "mowId": "ultraDreadnought", "compIds": ["AdMech"], "evidence": { "replayCount": 7, "averageDamage": 1770000, "maximumDamage": 2190000 } },
-        { "kind": "alternate", "heroIds": ["custoBladeChampion", "custoTrajann", "worldKharn", "spaceBlackmane", "templHelbrecht"], "mowId": "ultraDreadnought", "compIds": ["Custodes"], "evidence": { "replayCount": 4, "averageDamage": 1360000, "maximumDamage": 1400000 } }
+        { "kind": "meta", "heroIds": ["admecRuststalker", "admecMarshall", "admecManipulus", "admecDominus", "templHelbrecht"], "mowId": "ultraDreadnought", "compIds": ["AdMech"] },
+        { "kind": "alternate", "heroIds": ["custoBladeChampion", "custoTrajann", "worldKharn", "spaceBlackmane", "templHelbrecht"], "mowId": "ultraDreadnought", "compIds": ["Custodes"] }
       ]
     }
   ]

@@ -21,8 +21,7 @@ public sealed class GuildRaidMetaValidationTests
                 new GameCatalogGuildRaidMetaRawBoss(
                     "boss-1",
                     [new GameCatalogGuildRaidMetaRawRecommendation(
-                        "meta", ["hero-1", "hero-2", "hero-3", "hero-4", "hero-5"], "mow-1", ["comp"],
-                        new GameCatalogGuildRaidMetaRawEvidence(4, 100, 120))]),
+                        "meta", ["hero-1", "hero-2", "hero-3", "hero-4", "hero-5"], "mow-1", ["comp"])]),
             ]);
 
     private static List<GameCatalogValidationError> Validate(GameCatalogGuildRaidMetaRawData raw)
@@ -64,10 +63,9 @@ public sealed class GuildRaidMetaValidationTests
                     "prime-1",
                     [
                         new GameCatalogGuildRaidMetaRawRecommendation(
-                            "unexpected", ["hero-1", "hero-1", "hero-2"], "missing-mow", ["comp", "comp", "missing-comp"],
-                            new GameCatalogGuildRaidMetaRawEvidence(-1, -1, -1)),
+                            "unexpected", ["hero-1", "hero-1", "hero-2"], "missing-mow", ["comp", "comp", "missing-comp"]),
                         new GameCatalogGuildRaidMetaRawRecommendation(
-                            "unexpected", ["hero-1", "hero-2", "hero-3", "hero-4", "hero-5"], "mow-1", ["comp"], null),
+                            "unexpected", ["hero-1", "hero-2", "hero-3", "hero-4", "hero-5"], "mow-1", ["comp"]),
                     ]),
             ]);
 
@@ -82,6 +80,5 @@ public sealed class GuildRaidMetaValidationTests
         Assert.Contains(errors, error => error.Code == "MissingReference" && error.Message.Contains("served boss"));
         Assert.Contains(errors, error => error.Code == "InvalidRecommendationKind");
         Assert.Contains(errors, error => error.Code == "InvalidHeroCount");
-        Assert.Contains(errors, error => error.Code == "InvalidEvidence");
     }
 }

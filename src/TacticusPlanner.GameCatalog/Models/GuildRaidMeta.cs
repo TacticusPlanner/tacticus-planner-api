@@ -4,7 +4,7 @@ namespace TacticusPlanner.GameCatalog.Models;
 
 /// <summary>
 /// Curated Guild Raid strategy data. This source deliberately contains only stable game-data ids and
-/// editorial evidence; presentation and source links remain client responsibilities.
+/// curated team guidance; presentation and source links remain client responsibilities.
 /// </summary>
 public sealed record GameCatalogGuildRaidMetaRawData(
     string SourceId,
@@ -27,13 +27,7 @@ public sealed record GameCatalogGuildRaidMetaRawRecommendation(
     string Kind,
     IReadOnlyList<string> HeroIds,
     string MowId,
-    IReadOnlyList<string> CompIds,
-    GameCatalogGuildRaidMetaRawEvidence? Evidence);
-
-public sealed record GameCatalogGuildRaidMetaRawEvidence(
-    int ReplayCount,
-    int AverageDamage,
-    int MaximumDamage);
+    IReadOnlyList<string> CompIds);
 
 // ---- served view (public catalog surface) -----------------------------------------------------------
 
@@ -62,10 +56,4 @@ public sealed record GameCatalogGuildRaidMetaRecommendationView(
     string Kind,
     IReadOnlyList<string> HeroIds,
     string MowId,
-    IReadOnlyList<string> CompIds,
-    GameCatalogGuildRaidMetaEvidenceView? Evidence);
-
-public sealed record GameCatalogGuildRaidMetaEvidenceView(
-    int ReplayCount,
-    int AverageDamage,
-    int MaximumDamage);
+    IReadOnlyList<string> CompIds);

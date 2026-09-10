@@ -23,10 +23,9 @@ public sealed class GuildRaidMetaDenormalizerTests
                     "boss-2",
                     [
                         new GameCatalogGuildRaidMetaRawRecommendation(
-                            "alternate", ["hero-5", "hero-4", "hero-3", "hero-2", "hero-1"], "mow-2", ["second", "first"],
-                            new GameCatalogGuildRaidMetaRawEvidence(4, 100, 120)),
+                            "alternate", ["hero-5", "hero-4", "hero-3", "hero-2", "hero-1"], "mow-2", ["second", "first"]),
                         new GameCatalogGuildRaidMetaRawRecommendation(
-                            "meta", ["hero-a", "hero-b", "hero-c", "hero-d", "hero-e"], "mow-1", ["first"], null),
+                            "meta", ["hero-a", "hero-b", "hero-c", "hero-d", "hero-e"], "mow-1", ["first"]),
                     ]),
             ]);
 
@@ -38,7 +37,5 @@ public sealed class GuildRaidMetaDenormalizerTests
         Assert.Equal(["alternate", "meta"], view.Bosses[0].Recommendations.Select(recommendation => recommendation.Kind));
         Assert.Equal(["hero-5", "hero-4", "hero-3", "hero-2", "hero-1"], view.Bosses[0].Recommendations[0].HeroIds);
         Assert.Equal(["second", "first"], view.Bosses[0].Recommendations[0].CompIds);
-        Assert.Equal(new GameCatalogGuildRaidMetaEvidenceView(4, 100, 120), view.Bosses[0].Recommendations[0].Evidence);
-        Assert.Null(view.Bosses[0].Recommendations[1].Evidence);
     }
 }
