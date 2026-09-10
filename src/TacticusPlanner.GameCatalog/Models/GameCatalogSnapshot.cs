@@ -27,6 +27,7 @@ public sealed record GameCatalogSnapshot(
     // Raw raid-boss source (one file, ported from V1's guild_boss.json). Kept for validation — the
     // encounter unit / field-npc / modifier cross-reference checks run over the raw collections.
     GameCatalogRaidBossRawData RaidBossRawData,
+    GameCatalogGuildRaidMetaRawData GuildRaidMetaRawData,
     // Served (denormalized) payloads — the public catalog surface.
     IReadOnlyList<GameCatalogCharacterView> CharacterViews,
     IReadOnlyList<GameCatalogNpc> NpcList,
@@ -44,7 +45,8 @@ public sealed record GameCatalogSnapshot(
     IReadOnlyList<GameCatalogEventDefinition> EventDefinitionViews,
     IReadOnlyDictionary<string, IReadOnlyList<GameCatalogEventsCalendarEntry>> EventsCalendar,
     IReadOnlyList<GameCatalogShopView> ShopViews,
-    GameCatalogRaidBossesView RaidBossesView
+    GameCatalogRaidBossesView RaidBossesView,
+    GameCatalogGuildRaidMetaView GuildRaidMetaView
 )
 {
     // The manifest served to clients: release metadata + per-dataset hash and download url. Built from the

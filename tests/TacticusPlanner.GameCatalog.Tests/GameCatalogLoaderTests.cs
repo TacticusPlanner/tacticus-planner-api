@@ -191,6 +191,46 @@ public sealed class GameCatalogLoaderTests
     }
 
     [Fact]
+    public void GuildRaidMetaProvidesCuratedTeamsAndV1CompGuidance()
+    {
+        var meta = GameCatalogLoader.Load().GuildRaidMetaView;
+
+        Assert.Equal("terminus-maximus-guild-raid-boss-meta", meta.SourceId);
+        Assert.Equal("2026-07-01", meta.UpdatedOn);
+        Assert.Equal(["AdMech", "Battlesuits", "Custodes", "Laviscus", "Multi-Hit", "Neuro", "Z'Kar"], meta.Comps.Select(comp => comp.Id));
+        Assert.Equal(12, meta.Bosses.Count);
+
+        // Exact V1 Comp parity: the API data is intentionally static guidance, not a personalized
+        // guild roster or team builder. Keep all ordered signature/core/flex/MoW memberships explicit.
+        var expectedComps = new[]
+        {
+            ("AdMech", "admecRuststalker", new[] { "admecRuststalker", "admecMarshall", "admecManipulus" }, new[] { "admecDominus", "orksWarboss", "tauMarksman", "tauCrisis", "eldarAutarch", "votanMemnyr", "custoAtlacoya", "custoTrajann", "templHelbrecht", "necroSpyder", "necroOverlord" }, new[] { "ultraDreadnought", "tyranBiovore", "deathCrawler" }),
+            ("Battlesuits", "tauCrisis", new[] { "tauCrisis", "tauFarsight", "admecManipulus" }, new[] { "tauDarkstrider", "tauShadowsun", "eldarFarseer", "eldarLhykhis" }, new[] { "tauBroadside", "tyranBiovore", "deathCrawler", "necroReanimator" }),
+            ("Custodes", "custoBladeChampion", new[] { "custoBladeChampion", "custoTrajann", "worldKharn" }, new[] { "spaceBlackmane", "bloodDante", "bloodMephiston", "blackAbaddon", "custoAtlacoya", "templHelbrecht", "custoVexilusPraetor" }, new[] { "deathCrawler", "tyranBiovore" }),
+            ("Laviscus", "emperExultant", new[] { "emperExultant" }, new[] { "custoBladeChampion", "custoTrajann", "worldKharn", "orksWarboss", "worldExecutions", "templHelbrecht", "custoAtlacoya", "custoVexilusPraetor", "admecDominus", "adeptCanoness" }, new[] { "tyranBiovore", "deathCrawler" }),
+            ("Multi-Hit", "spaceBlackmane", new[] { "spaceBlackmane", "tauAunShi", "eldarFarseer" }, new[] { "ultraCalgar", "templHelbrecht", "ultraInceptorSgt", "darkaCompanion", "darkaAsmodai", "eldarMauganRa", "worldKharn" }, new[] { "tyranBiovore", "deathCrawler" }),
+            ("Neuro", "tyranNeurothrope", new[] { "tyranNeurothrope" }, new[] { "thousInfernalMaster", "thousTzaangor", "blackPossession", "thousAhriman", "genesMagus", "adeptCanoness", "templHelbrecht", "custoAtlacoya", "bloodMephiston" }, new[] { "adeptExorcist" }),
+            ("Z'Kar", "thousDaemonPrince", new[] { "tyranNeurothrope" }, new[] { "thousAhriman", "thousInfernalMaster", "thousTzaangor", "blackPossession", "blackAbaddon", "bloodMephiston", "thousSorcerer" }, new[] { "thousDaemonPrince" }),
+        };
+
+        foreach (var expected in expectedComps)
+        {
+            var comp = meta.Comps.Single(comp => comp.Id == expected.Item1);
+            Assert.Equal(expected.Item2, comp.SignatureUnitId);
+            Assert.Equal(expected.Item3, comp.CoreCharacterIds);
+            Assert.Equal(expected.Item4, comp.FlexCharacterIds);
+            Assert.Equal(expected.Item5, comp.MowIds);
+        }
+
+        var avatar = meta.Bosses.Single(boss => boss.BossUnitSetId == "GuildBoss8Boss1EldarAvatar");
+        Assert.Equal(["meta", "alternate"], avatar.Recommendations.Select(recommendation => recommendation.Kind));
+        Assert.Equal(
+            ["emperExultant", "custoBladeChampion", "custoTrajann", "orksWarboss", "worldKharn"],
+            avatar.Recommendations[0].HeroIds);
+        Assert.Equal("tyranBiovore", avatar.Recommendations[0].MowId);
+    }
+
+    [Fact]
     public void RaidBossEncountersResolveTheirUnitProgressionIndexAndInlinedModifiers()
     {
         var snapshot = GameCatalogLoader.Load();

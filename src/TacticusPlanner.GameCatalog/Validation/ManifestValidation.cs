@@ -52,6 +52,8 @@ public static partial class GameCatalogValidator
         RequireNonEmpty(GameCatalogDatasets.Shops, snapshot.ShopViews.Count, errors);
         RequireNonEmpty(GameCatalogDatasets.RaidBosses, snapshot.RaidBossesView.Bosses.Count, errors);
         RequireNonEmpty(GameCatalogDatasets.RaidBosses, snapshot.RaidBossesView.Primes.Count, errors);
+        RequireNonEmpty(GameCatalogDatasets.GuildRaidMeta, snapshot.GuildRaidMetaView.Comps.Count, errors);
+        RequireNonEmpty(GameCatalogDatasets.GuildRaidMeta, snapshot.GuildRaidMetaView.Bosses.Count, errors);
 
         // Every battle id referenced by a campaign definition must resolve to a served campaign battle.
         var battleIds = new HashSet<string>(

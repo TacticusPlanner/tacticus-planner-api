@@ -1,0 +1,141 @@
+{
+  "sourceId": "terminus-maximus-guild-raid-boss-meta",
+  "updatedOn": "2026-07-01",
+  "comps": [
+    {
+      "id": "AdMech",
+      "signatureUnitId": "admecRuststalker",
+      "coreCharacterIds": ["admecRuststalker", "admecMarshall", "admecManipulus"],
+      "flexCharacterIds": ["admecDominus", "orksWarboss", "tauMarksman", "tauCrisis", "eldarAutarch", "votanMemnyr", "custoAtlacoya", "custoTrajann", "templHelbrecht", "necroSpyder", "necroOverlord"],
+      "mowIds": ["ultraDreadnought", "tyranBiovore", "deathCrawler"]
+    },
+    {
+      "id": "Battlesuits",
+      "signatureUnitId": "tauCrisis",
+      "coreCharacterIds": ["tauCrisis", "tauFarsight", "admecManipulus"],
+      "flexCharacterIds": ["tauDarkstrider", "tauShadowsun", "eldarFarseer", "eldarLhykhis"],
+      "mowIds": ["tauBroadside", "tyranBiovore", "deathCrawler", "necroReanimator"]
+    },
+    {
+      "id": "Custodes",
+      "signatureUnitId": "custoBladeChampion",
+      "coreCharacterIds": ["custoBladeChampion", "custoTrajann", "worldKharn"],
+      "flexCharacterIds": ["spaceBlackmane", "bloodDante", "bloodMephiston", "blackAbaddon", "custoAtlacoya", "templHelbrecht", "custoVexilusPraetor"],
+      "mowIds": ["deathCrawler", "tyranBiovore"]
+    },
+    {
+      "id": "Laviscus",
+      "signatureUnitId": "emperExultant",
+      "coreCharacterIds": ["emperExultant"],
+      "flexCharacterIds": ["custoBladeChampion", "custoTrajann", "worldKharn", "orksWarboss", "worldExecutions", "templHelbrecht", "custoAtlacoya", "custoVexilusPraetor", "admecDominus", "adeptCanoness"],
+      "mowIds": ["tyranBiovore", "deathCrawler"]
+    },
+    {
+      "id": "Multi-Hit",
+      "signatureUnitId": "spaceBlackmane",
+      "coreCharacterIds": ["spaceBlackmane", "tauAunShi", "eldarFarseer"],
+      "flexCharacterIds": ["ultraCalgar", "templHelbrecht", "ultraInceptorSgt", "darkaCompanion", "darkaAsmodai", "eldarMauganRa", "worldKharn"],
+      "mowIds": ["tyranBiovore", "deathCrawler"]
+    },
+    {
+      "id": "Neuro",
+      "signatureUnitId": "tyranNeurothrope",
+      "coreCharacterIds": ["tyranNeurothrope"],
+      "flexCharacterIds": ["thousInfernalMaster", "thousTzaangor", "blackPossession", "thousAhriman", "genesMagus", "adeptCanoness", "templHelbrecht", "custoAtlacoya", "bloodMephiston"],
+      "mowIds": ["adeptExorcist"]
+    },
+    {
+      "id": "Z'Kar",
+      "signatureUnitId": "thousDaemonPrince",
+      "coreCharacterIds": ["tyranNeurothrope"],
+      "flexCharacterIds": ["thousAhriman", "thousInfernalMaster", "thousTzaangor", "blackPossession", "blackAbaddon", "bloodMephiston", "thousSorcerer"],
+      "mowIds": ["thousDaemonPrince"]
+    }
+  ],
+  "bosses": [
+    {
+      "bossUnitSetId": "GuildBoss8Boss1EldarAvatar",
+      "recommendations": [
+        { "kind": "meta", "heroIds": ["emperExultant", "custoBladeChampion", "custoTrajann", "orksWarboss", "worldKharn"], "mowId": "tyranBiovore", "compIds": ["Laviscus"] },
+        { "kind": "alternate", "heroIds": ["tyranNeurothrope", "thousInfernalMaster", "thousAhriman", "blackAbaddon", "blackPossession"], "mowId": "thousDaemonPrince", "compIds": ["Neuro"] }
+      ]
+    },
+    {
+      "bossUnitSetId": "GuildBoss10Boss1AdmecBelisarius",
+      "recommendations": [
+        { "kind": "meta", "heroIds": ["emperExultant", "custoBladeChampion", "custoTrajann", "worldKharn", "bloodDante"], "mowId": "tyranBiovore", "compIds": ["Laviscus"] },
+        { "kind": "alternate", "heroIds": ["tyranNeurothrope", "thousInfernalMaster", "thousAhriman", "blackAbaddon", "blackPossession"], "mowId": "thousDaemonPrince", "compIds": ["Neuro"] }
+      ]
+    },
+    {
+      "bossUnitSetId": "GuildBoss7Boss1AstraRogaldorn",
+      "recommendations": [
+        { "kind": "meta", "heroIds": ["emperExultant", "custoBladeChampion", "custoTrajann", "orksWarboss", "admecDominus"], "mowId": "tyranBiovore", "compIds": ["Laviscus"] },
+        { "kind": "alternate", "heroIds": ["admecRuststalker", "admecMarshall", "admecManipulus", "admecDominus", "tauMarksman"], "mowId": "tyranBiovore", "compIds": ["AdMech"] }
+      ]
+    },
+    {
+      "bossUnitSetId": "GuildBoss4Boss1OrksGhazghkull",
+      "recommendations": [
+        { "kind": "meta", "heroIds": ["emperExultant", "custoBladeChampion", "custoTrajann", "custoVexilusPraetor", "admecDominus"], "mowId": "tyranBiovore", "compIds": ["Laviscus"] },
+        { "kind": "alternate", "heroIds": ["tauFarsight", "tauCrisis", "admecManipulus", "tauDarkstrider", "eldarFarseer"], "mowId": "deathCrawler", "compIds": ["Battlesuits"] }
+      ]
+    },
+    {
+      "bossUnitSetId": "GuildBoss2Boss1TyranHiveTyrantLeviathan",
+      "recommendations": [
+        { "kind": "meta", "heroIds": ["admecRuststalker", "admecMarshall", "admecManipulus", "admecDominus", "templHelbrecht"], "mowId": "ultraDreadnought", "compIds": ["AdMech"] },
+        { "kind": "alternate", "heroIds": ["custoBladeChampion", "custoTrajann", "worldKharn", "spaceBlackmane", "templHelbrecht"], "mowId": "ultraDreadnought", "compIds": ["Custodes"] }
+      ]
+    },
+    {
+      "bossUnitSetId": "GuildBoss12Boss1DarkaLion",
+      "recommendations": [
+        { "kind": "meta", "heroIds": ["emperExultant", "custoBladeChampion", "custoTrajann", "orksWarboss", "custoVexilusPraetor"], "mowId": "tyranBiovore", "compIds": ["Laviscus"] },
+        { "kind": "alternate", "heroIds": ["tyranNeurothrope", "thousInfernalMaster", "thousAhriman", "blackAbaddon", "blackPossession"], "mowId": "thousDaemonPrince", "compIds": ["Neuro"] }
+      ]
+    },
+    {
+      "bossUnitSetId": "GuildBoss9Boss1ThousMagnus",
+      "recommendations": [
+        { "kind": "meta", "heroIds": ["custoBladeChampion", "custoTrajann", "worldKharn", "spaceBlackmane", "templHelbrecht"], "mowId": "tyranBiovore", "compIds": ["Custodes"] },
+        { "kind": "alternate", "heroIds": ["custoBladeChampion", "custoTrajann", "worldKharn", "templHelbrecht", "bloodDante"], "mowId": "tyranBiovore", "compIds": ["Custodes"] }
+      ]
+    },
+    {
+      "bossUnitSetId": "GuildBoss5Boss1DeathMortarion",
+      "recommendations": [
+        { "kind": "meta", "heroIds": ["emperExultant", "custoBladeChampion", "custoTrajann", "orksWarboss", "custoAtlacoya"], "mowId": "tyranBiovore", "compIds": ["Laviscus"] },
+        { "kind": "alternate", "heroIds": ["tyranNeurothrope", "thousInfernalMaster", "thousAhriman", "thousTzaangor", "adeptCanoness"], "mowId": "thousDaemonPrince", "compIds": ["Neuro"] }
+      ]
+    },
+    {
+      "bossUnitSetId": "GuildBoss11Boss1TauRiptide",
+      "recommendations": [
+        { "kind": "meta", "heroIds": ["admecRuststalker", "admecMarshall", "admecManipulus", "admecDominus", "custoTrajann"], "mowId": "ultraDreadnought", "compIds": ["AdMech"] },
+        { "kind": "alternate", "heroIds": ["tyranNeurothrope", "thousInfernalMaster", "thousAhriman", "blackAbaddon", "blackPossession"], "mowId": "thousDaemonPrince", "compIds": ["Neuro"] }
+      ]
+    },
+    {
+      "bossUnitSetId": "GuildBoss6Boss1TyranScreamerKiller",
+      "recommendations": [
+        { "kind": "meta", "heroIds": ["emperExultant", "custoBladeChampion", "custoTrajann", "orksWarboss", "custoVexilusPraetor"], "mowId": "deathCrawler", "compIds": ["Laviscus"] },
+        { "kind": "alternate", "heroIds": ["admecRuststalker", "admecMarshall", "admecManipulus", "admecDominus", "custoTrajann"], "mowId": "ultraDreadnought", "compIds": ["AdMech"] }
+      ]
+    },
+    {
+      "bossUnitSetId": "GuildBoss3Boss1NecroSilentKing",
+      "recommendations": [
+        { "kind": "meta", "heroIds": ["emperExultant", "custoBladeChampion", "custoTrajann", "orksWarboss", "custoVexilusPraetor"], "mowId": "tyranBiovore", "compIds": ["Laviscus"] },
+        { "kind": "alternate", "heroIds": ["admecRuststalker", "admecMarshall", "admecManipulus", "admecDominus", "orksWarboss"], "mowId": "tyranBiovore", "compIds": ["AdMech"] }
+      ]
+    },
+    {
+      "bossUnitSetId": "GuildBoss1Boss1TyranTervigonLeviathan",
+      "recommendations": [
+        { "kind": "meta", "heroIds": ["admecRuststalker", "admecMarshall", "admecManipulus", "admecDominus", "templHelbrecht"], "mowId": "ultraDreadnought", "compIds": ["AdMech"] },
+        { "kind": "alternate", "heroIds": ["custoBladeChampion", "custoTrajann", "worldKharn", "spaceBlackmane", "templHelbrecht"], "mowId": "ultraDreadnought", "compIds": ["Custodes"] }
+      ]
+    }
+  ]
+}

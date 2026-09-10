@@ -1,6 +1,6 @@
 ﻿{
   version: dev-2026-09-02,
-  schemaVersion: 2,
+  schemaVersion: 3,
   gameVersion: 1.42,
   sourceHash: {time-dependent},
   datasets: [
@@ -38,6 +38,11 @@
       key: events-calendar,
       hash: {time-dependent},
       url: /api/v1/game-catalog/events-calendar
+    },
+    {
+      key: guild-raid-meta,
+      hash: 77f501aeb5ccf146d218b607eb39ba747645a86db1333b961fc01ec0f5218160,
+      url: /api/v1/game-catalog/guild-raid-meta
     },
     {
       key: lre-battles,
