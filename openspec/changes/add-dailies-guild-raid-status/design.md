@@ -8,27 +8,29 @@ The companion `tacticus-planner-apps` change consumes `GET /api/v1/guilds/me/rai
 
 **Goals:**
 
-- Produce one small, stable current-status projection from upstream observations and catalog data.
+- Persist normalized Guild Raid source facts by guild and season and produce one small, stable current-status projection from them.
 - Keep automatic/manual refresh inexpensive and collapse same-guild concurrency.
 - Make partial source knowledge explicit through nullable fields and stale fallback.
 
 **Non-Goals:**
 
-- Persisting Guild Raid seasons/hits or building historical analytics.
+- Building historical analytics or storing derived rankings, scores, token summaries, or recommendations.
 - Returning member-level data, team recommendations, token resources, or performance scores.
 - Guessing a season schedule when no authored occurrence exists.
 
 ## Decisions
 
-### Add a dedicated Guild Raid status feature and pure projector
+### Persist normalized source facts and keep the status projector pure
 
-The endpoint will live under the existing Guild route boundary but delegate normalization to a pure status projector. The projector accepts the upstream response, the current raid-boss catalog snapshot, observation time, and optional active Guild Raid event occurrence, then emits the declared discriminated contract. Endpoint authorization/token lookup and upstream error mapping remain outside it.
+The endpoint will live under the existing Guild route boundary. A refresh service normalizes the upstream response into relational source facts scoped by `(guildId, seasonNumber)` and writes a complete successful observation transactionally. A pure status projector then accepts the persisted season/hits, the current raid-boss catalog snapshot, and optional active Guild Raid event occurrence and emits the declared discriminated contract. Endpoint authorization/token lookup and upstream error mapping remain outside it.
 
-This keeps boss-order/loop/modifier cases directly testable without HTTP or persistence. Returning raw upstream entries and reproducing V1 calculations in the browser was rejected because it exposes unnecessary member data and creates two normalization paths.
+`GuildRaidSyncState`, keyed by guild, records the latest successful active/no-active outcome and observation time so either result can be reused without a process-local cache. `GuildRaidSeason` records the upstream season/config identity, last observation metadata, and guild ownership. Child hit and hit-unit records retain normalized encounter facts needed for current projection and later separately-scoped analytics. A unique guild/season key plus a deterministic hash of each normalized upstream entry makes repeated refreshes idempotent. Derived current boss, modifiers, summaries, rankings, and token counts are not persisted.
+
+This keeps boss-order/loop/modifier cases directly testable without HTTP. Returning raw upstream entries and reproducing V1 calculations in the browser was rejected because it exposes unnecessary member data and creates two normalization paths.
 
 ### Use the raid-boss season config as the only encounter sequence
 
-The projector strips any progression suffix from upstream unit ids, resolves the matching boss position using unit-set id plus difficulty/progression, and advances with the catalog's tier/set and loop rules. It selects observations relative to the most recent boss defeat so repeated Legendary/Mythic loops cannot reuse stale HP.
+The refresh normalizer strips any progression suffix from upstream unit ids. The projector resolves the current boss position using unit-set id plus difficulty/progression and, after a defeated observation, selects the current configured position using the catalog's tier/set and loop rules. It selects observations relative to the most recent boss defeat so repeated Legendary/Mythic loops cannot reuse stale HP.
 
 Boss and prime maximum HP fall back to the exact selected catalog progression step. Modifier thresholds use the catalog's existing proportional `hpLost` semantics. No parallel hard-coded boss order will be introduced.
 
@@ -40,27 +42,28 @@ The endpoint returns structural ids and numeric/timestamp values. The app resolv
 
 The events catalog defines Guild Raid seasons as non-recurring. At `observedAt`, the projector may use one explicit active `GuildRaidSeason` occurrence's end timestamp; otherwise `endsAt` is null. It will not derive an anchor from the first recorded hit or assume a 14-day cadence. The relevant projection is the already-loaded current catalog version/window; this change adds no forward recurrence.
 
-### Use bounded in-memory stale-while-error caching with single-flight refresh
+### Use PostgreSQL as the durable observation cache with single-flight refresh
 
-A singleton status service keeps the last successful active/no-active observation by guild id. Five minutes is fresh; successful data remains eligible for stale fallback through 30 minutes. A per-guild asynchronous gate ensures both stale automatic requests and `refresh=true` share one upstream call. Entries are bounded by expiration/size policy so the lock/cache key set cannot grow indefinitely.
+The service reads the latest persisted observation for the guild. An observation less than five minutes old is fresh; a normal request returns it without upstream access. Older observations trigger refresh, while `refresh=true` bypasses the fresh-age check. A bounded per-guild asynchronous gate ensures automatic and forced refresh requests within one API instance share one upstream operation.
 
-Process-local caching was chosen over a database table because status is ephemeral and no historical fact retention is required. In a multi-instance deployment, single-flight is per instance; source rate limiting remains bounded by each instance. A distributed cache can replace this behind the service later without changing the endpoint.
+Each successful active response transactionally upserts the guild/season observation, its normalized source facts, and the guild sync state before projection. A successful no-active response updates only the guild sync state and does not delete prior season facts. If refresh fails, the most recent persisted successful sync state and any referenced season remain available as stale data regardless of process restarts; `observedAt` makes age explicit. Single-flight remains process-local, so database uniqueness and idempotent writes handle cross-instance overlap.
 
 ### Map prerequisite and upstream failures without hiding stale data
 
-Membership/readiness failures return conflict before upstream access. Upstream no-active responses normalize to a successful empty state. Rejected upstream credentials/data map to bad gateway; transient network/timeouts map to service unavailable. A recent successful cached projection wins over transient refresh errors and is marked stale.
+Membership/readiness failures return conflict before upstream access. Upstream no-active responses normalize to a successful empty state. Rejected upstream credentials/data map to bad gateway; transient network/timeouts map to service unavailable. Any previously persisted successful observation wins over a transient refresh error and is marked stale; when none exists, the mapped error is returned.
 
 ### Catalog and persistence impact
 
-No raw catalog dataset, denormalizer, public manifest shape, or manifest snapshot changes for this endpoint. It reads the existing `raid-bosses` and current event projections. No EF Core migration or backfill is required.
+No raw catalog dataset, denormalizer, public manifest shape, or manifest snapshot changes are required. The endpoint reads the existing `raid-bosses` and current event projections. An additive EF Core migration creates guild raid sync-state, season, hit, and hit-unit storage with guild/season ownership, cascade behavior, uniqueness, and lookup indexes. No backfill is required; the first status refresh populates the current guild state and season.
 
 ## Risks / Trade-offs
 
 - [Risk] Upstream responses with no hits provide less evidence for HP/difficulty → Use the exact first configured position and catalog progression, retaining null where no trustworthy value exists.
 - [Risk] A new upstream shape or unknown season config prevents detailed normalization → Fail the refresh rather than pair hit data with the wrong boss; recent cached data may be returned stale.
-- [Risk] Process-local single-flight permits one refresh per deployment instance → Keep the cache abstraction replaceable and monitor upstream pressure before adding distributed coordination.
+- [Risk] Process-local single-flight permits one refresh per deployment instance → Make refresh writes idempotent and enforce relational uniqueness so overlapping instances converge safely.
+- [Risk] Persisted hit facts broaden future data-retention responsibility → Store only normalized raid facts needed for projection, never credentials or derived analytics, and defer retention/analytics policy to a separate change.
 - [Risk] Explicit season occurrences may be absent → Return `endsAt: null`; the companion UI communicates that countdown is unavailable.
 
 ## Migration Plan
 
-Deploy the API endpoint and generated OpenAPI contract first, then apply the companion app change. The endpoint is additive and requires no data migration. Rollback removes the endpoint/cache service; existing guild and catalog data are untouched.
+Deploy the additive migration, API endpoint, and generated OpenAPI contract first, then apply the companion app change. Existing guilds populate their current season on first status refresh; no backfill job is required. Rollback removes the endpoint but retains captured raid facts unless a separately reviewed destructive migration removes them.

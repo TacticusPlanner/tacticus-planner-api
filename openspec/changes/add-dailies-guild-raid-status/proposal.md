@@ -5,9 +5,9 @@ The Dailies Guild Raids page cannot show the guild's live raid position because 
 ## What Changes
 
 - Add an authenticated current Guild Raid status endpoint for the caller's registered guild.
-- Fetch and normalize the upstream current-season response into active-season, no-active-season, and temporarily-unavailable states.
-- Derive the current boss, tier/set progress, next boss, HP, prime modifiers and remaining thresholds from the raid-boss catalog.
-- Return observation/freshness metadata and nullable season timing; keep a short-lived per-guild cache, support explicit refresh, and collapse concurrent refreshes.
+- Fetch and persist normalized upstream raid source facts per guild and season, then project active-season, no-active-season, and temporarily-unavailable states.
+- Derive the current boss, tier/set progress, HP, prime modifiers and remaining thresholds from the persisted season data and raid-boss catalog.
+- Return observation/freshness metadata and nullable season timing; reuse fresh persisted observations, support explicit refresh, and collapse concurrent refreshes.
 - Keep raw hit history, member performance, rankings, and team recommendations outside this contract.
 - Coordinate the matching `add-dailies-guild-raid-status` change in `tacticus-planner-apps`; the API side applies first.
 
@@ -15,7 +15,7 @@ The Dailies Guild Raids page cannot show the guild's live raid position because 
 
 ### New Capabilities
 
-- `guild-raid-current-status`: Defines the normalized, cached current-raid endpoint and its access, state, derivation, freshness, and failure behavior.
+- `guild-raid-current-status`: Defines the persisted Guild Raid observation model plus the normalized current-raid endpoint and its access, state, derivation, freshness, and failure behavior.
 
 ### Modified Capabilities
 
@@ -23,6 +23,6 @@ None.
 
 ## Impact
 
-- Affects the Guild API feature area, the upstream Tacticus API client, raid-boss catalog lookups, dependency injection, endpoint tests, and generated OpenAPI.
-- Uses the existing encrypted guild API token and persisted guild membership; no new database table or migration is expected.
+- Affects the Guild API feature area, persistence model and migration, the upstream Tacticus API client, raid-boss catalog lookups, dependency injection, endpoint tests, and generated OpenAPI.
+- Uses the existing encrypted guild API token and persisted guild membership; normalized raid source facts are stored by guild and season while derived status remains a read projection.
 - Adds a frontend-consumed API contract paired with `tacticus-planner-apps`.
