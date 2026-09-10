@@ -29,7 +29,7 @@ The server SHALL preserve authored recommendation, slot, and replacement order. 
 
 ### Requirement: Variant-rule references and coverage are validated
 
-Catalog loading SHALL reject Guild Raid Meta data when recommendation ids are duplicated, a recommendation does not have exactly five hero slots, a slot's `heroId` does not match the `heroIds` value at the same position, a replacement repeats its ideal hero, one replacement id is duplicated within a slot, or one Machine-of-War replacement repeats `mowId` or another replacement.
+Catalog loading SHALL reject Guild Raid Meta data when a recommendation id is empty or duplicated, a recommendation does not have exactly five hero slots, a slot's `roleId` is empty, a slot's `heroId` does not match the `heroIds` value at the same position, a replacement repeats its ideal hero, one replacement id is duplicated within a slot, or one Machine-of-War replacement repeats `mowId` or another replacement.
 
 Every slot hero and replacement id SHALL resolve to a catalog character. Every Machine-of-War replacement id SHALL resolve to a catalog Machine of War. A character MAY be an allowed replacement in multiple slots or recommendations; uniqueness is enforced within each individual replacement list, not globally.
 
@@ -42,6 +42,11 @@ Every slot hero and replacement id SHALL resolve to a catalog character. Every M
 
 - **WHEN** a replacement rule references an unknown character or Machine of War
 - **THEN** catalog loading fails with the unresolved id identified
+
+#### Scenario: Required rule identity is empty
+
+- **WHEN** a recommendation has an empty `id` or any hero slot has an empty `roleId`
+- **THEN** catalog loading fails with the empty field identified
 
 #### Scenario: Shared replacement is valid
 

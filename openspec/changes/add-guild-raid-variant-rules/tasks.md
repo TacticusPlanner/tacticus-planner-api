@@ -7,7 +7,7 @@
 
 - [ ] 2.1 Extend raw and served Guild Raid Meta records with recommendation identity, hero-slot rules, and Machine-of-War replacements, and verify compilation plus serialization tests assert the complete field/type shape.
 - [ ] 2.2 Extend denormalization as a direct order-preserving projection and verify `GuildRaidMetaDenormalizerTests` cover empty and populated replacement lists without Comp inference.
-- [ ] 2.3 Extend load validation for global recommendation identity, five-slot alignment, per-list uniqueness, ideal-unit exclusion, and character/Machine-of-War references, and verify `GuildRaidMetaValidationTests` cover each failure plus legal cross-rule reuse.
+- [ ] 2.3 Extend load validation for non-empty and globally unique recommendation ids, non-empty slot role ids, five-slot alignment, per-list uniqueness, ideal-unit exclusion, and character/Machine-of-War references, and verify `GuildRaidMetaValidationTests` cover each failure plus legal cross-rule reuse.
 
 ## 3. Manifest and Companion Coordination
 

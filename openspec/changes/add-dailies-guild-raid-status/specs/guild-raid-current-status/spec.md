@@ -44,7 +44,7 @@ An active-season object SHALL contain:
 
 A boss object SHALL contain `unitSetId` (string), `progressionIndex` (positive integer), `remainingHp` (non-negative integer), `maximumHp` (positive integer), and `isUpcoming` (boolean).
 
-A prime object SHALL contain `encounterIndex`, `unitSetId`, `progressionIndex`, nullable `remainingHp` and `maximumHp`, plus an ordered `modifiers` array. Each modifier SHALL contain `modifierId`, `type`, `target`, nullable `subtarget`, numeric `amount`, `activationRemainingHp`, and `active`.
+A prime object SHALL contain `encounterIndex`, `unitSetId`, `progressionIndex`, nullable integer `remainingHp` and `maximumHp`, plus an ordered `modifiers` array. Each modifier SHALL contain string `modifierId`, `type`, and `target`; nullable string `subtarget`; numeric `amount`; nullable integer `activationRemainingHp`; and nullable boolean `active`. `activationRemainingHp` and `active` SHALL both be null when the prime's maximum HP cannot be resolved.
 
 The server SHALL send stable ids and structured values only. The client SHALL derive names, icons, localized modifier descriptions, and display labels.
 
@@ -93,7 +93,7 @@ When current prime maximum HP cannot be resolved, its HP and derived modifier ac
 #### Scenario: Prime HP is unknown
 
 - **WHEN** neither a current observation nor the selected catalog progression provides the prime's maximum HP
-- **THEN** the prime remains present but its HP and HP-derived modifier values are null
+- **THEN** the prime remains present with `remainingHp: null` and `maximumHp: null`, and every modifier has `activationRemainingHp: null` and `active: null`
 
 ### Requirement: Season timing uses explicit event occurrences only
 
@@ -109,40 +109,42 @@ Guild Raid seasons SHALL NOT be projected from a guessed recurrence. `endsAt` SH
 - **WHEN** no explicit matching occurrence exists
 - **THEN** `endsAt` is null and the server does not infer an anchor or countdown
 
-### Requirement: Status refresh is cached and single-flight
+### Requirement: Successful Guild Raid observations are retained
 
-The system SHALL persist each successful normalized Guild Raid observation. A guild-scoped sync-state record SHALL retain whether the latest successful observation was active or no-active, its observation time, and its referenced season when active. Season source facts SHALL be scoped to the registered guild and upstream season and retain the season/config identity, normalized encounter hits, and participating unit facts needed to reproduce the current-status projection. The model SHALL enforce a unique guild/season identity and idempotent hit writes using a deterministic identity derived from the normalized upstream entry. Each hit SHALL retain the keyed Tacticus user-id hash compatible with existing profile/member lookup, not a new plaintext user-id lookup value. It SHALL NOT persist credentials, derived rankings, performance scores, token summaries, or team recommendations.
-
-The persistence layer SHALL provide a current-user hit query filtered in PostgreSQL by the resolved guild season and the authenticated caller's `TacticusUserIdHash`. A composite index SHALL begin with the season foreign key and user-id hash and support completion-time ordering. The query SHALL use a read-only projection and SHALL NOT materialize other members' hits or the complete season hit navigation. Requested unit details SHALL be restricted to the filtered hit ids. This query capability SHALL remain server-side and SHALL NOT add raw hit history to the current-status response.
-
-The endpoint SHALL treat the latest persisted successful observation as fresh for five minutes. A request without explicit refresh SHALL return that observation immediately while fresh and SHALL refresh it after it becomes stale. `refresh=true` SHALL bypass the fresh-age check. Concurrent refresh requests for the same guild in one API instance SHALL share one upstream operation. Successful refresh writes SHALL be transactional and safe when multiple instances overlap.
-
-If refresh fails and a successful persisted observation exists, the endpoint SHALL return it with `freshness: stale` and its original `observedAt`, including after a process restart. If no such observation exists, upstream rejection SHALL produce a bad-gateway response and transient unavailability or timeout SHALL produce a service-unavailable response. Failed/no-active observations SHALL NOT delete or overwrite the latest successful active season facts used for stale fallback.
+The system SHALL retain each successful normalized Guild Raid observation by registered guild and upstream season so the same current-status projection remains available after an API process restart. It SHALL NOT retain credentials or derived rankings, performance scores, token summaries, or team recommendations as part of the observation. Repeated or overlapping refreshes of the same logical observation SHALL NOT create duplicate season or hit facts.
 
 #### Scenario: Successful refresh persists source facts
 
 - **WHEN** the upstream source returns an active season for a ready guild
-- **THEN** its guild sync state plus normalized season, hit, and hit-unit facts are committed for that guild and the status is projected from the persisted observation
+- **THEN** a subsequent status read can reproduce that guild's observation after an API process restart without duplicating its season or hits
 
 #### Scenario: No-active observation is persisted
 
 - **WHEN** the upstream source successfully reports that no season is active
-- **THEN** the guild sync state records that result and observation time without deleting previously captured season facts
+- **THEN** a subsequent status read can reproduce the no-active result and observation time without losing previously retained season observations
 
 #### Scenario: Repeated refresh is idempotent
 
 - **WHEN** the same upstream season and hits are observed again or overlapping API instances complete refresh
 - **THEN** uniqueness constraints prevent duplicate season and hit facts while preserving one reproducible observation
 
+### Requirement: Current-user hit access is caller scoped
+
+A server-side current-user hit read SHALL accept one guild raid season and the authenticated caller's linked Tacticus identity and SHALL return only that caller's hits in completion-time order. It SHALL NOT return or materialize another guild member's hits or participating units. This read SHALL remain server-side and SHALL NOT add raw hit history to the current-status response.
+
 #### Scenario: Current user's hits are queried selectively
 
 - **WHEN** a server-side consumer requests hits for the authenticated caller in one guild raid season
-- **THEN** PostgreSQL filters by that season and the caller's keyed user-id hash and returns only the requested projection for matching hits
+- **THEN** the read filters by that season and caller identity and returns only the requested projection for matching hits
 
 #### Scenario: Other guild members have hits in the same season
 
 - **WHEN** the current-user hit query runs for a season containing hits from multiple members
 - **THEN** no other member's hit or unit rows are materialized or returned
+
+### Requirement: Status refresh observes a five-minute freshness window and single-flight behavior
+
+The endpoint SHALL treat the latest retained successful observation as fresh for five minutes. A request without explicit refresh SHALL return that observation immediately while fresh and SHALL refresh it after it becomes stale. `refresh=true` SHALL bypass the fresh-age check. Concurrent refresh requests for the same guild within one API instance SHALL share one upstream operation.
 
 #### Scenario: Fresh cached status is reused
 
@@ -154,6 +156,12 @@ If refresh fails and a successful persisted observation exists, the endpoint SHA
 - **WHEN** multiple requests for the same guild require refresh concurrently
 - **THEN** exactly one upstream request runs and every caller receives its result
 
+### Requirement: Refresh failures distinguish transient unavailability from rejected source data
+
+When a refresh fails because of transient unavailability or timeout and a retained successful observation exists, the endpoint SHALL return that observation with `freshness: stale` and its original `observedAt`, including after a process restart. Without retained data, transient unavailability or timeout SHALL produce a service-unavailable response.
+
+When the upstream source rejects the guild credential or response data, the endpoint SHALL produce a bad-gateway response even when retained status exists. A failed refresh or a successful no-active observation SHALL NOT delete previously retained active-season facts.
+
 #### Scenario: Refresh fails with persisted retained data
 
 - **WHEN** refresh fails transiently and the guild has a previously persisted successful observation
@@ -163,3 +171,8 @@ If refresh fails and a successful persisted observation exists, the endpoint SHA
 
 - **WHEN** refresh fails and no successful persisted observation exists
 - **THEN** the endpoint returns the mapped upstream error and does not fabricate status
+
+#### Scenario: Upstream credential is rejected while retained data exists
+
+- **WHEN** refresh is rejected because the guild credential is invalid and a successful observation was retained earlier
+- **THEN** the endpoint returns bad gateway and does not serve the retained observation as stale

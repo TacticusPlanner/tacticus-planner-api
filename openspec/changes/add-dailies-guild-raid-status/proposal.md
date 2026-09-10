@@ -5,7 +5,7 @@ The Dailies Guild Raids page cannot show the guild's live raid position because 
 ## What Changes
 
 - Add an authenticated current Guild Raid status endpoint for the caller's registered guild.
-- Fetch and persist normalized upstream raid source facts per guild and season, then project active-season, no-active-season, and temporarily-unavailable states.
+- Fetch and persist normalized upstream raid source facts per guild and season, then project active-season or no-active-season responses; represent refresh failures through retained stale data or mapped HTTP errors.
 - Index persisted hits for a server-side current-user query that filters by guild season and the caller's existing hashed Tacticus user identity without loading other members' hits.
 - Derive the current boss, tier/set progress, HP, prime modifiers and remaining thresholds from the persisted season data and raid-boss catalog.
 - Return observation/freshness metadata and nullable season timing; reuse fresh persisted observations, support explicit refresh, and collapse concurrent refreshes.

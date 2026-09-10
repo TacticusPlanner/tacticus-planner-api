@@ -57,7 +57,7 @@ Each successful active response transactionally upserts the guild/season observa
 
 ### Map prerequisite and upstream failures without hiding stale data
 
-Membership/readiness failures return conflict before upstream access. Upstream no-active responses normalize to a successful empty state. Rejected upstream credentials/data map to bad gateway; transient network/timeouts map to service unavailable. Any previously persisted successful observation wins over a transient refresh error and is marked stale; when none exists, the mapped error is returned.
+Membership/readiness failures return conflict before upstream access. Upstream no-active responses normalize to a successful empty state. Rejected upstream credentials/data always map to bad gateway so invalid access or malformed source data is not hidden by an old snapshot. Transient network/timeouts use a previously persisted successful observation marked stale; when none exists, they map to service unavailable.
 
 ### Catalog and persistence impact
 
