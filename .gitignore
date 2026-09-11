@@ -6,7 +6,8 @@
 *.user
 *.suo
 *.nupkg
-artifacts/
+artifacts/*
+!artifacts/openapi/
 TestResults/
 coverage/
 .aspire/
