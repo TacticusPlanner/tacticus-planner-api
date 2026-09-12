@@ -582,6 +582,9 @@
           },
           "409": {
             "description": "Guild access, synchronization, token, or a prior observation is not ready."
+          },
+          "502": {
+            "description": "The retained Guild Raid observation could not be projected."
           }
         },
         "security": [

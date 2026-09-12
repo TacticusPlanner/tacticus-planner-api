@@ -43,8 +43,19 @@ public sealed class GuildRaidStatusService(
 
     /// <summary>
     /// Performs (or reuses, within the per-guild cooldown) an upstream refresh and returns the resulting status.
+    /// Dispatches through <see cref="GuildRaidRefreshCoordinator"/> so concurrent callers for the same guild
+    /// join one shared, request-independent operation instead of racing the cooldown check individually.
     /// </summary>
-    public async Task<GuildRaidRefreshResult> RefreshAsync(Guild guild, CancellationToken ct)
+    public Task<GuildRaidRefreshResult> RefreshAsync(Guild guild, CancellationToken ct) =>
+        coordinator.RunAsync(guild, ct);
+
+    /// <summary>
+    /// The actual refresh operation, invoked by <see cref="GuildRaidRefreshCoordinator"/> inside its own
+    /// isolated scope. The cooldown check is evaluated here — inside the shared flight — rather than by each
+    /// caller beforehand, so a caller cannot observe a cooldown window opened by another caller's
+    /// still-in-flight attempt and short-circuit instead of joining it.
+    /// </summary>
+    internal async Task<GuildRaidRefreshResult> RefreshCoreAsync(Guild guild, CancellationToken ct)
     {
         var retained = await LoadRetainedAsync(guild.Id, ct);
         var now = timeProvider.GetUtcNow();
@@ -55,7 +66,7 @@ public sealed class GuildRaidStatusService(
                 : Project(retained, guild, FreshnessOf(retained.SyncState, observedAt));
         }
 
-        return await coordinator.RunAsync(guild.Id, () => DoRefreshAsync(guild, retained, ct));
+        return await DoRefreshAsync(guild, retained, ct);
     }
 
     private static GuildRaidFreshness FreshnessOf(GuildRaidSyncState syncState, DateTimeOffset observedAt) =>
@@ -94,9 +105,9 @@ public sealed class GuildRaidStatusService(
         {
             db.ChangeTracker.Clear();
             var converged = await LoadRetainedAsync(guild.Id, ct);
-            return converged?.SyncState.ObservedAt is null
+            return converged?.SyncState.ObservedAt is not { } convergedObservedAt
                 ? new GuildRaidRefreshResult.Unavailable("The Guild Raid observation could not be persisted.")
-                : Project(converged, guild, GuildRaidFreshness.Fresh);
+                : Project(converged, guild, FreshnessOf(converged.SyncState, convergedObservedAt));
         }
         catch (InvalidOperationException exception)
         {

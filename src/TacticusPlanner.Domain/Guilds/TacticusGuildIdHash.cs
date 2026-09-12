@@ -22,12 +22,12 @@ public readonly struct TacticusGuildIdHash : IEquatable<TacticusGuildIdHash>
             throw new ArgumentException($"A {nameof(TacticusGuildIdHash)} must be {Length} bytes.", nameof(value));
         }
 
-        return new TacticusGuildIdHash(value);
+        return new TacticusGuildIdHash((byte[])value.Clone());
     }
 
     public static TacticusGuildIdHash? FromNullable(byte[]? value) => value is null ? null : From(value);
 
-    public byte[] Value => value;
+    public byte[] Value => (byte[])value.Clone();
 
     public bool Equals(TacticusGuildIdHash other) => KeyedHashEquality.Equals(value, other.value);
 

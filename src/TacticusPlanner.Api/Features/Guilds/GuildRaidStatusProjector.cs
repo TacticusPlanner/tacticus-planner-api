@@ -213,11 +213,16 @@ public static class GuildRaidStatusProjector
             return currentIndex;
         }
 
-        var loopIndex = positions
-            .Select((position, index) => (position, index))
-            .FirstOrDefault(item => item.position.Tier.Tier == raw.LoopFromTier && item.position.Set.Set == raw.LoopFromSet)
-            .index;
-        return loopIndex;
+        for (var index = 0; index < positions.Count; index++)
+        {
+            if (positions[index].Tier.Tier == raw.LoopFromTier && positions[index].Set.Set == raw.LoopFromSet)
+            {
+                return index;
+            }
+        }
+
+        throw new InvalidOperationException(
+            $"Guild Raid season config '{seasonConfigId}' has a loop target (tier {raw.LoopFromTier}, set {raw.LoopFromSet}) outside its own positions.");
     }
 
     private static DateTimeOffset? ResolveEndsAt(

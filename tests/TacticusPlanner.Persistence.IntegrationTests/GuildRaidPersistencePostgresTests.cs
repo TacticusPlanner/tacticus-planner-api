@@ -45,16 +45,21 @@ public sealed class GuildRaidPersistencePostgresTests
         db.Guilds.Add(guild);
         await db.SaveChangesAsync(TestContext.Current.CancellationToken);
 
-        using var services = new ServiceCollection().AddGameCatalog().BuildServiceProvider();
-        var service = new GuildRaidStatusService(
-            db,
-            new NoActiveSeasonTacticusApi(),
-            new DeterministicHash(),
-            services.GetRequiredService<IGameCatalogProvider>(),
-            new GuildRaidRefreshCoordinator(),
-            TimeProvider.System);
+        // GuildRaidRefreshCoordinator resolves GuildRaidStatusService from its own DI scope (so a refresh
+        // outlives any single caller's request scope), so this test wires a real service provider with the
+        // same registrations production DI would use, rather than constructing the service by hand.
+        await using var services = new ServiceCollection()
+            .AddGameCatalog()
+            .AddSingleton<IColumnHashService>(new DeterministicHash())
+            .AddSingleton<ITacticusApi>(new NoActiveSeasonTacticusApi())
+            .AddSingleton(TimeProvider.System)
+            .AddScoped(_ => new PlannerDbContext(options, new PassthroughEncryption(), new NoProfile()))
+            .AddScoped<GuildRaidStatusService>()
+            .AddSingleton<GuildRaidRefreshCoordinator>()
+            .BuildServiceProvider();
 
-        var result = await service.RefreshAsync(guild, TestContext.Current.CancellationToken);
+        var coordinator = services.GetRequiredService<GuildRaidRefreshCoordinator>();
+        var result = await coordinator.RunAsync(guild, TestContext.Current.CancellationToken);
 
         var success = Assert.IsType<GuildRaidRefreshResult.Success>(result);
         Assert.Equal(GuildRaidObservationState.NoActiveSeason, success.Response.State);

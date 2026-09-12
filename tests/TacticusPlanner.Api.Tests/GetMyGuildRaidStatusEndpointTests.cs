@@ -248,6 +248,29 @@ public sealed class GetMyGuildRaidStatusEndpointTests(PlannerApiFactory factory)
     }
 
     [Fact]
+    public async Task RetainedObservationThatNoLongerResolvesInCatalogReturnsBadGatewayOnRead()
+    {
+        var ready = await RegisterAsync();
+        FakeTacticusApi.ConfigureGuildRaidResponse(ready.Token, BuildActiveResponse());
+        await PostRefreshAsync(ready.Client);
+
+        await using (var scope = factory.Services.CreateAsyncScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
+            var guildId = await db.Guilds.Where(guild => guild.Tag == ready.Tag)
+                .Select(guild => guild.Id)
+                .SingleAsync(TestContext.Current.CancellationToken);
+            var season = await db.GuildRaidSeasons.SingleAsync(
+                entity => entity.GuildId == guildId, TestContext.Current.CancellationToken);
+            season.SeasonConfigId = "unknown-season-config";
+            await db.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        Assert.Equal(HttpStatusCode.BadGateway, (await ready.Client.GetAsync(
+            StatusPath, TestContext.Current.CancellationToken)).StatusCode);
+    }
+
+    [Fact]
     public async Task TransientFailureWithoutRetainedObservationIsUnavailable()
     {
         var ready = await RegisterAsync();
@@ -271,6 +294,68 @@ public sealed class GetMyGuildRaidStatusEndpointTests(PlannerApiFactory factory)
 
         (await first).EnsureSuccessStatusCode();
         (await second).EnsureSuccessStatusCode();
+        Assert.Equal(1, FakeTacticusApi.GuildRaidCallCount(ready.Token));
+    }
+
+    [Fact]
+    public async Task RefreshArrivingWhileAnotherIsInFlightJoinsItInsteadOfReadingAStaleCooldownResult()
+    {
+        var ready = await RegisterAsync();
+        FakeTacticusApi.ConfigureGuildRaidResponse(ready.Token, BuildActiveResponse());
+        var initial = await PostRefreshAsync(ready.Client);
+        await ExpireCooldownAsync(ready.Tag);
+
+        var gate = FakeTacticusApi.ConfigureGuildRaidGate(ready.Token);
+        var first = ready.Client.PostAsync(RefreshPath, null, TestContext.Current.CancellationToken);
+        // The first call already recorded its attempt (opening a fresh cooldown window) and is now
+        // blocked in-flight on the gate; a second refresh arriving now must join that flight rather than
+        // reading the just-updated cooldown state and returning the old observation as an instant "stale"
+        // result without ever calling upstream again.
+        await WaitForCallCountAsync(ready.Token, 2);
+
+        var second = ready.Client.PostAsync(RefreshPath, null, TestContext.Current.CancellationToken);
+        gate.SetResult();
+
+        var firstResponse = await (await first).Content.ReadFromJsonAsync<GuildRaidStatusResponse>(
+            TestContext.Current.CancellationToken);
+        var secondResponse = await (await second).Content.ReadFromJsonAsync<GuildRaidStatusResponse>(
+            TestContext.Current.CancellationToken);
+
+        Assert.NotNull(initial);
+        Assert.NotNull(firstResponse);
+        Assert.NotNull(secondResponse);
+        Assert.Equal(2, FakeTacticusApi.GuildRaidCallCount(ready.Token));
+        Assert.Equal(GuildRaidFreshness.Fresh, secondResponse.Freshness);
+        Assert.Equal(firstResponse.ObservedAt, secondResponse.ObservedAt);
+        Assert.True(secondResponse.ObservedAt > initial.ObservedAt);
+    }
+
+    [Fact]
+    public async Task CancellingOneRefreshRequestDoesNotAffectAnotherCallersJoinedFlight()
+    {
+        var ready = await RegisterAsync();
+        FakeTacticusApi.ConfigureGuildRaidResponse(ready.Token, BuildActiveResponse());
+        var gate = FakeTacticusApi.ConfigureGuildRaidGate(ready.Token);
+
+        using var cancelledRequestCts = new CancellationTokenSource();
+        var cancelled = ready.Client.PostAsync(RefreshPath, null, cancelledRequestCts.Token);
+        await WaitForCallAsync(ready.Token);
+
+        var survivor = ready.Client.PostAsync(RefreshPath, null, TestContext.Current.CancellationToken);
+        await cancelledRequestCts.CancelAsync();
+        try
+        {
+            await cancelled;
+        }
+        catch (Exception)
+        {
+            // Expected: only the cancelled caller's own wait is aborted. The shared flight, and every
+            // other caller joined to it, must be unaffected by this caller's cancellation.
+        }
+
+        gate.SetResult();
+
+        (await survivor).EnsureSuccessStatusCode();
         Assert.Equal(1, FakeTacticusApi.GuildRaidCallCount(ready.Token));
     }
 
@@ -366,9 +451,11 @@ public sealed class GetMyGuildRaidStatusEndpointTests(PlannerApiFactory factory)
         };
     }
 
-    private static async Task WaitForCallAsync(string token)
+    private static Task WaitForCallAsync(string token) => WaitForCallCountAsync(token, 1);
+
+    private static async Task WaitForCallCountAsync(string token, int expectedAtLeast)
     {
-        for (var attempt = 0; attempt < 100 && FakeTacticusApi.GuildRaidCallCount(token) == 0; attempt++)
+        for (var attempt = 0; attempt < 100 && FakeTacticusApi.GuildRaidCallCount(token) < expectedAtLeast; attempt++)
         {
             await Task.Delay(10, TestContext.Current.CancellationToken);
         }

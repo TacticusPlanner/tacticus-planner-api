@@ -89,6 +89,30 @@ public sealed class GuildRaidStatusProjectorTests(PlannerApiFactory factory) : I
     }
 
     [Fact]
+    public void DefeatingFinalPositionWithAnInvalidConfiguredLoopTargetThrows()
+    {
+        var (configId, config) = FirstConfig();
+        var season = Season(configId);
+        var lastTier = config.Tiers[^1];
+        var finalSet = lastTier.Sets[^1];
+        season.Attacks.Add(Attack(finalSet, lastTier, Boss(finalSet), 0, 100, ObservedAt));
+
+        var invalidCatalog = catalog with
+        {
+            RaidBossRawData = catalog.RaidBossRawData with
+            {
+                Seasons = catalog.RaidBossRawData.Seasons.ToDictionary(
+                    pair => pair.Key,
+                    pair => pair.Key == configId
+                        ? pair.Value with { LoopFromTier = -1, LoopFromSet = -1 }
+                        : pair.Value),
+            },
+        };
+
+        Assert.Throws<InvalidOperationException>(() => Project(season, invalidCatalog));
+    }
+
+    [Fact]
     public void PrimeHpAndModifiersUseCurrentObservationAndIgnoreOlderLoopAttack()
     {
         var (configId, config) = FirstConfig();

@@ -18,6 +18,7 @@ public sealed class GetMyGuildRaidStatusEndpoint : EndpointWithoutRequest<GuildR
             summary.Response<GuildRaidStatusResponse>(StatusCodes.Status200OK, "Current Guild Raid status.");
             summary.Response(StatusCodes.Status404NotFound, "The authenticated profile has not been provisioned.");
             summary.Response(StatusCodes.Status409Conflict, "Guild access, synchronization, token, or a prior observation is not ready.");
+            summary.Response(StatusCodes.Status502BadGateway, "The retained Guild Raid observation could not be projected.");
         });
     }
 
@@ -54,6 +55,10 @@ public sealed class GetMyGuildRaidStatusEndpoint : EndpointWithoutRequest<GuildR
                 break;
             case GuildRaidRefreshResult.NeverObserved:
                 await ConflictAsync("The linked guild has no Guild Raid status observation yet.", ct);
+                break;
+            case GuildRaidRefreshResult.Rejected rejected:
+                AddError(rejected.Message);
+                await Send.ErrorsAsync(StatusCodes.Status502BadGateway, ct);
                 break;
         }
     }
