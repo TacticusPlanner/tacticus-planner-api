@@ -25,6 +25,11 @@ internal sealed class FakeTacticusApi : ITacticusApi
     private static readonly ConcurrentDictionary<string, HttpStatusCode> GuildRejectionsByToken = new();
     private static readonly ConcurrentDictionary<string, bool> GuildUnavailableTokens = new();
     private static readonly ConcurrentDictionary<string, PlayerResponse> PlayerResponsesByToken = new();
+    private static readonly ConcurrentDictionary<string, GuildRaidResponse> GuildRaidResponsesByToken = new();
+    private static readonly ConcurrentDictionary<string, HttpStatusCode> GuildRaidRejectionsByToken = new();
+    private static readonly ConcurrentDictionary<string, bool> GuildRaidUnavailableTokens = new();
+    private static readonly ConcurrentDictionary<string, int> GuildRaidCallsByToken = new();
+    private static readonly ConcurrentDictionary<string, TaskCompletionSource> GuildRaidGatesByToken = new();
 
     /// <summary>Registers the <see cref="GuildResponse"/> <see cref="GetGuildAsync"/> returns for
     /// <paramref name="guildApiToken"/>. Build the response via <see cref="BuildGuildResponse"/>.</summary>
@@ -72,6 +77,25 @@ internal sealed class FakeTacticusApi : ITacticusApi
             },
         };
     }
+
+    public static void ConfigureGuildRaidResponse(string guildApiToken, GuildRaidResponse response) =>
+        GuildRaidResponsesByToken[guildApiToken] = response;
+
+    public static void ConfigureGuildRaidRejection(string guildApiToken, HttpStatusCode statusCode) =>
+        GuildRaidRejectionsByToken[guildApiToken] = statusCode;
+
+    public static void ConfigureGuildRaidUnavailable(string guildApiToken) =>
+        GuildRaidUnavailableTokens[guildApiToken] = true;
+
+    public static TaskCompletionSource ConfigureGuildRaidGate(string guildApiToken)
+    {
+        var gate = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        GuildRaidGatesByToken[guildApiToken] = gate;
+        return gate;
+    }
+
+    public static int GuildRaidCallCount(string guildApiToken) =>
+        GuildRaidCallsByToken.GetValueOrDefault(guildApiToken);
 
     private static async Task<ApiException> CreateGuildApiExceptionAsync(HttpStatusCode statusCode)
     {
@@ -237,8 +261,30 @@ internal sealed class FakeTacticusApi : ITacticusApi
         );
     }
 
-    public Task<GuildRaidResponse> GetGuildRaidsAsync(string guildApiToken, CancellationToken cancellationToken = default) =>
-        throw new NotSupportedException();
+    public async Task<GuildRaidResponse> GetGuildRaidsAsync(
+        string guildApiToken,
+        CancellationToken cancellationToken = default)
+    {
+        GuildRaidCallsByToken.AddOrUpdate(guildApiToken, 1, (_, count) => count + 1);
+        if (GuildRaidGatesByToken.TryGetValue(guildApiToken, out var gate))
+        {
+            await gate.Task.WaitAsync(cancellationToken);
+        }
+        if (GuildRaidUnavailableTokens.ContainsKey(guildApiToken))
+        {
+            throw new HttpRequestException("Simulated Guild Raid API outage.");
+        }
+        if (GuildRaidRejectionsByToken.TryGetValue(guildApiToken, out var statusCode))
+        {
+            throw await CreateGuildApiExceptionAsync(statusCode);
+        }
+        if (GuildRaidResponsesByToken.TryGetValue(guildApiToken, out var response))
+        {
+            return response;
+        }
+        throw new InvalidOperationException(
+            $"No Guild Raid response configured for token '{guildApiToken}'.");
+    }
 
     public Task<GuildRaidResponse> GetGuildRaidBySeasonAsync(
         string guildApiToken,

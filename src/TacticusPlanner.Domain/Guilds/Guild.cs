@@ -20,7 +20,7 @@ public class Guild : BaseEntity<GuildId>, IRevisionedEntity
     /// <summary>HMAC hash of <see cref="TacticusGuildId"/>, computed with the same keyed hash service as
     /// <c>Profile.TacticusUserIdHash</c> — enforces uniqueness and enables lookup-by-guild-id without
     /// decrypting <see cref="TacticusGuildId"/>.</summary>
-    public byte[]? TacticusGuildIdHash { get; set; }
+    public TacticusGuildIdHash? TacticusGuildIdHash { get; set; }
 
     public required string Tag { get; set; }
 

@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TacticusPlanner.Domain.Accounts;
 using TacticusPlanner.Domain.Goals;
+using TacticusPlanner.Domain.GuildRaids;
 using TacticusPlanner.Domain.Guilds;
 using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.Profiles;
@@ -37,6 +38,14 @@ public sealed class PlannerDbContext(
     public DbSet<Guild> Guilds => Set<Guild>();
 
     public DbSet<GuildMember> GuildMembers => Set<GuildMember>();
+
+    public DbSet<GuildRaidSyncState> GuildRaidSyncStates => Set<GuildRaidSyncState>();
+
+    public DbSet<GuildRaidSeason> GuildRaidSeasons => Set<GuildRaidSeason>();
+
+    public DbSet<GuildRaidAttack> GuildRaidAttacks => Set<GuildRaidAttack>();
+
+    public DbSet<GuildRaidAttackUnit> GuildRaidAttackUnits => Set<GuildRaidAttackUnit>();
 
     public DbSet<Goal> Goals => Set<Goal>();
 

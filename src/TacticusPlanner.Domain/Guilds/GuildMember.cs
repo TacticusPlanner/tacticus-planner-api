@@ -23,7 +23,7 @@ public class GuildMember : BaseEntity<GuildMemberId>, IRevisionedEntity
 
     /// <summary>HMAC hash of <see cref="TacticusUserId"/>, computed with the same keyed hash service as
     /// <c>Profile.TacticusUserIdHash</c>, so the two can be matched without decrypting either side.</summary>
-    public byte[]? TacticusUserIdHash { get; set; }
+    public TacticusUserIdHash? TacticusUserIdHash { get; set; }
 
     /// <summary>The Planner profile this member is linked to, re-evaluated on every synchronization. Null
     /// when no configured profile matches this member's Tacticus user id yet.</summary>

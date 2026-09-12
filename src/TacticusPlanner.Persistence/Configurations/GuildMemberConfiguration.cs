@@ -17,7 +17,11 @@ public sealed class GuildMemberConfiguration : IEntityTypeConfiguration<GuildMem
             .ValueGeneratedNever();
         builder.Property(entity => entity.GuildId).HasVogenConversion().IsRequired();
         builder.Property(entity => entity.TacticusUserId).IsRequired();
-        builder.Property(entity => entity.TacticusUserIdHash).HasMaxLength(32);
+        builder.Property(entity => entity.TacticusUserIdHash)
+            .HasConversion(
+                hash => hash.HasValue ? hash.Value.Value : (byte[]?)null,
+                value => value != null ? TacticusUserIdHash.From(value) : (TacticusUserIdHash?)null)
+            .HasMaxLength(32);
 
         // HasVogenConversion() only targets the non-nullable struct overload; ProfileId here is nullable
         // (an unlinked member), so its converter is written out by hand — see GuildConfiguration for the

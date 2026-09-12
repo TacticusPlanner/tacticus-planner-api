@@ -14,7 +14,7 @@ public class Profile : BaseEntity<ProfileId>
 
     public TacticusUserId? TacticusUserId { get; set; }
 
-    public byte[]? TacticusUserIdHash { get; set; }
+    public TacticusUserIdHash? TacticusUserIdHash { get; set; }
 
     /// <summary>The profile's current active plan (plan §3.2/§5) — a loose id (no DB FK, to avoid a
     /// Profile↔Project cascade cycle), set to a project's id on activation. A single nullable pointer
