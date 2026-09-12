@@ -122,7 +122,7 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
         var db = Resolve<PlannerDbContext>();
         var profile = await db.Profiles.FirstAsync(entity => entity.Id == profileId, ct);
         profile.TacticusUserId = TacticusUserId.From(value);
-        profile.TacticusUserIdHash = Resolve<IColumnHashService>().ComputeHash(value);
+        profile.TacticusUserIdHash = TacticusUserIdHash.FromNullable(Resolve<IColumnHashService>().ComputeHash(value));
         try
         {
             await db.SaveChangesAsync(ct);

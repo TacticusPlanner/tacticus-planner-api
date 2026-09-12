@@ -8,7 +8,7 @@ Provides an authenticated, normalized view of a registered guild's current raid 
 
 The system SHALL expose an authenticated `GET /api/v1/guilds/me/raid-status` endpoint. It SHALL use the caller's linked guild and that guild's stored encrypted API token without returning the token or another member's hit history.
 
-The endpoint SHALL return conflict status when the caller has no linked registered guild, the guild has never completed synchronization, or the guild has no usable stored token. It SHALL preserve the existing not-found behavior for an unprovisioned profile and SHALL NOT call the upstream Guild Raid API in any of these cases.
+The endpoint SHALL return conflict status when the caller has no linked registered guild, the guild has never completed synchronization, the guild has no usable stored token, or the guild has never had a successful Guild Raid status observation persisted. It SHALL preserve the existing not-found behavior for an unprovisioned profile. `GET` SHALL NOT call the upstream Guild Raid API under any circumstance, including these prerequisite-failure cases and the never-observed case.
 
 #### Scenario: Ready guild requests its status
 
@@ -20,9 +20,14 @@ The endpoint SHALL return conflict status when the caller has no linked register
 - **WHEN** the caller is not linked to a registered and successfully synchronized guild
 - **THEN** the endpoint returns a conflict response that identifies the missing prerequisite without exposing any guild credential
 
+#### Scenario: Guild is ready but has no raid-status observation yet
+
+- **WHEN** the caller's guild is registered, synchronized, and holds a usable token, but no Guild Raid status observation has ever been persisted for it
+- **THEN** the endpoint returns a conflict response instead of performing an inline first upstream fetch
+
 ### Requirement: The endpoint returns a stable discriminated response
 
-Every successful response SHALL contain:
+Both `GET /api/v1/guilds/me/raid-status` and `POST /api/v1/guilds/me/raid-status/refresh` SHALL return the same discriminated response on success. Every successful response SHALL contain:
 
 - `state`: `active` or `noActiveSeason`;
 - `observedAt`: UTC timestamp of the upstream observation represented by the payload;
@@ -142,37 +147,46 @@ A server-side current-user hit read SHALL accept one guild raid season and the a
 - **WHEN** the current-user hit query runs for a season containing hits from multiple members
 - **THEN** no other member's hit or unit rows are materialized or returned
 
-### Requirement: Status refresh observes a five-minute freshness window and single-flight behavior
+### Requirement: Reading status never calls upstream; forced refresh is a separate cooldown-gated endpoint
 
-The endpoint SHALL treat the latest retained successful observation as fresh for five minutes. A request without explicit refresh SHALL return that observation immediately while fresh and SHALL refresh it after it becomes stale. `refresh=true` SHALL bypass the fresh-age check. Concurrent refresh requests for the same guild within one API instance SHALL share one upstream operation.
+`GET /api/v1/guilds/me/raid-status` SHALL always return the latest persisted observation for the caller's guild and SHALL NOT call the upstream Guild Raid API, regardless of how old that observation is.
 
-#### Scenario: Fresh cached status is reused
+`POST /api/v1/guilds/me/raid-status/refresh` SHALL perform the upstream call, persist a successful result, and return the same discriminated response. It SHALL be gated by a one-minute per-guild cooldown measured from the guild's last sync attempt, successful or failed; a request inside that window SHALL NOT call upstream and SHALL return the current persisted result instead of an error. Concurrent refresh requests for the same guild within one API instance SHALL share one upstream operation regardless of the cooldown.
 
-- **WHEN** a non-forced request arrives less than five minutes after a successful observation
-- **THEN** the cached response is returned without an upstream call
+#### Scenario: Read never triggers a sync
+
+- **WHEN** any `GET` request arrives, fresh or long-stale
+- **THEN** the response is served from the latest persisted observation and no upstream call is made
+
+#### Scenario: Refresh within the cooldown reuses the last attempt
+
+- **WHEN** a `POST /refresh` request arrives less than one minute after the guild's last sync attempt
+- **THEN** the endpoint returns the current persisted result without calling upstream
 
 #### Scenario: Manual and automatic refresh overlap
 
-- **WHEN** multiple requests for the same guild require refresh concurrently
+- **WHEN** multiple `POST /refresh` requests for the same guild require an upstream call concurrently
 - **THEN** exactly one upstream request runs and every caller receives its result
 
 ### Requirement: Refresh failures distinguish transient unavailability from rejected source data
 
-When a refresh fails because of transient unavailability or timeout and a retained successful observation exists, the endpoint SHALL return that observation with `freshness: stale` and its original `observedAt`, including after a process restart. Without retained data, transient unavailability or timeout SHALL produce a service-unavailable response.
+These failure responses SHALL only originate from `POST /refresh`; `GET` never produces them because it never calls upstream.
 
-When the upstream source rejects the guild credential or response data, the endpoint SHALL produce a bad-gateway response even when retained status exists. A failed refresh or a successful no-active observation SHALL NOT delete previously retained active-season facts.
+When `POST /refresh` fails because of transient unavailability or timeout and a retained successful observation exists, the endpoint SHALL return that observation with `freshness: stale` and its original `observedAt`, including after a process restart. Without retained data, transient unavailability or timeout SHALL produce a service-unavailable response.
+
+When the upstream source rejects the guild credential or response data, `POST /refresh` SHALL produce a bad-gateway response even when retained status exists. A failed refresh or a successful no-active observation SHALL NOT delete previously retained active-season facts.
 
 #### Scenario: Refresh fails with persisted retained data
 
-- **WHEN** refresh fails transiently and the guild has a previously persisted successful observation
+- **WHEN** `POST /refresh` fails transiently and the guild has a previously persisted successful observation
 - **THEN** that observation is returned with `freshness: stale`
 
 #### Scenario: Refresh fails without usable retained data
 
-- **WHEN** refresh fails and no successful persisted observation exists
+- **WHEN** `POST /refresh` fails and no successful persisted observation exists
 - **THEN** the endpoint returns the mapped upstream error and does not fabricate status
 
 #### Scenario: Upstream credential is rejected while retained data exists
 
-- **WHEN** refresh is rejected because the guild credential is invalid and a successful observation was retained earlier
+- **WHEN** `POST /refresh` is rejected because the guild credential is invalid and a successful observation was retained earlier
 - **THEN** the endpoint returns bad gateway and does not serve the retained observation as stale

@@ -82,7 +82,7 @@ public sealed class GuildSyncService(
         // The guild id is encrypted at rest (non-deterministically, per ADR 0005), so it can't be matched
         // by re-encrypting and comparing ciphertext — look up by the keyed hash instead, same as
         // Profile/GuildMember's Tacticus user id linking.
-        var tacticusGuildIdHash = hashService.ComputeHash(upstream.GuildId.ToString());
+        var tacticusGuildIdHash = TacticusGuildIdHash.FromNullable(hashService.ComputeHash(upstream.GuildId.ToString()));
 
         var guild = await db.Guilds
             .Include(entity => entity.Members)
@@ -150,7 +150,7 @@ public sealed class GuildSyncService(
         // Profile.TacticusUserIdHash, so linking never requires decrypting either side.
         var hashesByUserId = upstreamMembers.ToDictionary(
             member => member.UserId,
-            member => hashService.ComputeHash(member.UserId.ToString())
+            member => TacticusUserIdHash.FromNullable(hashService.ComputeHash(member.UserId.ToString()))
         );
 
         // Loaded once per sync and matched in memory: byte[] equality does not translate cleanly to SQL,
@@ -173,15 +173,15 @@ public sealed class GuildSyncService(
             .ToListAsync(ct);
 
         var profilesByHash = linkableProfiles
-            .GroupBy(profile => Convert.ToHexString(profile.TacticusUserIdHash!))
+            .GroupBy(profile => profile.TacticusUserIdHash!.Value)
             .ToDictionary(group => group.Key, group => group.First());
 
         var linkedProfileIds = upstreamMembers
             .Select(member => hashesByUserId[member.UserId])
             .Where(hash => hash is not null)
-            .Select(hash => Convert.ToHexString(hash!))
+            .Select(hash => hash!.Value)
             .Where(profilesByHash.ContainsKey)
-            .Select(key => profilesByHash[key].Id)
+            .Select(hash => profilesByHash[hash].Id)
             .Distinct()
             .ToList();
 
@@ -209,8 +209,7 @@ public sealed class GuildSyncService(
         {
             var upstreamUserId = TacticusUserId.From(upstreamMember.UserId.ToString());
             var hash = hashesByUserId[upstreamMember.UserId];
-            var hashKey = hash is null ? null : Convert.ToHexString(hash);
-            var linkedProfile = hashKey is not null && profilesByHash.TryGetValue(hashKey, out var profile)
+            var linkedProfile = hash is not null && profilesByHash.TryGetValue(hash.Value, out var profile)
                 ? profile
                 : null;
 

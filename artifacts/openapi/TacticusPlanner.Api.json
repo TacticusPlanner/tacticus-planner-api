@@ -552,6 +552,90 @@
         ]
       }
     },
+    "/api/v1/guilds/me/raid-status": {
+      "get": {
+        "tags": [
+          "Guilds"
+        ],
+        "summary": "Gets the caller's guild's current Guild Raid status.",
+        "description": "Returns an id-only normalized status from the latest persisted observation. This endpoint never calls the upstream Guild Raid API; use POST guilds/me/raid-status/refresh to force a sync.",
+        "operationId": "TacticusPlannerApiFeaturesGuildsGetMyGuildRaidStatusEndpoint",
+        "responses": {
+          "200": {
+            "description": "Current Guild Raid status.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGuildsGuildRaidStatusResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "The authenticated profile has not been provisioned."
+          },
+          "409": {
+            "description": "Guild access, synchronization, token, or a prior observation is not ready."
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/guilds/me/raid-status/refresh": {
+      "post": {
+        "tags": [
+          "Guilds"
+        ],
+        "summary": "Forces a Guild Raid status refresh for the caller's guild.",
+        "description": "Performs an upstream Guild Raid sync subject to a one-minute per-guild cooldown measured from the last attempt, successful or failed; a request inside the cooldown returns the current persisted result instead of calling upstream.",
+        "operationId": "TacticusPlannerApiFeaturesGuildsRefreshMyGuildRaidStatusEndpoint",
+        "responses": {
+          "200": {
+            "description": "Current Guild Raid status after refresh.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGuildsGuildRaidStatusResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "The authenticated profile has not been provisioned."
+          },
+          "409": {
+            "description": "Guild access, synchronization, or token is not ready."
+          },
+          "502": {
+            "description": "The upstream credential or response was rejected."
+          },
+          "503": {
+            "description": "The upstream service is unavailable and no retained status exists."
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
     "/api/v1/guilds/me/sync": {
       "post": {
         "tags": [
@@ -2134,6 +2218,18 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGuildsGuildMemberSummary"
+        }
+      },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesGuildsGuildRaidModifierStatusResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGuildsGuildRaidModifierStatusResponse"
+        }
+      },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesGuildsGuildRaidPrimeStatusResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGuildsGuildRaidPrimeStatusResponse"
         }
       },
       "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesPlayerDataOverridesCampaignEventProgressOverrideRequest": {
@@ -4485,6 +4581,211 @@
           }
         }
       },
+      "TacticusPlannerApiFeaturesGuildsGuildRaidBossStatusResponse": {
+        "required": [
+          "unitSetId",
+          "progressionIndex",
+          "remainingHp",
+          "maximumHp",
+          "isUpcoming"
+        ],
+        "type": "object",
+        "properties": {
+          "unitSetId": {
+            "type": "string"
+          },
+          "progressionIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "remainingHp": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maximumHp": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "isUpcoming": {
+            "type": "boolean"
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesGuildsGuildRaidModifierStatusResponse": {
+        "required": [
+          "modifierId",
+          "type",
+          "target",
+          "subtarget",
+          "amount",
+          "activationRemainingHp",
+          "active"
+        ],
+        "type": "object",
+        "properties": {
+          "modifierId": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "target": {
+            "type": "string"
+          },
+          "subtarget": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "amount": {
+            "type": "number",
+            "format": "double"
+          },
+          "activationRemainingHp": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "active": {
+            "type": [
+              "null",
+              "boolean"
+            ]
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesGuildsGuildRaidPrimeStatusResponse": {
+        "required": [
+          "encounterIndex",
+          "unitSetId",
+          "progressionIndex",
+          "remainingHp",
+          "maximumHp",
+          "modifiers"
+        ],
+        "type": "object",
+        "properties": {
+          "encounterIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "unitSetId": {
+            "type": "string"
+          },
+          "progressionIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "remainingHp": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "maximumHp": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "modifiers": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesGuildsGuildRaidModifierStatusResponse"
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesGuildsGuildRaidSeasonStatusResponse": {
+        "required": [
+          "seasonNumber",
+          "seasonConfigId",
+          "endsAt",
+          "tierIndex",
+          "setIndex",
+          "setCount",
+          "difficulty",
+          "boss",
+          "primes"
+        ],
+        "type": "object",
+        "properties": {
+          "seasonNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "seasonConfigId": {
+            "type": "string"
+          },
+          "endsAt": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "date-time"
+          },
+          "tierIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "setIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "setCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "difficulty": {
+            "$ref": "#/components/schemas/TacticusPlannerDomainGuildRaidsEnumsGuildRaidDifficulty"
+          },
+          "boss": {
+            "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGuildsGuildRaidBossStatusResponse"
+          },
+          "primes": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesGuildsGuildRaidPrimeStatusResponse"
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesGuildsGuildRaidStatusResponse": {
+        "required": [
+          "state",
+          "observedAt",
+          "freshness",
+          "lastGuildSyncSucceededAt",
+          "season"
+        ],
+        "type": "object",
+        "properties": {
+          "state": {
+            "$ref": "#/components/schemas/TacticusPlannerDomainGuildRaidsEnumsGuildRaidObservationState"
+          },
+          "observedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "freshness": {
+            "$ref": "#/components/schemas/TacticusPlannerDomainGuildRaidsEnumsGuildRaidFreshness"
+          },
+          "lastGuildSyncSucceededAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "season": {
+            "type": [
+              "null",
+              "object"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGuildsGuildRaidSeasonStatusResponse"
+              }
+            ]
+          }
+        }
+      },
       "TacticusPlannerApiFeaturesGuildsMyGuildResponse": {
         "required": [
           "state",
@@ -5480,6 +5781,31 @@
           "PriorityChanged",
           "Completed",
           "Archived"
+        ],
+        "type": "string"
+      },
+      "TacticusPlannerDomainGuildRaidsEnumsGuildRaidDifficulty": {
+        "enum": [
+          "Common",
+          "Uncommon",
+          "Rare",
+          "Epic",
+          "Legendary",
+          "Mythic"
+        ],
+        "type": "string"
+      },
+      "TacticusPlannerDomainGuildRaidsEnumsGuildRaidFreshness": {
+        "enum": [
+          "fresh",
+          "stale"
+        ],
+        "type": "string"
+      },
+      "TacticusPlannerDomainGuildRaidsEnumsGuildRaidObservationState": {
+        "enum": [
+          "active",
+          "noActiveSeason"
         ],
         "type": "string"
       },

@@ -18,7 +18,11 @@ public sealed class ProfileConfiguration : IEntityTypeConfiguration<Profile>
         builder.Property(entity => entity.AccountId).HasVogenConversion().IsRequired();
         builder.Property(entity => entity.DisplayName).IsRequired();
         builder.Property(entity => entity.TacticusUserId);
-        builder.Property(entity => entity.TacticusUserIdHash).HasMaxLength(32);
+        builder.Property(entity => entity.TacticusUserIdHash)
+            .HasConversion(
+                hash => hash.HasValue ? hash.Value.Value : (byte[]?)null,
+                value => value != null ? TacticusUserIdHash.From(value) : (TacticusUserIdHash?)null)
+            .HasMaxLength(32);
 
         // HasVogenConversion() only targets the non-nullable struct overload (see GuildConfiguration's
         // ConfiguredByProfileId); ActiveProjectId is a nullable Vogen id, so its converter is written out

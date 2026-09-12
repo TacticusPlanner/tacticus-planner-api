@@ -1,5 +1,6 @@
 using TacticusPlanner.Domain.Accounts;
 using TacticusPlanner.Domain.Goals;
+using TacticusPlanner.Domain.GuildRaids;
 using TacticusPlanner.Domain.Guilds;
 using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.Profiles;
@@ -17,6 +18,9 @@ namespace TacticusPlanner.Persistence;
 [EfCoreConverter<ProfileId>]
 [EfCoreConverter<GuildId>]
 [EfCoreConverter<GuildMemberId>]
+[EfCoreConverter<GuildRaidSeasonId>]
+[EfCoreConverter<GuildRaidAttackId>]
+[EfCoreConverter<GuildRaidAttackUnitId>]
 [EfCoreConverter<TacticusUserId>]
 [EfCoreConverter<TacticusGuildId>]
 [EfCoreConverter<CampaignId>]
