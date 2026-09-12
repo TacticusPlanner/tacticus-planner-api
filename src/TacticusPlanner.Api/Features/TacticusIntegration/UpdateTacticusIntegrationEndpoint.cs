@@ -97,7 +97,7 @@ public sealed class UpdateTacticusIntegrationEndpoint
         else if (Normalize(req.TacticusUserId) is { } tacticusUserId)
         {
             profile.TacticusUserId = TacticusUserId.From(tacticusUserId);
-            profile.TacticusUserIdHash = Resolve<IColumnHashService>().ComputeHash(tacticusUserId);
+            profile.TacticusUserIdHash = TacticusUserIdHash.FromNullable(Resolve<IColumnHashService>().ComputeHash(tacticusUserId));
         }
 
         await db.SaveChangesAsync(ct);

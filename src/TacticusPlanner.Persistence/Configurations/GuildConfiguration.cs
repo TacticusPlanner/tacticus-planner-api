@@ -17,6 +17,9 @@ public sealed class GuildConfiguration : IEntityTypeConfiguration<Guild>
             .ValueGeneratedNever();
         builder.Property(entity => entity.TacticusGuildId).IsRequired();
         builder.Property(entity => entity.TacticusGuildIdHash)
+            .HasConversion(
+                hash => hash.HasValue ? hash.Value.Value : (byte[]?)null,
+                value => value != null ? TacticusGuildIdHash.From(value) : (TacticusGuildIdHash?)null)
             .HasMaxLength(32);
         builder.Property(entity => entity.Tag).IsRequired();
         builder.Property(entity => entity.Name).IsRequired();
