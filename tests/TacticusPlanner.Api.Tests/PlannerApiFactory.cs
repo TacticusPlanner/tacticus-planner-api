@@ -46,6 +46,8 @@ public sealed class PlannerApiFactory : WebApplicationFactory<Program>
                 ["V1Api:BaseUrl"] = "https://tacticus.example.com",
                 ["ColumnEncryption:CurrentKeyVersion"] = "v1",
                 ["ColumnEncryption:Keys:v1"] = Convert.ToBase64String(new byte[32]),
+                ["UserJot:ProjectId"] = "test-userjot-project",
+                ["UserJot:ProjectSecret"] = "test-userjot-project-secret-for-tests",
             });
         });
         builder.ConfigureTestServices(services =>
@@ -187,8 +189,10 @@ public sealed class PlannerTestAuthenticationHandler : AuthenticationHandler<Aut
     public const string NoAuthHeader = "X-Test-NoAuth";
     public const string IssuerHeader = "X-Test-Issuer";
     public const string SubjectHeader = "X-Test-Subject";
+    public const string NameHeader = "X-Test-Name";
     public const string DefaultIssuer = "https://example.ciamlogin.com/example.onmicrosoft.com/v2.0";
     public const string DefaultSubject = "test-user";
+    public const string DefaultName = "Test User";
 
     public PlannerTestAuthenticationHandler(
         IOptionsMonitor<AuthenticationSchemeOptions> options,
@@ -206,13 +210,14 @@ public sealed class PlannerTestAuthenticationHandler : AuthenticationHandler<Aut
             return Task.FromResult(AuthenticateResult.NoResult());
         }
 
-        var claims = new[]
+        var claims = new List<Claim>
         {
-            new Claim("iss", GetHeaderOrDefault(IssuerHeader, DefaultIssuer)),
-            new Claim("sub", GetHeaderOrDefault(SubjectHeader, DefaultSubject)),
-            new Claim("scp", "access_as_user"),
-            new Claim("name", "Test User"),
+            new("iss", GetHeaderOrDefault(IssuerHeader, DefaultIssuer)),
+            new("sub", GetHeaderOrDefault(SubjectHeader, DefaultSubject)),
+            new("scp", "access_as_user"),
+            new("name", GetHeaderOrDefault(NameHeader, DefaultName)),
         };
+
         var identity = new ClaimsIdentity(claims, SchemeName);
         var principal = new ClaimsPrincipal(identity);
         var ticket = new AuthenticationTicket(principal, SchemeName);

@@ -30,6 +30,8 @@ public sealed class GameCatalogApiFactory : WebApplicationFactory<Program>
                 ["Authentication:Audience"] = "api://tacticus-planner-api-test",
                 ["TacticusApi:BaseUrl"] = "https://api.tacticusgame.com",
                 ["V1Api:BaseUrl"] = "https://tacticus.example.com",
+                ["UserJot:ProjectId"] = "test-userjot-project",
+                ["UserJot:ProjectSecret"] = "test-userjot-project-secret-for-tests",
             });
         });
         builder.ConfigureTestServices(services =>
