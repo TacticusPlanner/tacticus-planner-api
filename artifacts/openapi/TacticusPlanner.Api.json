@@ -2004,6 +2004,42 @@
         ]
       }
     },
+    "/api/v1/me/userjot-token": {
+      "get": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Issues a short-lived signed identity token for the UserJot feedback widget.",
+        "description": "The token proves the caller's identity to UserJot's widget SDK (signed identity) so feedback and messages cannot be attributed to a spoofed identity from the browser. Each call returns a fresh token, valid for at most one hour.",
+        "operationId": "TacticusPlannerApiFeaturesUserJotGetUserJotTokenEndpoint",
+        "responses": {
+          "200": {
+            "description": "A signed UserJot identity token for the current user.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesUserJotUserJotTokenResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is not authenticated."
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "The authenticated user has not signed up yet."
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
     "/api/v1/me/v1-import": {
       "post": {
         "tags": [
@@ -5573,6 +5609,17 @@
           "powerLevel": {
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesUserJotUserJotTokenResponse": {
+        "required": [
+          "token"
+        ],
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
           }
         }
       },
