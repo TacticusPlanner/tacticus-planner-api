@@ -2367,6 +2367,18 @@
           "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogGuildRaidMetaCompView"
         }
       },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogGuildRaidMetaHeroSlotView": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogGuildRaidMetaHeroSlotView"
+        }
+      },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogGuildRaidMetaPrimeView": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogGuildRaidMetaPrimeView"
+        }
+      },
       "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogGuildRaidMetaRecommendationView": {
         "type": "array",
         "items": {
@@ -6479,12 +6491,16 @@
       "TacticusPlannerGameCatalogModelsGameCatalogGuildRaidMetaBossView": {
         "required": [
           "bossUnitSetId",
+          "primeUnitSetIds",
           "recommendations"
         ],
         "type": "object",
         "properties": {
           "bossUnitSetId": {
             "type": "string"
+          },
+          "primeUnitSetIds": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemString"
           },
           "recommendations": {
             "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogGuildRaidMetaRecommendationView"
@@ -6518,26 +6534,77 @@
           }
         }
       },
-      "TacticusPlannerGameCatalogModelsGameCatalogGuildRaidMetaRecommendationView": {
+      "TacticusPlannerGameCatalogModelsGameCatalogGuildRaidMetaHeroSlotView": {
         "required": [
-          "kind",
-          "heroIds",
-          "mowId",
-          "compIds"
+          "heroId",
+          "roleId",
+          "essential",
+          "replacementCharacterIds"
         ],
         "type": "object",
         "properties": {
+          "heroId": {
+            "type": "string"
+          },
+          "roleId": {
+            "type": "string"
+          },
+          "essential": {
+            "type": "boolean"
+          },
+          "replacementCharacterIds": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemString"
+          }
+        }
+      },
+      "TacticusPlannerGameCatalogModelsGameCatalogGuildRaidMetaPrimeView": {
+        "required": [
+          "primeUnitSetId",
+          "recommendations"
+        ],
+        "type": "object",
+        "properties": {
+          "primeUnitSetId": {
+            "type": "string"
+          },
+          "recommendations": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogGuildRaidMetaRecommendationView"
+          }
+        }
+      },
+      "TacticusPlannerGameCatalogModelsGameCatalogGuildRaidMetaRecommendationView": {
+        "required": [
+          "id",
+          "kind",
+          "heroSlots",
+          "mowId",
+          "mowReplacementIds",
+          "compIds",
+          "efficiency"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
           "kind": {
             "type": "string"
           },
-          "heroIds": {
-            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemString"
+          "heroSlots": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogGuildRaidMetaHeroSlotView"
           },
           "mowId": {
             "type": "string"
           },
+          "mowReplacementIds": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemString"
+          },
           "compIds": {
             "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemString"
+          },
+          "efficiency": {
+            "type": "number",
+            "format": "double"
           }
         }
       },
@@ -6546,7 +6613,8 @@
           "sourceId",
           "updatedOn",
           "comps",
-          "bosses"
+          "bosses",
+          "primes"
         ],
         "type": "object",
         "properties": {
@@ -6561,6 +6629,9 @@
           },
           "bosses": {
             "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogGuildRaidMetaBossView"
+          },
+          "primes": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogGuildRaidMetaPrimeView"
           }
         }
       },

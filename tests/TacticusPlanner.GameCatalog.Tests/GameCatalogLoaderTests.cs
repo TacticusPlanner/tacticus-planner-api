@@ -195,8 +195,8 @@ public sealed class GameCatalogLoaderTests
     {
         var meta = GameCatalogLoader.Load().GuildRaidMetaView;
 
-        Assert.Equal("terminus-maximus-guild-raid-boss-meta", meta.SourceId);
-        Assert.Equal("2026-07-01", meta.UpdatedOn);
+        Assert.Equal("terminus-maximus-and-cognitae-guild-raid-meta", meta.SourceId);
+        Assert.Equal("2026-09-14", meta.UpdatedOn);
         Assert.Equal(["AdMech", "Battlesuits", "Custodes", "Laviscus", "Multi-Hit", "Neuro", "Z'Kar"], meta.Comps.Select(comp => comp.Id));
         Assert.Equal(12, meta.Bosses.Count);
 
@@ -224,10 +224,44 @@ public sealed class GameCatalogLoaderTests
 
         var avatar = meta.Bosses.Single(boss => boss.BossUnitSetId == "GuildBoss8Boss1EldarAvatar");
         Assert.Equal(["meta", "alternate"], avatar.Recommendations.Select(recommendation => recommendation.Kind));
+        var metaRecommendation = avatar.Recommendations[0];
         Assert.Equal(
             ["emperExultant", "custoBladeChampion", "custoTrajann", "orksWarboss", "worldKharn"],
-            avatar.Recommendations[0].HeroIds);
-        Assert.Equal("tyranBiovore", avatar.Recommendations[0].MowId);
+            metaRecommendation.HeroSlots.Select(slot => slot.HeroId));
+        Assert.Equal("tyranBiovore", metaRecommendation.MowId);
+
+        // Explicit variant-rule shape: a stable id, five slots, and ordered MoW replacements.
+        Assert.Equal("GuildBoss8Boss1EldarAvatar-meta", metaRecommendation.Id);
+        Assert.Equal(["deathCrawler"], metaRecommendation.MowReplacementIds);
+        Assert.Equal(5, metaRecommendation.HeroSlots.Count);
+
+        var signatureSlot = metaRecommendation.HeroSlots[0];
+        Assert.Equal("emperExultant", signatureSlot.HeroId);
+        Assert.Equal("signature", signatureSlot.RoleId);
+        Assert.True(signatureSlot.Essential);
+        Assert.Empty(signatureSlot.ReplacementCharacterIds);
+
+        var flexSlot = metaRecommendation.HeroSlots[1];
+        Assert.Equal("custoBladeChampion", flexSlot.HeroId);
+        Assert.Equal("flex", flexSlot.RoleId);
+        Assert.False(flexSlot.Essential);
+        Assert.Equal(["custoTrajann", "worldKharn"], flexSlot.ReplacementCharacterIds);
+
+        // Sourced efficiency and prime identification: relative-to-group, anchored at 1.0 for the weakest.
+        Assert.Equal(1.47, metaRecommendation.Efficiency);
+        Assert.Equal(["GuildBoss8MiniBoss1EldarAutarch", "GuildBoss8MiniBoss2EldarFarseer"], avatar.PrimeUnitSetIds);
+
+        // A cognitae.app/meta-covered boss authors more than two free-form archetype-id recommendations.
+        var lion = meta.Bosses.Single(boss => boss.BossUnitSetId == "GuildBoss12Boss1DarkaLion");
+        Assert.Equal(["lavistodes", "neuro", "battlesuit"], lion.Recommendations.Select(recommendation => recommendation.Kind));
+        Assert.All(lion.Recommendations, recommendation => Assert.True(recommendation.Efficiency > 0));
+        Assert.Contains(lion.Recommendations, recommendation => recommendation.Efficiency == 1.0);
+
+        // The top-level primes[] array carries curated comps for the primes cognitae.app/side-bosses documents.
+        Assert.NotEmpty(meta.Primes);
+        var terminatorPrime = meta.Primes.Single(prime => prime.PrimeUnitSetId == "GuildBoss12MiniBoss1DarkaTerminator");
+        Assert.Equal(["custodes", "admech"], terminatorPrime.Recommendations.Select(recommendation => recommendation.Kind));
+        Assert.All(terminatorPrime.Recommendations, recommendation => Assert.Equal(5, recommendation.HeroSlots.Count));
     }
 
     [Fact]

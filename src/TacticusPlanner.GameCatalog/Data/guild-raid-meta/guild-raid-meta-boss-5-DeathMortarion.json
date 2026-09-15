@@ -1,0 +1,286 @@
+{
+  "bossUnitSetId": "GuildBoss5Boss1DeathMortarion",
+  "primeUnitSetIds": [
+    "GuildBoss5MiniBoss1DeathRotbone",
+    "GuildBoss5Minion1DeathBlightlord",
+    "GuildBoss5MiniBoss2DeathBlightbringer"
+  ],
+  "recommendations": [
+    {
+      "id": "GuildBoss5Boss1DeathMortarion-lavistodes",
+      "kind": "lavistodes",
+      "heroSlots": [
+        {
+          "heroId": "custoBladeChampion",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "custoTrajann",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "emperExultant",
+          "roleId": "signature",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "orksWarboss",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "custoAtlacoya",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        }
+      ],
+      "mowId": "tyranBiovore",
+      "mowReplacementIds": [],
+      "compIds": [
+        "Laviscus"
+      ],
+      "efficiency": 1.43
+    },
+    {
+      "id": "GuildBoss5Boss1DeathMortarion-neuro",
+      "kind": "neuro",
+      "heroSlots": [
+        {
+          "heroId": "tyranNeurothrope",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "thousInfernalMaster",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "thousAhriman",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "adeptCanoness",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "eldarFarseer",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": [
+            "custoAtlacoya",
+            "thousSorcerer"
+          ]
+        }
+      ],
+      "mowId": "thousDaemonPrince",
+      "mowReplacementIds": [],
+      "compIds": [
+        "Z'Kar"
+      ],
+      "efficiency": 1.0
+    }
+  ],
+  "primes": [
+    {
+      "primeUnitSetId": "GuildBoss5MiniBoss1DeathRotbone",
+      "recommendations": [
+        {
+          "id": "GuildBoss5MiniBoss1DeathRotbone-admech",
+          "kind": "admech",
+          "heroSlots": [
+            {
+              "heroId": "admecRuststalker",
+              "roleId": "signature",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "admecMarshall",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "admecManipulus",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "admecDominus",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "tauMarksman",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            }
+          ],
+          "mowId": "tyranBiovore",
+          "mowReplacementIds": [],
+          "compIds": [
+            "AdMech"
+          ],
+          "efficiency": 1.43
+        },
+        {
+          "id": "GuildBoss5MiniBoss1DeathRotbone-neuro",
+          "kind": "neuro",
+          "heroSlots": [
+            {
+              "heroId": "tyranNeurothrope",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "bloodMephiston",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "thousInfernalMaster",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "thousAhriman",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "blackPossession",
+              "roleId": "flex",
+              "essential": false,
+              "replacementCharacterIds": [
+                "eldarFarseer"
+              ]
+            }
+          ],
+          "mowId": "thousDaemonPrince",
+          "mowReplacementIds": [],
+          "compIds": [
+            "Z'Kar"
+          ],
+          "efficiency": 1.0
+        }
+      ]
+    },
+    {
+      "primeUnitSetId": "GuildBoss5MiniBoss2DeathBlightbringer",
+      "recommendations": [
+        {
+          "id": "GuildBoss5MiniBoss2DeathBlightbringer-neuro",
+          "kind": "neuro",
+          "heroSlots": [
+            {
+              "heroId": "tyranNeurothrope",
+              "roleId": "signature",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "thousAhriman",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "thousInfernalMaster",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "blackAbaddon",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "blackPossession",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            }
+          ],
+          "mowId": "blackForgefiend",
+          "mowReplacementIds": [],
+          "compIds": [
+            "Neuro"
+          ],
+          "efficiency": 1.11
+        },
+        {
+          "id": "GuildBoss5MiniBoss2DeathBlightbringer-custodes",
+          "kind": "custodes",
+          "heroSlots": [
+            {
+              "heroId": "custoBladeChampion",
+              "roleId": "signature",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "worldKharn",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "orksWarboss",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "custoTrajann",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "emperExultant",
+              "roleId": "flex",
+              "essential": false,
+              "replacementCharacterIds": [
+                "spaceBlackmane",
+                "bloodDante",
+                "orksRuntherd",
+                "blackAbaddon",
+                "tauCrisis",
+                "bloodMephiston"
+              ]
+            }
+          ],
+          "mowId": "blackForgefiend",
+          "mowReplacementIds": [],
+          "compIds": [
+            "Custodes"
+          ],
+          "efficiency": 1.0
+        }
+      ]
+    }
+  ]
+}

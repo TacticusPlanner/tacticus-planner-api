@@ -1,0 +1,278 @@
+{
+  "bossUnitSetId": "GuildBoss12Boss1DarkaLion",
+  "primeUnitSetIds": [
+    "GuildBoss12MiniBoss1DarkaTerminator",
+    "GuildBoss12MiniBoss2DarkaCompanion"
+  ],
+  "recommendations": [
+    {
+      "id": "GuildBoss12Boss1DarkaLion-lavistodes",
+      "kind": "lavistodes",
+      "heroSlots": [
+        {
+          "heroId": "custoBladeChampion",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "custoTrajann",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "emperExultant",
+          "roleId": "signature",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "custoVexilusPraetor",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "bloodDante",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": [
+            "admecDominus",
+            "spaceWolfPriest"
+          ]
+        }
+      ],
+      "mowId": "tyranBiovore",
+      "mowReplacementIds": [],
+      "compIds": [
+        "Laviscus"
+      ],
+      "efficiency": 1.43
+    },
+    {
+      "id": "GuildBoss12Boss1DarkaLion-neuro",
+      "kind": "neuro",
+      "heroSlots": [
+        {
+          "heroId": "tyranNeurothrope",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "thousInfernalMaster",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "thousAhriman",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "blackPossession",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "blackAbaddon",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        }
+      ],
+      "mowId": "thousDaemonPrince",
+      "mowReplacementIds": [],
+      "compIds": [
+        "Z'Kar"
+      ],
+      "efficiency": 1.14
+    },
+    {
+      "id": "GuildBoss12Boss1DarkaLion-battlesuit",
+      "kind": "battlesuit",
+      "heroSlots": [
+        {
+          "heroId": "tauFarsight",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "admecManipulus",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "tauCrisis",
+          "roleId": "signature",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "tauDarkstrider",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "eldarFarseer",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        }
+      ],
+      "mowId": "tyranBiovore",
+      "mowReplacementIds": [],
+      "compIds": [
+        "Battlesuits"
+      ],
+      "efficiency": 1.0
+    }
+  ],
+  "primes": [
+    {
+      "primeUnitSetId": "GuildBoss12MiniBoss1DarkaTerminator",
+      "recommendations": [
+        {
+          "id": "GuildBoss12MiniBoss1DarkaTerminator-custodes",
+          "kind": "custodes",
+          "heroSlots": [
+            {
+              "heroId": "custoBladeChampion",
+              "roleId": "signature",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "worldKharn",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "custoTrajann",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "custoVexilusPraetor",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "orksRuntherd",
+              "roleId": "flex",
+              "essential": false,
+              "replacementCharacterIds": [
+                "spaceWolfPriest"
+              ]
+            }
+          ],
+          "mowId": "tyranBiovore",
+          "mowReplacementIds": [],
+          "compIds": [
+            "Custodes"
+          ],
+          "efficiency": 1.25
+        },
+        {
+          "id": "GuildBoss12MiniBoss1DarkaTerminator-admech",
+          "kind": "admech",
+          "heroSlots": [
+            {
+              "heroId": "admecRuststalker",
+              "roleId": "signature",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "admecManipulus",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "admecMarshall",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "admecDominus",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "orksWarboss",
+              "roleId": "flex",
+              "essential": false,
+              "replacementCharacterIds": []
+            }
+          ],
+          "mowId": "ultraDreadnought",
+          "mowReplacementIds": [],
+          "compIds": [
+            "AdMech"
+          ],
+          "efficiency": 1.0
+        }
+      ]
+    },
+    {
+      "primeUnitSetId": "GuildBoss12MiniBoss2DarkaCompanion",
+      "recommendations": [
+        {
+          "id": "GuildBoss12MiniBoss2DarkaCompanion-neuro",
+          "kind": "neuro",
+          "heroSlots": [
+            {
+              "heroId": "tyranNeurothrope",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "thousInfernalMaster",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "thousAhriman",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "blackPossession",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "blackAbaddon",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            }
+          ],
+          "mowId": "thousDaemonPrince",
+          "mowReplacementIds": [],
+          "compIds": [
+            "Z'Kar"
+          ],
+          "efficiency": 1.0
+        }
+      ]
+    }
+  ]
+}

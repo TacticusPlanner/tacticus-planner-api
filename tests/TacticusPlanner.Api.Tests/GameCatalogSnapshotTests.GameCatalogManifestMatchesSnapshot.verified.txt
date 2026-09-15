@@ -1,6 +1,6 @@
 ﻿{
   version: dev-2026-09-02,
-  schemaVersion: 3,
+  schemaVersion: 4,
   gameVersion: 1.42,
   sourceHash: {time-dependent},
   datasets: [
@@ -41,7 +41,7 @@
     },
     {
       key: guild-raid-meta,
-      hash: 77f501aeb5ccf146d218b607eb39ba747645a86db1333b961fc01ec0f5218160,
+      hash: 624de84a3265d6c701eba416483749cfb34f49a04e6381f00ca4ed71991ec80e,
       url: /api/v1/game-catalog/guild-raid-meta
     },
     {
