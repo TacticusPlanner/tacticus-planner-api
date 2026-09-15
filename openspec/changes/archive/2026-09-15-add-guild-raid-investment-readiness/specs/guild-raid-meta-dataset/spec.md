@@ -33,14 +33,14 @@ easier than another. It carries no unit and no fixed baseline value.
 
 - **WHEN** a boss group contains two recommendations, `kind: "meta"` and
   `kind: "alternate"`
-- **THEN** each recommendation exposes exactly five ordered hero ids, one
+- **THEN** each recommendation exposes exactly five ordered hero slots, one
   Machine of War id, one or more Comp ids, and a positive `efficiency` value
 
 #### Scenario: A boss has several tiered recommendations
 
 - **WHEN** a boss group contains three recommendations with distinct `kind`
   values
-- **THEN** each recommendation exposes exactly five ordered hero ids, one
+- **THEN** each recommendation exposes exactly five ordered hero slots, one
   Machine of War id, one or more Comp ids, and a positive `efficiency` value,
   in authored order
 
@@ -132,6 +132,47 @@ dataset's prior no-effectiveness-weight constraint.
 
 - **WHEN** an authored hero slot has an empty `replacementCharacterIds` array
 - **THEN** the empty list is served unchanged and no Comp member is inferred as a replacement
+
+### Requirement: Variant-rule references and coverage are validated
+
+Catalog loading SHALL reject Guild Raid Meta data when a recommendation id is
+empty or duplicated, a recommendation does not have exactly five hero slots,
+two of a recommendation's hero slots name the same `heroId`, a slot's
+`roleId` is empty, a replacement repeats its ideal hero, one replacement id
+is duplicated within a slot, or one Machine-of-War replacement repeats
+`mowId` or another replacement.
+
+Every slot hero and replacement id SHALL resolve to a catalog character.
+Every Machine-of-War replacement id SHALL resolve to a catalog Machine of
+War. A character MAY be an allowed replacement in multiple slots or
+recommendations; uniqueness is enforced within each individual replacement
+list, not globally.
+
+#### Scenario: Duplicate hero across slots fails catalog loading
+
+- **WHEN** a recommendation's five hero slots name the same character in two
+  different slots
+- **THEN** catalog loading fails and the malformed dataset is not added to
+  the manifest
+
+#### Scenario: Unknown replacement fails catalog loading
+
+- **WHEN** a replacement rule references an unknown character or Machine of
+  War
+- **THEN** catalog loading fails with the unresolved id identified
+
+#### Scenario: Required rule identity is empty
+
+- **WHEN** a recommendation has an empty `id` or any hero slot has an empty
+  `roleId`
+- **THEN** catalog loading fails with the empty field identified
+
+#### Scenario: Shared replacement is valid
+
+- **WHEN** the same known character is explicitly allowed in different slots
+  or recommendations
+- **THEN** catalog loading accepts the reuse while preserving each list's
+  authored order
 
 ## ADDED Requirements
 
