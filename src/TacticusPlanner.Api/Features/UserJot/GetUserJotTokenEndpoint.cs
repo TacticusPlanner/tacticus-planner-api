@@ -1,6 +1,7 @@
-using System.Security.Claims;
 using FastEndpoints;
+using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.UserJot;
 
@@ -27,24 +28,21 @@ public sealed class GetUserJotTokenEndpoint : EndpointWithoutRequest<UserJotToke
     public override async Task HandleAsync(CancellationToken ct)
     {
         var state = ProcessorState<CurrentUserState>();
-        if (state.AccountId is not { } accountId)
+        if (state.AccountId is not { } accountId || state.ProfileId is not { } profileId)
         {
             await Send.NotFoundAsync(ct);
             return;
         }
 
-        var email = Normalize(User.FindFirstValue("email")) ?? Normalize(User.FindFirstValue("preferred_username"));
-        var firstName = Normalize(User.FindFirstValue("given_name"));
-        var lastName = Normalize(User.FindFirstValue("family_name"));
+        var db = Resolve<PlannerDbContext>();
+        var displayName = await db.Profiles
+            .Where(profile => profile.Id == profileId)
+            .Select(profile => profile.DisplayName)
+            .FirstAsync(ct);
 
-        var token = Resolve<UserJotTokenSigner>().CreateToken(accountId.Value, email, firstName, lastName);
+        var token = Resolve<UserJotTokenSigner>().CreateToken(accountId.Value, displayName);
 
         await Send.OkAsync(new UserJotTokenResponse(token), ct);
-    }
-
-    private static string? Normalize(string? value)
-    {
-        return string.IsNullOrWhiteSpace(value) ? null : value.Trim();
     }
 }
 

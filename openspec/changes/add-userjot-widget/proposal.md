@@ -4,7 +4,7 @@ Players have no in-app way to submit feedback, see the roadmap, or read changelo
 
 ## What Changes
 
-- Add a new authenticated endpoint that mints a short-lived (<= 1 hour) HS256-signed JWT for the current user, with the claims UserJot's signed-identity flow requires (`sub`, `iss`, `aud`, `iat`, `exp`, plus `email`/`firstName`/`lastName`).
+- Add a new authenticated endpoint that mints a short-lived (<= 1 hour) HS256-signed JWT for the current user, with the claims UserJot's signed-identity flow requires (`sub`, `iss`, `aud`, `iat`, `exp`, plus `firstName` carrying the account's display name). The user's email is deliberately never included, for privacy.
 - Add `UserJot:ProjectId` / `UserJot:ProjectSecret` configuration, following the same per-environment `appsettings.json` pattern already used for `V1Api:FunctionsKey`.
 - Out of scope: UserJot Conversations (live chat) is explicitly not part of this change; no workspace features beyond Feedback, Roadmap, and Updates are assumed.
 

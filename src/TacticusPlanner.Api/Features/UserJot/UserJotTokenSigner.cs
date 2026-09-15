@@ -14,7 +14,7 @@ public sealed class UserJotTokenSigner(IOptions<UserJotOptions> options, TimePro
 {
     private const string Audience = "userjot";
 
-    public string CreateToken(Guid accountId, string? email, string? firstName, string? lastName)
+    public string CreateToken(Guid accountId, string displayName)
     {
         var issuedAt = timeProvider.GetUtcNow();
         var payload = new JwtPayload
@@ -24,25 +24,14 @@ public sealed class UserJotTokenSigner(IOptions<UserJotOptions> options, TimePro
             { "aud", Audience },
             { "iat", issuedAt.ToUnixTimeSeconds() },
             { "exp", issuedAt.AddHours(1).ToUnixTimeSeconds() },
+            // UserJot has no generic "display name" claim, only firstName/lastName - the planner's
+            // display name is a single free-text field, so it goes in firstName rather than being
+            // split on whitespace into a firstName/lastName guess.
+            { "firstName", displayName },
             // Not part of UserJot's claim contract; guarantees two tokens minted within the same second
             // are still distinct, per the "fresh token per call" requirement.
             { "jti", Guid.NewGuid().ToString() },
         };
-
-        if (email is not null)
-        {
-            payload["email"] = email;
-        }
-
-        if (firstName is not null)
-        {
-            payload["firstName"] = firstName;
-        }
-
-        if (lastName is not null)
-        {
-            payload["lastName"] = lastName;
-        }
 
         var signingCredentials = new SigningCredentials(
             new SymmetricSecurityKey(Encoding.UTF8.GetBytes(options.Value.ProjectSecret)),

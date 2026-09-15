@@ -5,7 +5,7 @@
 ## 2. Token endpoint
 
 - [x] 2.1 Implement an authenticated endpoint that signs an HS256 JWT with `sub`, `iss`, `aud`, `iat`, and `exp` (<= 1 hour after `iat`); verify a test asserts all five claims on a successful call.
-- [x] 2.2 Include `email`/`firstName`/`lastName` claims when known for the caller and omit them when not; verify tests cover both the known-profile and no-display-name cases from the spec.
+- [x] 2.2 Include a `firstName` claim carrying the caller's display name; never include email. (Amended after live verification: the original plan derived `firstName`/`lastName` from `given_name`/`family_name` token claims and included `email` — the identity provider in use doesn't populate those name claims, which surfaced as "Unknown" in the UserJot widget, and the user asked to drop email for privacy. Now reads `Profile.DisplayName` from the DB, the same value the app itself shows, and never sends email.) Verify tests cover both the default-name and a custom-display-name case, and assert no `email`/`lastName` claim is ever present.
 - [x] 2.3 Reject unauthenticated requests without issuing a token; verify a test asserts an auth error and no token in the response.
 - [x] 2.4 Verify (with a test) that a successful response body contains only the signed token and nothing derived from the raw project secret.
 - [x] 2.5 Verify two consecutive calls for the same user return distinct tokens with independent `iat`/`exp` (per spec: "Each call issues a fresh token").

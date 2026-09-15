@@ -16,7 +16,7 @@ public sealed class UserJotTokenEndpointTests(PlannerApiFactory factory) : IClas
     public async Task AuthenticatedUserReceivesSignedTokenWithCoreClaims()
     {
         var subject = NewSubject();
-        var client = CreateAuthenticatedClient(subject, email: "ada@example.com", givenName: "Ada", familyName: "Lovelace");
+        var client = CreateAuthenticatedClient(subject);
         var applicationUserId = await ProvisionAccountAsync(client);
 
         var response = await client.GetAsync("/api/v1/me/userjot-token", TestContext.Current.CancellationToken);
@@ -30,23 +30,19 @@ public sealed class UserJotTokenEndpointTests(PlannerApiFactory factory) : IClas
         Assert.Equal(ProjectId, token.Issuer);
         Assert.Equal("userjot", Assert.Single(token.Audiences));
         Assert.True(token.ValidTo - token.IssuedAt <= TimeSpan.FromHours(1));
-        Assert.Equal("ada@example.com", token.Claims.Single(claim => claim.Type == "email").Value);
-        Assert.Equal("Ada", token.Claims.Single(claim => claim.Type == "firstName").Value);
-        Assert.Equal("Lovelace", token.Claims.Single(claim => claim.Type == "lastName").Value);
+        Assert.Equal(PlannerTestAuthenticationHandler.DefaultName, token.Claims.Single(claim => claim.Type == "firstName").Value);
+        Assert.DoesNotContain(token.Claims, claim => claim.Type is "email" or "lastName");
     }
 
     [Fact]
-    public async Task UserWithNoDisplayNameOmitsNameClaims()
+    public async Task TokenReflectsTheAccountsActualDisplayName()
     {
-        var subject = NewSubject();
-        var client = CreateAuthenticatedClient(subject);
+        var client = CreateAuthenticatedClient(NewSubject(), name: "Ada Lovelace");
         await ProvisionAccountAsync(client);
 
-        var response = await client.GetAsync("/api/v1/me/userjot-token", TestContext.Current.CancellationToken);
-        var body = await response.Content.ReadFromJsonAsync<UserJotTokenResponse>(TestContext.Current.CancellationToken);
-        var token = ValidateAndReadToken(body!.Token);
+        var token = ValidateAndReadToken(await GetTokenAsync(client));
 
-        Assert.DoesNotContain(token.Claims, claim => claim.Type is "firstName" or "lastName");
+        Assert.Equal("Ada Lovelace", token.Claims.Single(claim => claim.Type == "firstName").Value);
     }
 
     [Fact]
@@ -118,29 +114,14 @@ public sealed class UserJotTokenEndpointTests(PlannerApiFactory factory) : IClas
         return (JwtSecurityToken)validatedToken;
     }
 
-    private HttpClient CreateAuthenticatedClient(
-        string subject,
-        string? email = null,
-        string? givenName = null,
-        string? familyName = null
-    )
+    private HttpClient CreateAuthenticatedClient(string subject, string? name = null)
     {
         var client = factory.CreateClient();
         client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.SubjectHeader, subject);
 
-        if (email is not null)
+        if (name is not null)
         {
-            client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.EmailHeader, email);
-        }
-
-        if (givenName is not null)
-        {
-            client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.GivenNameHeader, givenName);
-        }
-
-        if (familyName is not null)
-        {
-            client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.FamilyNameHeader, familyName);
+            client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.NameHeader, name);
         }
 
         return client;

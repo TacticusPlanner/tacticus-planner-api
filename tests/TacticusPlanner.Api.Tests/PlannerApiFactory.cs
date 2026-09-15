@@ -189,11 +189,10 @@ public sealed class PlannerTestAuthenticationHandler : AuthenticationHandler<Aut
     public const string NoAuthHeader = "X-Test-NoAuth";
     public const string IssuerHeader = "X-Test-Issuer";
     public const string SubjectHeader = "X-Test-Subject";
-    public const string EmailHeader = "X-Test-Email";
-    public const string GivenNameHeader = "X-Test-GivenName";
-    public const string FamilyNameHeader = "X-Test-FamilyName";
+    public const string NameHeader = "X-Test-Name";
     public const string DefaultIssuer = "https://example.ciamlogin.com/example.onmicrosoft.com/v2.0";
     public const string DefaultSubject = "test-user";
+    public const string DefaultName = "Test User";
 
     public PlannerTestAuthenticationHandler(
         IOptionsMonitor<AuthenticationSchemeOptions> options,
@@ -216,12 +215,8 @@ public sealed class PlannerTestAuthenticationHandler : AuthenticationHandler<Aut
             new("iss", GetHeaderOrDefault(IssuerHeader, DefaultIssuer)),
             new("sub", GetHeaderOrDefault(SubjectHeader, DefaultSubject)),
             new("scp", "access_as_user"),
-            new("name", "Test User"),
+            new("name", GetHeaderOrDefault(NameHeader, DefaultName)),
         };
-
-        AddClaimIfHeaderPresent(claims, EmailHeader, "email");
-        AddClaimIfHeaderPresent(claims, GivenNameHeader, "given_name");
-        AddClaimIfHeaderPresent(claims, FamilyNameHeader, "family_name");
 
         var identity = new ClaimsIdentity(claims, SchemeName);
         var principal = new ClaimsPrincipal(identity);
@@ -237,13 +232,5 @@ public sealed class PlannerTestAuthenticationHandler : AuthenticationHandler<Aut
             && !string.IsNullOrEmpty(values[0])
             ? values[0]!
             : defaultValue;
-    }
-
-    private void AddClaimIfHeaderPresent(List<Claim> claims, string headerName, string claimType)
-    {
-        if (Request.Headers.TryGetValue(headerName, out var values) && values.Count > 0 && !string.IsNullOrEmpty(values[0]))
-        {
-            claims.Add(new Claim(claimType, values[0]!));
-        }
     }
 }

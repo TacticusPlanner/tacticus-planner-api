@@ -18,19 +18,19 @@ The system SHALL provide an endpoint that, given a valid authenticated request, 
 - **WHEN** the same authenticated user calls the token endpoint twice
 - **THEN** each response contains a distinct token with its own `iat`/`exp`, and neither call reuses or extends a previously issued token
 
-### Requirement: Token carries known profile fields
+### Requirement: Token carries the account's display name, and nothing else identifying
 
-The token SHALL include `email`, `firstName`, and `lastName` claims when that information is known for the current user, using the same values the rest of the product shows for that account. A field with no known value SHALL be omitted from the token rather than sent as an empty or placeholder value.
+The token SHALL include a `firstName` claim equal to the current user's display name, using the same value the rest of the product shows for that account. The token SHALL NOT include the user's email address or any other contact information.
 
-#### Scenario: User has a known display name and email
+#### Scenario: Token reflects the account's display name
 
-- **WHEN** an authenticated user with a display name and email requests a token
-- **THEN** the token includes `email`, `firstName`, and `lastName` claims matching that account's current profile data
+- **WHEN** an authenticated user requests a token
+- **THEN** the token's `firstName` claim equals that account's current display name
 
-#### Scenario: User has no display name on file
+#### Scenario: Token never carries an email address
 
-- **WHEN** an authenticated user with no display name on file requests a token
-- **THEN** the token omits the `firstName`/`lastName` claims rather than including empty strings
+- **WHEN** an authenticated user requests a token
+- **THEN** the token contains no `email` claim, regardless of what email address is on file for that account
 
 ### Requirement: Unauthenticated requests are rejected
 
