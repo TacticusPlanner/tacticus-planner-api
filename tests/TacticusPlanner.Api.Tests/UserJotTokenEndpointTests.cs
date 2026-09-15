@@ -2,6 +2,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using System.Net.Http.Json;
 using System.Text;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using TacticusPlanner.Api.Features.UserJot;
 
@@ -21,6 +23,7 @@ public sealed class UserJotTokenEndpointTests(PlannerApiFactory factory) : IClas
 
         var response = await client.GetAsync("/api/v1/me/userjot-token", TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Equal("no-store", response.Headers.CacheControl?.ToString());
 
         var body = await response.Content.ReadFromJsonAsync<UserJotTokenResponse>(TestContext.Current.CancellationToken);
         Assert.NotNull(body);
@@ -67,6 +70,24 @@ public sealed class UserJotTokenEndpointTests(PlannerApiFactory factory) : IClas
         var response = await client.SendAsync(request, TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+    }
+
+    [Fact]
+    public void MissingProjectSecretFailsAtStartup()
+    {
+        using var misconfiguredFactory = new PlannerApiFactory().WithWebHostBuilder(builder =>
+        {
+            builder.ConfigureAppConfiguration((_, configuration) =>
+            {
+                configuration.AddInMemoryCollection(new Dictionary<string, string?>
+                {
+                    ["UserJot:ProjectSecret"] = "",
+                });
+            });
+        });
+
+        var exception = Assert.Throws<OptionsValidationException>(() => misconfiguredFactory.CreateClient());
+        Assert.Contains("UserJot:ProjectSecret", exception.Message, StringComparison.Ordinal);
     }
 
     [Fact]

@@ -42,6 +42,7 @@ public sealed class GetUserJotTokenEndpoint : EndpointWithoutRequest<UserJotToke
 
         var token = Resolve<UserJotTokenSigner>().CreateToken(accountId.Value, displayName);
 
+        HttpContext.Response.Headers.CacheControl = "no-store";
         await Send.OkAsync(new UserJotTokenResponse(token), ct);
     }
 }
