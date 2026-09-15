@@ -56,8 +56,12 @@ None.
   sourced data across a variable number of recommendations per boss (was
   fixed at exactly two), adds a per-recommendation `efficiency` figure, adds
   a `primes[]` array of curated prime comps, and widens `kind` to a free-form
-  archetype id. The served payload shape is additive/widened; no served field
-  is removed.
+  archetype id. Also removes the served `heroIds` field (redundant with
+  `heroSlots[].heroId`, which already carries the same five ids in the same
+  order) — a breaking served-shape change, so `SchemaVersion` bumps; the
+  companion `tacticus-planner-apps` change updates its schema and the two
+  call sites that read it in the same PR set, so no client is left reading
+  the old shape.
 
 ## Impact
 

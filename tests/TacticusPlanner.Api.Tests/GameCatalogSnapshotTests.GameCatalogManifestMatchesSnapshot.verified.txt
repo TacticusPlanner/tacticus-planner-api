@@ -1,6 +1,6 @@
 ﻿{
   version: dev-2026-09-02,
-  schemaVersion: 3,
+  schemaVersion: 4,
   gameVersion: 1.42,
   sourceHash: {time-dependent},
   datasets: [

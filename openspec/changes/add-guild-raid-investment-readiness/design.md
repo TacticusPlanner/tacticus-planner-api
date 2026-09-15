@@ -139,8 +139,8 @@ ceiling.
 ### Primes get their own `recommendations`, mirroring bosses
 
 A new top-level `primes[]` array holds `{primeUnitSetId, recommendations[]}`,
-reusing the exact recommendation shape `bosses[]` uses (`kind`, `heroIds`,
-`heroSlots`, `mowId`, `mowReplacementIds`, `compIds`, `efficiency`). Sourced
+reusing the exact recommendation shape `bosses[]` uses (`kind`, `heroSlots`,
+`mowId`, `mowReplacementIds`, `compIds`, `efficiency`). Sourced
 from `cognitae.app/side-bosses` for the 14 primes it documents; a prime not
 covered there gets no `primes[]` entry (the client's existing
 roster-agnostic-primes fallback design applies), while its `unitSetId` still
@@ -161,9 +161,12 @@ Only the `guild-raid-meta` authoring path and its models/denormalizer/validator
 change. The dataset hash and source hash change; every other dataset hash
 stays stable. Widening `kind`'s allowed values and adding fields is not a
 breaking served-shape change (the type is still a string; existing consumers
-reading it as such are unaffected), so `SchemaVersion` stays unbumped under
-the repository's breaking-shape policy; this is curated editorial content, so
-`Version`/`GameVersion` are not bumped either.
+reading it as such are unaffected). Dropping the redundant `HeroIds` field
+from `GameCatalogGuildRaidMetaRecommendationView` — already served on
+`main` — is a breaking served-shape change, so `SchemaVersion` bumps to 4
+under the repository's breaking-shape policy (both companion repos apply
+together in this session, so no client is left reading the old shape); this
+is curated editorial content, so `Version`/`GameVersion` are not bumped.
 
 ### No persistence migration
 

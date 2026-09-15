@@ -10,7 +10,9 @@ recommendation SHALL have:
 - `kind`: a non-empty archetype id, unique within the group it appears in
   (there is no fixed count or fixed set of allowed values — a boss/prime
   authors as many recommendations as its source documents);
-- `heroIds`: an ordered array of exactly five distinct character ids;
+- `heroSlots`: an ordered array of exactly five slot objects, each naming a
+  distinct character id (see below — this is the sole source of exact-team
+  hero identity; there is no separate flat hero-id array);
 - `mowId`: one Machine of War id;
 - `compIds`: an ordered, non-empty array of unique Comp ids;
 - `efficiency`: a positive number expressing that recommendation's relative
@@ -104,12 +106,11 @@ authored Comp profile.
 Every recommendation SHALL additionally have:
 
 - `id`: a non-empty recommendation id unique across the dataset;
-- `heroSlots`: an ordered array of exactly five slot objects, in the same order as `heroIds`;
 - `mowReplacementIds`: an ordered array of zero or more distinct Machine-of-War ids.
 
-Every hero-slot object SHALL have:
+Every hero-slot object (in the `heroSlots` array defined above) SHALL have:
 
-- `heroId`: the exact character id at the same array position in `heroIds`;
+- `heroId`: the exact character id for this slot;
 - `roleId`: a non-empty stable role id interpreted by the client;
 - `essential`: boolean indicating whether inability to fill this slot makes the recommendation unavailable;
 - `replacementCharacterIds`: an ordered array of zero or more distinct character ids explicitly allowed for that slot.
@@ -139,8 +140,8 @@ dataset's prior no-effectiveness-weight constraint.
 The served dataset SHALL have a `primes` array, ordered, of zero or more
 groups. Every element SHALL have `primeUnitSetId` and a non-empty
 `recommendations` array using exactly the same recommendation shape defined
-for `bosses` (`kind`, `heroIds`, `mowId`, `compIds`, `efficiency`, `id`,
-`heroSlots`, `mowReplacementIds`). A prime with no curated recommendation
+for `bosses` (`kind`, `heroSlots`, `mowId`, `compIds`, `efficiency`, `id`,
+`mowReplacementIds`). A prime with no curated recommendation
 SHALL simply have no entry in `primes` — this is a valid state, not an error,
 and is distinct from that prime being unknown to the catalog entirely (it can
 still appear in a boss's `primeUnitSetIds`).

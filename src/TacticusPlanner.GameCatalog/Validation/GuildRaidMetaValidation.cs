@@ -135,6 +135,12 @@ public static partial class GameCatalogValidator
                 dataset, "InvalidHeroSlotCount", $"Recommendation '{owner}' must contain exactly five hero slots."));
         }
 
+        ValidateUniqueValues(
+            dataset,
+            $"heroId for '{owner}'",
+            recommendation.HeroSlots.Select(slot => slot.HeroId),
+            errors);
+
         for (var slotIndex = 0; slotIndex < recommendation.HeroSlots.Count; slotIndex++)
         {
             var slot = recommendation.HeroSlots[slotIndex];

@@ -345,4 +345,30 @@ public sealed class GuildRaidMetaValidationTests
 
         Assert.Contains(errors, error => error.Code == "InvalidHeroSlotCount");
     }
+
+    [Fact]
+    public void DuplicateHeroIdAcrossSlotsFails()
+    {
+        var raw = Data(
+            bosses:
+            [
+                Boss(
+                    "boss-1",
+                    [
+                        Recommendation(
+                            heroSlots:
+                            [
+                                Slot("hero-1"),
+                                Slot("hero-1"),
+                                Slot("hero-3"),
+                                Slot("hero-4"),
+                                Slot("hero-5"),
+                            ]),
+                    ]),
+            ]);
+
+        var errors = Validate(raw);
+
+        Assert.Contains(errors, error => error.Code == "DuplicateId" && error.Message.Contains("heroId"));
+    }
 }
