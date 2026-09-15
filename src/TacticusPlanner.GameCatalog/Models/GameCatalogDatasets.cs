@@ -188,6 +188,13 @@ public static class GameCatalogDatasets
     public const string GuildRaidMeta = "guild-raid-meta";
 
     /// <summary>
+    /// Raw Comp-guidance source (<c>guild-raid-comps.json</c>): <c>sourceId</c>/<c>updatedOn</c> plus the
+    /// Comp profiles. Merged with the per-boss files into the single served <see cref="GuildRaidMeta"/>
+    /// dataset; no raw file is served directly.
+    /// </summary>
+    public const string GuildRaidMetaComps = "guild-raid-comps";
+
+    /// <summary>
     /// Per-boss raw unit-set source files, one per raid boss. Key = <c>raid-boss-{n}-{Type}</c> where
     /// <c>n</c> is the <c>GuildBoss&lt;n&gt;</c> number and <c>{Type}</c> is that boss's primary
     /// <c>Boss1</c> unit-set key with the <c>GuildBoss{n}Boss1</c> prefix stripped (e.g. <c>TauRiptide</c>),
@@ -224,6 +231,27 @@ public static class GameCatalogDatasets
         "raid-boss-season-5",
     ];
 
+    /// <summary>
+    /// Per-boss raw Guild Raid Meta source files, one per raid boss, mirroring <see cref="RaidBossGroups"/>'
+    /// naming. Key = <c>guild-raid-meta-boss-{n}-{Slug}</c>. Each file's <c>bosses[]</c> entry and any
+    /// <c>primes[]</c> entries are merged into the assembled raw data.
+    /// </summary>
+    public static readonly IReadOnlyList<string> GuildRaidMetaBossGroups =
+    [
+        "guild-raid-meta-boss-1-TyranTervigonLeviathan",
+        "guild-raid-meta-boss-2-TyranHiveTyrantLeviathan",
+        "guild-raid-meta-boss-3-NecroSilentKing",
+        "guild-raid-meta-boss-4-OrksGhazghkull",
+        "guild-raid-meta-boss-5-DeathMortarion",
+        "guild-raid-meta-boss-6-TyranScreamerKiller",
+        "guild-raid-meta-boss-7-AstraRogaldorn",
+        "guild-raid-meta-boss-8-EldarAvatar",
+        "guild-raid-meta-boss-9-ThousMagnus",
+        "guild-raid-meta-boss-10-AdmecBelisarius",
+        "guild-raid-meta-boss-11-TauRiptide",
+        "guild-raid-meta-boss-12-DarkaLion",
+    ];
+
     /// <summary>Raw embedded source datasets (one per file) used to build the served catalog.</summary>
     public static readonly IReadOnlyList<string> Required =
     [
@@ -243,9 +271,10 @@ public static class GameCatalogDatasets
         .. LreEvents,
         .. ShopSources,
         RaidBossCommon,
-        GuildRaidMeta,
+        GuildRaidMetaComps,
         .. RaidBossGroups,
         .. RaidBossSeasons,
+        .. GuildRaidMetaBossGroups,
     ];
 
     // Served (denormalized) dataset keys — the public manifest surface. Each is one consolidated,

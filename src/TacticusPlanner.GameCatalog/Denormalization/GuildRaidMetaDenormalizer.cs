@@ -20,12 +20,29 @@ internal static partial class GameCatalogDenormalizer
             raw.Bosses
                 .Select(boss => new GameCatalogGuildRaidMetaBossView(
                     boss.BossUnitSetId,
-                    boss.Recommendations
-                        .Select(recommendation => new GameCatalogGuildRaidMetaRecommendationView(
-                            recommendation.Kind,
-                            recommendation.HeroIds.ToArray(),
-                            recommendation.MowId,
-                            recommendation.CompIds.ToArray()))
-                        .ToArray()))
+                    boss.PrimeUnitSetIds.ToArray(),
+                    boss.Recommendations.Select(BuildGuildRaidMetaRecommendation).ToArray()))
+                .ToArray(),
+            raw.Primes
+                .Select(prime => new GameCatalogGuildRaidMetaPrimeView(
+                    prime.PrimeUnitSetId,
+                    prime.Recommendations.Select(BuildGuildRaidMetaRecommendation).ToArray()))
                 .ToArray());
+
+    private static GameCatalogGuildRaidMetaRecommendationView BuildGuildRaidMetaRecommendation(
+        GameCatalogGuildRaidMetaRawRecommendation recommendation) =>
+        new(
+            recommendation.Id,
+            recommendation.Kind,
+            recommendation.HeroSlots
+                .Select(slot => new GameCatalogGuildRaidMetaHeroSlotView(
+                    slot.HeroId,
+                    slot.RoleId,
+                    slot.Essential,
+                    slot.ReplacementCharacterIds.ToArray()))
+                .ToArray(),
+            recommendation.MowId,
+            recommendation.MowReplacementIds.ToArray(),
+            recommendation.CompIds.ToArray(),
+            recommendation.Efficiency);
 }

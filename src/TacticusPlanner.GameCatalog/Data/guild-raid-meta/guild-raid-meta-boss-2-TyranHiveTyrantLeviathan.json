@@ -1,0 +1,120 @@
+{
+  "bossUnitSetId": "GuildBoss2Boss1TyranHiveTyrantLeviathan",
+  "primeUnitSetIds": [],
+  "recommendations": [
+    {
+      "id": "GuildBoss2Boss1TyranHiveTyrantLeviathan-meta",
+      "kind": "meta",
+      "heroSlots": [
+        {
+          "heroId": "admecRuststalker",
+          "roleId": "signature",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "admecMarshall",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": [
+            "admecDominus",
+            "orksWarboss"
+          ]
+        },
+        {
+          "heroId": "admecManipulus",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": [
+            "admecDominus",
+            "orksWarboss"
+          ]
+        },
+        {
+          "heroId": "admecDominus",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": [
+            "orksWarboss",
+            "tauMarksman"
+          ]
+        },
+        {
+          "heroId": "templHelbrecht",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": [
+            "admecDominus",
+            "orksWarboss"
+          ]
+        }
+      ],
+      "mowId": "ultraDreadnought",
+      "mowReplacementIds": [
+        "tyranBiovore",
+        "deathCrawler"
+      ],
+      "compIds": [
+        "AdMech"
+      ],
+      "efficiency": 1.07
+    },
+    {
+      "id": "GuildBoss2Boss1TyranHiveTyrantLeviathan-alternate",
+      "kind": "alternate",
+      "heroSlots": [
+        {
+          "heroId": "custoBladeChampion",
+          "roleId": "signature",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "custoTrajann",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": [
+            "spaceBlackmane",
+            "bloodDante"
+          ]
+        },
+        {
+          "heroId": "worldKharn",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": [
+            "spaceBlackmane",
+            "bloodDante"
+          ]
+        },
+        {
+          "heroId": "spaceBlackmane",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": [
+            "bloodDante",
+            "bloodMephiston"
+          ]
+        },
+        {
+          "heroId": "templHelbrecht",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": [
+            "spaceBlackmane",
+            "bloodDante"
+          ]
+        }
+      ],
+      "mowId": "ultraDreadnought",
+      "mowReplacementIds": [
+        "deathCrawler",
+        "tyranBiovore"
+      ],
+      "compIds": [
+        "Custodes"
+      ],
+      "efficiency": 1.0
+    }
+  ]
+}

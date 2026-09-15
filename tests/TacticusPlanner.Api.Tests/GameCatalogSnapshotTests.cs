@@ -45,12 +45,47 @@ public sealed class GameCatalogSnapshotTests(GameCatalogApiFactory factory)
         Assert.Equal("guild-raid-meta", payload["datasetKey"]!.GetValue<string>());
 
         var data = payload["data"]!.AsObject();
-        Assert.Equal("terminus-maximus-guild-raid-boss-meta", data["sourceId"]!.GetValue<string>());
-        Assert.Equal("2026-07-01", data["updatedOn"]!.GetValue<string>());
+        Assert.Equal("terminus-maximus-and-cognitae-guild-raid-meta", data["sourceId"]!.GetValue<string>());
+        Assert.Equal("2026-09-14", data["updatedOn"]!.GetValue<string>());
         Assert.NotEmpty(data["comps"]!.AsArray());
         Assert.NotEmpty(data["bosses"]!.AsArray());
+        Assert.NotEmpty(data["primes"]!.AsArray());
         Assert.Null(data["sourceUrl"]);
         Assert.Null(data["displayName"]);
+
+        // Companion `tacticus-planner-apps` schema contract: every recommendation carries a stable id, five
+        // hero slots with id-only replacement rules, a positive efficiency, and an ordered MoW replacement
+        // list; every boss group carries its ordered primeUnitSetIds.
+        var bossGroup = data["bosses"]!.AsArray()[0]!.AsObject();
+        Assert.IsType<JsonArray>(bossGroup["primeUnitSetIds"]);
+        var recommendation = bossGroup["recommendations"]!.AsArray()[0]!.AsObject();
+        Assert.False(string.IsNullOrWhiteSpace(recommendation["id"]!.GetValue<string>()));
+        Assert.False(string.IsNullOrWhiteSpace(recommendation["kind"]!.GetValue<string>()));
+        Assert.True(recommendation["efficiency"]!.GetValue<double>() > 0);
+        Assert.IsType<JsonArray>(recommendation["mowReplacementIds"]);
+
+        var heroSlots = recommendation["heroSlots"]!.AsArray();
+        Assert.Equal(5, heroSlots.Count);
+        Assert.All(heroSlots, slot =>
+        {
+            var slotObject = slot!.AsObject();
+            Assert.False(string.IsNullOrWhiteSpace(slotObject["heroId"]!.GetValue<string>()));
+            Assert.False(string.IsNullOrWhiteSpace(slotObject["roleId"]!.GetValue<string>()));
+            Assert.IsType<bool>(slotObject["essential"]!.GetValue<bool>());
+            Assert.IsType<JsonArray>(slotObject["replacementCharacterIds"]);
+            Assert.Null(slotObject["name"]);
+            Assert.Null(slotObject["label"]);
+        });
+
+        // A boss may now carry more than the historical fixed meta/alternate pair.
+        Assert.Contains(
+            data["bosses"]!.AsArray(),
+            boss => boss!["recommendations"]!.AsArray().Count > 2);
+
+        // primes[] mirrors the boss recommendation shape.
+        var primeRecommendation = data["primes"]!.AsArray()[0]!["recommendations"]!.AsArray()[0]!.AsObject();
+        Assert.False(string.IsNullOrWhiteSpace(primeRecommendation["id"]!.GetValue<string>()));
+        Assert.Equal(5, primeRecommendation["heroSlots"]!.AsArray().Count);
     }
 
     /// <summary>

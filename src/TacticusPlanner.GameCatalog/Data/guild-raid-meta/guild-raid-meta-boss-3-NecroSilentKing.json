@@ -1,0 +1,271 @@
+{
+  "bossUnitSetId": "GuildBoss3Boss1NecroSilentKing",
+  "primeUnitSetIds": [
+    "GuildBoss3Minion1NecroMesophet",
+    "GuildBoss3Minion2NecroHapthatra",
+    "GuildBoss3Minion3NecroMenhir"
+  ],
+  "recommendations": [
+    {
+      "id": "GuildBoss3Boss1NecroSilentKing-lavistodes",
+      "kind": "lavistodes",
+      "heroSlots": [
+        {
+          "heroId": "custoBladeChampion",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "custoTrajann",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "emperExultant",
+          "roleId": "signature",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "orksWarboss",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "custoVexilusPraetor",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        }
+      ],
+      "mowId": "tyranBiovore",
+      "mowReplacementIds": [],
+      "compIds": [
+        "Laviscus"
+      ],
+      "efficiency": 1.43
+    },
+    {
+      "id": "GuildBoss3Boss1NecroSilentKing-battlesuit",
+      "kind": "battlesuit",
+      "heroSlots": [
+        {
+          "heroId": "tauFarsight",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "admecManipulus",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "tauCrisis",
+          "roleId": "signature",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "tauDarkstrider",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "eldarFarseer",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        }
+      ],
+      "mowId": "tyranBiovore",
+      "mowReplacementIds": [],
+      "compIds": [
+        "Battlesuits"
+      ],
+      "efficiency": 1.29
+    },
+    {
+      "id": "GuildBoss3Boss1NecroSilentKing-admech",
+      "kind": "admech",
+      "heroSlots": [
+        {
+          "heroId": "admecRuststalker",
+          "roleId": "signature",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "admecMarshall",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "admecManipulus",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "admecDominus",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "orksWarboss",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": []
+        }
+      ],
+      "mowId": "tyranBiovore",
+      "mowReplacementIds": [],
+      "compIds": [
+        "AdMech"
+      ],
+      "efficiency": 1.0
+    }
+  ],
+  "primes": [
+    {
+      "primeUnitSetId": "GuildBoss3Minion3NecroMenhir",
+      "recommendations": [
+        {
+          "id": "GuildBoss3Minion3NecroMenhir-neuro",
+          "kind": "neuro",
+          "heroSlots": [
+            {
+              "heroId": "tyranNeurothrope",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "thousInfernalMaster",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "thousAhriman",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "blackPossession",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "blackAbaddon",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            }
+          ],
+          "mowId": "thousDaemonPrince",
+          "mowReplacementIds": [],
+          "compIds": [
+            "Z'Kar"
+          ],
+          "efficiency": 1.25
+        },
+        {
+          "id": "GuildBoss3Minion3NecroMenhir-admech",
+          "kind": "admech",
+          "heroSlots": [
+            {
+              "heroId": "admecRuststalker",
+              "roleId": "signature",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "admecMarshall",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "admecManipulus",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "admecDominus",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "tauMarksman",
+              "roleId": "flex",
+              "essential": false,
+              "replacementCharacterIds": [
+                "votanMemnyr"
+              ]
+            }
+          ],
+          "mowId": "tyranBiovore",
+          "mowReplacementIds": [],
+          "compIds": [
+            "AdMech"
+          ],
+          "efficiency": 1.0
+        },
+        {
+          "id": "GuildBoss3Minion3NecroMenhir-battlesuit",
+          "kind": "battlesuit",
+          "heroSlots": [
+            {
+              "heroId": "tauFarsight",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "admecManipulus",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "tauCrisis",
+              "roleId": "signature",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "tauDarkstrider",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "eldarFarseer",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            }
+          ],
+          "mowId": "tyranBiovore",
+          "mowReplacementIds": [],
+          "compIds": [
+            "Battlesuits"
+          ],
+          "efficiency": 1.0
+        }
+      ]
+    }
+  ]
+}

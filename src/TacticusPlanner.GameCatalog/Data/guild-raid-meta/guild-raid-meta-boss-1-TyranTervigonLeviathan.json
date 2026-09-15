@@ -1,0 +1,268 @@
+{
+  "bossUnitSetId": "GuildBoss1Boss1TyranTervigonLeviathan",
+  "primeUnitSetIds": [
+    "GuildBoss1MiniBoss1TyranWarriorLeviathan",
+    "GuildBoss1MiniBoss2TyranWarriorKronos",
+    "GuildBoss1MiniBoss3TyranWarriorGorgon"
+  ],
+  "recommendations": [
+    {
+      "id": "GuildBoss1Boss1TyranTervigonLeviathan-meta",
+      "kind": "meta",
+      "heroSlots": [
+        {
+          "heroId": "admecRuststalker",
+          "roleId": "signature",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "admecMarshall",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": [
+            "admecDominus",
+            "orksWarboss"
+          ]
+        },
+        {
+          "heroId": "admecManipulus",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": [
+            "admecDominus",
+            "orksWarboss"
+          ]
+        },
+        {
+          "heroId": "admecDominus",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": [
+            "orksWarboss",
+            "tauMarksman"
+          ]
+        },
+        {
+          "heroId": "templHelbrecht",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": [
+            "admecDominus",
+            "orksWarboss"
+          ]
+        }
+      ],
+      "mowId": "ultraDreadnought",
+      "mowReplacementIds": [
+        "tyranBiovore",
+        "deathCrawler"
+      ],
+      "compIds": [
+        "AdMech"
+      ],
+      "efficiency": 1.3
+    },
+    {
+      "id": "GuildBoss1Boss1TyranTervigonLeviathan-alternate",
+      "kind": "alternate",
+      "heroSlots": [
+        {
+          "heroId": "custoBladeChampion",
+          "roleId": "signature",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "custoTrajann",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": [
+            "spaceBlackmane",
+            "bloodDante"
+          ]
+        },
+        {
+          "heroId": "worldKharn",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": [
+            "spaceBlackmane",
+            "bloodDante"
+          ]
+        },
+        {
+          "heroId": "spaceBlackmane",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": [
+            "bloodDante",
+            "bloodMephiston"
+          ]
+        },
+        {
+          "heroId": "templHelbrecht",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": [
+            "spaceBlackmane",
+            "bloodDante"
+          ]
+        }
+      ],
+      "mowId": "ultraDreadnought",
+      "mowReplacementIds": [
+        "deathCrawler",
+        "tyranBiovore"
+      ],
+      "compIds": [
+        "Custodes"
+      ],
+      "efficiency": 1.0
+    }
+  ],
+  "primes": [
+    {
+      "primeUnitSetId": "GuildBoss1MiniBoss2TyranWarriorKronos",
+      "recommendations": [
+        {
+          "id": "GuildBoss1MiniBoss2TyranWarriorKronos-admech",
+          "kind": "admech",
+          "heroSlots": [
+            {
+              "heroId": "admecRuststalker",
+              "roleId": "signature",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "admecManipulus",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "admecMarshall",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "orksWarboss",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "necroSpyder",
+              "roleId": "flex",
+              "essential": false,
+              "replacementCharacterIds": [
+                "tauCrisis"
+              ]
+            }
+          ],
+          "mowId": "ultraDreadnought",
+          "mowReplacementIds": [],
+          "compIds": [
+            "AdMech"
+          ],
+          "efficiency": 1.11
+        },
+        {
+          "id": "GuildBoss1MiniBoss2TyranWarriorKronos-lavistodes",
+          "kind": "lavistodes",
+          "heroSlots": [
+            {
+              "heroId": "custoBladeChampion",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "orksWarboss",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "emperExultant",
+              "roleId": "signature",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "custoTrajann",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "worldKharn",
+              "roleId": "flex",
+              "essential": false,
+              "replacementCharacterIds": [
+                "bloodDante"
+              ]
+            }
+          ],
+          "mowId": "blackForgefiend",
+          "mowReplacementIds": [],
+          "compIds": [
+            "Laviscus"
+          ],
+          "efficiency": 1.0
+        }
+      ]
+    },
+    {
+      "primeUnitSetId": "GuildBoss1MiniBoss3TyranWarriorGorgon",
+      "recommendations": [
+        {
+          "id": "GuildBoss1MiniBoss3TyranWarriorGorgon-custodes",
+          "kind": "custodes",
+          "heroSlots": [
+            {
+              "heroId": "custoBladeChampion",
+              "roleId": "signature",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "orksWarboss",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "eldarFarseer",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "worldKharn",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "custoTrajann",
+              "roleId": "flex",
+              "essential": false,
+              "replacementCharacterIds": [
+                "spaceBlackmane"
+              ]
+            }
+          ],
+          "mowId": "blackForgefiend",
+          "mowReplacementIds": [],
+          "compIds": [
+            "Custodes"
+          ],
+          "efficiency": 1.0
+        }
+      ]
+    }
+  ]
+}

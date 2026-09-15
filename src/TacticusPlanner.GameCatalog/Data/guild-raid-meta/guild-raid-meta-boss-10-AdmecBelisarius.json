@@ -1,0 +1,290 @@
+{
+  "bossUnitSetId": "GuildBoss10Boss1AdmecBelisarius",
+  "primeUnitSetIds": [
+    "GuildBoss10MiniBoss1AdmecMarshall",
+    "GuildBoss10MiniBoss2AdmecManipulus",
+    "GuildBoss10Minion1AdmecRuststalker",
+    "GuildBoss10Minion2AdmecDestroyer"
+  ],
+  "recommendations": [
+    {
+      "id": "GuildBoss10Boss1AdmecBelisarius-lavistodes",
+      "kind": "lavistodes",
+      "heroSlots": [
+        {
+          "heroId": "custoBladeChampion",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "custoTrajann",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "worldKharn",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "emperExultant",
+          "roleId": "signature",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "bloodDante",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        }
+      ],
+      "mowId": "tyranBiovore",
+      "mowReplacementIds": [],
+      "compIds": [
+        "Laviscus"
+      ],
+      "efficiency": 1.67
+    },
+    {
+      "id": "GuildBoss10Boss1AdmecBelisarius-neuro",
+      "kind": "neuro",
+      "heroSlots": [
+        {
+          "heroId": "tyranNeurothrope",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "thousAhriman",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "thousInfernalMaster",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "blackPossession",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "blackAbaddon",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": [
+            "bloodMephiston",
+            "thousTzaangor",
+            "eldarFarseer"
+          ]
+        }
+      ],
+      "mowId": "thousDaemonPrince",
+      "mowReplacementIds": [],
+      "compIds": [
+        "Z'Kar"
+      ],
+      "efficiency": 1.0
+    }
+  ],
+  "primes": [
+    {
+      "primeUnitSetId": "GuildBoss10MiniBoss1AdmecMarshall",
+      "recommendations": [
+        {
+          "id": "GuildBoss10MiniBoss1AdmecMarshall-neuro",
+          "kind": "neuro",
+          "heroSlots": [
+            {
+              "heroId": "tyranNeurothrope",
+              "roleId": "signature",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "thousAhriman",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "thousInfernalMaster",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "bloodMephiston",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "blackPossession",
+              "roleId": "flex",
+              "essential": false,
+              "replacementCharacterIds": [
+                "thousTzaangor",
+                "blackAbaddon",
+                "genesMagus"
+              ]
+            }
+          ],
+          "mowId": "blackForgefiend",
+          "mowReplacementIds": [],
+          "compIds": [
+            "Neuro"
+          ],
+          "efficiency": 1.0
+        }
+      ]
+    },
+    {
+      "primeUnitSetId": "GuildBoss10MiniBoss2AdmecManipulus",
+      "recommendations": [
+        {
+          "id": "GuildBoss10MiniBoss2AdmecManipulus-neuro",
+          "kind": "neuro",
+          "heroSlots": [
+            {
+              "heroId": "tyranNeurothrope",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "thousAhriman",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "thousInfernalMaster",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "bloodMephiston",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "blackPossession",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            }
+          ],
+          "mowId": "thousDaemonPrince",
+          "mowReplacementIds": [],
+          "compIds": [
+            "Z'Kar"
+          ],
+          "efficiency": 1.11
+        },
+        {
+          "id": "GuildBoss10MiniBoss2AdmecManipulus-battlesuit",
+          "kind": "battlesuit",
+          "heroSlots": [
+            {
+              "heroId": "tauFarsight",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "tauCrisis",
+              "roleId": "signature",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "tauDarkstrider",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "tauMarksman",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "tauShadowsun",
+              "roleId": "flex",
+              "essential": false,
+              "replacementCharacterIds": [
+                "necroOverlord"
+              ]
+            }
+          ],
+          "mowId": "tyranBiovore",
+          "mowReplacementIds": [],
+          "compIds": [
+            "Battlesuits"
+          ],
+          "efficiency": 1.0
+        },
+        {
+          "id": "GuildBoss10MiniBoss2AdmecManipulus-lavistodes",
+          "kind": "lavistodes",
+          "heroSlots": [
+            {
+              "heroId": "custoBladeChampion",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "worldKharn",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "custoTrajann",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "emperExultant",
+              "roleId": "signature",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "bloodDante",
+              "roleId": "flex",
+              "essential": false,
+              "replacementCharacterIds": [
+                "orksWarboss",
+                "spaceBlackmane",
+                "bloodMephiston",
+                "custoVexilusPraetor"
+              ]
+            }
+          ],
+          "mowId": "tyranBiovore",
+          "mowReplacementIds": [],
+          "compIds": [
+            "Laviscus"
+          ],
+          "efficiency": 1.0
+        }
+      ]
+    }
+  ]
+}

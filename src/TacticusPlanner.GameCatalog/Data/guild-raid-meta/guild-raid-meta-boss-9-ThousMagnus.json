@@ -1,0 +1,121 @@
+{
+  "bossUnitSetId": "GuildBoss9Boss1ThousMagnus",
+  "primeUnitSetIds": [
+    "GuildBoss9MiniBoss1ThousSorcerer",
+    "GuildBoss9MiniBoss2ThousInfernalMaster"
+  ],
+  "recommendations": [
+    {
+      "id": "GuildBoss9Boss1ThousMagnus-meta",
+      "kind": "meta",
+      "heroSlots": [
+        {
+          "heroId": "custoBladeChampion",
+          "roleId": "signature",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "custoTrajann",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": [
+            "spaceBlackmane",
+            "bloodDante"
+          ]
+        },
+        {
+          "heroId": "worldKharn",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": [
+            "spaceBlackmane",
+            "bloodDante"
+          ]
+        },
+        {
+          "heroId": "spaceBlackmane",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": [
+            "bloodDante",
+            "bloodMephiston"
+          ]
+        },
+        {
+          "heroId": "templHelbrecht",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": [
+            "spaceBlackmane",
+            "bloodDante"
+          ]
+        }
+      ],
+      "mowId": "tyranBiovore",
+      "mowReplacementIds": [
+        "deathCrawler"
+      ],
+      "compIds": [
+        "Custodes"
+      ],
+      "efficiency": 1.06
+    },
+    {
+      "id": "GuildBoss9Boss1ThousMagnus-alternate",
+      "kind": "alternate",
+      "heroSlots": [
+        {
+          "heroId": "custoBladeChampion",
+          "roleId": "signature",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "custoTrajann",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": [
+            "spaceBlackmane",
+            "bloodDante"
+          ]
+        },
+        {
+          "heroId": "worldKharn",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": [
+            "spaceBlackmane",
+            "bloodDante"
+          ]
+        },
+        {
+          "heroId": "templHelbrecht",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": [
+            "spaceBlackmane",
+            "bloodDante"
+          ]
+        },
+        {
+          "heroId": "bloodDante",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": [
+            "spaceBlackmane",
+            "bloodMephiston"
+          ]
+        }
+      ],
+      "mowId": "tyranBiovore",
+      "mowReplacementIds": [
+        "deathCrawler"
+      ],
+      "compIds": [
+        "Custodes"
+      ],
+      "efficiency": 1.0
+    }
+  ]
+}

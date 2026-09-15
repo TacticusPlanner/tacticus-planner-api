@@ -75,7 +75,7 @@ public static class GameCatalogLoader
         }
 
         var raidBossRawData = LoadRaidBossRawData();
-        var guildRaidMetaRawData = LoadDataset<GameCatalogGuildRaidMetaRawData>(GameCatalogDatasets.GuildRaidMeta);
+        var guildRaidMetaRawData = LoadGuildRaidMetaRawData();
 
         // ---- build denormalized served datasets ------------------------------------------------
         var characterViews = GameCatalogDenormalizer.BuildCharacters(unitsByFaction, equipmentByType, campaignGroups, dropChances);
@@ -210,6 +210,43 @@ public static class GameCatalogLoader
         }
 
         return new GameCatalogRaidBossRawData(common.Rotation, common.Primarchs, unitSets, seasons, common.Modifiers);
+    }
+
+    /// <summary>
+    /// Assembles the raw Guild Raid Meta data from <c>guild-raid-comps.json</c> (Comp guidance) plus one
+    /// <c>guild-raid-meta-boss-{n}-{Slug}</c> file per boss (that boss's own recommendations, and any
+    /// primes fought alongside it). A duplicate boss unit-set id or prime unit-set id across files throws.
+    /// </summary>
+    private static GameCatalogGuildRaidMetaRawData LoadGuildRaidMetaRawData()
+    {
+        var comps = LoadDataset<GameCatalogGuildRaidMetaRawCompsFile>(GameCatalogDatasets.GuildRaidMetaComps);
+
+        var bosses = new List<GameCatalogGuildRaidMetaRawBoss>();
+        var primes = new Dictionary<string, GameCatalogGuildRaidMetaRawPrime>(StringComparer.Ordinal);
+
+        foreach (var key in GameCatalogDatasets.GuildRaidMetaBossGroups)
+        {
+            var file = LoadDataset<GameCatalogGuildRaidMetaRawBossFile>(key);
+
+            bosses.Add(new GameCatalogGuildRaidMetaRawBoss(file.BossUnitSetId, file.PrimeUnitSetIds, file.Recommendations));
+
+            foreach (var prime in file.Primes ?? [])
+            {
+                if (!primes.TryAdd(prime.PrimeUnitSetId, prime))
+                {
+                    throw new InvalidOperationException(
+                        $"Guild Raid Meta prime unit-set id '{prime.PrimeUnitSetId}' is defined in more than one guild-raid-meta-boss-*.json file.");
+                }
+            }
+        }
+
+        if (bosses.Select(boss => boss.BossUnitSetId).Distinct(StringComparer.Ordinal).Count() != bosses.Count)
+        {
+            throw new InvalidOperationException(
+                "Guild Raid Meta boss unit-set id is defined in more than one guild-raid-meta-boss-*.json file.");
+        }
+
+        return new GameCatalogGuildRaidMetaRawData(comps.SourceId, comps.UpdatedOn, comps.Comps, bosses, primes.Values.ToArray());
     }
 
     private static T LoadDataset<T>(string key)

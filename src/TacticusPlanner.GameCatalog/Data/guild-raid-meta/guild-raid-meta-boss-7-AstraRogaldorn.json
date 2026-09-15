@@ -1,0 +1,313 @@
+{
+  "bossUnitSetId": "GuildBoss7Boss1AstraRogaldorn",
+  "primeUnitSetIds": [
+    "GuildBoss7MiniBoss1AstraPrimarisPsy",
+    "GuildBoss7MiniBoss2AstraOrdnance"
+  ],
+  "recommendations": [
+    {
+      "id": "GuildBoss7Boss1AstraRogaldorn-meta",
+      "kind": "meta",
+      "heroSlots": [
+        {
+          "heroId": "emperExultant",
+          "roleId": "signature",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "custoBladeChampion",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": [
+            "custoTrajann",
+            "worldKharn"
+          ]
+        },
+        {
+          "heroId": "custoTrajann",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": [
+            "custoBladeChampion",
+            "worldKharn"
+          ]
+        },
+        {
+          "heroId": "orksWarboss",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": [
+            "custoBladeChampion",
+            "custoTrajann"
+          ]
+        },
+        {
+          "heroId": "admecDominus",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": [
+            "custoBladeChampion",
+            "custoTrajann"
+          ]
+        }
+      ],
+      "mowId": "tyranBiovore",
+      "mowReplacementIds": [
+        "deathCrawler"
+      ],
+      "compIds": [
+        "Laviscus"
+      ],
+      "efficiency": 1.17
+    },
+    {
+      "id": "GuildBoss7Boss1AstraRogaldorn-alternate",
+      "kind": "alternate",
+      "heroSlots": [
+        {
+          "heroId": "admecRuststalker",
+          "roleId": "signature",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "admecMarshall",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": [
+            "admecDominus",
+            "orksWarboss"
+          ]
+        },
+        {
+          "heroId": "admecManipulus",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": [
+            "admecDominus",
+            "orksWarboss"
+          ]
+        },
+        {
+          "heroId": "admecDominus",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": [
+            "orksWarboss",
+            "tauMarksman"
+          ]
+        },
+        {
+          "heroId": "tauMarksman",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": [
+            "admecDominus",
+            "orksWarboss"
+          ]
+        }
+      ],
+      "mowId": "tyranBiovore",
+      "mowReplacementIds": [
+        "ultraDreadnought",
+        "deathCrawler"
+      ],
+      "compIds": [
+        "AdMech"
+      ],
+      "efficiency": 1.0
+    }
+  ],
+  "primes": [
+    {
+      "primeUnitSetId": "GuildBoss7MiniBoss1AstraPrimarisPsy",
+      "recommendations": [
+        {
+          "id": "GuildBoss7MiniBoss1AstraPrimarisPsy-neuro",
+          "kind": "neuro",
+          "heroSlots": [
+            {
+              "heroId": "tyranNeurothrope",
+              "roleId": "signature",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "thousInfernalMaster",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "thousAhriman",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "blackPossession",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "thousTzaangor",
+              "roleId": "flex",
+              "essential": false,
+              "replacementCharacterIds": [
+                "blackAbaddon",
+                "tyranWingedPrime"
+              ]
+            }
+          ],
+          "mowId": "blackForgefiend",
+          "mowReplacementIds": [],
+          "compIds": [
+            "Neuro"
+          ],
+          "efficiency": 1.67
+        },
+        {
+          "id": "GuildBoss7MiniBoss1AstraPrimarisPsy-custodes",
+          "kind": "custodes",
+          "heroSlots": [
+            {
+              "heroId": "custoBladeChampion",
+              "roleId": "signature",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "worldKharn",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "orksWarboss",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "custoTrajann",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "emperExultant",
+              "roleId": "flex",
+              "essential": false,
+              "replacementCharacterIds": [
+                "bloodDante",
+                "orksRuntherd",
+                "templHelbrecht",
+                "blackAbaddon"
+              ]
+            }
+          ],
+          "mowId": "blackForgefiend",
+          "mowReplacementIds": [],
+          "compIds": [
+            "Custodes"
+          ],
+          "efficiency": 1.0
+        },
+        {
+          "id": "GuildBoss7MiniBoss1AstraPrimarisPsy-admech",
+          "kind": "admech",
+          "heroSlots": [
+            {
+              "heroId": "admecRuststalker",
+              "roleId": "signature",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "admecMarshall",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "admecManipulus",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "admecDominus",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "orksWarboss",
+              "roleId": "flex",
+              "essential": false,
+              "replacementCharacterIds": [
+                "tauMarksman",
+                "necroSpyder"
+              ]
+            }
+          ],
+          "mowId": "ultraDreadnought",
+          "mowReplacementIds": [],
+          "compIds": [
+            "AdMech"
+          ],
+          "efficiency": 1.0
+        }
+      ]
+    },
+    {
+      "primeUnitSetId": "GuildBoss7MiniBoss2AstraOrdnance",
+      "recommendations": [
+        {
+          "id": "GuildBoss7MiniBoss2AstraOrdnance-admech",
+          "kind": "admech",
+          "heroSlots": [
+            {
+              "heroId": "admecRuststalker",
+              "roleId": "signature",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "admecMarshall",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "admecManipulus",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "tauMarksman",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "admecDominus",
+              "roleId": "flex",
+              "essential": false,
+              "replacementCharacterIds": []
+            }
+          ],
+          "mowId": "necroReanimator",
+          "mowReplacementIds": [],
+          "compIds": [
+            "AdMech"
+          ],
+          "efficiency": 1.0
+        }
+      ]
+    }
+  ]
+}

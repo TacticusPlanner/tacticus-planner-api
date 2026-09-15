@@ -1,0 +1,222 @@
+{
+  "bossUnitSetId": "GuildBoss6Boss1TyranScreamerKiller",
+  "primeUnitSetIds": [
+    "GuildBoss6MiniBoss1TyranNeurothrope",
+    "GuildBoss6MiniBoss2TyranWingedPrime"
+  ],
+  "recommendations": [
+    {
+      "id": "GuildBoss6Boss1TyranScreamerKiller-meta",
+      "kind": "meta",
+      "heroSlots": [
+        {
+          "heroId": "emperExultant",
+          "roleId": "signature",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "custoBladeChampion",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": [
+            "custoTrajann",
+            "worldKharn"
+          ]
+        },
+        {
+          "heroId": "custoTrajann",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": [
+            "custoBladeChampion",
+            "worldKharn"
+          ]
+        },
+        {
+          "heroId": "orksWarboss",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": [
+            "custoBladeChampion",
+            "custoTrajann"
+          ]
+        },
+        {
+          "heroId": "custoVexilusPraetor",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": [
+            "custoBladeChampion",
+            "custoTrajann"
+          ]
+        }
+      ],
+      "mowId": "deathCrawler",
+      "mowReplacementIds": [
+        "tyranBiovore"
+      ],
+      "compIds": [
+        "Laviscus"
+      ],
+      "efficiency": 1.33
+    },
+    {
+      "id": "GuildBoss6Boss1TyranScreamerKiller-alternate",
+      "kind": "alternate",
+      "heroSlots": [
+        {
+          "heroId": "admecRuststalker",
+          "roleId": "signature",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "admecMarshall",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": [
+            "admecDominus",
+            "orksWarboss"
+          ]
+        },
+        {
+          "heroId": "admecManipulus",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": [
+            "admecDominus",
+            "orksWarboss"
+          ]
+        },
+        {
+          "heroId": "admecDominus",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": [
+            "orksWarboss",
+            "tauMarksman"
+          ]
+        },
+        {
+          "heroId": "custoTrajann",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": [
+            "admecDominus",
+            "orksWarboss"
+          ]
+        }
+      ],
+      "mowId": "ultraDreadnought",
+      "mowReplacementIds": [
+        "tyranBiovore",
+        "deathCrawler"
+      ],
+      "compIds": [
+        "AdMech"
+      ],
+      "efficiency": 1.0
+    }
+  ],
+  "primes": [
+    {
+      "primeUnitSetId": "GuildBoss6MiniBoss1TyranNeurothrope",
+      "recommendations": [
+        {
+          "id": "GuildBoss6MiniBoss1TyranNeurothrope-admech",
+          "kind": "admech",
+          "heroSlots": [
+            {
+              "heroId": "admecRuststalker",
+              "roleId": "signature",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "admecMarshall",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "admecManipulus",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "admecDominus",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "templHelbrecht",
+              "roleId": "flex",
+              "essential": false,
+              "replacementCharacterIds": [
+                "orksWarboss"
+              ]
+            }
+          ],
+          "mowId": "necroReanimator",
+          "mowReplacementIds": [],
+          "compIds": [
+            "AdMech"
+          ],
+          "efficiency": 1.0
+        }
+      ]
+    },
+    {
+      "primeUnitSetId": "GuildBoss6MiniBoss2TyranWingedPrime",
+      "recommendations": [
+        {
+          "id": "GuildBoss6MiniBoss2TyranWingedPrime-battlesuit",
+          "kind": "battlesuit",
+          "heroSlots": [
+            {
+              "heroId": "tauFarsight",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "tauCrisis",
+              "roleId": "signature",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "admecManipulus",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "bloodDeathCompany",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "necroOverlord",
+              "roleId": "flex",
+              "essential": false,
+              "replacementCharacterIds": [
+                "thousAhriman"
+              ]
+            }
+          ],
+          "mowId": "necroReanimator",
+          "mowReplacementIds": [],
+          "compIds": [
+            "Battlesuits"
+          ],
+          "efficiency": 1.0
+        }
+      ]
+    }
+  ]
+}

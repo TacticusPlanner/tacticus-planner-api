@@ -1,0 +1,286 @@
+{
+  "bossUnitSetId": "GuildBoss4Boss1OrksGhazghkull",
+  "primeUnitSetIds": [
+    "GuildBoss4MiniBoss1OrksBigMek",
+    "GuildBoss4Minion1OrksKillaKan",
+    "GuildBoss4MiniBoss2OrksNob",
+    "GuildBoss4Minion2OrksRuntherd"
+  ],
+  "recommendations": [
+    {
+      "id": "GuildBoss4Boss1OrksGhazghkull-battlesuit",
+      "kind": "battlesuit",
+      "heroSlots": [
+        {
+          "heroId": "tauFarsight",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "tauCrisis",
+          "roleId": "signature",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "admecManipulus",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "eldarFarseer",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "tauDarkstrider",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        }
+      ],
+      "mowId": "deathCrawler",
+      "mowReplacementIds": [],
+      "compIds": [
+        "Battlesuits"
+      ],
+      "efficiency": 1.25
+    },
+    {
+      "id": "GuildBoss4Boss1OrksGhazghkull-lavistodes",
+      "kind": "lavistodes",
+      "heroSlots": [
+        {
+          "heroId": "custoBladeChampion",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "custoTrajann",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "emperExultant",
+          "roleId": "signature",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "custoVexilusPraetor",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "admecDominus",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": [
+            "worldExecutions"
+          ]
+        }
+      ],
+      "mowId": "tyranBiovore",
+      "mowReplacementIds": [],
+      "compIds": [
+        "Laviscus"
+      ],
+      "efficiency": 1.0
+    }
+  ],
+  "primes": [
+    {
+      "primeUnitSetId": "GuildBoss4MiniBoss1OrksBigMek",
+      "recommendations": [
+        {
+          "id": "GuildBoss4MiniBoss1OrksBigMek-neuro",
+          "kind": "neuro",
+          "heroSlots": [
+            {
+              "heroId": "tyranNeurothrope",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "thousInfernalMaster",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "thousAhriman",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "blackPossession",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "thousTzaangor",
+              "roleId": "flex",
+              "essential": false,
+              "replacementCharacterIds": [
+                "tyranWingedPrime",
+                "blackAbaddon"
+              ]
+            }
+          ],
+          "mowId": "thousDaemonPrince",
+          "mowReplacementIds": [],
+          "compIds": [
+            "Z'Kar"
+          ],
+          "efficiency": 1.67
+        },
+        {
+          "id": "GuildBoss4MiniBoss1OrksBigMek-admech",
+          "kind": "admech",
+          "heroSlots": [
+            {
+              "heroId": "admecRuststalker",
+              "roleId": "signature",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "admecMarshall",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "admecManipulus",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "admecDominus",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "tauMarksman",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            }
+          ],
+          "mowId": "tyranBiovore",
+          "mowReplacementIds": [],
+          "compIds": [
+            "AdMech"
+          ],
+          "efficiency": 1.0
+        }
+      ]
+    },
+    {
+      "primeUnitSetId": "GuildBoss4MiniBoss2OrksNob",
+      "recommendations": [
+        {
+          "id": "GuildBoss4MiniBoss2OrksNob-battlesuit",
+          "kind": "battlesuit",
+          "heroSlots": [
+            {
+              "heroId": "tauFarsight",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "tauCrisis",
+              "roleId": "signature",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "admecManipulus",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "eldarFarseer",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "tauDarkstrider",
+              "roleId": "flex",
+              "essential": false,
+              "replacementCharacterIds": [
+                "eldarAutarch"
+              ]
+            }
+          ],
+          "mowId": "tyranBiovore",
+          "mowReplacementIds": [],
+          "compIds": [
+            "Battlesuits"
+          ],
+          "efficiency": 1.43
+        },
+        {
+          "id": "GuildBoss4MiniBoss2OrksNob-custodes",
+          "kind": "custodes",
+          "heroSlots": [
+            {
+              "heroId": "custoBladeChampion",
+              "roleId": "signature",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "worldKharn",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "bloodDante",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "spaceBlackmane",
+              "roleId": "core",
+              "essential": true,
+              "replacementCharacterIds": []
+            },
+            {
+              "heroId": "blackAbaddon",
+              "roleId": "flex",
+              "essential": false,
+              "replacementCharacterIds": [
+                "tauCrisis",
+                "eldarAutarch",
+                "bloodMephiston"
+              ]
+            }
+          ],
+          "mowId": "blackForgefiend",
+          "mowReplacementIds": [],
+          "compIds": [
+            "Custodes"
+          ],
+          "efficiency": 1.0
+        }
+      ]
+    }
+  ]
+}

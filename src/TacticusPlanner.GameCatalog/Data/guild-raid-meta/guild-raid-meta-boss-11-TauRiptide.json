@@ -1,0 +1,122 @@
+{
+  "bossUnitSetId": "GuildBoss11Boss1TauRiptide",
+  "primeUnitSetIds": [
+    "GuildBoss11MiniBoss1TauMarksman",
+    "GuildBoss11MiniBoss2TauCrisis"
+  ],
+  "recommendations": [
+    {
+      "id": "GuildBoss11Boss1TauRiptide-meta",
+      "kind": "meta",
+      "heroSlots": [
+        {
+          "heroId": "admecRuststalker",
+          "roleId": "signature",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "admecMarshall",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": [
+            "admecDominus",
+            "orksWarboss"
+          ]
+        },
+        {
+          "heroId": "admecManipulus",
+          "roleId": "core",
+          "essential": true,
+          "replacementCharacterIds": [
+            "admecDominus",
+            "orksWarboss"
+          ]
+        },
+        {
+          "heroId": "admecDominus",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": [
+            "orksWarboss",
+            "tauMarksman"
+          ]
+        },
+        {
+          "heroId": "custoTrajann",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": [
+            "admecDominus",
+            "orksWarboss"
+          ]
+        }
+      ],
+      "mowId": "ultraDreadnought",
+      "mowReplacementIds": [
+        "tyranBiovore",
+        "deathCrawler"
+      ],
+      "compIds": [
+        "AdMech"
+      ],
+      "efficiency": 1.13
+    },
+    {
+      "id": "GuildBoss11Boss1TauRiptide-alternate",
+      "kind": "alternate",
+      "heroSlots": [
+        {
+          "heroId": "tyranNeurothrope",
+          "roleId": "signature",
+          "essential": true,
+          "replacementCharacterIds": []
+        },
+        {
+          "heroId": "thousInfernalMaster",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": [
+            "thousTzaangor",
+            "blackPossession"
+          ]
+        },
+        {
+          "heroId": "thousAhriman",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": [
+            "thousInfernalMaster",
+            "thousTzaangor"
+          ]
+        },
+        {
+          "heroId": "blackAbaddon",
+          "roleId": "guest",
+          "essential": false,
+          "replacementCharacterIds": [
+            "thousInfernalMaster",
+            "thousTzaangor"
+          ]
+        },
+        {
+          "heroId": "blackPossession",
+          "roleId": "flex",
+          "essential": false,
+          "replacementCharacterIds": [
+            "thousInfernalMaster",
+            "thousTzaangor"
+          ]
+        }
+      ],
+      "mowId": "thousDaemonPrince",
+      "mowReplacementIds": [
+        "adeptExorcist"
+      ],
+      "compIds": [
+        "Neuro"
+      ],
+      "efficiency": 1.0
+    }
+  ]
+}
