@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using TacticusPlanner.Api.Features.Analytics;
 using TacticusPlanner.Api.Features.V1Import;
 using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Persistence;
@@ -29,6 +30,12 @@ namespace TacticusPlanner.Api.Tests;
 public sealed class PlannerApiFactory : WebApplicationFactory<Program>
 {
     private readonly string databaseName = $"planner-tests-{Guid.NewGuid()}";
+
+    /// <summary>The fixed <c>Analytics:IdentityKey</c> this factory supplies. No <c>Analytics:ProjectToken</c>
+    /// is supplied, so the suite exercises real id derivation while the capture path stays inert by
+    /// construction (design.md's "identity key is required; the project token is optional" decision).
+    /// Exposed so tests can independently derive the expected analytics id for a caller.</summary>
+    public static readonly byte[] TestAnalyticsIdentityKey = [.. Enumerable.Repeat((byte)0x42, 32)];
 
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
@@ -48,6 +55,13 @@ public sealed class PlannerApiFactory : WebApplicationFactory<Program>
                 ["ColumnEncryption:Keys:v1"] = Convert.ToBase64String(new byte[32]),
                 ["UserJot:ProjectId"] = "test-userjot-project",
                 ["UserJot:ProjectSecret"] = "test-userjot-project-secret-for-tests",
+                ["Analytics:IdentityKey"] = Convert.ToBase64String(TestAnalyticsIdentityKey),
+                // Explicitly cleared: appsettings.Development.json now ships a real PostHog project
+                // token for local `dotnet run`, and this in-memory source is the last one added, so
+                // without this override the test host would pick that real token up and register the
+                // live PostHog SDK client instead of the inert path - see AGENTS.md's "no outbound
+                // network calls" rule for this test project.
+                ["Analytics:ProjectToken"] = "",
             });
         });
         builder.ConfigureTestServices(services =>
@@ -100,6 +114,9 @@ public sealed class PlannerApiFactory : WebApplicationFactory<Program>
 
             services.RemoveAll<ITacticusV1Client>();
             services.AddScoped<ITacticusV1Client, FakeTacticusV1Client>();
+
+            services.RemoveAll<IProductAnalytics>();
+            services.AddSingleton<IProductAnalytics, RecordingProductAnalytics>();
         });
     }
 }

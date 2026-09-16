@@ -1,6 +1,9 @@
 using System.Net;
 using System.Net.Http.Json;
+using Microsoft.Extensions.Options;
+using TacticusPlanner.Api.Features.Analytics;
 using TacticusPlanner.Api.Features.CurrentUser;
+using TacticusPlanner.Domain.Accounts;
 
 namespace TacticusPlanner.Api.Tests;
 
@@ -35,6 +38,41 @@ public sealed class CurrentUserEndpointTests(PlannerApiFactory factory) : IClass
             .Content.ReadFromJsonAsync<CurrentUserResponse>(TestContext.Current.CancellationToken);
 
         Assert.Equal(first!.ApplicationUserId, second!.ApplicationUserId);
+    }
+
+    [Fact]
+    public async Task ResponseCarriesTheIndependentlyDerivedAnalyticsId()
+    {
+        var client = CreateAuthenticatedClient(NewSubject());
+
+        var body = await (await client.GetAsync("/api/v1/me", TestContext.Current.CancellationToken))
+            .Content.ReadFromJsonAsync<CurrentUserResponse>(TestContext.Current.CancellationToken);
+
+        Assert.NotNull(body);
+        var deriver = new AnalyticsIdentityDeriver(Options.Create(new AnalyticsOptions
+        {
+            IdentityKey = Convert.ToBase64String(PlannerApiFactory.TestAnalyticsIdentityKey),
+        }));
+        var expected = deriver.Derive(
+            AccountId.From(body.ApplicationUserId),
+            AnalyticsIdentityDeriver.PostHogDestination
+        );
+
+        Assert.Equal(expected, body.AnalyticsId);
+    }
+
+    [Fact]
+    public async Task FirstAccessReportsAccountRegisteredExactlyOnce()
+    {
+        var client = CreateAuthenticatedClient(NewSubject());
+
+        var first = await (await client.GetAsync("/api/v1/me", TestContext.Current.CancellationToken))
+            .Content.ReadFromJsonAsync<CurrentUserResponse>(TestContext.Current.CancellationToken);
+        await client.GetAsync("/api/v1/me", TestContext.Current.CancellationToken);
+
+        var events = RecordingProductAnalytics.GetEvents(first!.AnalyticsId);
+
+        Assert.Equal(["account_registered"], events);
     }
 
     [Fact]

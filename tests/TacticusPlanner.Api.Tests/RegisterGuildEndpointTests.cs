@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
+using TacticusPlanner.Api.Features.CurrentUser;
 using TacticusPlanner.Api.Features.Guilds;
 using TacticusPlanner.TacticusApi.Models.Guild;
 
@@ -250,6 +251,111 @@ public sealed class RegisterGuildEndpointTests(PlannerApiFactory factory) : ICla
         Assert.Equal(firstBody.GuildId, secondBody.GuildId);
         Assert.Equal("Renamed", secondBody.Name);
         Assert.Equal(2, secondBody.Level);
+    }
+
+    [Fact]
+    public async Task FirstRegistrationReportsGuildRegistered()
+    {
+        var (client, tacticusUserId) = await GuildTestHelpers.CreateGuildReadyClientAsync(factory);
+        var analyticsId = await GetAnalyticsIdAsync(client);
+        var token = $"guild-token-{Guid.NewGuid()}";
+
+        FakeTacticusApi.ConfigureGuildResponse(
+            token,
+            FakeTacticusApi.BuildGuildResponse(
+                Guid.NewGuid(),
+                "TAG",
+                "Some Guild",
+                1,
+                (tacticusUserId, GuildRole.LEADER, 10, null)
+            )
+        );
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/guilds/register",
+            new RegisterGuildRequest(token),
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        Assert.Single(RecordingProductAnalytics.GetEvents(analyticsId), eventName => eventName == "guild_registered");
+    }
+
+    [Fact]
+    public async Task ReRegisteringAnExistingGuildDoesNotReReportGuildRegistered()
+    {
+        var (client, tacticusUserId) = await GuildTestHelpers.CreateGuildReadyClientAsync(factory);
+        var analyticsId = await GetAnalyticsIdAsync(client);
+        var token = $"guild-token-{Guid.NewGuid()}";
+        var guildId = Guid.NewGuid();
+
+        FakeTacticusApi.ConfigureGuildResponse(
+            token,
+            FakeTacticusApi.BuildGuildResponse(guildId, "TAG", "Some Guild", 1, (tacticusUserId, GuildRole.LEADER, 10, null))
+        );
+        await client.PostAsJsonAsync("/api/v1/guilds/register", new RegisterGuildRequest(token), TestContext.Current.CancellationToken);
+
+        FakeTacticusApi.ConfigureGuildResponse(
+            token,
+            FakeTacticusApi.BuildGuildResponse(guildId, "TAG", "Renamed", 2, (tacticusUserId, GuildRole.LEADER, 10, null))
+        );
+        var second = await client.PostAsJsonAsync(
+            "/api/v1/guilds/register",
+            new RegisterGuildRequest(token),
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.OK, second.StatusCode);
+        Assert.Single(RecordingProductAnalytics.GetEvents(analyticsId), eventName => eventName == "guild_registered");
+    }
+
+    [Fact]
+    public async Task RejectedRegistrationDoesNotReportGuildRegistered()
+    {
+        var (client, _) = await GuildTestHelpers.CreateGuildReadyClientAsync(factory);
+        var analyticsId = await GetAnalyticsIdAsync(client);
+        var token = $"guild-token-{Guid.NewGuid()}";
+        FakeTacticusApi.ConfigureGuildRejection(token, HttpStatusCode.Unauthorized);
+
+        await client.PostAsJsonAsync("/api/v1/guilds/register", new RegisterGuildRequest(token), TestContext.Current.CancellationToken);
+
+        Assert.DoesNotContain("guild_registered", RecordingProductAnalytics.GetEvents(analyticsId));
+    }
+
+    [Fact]
+    public async Task NoEmittedEventCarriesPersonalOrGuildData()
+    {
+        var (client, tacticusUserId) = await GuildTestHelpers.CreateGuildReadyClientAsync(factory);
+        var analyticsId = await GetAnalyticsIdAsync(client);
+        var token = $"guild-token-{Guid.NewGuid()}";
+
+        FakeTacticusApi.ConfigureGuildResponse(
+            token,
+            FakeTacticusApi.BuildGuildResponse(
+                Guid.NewGuid(),
+                "TAG",
+                "A Very Identifiable Guild Name",
+                1,
+                (tacticusUserId, GuildRole.LEADER, 10, null)
+            )
+        );
+        await client.PostAsJsonAsync("/api/v1/guilds/register", new RegisterGuildRequest(token), TestContext.Current.CancellationToken);
+
+        // IProductAnalytics.GuildRegistered(string analyticsId) has no properties parameter at all - there
+        // is no channel for the guild name, tacticus user id, or account id to travel through. This asserts
+        // the recorded event carries only the event name and analytics id, and that the analytics id itself
+        // (the one value that does travel) doesn't encode either.
+        var events = RecordingProductAnalytics.GetEvents(analyticsId);
+        Assert.Single(events, eventName => eventName == "guild_registered");
+        Assert.DoesNotContain("A Very Identifiable Guild Name", analyticsId, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain(tacticusUserId.ToString(), analyticsId, StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static async Task<string> GetAnalyticsIdAsync(HttpClient client)
+    {
+        var body = await (await client.GetAsync("/api/v1/me", TestContext.Current.CancellationToken))
+            .Content.ReadFromJsonAsync<CurrentUserResponse>(TestContext.Current.CancellationToken);
+        return body!.AnalyticsId;
     }
 
     [Fact]

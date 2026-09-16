@@ -173,6 +173,9 @@ do not commit secrets.
 | `V1Api__FunctionsKey` | Azure Functions `x-functions-key` for the V1 backend's `LoginUser`/`GetUserData` HTTP triggers (`AuthorizationLevel.Function`); sent as a header on every V1 request when set |
 | `ColumnEncryption__CurrentKeyVersion` | Logical key version used to encrypt new/updated sensitive columns |
 | `ColumnEncryption__Keys__<version>` | Base64/base64url 32-byte AES-256 key for the matching key version |
+| `Analytics__ProjectToken` | PostHog project token (public — identifies the project, not a secret) |
+| `Analytics__HostUrl` | PostHog ingestion host (public); must be `https://us.i.posthog.com` in every environment |
+| `Analytics__IdentityKey` | **Secret.** Base64 32-byte HMAC key deriving each account's pseudonymous analytics id. Never rotate — rotating it re-keys every analytics identity |
 | `APPLICATIONINSIGHTS_CONNECTION_STRING` | Enables Azure Monitor telemetry |
 | `OTEL_EXPORTER_OTLP_ENDPOINT` | Sends local telemetry to an OTLP collector |
 

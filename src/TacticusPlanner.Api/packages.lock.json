@@ -83,6 +83,16 @@
         "resolved": "10.0.9",
         "contentHash": "n1m7EAbCbHMGiTy++F+mLSan4MrZe0t00XEpJrkai6BFpB6lwEcirflI9FiMm4G4u55h/2RnWToYBDwS+MnN6g=="
       },
+      "PostHog.AspNetCore": {
+        "type": "Direct",
+        "requested": "[2.9.7, )",
+        "resolved": "2.9.7",
+        "contentHash": "ZIieX5VZJzxXfdwvCeeKclfgg7WcBkpz7a4G3AMrl0eQ+EnR3zn7W3rwYQkE5h5s8cf6HFF4o3hUYgcAX4+Bhg==",
+        "dependencies": {
+          "Microsoft.FeatureManagement": "4.6.0",
+          "PostHog": "2.15.6"
+        }
+      },
       "Scalar.AspNetCore": {
         "type": "Direct",
         "requested": "[2.16.9, )",
@@ -171,6 +181,11 @@
         "type": "Transitive",
         "resolved": "10.0.3",
         "contentHash": "TV62UsrJZPX6gbt3c4WrtXh7bmaDIcMqf9uft1cc4L6gJXOU07hDGEh+bFQh/L2Az0R1WVOkiT66lFqS6G2NmA=="
+      },
+      "Microsoft.Bcl.TimeProvider": {
+        "type": "Transitive",
+        "resolved": "8.0.1",
+        "contentHash": "C7kWHJnMRY7EvJev2S8+yJHZ1y7A4ZlLbA4NE+O23BDIAN5mHeqND1m+SKv1ChRS5YlCDW7yAMUe7lttRsJaAA=="
       },
       "Microsoft.Build.Framework": {
         "type": "Transitive",
@@ -320,6 +335,14 @@
         "contentHash": "ir1QKShZzfEmqO9LUWESVMUDZdnxYBSKQyulYPMeaye531lAuT8YTotthx+htrrS8hZY52HANeqowLQyCYBCZg==",
         "dependencies": {
           "Microsoft.Extensions.Compliance.Abstractions": "10.7.0"
+        }
+      },
+      "Microsoft.FeatureManagement": {
+        "type": "Transitive",
+        "resolved": "4.6.0",
+        "contentHash": "kLjGgEhlzuKs6t7g8so1dqsmE5NaSURNPOWkKD056nF43G/6w/VK5Gd02WKgpuBRQ9mjl7odAe462bn3XKBXmg==",
+        "dependencies": {
+          "Microsoft.Bcl.TimeProvider": "8.0.1"
         }
       },
       "Microsoft.Identity.Client": {
@@ -479,6 +502,11 @@
         "dependencies": {
           "Polly.Core": "8.4.2"
         }
+      },
+      "PostHog": {
+        "type": "Transitive",
+        "resolved": "2.15.6",
+        "contentHash": "I+IQqm2Eri1nwzpYhljGycHZoidXOzrzGBNFtYrS81FeBOo/HILXCrVKNDV1F3Yw9I9aLd50kTrFOMc/H29ErQ=="
       },
       "ReactiveUI.Disposables": {
         "type": "Transitive",
