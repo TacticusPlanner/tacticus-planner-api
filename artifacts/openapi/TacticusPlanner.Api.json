@@ -2736,7 +2736,8 @@
           "displayName",
           "hasCompletedOnboarding",
           "tacticusApiKeyMasked",
-          "tacticusUserIdMasked"
+          "tacticusUserIdMasked",
+          "analyticsId"
         ],
         "type": "object",
         "properties": {
@@ -2761,6 +2762,9 @@
               "null",
               "string"
             ]
+          },
+          "analyticsId": {
+            "type": "string"
           }
         }
       },

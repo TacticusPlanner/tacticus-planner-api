@@ -5,6 +5,7 @@ using Scalar.AspNetCore;
 using TacticusPlanner.Api;
 using TacticusPlanner.Api.Features;
 using TacticusPlanner.Api.Features.AccountManagement;
+using TacticusPlanner.Api.Features.Analytics;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Api.Features.Guilds;
@@ -57,6 +58,7 @@ builder.Services.AddTacticusApi(builder.Configuration["TacticusApi:BaseUrl"]);
 
 // Each feature slice owns the services it needs — see each Features/*/DependencyInjection.cs.
 builder.Services.AddAccountManagementFeature();
+builder.Services.AddAnalyticsFeature(builder.Configuration, validateOnStart: !isOpenApiDocumentGeneration);
 builder.Services.AddAuthFeature(builder.Configuration);
 builder.Services.AddGoalsFeature();
 builder.Services.AddGuildsFeature();

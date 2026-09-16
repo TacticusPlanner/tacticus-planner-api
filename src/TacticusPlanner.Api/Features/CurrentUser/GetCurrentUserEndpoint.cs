@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
+using TacticusPlanner.Api.Features.Analytics;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Api.Http;
 using TacticusPlanner.Domain.Accounts;
@@ -39,23 +40,36 @@ public sealed class GetCurrentUserEndpoint : EndpointWithoutRequest<CurrentUserR
             ? await FindAccountAsync(db, accountId, ct)
             : null;
 
-        if (account?.Profile is null)
+        var isNewAccount = account?.Profile is null;
+        if (isNewAccount)
         {
             account = await ProvisionAccountAsync(db, state.Issuer, state.Subject, User, ct);
         }
 
-        account.LastSeenAt = Resolve<TimeProvider>().GetUtcNow();
+        account!.LastSeenAt = Resolve<TimeProvider>().GetUtcNow();
         await db.SaveChangesAsync(ct);
 
         var profile = account.Profile!;
         var tacticusApiKey = profile.TacticusIntegration?.TacticusApiKey;
+        var analyticsId = Resolve<AnalyticsIdentityDeriver>()
+            .Derive(account.Id, AnalyticsIdentityDeriver.PostHogDestination);
+
+        if (isNewAccount)
+        {
+            ProductAnalyticsReporter.TryReport(
+                Resolve<ILogger<GetCurrentUserEndpoint>>(),
+                "account_registered",
+                () => Resolve<IProductAnalytics>().AccountRegistered(analyticsId)
+            );
+        }
 
         await Send.OkAsync(new CurrentUserResponse(
             account.Id.Value,
             profile.DisplayName,
             tacticusApiKey is not null,
             SecretMasker.Mask(tacticusApiKey),
-            SecretMasker.Mask(profile.TacticusUserId?.Value)
+            SecretMasker.Mask(profile.TacticusUserId?.Value),
+            analyticsId
         ), ct);
     }
 
@@ -124,5 +138,6 @@ public sealed record CurrentUserResponse(
     string DisplayName,
     bool HasCompletedOnboarding,
     string? TacticusApiKeyMasked,
-    string? TacticusUserIdMasked
+    string? TacticusUserIdMasked,
+    string AnalyticsId
 );

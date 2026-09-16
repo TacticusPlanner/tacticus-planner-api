@@ -1,5 +1,6 @@
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
+using TacticusPlanner.Api.Features.Analytics;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Persistence;
 
@@ -83,6 +84,20 @@ public sealed class RegisterGuildEndpoint : Endpoint<RegisterGuildRequest, Regis
 
         if (result is GuildSyncResult.Success success)
         {
+            if (success.WasCreated && state.AccountId is { } accountId)
+            {
+                ProductAnalyticsReporter.TryReport(
+                    Resolve<ILogger<RegisterGuildEndpoint>>(),
+                    "guild_registered",
+                    () =>
+                    {
+                        var analyticsId = Resolve<AnalyticsIdentityDeriver>()
+                            .Derive(accountId, AnalyticsIdentityDeriver.PostHogDestination);
+                        Resolve<IProductAnalytics>().GuildRegistered(analyticsId);
+                    }
+                );
+            }
+
             await Send.OkAsync(GuildProjection.Build(success.Guild, success.CallerMember), ct);
             return;
         }
