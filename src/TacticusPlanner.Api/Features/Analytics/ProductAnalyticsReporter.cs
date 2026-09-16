@@ -16,6 +16,12 @@ public static partial class ProductAnalyticsReporter
         {
             report();
         }
+        // codeql[cs/catch-of-all-exceptions]: deliberate - the whole point of this wrapper is that no
+        // failure mode of a fire-and-forget analytics call, known or not, may turn a successful request
+        // into a 500 (see the class doc comment / spec.md's "Analytics never affects the operation that
+        // produced it"). Catching a narrower, enumerable set of exception types - the pattern used
+        // elsewhere in this codebase for calls to a well-understood HTTP client - isn't available here
+        // since the vendor SDK's failure modes aren't part of its documented contract.
         catch (Exception exception)
         {
             LogReportingFailed(logger, exception, eventName);
