@@ -56,8 +56,8 @@ public static class GameCatalogGoalLookups
     public static IReadOnlySet<string> CharacterRelevantUpgradeIds(this GameCatalogSnapshot catalog, string characterId)
     {
         var character = catalog.CharacterViews.FirstOrDefault(item => item.Id == characterId);
-        return (character?.RankUpUpgrades.SelectMany(step => step.UpgradeIds) ?? [])
-            .ToHashSet(StringComparer.Ordinal);
+        return catalog.WithDecomposedIngredients(
+            character?.RankUpUpgrades.SelectMany(step => step.UpgradeIds) ?? []);
     }
 
     /// <summary>The upgrade ids relevant to a Mow's own progression — its whole primary+secondary
@@ -66,9 +66,33 @@ public static class GameCatalogGoalLookups
     {
         var mow = catalog.MowList.FirstOrDefault(item => item.Id == mowId);
         if (mow is null) return new HashSet<string>(StringComparer.Ordinal);
-        return mow.PrimaryAbility.Recipes.SelectMany(recipe => recipe)
-            .Concat(mow.SecondaryAbility.Recipes.SelectMany(recipe => recipe))
-            .ToHashSet(StringComparer.Ordinal);
+        return catalog.WithDecomposedIngredients(
+            mow.PrimaryAbility.Recipes.SelectMany(recipe => recipe)
+                .Concat(mow.SecondaryAbility.Recipes.SelectMany(recipe => recipe)));
+    }
+
+    /// <summary><paramref name="upgradeIds"/> plus every base material they decompose into: a crafted
+    /// upgrade is expanded through its recipe, recursively, until only non-craftable materials remain.
+    /// A player farms the ingredients, never the crafted upgrade itself, so an Upgrade goal must be
+    /// able to target them even though a unit's own ladder/recipes never name them directly — while the
+    /// literal ids stay accepted, so no already-valid target is invalidated. Unknown ids are kept as-is
+    /// (validated elsewhere); a recipe cycle terminates on the visited set rather than overflowing.</summary>
+    private static HashSet<string> WithDecomposedIngredients(
+        this GameCatalogSnapshot catalog,
+        IEnumerable<string> upgradeIds)
+    {
+        var upgrades = catalog.UpgradeViews.ToDictionary(item => item.Id, StringComparer.Ordinal);
+        var relevant = new HashSet<string>(StringComparer.Ordinal);
+
+        void Collect(string id)
+        {
+            if (!relevant.Add(id)) return;
+            if (!upgrades.TryGetValue(id, out var upgrade) || !upgrade.Craftable) return;
+            foreach (var ingredient in upgrade.Recipe) Collect(ingredient.Material);
+        }
+
+        foreach (var id in upgradeIds) Collect(id);
+        return relevant;
     }
 
     public static IReadOnlyDictionary<string, IReadOnlyDictionary<string, int>>
