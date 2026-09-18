@@ -63,6 +63,11 @@ The other selectable parts of the import SHALL be unaffected by this refusal.
 
 ### Requirement: Every source V1 goal receives exactly one outcome, plus one per synthesized prerequisite
 
+This cardinality applies only when the goals part is not refused for missing
+player data (see "The goals part is refused when the account has no player
+data" above) — a refused import instead returns the single blocking outcome
+described there, regardless of how many goals the V1 profile contains.
+
 The response SHALL contain exactly one *source* outcome entry per goal present
 in the V1 profile, in V1 priority order, each carrying the id of the V1 goal
 it originated from. When automatic prerequisite creation synthesizes a goal

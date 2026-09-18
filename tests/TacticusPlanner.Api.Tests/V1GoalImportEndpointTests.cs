@@ -225,6 +225,68 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
     }
 
     [Fact]
+    public async Task DuplicateRankGoalsWithTheSameEndKeepTheFurtherAlongPointFive()
+    {
+        // Both goals target the same integer rank, but the second carries a "point five" the first
+        // doesn't — comparing only the integer End would arbitrarily keep whichever goal came first
+        // instead of the actually-further-along endpoint (see MaxBy's tuple key in CollapseDuplicates).
+        var (client, subject) = await CreateProvisionedClientAsync();
+        await SeedPlayerDataSnapshotAsync(subject, [Character(CharacterId, xpLevel: 60)]);
+        var target = (int)UnitRank.Bronze1 + 1;
+
+        var body = await ImportGoalsAsync(
+            client,
+            [
+                new V1Goal("r-plain", CharacterId, 1, 1, true, null, null, null, null, target, false, 0,
+                    null, null, null, null, null, null, null),
+                new V1Goal("r-pointfive", CharacterId, 1, 2, true, null, null, null, null, target, true, 0,
+                    null, null, null, null, null, null, null),
+            ],
+            automaticPrerequisites: false);
+
+        var created = Assert.Single(body.Outcomes, o => o.Status == "Created");
+        var goal = await GetGoalAsync(client, created.GoalId!.Value);
+        Assert.True(goal.Config.Rank!.EndPointFive);
+    }
+
+    [Fact]
+    public async Task DuplicateAscensionGoalsUnionTheirAcquisitionSources()
+    {
+        var (client, subject) = await CreateProvisionedClientAsync();
+        await SeedPlayerDataSnapshotAsync(subject, [Character(CharacterId, xpLevel: 60)]);
+
+        var body = await ImportGoalsAsync(
+            client,
+            [
+                AscensionGoal("a-campaign", CharacterId, 1, UnitProgression.CommonTwoStars, campaignsUsage: 1),
+                AscensionGoal("a-onslaught", CharacterId, 2, UnitProgression.UncommonTwoStars, shardFarmType: V1ShardFarmType.Onslaught),
+            ],
+            automaticPrerequisites: false);
+
+        var created = Assert.Single(body.Outcomes, o => o.Status == "Created");
+        var goal = await GetGoalAsync(client, created.GoalId!.Value);
+        var kinds = goal.Config.AcquisitionSources!.Select(source => source.Kind).ToHashSet();
+        Assert.Contains("Campaign", kinds);
+        Assert.Contains("Onslaught", kinds);
+    }
+
+    [Fact]
+    public async Task AnExistingAscensionGoalThatAlreadyReachesTheNeededTargetReportsNoShortfall()
+    {
+        var (client, subject) = await CreateProvisionedClientAsync();
+        await SeedPlayerDataSnapshotAsync(subject, [Character(CharacterId, xpLevel: 60)]);
+        await CreateNativeGoalAsync(client, CharacterId, "ascension",
+            new CreateGoalConfigRequest(Progression: new ProgressionTargetRequest("Common:None", "Mythic:MythicWings")));
+
+        var body = await ImportGoalsAsync(client, [RankGoal("r1", CharacterId, 1, UnitRank.Gold1)]);
+
+        Assert.DoesNotContain(body.Outcomes, o => o.Code == "prerequisite_target_insufficient");
+        Assert.DoesNotContain(body.Outcomes, o => o.Code == "prerequisite_added" && o.GoalType == "Ascension");
+        var rankOutcome = Assert.Single(body.Outcomes, o => o.SourceGoalId == "r1");
+        Assert.Equal("Created", rankOutcome.Status);
+    }
+
+    [Fact]
     public async Task DuplicateAbilityGoalsKeepTheHigherPriorityOne()
     {
         var (client, subject) = await CreateProvisionedClientAsync();

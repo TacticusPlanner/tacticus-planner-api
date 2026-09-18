@@ -64,68 +64,85 @@ public sealed class UpdateGoalStatusEndpoint : Endpoint<UpdateGoalStatusRequest,
             .Where(entry => entry.GoalId == goal.Id)
             .Select(entry => entry.ProjectId)
             .ToListAsync(ct);
-        await planning.ExecuteLockedMutationAsync(lockedProjectIds, async transaction =>
-        {
-            // goal was loaded before the lock; under READ COMMITTED (see ProjectGoalPlanningService's
-            // isolation-level invariant) a concurrent status change that committed while this request was
-            // waiting for the lock would otherwise be invisible here, letting a stale goal.Status skip the
-            // slot-conflict check below for a transition that actually needs it.
-            await db.Entry(goal).ReloadAsync(ct);
 
-            if (goal.Status != targetStatus)
+        // A membership can be added to another project between this pre-lock read and the lock actually
+        // being acquired below. If the reloaded membership set under the lock turns out to reach outside
+        // what was locked, restart with the expanded set rather than let SyncOccupancy/NormalizeAsync
+        // mutate an unlocked project's rows (ProjectGoalPlanningService's isolation-level invariant: every
+        // project a decision touches must be locked first).
+        while (true)
+        {
+            List<ProjectId>? restartWithProjectIds = null;
+            await planning.ExecuteLockedMutationAsync(lockedProjectIds, async transaction =>
             {
-                // At most one Active/Paused goal per (entity, goal type) — mirrors CreateGoalEndpoint's
-                // check. Only entering the slot (targeting Active/Paused) from outside it needs the check;
-                // pausing an already-active goal (or resuming an already-paused one) never leaves the goal
-                // itself out of the count, so it can't conflict with itself.
-                if (targetStatus is GoalStatus.Active or GoalStatus.Paused)
+                // goal was loaded before the lock; under READ COMMITTED (see ProjectGoalPlanningService's
+                // isolation-level invariant) a concurrent status change that committed while this request
+                // was waiting for the lock would otherwise be invisible here, letting a stale goal.Status
+                // skip the slot-conflict check below for a transition that actually needs it.
+                await db.Entry(goal).ReloadAsync(ct);
+                var membershipProjectIds = await db.ProjectGoals
+                    .Where(entry => entry.GoalId == goal.Id)
+                    .Select(entry => entry.ProjectId)
+                    .ToListAsync(ct);
+
+                if (membershipProjectIds.Except(lockedProjectIds).Any())
                 {
-                    var membershipProjectIds = await db.ProjectGoals
-                        .Where(entry => entry.GoalId == goal.Id)
-                        .Select(entry => entry.ProjectId)
-                        .ToListAsync(ct);
-                    if (await planning.FindConflictAsync(
-                        membershipProjectIds, goal.EntityType, goal.EntityId, goal.GoalType, goal.Id, ct) is { } conflict)
+                    restartWithProjectIds = membershipProjectIds.Union(lockedProjectIds).ToList();
+                    return;
+                }
+
+                if (goal.Status != targetStatus)
+                {
+                    // At most one Active/Paused goal per (entity, goal type) — mirrors CreateGoalEndpoint's
+                    // check. Only entering the slot (targeting Active/Paused) from outside it needs the
+                    // check; pausing an already-active goal (or resuming an already-paused one) never
+                    // leaves the goal itself out of the count, so it can't conflict with itself.
+                    if (targetStatus is GoalStatus.Active or GoalStatus.Paused
+                        && await planning.FindConflictAsync(
+                            membershipProjectIds, goal.EntityType, goal.EntityId, goal.GoalType, goal.Id, ct) is { } conflict)
                     {
                         HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
                         await HttpContext.Response.WriteAsJsonAsync(conflict, ct);
                         return;
                     }
+
+                    goal.Status = targetStatus;
+                    goal.Events.Add(new GoalEvent { At = DateTimeOffset.UtcNow, Type = EventTypeFor(targetStatus) });
+                    await planning.SyncOccupancyAsync(goal, ct);
                 }
 
-                goal.Status = targetStatus;
-                goal.Events.Add(new GoalEvent { At = DateTimeOffset.UtcNow, Type = EventTypeFor(targetStatus) });
-                await planning.SyncOccupancyAsync(goal, ct);
-            }
+                try
+                {
+                    await db.SaveChangesAsync(ct);
+                }
+                catch (DbUpdateException ex) when (GoalConflictDetection.IsProjectSlotConflict(ex))
+                {
+                    var conflict = await planning.FindConflictAfterFailedSaveAsync(
+                        transaction,
+                        [new ProjectGoalSlotLookup(
+                        membershipProjectIds,
+                        goal.EntityType,
+                        goal.EntityId,
+                        goal.GoalType,
+                        goal.Id)],
+                        ct) ?? throw new InvalidOperationException(
+                            "The project slot constraint failed but no conflicting membership was found.", ex);
+                    HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+                    await HttpContext.Response.WriteAsJsonAsync(conflict, ct);
+                    return;
+                }
 
-            try
-            {
+                await planning.NormalizeAsync(membershipProjectIds, ct);
                 await db.SaveChangesAsync(ct);
-            }
-            catch (DbUpdateException ex) when (GoalConflictDetection.IsProjectSlotConflict(ex))
-            {
-                var conflict = await planning.FindConflictAfterFailedSaveAsync(
-                    transaction,
-                    [new ProjectGoalSlotLookup(
-                    lockedProjectIds,
-                    goal.EntityType,
-                    goal.EntityId,
-                    goal.GoalType,
-                    goal.Id)],
-                    ct) ?? throw new InvalidOperationException(
-                        "The project slot constraint failed but no conflicting membership was found.", ex);
-                HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
-                await HttpContext.Response.WriteAsJsonAsync(conflict, ct);
-                return;
-            }
+                if (transaction is not null)
+                    await transaction.CommitAsync(ct);
+                await Send.OkAsync(Map.ToDetail(goal, membershipProjectIds.Select(id => id.Value).ToList()), ct);
+            }, ct);
 
-            var projectIds = await db.ProjectIdsAsync(goal.Id, ct);
-            await planning.NormalizeAsync(projectIds.Select(ProjectId.From), ct);
-            await db.SaveChangesAsync(ct);
-            if (transaction is not null)
-                await transaction.CommitAsync(ct);
-            await Send.OkAsync(Map.ToDetail(goal, projectIds), ct);
-        }, ct);
+            if (restartWithProjectIds is null)
+                break;
+            lockedProjectIds = restartWithProjectIds;
+        }
     }
 
     private static GoalEventType EventTypeFor(GoalStatus status) => status switch

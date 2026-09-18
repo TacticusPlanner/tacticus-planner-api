@@ -69,18 +69,21 @@ public sealed class V1GoalImportService(
 
         var (collapsedSurvivors, mergedInto) = CollapseDuplicates(translated);
 
+        // Loaded as full tracked-then-detached entities, not an anonymous projection of individual
+        // columns: Config is a JSON-owned navigation (OwnsOne().ToJson()), and selecting it directly
+        // inside a `new { ... }` projection isn't materialized the same way by every provider.
         var existingRows = await db.Goals
+            .AsNoTracking()
             .Where(goal => goal.ProfileId == profileId)
-            .Select(goal => new { goal.EntityType, goal.EntityId, goal.GoalType, goal.Id })
             .ToListAsync(ct);
         var existingByKey = existingRows
             .GroupBy(row => new GoalKey(row.EntityType, row.EntityId, row.GoalType))
-            .ToDictionary(group => group.Key, group => group.First().Id.Value);
+            .ToDictionary(group => group.Key, group => new ExistingGoalRef(group.First().Id.Value, group.First().Config));
 
         var creatable = new List<TranslatedGoal>();
         foreach (var candidate in collapsedSurvivors)
         {
-            if (existingByKey.TryGetValue(candidate.Key, out var existingGoalId))
+            if (existingByKey.TryGetValue(candidate.Key, out var existingGoal))
             {
                 outcomeBySourceIndex[candidate.OriginalIndex] = new V1GoalOutcome(
                     "Skipped",
@@ -89,7 +92,7 @@ public sealed class V1GoalImportService(
                     candidate.Key.EntityType.ToString(),
                     candidate.Key.EntityId,
                     candidate.Key.GoalType.ToString(),
-                    existingGoalId,
+                    existingGoal.Id,
                     sourceIdByIndex[candidate.OriginalIndex]);
             }
             else
@@ -279,8 +282,11 @@ public sealed class V1GoalImportService(
             if (group.Key.GoalType == GoalType.Rank)
             {
                 var ranks = ordered.Select(goal => goal.Config.Rank!).ToList();
-                var first = ranks.MinBy(rank => rank.Start)!;
-                var last = ranks.MaxBy(rank => rank.End)!;
+                // Comparing only the integer Start/End loses ties: two goals can share the same rank but
+                // differ in EndPointFive/EndAppliedUpgrades, and the tuple key breaks the tie by the actual
+                // further-along endpoint instead of arbitrarily keeping whichever goal appeared first.
+                var first = ranks.MinBy(rank => (rank.Start, rank.StartPointFive ? 1 : 0, rank.StartAppliedUpgrades))!;
+                var last = ranks.MaxBy(rank => (rank.End, rank.EndPointFive ? 1 : 0, rank.EndAppliedUpgrades))!;
                 survivor = ordered[0] with
                 {
                     Config = new CreateGoalConfigRequest(Rank: new RankTargetRequest(
@@ -293,11 +299,18 @@ public sealed class V1GoalImportService(
             {
                 var first = ordered.MinBy(goal => ProgressionRules.ProgressionIndex(goal.Config.Progression!.Start))!;
                 var last = ordered.MaxBy(goal => ProgressionRules.ProgressionIndex(goal.Config.Progression!.End))!;
+                // Duplicate Ascension goals can carry different valid sources (e.g. one Campaign, one
+                // Onslaught) — union them instead of keeping only the first goal's list.
+                var acquisitionSources = ordered
+                    .SelectMany(goal => goal.Config.AcquisitionSources ?? [])
+                    .GroupBy(source => source.Kind)
+                    .Select(sourceGroup => sourceGroup.First())
+                    .ToList();
                 survivor = ordered[0] with
                 {
                     Config = new CreateGoalConfigRequest(
                         Progression: new ProgressionTargetRequest(first.Config.Progression!.Start, last.Config.Progression!.End),
-                        AcquisitionSources: ordered[0].Config.AcquisitionSources),
+                        AcquisitionSources: acquisitionSources.Count == 0 ? null : acquisitionSources),
                     Notes = JoinNotes(ordered),
                 };
             }
@@ -322,7 +335,7 @@ public sealed class V1GoalImportService(
         ProfileId profileId,
         PlayerDataSnapshot playerSnapshot,
         List<TranslatedGoal> creatable,
-        Dictionary<GoalKey, Guid> existingByKey,
+        Dictionary<GoalKey, ExistingGoalRef> existingByKey,
         bool synthesizePrerequisites,
         string?[] sourceIdByIndex,
         V1GoalOutcome?[] outcomeBySourceIndex,
@@ -356,6 +369,11 @@ public sealed class V1GoalImportService(
             var priority = await projects.GetNextPriorityAsync(project.Id, ct);
             var now = timeProvider.GetUtcNow();
             var staged = new Dictionary<int, Goal>();
+            // Synthesized-prerequisite "Created" outcomes (Unlock/Ascension/Level), like the `staged`
+            // source-goal ones above, can't be finalized until the transaction actually commits — a
+            // project-slot-conflict rollback below must still be able to turn them into failures instead of
+            // reporting a goal that was never persisted.
+            var stagedPrerequisites = new List<(Goal Goal, int CandidateCount)>();
 
             foreach (var unitKey in unitOrder)
             {
@@ -390,7 +408,7 @@ public sealed class V1GoalImportService(
                         db.Goals.Add(unlockGoal);
                         db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(project, unlockGoal, priority++, now));
                         unlockGoalId = unlockGoal.Id.Value;
-                        extraOutcomes.Add(PrerequisiteOutcome(unlockGoal, unitCandidates));
+                        stagedPrerequisites.Add((unlockGoal, unitCandidates.Count));
                     }
                 }
 
@@ -410,7 +428,7 @@ public sealed class V1GoalImportService(
                     db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(project, ascensionGoal, priority++, now));
                     ascensionGoalId = ascensionGoal.Id.Value;
                     ascensionFloor = targetProgression;
-                    extraOutcomes.Add(PrerequisiteOutcome(ascensionGoal, unitCandidates));
+                    stagedPrerequisites.Add((ascensionGoal, unitCandidates.Count));
                 }
                 else if (ownAscension is not null)
                 {
@@ -458,7 +476,7 @@ public sealed class V1GoalImportService(
                         db.Goals.Add(levelGoal);
                         db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(project, levelGoal, priority++, now));
                         levelGoalId = levelGoal.Id.Value;
-                        extraOutcomes.Add(PrerequisiteOutcome(levelGoal, unitCandidates));
+                        stagedPrerequisites.Add((levelGoal, unitCandidates.Count));
                     }
                 }
 
@@ -522,6 +540,13 @@ public sealed class V1GoalImportService(
                         "Another goal for this unit and type was created concurrently.",
                         null, null, null, null, sourceIdByIndex[index]);
                 }
+                foreach (var (goal, _) in stagedPrerequisites)
+                {
+                    extraOutcomes.Add(new V1GoalOutcome(
+                        "Failed", "project_slot_conflict",
+                        "Another goal for this unit and type was created concurrently.",
+                        goal.EntityType.ToString(), goal.EntityId, goal.GoalType.ToString(), null, null));
+                }
                 return;
             }
 
@@ -541,6 +566,10 @@ public sealed class V1GoalImportService(
                     goal.Id.Value,
                     sourceIdByIndex[index]);
             }
+            foreach (var (goal, candidateCount) in stagedPrerequisites)
+            {
+                extraOutcomes.Add(PrerequisiteOutcome(goal, candidateCount));
+            }
         }, ct);
     }
 
@@ -554,7 +583,7 @@ public sealed class V1GoalImportService(
         UnitKey unitKey,
         List<TranslatedGoal> unitCandidates,
         PlayerBaseUnitRecord? playerUnit,
-        Dictionary<GoalKey, Guid> existingByKey,
+        Dictionary<GoalKey, ExistingGoalRef> existingByKey,
         string?[] sourceIdByIndex)
     {
         // Unlock is only ever a valid goal type for a Character (GoalTargetValidationService) — a Mow
@@ -608,13 +637,20 @@ public sealed class V1GoalImportService(
                             sourceIdByIndex[ownAscension.OriginalIndex]);
                     }
                 }
-                else if (existingByKey.TryGetValue(new GoalKey(unitKey.EntityType, unitKey.EntityId, GoalType.Ascension), out var existingId))
+                else if (existingByKey.TryGetValue(new GoalKey(unitKey.EntityType, unitKey.EntityId, GoalType.Ascension), out var existingGoal))
                 {
-                    ascensionShortfall = new V1GoalOutcome(
-                        "Skipped",
-                        "prerequisite_target_insufficient",
-                        "An existing Ascension goal for this unit does not reach what an imported goal requires.",
-                        unitKey.EntityType.ToString(), unitKey.EntityId, GoalType.Ascension.ToString(), existingId, null);
+                    // The existing goal's own target may already reach (or exceed) what's needed — only
+                    // report a shortfall when it genuinely falls short, rather than assuming every existing
+                    // Ascension goal is insufficient.
+                    var existingProgressionIndex = ProgressionRules.ProgressionIndex(existingGoal.Config.Progression!.End);
+                    if (existingProgressionIndex < neededProgressionIndex)
+                    {
+                        ascensionShortfall = new V1GoalOutcome(
+                            "Skipped",
+                            "prerequisite_target_insufficient",
+                            "An existing Ascension goal for this unit does not reach what an imported goal requires.",
+                            unitKey.EntityType.ToString(), unitKey.EntityId, GoalType.Ascension.ToString(), existingGoal.Id, null);
+                    }
                 }
                 else
                 {
@@ -640,7 +676,7 @@ public sealed class V1GoalImportService(
     }
 
     private static bool HasOwnOrExistingGoal(
-        UnitKey unitKey, GoalType goalType, List<TranslatedGoal> unitCandidates, Dictionary<GoalKey, Guid> existingByKey) =>
+        UnitKey unitKey, GoalType goalType, List<TranslatedGoal> unitCandidates, Dictionary<GoalKey, ExistingGoalRef> existingByKey) =>
         unitCandidates.Any(candidate => candidate.Key.GoalType == goalType)
             || existingByKey.ContainsKey(new GoalKey(unitKey.EntityType, unitKey.EntityId, goalType));
 
@@ -670,10 +706,10 @@ public sealed class V1GoalImportService(
         InitialPassiveAbilityLevel = playerUnit?.Abilities.ElementAtOrDefault(1)?.Level,
     };
 
-    private static V1GoalOutcome PrerequisiteOutcome(Goal prerequisite, List<TranslatedGoal> unitCandidates) => new(
+    private static V1GoalOutcome PrerequisiteOutcome(Goal prerequisite, int candidateCount) => new(
         "Created",
         "prerequisite_added",
-        $"Automatically added because it is required by {unitCandidates.Count} imported goal(s) for this unit.",
+        $"Automatically added because it is required by {candidateCount} imported goal(s) for this unit.",
         prerequisite.EntityType.ToString(),
         prerequisite.EntityId,
         prerequisite.GoalType.ToString(),
@@ -751,6 +787,8 @@ public sealed class V1GoalImportService(
     }
 
     private sealed record GoalKey(GoalEntityType EntityType, string EntityId, GoalType GoalType);
+
+    private sealed record ExistingGoalRef(Guid Id, GoalConfig Config);
 
     private sealed record UnitKey(GoalEntityType EntityType, string EntityId);
 

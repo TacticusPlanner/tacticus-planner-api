@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using Refit;
 using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Persistence;
@@ -57,12 +58,47 @@ public sealed class PlayerDataSyncService(
         }
 
         var transformed = transformer.Transform(response);
+        var syncedAt = timeProvider.GetUtcNow();
 
         var snapshot = await db.PlayerDataSnapshots.FirstOrDefaultAsync(entity => entity.Id == profileId, ct);
         var isNew = snapshot is null;
         snapshot ??= new PlayerDataSnapshotEntity { Id = profileId };
+        ApplyTransform(snapshot, transformed, isNew, syncedAt);
+
+        if (isNew)
+        {
+            db.PlayerDataSnapshots.Add(snapshot);
+        }
+
+        if (integration is not null)
+        {
+            integration.TacticusSyncLastSucceededAt = syncedAt;
+        }
+
+        try
+        {
+            await db.SaveChangesAsync(ct);
+        }
+        catch (DbUpdateException exception) when (isNew && IsSnapshotPrimaryKeyConflict(exception))
+        {
+            // Two concurrent first-time syncs for the same profile can both observe no snapshot and both
+            // try to insert one; the loser's insert is rejected by the primary key. Detach the failed
+            // tracked instance and re-apply this sync as an update against the winner's row instead of
+            // surfacing a 500 (see ImportV1ProfileEndpoint: a V1 import's first request commonly races
+            // exactly this path).
+            db.Entry(snapshot).State = EntityState.Detached;
+            snapshot = await db.PlayerDataSnapshots.FirstAsync(entity => entity.Id == profileId, ct);
+            ApplyTransform(snapshot, transformed, isNew: false, syncedAt);
+            await db.SaveChangesAsync(ct);
+        }
+
+        return new PlayerDataSyncResult.Success(snapshot);
+    }
+
+    private static void ApplyTransform(
+        PlayerDataSnapshotEntity snapshot, PlayerDataTransformResult transformed, bool isNew, DateTimeOffset syncedAt)
+    {
         var existingChunkHashes = snapshot.ChunkHashes;
-        var syncedAt = timeProvider.GetUtcNow();
 
         snapshot.ConfigHash = transformed.ConfigHash;
         snapshot.TacticusLastUpdatedOn = transformed.TacticusLastUpdatedOn;
@@ -81,20 +117,10 @@ public sealed class PlayerDataSyncService(
                 setter(snapshot, transformed);
             }
         }
-
-        if (isNew)
-        {
-            db.PlayerDataSnapshots.Add(snapshot);
-        }
-
-        if (integration is not null)
-        {
-            integration.TacticusSyncLastSucceededAt = syncedAt;
-        }
-
-        await db.SaveChangesAsync(ct);
-        return new PlayerDataSyncResult.Success(snapshot);
     }
+
+    private static bool IsSnapshotPrimaryKeyConflict(DbUpdateException exception) =>
+        exception.InnerException is PostgresException { SqlState: PostgresErrorCodes.UniqueViolation };
 }
 
 public abstract record PlayerDataSyncResult
