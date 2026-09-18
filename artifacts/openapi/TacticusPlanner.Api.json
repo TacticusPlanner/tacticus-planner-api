@@ -5932,6 +5932,7 @@
           "challenge",
           "energyCost",
           "nodeNumber",
+          "battleIndex",
           "slots",
           "dailyAttempts",
           "rewards",
@@ -5961,6 +5962,10 @@
             "format": "int32"
           },
           "nodeNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "battleIndex": {
             "type": "integer",
             "format": "int32"
           },

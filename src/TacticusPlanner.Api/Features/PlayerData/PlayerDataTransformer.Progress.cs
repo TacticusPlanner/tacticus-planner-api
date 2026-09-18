@@ -76,6 +76,7 @@ public sealed partial class PlayerDataTransformer
             .Select(battle => new BattleAttemptRecord
             {
                 TacticusCampaignId = CampaignId.From(campaign.Id),
+                Type = campaign.Type,
                 BattleIndex = battle.BattleIndex,
                 AttemptsLeft = battle.AttemptsLeft,
                 AttemptsUsed = battle.AttemptsUsed,

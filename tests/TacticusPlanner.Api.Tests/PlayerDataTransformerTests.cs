@@ -22,7 +22,39 @@ public sealed class PlayerDataTransformerTests
 
     private static PlayerDataTransformer CreateTransformer() => new(new TestCatalogProvider());
 
-    private static PlayerResponse BuildResponse(string configHash = "hash-1") => new()
+    private static PlayerResponse BuildResponse(string configHash = "hash-1") =>
+        BuildResponse(configHash, DefaultCampaigns());
+
+    private static List<CampaignProgress> DefaultCampaigns() =>
+    [
+        new CampaignProgress
+        {
+            Id = FakeTacticusApi.CampaignId, // real catalog groupId (see GameCatalogDatasets)
+            Name = "Indomitus",
+            Type = "Standard",
+            Battles =
+            [
+                // BattleIndex 0 has never been attempted (AttemptsUsed 0) — excluded from
+                // LiveProgress.BattleAttempts, but still counts toward the high-water mark.
+                new CampaignLevel { BattleIndex = 0, AttemptsLeft = 3, AttemptsUsed = 0 },
+                new CampaignLevel { BattleIndex = 2, AttemptsLeft = 2, AttemptsUsed = 1 },
+            ],
+        },
+        new CampaignProgress
+        {
+            Id = FakeTacticusApi.EventCampaignId,
+            Name = string.Empty,
+            Type = "Standard",
+            Battles =
+            [
+                new CampaignLevel { BattleIndex = 14, AttemptsLeft = 9, AttemptsUsed = 1 },
+                new CampaignLevel { BattleIndex = 5, AttemptsLeft = 9, AttemptsUsed = 1 },
+                new CampaignLevel { BattleIndex = 3, AttemptsLeft = 9, AttemptsUsed = 1 },
+            ],
+        },
+    ];
+
+    private static PlayerResponse BuildResponse(string configHash, List<CampaignProgress> campaigns) => new()
     {
         Player = new Player
         {
@@ -83,34 +115,7 @@ public sealed class PlayerDataTransformerTests
             },
             Progress = new Progress
             {
-                Campaigns =
-                [
-                    new CampaignProgress
-                    {
-                        Id = FakeTacticusApi.CampaignId, // real catalog groupId (see GameCatalogDatasets)
-                        Name = "Indomitus",
-                        Type = "Standard",
-                        Battles =
-                        [
-                            // BattleIndex 0 has never been attempted (AttemptsUsed 0) — excluded from
-                            // LiveProgress.BattleAttempts, but still counts toward the high-water mark.
-                            new CampaignLevel { BattleIndex = 0, AttemptsLeft = 3, AttemptsUsed = 0 },
-                            new CampaignLevel { BattleIndex = 2, AttemptsLeft = 2, AttemptsUsed = 1 },
-                        ],
-                    },
-                    new CampaignProgress
-                    {
-                        Id = FakeTacticusApi.EventCampaignId,
-                        Name = string.Empty,
-                        Type = "Standard",
-                        Battles =
-                        [
-                            new CampaignLevel { BattleIndex = 14, AttemptsLeft = 9, AttemptsUsed = 1 },
-                            new CampaignLevel { BattleIndex = 5, AttemptsLeft = 9, AttemptsUsed = 1 },
-                            new CampaignLevel { BattleIndex = 3, AttemptsLeft = 9, AttemptsUsed = 1 },
-                        ],
-                    },
-                ],
+                Campaigns = campaigns,
                 LegendaryEvents =
                 [
                     new LegendaryEvent
@@ -247,11 +252,45 @@ public sealed class PlayerDataTransformerTests
         // untouched standard battle is excluded).
         Assert.Equal(4, result.LiveProgress.BattleAttempts.Count);
         Assert.Contains(result.LiveProgress.BattleAttempts, b =>
-            b.TacticusCampaignId == FakeTacticusApi.CampaignId && b.BattleIndex == 2 && b.AttemptsLeft == 2);
+            b.TacticusCampaignId == FakeTacticusApi.CampaignId && b.BattleIndex == 2 && b.AttemptsLeft == 2 && b.Type == "Standard");
         Assert.DoesNotContain(result.LiveProgress.BattleAttempts, b =>
             b.TacticusCampaignId == FakeTacticusApi.CampaignId && b.BattleIndex == 0);
+        Assert.All(result.LiveProgress.BattleAttempts, b => Assert.Equal("Standard", b.Type));
 
         Assert.Equal(FakeTacticusApi.EventCampaignId, result.LiveProgress.ActiveCampaignEventId?.Value);
+    }
+
+    [Fact]
+    public void DistinguishesBattleAttemptsFromTwoTiersOfTheSameEventCampaignByType()
+    {
+        // Standard and Extremis are reported as two separate CampaignProgress entries sharing one
+        // campaign id, each with its own independent (and here, colliding) BattleIndex sequence —
+        // Type is the only signal that keeps their battle attempts apart once flattened together.
+        var campaigns = new List<CampaignProgress>
+        {
+            new()
+            {
+                Id = FakeTacticusApi.EventCampaignId,
+                Name = string.Empty,
+                Type = "Standard",
+                Battles = [new CampaignLevel { BattleIndex = 0, AttemptsLeft = 9, AttemptsUsed = 6 }],
+            },
+            new()
+            {
+                Id = FakeTacticusApi.EventCampaignId,
+                Name = string.Empty,
+                Type = "Extremis",
+                Battles = [new CampaignLevel { BattleIndex = 0, AttemptsLeft = 4, AttemptsUsed = 2 }],
+            },
+        };
+
+        var result = CreateTransformer().Transform(BuildResponse("hash-1", campaigns));
+
+        Assert.Equal(2, result.LiveProgress.BattleAttempts.Count);
+        Assert.Contains(result.LiveProgress.BattleAttempts, b =>
+            b.Type == "Standard" && b.BattleIndex == 0 && b.AttemptsUsed == 6);
+        Assert.Contains(result.LiveProgress.BattleAttempts, b =>
+            b.Type == "Extremis" && b.BattleIndex == 0 && b.AttemptsUsed == 2);
     }
 
     [Fact]
