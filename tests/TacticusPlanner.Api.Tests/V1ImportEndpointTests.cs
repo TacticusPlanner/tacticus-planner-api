@@ -1,7 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
-using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Api.Features.PlayerDataOverrides;
 using TacticusPlanner.Api.Features.V1Import;
 
@@ -31,6 +30,51 @@ public sealed class V1ImportEndpointTests(PlannerApiFactory factory) : IClassFix
         Assert.Equal(new("Gold", 2), result.Progress.Imperial);
         Assert.Equal(new("Diamond", 4), result.Progress.Xenos);
         Assert.Equal(new("Silver", 3), result.Progress.Chaos);
+    }
+
+    [Fact]
+    public void ParsesV1ShardSourceFieldsPreviouslyDroppedEntirely()
+    {
+        // A captured V1 profile payload's goals array: an Ascension goal (combined onslaught + energy
+        // farming, plus mythic campaign usage) and an Unlock goal (campaign usage only — V1 never sends
+        // shardFarmType/mythicCampaignsUsage for Unlock).
+        var data = JsonSerializer.Deserialize<V1UserData>("""
+            {
+              "goals": [
+                {
+                  "id": "ascend-1",
+                  "character": "Bellator",
+                  "type": 2,
+                  "priority": 1,
+                  "dailyRaids": true,
+                  "targetRarity": 3,
+                  "targetStars": 8,
+                  "shardFarmType": "both",
+                  "campaignsUsage": 1,
+                  "mythicCampaignsUsage": 2
+                },
+                {
+                  "id": "unlock-1",
+                  "character": "Bellator",
+                  "type": 3,
+                  "priority": 2,
+                  "dailyRaids": false,
+                  "campaignsUsage": 1
+                }
+              ]
+            }
+            """, WebJsonOptions);
+
+        Assert.NotNull(data?.Goals);
+        var ascend = Assert.Single(data.Goals, goal => goal.Id == "ascend-1");
+        Assert.Equal("both", ascend.ShardFarmType);
+        Assert.Equal(1, ascend.CampaignsUsage);
+        Assert.Equal(2, ascend.MythicCampaignsUsage);
+
+        var unlock = Assert.Single(data.Goals, goal => goal.Id == "unlock-1");
+        Assert.Null(unlock.ShardFarmType);
+        Assert.Equal(1, unlock.CampaignsUsage);
+        Assert.Null(unlock.MythicCampaignsUsage);
     }
 
     [Fact]
@@ -125,89 +169,8 @@ public sealed class V1ImportEndpointTests(PlannerApiFactory factory) : IClassFix
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
-    [Fact]
-    public async Task GoalsOnlyImportReturnsSpecsForTheClientToCreateAndReportsUnsupportedGoals()
-    {
-        var client = await CreateProvisionedClientAsync();
-
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/v1-import",
-            new ImportV1ProfileRequest(
-                FakeTacticusV1Client.UsernameWithGoals,
-                FakeTacticusV1Client.ValidPassword,
-                new ImportV1Selection(false, false, false, true, false, false)
-            ),
-            TestContext.Current.CancellationToken
-        );
-        response.EnsureSuccessStatusCode();
-        var body = await response.Content.ReadFromJsonAsync<ImportV1ProfileResponse>(TestContext.Current.CancellationToken);
-
-        Assert.NotNull(body);
-        Assert.Equal("Imported", body.Goals.Status);
-        var spec = Assert.Single(body.GoalSpecs);
-        Assert.Equal("Character", spec.EntityType);
-        Assert.Equal("ultraInceptorSgt", spec.EntityId);
-        var goalSpec = Assert.Single(spec.Goals);
-        Assert.Equal("Rank", goalSpec.GoalType);
-        Assert.Equal(1, body.GoalsSkipped);
-        Assert.Contains(body.GoalIssues, issue => issue.Code == "unsupported_goal_type");
-        Assert.Equal("not_selected", body.PersonalTacticusApiKey.Code);
-        Assert.Equal("not_selected", body.OnslaughtProgress.Code);
-
-        // Nothing was created server-side — this is a pure translation. The caller (the web client, in
-        // production) is responsible for submitting the returned specs through POST me/goals/combined.
-        var goals = await client.GetFromJsonAsync<ListGoalsResponse>(
-            "/api/v1/me/goals",
-            TestContext.Current.CancellationToken
-        );
-        Assert.Empty(goals!.Goals);
-    }
-
-    [Fact]
-    public async Task GoalsOnlyImportSkipsCandidatesThatAlreadyHaveAMatchingGoal()
-    {
-        var client = await CreateProvisionedClientAsync();
-        var nativeResponse = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            new CreateGoalRequest(
-                "character",
-                "ultraInceptorSgt",
-                "rank",
-                new CreateGoalConfigRequest(
-                    Rank: new RankTargetRequest(0, false, 0, 1, false, 0)
-                ),
-                null
-            ),
-            TestContext.Current.CancellationToken
-        );
-        nativeResponse.EnsureSuccessStatusCode();
-
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/v1-import",
-            new ImportV1ProfileRequest(
-                FakeTacticusV1Client.UsernameWithGoals,
-                FakeTacticusV1Client.ValidPassword,
-                new ImportV1Selection(false, false, false, true, false, false)
-            ),
-            TestContext.Current.CancellationToken
-        );
-        response.EnsureSuccessStatusCode();
-        var body = await response.Content.ReadFromJsonAsync<ImportV1ProfileResponse>(TestContext.Current.CancellationToken);
-
-        Assert.NotNull(body);
-        Assert.Empty(body.GoalSpecs);
-        // 1 unsupported goal + 1 skipped as already-existing.
-        Assert.Equal(2, body.GoalsSkipped);
-        Assert.Contains(body.GoalIssues, issue => issue.Code == "goal_already_exists");
-        Assert.Contains(body.GoalIssues, issue => issue.Code == "unsupported_goal_type");
-
-        var goals = await client.GetFromJsonAsync<ListGoalsResponse>(
-            "/api/v1/me/goals",
-            TestContext.Current.CancellationToken
-        );
-        var existing = Assert.Single(goals!.Goals);
-        Assert.Equal("ultraInceptorSgt", existing.EntityId);
-    }
+    // Goal-import behavior (server-side creation, outcomes, prerequisites, acquisition sources,
+    // ordering) is covered in V1GoalImportEndpointTests.cs — this file covers the other import parts.
 
     [Fact]
     public async Task OnslaughtImportReplacesAllAllianceProgressAndSupportsCompletedSectorTier()

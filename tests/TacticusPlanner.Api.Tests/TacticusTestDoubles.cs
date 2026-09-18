@@ -301,6 +301,18 @@ internal sealed class FakeTacticusV1Client : ITacticusV1Client
 {
     public const string ValidUsername = "v1-user";
     public const string ValidPassword = "v1-password";
+
+    // Per-test configurable profiles (goal-import tests need arbitrary V1Goal lists that don't fit the
+    // fixed named fixtures below) — keyed by a caller-chosen username, always authenticated with
+    // ValidPassword. Tests use a unique username (typically Guid-derived) so fixtures don't leak.
+    private static readonly ConcurrentDictionary<string, TacticusV1Profile> ConfiguredProfiles = new();
+
+    public static string ConfigureProfile(TacticusV1Profile profile)
+    {
+        var username = $"v1-configured-{Guid.NewGuid()}";
+        ConfiguredProfiles[username] = profile;
+        return username;
+    }
     public const string UsernameWithoutTacticusKey = "v1-user-no-key";
     public const string UsernameWithGoals = "v1-user-with-goals";
     public const string UsernameWithOnslaught = "v1-user-with-onslaught";
@@ -324,6 +336,11 @@ internal sealed class FakeTacticusV1Client : ITacticusV1Client
             return Task.FromResult<string?>(null);
         }
 
+        if (ConfiguredProfiles.ContainsKey(username))
+        {
+            return Task.FromResult<string?>("v1-access-token-for-" + username);
+        }
+
         return username switch
         {
             ValidUsername => Task.FromResult<string?>(AccessToken),
@@ -339,6 +356,13 @@ internal sealed class FakeTacticusV1Client : ITacticusV1Client
 
     public Task<TacticusV1Profile?> GetProfileAsync(string accessToken, CancellationToken cancellationToken)
     {
+        if (accessToken.StartsWith("v1-access-token-for-v1-configured-", StringComparison.Ordinal))
+        {
+            var username = accessToken["v1-access-token-for-".Length..];
+            return Task.FromResult<TacticusV1Profile?>(
+                ConfiguredProfiles.TryGetValue(username, out var profile) ? profile : null);
+        }
+
         return accessToken switch
         {
             AccessToken => Task.FromResult<TacticusV1Profile?>(

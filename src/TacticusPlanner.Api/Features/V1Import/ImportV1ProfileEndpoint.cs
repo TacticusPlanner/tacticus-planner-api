@@ -1,7 +1,6 @@
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
-using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Api.Features.Guilds;
 using TacticusPlanner.Api.Features.TacticusIntegration;
 using TacticusPlanner.Api.Http;
@@ -23,10 +22,10 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
             summary.Summary = "Selectively imports integration data, progress, and goals from V1.";
             summary.Description = "V1 credentials are used once and never persisted. After profile retrieval, "
                 + "each selected part is applied independently and reports Imported, Skipped, or Failed. "
-                + "Goals are translated into V2 create-goal specs (GoalSpecs) rather than created here — the "
-                + "caller submits each spec through POST me/goals/combined, the same endpoint the regular "
-                + "create-goal flow uses. A V1 goal is skipped when it can't be translated or when the account "
-                + "already has a goal of that type for that entity.";
+                + "Goals are created directly by this operation, in V1 priority order — the response carries "
+                + "one outcome per source V1 goal (created, skipped, or failed), plus one per automatically "
+                + "added prerequisite. The goals part is refused (no goals created) when the account has no "
+                + "player data snapshot.";
         });
     }
 
@@ -77,15 +76,16 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
         ImportPartResult goals;
         if (!selection.Goals)
         {
-            goalResult = new V1GoalImportResult([], 0, []);
+            goalResult = new V1GoalImportResult([], Refused: false);
             goals = ImportPartResult.NotSelected();
         }
         else
         {
-            goalResult = await Resolve<V1GoalImportService>().TranslateAsync(profileId.Value, v1.Goals, ct);
-            goals = goalResult.GoalSpecs.Count > 0
-                ? new ImportPartResult("Imported", null, null)
-                : new ImportPartResult("Skipped", "no_importable_goals", "No supported V1 goals were available to import.");
+            goalResult = await Resolve<V1GoalImportService>().ImportAsync(
+                profileId.Value, v1.Goals, selection.AutomaticPrerequisites, ct);
+            goals = goalResult.Refused
+                ? new ImportPartResult("Failed", "player_data_required", "Player data must be synced before goals can be imported.")
+                : new ImportPartResult("Imported", null, null);
         }
 
         await Send.OkAsync(new ImportV1ProfileResponse(
@@ -95,9 +95,7 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
             onslaughtProgress,
             campaignEventProgress,
             goals,
-            goalResult.GoalSpecs,
-            goalResult.Skipped,
-            goalResult.Issues
+            goalResult.Outcomes
         )
         {
             ProfileId = profileId.Value.Value,
@@ -385,7 +383,11 @@ public sealed record ImportV1Selection(
     bool GuildApiToken,
     bool Goals,
     bool OnslaughtProgress,
-    bool CampaignEventProgress
+    bool CampaignEventProgress,
+    // Automatic prerequisite synthesis (Unlock/Ascension/Level) for imported goals — same rules and
+    // minimum targets the manual create-goal flow applies (rewrite-v1-goal-import). Defaults on, matching
+    // the manual flow's own default.
+    bool AutomaticPrerequisites = true
 );
 
 public sealed record ImportV1ProfileRequest(string? Username, string? Password, ImportV1Selection? Import);
@@ -402,11 +404,10 @@ public sealed record ImportV1ProfileResponse(
     ImportPartResult OnslaughtProgress,
     ImportPartResult CampaignEventProgress,
     ImportPartResult Goals,
-    // Parsed V1 goals, already shaped as create requests — one per unit. The caller submits each of
-    // these through POST me/goals/combined; this endpoint no longer creates goals itself.
-    IReadOnlyList<CreateCombinedGoalsRequest> GoalSpecs,
-    int GoalsSkipped,
-    IReadOnlyList<V1ImportIssue> GoalIssues
+    // One outcome per source V1 goal (created/skipped/failed), plus one per automatically added
+    // prerequisite — goals are created by this operation itself; nothing is returned for the caller to
+    // submit elsewhere (rewrite-v1-goal-import).
+    IReadOnlyList<V1GoalOutcome> Outcomes
 )
 {
     public Guid ProfileId { get; init; }
