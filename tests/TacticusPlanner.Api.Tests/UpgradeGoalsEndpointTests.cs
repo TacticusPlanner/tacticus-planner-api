@@ -18,6 +18,20 @@ public sealed class UpgradeGoalsEndpointTests(PlannerApiFactory factory) : IClas
     // Present in astraOrdnanceBattery's primaryAbility recipes[0] and recipes[2] (units-astramilitarum.json).
     private const string MowRelevantUpgradeId = "upgHpC015";
 
+    // A base material blackTerminator's rank-up lists never name: it is only an ingredient of a crafted
+    // upgrade on that ladder. A player farms this, not the crafted upgrade, so it must be targetable.
+    private const string CharacterIngredientUpgradeId = "upgDmgC010";
+
+    // Same, one level deeper — reachable only through a crafted upgrade nested inside another recipe.
+    private const string CharacterNestedIngredientUpgradeId = "upgDmgU011";
+
+    // The MoW equivalent: a base material only reachable by expanding astraOrdnanceBattery's recipes.
+    private const string MowIngredientUpgradeId = "upgHpC006";
+
+    // A real base material that is neither on blackTerminator's ladder nor in any of its recipes —
+    // guards against relevance widening into "any upgrade in the game".
+    private const string UnrelatedUpgradeId = "upgArmC001";
+
     private static readonly CreateGoalRequest RankGoal = new(
         "character",
         "blackTerminator",
@@ -82,8 +96,10 @@ public sealed class UpgradeGoalsEndpointTests(PlannerApiFactory factory) : IClas
         Assert.Equal("Upgrade", created.GoalType);
     }
 
-    [Fact]
-    public async Task CreateUpgradeGoalWithIrrelevantMaterialIsRejected()
+    [Theory]
+    [InlineData(CharacterIngredientUpgradeId)]
+    [InlineData(CharacterNestedIngredientUpgradeId)]
+    public async Task CreateUpgradeGoalWithDecomposedIngredientIsAccepted(string upgradeId)
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
@@ -93,7 +109,55 @@ public sealed class UpgradeGoalsEndpointTests(PlannerApiFactory factory) : IClas
             {
                 GoalType = "upgrade",
                 Config = new CreateGoalConfigRequest(
-                    Upgrade: new UpgradeTargetRequest([new UpgradeMaterialTargetRequest("not-a-real-upgrade-id", 1)])),
+                    Upgrade: new UpgradeTargetRequest([new UpgradeMaterialTargetRequest(upgradeId, 4)])),
+            },
+            TestContext.Current.CancellationToken
+        );
+        response.EnsureSuccessStatusCode();
+        var created = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+
+        Assert.NotNull(created);
+        var target = Assert.Single(created.Config.Upgrade!.Targets);
+        Assert.Equal(upgradeId, target.UpgradeId);
+    }
+
+    [Fact]
+    public async Task CreateUpgradeGoalForMowWithDecomposedIngredientIsAccepted()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            MowAbilityGoal with
+            {
+                GoalType = "upgrade",
+                Config = new CreateGoalConfigRequest(
+                    Upgrade: new UpgradeTargetRequest([new UpgradeMaterialTargetRequest(MowIngredientUpgradeId, 2)])),
+            },
+            TestContext.Current.CancellationToken
+        );
+        response.EnsureSuccessStatusCode();
+        var created = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+
+        Assert.NotNull(created);
+        Assert.Equal("Mow", created.EntityType);
+        Assert.Equal(MowIngredientUpgradeId, created.Config.Upgrade!.Targets[0].UpgradeId);
+    }
+
+    [Theory]
+    [InlineData("not-a-real-upgrade-id")]
+    [InlineData(UnrelatedUpgradeId)]
+    public async Task CreateUpgradeGoalWithIrrelevantMaterialIsRejected(string upgradeId)
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            RankGoal with
+            {
+                GoalType = "upgrade",
+                Config = new CreateGoalConfigRequest(
+                    Upgrade: new UpgradeTargetRequest([new UpgradeMaterialTargetRequest(upgradeId, 1)])),
             },
             TestContext.Current.CancellationToken
         );

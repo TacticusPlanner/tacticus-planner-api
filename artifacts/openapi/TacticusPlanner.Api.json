@@ -5932,6 +5932,7 @@
           "challenge",
           "energyCost",
           "nodeNumber",
+          "battleIndex",
           "slots",
           "dailyAttempts",
           "rewards",
@@ -5961,6 +5962,10 @@
             "format": "int32"
           },
           "nodeNumber": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "battleIndex": {
             "type": "integer",
             "format": "int32"
           },
@@ -6491,7 +6496,8 @@
           "numerator",
           "denominator",
           "effectiveRate",
-          "isMythic"
+          "isMythic",
+          "expectedGold"
         ],
         "type": "object",
         "properties": {
@@ -6536,6 +6542,13 @@
           },
           "isMythic": {
             "type": "boolean"
+          },
+          "expectedGold": {
+            "type": [
+              "null",
+              "number"
+            ],
+            "format": "double"
           }
         }
       },

@@ -20,6 +20,11 @@ public sealed class BattleAttemptRecord
     /// <summary>Matches <see cref="CampaignProgressRecord.TacticusCampaignId"/>.</summary>
     public CampaignId TacticusCampaignId { get; set; } = CampaignId.From(string.Empty);
 
+    /// <summary>Matches <see cref="CampaignProgressRecord.Type"/>. Needed to disambiguate a campaign
+    /// event's Standard and Extremis tiers, which otherwise share the same <see cref="TacticusCampaignId"/>
+    /// and an independent, colliding <see cref="BattleIndex"/> sequence.</summary>
+    public string Type { get; set; } = string.Empty;
+
     public int BattleIndex { get; set; }
 
     public int AttemptsLeft { get; set; }

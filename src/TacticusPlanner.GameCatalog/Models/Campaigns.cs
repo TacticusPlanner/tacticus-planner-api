@@ -99,6 +99,11 @@ public sealed record GameCatalogCampaignBattleView(
     bool Challenge,
     int EnergyCost,
     int NodeNumber,
+    // Zero-based index used by Tacticus campaign-progress/battle-attempt payloads, assigned
+    // independently within each {CampaignGroupId, Type} track — see GameCatalogCampaignBattle.BattleIndex.
+    // Unlike NodeNumber, this distinguishes a challenge battle from the regular battle it shares a node
+    // number with.
+    int BattleIndex,
     int Slots,
     // The battle's daily attempt cap, derived from Type (not authored per-battle — see
     // GameCatalogDenormalizer.DailyAttemptsForType) since it's a fixed game rule per campaign

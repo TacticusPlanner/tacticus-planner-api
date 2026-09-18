@@ -42,7 +42,9 @@ public sealed record GameCatalogCharacterRankUp(
 // their combined expected yield, while ChanceId/Numerator/Denominator remain null because no single chance
 // definition represents the sum. IsMythic is true only for a character's mythicShards_ reward locations (see
 // ShardPrefixes in GameCatalogDenormalizer.cs) — always false for upgrade-material locations, which have no
-// mythic concept at all.
+// mythic concept at all. ExpectedGold is a property of the battle, not of this specific resource: it's the
+// average of the battle's own guaranteed gold reward (min+max)/2, null when the battle guarantees no gold —
+// every location sharing that battle (even for a different resource) reports the same value.
 public sealed record GameCatalogFarmLocation(
     string BattleId,
     string Type,
@@ -52,7 +54,8 @@ public sealed record GameCatalogFarmLocation(
     int? Numerator,
     int? Denominator,
     double? EffectiveRate,
-    bool IsMythic
+    bool IsMythic,
+    double? ExpectedGold
 );
 
 public sealed record GameCatalogEquipmentSlot(

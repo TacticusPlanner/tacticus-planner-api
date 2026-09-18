@@ -58,6 +58,7 @@ internal static partial class GameCatalogDenormalizer
             battle.Challenge,
             battle.EnergyCost,
             battle.NodeNumber,
+            battle.BattleIndex,
             battle.Slots,
             DailyAttemptsForType(battle.Type),
             new GameCatalogCampaignRewardsView(battle.Rewards.Guaranteed, potential),

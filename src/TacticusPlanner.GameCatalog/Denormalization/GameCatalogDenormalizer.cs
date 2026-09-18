@@ -21,15 +21,20 @@ internal static partial class GameCatalogDenormalizer
             .GroupBy(chance => chance.Id, StringComparer.Ordinal)
             .ToDictionary(group => group.Key, group => group.First(), StringComparer.Ordinal);
 
-    private static Dictionary<string, List<RewardLocation>> BuildRewardLocations(
+    private static (Dictionary<string, List<RewardLocation>> RewardLocations, Dictionary<string, double?> ExpectedGoldByBattle) BuildRewardLocations(
         IReadOnlyDictionary<string, GameCatalogCampaignGroup> campaignGroups)
     {
         var locations = new Dictionary<string, List<RewardLocation>>(StringComparer.OrdinalIgnoreCase);
+        var expectedGoldByBattle = new Dictionary<string, double?>(StringComparer.Ordinal);
 
         foreach (var group in campaignGroups.OrderBy(pair => pair.Key, StringComparer.Ordinal).Select(pair => pair.Value))
         {
             foreach (var battle in group.Battles)
             {
+                var goldReward = battle.Rewards.Guaranteed
+                    .FirstOrDefault(reward => string.Equals(reward.Id, "gold", StringComparison.OrdinalIgnoreCase));
+                expectedGoldByBattle[battle.Id] = goldReward is null ? null : (goldReward.Min + goldReward.Max) / 2.0;
+
                 foreach (var reward in battle.Rewards.Guaranteed)
                 {
                     Add(reward.Id, new RewardLocation(battle.Id, battle.Type, battle.Challenge, true, null));
@@ -42,7 +47,7 @@ internal static partial class GameCatalogDenormalizer
             }
         }
 
-        return locations;
+        return (locations, expectedGoldByBattle);
 
         void Add(string rewardId, RewardLocation location)
         {
@@ -65,6 +70,7 @@ internal static partial class GameCatalogDenormalizer
         string rewardId,
         Dictionary<string, List<RewardLocation>> rewardLocations,
         Dictionary<string, GameCatalogDropChance> dropChanceById,
+        Dictionary<string, double?> expectedGoldByBattle,
         bool isMythic = false)
     {
         if (!rewardLocations.TryGetValue(rewardId, out var locations))
@@ -77,9 +83,10 @@ internal static partial class GameCatalogDenormalizer
             .Select(group =>
         {
             var groupedLocations = group.ToArray();
+            var expectedGold = expectedGoldByBattle.GetValueOrDefault(group.Key);
             if (groupedLocations.Length == 1)
             {
-                return ResolveLocation(groupedLocations[0]);
+                return ResolveLocation(groupedLocations[0], expectedGold);
             }
 
             var first = groupedLocations[0];
@@ -105,21 +112,22 @@ internal static partial class GameCatalogDenormalizer
                 null,
                 null,
                 effectiveRate,
-                isMythic);
+                isMythic,
+                expectedGold);
         })
             .ToArray();
 
-        GameCatalogFarmLocation ResolveLocation(RewardLocation location)
+        GameCatalogFarmLocation ResolveLocation(RewardLocation location, double? expectedGold)
         {
             if (location.Guaranteed || location.ChanceId is null
                 || !dropChanceById.TryGetValue(location.ChanceId, out var chance))
             {
                 return new GameCatalogFarmLocation(location.BattleId, location.Type, location.Challenge, location.Guaranteed,
-                    location.Guaranteed ? null : location.ChanceId, null, null, null, isMythic);
+                    location.Guaranteed ? null : location.ChanceId, null, null, null, isMythic, expectedGold);
             }
 
             return new GameCatalogFarmLocation(location.BattleId, location.Type, location.Challenge, false,
-                location.ChanceId, chance.Numerator, chance.Denominator, chance.EffectiveRate, isMythic);
+                location.ChanceId, chance.Numerator, chance.Denominator, chance.EffectiveRate, isMythic, expectedGold);
         }
     }
 }
