@@ -67,12 +67,13 @@ public sealed class V1ImportEndpointTests(PlannerApiFactory factory) : IClassFix
 
         Assert.NotNull(data);
         Assert.NotNull(data.Goals);
-        var ascend = Assert.Single(data.Goals, goal => goal.Id == "ascend-1");
+        var goals = data.Goals;
+        var ascend = Assert.Single(goals, goal => goal.Id == "ascend-1");
         Assert.Equal("both", ascend.ShardFarmType);
         Assert.Equal(1, ascend.CampaignsUsage);
         Assert.Equal(2, ascend.MythicCampaignsUsage);
 
-        var unlock = Assert.Single(data.Goals, goal => goal.Id == "unlock-1");
+        var unlock = Assert.Single(goals, goal => goal.Id == "unlock-1");
         Assert.Null(unlock.ShardFarmType);
         Assert.Equal(1, unlock.CampaignsUsage);
         Assert.Null(unlock.MythicCampaignsUsage);

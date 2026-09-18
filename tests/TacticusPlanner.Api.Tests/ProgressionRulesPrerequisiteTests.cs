@@ -70,9 +70,8 @@ public sealed class ProgressionRulesPrerequisiteTests
     [Fact]
     public void MinimumProgressionForAbilityLevelRoundTripsEveryRarityCap()
     {
-        foreach (var progression in Enum.GetValues<UnitProgression>())
+        foreach (var cap in Enum.GetValues<UnitProgression>().Select(ProgressionRules.AbilityCapForProgression))
         {
-            var cap = ProgressionRules.AbilityCapForProgression(progression);
             var resolved = ProgressionRules.MinimumProgressionForAbilityLevel(cap);
             // The inverse need not return the same step (several steps share a rarity/cap), but it must
             // resolve to a step whose own cap is exactly the requested one.

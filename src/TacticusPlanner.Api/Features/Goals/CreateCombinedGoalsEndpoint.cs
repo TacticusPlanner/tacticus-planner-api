@@ -89,16 +89,15 @@ public sealed class CreateCombinedGoalsEndpoint
 
             // The lift is gated on a declared dependency (goal-target-model): only Ascension specs within
             // this spec's own closure count, not every Ascension spec anywhere in the request.
-            UnitProgression? effectiveProgressionFloor = null;
-            foreach (var dependencyIndex in closure)
-            {
-                if (parsedGoalTypes[dependencyIndex] != GoalType.Ascension) continue;
-                if (req.Goals[dependencyIndex].Config.Progression is not { } progression) continue;
-                var endIndex = ProgressionRules.ProgressionIndex(progression.End);
-                if (endIndex < 0) continue;
-                if (effectiveProgressionFloor is not { } current || endIndex > (int)current)
-                    effectiveProgressionFloor = (UnitProgression)endIndex;
-            }
+            var ascensionEndIndices = closure
+                .Where(dependencyIndex => parsedGoalTypes[dependencyIndex] == GoalType.Ascension)
+                .Select(dependencyIndex => req.Goals[dependencyIndex].Config.Progression)
+                .OfType<ProgressionTargetRequest>()
+                .Select(progression => ProgressionRules.ProgressionIndex(progression.End))
+                .Where(endIndex => endIndex >= 0)
+                .ToList();
+            UnitProgression? effectiveProgressionFloor =
+                ascensionEndIndices.Count > 0 ? (UnitProgression)ascensionEndIndices.Max() : null;
 
             if (await targetValidation.ValidateAsync(
                 profileId, entityType, req.EntityId.Trim(), goalType, spec.Config, ct, effectiveProgressionFloor)
