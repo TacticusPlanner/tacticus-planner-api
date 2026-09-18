@@ -9,7 +9,9 @@ progression ladder, of:
 
 - the unit's live progression as recorded in the account's player data, and
 - the highest Ascension target present in the same creation request among the
-  specs that the goal being validated declares a dependency on.
+  specs in the goal being validated's full transitive dependency closure (its
+  direct dependencies, and their dependencies, and so on) — not only specs it
+  directly depends on.
 
 For a request containing a single goal, or a goal that declares no dependency
 on an Ascension spec, the effective progression SHALL equal the live

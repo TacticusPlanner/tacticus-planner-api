@@ -33,10 +33,13 @@ manual create-goal flow.
 - A dependency edge is required for the lift. An ability spec that does not
   declare a dependency on the Ascension spec in the same request does **not**
   get the raised cap, so the lift cannot be obtained by accident.
-- The client-side prerequisite wiring gains the missing `Ability -> Ascension`
-  dependency edge so the promised sequence actually declares its dependency.
-  **BREAKING** for nothing on the wire; it changes which edges the client
-  sends.
+- The client-side prerequisite wiring still needs the missing
+  `Ability -> Ascension` dependency edge so the promised sequence actually
+  declares its dependency — this change does not add it. It must land with
+  the companion `tacticus-planner-apps` builder change before this behavior
+  is released; until then, an above-cap Ability goal from the manual
+  create-goal flow keeps receiving `400` responses. **BREAKING** for nothing
+  on the wire; it changes which edges the client sends.
 
 ## Capabilities
 
