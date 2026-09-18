@@ -51,8 +51,11 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
     }
 
     [Fact]
-    public async Task OtherSelectedPartsStillProcessWhenGoalsAreRefused()
+    public async Task GoalsSyncAndImportSucceedOnTheFirstRequestWhenAValidKeyIsAvailable()
     {
+        // A selected personal key gives EnsurePlayerDataSyncedAsync something to sync with before goals
+        // run, so — unlike GoalsAreRefusedWithoutPlayerDataAndNoGoalsAreCreated above, where no key is
+        // available anywhere — this first request no longer needs a second, manually-seeded run.
         var (client, subject) = await CreateProvisionedClientAsync();
         var username = FakeTacticusV1Client.ConfigureProfile(new TacticusV1Profile(
             FakeTacticusApi.ValidKey, "some-user-id", null, [RankGoal("r1", CharacterId, 1, UnitRank.Iron1)],
@@ -67,11 +70,36 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         response.EnsureSuccessStatusCode();
         var body = await response.Content.ReadFromJsonAsync<ImportV1ProfileResponse>(TestContext.Current.CancellationToken);
 
+        Assert.Equal("Imported", body!.PersonalTacticusApiKey.Status);
+        Assert.Equal("Imported", body.TacticusUserId.Status);
+        Assert.Equal("Imported", body.Goals.Status);
+        // The character starts unowned in the synced snapshot, so the Rank goal also pulls in its
+        // Unlock/Level prerequisites automatically — all three still land as "Created", not refused.
+        Assert.All(body.Outcomes, outcome => Assert.Equal("Created", outcome.Status));
+        Assert.Contains(body.Outcomes, outcome => outcome.SourceGoalId == "r1");
+        _ = subject;
+    }
+
+    [Fact]
+    public async Task OtherSelectedPartsStillProcessWhenGoalsAreRefusedForLackOfAKeyToSyncWith()
+    {
+        var (client, _) = await CreateProvisionedClientAsync();
+        var username = FakeTacticusV1Client.ConfigureProfile(new TacticusV1Profile(
+            null, "some-user-id", null, [RankGoal("r1", CharacterId, 1, UnitRank.Iron1)],
+            V1OnslaughtImportData.Missing(), V1CampaignEventProgressImportData.Missing()));
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/v1-import",
+            new ImportV1ProfileRequest(
+                username, FakeTacticusV1Client.ValidPassword,
+                new ImportV1Selection(false, true, false, true, false, false)),
+            TestContext.Current.CancellationToken);
+        response.EnsureSuccessStatusCode();
+        var body = await response.Content.ReadFromJsonAsync<ImportV1ProfileResponse>(TestContext.Current.CancellationToken);
+
         Assert.Equal("Failed", body!.Goals.Status);
         Assert.Equal("player_data_required", body.Goals.Code);
-        Assert.Equal("Imported", body.PersonalTacticusApiKey.Status);
         Assert.Equal("Imported", body.TacticusUserId.Status);
-        _ = subject;
     }
 
     [Fact]

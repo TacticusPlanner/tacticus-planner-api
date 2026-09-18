@@ -1,7 +1,9 @@
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
+using Refit;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Api.Features.Guilds;
+using TacticusPlanner.Api.Features.PlayerData;
 using TacticusPlanner.Api.Features.TacticusIntegration;
 using TacticusPlanner.Api.Http;
 using TacticusPlanner.Domain.PlayerData;
@@ -81,6 +83,11 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
         }
         else
         {
+            // V1GoalImportService refuses without a player-data snapshot (every starting point and
+            // already-reached check needs live data). On a brand-new account that snapshot would
+            // otherwise not exist until whatever later request happens to sync it — near-guaranteeing
+            // the refusal on a first import. Sync it here, once, before goals run.
+            await EnsurePlayerDataSyncedAsync(profileId.Value, ct);
             goalResult = await Resolve<V1GoalImportService>().ImportAsync(
                 profileId.Value, v1.Goals, selection.AutomaticPrerequisites, ct);
             goals = goalResult.Refused
@@ -108,6 +115,39 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
                 ? SecretMasker.Mask(v1.TacticusUserId)
                 : null,
         }, ct);
+    }
+
+    /// <summary>No-ops when a snapshot already exists (the common case on a re-import) or when no
+    /// Tacticus API key is available to sync with — goals import below then refuses on its own terms
+    /// with <c>player_data_required</c>, exactly as if this call were never made.</summary>
+    private async Task EnsurePlayerDataSyncedAsync(ProfileId profileId, CancellationToken ct)
+    {
+        var db = Resolve<PlannerDbContext>();
+        var hasSnapshot = await db.PlayerDataSnapshots.AsNoTracking()
+            .AnyAsync(entity => entity.Id == profileId, ct);
+        if (hasSnapshot)
+        {
+            return;
+        }
+
+        var apiKey = await db.TacticusIntegrations
+            .Where(entity => entity.Id == profileId)
+            .Select(entity => entity.TacticusApiKey)
+            .FirstOrDefaultAsync(ct);
+        if (apiKey is null)
+        {
+            return;
+        }
+
+        try
+        {
+            await Resolve<PlayerDataSyncService>().SyncAsync(profileId, apiKey, ct);
+        }
+        catch (Exception exception) when (exception is ApiException or HttpRequestException)
+        {
+            // Best-effort, as documented above: the Tacticus API being unreachable here just leaves
+            // goals refusing with player_data_required, same as before this sync existed.
+        }
     }
 
     private async Task<ImportPartResult> ImportUserIdAsync(ProfileId profileId, string? value, CancellationToken ct)
