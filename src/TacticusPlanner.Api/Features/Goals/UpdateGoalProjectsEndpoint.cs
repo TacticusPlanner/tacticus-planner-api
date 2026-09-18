@@ -80,6 +80,16 @@ public sealed class UpdateGoalProjectsEndpoint : Endpoint<UpdateGoalProjectsRequ
             .ToList();
         await planning.ExecuteLockedMutationAsync(affectedProjectIds, async transaction =>
         {
+            // goal and existingMemberships were both loaded before the lock; under READ COMMITTED (see
+            // ProjectGoalPlanningService's isolation-level invariant) a concurrent status change or
+            // membership add/remove that committed while this request was waiting for the lock would
+            // otherwise be invisible here, letting the slot-conflict check and the add/remove diff below
+            // both act on stale state.
+            await db.Entry(goal).ReloadAsync(ct);
+            existingMemberships = await db.ProjectGoals
+                .Where(entity => entity.GoalId == goalId)
+                .ToListAsync(ct);
+
             if (goal.Status is GoalStatus.Active or GoalStatus.Paused
                 && await planning.FindConflictAsync(
                     requestedProjectIds, goal.EntityType, goal.EntityId, goal.GoalType, goal.Id, ct) is { } conflict)

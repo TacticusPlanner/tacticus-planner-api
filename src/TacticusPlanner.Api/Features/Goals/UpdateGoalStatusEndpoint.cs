@@ -66,6 +66,11 @@ public sealed class UpdateGoalStatusEndpoint : Endpoint<UpdateGoalStatusRequest,
             .ToListAsync(ct);
         await planning.ExecuteLockedMutationAsync(lockedProjectIds, async transaction =>
         {
+            // goal was loaded before the lock; under READ COMMITTED (see ProjectGoalPlanningService's
+            // isolation-level invariant) a concurrent status change that committed while this request was
+            // waiting for the lock would otherwise be invisible here, letting a stale goal.Status skip the
+            // slot-conflict check below for a transition that actually needs it.
+            await db.Entry(goal).ReloadAsync(ct);
 
             if (goal.Status != targetStatus)
             {
