@@ -14,8 +14,7 @@ namespace TacticusPlanner.Api.Features.PlayerData;
 /// whose transformed content changed are replaced. A successful unchanged sync still advances the
 /// snapshot's sync timestamp.
 /// </summary>
-public sealed class PlayerSyncEndpoint(PlayerDataSyncService syncService)
-    : EndpointWithoutRequest<PlayerDataManifest>
+public sealed class PlayerSyncEndpoint : EndpointWithoutRequest<PlayerDataManifest>
 {
     public override void Configure()
     {
@@ -57,7 +56,7 @@ public sealed class PlayerSyncEndpoint(PlayerDataSyncService syncService)
             return;
         }
 
-        var result = await syncService.SyncAsync(profileId, apiKey, ct);
+        var result = await Resolve<PlayerDataSyncService>().SyncAsync(profileId, apiKey, ct);
         if (result is not PlayerDataSyncResult.Success success)
         {
             AddError("The Tacticus API could not fetch player data for the configured key.");
