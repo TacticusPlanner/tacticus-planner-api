@@ -16,14 +16,23 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
     /// goal-validation.ts).</summary>
     private const int MaxCharacterLevel = 60;
 
-    /// <summary>Returns an error message when the target is invalid, or null when it's valid.</summary>
+    /// <summary>Returns an error message when the target is invalid, or null when it's valid.
+    /// <paramref name="effectiveProgressionFloor"/> is the highest Ascension target, within the same
+    /// creation request, among the specs this goal declares a dependency on (see
+    /// `fix-goal-ability-cap-effective-progression`) — every progression-derived cap is evaluated against
+    /// the higher of the unit's live progression and this floor, so a target that is only reachable after
+    /// an accompanying Ascension goal is not rejected. Single-goal creation and updates pass nothing, so a
+    /// missing live progression still falls back to the top of the ladder exactly as before; only a caller
+    /// that supplies a floor gets the narrower "no live data -> floor only" behavior (see design.md's
+    /// Risks).</summary>
     public async Task<string?> ValidateAsync(
         ProfileId profileId,
         GoalEntityType entityType,
         string entityId,
         GoalType goalType,
         CreateGoalConfigRequest config,
-        CancellationToken ct)
+        CancellationToken ct,
+        UnitProgression? effectiveProgressionFloor = null)
     {
         var character = catalog.Current.CharacterViews.FirstOrDefault(item => item.Id == entityId);
         var mow = catalog.Current.MowList.FirstOrDefault(item => item.Id == entityId);
@@ -86,8 +95,11 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
             if (config.Ability.ActiveEnd <= config.Ability.ActiveStart
                 && config.Ability.PassiveEnd <= config.Ability.PassiveStart)
                 return "At least one ability target must be above its effective start.";
-            var cap = ProgressionRules.AbilityCapForProgression(
-                playerUnit?.ProgressionIndex ?? UnitProgression.MythicMythicWings);
+            var liveProgression = playerUnit?.ProgressionIndex;
+            var effectiveProgression = effectiveProgressionFloor is { } floor
+                ? (UnitProgression)Math.Max((int)(liveProgression ?? floor), (int)floor)
+                : liveProgression ?? UnitProgression.MythicMythicWings;
+            var cap = ProgressionRules.AbilityCapForProgression(effectiveProgression);
             if (config.Ability.ActiveEnd > cap || config.Ability.PassiveEnd > cap)
                 return $"Ability targets cannot exceed the current rarity cap of {cap}.";
         }
