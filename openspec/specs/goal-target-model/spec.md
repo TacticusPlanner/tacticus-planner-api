@@ -210,7 +210,9 @@ unit, where relevance is the union of:
 - the upgrade ids named directly by the unit's own progression — a Character's rank-up
   ladder, or a Machine of War's primary and secondary ability recipes; and
 - the base upgrade ids obtained by expanding every crafted upgrade in that set through its
-  recipe, recursively, until only non-craftable upgrades remain.
+  recipe, recursively, until only non-craftable upgrades remain. Expansion SHALL track
+  visited upgrade ids and SHALL NOT revisit one already expanded, so a recipe cycle
+  terminates instead of recursing indefinitely.
 
 Targets outside that union SHALL be rejected. Widening relevance SHALL NOT invalidate any
 previously accepted target.
