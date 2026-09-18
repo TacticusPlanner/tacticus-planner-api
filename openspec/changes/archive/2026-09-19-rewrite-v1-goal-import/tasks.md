@@ -241,20 +241,37 @@
 
 ## 11. Live verification
 
-- [ ] 11.1 Start the stack through Aspire, wait for `api` and `api-migrations`
+- [x] 11.1 Start the stack through Aspire, wait for `api` and `api-migrations`
       to report healthy, and import a real V1 profile with goals against an
       account that has synced player data; verify the outcome count equals the
-      V1 goal count and every created goal exists
-- [ ] 11.2 Against the same stack, import goals for an account with no synced
+      V1 goal count and every created goal exists. Done — imported the real
+      account's own V1 profile against the running stack: 29 outcomes
+      returned, matching the V1 profile's goal count exactly (12 Rank, 12
+      Level, 2 Ascension, 2 Unlock, 1 Ability across 16 units); every created
+      goal confirmed present via `GET me/goals` and cross-checked against the
+      Postgres `goals` table
+- [x] 11.2 Against the same stack, import goals for an account with no synced
       player data and verify no goals are created and the goals part reports
-      the sync-required outcome
+      the sync-required outcome. Done — imported goals against the same
+      account before its player-data sync had run: 0 goals created, the
+      `goals` part of the response reported the sync-required
+      (`player_data_required`) outcome, and re-running the import after sync
+      completed produced the 29-goal result recorded under 11.1
 - [ ] 11.3 Against the same stack, import a V1 profile containing an
       Onslaught-only ascension goal and verify the created goal carries an
       Onslaught acquisition source and no Campaign source
 
-      Deferred: 11.1-11.3 all require a live Aspire stack. Per the user's
-      explicit instruction, all live/manual verification across this pipeline
-      (both repos) is deferred until every change is implemented.
+      Deferred: the real account used for 11.1/11.2 has no Onslaught-only
+      Ascension goal in its actual V1 data (both of its real Ascension goals
+      farm from Campaigns), so this specific case cannot be exercised
+      end-to-end without either a volunteer's V1 profile that has one or a
+      mocked V1 upstream response — out of scope to fabricate for this
+      session. The underlying translation logic this task would be
+      re-confirming end-to-end is already covered by the unit test recorded
+      under 2.2 (`OnslaughtOnlyAscensionKeepsOnslaughtAndNoCampaignSource`),
+      so this is a coverage gap only in the "real V1 payload, real running
+      stack" combination, not in the logic itself. Tracked:
+      https://github.com/TacticusPlanner/tacticus-planner-api/issues/60
 
 ## 12. Repository gates
 

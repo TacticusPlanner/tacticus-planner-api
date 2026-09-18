@@ -61,20 +61,25 @@
 
 ## 4. Live verification
 
-- [ ] 4.1 Start the stack through Aspire
+- [x] 4.1 Start the stack through Aspire
       (`aspire run --project orchestration/TacticusPlanner.AppHost/TacticusPlanner.AppHost.csproj`),
       wait for `api` and `api-migrations` to report healthy, then submit
       several concurrent goal-creation requests for distinct units to one
-      project and verify every one returns success with contiguous priorities
-- [ ] 4.2 Against the same running stack, submit two concurrent creations for
+      project and verify every one returns success with contiguous priorities.
+      Done — against the running stack and the real account's own profile,
+      fired 5 concurrent `POST me/goals` (Level goals for 5 distinct owned
+      units) at the default "My Goals" project via `Promise.all`; all 5
+      returned 200, and the resulting `project_goals` rows carried contiguous
+      priorities 30-34 with no gaps or duplicates. Test goals deleted
+      afterward (all 6 DELETEs in 4.1+4.2 returned 204; goal count back to 29)
+- [x] 4.2 Against the same running stack, submit two concurrent creations for
       the same unit and goal type and verify one succeeds and the other
       returns the structured HTTP 409 slot-conflict body, with no 500 in the
-      API logs
-
-      Deferred: both 4.1 and 4.2 require a live Aspire stack. Per the user's
-      explicit instruction, all live/manual verification across this pipeline
-      is deferred until every change (this repo and `tacticus-planner-apps`)
-      is implemented.
+      API logs. Done — two concurrent `POST me/goals` for the same
+      (unit, Level) slot returned one 200 and one 409 with body
+      `{"issueCode":"projectGoalSlotOccupied", ...}` naming the winning
+      goal id; `aspire logs api` showed no 5xx/exception/unhandled lines
+      across the run
 
 ## 5. Repository gates
 

@@ -86,12 +86,21 @@
 
 ## 6. Deferred / out-of-session
 
-- [ ] 6.1 Live end-to-end verification of the manual create-goal flow
+- [x] 6.1 Live end-to-end verification of the manual create-goal flow
       (above-cap ability target auto-suggesting an Ascension and succeeding)
       cannot complete until the companion client edge from 4.2 ships. Track it
       against the apps half of `rewrite-v1-goal-import` and verify there, not
       here.
 
-      Deferred: per the user's explicit instruction, all live/manual
-      verification across this pipeline (both repos) is deferred until every
-      change is implemented.
+      Done — verified against the real running stack and the real account's
+      own profile: `POST me/goals/combined` for `ultraCalgar` (live rarity
+      Legendary, ability cap 50) with an Ascension spec targeting
+      `Mythic:OneBlueStar` and an Ability spec (target 60/60) declaring
+      `DependsOnIndex: [0]` on it returned 200 and created both goals — the
+      dependency edge lifts the cap exactly as `ValidateAsync`'s
+      `effectiveProgressionFloor` intends. (An Ascension target that stayed
+      within the same rarity, e.g. `Legendary:OneBlueStar`, correctly still
+      hit the 400 cap error — same rarity means same
+      `AbilityCapForRarity`.) Both test goals deleted afterward. Corresponding
+      client-side edge verified in the apps repo's `rewrite-v1-goal-import`
+      task 8.2.
