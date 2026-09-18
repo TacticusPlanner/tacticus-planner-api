@@ -373,11 +373,25 @@ public sealed class V1GoalImportService(
                 Guid? unlockGoalId = null;
                 if (prerequisites.NeedsUnlock)
                 {
-                    var unlockGoal = BuildGoal(profileId, unitKey, GoalType.Unlock, new CreateGoalConfigRequest(), null, status, now, playerUnit);
-                    db.Goals.Add(unlockGoal);
-                    db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(project, unlockGoal, priority++, now));
-                    unlockGoalId = unlockGoal.Id.Value;
-                    extraOutcomes.Add(PrerequisiteOutcome(unlockGoal, unitCandidates));
+                    // Validated like every other synthesized/candidate goal before persisting (unlike the
+                    // synthesized Ascension path below, this one isn't structurally guaranteed valid: Unlock
+                    // is Character-only and further requires catalog shard-upgrade data — see
+                    // GoalTargetValidationService — neither of which ComputePrerequisites checks).
+                    var unlockConfig = new CreateGoalConfigRequest();
+                    var unlockError = await targetValidation.ValidateAsync(
+                        profileId, unitKey.EntityType, unitKey.EntityId, GoalType.Unlock, unlockConfig, ct);
+                    if (unlockError is not null)
+                    {
+                        extraOutcomes.Add(FailedPrerequisiteOutcome(unitKey, GoalType.Unlock, unlockError));
+                    }
+                    else
+                    {
+                        var unlockGoal = BuildGoal(profileId, unitKey, GoalType.Unlock, unlockConfig, null, status, now, playerUnit);
+                        db.Goals.Add(unlockGoal);
+                        db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(project, unlockGoal, priority++, now));
+                        unlockGoalId = unlockGoal.Id.Value;
+                        extraOutcomes.Add(PrerequisiteOutcome(unlockGoal, unitCandidates));
+                    }
                 }
 
                 Guid? ascensionGoalId = null;
@@ -426,22 +440,31 @@ public sealed class V1GoalImportService(
                 Guid? levelGoalId = null;
                 if (prerequisites.LevelTarget is { } targetLevel)
                 {
+                    // Validated before persisting: RequiredLevelForRankTarget can compute a level above
+                    // GoalTargetValidationService's MaxCharacterLevel cap (e.g. Adamantine2 + 5 applied
+                    // upgrades = 64 > 60), which ComputePrerequisites doesn't itself clamp.
                     var startLevel = (playerUnit as PlayerCharacterRecord)?.XpLevel ?? 0;
-                    var levelGoal = BuildGoal(
-                        profileId, unitKey, GoalType.Level,
-                        new CreateGoalConfigRequest(Level: new LevelTargetRequest(startLevel, targetLevel)),
-                        null, status, now, playerUnit);
-                    if (unlockGoalId is { } unlockId) levelGoal.DependsOn.Add(unlockId);
-                    db.Goals.Add(levelGoal);
-                    db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(project, levelGoal, priority++, now));
-                    levelGoalId = levelGoal.Id.Value;
-                    extraOutcomes.Add(PrerequisiteOutcome(levelGoal, unitCandidates));
+                    var levelConfig = new CreateGoalConfigRequest(Level: new LevelTargetRequest(startLevel, targetLevel));
+                    var levelError = await targetValidation.ValidateAsync(
+                        profileId, unitKey.EntityType, unitKey.EntityId, GoalType.Level, levelConfig, ct);
+                    if (levelError is not null)
+                    {
+                        extraOutcomes.Add(FailedPrerequisiteOutcome(unitKey, GoalType.Level, levelError));
+                    }
+                    else
+                    {
+                        var levelGoal = BuildGoal(profileId, unitKey, GoalType.Level, levelConfig, null, status, now, playerUnit);
+                        if (unlockGoalId is { } unlockId) levelGoal.DependsOn.Add(unlockId);
+                        db.Goals.Add(levelGoal);
+                        db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(project, levelGoal, priority++, now));
+                        levelGoalId = levelGoal.Id.Value;
+                        extraOutcomes.Add(PrerequisiteOutcome(levelGoal, unitCandidates));
+                    }
                 }
 
-                foreach (var candidate in unitCandidates)
+                // ownAscension (if any) was already created above, out of its natural position.
+                foreach (var candidate in unitCandidates.Where(candidate => candidate != ownAscension))
                 {
-                    if (candidate == ownAscension) continue; // already created above, out of its natural position
-
                     var dependsOn = new List<Guid>();
                     if (unlockGoalId is { } unlockId) dependsOn.Add(unlockId);
 
@@ -534,7 +557,11 @@ public sealed class V1GoalImportService(
         Dictionary<GoalKey, Guid> existingByKey,
         string?[] sourceIdByIndex)
     {
-        var needsUnlock = playerUnit is null
+        // Unlock is only ever a valid goal type for a Character (GoalTargetValidationService) — a Mow
+        // missing from the roster (e.g. a type-4 Mow Ability goal) never gets a synthesized Unlock; there
+        // is no such prerequisite for a Mow in this domain.
+        var needsUnlock = unitKey.EntityType == GoalEntityType.Character
+            && playerUnit is null
             && !HasOwnOrExistingGoal(unitKey, GoalType.Unlock, unitCandidates, existingByKey);
 
         var neededProgressionIndex = -1;
@@ -651,6 +678,20 @@ public sealed class V1GoalImportService(
         prerequisite.EntityId,
         prerequisite.GoalType.ToString(),
         prerequisite.Id.Value,
+        null);
+
+    /// <summary>Reports a synthesized Unlock/Level prerequisite that <see cref="GoalTargetValidationService"/>
+    /// rejected (e.g. Unlock for a Mow, or a Level target above the character-level cap) — the prerequisite
+    /// is not persisted, and dependents proceed without a dependency edge to it, same as an
+    /// <see cref="UnitPrerequisites.AscensionShortfall"/> report.</summary>
+    private static V1GoalOutcome FailedPrerequisiteOutcome(UnitKey unitKey, GoalType goalType, string message) => new(
+        "Failed",
+        "prerequisite_rejected",
+        message,
+        unitKey.EntityType.ToString(),
+        unitKey.EntityId,
+        goalType.ToString(),
+        null,
         null);
 
     private static V1GoalOutcome FailedOutcome(TranslatedGoal candidate, string message, string?[] sourceIdByIndex) => new(

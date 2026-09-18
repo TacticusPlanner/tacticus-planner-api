@@ -61,24 +61,40 @@ The other selectable parts of the import SHALL be unaffected by this refusal.
 - **WHEN** player data has since been recorded and the goals part is imported again
 - **THEN** goals are created
 
-### Requirement: Every source V1 goal receives exactly one outcome
+### Requirement: Every source V1 goal receives exactly one outcome, plus one per synthesized prerequisite
 
-The response SHALL contain exactly one outcome entry per goal present in the
-V1 profile, in V1 priority order. Each outcome SHALL carry a status of
-created, skipped, or failed; a stable machine-readable code; a human-readable
-message; the entity type and entity id it concerned when known; the V2 goal
-type it concerned when one was determined; and the id of the V2 goal it
-created or matched when one applies.
+The response SHALL contain exactly one *source* outcome entry per goal present
+in the V1 profile, in V1 priority order, each carrying the id of the V1 goal
+it originated from. When automatic prerequisite creation synthesizes a goal
+(Unlock, Ascension, or Level) or reports a prerequisite-target shortfall, that
+SHALL add one further outcome entry with no originating V1 goal id, appended
+after the source outcomes. Every outcome, source or synthesized, SHALL carry a
+status of created, skipped, or failed; a stable machine-readable code; a
+human-readable message; the entity type and entity id it concerned when known;
+the V2 goal type it concerned when one was determined; and the id of the V2
+goal it created or matched when one applies.
 
-The number of created outcomes SHALL equal the number of V2 goals the import
-created from source goals. No count in the response SHALL mix source goals with
-any other unit of aggregation.
+A client SHALL be able to count source-created goals and automatically
+created prerequisite goals separately, using the presence or absence of an
+originating V1 goal id: exactly one outcome exists per source V1 goal, and the
+number of created *source* outcomes SHALL equal the number of V2 goals the
+import created from source goals. No count in the response SHALL mix source
+goals with any other unit of aggregation.
 
 #### Scenario: Outcome count matches the source profile
 
-- **GIVEN** a V1 profile containing 34 goals
+- **GIVEN** a V1 profile containing 34 goals, and automatic prerequisite
+  creation not selected (so no synthesized outcomes are added)
 - **WHEN** the goals part is imported
-- **THEN** the response contains exactly 34 outcome entries
+- **THEN** the response contains exactly 34 outcome entries, one per source goal
+
+#### Scenario: A synthesized prerequisite adds an outcome beyond the source count
+
+- **GIVEN** a V1 profile containing 1 goal, and automatic prerequisite creation
+  selected for a target that needs one synthesized Unlock goal
+- **WHEN** the goals part is imported
+- **THEN** the response contains 2 outcome entries: 1 source outcome carrying
+  that goal's V1 id, and 1 synthesized-prerequisite outcome carrying none
 
 #### Scenario: Several goals for one unit are reported individually
 
@@ -260,6 +276,14 @@ A prerequisite SHALL NOT be created when the unit's imported goals already
 include one of that type, or when the account already has one of that type for
 that unit. In those cases the requirement SHALL be reported rather than
 satisfied, and the existing goal's target SHALL NOT be altered.
+
+A synthesized Unlock or Level goal SHALL be validated by the same rules a
+manual creation of that goal would be before it is persisted (e.g. Unlock is
+valid only for a Character with catalog shard-upgrade data; a Level target
+must not exceed the character-level cap). When that validation fails, the
+prerequisite SHALL NOT be created; the requirement SHALL be reported as
+failed, and the imported goals that needed it proceed without a dependency
+edge to it.
 
 Each created prerequisite SHALL be reported as its own outcome entry,
 identified as automatically added and naming the source goal it unblocks.

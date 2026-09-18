@@ -65,7 +65,8 @@ public sealed class V1ImportEndpointTests(PlannerApiFactory factory) : IClassFix
             }
             """, WebJsonOptions);
 
-        Assert.NotNull(data?.Goals);
+        Assert.NotNull(data);
+        Assert.NotNull(data.Goals);
         var ascend = Assert.Single(data.Goals, goal => goal.Id == "ascend-1");
         Assert.Equal("both", ascend.ShardFarmType);
         Assert.Equal(1, ascend.CampaignsUsage);

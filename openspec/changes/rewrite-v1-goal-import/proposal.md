@@ -106,4 +106,8 @@ one remaining input is passed as empty by the import path anyway.
 - Companion `tacticus-planner-apps` change of the same name consumes the new
   response, removes the client-side fan-out and snapshot resolution, renders
   the bucketed outcome report, and adds the missing `Ability -> Ascension`
-  prerequisite edge. Apply this API change first.
+  prerequisite edge. This API change and its companion client change SHALL
+  ship as one atomic, matching-tested release — the client no longer relies
+  on `goalSpecs`, `goalsSkipped`, `goalIssues`, or submitting parallel
+  combined-goal requests once this API change is live, so a client still on
+  the old response/request shape must not be left pointed at this endpoint.

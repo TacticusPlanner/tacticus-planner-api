@@ -509,6 +509,44 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
     }
 
     [Fact]
+    public async Task UnlockIsNeverSynthesizedForAMachineOfWarNotInTheRoster()
+    {
+        // Unlock is only ever a valid goal type for a Character (GoalTargetValidationService); a Mow
+        // absent from the roster must not get a synthesized Unlock attempt.
+        var (client, subject) = await CreateProvisionedClientAsync();
+        await SeedPlayerDataSnapshotAsync(subject, []); // account has player data, but not this Mow
+
+        var body = await ImportGoalsAsync(client, [MowAbilityGoal("mow-ab", MowId, 1, 5, 0)]);
+
+        Assert.DoesNotContain(body.Outcomes, o => o.GoalType == "Unlock");
+        var outcome = Assert.Single(body.Outcomes, o => o.SourceGoalId == "mow-ab");
+        Assert.Equal("Created", outcome.Status);
+    }
+
+    [Fact]
+    public async Task LevelPrerequisiteAboveTheCharacterLevelCapIsRejectedRatherThanPersisted()
+    {
+        // Adamantine2 with 5 applied upgrades needs level 64 (RequiredLevelForRankTarget), which exceeds
+        // GoalTargetValidationService's 60-level cap. The synthesized Level goal must be rejected — not
+        // persisted with an invalid target — while the Rank goal that needed it still succeeds.
+        var (client, subject) = await CreateProvisionedClientAsync();
+        await SeedPlayerDataSnapshotAsync(subject, [Character(CharacterId, UnitProgression.CommonNone, UnitRank.Stone1, xpLevel: 1)]);
+
+        var body = await ImportGoalsAsync(client, [RankGoal("r1", CharacterId, 1, UnitRank.Adamantine2, rankAppliedUpgrades: 5)]);
+
+        var levelOutcome = Assert.Single(body.Outcomes, o => o.GoalType == "Level");
+        Assert.Equal("Failed", levelOutcome.Status);
+        Assert.Equal("prerequisite_rejected", levelOutcome.Code);
+        Assert.Null(levelOutcome.GoalId);
+
+        var rankOutcome = Assert.Single(body.Outcomes, o => o.SourceGoalId == "r1");
+        Assert.Equal("Created", rankOutcome.Status);
+
+        var goals = await client.GetFromJsonAsync<ListGoalsResponse>("/api/v1/me/goals", TestContext.Current.CancellationToken);
+        Assert.DoesNotContain(goals!.Goals, goal => goal.GoalType == "Level");
+    }
+
+    [Fact]
     public async Task PrerequisitesAreNotCreatedWhenNotSelected()
     {
         var (client, subject) = await CreateProvisionedClientAsync();
@@ -687,8 +725,9 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         return response!.Projects.Single(project => project.IsDefault);
     }
 
-    private static V1Goal RankGoal(string id, string character, int priority, UnitRank target, string? notes = null) =>
-        new(id, character, 1, priority, true, notes, null, null, null, (int)target + 1, false, 0,
+    private static V1Goal RankGoal(
+        string id, string character, int priority, UnitRank target, string? notes = null, int rankAppliedUpgrades = 0) =>
+        new(id, character, 1, priority, true, notes, null, null, null, (int)target + 1, false, rankAppliedUpgrades,
             null, null, null, null, null, null, null);
 
     private static V1Goal AscensionGoal(
@@ -707,6 +746,10 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
     private static V1Goal AbilityGoal(string id, string entityId, int priority, int firstAbilityLevel, int secondAbilityLevel) =>
         new(id, entityId, 5, priority, true, null, null, null, null, null, null, null,
             null, null, null, null, null, firstAbilityLevel, secondAbilityLevel);
+
+    private static V1Goal MowAbilityGoal(string id, string mowId, int priority, int firstAbilityLevel, int secondAbilityLevel) =>
+        new(id, null, 4, priority, true, null, null, null, null, null, null, null,
+            null, null, null, null, mowId, firstAbilityLevel, secondAbilityLevel);
 
     private static V1Goal UnsupportedGoal(string id, int priority, int type = 6) =>
         new(id, "irrelevant", type, priority, false, null, null, null, null, null, null, null,
