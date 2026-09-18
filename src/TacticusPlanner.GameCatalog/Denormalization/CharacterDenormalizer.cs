@@ -11,7 +11,7 @@ internal static partial class GameCatalogDenormalizer
         IReadOnlyList<GameCatalogDropChance> dropChances)
     {
         var dropChanceById = BuildDropChanceIndex(dropChances);
-        var rewardLocations = BuildRewardLocations(campaignGroups);
+        var (rewardLocations, expectedGoldByBattle) = BuildRewardLocations(campaignGroups);
         var equipmentByTypeName = equipmentByType.Values
             .SelectMany(items => items)
             .GroupBy(item => item.Type, StringComparer.Ordinal)
@@ -44,7 +44,7 @@ internal static partial class GameCatalogDenormalizer
                     character.PassiveAbilityNames,
                     character.EquipmentSlots,
                     character.RankUpUpgrades,
-                    BuildShardLocations(character.Id, rewardLocations, dropChanceById),
+                    BuildShardLocations(character.Id, rewardLocations, dropChanceById, expectedGoldByBattle),
                     BuildEligibleEquipment(character, faction.FactionId, equipmentByTypeName)));
             }
         }
@@ -55,13 +55,14 @@ internal static partial class GameCatalogDenormalizer
     private static List<GameCatalogFarmLocation> BuildShardLocations(
         string characterId,
         Dictionary<string, List<RewardLocation>> rewardLocations,
-        Dictionary<string, GameCatalogDropChance> dropChanceById)
+        Dictionary<string, GameCatalogDropChance> dropChanceById,
+        Dictionary<string, double?> expectedGoldByBattle)
     {
         var result = new List<GameCatalogFarmLocation>();
         foreach (var prefix in ShardPrefixes)
         {
             var isMythic = prefix == "mythicShards_";
-            foreach (var location in ResolveLocations(prefix + characterId, rewardLocations, dropChanceById, isMythic))
+            foreach (var location in ResolveLocations(prefix + characterId, rewardLocations, dropChanceById, expectedGoldByBattle, isMythic))
             {
                 result.Add(location);
             }

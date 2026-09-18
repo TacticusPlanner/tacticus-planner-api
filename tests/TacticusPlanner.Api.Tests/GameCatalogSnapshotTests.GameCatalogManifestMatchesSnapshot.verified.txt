@@ -21,7 +21,7 @@
     },
     {
       key: characters,
-      hash: 566358670c91d1cfbfffa17175bbd8e2ba5a0e45bc3128e691a19c3bd5b1efa8,
+      hash: d1c9cca75d145b28d75cef362e02132efd240bd2815f05d1367bdfb90b47aa92,
       url: /api/v1/game-catalog/characters
     },
     {
@@ -96,7 +96,7 @@
     },
     {
       key: upgrades,
-      hash: 52ff83e840e7613f9591297121c6c09906d3ff1d415290c1e3f87cede8aa9023,
+      hash: 55db714538b74e564e975d0c3c1a9b5589bd0dddecfd93eff6160227e7d4e421,
       url: /api/v1/game-catalog/upgrades
     }
   ]

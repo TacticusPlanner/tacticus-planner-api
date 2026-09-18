@@ -10,7 +10,7 @@ internal static partial class GameCatalogDenormalizer
         IReadOnlyList<GameCatalogDropChance> dropChances)
     {
         var dropChanceById = BuildDropChanceIndex(dropChances);
-        var rewardLocations = BuildRewardLocations(campaignGroups);
+        var (rewardLocations, expectedGoldByBattle) = BuildRewardLocations(campaignGroups);
         var upgrades = upgradesByRarity
             .OrderBy(pair => pair.Key, StringComparer.Ordinal)
             .SelectMany(pair => pair.Value)
@@ -29,7 +29,7 @@ internal static partial class GameCatalogDenormalizer
                 upgrade.Stat,
                 upgrade.Craftable,
                 BuildNestedRecipe(upgrade.Recipe, byId, new HashSet<string>(StringComparer.OrdinalIgnoreCase) { upgrade.Id }),
-                ResolveLocations(upgrade.Id, rewardLocations, dropChanceById)));
+                ResolveLocations(upgrade.Id, rewardLocations, dropChanceById, expectedGoldByBattle)));
         }
 
         return views;

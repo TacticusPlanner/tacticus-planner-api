@@ -6491,7 +6491,8 @@
           "numerator",
           "denominator",
           "effectiveRate",
-          "isMythic"
+          "isMythic",
+          "expectedGold"
         ],
         "type": "object",
         "properties": {
@@ -6536,6 +6537,13 @@
           },
           "isMythic": {
             "type": "boolean"
+          },
+          "expectedGold": {
+            "type": [
+              "null",
+              "number"
+            ],
+            "format": "double"
           }
         }
       },
