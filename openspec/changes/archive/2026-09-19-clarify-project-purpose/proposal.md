@@ -27,9 +27,10 @@ the response or the UI saying so.
   addition is backward compatible even though the default behavior changes.
 - The V1 goal import has no such flag, because a V1 goal already records the
   user's own choice: `dailyRaids` (V1's "include this goal in Daily Raids")
-  becomes `Active`, and its absence of it becomes `Paused`. The field already
-  arrives on the wire and was read by nothing, so today's import silently
-  discards it; a V1 goal carrying no flag at all imports `Active`.
+  carries it. An explicit `false` imports as `Paused`; `true` imports as
+  `Active`, and so does an absent value — a V1 record written before the field
+  existed must not be silently paused. The field already arrives on the wire and
+  was read by nothing, so today's import discards it.
 - `Profile.ActiveProjectId` keeps its remaining roles — the Current-plan marker
   on project responses, the archive guard in `UpdateProjectEndpoint`, and the
   implicit project selection clients fall back to. Only its influence on a new
