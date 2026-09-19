@@ -901,7 +901,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsCreateCombinedGoalsRequest__opB61F685CE083"
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsCreateCombinedGoalsRequest"
               }
             }
           },
@@ -2046,7 +2046,7 @@
           "Me"
         ],
         "summary": "Selectively imports integration data, progress, and goals from V1.",
-        "description": "V1 credentials are used once and never persisted. After profile retrieval, each selected part is applied independently and reports Imported, Skipped, or Failed. Goals are translated into V2 create-goal specs (GoalSpecs) rather than created here — the caller submits each spec through POST me/goals/combined, the same endpoint the regular create-goal flow uses. A V1 goal is skipped when it can't be translated or when the account already has a goal of that type for that entity.",
+        "description": "V1 credentials are used once and never persisted. After profile retrieval, each selected part is applied independently and reports Imported, Skipped, or Failed. Goals are created directly by this operation, in V1 priority order — the response carries one outcome per source V1 goal (created, skipped, or failed), plus one per automatically added prerequisite. The goals part is refused (no goals created) when the account has no player data snapshot.",
         "operationId": "TacticusPlannerApiFeaturesV1ImportImportV1ProfileEndpoint",
         "requestBody": {
           "content": {
@@ -2247,12 +2247,6 @@
           "type": "string"
         }
       },
-      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesGoalsCreateCombinedGoalsRequest": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsCreateCombinedGoalsRequest"
-        }
-      },
       "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesGuildsGuildMemberSummary": {
         "type": "array",
         "items": {
@@ -2289,10 +2283,10 @@
           "$ref": "#/components/schemas/TacticusPlannerApiFeaturesPlayerDataPlayerDataManifestChunk"
         }
       },
-      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesV1ImportV1ImportIssue": {
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesV1ImportV1GoalOutcome": {
         "type": "array",
         "items": {
-          "$ref": "#/components/schemas/TacticusPlannerApiFeaturesV1ImportV1ImportIssue"
+          "$ref": "#/components/schemas/TacticusPlannerApiFeaturesV1ImportV1GoalOutcome"
         }
       },
       "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogAmountByRarity": {
@@ -2636,12 +2630,6 @@
         }
       },
       "SystemCollectionsGenericListOfTacticusPlannerApiFeaturesGoalsCombinedGoalSpec": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsCombinedGoalSpec"
-        }
-      },
-      "SystemCollectionsGenericListOfTacticusPlannerApiFeaturesGoalsCombinedGoalSpec__op2B0A629394EB": {
         "minItems": 1,
         "type": "array",
         "items": {
@@ -3731,37 +3719,6 @@
             "type": "string"
           },
           "entityId": {
-            "type": "string"
-          },
-          "projects": {
-            "type": [
-              "null",
-              "array"
-            ],
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/SystemCollectionsGenericListOfTacticusPlannerApiFeaturesGoalsProjectPriorityRequest"
-              }
-            ]
-          },
-          "goals": {
-            "$ref": "#/components/schemas/SystemCollectionsGenericListOfTacticusPlannerApiFeaturesGoalsCombinedGoalSpec"
-          }
-        }
-      },
-      "TacticusPlannerApiFeaturesGoalsCreateCombinedGoalsRequest__opB61F685CE083": {
-        "required": [
-          "entityType",
-          "entityId",
-          "projects",
-          "goals"
-        ],
-        "type": "object",
-        "properties": {
-          "entityType": {
-            "type": "string"
-          },
-          "entityId": {
             "maxLength": 128,
             "minLength": 0,
             "type": "string"
@@ -3778,7 +3735,7 @@
             ]
           },
           "goals": {
-            "$ref": "#/components/schemas/SystemCollectionsGenericListOfTacticusPlannerApiFeaturesGoalsCombinedGoalSpec__op2B0A629394EB"
+            "$ref": "#/components/schemas/SystemCollectionsGenericListOfTacticusPlannerApiFeaturesGoalsCombinedGoalSpec"
           }
         }
       },
@@ -5724,9 +5681,7 @@
           "onslaughtProgress",
           "campaignEventProgress",
           "goals",
-          "goalSpecs",
-          "goalsSkipped",
-          "goalIssues"
+          "outcomes"
         ],
         "type": "object",
         "properties": {
@@ -5748,15 +5703,8 @@
           "goals": {
             "$ref": "#/components/schemas/TacticusPlannerApiFeaturesV1ImportImportPartResult"
           },
-          "goalSpecs": {
-            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesGoalsCreateCombinedGoalsRequest"
-          },
-          "goalsSkipped": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "goalIssues": {
-            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesV1ImportV1ImportIssue"
+          "outcomes": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesV1ImportV1GoalOutcome"
           },
           "profileId": {
             "type": "string",
@@ -5814,28 +5762,65 @@
           },
           "campaignEventProgress": {
             "type": "boolean"
+          },
+          "automaticPrerequisites": {
+            "type": "boolean",
+            "default": true
           }
         }
       },
-      "TacticusPlannerApiFeaturesV1ImportV1ImportIssue": {
+      "TacticusPlannerApiFeaturesV1ImportV1GoalOutcome": {
         "required": [
+          "status",
           "code",
-          "sourceGoalId",
-          "message"
+          "message",
+          "entityType",
+          "entityId",
+          "goalType",
+          "goalId",
+          "sourceGoalId"
         ],
         "type": "object",
         "properties": {
+          "status": {
+            "type": "string"
+          },
           "code": {
             "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "entityType": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "entityId": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "goalType": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "goalId": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "uuid"
           },
           "sourceGoalId": {
             "type": [
               "null",
               "string"
             ]
-          },
-          "message": {
-            "type": "string"
           }
         }
       },

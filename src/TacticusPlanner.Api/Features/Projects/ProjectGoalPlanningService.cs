@@ -21,10 +21,27 @@ public sealed class ProjectGoalPlanningService(PlannerDbContext db)
         }
 
         var orderedProjectIds = projectIds.Distinct().OrderBy(id => id.Value).ToList();
+        // strategy.ExecuteAsync is NOT a working retry here: it re-runs the delegate against the same
+        // DbContext without resetting the change tracker (a retried attempt re-adds an already-tracked
+        // entity and throws InvalidOperationException, which is not retried again), and several call
+        // sites write the HTTP response from inside the delegate, so a retry after a partial write would
+        // corrupt it. It stays only because EF Core requires a user-initiated transaction to be created
+        // inside the strategy delegate. The design here avoids retryable failures by construction (see the
+        // isolation-level comment below) rather than relying on this to absorb them. Upgrade path, if ever
+        // needed: hoist response writes out of the delegate and call ChangeTracker.Clear() per attempt.
         var strategy = db.Database.CreateExecutionStrategy();
         await strategy.ExecuteAsync(async () =>
         {
-            await using var transaction = await db.Database.BeginTransactionAsync(IsolationLevel.Serializable, ct);
+            // READ COMMITTED, not SERIALIZABLE: the SELECT ... FOR UPDATE below is the actual mutual-
+            // exclusion mechanism (locks are taken in ascending project id order, so multi-project
+            // mutations cannot deadlock). READ COMMITTED is required so that a waiter, once unblocked,
+            // takes a fresh per-statement snapshot and reads the state its predecessor just committed
+            // instead of aborting on a transaction-wide snapshot taken before it started waiting. This is
+            // safe only because every conflict- and ordering-relevant read (slot pre-check, next-priority
+            // lookup, membership load) happens after the lock is held — standing constraint: any future
+            // read used for a conflict or ordering decision must stay inside the lock, or this isolation
+            // level becomes unsafe.
+            await using var transaction = await db.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, ct);
             foreach (var projectId in orderedProjectIds)
             {
                 _ = await db.Database

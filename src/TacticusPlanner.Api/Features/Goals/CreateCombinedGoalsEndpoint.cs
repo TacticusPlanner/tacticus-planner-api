@@ -4,6 +4,7 @@ using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Api.Features.Projects;
 using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.Projects;
+using TacticusPlanner.GameDomain;
 using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.Goals;
@@ -64,8 +65,13 @@ public sealed class CreateCombinedGoalsEndpoint
 
         var requestGoalTypes = new HashSet<GoalType>();
         var parsedGoalTypes = new List<GoalType>(req.Goals.Count);
-        foreach (var spec in req.Goals)
+        // Each spec's transitive dependency closure, computed in one forward pass — DependsOnIndex is
+        // guaranteed (by CreateCombinedGoalsValidator) to reference only strictly earlier indices, so
+        // closures[d] for every d in a spec's direct deps is already complete by the time we reach it.
+        var closures = new List<HashSet<int>>(req.Goals.Count);
+        for (var i = 0; i < req.Goals.Count; i++)
         {
+            var spec = req.Goals[i];
             if (!Enum.TryParse<GoalType>(spec.GoalType, ignoreCase: true, out var goalType))
             {
                 AddError(request => request.Goals, "Unknown or not-yet-supported goal type.");
@@ -74,8 +80,28 @@ public sealed class CreateCombinedGoalsEndpoint
             }
 
             parsedGoalTypes.Add(goalType);
+
+            var directDeps = spec.DependsOnIndex ?? [];
+            var closure = new HashSet<int>(directDeps);
+            foreach (var dependencyIndex in directDeps)
+                closure.UnionWith(closures[dependencyIndex]);
+            closures.Add(closure);
+
+            // The lift is gated on a declared dependency (goal-target-model): only Ascension specs within
+            // this spec's own closure count, not every Ascension spec anywhere in the request.
+            var ascensionEndIndices = closure
+                .Where(dependencyIndex => parsedGoalTypes[dependencyIndex] == GoalType.Ascension)
+                .Select(dependencyIndex => req.Goals[dependencyIndex].Config.Progression)
+                .OfType<ProgressionTargetRequest>()
+                .Select(progression => ProgressionRules.ProgressionIndex(progression.End))
+                .Where(endIndex => endIndex >= 0)
+                .ToList();
+            UnitProgression? effectiveProgressionFloor =
+                ascensionEndIndices.Count > 0 ? (UnitProgression)ascensionEndIndices.Max() : null;
+
             if (await targetValidation.ValidateAsync(
-                profileId, entityType, req.EntityId.Trim(), goalType, spec.Config, ct) is { } targetError)
+                profileId, entityType, req.EntityId.Trim(), goalType, spec.Config, ct, effectiveProgressionFloor)
+                is { } targetError)
             {
                 AddError(targetError);
                 await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);

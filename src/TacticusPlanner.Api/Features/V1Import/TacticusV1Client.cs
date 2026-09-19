@@ -64,6 +64,16 @@ public sealed record V1OnslaughtImportData(bool IsPresent, V1OnslaughtProgress? 
     public static V1OnslaughtImportData Valid(V1OnslaughtProgress progress) => new(true, progress);
 }
 
+/// <summary>The V1 wire shape's shard-farming choice for an Ascension goal — one of V1's
+/// <c>ShardFarmType</c> string-union values (<c>"onslaught"</c>, <c>"energy"</c>, or <c>"both"</c>).
+/// Not a C# enum: it's read from a legacy JSON blob and only ever compared, never round-tripped.</summary>
+public static class V1ShardFarmType
+{
+    public const string Onslaught = "onslaught";
+    public const string Energy = "energy";
+    public const string Both = "both";
+}
+
 public sealed record V1Goal(
     string? Id,
     string? Character,
@@ -83,7 +93,14 @@ public sealed record V1Goal(
     int? TargetStars,
     string? UnitId,
     int? FirstAbilityLevel,
-    int? SecondAbilityLevel
+    int? SecondAbilityLevel,
+    // V1's shard-source choice, previously dropped entirely (rewrite-v1-goal-import) — present on
+    // Unlock (CampaignsUsage only) and Ascension (all three) goals. V1's CampaignsLocationsUsage is a
+    // numeric enum (None = 0, BestTime = 1, LeastEnergy = 2); only "did the player farm campaigns at
+    // all" (non-zero) matters here, not which strategy.
+    string? ShardFarmType = null,
+    int? CampaignsUsage = null,
+    int? MythicCampaignsUsage = null
 );
 
 public sealed class TacticusV1Client(IHttpClientFactory httpClientFactory) : ITacticusV1Client
