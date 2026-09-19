@@ -79,7 +79,10 @@ public sealed record V1Goal(
     string? Character,
     int Type,
     int Priority,
-    bool DailyRaids,
+    // V1's per-goal "include this in Daily Raids" flag — the only activation signal a V1 goal carries,
+    // and the direct analogue of V2's Active/Paused status. Nullable so a V1 record written before the
+    // field existed imports as Active rather than being silently paused (goal-lifecycle-status).
+    bool? DailyRaids,
     string? Notes,
     int? StartingRank,
     bool? StartingRankPoint5,

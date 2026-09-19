@@ -13,8 +13,9 @@ the caller receives.
 
 The import operation SHALL create the imported goals itself. It SHALL NOT
 return goal-creation requests for the caller to submit. Goals SHALL be created
-in the caller's default project, with the same in-flight status a goal created
-through the ordinary create-goal operation would receive.
+in the caller's default project, each in the status its own V1 daily-planning
+choice implies (see `goal-lifecycle-status`) and never one derived from which
+project is the caller's active plan.
 
 The import SHALL NOT require the caller to supply, or re-supply, anything
 derived from the V1 profile: V1 credentials are used once, within the same

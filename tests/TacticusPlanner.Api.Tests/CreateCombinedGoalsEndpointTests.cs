@@ -140,7 +140,7 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
     }
 
     [Fact]
-    public async Task CreateInNonActiveProjectStartsAllGoalsPaused()
+    public async Task CreateInNonActiveProjectStartsAllGoalsActive()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
@@ -151,6 +151,7 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
         );
         var otherProject = await otherProjectResponse.Content.ReadFromJsonAsync<ProjectSummaryResponse>(TestContext.Current.CancellationToken);
         Assert.NotNull(otherProject);
+        Assert.False(otherProject.IsActivePlan);
 
         var response = await client.PostAsJsonAsync(
             "/api/v1/me/goals/combined",
@@ -161,6 +162,27 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
         var created = await response.Content.ReadFromJsonAsync<CreateCombinedGoalsResponse>(TestContext.Current.CancellationToken);
 
         Assert.NotNull(created);
+        Assert.Equal(2, created.Goals.Count);
+        Assert.All(created.Goals, goal => Assert.Equal("Active", goal.Status));
+    }
+
+    [Fact]
+    public async Task CreateWithStartPausedPausesTheWholeDependencyChain()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals/combined",
+            UnlockThenRank with { StartPaused = true },
+            TestContext.Current.CancellationToken
+        );
+        response.EnsureSuccessStatusCode();
+        var created = await response.Content.ReadFromJsonAsync<CreateCombinedGoalsResponse>(TestContext.Current.CancellationToken);
+
+        Assert.NotNull(created);
+        // Both the prerequisite (Unlock) and its dependent (Rank) — the flag is request-wide, so the chain
+        // never lands half-paused.
+        Assert.Equal(2, created.Goals.Count);
         Assert.All(created.Goals, goal => Assert.Equal("Paused", goal.Status));
     }
 

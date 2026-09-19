@@ -34,7 +34,9 @@ public sealed class CreateCombinedGoalsEndpoint
             summary.Description = "Each spec's DependsOnIndex (indices into this same request's Goals list, "
                 + "referencing only earlier entries) is resolved into real DependsOn edges. Assigns the "
                 + "whole set to the given project(s), or the caller's default project (created on first use) "
-                + "when none is given, same as POST me/goals.";
+                + "when none is given, same as POST me/goals. Every goal in the set starts Active regardless "
+                + "of which projects it is filed into; startPaused creates the whole set Paused instead and "
+                + "cannot be set per goal.";
             summary.Response<CreateCombinedGoalsResponse>(StatusCodes.Status200OK, "The newly created goals, in request order.");
             summary.Response(StatusCodes.Status400BadRequest, "Invalid entity/goal type, a bad DependsOnIndex, or an unknown project.");
             summary.Response<ProjectGoalSlotConflictResponse>(StatusCodes.Status409Conflict,
@@ -118,9 +120,6 @@ public sealed class CreateCombinedGoalsEndpoint
             }
         }
 
-        // At most one Active/Paused goal per (entity, goal type) — mirrors CreateGoalEndpoint's check.
-        var profile = await db.Profiles.FirstAsync(entity => entity.Id == profileId, ct);
-
         List<Project> targetProjects;
         if (req.Projects is { Count: > 0 } requestedProjects)
         {
@@ -142,15 +141,16 @@ public sealed class CreateCombinedGoalsEndpoint
             targetProjects = [await projects.EnsureDefaultProjectAsync(profileId, ct)];
         }
 
-        var status = targetProjects.Any(project => project.Id == profile.ActiveProjectId)
-            ? GoalStatus.Active
-            : GoalStatus.Paused;
+        // Request-wide, not per spec: the set is one dependency chain, so a Paused prerequisite under an
+        // Active dependent is a state nothing needs (design: "The flag is request-wide for combined creation").
+        var status = req.StartPaused ? GoalStatus.Paused : GoalStatus.Active;
         var now = DateTimeOffset.UtcNow;
         var planning = Resolve<ProjectGoalPlanningService>();
         await planning.ExecuteLockedMutationAsync(
             targetProjects.Select(project => project.Id),
             async transaction =>
         {
+            // At most one Active/Paused goal per (entity, goal type) — mirrors CreateGoalEndpoint's check.
             foreach (var goalType in requestGoalTypes)
             {
                 if (await planning.FindConflictAsync(
@@ -239,7 +239,8 @@ public sealed record CreateCombinedGoalsRequest(
     string EntityType,
     string EntityId,
     List<ProjectPriorityRequest>? Projects,
-    List<CombinedGoalSpec> Goals
+    List<CombinedGoalSpec> Goals,
+    bool StartPaused = false
 );
 
 /// <summary>One goal within a combined-creation request. <see cref="DependsOnIndex"/> holds indices into

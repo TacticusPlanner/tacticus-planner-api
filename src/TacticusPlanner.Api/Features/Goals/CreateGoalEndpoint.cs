@@ -13,7 +13,9 @@ namespace TacticusPlanner.Api.Features.Goals;
 /// <see cref="CreateGoalRequest.Projects"/> is omitted or empty, the caller's default project is used
 /// (created on first access); otherwise the goal is added to every listed project (a goal may belong to
 /// several projects at once), at that project's given <see cref="ProjectPriorityRequest.Priority"/> when
-/// supplied, or appended after the project's current goals otherwise. The combined-creation flow (multiple
+/// supplied, or appended after the project's current goals otherwise. Membership decides nothing about the
+/// goal's lifecycle status (goal-lifecycle-status): the goal is born Active whatever projects it is filed
+/// into, unless <see cref="CreateGoalRequest.StartPaused"/> asks for Paused. The combined-creation flow (multiple
 /// goal types + dependency chains for one entity, plan §6/§8) is not implemented here — this endpoint only
 /// ever creates one independent goal.
 /// </summary>
@@ -26,8 +28,8 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
         {
             summary.Summary = "Creates a goal for a character or Machine of War.";
             summary.Description = "Assigns the goal to the given project(s), or the caller's default project "
-                + "(created on first use) when none is given. The goal starts Active if any target project is "
-                + "the caller's active plan, otherwise Paused.";
+                + "(created on first use) when none is given. The goal starts Active regardless of which "
+                + "projects it is filed into; pass startPaused to create it Paused instead.";
             summary.Response<GoalDetailResponse>(StatusCodes.Status200OK, "The newly created goal.");
             summary.Response(StatusCodes.Status400BadRequest, "Invalid entity/goal type, or an unknown project.");
             summary.Response<ProjectGoalSlotConflictResponse>(StatusCodes.Status409Conflict,
@@ -59,11 +61,6 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
             return;
         }
 
-        // At most one Active/Paused goal per (entity, goal type) — a unit may still accumulate several
-        // Completed/Archived goals of the same type, but only one "in flight" at a time (see the mirrored
-        // check in UpdateGoalStatusEndpoint, and the partial unique index backing this invariant).
-        var profile = await db.Profiles.FirstAsync(entity => entity.Id == profileId, ct);
-
         List<Project> targetProjects;
         if (req.Projects is { Count: > 0 } requestedProjects)
         {
@@ -88,9 +85,7 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
         var goal = Map.ToEntity(req);
         goal.Id = GoalId.From(Guid.CreateVersion7());
         goal.ProfileId = profileId;
-        goal.Status = targetProjects.Any(project => project.Id == profile.ActiveProjectId)
-            ? GoalStatus.Active
-            : GoalStatus.Paused;
+        goal.Status = req.StartPaused ? GoalStatus.Paused : GoalStatus.Active;
         var now = DateTimeOffset.UtcNow;
         goal.Snapshot = GoalMapper.MapSnapshot(req.Snapshot);
         goal.Events = [new GoalEvent { At = now, Type = GoalEventType.Created }];
@@ -100,6 +95,9 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
             targetProjects.Select(project => project.Id),
             async transaction =>
         {
+            // At most one Active/Paused goal per (entity, goal type) — a unit may still accumulate several
+            // Completed/Archived goals of the same type, but only one "in flight" at a time (see the mirrored
+            // check in UpdateGoalStatusEndpoint, and the partial unique index backing this invariant).
             if (await planning.FindConflictAsync(
                 targetProjects.Select(project => project.Id), entityType, goal.EntityId, goalType, null, ct) is { } conflict)
             {
@@ -157,7 +155,8 @@ public sealed record CreateGoalRequest(
     string GoalType,
     CreateGoalConfigRequest Config,
     List<ProjectPriorityRequest>? Projects,
-    CreateGoalSnapshotRequest? Snapshot = null
+    CreateGoalSnapshotRequest? Snapshot = null,
+    bool StartPaused = false
 );
 
 /// <summary>One target project for a newly created goal, with an optional caller-chosen priority within
