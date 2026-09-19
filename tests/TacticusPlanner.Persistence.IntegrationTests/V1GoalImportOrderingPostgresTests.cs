@@ -17,15 +17,17 @@ using Xunit;
 namespace TacticusPlanner.Persistence.IntegrationTests;
 
 /// <summary>
-/// Covers `rewrite-v1-goal-import`'s ordering requirement against real PostgreSQL: a multi-unit import
-/// yields contiguous in-flight priorities from 1 with no gaps or duplicates, and each unit's goals stay
-/// contiguous — the transactional (`ExecuteLockedMutationAsync` + one `NormalizeAsync`) side of the
-/// batch that the InMemory-backed API test suite can't exercise (that provider no-ops the lock).
+/// Covers `v1-goal-import`'s ordering requirement against real PostgreSQL: a multi-unit import yields
+/// contiguous in-flight priorities from 1 with no gaps or duplicates, and preserves V1's exact priority
+/// sequence goal-by-goal — including interleaving between different units' goals (`add-inline-goal-reprioritize`
+/// retired the old unit-block-contiguous behavior this test used to cover; see git history for that
+/// version) — the transactional (`ExecuteLockedMutationAsync` + one `NormalizeAsync`) side of the batch
+/// that the InMemory-backed API test suite can't exercise (that provider no-ops the lock).
 /// </summary>
 public sealed class V1GoalImportOrderingPostgresTests
 {
     [Fact]
-    public async Task MultiUnitImportYieldsContiguousInFlightPrioritiesWithEachUnitsGoalsContiguous()
+    public async Task MultiUnitImportPreservesV1sInterleavedPriorityOrder()
     {
         await using var postgres = new PostgreSqlBuilder("postgres:18-alpine").Build();
         await postgres.StartAsync(TestContext.Current.CancellationToken);
@@ -76,8 +78,8 @@ public sealed class V1GoalImportOrderingPostgresTests
         var projectsService = new ProjectsService(db);
         var importService = new V1GoalImportService(db, catalog, targetValidation, planning, projectsService, TimeProvider.System);
 
-        // Interleaved in V1 priority: blackTerminator (1, 3), ultraInceptorSgt (2) — blackTerminator's
-        // block must come first (its lowest priority is 1) and stay contiguous despite the interleaving.
+        // Interleaved in V1 priority: blackTerminator (1, 3), ultraInceptorSgt (2) — the import must
+        // preserve this exact interleaving, not collapse blackTerminator's two goals into one block.
         var goals = new[]
         {
             new V1Goal("bt-rank", "blackTerminator", 1, 1, true, null, null, null, null, 4, false, 0,
@@ -96,14 +98,15 @@ public sealed class V1GoalImportOrderingPostgresTests
             await connection.OpenAsync(TestContext.Current.CancellationToken);
             await using var command = connection.CreateCommand();
             command.CommandText = """
-                SELECT entity_id, priority FROM project_goals
-                WHERE occupies_in_flight_slot ORDER BY priority;
+                SELECT g.entity_id, g.goal_type, pg.priority FROM project_goals pg
+                JOIN goals g ON g.id = pg.goal_id
+                WHERE pg.occupies_in_flight_slot ORDER BY pg.priority;
                 """;
             await using var reader = await command.ExecuteReaderAsync(TestContext.Current.CancellationToken);
-            var rows = new List<(string EntityId, int Priority)>();
+            var rows = new List<(string EntityId, string GoalType, int Priority)>();
             while (await reader.ReadAsync(TestContext.Current.CancellationToken))
             {
-                rows.Add((reader.GetString(0), reader.GetInt32(1)));
+                rows.Add((reader.GetString(0), reader.GetString(1), reader.GetInt32(2)));
             }
 
             Assert.Equal(3, rows.Count);
@@ -111,12 +114,14 @@ public sealed class V1GoalImportOrderingPostgresTests
             Assert.Equal(priorities.Distinct().Count(), priorities.Count);
             Assert.Equal([1, 2, 3], priorities.OrderBy(value => value).ToList());
 
-            // blackTerminator's block (2 goals) is contiguous and comes before ultraInceptorSgt's.
-            var blackTerminatorPriorities = rows.Where(row => row.EntityId == "blackTerminator")
-                .Select(row => row.Priority).OrderBy(value => value).ToList();
-            var ultraInceptorPriority = rows.Single(row => row.EntityId == "ultraInceptorSgt").Priority;
-            Assert.Equal([1, 2], blackTerminatorPriorities);
-            Assert.Equal(3, ultraInceptorPriority);
+            // V1's exact interleaved priority sequence is preserved: blackTerminator's Rank goal (V1
+            // priority 1), then ultraInceptorSgt's Rank goal (V1 priority 2), then blackTerminator's own
+            // Ascension goal (V1 priority 3) — not collapsed into unit-contiguous blocks.
+            var ordered = rows.OrderBy(row => row.Priority)
+                .Select(row => (row.EntityId, row.GoalType)).ToList();
+            Assert.Equal(
+                [("blackTerminator", "Rank"), ("ultraInceptorSgt", "Rank"), ("blackTerminator", "Ascension")],
+                ordered);
         }
     }
 

@@ -136,45 +136,58 @@ public sealed class ProjectGoalPlanningService(PlannerDbContext db)
             membership.OccupiesInFlightSlot = IsInFlight(goal.Status);
     }
 
+    /// <summary>
+    /// Full renumbering pass, run after every priority-affecting mutation (plan: flat per-goal priority,
+    /// not unit-grouped — see <c>add-inline-goal-reprioritize</c>). Two zones, each compacted to a dense
+    /// sequence in its own existing relative order (already the order <see cref="LoadProjectMembershipsAsync"/>
+    /// loads them in): in-flight (Active/Paused) first, 1..N; historical (Completed/Archived) after, N+1..M.
+    /// A freshly created goal already holds the highest raw priority across the whole project (see
+    /// <c>ProjectsService.GetNextPriorityAsync</c>), so it always lands last within its own zone here,
+    /// regardless of the other zone's raw values — this is what keeps a newly created historical-status
+    /// goal (e.g. imported already-Completed) from being pulled ahead of older historical goals, and a
+    /// newly created in-flight goal from being pulled ahead of older in-flight ones. Re-deriving both
+    /// zones from scratch on every call (rather than only assigning priority to unpositioned goals) is
+    /// what keeps a goal that transitions between zones (e.g. Active to Archived) from ever leaving a
+    /// stale priority value in the wrong zone's numeric range.
+    /// </summary>
     public async Task NormalizeAsync(IEnumerable<ProjectId> projectIds, CancellationToken ct)
     {
         foreach (var projectId in projectIds.Distinct())
         {
             var memberships = await LoadProjectMembershipsAsync(projectId, ct);
-            var activeMemberships = memberships.Where(entry => entry.OccupiesInFlightSlot).ToList();
-            var units = activeMemberships
-                .GroupBy(UnitKey.From)
-                .OrderBy(group => group.Min(entry => entry.Priority))
-                .ThenBy(group => group.Key.EntityType)
-                .ThenBy(group => group.Key.EntityId, StringComparer.Ordinal);
 
             var priority = 1;
-            foreach (var unit in units)
-                foreach (var membership in OrderGoals(unit.ToList()))
-                    membership.Priority = priority++;
+            foreach (var membership in memberships.Where(entry => entry.OccupiesInFlightSlot))
+                membership.Priority = priority++;
 
             foreach (var membership in memberships.Where(entry => !entry.OccupiesInFlightSlot))
                 membership.Priority = priority++;
         }
     }
 
-    public async Task<bool> ApplyUnitOrderAsync(ProjectId projectId, IReadOnlyList<UnitOrderEntryRequest> requested, CancellationToken ct)
+    /// <summary>
+    /// Applies a caller-submitted full reorder of a project's in-flight goals (plan:
+    /// <c>add-inline-goal-reprioritize</c>'s goal-keyed reorder, replacing the retired unit-keyed one).
+    /// <paramref name="requested"/> must be an exact, duplicate-free permutation of the project's current
+    /// in-flight goal ids — same atomic-reject-on-mismatch contract the old unit-keyed operation had, at
+    /// goal granularity instead of unit granularity. No dependency validation is applied to the requested
+    /// order: a goal may be placed ahead of a <c>DependsOn</c> prerequisite it hasn't reached (plan
+    /// decision: priority is a pure ordering preference, decoupled from dependency validity).
+    /// </summary>
+    public async Task<bool> ApplyGoalOrderAsync(ProjectId projectId, IReadOnlyList<GoalId> requested, CancellationToken ct)
     {
         var memberships = await LoadProjectMembershipsAsync(projectId, ct);
         var activeMemberships = memberships.Where(entry => entry.OccupiesInFlightSlot).ToList();
-        var grouped = activeMemberships.GroupBy(UnitKey.From).ToDictionary(group => group.Key, group => group.ToList());
-        var requestedKeys = requested.Select(entry => new UnitKey(
-            Enum.Parse<GoalEntityType>(entry.EntityType, true), entry.EntityId.Trim())).ToList();
+        var byId = activeMemberships.ToDictionary(entry => entry.GoalId);
 
-        if (requestedKeys.Count != grouped.Count
-            || requestedKeys.Distinct().Count() != requestedKeys.Count
-            || requestedKeys.Any(key => !grouped.ContainsKey(key)))
+        if (requested.Count != activeMemberships.Count
+            || requested.Distinct().Count() != requested.Count
+            || requested.Any(id => !byId.ContainsKey(id)))
             return false;
 
         var priority = 1;
-        foreach (var key in requestedKeys)
-            foreach (var membership in OrderGoals(grouped[key]))
-                membership.Priority = priority++;
+        foreach (var goalId in requested)
+            byId[goalId].Priority = priority++;
 
         foreach (var membership in memberships.Where(entry => !entry.OccupiesInFlightSlot))
             membership.Priority = priority++;
@@ -190,34 +203,8 @@ public sealed class ProjectGoalPlanningService(PlannerDbContext db)
             .ThenBy(entry => entry.GoalId)
             .ToListAsync(ct);
 
-    private static List<ProjectGoal> OrderGoals(List<ProjectGoal> memberships)
-    {
-        var remaining = memberships.OrderBy(entry => entry.Priority).ThenBy(entry => entry.GoalId).ToList();
-        var ids = remaining.Select(entry => entry.GoalId.Value).ToHashSet();
-        var emitted = new HashSet<Guid>();
-        var result = new List<ProjectGoal>(remaining.Count);
-
-        while (remaining.Count > 0)
-        {
-            var next = remaining.FirstOrDefault(entry =>
-                entry.Goal is null || entry.Goal.DependsOn.Where(ids.Contains).All(emitted.Contains)) ?? remaining[0];
-            remaining.Remove(next);
-            result.Add(next);
-            emitted.Add(next.GoalId.Value);
-        }
-
-        return result;
-    }
-
     private static bool IsInFlight(GoalStatus status) => status is GoalStatus.Active or GoalStatus.Paused;
-
-    private sealed record UnitKey(GoalEntityType EntityType, string EntityId)
-    {
-        public static UnitKey From(ProjectGoal entry) => new(entry.EntityType, entry.EntityId);
-    }
 }
-
-public sealed record UnitOrderEntryRequest(string EntityType, string EntityId);
 
 public sealed record ProjectGoalSlotConflictResponse(
     string IssueCode,

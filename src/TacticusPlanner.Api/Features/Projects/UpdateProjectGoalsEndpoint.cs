@@ -9,9 +9,15 @@ using TacticusPlanner.Persistence;
 namespace TacticusPlanner.Api.Features.Projects;
 
 /// <summary>
-/// Replaces a project's goal membership and per-project priority ordering (plan §5) in one call. Every
-/// goal must belong to at least one project, so a goal cannot be removed from its only remaining project —
-/// such a removal is rejected wholesale (400) rather than silently orphaning the goal.
+/// Replaces a project's goal membership (plan §5) in one call. Every goal must belong to at least one
+/// project, so a goal cannot be removed from its only remaining project — such a removal is rejected
+/// wholesale (400) rather than silently orphaning the goal. Does NOT accept caller-authored priority (plan:
+/// <c>add-inline-goal-reprioritize</c> — priority is set exclusively via <see cref="UpdateProjectGoalOrderEndpoint"/>
+/// now that priority is flat per-goal, not unit-grouped, so nothing downstream reconciles an arbitrary
+/// submitted value the way <see cref="ProjectGoalPlanningService.NormalizeAsync"/>'s old per-unit
+/// regrouping incidentally did): an existing member's priority is left untouched regardless of what
+/// <see cref="ProjectGoalEntryRequest.Priority"/> is submitted for it, and a newly added member is
+/// appended after the project's current in-flight goals, same as <see cref="CreateGoalEndpoint"/>.
 /// </summary>
 public sealed class UpdateProjectGoalsEndpoint : Endpoint<UpdateProjectGoalsRequest, ProjectGoalsResponse>
 {
@@ -111,19 +117,24 @@ public sealed class UpdateProjectGoalsEndpoint : Endpoint<UpdateProjectGoalsRequ
                 db.ProjectGoals.RemoveRange(toRemove);
             }
 
+            // Priority is never taken from the request (see this endpoint's class doc): an existing
+            // member keeps its current stored priority untouched, and a newly added member is appended
+            // via GetNextPriorityAsync (same as CreateGoalEndpoint) — NormalizeAsync below then produces
+            // the final, definitive values for the whole project regardless.
             var existingByGoalId = existingMemberships.ToDictionary(entity => entity.GoalId);
             var goalsById = ownedGoals.ToDictionary(goal => goal.Id);
+            var projects = Resolve<ProjectsService>();
+            // Queried once, then incremented locally — GetNextPriorityAsync re-queried per entry would
+            // return the same value for every not-yet-saved addition, since it reads the database, not
+            // this change tracker's pending inserts.
+            var nextPriority = await projects.GetNextPriorityAsync(projectId, ct);
             foreach (var entry in req.Goals)
             {
                 var goalId = GoalId.From(entry.GoalId);
-                if (existingByGoalId.TryGetValue(goalId, out var membership))
-                {
-                    membership.Priority = entry.Priority;
-                }
-                else
+                if (!existingByGoalId.ContainsKey(goalId))
                 {
                     db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(
-                        project, goalsById[goalId], entry.Priority, DateTimeOffset.UtcNow));
+                        project, goalsById[goalId], nextPriority++, DateTimeOffset.UtcNow));
                 }
             }
 
@@ -169,7 +180,9 @@ public sealed class UpdateProjectGoalsEndpoint : Endpoint<UpdateProjectGoalsRequ
 
 public sealed record UpdateProjectGoalsRequest(List<ProjectGoalEntryRequest> Goals);
 
-public sealed record ProjectGoalEntryRequest(Guid GoalId, int Priority);
+/// <summary>No <c>Priority</c> field (see the endpoint's class doc for why) — removed rather than kept
+/// and ignored, since a field with no legitimate use is worse than no field.</summary>
+public sealed record ProjectGoalEntryRequest(Guid GoalId);
 
 public sealed record ProjectGoalsResponse(List<ProjectGoalEntryResponse> Goals);
 

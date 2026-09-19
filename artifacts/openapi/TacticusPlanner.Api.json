@@ -1645,6 +1645,65 @@
         ]
       }
     },
+    "/api/v1/me/projects/{projectId}/goal-order": {
+      "put": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Reorders all in-flight goals in a project.",
+        "description": "GoalIds must be an exact, duplicate-free permutation of the project's current in-flight (Active/Paused) goal ids. Accepts any ordering, including one that places a goal ahead of a DependsOn prerequisite it hasn't reached.",
+        "operationId": "TacticusPlannerApiFeaturesProjectsUpdateProjectGoalOrderEndpoint",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesProjectsUpdateProjectGoalOrderRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesProjectsProjectGoalsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The request is not an exact permutation of the project's in-flight goals."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
     "/api/v1/me/projects/{projectId}/goals": {
       "get": {
         "tags": [
@@ -1806,64 +1865,6 @@
           },
           "404": {
             "description": "No matching project owned by the caller."
-          }
-        },
-        "security": [
-          {
-            "JWTBearerAuth": [ ]
-          }
-        ]
-      }
-    },
-    "/api/v1/me/projects/{projectId}/unit-order": {
-      "put": {
-        "tags": [
-          "Me"
-        ],
-        "summary": "Reorders all Character and Machine of War blocks in a project.",
-        "operationId": "TacticusPlannerApiFeaturesProjectsUpdateProjectUnitOrderEndpoint",
-        "parameters": [
-          {
-            "name": "projectId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesProjectsUpdateProjectUnitOrderRequest"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesProjectsProjectGoalsResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "The request is not an exact permutation of the project's units."
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "Not Found"
           }
         },
         "security": [
@@ -2706,12 +2707,6 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/TacticusPlannerApiFeaturesProjectsProjectSummaryResponse"
-        }
-      },
-      "SystemCollectionsGenericListOfTacticusPlannerApiFeaturesProjectsUnitOrderEntryRequest": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/TacticusPlannerApiFeaturesProjectsUnitOrderEntryRequest"
         }
       },
       "SystemCollectionsGenericListOfTacticusPlannerDomainGoalsCampaignBattleId": {
@@ -5224,18 +5219,13 @@
       },
       "TacticusPlannerApiFeaturesProjectsProjectGoalEntryRequest": {
         "required": [
-          "goalId",
-          "priority"
+          "goalId"
         ],
         "type": "object",
         "properties": {
           "goalId": {
             "type": "string",
             "format": "uuid"
-          },
-          "priority": {
-            "type": "integer",
-            "format": "int32"
           }
         }
       },
@@ -5393,18 +5383,14 @@
           }
         }
       },
-      "TacticusPlannerApiFeaturesProjectsUnitOrderEntryRequest": {
+      "TacticusPlannerApiFeaturesProjectsUpdateProjectGoalOrderRequest": {
         "required": [
-          "entityType",
-          "entityId"
+          "goalIds"
         ],
         "type": "object",
         "properties": {
-          "entityType": {
-            "type": "string"
-          },
-          "entityId": {
-            "type": "string"
+          "goalIds": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericListOfSystemGuid"
           }
         }
       },
@@ -5463,17 +5449,6 @@
             "minimum": 0,
             "type": "integer",
             "format": "int64"
-          }
-        }
-      },
-      "TacticusPlannerApiFeaturesProjectsUpdateProjectUnitOrderRequest": {
-        "required": [
-          "units"
-        ],
-        "type": "object",
-        "properties": {
-          "units": {
-            "$ref": "#/components/schemas/SystemCollectionsGenericListOfTacticusPlannerApiFeaturesProjectsUnitOrderEntryRequest"
           }
         }
       },
