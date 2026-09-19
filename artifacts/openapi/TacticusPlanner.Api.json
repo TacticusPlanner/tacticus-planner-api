@@ -802,7 +802,7 @@
           "Me"
         ],
         "summary": "Creates a goal for a character or Machine of War.",
-        "description": "Assigns the goal to the given project(s), or the caller's default project (created on first use) when none is given. The goal starts Active if any target project is the caller's active plan, otherwise Paused.",
+        "description": "Assigns the goal to the given project(s), or the caller's default project (created on first use) when none is given. The goal starts Active regardless of which projects it is filed into; pass startPaused to create it Paused instead.",
         "operationId": "TacticusPlannerApiFeaturesGoalsCreateGoalEndpoint",
         "requestBody": {
           "content": {
@@ -895,7 +895,7 @@
           "Me"
         ],
         "summary": "Creates several linked goals for one entity in one call (combined creation).",
-        "description": "Each spec's DependsOnIndex (indices into this same request's Goals list, referencing only earlier entries) is resolved into real DependsOn edges. Assigns the whole set to the given project(s), or the caller's default project (created on first use) when none is given, same as POST me/goals.",
+        "description": "Each spec's DependsOnIndex (indices into this same request's Goals list, referencing only earlier entries) is resolved into real DependsOn edges. Assigns the whole set to the given project(s), or the caller's default project (created on first use) when none is given, same as POST me/goals. Every goal in the set starts Active regardless of which projects it is filed into; startPaused creates the whole set Paused instead and cannot be set per goal.",
         "operationId": "TacticusPlannerApiFeaturesGoalsCreateCombinedGoalsEndpoint",
         "requestBody": {
           "content": {
@@ -3736,6 +3736,10 @@
           },
           "goals": {
             "$ref": "#/components/schemas/SystemCollectionsGenericListOfTacticusPlannerApiFeaturesGoalsCombinedGoalSpec"
+          },
+          "startPaused": {
+            "type": "boolean",
+            "default": false
           }
         }
       },
@@ -3883,6 +3887,10 @@
                 "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsCreateGoalSnapshotRequest"
               }
             ]
+          },
+          "startPaused": {
+            "type": "boolean",
+            "default": false
           }
         }
       },

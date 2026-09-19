@@ -21,6 +21,7 @@ namespace TacticusPlanner.Api.Tests;
 public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClassFixture<PlannerApiFactory>
 {
     private const string CharacterId = "ultraInceptorSgt"; // catalog Name "Bellator" (see TacticusTestDoubles.cs)
+    private const string OtherCharacterId = "blackTerminator";
     private const string MowId = "astraOrdnanceBattery";
 
     private static readonly string[] RarityNames = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic"];
@@ -706,6 +707,91 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         Assert.True(byGoalId[unlockGoalId] < byGoalId[rankGoalId]);
     }
 
+    // ----- Imported status follows V1's own dailyRaids choice -----
+
+    [Fact]
+    public async Task ImportWhileAnotherProjectIsTheActivePlanHonoursEachGoalsPlanningChoice()
+    {
+        // The import always files into the default project, so under the old membership-derived rule the
+        // whole import landed Paused whenever another project was current. Status now comes from the source
+        // goal's own dailyRaids flag, never from the active plan (goal-lifecycle-status).
+        var (client, subject) = await CreateProvisionedClientAsync();
+        await SeedPlayerDataSnapshotAsync(subject, [Character(CharacterId, xpLevel: 60), Character(OtherCharacterId, xpLevel: 60)]);
+        await MakeAnotherProjectCurrentAsync(client);
+
+        var body = await ImportGoalsAsync(
+            client,
+            [
+                RankGoal("planned", CharacterId, 1, UnitRank.Iron1, dailyRaids: true),
+                RankGoal("excluded", OtherCharacterId, 2, UnitRank.Iron1, dailyRaids: false),
+            ],
+            automaticPrerequisites: false);
+
+        Assert.Equal("Active", await StatusOfSourceGoalAsync(client, body, "planned"));
+        Assert.Equal("Paused", await StatusOfSourceGoalAsync(client, body, "excluded"));
+    }
+
+    [Fact]
+    public async Task AGoalWithNoDailyRaidsFlagImportsActive()
+    {
+        // A V1 record written before the flag existed must not be pushed into Paused by a defaulted false.
+        var (client, subject) = await CreateProvisionedClientAsync();
+        await SeedPlayerDataSnapshotAsync(subject, [Character(CharacterId, xpLevel: 60)]);
+
+        var body = await ImportGoalsAsync(
+            client, [RankGoal("r1", CharacterId, 1, UnitRank.Iron1, dailyRaids: null)], automaticPrerequisites: false);
+
+        Assert.Equal("Active", await StatusOfSourceGoalAsync(client, body, "r1"));
+    }
+
+    [Fact]
+    public async Task ASynthesizedPrerequisiteIsActiveWhenAnyOfItsUnitsGoalsIs()
+    {
+        // The prerequisite exists to unblock the unit's goals — pausing it while an Active goal depends on
+        // it would leave that goal unworkable.
+        var (client, subject) = await CreateProvisionedClientAsync();
+        await SeedPlayerDataSnapshotAsync(subject, []); // unit absent from the roster, so Unlock is synthesized
+
+        var body = await ImportGoalsAsync(client, [RankGoal("r1", CharacterId, 1, UnitRank.Stone2, dailyRaids: true)]);
+
+        var unlock = Assert.Single(body.Outcomes, o => o.Code == "prerequisite_added" && o.GoalType == "Unlock");
+        Assert.Equal("Active", (await GetGoalAsync(client, unlock.GoalId!.Value)).Status);
+        Assert.Equal("Active", await StatusOfSourceGoalAsync(client, body, "r1"));
+    }
+
+    [Fact]
+    public async Task ASynthesizedPrerequisiteIsPausedWhenEveryGoalOfItsUnitIs()
+    {
+        var (client, subject) = await CreateProvisionedClientAsync();
+        await SeedPlayerDataSnapshotAsync(subject, []);
+
+        var body = await ImportGoalsAsync(client, [RankGoal("r1", CharacterId, 1, UnitRank.Stone2, dailyRaids: false)]);
+
+        var unlock = Assert.Single(body.Outcomes, o => o.Code == "prerequisite_added" && o.GoalType == "Unlock");
+        Assert.Equal("Paused", (await GetGoalAsync(client, unlock.GoalId!.Value)).Status);
+        Assert.Equal("Paused", await StatusOfSourceGoalAsync(client, body, "r1"));
+    }
+
+    [Fact]
+    public async Task MergedDuplicateGoalsKeepTheActiveChoice()
+    {
+        // The survivor stands in for both V1 goals, so merging must not discard the activation the user set
+        // on one of them.
+        var (client, subject) = await CreateProvisionedClientAsync();
+        await SeedPlayerDataSnapshotAsync(subject, [Character(CharacterId, xpLevel: 60)]);
+
+        var body = await ImportGoalsAsync(
+            client,
+            [
+                RankGoal("excluded", CharacterId, 1, UnitRank.Iron1, dailyRaids: false),
+                RankGoal("planned", CharacterId, 2, UnitRank.Silver1, dailyRaids: true),
+            ],
+            automaticPrerequisites: false);
+
+        var created = Assert.Single(body.Outcomes, o => o.Status == "Created");
+        Assert.Equal("Active", (await GetGoalAsync(client, created.GoalId!.Value)).Status);
+    }
+
     // ----- Idempotency -----
 
     [Fact]
@@ -805,6 +891,32 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         return (await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken))!;
     }
 
+    /// <summary>Creates a second project and makes it the caller's active plan, so an import (which always
+    /// files into the default project) runs while some other project is current.</summary>
+    private static async Task MakeAnotherProjectCurrentAsync(HttpClient client)
+    {
+        var created = await client.PostAsJsonAsync(
+            "/api/v1/me/projects",
+            new CreateProjectRequest("Event Prep", null, null),
+            TestContext.Current.CancellationToken
+        );
+        created.EnsureSuccessStatusCode();
+        var project = await created.Content.ReadFromJsonAsync<ProjectSummaryResponse>(
+            TestContext.Current.CancellationToken);
+        Assert.NotNull(project);
+        var activated = await client.PostAsync(
+            $"/api/v1/me/projects/{project.ProjectId}/activate", null, TestContext.Current.CancellationToken);
+        activated.EnsureSuccessStatusCode();
+    }
+
+    private static async Task<string> StatusOfSourceGoalAsync(
+        HttpClient client, ImportV1ProfileResponse body, string sourceGoalId)
+    {
+        var outcome = Assert.Single(body.Outcomes, o => o.SourceGoalId == sourceGoalId);
+        Assert.Equal("Created", outcome.Status);
+        return (await GetGoalAsync(client, outcome.GoalId!.Value)).Status;
+    }
+
     private static async Task<GoalDetailResponse> GetGoalAsync(HttpClient client, Guid goalId) =>
         (await client.GetFromJsonAsync<GoalDetailResponse>($"/api/v1/me/goals/{goalId}", TestContext.Current.CancellationToken))!;
 
@@ -816,16 +928,18 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
     }
 
     private static V1Goal RankGoal(
-        string id, string character, int priority, UnitRank target, string? notes = null, int rankAppliedUpgrades = 0) =>
-        new(id, character, 1, priority, true, notes, null, null, null, (int)target + 1, false, rankAppliedUpgrades,
+        string id, string character, int priority, UnitRank target, string? notes = null, int rankAppliedUpgrades = 0,
+        bool? dailyRaids = true) =>
+        new(id, character, 1, priority, dailyRaids, notes, null, null, null, (int)target + 1, false, rankAppliedUpgrades,
             null, null, null, null, null, null, null);
 
     private static V1Goal AscensionGoal(
         string id, string character, int priority, UnitProgression target, string? notes = null,
-        string? shardFarmType = null, int? campaignsUsage = null, int? mythicCampaignsUsage = null)
+        string? shardFarmType = null, int? campaignsUsage = null, int? mythicCampaignsUsage = null,
+        bool? dailyRaids = true)
     {
         var (rarity, stars) = ProgressionWireParts(target);
-        return new(id, character, 2, priority, true, notes, null, null, null, null, null, null,
+        return new(id, character, 2, priority, dailyRaids, notes, null, null, null, null, null, null,
             null, null, rarity, stars, null, null, null, shardFarmType, campaignsUsage, mythicCampaignsUsage);
     }
 

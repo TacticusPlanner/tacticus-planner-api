@@ -232,7 +232,11 @@ public sealed class V1GoalImportService(
                     "The goal is missing a required target."));
         }
 
-        return (new TranslatedGoal(new GoalKey(entityType, entityId, goalType), config, originalIndex, sourceGoal.Notes), null);
+        // An absent dailyRaids field (a V1 record predating it) reads as in-planning, so a missing flag
+        // never silently pauses an imported goal.
+        return (new TranslatedGoal(
+            new GoalKey(entityType, entityId, goalType), config, originalIndex, sourceGoal.Notes,
+            InDailyPlanning: sourceGoal.DailyRaids is not false), null);
     }
 
     /// <summary>Translates V1's shard-source fields (previously dropped entirely) into acquisition
@@ -278,6 +282,10 @@ public sealed class V1GoalImportService(
                 continue;
             }
 
+            // The survivor stands in for every duplicate, so it is in daily planning if any of them was —
+            // merging must not drop a goal the user had active.
+            var inDailyPlanning = ordered.Any(goal => goal.InDailyPlanning);
+
             TranslatedGoal survivor;
             if (group.Key.GoalType == GoalType.Rank)
             {
@@ -293,6 +301,7 @@ public sealed class V1GoalImportService(
                         first.Start, first.StartPointFive, first.StartAppliedUpgrades,
                         last.End, last.EndPointFive, last.EndAppliedUpgrades)),
                     Notes = JoinNotes(ordered),
+                    InDailyPlanning = inDailyPlanning,
                 };
             }
             else if (group.Key.GoalType == GoalType.Ascension)
@@ -312,13 +321,14 @@ public sealed class V1GoalImportService(
                         Progression: new ProgressionTargetRequest(first.Config.Progression!.Start, last.Config.Progression!.End),
                         AcquisitionSources: acquisitionSources.Count == 0 ? null : acquisitionSources),
                     Notes = JoinNotes(ordered),
+                    InDailyPlanning = inDailyPlanning,
                 };
             }
             else
             {
                 // Every other goal type has no clear min-start/max-end merge semantics, so only the
                 // highest-priority (lowest index) duplicate survives.
-                survivor = ordered[0];
+                survivor = ordered[0] with { InDailyPlanning = inDailyPlanning };
             }
 
             survivors.Add(survivor);
@@ -360,9 +370,7 @@ public sealed class V1GoalImportService(
             list.Add(candidate);
         }
 
-        var profile = await db.Profiles.FirstAsync(entity => entity.Id == profileId, ct);
         var project = await projects.EnsureDefaultProjectAsync(profileId, ct);
-        var status = project.Id == profile.ActiveProjectId ? GoalStatus.Active : GoalStatus.Paused;
 
         await planning.ExecuteLockedMutationAsync([project.Id], async transaction =>
         {
@@ -379,6 +387,12 @@ public sealed class V1GoalImportService(
             {
                 var unitCandidates = byUnit[unitKey];
                 var playerUnit = ResolvePlayerUnit(unitKey, playerSnapshot);
+                // Each imported goal keeps V1's own dailyRaids choice (goal-lifecycle-status). A synthesized
+                // prerequisite serves every candidate of its unit, so it is Active if any of them is —
+                // pausing it would block a goal the user had in daily planning.
+                var prerequisiteStatus = unitCandidates.Any(candidate => candidate.InDailyPlanning)
+                    ? GoalStatus.Active
+                    : GoalStatus.Paused;
                 var prerequisites = synthesizePrerequisites
                     ? ComputePrerequisites(unitKey, unitCandidates, playerUnit, existingByKey, sourceIdByIndex)
                     : UnitPrerequisites.None;
@@ -404,7 +418,7 @@ public sealed class V1GoalImportService(
                     }
                     else
                     {
-                        var unlockGoal = BuildGoal(profileId, unitKey, GoalType.Unlock, unlockConfig, null, status, now, playerUnit);
+                        var unlockGoal = BuildGoal(profileId, unitKey, GoalType.Unlock, unlockConfig, null, prerequisiteStatus, now, playerUnit);
                         db.Goals.Add(unlockGoal);
                         db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(project, unlockGoal, priority++, now));
                         unlockGoalId = unlockGoal.Id.Value;
@@ -422,7 +436,7 @@ public sealed class V1GoalImportService(
                     var ascensionGoal = BuildGoal(
                         profileId, unitKey, GoalType.Ascension,
                         new CreateGoalConfigRequest(Progression: new ProgressionTargetRequest(startWire, endWire)),
-                        null, status, now, playerUnit);
+                        null, prerequisiteStatus, now, playerUnit);
                     if (unlockGoalId is { } unlockId) ascensionGoal.DependsOn.Add(unlockId);
                     db.Goals.Add(ascensionGoal);
                     db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(project, ascensionGoal, priority++, now));
@@ -445,7 +459,7 @@ public sealed class V1GoalImportService(
                     }
                     else
                     {
-                        var goal = BuildGoal(profileId, unitKey, GoalType.Ascension, ownAscension.Config, ownAscension.Notes, status, now, playerUnit);
+                        var goal = BuildGoal(profileId, unitKey, GoalType.Ascension, ownAscension.Config, ownAscension.Notes, StatusOf(ownAscension), now, playerUnit);
                         goal.DependsOn = dependsOn;
                         db.Goals.Add(goal);
                         db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(project, goal, priority++, now));
@@ -471,7 +485,7 @@ public sealed class V1GoalImportService(
                     }
                     else
                     {
-                        var levelGoal = BuildGoal(profileId, unitKey, GoalType.Level, levelConfig, null, status, now, playerUnit);
+                        var levelGoal = BuildGoal(profileId, unitKey, GoalType.Level, levelConfig, null, prerequisiteStatus, now, playerUnit);
                         if (unlockGoalId is { } unlockId) levelGoal.DependsOn.Add(unlockId);
                         db.Goals.Add(levelGoal);
                         db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(project, levelGoal, priority++, now));
@@ -513,7 +527,7 @@ public sealed class V1GoalImportService(
                         continue;
                     }
 
-                    var goal = BuildGoal(profileId, unitKey, candidate.Key.GoalType, candidate.Config, candidate.Notes, status, now, playerUnit);
+                    var goal = BuildGoal(profileId, unitKey, candidate.Key.GoalType, candidate.Config, candidate.Notes, StatusOf(candidate), now, playerUnit);
                     goal.DependsOn = dependsOn;
                     db.Goals.Add(goal);
                     db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(project, goal, priority++, now));
@@ -786,13 +800,23 @@ public sealed class V1GoalImportService(
         return result.Length == 0 ? null : result;
     }
 
+    /// <summary>V1's per-goal <c>dailyRaids</c> choice, carried through to the V2 lifecycle status: a goal
+    /// the user had in daily planning imports Active, one they had excluded imports Paused. The import
+    /// never consults the profile's active project (goal-lifecycle-status).</summary>
+    private static GoalStatus StatusOf(TranslatedGoal goal) =>
+        goal.InDailyPlanning ? GoalStatus.Active : GoalStatus.Paused;
+
     private sealed record GoalKey(GoalEntityType EntityType, string EntityId, GoalType GoalType);
 
     private sealed record ExistingGoalRef(Guid Id, GoalConfig Config);
 
     private sealed record UnitKey(GoalEntityType EntityType, string EntityId);
 
-    private sealed record TranslatedGoal(GoalKey Key, CreateGoalConfigRequest Config, int OriginalIndex, string? Notes);
+    /// <summary><see cref="InDailyPlanning"/> carries V1's per-goal <c>dailyRaids</c> choice through to the
+    /// created goal's status: in daily planning becomes <see cref="GoalStatus.Active"/>, out of it becomes
+    /// <see cref="GoalStatus.Paused"/>.</summary>
+    private sealed record TranslatedGoal(
+        GoalKey Key, CreateGoalConfigRequest Config, int OriginalIndex, string? Notes, bool InDailyPlanning);
 
     private sealed record UnitPrerequisites(
         bool NeedsUnlock, UnitProgression? AscensionTarget, int? LevelTarget, V1GoalOutcome? AscensionShortfall)

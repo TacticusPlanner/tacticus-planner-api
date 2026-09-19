@@ -182,7 +182,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     }
 
     [Fact]
-    public async Task CreateGoalInNonActiveProjectStartsPaused()
+    public async Task CreateGoalInNonActiveProjectStartsActive()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
@@ -204,7 +204,76 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         var created = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
 
         Assert.NotNull(created);
+        Assert.Equal("Active", created.Status);
+    }
+
+    [Fact]
+    public async Task CreateGoalWithStartPausedStartsPaused()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            RankGoal with { StartPaused = true },
+            TestContext.Current.CancellationToken
+        );
+        response.EnsureSuccessStatusCode();
+        var created = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+
+        Assert.NotNull(created);
         Assert.Equal("Paused", created.Status);
+    }
+
+    [Fact]
+    public async Task CreateGoalWithoutStartPausedStartsActive()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            RankGoal,
+            TestContext.Current.CancellationToken
+        );
+        response.EnsureSuccessStatusCode();
+        var created = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+
+        Assert.NotNull(created);
+        Assert.Equal("Active", created.Status);
+    }
+
+    [Fact]
+    public async Task CreateStartPausedGoalInOccupiedSlotIsRejected()
+    {
+        // Paused occupies a project goal-type slot exactly as Active does, so asking for a paused goal is
+        // not a way around the "at most one in flight" invariant (project-goal-slots).
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var defaultProject = await GetDefaultProjectAsync(client);
+
+        var first = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            RankGoal with { Projects = [new ProjectPriorityRequest(defaultProject.ProjectId)] },
+            TestContext.Current.CancellationToken
+        );
+        first.EnsureSuccessStatusCode();
+        var active = await first.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        Assert.NotNull(active);
+        Assert.Equal("Active", active.Status);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            RankGoal with
+            {
+                Projects = [new ProjectPriorityRequest(defaultProject.ProjectId)],
+                StartPaused = true,
+            },
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
+        var conflict = await response.Content.ReadFromJsonAsync<ProjectGoalSlotConflictResponse>(TestContext.Current.CancellationToken);
+        Assert.NotNull(conflict);
+        Assert.Equal("projectGoalSlotOccupied", conflict.IssueCode);
+        Assert.Equal(active.GoalId, conflict.ExistingGoalId);
     }
 
     [Fact]
