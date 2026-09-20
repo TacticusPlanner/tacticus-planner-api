@@ -352,10 +352,10 @@ public sealed class V1GoalImportService(
         List<V1GoalOutcome> extraOutcomes,
         CancellationToken ct)
     {
-        // Grouping by unit while iterating `creatable` (already in ascending V1 priority order)
-        // preserves each unit's first-appearance order — the base for both the created project's unit
-        // block order and the membership priorities assigned below (v1-goal-import: "Imported goals
-        // preserve V1 unit order").
+        // Grouping by unit is still needed to compute each unit's shared prerequisites (Unlock,
+        // Ascension, Level each serve every candidate of their unit that needs them) — it no longer
+        // determines final priority order, which is assigned in a separate flat pass below (v1-goal-import:
+        // "Imported goals preserve V1 priority order").
         var unitOrder = new List<UnitKey>();
         var byUnit = new Dictionary<UnitKey, List<TranslatedGoal>>();
         foreach (var candidate in creatable)
@@ -374,7 +374,6 @@ public sealed class V1GoalImportService(
 
         await planning.ExecuteLockedMutationAsync([project.Id], async transaction =>
         {
-            var priority = await projects.GetNextPriorityAsync(project.Id, ct);
             var now = timeProvider.GetUtcNow();
             var staged = new Dictionary<int, Goal>();
             // Synthesized-prerequisite "Created" outcomes (Unlock/Ascension/Level), like the `staged`
@@ -382,6 +381,16 @@ public sealed class V1GoalImportService(
             // project-slot-conflict rollback below must still be able to turn them into failures instead of
             // reporting a goal that was never persisted.
             var stagedPrerequisites = new List<(Goal Goal, int CandidateCount)>();
+            // Every goal this batch creates, tagged with a flat-order sort key (v1-goal-import: "Imported
+            // goals preserve V1 priority order") instead of getting its priority assigned inline as it's
+            // built. AnchorIndex is the goal's own OriginalIndex for a real imported candidate (Rank,
+            // Ability, Unlock, Level, or the unit's own imported Ascension goal — none of these are
+            // synthesized, so none are pulled out of their natural V1 position), or the lowest OriginalIndex
+            // among a synthesized prerequisite's actual dependents (it has no V1 position of its own — this
+            // places it immediately before whichever of its dependents appears earliest). SubOrder breaks a
+            // tie at the same AnchorIndex in the same order this unit's prerequisites were always built in:
+            // Unlock, synthesized Ascension, Level, then the anchoring candidate itself.
+            var pending = new List<(Goal Goal, int AnchorIndex, int SubOrder)>();
 
             foreach (var unitKey in unitOrder)
             {
@@ -418,9 +427,12 @@ public sealed class V1GoalImportService(
                     }
                     else
                     {
+                        // Every candidate of this unit gets a DependsOn edge to Unlock (below), so its
+                        // earliest dependent is simply the unit's first candidate by V1 order.
+                        var anchorIndex = unitCandidates.Min(candidate => candidate.OriginalIndex);
                         var unlockGoal = BuildGoal(profileId, unitKey, GoalType.Unlock, unlockConfig, null, prerequisiteStatus, now, playerUnit);
                         db.Goals.Add(unlockGoal);
-                        db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(project, unlockGoal, priority++, now));
+                        pending.Add((unlockGoal, anchorIndex, 0));
                         unlockGoalId = unlockGoal.Id.Value;
                         stagedPrerequisites.Add((unlockGoal, unitCandidates.Count));
                     }
@@ -431,6 +443,12 @@ public sealed class V1GoalImportService(
                 var ownAscension = unitCandidates.FirstOrDefault(candidate => candidate.Key.GoalType == GoalType.Ascension);
                 if (prerequisites.AscensionTarget is { } targetProgression)
                 {
+                    // Only Rank/Ability candidates of this unit get a DependsOn edge to a synthesized
+                    // Ascension (below) — ComputePrerequisites guarantees at least one exists whenever
+                    // AscensionTarget is set.
+                    var anchorIndex = unitCandidates
+                        .Where(candidate => candidate.Key.GoalType is GoalType.Rank or GoalType.Ability)
+                        .Min(candidate => candidate.OriginalIndex);
                     var startWire = CurrentProgressionWire(playerUnit);
                     var endWire = ProgressionRules.ProgressionOrder[(int)targetProgression];
                     var ascensionGoal = BuildGoal(
@@ -439,16 +457,18 @@ public sealed class V1GoalImportService(
                         null, prerequisiteStatus, now, playerUnit);
                     if (unlockGoalId is { } unlockId) ascensionGoal.DependsOn.Add(unlockId);
                     db.Goals.Add(ascensionGoal);
-                    db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(project, ascensionGoal, priority++, now));
+                    pending.Add((ascensionGoal, anchorIndex, 1));
                     ascensionGoalId = ascensionGoal.Id.Value;
                     ascensionFloor = targetProgression;
                     stagedPrerequisites.Add((ascensionGoal, unitCandidates.Count));
                 }
                 else if (ownAscension is not null)
                 {
-                    // The unit's own imported Ascension candidate satisfies (or already reports the
-                    // shortfall for) every dependent's requirement — create it first so Rank/Ability
-                    // siblings below can depend on it and use its target as their cap floor.
+                    // Not synthesized — this is the unit's own imported Ascension goal, so it keeps its
+                    // own natural V1 position (AnchorIndex = its own OriginalIndex) rather than being
+                    // pulled early. Its dependency edges and target are still computed and staged here so
+                    // Rank/Ability siblings below can depend on it and use its target as their cap floor,
+                    // regardless of which of them ends up positioned before or after it.
                     var dependsOn = new List<Guid>();
                     if (unlockGoalId is { } unlockId) dependsOn.Add(unlockId);
                     var error = await targetValidation.ValidateAsync(
@@ -462,7 +482,7 @@ public sealed class V1GoalImportService(
                         var goal = BuildGoal(profileId, unitKey, GoalType.Ascension, ownAscension.Config, ownAscension.Notes, StatusOf(ownAscension), now, playerUnit);
                         goal.DependsOn = dependsOn;
                         db.Goals.Add(goal);
-                        db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(project, goal, priority++, now));
+                        pending.Add((goal, ownAscension.OriginalIndex, 3));
                         staged[ownAscension.OriginalIndex] = goal;
                         ascensionGoalId = goal.Id.Value;
                         ascensionFloor = (UnitProgression)ProgressionRules.ProgressionIndex(ownAscension.Config.Progression!.End);
@@ -472,6 +492,11 @@ public sealed class V1GoalImportService(
                 Guid? levelGoalId = null;
                 if (prerequisites.LevelTarget is { } targetLevel)
                 {
+                    // Only Rank candidates of this unit get a DependsOn edge to a synthesized Level (below)
+                    // — ComputePrerequisites guarantees at least one exists whenever LevelTarget is set.
+                    var anchorIndex = unitCandidates
+                        .Where(candidate => candidate.Key.GoalType == GoalType.Rank)
+                        .Min(candidate => candidate.OriginalIndex);
                     // Validated before persisting: RequiredLevelForRankTarget can compute a level above
                     // GoalTargetValidationService's MaxCharacterLevel cap (e.g. Adamantine2 + 5 applied
                     // upgrades = 64 > 60), which ComputePrerequisites doesn't itself clamp.
@@ -488,13 +513,13 @@ public sealed class V1GoalImportService(
                         var levelGoal = BuildGoal(profileId, unitKey, GoalType.Level, levelConfig, null, prerequisiteStatus, now, playerUnit);
                         if (unlockGoalId is { } unlockId) levelGoal.DependsOn.Add(unlockId);
                         db.Goals.Add(levelGoal);
-                        db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(project, levelGoal, priority++, now));
+                        pending.Add((levelGoal, anchorIndex, 2));
                         levelGoalId = levelGoal.Id.Value;
                         stagedPrerequisites.Add((levelGoal, unitCandidates.Count));
                     }
                 }
 
-                // ownAscension (if any) was already created above, out of its natural position.
+                // ownAscension (if any) was already staged above, at its own natural V1 position.
                 foreach (var candidate in unitCandidates.Where(candidate => candidate != ownAscension))
                 {
                     var dependsOn = new List<Guid>();
@@ -530,9 +555,18 @@ public sealed class V1GoalImportService(
                     var goal = BuildGoal(profileId, unitKey, candidate.Key.GoalType, candidate.Config, candidate.Notes, StatusOf(candidate), now, playerUnit);
                     goal.DependsOn = dependsOn;
                     db.Goals.Add(goal);
-                    db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(project, goal, priority++, now));
+                    pending.Add((goal, candidate.OriginalIndex, 3));
                     staged[candidate.OriginalIndex] = goal;
                 }
+            }
+
+            // Flat pass: assign priorities in (AnchorIndex, SubOrder) order — this is where V1's priority
+            // sequence (and each synthesized prerequisite's "immediately before its earliest dependent"
+            // placement) actually becomes the persisted project-goal order.
+            var priority = await projects.GetNextPriorityAsync(project.Id, ct);
+            foreach (var (goal, _, _) in pending.OrderBy(entry => entry.AnchorIndex).ThenBy(entry => entry.SubOrder))
+            {
+                db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(project, goal, priority++, now));
             }
 
             try

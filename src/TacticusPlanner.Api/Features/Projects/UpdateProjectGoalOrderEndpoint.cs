@@ -8,21 +8,30 @@ using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.Projects;
 
-public sealed class UpdateProjectUnitOrderEndpoint : Endpoint<UpdateProjectUnitOrderRequest, ProjectGoalsResponse>
+/// <summary>
+/// Reorders a project's in-flight goals directly (plan: <c>add-inline-goal-reprioritize</c>) — replaces
+/// the retired unit-keyed <c>PUT /me/projects/{id}/unit-order</c>. Priority is flat per-goal, not
+/// unit-grouped: the caller submits the project's complete ordered set of in-flight goal ids, and it is
+/// applied verbatim, with no dependency-based validation or reordering.
+/// </summary>
+public sealed class UpdateProjectGoalOrderEndpoint : Endpoint<UpdateProjectGoalOrderRequest, ProjectGoalsResponse>
 {
     public override void Configure()
     {
-        Put("me/projects/{projectId}/unit-order");
+        Put("me/projects/{projectId}/goal-order");
         Summary(summary =>
         {
-            summary.Summary = "Reorders all Character and Machine of War blocks in a project.";
+            summary.Summary = "Reorders all in-flight goals in a project.";
+            summary.Description = "GoalIds must be an exact, duplicate-free permutation of the project's "
+                + "current in-flight (Active/Paused) goal ids. Accepts any ordering, including one that "
+                + "places a goal ahead of a DependsOn prerequisite it hasn't reached.";
             summary.Response<ProjectGoalsResponse>(StatusCodes.Status200OK);
-            summary.Response(StatusCodes.Status400BadRequest, "The request is not an exact permutation of the project's units.");
+            summary.Response(StatusCodes.Status400BadRequest, "The request is not an exact permutation of the project's in-flight goals.");
             summary.Response(StatusCodes.Status404NotFound);
         });
     }
 
-    public override async Task HandleAsync(UpdateProjectUnitOrderRequest req, CancellationToken ct)
+    public override async Task HandleAsync(UpdateProjectGoalOrderRequest req, CancellationToken ct)
     {
         if (ProcessorState<CurrentUserState>().ProfileId is null)
         {
@@ -41,9 +50,10 @@ public sealed class UpdateProjectUnitOrderEndpoint : Endpoint<UpdateProjectUnitO
         var planning = Resolve<ProjectGoalPlanningService>();
         await planning.ExecuteLockedMutationAsync([projectId], async transaction =>
         {
-            if (!await planning.ApplyUnitOrderAsync(projectId, req.Units, ct))
+            var goalIds = req.GoalIds.Select(GoalId.From).ToList();
+            if (!await planning.ApplyGoalOrderAsync(projectId, goalIds, ct))
             {
-                AddError(request => request.Units, "Units must be an exact, duplicate-free permutation of the project's current units.");
+                AddError(request => request.GoalIds, "GoalIds must be an exact, duplicate-free permutation of the project's current in-flight goals.");
                 await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
                 return;
             }
@@ -61,19 +71,12 @@ public sealed class UpdateProjectUnitOrderEndpoint : Endpoint<UpdateProjectUnitO
     }
 }
 
-public sealed record UpdateProjectUnitOrderRequest(List<UnitOrderEntryRequest> Units);
+public sealed record UpdateProjectGoalOrderRequest(List<Guid> GoalIds);
 
-public sealed class UpdateProjectUnitOrderValidator : Validator<UpdateProjectUnitOrderRequest>
+public sealed class UpdateProjectGoalOrderValidator : Validator<UpdateProjectGoalOrderRequest>
 {
-    public UpdateProjectUnitOrderValidator()
+    public UpdateProjectGoalOrderValidator()
     {
-        RuleFor(request => request.Units).NotNull();
-        RuleForEach(request => request.Units).ChildRules(unit =>
-        {
-            unit.RuleFor(value => value.EntityType)
-                .Must(value => Enum.TryParse<GoalEntityType>(value, true, out var parsed) && Enum.IsDefined(parsed))
-                .WithMessage("Entity type must be Character or Mow.");
-            unit.RuleFor(value => value.EntityId).NotEmpty();
-        });
+        RuleFor(request => request.GoalIds).NotNull();
     }
 }

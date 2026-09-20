@@ -1,8 +1,18 @@
-## Purpose
+## REMOVED Requirements
 
-Lets clients order project work by Character/MoW while preserving one deterministic flattened goal order for scheduling engines.
+### Requirement: Project unit order is addressable through a dedicated operation
 
-## Requirements
+**Reason**: Priority is no longer stored or reordered at unit granularity — replaced by a goal-keyed operation (see "Project goal order is addressable through a dedicated operation" under ADDED Requirements below).
+
+**Migration**: Callers of the unit-keyed operation must switch to the new goal-keyed operation, submitting the project's complete ordered list of in-flight goal ids instead of unit `(entityType, entityId)` keys.
+
+### Requirement: Goals inside a unit are ordered automatically
+
+**Reason**: Dependency order is no longer automatically computed or enforced on a goal's priority position. A goal may be positioned anywhere in its project's priority list regardless of whether a goal it `DependsOn` has been reached — priority is now a pure ordering/scheduling preference, fully decoupled from dependency validity. Whether a goal can actually proceed remains a separate, unaffected concern (the existing blocked/restricted signal).
+
+**Migration**: No automatic within-unit ordering exists to migrate to. A caller that relied on goals sharing a unit self-ordering by dependency must now position every goal explicitly via the new goal-order operation (ADDED below); a goal ahead of an unreached prerequisite is accepted, not rejected.
+
+## MODIFIED Requirements
 
 ### Requirement: Flattened order remains the canonical scheduler order
 
@@ -31,6 +41,8 @@ Single and combined goal creation SHALL accept project membership without caller
 
 - **WHEN** a goal is created and added to a project that already has in-flight goals
 - **THEN** the new goal is placed after every existing in-flight goal in that project's priority order, regardless of which unit it belongs to
+
+## ADDED Requirements
 
 ### Requirement: Project goal order is addressable through a dedicated operation
 

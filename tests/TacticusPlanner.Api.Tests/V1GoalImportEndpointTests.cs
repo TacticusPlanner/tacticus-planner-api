@@ -664,12 +664,14 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
     // ----- Ordering -----
 
     [Fact]
-    public async Task UnitBlocksAppearInTheOrderTheirUnitsFirstAppearInV1Priority()
+    public async Task ImportPreservesV1sExactInterleavedPriorityOrder()
     {
         var (client, subject) = await CreateProvisionedClientAsync();
         await SeedPlayerDataSnapshotAsync(subject, [Character(CharacterId, xpLevel: 60), Character("blackTerminator", xpLevel: 60)]);
 
-        // "blackTerminator" first appears at priority 1; CharacterId's goals interleave afterward.
+        // "blackTerminator" first appears at priority 1, then CharacterId at 2, then blackTerminator
+        // again at 3 — this exact interleaved sequence must survive the import, not collapse into
+        // unit-contiguous blocks (add-inline-goal-reprioritize: priority is flat per-goal now).
         var body = await ImportGoalsAsync(
             client,
             [
@@ -684,13 +686,15 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
             $"/api/v1/me/projects/{defaultProject.ProjectId}/goals", TestContext.Current.CancellationToken);
         var byGoalId = members!.Goals.ToDictionary(entry => entry.Goal.GoalId, entry => entry.Priority);
 
-        var btGoalIds = body.Outcomes.Where(o => o.SourceGoalId is "bt-1" or "bt-2").Select(o => o.GoalId!.Value);
-        var ciGoalId = body.Outcomes.Single(o => o.SourceGoalId == "ci-1").GoalId!.Value;
-        Assert.All(btGoalIds, id => Assert.True(byGoalId[id] < byGoalId[ciGoalId]));
+        var bt1GoalId = body.Outcomes.Single(o => o.SourceGoalId == "bt-1").GoalId!.Value;
+        var ci1GoalId = body.Outcomes.Single(o => o.SourceGoalId == "ci-1").GoalId!.Value;
+        var bt2GoalId = body.Outcomes.Single(o => o.SourceGoalId == "bt-2").GoalId!.Value;
+        Assert.True(byGoalId[bt1GoalId] < byGoalId[ci1GoalId]);
+        Assert.True(byGoalId[ci1GoalId] < byGoalId[bt2GoalId]);
     }
 
     [Fact]
-    public async Task APrerequisitePrecedesTheGoalsThatDependOnItWithinItsUnitBlock()
+    public async Task APrerequisitePrecedesTheGoalThatDependsOnIt()
     {
         var (client, subject) = await CreateProvisionedClientAsync();
         await SeedPlayerDataSnapshotAsync(subject, []);

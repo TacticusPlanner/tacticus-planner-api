@@ -236,30 +236,21 @@ every contributing source goal that had any.
 - **WHEN** they are imported
 - **THEN** the created goal's notes contain both source goals' notes
 
-### Requirement: Imported goals preserve V1 unit order
+### Requirement: Imported goals preserve V1 priority order
 
-Goals SHALL be created in ascending V1 priority order. The resulting project
-order SHALL place unit blocks in the order those units first appear in the V1
-priority sequence, and within a unit SHALL place a goal's prerequisites before
-it.
+Goals SHALL be created in ascending V1 priority order, and the resulting project order SHALL preserve that exact V1 priority sequence, goal by goal — including any interleaving between different units' goals that V1's original priority expressed. A created prerequisite (see "Missing prerequisites are created automatically...") is placed immediately before the goal(s) that required it, which may shift it earlier than its own original V1 position, since it didn't exist as a separate goal in V1.
 
-Absolute V1 priority numbers SHALL NOT be preserved, and V1's interleaving of
-different units' goals SHALL NOT be preserved, because a project orders whole
-unit blocks. The outcome report SHALL NOT claim an ordering guarantee stronger
-than unit order.
+#### Scenario: V1's goal interleaving is preserved
 
-#### Scenario: Unit order follows V1 priority
-
-- **GIVEN** a V1 profile whose lowest-priority goals belong to character A and whose next
-  belong to character B
+- **GIVEN** a V1 profile whose priority sequence interleaves goals for characters A and B (for example: A, B, A)
 - **WHEN** the goals part is imported
-- **THEN** A's unit block precedes B's unit block in the project's goal order
+- **THEN** the project's resulting priority order preserves that same interleaved sequence for A and B's goals
 
-#### Scenario: A unit's goals are contiguous
+#### Scenario: A created prerequisite is placed ahead of its own V1-relative position
 
-- **GIVEN** a V1 profile that interleaves goals for two characters
-- **WHEN** the goals part is imported
-- **THEN** each character's goals are contiguous in the project's goal order
+- **GIVEN** a V1 profile's imported Rank goal for character A requires a Level prerequisite absent from the account, and A's Rank goal is not first in V1's priority sequence
+- **WHEN** the goals part is imported with automatic prerequisite creation
+- **THEN** the created Level goal is positioned immediately before A's Rank goal, ahead of goals that preceded A's Rank goal in V1's original sequence but did not require this prerequisite
 
 ### Requirement: Missing prerequisites are created automatically by the same rules as manual creation
 
@@ -277,7 +268,10 @@ the same rules and the same minimum targets:
   that satisfies every such target for that unit.
 
 Each created prerequisite SHALL be declared as a dependency of every imported
-goal that required it, and SHALL be ordered before them within the unit.
+goal that required it, and SHALL be placed immediately before them in the
+constructed import sequence. There is no automatic within-unit reordering to
+fall back on for this placement — the import process itself is responsible
+for the prerequisite's position, not a downstream ordering step.
 
 A prerequisite SHALL NOT be created when the unit's imported goals already
 include one of that type, or when the account already has one of that type for
@@ -338,6 +332,12 @@ identified as automatically added and naming the source goal it unblocks.
   current level
 - **WHEN** the goals part is imported with automatic prerequisites selected
 - **THEN** no Ascension or Level goal is created for that character
+
+#### Scenario: A created prerequisite precedes its dependents in the import sequence
+
+- **GIVEN** an imported Rank goal requires a Level prerequisite the account doesn't have
+- **WHEN** the prerequisite is created automatically
+- **THEN** the created Level goal's position in the project's priority order precedes the Rank goal's position
 
 ### Requirement: A failure for one goal does not discard the others
 
