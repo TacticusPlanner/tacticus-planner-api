@@ -33,6 +33,7 @@ public static partial class GameCatalogValidator
         ValidateEvents(snapshot, errors);
         ValidateShops(snapshot, errors);
         ValidateRaidBosses(snapshot, errors);
+        ValidateNpcs(snapshot, errors);
         ValidateGuildRaidMeta(snapshot, errors);
         ValidateServedProjections(snapshot, errors);
 

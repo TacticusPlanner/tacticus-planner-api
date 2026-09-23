@@ -71,7 +71,7 @@ public sealed record GameCatalogSnapshot(
     public IReadOnlyList<GameCatalogMow> Mows { get; } =
         UnitsByFaction.Values.SelectMany(faction => faction.Mows).ToArray();
 
-    public IReadOnlyList<GameCatalogNpc> Npcs { get; } =
+    public IReadOnlyList<GameCatalogRawNpc> Npcs { get; } =
         NpcsByFaction.Values.SelectMany(faction => faction.Npcs).ToArray();
 
     public IReadOnlyList<GameCatalogEquipment> Equipment { get; } =
