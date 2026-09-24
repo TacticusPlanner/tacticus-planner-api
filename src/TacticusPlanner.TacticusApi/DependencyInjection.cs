@@ -30,7 +30,7 @@ public static class DependencyInjection
             ContentSerializer = new SystemTextJsonContentSerializer(jsonOptions)
         };
 
-        services.AddRefitClient<ITacticusApi>(refitSettings)
+        services.AddRefitGeneratedClient<ITacticusApi>(refitSettings)
             .ConfigureHttpClient(c => c.BaseAddress = baseUri);
 
         return services;
