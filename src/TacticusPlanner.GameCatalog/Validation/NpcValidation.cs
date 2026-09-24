@@ -24,15 +24,11 @@ public static partial class GameCatalogValidator
             return;
         }
 
-        foreach (var npc in objects.Npcs)
-        {
-            if (npc.Traits.Contains(GameCatalogDenormalizer.MachineOfWarTraitId, StringComparer.Ordinal))
-            {
-                errors.Add(new GameCatalogValidationError(
-                    GameCatalogDatasets.Npcs,
-                    "ConflictingNpcKind",
-                    $"NPC '{npc.Id}' in '{GameCatalogDenormalizer.NpcObjectsSourceKey}' carries the '{GameCatalogDenormalizer.MachineOfWarTraitId}' trait; an object cannot also be a Machine of War."));
-            }
-        }
+        errors.AddRange(objects.Npcs
+            .Where(npc => npc.Traits.Contains(GameCatalogDenormalizer.MachineOfWarTraitId, StringComparer.Ordinal))
+            .Select(npc => new GameCatalogValidationError(
+                GameCatalogDatasets.Npcs,
+                "ConflictingNpcKind",
+                $"NPC '{npc.Id}' in '{GameCatalogDenormalizer.NpcObjectsSourceKey}' carries the '{GameCatalogDenormalizer.MachineOfWarTraitId}' trait; an object cannot also be a Machine of War.")));
     }
 }
