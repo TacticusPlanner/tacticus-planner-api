@@ -283,12 +283,12 @@ public sealed class V1GoalImportService(
             var keys = new HashSet<string?> { RankTargetKey.For(row.GoalType, row.Config) };
             if (row.GoalType == GoalType.Rank)
             {
-                foreach (var target in row.Events.SelectMany(goalEvent => new[] { goalEvent.PreviousTarget, goalEvent.NewTarget }))
+                var heldTargets = row.Events
+                    .SelectMany(goalEvent => new[] { goalEvent.PreviousTarget, goalEvent.NewTarget })
+                    .Where(target => target?.RankEnd is not null);
+                foreach (var target in heldTargets)
                 {
-                    if (target?.RankEnd is { } end)
-                    {
-                        keys.Add(RankTargetKey.From(end, target.RankEndPointFive ?? false, target.RankEndAppliedUpgrades ?? 0));
-                    }
+                    keys.Add(RankTargetKey.From(target!.RankEnd!.Value, target.RankEndPointFive ?? false, target.RankEndAppliedUpgrades ?? 0));
                 }
             }
 
