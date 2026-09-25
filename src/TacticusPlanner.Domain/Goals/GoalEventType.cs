@@ -14,4 +14,5 @@ public enum GoalEventType
     PriorityChanged = 4,
     Completed = 5,
     Archived = 6,
+    TargetChanged = 7,
 }

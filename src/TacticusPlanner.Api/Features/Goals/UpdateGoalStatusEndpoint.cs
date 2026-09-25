@@ -78,8 +78,17 @@ public sealed class UpdateGoalStatusEndpoint : Endpoint<UpdateGoalStatusRequest,
                 // goal was loaded before the lock; under READ COMMITTED (see ProjectGoalPlanningService's
                 // isolation-level invariant) a concurrent status change that committed while this request
                 // was waiting for the lock would otherwise be invisible here, letting a stale goal.Status
-                // skip the slot-conflict check below for a transition that actually needs it.
-                await db.Entry(goal).ReloadAsync(ct);
+                // skip the slot-conflict check below for a transition that actually needs it. The same goes
+                // for a concurrent target edit: the Rank slot key derives from the goal's Config, which a
+                // plain ReloadAsync would leave stale (see GoalQueries.ReloadGoalAsync).
+                var reloaded = await db.ReloadGoalAsync(goal, ct);
+                if (reloaded is null)
+                {
+                    await Send.NotFoundAsync(ct);
+                    return;
+                }
+
+                goal = reloaded;
                 var membershipProjectIds = await db.ProjectGoals
                     .Where(entry => entry.GoalId == goal.Id)
                     .Select(entry => entry.ProjectId)
@@ -99,7 +108,8 @@ public sealed class UpdateGoalStatusEndpoint : Endpoint<UpdateGoalStatusRequest,
                     // leaves the goal itself out of the count, so it can't conflict with itself.
                     if (targetStatus is GoalStatus.Active or GoalStatus.Paused
                         && await planning.FindConflictAsync(
-                            membershipProjectIds, goal.EntityType, goal.EntityId, goal.GoalType, goal.Id, ct) is { } conflict)
+                            membershipProjectIds, goal.EntityType, goal.EntityId, goal.GoalType,
+                            RankTargetKey.For(goal.GoalType, goal.Config), goal.Id, ct) is { } conflict)
                     {
                         HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
                         await HttpContext.Response.WriteAsJsonAsync(conflict, ct);
@@ -124,6 +134,7 @@ public sealed class UpdateGoalStatusEndpoint : Endpoint<UpdateGoalStatusRequest,
                         goal.EntityType,
                         goal.EntityId,
                         goal.GoalType,
+                        RankTargetKey.For(goal.GoalType, goal.Config),
                         goal.Id)],
                         ct) ?? throw new InvalidOperationException(
                             "The project slot constraint failed but no conflicting membership was found.", ex);

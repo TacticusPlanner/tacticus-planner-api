@@ -94,7 +94,16 @@ public sealed class UpdateGoalProjectsEndpoint : Endpoint<UpdateGoalProjectsRequ
                 // membership add/remove that committed while this request was waiting for the lock would
                 // otherwise be invisible here, letting the slot-conflict check and the add/remove diff below
                 // both act on stale state.
-                await db.Entry(goal).ReloadAsync(ct);
+                // Config too, not just columns: the Rank slot key derives from it and a target edit can
+                // commit while this request waits for the lock (see GoalQueries.ReloadGoalAsync).
+                var reloadedGoal = await db.ReloadGoalAsync(goal, ct);
+                if (reloadedGoal is null)
+                {
+                    await Send.NotFoundAsync(ct);
+                    return;
+                }
+
+                goal = reloadedGoal;
                 var reloadedMemberships = await db.ProjectGoals
                     .Where(entity => entity.GoalId == goalId)
                     .ToListAsync(ct);
@@ -111,7 +120,8 @@ public sealed class UpdateGoalProjectsEndpoint : Endpoint<UpdateGoalProjectsRequ
 
                 if (goal.Status is GoalStatus.Active or GoalStatus.Paused
                     && await planning.FindConflictAsync(
-                        requestedProjectIds, goal.EntityType, goal.EntityId, goal.GoalType, goal.Id, ct) is { } conflict)
+                        requestedProjectIds, goal.EntityType, goal.EntityId, goal.GoalType,
+                        RankTargetKey.For(goal.GoalType, goal.Config), goal.Id, ct) is { } conflict)
                 {
                     HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
                     await HttpContext.Response.WriteAsJsonAsync(conflict, ct);
@@ -147,6 +157,7 @@ public sealed class UpdateGoalProjectsEndpoint : Endpoint<UpdateGoalProjectsRequ
                         goal.EntityType,
                         goal.EntityId,
                         goal.GoalType,
+                        RankTargetKey.For(goal.GoalType, goal.Config),
                         goal.Id)],
                         ct) ?? throw new InvalidOperationException(
                             "The project slot constraint failed but no conflicting membership was found.", ex);

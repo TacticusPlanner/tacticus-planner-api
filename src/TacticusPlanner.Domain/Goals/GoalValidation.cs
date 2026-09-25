@@ -9,4 +9,7 @@ public static class GoalValidation
     public const int MaxEntityIdLength = 128;
 
     public const int MaxNotesLength = 2000;
+
+    /// <summary>Room for the <c>"&lt;rank&gt;:&lt;slots&gt;"</c> Rank target key with headroom.</summary>
+    public const int MaxRankTargetKeyLength = 16;
 }

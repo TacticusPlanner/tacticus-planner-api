@@ -8,9 +8,9 @@ using TacticusPlanner.Persistence;
 namespace TacticusPlanner.Api.Features.Goals;
 
 /// <summary>
-/// Updates a goal's editable fields only (plan §7). The target end-state in <see cref="Goal.Config"/> and
-/// the creation snapshot are immutable — redefining them means creating a replacement goal, not editing
-/// this one. Only <c>notes</c> and the farming-location override are writable here. Null semantics differ
+/// Updates a goal's editable fields only (plan §7). The target end-state in <see cref="Goal.Config"/> is
+/// changed through <see cref="UpdateGoalTargetEndpoint"/> instead, and the creation snapshot is immutable.
+/// Only <c>notes</c> and the farming-location override are writable here. Null semantics differ
 /// deliberately by field: a null <see cref="UpdateGoalRequest.Notes"/> or
 /// <see cref="UpdateGoalRequest.FarmingLocationIds"/> clears that field (there is no other way to clear
 /// it), while a null <see cref="UpdateGoalRequest.FarmingStrategy"/> means "leave unchanged" (it has a
@@ -24,8 +24,8 @@ public sealed class UpdateGoalEndpoint : Endpoint<UpdateGoalRequest, GoalDetailR
         Summary(summary =>
         {
             summary.Summary = "Updates a goal's editable fields (notes, farming-location override).";
-            summary.Description = "The goal's target end-state and creation snapshot cannot be changed here "
-                + "— create a replacement goal instead.";
+            summary.Description = "The goal's target end-state cannot be changed here — use "
+                + "PUT /me/goals/{goalId}/target — and its creation snapshot cannot be changed at all.";
             summary.Response<GoalDetailResponse>(StatusCodes.Status200OK, "The updated goal.");
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
             summary.Response(StatusCodes.Status404NotFound, "No matching goal owned by the caller.");

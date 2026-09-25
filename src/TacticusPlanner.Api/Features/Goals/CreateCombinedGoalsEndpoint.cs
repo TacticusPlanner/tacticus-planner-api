@@ -150,11 +150,17 @@ public sealed class CreateCombinedGoalsEndpoint
             targetProjects.Select(project => project.Id),
             async transaction =>
         {
-            // At most one Active/Paused goal per (entity, goal type) — mirrors CreateGoalEndpoint's check.
-            foreach (var goalType in requestGoalTypes)
+            // At most one Active/Paused goal per (entity, goal type) (for Rank: per normalized end target) —
+            // mirrors CreateGoalEndpoint's check. A combined request has at most one goal per type, so the
+            // (type, target key) pairs below are one per spec.
+            var slotKeys = parsedGoalTypes
+                .Select((goalType, i) => (goalType, key: RankTargetKey.For(goalType, GoalMapper.MapConfig(req.Goals[i].Config))))
+                .ToList();
+            foreach (var (goalType, rankTargetKey) in slotKeys)
             {
                 if (await planning.FindConflictAsync(
-                    targetProjects.Select(project => project.Id), entityType, req.EntityId.Trim(), goalType, null, ct) is { } conflict)
+                    targetProjects.Select(project => project.Id), entityType, req.EntityId.Trim(), goalType,
+                    rankTargetKey, null, ct) is { } conflict)
                 {
                     HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
                     await HttpContext.Response.WriteAsJsonAsync(conflict, ct);
@@ -211,11 +217,12 @@ public sealed class CreateCombinedGoalsEndpoint
                 var slotProjectIds = targetProjects.Select(project => project.Id).ToList();
                 var conflict = await planning.FindConflictAfterFailedSaveAsync(
                     transaction,
-                    requestGoalTypes.Select(goalType => new ProjectGoalSlotLookup(
+                    slotKeys.Select(slot => new ProjectGoalSlotLookup(
                         slotProjectIds,
                         entityType,
                         req.EntityId.Trim(),
-                        goalType)),
+                        slot.goalType,
+                        slot.key)),
                     ct) ?? throw new InvalidOperationException(
                         "The project slot constraint failed but no conflicting membership was found.", ex);
                 HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;

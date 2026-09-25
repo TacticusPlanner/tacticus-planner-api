@@ -76,9 +76,7 @@ public sealed class V1GoalImportService(
             .AsNoTracking()
             .Where(goal => goal.ProfileId == profileId)
             .ToListAsync(ct);
-        var existingByKey = existingRows
-            .GroupBy(row => new GoalKey(row.EntityType, row.EntityId, row.GoalType))
-            .ToDictionary(group => group.Key, group => new ExistingGoalRef(group.First().Id.Value, group.First().Config));
+        var existingByKey = ExistingGoalsByKey(existingRows);
 
         var creatable = new List<TranslatedGoal>();
         foreach (var candidate in collapsedSurvivors)
@@ -235,7 +233,10 @@ public sealed class V1GoalImportService(
         // An absent dailyRaids field (a V1 record predating it) reads as in-planning, so a missing flag
         // never silently pauses an imported goal.
         return (new TranslatedGoal(
-            new GoalKey(entityType, entityId, goalType), config, originalIndex, sourceGoal.Notes,
+            new GoalKey(entityType, entityId, goalType, config.Rank is { } rank
+                ? RankTargetKey.From(rank.End, rank.EndPointFive, rank.EndAppliedUpgrades)
+                : null),
+            config, originalIndex, sourceGoal.Notes,
             InDailyPlanning: sourceGoal.DailyRaids is not false), null);
     }
 
@@ -264,6 +265,40 @@ public sealed class V1GoalImportService(
         }
 
         return sources.Count == 0 ? null : sources;
+    }
+
+    /// <summary>
+    /// Indexes the account's existing goals for the "already imported" check. A Rank goal is filed under its
+    /// current end target <em>and</em> every target it has held (the previous/new targets of its
+    /// <c>TargetChanged</c> events), so a goal the user later edited in place still matches the V1 source it
+    /// was imported from — otherwise re-importing would create a second Rank goal at the original target.
+    /// The first goal seen for a key wins, as before.
+    /// </summary>
+    private static Dictionary<GoalKey, ExistingGoalRef> ExistingGoalsByKey(IEnumerable<Goal> existingRows)
+    {
+        var byKey = new Dictionary<GoalKey, ExistingGoalRef>();
+        foreach (var row in existingRows)
+        {
+            var reference = new ExistingGoalRef(row.Id.Value, row.Config);
+            var keys = new HashSet<string?> { RankTargetKey.For(row.GoalType, row.Config) };
+            if (row.GoalType == GoalType.Rank)
+            {
+                var heldTargets = row.Events
+                    .SelectMany(goalEvent => new[] { goalEvent.PreviousTarget, goalEvent.NewTarget })
+                    .Where(target => target?.RankEnd is not null);
+                foreach (var target in heldTargets)
+                {
+                    keys.Add(RankTargetKey.From(target!.RankEnd!.Value, target.RankEndPointFive ?? false, target.RankEndAppliedUpgrades ?? 0));
+                }
+            }
+
+            foreach (var key in keys)
+            {
+                byKey.TryAdd(new GoalKey(row.EntityType, row.EntityId, row.GoalType, key), reference);
+            }
+        }
+
+        return byKey;
     }
 
     private static (List<TranslatedGoal> Survivors, List<(int DuplicateIndex, int SurvivorIndex)> MergedInto)
@@ -585,7 +620,7 @@ public sealed class V1GoalImportService(
                 {
                     outcomeBySourceIndex[index] ??= new V1GoalOutcome(
                         "Failed", "project_slot_conflict",
-                        "Another goal for this unit and type was created concurrently.",
+                        "Another goal for this unit, type and target was created concurrently.",
                         null, null, null, null, sourceIdByIndex[index]);
                 }
                 foreach (var (goal, _) in stagedPrerequisites)
@@ -840,7 +875,10 @@ public sealed class V1GoalImportService(
     private static GoalStatus StatusOf(TranslatedGoal goal) =>
         goal.InDailyPlanning ? GoalStatus.Active : GoalStatus.Paused;
 
-    private sealed record GoalKey(GoalEntityType EntityType, string EntityId, GoalType GoalType);
+    /// <summary><paramref name="RankTargetKey"/> is set only for a Rank goal, so distinct Rank end targets
+    /// for one unit are distinct keys (imported as separate milestones) while an exact duplicate shares a
+    /// key (merged) — every other goal type keeps the one-per-unit/type key.</summary>
+    private sealed record GoalKey(GoalEntityType EntityType, string EntityId, GoalType GoalType, string? RankTargetKey = null);
 
     private sealed record ExistingGoalRef(Guid Id, GoalConfig Config);
 

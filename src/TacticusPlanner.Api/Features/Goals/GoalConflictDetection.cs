@@ -11,9 +11,12 @@ namespace TacticusPlanner.Api.Features.Goals;
 /// </summary>
 internal static class GoalConflictDetection
 {
+    // The in-flight slot rule is two partial unique indexes: non-Rank (project, unit, type) and Rank
+    // (project, unit, normalized end target). A race on either is the same structured conflict.
     private const string ProjectSlotIndexName = "ix_project_goals_one_in_flight_slot";
+    private const string RankTargetIndexName = "ix_project_goals_one_in_flight_rank_target";
 
     public static bool IsProjectSlotConflict(DbUpdateException exception) =>
         exception.InnerException is PostgresException { SqlState: PostgresErrorCodes.UniqueViolation } postgres
-            && postgres.ConstraintName == ProjectSlotIndexName;
+            && postgres.ConstraintName is ProjectSlotIndexName or RankTargetIndexName;
 }

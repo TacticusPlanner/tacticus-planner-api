@@ -59,7 +59,8 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
         goal.DependsOn.ToList(),
         projectIds,
         goal.CreatedAt,
-        goal.UpdatedAt
+        goal.UpdatedAt,
+        goal.Revision
     );
 
     public GoalSummaryResponse ToSummary(Goal goal) => new(
@@ -198,7 +199,21 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
     private static GoalSnapshotResourceResponse BuildSnapshotResource(GoalSnapshotResource resource) =>
         new(resource.ResourceId, resource.Count);
 
-    private static GoalEventResponse BuildEvent(GoalEvent goalEvent) => new(goalEvent.At, goalEvent.Type);
+    private static GoalEventResponse BuildEvent(GoalEvent goalEvent) => new(
+        goalEvent.At,
+        goalEvent.Type,
+        goalEvent.PreviousTarget is null ? null : BuildTarget(goalEvent.PreviousTarget),
+        goalEvent.NewTarget is null ? null : BuildTarget(goalEvent.NewTarget));
+
+    private static GoalTargetSnapshotResponse BuildTarget(GoalTargetSnapshot target) => new(
+        target.RankEnd,
+        target.RankEndPointFive,
+        target.RankEndAppliedUpgrades,
+        target.ProgressionEnd,
+        target.LevelEnd,
+        target.ActiveAbilityEnd,
+        target.PassiveAbilityEnd,
+        target.UpgradeTargets?.Select(value => new UpgradeMaterialTargetResponse(value.UpgradeId, value.Quantity)).ToList());
 }
 
 public sealed record GoalSummaryResponse(
@@ -229,7 +244,9 @@ public sealed record GoalDetailResponse(
     // to ProjectGoal, so this can't be filled in by FromEntity(Goal) alone.
     List<Guid> ProjectIds,
     DateTimeOffset CreatedAt,
-    DateTimeOffset UpdatedAt
+    DateTimeOffset UpdatedAt,
+    // Monotonically increasing; a target edit must echo it as expectedRevision (optimistic concurrency).
+    long Revision = 0
 );
 
 public sealed record GoalConfigResponse(
@@ -275,4 +292,21 @@ public sealed record GoalSnapshotResponse(
 
 public sealed record GoalSnapshotResourceResponse(string ResourceId, int Count);
 
-public sealed record GoalEventResponse(DateTimeOffset At, GoalEventType Type);
+/// <summary><see cref="PreviousTarget"/>/<see cref="NewTarget"/> are set only on a
+/// <see cref="GoalEventType.TargetChanged"/> event.</summary>
+public sealed record GoalEventResponse(
+    DateTimeOffset At,
+    GoalEventType Type,
+    GoalTargetSnapshotResponse? PreviousTarget = null,
+    GoalTargetSnapshotResponse? NewTarget = null);
+
+/// <summary>A goal's end target at one moment; only the fields of the goal's own kind are non-null.</summary>
+public sealed record GoalTargetSnapshotResponse(
+    int? RankEnd,
+    bool? RankEndPointFive,
+    int? RankEndAppliedUpgrades,
+    string? ProgressionEnd,
+    int? LevelEnd,
+    int? ActiveAbilityEnd,
+    int? PassiveAbilityEnd,
+    List<UpgradeMaterialTargetResponse>? UpgradeTargets);
