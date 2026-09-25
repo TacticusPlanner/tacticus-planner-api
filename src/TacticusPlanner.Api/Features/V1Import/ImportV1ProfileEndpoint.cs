@@ -114,7 +114,17 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
             TacticusUserIdMasked = userId.Status == "Imported"
                 ? SecretMasker.Mask(v1.TacticusUserId)
                 : null,
+            SuggestedDisplayName = await GetDisplayNameSuggestionAsync(profileId.Value, req.Username!.Trim(), ct),
         }, ct);
+    }
+
+    /// <summary>The V1 login only proposes a name (it can be email-like): returned for the client to prefill,
+    /// never stored, never confirmed, and omitted once the user has confirmed their own name.</summary>
+    private async Task<string?> GetDisplayNameSuggestionAsync(ProfileId profileId, string username, CancellationToken ct)
+    {
+        var confirmed = await Resolve<PlannerDbContext>().Profiles
+            .AnyAsync(entity => entity.Id == profileId && entity.DisplayName != "", ct);
+        return confirmed || string.IsNullOrWhiteSpace(username) ? null : username;
     }
 
     /// <summary>No-ops when a snapshot already exists (the common case on a re-import) or when no
@@ -455,4 +465,7 @@ public sealed record ImportV1ProfileResponse(
     public int PowerLevel { get; init; }
     public string? TacticusApiKeyMasked { get; init; }
     public string? TacticusUserIdMasked { get; init; }
+
+    // Private prefill for the name step; see GetDisplayNameSuggestionAsync.
+    public string? SuggestedDisplayName { get; init; }
 }

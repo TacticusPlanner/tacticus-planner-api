@@ -1,12 +1,15 @@
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Api.Features.CurrentUser;
 using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.UserJot;
 
 public sealed class GetUserJotTokenEndpoint : EndpointWithoutRequest<UserJotTokenResponse>
 {
+    public const string FallbackName = "Planner User";
+
     public override void Configure()
     {
         Get("me/userjot-token");
@@ -35,10 +38,15 @@ public sealed class GetUserJotTokenEndpoint : EndpointWithoutRequest<UserJotToke
         }
 
         var db = Resolve<PlannerDbContext>();
+        // Public identity: only a name the user confirmed. Provider/V1/legacy suggestions never reach UserJot.
         var displayName = await db.Profiles
             .Where(profile => profile.Id == profileId)
             .Select(profile => profile.DisplayName)
             .FirstAsync(ct);
+        if (displayName == GetCurrentUserEndpoint.NoDisplayName)
+        {
+            displayName = FallbackName;
+        }
 
         var token = Resolve<UserJotTokenSigner>().CreateToken(accountId.Value, displayName);
 

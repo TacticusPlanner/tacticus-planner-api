@@ -33,19 +33,37 @@ public sealed class UserJotTokenEndpointTests(PlannerApiFactory factory) : IClas
         Assert.Equal(ProjectId, token.Issuer);
         Assert.Equal("userjot", Assert.Single(token.Audiences));
         Assert.True(token.ValidTo - token.IssuedAt <= TimeSpan.FromHours(1));
-        Assert.Equal(PlannerTestAuthenticationHandler.DefaultName, token.Claims.Single(claim => claim.Type == "firstName").Value);
+        Assert.Equal("Planner User", token.Claims.Single(claim => claim.Type == "firstName").Value);
         Assert.DoesNotContain(token.Claims, claim => claim.Type is "email" or "lastName");
     }
 
     [Fact]
-    public async Task TokenReflectsTheAccountsActualDisplayName()
+    public async Task TokenReflectsTheAccountsDisplayNameIncludingFreshEdits()
     {
         var client = CreateAuthenticatedClient(NewSubject(), name: "Ada Lovelace");
         await ProvisionAccountAsync(client);
 
+        await client.PutAsJsonAsync("/api/v1/me/display-name", new { displayName = "Ada" }, TestContext.Current.CancellationToken);
+        var first = ValidateAndReadToken(await GetTokenAsync(client));
+        await client.PutAsJsonAsync("/api/v1/me/display-name", new { displayName = "Countess" }, TestContext.Current.CancellationToken);
+        var second = ValidateAndReadToken(await GetTokenAsync(client));
+
+        Assert.Equal("Ada", first.Claims.Single(claim => claim.Type == "firstName").Value);
+        Assert.Equal("Countess", second.Claims.Single(claim => claim.Type == "firstName").Value);
+    }
+
+    [Theory]
+    [InlineData("Ada Lovelace")]
+    [InlineData("ada@example.com")]
+    public async Task ProviderSuggestionNeverAppearsInTheToken(string providerName)
+    {
+        var client = CreateAuthenticatedClient(NewSubject(), name: providerName);
+        await ProvisionAccountAsync(client);
+
         var token = ValidateAndReadToken(await GetTokenAsync(client));
 
-        Assert.Equal("Ada Lovelace", token.Claims.Single(claim => claim.Type == "firstName").Value);
+        Assert.Equal("Planner User", token.Claims.Single(claim => claim.Type == "firstName").Value);
+        Assert.DoesNotContain(providerName, token.Payload.SerializeToJson(), StringComparison.Ordinal);
     }
 
     [Fact]

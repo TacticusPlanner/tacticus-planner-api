@@ -207,6 +207,7 @@ public sealed class PlannerTestAuthenticationHandler : AuthenticationHandler<Aut
     public const string IssuerHeader = "X-Test-Issuer";
     public const string SubjectHeader = "X-Test-Subject";
     public const string NameHeader = "X-Test-Name";
+    public const string OmitNameHeader = "X-Test-OmitName";
     public const string DefaultIssuer = "https://example.ciamlogin.com/example.onmicrosoft.com/v2.0";
     public const string DefaultSubject = "test-user";
     public const string DefaultName = "Test User";
@@ -232,8 +233,11 @@ public sealed class PlannerTestAuthenticationHandler : AuthenticationHandler<Aut
             new("iss", GetHeaderOrDefault(IssuerHeader, DefaultIssuer)),
             new("sub", GetHeaderOrDefault(SubjectHeader, DefaultSubject)),
             new("scp", "access_as_user"),
-            new("name", GetHeaderOrDefault(NameHeader, DefaultName)),
         };
+        if (!Request.Headers.ContainsKey(OmitNameHeader))
+        {
+            claims.Add(new("name", GetHeaderOrDefault(NameHeader, DefaultName)));
+        }
 
         var identity = new ClaimsIdentity(claims, SchemeName);
         var principal = new ClaimsPrincipal(identity);
