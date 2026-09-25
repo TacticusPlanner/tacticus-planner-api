@@ -75,7 +75,13 @@ public sealed class UpdateProjectGoalsEndpoint : Endpoint<UpdateProjectGoalsRequ
 
             var duplicateSlot = ownedGoals
                 .Where(goal => goal.Status is GoalStatus.Active or GoalStatus.Paused)
-                .GroupBy(goal => new { goal.EntityType, goal.EntityId, goal.GoalType })
+                .GroupBy(goal => new
+                {
+                    goal.EntityType,
+                    goal.EntityId,
+                    goal.GoalType,
+                    RankTargetKey = RankTargetKey.For(goal.GoalType, goal.Config),
+                })
                 .FirstOrDefault(group => group.Count() > 1);
             if (duplicateSlot is not null)
             {
@@ -83,9 +89,11 @@ public sealed class UpdateProjectGoalsEndpoint : Endpoint<UpdateProjectGoalsRequ
                 HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
                 await HttpContext.Response.WriteAsJsonAsync(new ProjectGoalSlotConflictResponse(
                     "projectGoalSlotOccupied",
-                    $"{project.Name} already contains an active or paused {existing.GoalType} goal for this unit.",
+                    ProjectGoalPlanningService.ConflictMessage(
+                        project.Name, existing.GoalType, duplicateSlot.Key.RankTargetKey),
                     project.Id.Value, project.Name, existing.EntityType.ToString(),
-                    existing.EntityId, existing.GoalType.ToString(), existing.Id.Value), ct);
+                    existing.EntityId, existing.GoalType.ToString(), existing.Id.Value,
+                    duplicateSlot.Key.RankTargetKey), ct);
                 return;
             }
 
@@ -153,6 +161,7 @@ public sealed class UpdateProjectGoalsEndpoint : Endpoint<UpdateProjectGoalsRequ
                             goal.EntityType,
                             goal.EntityId,
                             goal.GoalType,
+                            RankTargetKey.For(goal.GoalType, goal.Config),
                             goal.Id)),
                     ct) ?? throw new InvalidOperationException(
                         "The project slot constraint failed but no conflicting membership was found.", ex);

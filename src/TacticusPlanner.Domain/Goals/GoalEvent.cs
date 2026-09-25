@@ -9,4 +9,10 @@ public sealed class GoalEvent
     public DateTimeOffset At { get; set; }
 
     public required GoalEventType Type { get; set; }
+
+    /// <summary>The end target before/after a <see cref="GoalEventType.TargetChanged"/>; null for every other
+    /// event, and for events written before target editing existed.</summary>
+    public GoalTargetSnapshot? PreviousTarget { get; set; }
+
+    public GoalTargetSnapshot? NewTarget { get; set; }
 }

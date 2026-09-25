@@ -99,7 +99,8 @@ public sealed class UpdateGoalStatusEndpoint : Endpoint<UpdateGoalStatusRequest,
                     // leaves the goal itself out of the count, so it can't conflict with itself.
                     if (targetStatus is GoalStatus.Active or GoalStatus.Paused
                         && await planning.FindConflictAsync(
-                            membershipProjectIds, goal.EntityType, goal.EntityId, goal.GoalType, goal.Id, ct) is { } conflict)
+                            membershipProjectIds, goal.EntityType, goal.EntityId, goal.GoalType,
+                            RankTargetKey.For(goal.GoalType, goal.Config), goal.Id, ct) is { } conflict)
                     {
                         HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
                         await HttpContext.Response.WriteAsJsonAsync(conflict, ct);
@@ -124,6 +125,7 @@ public sealed class UpdateGoalStatusEndpoint : Endpoint<UpdateGoalStatusRequest,
                         goal.EntityType,
                         goal.EntityId,
                         goal.GoalType,
+                        RankTargetKey.For(goal.GoalType, goal.Config),
                         goal.Id)],
                         ct) ?? throw new InvalidOperationException(
                             "The project slot constraint failed but no conflicting membership was found.", ex);

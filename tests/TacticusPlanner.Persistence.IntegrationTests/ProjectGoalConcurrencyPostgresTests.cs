@@ -66,6 +66,20 @@ public sealed class ProjectGoalConcurrencyPostgresTests
         await AssertContiguousPrioritiesAsync(connectionString, projectId, 1);
     }
 
+    [Fact]
+    public async Task ConcurrentDistinctRankTargetCreatesBothCommit()
+    {
+        await using var postgres = await StartPostgresAsync();
+        var (connectionString, profileId, projectId) = await SeedEmptyProjectAsync(postgres);
+
+        var results = await Task.WhenAll(
+            CreateGoalAsync(connectionString, profileId, projectId, "ragnar", GoalType.Rank, rankEnd: 11),
+            CreateGoalAsync(connectionString, profileId, projectId, "ragnar", GoalType.Rank, rankEnd: 12));
+
+        Assert.All(results, result => Assert.True(result.Succeeded));
+        await AssertContiguousPrioritiesAsync(connectionString, projectId, 2);
+    }
+
     /// <summary>
     /// Unlike the retired unit-keyed reorder, a goal-order change validates against the project's
     /// *complete* in-flight goal set, not a single slot — it is not slot-scoped (see the corresponding
@@ -154,7 +168,8 @@ public sealed class ProjectGoalConcurrencyPostgresTests
     /// insert the goal + membership, normalize, commit. Returns <c>(false, default)</c> (not an exception)
     /// on a detected slot conflict, matching the endpoint's structured-409 handling.</summary>
     private static async Task<(bool Succeeded, Guid GoalId)> CreateGoalAsync(
-        string connectionString, Guid profileId, Guid projectId, string entityId, GoalType goalType)
+        string connectionString, Guid profileId, Guid projectId, string entityId, GoalType goalType,
+        int rankEnd = 12)
     {
         var options = BuildOptions(connectionString);
         await using var db = new PlannerDbContext(options, new PassthroughEncryption(), new StaticProfile(ProfileId.From(profileId)));
@@ -162,11 +177,17 @@ public sealed class ProjectGoalConcurrencyPostgresTests
         var ct = TestContext.Current.CancellationToken;
         var succeeded = false;
         var createdGoalId = Guid.Empty;
+        // A Rank goal always carries a target in the real API (validated on creation), so its membership
+        // gets a normalized Rank key; other goal types leave the config empty.
+        var config = goalType == GoalType.Rank
+            ? new GoalConfig { Rank = new RankTarget { Start = 1, End = rankEnd } }
+            : new GoalConfig();
+        var rankTargetKey = RankTargetKey.For(goalType, config);
 
         await planning.ExecuteLockedMutationAsync([ProjectId.From(projectId)], async transaction =>
         {
             if (await planning.FindConflictAsync(
-                [ProjectId.From(projectId)], GoalEntityType.Character, entityId, goalType, null, ct) is not null)
+                [ProjectId.From(projectId)], GoalEntityType.Character, entityId, goalType, rankTargetKey, null, ct) is not null)
             {
                 if (transaction is not null)
                     await transaction.RollbackAsync(ct);
@@ -179,6 +200,7 @@ public sealed class ProjectGoalConcurrencyPostgresTests
                 Id = GoalId.From(Guid.CreateVersion7()),
                 ProfileId = ProfileId.From(profileId),
                 Status = GoalStatus.Active,
+                Config = config,
                 Events = [new GoalEvent { At = now, Type = GoalEventType.Created }],
             };
             db.Goals.Add(goal);

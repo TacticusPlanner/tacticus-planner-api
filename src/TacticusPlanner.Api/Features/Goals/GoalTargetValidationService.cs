@@ -24,7 +24,11 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
     /// an accompanying Ascension goal is not rejected. Single-goal creation and updates pass nothing, so a
     /// missing live progression still falls back to the top of the ladder exactly as before; only a caller
     /// that supplies a floor gets the narrower "no live data -> floor only" behavior (see design.md's
-    /// Risks).</summary>
+    /// Risks). <paramref name="againstBaseline"/> is the in-place target edit mode
+    /// (<c>edit-goal-targets-in-place</c>): the request's start values are the goal's persisted baseline, and
+    /// every "not below current progress" / "above the effective start" check compares against that baseline
+    /// instead of the unit's live synced progress, so a target already reached in player data is still a valid
+    /// (zero-need) target. Catalog, entity-type, shape and rarity-cap rules are unchanged.</summary>
     public async Task<string?> ValidateAsync(
         ProfileId profileId,
         GoalEntityType entityType,
@@ -32,7 +36,8 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
         GoalType goalType,
         CreateGoalConfigRequest config,
         CancellationToken ct,
-        UnitProgression? effectiveProgressionFloor = null)
+        UnitProgression? effectiveProgressionFloor = null,
+        bool againstBaseline = false)
     {
         var character = catalog.Current.CharacterViews.FirstOrDefault(item => item.Id == entityId);
         var mow = catalog.Current.MowList.FirstOrDefault(item => item.Id == entityId);
@@ -69,7 +74,7 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
         if (goalType == GoalType.Rank)
         {
             if (config.Rank is null) return "Rank requires a character rank target.";
-            var current = (int?)playerCharacter?.Rank ?? config.Rank.Start;
+            var current = againstBaseline ? config.Rank.Start : (int?)playerCharacter?.Rank ?? config.Rank.Start;
             if (config.Rank.Start < current) return "The starting rank cannot be lower than the current rank.";
             if (config.Rank.End <= Math.Max(config.Rank.Start, current) || config.Rank.End > (int)UnitRank.Adamantine3)
                 return "The target rank must be above the effective starting rank and within the rank ladder.";
@@ -80,7 +85,7 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
             if (config.Progression is null) return "Ascension requires a progression target.";
             var start = ProgressionRules.ProgressionIndex(config.Progression.Start);
             var end = ProgressionRules.ProgressionIndex(config.Progression.End);
-            var current = (int?)playerUnit?.ProgressionIndex ?? start;
+            var current = againstBaseline ? start : (int?)playerUnit?.ProgressionIndex ?? start;
             if (start < current) return "The starting progression cannot be lower than current progression.";
             if (end <= Math.Max(start, current)) return "The target progression must be above the effective start.";
         }
@@ -88,8 +93,12 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
         if (goalType == GoalType.Ability)
         {
             if (config.Ability is null) return "Ability requires an ability target.";
-            var first = playerUnit?.Abilities.ElementAtOrDefault(0)?.Level ?? config.Ability.ActiveStart;
-            var second = playerUnit?.Abilities.ElementAtOrDefault(1)?.Level ?? config.Ability.PassiveStart;
+            var first = againstBaseline
+                ? config.Ability.ActiveStart
+                : playerUnit?.Abilities.ElementAtOrDefault(0)?.Level ?? config.Ability.ActiveStart;
+            var second = againstBaseline
+                ? config.Ability.PassiveStart
+                : playerUnit?.Abilities.ElementAtOrDefault(1)?.Level ?? config.Ability.PassiveStart;
             if (config.Ability.ActiveStart < first || config.Ability.PassiveStart < second)
                 return "Ability starting levels cannot be lower than current levels.";
             if (config.Ability.ActiveEnd <= config.Ability.ActiveStart
@@ -124,7 +133,7 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
         if (goalType == GoalType.Level)
         {
             if (config.Level is null) return "Level requires a target level.";
-            var current = playerCharacter?.XpLevel ?? config.Level.Start;
+            var current = againstBaseline ? config.Level.Start : playerCharacter?.XpLevel ?? config.Level.Start;
             if (config.Level.Start < current) return "The starting level cannot be lower than the current level.";
             if (config.Level.End <= Math.Max(config.Level.Start, current) || config.Level.End > MaxCharacterLevel)
                 return $"The target level must be above the effective starting level and no higher than {MaxCharacterLevel}.";

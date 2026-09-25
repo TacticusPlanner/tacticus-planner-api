@@ -199,7 +199,34 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
     }
 
     [Fact]
-    public async Task DuplicateRankGoalsMergeIntoOneSpanningGoalAndCombineNotes()
+    public async Task DuplicateRankGoalsWithTheSameEndMergeIntoOneGoalAndCombineNotes()
+    {
+        var (client, subject) = await CreateProvisionedClientAsync();
+        await SeedPlayerDataSnapshotAsync(subject, [Character(CharacterId, xpLevel: 60)]);
+
+        var body = await ImportGoalsAsync(
+            client,
+            [
+                RankGoal("r-first", CharacterId, 1, UnitRank.Bronze1, notes: "first"),
+                RankGoal("r-second", CharacterId, 2, UnitRank.Bronze1, notes: "second"),
+            ],
+            automaticPrerequisites: false);
+
+        var created = Assert.Single(body.Outcomes, o => o.Status == "Created");
+        var merged = Assert.Single(body.Outcomes, o => o.Status == "Skipped");
+        Assert.Equal("duplicate_goal_merged", merged.Code);
+        Assert.Equal(created.GoalId, merged.GoalId);
+        Assert.Equal("r-first", created.SourceGoalId); // higher-priority (earlier) source keeps the slot
+        Assert.Equal("r-second", merged.SourceGoalId);
+
+        var goal = await GetGoalAsync(client, created.GoalId!.Value);
+        Assert.Equal((int)UnitRank.Bronze1, goal.Config.Rank!.End);
+        Assert.Contains("first", goal.Notes);
+        Assert.Contains("second", goal.Notes);
+    }
+
+    [Fact]
+    public async Task DistinctRankTargetsImportAsSeparateMilestonesWithTheirOwnNotesInV1Order()
     {
         var (client, subject) = await CreateProvisionedClientAsync();
         await SeedPlayerDataSnapshotAsync(subject, [Character(CharacterId, xpLevel: 60)]);
@@ -212,25 +239,24 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
             ],
             automaticPrerequisites: false);
 
-        var created = Assert.Single(body.Outcomes, o => o.Status == "Created");
-        var merged = Assert.Single(body.Outcomes, o => o.Status == "Skipped");
-        Assert.Equal("duplicate_goal_merged", merged.Code);
-        Assert.Equal(created.GoalId, merged.GoalId);
-        Assert.Equal("r-low", created.SourceGoalId); // higher-priority (earlier) source keeps the slot
-        Assert.Equal("r-high", merged.SourceGoalId);
+        Assert.All(body.Outcomes, outcome => Assert.Equal("Created", outcome.Status));
+        var low = await GetGoalAsync(client, body.Outcomes[0].GoalId!.Value);
+        var high = await GetGoalAsync(client, body.Outcomes[1].GoalId!.Value);
+        Assert.NotEqual(low.GoalId, high.GoalId);
+        Assert.Equal((int)UnitRank.Bronze1, low.Config.Rank!.End);
+        Assert.Equal((int)UnitRank.Silver1, high.Config.Rank!.End);
+        Assert.Equal("first", low.Notes);
+        Assert.Equal("second", high.Notes);
 
-        var goal = await GetGoalAsync(client, created.GoalId!.Value);
-        Assert.Equal((int)UnitRank.Silver1, goal.Config.Rank!.End); // spans to the higher target
-        Assert.Contains("first", goal.Notes);
-        Assert.Contains("second", goal.Notes);
+        var listed = await client.GetFromJsonAsync<ListGoalsResponse>("/api/v1/me/goals", TestContext.Current.CancellationToken);
+        Assert.Equal(2, listed!.Goals.Count);
     }
 
     [Fact]
-    public async Task DuplicateRankGoalsWithTheSameEndKeepTheFurtherAlongPointFive()
+    public async Task DuplicateRankGoalsWithEquivalentEndsMergeAndKeepThePointFiveRepresentation()
     {
-        // Both goals target the same integer rank, but the second carries a "point five" the first
-        // doesn't — comparing only the integer End would arbitrarily keep whichever goal came first
-        // instead of the actually-further-along endpoint (see MaxBy's tuple key in CollapseDuplicates).
+        // Point-five below Adamantine1 is the same end state as three applied slots, so the two goals are
+        // exact duplicates (same normalized key), not distinct milestones.
         var (client, subject) = await CreateProvisionedClientAsync();
         await SeedPlayerDataSnapshotAsync(subject, [Character(CharacterId, xpLevel: 60)]);
         var target = (int)UnitRank.Bronze1 + 1;
@@ -238,7 +264,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         var body = await ImportGoalsAsync(
             client,
             [
-                new V1Goal("r-plain", CharacterId, 1, 1, true, null, null, null, null, target, false, 0,
+                new V1Goal("r-three-slots", CharacterId, 1, 1, true, null, null, null, null, target, false, 3,
                     null, null, null, null, null, null, null),
                 new V1Goal("r-pointfive", CharacterId, 1, 2, true, null, null, null, null, target, true, 0,
                     null, null, null, null, null, null, null),
@@ -246,8 +272,29 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
             automaticPrerequisites: false);
 
         var created = Assert.Single(body.Outcomes, o => o.Status == "Created");
+        Assert.Equal("duplicate_goal_merged", Assert.Single(body.Outcomes, o => o.Status == "Skipped").Code);
         var goal = await GetGoalAsync(client, created.GoalId!.Value);
         Assert.True(goal.Config.Rank!.EndPointFive);
+    }
+
+    [Fact]
+    public async Task ReimportingAHigherRankTargetCreatesItBesideTheExistingMilestone()
+    {
+        var (client, subject) = await CreateProvisionedClientAsync();
+        await SeedPlayerDataSnapshotAsync(subject, [Character(CharacterId, xpLevel: 60)]);
+
+        var first = await ImportGoalsAsync(
+            client, [RankGoal("r-low", CharacterId, 1, UnitRank.Bronze1)], automaticPrerequisites: false);
+        var second = await ImportGoalsAsync(
+            client,
+            [RankGoal("r-low", CharacterId, 1, UnitRank.Bronze1), RankGoal("r-high", CharacterId, 2, UnitRank.Silver1)],
+            automaticPrerequisites: false);
+
+        Assert.Equal("Created", first.Outcomes[0].Status);
+        Assert.Equal("goal_already_exists", second.Outcomes[0].Code);
+        Assert.Equal(first.Outcomes[0].GoalId, second.Outcomes[0].GoalId);
+        Assert.Equal("Created", second.Outcomes[1].Status);
+        Assert.NotEqual(first.Outcomes[0].GoalId, second.Outcomes[1].GoalId);
     }
 
     [Fact]
@@ -788,7 +835,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
             client,
             [
                 RankGoal("excluded", CharacterId, 1, UnitRank.Iron1, dailyRaids: false),
-                RankGoal("planned", CharacterId, 2, UnitRank.Silver1, dailyRaids: true),
+                RankGoal("planned", CharacterId, 2, UnitRank.Iron1, dailyRaids: true),
             ],
             automaticPrerequisites: false);
 

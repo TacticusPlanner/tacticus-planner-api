@@ -77,7 +77,7 @@ public sealed class V1GoalImportService(
             .Where(goal => goal.ProfileId == profileId)
             .ToListAsync(ct);
         var existingByKey = existingRows
-            .GroupBy(row => new GoalKey(row.EntityType, row.EntityId, row.GoalType))
+            .GroupBy(row => new GoalKey(row.EntityType, row.EntityId, row.GoalType, RankTargetKey.For(row.GoalType, row.Config)))
             .ToDictionary(group => group.Key, group => new ExistingGoalRef(group.First().Id.Value, group.First().Config));
 
         var creatable = new List<TranslatedGoal>();
@@ -235,7 +235,10 @@ public sealed class V1GoalImportService(
         // An absent dailyRaids field (a V1 record predating it) reads as in-planning, so a missing flag
         // never silently pauses an imported goal.
         return (new TranslatedGoal(
-            new GoalKey(entityType, entityId, goalType), config, originalIndex, sourceGoal.Notes,
+            new GoalKey(entityType, entityId, goalType, config.Rank is { } rank
+                ? RankTargetKey.From(rank.End, rank.EndPointFive, rank.EndAppliedUpgrades)
+                : null),
+            config, originalIndex, sourceGoal.Notes,
             InDailyPlanning: sourceGoal.DailyRaids is not false), null);
     }
 
@@ -585,7 +588,7 @@ public sealed class V1GoalImportService(
                 {
                     outcomeBySourceIndex[index] ??= new V1GoalOutcome(
                         "Failed", "project_slot_conflict",
-                        "Another goal for this unit and type was created concurrently.",
+                        "Another goal for this unit, type and target was created concurrently.",
                         null, null, null, null, sourceIdByIndex[index]);
                 }
                 foreach (var (goal, _) in stagedPrerequisites)
@@ -840,7 +843,10 @@ public sealed class V1GoalImportService(
     private static GoalStatus StatusOf(TranslatedGoal goal) =>
         goal.InDailyPlanning ? GoalStatus.Active : GoalStatus.Paused;
 
-    private sealed record GoalKey(GoalEntityType EntityType, string EntityId, GoalType GoalType);
+    /// <summary><paramref name="RankTargetKey"/> is set only for a Rank goal, so distinct Rank end targets
+    /// for one unit are distinct keys (imported as separate milestones) while an exact duplicate shares a
+    /// key (merged) — every other goal type keeps the one-per-unit/type key.</summary>
+    private sealed record GoalKey(GoalEntityType EntityType, string EntityId, GoalType GoalType, string? RankTargetKey = null);
 
     private sealed record ExistingGoalRef(Guid Id, GoalConfig Config);
 

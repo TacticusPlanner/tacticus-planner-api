@@ -23,6 +23,11 @@ public class ProjectGoal
 
     public bool OccupiesInFlightSlot { get; set; }
 
+    /// <summary>Normalized end target (<see cref="Goals.RankTargetKey"/>) for a Rank goal, null for every other
+    /// type. Denormalized from the goal's config so a partial unique index can enforce Rank target
+    /// occupancy; kept in sync by every target mutation.</summary>
+    public string? RankTargetKey { get; set; }
+
     public DateTimeOffset CreatedAt { get; set; }
 
     public virtual Project? Project { get; set; }

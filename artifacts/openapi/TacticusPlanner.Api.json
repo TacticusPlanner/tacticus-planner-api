@@ -1082,7 +1082,7 @@
           "Me"
         ],
         "summary": "Updates a goal's editable fields (notes, farming-location override).",
-        "description": "The goal's target end-state and creation snapshot cannot be changed here — create a replacement goal instead.",
+        "description": "The goal's target end-state cannot be changed here — use PUT /me/goals/{goalId}/target — and its creation snapshot cannot be changed at all.",
         "operationId": "TacticusPlannerApiFeaturesGoalsUpdateGoalEndpoint",
         "parameters": [
           {
@@ -1267,6 +1267,75 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TacticusPlannerApiFeaturesProjectsProjectGoalSlotConflictResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/me/goals/{goalId}/target": {
+      "put": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Changes an active or paused goal's end target in place.",
+        "description": "Supported for Rank, Ascension, Level, Ability and Upgrade goals; Unlock has no adjustable target. The new target is validated against the goal's stored baseline and the current catalog (an already-reached target is allowed). Submitting the target the goal already has is a no-op that changes neither the revision nor the history.",
+        "operationId": "TacticusPlannerApiFeaturesGoalsUpdateGoalTargetEndpoint",
+        "parameters": [
+          {
+            "name": "goalId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsUpdateGoalTargetRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The updated (or unchanged) goal.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsGoalDetailResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The target is malformed, invalid for this goal, or the goal is Unlock/Completed/Archived."
+          },
+          "401": {
+            "description": "The request is missing required identity claims."
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "No matching goal owned by the caller."
+          },
+          "409": {
+            "description": "expectedRevision is stale (issueCode goalRevisionStale, carrying the current goal), or a Rank target is already held in another project (a ProjectGoalSlotConflictResponse).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsGoalRevisionConflictResponse"
                 }
               }
             }
@@ -3668,6 +3737,23 @@
           }
         }
       },
+      "TacticusPlannerApiFeaturesGoalsAbilityEndTargetRequest": {
+        "required": [
+          "activeEnd",
+          "passiveEnd"
+        ],
+        "type": "object",
+        "properties": {
+          "activeEnd": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "passiveEnd": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "TacticusPlannerApiFeaturesGoalsAbilityTargetRequest": {
         "required": [
           "activeStart",
@@ -4188,6 +4274,11 @@
           "updatedAt": {
             "type": "string",
             "format": "date-time"
+          },
+          "revision": {
+            "type": "integer",
+            "format": "int64",
+            "default": 0
           }
         }
       },
@@ -4204,6 +4295,47 @@
           },
           "type": {
             "$ref": "#/components/schemas/TacticusPlannerDomainGoalsGoalEventType"
+          },
+          "previousTarget": {
+            "type": [
+              "null",
+              "object"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsGoalTargetSnapshotResponse"
+              }
+            ]
+          },
+          "newTarget": {
+            "type": [
+              "null",
+              "object"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsGoalTargetSnapshotResponse"
+              }
+            ]
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesGoalsGoalRevisionConflictResponse": {
+        "required": [
+          "issueCode",
+          "message",
+          "goal"
+        ],
+        "type": "object",
+        "properties": {
+          "issueCode": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "goal": {
+            "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsGoalDetailResponse"
           }
         }
       },
@@ -4343,6 +4475,151 @@
           }
         }
       },
+      "TacticusPlannerApiFeaturesGoalsGoalTargetEditRequest": {
+        "type": "object",
+        "properties": {
+          "rank": {
+            "type": [
+              "null",
+              "object"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsRankEndTargetRequest"
+              }
+            ]
+          },
+          "progression": {
+            "type": [
+              "null",
+              "object"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsProgressionEndTargetRequest"
+              }
+            ]
+          },
+          "level": {
+            "type": [
+              "null",
+              "object"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsLevelEndTargetRequest"
+              }
+            ]
+          },
+          "ability": {
+            "type": [
+              "null",
+              "object"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsAbilityEndTargetRequest"
+              }
+            ]
+          },
+          "upgrade": {
+            "type": [
+              "null",
+              "object"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsUpgradeTargetRequest"
+              }
+            ]
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesGoalsGoalTargetSnapshotResponse": {
+        "required": [
+          "rankEnd",
+          "rankEndPointFive",
+          "rankEndAppliedUpgrades",
+          "progressionEnd",
+          "levelEnd",
+          "activeAbilityEnd",
+          "passiveAbilityEnd",
+          "upgradeTargets"
+        ],
+        "type": "object",
+        "properties": {
+          "rankEnd": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "rankEndPointFive": {
+            "type": [
+              "null",
+              "boolean"
+            ]
+          },
+          "rankEndAppliedUpgrades": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "progressionEnd": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "levelEnd": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "activeAbilityEnd": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "passiveAbilityEnd": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "upgradeTargets": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SystemCollectionsGenericListOfTacticusPlannerApiFeaturesGoalsUpgradeMaterialTargetResponse"
+              }
+            ]
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesGoalsLevelEndTargetRequest": {
+        "required": [
+          "end"
+        ],
+        "type": "object",
+        "properties": {
+          "end": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "TacticusPlannerApiFeaturesGoalsLevelTargetRequest": {
         "required": [
           "start",
@@ -4388,6 +4665,17 @@
           }
         }
       },
+      "TacticusPlannerApiFeaturesGoalsProgressionEndTargetRequest": {
+        "required": [
+          "end"
+        ],
+        "type": "object",
+        "properties": {
+          "end": {
+            "type": "string"
+          }
+        }
+      },
       "TacticusPlannerApiFeaturesGoalsProgressionTargetRequest": {
         "required": [
           "start",
@@ -4427,6 +4715,27 @@
           "projectId": {
             "type": "string",
             "format": "uuid"
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesGoalsRankEndTargetRequest": {
+        "required": [
+          "end",
+          "endPointFive",
+          "endAppliedUpgrades"
+        ],
+        "type": "object",
+        "properties": {
+          "end": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "endPointFive": {
+            "type": "boolean"
+          },
+          "endAppliedUpgrades": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -4564,6 +4873,23 @@
         "properties": {
           "status": {
             "type": "string"
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesGoalsUpdateGoalTargetRequest": {
+        "required": [
+          "expectedRevision",
+          "target"
+        ],
+        "type": "object",
+        "properties": {
+          "expectedRevision": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int64"
+          },
+          "target": {
+            "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsGoalTargetEditRequest"
           }
         }
       },
@@ -5365,6 +5691,12 @@
           "existingGoalId": {
             "type": "string",
             "format": "uuid"
+          },
+          "normalizedTarget": {
+            "type": [
+              "null",
+              "string"
+            ]
           }
         }
       },
@@ -5901,7 +6233,8 @@
           "Resumed",
           "PriorityChanged",
           "Completed",
-          "Archived"
+          "Archived",
+          "TargetChanged"
         ],
         "type": "string"
       },

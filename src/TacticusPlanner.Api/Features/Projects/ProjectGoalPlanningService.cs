@@ -64,6 +64,7 @@ public sealed class ProjectGoalPlanningService(PlannerDbContext db)
         EntityId = goal.EntityId,
         GoalType = goal.GoalType,
         OccupiesInFlightSlot = IsInFlight(goal.Status),
+        RankTargetKey = RankTargetKey.For(goal.GoalType, goal.Config),
         CreatedAt = now,
     };
 
@@ -72,15 +73,19 @@ public sealed class ProjectGoalPlanningService(PlannerDbContext db)
         GoalEntityType entityType,
         string entityId,
         GoalType goalType,
+        string? rankTargetKey,
         GoalId? excludingGoalId,
         CancellationToken ct)
     {
         var ids = projectIds.Distinct().ToList();
+        // rankTargetKey is null for every non-Rank goal, so this compares null to null there (same slot as
+        // before) and only separates Rank goals by their normalized end target.
         var query = db.ProjectGoals
             .Where(entry => ids.Contains(entry.ProjectId)
                 && entry.EntityType == entityType
                 && entry.EntityId == entityId
                 && entry.GoalType == goalType
+                && entry.RankTargetKey == rankTargetKey
                 && entry.OccupiesInFlightSlot);
 
         if (excludingGoalId is { } excluded)
@@ -90,13 +95,14 @@ public sealed class ProjectGoalPlanningService(PlannerDbContext db)
             .Join(db.Projects, entry => entry.ProjectId, project => project.Id, (entry, project) => new { entry, project })
             .Select(value => new ProjectGoalSlotConflictResponse(
                 "projectGoalSlotOccupied",
-                $"{value.project.Name} already contains an active or paused {value.entry.GoalType} goal for this unit.",
+                ConflictMessage(value.project.Name, value.entry.GoalType, value.entry.RankTargetKey),
                 value.project.Id.Value,
                 value.project.Name,
                 value.entry.EntityType.ToString(),
                 value.entry.EntityId,
                 value.entry.GoalType.ToString(),
-                value.entry.GoalId.Value))
+                value.entry.GoalId.Value,
+                value.entry.RankTargetKey))
             .FirstOrDefaultAsync(ct);
     }
 
@@ -119,6 +125,7 @@ public sealed class ProjectGoalPlanningService(PlannerDbContext db)
                 slot.EntityType,
                 slot.EntityId,
                 slot.GoalType,
+                slot.RankTargetKey,
                 slot.ExcludingGoalId,
                 ct) is { } conflict)
             {
@@ -203,6 +210,13 @@ public sealed class ProjectGoalPlanningService(PlannerDbContext db)
             .ThenBy(entry => entry.GoalId)
             .ToListAsync(ct);
 
+    /// <summary>The 409 message shared by every slot-conflict site (this service and the project-side
+    /// membership endpoint's in-request duplicate check).</summary>
+    public static string ConflictMessage(string projectName, GoalType goalType, string? rankTargetKey) =>
+        rankTargetKey is null
+            ? $"{projectName} already contains an active or paused {goalType} goal for this unit."
+            : $"{projectName} already contains an active or paused {goalType} goal with this target for this unit.";
+
     private static bool IsInFlight(GoalStatus status) => status is GoalStatus.Active or GoalStatus.Paused;
 }
 
@@ -214,11 +228,13 @@ public sealed record ProjectGoalSlotConflictResponse(
     string EntityType,
     string EntityId,
     string GoalType,
-    Guid ExistingGoalId);
+    Guid ExistingGoalId,
+    string? NormalizedTarget = null);
 
 public sealed record ProjectGoalSlotLookup(
     IReadOnlyCollection<ProjectId> ProjectIds,
     GoalEntityType EntityType,
     string EntityId,
     GoalType GoalType,
+    string? RankTargetKey = null,
     GoalId? ExcludingGoalId = null);

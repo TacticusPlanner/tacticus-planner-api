@@ -4,8 +4,9 @@ namespace TacticusPlanner.Domain.Goals;
 /// The goal's target, grouped by goal kind so a whole group is null-or-fully-present rather than every
 /// field independently nullable (mirrors V1's <c>IPersonalGoal</c> shape at the group level) — only the
 /// group relevant to the owning <see cref="Goal.EntityType"/>/<see cref="Goal.GoalType"/> pair is
-/// populated. Immutable after creation (redefining a target means creating a replacement goal) — see the
-/// plan's §7 "Immutable-after-creation policy".
+/// populated. The start/baseline is immutable after creation; only the <em>end</em> target can change, and
+/// only through <c>PUT /me/goals/{id}/target</c> (revision-checked, recorded as a
+/// <see cref="GoalEventType.TargetChanged"/> event) — see the plan's §7 and <c>edit-goal-targets-in-place</c>.
 /// </summary>
 public sealed class GoalConfig
 {

@@ -54,7 +54,12 @@ public sealed class GoalConfiguration : IEntityTypeConfiguration<Goal>
         // Tried ComplexCollection(...).ToJson() (EF Core 10's OwnsMany replacement) here — it compiles but
         // throws at model-build/query time against this stack (confirmed empirically: every endpoint
         // touching a Goal 500s). Staying on OwnsMany().ToJson() until that's fixed upstream.
-        builder.OwnsMany(entity => entity.Events, events => events.ToJson("events"));
+        builder.OwnsMany(entity => entity.Events, events =>
+        {
+            events.ToJson("events");
+            events.OwnsOne(goalEvent => goalEvent.PreviousTarget, target => target.OwnsMany(value => value.UpgradeTargets));
+            events.OwnsOne(goalEvent => goalEvent.NewTarget, target => target.OwnsMany(value => value.UpgradeTargets));
+        });
 
         builder.HasIndex(entity => entity.ProfileId);
 

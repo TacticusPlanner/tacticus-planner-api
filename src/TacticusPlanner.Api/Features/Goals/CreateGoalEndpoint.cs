@@ -95,11 +95,12 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
             targetProjects.Select(project => project.Id),
             async transaction =>
         {
-            // At most one Active/Paused goal per (entity, goal type) — a unit may still accumulate several
+            // At most one Active/Paused goal per (entity, goal type) (for Rank: per normalized end target) — a unit may still accumulate several
             // Completed/Archived goals of the same type, but only one "in flight" at a time (see the mirrored
             // check in UpdateGoalStatusEndpoint, and the partial unique index backing this invariant).
             if (await planning.FindConflictAsync(
-                targetProjects.Select(project => project.Id), entityType, goal.EntityId, goalType, null, ct) is { } conflict)
+                targetProjects.Select(project => project.Id), entityType, goal.EntityId, goalType,
+                RankTargetKey.For(goalType, goal.Config), null, ct) is { } conflict)
             {
                 await SendSlotConflictAsync(conflict, ct);
                 return;
@@ -125,7 +126,8 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
                     targetProjects.Select(project => project.Id).ToList(),
                     entityType,
                     goal.EntityId,
-                    goalType)],
+                    goalType,
+                    RankTargetKey.For(goalType, goal.Config))],
                     ct) ?? throw new InvalidOperationException(
                         "The project slot constraint failed but no conflicting membership was found.", ex);
                 await SendSlotConflictAsync(databaseConflict, ct);
