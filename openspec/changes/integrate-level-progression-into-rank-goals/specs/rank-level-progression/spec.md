@@ -1,36 +1,51 @@
 ## Purpose
 
-Defines Rank's inherent level prerequisite without requiring a second goal record for routine progression, while preserving independently useful Level goals.
+Defines the level a Rank or Ability target needs as an intrinsic, derived requirement of that target, with no Level goal type to plan it separately.
 
 ## ADDED Requirements
 
-### Requirement: Rank's level gate is intrinsic to its target
+### Requirement: A target's level requirement is intrinsic and derived
 
-A Character Rank goal SHALL include the character level required for its configured end rank and applied-upgrade target as part of that goal's progression. Creation SHALL NOT require or synthesize a Level goal solely to satisfy that Rank target. Rank completion SHALL still require the actual rank/slots target to be reached; reaching the level alone SHALL NOT complete it.
+A Character Rank goal SHALL include the character level required for its configured end rank and applied-upgrade target, and a Character Ability goal SHALL include the character level implied by the higher of its two ability targets, both derived from the current catalog ladder. Creation SHALL NOT require, synthesize, or accept a goal or dependency edge solely to satisfy that level. Rank completion SHALL still require the actual rank/slots target to be reached, and Ability completion its ability levels; reaching a level alone SHALL NOT complete either.
 
 #### Scenario: Rank target is above current level
 
 - **GIVEN** a character is below the level needed for a requested Rank target
 - **WHEN** the Rank goal is created
-- **THEN** the Rank goal retains its target without a new Level dependency, and its required level is derived from that target
+- **THEN** the Rank goal retains its target with no new goal or dependency, and its required level is derived from that target
 
-#### Scenario: Standalone Level goal remains supported
+#### Scenario: Ability target is above current level
 
-- **WHEN** a user creates an intentional Level goal without a Rank dependency
-- **THEN** that goal remains separately addressable and managed as a Level target
+- **GIVEN** a Character Ability target implies a level above the character's current level
+- **WHEN** the Ability goal is created
+- **THEN** it is created without a Level goal or Level dependency, and its required level is derived from the target
 
-### Requirement: Legacy Level dependencies are not destructively guessed away
+### Requirement: The Level goal type does not exist
 
-An existing Rank→Level dependency whose Level goal has no other dependent SHALL be interpreted as routine Rank progression for planning and SHALL not cause an independent required Level milestone or duplicate XP allocation. An existing Level goal with an Ability dependent or an independent purpose SHALL remain a separately actionable goal. No existing Level record SHALL be deleted solely by inference from a dependency edge.
+The goal API SHALL NOT expose a Level goal type or a Level target group on create, combined create, target edit, read, list, or import responses. A request that names a Level goal type or supplies a Level target group SHALL be rejected with a validation error and SHALL NOT create or change any goal. No goal SHALL declare a dependency on a Level goal.
 
-#### Scenario: Rank-only legacy pair
+#### Scenario: Creating a Level goal is rejected
 
-- **GIVEN** a Rank goal depends on a Level goal that has no other dependent
-- **WHEN** an effective plan is derived
-- **THEN** level progression is attributed to the Rank milestone once and the stored Level goal remains recoverable by id
+- **WHEN** a client submits a goal whose goal type is Level, or a config with a Level target group
+- **THEN** the request is rejected with a validation error and nothing is created
 
-#### Scenario: Shared Ability prerequisite
+#### Scenario: Goal responses carry no Level data
 
-- **GIVEN** one Level goal supports both Rank and Ability goals
-- **WHEN** the effective plan is derived
-- **THEN** the Level goal remains separately actionable for Ability and the Rank does not claim its XP twice
+- **WHEN** any goal is read or listed
+- **THEN** its response contains no Level goal type and no Level target group
+
+### Requirement: Existing Level goals are removed by migration
+
+Applying the migration SHALL delete every existing Level goal, including its project memberships, and SHALL remove each deleted goal's id from every other goal's dependency list. Goals that depended on a Level goal SHALL otherwise be unchanged and remain valid. No Level goal SHALL be preserved, hidden, or reinterpreted as part of a Rank or Ability goal.
+
+#### Scenario: Rank and Ability dependents survive
+
+- **GIVEN** a Level goal that Rank and Ability goals depend on
+- **WHEN** the migration runs
+- **THEN** the Level goal and its memberships are gone, and the Rank and Ability goals remain with the Level id removed from their dependencies
+
+#### Scenario: Standalone Level goal is deleted
+
+- **GIVEN** a Level goal with no dependents
+- **WHEN** the migration runs
+- **THEN** it is deleted and no other goal changes
