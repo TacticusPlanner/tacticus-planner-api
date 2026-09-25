@@ -33,8 +33,9 @@ public sealed class UpdateDisplayNameEndpoint : Endpoint<UpdateDisplayNameReques
             return;
         }
 
+        var profileIdValue = profileId.Value;
         var db = Resolve<PlannerDbContext>();
-        var profile = await db.Profiles.FirstAsync(entity => entity.Id == profileId.Value, ct);
+        var profile = await db.Profiles.FirstAsync(entity => entity.Id == profileIdValue, ct);
         profile.DisplayName = req.DisplayName.Trim();
         await db.SaveChangesAsync(ct);
 
