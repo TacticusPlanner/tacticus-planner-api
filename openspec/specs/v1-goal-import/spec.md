@@ -159,30 +159,25 @@ carries no usable target.
 
 ### Requirement: Duplicate V1 goals for one unit and type are merged and reported
 
-When a V1 profile contains more than one goal of the same type for the same
-unit, the import SHALL produce at most one V2 goal for that unit and type.
-
-For Rank and Ascension goals the merged target SHALL span the duplicates: the
-lowest starting point and the highest end point among them. For every other
-goal type the highest-priority duplicate SHALL be used.
-
-The surviving source goal SHALL report as created. Every merged-away source
-goal SHALL report as skipped with a code identifying a merge, and SHALL carry
-the id of the goal it was merged into.
+When V1 contains multiple Rank goals for one unit, the import SHALL preserve goals with distinct normalized end targets as separate V2 milestones in their V1 priority order. Exact Rank end-target duplicates SHALL merge into the highest-priority survivor and report the survivor id. For non-Rank goals, the existing one-per-unit/type merge remains: Ascension spans lowest start to highest end; other types retain the highest-priority source. Every merged-away source SHALL report a skip with merge code and survivor id.
 
 #### Scenario: Two rank goals merge into one spanning goal
 
-- **GIVEN** a V1 profile with two Rank goals for one character, targeting different ranks
-- **WHEN** the goals part is imported
-- **THEN** one Rank goal is created whose target is the higher of the two
-- **AND** the other source goal reports as skipped with a merge code and the created goal's id
+- **GIVEN** two V1 Rank goals for one character with the same normalized end target but different starts
+- **WHEN** goals are imported
+- **THEN** one Rank goal survives, with a span covering both starts, and the other source reports a merge skip naming that goal
 
 #### Scenario: Duplicate ability goals keep the higher-priority one
 
-- **GIVEN** a V1 profile with two ability goals for one unit
-- **WHEN** the goals part is imported
-- **THEN** the higher-priority one reports as created and the other reports as skipped with a
-  merge code
+- **GIVEN** two V1 Ability goals for one unit
+- **WHEN** goals are imported
+- **THEN** the higher-priority one reports created and the other reports skipped with a merge code
+
+#### Scenario: Distinct Rank targets import separately
+
+- **GIVEN** V1 has Rank goals for Bellator targeting Silver3 and Gold1
+- **WHEN** goals are imported
+- **THEN** two V2 goals are created with distinct ids and preserved V1 order
 
 ### Requirement: V1 shard-source choices are carried into acquisition sources
 
@@ -220,9 +215,7 @@ the outcome SHALL remain created.
 
 ### Requirement: V1 goal notes are preserved
 
-An imported goal SHALL carry the notes from its source V1 goal. When several
-source goals merge into one V2 goal, the merged goal SHALL carry the notes of
-every contributing source goal that had any.
+An imported goal SHALL carry notes from its V1 source. When source goals merge into one V2 goal, the merged goal SHALL carry notes from every contributing source that had notes. Distinct Rank milestones SHALL keep their own notes rather than combining them.
 
 #### Scenario: Notes survive the import
 
@@ -232,9 +225,15 @@ every contributing source goal that had any.
 
 #### Scenario: Merged goals combine their notes
 
-- **GIVEN** two merging V1 Rank goals for one character, both with notes
+- **GIVEN** two merging V1 Ascension goals for one character, both with notes
 - **WHEN** they are imported
 - **THEN** the created goal's notes contain both source goals' notes
+
+#### Scenario: Distinct Rank notes stay distinct
+
+- **GIVEN** V1 Silver3 and Gold1 Rank goals have different notes
+- **WHEN** they are imported
+- **THEN** each V2 milestone carries only its own notes
 
 ### Requirement: Imported goals preserve V1 priority order
 
