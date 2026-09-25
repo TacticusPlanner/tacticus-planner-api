@@ -216,7 +216,9 @@ public sealed class GuildSyncService(
             // Unlinked members have no name to show — the upstream guild response never contains one.
             var linkedName = linkedProfile is null
                 ? null
-                : snapshotNamesByProfileId.GetValueOrDefault(linkedProfile.Id, linkedProfile.DisplayName);
+                : snapshotNamesByProfileId.GetValueOrDefault(linkedProfile.Id, linkedProfile.DisplayName) is { Length: > 0 } name
+                    ? name
+                    : null; // unconfirmed profiles have no public name — never fall back to a provider value
 
             if (!existingByUserId.TryGetValue(upstreamUserId, out var member))
             {

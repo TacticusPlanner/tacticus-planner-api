@@ -745,7 +745,7 @@
           "Me"
         ],
         "summary": "Gets the authenticated user's planner account, creating it on first access.",
-        "description": "Every authenticated caller has a planner account: this endpoint creates the Account and Profile on first access if they do not exist yet. Tacticus integration values are never returned in full — only a masked preview and whether onboarding is complete.",
+        "description": "Every authenticated caller has a planner account: this endpoint creates the Account and Profile on first access if they do not exist yet. displayName is the user-confirmed name or null; suggestedDisplayName is a private, editable suggestion that is never public identity. Tacticus integration values are never returned in full — only a masked preview and whether onboarding is complete.",
         "operationId": "TacticusPlannerApiFeaturesCurrentUserGetCurrentUserEndpoint",
         "responses": {
           "200": {
@@ -787,6 +787,55 @@
           },
           "403": {
             "description": "The authenticated user cannot access the API."
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/me/display-name": {
+      "put": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Confirms or edits the current profile's app-owned display name.",
+        "description": "Trims the name, requires 1-80 characters without control characters, saves it, which confirms it. Names are not required to be unique.",
+        "operationId": "TacticusPlannerApiFeaturesCurrentUserUpdateDisplayNameEndpoint",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesCurrentUserUpdateDisplayNameRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The saved, confirmed name.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesCurrentUserUpdateDisplayNameResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The name is empty, too long, or has control characters."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "The authenticated user has not signed up yet."
           }
         },
         "security": [
@@ -2717,6 +2766,7 @@
         "required": [
           "applicationUserId",
           "displayName",
+          "suggestedDisplayName",
           "hasCompletedOnboarding",
           "tacticusApiKeyMasked",
           "tacticusUserIdMasked",
@@ -2729,7 +2779,16 @@
             "format": "uuid"
           },
           "displayName": {
-            "type": "string"
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "suggestedDisplayName": {
+            "type": [
+              "null",
+              "string"
+            ]
           },
           "hasCompletedOnboarding": {
             "type": "boolean"
@@ -2747,6 +2806,28 @@
             ]
           },
           "analyticsId": {
+            "type": "string"
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesCurrentUserUpdateDisplayNameRequest": {
+        "required": [
+          "displayName"
+        ],
+        "type": "object",
+        "properties": {
+          "displayName": {
+            "type": "string"
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesCurrentUserUpdateDisplayNameResponse": {
+        "required": [
+          "displayName"
+        ],
+        "type": "object",
+        "properties": {
+          "displayName": {
             "type": "string"
           }
         }
@@ -5710,6 +5791,12 @@
             ]
           },
           "tacticusUserIdMasked": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "suggestedDisplayName": {
             "type": [
               "null",
               "string"

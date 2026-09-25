@@ -13,6 +13,10 @@ namespace TacticusPlanner.Api.Features.CurrentUser;
 
 public sealed class GetCurrentUserEndpoint : EndpointWithoutRequest<CurrentUserResponse>
 {
+    /// <summary>Stored until the user sets a name; a chosen name is always 1-80 characters, so this can never
+    /// collide with one. Provider claims are never persisted as the name.</summary>
+    public const string NoDisplayName = "";
+
     public override void Configure()
     {
         Get("me");
@@ -20,8 +24,10 @@ public sealed class GetCurrentUserEndpoint : EndpointWithoutRequest<CurrentUserR
         {
             summary.Summary = "Gets the authenticated user's planner account, creating it on first access.";
             summary.Description = "Every authenticated caller has a planner account: this endpoint creates the "
-                + "Account and Profile on first access if they do not exist yet. Tacticus integration values are "
-                + "never returned in full — only a masked preview and whether onboarding is complete.";
+                + "Account and Profile on first access if they do not exist yet. displayName is the user-confirmed "
+                + "name or null; suggestedDisplayName is a private, editable suggestion that is never public "
+                + "identity. Tacticus integration values are never returned in full — only a masked preview and "
+                + "whether onboarding is complete.";
             summary.Response<CurrentUserResponse>(
                 StatusCodes.Status200OK,
                 "The authenticated user's account and Tacticus integration status."
@@ -50,6 +56,7 @@ public sealed class GetCurrentUserEndpoint : EndpointWithoutRequest<CurrentUserR
         await db.SaveChangesAsync(ct);
 
         var profile = account.Profile!;
+        var hasName = profile.DisplayName != NoDisplayName;
         var tacticusApiKey = profile.TacticusIntegration?.TacticusApiKey;
         var analyticsId = Resolve<AnalyticsIdentityDeriver>()
             .Derive(account.Id, AnalyticsIdentityDeriver.PostHogDestination);
@@ -65,7 +72,8 @@ public sealed class GetCurrentUserEndpoint : EndpointWithoutRequest<CurrentUserR
 
         await Send.OkAsync(new CurrentUserResponse(
             account.Id.Value,
-            profile.DisplayName,
+            hasName ? profile.DisplayName : null,
+            hasName ? null : GetDisplayNameSuggestion(User),
             tacticusApiKey is not null,
             SecretMasker.Mask(tacticusApiKey),
             SecretMasker.Mask(profile.TacticusUserId?.Value),
@@ -99,7 +107,7 @@ public sealed class GetCurrentUserEndpoint : EndpointWithoutRequest<CurrentUserR
             Profile = new Profile
             {
                 Id = profileId,
-                DisplayName = GetDisplayName(user),
+                DisplayName = NoDisplayName,
                 ActiveProjectId = defaultProject.Id,
             },
         };
@@ -125,17 +133,18 @@ public sealed class GetCurrentUserEndpoint : EndpointWithoutRequest<CurrentUserR
             .FirstOrDefaultAsync(account => account.Id == accountId, ct);
     }
 
-    private static string GetDisplayName(ClaimsPrincipal user)
+    /// <summary>A private suggestion read live from the token — provider claims are never public identity.</summary>
+    private static string? GetDisplayNameSuggestion(ClaimsPrincipal user)
     {
-        return user.FindFirstValue("name")
-            ?? user.FindFirstValue("preferred_username")
-            ?? "Planner User";
+        var claim = user.FindFirstValue("name") ?? user.FindFirstValue("preferred_username");
+        return string.IsNullOrWhiteSpace(claim) ? null : claim.Trim();
     }
 }
 
 public sealed record CurrentUserResponse(
     Guid ApplicationUserId,
-    string DisplayName,
+    string? DisplayName,
+    string? SuggestedDisplayName,
     bool HasCompletedOnboarding,
     string? TacticusApiKeyMasked,
     string? TacticusUserIdMasked,
