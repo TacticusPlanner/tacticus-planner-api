@@ -131,22 +131,22 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var defaultProject = await GetDefaultProjectAsync(client);
-        // A different goal type for the same character (Level, not Rank) so it doesn't trip the
+        // A different goal type for the same character (Ascension, not Rank) so it doesn't trip the
         // one-active-or-paused-per-(entity,type) constraint — occupies priority 1 in the default
         // project via the normal auto-append path, so the Rank goal's explicit priority below is a
         // deliberate insert-at-the-top, not a coincidence.
-        var levelGoalResponse = await client.PostAsJsonAsync(
+        var ascensionGoalResponse = await client.PostAsJsonAsync(
             "/api/v1/me/goals",
             new CreateGoalRequest(
                 "character",
                 "blackTerminator",
-                "level",
-                new CreateGoalConfigRequest(Level: new LevelTargetRequest(1, 10)),
+                "ascension",
+                new CreateGoalConfigRequest(Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar")),
                 null
             ),
             TestContext.Current.CancellationToken
         );
-        levelGoalResponse.EnsureSuccessStatusCode();
+        ascensionGoalResponse.EnsureSuccessStatusCode();
 
         var response = await client.PostAsJsonAsync(
             "/api/v1/me/goals",
@@ -924,8 +924,8 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
             new CreateGoalRequest(
                 "character",
                 "blackTerminator",
-                "level",
-                new CreateGoalConfigRequest(Level: new LevelTargetRequest(1, 10)),
+                "ascension",
+                new CreateGoalConfigRequest(Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar")),
                 null
             ),
             TestContext.Current.CancellationToken
@@ -1089,8 +1089,8 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
             new CreateGoalRequest(
                 "character",
                 "blackTerminator",
-                "level",
-                new CreateGoalConfigRequest(Level: new LevelTargetRequest(1, 10)),
+                "ascension",
+                new CreateGoalConfigRequest(Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar")),
                 null
             ),
             TestContext.Current.CancellationToken

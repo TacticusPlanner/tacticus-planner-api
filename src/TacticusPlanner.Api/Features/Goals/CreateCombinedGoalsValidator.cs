@@ -37,8 +37,10 @@ public sealed class CreateCombinedGoalsValidator : Validator<CreateCombinedGoals
 
         RuleForEach(request => request.Goals)
             .ChildRules(goal => goal.RuleFor(spec => spec.GoalType)
-                .Must(value => Enum.TryParse<GoalType>(value, ignoreCase: true, out _))
-                .WithMessage("Unknown or not-yet-supported goal type."));
+                .Must(value => Enum.TryParse<GoalType>(value, ignoreCase: true, out var parsed)
+                    && Enum.IsDefined(parsed)
+                    && !int.TryParse(value, out _))
+                .WithMessage("Unknown or unsupported goal type (the Level goal type no longer exists)."));
 
         RuleForEach(request => request.Goals)
             .ChildRules(goal => goal.RuleFor(spec => spec.Snapshot)

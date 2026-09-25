@@ -18,11 +18,11 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
     // A second, different-typed goal for the same character — these priority/bulk-status tests need
     // two distinct goal rows in one project, and two Rank goals for the same character would now trip
     // the one-active-or-paused-per-(entity,type) constraint (see GoalsEndpointTests).
-    private static readonly CreateGoalRequest LevelGoal = new(
+    private static readonly CreateGoalRequest AscensionGoal = new(
         "character",
         "blackTerminator",
-        "level",
-        new CreateGoalConfigRequest(Level: new LevelTargetRequest(1, 10)),
+        "ascension",
+        new CreateGoalConfigRequest(Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar")),
         null
     );
 
@@ -204,7 +204,7 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var defaultProject = await GetDefaultProjectAsync(client);
         var activeGoal = await CreateGoalAsync(client);
-        var completedGoal = await CreateGoalAsync(client, LevelGoal);
+        var completedGoal = await CreateGoalAsync(client, AscensionGoal);
 
         var completeResponse = await client.PostAsJsonAsync(
             $"/api/v1/me/goals/{completedGoal.GoalId}/status",
@@ -244,7 +244,7 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var defaultProject = await GetDefaultProjectAsync(client);
         var first = await CreateGoalAsync(client);
-        var second = await CreateGoalAsync(client, LevelGoal);
+        var second = await CreateGoalAsync(client, AscensionGoal);
 
         await client.PutAsJsonAsync(
             $"/api/v1/me/projects/{defaultProject.ProjectId}/goal-order",
@@ -416,14 +416,14 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
         var mow = await CreateGoalAsync(client, new CreateGoalRequest(
             "mow", "astraOrdnanceBattery", "ability",
             new CreateGoalConfigRequest(Ability: new AbilityTargetRequest(0, 3, 0, 3)), null));
-        var level = await CreateGoalAsync(client, LevelGoal);
+        var ascension = await CreateGoalAsync(client, AscensionGoal);
 
         var initial = await client.GetFromJsonAsync<ListProjectGoalsResponse>(
             $"/api/v1/me/projects/{project.ProjectId}/goals", TestContext.Current.CancellationToken);
         Assert.NotNull(initial);
-        // Flat per-goal creation order, not unit-grouped: rank and level share a unit but do not sit
+        // Flat per-goal creation order, not unit-grouped: rank and ascension share a unit but do not sit
         // adjacent to each other just because of that — mow, created between them, sits between them too.
-        Assert.Equal([rank.GoalId, mow.GoalId, level.GoalId], initial.Goals.Select(entry => entry.Goal.GoalId));
+        Assert.Equal([rank.GoalId, mow.GoalId, ascension.GoalId], initial.Goals.Select(entry => entry.Goal.GoalId));
 
         var complete = await client.PostAsJsonAsync(
             $"/api/v1/me/goals/{rank.GoalId}/status", new UpdateGoalStatusRequest("completed"),
@@ -432,18 +432,18 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
 
         var reordered = await client.PutAsJsonAsync(
             $"/api/v1/me/projects/{project.ProjectId}/goal-order",
-            new UpdateProjectGoalOrderRequest([mow.GoalId, level.GoalId]),
+            new UpdateProjectGoalOrderRequest([mow.GoalId, ascension.GoalId]),
             TestContext.Current.CancellationToken);
         reordered.EnsureSuccessStatusCode();
 
         var final = await client.GetFromJsonAsync<ListProjectGoalsResponse>(
             $"/api/v1/me/projects/{project.ProjectId}/goals", TestContext.Current.CancellationToken);
         Assert.NotNull(final);
-        var byId = new Dictionary<Guid, string> { [mow.GoalId] = "mow", [level.GoalId] = "level", [rank.GoalId] = "rank" };
+        var byId = new Dictionary<Guid, string> { [mow.GoalId] = "mow", [ascension.GoalId] = "ascension", [rank.GoalId] = "rank" };
         var actualNames = final.Goals.Select(entry => byId[entry.Goal.GoalId]).ToList();
         // The completed rank goal is historical and stays after every in-flight goal regardless of its
         // stale pre-completion priority value — NormalizeAsync's two-zone renumbering, not query filtering.
-        Assert.Equal(["mow", "level", "rank"], actualNames);
+        Assert.Equal(["mow", "ascension", "rank"], actualNames);
     }
 
     [Fact]
@@ -530,7 +530,7 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
         var firstOriginalPriority = before.Goals.Single(entry => entry.Goal.GoalId == first.GoalId).Priority;
 
         var thirdResponse = await client.PostAsJsonAsync(
-            "/api/v1/me/goals", LevelGoal, TestContext.Current.CancellationToken);
+            "/api/v1/me/goals", AscensionGoal, TestContext.Current.CancellationToken);
         thirdResponse.EnsureSuccessStatusCode();
         var third = await thirdResponse.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
         Assert.NotNull(third);

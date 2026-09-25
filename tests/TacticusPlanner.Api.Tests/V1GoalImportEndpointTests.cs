@@ -607,7 +607,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
     }
 
     [Fact]
-    public async Task AscensionIsSynthesizedAtTheMinimumSatisfyingTargetWithALevelPrerequisiteToo()
+    public async Task AscensionIsSynthesizedAtTheMinimumSatisfyingTargetAndNoLevelGoalIsCreated()
     {
         var (client, subject) = await CreateProvisionedClientAsync();
         await SeedPlayerDataSnapshotAsync(subject, [Character(CharacterId, UnitProgression.CommonNone, UnitRank.Stone1, xpLevel: 1)]);
@@ -615,20 +615,17 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         var body = await ImportGoalsAsync(client, [RankGoal("r1", CharacterId, 1, UnitRank.Gold1)]);
 
         var expectedAscension = ProgressionRules.MinimumProgressionForRank(UnitRank.Gold1);
-        var expectedLevel = ProgressionRules.RequiredLevelForRankTarget(UnitRank.Gold1, false, 0);
 
         var ascensionOutcome = Assert.Single(body.Outcomes, o => o.Code == "prerequisite_added" && o.GoalType == "Ascension");
-        var levelOutcome = Assert.Single(body.Outcomes, o => o.Code == "prerequisite_added" && o.GoalType == "Level");
         var rankOutcome = Assert.Single(body.Outcomes, o => o.SourceGoalId == "r1");
 
         var ascensionGoal = await GetGoalAsync(client, ascensionOutcome.GoalId!.Value);
         Assert.Equal(ProgressionRules.ProgressionOrder[(int)expectedAscension], ascensionGoal.Config.Progression!.End);
-        var levelGoal = await GetGoalAsync(client, levelOutcome.GoalId!.Value);
-        Assert.Equal(expectedLevel, levelGoal.Config.Level!.End);
+        Assert.DoesNotContain(body.Outcomes, o => o.GoalType == "Level");
 
         var rankGoal = await GetGoalAsync(client, rankOutcome.GoalId!.Value);
         Assert.Contains(ascensionOutcome.GoalId.Value, rankGoal.DependsOn);
-        Assert.Contains(levelOutcome.GoalId.Value, rankGoal.DependsOn);
+        Assert.Single(rankGoal.DependsOn);
     }
 
     [Fact]
@@ -686,29 +683,6 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         Assert.DoesNotContain(body.Outcomes, o => o.GoalType == "Unlock");
         var outcome = Assert.Single(body.Outcomes, o => o.SourceGoalId == "mow-ab");
         Assert.Equal("Created", outcome.Status);
-    }
-
-    [Fact]
-    public async Task LevelPrerequisiteAboveTheCharacterLevelCapIsRejectedRatherThanPersisted()
-    {
-        // Adamantine2 with 5 applied upgrades needs level 64 (RequiredLevelForRankTarget), which exceeds
-        // GoalTargetValidationService's 60-level cap. The synthesized Level goal must be rejected — not
-        // persisted with an invalid target — while the Rank goal that needed it still succeeds.
-        var (client, subject) = await CreateProvisionedClientAsync();
-        await SeedPlayerDataSnapshotAsync(subject, [Character(CharacterId, UnitProgression.CommonNone, UnitRank.Stone1, xpLevel: 1)]);
-
-        var body = await ImportGoalsAsync(client, [RankGoal("r1", CharacterId, 1, UnitRank.Adamantine2, rankAppliedUpgrades: 5)]);
-
-        var levelOutcome = Assert.Single(body.Outcomes, o => o.GoalType == "Level");
-        Assert.Equal("Failed", levelOutcome.Status);
-        Assert.Equal("prerequisite_rejected", levelOutcome.Code);
-        Assert.Null(levelOutcome.GoalId);
-
-        var rankOutcome = Assert.Single(body.Outcomes, o => o.SourceGoalId == "r1");
-        Assert.Equal("Created", rankOutcome.Status);
-
-        var goals = await client.GetFromJsonAsync<ListGoalsResponse>("/api/v1/me/goals", TestContext.Current.CancellationToken);
-        Assert.DoesNotContain(goals!.Goals, goal => goal.GoalType == "Level");
     }
 
     [Fact]

@@ -18,7 +18,7 @@
 
 ## Spec deltas to author
 
-Only `rank-level-progression` and `v1-goal-import` deltas exist under `specs/` today. The removal also changes these existing capabilities, whose delta specs still need creating (`/opsx:continue`): `goal-lifecycle-status` (drop the missing-Level reason and its Restricted scenario, and the Level clause of "A covering goal suppresses its prerequisite reason") and `goal-target-editing` (drop Level from the supported target kinds and the all-kinds scenario).
+The API deltas are `rank-level-progression`, `v1-goal-import`, and `goal-target-editing` (drop Level from the supported target kinds and the all-kinds scenario). The API `goal-lifecycle-status` capability never mentioned Level, so it needs no delta here; the missing-Level reason lives in the apps `goal-blocker-reasons` capability.
 
 ## Risks / Trade-offs
 

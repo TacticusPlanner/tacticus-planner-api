@@ -22,11 +22,11 @@ A Character Rank goal SHALL include the character level required for its configu
 
 ### Requirement: The Level goal type does not exist
 
-The goal API SHALL NOT expose a Level goal type or a Level target group on create, combined create, target edit, read, list, or import responses. A request that names a Level goal type or supplies a Level target group SHALL be rejected with a validation error and SHALL NOT create or change any goal. No goal SHALL declare a dependency on a Level goal.
+The goal API SHALL NOT expose a Level goal type or a Level target group on create, combined create, target edit, read, list, or import responses. A request that names the Level goal type SHALL be rejected with a validation error and SHALL NOT create or change any goal (an unrecognized `level` config member is ignored like any other unknown member). No goal SHALL declare a dependency on a Level goal.
 
 #### Scenario: Creating a Level goal is rejected
 
-- **WHEN** a client submits a goal whose goal type is Level, or a config with a Level target group
+- **WHEN** a client submits a goal whose goal type is Level
 - **THEN** the request is rejected with a validation error and nothing is created
 
 #### Scenario: Goal responses carry no Level data

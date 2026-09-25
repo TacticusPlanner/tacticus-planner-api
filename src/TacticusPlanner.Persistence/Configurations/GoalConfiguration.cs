@@ -43,7 +43,6 @@ public sealed class GoalConfiguration : IEntityTypeConfiguration<Goal>
             config.OwnsOne(c => c.Ability);
             config.OwnsMany(c => c.AcquisitionSources);
             config.OwnsOne(c => c.Upgrade, upgrade => upgrade.OwnsMany(u => u.Targets));
-            config.OwnsOne(c => c.Level);
         });
         builder.OwnsOne(entity => entity.Snapshot, snapshot =>
         {

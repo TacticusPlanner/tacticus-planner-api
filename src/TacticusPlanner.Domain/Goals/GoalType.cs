@@ -8,5 +8,4 @@ public enum GoalType
     Ability = 3,
     Unlock = 4,
     Upgrade = 5,
-    Level = 7,
 }
