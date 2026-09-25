@@ -278,6 +278,33 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
     }
 
     [Fact]
+    public async Task ReimportingAfterTheRankTargetWasEditedInPlaceStillSkipsTheImportedGoal()
+    {
+        var (client, subject) = await CreateProvisionedClientAsync();
+        await SeedPlayerDataSnapshotAsync(subject, [Character(CharacterId, xpLevel: 60)]);
+        var source = new[] { RankGoal("r-low", CharacterId, 1, UnitRank.Bronze1) };
+
+        var first = await ImportGoalsAsync(client, source, automaticPrerequisites: false);
+        var imported = await GetGoalAsync(client, first.Outcomes[0].GoalId!.Value);
+        var edit = await client.PutAsJsonAsync(
+            $"/api/v1/me/goals/{imported.GoalId}/target",
+            new UpdateGoalTargetRequest(
+                imported.Revision,
+                new GoalTargetEditRequest(Rank: new RankEndTargetRequest((int)UnitRank.Silver1, false, 0))),
+            TestContext.Current.CancellationToken);
+        edit.EnsureSuccessStatusCode();
+
+        var second = await ImportGoalsAsync(client, source, automaticPrerequisites: false);
+
+        var outcome = Assert.Single(second.Outcomes);
+        Assert.Equal("Skipped", outcome.Status);
+        Assert.Equal("goal_already_exists", outcome.Code);
+        Assert.Equal(imported.GoalId, outcome.GoalId);
+        var all = await client.GetFromJsonAsync<ListGoalsResponse>("/api/v1/me/goals", TestContext.Current.CancellationToken);
+        Assert.Single(all!.Goals);
+    }
+
+    [Fact]
     public async Task ReimportingAHigherRankTargetCreatesItBesideTheExistingMilestone()
     {
         var (client, subject) = await CreateProvisionedClientAsync();

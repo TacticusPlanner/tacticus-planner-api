@@ -76,9 +76,7 @@ public sealed class V1GoalImportService(
             .AsNoTracking()
             .Where(goal => goal.ProfileId == profileId)
             .ToListAsync(ct);
-        var existingByKey = existingRows
-            .GroupBy(row => new GoalKey(row.EntityType, row.EntityId, row.GoalType, RankTargetKey.For(row.GoalType, row.Config)))
-            .ToDictionary(group => group.Key, group => new ExistingGoalRef(group.First().Id.Value, group.First().Config));
+        var existingByKey = ExistingGoalsByKey(existingRows);
 
         var creatable = new List<TranslatedGoal>();
         foreach (var candidate in collapsedSurvivors)
@@ -267,6 +265,40 @@ public sealed class V1GoalImportService(
         }
 
         return sources.Count == 0 ? null : sources;
+    }
+
+    /// <summary>
+    /// Indexes the account's existing goals for the "already imported" check. A Rank goal is filed under its
+    /// current end target <em>and</em> every target it has held (the previous/new targets of its
+    /// <c>TargetChanged</c> events), so a goal the user later edited in place still matches the V1 source it
+    /// was imported from — otherwise re-importing would create a second Rank goal at the original target.
+    /// The first goal seen for a key wins, as before.
+    /// </summary>
+    private static Dictionary<GoalKey, ExistingGoalRef> ExistingGoalsByKey(IEnumerable<Goal> existingRows)
+    {
+        var byKey = new Dictionary<GoalKey, ExistingGoalRef>();
+        foreach (var row in existingRows)
+        {
+            var reference = new ExistingGoalRef(row.Id.Value, row.Config);
+            var keys = new HashSet<string?> { RankTargetKey.For(row.GoalType, row.Config) };
+            if (row.GoalType == GoalType.Rank)
+            {
+                foreach (var target in row.Events.SelectMany(goalEvent => new[] { goalEvent.PreviousTarget, goalEvent.NewTarget }))
+                {
+                    if (target?.RankEnd is { } end)
+                    {
+                        keys.Add(RankTargetKey.From(end, target.RankEndPointFive ?? false, target.RankEndAppliedUpgrades ?? 0));
+                    }
+                }
+            }
+
+            foreach (var key in keys)
+            {
+                byKey.TryAdd(new GoalKey(row.EntityType, row.EntityId, row.GoalType, key), reference);
+            }
+        }
+
+        return byKey;
     }
 
     private static (List<TranslatedGoal> Survivors, List<(int DuplicateIndex, int SurvivorIndex)> MergedInto)

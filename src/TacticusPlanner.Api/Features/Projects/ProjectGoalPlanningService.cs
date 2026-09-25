@@ -91,19 +91,30 @@ public sealed class ProjectGoalPlanningService(PlannerDbContext db)
         if (excludingGoalId is { } excluded)
             query = query.Where(entry => entry.GoalId != excluded);
 
-        return await query
+        // Every occupied project is reported (the first is the top-level conflict for existing callers, the
+        // full list is in Conflicts) so a multi-project change can show all of them, not just one.
+        var found = await query
             .Join(db.Projects, entry => entry.ProjectId, project => project.Id, (entry, project) => new { entry, project })
-            .Select(value => new ProjectGoalSlotConflictResponse(
-                "projectGoalSlotOccupied",
-                ConflictMessage(value.project.Name, value.entry.GoalType, value.entry.RankTargetKey),
-                value.project.Id.Value,
-                value.project.Name,
-                value.entry.EntityType.ToString(),
-                value.entry.EntityId,
-                value.entry.GoalType.ToString(),
-                value.entry.GoalId.Value,
-                value.entry.RankTargetKey))
-            .FirstOrDefaultAsync(ct);
+            .OrderBy(value => value.project.Id)
+            .ToListAsync(ct);
+        if (found.Count == 0)
+            return null;
+
+        var first = found[0];
+        return new ProjectGoalSlotConflictResponse(
+            "projectGoalSlotOccupied",
+            ConflictMessage(first.project.Name, first.entry.GoalType, first.entry.RankTargetKey),
+            first.project.Id.Value,
+            first.project.Name,
+            first.entry.EntityType.ToString(),
+            first.entry.EntityId,
+            first.entry.GoalType.ToString(),
+            first.entry.GoalId.Value,
+            first.entry.RankTargetKey,
+            found
+                .Select(value => new ProjectGoalSlotConflictEntry(
+                    value.project.Id.Value, value.project.Name, value.entry.GoalId.Value))
+                .ToList());
     }
 
     public async Task<ProjectGoalSlotConflictResponse?> FindConflictAfterFailedSaveAsync(
@@ -229,7 +240,11 @@ public sealed record ProjectGoalSlotConflictResponse(
     string EntityId,
     string GoalType,
     Guid ExistingGoalId,
-    string? NormalizedTarget = null);
+    string? NormalizedTarget = null,
+    IReadOnlyList<ProjectGoalSlotConflictEntry>? Conflicts = null);
+
+/// <summary>One occupied project and the goal holding the slot there — one per conflicting project.</summary>
+public sealed record ProjectGoalSlotConflictEntry(Guid ProjectId, string ProjectName, Guid ExistingGoalId);
 
 public sealed record ProjectGoalSlotLookup(
     IReadOnlyCollection<ProjectId> ProjectIds,

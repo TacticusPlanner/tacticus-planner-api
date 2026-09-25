@@ -18,7 +18,7 @@ namespace TacticusPlanner.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.12")
+                .HasAnnotation("ProductVersion", "10.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -1930,9 +1930,6 @@ namespace TacticusPlanner.Persistence.Migrations
                                     b2.Property<int>("BattleIndex");
 
                                     b2.Property<string>("TacticusCampaignId")
-                                        .IsRequired();
-
-                                    b2.Property<string>("Type")
                                         .IsRequired();
 
                                     b2.HasKey("LiveProgressChunkPlayerDataSnapshotId", "__synthesizedOrdinal")

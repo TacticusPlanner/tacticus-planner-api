@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql;
+using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Api.Features.Projects;
 using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.Profiles;
@@ -170,6 +171,54 @@ public sealed class RankTargetSlotsPostgresTests
         var goal = await verify.Goals.SingleAsync(entry => entry.Id == recreated, ct);
         Assert.Equal(GoalStatus.Active, goal.Status);
         Assert.Equal([GoalEventType.Created], goal.Events.Select(entry => entry.Type));
+    }
+
+    /// <summary>The database backstop for a Rank race: when the friendly pre-check is bypassed and two goals
+    /// claim the same Rank target in one project, the Rank-target index rejects the second — and that
+    /// violation must be recognised as a slot conflict (so endpoints answer 409, not 500), like the
+    /// non-Rank index's.</summary>
+    [Fact]
+    public async Task RankTargetIndexViolationIsRecognisedAsASlotConflict()
+    {
+        await using var postgres = new PostgreSqlBuilder("postgres:18-alpine").Build();
+        await postgres.StartAsync(TestContext.Current.CancellationToken);
+        var connectionString = postgres.GetConnectionString();
+        var ct = TestContext.Current.CancellationToken;
+        var profileId = ProfileId.From(Guid.NewGuid());
+        var projectId = ProjectId.From(Guid.NewGuid());
+        var options = new DbContextOptionsBuilder<PlannerDbContext>()
+            .UseNpgsql(connectionString)
+            .UseSnakeCaseNamingConvention()
+            .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
+            .Options;
+        await using (var migrationDb = new PlannerDbContext(options, new PassthroughEncryption(), new NoProfile()))
+        {
+            await migrationDb.Database.GetService<IMigrator>().MigrateAsync(cancellationToken: ct);
+        }
+
+        await using (var connection = new NpgsqlConnection(connectionString))
+        {
+            await connection.OpenAsync(ct);
+            await using var command = connection.CreateCommand();
+            command.CommandText = """
+                INSERT INTO accounts (id, issuer, subject, created_at, updated_at)
+                VALUES (gen_random_uuid(), 'test', 'rank-race', now(), now());
+                INSERT INTO profiles (id, account_id, display_name, created_at, updated_at)
+                SELECT @profile, id, 'Rank race', now(), now() FROM accounts LIMIT 1;
+                INSERT INTO projects (id, revision, profile_id, name, status, type, created_at, updated_at)
+                VALUES (@project, 0, @profile, 'A', 'Active', 'Custom', now(), now());
+                """;
+            command.Parameters.AddWithValue("profile", profileId.Value);
+            command.Parameters.AddWithValue("project", projectId.Value);
+            await command.ExecuteNonQueryAsync(ct);
+        }
+
+        await AddRankGoalInBothProjectsAsync(options, profileId, [projectId], GoalStatus.Active);
+        var raced = await Assert.ThrowsAsync<DbUpdateException>(
+            () => AddRankGoalInBothProjectsAsync(options, profileId, [projectId], GoalStatus.Active));
+
+        Assert.True(GoalConflictDetection.IsProjectSlotConflict(raced));
+        Assert.Equal("ix_project_goals_one_in_flight_rank_target", (raced.InnerException as PostgresException)?.ConstraintName);
     }
 
     private static async Task<GoalId> AddRankGoalInBothProjectsAsync(

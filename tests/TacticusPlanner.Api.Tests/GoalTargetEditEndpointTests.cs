@@ -337,6 +337,68 @@ public sealed class GoalTargetEditEndpointTests(PlannerApiFactory factory) : ICl
     }
 
     [Fact]
+    public async Task RankCollisionNamesEveryConflictingProject()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var projectA = await GetDefaultProjectAsync(client);
+        var projectB = await CreateProjectAsync(client, "Second plan");
+        var shared = await CreateGoalAsync(
+            client,
+            RankGoal with
+            {
+                Projects = [new ProjectPriorityRequest(projectA.ProjectId), new ProjectPriorityRequest(projectB.ProjectId)],
+            });
+        var seven = new CreateGoalConfigRequest(Rank: new RankTargetRequest(1, false, 0, 7, false, 0));
+        var holderA = await CreateGoalAsync(
+            client, RankGoal with { Config = seven, Projects = [new ProjectPriorityRequest(projectA.ProjectId)] });
+        var holderB = await CreateGoalAsync(
+            client, RankGoal with { Config = seven, Projects = [new ProjectPriorityRequest(projectB.ProjectId)] });
+
+        var response = await PutTargetAsync(client, shared.GoalId, RankEdit(shared.Revision, 7));
+
+        Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
+        var conflict = await ReadAsync<ProjectGoalSlotConflictResponse>(response);
+        var entries = Assert.IsAssignableFrom<IReadOnlyList<ProjectGoalSlotConflictEntry>>(conflict.Conflicts);
+        Assert.Equal(2, entries.Count);
+        Assert.Contains(entries, e => e.ProjectId == projectA.ProjectId && e.ExistingGoalId == holderA.GoalId);
+        Assert.Contains(entries, e => e.ProjectId == projectB.ProjectId && e.ExistingGoalId == holderB.GoalId);
+    }
+
+    [Fact]
+    public async Task MissingUpgradeListOrBlankIdsAreABadRequestNotAServerError()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var upgrade = await CreateGoalAsync(
+            client,
+            Goal("upgrade", new CreateGoalConfigRequest(
+                Upgrade: new UpgradeTargetRequest([new UpgradeMaterialTargetRequest(RelevantUpgradeId, 2)]))));
+        var ascension = await CreateGoalAsync(
+            client,
+            Goal("ascension", new CreateGoalConfigRequest(
+                Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar"))));
+
+        var noList = await client.PutAsJsonAsync(
+            $"/api/v1/me/goals/{upgrade.GoalId}/target",
+            new { expectedRevision = upgrade.Revision, target = new { upgrade = new { targets = (object?)null } } },
+            TestContext.Current.CancellationToken);
+        var blankId = await PutTargetAsync(
+            client,
+            upgrade.GoalId,
+            new UpdateGoalTargetRequest(
+                upgrade.Revision,
+                new GoalTargetEditRequest(
+                    Upgrade: new UpgradeTargetRequest([new UpgradeMaterialTargetRequest("  ", 1)]))));
+        var noStep = await client.PutAsJsonAsync(
+            $"/api/v1/me/goals/{ascension.GoalId}/target",
+            new { expectedRevision = ascension.Revision, target = new { progression = new { end = (string?)null } } },
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.BadRequest, noList.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, blankId.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, noStep.StatusCode);
+    }
+
+    [Fact]
     public async Task EditedRankTargetFreesTheOldSlotAndOccupiesTheNewOne()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);

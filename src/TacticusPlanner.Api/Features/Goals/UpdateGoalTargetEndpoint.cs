@@ -85,7 +85,16 @@ public sealed class UpdateGoalTargetEndpoint : Endpoint<UpdateGoalTargetRequest,
             {
                 // Loaded before the lock; a status/target/membership change that committed while this request
                 // waited would otherwise be invisible.
-                await db.Entry(goal).ReloadAsync(ct);
+                // A full re-read, not ReloadAsync: `before`, the no-op check and the stale-409 body all read
+                // Config/Events, which ReloadAsync leaves at their pre-lock values (GoalQueries.ReloadGoalAsync).
+                var reloaded = await db.ReloadGoalAsync(goal, ct);
+                if (reloaded is null)
+                {
+                    await Send.NotFoundAsync(ct);
+                    return;
+                }
+
+                goal = reloaded;
                 var membershipProjectIds = await db.ProjectGoals
                     .Where(entry => entry.GoalId == goal.Id)
                     .Select(entry => entry.ProjectId)
@@ -173,7 +182,13 @@ public sealed class UpdateGoalTargetEndpoint : Endpoint<UpdateGoalTargetRequest,
                     }
 
                     db.ChangeTracker.Clear();
-                    var current = await db.Goals.AsNoTracking().FirstAsync(entity => entity.Id == goalId, ct);
+                    var current = await db.Goals.AsNoTracking().FirstOrDefaultAsync(entity => entity.Id == goalId, ct);
+                    if (current is null)
+                    {
+                        await Send.NotFoundAsync(ct);
+                        return;
+                    }
+
                     await SendStaleAsync(current, membershipProjectIds, ct);
                     return;
                 }
@@ -369,5 +384,23 @@ public sealed class UpdateGoalTargetValidator : Validator<UpdateGoalTargetReques
     {
         RuleFor(request => request.ExpectedRevision).GreaterThanOrEqualTo(0);
         RuleFor(request => request.Target).NotNull();
+
+        // Creation returns a 400 for a missing upgrade list / blank ids; the edit must too, before the
+        // handler dereferences them.
+        When(request => request.Target?.Upgrade is not null, () =>
+        {
+            RuleFor(request => request.Target.Upgrade!.Targets)
+                .NotNull()
+                .WithMessage("An upgrade target needs a list of materials.");
+            RuleForEach(request => request.Target.Upgrade!.Targets)
+                .Must(target => target is not null && !string.IsNullOrWhiteSpace(target.UpgradeId))
+                .When(request => request.Target.Upgrade!.Targets is not null)
+                .WithMessage("Every upgrade target needs an upgrade id.");
+        });
+
+        When(request => request.Target?.Progression is not null, () =>
+            RuleFor(request => request.Target.Progression!.End)
+                .NotEmpty()
+                .WithMessage("An Ascension target needs a progression step."));
     }
 }

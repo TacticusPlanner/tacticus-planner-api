@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql;
+using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Persistence.Encryption;
@@ -162,6 +163,60 @@ public sealed class GoalTargetEditPostgresTests
 
         await using var verify = new PlannerDbContext(options, new PassthroughEncryption(), new StaticProfile(profileId));
         Assert.Equal(7, (await verify.Goals.SingleAsync(entity => entity.Id == goalId, TestContext.Current.CancellationToken)).Config.Rank!.End);
+    }
+
+    [Fact]
+    public async Task ReloadGoalAsyncRefreshesTheJsonOwnedConfigAndEventsThatReloadAsyncLeavesStale()
+    {
+        await using var postgres = new PostgreSqlBuilder("postgres:18-alpine").Build();
+        await postgres.StartAsync(TestContext.Current.CancellationToken);
+        var (options, profileId) = await MigrateAndSeedProfileAsync(postgres.GetConnectionString());
+        var goalId = GoalId.From(Guid.NewGuid());
+        await using (var seed = new PlannerDbContext(options, new PassthroughEncryption(), new StaticProfile(profileId)))
+        {
+            seed.Goals.Add(new Goal(GoalEntityType.Character, "ragnar", GoalType.Rank)
+            {
+                Id = goalId,
+                ProfileId = profileId,
+                Status = GoalStatus.Active,
+                Config = new GoalConfig { Rank = new RankTarget { Start = 1, End = 5 } },
+                Events = [new GoalEvent { At = DateTimeOffset.UtcNow, Type = GoalEventType.Created }],
+            });
+            await seed.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        await using var stale = new PlannerDbContext(options, new PassthroughEncryption(), new StaticProfile(profileId));
+        var staleGoal = await stale.Goals.SingleAsync(entity => entity.Id == goalId, TestContext.Current.CancellationToken);
+
+        await using (var writer = new PlannerDbContext(options, new PassthroughEncryption(), new StaticProfile(profileId)))
+        {
+            var goal = await writer.Goals.SingleAsync(entity => entity.Id == goalId, TestContext.Current.CancellationToken);
+            goal.Config.Rank!.End = 7;
+            goal.Events.Add(new GoalEvent { At = DateTimeOffset.UtcNow, Type = GoalEventType.TargetChanged });
+            writer.Entry(goal).Property(entity => entity.UpdatedAt).IsModified = true;
+            await writer.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        // Documents why the helper exists: the built-in reload refreshes the row's columns but not its JSON.
+        await stale.Entry(staleGoal).ReloadAsync(TestContext.Current.CancellationToken);
+        Assert.Equal(2L, staleGoal.Revision);
+        Assert.Equal(5, staleGoal.Config.Rank!.End);
+
+        var fresh = await stale.ReloadGoalAsync(staleGoal, TestContext.Current.CancellationToken);
+
+        Assert.NotNull(fresh);
+        Assert.Equal(2L, fresh.Revision);
+        Assert.Equal(7, fresh.Config.Rank!.End);
+        Assert.Equal(2, fresh.Events.Count);
+        Assert.Same(fresh, await stale.Goals.SingleAsync(entity => entity.Id == goalId, TestContext.Current.CancellationToken));
+
+        await using (var deleter = new PlannerDbContext(options, new PassthroughEncryption(), new StaticProfile(profileId)))
+        {
+            deleter.Goals.Remove(await deleter.Goals.SingleAsync(entity => entity.Id == goalId, TestContext.Current.CancellationToken));
+            await deleter.SaveChangesAsync(TestContext.Current.CancellationToken);
+        }
+
+        Assert.Null(await stale.ReloadGoalAsync(fresh, TestContext.Current.CancellationToken));
     }
 
     private static async Task<(DbContextOptions<PlannerDbContext> Options, ProfileId ProfileId)> MigrateAndSeedProfileAsync(

@@ -2402,6 +2402,12 @@
           "$ref": "#/components/schemas/TacticusPlannerApiFeaturesPlayerDataPlayerDataManifestChunk"
         }
       },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesProjectsProjectGoalSlotConflictEntry": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerApiFeaturesProjectsProjectGoalSlotConflictEntry"
+        }
+      },
       "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesV1ImportV1GoalOutcome": {
         "type": "array",
         "items": {
@@ -5653,6 +5659,27 @@
           }
         }
       },
+      "TacticusPlannerApiFeaturesProjectsProjectGoalSlotConflictEntry": {
+        "required": [
+          "projectId",
+          "projectName",
+          "existingGoalId"
+        ],
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "projectName": {
+            "type": "string"
+          },
+          "existingGoalId": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
       "TacticusPlannerApiFeaturesProjectsProjectGoalSlotConflictResponse": {
         "required": [
           "issueCode",
@@ -5696,6 +5723,17 @@
             "type": [
               "null",
               "string"
+            ]
+          },
+          "conflicts": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesProjectsProjectGoalSlotConflictEntry"
+              }
             ]
           }
         }
