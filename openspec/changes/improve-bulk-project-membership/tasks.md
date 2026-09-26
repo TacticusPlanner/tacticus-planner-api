@@ -6,5 +6,5 @@
 
 ## 2. Pair and gates
 
-- [ ] 2.1 Coordinate the same-named apps change and verify every `updateProjectGoals` caller sends the expected set and handles conflict responses before deploying either side.
+- [x] 2.1 Coordinate the same-named apps change and verify every `updateProjectGoals` caller sends the expected set and handles conflict responses before deploying either side.
 - [x] 2.2 Run `dotnet format TacticusPlanner.slnx --verify-no-changes --no-restore`, `dotnet build TacticusPlanner.slnx -c Release --no-restore`, `dotnet test TacticusPlanner.slnx -c Release --no-build`, and `git diff --check`; verify all pass.
