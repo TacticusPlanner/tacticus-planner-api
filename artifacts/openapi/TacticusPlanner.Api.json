@@ -1908,7 +1908,8 @@
         "tags": [
           "Me"
         ],
-        "summary": "Replaces a project's goal membership and priority ordering.",
+        "summary": "Replaces a project's goal membership.",
+        "description": "Atomic: any rejection changes nothing. Never changes any goal's global priority or the goal-order revision. expectedGoalIds is the membership the client reviewed; it is compared with the current membership under the project lock.",
         "operationId": "TacticusPlannerApiFeaturesProjectsUpdateProjectGoalsEndpoint",
         "parameters": [
           {
@@ -1932,7 +1933,7 @@
         },
         "responses": {
           "200": {
-            "description": "The project's updated goal membership.",
+            "description": "The project's updated members in global-priority order.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1942,7 +1943,14 @@
             }
           },
           "400": {
-            "description": "An unknown goal id, or a removal that would leave a goal in no project."
+            "description": "A removal that would leave goals in no project (issueCode lastProjectMembership, naming the blocked goal ids), or an unknown goal id (a validation error).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesProjectsProjectLastMembershipResponse"
+                }
+              }
+            }
           },
           "401": {
             "description": "The request is missing required identity claims."
@@ -1954,11 +1962,11 @@
             "description": "No matching project owned by the caller."
           },
           "409": {
-            "description": "The requested membership contains an occupied active or paused goal slot.",
+            "description": "expectedGoalIds no longer matches the current membership (issueCode projectMembershipStale, carrying the current goal ids), or the requested membership contains an occupied active or paused goal slot (a ProjectGoalSlotConflictResponse).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesProjectsProjectGoalSlotConflictResponse"
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesProjectsProjectMembershipStaleResponse"
                 }
               }
             }
@@ -5806,6 +5814,49 @@
           }
         }
       },
+      "TacticusPlannerApiFeaturesProjectsProjectLastMembershipResponse": {
+        "required": [
+          "issueCode",
+          "message",
+          "blockedGoalIds"
+        ],
+        "type": "object",
+        "properties": {
+          "issueCode": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "blockedGoalIds": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericListOfSystemGuid"
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesProjectsProjectMembershipStaleResponse": {
+        "required": [
+          "issueCode",
+          "message",
+          "projectId",
+          "currentGoalIds"
+        ],
+        "type": "object",
+        "properties": {
+          "issueCode": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "projectId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "currentGoalIds": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericListOfSystemGuid"
+          }
+        }
+      },
       "TacticusPlannerApiFeaturesProjectsProjectSummaryResponse": {
         "required": [
           "projectId",
@@ -5886,12 +5937,16 @@
       },
       "TacticusPlannerApiFeaturesProjectsUpdateProjectGoalsRequest": {
         "required": [
-          "goals"
+          "goals",
+          "expectedGoalIds"
         ],
         "type": "object",
         "properties": {
           "goals": {
             "$ref": "#/components/schemas/SystemCollectionsGenericListOfTacticusPlannerApiFeaturesProjectsProjectGoalEntryRequest"
+          },
+          "expectedGoalIds": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericListOfSystemGuid"
           }
         }
       },

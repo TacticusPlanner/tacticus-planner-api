@@ -218,7 +218,8 @@ public sealed class GlobalGoalOrderEndpointTests(PlannerApiFactory factory) : IC
         response.EnsureSuccessStatusCode();
         var members = await client.PutAsJsonAsync(
             $"/api/v1/me/projects/{extra.ProjectId}/goals",
-            new UpdateProjectGoalsRequest([new ProjectGoalEntryRequest(a.GoalId), new ProjectGoalEntryRequest(b.GoalId)]),
+            new UpdateProjectGoalsRequest(
+                [new ProjectGoalEntryRequest(a.GoalId), new ProjectGoalEntryRequest(b.GoalId)], [a.GoalId]),
             TestContext.Current.CancellationToken);
         members.EnsureSuccessStatusCode();
 

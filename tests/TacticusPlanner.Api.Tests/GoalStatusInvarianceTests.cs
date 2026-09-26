@@ -59,7 +59,7 @@ public sealed class GoalStatusInvarianceTests(PlannerApiFactory factory) : IClas
 
         var response = await client.PutAsJsonAsync(
             $"/api/v1/me/projects/{projectB.ProjectId}/goals",
-            new UpdateProjectGoalsRequest([new ProjectGoalEntryRequest(goal.GoalId)]),
+            new UpdateProjectGoalsRequest([new ProjectGoalEntryRequest(goal.GoalId)], []),
             TestContext.Current.CancellationToken
         );
         response.EnsureSuccessStatusCode();

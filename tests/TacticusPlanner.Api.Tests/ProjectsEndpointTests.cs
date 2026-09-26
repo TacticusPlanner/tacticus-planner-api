@@ -161,7 +161,7 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
 
         var response = await client.PutAsJsonAsync(
             $"/api/v1/me/projects/{defaultProject.ProjectId}/goals",
-            new UpdateProjectGoalsRequest([new ProjectGoalEntryRequest(goal.GoalId)]),
+            new UpdateProjectGoalsRequest([new ProjectGoalEntryRequest(goal.GoalId)], [goal.GoalId]),
             TestContext.Current.CancellationToken
         );
         response.EnsureSuccessStatusCode();
@@ -182,7 +182,7 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
 
         var response = await client.PutAsJsonAsync(
             $"/api/v1/me/projects/{defaultProject.ProjectId}/goals",
-            new UpdateProjectGoalsRequest([]),
+            new UpdateProjectGoalsRequest([], [goal.GoalId]),
             TestContext.Current.CancellationToken
         );
 
@@ -302,7 +302,7 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
             new UpdateProjectGoalsRequest([
                 new ProjectGoalEntryRequest(first.GoalId),
                 new ProjectGoalEntryRequest(second.GoalId),
-            ]), TestContext.Current.CancellationToken);
+            ], [first.GoalId]), TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
     }
 
@@ -333,7 +333,7 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
                 new ProjectGoalEntryRequest(first.GoalId),
                 new ProjectGoalEntryRequest(second.GoalId),
                 new ProjectGoalEntryRequest(third.GoalId),
-            ]), TestContext.Current.CancellationToken);
+            ], [first.GoalId, second.GoalId, third.GoalId]), TestContext.Current.CancellationToken);
         response.EnsureSuccessStatusCode();
 
         var after = await client.GetFromJsonAsync<ListProjectGoalsResponse>(
