@@ -11,7 +11,7 @@
 - [x] 2.2a Re-contract `PUT /me/projects/{id}/goal-order` as the subset move `{goalId, displacedGoalId, expectedRevision}` with the array-move rule from the design; verify the A,B,C,D,E / project A,C,E example in both directions, hidden non-member goals keeping their relative order, non-member/non-in-flight/foreign/self/stale rejections, shared revision with the global reorder, and no membership or dependency change.
 - [x] 2.3 Update goal creation, combined creation, import, status transitions, and deletion to maintain one global order and advance revision only on set/order changes; verify lifecycle integration tests including pause/resume and terminal reopen.
 - [x] 2.4 Update global and project goal reads to expose canonical positions, re-contract project-scoped reorder as the subset move, retire caller priority, and keep membership/Current plan changes order-neutral; verify endpoint contract tests and last-membership regression tests.
-- [ ] 2.5 Regenerate and inspect `artifacts/openapi` for global order/read DTOs and the re-contracted project move contract and retired full-order body; verify the companion apps change consumes the final shapes.
+- [x] 2.5 Regenerate and inspect `artifacts/openapi` for global order/read DTOs and the re-contracted project move contract and retired full-order body; verify the companion apps change consumes the final shapes.
 
 ## 3. Verification
 
