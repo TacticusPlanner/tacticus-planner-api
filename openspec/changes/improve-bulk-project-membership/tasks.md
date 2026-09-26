@@ -1,8 +1,8 @@
 ## 1. Contract and transaction
 
-- [ ] 1.1 Reconcile canonical order/storage with `establish-global-goal-priority`, then add `expectedGoalIds` and structured stale/last-membership responses to the existing project membership endpoint; verify generated OpenAPI and all request/response shapes.
+- [ ] 1.1 Add `expectedGoalIds` and structured stale/last-membership responses to the existing project membership endpoint (keeping the members-with-`globalPriority` response), and replace the stale "…and priority ordering" summary text; verify generated OpenAPI and all request/response shapes.
 - [ ] 1.2 Compare reviewed/current sets under the project lock before writes and retain atomic slot/orphan validation; verify API tests for fresh, stale, unknown, slot conflict, orphan, and mixed valid/invalid batches.
-- [ ] 1.3 Add a concurrent-edit test where another membership change wins first; verify stale save rejects atomically and global priority remains unchanged.
+- [ ] 1.3 Add a concurrent-edit test where another membership change wins first; verify stale save rejects atomically. Add a test that a successful add/remove leaves every goal's `GlobalPriority` and the profile's `GoalOrderRevision` unchanged, and that a concurrent reorder does not make the membership save stale.
 
 ## 2. Pair and gates
 

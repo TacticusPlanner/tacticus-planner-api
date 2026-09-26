@@ -1,6 +1,6 @@
 ## Purpose
 
-Defines the account-wide user settings a profile persists and reads through the API, starting with the XP-book rarity preference the client uses to express Level-goal XP needs as a book equivalent.
+Defines the account-wide user settings a profile persists and reads through the API, starting with the XP-book rarity preference the client uses to express a Rank or Ability goal's required-level XP need as a book equivalent.
 
 ## ADDED Requirements
 
