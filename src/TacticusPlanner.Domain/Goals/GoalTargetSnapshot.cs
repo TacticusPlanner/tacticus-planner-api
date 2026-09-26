@@ -12,7 +12,6 @@ public sealed class GoalTargetSnapshot
     public bool? RankEndPointFive { get; set; }
     public int? RankEndAppliedUpgrades { get; set; }
     public string? ProgressionEnd { get; set; }
-    public int? LevelEnd { get; set; }
     public int? ActiveAbilityEnd { get; set; }
     public int? PassiveAbilityEnd { get; set; }
     public List<UpgradeMaterialTarget>? UpgradeTargets { get; set; }
@@ -27,7 +26,6 @@ public sealed class GoalTargetSnapshot
             RankEndAppliedUpgrades = rank.EndAppliedUpgrades,
         },
         GoalType.Ascension when config.Progression is { } progression => new() { ProgressionEnd = progression.End },
-        GoalType.Level when config.Level is { } level => new() { LevelEnd = level.End },
         GoalType.Ability when config.Ability is { } ability => new()
         {
             ActiveAbilityEnd = ability.ActiveEnd,
@@ -48,7 +46,6 @@ public sealed class GoalTargetSnapshot
         && RankEndPointFive == other.RankEndPointFive
         && RankEndAppliedUpgrades == other.RankEndAppliedUpgrades
         && ProgressionEnd == other.ProgressionEnd
-        && LevelEnd == other.LevelEnd
         && ActiveAbilityEnd == other.ActiveAbilityEnd
         && PassiveAbilityEnd == other.PassiveAbilityEnd
         && UpgradeKey(UpgradeTargets) == UpgradeKey(other.UpgradeTargets);

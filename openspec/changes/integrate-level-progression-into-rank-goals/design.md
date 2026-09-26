@@ -1,30 +1,35 @@
 ## Context
 
-`GoalConfig` has separate Rank and Level target groups. `CreateCombinedGoalsEndpoint` persists the client's chosen dependency graph; `V1GoalImportService` can synthesize Level prerequisites for Rank. The apps companion derives required level from the rank ladder. This plan establishes the ownership decision before `support-multiple-rank-milestones` or `edit-goal-targets-in-place`.
+`GoalConfig` has separate Rank and Level target groups and `GoalType` includes Level. `CreateCombinedGoalsEndpoint` persists the client's chosen dependency graph; `V1GoalImportService` can synthesize Level prerequisites for Rank and Ability. The apps companion derives the required level from the rank ladder (and from the level an Ability target implies). This plan establishes the ownership decision before `support-multiple-rank-milestones` or `edit-goal-targets-in-place`.
 
 ## Goals / Non-Goals
 
-**Goals:** Keep one Rank milestone for routine rank-plus-level progression and avoid duplicate cost/status from legacy pairs.
+**Goals:** Make the level a target needs an intrinsic, derived requirement of that target, and remove the Level goal kind so no path can plan the same level twice.
 
-**Non-Goals:** Deleting ambiguous Level records or removing user-authored Level and Ability-level goals.
+**Non-Goals:** Altering the XP curve, or hiding genuine eligibility blockers (absent player data, missing Unlock, insufficient Ascension). Preserving Level goals or interpreting legacy Level links.
 
 ## Decisions
 
-1. Derive the level gate from the Rank end/partial-slot target and current catalog ladder; do not persist a duplicate Rank-level field. Alternative: retain a linked Level goal as the authoritative level requirement. Rejected because it creates a separately ordered milestone for routine Rank work.
-2. Manual combined creation stops adding Level solely for Rank. V1 import follows the same rule, but can still synthesize Level for Ability. API validates the submitted dependency graph and interprets legacy edges; it does not silently delete stored Level goals.
-3. Treat a legacy Level with exactly one Rank dependent as absorbed into that Rank for effective planning, but retain its id and data. If any Ability dependent exists, keep the Level independently actionable and allocate its XP once. Alternative: hard-delete every linked Level. Rejected because provenance is absent and intentional/shared goals could be lost.
-4. No EF migration is required: existing JSON target/dependency columns can represent the new behavior. The shared contract with the apps companion is existing goal responses and V1 import outcomes; if a new explicit relation is required during apply, amend both paired artifacts before coding.
+1. **Level is not a goal kind.** Remove `GoalType.Level` and `GoalConfig.Level`/`LevelTarget`. Creation, combined creation, target editing, and import reject a Level goal type or target (400 for a request that names one). Alternative: keep Level goals for Ability or as standalone targets. Rejected because it recreates the duplicate-planning problem and a second owner of the same XP.
+2. **The required level is derived, not stored.** For a Rank target it comes from the rank ladder (end rank plus partial upgrade slots); for an Ability target from the level the higher ability target implies, both against the current catalog. Nothing persists a duplicate level field, and no dependency edge represents it. Rank completion still requires the actual rank/slot target; reaching a level alone never completes anything.
+3. **Existing Level goals are deleted by migration.** V2 is pre-production, so breaking changes are allowed. One EF migration deletes every Level goal (memberships cascade) and removes their ids from other goals' `depends_on`. Alternative: keep them readable but hidden. Rejected because it leaves dead data and a dead goal type. There is no legacy pair interpretation and no reversibility promise.
+4. **V1 import and combined creation never synthesize Level.** Unlock and Ascension synthesis, ordering, and shortfall reporting are unchanged.
+5. **No relational schema change beyond the data migration.** Goal config remains JSON; the migration is data-only (the model snapshot changes because the Level target group is dropped from the mapped config). The shared contract with the apps companion is the goal response (no `level` config, no Level `goalType`) and V1 import outcomes; if a new explicit relation is needed during apply, amend both paired artifacts before coding.
+
+## Spec deltas to author
+
+The API deltas are `rank-level-progression`, `v1-goal-import`, and `goal-target-editing` (drop Level from the supported target kinds and the all-kinds scenario). The API `goal-lifecycle-status` capability never mentioned Level, so it needs no delta here; the missing-Level reason lives in the apps `goal-blocker-reasons` capability.
 
 ## Risks / Trade-offs
 
-- [A Rank-only linked Level may have been intentionally authored] → Preserve it in storage and detail-by-id, and test reversibility of the plan projection.
-- [Ability and Rank share a Level] → Give the shared Level one allocation owner and never credit XP twice.
-- [Current screenshot may be stale] → Reproduce on the current stack before editing; the new creation/import contract still stands as the chosen model.
+- [Deletion is irreversible] → Acceptable pre-production; verify counts in the old-data migration test and state the deletion in the PR.
+- [Ability level requirement drifts from the ladder] → Derive it in one place from the same rule creation used to suggest a Level prerequisite, and cover it with tests.
+- [Clients still sending `Level`] → Fail with a clear 400; the apps companion ships in the same release train (API applies first).
 
 ## Migration Plan
 
-Deploy API behavior before apps. Reconcile legacy pairs in read/plan projection without destructive data migration, then update import and combined-creation regressions. Rollback restores prior interpretation without data loss.
+Deploy API first: apply the data migration, then the code that no longer knows Level. Then ship apps. Rolling the code back without restoring data cannot recreate deleted Level goals.
 
 ## Open Questions
 
-- Which real pre-change Rank/Level pair best exercises the shared-Ability case? Capture an anonymized fixture for both repos before apply; it does not alter the ownership rule.
+- Which rule exactly derives an Ability target's required level (the current creation-suggestion logic)? Confirm and reuse it during apply; it does not change the ownership decision.

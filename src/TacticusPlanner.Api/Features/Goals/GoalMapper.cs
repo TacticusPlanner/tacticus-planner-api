@@ -114,11 +114,6 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
                 Quantity = target.Quantity,
             }).ToList(),
         },
-        Level = config.Level is null ? null : new LevelTarget
-        {
-            Start = config.Level.Start,
-            End = config.Level.End,
-        },
     };
 
     /// <summary>Maps the wire acquisition-source list to its domain form. Null / empty stays null —
@@ -183,8 +178,7 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
             ? null
             : config.AcquisitionSources.Select(source => new AcquisitionSourceResponse(source.Kind, source.Ids)).ToList(),
         config.Upgrade is null ? null : new UpgradeTargetResponse(
-            config.Upgrade.Targets.Select(target => new UpgradeMaterialTargetResponse(target.UpgradeId, target.Quantity)).ToList()),
-        config.Level is null ? null : new LevelTargetResponse(config.Level.Start, config.Level.End)
+            config.Upgrade.Targets.Select(target => new UpgradeMaterialTargetResponse(target.UpgradeId, target.Quantity)).ToList())
     );
 
     private static GoalSnapshotResponse BuildSnapshot(GoalSnapshot snapshot) => new(
@@ -210,7 +204,6 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
         target.RankEndPointFive,
         target.RankEndAppliedUpgrades,
         target.ProgressionEnd,
-        target.LevelEnd,
         target.ActiveAbilityEnd,
         target.PassiveAbilityEnd,
         target.UpgradeTargets?.Select(value => new UpgradeMaterialTargetResponse(value.UpgradeId, value.Quantity)).ToList());
@@ -256,8 +249,7 @@ public sealed record GoalConfigResponse(
     List<string>? FarmingLocationIds,
     string FarmingStrategy,
     List<AcquisitionSourceResponse>? AcquisitionSources,
-    UpgradeTargetResponse? Upgrade,
-    LevelTargetResponse? Level
+    UpgradeTargetResponse? Upgrade
 );
 
 public sealed record AcquisitionSourceResponse(string Kind, List<string> Ids);
@@ -265,8 +257,6 @@ public sealed record AcquisitionSourceResponse(string Kind, List<string> Ids);
 public sealed record UpgradeTargetResponse(List<UpgradeMaterialTargetResponse> Targets);
 
 public sealed record UpgradeMaterialTargetResponse(string UpgradeId, int Quantity);
-
-public sealed record LevelTargetResponse(int Start, int End);
 
 public sealed record RankTargetResponse(
     int Start,
@@ -306,7 +296,6 @@ public sealed record GoalTargetSnapshotResponse(
     bool? RankEndPointFive,
     int? RankEndAppliedUpgrades,
     string? ProgressionEnd,
-    int? LevelEnd,
     int? ActiveAbilityEnd,
     int? PassiveAbilityEnd,
     List<UpgradeMaterialTargetResponse>? UpgradeTargets);

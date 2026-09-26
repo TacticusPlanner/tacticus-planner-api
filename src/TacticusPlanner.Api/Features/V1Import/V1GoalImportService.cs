@@ -388,7 +388,7 @@ public sealed class V1GoalImportService(
         CancellationToken ct)
     {
         // Grouping by unit is still needed to compute each unit's shared prerequisites (Unlock,
-        // Ascension, Level each serve every candidate of their unit that needs them) — it no longer
+        // Ascension each serve every candidate of their unit that needs them) — it no longer
         // determines final priority order, which is assigned in a separate flat pass below (v1-goal-import:
         // "Imported goals preserve V1 priority order").
         var unitOrder = new List<UnitKey>();
@@ -411,7 +411,7 @@ public sealed class V1GoalImportService(
         {
             var now = timeProvider.GetUtcNow();
             var staged = new Dictionary<int, Goal>();
-            // Synthesized-prerequisite "Created" outcomes (Unlock/Ascension/Level), like the `staged`
+            // Synthesized-prerequisite "Created" outcomes (Unlock/Ascension), like the `staged`
             // source-goal ones above, can't be finalized until the transaction actually commits — a
             // project-slot-conflict rollback below must still be able to turn them into failures instead of
             // reporting a goal that was never persisted.
@@ -419,12 +419,12 @@ public sealed class V1GoalImportService(
             // Every goal this batch creates, tagged with a flat-order sort key (v1-goal-import: "Imported
             // goals preserve V1 priority order") instead of getting its priority assigned inline as it's
             // built. AnchorIndex is the goal's own OriginalIndex for a real imported candidate (Rank,
-            // Ability, Unlock, Level, or the unit's own imported Ascension goal — none of these are
+            // Ability, Unlock, or the unit's own imported Ascension goal — none of these are
             // synthesized, so none are pulled out of their natural V1 position), or the lowest OriginalIndex
             // among a synthesized prerequisite's actual dependents (it has no V1 position of its own — this
             // places it immediately before whichever of its dependents appears earliest). SubOrder breaks a
             // tie at the same AnchorIndex in the same order this unit's prerequisites were always built in:
-            // Unlock, synthesized Ascension, Level, then the anchoring candidate itself.
+            // Unlock, synthesized Ascension, then the anchoring candidate itself.
             var pending = new List<(Goal Goal, int AnchorIndex, int SubOrder)>();
 
             foreach (var unitKey in unitOrder)
@@ -524,36 +524,6 @@ public sealed class V1GoalImportService(
                     }
                 }
 
-                Guid? levelGoalId = null;
-                if (prerequisites.LevelTarget is { } targetLevel)
-                {
-                    // Only Rank candidates of this unit get a DependsOn edge to a synthesized Level (below)
-                    // — ComputePrerequisites guarantees at least one exists whenever LevelTarget is set.
-                    var anchorIndex = unitCandidates
-                        .Where(candidate => candidate.Key.GoalType == GoalType.Rank)
-                        .Min(candidate => candidate.OriginalIndex);
-                    // Validated before persisting: RequiredLevelForRankTarget can compute a level above
-                    // GoalTargetValidationService's MaxCharacterLevel cap (e.g. Adamantine2 + 5 applied
-                    // upgrades = 64 > 60), which ComputePrerequisites doesn't itself clamp.
-                    var startLevel = (playerUnit as PlayerCharacterRecord)?.XpLevel ?? 0;
-                    var levelConfig = new CreateGoalConfigRequest(Level: new LevelTargetRequest(startLevel, targetLevel));
-                    var levelError = await targetValidation.ValidateAsync(
-                        profileId, unitKey.EntityType, unitKey.EntityId, GoalType.Level, levelConfig, ct);
-                    if (levelError is not null)
-                    {
-                        extraOutcomes.Add(FailedPrerequisiteOutcome(unitKey, GoalType.Level, levelError));
-                    }
-                    else
-                    {
-                        var levelGoal = BuildGoal(profileId, unitKey, GoalType.Level, levelConfig, null, prerequisiteStatus, now, playerUnit);
-                        if (unlockGoalId is { } unlockId) levelGoal.DependsOn.Add(unlockId);
-                        db.Goals.Add(levelGoal);
-                        pending.Add((levelGoal, anchorIndex, 2));
-                        levelGoalId = levelGoal.Id.Value;
-                        stagedPrerequisites.Add((levelGoal, unitCandidates.Count));
-                    }
-                }
-
                 // ownAscension (if any) was already staged above, at its own natural V1 position.
                 foreach (var candidate in unitCandidates.Where(candidate => candidate != ownAscension))
                 {
@@ -565,10 +535,6 @@ public sealed class V1GoalImportService(
                     {
                         dependsOn.Add(ascId);
                         effectiveFloor = ascensionFloor;
-                    }
-                    if (candidate.Key.GoalType == GoalType.Rank && levelGoalId is { } lvlId)
-                    {
-                        dependsOn.Add(lvlId);
                     }
 
                     // ponytail: ValidateAsync re-reads the account's PlayerDataSnapshot from the database
@@ -656,8 +622,8 @@ public sealed class V1GoalImportService(
         }, ct);
     }
 
-    /// <summary>Computes what, if anything, needs synthesizing for one unit — Unlock, Ascension, and/or
-    /// Level, at the minimum target that satisfies every requirement among that unit's own creatable
+    /// <summary>Computes what, if anything, needs synthesizing for one unit — Unlock and/or Ascension
+    /// (never Level: the level a Rank/Ability target needs is intrinsic to it), at the minimum target that satisfies every requirement among that unit's own creatable
     /// goals (v1-goal-import: "Missing prerequisites are created automatically by the same rules as
     /// manual creation"). Live player state is checked before consulting existing goals, so a completed
     /// (but historically present) prerequisite goal doesn't block synthesis for an already-met
@@ -677,15 +643,12 @@ public sealed class V1GoalImportService(
             && !HasOwnOrExistingGoal(unitKey, GoalType.Unlock, unitCandidates, existingByKey);
 
         var neededProgressionIndex = -1;
-        var neededLevel = -1;
         foreach (var candidate in unitCandidates)
         {
             if (candidate.Key.GoalType == GoalType.Rank)
             {
                 var rank = (UnitRank)candidate.Config.Rank!.End;
                 neededProgressionIndex = Math.Max(neededProgressionIndex, (int)ProgressionRules.MinimumProgressionForRank(rank));
-                neededLevel = Math.Max(neededLevel, ProgressionRules.RequiredLevelForRankTarget(
-                    rank, candidate.Config.Rank.EndPointFive, candidate.Config.Rank.EndAppliedUpgrades));
             }
             else if (candidate.Key.GoalType == GoalType.Ability)
             {
@@ -742,20 +705,7 @@ public sealed class V1GoalImportService(
             }
         }
 
-        int? levelTarget = null;
-        if (unitKey.EntityType == GoalEntityType.Character && neededLevel >= 0)
-        {
-            // Same reasoning as the progression sentinel above: a freshly unlocked character's real
-            // starting level is never below every reachable rank target's own requirement, so 0 (not a
-            // "below everything" sentinel) is the safe absent-unit default.
-            var liveLevel = (playerUnit as PlayerCharacterRecord)?.XpLevel ?? 0;
-            if (neededLevel > liveLevel && !HasOwnOrExistingGoal(unitKey, GoalType.Level, unitCandidates, existingByKey))
-            {
-                levelTarget = neededLevel;
-            }
-        }
-
-        return new UnitPrerequisites(needsUnlock, ascensionTarget, levelTarget, ascensionShortfall);
+        return new UnitPrerequisites(needsUnlock, ascensionTarget, ascensionShortfall);
     }
 
     private static bool HasOwnOrExistingGoal(
@@ -799,8 +749,8 @@ public sealed class V1GoalImportService(
         prerequisite.Id.Value,
         null);
 
-    /// <summary>Reports a synthesized Unlock/Level prerequisite that <see cref="GoalTargetValidationService"/>
-    /// rejected (e.g. Unlock for a Mow, or a Level target above the character-level cap) — the prerequisite
+    /// <summary>Reports a synthesized Unlock/Ascension prerequisite that <see cref="GoalTargetValidationService"/>
+    /// rejected (e.g. Unlock for a Mow) — the prerequisite
     /// is not persisted, and dependents proceed without a dependency edge to it, same as an
     /// <see cref="UnitPrerequisites.AscensionShortfall"/> report.</summary>
     private static V1GoalOutcome FailedPrerequisiteOutcome(UnitKey unitKey, GoalType goalType, string message) => new(
@@ -891,9 +841,9 @@ public sealed class V1GoalImportService(
         GoalKey Key, CreateGoalConfigRequest Config, int OriginalIndex, string? Notes, bool InDailyPlanning);
 
     private sealed record UnitPrerequisites(
-        bool NeedsUnlock, UnitProgression? AscensionTarget, int? LevelTarget, V1GoalOutcome? AscensionShortfall)
+        bool NeedsUnlock, UnitProgression? AscensionTarget, V1GoalOutcome? AscensionShortfall)
     {
-        public static readonly UnitPrerequisites None = new(false, null, null, null);
+        public static readonly UnitPrerequisites None = new(false, null, null);
     }
 }
 

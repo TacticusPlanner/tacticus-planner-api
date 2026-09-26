@@ -28,7 +28,7 @@ public sealed class UpdateGoalTargetEndpoint : Endpoint<UpdateGoalTargetRequest,
         Summary(summary =>
         {
             summary.Summary = "Changes an active or paused goal's end target in place.";
-            summary.Description = "Supported for Rank, Ascension, Level, Ability and Upgrade goals; Unlock has no "
+            summary.Description = "Supported for Rank, Ascension, Ability and Upgrade goals; Unlock has no "
                 + "adjustable target. The new target is validated against the goal's stored baseline and the "
                 + "current catalog (an already-reached target is allowed). Submitting the target the goal "
                 + "already has is a no-op that changes neither the revision nor the history.";
@@ -240,7 +240,6 @@ public sealed class UpdateGoalTargetEndpoint : Endpoint<UpdateGoalTargetRequest,
         {
             (GoalType.Rank, target.Rank is not null),
             (GoalType.Ascension, target.Progression is not null),
-            (GoalType.Level, target.Level is not null),
             (GoalType.Ability, target.Ability is not null),
             (GoalType.Upgrade, target.Upgrade is not null),
         }.Where(group => group.Item2).Select(group => group.Item1).ToList();
@@ -259,7 +258,6 @@ public sealed class UpdateGoalTargetEndpoint : Endpoint<UpdateGoalTargetRequest,
             RankEndAppliedUpgrades = target.Rank.EndAppliedUpgrades,
         },
         GoalType.Ascension => new() { ProgressionEnd = target.Progression!.End },
-        GoalType.Level => new() { LevelEnd = target.Level!.End },
         GoalType.Ability => new()
         {
             ActiveAbilityEnd = target.Ability!.ActiveEnd,
@@ -289,9 +287,6 @@ public sealed class UpdateGoalTargetEndpoint : Endpoint<UpdateGoalTargetRequest,
             case GoalType.Ascension:
                 config.Progression!.End = target.Progression!.End;
                 break;
-            case GoalType.Level:
-                config.Level!.End = target.Level!.End;
-                break;
             case GoalType.Ability:
                 config.Ability!.ActiveEnd = target.Ability!.ActiveEnd;
                 config.Ability.PassiveEnd = target.Ability.PassiveEnd;
@@ -319,8 +314,6 @@ public sealed class UpdateGoalTargetEndpoint : Endpoint<UpdateGoalTargetRequest,
             GoalType.Ascension => new CreateGoalConfigRequest(
                 Progression: new ProgressionTargetRequest(config.Progression!.Start, target.Progression!.End),
                 AcquisitionSources: null),
-            GoalType.Level => new CreateGoalConfigRequest(
-                Level: new LevelTargetRequest(config.Level!.Start, target.Level!.End)),
             GoalType.Ability => new CreateGoalConfigRequest(
                 Ability: new AbilityTargetRequest(
                     config.Ability!.ActiveStart, target.Ability!.ActiveEnd,
@@ -360,7 +353,6 @@ public sealed record UpdateGoalTargetRequest(long ExpectedRevision, GoalTargetEd
 public sealed record GoalTargetEditRequest(
     RankEndTargetRequest? Rank = null,
     ProgressionEndTargetRequest? Progression = null,
-    LevelEndTargetRequest? Level = null,
     AbilityEndTargetRequest? Ability = null,
     UpgradeTargetRequest? Upgrade = null
 );
@@ -368,8 +360,6 @@ public sealed record GoalTargetEditRequest(
 public sealed record RankEndTargetRequest(int End, bool EndPointFive, int EndAppliedUpgrades);
 
 public sealed record ProgressionEndTargetRequest(string End);
-
-public sealed record LevelEndTargetRequest(int End);
 
 public sealed record AbilityEndTargetRequest(int ActiveEnd, int PassiveEnd);
 

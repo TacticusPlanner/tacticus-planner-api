@@ -1285,7 +1285,7 @@
           "Me"
         ],
         "summary": "Changes an active or paused goal's end target in place.",
-        "description": "Supported for Rank, Ascension, Level, Ability and Upgrade goals; Unlock has no adjustable target. The new target is validated against the goal's stored baseline and the current catalog (an already-reached target is allowed). Submitting the target the goal already has is a no-op that changes neither the revision nor the history.",
+        "description": "Supported for Rank, Ascension, Ability and Upgrade goals; Unlock has no adjustable target. The new target is validated against the goal's stored baseline and the current catalog (an already-reached target is allowed). Submitting the target the goal already has is a no-op that changes neither the revision nor the history.",
         "operationId": "TacticusPlannerApiFeaturesGoalsUpdateGoalTargetEndpoint",
         "parameters": [
           {
@@ -3996,17 +3996,6 @@
                 "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsUpgradeTargetRequest"
               }
             ]
-          },
-          "level": {
-            "type": [
-              "null",
-              "object"
-            ],
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsLevelTargetRequest"
-              }
-            ]
           }
         }
       },
@@ -4123,8 +4112,7 @@
           "farmingLocationIds",
           "farmingStrategy",
           "acquisitionSources",
-          "upgrade",
-          "level"
+          "upgrade"
         ],
         "type": "object",
         "properties": {
@@ -4194,17 +4182,6 @@
             "oneOf": [
               {
                 "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsUpgradeTargetResponse"
-              }
-            ]
-          },
-          "level": {
-            "type": [
-              "null",
-              "object"
-            ],
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsLevelTargetResponse"
               }
             ]
           }
@@ -4506,17 +4483,6 @@
               }
             ]
           },
-          "level": {
-            "type": [
-              "null",
-              "object"
-            ],
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsLevelEndTargetRequest"
-              }
-            ]
-          },
           "ability": {
             "type": [
               "null",
@@ -4547,7 +4513,6 @@
           "rankEndPointFive",
           "rankEndAppliedUpgrades",
           "progressionEnd",
-          "levelEnd",
           "activeAbilityEnd",
           "passiveAbilityEnd",
           "upgradeTargets"
@@ -4580,13 +4545,6 @@
               "string"
             ]
           },
-          "levelEnd": {
-            "type": [
-              "null",
-              "integer"
-            ],
-            "format": "int32"
-          },
           "activeAbilityEnd": {
             "type": [
               "null",
@@ -4611,52 +4569,6 @@
                 "$ref": "#/components/schemas/SystemCollectionsGenericListOfTacticusPlannerApiFeaturesGoalsUpgradeMaterialTargetResponse"
               }
             ]
-          }
-        }
-      },
-      "TacticusPlannerApiFeaturesGoalsLevelEndTargetRequest": {
-        "required": [
-          "end"
-        ],
-        "type": "object",
-        "properties": {
-          "end": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
-      "TacticusPlannerApiFeaturesGoalsLevelTargetRequest": {
-        "required": [
-          "start",
-          "end"
-        ],
-        "type": "object",
-        "properties": {
-          "start": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "end": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
-      "TacticusPlannerApiFeaturesGoalsLevelTargetResponse": {
-        "required": [
-          "start",
-          "end"
-        ],
-        "type": "object",
-        "properties": {
-          "start": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "end": {
-            "type": "integer",
-            "format": "int32"
           }
         }
       },

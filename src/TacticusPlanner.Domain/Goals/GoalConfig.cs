@@ -19,8 +19,6 @@ public sealed class GoalConfig
 
     public UpgradeTarget? Upgrade { get; set; }
 
-    public LevelTarget? Level { get; set; }
-
     public FarmingStrategy FarmingStrategy { get; set; } = FarmingStrategy.TotalUpgrades;
 
     /// <summary>The shard acquisition sources chosen for an Unlock/Ascension goal (plan: multi-select
@@ -77,15 +75,6 @@ public sealed class UpgradeMaterialTarget
 {
     public required string UpgradeId { get; set; }
     public required int Quantity { get; set; }
-}
-
-/// <summary>Target character level (see <see cref="GoalEntityType.Character"/>). Uncosted — no
-/// XP-cost curve/XP-book farming engine exists anywhere in this app yet; "complete" is simply the
-/// unit's synced <c>XpLevel</c> reaching <see cref="End"/>.</summary>
-public sealed class LevelTarget
-{
-    public required int Start { get; set; }
-    public required int End { get; set; }
 }
 
 public enum FarmingStrategy

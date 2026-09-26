@@ -173,8 +173,7 @@ public sealed record CreateGoalConfigRequest(
     List<CampaignBattleId>? FarmingLocationIds = null,
     string? FarmingStrategy = null,
     List<AcquisitionSourceRequest>? AcquisitionSources = null,
-    UpgradeTargetRequest? Upgrade = null,
-    LevelTargetRequest? Level = null
+    UpgradeTargetRequest? Upgrade = null
 );
 
 /// <summary>One selected shard acquisition source (plan: multi-select Campaigns/Onslaught/Shops picker).
@@ -202,8 +201,6 @@ public sealed record AbilityTargetRequest(int ActiveStart, int ActiveEnd, int Pa
 public sealed record UpgradeTargetRequest(List<UpgradeMaterialTargetRequest> Targets);
 
 public sealed record UpgradeMaterialTargetRequest(string UpgradeId, int Quantity);
-
-public sealed record LevelTargetRequest(int Start, int End);
 
 /// <summary><see cref="InitialRank"/>/<see cref="InitialProgression"/> are the client's plain wire strings
 /// (e.g. "Gold2", "Common:TwoStars" — the same values <c>Rank</c>/<c>Progression</c> serialize to); an

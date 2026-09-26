@@ -23,7 +23,7 @@ public sealed class CreateGoalValidator : Validator<CreateGoalRequest>
             .Must(value => Enum.TryParse<GoalType>(value, ignoreCase: true, out var parsed)
                 && Enum.IsDefined(parsed)
                 && !int.TryParse(value, out _))
-            .WithMessage("Unknown or not-yet-supported goal type.");
+            .WithMessage("Unknown or unsupported goal type (the Level goal type no longer exists).");
 
         RuleFor(request => request.EntityId)
             .NotEmpty()
