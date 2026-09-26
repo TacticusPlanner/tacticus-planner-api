@@ -39,6 +39,9 @@ public sealed class ListGoalsEndpoint : EndpointWithoutRequest<ListGoalsResponse
         var db = Resolve<PlannerDbContext>();
 
         // Scoped to the caller's profile by PlannerDbContext's global query filter.
+        // Revision first: if a reorder commits between the two reads the client gets a newer order with an
+        // older revision, which the reorder operations reject, never the other way round.
+        var revision = (await db.Profiles.AsNoTracking().FirstAsync(ct)).GoalOrderRevision;
         var goals = await db.Goals
             .AsNoTracking()
             .Where(entity => archived
@@ -49,7 +52,6 @@ public sealed class ListGoalsEndpoint : EndpointWithoutRequest<ListGoalsResponse
             .ThenByDescending(entity => entity.CreatedAt)
             .ThenBy(entity => entity.Id)
             .ToListAsync(ct);
-        var revision = (await db.Profiles.AsNoTracking().FirstAsync(ct)).GoalOrderRevision;
 
         await Send.OkAsync(new ListGoalsResponse(goals.Select(Map.ToSummary).ToList(), revision), ct);
     }

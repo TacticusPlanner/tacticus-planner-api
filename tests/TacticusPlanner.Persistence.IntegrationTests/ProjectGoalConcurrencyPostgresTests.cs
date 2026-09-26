@@ -204,6 +204,46 @@ public sealed class ProjectGoalConcurrencyPostgresTests
         return (true, goalId);
     }
 
+    [Fact]
+    public async Task RevisionAdvancesFromTheValueUnderTheLockNotFromAProfileTrackedBeforeIt()
+    {
+        await using var postgres = await StartPostgresAsync();
+        var (connectionString, profileId, projectId) = await SeedEmptyProjectAsync(postgres);
+        await CreateGoalAsync(connectionString, profileId, projectId, "ragnar", GoalType.Rank);
+
+        // A request that loaded the Profile (as EnsureDefaultProjectAsync does) before taking the lock ...
+        await using var db = new PlannerDbContext(
+            BuildOptions(connectionString), new PassthroughEncryption(), new StaticProfile(ProfileId.From(profileId)));
+        var trackedBeforeTheLock = await db.Profiles.FirstAsync(TestContext.Current.CancellationToken);
+        Assert.Equal(1, trackedBeforeTheLock.GoalOrderRevision);
+
+        // ... while another request commits a change of the order first.
+        await CreateGoalAsync(connectionString, profileId, projectId, "aunshi", GoalType.Rank);
+        Assert.Equal(2, await ReadOrderRevisionAsync(connectionString, profileId));
+
+        var planning = new ProjectGoalPlanningService(db);
+        var ct = TestContext.Current.CancellationToken;
+        await planning.ExecuteLockedMutationAsync([], async transaction =>
+        {
+            var goal = new Goal(GoalEntityType.Character, "certus", GoalType.Rank)
+            {
+                Id = GoalId.From(Guid.CreateVersion7()),
+                ProfileId = ProfileId.From(profileId),
+                Status = GoalStatus.Active,
+                Config = new GoalConfig { Rank = new RankTarget { Start = 1, End = 12 } },
+                Events = [new GoalEvent { At = DateTimeOffset.UtcNow, Type = GoalEventType.Created }],
+            };
+            db.Goals.Add(goal);
+            var order = new GoalOrderService(db);
+            await order.AppendAsync(goal, ct);
+            await order.CompleteAsync(ct);
+            await transaction!.CommitAsync(ct);
+        }, ct);
+
+        Assert.Equal(3, await ReadOrderRevisionAsync(connectionString, profileId));
+        await AssertContiguousOrderAsync(connectionString, profileId, 3);
+    }
+
     private static async Task<PostgreSqlContainer> StartPostgresAsync()
     {
         var postgres = new PostgreSqlBuilder("postgres:18-alpine").Build();

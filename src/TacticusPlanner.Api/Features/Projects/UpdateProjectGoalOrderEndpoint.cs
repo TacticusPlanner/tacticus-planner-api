@@ -56,6 +56,16 @@ public sealed class UpdateProjectGoalOrderEndpoint : Endpoint<UpdateProjectGoalO
         var order = Resolve<GoalOrderService>();
         await planning.ExecuteLockedMutationAsync([projectId], async transaction =>
         {
+            // Revision first: a stale client is told so whatever else changed (a goal leaving the project
+            // would otherwise read as a set mismatch).
+            var current = await order.ReadAsync(ct);
+            if (current.Revision != req.ExpectedRevision)
+            {
+                await GoalOrderResponses.SendAsync(
+                    this, new GoalOrderResult(GoalOrderOutcome.StaleRevision, current), transaction, ct);
+                return;
+            }
+
             var inFlightMembers = await db.ProjectGoals.AsNoTracking()
                 .Where(entry => entry.ProjectId == projectId && entry.OccupiesInFlightSlot
                     && (entry.GoalId == goalId || entry.GoalId == displacedGoalId))
@@ -64,7 +74,7 @@ public sealed class UpdateProjectGoalOrderEndpoint : Endpoint<UpdateProjectGoalO
             var result = inFlightMembers.Distinct().Count() == (goalId == displacedGoalId ? 1 : 2)
                 ? await order.MoveAsync(goalId, displacedGoalId, req.ExpectedRevision, ct)
                 // Not both in-flight members: same conflict shape as a stale set, current order attached.
-                : new GoalOrderResult(GoalOrderOutcome.SetMismatch, await order.ReadAsync(ct));
+                : new GoalOrderResult(GoalOrderOutcome.SetMismatch, current);
             await GoalOrderResponses.SendAsync(this, result, transaction, ct);
         }, ct);
     }

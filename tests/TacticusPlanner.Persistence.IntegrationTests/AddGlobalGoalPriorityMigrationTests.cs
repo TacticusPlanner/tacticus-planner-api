@@ -97,6 +97,49 @@ public sealed class AddGlobalGoalPriorityMigrationTests
         Assert.Equal(PostgresErrorCodes.CheckViolation, missing.SqlState);
     }
 
+    [Fact]
+    public async Task DownRestoresPerProjectPrioritiesFromTheGlobalOrder()
+    {
+        await using var postgres = new PostgreSqlBuilder("postgres:18-alpine").Build();
+        await postgres.StartAsync(TestContext.Current.CancellationToken);
+        var connectionString = postgres.GetConnectionString();
+
+        var options = new DbContextOptionsBuilder<PlannerDbContext>()
+            .UseNpgsql(connectionString)
+            .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
+            .Options;
+        await using var db = new PlannerDbContext(options, new PassthroughEncryption(), new NoProfile());
+        var migrator = db.Database.GetService<IMigrator>();
+        await migrator.MigrateAsync("20260925204338_RemoveLevelGoals", TestContext.Current.CancellationToken);
+
+        await using var connection = new NpgsqlConnection(connectionString);
+        await connection.OpenAsync(TestContext.Current.CancellationToken);
+        var profile = await SeedProfileAsync(connection, "down");
+        var project = await SeedProjectAsync(connection, profile, "Plan", createdAt: "2026-01-01");
+        var (x, y, done) = (Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
+        await SeedGoalAsync(connection, profile, x, "ux", "Active", "2026-02-01");
+        await SeedGoalAsync(connection, profile, y, "uy", "Active", "2026-02-02");
+        await SeedGoalAsync(connection, profile, done, "ud", "Completed", "2026-02-03");
+        await SeedMembershipAsync(connection, project, y, "uy", "Active", 1);
+        await SeedMembershipAsync(connection, project, x, "ux", "Active", 2);
+        await SeedMembershipAsync(connection, project, done, "ud", "Completed", 3);
+
+        await migrator.MigrateAsync(cancellationToken: TestContext.Current.CancellationToken);
+        // The migrated global order follows the stored project order: Y, X.
+        Assert.Equal([y, x], await OrderAsync(connection, profile));
+
+        await migrator.MigrateAsync("20260925204338_RemoveLevelGoals", TestContext.Current.CancellationToken);
+
+        Assert.Equal(1L, await ScalarAsync(connection,
+            "SELECT count(*) FROM information_schema.columns WHERE table_name = 'project_goals' AND column_name = 'priority'"));
+        Assert.Equal(0L, await ScalarAsync(connection,
+            "SELECT count(*) FROM information_schema.columns WHERE table_name = 'goals' AND column_name = 'global_priority'"));
+        // In-flight goals first in their former order, the historical goal after them.
+        Assert.Equal(1, (int)(await ScalarAsync(connection, $"SELECT priority FROM project_goals WHERE goal_id = '{y}'"))!);
+        Assert.Equal(2, (int)(await ScalarAsync(connection, $"SELECT priority FROM project_goals WHERE goal_id = '{x}'"))!);
+        Assert.Equal(3, (int)(await ScalarAsync(connection, $"SELECT priority FROM project_goals WHERE goal_id = '{done}'"))!);
+    }
+
     private static async Task<Guid> SeedProfileAsync(NpgsqlConnection connection, string name)
     {
         var profile = Guid.NewGuid();

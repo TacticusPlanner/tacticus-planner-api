@@ -42,12 +42,13 @@ public sealed class ProjectGoalPlanningService(PlannerDbContext db)
             // read used for a conflict or ordering decision must stay inside the lock, or this isolation
             // level becomes unsafe.
             await using var transaction = await db.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, ct);
-            // The profile row is locked first, always: it serializes every mutation of the account's global
+            // The profile row is locked first, always (FOR NO KEY UPDATE: its key is never written, so inserts
+            // of rows that reference it, which take FOR KEY SHARE, are not blocked): it serializes every mutation of the account's global
             // goal order (see GoalOrderService) and fixes the lock order (profile, then projects ascending),
             // so paths that need both cannot deadlock.
             var profileId = await db.Profiles.Select(profile => profile.Id).SingleAsync(ct);
             _ = await db.Database
-                .SqlQueryRaw<int>("SELECT 1 AS \"Value\" FROM profiles WHERE id = {0} FOR UPDATE", profileId.Value)
+                .SqlQueryRaw<int>("SELECT 1 AS \"Value\" FROM profiles WHERE id = {0} FOR NO KEY UPDATE", profileId.Value)
                 .SingleAsync(ct);
             foreach (var projectId in orderedProjectIds)
             {

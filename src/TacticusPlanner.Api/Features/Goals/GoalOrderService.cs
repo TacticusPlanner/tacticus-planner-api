@@ -44,10 +44,21 @@ public sealed class GoalOrderService(PlannerDbContext db)
 
         var ordered = await LoadInFlightAsync(ct);
         Renumber(ordered);
-        var profile = await db.Profiles.FirstAsync(ct);
+        var profile = await LoadProfileAsync(ct);
         profile.GoalOrderRevision++;
         await db.SaveChangesAsync(ct);
         changed = false;
+        nextPosition = null;
+    }
+
+    /// <summary>The profile as it stands under the lock. Callers such as <c>EnsureDefaultProjectAsync</c> load
+    /// it (tracked) before the lock is taken, and EF would hand back that stale instance, so the revision
+    /// would be incremented from a value read before a concurrent reorder committed.</summary>
+    private async Task<Domain.Profiles.Profile> LoadProfileAsync(CancellationToken ct)
+    {
+        var profile = await db.Profiles.FirstAsync(ct);
+        await db.Entry(profile).ReloadAsync(ct);
+        return profile;
     }
 
     /// <summary>The current revision and in-flight goal ids in order.</summary>
@@ -68,7 +79,7 @@ public sealed class GoalOrderService(PlannerDbContext db)
     public async Task<GoalOrderResult> ReorderAsync(
         IReadOnlyList<GoalId> requested, long expectedRevision, CancellationToken ct)
     {
-        var profile = await db.Profiles.FirstAsync(ct);
+        var profile = await LoadProfileAsync(ct);
         var ordered = await LoadInFlightAsync(ct);
         GoalOrderOutcome? rejection = null;
         if (expectedRevision != profile.GoalOrderRevision)
@@ -89,7 +100,7 @@ public sealed class GoalOrderService(PlannerDbContext db)
     public async Task<GoalOrderResult> MoveAsync(
         GoalId goalId, GoalId displacedGoalId, long expectedRevision, CancellationToken ct)
     {
-        var profile = await db.Profiles.FirstAsync(ct);
+        var profile = await LoadProfileAsync(ct);
         var ordered = await LoadInFlightAsync(ct);
         var from = ordered.FindIndex(goal => goal.Id == goalId);
         var to = ordered.FindIndex(goal => goal.Id == displacedGoalId);

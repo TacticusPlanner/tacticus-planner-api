@@ -270,6 +270,8 @@ public sealed class GlobalGoalOrderEndpointTests(PlannerApiFactory factory) : IC
         await AssertConflictAsync(await MoveAsync(client, project, b, c, loaded.OrderRevision), "goalOrderSetMismatch", loaded);
         await AssertConflictAsync(await MoveAsync(client, project, a, a, loaded.OrderRevision), "goalOrderSameGoal", loaded);
         await AssertConflictAsync(await MoveAsync(client, project, e, c, loaded.OrderRevision + 1), "goalOrderStale", loaded);
+        // A stale client is told so even when its goals also left the project.
+        await AssertConflictAsync(await MoveAsync(client, project, b, c, loaded.OrderRevision + 1), "goalOrderStale", loaded);
 
         var after = await ListGoalsAsync(client);
         Assert.Equal(loaded.Goals.Select(goal => goal.GoalId), after.Goals.Select(goal => goal.GoalId));

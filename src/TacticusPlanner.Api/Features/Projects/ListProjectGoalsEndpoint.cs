@@ -45,18 +45,19 @@ public sealed class ListProjectGoalsEndpoint : EndpointWithoutRequest<ListProjec
             return;
         }
 
+        // Revision first, so a concurrent reorder yields a stale revision rather than a stale order.
+        var revision = (await db.Profiles.AsNoTracking().FirstAsync(ct)).GoalOrderRevision;
         var members = await db.ProjectGoals
             .AsNoTracking()
             .Where(entity => entity.ProjectId == projectId)
             .Join(db.Goals, pg => pg.GoalId, goal => goal.Id, (pg, goal) => goal)
             .OrderBy(goal => goal.GlobalPriority == null)
             .ThenBy(goal => goal.GlobalPriority)
-            .ThenBy(goal => goal.CreatedAt)
+            .ThenByDescending(goal => goal.CreatedAt)
             .ThenBy(goal => goal.Id)
             .ToListAsync(ct);
 
         var goals = members.Select(goal => new ProjectGoalSummaryResponse(Map.ToSummary(goal))).ToList();
-        var revision = (await db.Profiles.AsNoTracking().FirstAsync(ct)).GoalOrderRevision;
 
         await Send.OkAsync(new ListProjectGoalsResponse(goals, revision), ct);
     }
