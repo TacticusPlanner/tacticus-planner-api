@@ -44,11 +44,17 @@ public sealed class ListGoalsEndpoint : EndpointWithoutRequest<ListGoalsResponse
             .Where(entity => archived
                 ? entity.Status == GoalStatus.Archived
                 : entity.Status != GoalStatus.Archived)
-            .OrderByDescending(entity => entity.CreatedAt)
+            .OrderBy(entity => entity.GlobalPriority == null)
+            .ThenBy(entity => entity.GlobalPriority)
+            .ThenByDescending(entity => entity.CreatedAt)
+            .ThenBy(entity => entity.Id)
             .ToListAsync(ct);
+        var revision = (await db.Profiles.AsNoTracking().FirstAsync(ct)).GoalOrderRevision;
 
-        await Send.OkAsync(new ListGoalsResponse(goals.Select(Map.ToSummary).ToList()), ct);
+        await Send.OkAsync(new ListGoalsResponse(goals.Select(Map.ToSummary).ToList(), revision), ct);
     }
 }
 
-public sealed record ListGoalsResponse(List<GoalSummaryResponse> Goals);
+/// <summary>In-flight goals first in account-wide order (each with its <c>GlobalPriority</c>), then the rest
+/// newest first. <c>OrderRevision</c> is the token the reorder operations expect.</summary>
+public sealed record ListGoalsResponse(List<GoalSummaryResponse> Goals, long OrderRevision = 0);

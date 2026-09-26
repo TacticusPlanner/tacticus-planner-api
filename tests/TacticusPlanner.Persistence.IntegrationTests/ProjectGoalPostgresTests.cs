@@ -71,6 +71,7 @@ public sealed class ProjectGoalPostgresTests
 
         var retryOptions = new DbContextOptionsBuilder<PlannerDbContext>()
             .UseNpgsql(postgres.GetConnectionString(), options => options.EnableRetryOnFailure())
+            .UseSnakeCaseNamingConvention()
             .Options;
         await using (var retryDb = new PlannerDbContext(
             retryOptions,
@@ -132,9 +133,9 @@ public sealed class ProjectGoalPostgresTests
             await using var command = connection.CreateCommand();
             command.CommandText = """
                 INSERT INTO goals (id, revision, profile_id, entity_type, entity_id, goal_type, status,
-                                   depends_on, created_at, updated_at, config, events)
+                                   depends_on, created_at, updated_at, config, events, global_priority)
                 VALUES (@goal, 0, @profile, 'Mow', 'forgefiend', 'Ability', 'Active',
-                        ARRAY[]::uuid[], now(), now(), '{}', '[]');
+                        ARRAY[]::uuid[], now(), now(), '{}', '[]', (SELECT coalesce(max(global_priority), 0) + 1 FROM goals WHERE profile_id = @profile));
                 """;
             command.Parameters.AddWithValue("goal", goalId);
             command.Parameters.AddWithValue("profile", profileId);
@@ -151,9 +152,9 @@ public sealed class ProjectGoalPostgresTests
             await using var command = connection.CreateCommand();
             command.CommandText = """
                 INSERT INTO project_goals
-                    (project_id, goal_id, priority, entity_type, entity_id, goal_type,
+                    (project_id, goal_id, entity_type, entity_id, goal_type,
                      occupies_in_flight_slot, created_at)
-                VALUES (@project, @goal, 1, 'Mow', 'forgefiend', 'Ability', TRUE, now());
+                VALUES (@project, @goal, 'Mow', 'forgefiend', 'Ability', TRUE, now());
                 """;
             command.Parameters.AddWithValue("project", projectId);
             command.Parameters.AddWithValue("goal", goalId);

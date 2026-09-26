@@ -42,6 +42,13 @@ public sealed class ProjectGoalPlanningService(PlannerDbContext db)
             // read used for a conflict or ordering decision must stay inside the lock, or this isolation
             // level becomes unsafe.
             await using var transaction = await db.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, ct);
+            // The profile row is locked first, always: it serializes every mutation of the account's global
+            // goal order (see GoalOrderService) and fixes the lock order (profile, then projects ascending),
+            // so paths that need both cannot deadlock.
+            var profileId = await db.Profiles.Select(profile => profile.Id).SingleAsync(ct);
+            _ = await db.Database
+                .SqlQueryRaw<int>("SELECT 1 AS \"Value\" FROM profiles WHERE id = {0} FOR UPDATE", profileId.Value)
+                .SingleAsync(ct);
             foreach (var projectId in orderedProjectIds)
             {
                 _ = await db.Database
@@ -55,11 +62,10 @@ public sealed class ProjectGoalPlanningService(PlannerDbContext db)
         });
     }
 
-    public static ProjectGoal CreateMembership(Project project, Goal goal, int priority, DateTimeOffset now) => new()
+    public static ProjectGoal CreateMembership(Project project, Goal goal, DateTimeOffset now) => new()
     {
         ProjectId = project.Id,
         GoalId = goal.Id,
-        Priority = priority,
         EntityType = goal.EntityType,
         EntityId = goal.EntityId,
         GoalType = goal.GoalType,
@@ -153,73 +159,6 @@ public sealed class ProjectGoalPlanningService(PlannerDbContext db)
         foreach (var membership in memberships)
             membership.OccupiesInFlightSlot = IsInFlight(goal.Status);
     }
-
-    /// <summary>
-    /// Full renumbering pass, run after every priority-affecting mutation (plan: flat per-goal priority,
-    /// not unit-grouped — see <c>add-inline-goal-reprioritize</c>). Two zones, each compacted to a dense
-    /// sequence in its own existing relative order (already the order <see cref="LoadProjectMembershipsAsync"/>
-    /// loads them in): in-flight (Active/Paused) first, 1..N; historical (Completed/Archived) after, N+1..M.
-    /// A freshly created goal already holds the highest raw priority across the whole project (see
-    /// <c>ProjectsService.GetNextPriorityAsync</c>), so it always lands last within its own zone here,
-    /// regardless of the other zone's raw values — this is what keeps a newly created historical-status
-    /// goal (e.g. imported already-Completed) from being pulled ahead of older historical goals, and a
-    /// newly created in-flight goal from being pulled ahead of older in-flight ones. Re-deriving both
-    /// zones from scratch on every call (rather than only assigning priority to unpositioned goals) is
-    /// what keeps a goal that transitions between zones (e.g. Active to Archived) from ever leaving a
-    /// stale priority value in the wrong zone's numeric range.
-    /// </summary>
-    public async Task NormalizeAsync(IEnumerable<ProjectId> projectIds, CancellationToken ct)
-    {
-        foreach (var projectId in projectIds.Distinct())
-        {
-            var memberships = await LoadProjectMembershipsAsync(projectId, ct);
-
-            var priority = 1;
-            foreach (var membership in memberships.Where(entry => entry.OccupiesInFlightSlot))
-                membership.Priority = priority++;
-
-            foreach (var membership in memberships.Where(entry => !entry.OccupiesInFlightSlot))
-                membership.Priority = priority++;
-        }
-    }
-
-    /// <summary>
-    /// Applies a caller-submitted full reorder of a project's in-flight goals (plan:
-    /// <c>add-inline-goal-reprioritize</c>'s goal-keyed reorder, replacing the retired unit-keyed one).
-    /// <paramref name="requested"/> must be an exact, duplicate-free permutation of the project's current
-    /// in-flight goal ids — same atomic-reject-on-mismatch contract the old unit-keyed operation had, at
-    /// goal granularity instead of unit granularity. No dependency validation is applied to the requested
-    /// order: a goal may be placed ahead of a <c>DependsOn</c> prerequisite it hasn't reached (plan
-    /// decision: priority is a pure ordering preference, decoupled from dependency validity).
-    /// </summary>
-    public async Task<bool> ApplyGoalOrderAsync(ProjectId projectId, IReadOnlyList<GoalId> requested, CancellationToken ct)
-    {
-        var memberships = await LoadProjectMembershipsAsync(projectId, ct);
-        var activeMemberships = memberships.Where(entry => entry.OccupiesInFlightSlot).ToList();
-        var byId = activeMemberships.ToDictionary(entry => entry.GoalId);
-
-        if (requested.Count != activeMemberships.Count
-            || requested.Distinct().Count() != requested.Count
-            || requested.Any(id => !byId.ContainsKey(id)))
-            return false;
-
-        var priority = 1;
-        foreach (var goalId in requested)
-            byId[goalId].Priority = priority++;
-
-        foreach (var membership in memberships.Where(entry => !entry.OccupiesInFlightSlot))
-            membership.Priority = priority++;
-
-        return true;
-    }
-
-    private async Task<List<ProjectGoal>> LoadProjectMembershipsAsync(ProjectId projectId, CancellationToken ct) =>
-        await db.ProjectGoals
-            .Include(entry => entry.Goal)
-            .Where(entry => entry.ProjectId == projectId)
-            .OrderBy(entry => entry.Priority)
-            .ThenBy(entry => entry.GoalId)
-            .ToListAsync(ct);
 
     /// <summary>The 409 message shared by every slot-conflict site (this service and the project-side
     /// membership endpoint's in-request duplicate check).</summary>

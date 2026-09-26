@@ -35,11 +35,11 @@ public sealed class GoalTargetEditPostgresTests
             await using var command = connection.CreateCommand();
             command.CommandText = """
                 INSERT INTO goals (id, revision, profile_id, entity_type, entity_id, goal_type, status,
-                                   depends_on, created_at, updated_at, config, events)
+                                   depends_on, created_at, updated_at, config, events, global_priority)
                 VALUES (@goal, 3, @profile, 'Character', 'ragnar', 'Rank', 'Active', ARRAY[]::uuid[], now(), now(),
                         '{"Rank":{"Start":1,"End":5,"EndPointFive":false,"EndAppliedUpgrades":0}}',
                         '[{"At":"2026-01-01T00:00:00+00:00","Type":"Created"},
-                          {"At":"2026-01-02T00:00:00+00:00","Type":"Paused"}]');
+                          {"At":"2026-01-02T00:00:00+00:00","Type":"Paused"}]', 1);
                 """;
             command.Parameters.AddWithValue("goal", oldGoalId);
             command.Parameters.AddWithValue("profile", profileId.Value);
@@ -96,6 +96,7 @@ public sealed class GoalTargetEditPostgresTests
                 Id = goalId,
                 ProfileId = profileId,
                 Status = GoalStatus.Active,
+                GlobalPriority = 1,
                 Config = new GoalConfig
                 {
                     Upgrade = new UpgradeTarget { Targets = [new UpgradeMaterialTarget { UpgradeId = "upgHpC014", Quantity = 9 }] },
@@ -142,6 +143,7 @@ public sealed class GoalTargetEditPostgresTests
                 Id = goalId,
                 ProfileId = profileId,
                 Status = GoalStatus.Active,
+                GlobalPriority = 1,
                 Config = new GoalConfig { Rank = new RankTarget { Start = 1, End = 5 } },
             });
             await seed.SaveChangesAsync(TestContext.Current.CancellationToken);
@@ -179,6 +181,7 @@ public sealed class GoalTargetEditPostgresTests
                 Id = goalId,
                 ProfileId = profileId,
                 Status = GoalStatus.Active,
+                GlobalPriority = 1,
                 Config = new GoalConfig { Rank = new RankTarget { Start = 1, End = 5 } },
                 Events = [new GoalEvent { At = DateTimeOffset.UtcNow, Type = GoalEventType.Created }],
             });

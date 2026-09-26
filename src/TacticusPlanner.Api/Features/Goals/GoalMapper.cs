@@ -60,7 +60,8 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
         projectIds,
         goal.CreatedAt,
         goal.UpdatedAt,
-        goal.Revision
+        goal.Revision,
+        goal.GlobalPriority
     );
 
     public GoalSummaryResponse ToSummary(Goal goal) => new(
@@ -72,7 +73,8 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
         goal.Notes,
         goal.DependsOn.ToList(),
         goal.CreatedAt,
-        goal.UpdatedAt
+        goal.UpdatedAt,
+        goal.GlobalPriority
     );
 
     /// <summary>Also used directly by <see cref="CreateCombinedGoalsEndpoint"/>, which builds its own
@@ -218,7 +220,9 @@ public sealed record GoalSummaryResponse(
     string? Notes,
     List<Guid> DependsOn,
     DateTimeOffset CreatedAt,
-    DateTimeOffset UpdatedAt
+    DateTimeOffset UpdatedAt,
+    // Position in the account-wide in-flight order (1 = first); null for Completed/Archived goals.
+    int? GlobalPriority = null
 );
 
 public sealed record GoalDetailResponse(
@@ -239,7 +243,8 @@ public sealed record GoalDetailResponse(
     DateTimeOffset CreatedAt,
     DateTimeOffset UpdatedAt,
     // Monotonically increasing; a target edit must echo it as expectedRevision (optimistic concurrency).
-    long Revision = 0
+    long Revision = 0,
+    int? GlobalPriority = null
 );
 
 public sealed record GoalConfigResponse(

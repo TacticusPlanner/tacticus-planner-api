@@ -60,6 +60,25 @@ migrations against a production-like database before promoting the image and
 confirm that rollback does not require reversing an already-applied destructive
 migration.
 
+### Data migrations that drop or rewrite data
+
+Some migrations are deliberately not reversible in place, for example
+`AddGlobalGoalPriority`, which folds every profile's per-project goal orders
+into one account-wide order and drops `project_goals.priority`. For these:
+
+1. Take a verified database backup immediately before deploying the release
+   (`pg_dump --format=custom`, then confirm the dump restores into a scratch
+   database and that row counts match).
+2. Deploy the API first; the migration runs at startup inside one transaction
+   and aborts, leaving the schema unchanged, if its built-in invariant check
+   fails (every in-flight goal holds exactly one dense position per profile).
+3. After startup, spot-check the counts: `count(*)` of Active/Paused goals per
+   profile equals `count(global_priority)`.
+4. Prefer forward repair if the cutover misbehaves. Rolling back to an old
+   binary requires restoring the pre-migration backup, because the old
+   per-project orders no longer exist; the migration's `Down` only
+   reconstructs an approximation from the global order.
+
 ## Coordinated apps and API releases
 
 Apps and API versions use Semantic Versioning independently. A production

@@ -54,7 +54,7 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
         Assert.NotNull(membersResponse);
         var unlockMember = membersResponse.Goals.Single(entry => entry.Goal.GoalId == unlock.GoalId);
         var rankMember = membersResponse.Goals.Single(entry => entry.Goal.GoalId == rank.GoalId);
-        Assert.NotEqual(unlockMember.Priority, rankMember.Priority);
+        Assert.NotEqual(unlockMember.Goal.GlobalPriority, rankMember.Goal.GlobalPriority);
     }
 
     [Fact]
@@ -84,8 +84,8 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
         Assert.NotNull(members);
         // Priorities are assigned automatically and contiguously in request order, so the combined set
         // occupies 1 and 2 in the otherwise empty default project.
-        Assert.Equal(1, members.Goals.Single(entry => entry.Goal.GoalId == unlock.GoalId).Priority);
-        Assert.Equal(2, members.Goals.Single(entry => entry.Goal.GoalId == rank.GoalId).Priority);
+        Assert.Equal(1, members.Goals.Single(entry => entry.Goal.GoalId == unlock.GoalId).Goal.GlobalPriority);
+        Assert.Equal(2, members.Goals.Single(entry => entry.Goal.GoalId == rank.GoalId).Goal.GlobalPriority);
     }
 
     [Fact]

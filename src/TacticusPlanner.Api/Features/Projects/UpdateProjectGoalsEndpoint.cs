@@ -11,13 +11,9 @@ namespace TacticusPlanner.Api.Features.Projects;
 /// <summary>
 /// Replaces a project's goal membership (plan §5) in one call. Every goal must belong to at least one
 /// project, so a goal cannot be removed from its only remaining project — such a removal is rejected
-/// wholesale (400) rather than silently orphaning the goal. Does NOT accept caller-authored priority (plan:
-/// <c>add-inline-goal-reprioritize</c> — priority is set exclusively via <see cref="UpdateProjectGoalOrderEndpoint"/>
-/// now that priority is flat per-goal, not unit-grouped, so nothing downstream reconciles an arbitrary
-/// submitted value the way <see cref="ProjectGoalPlanningService.NormalizeAsync"/>'s old per-unit
-/// regrouping incidentally did): an existing member's priority is left untouched regardless of what
-/// <see cref="ProjectGoalEntryRequest.Priority"/> is submitted for it, and a newly added member is
-/// appended after the project's current in-flight goals, same as <see cref="CreateGoalEndpoint"/>.
+/// wholesale (400) rather than silently orphaning the goal. Membership never changes goal priority: a
+/// project holds no order of its own, and every member keeps its account-wide position (see
+/// <see cref="GoalOrderService"/>; the only project-level write is <see cref="UpdateProjectGoalOrderEndpoint"/>).
 /// </summary>
 public sealed class UpdateProjectGoalsEndpoint : Endpoint<UpdateProjectGoalsRequest, ProjectGoalsResponse>
 {
@@ -125,24 +121,16 @@ public sealed class UpdateProjectGoalsEndpoint : Endpoint<UpdateProjectGoalsRequ
                 db.ProjectGoals.RemoveRange(toRemove);
             }
 
-            // Priority is never taken from the request (see this endpoint's class doc): an existing
-            // member keeps its current stored priority untouched, and a newly added member is appended
-            // via GetNextPriorityAsync (same as CreateGoalEndpoint) — NormalizeAsync below then produces
-            // the final, definitive values for the whole project regardless.
+            // Membership never touches the global order: every member keeps its position.
             var existingByGoalId = existingMemberships.ToDictionary(entity => entity.GoalId);
             var goalsById = ownedGoals.ToDictionary(goal => goal.Id);
-            var projects = Resolve<ProjectsService>();
-            // Queried once, then incremented locally — GetNextPriorityAsync re-queried per entry would
-            // return the same value for every not-yet-saved addition, since it reads the database, not
-            // this change tracker's pending inserts.
-            var nextPriority = await projects.GetNextPriorityAsync(projectId, ct);
             foreach (var entry in req.Goals)
             {
                 var goalId = GoalId.From(entry.GoalId);
                 if (!existingByGoalId.ContainsKey(goalId))
                 {
                     db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(
-                        project, goalsById[goalId], nextPriority++, DateTimeOffset.UtcNow));
+                        project, goalsById[goalId], DateTimeOffset.UtcNow));
                 }
             }
 
@@ -170,16 +158,18 @@ public sealed class UpdateProjectGoalsEndpoint : Endpoint<UpdateProjectGoalsRequ
                 return;
             }
 
-            await planning.NormalizeAsync([projectId], ct);
-            await db.SaveChangesAsync(ct);
             if (transaction is not null)
                 await transaction.CommitAsync(ct);
 
             var updated = await db.ProjectGoals
                 .AsNoTracking()
                 .Where(entity => entity.ProjectId == projectId)
-                .OrderBy(entity => entity.Priority)
-                .Select(entity => new ProjectGoalEntryResponse(entity.GoalId.Value, entity.Priority))
+                .Join(db.Goals, entry => entry.GoalId, goal => goal.Id, (entry, goal) => goal)
+                .OrderBy(goal => goal.GlobalPriority == null)
+                .ThenBy(goal => goal.GlobalPriority)
+                .ThenBy(goal => goal.CreatedAt)
+                .ThenBy(goal => goal.Id)
+                .Select(goal => new ProjectGoalEntryResponse(goal.Id.Value, goal.GlobalPriority))
                 .ToListAsync(ct);
 
             await Send.OkAsync(new ProjectGoalsResponse(updated), ct);
@@ -195,4 +185,5 @@ public sealed record ProjectGoalEntryRequest(Guid GoalId);
 
 public sealed record ProjectGoalsResponse(List<ProjectGoalEntryResponse> Goals);
 
-public sealed record ProjectGoalEntryResponse(Guid GoalId, int Priority);
+/// <summary>A member goal with its account-wide position (null once completed/archived).</summary>
+public sealed record ProjectGoalEntryResponse(Guid GoalId, int? GlobalPriority);

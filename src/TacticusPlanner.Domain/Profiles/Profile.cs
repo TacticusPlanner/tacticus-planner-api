@@ -22,6 +22,10 @@ public class Profile : BaseEntity<ProfileId>
     /// flag with a partial unique index.</summary>
     public ProjectId? ActiveProjectId { get; set; }
 
+    /// <summary>Optimistic-concurrency token for the account-wide goal order: advanced whenever the set or
+    /// order of in-flight goals changes, and checked by the reorder operations.</summary>
+    public long GoalOrderRevision { get; set; }
+
     public virtual Account? Account { get; set; }
 
     public virtual TacticusIntegration? TacticusIntegration { get; set; }

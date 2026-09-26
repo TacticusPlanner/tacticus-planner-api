@@ -107,12 +107,10 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
             }
 
             db.Goals.Add(goal);
+            await Resolve<GoalOrderService>().AppendAsync(goal, ct);
 
             foreach (var project in targetProjects)
-            {
-                db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(
-                    project, goal, await projects.GetNextPriorityAsync(project.Id, ct), now));
-            }
+                db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(project, goal, now));
 
             try
             {
@@ -134,8 +132,7 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
                 return;
             }
 
-            await planning.NormalizeAsync(targetProjects.Select(project => project.Id), ct);
-            await db.SaveChangesAsync(ct);
+            await Resolve<GoalOrderService>().CompleteAsync(ct);
             if (transaction is not null)
                 await transaction.CommitAsync(ct);
 
@@ -161,9 +158,8 @@ public sealed record CreateGoalRequest(
     bool StartPaused = false
 );
 
-/// <summary>One target project for a newly created goal, with an optional caller-chosen priority within
-/// that project (plan: per-project priority). <see cref="Priority"/> null means "append after the
-/// project's current goals" — the same behavior as before per-project priority existed.</summary>
+/// <summary>One target project a newly created goal is filed into. A goal takes no caller-chosen
+/// priority: it appends once to the account-wide in-flight order however many projects it joins.</summary>
 public sealed record ProjectPriorityRequest(Guid ProjectId);
 
 public sealed record CreateGoalConfigRequest(

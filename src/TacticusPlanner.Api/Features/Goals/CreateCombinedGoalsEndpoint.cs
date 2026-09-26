@@ -201,12 +201,12 @@ public sealed class CreateCombinedGoalsEndpoint
             }
 
             db.Goals.AddRange(goals);
+            // Once each, in request order, however many projects they are filed into.
+            var order = Resolve<GoalOrderService>();
+            foreach (var goal in goals)
+                await order.AppendAsync(goal, ct);
             foreach (var project in targetProjects)
-            {
-                var basePriority = await projects.GetNextPriorityAsync(project.Id, ct);
-                db.ProjectGoals.AddRange(goals.Select((goal, i) =>
-                    ProjectGoalPlanningService.CreateMembership(project, goal, basePriority + i, now)));
-            }
+                db.ProjectGoals.AddRange(goals.Select(goal => ProjectGoalPlanningService.CreateMembership(project, goal, now)));
 
             try
             {
@@ -230,8 +230,7 @@ public sealed class CreateCombinedGoalsEndpoint
                 return;
             }
 
-            await planning.NormalizeAsync(targetProjects.Select(project => project.Id), ct);
-            await db.SaveChangesAsync(ct);
+            await order.CompleteAsync(ct);
             if (transaction is not null)
                 await transaction.CommitAsync(ct);
 

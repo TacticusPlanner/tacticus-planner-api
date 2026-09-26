@@ -26,6 +26,7 @@ public sealed class V1GoalImportService(
     GoalTargetValidationService targetValidation,
     ProjectGoalPlanningService planning,
     ProjectsService projects,
+    GoalOrderService order,
     TimeProvider timeProvider)
 {
     private static readonly string[] Rarities = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic"];
@@ -564,10 +565,10 @@ public sealed class V1GoalImportService(
             // Flat pass: assign priorities in (AnchorIndex, SubOrder) order — this is where V1's priority
             // sequence (and each synthesized prerequisite's "immediately before its earliest dependent"
             // placement) actually becomes the persisted project-goal order.
-            var priority = await projects.GetNextPriorityAsync(project.Id, ct);
             foreach (var (goal, _, _) in pending.OrderBy(entry => entry.AnchorIndex).ThenBy(entry => entry.SubOrder))
             {
-                db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(project, goal, priority++, now));
+                await order.AppendAsync(goal, ct);
+                db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(project, goal, now));
             }
 
             try
@@ -599,8 +600,7 @@ public sealed class V1GoalImportService(
                 return;
             }
 
-            await planning.NormalizeAsync([project.Id], ct);
-            await db.SaveChangesAsync(ct);
+            await order.CompleteAsync(ct);
             if (transaction is not null) await transaction.CommitAsync(ct);
 
             foreach (var (index, goal) in staged)

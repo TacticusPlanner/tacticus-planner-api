@@ -45,15 +45,4 @@ public sealed class ProjectsService(PlannerDbContext db)
 
         return project;
     }
-
-    /// <summary>The next priority value to append a goal at the bottom of a project's ordering.</summary>
-    public async Task<int> GetNextPriorityAsync(ProjectId projectId, CancellationToken ct)
-    {
-        var max = await db.ProjectGoals
-            .Where(entity => entity.ProjectId == projectId)
-            .Select(entity => (int?)entity.Priority)
-            .MaxAsync(ct);
-
-        return (max ?? 0) + 1;
-    }
 }

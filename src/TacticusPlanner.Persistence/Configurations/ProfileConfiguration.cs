@@ -32,6 +32,8 @@ public sealed class ProfileConfiguration : IEntityTypeConfiguration<Profile>
                 id => id.HasValue ? id.Value.Value : (Guid?)null,
                 value => value.HasValue ? ProjectId.From(value.Value) : (ProjectId?)null);
 
+        builder.Property(entity => entity.GoalOrderRevision).IsRequired().HasDefaultValue(0L);
+
         builder.Property(entity => entity.CreatedAt).IsRequired();
         builder.Property(entity => entity.UpdatedAt).IsRequired();
 

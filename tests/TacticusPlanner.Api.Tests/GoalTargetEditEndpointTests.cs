@@ -492,12 +492,12 @@ public sealed class GoalTargetEditEndpointTests(PlannerApiFactory factory) : ICl
         return goal;
     }
 
-    private static async Task<List<(Guid GoalId, int Priority)>> PrioritiesAsync(HttpClient client, Guid projectId)
+    private static async Task<List<(Guid GoalId, int? Priority)>> PrioritiesAsync(HttpClient client, Guid projectId)
     {
         var response = await client.GetFromJsonAsync<ListProjectGoalsResponse>(
             $"/api/v1/me/projects/{projectId}/goals", TestContext.Current.CancellationToken);
         Assert.NotNull(response);
-        return response.Goals.Select(entry => (entry.Goal.GoalId, entry.Priority)).ToList();
+        return response.Goals.Select(entry => (entry.Goal.GoalId, entry.Goal.GlobalPriority)).ToList();
     }
 
     private static async Task<ProjectSummaryResponse> CreateProjectAsync(HttpClient client, string name)

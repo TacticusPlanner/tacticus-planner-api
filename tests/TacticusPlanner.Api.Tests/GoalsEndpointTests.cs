@@ -162,7 +162,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
             TestContext.Current.CancellationToken
         );
         Assert.NotNull(members);
-        var priority = Assert.Single(members.Goals, entry => entry.Goal.GoalId == created.GoalId).Priority;
+        var priority = Assert.Single(members.Goals, entry => entry.Goal.GoalId == created.GoalId).Goal.GlobalPriority;
         Assert.Equal(2, priority);
     }
 
@@ -1118,9 +1118,11 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         );
         Assert.NotNull(defaultMembers);
         Assert.DoesNotContain(defaultMembers.Goals, entry => entry.Goal.GoalId == created.GoalId);
+        // Membership changes never touch the account-wide order: the goals created first and second
+        // keep positions 1 and 2 even though the first left the project.
         Assert.Equal(
-            1,
-            Assert.Single(defaultMembers.Goals, entry => entry.Goal.GoalId == remainingGoal.GoalId).Priority
+            2,
+            Assert.Single(defaultMembers.Goals, entry => entry.Goal.GoalId == remainingGoal.GoalId).Goal.GlobalPriority
         );
     }
 

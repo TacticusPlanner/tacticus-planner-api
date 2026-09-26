@@ -732,7 +732,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         var defaultProject = await GetDefaultProjectAsync(client);
         var members = await client.GetFromJsonAsync<ListProjectGoalsResponse>(
             $"/api/v1/me/projects/{defaultProject.ProjectId}/goals", TestContext.Current.CancellationToken);
-        var byGoalId = members!.Goals.ToDictionary(entry => entry.Goal.GoalId, entry => entry.Priority);
+        var byGoalId = members!.Goals.ToDictionary(entry => entry.Goal.GoalId, entry => entry.Goal.GlobalPriority);
 
         var bt1GoalId = body.Outcomes.Single(o => o.SourceGoalId == "bt-1").GoalId!.Value;
         var ci1GoalId = body.Outcomes.Single(o => o.SourceGoalId == "ci-1").GoalId!.Value;
@@ -754,7 +754,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         var defaultProject = await GetDefaultProjectAsync(client);
         var members = await client.GetFromJsonAsync<ListProjectGoalsResponse>(
             $"/api/v1/me/projects/{defaultProject.ProjectId}/goals", TestContext.Current.CancellationToken);
-        var byGoalId = members!.Goals.ToDictionary(entry => entry.Goal.GoalId, entry => entry.Priority);
+        var byGoalId = members!.Goals.ToDictionary(entry => entry.Goal.GoalId, entry => entry.Goal.GlobalPriority);
 
         Assert.True(byGoalId[unlockGoalId] < byGoalId[rankGoalId]);
     }

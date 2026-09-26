@@ -5,6 +5,7 @@ public static class DependencyInjection
     public static IServiceCollection AddGoalsFeature(this IServiceCollection services)
     {
         services.AddScoped<GoalTargetValidationService>();
+        services.AddScoped<GoalOrderService>();
 
         return services;
     }

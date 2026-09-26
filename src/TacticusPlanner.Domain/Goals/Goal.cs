@@ -34,6 +34,11 @@ public class Goal : BaseEntity<GoalId>, IRevisionedEntity
 
     public GoalStatus Status { get; set; }
 
+    /// <summary>Position in the account-wide in-flight order (1 = first): set for every Active/Paused goal,
+    /// null for Completed/Archived ones. Unique per profile (a deferrable constraint, so a reorder can
+    /// permute positions inside one transaction). Only <c>GoalOrderService</c> writes it.</summary>
+    public int? GlobalPriority { get; set; }
+
     /// <summary>Freeform user notes — editable after creation, unlike the target fields in <see cref="Config"/>.</summary>
     public string? Notes { get; set; }
 
