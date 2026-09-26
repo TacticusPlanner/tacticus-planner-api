@@ -12,7 +12,7 @@ public static class RankTargetKey
 {
     /// <summary>Below Adamantine1 a rank's upgrades are a 3-slot row and point-five means all 3, so
     /// (pointFive, 0) and (false, 3) are one end state; at Adamantine1+ slots are numbered individually and
-    /// point-five carries no meaning — the same rules as <c>ProgressionRules.RequiredLevelForRankTarget</c>.</summary>
+    /// point-five carries no meaning.</summary>
     public static string From(int end, bool endPointFive, int endAppliedUpgrades)
     {
         var slots = Math.Max(endAppliedUpgrades, 0);

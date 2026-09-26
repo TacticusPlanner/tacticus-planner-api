@@ -84,24 +84,4 @@ public sealed class ProgressionRulesPrerequisiteTests
     {
         Assert.Equal(UnitProgression.MythicMythicWings, ProgressionRules.MinimumProgressionForAbilityLevel(61));
     }
-
-    [Theory]
-    // Ends of the ladder.
-    [InlineData(UnitRank.Stone1, false, 0, 1)]
-    [InlineData(UnitRank.Adamantine2, false, 0, 60)]
-    // Mid-ladder, pre-Adamantine1 "top row" partial-upgrade cases (Silver1 base level 26).
-    [InlineData(UnitRank.Silver1, false, 0, 26)] // clean boundary
-    [InlineData(UnitRank.Silver1, false, 1, 26)] // TopRow1
-    [InlineData(UnitRank.Silver1, false, 2, 27)] // TopRow2
-    [InlineData(UnitRank.Silver1, true, 0, 28)] // TopRow (pointFive)
-    [InlineData(UnitRank.Silver1, false, 3, 28)] // TopRow via appliedUpgrades >= 3
-    // Adamantine1+ numbered-row partial-upgrade cases (Adamantine1 base level 55).
-    [InlineData(UnitRank.Adamantine1, false, 0, 55)]
-    [InlineData(UnitRank.Adamantine1, false, 1, 55)] // Row1
-    [InlineData(UnitRank.Adamantine1, false, 5, 59)] // Row5
-    public void RequiredLevelForRankTargetMatchesTheClientsDecode(
-        UnitRank rank, bool endPointFive, int endAppliedUpgrades, int expectedLevel)
-    {
-        Assert.Equal(expectedLevel, ProgressionRules.RequiredLevelForRankTarget(rank, endPointFive, endAppliedUpgrades));
-    }
 }
