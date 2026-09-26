@@ -5,10 +5,10 @@ using TacticusPlanner.Api.Features.Projects;
 namespace TacticusPlanner.Api.Tests;
 
 /// <summary>
-/// Regression guard for goal-lifecycle-status: "Project operations do not change a goal's status". Neither
-/// membership changes (through either direction of the membership endpoints) nor changing which project is
-/// the profile's active plan may move a goal between Active and Paused — a goal's status changes only
-/// through an operation that explicitly targets it. This already holds, and these tests keep it holding.
+/// Regression guard for goal-lifecycle-status: "Project membership operations do not change a goal's
+/// status". Membership changes (through either direction of the membership endpoints) may not move a goal
+/// between Active and Paused — a goal's status changes only through an operation that explicitly targets
+/// it. This already holds, and these tests keep it holding.
 /// </summary>
 public sealed class GoalStatusInvarianceTests(PlannerApiFactory factory) : IClassFixture<PlannerApiFactory>
 {
@@ -19,43 +19,6 @@ public sealed class GoalStatusInvarianceTests(PlannerApiFactory factory) : IClas
         new CreateGoalConfigRequest(Rank: new RankTargetRequest(1, false, 0, 5, false, 0)),
         null
     );
-
-    [Fact]
-    public async Task MakingAProjectCurrentDoesNotActivateItsPausedGoals()
-    {
-        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
-        var projectB = await CreateProjectAsync(client, "Event Prep");
-
-        var goal = await CreateGoalAsync(client, RankGoal with
-        {
-            Projects = [new ProjectPriorityRequest(projectB.ProjectId)],
-            StartPaused = true,
-        });
-        Assert.Equal("Paused", goal.Status);
-
-        await ActivateAsync(client, projectB.ProjectId);
-
-        Assert.Equal("Paused", (await GetGoalAsync(client, goal.GoalId)).Status);
-    }
-
-    [Fact]
-    public async Task LosingCurrentPlanStandingDoesNotPauseGoals()
-    {
-        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
-        var defaultProject = await GetDefaultProjectAsync(client);
-        Assert.True(defaultProject.IsActivePlan);
-
-        var goal = await CreateGoalAsync(client, RankGoal with
-        {
-            Projects = [new ProjectPriorityRequest(defaultProject.ProjectId)],
-        });
-        Assert.Equal("Active", goal.Status);
-
-        var projectB = await CreateProjectAsync(client, "Event Prep");
-        await ActivateAsync(client, projectB.ProjectId);
-
-        Assert.Equal("Active", (await GetGoalAsync(client, goal.GoalId)).Status);
-    }
 
     [Fact]
     public async Task AddingAMembershipThroughTheGoalDoesNotChangeStatus()
@@ -154,13 +117,6 @@ public sealed class GoalStatusInvarianceTests(PlannerApiFactory factory) : IClas
             TestContext.Current.CancellationToken);
         Assert.NotNull(goal);
         return goal;
-    }
-
-    private static async Task ActivateAsync(HttpClient client, Guid projectId)
-    {
-        var response = await client.PostAsync(
-            $"/api/v1/me/projects/{projectId}/activate", null, TestContext.Current.CancellationToken);
-        response.EnsureSuccessStatusCode();
     }
 
     private static async Task<GoalDetailResponse> GetGoalAsync(HttpClient client, Guid goalId) =>

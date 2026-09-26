@@ -22,8 +22,7 @@ public sealed class UpdateProjectEndpoint : Endpoint<UpdateProjectRequest, Proje
 
     public override async Task HandleAsync(UpdateProjectRequest req, CancellationToken ct)
     {
-        var state = ProcessorState<CurrentUserState>();
-        if (state.ProfileId is not { } profileId)
+        if (ProcessorState<CurrentUserState>().ProfileId is null)
         {
             await Send.NotFoundAsync(ct);
             return;
@@ -47,16 +46,9 @@ public sealed class UpdateProjectEndpoint : Endpoint<UpdateProjectRequest, Proje
         }
 
         var status = Enum.Parse<ProjectStatus>(req.Status, ignoreCase: true);
-        var profile = await db.Profiles.FirstAsync(entity => entity.Id == profileId, ct);
         if (status == ProjectStatus.Archived && project.Type == ProjectType.Default)
         {
             await SendConflictAsync("defaultProjectCannotBeArchived", "The default project cannot be archived.", ct);
-            return;
-        }
-
-        if (status == ProjectStatus.Archived && profile.ActiveProjectId == project.Id)
-        {
-            await SendConflictAsync("activeProjectCannotBeArchived", "Activate another project before archiving this one.", ct);
             return;
         }
 
@@ -75,7 +67,7 @@ public sealed class UpdateProjectEndpoint : Endpoint<UpdateProjectRequest, Proje
             return;
         }
 
-        await Send.OkAsync(Map.ToSummary(project, profile.ActiveProjectId), ct);
+        await Send.OkAsync(Map.ToSummary(project), ct);
     }
 
     private async Task SendConflictAsync(string issueCode, string message, CancellationToken ct)

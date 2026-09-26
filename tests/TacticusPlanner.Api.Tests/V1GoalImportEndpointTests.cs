@@ -762,14 +762,12 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
     // ----- Imported status follows V1's own dailyRaids choice -----
 
     [Fact]
-    public async Task ImportWhileAnotherProjectIsTheActivePlanHonoursEachGoalsPlanningChoice()
+    public async Task ImportHonoursEachGoalsPlanningChoice()
     {
-        // The import always files into the default project, so under the old membership-derived rule the
-        // whole import landed Paused whenever another project was current. Status now comes from the source
-        // goal's own dailyRaids flag, never from the active plan (goal-lifecycle-status).
+        // Status comes from the source goal's own dailyRaids flag, never from project membership
+        // (goal-lifecycle-status).
         var (client, subject) = await CreateProvisionedClientAsync();
         await SeedPlayerDataSnapshotAsync(subject, [Character(CharacterId, xpLevel: 60), Character(OtherCharacterId, xpLevel: 60)]);
-        await MakeAnotherProjectCurrentAsync(client);
 
         var body = await ImportGoalsAsync(
             client,
@@ -941,24 +939,6 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
             TestContext.Current.CancellationToken);
         response.EnsureSuccessStatusCode();
         return (await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken))!;
-    }
-
-    /// <summary>Creates a second project and makes it the caller's active plan, so an import (which always
-    /// files into the default project) runs while some other project is current.</summary>
-    private static async Task MakeAnotherProjectCurrentAsync(HttpClient client)
-    {
-        var created = await client.PostAsJsonAsync(
-            "/api/v1/me/projects",
-            new CreateProjectRequest("Event Prep", null, null),
-            TestContext.Current.CancellationToken
-        );
-        created.EnsureSuccessStatusCode();
-        var project = await created.Content.ReadFromJsonAsync<ProjectSummaryResponse>(
-            TestContext.Current.CancellationToken);
-        Assert.NotNull(project);
-        var activated = await client.PostAsync(
-            $"/api/v1/me/projects/{project.ProjectId}/activate", null, TestContext.Current.CancellationToken);
-        activated.EnsureSuccessStatusCode();
     }
 
     private static async Task<string> StatusOfSourceGoalAsync(

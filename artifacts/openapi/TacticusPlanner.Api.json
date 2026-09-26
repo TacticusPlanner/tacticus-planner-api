@@ -1784,51 +1784,6 @@
         ]
       }
     },
-    "/api/v1/me/projects/{projectId}/activate": {
-      "post": {
-        "tags": [
-          "Me"
-        ],
-        "summary": "Sets a project as the profile's active plan.",
-        "operationId": "TacticusPlannerApiFeaturesProjectsActivateProjectEndpoint",
-        "parameters": [
-          {
-            "name": "projectId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "The now-active project.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesProjectsProjectSummaryResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "The request is missing required identity claims."
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "No matching project owned by the caller."
-          }
-        },
-        "security": [
-          {
-            "JWTBearerAuth": [ ]
-          }
-        ]
-      }
-    },
     "/api/v1/me/projects/{projectId}/goal-order": {
       "put": {
         "tags": [
@@ -5858,7 +5813,6 @@
           "description",
           "color",
           "status",
-          "isActivePlan",
           "isDefault",
           "revision",
           "createdAt",
@@ -5887,9 +5841,6 @@
           },
           "status": {
             "type": "string"
-          },
-          "isActivePlan": {
-            "type": "boolean"
           },
           "isDefault": {
             "type": "boolean"

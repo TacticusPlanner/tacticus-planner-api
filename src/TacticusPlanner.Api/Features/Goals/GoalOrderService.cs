@@ -51,8 +51,8 @@ public sealed class GoalOrderService(PlannerDbContext db)
         nextPosition = null;
     }
 
-    /// <summary>The profile as it stands under the lock. Callers such as <c>EnsureDefaultProjectAsync</c> load
-    /// it (tracked) before the lock is taken, and EF would hand back that stale instance, so the revision
+    /// <summary>The profile as it stands under the lock. Callers may load it
+    /// (tracked) before the lock is taken, and EF would hand back that stale instance, so the revision
     /// would be incremented from a value read before a concurrent reorder committed.</summary>
     private async Task<Domain.Profiles.Profile> LoadProfileAsync(CancellationToken ct)
     {

@@ -140,7 +140,7 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
     }
 
     [Fact]
-    public async Task CreateInNonActiveProjectStartsAllGoalsActive()
+    public async Task CreateInCustomProjectStartsAllGoalsActive()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
@@ -151,7 +151,6 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
         );
         var otherProject = await otherProjectResponse.Content.ReadFromJsonAsync<ProjectSummaryResponse>(TestContext.Current.CancellationToken);
         Assert.NotNull(otherProject);
-        Assert.False(otherProject.IsActivePlan);
 
         var response = await client.PostAsJsonAsync(
             "/api/v1/me/goals/combined",

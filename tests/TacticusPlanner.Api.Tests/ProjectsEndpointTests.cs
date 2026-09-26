@@ -38,7 +38,6 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
         Assert.NotNull(body);
         var project = Assert.Single(body.Projects);
         Assert.True(project.IsDefault);
-        Assert.True(project.IsActivePlan);
         Assert.Equal("My Goals", project.Name);
     }
 
@@ -70,35 +69,28 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
     }
 
     [Fact]
-    public async Task ActivateProjectSwitchesActivePlanFlagFromDefault()
+    public async Task ActivateProjectRouteIsGone()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
-        await client.GetAsync("/api/v1/me/projects", TestContext.Current.CancellationToken); // provisions the default
+        var projects = await client.GetFromJsonAsync<ListProjectsResponse>(
+            "/api/v1/me/projects", TestContext.Current.CancellationToken);
+        // A real project: the removed endpoint answered 200 for it, so only a missing route passes.
+        var projectId = Assert.Single(projects!.Projects).ProjectId;
 
-        var createResponse = await client.PostAsJsonAsync(
-            "/api/v1/me/projects",
-            new CreateProjectRequest("Event Prep", null, null),
-            TestContext.Current.CancellationToken
-        );
-        var created = await createResponse.Content.ReadFromJsonAsync<ProjectSummaryResponse>(TestContext.Current.CancellationToken);
-        Assert.NotNull(created);
-        Assert.False(created.IsActivePlan);
+        var response = await client.PostAsync(
+            $"/api/v1/me/projects/{projectId}/activate", null, TestContext.Current.CancellationToken);
 
-        var activateResponse = await client.PostAsync(
-            $"/api/v1/me/projects/{created.ProjectId}/activate",
-            null,
-            TestContext.Current.CancellationToken
-        );
-        activateResponse.EnsureSuccessStatusCode();
+        Assert.True(response.StatusCode is HttpStatusCode.NotFound or HttpStatusCode.MethodNotAllowed);
+    }
 
-        var listResponse = await client.GetAsync("/api/v1/me/projects", TestContext.Current.CancellationToken);
-        var list = await listResponse.Content.ReadFromJsonAsync<ListProjectsResponse>(TestContext.Current.CancellationToken);
-        Assert.NotNull(list);
-        Assert.Equal(2, list.Projects.Count);
+    [Fact]
+    public async Task ProjectSummaryHasNoActivePlanFlag()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var activeProjects = list.Projects.Where(project => project.IsActivePlan).ToList();
-        var activeProject = Assert.Single(activeProjects);
-        Assert.Equal(created.ProjectId, activeProject.ProjectId);
+        var json = await client.GetStringAsync("/api/v1/me/projects", TestContext.Current.CancellationToken);
+
+        Assert.DoesNotContain("isActivePlan", json, StringComparison.OrdinalIgnoreCase);
     }
 
     [Fact]

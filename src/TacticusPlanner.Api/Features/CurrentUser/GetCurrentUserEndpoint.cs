@@ -108,7 +108,6 @@ public sealed class GetCurrentUserEndpoint : EndpointWithoutRequest<CurrentUserR
             {
                 Id = profileId,
                 DisplayName = NoDisplayName,
-                ActiveProjectId = defaultProject.Id,
             },
         };
 

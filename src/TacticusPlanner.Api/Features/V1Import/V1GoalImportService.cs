@@ -820,8 +820,8 @@ public sealed class V1GoalImportService(
     }
 
     /// <summary>V1's per-goal <c>dailyRaids</c> choice, carried through to the V2 lifecycle status: a goal
-    /// the user had in daily planning imports Active, one they had excluded imports Paused. The import
-    /// never consults the profile's active project (goal-lifecycle-status).</summary>
+    /// the user had in daily planning imports Active, one they had excluded imports Paused, whatever project
+    /// it is filed into (goal-lifecycle-status).</summary>
     private static GoalStatus StatusOf(TranslatedGoal goal) =>
         goal.InDailyPlanning ? GoalStatus.Active : GoalStatus.Paused;
 

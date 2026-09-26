@@ -211,7 +211,7 @@ public sealed class ProjectGoalConcurrencyPostgresTests
         var (connectionString, profileId, projectId) = await SeedEmptyProjectAsync(postgres);
         await CreateGoalAsync(connectionString, profileId, projectId, "ragnar", GoalType.Rank);
 
-        // A request that loaded the Profile (as EnsureDefaultProjectAsync does) before taking the lock ...
+        // A request that loaded the Profile (tracked) before taking the lock ...
         await using var db = new PlannerDbContext(
             BuildOptions(connectionString), new PassthroughEncryption(), new StaticProfile(ProfileId.From(profileId)));
         var trackedBeforeTheLock = await db.Profiles.FirstAsync(TestContext.Current.CancellationToken);
@@ -242,6 +242,76 @@ public sealed class ProjectGoalConcurrencyPostgresTests
 
         Assert.Equal(3, await ReadOrderRevisionAsync(connectionString, profileId));
         await AssertContiguousOrderAsync(connectionString, profileId, 3);
+    }
+
+    [Fact]
+    public async Task ConcurrentEnsureDefaultProjectCreatesExactlyOneDefault()
+    {
+        await using var postgres = await StartPostgresAsync();
+        var (connectionString, profileId, _) = await SeedEmptyProjectAsync(postgres);
+
+        // A start gate makes the six requests genuinely overlap instead of running back to back.
+        using var start = new ManualResetEventSlim(false);
+        var requests = Enumerable.Range(0, 6).Select(_ => Task.Run(async () =>
+        {
+            await using var db = new PlannerDbContext(
+                BuildOptions(connectionString), new PassthroughEncryption(), new StaticProfile(ProfileId.From(profileId)));
+            start.Wait(TestContext.Current.CancellationToken);
+            var project = await new ProjectsService(db).EnsureDefaultProjectAsync(
+                ProfileId.From(profileId), TestContext.Current.CancellationToken);
+            return project.Id;
+        })).ToArray();
+        start.Set();
+        var ids = await Task.WhenAll(requests);
+
+        Assert.Single(ids.Distinct());
+        await using var connection = new NpgsqlConnection(connectionString);
+        await connection.OpenAsync(TestContext.Current.CancellationToken);
+        await using var command = connection.CreateCommand();
+        command.CommandText = "SELECT count(*) FROM projects WHERE profile_id = @profile AND type = 'Default'";
+        command.Parameters.AddWithValue("profile", profileId);
+        Assert.Equal(1L, await command.ExecuteScalarAsync(TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    public async Task EnsureDefaultProjectReReadsTheWinnerWhenTheDefaultAppearsBetweenReadAndSave()
+    {
+        await using var postgres = await StartPostgresAsync();
+        var (connectionString, profileId, _) = await SeedEmptyProjectAsync(postgres);
+        var winnerId = Guid.NewGuid();
+        var options = new DbContextOptionsBuilder<PlannerDbContext>(BuildOptions(connectionString))
+            .AddInterceptors(new InsertDefaultBeforeSaveInterceptor(connectionString, profileId, winnerId))
+            .Options;
+
+        await using var db = new PlannerDbContext(
+            options, new PassthroughEncryption(), new StaticProfile(ProfileId.From(profileId)));
+        var project = await new ProjectsService(db).EnsureDefaultProjectAsync(
+            ProfileId.From(profileId), TestContext.Current.CancellationToken);
+
+        // The service's own insert hit ix_projects_profile_id_default and fell back to the other request's row.
+        Assert.Equal(winnerId, project.Id.Value);
+    }
+
+    /// <summary>Plays the concurrent request that wins the race: it commits a Default project on a second
+    /// connection just before this context's own save.</summary>
+    private sealed class InsertDefaultBeforeSaveInterceptor(string connectionString, Guid profileId, Guid winnerId)
+        : SaveChangesInterceptor
+    {
+        public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(
+            DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
+        {
+            await using var connection = new NpgsqlConnection(connectionString);
+            await connection.OpenAsync(cancellationToken);
+            await using var command = connection.CreateCommand();
+            command.CommandText = """
+                INSERT INTO projects (id, revision, profile_id, name, status, type, created_at, updated_at)
+                VALUES (@id, 0, @profile, 'My Goals', 'Active', 'Default', now(), now());
+                """;
+            command.Parameters.AddWithValue("id", winnerId);
+            command.Parameters.AddWithValue("profile", profileId);
+            await command.ExecuteNonQueryAsync(cancellationToken);
+            return result;
+        }
     }
 
     private static async Task<PostgreSqlContainer> StartPostgresAsync()

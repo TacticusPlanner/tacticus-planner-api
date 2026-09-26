@@ -114,8 +114,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
             new HashSet<Guid> { defaultProject.ProjectId, otherProject.ProjectId },
             created.ProjectIds.ToHashSet()
         );
-        // The default project is the active plan, so the goal starts Active even though the second
-        // project isn't — membership in any active-plan project is enough.
+        // Status is independent of membership: the goal starts Active whichever projects it joins.
         Assert.Equal("Active", created.Status);
 
         var otherMembers = await client.GetFromJsonAsync<ListProjectGoalsResponse>(
@@ -182,7 +181,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     }
 
     [Fact]
-    public async Task CreateGoalInNonActiveProjectStartsActive()
+    public async Task CreateGoalInCustomProjectStartsActive()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
@@ -193,7 +192,6 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         );
         var otherProject = await otherProjectResponse.Content.ReadFromJsonAsync<ProjectSummaryResponse>(TestContext.Current.CancellationToken);
         Assert.NotNull(otherProject);
-        Assert.False(otherProject.IsActivePlan);
 
         var response = await client.PostAsJsonAsync(
             "/api/v1/me/goals",
