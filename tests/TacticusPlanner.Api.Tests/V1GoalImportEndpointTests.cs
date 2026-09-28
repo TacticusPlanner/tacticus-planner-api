@@ -607,7 +607,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
     }
 
     [Fact]
-    public async Task AscensionIsSynthesizedAtTheMinimumSatisfyingTargetWithALevelPrerequisiteToo()
+    public async Task AscensionIsSynthesizedAtTheMinimumSatisfyingTargetAndNoLevelGoalIsCreated()
     {
         var (client, subject) = await CreateProvisionedClientAsync();
         await SeedPlayerDataSnapshotAsync(subject, [Character(CharacterId, UnitProgression.CommonNone, UnitRank.Stone1, xpLevel: 1)]);
@@ -615,20 +615,17 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         var body = await ImportGoalsAsync(client, [RankGoal("r1", CharacterId, 1, UnitRank.Gold1)]);
 
         var expectedAscension = ProgressionRules.MinimumProgressionForRank(UnitRank.Gold1);
-        var expectedLevel = ProgressionRules.RequiredLevelForRankTarget(UnitRank.Gold1, false, 0);
 
         var ascensionOutcome = Assert.Single(body.Outcomes, o => o.Code == "prerequisite_added" && o.GoalType == "Ascension");
-        var levelOutcome = Assert.Single(body.Outcomes, o => o.Code == "prerequisite_added" && o.GoalType == "Level");
         var rankOutcome = Assert.Single(body.Outcomes, o => o.SourceGoalId == "r1");
 
         var ascensionGoal = await GetGoalAsync(client, ascensionOutcome.GoalId!.Value);
         Assert.Equal(ProgressionRules.ProgressionOrder[(int)expectedAscension], ascensionGoal.Config.Progression!.End);
-        var levelGoal = await GetGoalAsync(client, levelOutcome.GoalId!.Value);
-        Assert.Equal(expectedLevel, levelGoal.Config.Level!.End);
+        Assert.DoesNotContain(body.Outcomes, o => o.GoalType == "Level");
 
         var rankGoal = await GetGoalAsync(client, rankOutcome.GoalId!.Value);
         Assert.Contains(ascensionOutcome.GoalId.Value, rankGoal.DependsOn);
-        Assert.Contains(levelOutcome.GoalId.Value, rankGoal.DependsOn);
+        Assert.Single(rankGoal.DependsOn);
     }
 
     [Fact]
@@ -689,29 +686,6 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
     }
 
     [Fact]
-    public async Task LevelPrerequisiteAboveTheCharacterLevelCapIsRejectedRatherThanPersisted()
-    {
-        // Adamantine2 with 5 applied upgrades needs level 64 (RequiredLevelForRankTarget), which exceeds
-        // GoalTargetValidationService's 60-level cap. The synthesized Level goal must be rejected — not
-        // persisted with an invalid target — while the Rank goal that needed it still succeeds.
-        var (client, subject) = await CreateProvisionedClientAsync();
-        await SeedPlayerDataSnapshotAsync(subject, [Character(CharacterId, UnitProgression.CommonNone, UnitRank.Stone1, xpLevel: 1)]);
-
-        var body = await ImportGoalsAsync(client, [RankGoal("r1", CharacterId, 1, UnitRank.Adamantine2, rankAppliedUpgrades: 5)]);
-
-        var levelOutcome = Assert.Single(body.Outcomes, o => o.GoalType == "Level");
-        Assert.Equal("Failed", levelOutcome.Status);
-        Assert.Equal("prerequisite_rejected", levelOutcome.Code);
-        Assert.Null(levelOutcome.GoalId);
-
-        var rankOutcome = Assert.Single(body.Outcomes, o => o.SourceGoalId == "r1");
-        Assert.Equal("Created", rankOutcome.Status);
-
-        var goals = await client.GetFromJsonAsync<ListGoalsResponse>("/api/v1/me/goals", TestContext.Current.CancellationToken);
-        Assert.DoesNotContain(goals!.Goals, goal => goal.GoalType == "Level");
-    }
-
-    [Fact]
     public async Task PrerequisitesAreNotCreatedWhenNotSelected()
     {
         var (client, subject) = await CreateProvisionedClientAsync();
@@ -758,7 +732,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         var defaultProject = await GetDefaultProjectAsync(client);
         var members = await client.GetFromJsonAsync<ListProjectGoalsResponse>(
             $"/api/v1/me/projects/{defaultProject.ProjectId}/goals", TestContext.Current.CancellationToken);
-        var byGoalId = members!.Goals.ToDictionary(entry => entry.Goal.GoalId, entry => entry.Priority);
+        var byGoalId = members!.Goals.ToDictionary(entry => entry.Goal.GoalId, entry => entry.Goal.GlobalPriority);
 
         var bt1GoalId = body.Outcomes.Single(o => o.SourceGoalId == "bt-1").GoalId!.Value;
         var ci1GoalId = body.Outcomes.Single(o => o.SourceGoalId == "ci-1").GoalId!.Value;
@@ -780,7 +754,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         var defaultProject = await GetDefaultProjectAsync(client);
         var members = await client.GetFromJsonAsync<ListProjectGoalsResponse>(
             $"/api/v1/me/projects/{defaultProject.ProjectId}/goals", TestContext.Current.CancellationToken);
-        var byGoalId = members!.Goals.ToDictionary(entry => entry.Goal.GoalId, entry => entry.Priority);
+        var byGoalId = members!.Goals.ToDictionary(entry => entry.Goal.GoalId, entry => entry.Goal.GlobalPriority);
 
         Assert.True(byGoalId[unlockGoalId] < byGoalId[rankGoalId]);
     }
@@ -788,14 +762,12 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
     // ----- Imported status follows V1's own dailyRaids choice -----
 
     [Fact]
-    public async Task ImportWhileAnotherProjectIsTheActivePlanHonoursEachGoalsPlanningChoice()
+    public async Task ImportHonoursEachGoalsPlanningChoice()
     {
-        // The import always files into the default project, so under the old membership-derived rule the
-        // whole import landed Paused whenever another project was current. Status now comes from the source
-        // goal's own dailyRaids flag, never from the active plan (goal-lifecycle-status).
+        // Status comes from the source goal's own dailyRaids flag, never from project membership
+        // (goal-lifecycle-status).
         var (client, subject) = await CreateProvisionedClientAsync();
         await SeedPlayerDataSnapshotAsync(subject, [Character(CharacterId, xpLevel: 60), Character(OtherCharacterId, xpLevel: 60)]);
-        await MakeAnotherProjectCurrentAsync(client);
 
         var body = await ImportGoalsAsync(
             client,
@@ -967,24 +939,6 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
             TestContext.Current.CancellationToken);
         response.EnsureSuccessStatusCode();
         return (await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken))!;
-    }
-
-    /// <summary>Creates a second project and makes it the caller's active plan, so an import (which always
-    /// files into the default project) runs while some other project is current.</summary>
-    private static async Task MakeAnotherProjectCurrentAsync(HttpClient client)
-    {
-        var created = await client.PostAsJsonAsync(
-            "/api/v1/me/projects",
-            new CreateProjectRequest("Event Prep", null, null),
-            TestContext.Current.CancellationToken
-        );
-        created.EnsureSuccessStatusCode();
-        var project = await created.Content.ReadFromJsonAsync<ProjectSummaryResponse>(
-            TestContext.Current.CancellationToken);
-        Assert.NotNull(project);
-        var activated = await client.PostAsync(
-            $"/api/v1/me/projects/{project.ProjectId}/activate", null, TestContext.Current.CancellationToken);
-        activated.EnsureSuccessStatusCode();
     }
 
     private static async Task<string> StatusOfSourceGoalAsync(

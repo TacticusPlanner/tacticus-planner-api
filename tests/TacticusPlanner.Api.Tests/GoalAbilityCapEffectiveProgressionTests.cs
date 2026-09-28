@@ -92,7 +92,7 @@ public sealed class GoalAbilityCapEffectiveProgressionTests(PlannerApiFactory fa
             CharacterId,
             null,
             [
-                new CombinedGoalSpec("level", new CreateGoalConfigRequest(Level: new LevelTargetRequest(0, 10)), []),
+                new CombinedGoalSpec("unlock", new CreateGoalConfigRequest(), []),
                 new CombinedGoalSpec(
                     "ability",
                     new CreateGoalConfigRequest(Ability: new AbilityTargetRequest(0, 12, 0, 0)),

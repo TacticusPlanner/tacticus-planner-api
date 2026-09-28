@@ -114,8 +114,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
             new HashSet<Guid> { defaultProject.ProjectId, otherProject.ProjectId },
             created.ProjectIds.ToHashSet()
         );
-        // The default project is the active plan, so the goal starts Active even though the second
-        // project isn't — membership in any active-plan project is enough.
+        // Status is independent of membership: the goal starts Active whichever projects it joins.
         Assert.Equal("Active", created.Status);
 
         var otherMembers = await client.GetFromJsonAsync<ListProjectGoalsResponse>(
@@ -131,22 +130,22 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var defaultProject = await GetDefaultProjectAsync(client);
-        // A different goal type for the same character (Level, not Rank) so it doesn't trip the
+        // A different goal type for the same character (Ascension, not Rank) so it doesn't trip the
         // one-active-or-paused-per-(entity,type) constraint — occupies priority 1 in the default
         // project via the normal auto-append path, so the Rank goal's explicit priority below is a
         // deliberate insert-at-the-top, not a coincidence.
-        var levelGoalResponse = await client.PostAsJsonAsync(
+        var ascensionGoalResponse = await client.PostAsJsonAsync(
             "/api/v1/me/goals",
             new CreateGoalRequest(
                 "character",
                 "blackTerminator",
-                "level",
-                new CreateGoalConfigRequest(Level: new LevelTargetRequest(1, 10)),
+                "ascension",
+                new CreateGoalConfigRequest(Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar")),
                 null
             ),
             TestContext.Current.CancellationToken
         );
-        levelGoalResponse.EnsureSuccessStatusCode();
+        ascensionGoalResponse.EnsureSuccessStatusCode();
 
         var response = await client.PostAsJsonAsync(
             "/api/v1/me/goals",
@@ -162,7 +161,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
             TestContext.Current.CancellationToken
         );
         Assert.NotNull(members);
-        var priority = Assert.Single(members.Goals, entry => entry.Goal.GoalId == created.GoalId).Priority;
+        var priority = Assert.Single(members.Goals, entry => entry.Goal.GoalId == created.GoalId).Goal.GlobalPriority;
         Assert.Equal(2, priority);
     }
 
@@ -182,7 +181,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     }
 
     [Fact]
-    public async Task CreateGoalInNonActiveProjectStartsActive()
+    public async Task CreateGoalInCustomProjectStartsActive()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
@@ -193,7 +192,6 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         );
         var otherProject = await otherProjectResponse.Content.ReadFromJsonAsync<ProjectSummaryResponse>(TestContext.Current.CancellationToken);
         Assert.NotNull(otherProject);
-        Assert.False(otherProject.IsActivePlan);
 
         var response = await client.PostAsJsonAsync(
             "/api/v1/me/goals",
@@ -924,8 +922,8 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
             new CreateGoalRequest(
                 "character",
                 "blackTerminator",
-                "level",
-                new CreateGoalConfigRequest(Level: new LevelTargetRequest(1, 10)),
+                "ascension",
+                new CreateGoalConfigRequest(Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar")),
                 null
             ),
             TestContext.Current.CancellationToken
@@ -1089,8 +1087,8 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
             new CreateGoalRequest(
                 "character",
                 "blackTerminator",
-                "level",
-                new CreateGoalConfigRequest(Level: new LevelTargetRequest(1, 10)),
+                "ascension",
+                new CreateGoalConfigRequest(Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar")),
                 null
             ),
             TestContext.Current.CancellationToken
@@ -1118,9 +1116,11 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         );
         Assert.NotNull(defaultMembers);
         Assert.DoesNotContain(defaultMembers.Goals, entry => entry.Goal.GoalId == created.GoalId);
+        // Membership changes never touch the account-wide order: the goals created first and second
+        // keep positions 1 and 2 even though the first left the project.
         Assert.Equal(
-            1,
-            Assert.Single(defaultMembers.Goals, entry => entry.Goal.GoalId == remainingGoal.GoalId).Priority
+            2,
+            Assert.Single(defaultMembers.Goals, entry => entry.Goal.GoalId == remainingGoal.GoalId).Goal.GlobalPriority
         );
     }
 

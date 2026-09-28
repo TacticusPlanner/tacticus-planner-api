@@ -36,7 +36,6 @@ public sealed class ListProjectsEndpoint : EndpointWithoutRequest<ListProjectsRe
         await Resolve<ProjectsService>().EnsureDefaultProjectAsync(profileId, ct);
 
         var db = Resolve<PlannerDbContext>();
-        var profile = await db.Profiles.AsNoTracking().FirstAsync(entity => entity.Id == profileId, ct);
 
         // Scoped to the caller's profile by PlannerDbContext's global query filter.
         var projects = await db.Projects
@@ -46,7 +45,7 @@ public sealed class ListProjectsEndpoint : EndpointWithoutRequest<ListProjectsRe
             .ToListAsync(ct);
 
         await Send.OkAsync(
-            new ListProjectsResponse(projects.Select(project => Map.ToSummary(project, profile.ActiveProjectId)).ToList()),
+            new ListProjectsResponse(projects.Select(Map.ToSummary).ToList()),
             ct
         );
     }

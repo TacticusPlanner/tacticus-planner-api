@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql;
+using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Api.Features.Projects;
 using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.Profiles;
@@ -24,7 +25,7 @@ namespace TacticusPlanner.Persistence.IntegrationTests;
 public sealed class ProjectGoalConcurrencyPostgresTests
 {
     [Fact]
-    public async Task ConcurrentCreatesForDistinctUnitsAllCommitWithContiguousPriorities()
+    public async Task ConcurrentCreatesForDistinctUnitsAllCommitWithContiguousGlobalPositions()
     {
         await using var postgres = await StartPostgresAsync();
         var (connectionString, profileId, projectId) = await SeedEmptyProjectAsync(postgres);
@@ -34,7 +35,7 @@ public sealed class ProjectGoalConcurrencyPostgresTests
             CreateGoalAsync(connectionString, profileId, projectId, unitId, GoalType.Rank)));
 
         Assert.All(results, result => Assert.True(result.Succeeded));
-        await AssertContiguousPrioritiesAsync(connectionString, projectId, units.Length);
+        await AssertContiguousOrderAsync(connectionString, profileId, units.Length);
     }
 
     [Fact]
@@ -48,7 +49,7 @@ public sealed class ProjectGoalConcurrencyPostgresTests
             CreateGoalAsync(connectionString, profileId, projectId, "ragnar", GoalType.Rank));
 
         Assert.All(results, result => Assert.True(result.Succeeded));
-        await AssertContiguousPrioritiesAsync(connectionString, projectId, 2);
+        await AssertContiguousOrderAsync(connectionString, profileId, 2);
     }
 
     [Fact]
@@ -63,7 +64,7 @@ public sealed class ProjectGoalConcurrencyPostgresTests
 
         Assert.Equal(1, results.Count(result => result.Succeeded));
         Assert.Equal(1, results.Count(result => !result.Succeeded));
-        await AssertContiguousPrioritiesAsync(connectionString, projectId, 1);
+        await AssertContiguousOrderAsync(connectionString, profileId, 1);
     }
 
     [Fact]
@@ -77,7 +78,7 @@ public sealed class ProjectGoalConcurrencyPostgresTests
             CreateGoalAsync(connectionString, profileId, projectId, "ragnar", GoalType.Rank, rankEnd: 12));
 
         Assert.All(results, result => Assert.True(result.Succeeded));
-        await AssertContiguousPrioritiesAsync(connectionString, projectId, 2);
+        await AssertContiguousOrderAsync(connectionString, profileId, 2);
     }
 
     /// <summary>
@@ -103,11 +104,12 @@ public sealed class ProjectGoalConcurrencyPostgresTests
         Assert.True(aunshiSeed.Succeeded);
 
         var createTask = CreateGoalAsync(connectionString, profileId, projectId, "ragnar", GoalType.Ascension);
+        var loadedRevision = await ReadOrderRevisionAsync(connectionString, profileId);
         var reorderTask = ApplyGoalOrderAsync(connectionString, profileId, projectId,
         [
             aunshiSeed.GoalId,
             ragnarSeed.GoalId,
-        ]);
+        ], loadedRevision);
 
         var createResult = await createTask;
         var reorderSucceeded = await reorderTask;
@@ -119,7 +121,197 @@ public sealed class ProjectGoalConcurrencyPostgresTests
         // count) reflects only the create; a rejected reorder changes nothing.
         Assert.True(createResult.Succeeded);
         _ = reorderSucceeded; // both true and false are valid outcomes here, see the summary above
-        await AssertContiguousPrioritiesAsync(connectionString, projectId, 3);
+        await AssertContiguousOrderAsync(connectionString, profileId, 3);
+    }
+
+    [Fact]
+    public async Task ReorderPermutesPositionsUnderTheDeferredUniqueConstraint()
+    {
+        await using var postgres = await StartPostgresAsync();
+        var (connectionString, profileId, projectId) = await SeedEmptyProjectAsync(postgres);
+        var seeds = new List<Guid>();
+        foreach (var unit in new[] { "ragnar", "aunshi", "certus" })
+            seeds.Add((await CreateGoalAsync(connectionString, profileId, projectId, unit, GoalType.Rank)).GoalId);
+        var revision = await ReadOrderRevisionAsync(connectionString, profileId);
+
+        // Reversing swaps positions across rows, which a per-row unique check would reject mid-update.
+        var applied = await ApplyGoalOrderAsync(
+            connectionString, profileId, projectId, [seeds[2], seeds[1], seeds[0]], revision);
+
+        Assert.True(applied);
+        await AssertContiguousOrderAsync(connectionString, profileId, 3);
+        Assert.Equal(revision + 1, await ReadOrderRevisionAsync(connectionString, profileId));
+    }
+
+    [Fact]
+    public async Task ConcurrentReordersWithTheSameRevisionAllowExactlyOneWinner()
+    {
+        await using var postgres = await StartPostgresAsync();
+        var (connectionString, profileId, projectId) = await SeedEmptyProjectAsync(postgres);
+        var seeds = new List<Guid>();
+        foreach (var unit in new[] { "ragnar", "aunshi", "certus" })
+            seeds.Add((await CreateGoalAsync(connectionString, profileId, projectId, unit, GoalType.Rank)).GoalId);
+        var revision = await ReadOrderRevisionAsync(connectionString, profileId);
+
+        var results = await Task.WhenAll(
+            ApplyGoalOrderAsync(connectionString, profileId, projectId, [seeds[2], seeds[1], seeds[0]], revision),
+            ApplyGoalOrderAsync(connectionString, profileId, projectId, [seeds[1], seeds[0], seeds[2]], revision));
+
+        Assert.Equal(1, results.Count(applied => applied));
+        await AssertContiguousOrderAsync(connectionString, profileId, 3);
+        Assert.Equal(revision + 1, await ReadOrderRevisionAsync(connectionString, profileId));
+    }
+
+    [Fact]
+    public async Task ConcurrentCompletionAndCreateKeepThePositionsDense()
+    {
+        await using var postgres = await StartPostgresAsync();
+        var (connectionString, profileId, projectId) = await SeedEmptyProjectAsync(postgres);
+        var seeds = new List<Guid>();
+        foreach (var unit in new[] { "ragnar", "aunshi", "certus" })
+            seeds.Add((await CreateGoalAsync(connectionString, profileId, projectId, unit, GoalType.Rank)).GoalId);
+
+        var results = await Task.WhenAll(
+            CompleteGoalAsync(connectionString, profileId, seeds[0]),
+            CreateGoalAsync(connectionString, profileId, projectId, "gulgortz", GoalType.Rank),
+            CreateGoalAsync(connectionString, profileId, projectId, "trajann", GoalType.Rank));
+
+        Assert.True(results[1].Succeeded && results[2].Succeeded);
+        await AssertContiguousOrderAsync(connectionString, profileId, 4);
+    }
+
+    /// <summary>Mirrors <c>UpdateGoalStatusEndpoint</c>'s completion path: under the lock, take the goal out
+    /// of the order, then compact and advance the revision.</summary>
+    private static async Task<(bool Succeeded, Guid GoalId)> CompleteGoalAsync(
+        string connectionString, Guid profileId, Guid goalId)
+    {
+        await using var db = new PlannerDbContext(
+            BuildOptions(connectionString), new PassthroughEncryption(), new StaticProfile(ProfileId.From(profileId)));
+        var planning = new ProjectGoalPlanningService(db);
+        var ct = TestContext.Current.CancellationToken;
+
+        await planning.ExecuteLockedMutationAsync([], async transaction =>
+        {
+            var goal = await db.Goals.FirstAsync(entity => entity.Id == GoalId.From(goalId), ct);
+            var order = new GoalOrderService(db);
+            goal.Status = GoalStatus.Completed;
+            order.Release(goal);
+            await order.CompleteAsync(ct);
+            if (transaction is not null)
+                await transaction.CommitAsync(ct);
+        }, ct);
+
+        return (true, goalId);
+    }
+
+    [Fact]
+    public async Task RevisionAdvancesFromTheValueUnderTheLockNotFromAProfileTrackedBeforeIt()
+    {
+        await using var postgres = await StartPostgresAsync();
+        var (connectionString, profileId, projectId) = await SeedEmptyProjectAsync(postgres);
+        await CreateGoalAsync(connectionString, profileId, projectId, "ragnar", GoalType.Rank);
+
+        // A request that loaded the Profile (tracked) before taking the lock ...
+        await using var db = new PlannerDbContext(
+            BuildOptions(connectionString), new PassthroughEncryption(), new StaticProfile(ProfileId.From(profileId)));
+        var trackedBeforeTheLock = await db.Profiles.FirstAsync(TestContext.Current.CancellationToken);
+        Assert.Equal(1, trackedBeforeTheLock.GoalOrderRevision);
+
+        // ... while another request commits a change of the order first.
+        await CreateGoalAsync(connectionString, profileId, projectId, "aunshi", GoalType.Rank);
+        Assert.Equal(2, await ReadOrderRevisionAsync(connectionString, profileId));
+
+        var planning = new ProjectGoalPlanningService(db);
+        var ct = TestContext.Current.CancellationToken;
+        await planning.ExecuteLockedMutationAsync([], async transaction =>
+        {
+            var goal = new Goal(GoalEntityType.Character, "certus", GoalType.Rank)
+            {
+                Id = GoalId.From(Guid.CreateVersion7()),
+                ProfileId = ProfileId.From(profileId),
+                Status = GoalStatus.Active,
+                Config = new GoalConfig { Rank = new RankTarget { Start = 1, End = 12 } },
+                Events = [new GoalEvent { At = DateTimeOffset.UtcNow, Type = GoalEventType.Created }],
+            };
+            db.Goals.Add(goal);
+            var order = new GoalOrderService(db);
+            await order.AppendAsync(goal, ct);
+            await order.CompleteAsync(ct);
+            await transaction!.CommitAsync(ct);
+        }, ct);
+
+        Assert.Equal(3, await ReadOrderRevisionAsync(connectionString, profileId));
+        await AssertContiguousOrderAsync(connectionString, profileId, 3);
+    }
+
+    [Fact]
+    public async Task ConcurrentEnsureDefaultProjectCreatesExactlyOneDefault()
+    {
+        await using var postgres = await StartPostgresAsync();
+        var (connectionString, profileId, _) = await SeedEmptyProjectAsync(postgres);
+
+        // A start gate makes the six requests genuinely overlap instead of running back to back.
+        using var start = new ManualResetEventSlim(false);
+        var requests = Enumerable.Range(0, 6).Select(_ => Task.Run(async () =>
+        {
+            await using var db = new PlannerDbContext(
+                BuildOptions(connectionString), new PassthroughEncryption(), new StaticProfile(ProfileId.From(profileId)));
+            start.Wait(TestContext.Current.CancellationToken);
+            var project = await new ProjectsService(db).EnsureDefaultProjectAsync(
+                ProfileId.From(profileId), TestContext.Current.CancellationToken);
+            return project.Id;
+        })).ToArray();
+        start.Set();
+        var ids = await Task.WhenAll(requests);
+
+        Assert.Single(ids.Distinct());
+        await using var connection = new NpgsqlConnection(connectionString);
+        await connection.OpenAsync(TestContext.Current.CancellationToken);
+        await using var command = connection.CreateCommand();
+        command.CommandText = "SELECT count(*) FROM projects WHERE profile_id = @profile AND type = 'Default'";
+        command.Parameters.AddWithValue("profile", profileId);
+        Assert.Equal(1L, await command.ExecuteScalarAsync(TestContext.Current.CancellationToken));
+    }
+
+    [Fact]
+    public async Task EnsureDefaultProjectReReadsTheWinnerWhenTheDefaultAppearsBetweenReadAndSave()
+    {
+        await using var postgres = await StartPostgresAsync();
+        var (connectionString, profileId, _) = await SeedEmptyProjectAsync(postgres);
+        var winnerId = Guid.NewGuid();
+        var options = new DbContextOptionsBuilder<PlannerDbContext>(BuildOptions(connectionString))
+            .AddInterceptors(new InsertDefaultBeforeSaveInterceptor(connectionString, profileId, winnerId))
+            .Options;
+
+        await using var db = new PlannerDbContext(
+            options, new PassthroughEncryption(), new StaticProfile(ProfileId.From(profileId)));
+        var project = await new ProjectsService(db).EnsureDefaultProjectAsync(
+            ProfileId.From(profileId), TestContext.Current.CancellationToken);
+
+        // The service's own insert hit ix_projects_profile_id_default and fell back to the other request's row.
+        Assert.Equal(winnerId, project.Id.Value);
+    }
+
+    /// <summary>Plays the concurrent request that wins the race: it commits a Default project on a second
+    /// connection just before this context's own save.</summary>
+    private sealed class InsertDefaultBeforeSaveInterceptor(string connectionString, Guid profileId, Guid winnerId)
+        : SaveChangesInterceptor
+    {
+        public override async ValueTask<InterceptionResult<int>> SavingChangesAsync(
+            DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
+        {
+            await using var connection = new NpgsqlConnection(connectionString);
+            await connection.OpenAsync(cancellationToken);
+            await using var command = connection.CreateCommand();
+            command.CommandText = """
+                INSERT INTO projects (id, revision, profile_id, name, status, type, created_at, updated_at)
+                VALUES (@id, 0, @profile, 'My Goals', 'Active', 'Default', now(), now());
+                """;
+            command.Parameters.AddWithValue("id", winnerId);
+            command.Parameters.AddWithValue("profile", profileId);
+            await command.ExecuteNonQueryAsync(cancellationToken);
+            return result;
+        }
     }
 
     private static async Task<PostgreSqlContainer> StartPostgresAsync()
@@ -206,15 +398,11 @@ public sealed class ProjectGoalConcurrencyPostgresTests
             db.Goals.Add(goal);
 
             var project = await db.Projects.FirstAsync(entity => entity.Id == ProjectId.From(projectId), ct);
-            var nextPriority = await db.ProjectGoals
-                .Where(entity => entity.ProjectId == project.Id)
-                .Select(entity => (int?)entity.Priority)
-                .MaxAsync(ct) ?? 0;
-            db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(project, goal, nextPriority + 1, now));
+            var order = new GoalOrderService(db);
+            await order.AppendAsync(goal, ct);
+            db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(project, goal, now));
 
-            await db.SaveChangesAsync(ct);
-            await planning.NormalizeAsync([project.Id], ct);
-            await db.SaveChangesAsync(ct);
+            await order.CompleteAsync(ct);
             if (transaction is not null)
                 await transaction.CommitAsync(ct);
             succeeded = true;
@@ -225,7 +413,7 @@ public sealed class ProjectGoalConcurrencyPostgresTests
     }
 
     private static async Task<bool> ApplyGoalOrderAsync(
-        string connectionString, Guid profileId, Guid projectId, List<Guid> goalIds)
+        string connectionString, Guid profileId, Guid projectId, List<Guid> goalIds, long expectedRevision)
     {
         var options = BuildOptions(connectionString);
         await using var db = new PlannerDbContext(options, new PassthroughEncryption(), new StaticProfile(ProfileId.From(profileId)));
@@ -235,8 +423,9 @@ public sealed class ProjectGoalConcurrencyPostgresTests
 
         await planning.ExecuteLockedMutationAsync([ProjectId.From(projectId)], async transaction =>
         {
-            applied = await planning.ApplyGoalOrderAsync(
-                ProjectId.From(projectId), goalIds.Select(GoalId.From).ToList(), ct);
+            var result = await new GoalOrderService(db).ReorderAsync(
+                goalIds.Select(GoalId.From).ToList(), expectedRevision, ct);
+            applied = result.Outcome == GoalOrderOutcome.Ok;
             if (!applied)
             {
                 if (transaction is not null)
@@ -244,7 +433,6 @@ public sealed class ProjectGoalConcurrencyPostgresTests
                 return;
             }
 
-            await db.SaveChangesAsync(ct);
             if (transaction is not null)
                 await transaction.CommitAsync(ct);
         }, ct);
@@ -252,21 +440,31 @@ public sealed class ProjectGoalConcurrencyPostgresTests
         return applied;
     }
 
-    private static async Task AssertContiguousPrioritiesAsync(string connectionString, Guid projectId, int expectedCount)
+    /// <summary>The account's in-flight goals hold exactly the positions 1..<paramref name="expectedCount"/>.</summary>
+    private static async Task AssertContiguousOrderAsync(string connectionString, Guid profileId, int expectedCount)
     {
         await using var connection = new NpgsqlConnection(connectionString);
         await connection.OpenAsync(TestContext.Current.CancellationToken);
         await using var command = connection.CreateCommand();
-        command.CommandText = "SELECT priority FROM project_goals WHERE project_id = @project ORDER BY priority;";
-        command.Parameters.AddWithValue("project", projectId);
+        command.CommandText =
+            "SELECT global_priority FROM goals WHERE profile_id = @profile AND global_priority IS NOT NULL ORDER BY global_priority;";
+        command.Parameters.AddWithValue("profile", profileId);
         await using var reader = await command.ExecuteReaderAsync(TestContext.Current.CancellationToken);
-        var priorities = new List<int>();
+        var positions = new List<int>();
         while (await reader.ReadAsync(TestContext.Current.CancellationToken))
-            priorities.Add(reader.GetInt32(0));
+            positions.Add(reader.GetInt32(0));
 
-        Assert.Equal(expectedCount, priorities.Count);
-        Assert.Equal(priorities.Distinct().Count(), priorities.Count);
-        Assert.Equal(Enumerable.Range(1, expectedCount), priorities);
+        Assert.Equal(Enumerable.Range(1, expectedCount), positions);
+    }
+
+    private static async Task<long> ReadOrderRevisionAsync(string connectionString, Guid profileId)
+    {
+        await using var connection = new NpgsqlConnection(connectionString);
+        await connection.OpenAsync(TestContext.Current.CancellationToken);
+        await using var command = connection.CreateCommand();
+        command.CommandText = "SELECT goal_order_revision FROM profiles WHERE id = @profile;";
+        command.Parameters.AddWithValue("profile", profileId);
+        return (long)(await command.ExecuteScalarAsync(TestContext.Current.CancellationToken))!;
     }
 
     private static DbContextOptions<PlannerDbContext> BuildOptions(string connectionString) =>

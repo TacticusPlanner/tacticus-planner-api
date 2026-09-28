@@ -11,29 +11,21 @@ the caller receives.
 
 ### Requirement: Imported goals are created by the import operation
 
-The import operation SHALL create the imported goals itself. It SHALL NOT
-return goal-creation requests for the caller to submit. Goals SHALL be created
-in the caller's default project, each in the status its own V1 daily-planning
-choice implies (see `goal-lifecycle-status`) and never one derived from which
-project is the caller's active plan.
+The import operation SHALL create the imported goals itself. It SHALL NOT return goal-creation requests for the caller to submit. Goals SHALL be created in the caller's default project, each in the status its own V1 daily-planning choice implies (see `goal-lifecycle-status`).
 
-The import SHALL NOT require the caller to supply, or re-supply, anything
-derived from the V1 profile: V1 credentials are used once, within the same
-operation, and are not retained.
+The import SHALL NOT require the caller to supply, or re-supply, anything derived from the V1 profile: V1 credentials are used once, within the same operation, and are not retained.
 
 #### Scenario: Import creates goals in one operation
 
 - **GIVEN** an account with player data and a V1 profile containing supported goals
 - **WHEN** the goals part is imported
-- **THEN** the goals exist on the account when the operation returns, and the response contains
-  no goal-creation request for the caller to submit
+- **THEN** the goals exist on the account when the operation returns, and the response contains no goal-creation request for the caller to submit
 
 #### Scenario: Import is repeatable without duplicating goals
 
 - **GIVEN** an import has already created goals for an account
 - **WHEN** the same V1 profile is imported again
-- **THEN** no duplicate goals are created, and each already-present goal reports as skipped
-  because it already exists
+- **THEN** no duplicate goals are created, and each already-present goal reports as skipped because it already exists
 
 ### Requirement: The goals part is refused when the account has no player data
 
@@ -73,7 +65,7 @@ described there, regardless of how many goals the V1 profile contains.
 The response SHALL contain exactly one *source* outcome entry per goal present
 in the V1 profile, in V1 priority order, each carrying the id of the V1 goal
 it originated from. When automatic prerequisite creation synthesizes a goal
-(Unlock, Ascension, or Level) or reports a prerequisite-target shortfall, that
+(Unlock or Ascension) or reports a prerequisite-target shortfall, that
 SHALL add one further outcome entry with no originating V1 goal id, appended
 after the source outcomes. Every outcome, source or synthesized, SHALL carry a
 status of created, skipped, or failed; a stable machine-readable code; a
@@ -247,9 +239,9 @@ Goals SHALL be created in ascending V1 priority order, and the resulting project
 
 #### Scenario: A created prerequisite is placed ahead of its own V1-relative position
 
-- **GIVEN** a V1 profile's imported Rank goal for character A requires a Level prerequisite absent from the account, and A's Rank goal is not first in V1's priority sequence
+- **GIVEN** a V1 profile's imported Rank goal for character A requires an Ascension prerequisite absent from the account, and A's Rank goal is not first in V1's priority sequence
 - **WHEN** the goals part is imported with automatic prerequisite creation
-- **THEN** the created Level goal is positioned immediately before A's Rank goal, ahead of goals that preceded A's Rank goal in V1's original sequence but did not require this prerequisite
+- **THEN** the created Ascension goal is positioned immediately before A's Rank goal, ahead of goals that preceded A's Rank goal in V1's original sequence but did not require this prerequisite
 
 ### Requirement: Missing prerequisites are created automatically by the same rules as manual creation
 
@@ -261,10 +253,10 @@ the same rules and the same minimum targets:
   imported goal requires the unit to exist;
 - an **Ascension** goal when an imported target is above the unit's
   progression-derived cap, targeting the lowest progression that satisfies
-  every such target for that unit;
-- a **Level** goal, for characters only, when an imported target requires a
-  character level above the unit's current level, targeting the lowest level
-  that satisfies every such target for that unit.
+  every such target for that unit.
+
+The character level a Rank or Ability target needs is intrinsic to that target
+(see `rank-level-progression`) and SHALL NOT synthesize any goal.
 
 Each created prerequisite SHALL be declared as a dependency of every imported
 goal that required it, and SHALL be placed immediately before them in the
@@ -277,10 +269,9 @@ include one of that type, or when the account already has one of that type for
 that unit. In those cases the requirement SHALL be reported rather than
 satisfied, and the existing goal's target SHALL NOT be altered.
 
-A synthesized Unlock or Level goal SHALL be validated by the same rules a
-manual creation of that goal would be before it is persisted (e.g. Unlock is
-valid only for a Character with catalog shard-upgrade data; a Level target
-must not exceed the character-level cap). When that validation fails, the
+A synthesized Unlock goal SHALL be validated by the same rules a manual
+creation of that goal would be before it is persisted (Unlock is valid only for
+a Character with catalog shard-upgrade data). When that validation fails, the
 prerequisite SHALL NOT be created; the requirement SHALL be reported as
 failed, and the imported goals that needed it proceed without a dependency
 edge to it.
@@ -327,16 +318,22 @@ identified as automatically added and naming the source goal it unblocks.
 
 #### Scenario: A requirement already met needs no prerequisite
 
-- **GIVEN** a V1 Rank goal whose target is within the character's progression-derived cap and
-  current level
+- **GIVEN** a V1 Rank goal whose target is within the character's progression-derived cap, with
+  the character below the level the target needs
 - **WHEN** the goals part is imported with automatic prerequisites selected
-- **THEN** no Ascension or Level goal is created for that character
+- **THEN** no Ascension goal is created and no other goal is created for that character
 
 #### Scenario: A created prerequisite precedes its dependents in the import sequence
 
-- **GIVEN** an imported Rank goal requires a Level prerequisite the account doesn't have
+- **GIVEN** an imported Rank goal requires an Ascension prerequisite the account doesn't have
 - **WHEN** the prerequisite is created automatically
-- **THEN** the created Level goal's position in the project's priority order precedes the Rank goal's position
+- **THEN** the created Ascension goal's position in the project's priority order precedes the Rank goal's position
+
+#### Scenario: Rank and Ability imports do not synthesize Level
+
+- **GIVEN** imported Rank and Ability targets that need a higher character level
+- **WHEN** the goals part is imported with automatic prerequisites selected
+- **THEN** no Level goal is created, and each target still carries its own level requirement
 
 ### Requirement: A failure for one goal does not discard the others
 

@@ -8,7 +8,13 @@ public sealed class GoalConfiguration : IEntityTypeConfiguration<Goal>
 {
     public void Configure(EntityTypeBuilder<Goal> builder)
     {
-        builder.ToTable("goals");
+        // The order invariant, enforced in the database as a backstop to GoalOrderService: exactly the
+        // in-flight (Active/Paused) goals hold a positive position. Uniqueness per profile is the
+        // deferrable constraint ix_goals_profile_global_priority (see the AddGlobalGoalPriority migration).
+        builder.ToTable("goals", table => table.HasCheckConstraint(
+            "ck_goals_global_priority_in_flight",
+            "(status IN ('Active', 'Paused') AND global_priority IS NOT NULL AND global_priority > 0) "
+                + "OR (status NOT IN ('Active', 'Paused') AND global_priority IS NULL)"));
         builder.HasKey(entity => entity.Id);
 
         builder.Property(entity => entity.Id)
@@ -21,6 +27,7 @@ public sealed class GoalConfiguration : IEntityTypeConfiguration<Goal>
         builder.Property(entity => entity.EntityId).HasMaxLength(GoalValidation.MaxEntityIdLength).IsRequired();
         builder.Property(entity => entity.GoalType).HasConversion<string>().IsRequired();
         builder.Property(entity => entity.Status).HasConversion<string>().IsRequired();
+        builder.Property(entity => entity.GlobalPriority);
         builder.Property(entity => entity.Notes).HasMaxLength(GoalValidation.MaxNotesLength);
         builder.Property(entity => entity.Revision).IsConcurrencyToken();
         builder.Property(entity => entity.CreatedAt).IsRequired();
@@ -43,7 +50,6 @@ public sealed class GoalConfiguration : IEntityTypeConfiguration<Goal>
             config.OwnsOne(c => c.Ability);
             config.OwnsMany(c => c.AcquisitionSources);
             config.OwnsOne(c => c.Upgrade, upgrade => upgrade.OwnsMany(u => u.Targets));
-            config.OwnsOne(c => c.Level);
         });
         builder.OwnsOne(entity => entity.Snapshot, snapshot =>
         {
@@ -62,6 +68,13 @@ public sealed class GoalConfiguration : IEntityTypeConfiguration<Goal>
         });
 
         builder.HasIndex(entity => entity.ProfileId);
+
+        // Uniqueness of (profile_id, global_priority) is the DEFERRABLE INITIALLY DEFERRED constraint
+        // ix_goals_profile_global_priority, created by the AddGlobalGoalPriority migration. It is kept out of
+        // the EF model on purpose: a unique index there makes SaveChanges order updates by value and throw a
+        // circular-dependency error when a reorder permutes positions. Deferred, the database checks it at
+        // commit, so one transaction can permute or compact positions freely (NULLs are distinct, so
+        // historical goals never collide).
 
         // At most one Active/Paused goal per (profile, entity, goal type) — the app-level checks in
         // CreateGoalEndpoint/CreateCombinedGoalsEndpoint/UpdateGoalStatusEndpoint give the friendly 400,

@@ -140,7 +140,7 @@ public sealed class UpdateGoalProjectsEndpoint : Endpoint<UpdateGoalProjectsRequ
                     if (!existingByProjectId.ContainsKey(project.Id))
                     {
                         db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(
-                            project, goal, await projectsService.GetNextPriorityAsync(project.Id, ct), DateTimeOffset.UtcNow));
+                            project, goal, DateTimeOffset.UtcNow));
                     }
                 }
 
@@ -166,8 +166,6 @@ public sealed class UpdateGoalProjectsEndpoint : Endpoint<UpdateGoalProjectsRequ
                     return;
                 }
 
-                await planning.NormalizeAsync(affectedProjectIds, ct);
-                await db.SaveChangesAsync(ct);
                 if (transaction is not null)
                     await transaction.CommitAsync(ct);
 

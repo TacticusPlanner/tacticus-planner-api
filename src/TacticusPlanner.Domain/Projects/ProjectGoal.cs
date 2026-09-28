@@ -3,17 +3,14 @@ using TacticusPlanner.Domain.Goals;
 namespace TacticusPlanner.Domain.Projects;
 
 /// <summary>
-/// Membership of a goal in a project, carrying that project's own priority for the goal (plan §5: priority
-/// is per-project, not global — the same goal can belong to multiple projects with a different priority in
-/// each).
+/// Membership of a goal in a project. A project has no order of its own: goals are ordered by
+/// <see cref="Goal.GlobalPriority"/>, and project reads are filtered projections of that order.
 /// </summary>
 public class ProjectGoal
 {
     public ProjectId ProjectId { get; set; }
 
     public GoalId GoalId { get; set; }
-
-    public int Priority { get; set; }
 
     public GoalEntityType EntityType { get; set; }
 

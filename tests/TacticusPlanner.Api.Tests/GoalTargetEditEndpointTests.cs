@@ -46,7 +46,8 @@ public sealed class GoalTargetEditEndpointTests(PlannerApiFactory factory) : ICl
             });
         var other = await CreateGoalAsync(
             client,
-            Goal("level", new CreateGoalConfigRequest(Level: new LevelTargetRequest(1, 10))) with
+            Goal("ascension", new CreateGoalConfigRequest(
+                Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar"))) with
             {
                 Projects = [new ProjectPriorityRequest(projectA.ProjectId)],
             });
@@ -124,24 +125,6 @@ public sealed class GoalTargetEditEndpointTests(PlannerApiFactory factory) : ICl
         var updated = await GetGoalAsync(client, created.GoalId);
         Assert.Equal("Common:TwoStars", updated.Config.Progression!.End);
         Assert.Equal("Common:None", updated.Config.Progression.Start);
-    }
-
-    [Fact]
-    public async Task LevelTargetCanBeEdited()
-    {
-        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
-        var created = await CreateGoalAsync(
-            client, Goal("level", new CreateGoalConfigRequest(Level: new LevelTargetRequest(1, 10))));
-
-        var response = await PutTargetAsync(
-            client,
-            created.GoalId,
-            new UpdateGoalTargetRequest(created.Revision, new GoalTargetEditRequest(Level: new LevelEndTargetRequest(20))));
-
-        response.EnsureSuccessStatusCode();
-        var updated = await GetGoalAsync(client, created.GoalId);
-        Assert.Equal(20, updated.Config.Level!.End);
-        Assert.Equal(1, updated.Config.Level.Start);
     }
 
     [Fact]
@@ -227,9 +210,9 @@ public sealed class GoalTargetEditEndpointTests(PlannerApiFactory factory) : ICl
         UpdateGoalTargetRequest[] bad =
         [
             new(created.Revision, new GoalTargetEditRequest()), // no group at all
-            new(created.Revision, new GoalTargetEditRequest(Level: new LevelEndTargetRequest(20))), // wrong kind
+            new(created.Revision, new GoalTargetEditRequest(Ability: new AbilityEndTargetRequest(5, 0))), // wrong kind
             new(created.Revision, new GoalTargetEditRequest( // mixed groups
-                Rank: new RankEndTargetRequest(7, false, 0), Level: new LevelEndTargetRequest(20))),
+                Rank: new RankEndTargetRequest(7, false, 0), Ability: new AbilityEndTargetRequest(5, 0))),
         ];
         foreach (var request in bad)
         {
@@ -258,15 +241,13 @@ public sealed class GoalTargetEditEndpointTests(PlannerApiFactory factory) : ICl
     }
 
     [Fact]
-    public async Task InvalidUpgradeAndLevelTargetsAreRejected()
+    public async Task InvalidUpgradeTargetsAreRejected()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var upgrade = await CreateGoalAsync(
             client,
             Goal("upgrade", new CreateGoalConfigRequest(
                 Upgrade: new UpgradeTargetRequest([new UpgradeMaterialTargetRequest(RelevantUpgradeId, 2)]))));
-        var level = await CreateGoalAsync(
-            client, Goal("level", new CreateGoalConfigRequest(Level: new LevelTargetRequest(1, 10))));
 
         var irrelevant = await PutTargetAsync(
             client,
@@ -275,13 +256,8 @@ public sealed class GoalTargetEditEndpointTests(PlannerApiFactory factory) : ICl
                 upgrade.Revision,
                 new GoalTargetEditRequest(
                     Upgrade: new UpgradeTargetRequest([new UpgradeMaterialTargetRequest(UnrelatedUpgradeId, 1)]))));
-        var tooHigh = await PutTargetAsync(
-            client,
-            level.GoalId,
-            new UpdateGoalTargetRequest(level.Revision, new GoalTargetEditRequest(Level: new LevelEndTargetRequest(61))));
 
         Assert.Equal(HttpStatusCode.BadRequest, irrelevant.StatusCode);
-        Assert.Equal(HttpStatusCode.BadRequest, tooHigh.StatusCode);
     }
 
     [Fact]
@@ -516,12 +492,12 @@ public sealed class GoalTargetEditEndpointTests(PlannerApiFactory factory) : ICl
         return goal;
     }
 
-    private static async Task<List<(Guid GoalId, int Priority)>> PrioritiesAsync(HttpClient client, Guid projectId)
+    private static async Task<List<(Guid GoalId, int? Priority)>> PrioritiesAsync(HttpClient client, Guid projectId)
     {
         var response = await client.GetFromJsonAsync<ListProjectGoalsResponse>(
             $"/api/v1/me/projects/{projectId}/goals", TestContext.Current.CancellationToken);
         Assert.NotNull(response);
-        return response.Goals.Select(entry => (entry.Goal.GoalId, entry.Priority)).ToList();
+        return response.Goals.Select(entry => (entry.Goal.GoalId, entry.Goal.GlobalPriority)).ToList();
     }
 
     private static async Task<ProjectSummaryResponse> CreateProjectAsync(HttpClient client, string name)

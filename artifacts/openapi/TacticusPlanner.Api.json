@@ -997,6 +997,72 @@
         ]
       }
     },
+    "/api/v1/me/goals/order": {
+      "put": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Reorders every in-flight goal in the account-wide order.",
+        "description": "GoalIds must be the exact, duplicate-free set of the caller's Active and Paused goals, ExpectedRevision the revision last read. Any ordering is accepted, including one that places a goal ahead of a DependsOn prerequisite it hasn't reached.",
+        "operationId": "TacticusPlannerApiFeaturesGoalsUpdateGoalOrderEndpoint",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsUpdateGoalOrderRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The new revision and canonical order.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsGoalOrderResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FastEndpointsErrorResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is missing required identity claims."
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "The authenticated account/profile has not been provisioned."
+          },
+          "409": {
+            "description": "The goal set or revision is stale, or the request repeats a goal; nothing changed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsGoalOrderConflictResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
     "/api/v1/me/goals/{goalId}": {
       "delete": {
         "tags": [
@@ -1285,7 +1351,7 @@
           "Me"
         ],
         "summary": "Changes an active or paused goal's end target in place.",
-        "description": "Supported for Rank, Ascension, Level, Ability and Upgrade goals; Unlock has no adjustable target. The new target is validated against the goal's stored baseline and the current catalog (an already-reached target is allowed). Submitting the target the goal already has is a no-op that changes neither the revision nor the history.",
+        "description": "Supported for Rank, Ascension, Ability and Upgrade goals; Unlock has no adjustable target. The new target is validated against the goal's stored baseline and the current catalog (an already-reached target is allowed). Submitting the target the goal already has is a no-op that changes neither the revision nor the history.",
         "operationId": "TacticusPlannerApiFeaturesGoalsUpdateGoalTargetEndpoint",
         "parameters": [
           {
@@ -1718,58 +1784,13 @@
         ]
       }
     },
-    "/api/v1/me/projects/{projectId}/activate": {
-      "post": {
-        "tags": [
-          "Me"
-        ],
-        "summary": "Sets a project as the profile's active plan.",
-        "operationId": "TacticusPlannerApiFeaturesProjectsActivateProjectEndpoint",
-        "parameters": [
-          {
-            "name": "projectId",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "The now-active project.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesProjectsProjectSummaryResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "The request is missing required identity claims."
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "404": {
-            "description": "No matching project owned by the caller."
-          }
-        },
-        "security": [
-          {
-            "JWTBearerAuth": [ ]
-          }
-        ]
-      }
-    },
     "/api/v1/me/projects/{projectId}/goal-order": {
       "put": {
         "tags": [
           "Me"
         ],
-        "summary": "Reorders all in-flight goals in a project.",
-        "description": "GoalIds must be an exact, duplicate-free permutation of the project's current in-flight (Active/Paused) goal ids. Accepts any ordering, including one that places a goal ahead of a DependsOn prerequisite it hasn't reached.",
+        "summary": "Moves a project goal onto the global position of another project goal.",
+        "description": "Both goals must be in-flight members of the project. The move writes through to the account-wide order; it never changes membership, status or dependencies. ExpectedRevision is the order revision last read.",
         "operationId": "TacticusPlannerApiFeaturesProjectsUpdateProjectGoalOrderEndpoint",
         "parameters": [
           {
@@ -1793,17 +1814,24 @@
         },
         "responses": {
           "200": {
-            "description": "Success",
+            "description": "The new revision and canonical order.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesProjectsProjectGoalsResponse"
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsGoalOrderResponse"
                 }
               }
             }
           },
           "400": {
-            "description": "The request is not an exact permutation of the project's in-flight goals."
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FastEndpointsErrorResponse"
+                }
+              }
+            }
           },
           "401": {
             "description": "Unauthorized"
@@ -1813,6 +1841,16 @@
           },
           "404": {
             "description": "Not Found"
+          },
+          "409": {
+            "description": "The revision is stale, a goal is not an in-flight member of the project, or both goals are the same.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsGoalOrderConflictResponse"
+                }
+              }
+            }
           }
         },
         "security": [
@@ -1827,7 +1865,7 @@
         "tags": [
           "Me"
         ],
-        "summary": "Lists a project's member goals with their per-project priority.",
+        "summary": "Lists a project's member goals in account-wide priority order.",
         "operationId": "TacticusPlannerApiFeaturesProjectsListProjectGoalsEndpoint",
         "parameters": [
           {
@@ -1841,7 +1879,7 @@
         ],
         "responses": {
           "200": {
-            "description": "The project's member goals, ordered by priority.",
+            "description": "The project's member goals, in global priority order.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1870,7 +1908,8 @@
         "tags": [
           "Me"
         ],
-        "summary": "Replaces a project's goal membership and priority ordering.",
+        "summary": "Replaces a project's goal membership.",
+        "description": "Atomic: any rejection changes nothing. Never changes any goal's global priority or the goal-order revision. expectedGoalIds is the membership the client reviewed; it is compared with the current membership under the project lock.",
         "operationId": "TacticusPlannerApiFeaturesProjectsUpdateProjectGoalsEndpoint",
         "parameters": [
           {
@@ -1894,7 +1933,7 @@
         },
         "responses": {
           "200": {
-            "description": "The project's updated goal membership.",
+            "description": "The project's updated members in global-priority order.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1904,7 +1943,14 @@
             }
           },
           "400": {
-            "description": "An unknown goal id, or a removal that would leave a goal in no project."
+            "description": "A removal that would leave goals in no project (issueCode lastProjectMembership, naming the blocked goal ids), or an unknown goal id (a validation error).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesProjectsProjectLastMembershipResponse"
+                }
+              }
+            }
           },
           "401": {
             "description": "The request is missing required identity claims."
@@ -1916,11 +1962,11 @@
             "description": "No matching project owned by the caller."
           },
           "409": {
-            "description": "The requested membership contains an occupied active or paused goal slot.",
+            "description": "expectedGoalIds no longer matches the current membership (issueCode projectMembershipStale, carrying the current goal ids), or the requested membership contains an occupied active or paused goal slot (a ProjectGoalSlotConflictResponse).",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesProjectsProjectGoalSlotConflictResponse"
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesProjectsProjectMembershipStaleResponse"
                 }
               }
             }
@@ -3996,17 +4042,6 @@
                 "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsUpgradeTargetRequest"
               }
             ]
-          },
-          "level": {
-            "type": [
-              "null",
-              "object"
-            ],
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsLevelTargetRequest"
-              }
-            ]
           }
         }
       },
@@ -4123,8 +4158,7 @@
           "farmingLocationIds",
           "farmingStrategy",
           "acquisitionSources",
-          "upgrade",
-          "level"
+          "upgrade"
         ],
         "type": "object",
         "properties": {
@@ -4194,17 +4228,6 @@
             "oneOf": [
               {
                 "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsUpgradeTargetResponse"
-              }
-            ]
-          },
-          "level": {
-            "type": [
-              "null",
-              "object"
-            ],
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsLevelTargetResponse"
               }
             ]
           }
@@ -4285,6 +4308,13 @@
             "type": "integer",
             "format": "int64",
             "default": 0
+          },
+          "globalPriority": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
           }
         }
       },
@@ -4323,6 +4353,46 @@
                 "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsGoalTargetSnapshotResponse"
               }
             ]
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesGoalsGoalOrderConflictResponse": {
+        "required": [
+          "issueCode",
+          "message",
+          "revision",
+          "goalIds"
+        ],
+        "type": "object",
+        "properties": {
+          "issueCode": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "goalIds": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericListOfSystemGuid"
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesGoalsGoalOrderResponse": {
+        "required": [
+          "revision",
+          "goalIds"
+        ],
+        "type": "object",
+        "properties": {
+          "revision": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "goalIds": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericListOfSystemGuid"
           }
         }
       },
@@ -4478,6 +4548,13 @@
           "updatedAt": {
             "type": "string",
             "format": "date-time"
+          },
+          "globalPriority": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
           }
         }
       },
@@ -4503,17 +4580,6 @@
             "oneOf": [
               {
                 "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsProgressionEndTargetRequest"
-              }
-            ]
-          },
-          "level": {
-            "type": [
-              "null",
-              "object"
-            ],
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsLevelEndTargetRequest"
               }
             ]
           },
@@ -4547,7 +4613,6 @@
           "rankEndPointFive",
           "rankEndAppliedUpgrades",
           "progressionEnd",
-          "levelEnd",
           "activeAbilityEnd",
           "passiveAbilityEnd",
           "upgradeTargets"
@@ -4580,13 +4645,6 @@
               "string"
             ]
           },
-          "levelEnd": {
-            "type": [
-              "null",
-              "integer"
-            ],
-            "format": "int32"
-          },
           "activeAbilityEnd": {
             "type": [
               "null",
@@ -4614,52 +4672,6 @@
           }
         }
       },
-      "TacticusPlannerApiFeaturesGoalsLevelEndTargetRequest": {
-        "required": [
-          "end"
-        ],
-        "type": "object",
-        "properties": {
-          "end": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
-      "TacticusPlannerApiFeaturesGoalsLevelTargetRequest": {
-        "required": [
-          "start",
-          "end"
-        ],
-        "type": "object",
-        "properties": {
-          "start": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "end": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
-      "TacticusPlannerApiFeaturesGoalsLevelTargetResponse": {
-        "required": [
-          "start",
-          "end"
-        ],
-        "type": "object",
-        "properties": {
-          "start": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "end": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
       "TacticusPlannerApiFeaturesGoalsListGoalsResponse": {
         "required": [
           "goals"
@@ -4668,6 +4680,11 @@
         "properties": {
           "goals": {
             "$ref": "#/components/schemas/SystemCollectionsGenericListOfTacticusPlannerApiFeaturesGoalsGoalSummaryResponse"
+          },
+          "orderRevision": {
+            "type": "integer",
+            "format": "int64",
+            "default": 0
           }
         }
       },
@@ -4812,6 +4829,23 @@
           "endAppliedUpgrades": {
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesGoalsUpdateGoalOrderRequest": {
+        "required": [
+          "goalIds",
+          "expectedRevision"
+        ],
+        "type": "object",
+        "properties": {
+          "goalIds": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericListOfSystemGuid"
+          },
+          "expectedRevision": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
@@ -5601,6 +5635,11 @@
         "properties": {
           "goals": {
             "$ref": "#/components/schemas/SystemCollectionsGenericListOfTacticusPlannerApiFeaturesProjectsProjectGoalSummaryResponse"
+          },
+          "orderRevision": {
+            "type": "integer",
+            "format": "int64",
+            "default": 0
           }
         }
       },
@@ -5645,7 +5684,7 @@
       "TacticusPlannerApiFeaturesProjectsProjectGoalEntryResponse": {
         "required": [
           "goalId",
-          "priority"
+          "globalPriority"
         ],
         "type": "object",
         "properties": {
@@ -5653,8 +5692,11 @@
             "type": "string",
             "format": "uuid"
           },
-          "priority": {
-            "type": "integer",
+          "globalPriority": {
+            "type": [
+              "null",
+              "integer"
+            ],
             "format": "int32"
           }
         }
@@ -5763,17 +5805,55 @@
       },
       "TacticusPlannerApiFeaturesProjectsProjectGoalSummaryResponse": {
         "required": [
-          "goal",
-          "priority"
+          "goal"
         ],
         "type": "object",
         "properties": {
           "goal": {
             "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsGoalSummaryResponse"
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesProjectsProjectLastMembershipResponse": {
+        "required": [
+          "issueCode",
+          "message",
+          "blockedGoalIds"
+        ],
+        "type": "object",
+        "properties": {
+          "issueCode": {
+            "type": "string"
           },
-          "priority": {
-            "type": "integer",
-            "format": "int32"
+          "message": {
+            "type": "string"
+          },
+          "blockedGoalIds": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericListOfSystemGuid"
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesProjectsProjectMembershipStaleResponse": {
+        "required": [
+          "issueCode",
+          "message",
+          "projectId",
+          "currentGoalIds"
+        ],
+        "type": "object",
+        "properties": {
+          "issueCode": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "projectId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "currentGoalIds": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericListOfSystemGuid"
           }
         }
       },
@@ -5784,7 +5864,6 @@
           "description",
           "color",
           "status",
-          "isActivePlan",
           "isDefault",
           "revision",
           "createdAt",
@@ -5814,9 +5893,6 @@
           "status": {
             "type": "string"
           },
-          "isActivePlan": {
-            "type": "boolean"
-          },
           "isDefault": {
             "type": "boolean"
           },
@@ -5836,23 +5912,41 @@
       },
       "TacticusPlannerApiFeaturesProjectsUpdateProjectGoalOrderRequest": {
         "required": [
-          "goalIds"
+          "goalId",
+          "displacedGoalId",
+          "expectedRevision"
         ],
         "type": "object",
         "properties": {
-          "goalIds": {
-            "$ref": "#/components/schemas/SystemCollectionsGenericListOfSystemGuid"
+          "goalId": {
+            "minLength": 1,
+            "type": "string",
+            "format": "uuid"
+          },
+          "displacedGoalId": {
+            "minLength": 1,
+            "type": "string",
+            "format": "uuid"
+          },
+          "expectedRevision": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
       "TacticusPlannerApiFeaturesProjectsUpdateProjectGoalsRequest": {
         "required": [
-          "goals"
+          "goals",
+          "expectedGoalIds"
         ],
         "type": "object",
         "properties": {
           "goals": {
             "$ref": "#/components/schemas/SystemCollectionsGenericListOfTacticusPlannerApiFeaturesProjectsProjectGoalEntryRequest"
+          },
+          "expectedGoalIds": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericListOfSystemGuid"
           }
         }
       },

@@ -60,7 +60,8 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
         projectIds,
         goal.CreatedAt,
         goal.UpdatedAt,
-        goal.Revision
+        goal.Revision,
+        goal.GlobalPriority
     );
 
     public GoalSummaryResponse ToSummary(Goal goal) => new(
@@ -72,7 +73,8 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
         goal.Notes,
         goal.DependsOn.ToList(),
         goal.CreatedAt,
-        goal.UpdatedAt
+        goal.UpdatedAt,
+        goal.GlobalPriority
     );
 
     /// <summary>Also used directly by <see cref="CreateCombinedGoalsEndpoint"/>, which builds its own
@@ -113,11 +115,6 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
                 UpgradeId = target.UpgradeId.Trim(),
                 Quantity = target.Quantity,
             }).ToList(),
-        },
-        Level = config.Level is null ? null : new LevelTarget
-        {
-            Start = config.Level.Start,
-            End = config.Level.End,
         },
     };
 
@@ -183,8 +180,7 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
             ? null
             : config.AcquisitionSources.Select(source => new AcquisitionSourceResponse(source.Kind, source.Ids)).ToList(),
         config.Upgrade is null ? null : new UpgradeTargetResponse(
-            config.Upgrade.Targets.Select(target => new UpgradeMaterialTargetResponse(target.UpgradeId, target.Quantity)).ToList()),
-        config.Level is null ? null : new LevelTargetResponse(config.Level.Start, config.Level.End)
+            config.Upgrade.Targets.Select(target => new UpgradeMaterialTargetResponse(target.UpgradeId, target.Quantity)).ToList())
     );
 
     private static GoalSnapshotResponse BuildSnapshot(GoalSnapshot snapshot) => new(
@@ -210,7 +206,6 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
         target.RankEndPointFive,
         target.RankEndAppliedUpgrades,
         target.ProgressionEnd,
-        target.LevelEnd,
         target.ActiveAbilityEnd,
         target.PassiveAbilityEnd,
         target.UpgradeTargets?.Select(value => new UpgradeMaterialTargetResponse(value.UpgradeId, value.Quantity)).ToList());
@@ -225,7 +220,9 @@ public sealed record GoalSummaryResponse(
     string? Notes,
     List<Guid> DependsOn,
     DateTimeOffset CreatedAt,
-    DateTimeOffset UpdatedAt
+    DateTimeOffset UpdatedAt,
+    // Position in the account-wide in-flight order (1 = first); null for Completed/Archived goals.
+    int? GlobalPriority = null
 );
 
 public sealed record GoalDetailResponse(
@@ -246,7 +243,8 @@ public sealed record GoalDetailResponse(
     DateTimeOffset CreatedAt,
     DateTimeOffset UpdatedAt,
     // Monotonically increasing; a target edit must echo it as expectedRevision (optimistic concurrency).
-    long Revision = 0
+    long Revision = 0,
+    int? GlobalPriority = null
 );
 
 public sealed record GoalConfigResponse(
@@ -256,8 +254,7 @@ public sealed record GoalConfigResponse(
     List<string>? FarmingLocationIds,
     string FarmingStrategy,
     List<AcquisitionSourceResponse>? AcquisitionSources,
-    UpgradeTargetResponse? Upgrade,
-    LevelTargetResponse? Level
+    UpgradeTargetResponse? Upgrade
 );
 
 public sealed record AcquisitionSourceResponse(string Kind, List<string> Ids);
@@ -265,8 +262,6 @@ public sealed record AcquisitionSourceResponse(string Kind, List<string> Ids);
 public sealed record UpgradeTargetResponse(List<UpgradeMaterialTargetResponse> Targets);
 
 public sealed record UpgradeMaterialTargetResponse(string UpgradeId, int Quantity);
-
-public sealed record LevelTargetResponse(int Start, int End);
 
 public sealed record RankTargetResponse(
     int Start,
@@ -306,7 +301,6 @@ public sealed record GoalTargetSnapshotResponse(
     bool? RankEndPointFive,
     int? RankEndAppliedUpgrades,
     string? ProgressionEnd,
-    int? LevelEnd,
     int? ActiveAbilityEnd,
     int? PassiveAbilityEnd,
     List<UpgradeMaterialTargetResponse>? UpgradeTargets);
