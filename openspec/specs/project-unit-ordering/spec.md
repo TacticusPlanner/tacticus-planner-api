@@ -6,66 +6,57 @@ Lets clients order project work by Character/MoW while preserving one determinis
 
 ### Requirement: Flattened order remains the canonical scheduler order
 
-Project-goal list responses SHALL return in-flight (Active/Paused) goals in exactly the order most recently established by the goal-order operation, or by append order for a goal never explicitly repositioned. This order SHALL NOT be grouped, re-clustered, or otherwise reordered by unit. Completed/Archived memberships SHALL follow in stable prior order.
+Project-goal list responses SHALL return in-flight (Active/Paused) goals as a filtered projection of the account-wide order, without regrouping by unit. Completed/Archived memberships SHALL follow in stable goal-creation-time and goal-ID order and SHALL not report an in-flight position.
 
 #### Scenario: Scheduler receives contiguous unit blocks
-
-- **WHEN** ordered project goals are listed after reprioritization
-- **THEN** the returned order exactly matches the most recently submitted goal order — the scheduler no longer receives contiguous per-unit blocks; two goals sharing a unit may have any other goal positioned between them, exactly as submitted
+- **WHEN** a project's global-priority projection is listed after account-wide reprioritization
+- **THEN** the returned order follows global positions; two goals sharing a unit may have another goal between them
 
 #### Scenario: Scheduler receives the exact submitted order, unit membership notwithstanding
-
-- **WHEN** ordered project goals are listed after a reorder that interleaves goals from different units
-- **THEN** the returned order exactly matches the submitted order, with no goal moved to be adjacent to another goal sharing its unit
+- **WHEN** account-wide order interleaves different units in one project
+- **THEN** the project read preserves that interleaving
 
 ### Requirement: Goal creation does not accept numeric priority
 
-Single and combined goal creation SHALL accept project membership without caller-authored numeric priority. The API SHALL append each newly created goal to the end of the project's existing in-flight priority order.
+Single and combined goal creation SHALL accept project membership without caller-authored numeric priority. The API SHALL append each newly created goal once to the account's in-flight priority order, even if it belongs to multiple projects.
 
 #### Scenario: First goal for new unit appends unit
-
-- **WHEN** a goal introduces a unit not already in the project
-- **THEN** the new goal is appended after every existing in-flight goal in the project's priority order — there is no separate unit-block position to append to, since order is now flat per-goal
+- **WHEN** a goal introduces a unit not already represented in the account's in-flight order
+- **THEN** it appends after all existing in-flight goals, without a unit block
 
 #### Scenario: New goal appends to the end of the list
-
-- **WHEN** a goal is created and added to a project that already has in-flight goals
-- **THEN** the new goal is placed after every existing in-flight goal in that project's priority order, regardless of which unit it belongs to
+- **WHEN** a goal is created for a unit already represented in another project
+- **THEN** it appends to the account-wide order regardless of unit or project
 
 ### Requirement: Project goal order is addressable through a dedicated operation
 
-The API SHALL provide an authenticated operation that accepts the complete ordered set of distinct in-flight (Active/Paused) goal ids currently in an owned project. It SHALL change priority only and SHALL NOT replace membership. It SHALL accept any ordering of the submitted goal ids, including one that places a goal ahead of another goal it `DependsOn`.
+Goal order SHALL be addressable only through the account-wide operations specified by `global-goal-priority`: the complete-set reorder and the project-scoped move, in which a project member takes the global position of another member it displaces. A project SHALL NOT hold an order of its own, and the project-scoped operation SHALL NOT accept a full project order or a per-membership priority. Reordering SHALL not replace membership and SHALL not enforce dependency position.
 
 #### Scenario: Reorder two goals across different units
+- **WHEN** the owner submits the Aun'shi goal before the Ragnar goal through the global operation
+- **THEN** Aun'shi precedes Ragnar in global and applicable project reads
 
-- **GIVEN** a project contains an in-flight Ragnar goal and an in-flight Aun'shi goal
-- **WHEN** the caller submits the Aun'shi goal before the Ragnar goal
-- **THEN** the Aun'shi goal precedes the Ragnar goal in the returned project-goal order
+#### Scenario: Reorder within a project writes through to global order
+- **GIVEN** global order A, B, C, D, E and a project containing A, C and E
+- **WHEN** the owner moves E onto C through the project's order operation
+- **THEN** the global order is A, B, E, C, D and the project projection reads A, E, C
 
 #### Scenario: Stale goal set is rejected atomically
-
-- **GIVEN** project membership changed after the client loaded its in-flight goal list
-- **WHEN** it submits a goal id set that is missing an id or includes an id no longer in-flight
-- **THEN** the API rejects the request without changing any priorities
+- **WHEN** a global order request omits a newly created in-flight goal
+- **THEN** it is rejected without changing priorities
 
 #### Scenario: A goal may be positioned ahead of an unreached prerequisite
-
-- **GIVEN** a project contains a Rank goal that `DependsOn` an unreached Ascension goal for the same unit
-- **WHEN** the caller submits an order placing the Rank goal before the Ascension goal
-- **THEN** the API accepts the order as submitted, and the Rank goal's dependency-blocked state is unaffected by its position
+- **WHEN** a global order request places a Rank goal before its unreached Ascension dependency
+- **THEN** the order is accepted and the dependency-blocked state is unaffected
 
 ### Requirement: Membership replacement does not accept caller-authored priority
 
-Replacing a project's goal membership (`PUT /me/projects/{id}/goals`) SHALL NOT let the caller set or change a goal's priority. An existing member's priority SHALL remain exactly what it was before the call, regardless of any priority value submitted for it. A newly added member SHALL be appended after the project's current in-flight goals, the same as single goal creation.
+Replacing a project's goal membership (`PUT /me/projects/{id}/goals`) SHALL NOT let the caller set or change global priority. Existing members and newly added members SHALL retain their account-wide positions. A newly created goal receives a global position through creation, not through later membership replacement.
 
 #### Scenario: An existing member's priority is unaffected by the request
-
-- **GIVEN** a project membership-replacement request includes a goal that is already a member, with a submitted priority different from its current stored priority
-- **WHEN** the request is processed
-- **THEN** that goal's priority remains unchanged from before the request
+- **WHEN** membership replacement retains a goal and submits a legacy priority value
+- **THEN** its global priority remains unchanged and the submitted value is ignored or rejected as invalid contract input
 
 #### Scenario: A newly added member appends
-
-- **GIVEN** a project membership-replacement request adds a goal not previously in the project
-- **WHEN** the request is processed
-- **THEN** the newly added goal is placed after every existing in-flight goal in the project's priority order, regardless of any priority value submitted for it
+- **WHEN** membership replacement adds an existing goal to a project
+- **THEN** that goal appears at its existing global position in the project's filtered list, not at the end of global order

@@ -1,6 +1,7 @@
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Api.Features.Projects;
 using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Persistence;
 
@@ -36,19 +37,25 @@ public sealed class DeleteGoalEndpoint : EndpointWithoutRequest
         var goalId = Route<Guid>("goalId");
         var db = Resolve<PlannerDbContext>();
 
-        // Scoped to the caller's profile by PlannerDbContext's global query filter.
-        var goal = await db.Goals.FirstOrDefaultAsync(entity => entity.Id == GoalId.From(goalId), ct);
-
-        if (goal is null)
+        // Under the profile lock: a deleted in-flight goal leaves the global order, which then compacts.
+        var order = Resolve<GoalOrderService>();
+        await Resolve<ProjectGoalPlanningService>().ExecuteLockedMutationAsync([], async transaction =>
         {
-            await Send.NotFoundAsync(ct);
-            return;
-        }
+            // Scoped to the caller's profile by PlannerDbContext's global query filter.
+            var goal = await db.Goals.FirstOrDefaultAsync(entity => entity.Id == GoalId.From(goalId), ct);
+            if (goal is null)
+            {
+                await Send.NotFoundAsync(ct);
+                return;
+            }
 
-        db.Goals.Remove(goal);
+            order.Release(goal);
+            db.Goals.Remove(goal);
+            await order.CompleteAsync(ct);
+            if (transaction is not null)
+                await transaction.CommitAsync(ct);
 
-        await db.SaveChangesAsync(ct);
-
-        await Send.NoContentAsync(ct);
+            await Send.NoContentAsync(ct);
+        }, ct);
     }
 }

@@ -26,11 +26,16 @@ Single and combined goal creation SHALL accept project membership without caller
 
 ### Requirement: Project goal order is addressable through a dedicated operation
 
-Goal order SHALL be addressable only through the account-wide operation specified by `global-goal-priority`. The project-scoped order operation SHALL no longer accept reorder requests. Reordering SHALL not replace membership and SHALL not enforce dependency position.
+Goal order SHALL be addressable only through the account-wide operations specified by `global-goal-priority`: the complete-set reorder and the project-scoped move, in which a project member takes the global position of another member it displaces. A project SHALL NOT hold an order of its own, and the project-scoped operation SHALL NOT accept a full project order or a per-membership priority. Reordering SHALL not replace membership and SHALL not enforce dependency position.
 
 #### Scenario: Reorder two goals across different units
 - **WHEN** the owner submits the Aun'shi goal before the Ragnar goal through the global operation
 - **THEN** Aun'shi precedes Ragnar in global and applicable project reads
+
+#### Scenario: Reorder within a project writes through to global order
+- **GIVEN** global order A, B, C, D, E and a project containing A, C and E
+- **WHEN** the owner moves E onto C through the project's order operation
+- **THEN** the global order is A, B, E, C, D and the project projection reads A, E, C
 
 #### Scenario: Stale goal set is rejected atomically
 - **WHEN** a global order request omits a newly created in-flight goal

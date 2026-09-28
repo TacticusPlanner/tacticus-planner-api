@@ -1,6 +1,5 @@
 using FastEndpoints;
 using FluentValidation;
-using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Domain.Projects;
 using TacticusPlanner.Persistence;
@@ -40,7 +39,6 @@ public sealed class CreateProjectEndpoint : Endpoint<CreateProjectRequest, Proje
         }
 
         var db = Resolve<PlannerDbContext>();
-        var profile = await db.Profiles.AsNoTracking().FirstAsync(entity => entity.Id == profileId, ct);
 
         var project = Map.ToEntity(req);
         project.Id = ProjectId.From(Guid.CreateVersion7());
@@ -50,7 +48,7 @@ public sealed class CreateProjectEndpoint : Endpoint<CreateProjectRequest, Proje
         db.Projects.Add(project);
         await db.SaveChangesAsync(ct);
 
-        await Send.OkAsync(Map.ToSummary(project, profile.ActiveProjectId), ct);
+        await Send.OkAsync(Map.ToSummary(project), ct);
     }
 }
 

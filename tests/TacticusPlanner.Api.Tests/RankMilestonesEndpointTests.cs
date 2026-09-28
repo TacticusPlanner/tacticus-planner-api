@@ -161,7 +161,8 @@ public sealed class RankMilestonesEndpointTests(PlannerApiFactory factory) : ICl
         var distinct = await client.PutAsJsonAsync(
             $"/api/v1/me/projects/{projectB.ProjectId}/goals",
             new UpdateProjectGoalsRequest([
-                new ProjectGoalEntryRequest(otherSilver.GoalId), new ProjectGoalEntryRequest(gold.GoalId)]),
+                new ProjectGoalEntryRequest(otherSilver.GoalId), new ProjectGoalEntryRequest(gold.GoalId)],
+                [otherSilver.GoalId]),
             TestContext.Current.CancellationToken);
         distinct.EnsureSuccessStatusCode();
 
@@ -170,7 +171,8 @@ public sealed class RankMilestonesEndpointTests(PlannerApiFactory factory) : ICl
             new UpdateProjectGoalsRequest([
                 new ProjectGoalEntryRequest(otherSilver.GoalId),
                 new ProjectGoalEntryRequest(gold.GoalId),
-                new ProjectGoalEntryRequest(silver.GoalId)]),
+                new ProjectGoalEntryRequest(silver.GoalId)],
+                [otherSilver.GoalId, gold.GoalId]),
             TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.Conflict, duplicate.StatusCode);
         var conflict = await duplicate.Content.ReadFromJsonAsync<ProjectGoalSlotConflictResponse>(

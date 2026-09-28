@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TacticusPlanner.Domain.Profiles;
-using TacticusPlanner.Domain.Projects;
 
 namespace TacticusPlanner.Persistence.Configurations;
 
@@ -24,13 +23,7 @@ public sealed class ProfileConfiguration : IEntityTypeConfiguration<Profile>
                 value => value != null ? TacticusUserIdHash.From(value) : (TacticusUserIdHash?)null)
             .HasMaxLength(32);
 
-        // HasVogenConversion() only targets the non-nullable struct overload (see GuildConfiguration's
-        // ConfiguredByProfileId); ActiveProjectId is a nullable Vogen id, so its converter is written out
-        // by hand. No DB-level FK — this is a loose pointer to avoid a Profile<->Project cascade cycle.
-        builder.Property(entity => entity.ActiveProjectId)
-            .HasConversion(
-                id => id.HasValue ? id.Value.Value : (Guid?)null,
-                value => value.HasValue ? ProjectId.From(value.Value) : (ProjectId?)null);
+        builder.Property(entity => entity.GoalOrderRevision).IsRequired().HasDefaultValue(0L);
 
         builder.Property(entity => entity.CreatedAt).IsRequired();
         builder.Property(entity => entity.UpdatedAt).IsRequired();

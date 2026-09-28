@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Domain.Projects;
 using TacticusPlanner.Persistence;
@@ -14,46 +15,45 @@ namespace TacticusPlanner.Api.Features.Projects;
 /// </summary>
 public sealed class ProjectsService(PlannerDbContext db)
 {
-    /// <summary>Gets the profile's default project ("My Goals"), creating it if it does not exist yet,
-    /// and makes it the profile's active plan if none is set yet.</summary>
+    /// <summary>Gets the profile's default project ("My Goals"), creating it if it does not exist yet. A
+    /// concurrent request may create it first; the unique Default index turns that race into a re-read.</summary>
     public async Task<Project> EnsureDefaultProjectAsync(ProfileId profileId, CancellationToken ct)
     {
-        var existing = await db.Projects.FirstOrDefaultAsync(
-            entity => entity.ProfileId == profileId && entity.Type == ProjectType.Default, ct);
-
-        var project = existing;
-        if (project is null)
+        var existing = await FindDefaultAsync(profileId, ct);
+        if (existing is not null)
         {
-            project = new Project
-            {
-                Id = ProjectId.From(Guid.CreateVersion7()),
-                ProfileId = profileId,
-                Name = "My Goals",
-                Status = ProjectStatus.Active,
-                Type = ProjectType.Default,
-            };
-
-            db.Projects.Add(project);
+            return existing;
         }
 
-        var profile = await db.Profiles.FirstAsync(entity => entity.Id == profileId, ct);
-        profile.ActiveProjectId ??= project.Id;
+        var project = new Project
+        {
+            Id = ProjectId.From(Guid.CreateVersion7()),
+            ProfileId = profileId,
+            Name = "My Goals",
+            Status = ProjectStatus.Active,
+            Type = ProjectType.Default,
+        };
 
-        // A no-op when neither the project nor the profile actually changed — SaveChanges only issues
-        // statements for entities the change tracker marked dirty.
-        await db.SaveChangesAsync(ct);
-
-        return project;
+        db.Projects.Add(project);
+        try
+        {
+            await db.SaveChangesAsync(ct);
+            return project;
+        }
+        catch (DbUpdateException exception) when (IsDefaultProjectConflict(exception))
+        {
+            // Another request created it first (ix_projects_profile_id_default): use theirs.
+            db.Entry(project).State = EntityState.Detached;
+            return await FindDefaultAsync(profileId, ct)
+                ?? throw new InvalidOperationException("The default project vanished after a unique conflict.");
+        }
     }
 
-    /// <summary>The next priority value to append a goal at the bottom of a project's ordering.</summary>
-    public async Task<int> GetNextPriorityAsync(ProjectId projectId, CancellationToken ct)
-    {
-        var max = await db.ProjectGoals
-            .Where(entity => entity.ProjectId == projectId)
-            .Select(entity => (int?)entity.Priority)
-            .MaxAsync(ct);
+    private Task<Project?> FindDefaultAsync(ProfileId profileId, CancellationToken ct) =>
+        db.Projects.FirstOrDefaultAsync(
+            entity => entity.ProfileId == profileId && entity.Type == ProjectType.Default, ct);
 
-        return (max ?? 0) + 1;
-    }
+    private static bool IsDefaultProjectConflict(DbUpdateException exception) =>
+        exception.InnerException is PostgresException { SqlState: PostgresErrorCodes.UniqueViolation } postgres
+            && postgres.ConstraintName == "ix_projects_profile_id_default";
 }

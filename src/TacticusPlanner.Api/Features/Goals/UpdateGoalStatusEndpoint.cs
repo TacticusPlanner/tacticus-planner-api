@@ -116,7 +116,19 @@ public sealed class UpdateGoalStatusEndpoint : Endpoint<UpdateGoalStatusRequest,
                         return;
                     }
 
+                    var order = Resolve<GoalOrderService>();
+                    var wasInFlight = goal.GlobalPriority is not null;
                     goal.Status = targetStatus;
+                    if (targetStatus is GoalStatus.Active or GoalStatus.Paused)
+                    {
+                        // Pause/resume keeps the position; a terminal goal reopened appends.
+                        if (!wasInFlight) await order.AppendAsync(goal, ct);
+                    }
+                    else
+                    {
+                        order.Release(goal);
+                    }
+
                     goal.Events.Add(new GoalEvent { At = DateTimeOffset.UtcNow, Type = EventTypeFor(targetStatus) });
                     await planning.SyncOccupancyAsync(goal, ct);
                 }
@@ -143,8 +155,7 @@ public sealed class UpdateGoalStatusEndpoint : Endpoint<UpdateGoalStatusRequest,
                     return;
                 }
 
-                await planning.NormalizeAsync(membershipProjectIds, ct);
-                await db.SaveChangesAsync(ct);
+                await Resolve<GoalOrderService>().CompleteAsync(ct);
                 if (transaction is not null)
                     await transaction.CommitAsync(ct);
                 await Send.OkAsync(Map.ToDetail(goal, membershipProjectIds.Select(id => id.Value).ToList()), ct);

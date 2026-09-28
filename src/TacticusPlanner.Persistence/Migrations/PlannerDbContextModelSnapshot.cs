@@ -87,6 +87,10 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasColumnType("text")
                         .HasColumnName("entity_type");
 
+                    b.Property<int?>("GlobalPriority")
+                        .HasColumnType("integer")
+                        .HasColumnName("global_priority");
+
                     b.Property<string>("GoalType")
                         .IsRequired()
                         .HasColumnType("text")
@@ -121,7 +125,10 @@ namespace TacticusPlanner.Persistence.Migrations
                     b.HasIndex("ProfileId")
                         .HasDatabaseName("ix_goals_profile_id");
 
-                    b.ToTable("goals", (string)null);
+                    b.ToTable("goals", null, t =>
+                        {
+                            t.HasCheckConstraint("ck_goals_global_priority_in_flight", "(status IN ('Active', 'Paused') AND global_priority IS NOT NULL AND global_priority > 0) OR (status NOT IN ('Active', 'Paused') AND global_priority IS NULL)");
+                        });
                 });
 
             modelBuilder.Entity("TacticusPlanner.Domain.GuildRaids.GuildRaidAttack", b =>
@@ -599,10 +606,6 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("account_id");
 
-                    b.Property<Guid?>("ActiveProjectId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("active_project_id");
-
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
@@ -611,6 +614,12 @@ namespace TacticusPlanner.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("display_name");
+
+                    b.Property<long>("GoalOrderRevision")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasDefaultValue(0L)
+                        .HasColumnName("goal_order_revision");
 
                     b.Property<string>("TacticusUserId")
                         .HasColumnType("text")
@@ -727,6 +736,11 @@ namespace TacticusPlanner.Persistence.Migrations
                     b.HasIndex(new[] { "ProfileId" }, "ix_projects_profile_id")
                         .HasDatabaseName("ix_projects_profile_id");
 
+                    b.HasIndex(new[] { "ProfileId" }, "ix_projects_profile_id_default")
+                        .IsUnique()
+                        .HasDatabaseName("ix_projects_profile_id_default")
+                        .HasFilter("type = 'Default'");
+
                     b.ToTable("projects", (string)null);
                 });
 
@@ -764,10 +778,6 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("occupies_in_flight_slot");
 
-                    b.Property<int>("Priority")
-                        .HasColumnType("integer")
-                        .HasColumnName("priority");
-
                     b.Property<string>("RankTargetKey")
                         .HasMaxLength(16)
                         .HasColumnType("character varying(16)")
@@ -789,10 +799,7 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasDatabaseName("ix_project_goals_one_in_flight_rank_target")
                         .HasFilter("occupies_in_flight_slot = TRUE AND goal_type = 'Rank'");
 
-                    b.ToTable("project_goals", null, t =>
-                        {
-                            t.HasCheckConstraint("ck_project_goals_priority_range", "priority > 0 AND priority <= 10000");
-                        });
+                    b.ToTable("project_goals", (string)null);
                 });
 
             modelBuilder.Entity("TacticusPlanner.Domain.UserSettings.UserSettings", b =>

@@ -235,11 +235,11 @@ public sealed class RankTargetSlotsPostgresTests
             Events = [new GoalEvent { At = now, Type = GoalEventType.Created }],
         };
         db.Goals.Add(goal);
-        var priority = 1;
+        await new GoalOrderService(db).AppendAsync(goal, TestContext.Current.CancellationToken);
         foreach (var projectId in projectIds)
         {
             var project = await db.Projects.SingleAsync(entity => entity.Id == projectId, TestContext.Current.CancellationToken);
-            db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(project, goal, priority++, now));
+            db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(project, goal, now));
         }
 
         await db.SaveChangesAsync(TestContext.Current.CancellationToken);
@@ -264,13 +264,14 @@ public sealed class RankTargetSlotsPostgresTests
         await using var command = connection.CreateCommand();
         command.CommandText = """
             INSERT INTO goals (id, revision, profile_id, entity_type, entity_id, goal_type, status,
-                               depends_on, created_at, updated_at, config, events)
-            SELECT @goal, 0, profile_id, @entityType, @entityId, @goalType, 'Active',
-                   ARRAY[]::uuid[], now(), now(), '{}', '[]'
-            FROM projects WHERE id = @project;
-            INSERT INTO project_goals (project_id, goal_id, priority, entity_type, entity_id, goal_type,
+                               depends_on, created_at, updated_at, config, events, global_priority)
+            SELECT @goal, 0, p.profile_id, @entityType, @entityId, @goalType, 'Active',
+                   ARRAY[]::uuid[], now(), now(), '{}', '[]',
+                   (SELECT coalesce(max(g.global_priority), 0) + 1 FROM goals g WHERE g.profile_id = p.profile_id)
+            FROM projects p WHERE p.id = @project;
+            INSERT INTO project_goals (project_id, goal_id, entity_type, entity_id, goal_type,
                                        occupies_in_flight_slot, rank_target_key, created_at)
-            VALUES (@project, @goal, 99, @entityType, @entityId, @goalType, TRUE, @rankKey, now());
+            VALUES (@project, @goal, @entityType, @entityId, @goalType, TRUE, @rankKey, now());
             """;
         command.Parameters.AddWithValue("goal", goalId);
         command.Parameters.AddWithValue("project", projectId);

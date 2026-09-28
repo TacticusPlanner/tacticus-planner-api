@@ -27,6 +27,12 @@ public sealed class ProjectConfiguration : IEntityTypeConfiguration<Project>
         builder.Property(entity => entity.UpdatedAt).IsRequired();
 
         builder.HasIndex([nameof(Project.ProfileId)], "ix_projects_profile_id");
+        // Exactly one Default project per profile — makes lazy provisioning race-safe.
+        builder
+            .HasIndex([nameof(Project.ProfileId)], "ix_projects_profile_id_default")
+            .HasDatabaseName("ix_projects_profile_id_default")
+            .IsUnique()
+            .HasFilter($"{PostgresNaming.SnakeCase(nameof(Project.Type))} = 'Default'");
 
         builder
             .HasOne(entity => entity.Profile)

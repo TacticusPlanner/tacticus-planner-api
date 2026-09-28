@@ -1,6 +1,6 @@
 ## Why
 
-The paired apps change `surface-goal-farming-guidance` adds an XP-book rarity choice to the Planning settings dialog so Level-goal guidance can express remaining XP as a book equivalent in the rarity the user actually farms. Planning settings are persisted server-side through `/api/v1/me/user-settings`, which today carries only `dailyEnergy`, so the field needs an API contract before the client can save it.
+The paired apps change `surface-goal-farming-guidance` adds an XP-book rarity choice to the Planning settings dialog so required-level guidance (a Rank or Ability goal whose character is below the level it needs; standalone Level goals no longer exist) can express remaining XP as a book equivalent in the rarity the user actually farms. Planning settings are persisted server-side through `/api/v1/me/user-settings`, which today carries only `dailyEnergy`, so the field needs an API contract before the client can save it.
 
 ## What Changes
 
@@ -22,4 +22,4 @@ None.
 
 ## Impact
 
-`UserSettingsData`, `GetUserSettingsEndpoint`/`UpdateUserSettingsEndpoint` request/response records and validator, user-settings endpoint tests, the model snapshot (and an empty-DDL migration if EF requires one), and the regenerated `artifacts/openapi` artifact. Companion: `tacticus-planner-apps` change `surface-goal-farming-guidance` (dialog control, types, and consumption by Level guidance); this API half applies first.
+`UserSettingsData`, `GetUserSettingsEndpoint`/`UpdateUserSettingsEndpoint` request/response records and validator, user-settings endpoint tests, the model snapshot (and an empty-DDL migration if EF requires one), and the regenerated `artifacts/openapi` artifact. Companion: `tacticus-planner-apps` change `surface-goal-farming-guidance` (dialog control, types, and consumption by required-level guidance); this API half applies first.

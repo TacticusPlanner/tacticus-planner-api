@@ -1,4 +1,5 @@
 using FastEndpoints;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Api.Features.Goals;
@@ -11,13 +12,11 @@ namespace TacticusPlanner.Api.Features.Projects;
 /// <summary>
 /// Replaces a project's goal membership (plan §5) in one call. Every goal must belong to at least one
 /// project, so a goal cannot be removed from its only remaining project — such a removal is rejected
-/// wholesale (400) rather than silently orphaning the goal. Does NOT accept caller-authored priority (plan:
-/// <c>add-inline-goal-reprioritize</c> — priority is set exclusively via <see cref="UpdateProjectGoalOrderEndpoint"/>
-/// now that priority is flat per-goal, not unit-grouped, so nothing downstream reconciles an arbitrary
-/// submitted value the way <see cref="ProjectGoalPlanningService.NormalizeAsync"/>'s old per-unit
-/// regrouping incidentally did): an existing member's priority is left untouched regardless of what
-/// <see cref="ProjectGoalEntryRequest.Priority"/> is submitted for it, and a newly added member is
-/// appended after the project's current in-flight goals, same as <see cref="CreateGoalEndpoint"/>.
+/// wholesale (400, naming the blocked goals) rather than silently orphaning the goal. The request carries
+/// the membership the client reviewed (<c>expectedGoalIds</c>); if it no longer matches the current
+/// membership under the project lock the whole save is rejected as stale (409). Membership never changes goal priority: a
+/// project holds no order of its own, and every member keeps its account-wide position (see
+/// <see cref="GoalOrderService"/>; the only project-level write is <see cref="UpdateProjectGoalOrderEndpoint"/>).
 /// </summary>
 public sealed class UpdateProjectGoalsEndpoint : Endpoint<UpdateProjectGoalsRequest, ProjectGoalsResponse>
 {
@@ -26,11 +25,19 @@ public sealed class UpdateProjectGoalsEndpoint : Endpoint<UpdateProjectGoalsRequ
         Put("me/projects/{projectId}/goals");
         Summary(summary =>
         {
-            summary.Summary = "Replaces a project's goal membership and priority ordering.";
-            summary.Response<ProjectGoalsResponse>(StatusCodes.Status200OK, "The project's updated goal membership.");
-            summary.Response(StatusCodes.Status400BadRequest, "An unknown goal id, or a removal that would leave a goal in no project.");
-            summary.Response<ProjectGoalSlotConflictResponse>(StatusCodes.Status409Conflict,
-                "The requested membership contains an occupied active or paused goal slot.");
+            summary.Summary = "Replaces a project's goal membership.";
+            summary.Description = "Atomic: any rejection changes nothing. Never changes any goal's global priority or "
+                + "the goal-order revision. expectedGoalIds is the membership the client reviewed; it is compared "
+                + "with the current membership under the project lock.";
+            summary.Response<ProjectGoalsResponse>(StatusCodes.Status200OK,
+                "The project's updated members in global-priority order.");
+            summary.Response<ProjectLastMembershipResponse>(StatusCodes.Status400BadRequest,
+                "A removal that would leave goals in no project (issueCode lastProjectMembership, naming the "
+                + "blocked goal ids), or an unknown goal id (a validation error).");
+            summary.Response<ProjectMembershipStaleResponse>(StatusCodes.Status409Conflict,
+                "expectedGoalIds no longer matches the current membership (issueCode projectMembershipStale, "
+                + "carrying the current goal ids), or the requested membership contains an occupied active or "
+                + "paused goal slot (a ProjectGoalSlotConflictResponse).");
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
             summary.Response(StatusCodes.Status404NotFound, "No matching project owned by the caller.");
         });
@@ -61,6 +68,24 @@ public sealed class UpdateProjectGoalsEndpoint : Endpoint<UpdateProjectGoalsRequ
         {
 
             var requestedGoalIds = req.Goals.Select(entry => GoalId.From(entry.GoalId)).ToHashSet();
+            var expectedGoalIds = req.ExpectedGoalIds.Select(GoalId.From).ToHashSet();
+
+            // Read under the project lock (so a concurrent membership change has either committed and is
+            // visible here, or is still waiting for the lock).
+            var existingMemberships = await db.ProjectGoals
+                .Where(entity => entity.ProjectId == projectId)
+                .ToListAsync(ct);
+
+            if (!existingMemberships.Select(entity => entity.GoalId).ToHashSet().SetEquals(expectedGoalIds))
+            {
+                HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+                await HttpContext.Response.WriteAsJsonAsync(new ProjectMembershipStaleResponse(
+                    "projectMembershipStale",
+                    "The project's goals changed after they were reviewed.",
+                    project.Id.Value,
+                    existingMemberships.Select(entity => entity.GoalId.Value).ToList()), ct);
+                return;
+            }
 
             var ownedGoals = await db.Goals
                 .Where(entity => requestedGoalIds.Contains(entity.Id))
@@ -97,10 +122,6 @@ public sealed class UpdateProjectGoalsEndpoint : Endpoint<UpdateProjectGoalsRequ
                 return;
             }
 
-            var existingMemberships = await db.ProjectGoals
-                .Where(entity => entity.ProjectId == projectId)
-                .ToListAsync(ct);
-
             var toRemove = existingMemberships.Where(entity => !requestedGoalIds.Contains(entity.GoalId)).ToList();
             if (toRemove.Count > 0)
             {
@@ -117,32 +138,26 @@ public sealed class UpdateProjectGoalsEndpoint : Endpoint<UpdateProjectGoalsRequ
 
                 if (orphaned.Count > 0)
                 {
-                    AddError(request => request.Goals, "Cannot remove a goal from its only remaining project.");
-                    await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+                    HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
+                    await HttpContext.Response.WriteAsJsonAsync(new ProjectLastMembershipResponse(
+                        "lastProjectMembership",
+                        "Cannot remove a goal from its only remaining project.",
+                        orphaned.Select(id => id.Value).ToList()), ct);
                     return;
                 }
 
                 db.ProjectGoals.RemoveRange(toRemove);
             }
 
-            // Priority is never taken from the request (see this endpoint's class doc): an existing
-            // member keeps its current stored priority untouched, and a newly added member is appended
-            // via GetNextPriorityAsync (same as CreateGoalEndpoint) — NormalizeAsync below then produces
-            // the final, definitive values for the whole project regardless.
+            // Membership never touches the global order: every member keeps its position.
             var existingByGoalId = existingMemberships.ToDictionary(entity => entity.GoalId);
             var goalsById = ownedGoals.ToDictionary(goal => goal.Id);
-            var projects = Resolve<ProjectsService>();
-            // Queried once, then incremented locally — GetNextPriorityAsync re-queried per entry would
-            // return the same value for every not-yet-saved addition, since it reads the database, not
-            // this change tracker's pending inserts.
-            var nextPriority = await projects.GetNextPriorityAsync(projectId, ct);
-            foreach (var entry in req.Goals)
+            foreach (var goalId in requestedGoalIds)
             {
-                var goalId = GoalId.From(entry.GoalId);
                 if (!existingByGoalId.ContainsKey(goalId))
                 {
                     db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(
-                        project, goalsById[goalId], nextPriority++, DateTimeOffset.UtcNow));
+                        project, goalsById[goalId], DateTimeOffset.UtcNow));
                 }
             }
 
@@ -170,16 +185,18 @@ public sealed class UpdateProjectGoalsEndpoint : Endpoint<UpdateProjectGoalsRequ
                 return;
             }
 
-            await planning.NormalizeAsync([projectId], ct);
-            await db.SaveChangesAsync(ct);
             if (transaction is not null)
                 await transaction.CommitAsync(ct);
 
             var updated = await db.ProjectGoals
                 .AsNoTracking()
                 .Where(entity => entity.ProjectId == projectId)
-                .OrderBy(entity => entity.Priority)
-                .Select(entity => new ProjectGoalEntryResponse(entity.GoalId.Value, entity.Priority))
+                .Join(db.Goals, entry => entry.GoalId, goal => goal.Id, (entry, goal) => goal)
+                .OrderBy(goal => goal.GlobalPriority == null)
+                .ThenBy(goal => goal.GlobalPriority)
+                .ThenBy(goal => goal.CreatedAt)
+                .ThenBy(goal => goal.Id)
+                .Select(goal => new ProjectGoalEntryResponse(goal.Id.Value, goal.GlobalPriority))
                 .ToListAsync(ct);
 
             await Send.OkAsync(new ProjectGoalsResponse(updated), ct);
@@ -187,7 +204,26 @@ public sealed class UpdateProjectGoalsEndpoint : Endpoint<UpdateProjectGoalsRequ
     }
 }
 
-public sealed record UpdateProjectGoalsRequest(List<ProjectGoalEntryRequest> Goals);
+/// <param name="Goals">The complete desired membership (goal ids only).</param>
+/// <param name="ExpectedGoalIds">The complete membership the client reviewed; compared with the current
+/// membership under the project lock.</param>
+public sealed record UpdateProjectGoalsRequest(List<ProjectGoalEntryRequest> Goals, List<Guid> ExpectedGoalIds);
+
+public sealed class UpdateProjectGoalsValidator : Validator<UpdateProjectGoalsRequest>
+{
+    public UpdateProjectGoalsValidator()
+    {
+        RuleFor(request => request.Goals).NotNull();
+        RuleFor(request => request.ExpectedGoalIds).NotNull();
+    }
+}
+
+/// <summary>409 body for a stale <c>expectedGoalIds</c>: the project's current goal ids.</summary>
+public sealed record ProjectMembershipStaleResponse(
+    string IssueCode, string Message, Guid ProjectId, List<Guid> CurrentGoalIds);
+
+/// <summary>400 body when a removal would leave goals in no project: the goals blocking the save.</summary>
+public sealed record ProjectLastMembershipResponse(string IssueCode, string Message, List<Guid> BlockedGoalIds);
 
 /// <summary>No <c>Priority</c> field (see the endpoint's class doc for why) — removed rather than kept
 /// and ignored, since a field with no legitimate use is worse than no field.</summary>
@@ -195,4 +231,5 @@ public sealed record ProjectGoalEntryRequest(Guid GoalId);
 
 public sealed record ProjectGoalsResponse(List<ProjectGoalEntryResponse> Goals);
 
-public sealed record ProjectGoalEntryResponse(Guid GoalId, int Priority);
+/// <summary>A member goal with its account-wide position (null once completed/archived).</summary>
+public sealed record ProjectGoalEntryResponse(Guid GoalId, int? GlobalPriority);

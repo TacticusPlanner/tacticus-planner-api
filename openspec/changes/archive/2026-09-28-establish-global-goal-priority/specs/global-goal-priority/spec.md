@@ -33,6 +33,32 @@ Each owned Active or Paused goal SHALL have exactly one account-wide priority po
 - **WHEN** the submitted order places a dependent Rank goal ahead of its Ascension prerequisite
 - **THEN** the order is accepted and the dependency remains unchanged
 
+### Requirement: Owner can move a goal within a project's projection
+
+`PUT /me/projects/{projectId}/goal-order` SHALL accept a goal ID, a displaced goal ID and the expected order revision. Both goals SHALL be in-flight members of that project. The server SHALL move the goal to the global position currently held by the displaced goal; every in-flight goal between the two positions, project member or not, SHALL shift one place toward the vacated position, and all other relative positions SHALL be unchanged. The operation SHALL change only priority and SHALL return the new order revision and canonical ordered IDs. It SHALL reject a goal moved onto itself, non-members, non-in-flight or foreign goals, and stale revisions atomically, the stale case with the same structured conflict as the global reorder.
+
+#### Scenario: Moving a member up within the project
+- **GIVEN** global order A, B, C, D, E and a project containing A, C and E
+- **WHEN** the owner moves E onto C
+- **THEN** the global order is A, B, E, C, D and the project projection reads A, E, C
+
+#### Scenario: Moving a member down within the project
+- **GIVEN** global order A, B, C, D, E and a project containing A, C and E
+- **WHEN** the owner moves C onto E
+- **THEN** the global order is A, B, D, E, C and the project projection reads A, E, C
+
+#### Scenario: Non-member goals keep their relative order
+- **WHEN** a member is moved past several non-member goals
+- **THEN** the non-member goals appear in the same relative order as before, and other projects' projections change only where the moved goal crossed their members
+
+#### Scenario: Invalid move
+- **WHEN** the displaced goal is not an in-flight member of the project, or equals the moved goal
+- **THEN** the request is rejected and no position or revision changes
+
+#### Scenario: Stale revision
+- **WHEN** the order changed after the client loaded it
+- **THEN** the move is rejected with the structured conflict and no positions change
+
 ### Requirement: Lifecycle changes maintain global order
 
 New Active or Paused goals SHALL append once to the global in-flight order, regardless of project count. Pausing SHALL retain a goal's position; resuming SHALL retain its position if it remained Paused. Completing or archiving SHALL remove its in-flight position; returning a terminal goal to an in-flight status SHALL append it. Deleting a goal SHALL remove it. Membership edits and changing the Current plan SHALL not change global positions. Every change to the in-flight set or order SHALL advance the order revision.

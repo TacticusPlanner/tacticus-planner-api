@@ -9,18 +9,11 @@ public sealed class ProjectGoalConfiguration : IEntityTypeConfiguration<ProjectG
 {
     public void Configure(EntityTypeBuilder<ProjectGoal> builder)
     {
-        // A DB-level backstop, not the primary enforcement point — see ProjectValidation.MaxPriority for
-        // the shared value the API's FluentValidation rule also sources.
-        builder.ToTable("project_goals", table => table.HasCheckConstraint(
-            "ck_project_goals_priority_range",
-            $"{PostgresNaming.SnakeCase(nameof(ProjectGoal.Priority))} > 0 AND "
-                + $"{PostgresNaming.SnakeCase(nameof(ProjectGoal.Priority))} <= {ProjectValidation.MaxPriority}"
-        ));
+        builder.ToTable("project_goals");
         builder.HasKey(entity => new { entity.ProjectId, entity.GoalId });
 
         builder.Property(entity => entity.ProjectId).HasVogenConversion();
         builder.Property(entity => entity.GoalId).HasVogenConversion();
-        builder.Property(entity => entity.Priority).IsRequired();
         builder.Property(entity => entity.EntityType).HasConversion<string>().IsRequired();
         builder.Property(entity => entity.EntityId).HasMaxLength(GoalValidation.MaxEntityIdLength).IsRequired();
         builder.Property(entity => entity.GoalType).HasConversion<string>().IsRequired();

@@ -53,7 +53,7 @@ public sealed class PlannerDbContextQueryFilterTests(PlannerApiFactory factory) 
             seedDb.Goals.Add(goalA);
             seedDb.Projects.Add(projectA);
             seedDb.UserSettings.Add(settingsA);
-            seedDb.ProjectGoals.Add(new ProjectGoal { ProjectId = projectA.Id, GoalId = goalA.Id, Priority = 1 });
+            seedDb.ProjectGoals.Add(new ProjectGoal { ProjectId = projectA.Id, GoalId = goalA.Id });
             await seedDb.SaveChangesAsync(ct);
         }
 

@@ -6,7 +6,8 @@ Priority currently exists inside each project, so the same goal can have competi
 
 - Introduce one account-wide order of Active and Paused goals and a revision-checked reorder operation independent of memberships or unit type.
 - Make global and project goal reads expose that order; project lists become filtered projections.
-- **BREAKING**: Retire project-scoped reorder and per-membership priority as writable planning contracts. Project membership and Current plan selection no longer change execution priority.
+- **BREAKING**: Retire per-membership priority and the project-scoped full-order write. Project membership and Current plan selection no longer change execution priority.
+- Re-contract `PUT /me/projects/{id}/goal-order` as a *subset move*: one project goal takes the global position of another project goal it displaces, and the move writes through to the account-wide order (non-member goals in between shift but keep their relative order).
 - Migrate existing orders deterministically, putting the former Current plan's order first and appending remaining in-flight goals once each; preserve historical goals and statuses.
 - Normalize priority on creation, status transitions, and deletion, with race-safe concurrent writes.
 
@@ -18,7 +19,7 @@ Priority currently exists inside each project, so the same goal can have competi
 
 ### Modified Capabilities
 
-- `project-unit-ordering`: Project reads and membership operations become projections of global priority; project-scoped reorder is retired.
+- `project-unit-ordering`: Project reads and membership operations become projections of global priority; project-scoped reorder becomes a move that edits the global order.
 
 ## Impact
 
