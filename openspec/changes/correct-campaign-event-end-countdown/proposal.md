@@ -21,4 +21,4 @@ None.
 ## Impact
 
 - Raw `event-occurrences.json`, event denormalization/validation tests, and the `events-calendar` catalog hash; no EF migration or OpenAPI shape change anticipated.
-- Companion `tacticus-planner-apps/openspec/changes/correct-campaign-event-end-countdown`; API applies first.
+- Companion `tacticus-planner-apps/openspec/changes/correct-campaign-event-end-countdown` no longer depends on this change applying first: it already reads the existing `confirmed` flag, so it ships and stops showing a false exact countdown regardless of whether this occurrence is ever authored. Task 1.1 here remains blocked on dated in-game evidence (see the `Apply investigation` note in `design.md`); this change applies independently, whenever that evidence exists.
