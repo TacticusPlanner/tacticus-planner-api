@@ -6,6 +6,9 @@ public static class DependencyInjection
     {
         services.AddScoped<GoalTargetValidationService>();
         services.AddScoped<GoalOrderService>();
+        services.AddScoped<GoalTargetEditor>();
+        services.AddScoped<GoalDetailsEditor>();
+        services.AddScoped<GoalMembershipEditor>();
 
         return services;
     }
