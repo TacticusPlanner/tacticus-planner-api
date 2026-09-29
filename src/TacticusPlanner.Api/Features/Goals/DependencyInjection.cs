@@ -9,6 +9,7 @@ public static class DependencyInjection
         services.AddScoped<GoalTargetEditor>();
         services.AddScoped<GoalDetailsEditor>();
         services.AddScoped<GoalMembershipEditor>();
+        services.AddScoped<GoalCombinedEditor>();
 
         return services;
     }

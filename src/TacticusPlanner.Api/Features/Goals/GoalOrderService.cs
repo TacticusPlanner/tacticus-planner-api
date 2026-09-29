@@ -91,7 +91,7 @@ public sealed class GoalOrderService(PlannerDbContext db)
         if (rejection is { } outcome) return Failure(outcome, profile, ordered);
 
         var byId = ordered.ToDictionary(goal => goal.Id);
-        return await CommitAsync(profile, ordered, requested.Select(id => byId[id]).ToList(), ct);
+        return await CommitAsync(profile, ordered, requested.Select(id => byId[id]).ToList(), save: true, ct);
     }
 
     /// <summary>Moves <paramref name="goalId"/> to the position <paramref name="displacedGoalId"/> holds;
@@ -117,20 +117,47 @@ public sealed class GoalOrderService(PlannerDbContext db)
         var goal = moved[from];
         moved.RemoveAt(from);
         moved.Insert(to, goal);
-        return await CommitAsync(profile, ordered, moved, ct);
+        return await CommitAsync(profile, ordered, moved, save: true, ct);
+    }
+
+    /// <summary>Moves <paramref name="goalId"/> to the 1-based <paramref name="position"/> in the in-flight
+    /// order (the same array move as <see cref="MoveAsync"/>). Unlike the other methods it does not save:
+    /// the caller's single <c>SaveChangesAsync</c> persists the new positions and the revision bump, so a
+    /// combined edit stays one write.</summary>
+    public async Task<GoalOrderResult> MoveToPositionAsync(
+        GoalId goalId, int position, long expectedRevision, CancellationToken ct)
+    {
+        var profile = await LoadProfileAsync(ct);
+        var ordered = await LoadInFlightAsync(ct);
+        var from = ordered.FindIndex(goal => goal.Id == goalId);
+        GoalOrderOutcome? rejection = null;
+        if (expectedRevision != profile.GoalOrderRevision)
+            rejection = GoalOrderOutcome.StaleRevision;
+        else if (from < 0)
+            rejection = GoalOrderOutcome.NotInFlight;
+        else if (position < 1 || position > ordered.Count)
+            rejection = GoalOrderOutcome.PositionOutOfRange;
+        if (rejection is { } outcome) return Failure(outcome, profile, ordered);
+
+        var moved = ordered.ToList();
+        var goal = moved[from];
+        moved.RemoveAt(from);
+        moved.Insert(position - 1, goal);
+        return await CommitAsync(profile, ordered, moved, save: false, ct);
     }
 
     private static GoalOrderResult Failure(GoalOrderOutcome outcome, Domain.Profiles.Profile profile, List<Goal> ordered) =>
         new(outcome, new GoalOrderSnapshot(profile.GoalOrderRevision, ordered.Select(goal => goal.Id).ToList()));
 
     private async Task<GoalOrderResult> CommitAsync(
-        Domain.Profiles.Profile profile, List<Goal> before, List<Goal> after, CancellationToken ct)
+        Domain.Profiles.Profile profile, List<Goal> before, List<Goal> after, bool save, CancellationToken ct)
     {
         if (!after.SequenceEqual(before))
         {
             Renumber(after);
             profile.GoalOrderRevision++;
-            await db.SaveChangesAsync(ct);
+            if (save)
+                await db.SaveChangesAsync(ct);
         }
 
         return new GoalOrderResult(
@@ -157,6 +184,8 @@ public enum GoalOrderOutcome
     SetMismatch,
     DuplicateGoal,
     SameGoal,
+    NotInFlight,
+    PositionOutOfRange,
 }
 
 public sealed record GoalOrderSnapshot(long Revision, IReadOnlyList<GoalId> GoalIds);
