@@ -20,6 +20,11 @@
       url: /api/v1/game-catalog/campaign-definitions
     },
     {
+      key: character-ability-costs,
+      hash: c0be0512a67c8ebb28445c9628e433a32b052bd5bba6629665d6be8991a74382,
+      url: /api/v1/game-catalog/character-ability-costs
+    },
+    {
       key: characters,
       hash: d1c9cca75d145b28d75cef362e02132efd240bd2815f05d1367bdfb90b47aa92,
       url: /api/v1/game-catalog/characters

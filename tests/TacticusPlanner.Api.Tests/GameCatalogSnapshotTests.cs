@@ -31,6 +31,28 @@ public sealed class GameCatalogSnapshotTests(GameCatalogApiFactory factory)
     }
 
     [Fact]
+    public async Task CharacterAbilityCostsAreServedAnonymouslyForLevels2To60()
+    {
+        var client = factory.CreateClient();
+
+        using var request = new HttpRequestMessage(HttpMethod.Get, "/api/v1/game-catalog/character-ability-costs");
+        request.Headers.Add(TestAuthenticationHandler.NoAuthHeader, "1");
+        var response = await client.SendAsync(request, TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var payload = JsonNode.Parse(await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken))!.AsObject();
+        Assert.Equal("character-ability-costs", payload["datasetKey"]!.GetValue<string>());
+
+        var data = payload["data"]!.AsArray();
+        Assert.Equal(Enumerable.Range(2, 59), data.Select(row => row!["level"]!.GetValue<int>()));
+        var first = data[0]!.AsObject();
+        Assert.Equal(["level", "gold", "badges"], first.Select(property => property.Key));
+        Assert.Equal("Common", first["badges"]!["rarity"]!.GetValue<string>());
+        Assert.Equal(1, first["badges"]!["amount"]!.GetValue<int>());
+    }
+
+    [Fact]
     public async Task GuildRaidMetaDatasetIsAnonymousAndIdOnly()
     {
         var client = factory.CreateClient();

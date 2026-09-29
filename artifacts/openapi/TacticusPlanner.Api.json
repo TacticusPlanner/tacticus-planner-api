@@ -77,6 +77,30 @@
         }
       }
     },
+    "/api/v1/game-catalog/character-ability-costs": {
+      "get": {
+        "tags": [
+          "Game-Catalog"
+        ],
+        "summary": "Gets the character ability cost ladder.",
+        "operationId": "TacticusPlannerApiFeaturesGameCatalogGetGameCatalogCharacterAbilityCostsEndpoint",
+        "responses": {
+          "200": {
+            "description": "The shared per-level gold and ability-badge cost ladder for all character abilities.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGameCatalogGameCatalogDatasetEnvelopeOfSystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogCharacterAbilityCostView"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
     "/api/v1/game-catalog/characters": {
       "get": {
         "tags": [
@@ -2502,6 +2526,12 @@
           "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogCampaignPotentialRewardView"
         }
       },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogCharacterAbilityCostView": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogCharacterAbilityCostView"
+        }
+      },
       "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogCharacterRankUp": {
         "type": "array",
         "items": {
@@ -3124,6 +3154,50 @@
             "oneOf": [
               {
                 "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogCampaignDefinitionView"
+              }
+            ]
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesGameCatalogGameCatalogDatasetEnvelopeOfSystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogCharacterAbilityCostView": {
+        "required": [
+          "version",
+          "schemaVersion",
+          "gameVersion",
+          "sourceHash",
+          "datasetKey",
+          "datasetHash",
+          "data"
+        ],
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "schemaVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gameVersion": {
+            "type": "string"
+          },
+          "sourceHash": {
+            "type": "string"
+          },
+          "datasetKey": {
+            "type": "string"
+          },
+          "datasetHash": {
+            "type": "string"
+          },
+          "data": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogCharacterAbilityCostView"
               }
             ]
           }
@@ -6672,6 +6746,27 @@
           },
           "potential": {
             "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogCampaignPotentialRewardView"
+          }
+        }
+      },
+      "TacticusPlannerGameCatalogModelsGameCatalogCharacterAbilityCostView": {
+        "required": [
+          "level",
+          "gold",
+          "badges"
+        ],
+        "type": "object",
+        "properties": {
+          "level": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gold": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "badges": {
+            "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogAmountByRarity"
           }
         }
       },

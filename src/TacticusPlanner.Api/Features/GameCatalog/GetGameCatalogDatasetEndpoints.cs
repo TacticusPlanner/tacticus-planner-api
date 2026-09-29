@@ -90,6 +90,18 @@ public sealed class GetGameCatalogMowUpgradeCostsEndpoint(IGameCatalogProvider c
     }
 }
 
+public sealed class GetGameCatalogCharacterAbilityCostsEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogCharacterAbilityCostView>>(catalog, GameCatalogDatasets.CharacterAbilityCostsServed)
+{
+    protected override IReadOnlyList<GameCatalogCharacterAbilityCostView> Payload => Snapshot.CharacterAbilityCostViews;
+
+    public override void Configure()
+    {
+        Get("game-catalog/character-ability-costs");
+        ConfigureServed("Gets the character ability cost ladder.", "The shared per-level gold and ability-badge cost ladder for all character abilities.");
+    }
+}
+
 public sealed class GetGameCatalogAscensionCostsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogAscensionCostView>>(catalog, GameCatalogDatasets.AscensionCostsServed)
 {
