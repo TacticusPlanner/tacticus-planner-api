@@ -9,6 +9,7 @@ public sealed record GameCatalogSnapshot(
     // Raw source collections — kept for validation and the existing derived views.
     IReadOnlyDictionary<string, GameCatalogFactionUnits> UnitsByFaction,
     IReadOnlyList<GameCatalogMowUpgradeCost> MowUpgradeCosts,
+    IReadOnlyList<GameCatalogCharacterAbilityCost> CharacterAbilityCosts,
     IReadOnlyList<GameCatalogEquipmentUpgradeCost> EquipmentUpgradeCosts,
     IReadOnlyList<GameCatalogAscensionCost> AscensionCosts,
     IReadOnlyList<GameCatalogUnlockShardCost> UnlockShardCosts,
@@ -33,6 +34,7 @@ public sealed record GameCatalogSnapshot(
     IReadOnlyList<GameCatalogNpc> NpcList,
     IReadOnlyList<GameCatalogMow> MowList,
     IReadOnlyList<GameCatalogMowUpgradeCostView> MowUpgradeCostViews,
+    IReadOnlyList<GameCatalogCharacterAbilityCostView> CharacterAbilityCostViews,
     IReadOnlyList<GameCatalogAscensionCostView> AscensionCostViews,
     IReadOnlyList<GameCatalogUnlockShardCostView> UnlockShardCostViews,
     IReadOnlyList<GameCatalogUpgradeView> UpgradeViews,

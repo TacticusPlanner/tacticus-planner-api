@@ -35,6 +35,21 @@ public sealed record GameCatalogMowUpgradeCostView(
     int Components
 );
 
+// Raw character ability cost rung, ported unchanged from V1's characters-lvl-up-abilities.json: Lvl N is
+// the cost to raise an ability from level N to N + 1.
+public sealed record GameCatalogCharacterAbilityCost(
+    int Lvl,
+    int Gold,
+    int Badges
+);
+
+// The served projection, keyed by the ability level it raises to (Level = Lvl + 1); badge rarity is derived.
+public sealed record GameCatalogCharacterAbilityCostView(
+    int Level,
+    int Gold,
+    GameCatalogAmountByRarity Badges
+);
+
 public sealed record GameCatalogAmountByRarity(
     string Rarity,
     int Amount

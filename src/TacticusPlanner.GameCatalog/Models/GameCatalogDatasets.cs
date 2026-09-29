@@ -6,6 +6,7 @@ public static class GameCatalogDatasets
     public const string RoutePrefix = "/api/v1/game-catalog";
 
     public const string MowUpgradeCosts = "mow-upgrade-costs";
+    public const string CharacterAbilityCosts = "character-ability-costs";
     public const string EquipmentUpgradeCosts = "equipment-upgrade-costs";
     public const string DropChances = "drop-chances";
     public const string AscensionCosts = "ascension-costs";
@@ -257,6 +258,7 @@ public static class GameCatalogDatasets
     [
         .. UnitFactions,
         MowUpgradeCosts,
+        CharacterAbilityCosts,
         EquipmentUpgradeCosts,
         DropChances,
         AscensionCosts,
@@ -285,6 +287,9 @@ public static class GameCatalogDatasets
     // The shared mow upgrade-cost ladder, served as its own dataset (it is a single progression shared by
     // every mow, so it is not inlined per record).
     public const string MowUpgradeCostsServed = MowUpgradeCosts;
+    // The shared character ability cost ladder (gold + ability badges per level raised to), one progression
+    // shared by every character and ability track.
+    public const string CharacterAbilityCostsServed = CharacterAbilityCosts;
     // The shared ascension-orb/shard cost ladder (one entry per progression step, keyed by the same
     // "{Rarity}:{Stars}" strings the client's Progression type uses) and the per-rarity unlock-shard
     // cost table — both single shared progressions, so served as their own datasets rather than inlined
@@ -331,6 +336,7 @@ public static class GameCatalogDatasets
         Npcs,
         Mows,
         MowUpgradeCostsServed,
+        CharacterAbilityCostsServed,
         AscensionCostsServed,
         UnlockShardCostsServed,
         OnslaughtRewards,

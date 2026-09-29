@@ -21,6 +21,7 @@ public static partial class GameCatalogValidator
         RequireNonEmpty(GameCatalogDatasets.Npcs, snapshot.NpcList.Count, errors);
         RequireNonEmpty(GameCatalogDatasets.Mows, snapshot.MowList.Count, errors);
         RequireNonEmpty(GameCatalogDatasets.MowUpgradeCostsServed, snapshot.MowUpgradeCostViews.Count, errors);
+        RequireNonEmpty(GameCatalogDatasets.CharacterAbilityCostsServed, snapshot.CharacterAbilityCostViews.Count, errors);
         RequireNonEmpty(GameCatalogDatasets.AscensionCostsServed, snapshot.AscensionCostViews.Count, errors);
         RequireNonEmpty(GameCatalogDatasets.UnlockShardCostsServed, snapshot.UnlockShardCostViews.Count, errors);
         RequireNonEmpty(GameCatalogDatasets.OnslaughtRewards, snapshot.OnslaughtRewards.Count, errors);

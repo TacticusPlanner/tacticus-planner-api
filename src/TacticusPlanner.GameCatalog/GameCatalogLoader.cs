@@ -30,6 +30,7 @@ public static class GameCatalogLoader
         }
 
         var mowUpgradeCosts = LoadDataset<IReadOnlyList<GameCatalogMowUpgradeCost>>(GameCatalogDatasets.MowUpgradeCosts);
+        var characterAbilityCosts = LoadDataset<IReadOnlyList<GameCatalogCharacterAbilityCost>>(GameCatalogDatasets.CharacterAbilityCosts);
         var equipmentUpgradeCosts = LoadDataset<IReadOnlyList<GameCatalogEquipmentUpgradeCost>>(GameCatalogDatasets.EquipmentUpgradeCosts);
         var dropChances = LoadDataset<IReadOnlyList<GameCatalogDropChance>>(GameCatalogDatasets.DropChances);
         var ascensionCosts = LoadDataset<IReadOnlyList<GameCatalogAscensionCost>>(GameCatalogDatasets.AscensionCosts);
@@ -82,6 +83,7 @@ public static class GameCatalogLoader
         var npcList = GameCatalogDenormalizer.BuildNpcs(npcsByFaction);
         var mowList = GameCatalogDenormalizer.BuildMows(unitsByFaction);
         var mowUpgradeCostViews = GameCatalogDenormalizer.BuildMowUpgradeCosts(mowUpgradeCosts);
+        var characterAbilityCostViews = GameCatalogDenormalizer.BuildCharacterAbilityCosts(characterAbilityCosts);
         var ascensionCostViews = GameCatalogDenormalizer.BuildAscensionCosts(ascensionCosts);
         var unlockShardCostViews = GameCatalogDenormalizer.BuildUnlockShardCosts(unlockShardCosts);
         var upgradeViews = GameCatalogDenormalizer.BuildUpgrades(upgradesByRarity, campaignGroups, dropChances);
@@ -105,6 +107,7 @@ public static class GameCatalogLoader
             [GameCatalogDatasets.Npcs] = GameCatalogHashing.ComputeCanonicalJsonHash(npcList, JsonOptions),
             [GameCatalogDatasets.Mows] = GameCatalogHashing.ComputeCanonicalJsonHash(mowList, JsonOptions),
             [GameCatalogDatasets.MowUpgradeCostsServed] = GameCatalogHashing.ComputeCanonicalJsonHash(mowUpgradeCostViews, JsonOptions),
+            [GameCatalogDatasets.CharacterAbilityCostsServed] = GameCatalogHashing.ComputeCanonicalJsonHash(characterAbilityCostViews, JsonOptions),
             [GameCatalogDatasets.AscensionCostsServed] = GameCatalogHashing.ComputeCanonicalJsonHash(ascensionCostViews, JsonOptions),
             [GameCatalogDatasets.UnlockShardCostsServed] = GameCatalogHashing.ComputeCanonicalJsonHash(unlockShardCostViews, JsonOptions),
             [GameCatalogDatasets.OnslaughtRewards] = GameCatalogHashing.ComputeCanonicalJsonHash(onslaughtRewards, JsonOptions),
@@ -131,6 +134,7 @@ public static class GameCatalogLoader
             new ReadOnlyDictionary<string, string>(datasetHashes),
             new ReadOnlyDictionary<string, GameCatalogFactionUnits>(unitsByFaction),
             new ReadOnlyCollection<GameCatalogMowUpgradeCost>(mowUpgradeCosts.ToArray()),
+            new ReadOnlyCollection<GameCatalogCharacterAbilityCost>(characterAbilityCosts.ToArray()),
             new ReadOnlyCollection<GameCatalogEquipmentUpgradeCost>(equipmentUpgradeCosts.ToArray()),
             new ReadOnlyCollection<GameCatalogAscensionCost>(ascensionCosts.ToArray()),
             new ReadOnlyCollection<GameCatalogUnlockShardCost>(unlockShardCosts.ToArray()),
@@ -150,6 +154,7 @@ public static class GameCatalogLoader
             npcList,
             mowList,
             mowUpgradeCostViews,
+            characterAbilityCostViews,
             ascensionCostViews,
             unlockShardCostViews,
             upgradeViews,
