@@ -6115,6 +6115,7 @@
       "TacticusPlannerApiFeaturesUserSettingsUpdateUserSettingsRequest": {
         "required": [
           "dailyEnergy",
+          "xpBookRarity",
           "revision"
         ],
         "type": "object",
@@ -6122,6 +6123,9 @@
           "dailyEnergy": {
             "type": "integer",
             "format": "int32"
+          },
+          "xpBookRarity": {
+            "type": "string"
           },
           "revision": {
             "minimum": 0,
@@ -6133,6 +6137,7 @@
       "TacticusPlannerApiFeaturesUserSettingsUserSettingsResponse": {
         "required": [
           "dailyEnergy",
+          "xpBookRarity",
           "revision"
         ],
         "type": "object",
@@ -6140,6 +6145,9 @@
           "dailyEnergy": {
             "type": "integer",
             "format": "int32"
+          },
+          "xpBookRarity": {
+            "type": "string"
           },
           "revision": {
             "type": "integer",

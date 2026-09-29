@@ -19,9 +19,15 @@ public class UserSettings : BaseEntity<ProfileId>, IRevisionedEntity
 public sealed class UserSettingsData
 {
     public const int DefaultDailyEnergy = 288;
+    public const string DefaultXpBookRarity = "Legendary";
 
     public static readonly IReadOnlySet<int> SupportedDailyEnergy =
         new HashSet<int> { 288, 378, 438, 538, 638, 738, 838, 938 };
 
+    public static readonly IReadOnlySet<string> SupportedXpBookRarity =
+        new HashSet<string> { "Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic" };
+
     public int DailyEnergy { get; set; } = DefaultDailyEnergy;
+
+    public string XpBookRarity { get; set; } = DefaultXpBookRarity;
 }

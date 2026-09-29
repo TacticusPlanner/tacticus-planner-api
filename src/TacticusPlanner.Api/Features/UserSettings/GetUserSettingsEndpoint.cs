@@ -2,6 +2,7 @@ using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Persistence;
+using UserSettingsData = TacticusPlanner.Domain.UserSettings.UserSettingsData;
 using UserSettingsEntity = TacticusPlanner.Domain.UserSettings.UserSettings;
 
 namespace TacticusPlanner.Api.Features.UserSettings;
@@ -37,8 +38,15 @@ public sealed class GetUserSettingsEndpoint : EndpointWithoutRequest<UserSetting
     }
 }
 
-public sealed record UserSettingsResponse(int DailyEnergy, long Revision)
+public sealed record UserSettingsResponse(int DailyEnergy, string XpBookRarity, long Revision)
 {
     public static UserSettingsResponse From(UserSettingsEntity settings) =>
-        new(settings.Settings.DailyEnergy, settings.Revision);
+        new(settings.Settings.DailyEnergy, NormalizeXpBookRarity(settings.Settings.XpBookRarity), settings.Revision);
+
+    // A row saved before this field existed (or any other missing/null/unsupported stored value) reads
+    // as the default rather than leaking an invalid value to the client.
+    private static string NormalizeXpBookRarity(string? xpBookRarity) =>
+        xpBookRarity is not null && UserSettingsData.SupportedXpBookRarity.Contains(xpBookRarity)
+            ? xpBookRarity
+            : UserSettingsData.DefaultXpBookRarity;
 }

@@ -12,4 +12,4 @@
 ## 3. Integration and gates
 
 - [ ] 3.1 With the Aspire stack, compare the served confirmed occurrence and refreshed apps status at a fixed testable instant, and verify a later unverified slot remains visibly unconfirmed; record the exact evidence and result in verification notes.
-- [ ] 3.2 Run `dotnet format TacticusPlanner.slnx --verify-no-changes --no-restore`, `dotnet build TacticusPlanner.slnx -c Release --no-restore`, `dotnet test TacticusPlanner.slnx -c Release --no-build`, and `git diff --check`; verify all gates pass before applying the apps companion.
+- [ ] 3.2 Run `dotnet format TacticusPlanner.slnx --verify-no-changes --no-restore`, `dotnet build TacticusPlanner.slnx -c Release --no-restore`, `dotnet test TacticusPlanner.slnx -c Release --no-build`, and `git diff --check`; verify all gates pass. The apps companion no longer needs this change first — it already ships against the existing `confirmed` flag (see `proposal.md`) — so this can apply whenever task 1.1's evidence exists, independently of the apps change's status.
