@@ -18,11 +18,12 @@ public sealed class UserSettingsEndpointTests(PlannerApiFactory factory) : IClas
 
         Assert.NotNull(initial);
         Assert.Equal(288, initial.DailyEnergy);
+        Assert.Equal("Legendary", initial.XpBookRarity);
         Assert.Equal(1, initial.Revision);
 
         var response = await client.PutAsJsonAsync(
             "/api/v1/me/user-settings",
-            new UpdateUserSettingsRequest(538, initial.Revision),
+            new UpdateUserSettingsRequest(538, "Epic", initial.Revision),
             TestContext.Current.CancellationToken
         );
         response.EnsureSuccessStatusCode();
@@ -30,6 +31,7 @@ public sealed class UserSettingsEndpointTests(PlannerApiFactory factory) : IClas
 
         Assert.NotNull(updated);
         Assert.Equal(538, updated.DailyEnergy);
+        Assert.Equal("Epic", updated.XpBookRarity);
         Assert.Equal(2, updated.Revision);
     }
 
@@ -40,11 +42,58 @@ public sealed class UserSettingsEndpointTests(PlannerApiFactory factory) : IClas
 
         var response = await client.PutAsJsonAsync(
             "/api/v1/me/user-settings",
-            new UpdateUserSettingsRequest(300, 0),
+            new UpdateUserSettingsRequest(300, "Legendary", 0),
             TestContext.Current.CancellationToken
         );
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Theory]
+    [InlineData("Godly")]
+    [InlineData("")]
+    public async Task PutRejectsUnsupportedXpBookRarity(string xpBookRarity)
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PutAsJsonAsync(
+            "/api/v1/me/user-settings",
+            new UpdateUserSettingsRequest(288, xpBookRarity, 0),
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+        var unchanged = await client.GetFromJsonAsync<UserSettingsResponse>(
+            "/api/v1/me/user-settings",
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(unchanged);
+        Assert.Equal("Legendary", unchanged.XpBookRarity);
+        Assert.Equal(1, unchanged.Revision);
+    }
+
+    [Fact]
+    public async Task PutRejectsMissingXpBookRarity()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var payload = new { DailyEnergy = 288, Revision = 0 };
+        var response = await client.PutAsJsonAsync(
+            "/api/v1/me/user-settings",
+            payload,
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+        var unchanged = await client.GetFromJsonAsync<UserSettingsResponse>(
+            "/api/v1/me/user-settings",
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(unchanged);
+        Assert.Equal("Legendary", unchanged.XpBookRarity);
+        Assert.Equal(1, unchanged.Revision);
     }
 
     [Fact]
@@ -58,7 +107,7 @@ public sealed class UserSettingsEndpointTests(PlannerApiFactory factory) : IClas
 
         var response = await client.PutAsJsonAsync(
             "/api/v1/me/user-settings",
-            new UpdateUserSettingsRequest(378, current!.Revision - 1),
+            new UpdateUserSettingsRequest(378, "Legendary", current!.Revision - 1),
             TestContext.Current.CancellationToken
         );
 

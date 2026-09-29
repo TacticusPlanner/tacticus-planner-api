@@ -47,7 +47,7 @@ public sealed class UpdateUserSettingsEndpoint
             return;
         }
 
-        settings.Settings = new UserSettingsData { DailyEnergy = req.DailyEnergy };
+        settings.Settings = new UserSettingsData { DailyEnergy = req.DailyEnergy, XpBookRarity = req.XpBookRarity };
 
         // A nested owned-JSON property mutation isn't always picked up by snapshot change detection on
         // its owning entity — force Modified explicitly so EntityMetadataInterceptor reliably bumps
@@ -72,7 +72,7 @@ public sealed class UpdateUserSettingsEndpoint
     }
 }
 
-public sealed record UpdateUserSettingsRequest(int DailyEnergy, long Revision);
+public sealed record UpdateUserSettingsRequest(int DailyEnergy, string XpBookRarity, long Revision);
 
 public sealed class UpdateUserSettingsValidator : Validator<UpdateUserSettingsRequest>
 {
@@ -81,6 +81,9 @@ public sealed class UpdateUserSettingsValidator : Validator<UpdateUserSettingsRe
         RuleFor(request => request.DailyEnergy)
             .Must(UserSettingsData.SupportedDailyEnergy.Contains)
             .WithMessage("Daily energy must be one of the supported planning tiers.");
+        RuleFor(request => request.XpBookRarity)
+            .Must(xpBookRarity => !string.IsNullOrEmpty(xpBookRarity) && UserSettingsData.SupportedXpBookRarity.Contains(xpBookRarity))
+            .WithMessage("XP book rarity must be one of the supported rarities.");
         RuleFor(request => request.Revision).GreaterThanOrEqualTo(0);
     }
 }
