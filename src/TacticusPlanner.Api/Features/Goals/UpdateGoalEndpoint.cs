@@ -53,59 +53,11 @@ public sealed class UpdateGoalEndpoint : Endpoint<UpdateGoalRequest, GoalDetailR
             return;
         }
 
-        FarmingStrategy? farmingStrategy = null;
-        if (req.FarmingStrategy is not null)
+        if (Resolve<GoalDetailsEditor>().Apply(goal, req) is GoalEditResult.Invalid invalid)
         {
-            if (!Enum.TryParse<FarmingStrategy>(req.FarmingStrategy, ignoreCase: true, out var parsedStrategy)
-                || !Enum.IsDefined(parsedStrategy)
-                || int.TryParse(req.FarmingStrategy, out _))
-            {
-                AddError(request => request.FarmingStrategy, "Unknown farming strategy.");
-                await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
-                return;
-            }
-
-            if (parsedStrategy != FarmingStrategy.TotalUpgrades
-                && goal.GoalType != GoalType.Rank
-                && !(goal.GoalType == GoalType.Ability && goal.EntityType == GoalEntityType.Mow))
-            {
-                AddError(request => request.FarmingStrategy,
-                    "Farming strategy is supported only for Character Rank and Machine of War Ability goals.");
-                await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
-                return;
-            }
-
-            farmingStrategy = parsedStrategy;
-        }
-
-        var farmingLocationIds = req.FarmingLocationIds?.Select(id => id.Value).ToList();
-        var targetValidation = Resolve<GoalTargetValidationService>();
-        if (targetValidation
-            .ValidateFarmingLocationOverride(goal.GoalType, goal.EntityId, farmingLocationIds) is { } farmingError)
-        {
-            AddError(request => request.FarmingLocationIds, farmingError);
+            ValidationFailures.Add(new(invalid.Field, invalid.Message));
             await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
             return;
-        }
-
-        if (targetValidation.ValidateAcquisitionSources(
-                goal.GoalType, goal.EntityType, goal.EntityId, req.AcquisitionSources) is { } acquisitionError)
-        {
-            AddError(request => request.AcquisitionSources, acquisitionError);
-            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
-            return;
-        }
-
-        goal.Notes = req.Notes;
-        goal.Config.FarmingLocationIds = farmingLocationIds;
-        if (req.AcquisitionSources is not null)
-        {
-            goal.Config.AcquisitionSources = GoalMapper.MapAcquisitionSources(req.AcquisitionSources);
-        }
-
-        if (farmingStrategy is not null)
-        {
-            goal.Config.FarmingStrategy = farmingStrategy.Value;
         }
 
         await db.SaveChangesAsync(ct);

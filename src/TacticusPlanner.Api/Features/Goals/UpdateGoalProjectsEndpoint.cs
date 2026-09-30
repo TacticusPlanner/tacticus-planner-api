@@ -118,51 +118,26 @@ public sealed class UpdateGoalProjectsEndpoint : Endpoint<UpdateGoalProjectsRequ
                     return;
                 }
 
-                if (goal.Status is GoalStatus.Active or GoalStatus.Paused
-                    && await planning.FindConflictAsync(
-                        requestedProjectIds, goal.EntityType, goal.EntityId, goal.GoalType,
-                        RankTargetKey.For(goal.GoalType, goal.Config), goal.Id, ct) is { } conflict)
+                var result = await Resolve<GoalMembershipEditor>().ApplyAsync(
+                    goal, requestedProjectIds, ownedProjects, reloadedMemberships, ct);
+                if (result is GoalEditResult.Applied)
+                {
+                    result = await GoalEditSaver.SaveAsync(
+                        db, planning, transaction, goalId,
+                        new ProjectGoalSlotLookup(
+                            requestedProjectIds,
+                            goal.EntityType,
+                            goal.EntityId,
+                            goal.GoalType,
+                            RankTargetKey.For(goal.GoalType, goal.Config),
+                            goal.Id),
+                        staleProjectIds: null, ct);
+                }
+
+                if (result is GoalEditResult.SlotConflict slotConflict)
                 {
                     HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
-                    await HttpContext.Response.WriteAsJsonAsync(conflict, ct);
-                    return;
-                }
-
-                var toRemove = reloadedMemberships.Where(entity => !requestedProjectIds.Contains(entity.ProjectId)).ToList();
-                if (toRemove.Count > 0)
-                {
-                    db.ProjectGoals.RemoveRange(toRemove);
-                }
-
-                var existingByProjectId = reloadedMemberships.ToDictionary(entity => entity.ProjectId);
-                foreach (var project in ownedProjects)
-                {
-                    if (!existingByProjectId.ContainsKey(project.Id))
-                    {
-                        db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(
-                            project, goal, DateTimeOffset.UtcNow));
-                    }
-                }
-
-                try
-                {
-                    await db.SaveChangesAsync(ct);
-                }
-                catch (DbUpdateException ex) when (GoalConflictDetection.IsProjectSlotConflict(ex))
-                {
-                    var databaseConflict = await planning.FindConflictAfterFailedSaveAsync(
-                        transaction,
-                        [new ProjectGoalSlotLookup(
-                        requestedProjectIds,
-                        goal.EntityType,
-                        goal.EntityId,
-                        goal.GoalType,
-                        RankTargetKey.For(goal.GoalType, goal.Config),
-                        goal.Id)],
-                        ct) ?? throw new InvalidOperationException(
-                            "The project slot constraint failed but no conflicting membership was found.", ex);
-                    HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
-                    await HttpContext.Response.WriteAsJsonAsync(databaseConflict, ct);
+                    await HttpContext.Response.WriteAsJsonAsync(slotConflict.Body, ct);
                     return;
                 }
 
