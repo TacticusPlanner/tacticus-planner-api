@@ -2,6 +2,10 @@
   "groupId": "campaign4",
   "faction": "Aeldari",
   "releaseType": "standard",
+  "alliesAlliance": "Xenos",
+  "alliesFactions": [
+    "Aeldari"
+  ],
   "coreCharacters": [
     "eldarRanger",
     "eldarAutarch",

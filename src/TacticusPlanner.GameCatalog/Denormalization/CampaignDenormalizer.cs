@@ -15,7 +15,7 @@ internal static partial class GameCatalogDenormalizer
         return campaignGroups
             .OrderBy(pair => pair.Key, StringComparer.Ordinal)
             .Select(pair => pair.Value)
-            .SelectMany(group => group.Battles.Select(battle => BuildBattleView(battle, group.GroupId, dropChanceById)))
+            .SelectMany(group => group.Battles.Select(battle => BuildBattleView(battle, group, dropChanceById)))
             .ToArray();
     }
 
@@ -37,7 +37,7 @@ internal static partial class GameCatalogDenormalizer
 
     private static GameCatalogCampaignBattleView BuildBattleView(
         GameCatalogCampaignBattle battle,
-        string campaignGroupId,
+        GameCatalogCampaignGroup group,
         Dictionary<string, GameCatalogDropChance> dropChanceById)
     {
         var potential = battle.Rewards.Potential.Select(reward =>
@@ -53,7 +53,7 @@ internal static partial class GameCatalogDenormalizer
 
         return new GameCatalogCampaignBattleView(
             battle.Id,
-            campaignGroupId,
+            group.GroupId,
             battle.Type,
             battle.Challenge,
             battle.EnergyCost,
@@ -63,6 +63,8 @@ internal static partial class GameCatalogDenormalizer
             DailyAttemptsForType(battle.Type),
             new GameCatalogCampaignRewardsView(battle.Rewards.Guaranteed, potential),
             battle.EnemyPower,
+            group.AlliesAlliance,
+            group.AlliesFactions,
             battle.EnemiesAlliances,
             battle.EnemiesFactions,
             battle.EnemiesTotal,

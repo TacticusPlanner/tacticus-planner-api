@@ -2,6 +2,11 @@
   "groupId": "eventCampaign5",
   "faction": "WorldEaters",
   "releaseType": "event",
+  "alliesAlliance": "Chaos",
+  "alliesFactions": [
+    "WorldEaters",
+    "BlackLegion"
+  ],
   "coreCharacters": [
     "worldEightbound",
     "worldExecutions",

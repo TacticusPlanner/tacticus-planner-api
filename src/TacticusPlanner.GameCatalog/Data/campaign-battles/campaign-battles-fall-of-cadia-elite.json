@@ -2,6 +2,14 @@
   "groupId": "elite2",
   "faction": "BlackLegion",
   "releaseType": "standard",
+  "alliesAlliance": "Chaos",
+  "alliesFactions": [
+    "BlackLegion",
+    "DeathGuard",
+    "EmperorsChildren",
+    "ThousandSons",
+    "WorldEaters"
+  ],
   "coreCharacters": [
     "blackTerminator",
     "blackPossession",

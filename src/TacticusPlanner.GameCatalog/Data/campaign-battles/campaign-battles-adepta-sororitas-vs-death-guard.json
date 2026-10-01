@@ -2,6 +2,11 @@
   "groupId": "eventCampaign4",
   "faction": "Sisterhood",
   "releaseType": "event",
+  "alliesAlliance": "Imperial",
+  "alliesFactions": [
+    "Sisterhood",
+    "BlackTemplars"
+  ],
   "coreCharacters": [
     "adeptCanoness",
     "adeptHospitaller",

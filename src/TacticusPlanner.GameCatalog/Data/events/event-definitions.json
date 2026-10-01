@@ -135,6 +135,78 @@
     "requiredParameters": []
   },
   {
+    "id": "hse-purge-order",
+    "type": "HomeScreenEvent",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": []
+  },
+  {
+    "id": "hse-squig-smash",
+    "type": "HomeScreenEvent",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": []
+  },
+  {
+    "id": "hse-against-the-tide",
+    "type": "HomeScreenEvent",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": []
+  },
+  {
+    "id": "hse-trait-boost-rapid-assault",
+    "type": "HomeScreenEvent",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": []
+  },
+  {
+    "id": "hse-trait-boost-flying",
+    "type": "HomeScreenEvent",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": []
+  },
+  {
+    "id": "hse-trait-boost-psyker",
+    "type": "HomeScreenEvent",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": []
+  },
+  {
+    "id": "hse-for-the-dark-gods",
+    "type": "HomeScreenEvent",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": []
+  },
+  {
+    "id": "hse-for-the-emperor",
+    "type": "HomeScreenEvent",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": []
+  },
+  {
+    "id": "hse-defeat-waves",
+    "type": "HomeScreenEvent",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": []
+  },
+  {
+    "id": "hse-11th-edition-week-1",
+    "type": "HomeScreenEvent",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": []
+  },
+  {
+    "id": "hse-11th-edition-week-2",
+    "type": "HomeScreenEvent",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": []
+  },
+  {
+    "id": "hse-11th-edition-week-3",
+    "type": "HomeScreenEvent",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": []
+  },
+  {
     "id": "anniversary-event",
     "type": "ShopEvent",
     "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },

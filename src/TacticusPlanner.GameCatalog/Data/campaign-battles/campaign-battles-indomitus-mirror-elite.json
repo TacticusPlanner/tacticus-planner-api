@@ -2,6 +2,10 @@
   "groupId": "eliteMirror1",
   "faction": "Necrons",
   "releaseType": "standard",
+  "alliesAlliance": "Xenos",
+  "alliesFactions": [
+    "Necrons"
+  ],
   "coreCharacters": [
     "necroWarden",
     "necroDestroyer",

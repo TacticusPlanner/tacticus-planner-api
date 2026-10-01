@@ -11,7 +11,7 @@
     },
     {
       key: campaign-battles,
-      hash: b9e1d8a960a793962040f25a17e0347cc9171e45e785e328437cb81c4ee8ab3f,
+      hash: 826c2899d3312579b85ba8d46aecdb08fb69ff7500c1c7372aa05bf49b6c1937,
       url: /api/v1/game-catalog/campaign-battles
     },
     {
@@ -36,7 +36,7 @@
     },
     {
       key: event-definitions,
-      hash: 19244911a4a1227f75458601715c63f6f2fb8ff201c571e1d675834fb06042c7,
+      hash: 42dd6ca927cdd1877f6cce6ae08e2f3111b558527d8742b8d4f4d6d8a873298b,
       url: /api/v1/game-catalog/event-definitions
     },
     {

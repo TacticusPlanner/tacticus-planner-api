@@ -6,6 +6,9 @@ public sealed record GameCatalogCampaignGroup(
     string GroupId,
     string Faction,
     string ReleaseType,
+    // Allied side usable in this campaign group (V1 getEnemiesAndAllies); copied onto every served battle.
+    string AlliesAlliance,
+    IReadOnlyList<string> AlliesFactions,
     IReadOnlyList<string> CoreCharacters,
     // Distinct Tacticus campaign types present in this group's battles — a singleton for
     // storyline/mirror/elite/eliteMirror groups (which are split one-type-per-group), or
@@ -111,6 +114,8 @@ public sealed record GameCatalogCampaignBattleView(
     int DailyAttempts,
     GameCatalogCampaignRewardsView Rewards,
     int EnemyPower,
+    string AlliesAlliance,
+    IReadOnlyList<string> AlliesFactions,
     IReadOnlyList<string> EnemiesAlliances,
     IReadOnlyList<string> EnemiesFactions,
     int EnemiesTotal,

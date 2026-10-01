@@ -16,7 +16,7 @@ public sealed class UpgradeDenormalizerTests
             0, [], [], 0, [], [], []);
 
     private static GameCatalogCampaignGroup Group(string groupId, params GameCatalogCampaignBattle[] battles) =>
-        new(groupId, "AdeptusMechanicus", "standard", [], ["Standard"], battles);
+        new(groupId, "AdeptusMechanicus", "standard", "Imperial", ["AdeptusMechanicus"], [], ["Standard"], battles);
 
     private static GameCatalogUpgrade Upgrade(string id) =>
         new(id, id, id, id, "Common", "Armour", false, []);

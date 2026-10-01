@@ -6688,6 +6688,8 @@
           "dailyAttempts",
           "rewards",
           "enemyPower",
+          "alliesAlliance",
+          "alliesFactions",
           "enemiesAlliances",
           "enemiesFactions",
           "enemiesTotal",
@@ -6734,6 +6736,12 @@
           "enemyPower": {
             "type": "integer",
             "format": "int32"
+          },
+          "alliesAlliance": {
+            "type": "string"
+          },
+          "alliesFactions": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemString"
           },
           "enemiesAlliances": {
             "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemString"

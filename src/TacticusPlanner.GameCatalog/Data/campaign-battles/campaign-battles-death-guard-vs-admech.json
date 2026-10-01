@@ -2,6 +2,11 @@
   "groupId": "eventCampaign1",
   "faction": "DeathGuard",
   "releaseType": "event",
+  "alliesAlliance": "Chaos",
+  "alliesFactions": [
+    "DeathGuard",
+    "WorldEaters"
+  ],
   "coreCharacters": [
     "deathBlightlord",
     "deathPutrifier",

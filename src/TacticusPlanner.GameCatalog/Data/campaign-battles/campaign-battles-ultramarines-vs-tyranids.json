@@ -2,6 +2,11 @@
   "groupId": "eventCampaign2",
   "faction": "Ultramarines",
   "releaseType": "event",
+  "alliesAlliance": "Imperial",
+  "alliesFactions": [
+    "Ultramarines",
+    "BloodAngels"
+  ],
   "coreCharacters": [
     "ultraInceptorSgt",
     "ultraApothecary",

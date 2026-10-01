@@ -2,6 +2,19 @@
   "groupId": "mirror3",
   "faction": "BlackTemplars",
   "releaseType": "standard",
+  "alliesAlliance": "Imperial",
+  "alliesFactions": [
+    "AdeptusAstartes",
+    "AdeptusMechanicus",
+    "AstraMilitarum",
+    "BlackTemplars",
+    "BloodAngels",
+    "Custodes",
+    "DarkAngels",
+    "Sisterhood",
+    "SpaceWolves",
+    "Ultramarines"
+  ],
   "coreCharacters": [
     "templSwordBrother",
     "templAggressor",

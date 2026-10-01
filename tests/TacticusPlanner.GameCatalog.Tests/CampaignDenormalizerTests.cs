@@ -24,7 +24,7 @@ public sealed class CampaignDenormalizerTests
         // already-assigned battleIndex values through to the served view (see GameCatalogCampaignBattle.BattleIndex).
         var regular = Battle("AMS3", battleIndex: 2, nodeNumber: 3);
         var challengeBattle = Battle("AMSC3B", battleIndex: 3, challenge: true, nodeNumber: 3);
-        var group = new GameCatalogCampaignGroup("eventCampaign1", "AdeptusMechanicus", "event", [], ["Standard"],
+        var group = new GameCatalogCampaignGroup("eventCampaign1", "AdeptusMechanicus", "event", "Chaos", ["DeathGuard"], [], ["Standard"],
             [regular, challengeBattle]);
 
         var views = GameCatalogDenormalizer.BuildCampaignBattles(
