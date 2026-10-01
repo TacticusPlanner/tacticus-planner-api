@@ -47,6 +47,10 @@ public sealed class CreateGoalValidator : Validator<CreateGoalRequest>
             .WithMessage("The farming strategy configuration is invalid.");
 
         RuleFor(request => request.Config)
+            .Must(config => UpgradeRangeRules.HasWholeRanges(config?.Upgrade))
+            .WithMessage(UpgradeRangeRules.ShapeMessage);
+
+        RuleFor(request => request.Config)
             .Must(config => AcquisitionSourceRules.ShapeError(config?.AcquisitionSources) is null)
             .WithMessage(request =>
                 AcquisitionSourceRules.ShapeError(request.Config?.AcquisitionSources)

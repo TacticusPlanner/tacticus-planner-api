@@ -52,6 +52,11 @@ public sealed class CreateCombinedGoalsValidator : Validator<CreateCombinedGoals
                 .Must(CreateGoalValidator.IsValidConfig)
                 .WithMessage("The farming strategy or ascension farming configuration is invalid."));
 
+        RuleForEach(request => request.Goals)
+            .ChildRules(goal => goal.RuleFor(spec => spec.Config)
+                .Must(config => UpgradeRangeRules.HasWholeRanges(config?.Upgrade))
+                .WithMessage(UpgradeRangeRules.ShapeMessage));
+
         RuleFor(request => request.Goals)
             .Custom((goals, context) =>
             {

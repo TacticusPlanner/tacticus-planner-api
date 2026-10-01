@@ -199,6 +199,9 @@ public sealed class UpdateGoalTargetValidator : Validator<UpdateGoalTargetReques
                 .Must(target => target is not null && !string.IsNullOrWhiteSpace(target.UpgradeId))
                 .When(request => request.Target.Upgrade!.Targets is not null)
                 .WithMessage("Every upgrade target needs an upgrade id.");
+            RuleFor(request => request.Target.Upgrade!)
+                .Must(UpgradeRangeRules.HasWholeRanges)
+                .WithMessage(UpgradeRangeRules.ShapeMessage);
         });
 
         When(request => request.Target?.Progression is not null, () =>

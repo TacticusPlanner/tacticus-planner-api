@@ -183,6 +183,9 @@ public sealed class GoalTargetEditor(
             UpgradeTargets = target.Upgrade!.Targets
                 .Select(value => new UpgradeMaterialTarget { UpgradeId = value.UpgradeId.Trim(), Quantity = value.Quantity })
                 .ToList(),
+            UpgradeRankRange = GoalMapper.ToRange(target.Upgrade.RankRange),
+            UpgradeActiveRange = GoalMapper.ToRange(target.Upgrade.ActiveRange),
+            UpgradePassiveRange = GoalMapper.ToRange(target.Upgrade.PassiveRange),
         },
         _ => throw new ArgumentOutOfRangeException(nameof(goalType), goalType, "Not an adjustable goal type."),
     };
@@ -207,7 +210,12 @@ public sealed class GoalTargetEditor(
                 config.Ability.PassiveEnd = target.Ability.PassiveEnd;
                 break;
             case GoalType.Upgrade:
-                config.Upgrade!.Targets = ToSnapshot(goal.GoalType, target).UpgradeTargets!;
+                var edited = ToSnapshot(goal.GoalType, target);
+                config.Upgrade!.Targets = edited.UpgradeTargets!;
+                // Replaced as a whole: an omitted range group clears the stored one.
+                config.Upgrade.RankRange = edited.UpgradeRankRange;
+                config.Upgrade.ActiveRange = edited.UpgradeActiveRange;
+                config.Upgrade.PassiveRange = edited.UpgradePassiveRange;
                 break;
         }
     }

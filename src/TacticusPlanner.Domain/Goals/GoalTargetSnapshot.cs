@@ -15,6 +15,9 @@ public sealed class GoalTargetSnapshot
     public int? ActiveAbilityEnd { get; set; }
     public int? PassiveAbilityEnd { get; set; }
     public List<UpgradeMaterialTarget>? UpgradeTargets { get; set; }
+    public UpgradeRange? UpgradeRankRange { get; set; }
+    public UpgradeRange? UpgradeActiveRange { get; set; }
+    public UpgradeRange? UpgradePassiveRange { get; set; }
 
     /// <summary>The current end target of <paramref name="config"/> for a goal of <paramref name="goalType"/>.</summary>
     public static GoalTargetSnapshot From(GoalType goalType, GoalConfig config) => goalType switch
@@ -36,6 +39,9 @@ public sealed class GoalTargetSnapshot
             UpgradeTargets = upgrade.Targets
                 .Select(target => new UpgradeMaterialTarget { UpgradeId = target.UpgradeId, Quantity = target.Quantity })
                 .ToList(),
+            UpgradeRankRange = Copy(upgrade.RankRange),
+            UpgradeActiveRange = Copy(upgrade.ActiveRange),
+            UpgradePassiveRange = Copy(upgrade.PassiveRange),
         },
         _ => new(),
     };
@@ -48,7 +54,16 @@ public sealed class GoalTargetSnapshot
         && ProgressionEnd == other.ProgressionEnd
         && ActiveAbilityEnd == other.ActiveAbilityEnd
         && PassiveAbilityEnd == other.PassiveAbilityEnd
-        && UpgradeKey(UpgradeTargets) == UpgradeKey(other.UpgradeTargets);
+        && UpgradeKey(UpgradeTargets) == UpgradeKey(other.UpgradeTargets)
+        && SameRange(UpgradeRankRange, other.UpgradeRankRange)
+        && SameRange(UpgradeActiveRange, other.UpgradeActiveRange)
+        && SameRange(UpgradePassiveRange, other.UpgradePassiveRange);
+
+    private static UpgradeRange? Copy(UpgradeRange? range) =>
+        range is null ? null : new UpgradeRange { Start = range.Start, End = range.End };
+
+    private static bool SameRange(UpgradeRange? a, UpgradeRange? b) =>
+        a is null ? b is null : b is not null && a.Start == b.Start && a.End == b.End;
 
     private static string UpgradeKey(List<UpgradeMaterialTarget>? targets) =>
         targets is null

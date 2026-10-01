@@ -69,6 +69,21 @@ public sealed class AbilityTarget
 public sealed class UpgradeTarget
 {
     public List<UpgradeMaterialTarget> Targets { get; set; } = [];
+
+    /// <summary>Character only: the rank range the goal was created against (client overlap de-duplication).</summary>
+    public UpgradeRange? RankRange { get; set; }
+
+    /// <summary>Mow only: the active-ability level range, independent of <see cref="PassiveRange"/>.</summary>
+    public UpgradeRange? ActiveRange { get; set; }
+
+    /// <summary>Mow only: the passive-ability level range, independent of <see cref="ActiveRange"/>.</summary>
+    public UpgradeRange? PassiveRange { get; set; }
+}
+
+public sealed class UpgradeRange
+{
+    public required int Start { get; set; }
+    public required int End { get; set; }
 }
 
 public sealed class UpgradeMaterialTarget

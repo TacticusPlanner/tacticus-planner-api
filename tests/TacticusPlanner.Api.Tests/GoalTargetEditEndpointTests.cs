@@ -172,6 +172,64 @@ public sealed class GoalTargetEditEndpointTests(PlannerApiFactory factory) : ICl
     }
 
     [Fact]
+    public async Task UpgradeRangeCanBeReplacedClearedAndIsRecordedInHistory()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var targets = new List<UpgradeMaterialTargetRequest> { new(RelevantUpgradeId, 2) };
+        var created = await CreateGoalAsync(
+            client,
+            Goal("upgrade", new CreateGoalConfigRequest(
+                Upgrade: new UpgradeTargetRequest(targets, RankRange: new UpgradeRangeRequest(1, 3)))));
+
+        var replace = await PutTargetAsync(
+            client,
+            created.GoalId,
+            new UpdateGoalTargetRequest(
+                created.Revision,
+                new GoalTargetEditRequest(Upgrade: new UpgradeTargetRequest(targets, RankRange: new UpgradeRangeRequest(1, 4)))));
+        replace.EnsureSuccessStatusCode();
+        var replaced = await GetGoalAsync(client, created.GoalId);
+        Assert.Equal(new UpgradeRangeResponse(1, 4), replaced.Config.Upgrade!.RankRange);
+        Assert.Equal(created.Revision + 1, replaced.Revision);
+        var changed = Assert.Single(replaced.Events, e => e.Type == GoalEventType.TargetChanged);
+        Assert.Equal(new UpgradeRangeResponse(1, 3), changed.PreviousTarget!.UpgradeRankRange);
+        Assert.Equal(new UpgradeRangeResponse(1, 4), changed.NewTarget!.UpgradeRankRange);
+
+        var clear = await PutTargetAsync(
+            client,
+            created.GoalId,
+            new UpdateGoalTargetRequest(replaced.Revision, new GoalTargetEditRequest(Upgrade: new UpgradeTargetRequest(targets))));
+        clear.EnsureSuccessStatusCode();
+        var cleared = await GetGoalAsync(client, created.GoalId);
+        Assert.Null(cleared.Config.Upgrade!.RankRange);
+        Assert.Null(cleared.Config.Upgrade.ActiveRange);
+    }
+
+    [Theory]
+    [InlineData(3, 3)]
+    [InlineData(-1, 2)]
+    [InlineData(0, 999)]
+    public async Task InvalidUpgradeRangeIsRejectedOnEditAndNothingChanges(int start, int end)
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var targets = new List<UpgradeMaterialTargetRequest> { new(RelevantUpgradeId, 2) };
+        var created = await CreateGoalAsync(
+            client, Goal("upgrade", new CreateGoalConfigRequest(Upgrade: new UpgradeTargetRequest(targets))));
+
+        var response = await PutTargetAsync(
+            client,
+            created.GoalId,
+            new UpdateGoalTargetRequest(
+                created.Revision,
+                new GoalTargetEditRequest(Upgrade: new UpgradeTargetRequest(targets, RankRange: new UpgradeRangeRequest(start, end)))));
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var after = await GetGoalAsync(client, created.GoalId);
+        Assert.Equal(created.Revision, after.Revision);
+        Assert.Null(after.Config.Upgrade!.RankRange);
+    }
+
+    [Fact]
     public async Task UnlockGoalHasNoAdjustableTarget()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);

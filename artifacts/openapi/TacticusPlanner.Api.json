@@ -4892,6 +4892,39 @@
                 "$ref": "#/components/schemas/SystemCollectionsGenericListOfTacticusPlannerApiFeaturesGoalsUpgradeMaterialTargetResponse"
               }
             ]
+          },
+          "upgradeRankRange": {
+            "type": [
+              "null",
+              "object"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsUpgradeRangeResponse"
+              }
+            ]
+          },
+          "upgradeActiveRange": {
+            "type": [
+              "null",
+              "object"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsUpgradeRangeResponse"
+              }
+            ]
+          },
+          "upgradePassiveRange": {
+            "type": [
+              "null",
+              "object"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsUpgradeRangeResponse"
+              }
+            ]
           }
         }
       },
@@ -5188,6 +5221,46 @@
           }
         }
       },
+      "TacticusPlannerApiFeaturesGoalsUpgradeRangeRequest": {
+        "required": [
+          "start",
+          "end"
+        ],
+        "type": "object",
+        "properties": {
+          "start": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "end": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesGoalsUpgradeRangeResponse": {
+        "required": [
+          "start",
+          "end"
+        ],
+        "type": "object",
+        "properties": {
+          "start": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "end": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "TacticusPlannerApiFeaturesGoalsUpgradeTargetRequest": {
         "required": [
           "targets"
@@ -5196,6 +5269,39 @@
         "properties": {
           "targets": {
             "$ref": "#/components/schemas/SystemCollectionsGenericListOfTacticusPlannerApiFeaturesGoalsUpgradeMaterialTargetRequest"
+          },
+          "rankRange": {
+            "type": [
+              "null",
+              "object"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsUpgradeRangeRequest"
+              }
+            ]
+          },
+          "activeRange": {
+            "type": [
+              "null",
+              "object"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsUpgradeRangeRequest"
+              }
+            ]
+          },
+          "passiveRange": {
+            "type": [
+              "null",
+              "object"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsUpgradeRangeRequest"
+              }
+            ]
           }
         }
       },
@@ -5207,6 +5313,39 @@
         "properties": {
           "targets": {
             "$ref": "#/components/schemas/SystemCollectionsGenericListOfTacticusPlannerApiFeaturesGoalsUpgradeMaterialTargetResponse"
+          },
+          "rankRange": {
+            "type": [
+              "null",
+              "object"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsUpgradeRangeResponse"
+              }
+            ]
+          },
+          "activeRange": {
+            "type": [
+              "null",
+              "object"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsUpgradeRangeResponse"
+              }
+            ]
+          },
+          "passiveRange": {
+            "type": [
+              "null",
+              "object"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGoalsUpgradeRangeResponse"
+              }
+            ]
           }
         }
       },

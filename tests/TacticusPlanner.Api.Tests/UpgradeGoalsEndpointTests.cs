@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Http.Json;
 using TacticusPlanner.Api.Features.Goals;
+using TacticusPlanner.GameDomain;
 
 namespace TacticusPlanner.Api.Tests;
 
@@ -235,4 +236,92 @@ public sealed class UpgradeGoalsEndpointTests(PlannerApiFactory factory) : IClas
         Assert.Equal("Upgrade", goal.GoalType);
         Assert.Equal(5, goal.Config.Upgrade!.Targets[0].Quantity);
     }
+
+    private static CreateGoalRequest UpgradeGoal(string entityType, string entityId, UpgradeTargetRequest upgrade) =>
+        new(entityType, entityId, "upgrade", new CreateGoalConfigRequest(Upgrade: upgrade), null);
+
+    private static UpgradeRangeRequest Range(int start, int end) => new(start, end);
+
+    private static readonly List<UpgradeMaterialTargetRequest> MowTargets = [new(MowRelevantUpgradeId, 2)];
+
+    [Fact]
+    public async Task CharacterUpgradeGoalWithRankRangeRoundTrips()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            UpgradeGoal("character", "ultraApothecary",
+                new UpgradeTargetRequest([new("upgArmC002", 5)], RankRange: Range((int)UnitRank.Stone2, (int)UnitRank.Iron1 + 1))),
+            TestContext.Current.CancellationToken);
+        response.EnsureSuccessStatusCode();
+        var created = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        var fetched = await client.GetFromJsonAsync<GoalDetailResponse>(
+            $"/api/v1/me/goals/{created!.GoalId}", TestContext.Current.CancellationToken);
+
+        var upgrade = fetched!.Config.Upgrade!;
+        Assert.Equal(new UpgradeRangeResponse(1, 4), upgrade.RankRange);
+        Assert.Null(upgrade.ActiveRange);
+        Assert.Null(upgrade.PassiveRange);
+    }
+
+    [Fact]
+    public async Task MowUpgradeGoalAcceptsOneOrBothAbilityRanges()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var activeOnly = await PostUpgradeAsync(client, new UpgradeTargetRequest(MowTargets, ActiveRange: Range(1, 5)));
+        var both = await PostUpgradeAsync(await GoalsTestHelpers.CreateProvisionedClientAsync(factory), new UpgradeTargetRequest(MowTargets, ActiveRange: Range(1, 5), PassiveRange: Range(2, 4)));
+
+        activeOnly.EnsureSuccessStatusCode();
+        both.EnsureSuccessStatusCode();
+        var a = (await activeOnly.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken))!.Config.Upgrade!;
+        Assert.Equal(new UpgradeRangeResponse(1, 5), a.ActiveRange);
+        Assert.Null(a.PassiveRange);
+        var b = (await both.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken))!.Config.Upgrade!;
+        Assert.Equal(new UpgradeRangeResponse(2, 4), b.PassiveRange);
+    }
+
+    [Fact]
+    public async Task UpgradeGoalWithoutRangesReadsBackNullGroups()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await PostUpgradeAsync(client, new UpgradeTargetRequest(MowTargets));
+
+        var upgrade = (await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken))!.Config.Upgrade!;
+        Assert.Null(upgrade.RankRange);
+        Assert.Null(upgrade.ActiveRange);
+        Assert.Null(upgrade.PassiveRange);
+    }
+
+    public static TheoryData<string, UpgradeTargetRequest> InvalidRangeRequests => new()
+    {
+        { "mow", new UpgradeTargetRequest(MowTargets, RankRange: Range(0, 2)) },
+        { "mow", new UpgradeTargetRequest(MowTargets, ActiveRange: Range(3, 3)) },
+        { "mow", new UpgradeTargetRequest(MowTargets, ActiveRange: Range(0, 2)) },
+        { "mow", new UpgradeTargetRequest(MowTargets, PassiveRange: Range(1, 99)) },
+        { "mow", new UpgradeTargetRequest(MowTargets, ActiveRange: new UpgradeRangeRequest(1, null)) },
+        { "character", new UpgradeTargetRequest([new("upgArmC002", 1)], ActiveRange: Range(1, 2)) },
+        { "character", new UpgradeTargetRequest([new("upgArmC002", 1)], RankRange: Range(4, 2)) },
+        { "character", new UpgradeTargetRequest([new("upgArmC002", 1)], RankRange: Range(-1, 2)) },
+        { "character", new UpgradeTargetRequest([new("upgArmC002", 1)], RankRange: Range(0, 999)) },
+    };
+
+    [Theory]
+    [MemberData(nameof(InvalidRangeRequests))]
+    public async Task InvalidUpgradeRangesAreRejectedOnCreate(string entityType, UpgradeTargetRequest upgrade)
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var entityId = entityType == "mow" ? "astraOrdnanceBattery" : "ultraApothecary";
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals", UpgradeGoal(entityType, entityId, upgrade), TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    private static Task<HttpResponseMessage> PostUpgradeAsync(HttpClient client, UpgradeTargetRequest upgrade) =>
+        client.PostAsJsonAsync(
+            "/api/v1/me/goals", UpgradeGoal("mow", "astraOrdnanceBattery", upgrade), TestContext.Current.CancellationToken);
 }

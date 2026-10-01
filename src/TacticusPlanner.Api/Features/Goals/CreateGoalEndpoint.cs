@@ -194,7 +194,19 @@ public sealed record ProgressionTargetRequest(string Start, string End);
 
 public sealed record AbilityTargetRequest(int ActiveStart, int ActiveEnd, int PassiveStart, int PassiveEnd);
 
-public sealed record UpgradeTargetRequest(List<UpgradeMaterialTargetRequest> Targets);
+/// <summary>Optional progression ranges the goal was created against: <c>RankRange</c> (Character only) is a
+/// rank-ladder index pair (<c>UnitRank</c> ordinal, e.g. Stone2 = 1); <c>ActiveRange</c>/<c>PassiveRange</c>
+/// (Mow only) are ability-level pairs. Omitted groups stay null — no overlap de-duplication.</summary>
+public sealed record UpgradeTargetRequest(
+    List<UpgradeMaterialTargetRequest> Targets,
+    UpgradeRangeRequest? RankRange = null,
+    UpgradeRangeRequest? ActiveRange = null,
+    UpgradeRangeRequest? PassiveRange = null
+);
+
+/// <summary>Nullable members so a half-present group is detectable (and rejected with a 400) rather than
+/// silently defaulting to 0.</summary>
+public sealed record UpgradeRangeRequest(int? Start, int? End);
 
 public sealed record UpgradeMaterialTargetRequest(string UpgradeId, int Quantity);
 

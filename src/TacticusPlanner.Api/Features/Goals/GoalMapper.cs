@@ -115,8 +115,17 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
                 UpgradeId = target.UpgradeId.Trim(),
                 Quantity = target.Quantity,
             }).ToList(),
+            RankRange = ToRange(config.Upgrade.RankRange),
+            ActiveRange = ToRange(config.Upgrade.ActiveRange),
+            PassiveRange = ToRange(config.Upgrade.PassiveRange),
         },
     };
+
+    internal static UpgradeRange? ToRange(UpgradeRangeRequest? range) =>
+        range is { Start: { } start, End: { } end } ? new UpgradeRange { Start = start, End = end } : null;
+
+    private static UpgradeRangeResponse? ToResponse(UpgradeRange? range) =>
+        range is null ? null : new UpgradeRangeResponse(range.Start, range.End);
 
     /// <summary>Maps the wire acquisition-source list to its domain form. Null / empty stays null —
     /// "unrestricted campaign farming", the pre-picker default. Shared by <see cref="MapConfig"/> and
@@ -180,7 +189,10 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
             ? null
             : config.AcquisitionSources.Select(source => new AcquisitionSourceResponse(source.Kind, source.Ids)).ToList(),
         config.Upgrade is null ? null : new UpgradeTargetResponse(
-            config.Upgrade.Targets.Select(target => new UpgradeMaterialTargetResponse(target.UpgradeId, target.Quantity)).ToList())
+            config.Upgrade.Targets.Select(target => new UpgradeMaterialTargetResponse(target.UpgradeId, target.Quantity)).ToList(),
+            ToResponse(config.Upgrade.RankRange),
+            ToResponse(config.Upgrade.ActiveRange),
+            ToResponse(config.Upgrade.PassiveRange))
     );
 
     private static GoalSnapshotResponse BuildSnapshot(GoalSnapshot snapshot) => new(
@@ -208,7 +220,10 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
         target.ProgressionEnd,
         target.ActiveAbilityEnd,
         target.PassiveAbilityEnd,
-        target.UpgradeTargets?.Select(value => new UpgradeMaterialTargetResponse(value.UpgradeId, value.Quantity)).ToList());
+        target.UpgradeTargets?.Select(value => new UpgradeMaterialTargetResponse(value.UpgradeId, value.Quantity)).ToList(),
+        ToResponse(target.UpgradeRankRange),
+        ToResponse(target.UpgradeActiveRange),
+        ToResponse(target.UpgradePassiveRange));
 }
 
 public sealed record GoalSummaryResponse(
@@ -259,7 +274,13 @@ public sealed record GoalConfigResponse(
 
 public sealed record AcquisitionSourceResponse(string Kind, List<string> Ids);
 
-public sealed record UpgradeTargetResponse(List<UpgradeMaterialTargetResponse> Targets);
+public sealed record UpgradeTargetResponse(
+    List<UpgradeMaterialTargetResponse> Targets,
+    UpgradeRangeResponse? RankRange = null,
+    UpgradeRangeResponse? ActiveRange = null,
+    UpgradeRangeResponse? PassiveRange = null);
+
+public sealed record UpgradeRangeResponse(int Start, int End);
 
 public sealed record UpgradeMaterialTargetResponse(string UpgradeId, int Quantity);
 
@@ -303,4 +324,7 @@ public sealed record GoalTargetSnapshotResponse(
     string? ProgressionEnd,
     int? ActiveAbilityEnd,
     int? PassiveAbilityEnd,
-    List<UpgradeMaterialTargetResponse>? UpgradeTargets);
+    List<UpgradeMaterialTargetResponse>? UpgradeTargets,
+    UpgradeRangeResponse? UpgradeRankRange = null,
+    UpgradeRangeResponse? UpgradeActiveRange = null,
+    UpgradeRangeResponse? UpgradePassiveRange = null);
