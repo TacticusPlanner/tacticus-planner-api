@@ -10,9 +10,14 @@ namespace TacticusPlanner.GameCatalog;
 /// needed.</summary>
 public static class GameCatalogGoalLookups
 {
+    /// <summary>An Unlock goal needs some way to farm regular shards: a campaign shard node, or a regular
+    /// shard offer in any shop (so shop-only characters like Kharn and Ragnar qualify). A mythic-only shop
+    /// offer does not count — unlocking consumes regular shards.</summary>
     public static bool IsUnlockEligible(this GameCatalogSnapshot catalog, string characterId) =>
         catalog.CharacterViews.Any(character =>
-            character.Id == characterId && character.ShardLocations.Count > 0);
+            character.Id == characterId && character.ShardLocations.Count > 0)
+        || catalog.ShopViews.Any(shop => shop.Slots.Any(slot => slot.Variants.Any(variant =>
+            variant.UnitId == characterId && variant.Reward.Type == $"shards_{characterId}")));
 
     public static GameCatalogRewardRange OnslaughtReward(
         this GameCatalogSnapshot catalog,

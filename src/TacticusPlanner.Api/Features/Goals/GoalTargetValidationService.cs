@@ -62,7 +62,7 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
         if (goalType == GoalType.Unlock)
         {
             if (!catalog.Current.IsUnlockEligible(entityId))
-                return "Unlock is unavailable because the catalog has no shard-upgrade data for this character.";
+                return "Unlock is unavailable because the catalog has no campaign shard node or shop shard offer for this character.";
             if (playerUnit is not null) return "The selected character is already unlocked.";
         }
 
