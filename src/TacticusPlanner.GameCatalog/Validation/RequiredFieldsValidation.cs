@@ -47,6 +47,13 @@ public static partial class GameCatalogValidator
             Require(GameCatalogDatasets.CampaignBattlesPrefix, key, group.Faction, "faction", errors);
             Require(GameCatalogDatasets.CampaignBattlesPrefix, key, group.ReleaseType, "releaseType", errors);
 
+            Require(GameCatalogDatasets.CampaignBattlesPrefix, key, group.AlliesAlliance, "alliesAlliance", errors);
+            if (group.AlliesFactions.Count == 0)
+            {
+                errors.Add(new GameCatalogValidationError(
+                    GameCatalogDatasets.CampaignBattlesPrefix, "RequiredField", $"'alliesFactions' is required for '{key}'."));
+            }
+
             if (group.Types.Count == 0)
             {
                 errors.Add(new GameCatalogValidationError(

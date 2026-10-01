@@ -2,6 +2,10 @@
   "groupId": "elite3",
   "faction": "Orks",
   "releaseType": "standard",
+  "alliesAlliance": "Xenos",
+  "alliesFactions": [
+    "Orks"
+  ],
   "coreCharacters": [
     "orksBigMek",
     "orksKillaKan",

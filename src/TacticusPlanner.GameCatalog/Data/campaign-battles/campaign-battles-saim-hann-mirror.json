@@ -2,6 +2,14 @@
   "groupId": "mirror4",
   "faction": "ThousandSons",
   "releaseType": "standard",
+  "alliesAlliance": "Chaos",
+  "alliesFactions": [
+    "BlackLegion",
+    "DeathGuard",
+    "EmperorsChildren",
+    "ThousandSons",
+    "WorldEaters"
+  ],
   "coreCharacters": [
     "thousTzaangor",
     "thousTerminator",

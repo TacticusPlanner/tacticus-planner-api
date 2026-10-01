@@ -2,6 +2,11 @@
   "groupId": "eventCampaign3",
   "faction": "Genestealers",
   "releaseType": "event",
+  "alliesAlliance": "Xenos",
+  "alliesFactions": [
+    "Genestealers",
+    "Tyranids"
+  ],
   "coreCharacters": [
     "genesBiophagus",
     "genesMagus",

@@ -14,6 +14,9 @@ public static partial class GameCatalogValidator
         var dropChanceIds = new HashSet<string>(snapshot.DropChances.Select(chance => chance.Id), StringComparer.OrdinalIgnoreCase);
         var npcIds = new HashSet<string>(snapshot.Npcs.Select(npc => npc.Id), StringComparer.OrdinalIgnoreCase);
 
+        var factionIds = new HashSet<string>(snapshot.UnitsByFaction.Values.Select(faction => faction.FactionId), StringComparer.OrdinalIgnoreCase);
+        var alliances = new HashSet<string>(snapshot.UnitsByFaction.Values.Select(faction => faction.Alliance), StringComparer.OrdinalIgnoreCase);
+
         foreach (var mow in snapshot.Mows)
         {
             foreach (var upgradeId in mow.PrimaryAbility.Recipes.Concat(mow.SecondaryAbility.Recipes).SelectMany(recipe => recipe))
@@ -54,6 +57,12 @@ public static partial class GameCatalogValidator
             foreach (var unitId in group.CoreCharacters)
             {
                 RequireReference(GameCatalogDatasets.CampaignBattlesPrefix, key, "coreCharacters", unitId, unitIds, errors);
+            }
+
+            RequireReference(GameCatalogDatasets.CampaignBattlesPrefix, key, "alliesAlliance", group.AlliesAlliance, alliances, errors);
+            foreach (var factionId in group.AlliesFactions)
+            {
+                RequireReference(GameCatalogDatasets.CampaignBattlesPrefix, key, "alliesFactions", factionId, factionIds, errors);
             }
         }
 

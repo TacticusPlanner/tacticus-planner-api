@@ -2,6 +2,19 @@
   "groupId": "campaign1",
   "faction": "Ultramarines",
   "releaseType": "standard",
+  "alliesAlliance": "Imperial",
+  "alliesFactions": [
+    "AdeptusAstartes",
+    "AdeptusMechanicus",
+    "AstraMilitarum",
+    "BlackTemplars",
+    "BloodAngels",
+    "Custodes",
+    "DarkAngels",
+    "Sisterhood",
+    "SpaceWolves",
+    "Ultramarines"
+  ],
   "coreCharacters": [
     "ultraTigurius",
     "ultraEliminatorSgt",

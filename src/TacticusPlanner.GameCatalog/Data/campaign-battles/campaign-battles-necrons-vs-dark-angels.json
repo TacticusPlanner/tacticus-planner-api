@@ -2,6 +2,10 @@
   "groupId": "eventCampaign6",
   "faction": "Necrons",
   "releaseType": "event",
+  "alliesAlliance": "Xenos",
+  "alliesFactions": [
+    "Necrons"
+  ],
   "coreCharacters": [
     "necroSpyder",
     "necroDestroyer",

@@ -2,6 +2,19 @@
   "groupId": "eliteMirror2",
   "faction": "AstraMilitarum",
   "releaseType": "standard",
+  "alliesAlliance": "Imperial",
+  "alliesFactions": [
+    "AdeptusAstartes",
+    "AdeptusMechanicus",
+    "AstraMilitarum",
+    "BlackTemplars",
+    "BloodAngels",
+    "Custodes",
+    "DarkAngels",
+    "Sisterhood",
+    "SpaceWolves",
+    "Ultramarines"
+  ],
   "coreCharacters": [
     "astraPrimarisPsy",
     "astraBullgryn",
