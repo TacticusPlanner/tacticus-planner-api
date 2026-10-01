@@ -49,7 +49,13 @@ public sealed class GoalConfiguration : IEntityTypeConfiguration<Goal>
             config.OwnsOne(c => c.Progression);
             config.OwnsOne(c => c.Ability);
             config.OwnsMany(c => c.AcquisitionSources);
-            config.OwnsOne(c => c.Upgrade, upgrade => upgrade.OwnsMany(u => u.Targets));
+            config.OwnsOne(c => c.Upgrade, upgrade =>
+            {
+                upgrade.OwnsMany(u => u.Targets);
+                upgrade.OwnsOne(u => u.RankRange);
+                upgrade.OwnsOne(u => u.ActiveRange);
+                upgrade.OwnsOne(u => u.PassiveRange);
+            });
         });
         builder.OwnsOne(entity => entity.Snapshot, snapshot =>
         {
@@ -63,8 +69,20 @@ public sealed class GoalConfiguration : IEntityTypeConfiguration<Goal>
         builder.OwnsMany(entity => entity.Events, events =>
         {
             events.ToJson("events");
-            events.OwnsOne(goalEvent => goalEvent.PreviousTarget, target => target.OwnsMany(value => value.UpgradeTargets));
-            events.OwnsOne(goalEvent => goalEvent.NewTarget, target => target.OwnsMany(value => value.UpgradeTargets));
+            events.OwnsOne(goalEvent => goalEvent.PreviousTarget, target =>
+            {
+                target.OwnsMany(value => value.UpgradeTargets);
+                target.OwnsOne(value => value.UpgradeRankRange);
+                target.OwnsOne(value => value.UpgradeActiveRange);
+                target.OwnsOne(value => value.UpgradePassiveRange);
+            });
+            events.OwnsOne(goalEvent => goalEvent.NewTarget, target =>
+            {
+                target.OwnsMany(value => value.UpgradeTargets);
+                target.OwnsOne(value => value.UpgradeRankRange);
+                target.OwnsOne(value => value.UpgradeActiveRange);
+                target.OwnsOne(value => value.UpgradePassiveRange);
+            });
         });
 
         builder.HasIndex(entity => entity.ProfileId);

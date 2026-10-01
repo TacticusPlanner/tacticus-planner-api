@@ -11,6 +11,36 @@ namespace TacticusPlanner.Api.Features.Goals;
 
 public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalogProvider catalog)
 {
+    /// <summary>Range groups must match the unit kind and stay on the ladder. Rank: <c>0 &lt;= start &lt; end &lt;=
+    /// Adamantine3</c>. Ability track: <c>1 &lt;= start &lt; end &lt;= recipeRows + 1</c> (one recipe row per
+    /// level transition). Ranges never narrow which upgrade ids are relevant.</summary>
+    private string? ValidateUpgradeRanges(UpgradeTargetRequest upgrade, GoalEntityType entityType, string entityId)
+    {
+        if (entityType == GoalEntityType.Character)
+        {
+            if (upgrade.ActiveRange is not null || upgrade.PassiveRange is not null)
+                return "A Character upgrade goal accepts only a rank range.";
+            if (upgrade.RankRange is { } rank
+                && (rank.Start < 0 || rank.Start >= rank.End || rank.End > (int)UnitRank.Adamantine3))
+                return "The upgrade rankRange must satisfy 0 <= start < end within the rank ladder.";
+            return null;
+        }
+
+        if (upgrade.RankRange is not null)
+            return "A Machine of War upgrade goal accepts only activeRange and passiveRange.";
+        var mow = catalog.Current.MowList.First(item => item.Id == entityId);
+        if (AbilityRangeError(upgrade.ActiveRange, mow.PrimaryAbility.Recipes.Count) is { } active)
+            return $"The upgrade activeRange {active}";
+        if (AbilityRangeError(upgrade.PassiveRange, mow.SecondaryAbility.Recipes.Count) is { } passive)
+            return $"The upgrade passiveRange {passive}";
+        return null;
+    }
+
+    private static string? AbilityRangeError(UpgradeRangeRequest? range, int recipeRows) =>
+        range is { } r && (r.Start < 1 || r.Start >= r.End || r.End > recipeRows + 1)
+            ? $"must satisfy 1 <= start < end <= {recipeRows + 1} for this unit."
+            : null;
+
     /// <summary>Returns an error message when the target is invalid, or null when it's valid.
     /// <paramref name="effectiveProgressionFloor"/> is the highest Ascension target, within the same
     /// creation request, among the specs this goal declares a dependency on (see
@@ -123,6 +153,9 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
                 if (!relevant.Contains(target.UpgradeId))
                     return "An upgrade target is not relevant to the selected unit's own requirements.";
             }
+
+            if (ValidateUpgradeRanges(config.Upgrade, entityType, entityId) is { } rangeError)
+                return rangeError;
         }
 
         if (AcquisitionSourceRules.SemanticError(
