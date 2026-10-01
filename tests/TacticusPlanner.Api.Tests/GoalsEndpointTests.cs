@@ -624,6 +624,29 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     }
 
     [Fact]
+    public async Task CreateUnlockGoalForAShopOnlyCharacterIsAccepted()
+    {
+        // Kharn has no campaign shard nodes; the Guild War shop is his only shard source.
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            new CreateGoalRequest(
+                "character",
+                "worldKharn",
+                "unlock",
+                new CreateGoalConfigRequest(
+                    AcquisitionSources: [new AcquisitionSourceRequest("Shop", ["war:shards_worldKharn"])]
+                ),
+                null
+            ),
+            TestContext.Current.CancellationToken
+        );
+
+        response.EnsureSuccessStatusCode();
+    }
+
+    [Fact]
     public async Task CreateMowUnlockGoalRejectsAShopSource()
     {
         // Unlock is Character-only (see CreateGoalDeferredGoalTypeOrEntityTypeIsRejected), so this proves
