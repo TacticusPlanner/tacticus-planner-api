@@ -11,8 +11,9 @@ namespace TacticusPlanner.Api.Features.Goals;
 /// </summary>
 public static partial class AcquisitionSourceRules
 {
-    // <shopId>:<rewardType> where rewardType is a character-/mythic-shard reward id.
-    [GeneratedRegex(@"^[A-Za-z0-9_-]+:(?:shards|mythicShards)_[A-Za-z0-9]+$")]
+    // <shopId>:<rewardType> where rewardType is a character-/mythic-shard reward id or one of the four
+    // Mythic upgrade-material ids (MythicMaterialIds).
+    [GeneratedRegex(@"^[A-Za-z0-9_-]+:(?:(?:shards|mythicShards)_[A-Za-z0-9]+|upgHpM00[1-4])$")]
     private static partial Regex ShopOfferIdRegex();
 
     /// <summary>Request-shape only: known <c>kind</c>, empty <c>ids</c> for run-based kinds, and a
@@ -56,9 +57,45 @@ public static partial class AcquisitionSourceRules
     {
         if (sources is null || sources.Count == 0) return null;
 
-        if (goalType is not (GoalType.Unlock or GoalType.Ascension))
-            return "Acquisition sources are only valid for Unlock and Ascension goals.";
+        if (goalType is GoalType.Unlock or GoalType.Ascension)
+            return ShardSourceError(sources, goalType, entityType, regularShardBattleIds, mythicShardBattleIds, knownShopIds);
 
+        var takesMythicMaterials = goalType switch
+        {
+            GoalType.Rank => entityType == GoalEntityType.Character,
+            GoalType.Upgrade => true,
+            GoalType.Ability => entityType == GoalEntityType.Mow,
+            _ => false,
+        };
+        if (!takesMythicMaterials)
+            return "Acquisition sources are not valid for this goal.";
+
+        foreach (var source in sources)
+        {
+            if (source.Kind != AcquisitionSourceKinds.Shop)
+                return "Only shop acquisition sources are valid for this goal.";
+
+            foreach (var id in source.Ids ?? [])
+            {
+                var parts = id.Split(':', 2);
+                if (!knownShopIds.Contains(parts[0]))
+                    return "A shop acquisition source names an unknown shop.";
+                if (!MythicMaterialIds.All.Contains(parts[1]))
+                    return "Only Mythic upgrade-material shop offers are valid for this goal.";
+            }
+        }
+
+        return null;
+    }
+
+    private static string? ShardSourceError(
+        IReadOnlyList<AcquisitionSourceRequest> sources,
+        GoalType goalType,
+        GoalEntityType entityType,
+        IReadOnlySet<string> regularShardBattleIds,
+        IReadOnlySet<string> mythicShardBattleIds,
+        IReadOnlySet<string> knownShopIds)
+    {
         foreach (var source in sources)
         {
             switch (source.Kind)
@@ -84,6 +121,9 @@ public static partial class AcquisitionSourceRules
 
                     if ((source.Ids ?? []).Any(id => !knownShopIds.Contains(id.Split(':', 2)[0])))
                         return "A shop acquisition source names an unknown shop.";
+
+                    if ((source.Ids ?? []).Any(id => MythicMaterialIds.All.Contains(id.Split(':', 2)[1])))
+                        return "Only character-shard shop offers are valid for this goal.";
 
                     break;
             }

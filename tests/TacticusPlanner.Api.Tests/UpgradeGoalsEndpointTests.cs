@@ -321,6 +321,103 @@ public sealed class UpgradeGoalsEndpointTests(PlannerApiFactory factory) : IClas
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
+    [Fact]
+    public async Task CharacterUpgradeGoalUpdateRoundTripsAMythicMaterialShopSource()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var created = await CreateAsync(
+            client,
+            RankGoal with
+            {
+                GoalType = "upgrade",
+                Config = new CreateGoalConfigRequest(
+                    Upgrade: new UpgradeTargetRequest([new UpgradeMaterialTargetRequest(CharacterRelevantUpgradeId, 3)])),
+            });
+
+        var source = await UpdateShopSourceAsync(client, created.GoalId, "rogue-trader:upgHpM004");
+
+        Assert.Equal(["rogue-trader:upgHpM004"], source.Ids);
+    }
+
+    [Fact]
+    public async Task MowUpgradeGoalUpdateRoundTripsAMythicMaterialShopSource()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var created = await CreateAsync(
+            client,
+            MowAbilityGoal with
+            {
+                GoalType = "upgrade",
+                Config = new CreateGoalConfigRequest(
+                    Upgrade: new UpgradeTargetRequest([new UpgradeMaterialTargetRequest("upgHpM004", 2)])),
+            });
+
+        var source = await UpdateShopSourceAsync(client, created.GoalId, "guild:upgHpM004");
+
+        Assert.Equal(["guild:upgHpM004"], source.Ids);
+    }
+
+    [Fact]
+    public async Task MowAbilityGoalCreateRoundTripsAMythicMaterialShopSource()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var created = await CreateAsync(
+            client,
+            new CreateGoalRequest(
+                "mow",
+                "ultraDreadnought",
+                "ability",
+                new CreateGoalConfigRequest(
+                    Ability: new AbilityTargetRequest(0, 3, 0, 3),
+                    AcquisitionSources: [new AcquisitionSourceRequest("Shop", ["guild:upgHpM004"])]),
+                null));
+
+        var source = Assert.Single(created.Config.AcquisitionSources!);
+        Assert.Equal(["guild:upgHpM004"], source.Ids);
+    }
+
+    [Fact]
+    public async Task CharacterAbilityGoalRejectsAShopSource()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            new CreateGoalRequest(
+                "character",
+                "blackTerminator",
+                "ability",
+                new CreateGoalConfigRequest(
+                    Ability: new AbilityTargetRequest(1, 3, 1, 3),
+                    AcquisitionSources: [new AcquisitionSourceRequest("Shop", ["guild:upgHpM004"])]),
+                null),
+            TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    private static async Task<GoalDetailResponse> CreateAsync(HttpClient client, CreateGoalRequest request)
+    {
+        var response = await client.PostAsJsonAsync("/api/v1/me/goals", request, TestContext.Current.CancellationToken);
+        response.EnsureSuccessStatusCode();
+        var created = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        Assert.NotNull(created);
+        return created;
+    }
+
+    private static async Task<AcquisitionSourceResponse> UpdateShopSourceAsync(HttpClient client, Guid goalId, string offerId)
+    {
+        var response = await client.PutAsJsonAsync(
+            $"/api/v1/me/goals/{goalId}",
+            new UpdateGoalRequest(null, null, AcquisitionSources: [new AcquisitionSourceRequest("Shop", [offerId])]),
+            TestContext.Current.CancellationToken);
+        response.EnsureSuccessStatusCode();
+        var updated = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        Assert.NotNull(updated);
+        return Assert.Single(updated.Config.AcquisitionSources!);
+    }
+
     private static Task<HttpResponseMessage> PostUpgradeAsync(HttpClient client, UpgradeTargetRequest upgrade) =>
         client.PostAsJsonAsync(
             "/api/v1/me/goals", UpgradeGoal("mow", "astraOrdnanceBattery", upgrade), TestContext.Current.CancellationToken);

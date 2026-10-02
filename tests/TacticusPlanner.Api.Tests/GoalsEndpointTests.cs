@@ -1382,6 +1382,92 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         Assert.Equal("Archived", unchanged?.Status);
     }
 
+    [Fact]
+    public async Task CreateRankGoalRoundTripsMythicMaterialShopSourcesAndFarmingLocations()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            RankGoal with
+            {
+                Config = RankGoal.Config with
+                {
+                    FarmingLocationIds = [CampaignBattleId.From("node-1")],
+                    AcquisitionSources = [new AcquisitionSourceRequest("Shop", ["guild:upgHpM004", "crusade:upgHpM004"])],
+                },
+            },
+            TestContext.Current.CancellationToken
+        );
+        response.EnsureSuccessStatusCode();
+        var created = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+
+        Assert.NotNull(created);
+        Assert.Equal(["node-1"], created.Config.FarmingLocationIds);
+        var source = Assert.Single(created.Config.AcquisitionSources!);
+        Assert.Equal("Shop", source.Kind);
+        Assert.Equal(["guild:upgHpM004", "crusade:upgHpM004"], source.Ids);
+    }
+
+    [Fact]
+    public async Task CreateRankGoalKeepsAnExplicitEmptyShopSourceDistinctFromNull()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            RankGoal with { Config = RankGoal.Config with { AcquisitionSources = [new AcquisitionSourceRequest("Shop", [])] } },
+            TestContext.Current.CancellationToken
+        );
+        response.EnsureSuccessStatusCode();
+        var created = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+
+        // Not collapsed to null (the "every available offer" default): an explicit opt-out survives.
+        Assert.NotNull(created);
+        var source = Assert.Single(created.Config.AcquisitionSources!);
+        Assert.Equal("Shop", source.Kind);
+        Assert.Empty(source.Ids);
+    }
+
+    [Theory]
+    [InlineData("guild:shards_blackTerminator")]
+    [InlineData("guild:upgDmgL202")]
+    public async Task CreateRankGoalRejectsNonMythicMaterialShopOffers(string offerId)
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            RankGoal with { Config = RankGoal.Config with { AcquisitionSources = [new AcquisitionSourceRequest("Shop", [offerId])] } },
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task CreateAscensionGoalRejectsAMythicMaterialShopOffer()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals",
+            new CreateGoalRequest(
+                "character",
+                "eldarFarseer",
+                "ascension",
+                new CreateGoalConfigRequest(
+                    Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar"),
+                    AcquisitionSources: [new AcquisitionSourceRequest("Shop", ["guild:upgHpM004"])]
+                ),
+                null
+            ),
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
     private static async Task<GoalDetailResponse> CreateGoalAsync(HttpClient client)
     {
         var response = await client.PostAsJsonAsync("/api/v1/me/goals", RankGoal, TestContext.Current.CancellationToken);

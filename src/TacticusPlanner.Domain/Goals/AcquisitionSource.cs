@@ -1,7 +1,8 @@
 namespace TacticusPlanner.Domain.Goals;
 
 /// <summary>
-/// One selected shard acquisition source on a goal's <see cref="GoalConfig.AcquisitionSources"/>.
+/// One selected acquisition source on a goal's <see cref="GoalConfig.AcquisitionSources"/> — a shard
+/// source on Unlock/Ascension goals, or a Mythic-material shop offer on Rank/Upgrade/MoW-Ability goals.
 /// <see cref="Kind"/> is validated against <see cref="AcquisitionSourceKinds"/> at the API boundary;
 /// <see cref="Ids"/> holds campaign battle ids for <c>Campaign</c>, shop-offer ids
 /// (<c>&lt;shopId&gt;:&lt;rewardType&gt;</c>) for <c>Shop</c>, and is empty for run-based kinds
@@ -34,4 +35,16 @@ public static class AcquisitionSourceKinds
         new HashSet<string>(StringComparer.Ordinal) { Onslaught };
 
     public static bool IsKnown(string? kind) => kind is not null && All.Contains(kind);
+}
+
+/// <summary>
+/// The four uncraftable Mythic upgrade materials (Imperial Aquila, Mutant Form, Ancient Inscription,
+/// Venerable Battle Mark). Their reliable source is daily shops, so a Rank/Upgrade/MoW-Ability goal may
+/// carry <c>Shop</c> acquisition sources for them (<c>&lt;shopId&gt;:upgHpM00x</c>). The client keeps the
+/// same list (<c>MYTHIC_UNCRAFTABLE_UPGRADES</c>).
+/// </summary>
+public static class MythicMaterialIds
+{
+    public static readonly IReadOnlySet<string> All =
+        new HashSet<string>(StringComparer.Ordinal) { "upgHpM001", "upgHpM002", "upgHpM003", "upgHpM004" };
 }
