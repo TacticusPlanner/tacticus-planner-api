@@ -24,8 +24,10 @@ public sealed class GoalConfig
     /// <summary>The shard acquisition sources chosen for an Unlock/Ascension goal (plan: multi-select
     /// Campaigns/Onslaught/Shops picker) — an ordered, open set so a later run-based source
     /// (<c>Incursion</c>, tacticus-planner-apps#106) is an allow-list addition, not a schema break. Null
-    /// means "unrestricted campaign farming", the pre-picker default. Only meaningful for
-    /// <see cref="GoalType.Unlock"/>/<see cref="GoalType.Ascension"/>; other goal types leave it null.</summary>
+    /// means "unrestricted campaign farming", the pre-picker default. Character Rank, Upgrade, and
+    /// Machine-of-War Ability goals may instead carry only <c>Shop</c> entries naming
+    /// <see cref="MythicMaterialIds"/> offers; for them null means "every available offer" (resolved
+    /// client-side) and an empty <c>Shop</c> entry means "none".</summary>
     public List<AcquisitionSource>? AcquisitionSources { get; set; }
 
     /// <summary>Per-goal farming location override (plan §6) for the Rank/Ability <em>upgrade</em>-node

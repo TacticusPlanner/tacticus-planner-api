@@ -23,6 +23,35 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
     );
 
     [Fact]
+    public async Task PersistsAMythicMaterialShopSourceOnTheCombinedRankGoal()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var rankSpec = UnlockThenRank.Goals[1];
+        var request = UnlockThenRank with
+        {
+            Goals =
+            [
+                UnlockThenRank.Goals[0],
+                rankSpec with
+                {
+                    Config = rankSpec.Config with
+                    {
+                        AcquisitionSources = [new AcquisitionSourceRequest("Shop", ["crusade:upgHpM004"])],
+                    },
+                },
+            ],
+        };
+
+        var response = await client.PostAsJsonAsync("/api/v1/me/goals/combined", request, TestContext.Current.CancellationToken);
+        response.EnsureSuccessStatusCode();
+        var created = await response.Content.ReadFromJsonAsync<CreateCombinedGoalsResponse>(TestContext.Current.CancellationToken);
+
+        Assert.NotNull(created);
+        var source = Assert.Single(created.Goals[1].Config.AcquisitionSources!);
+        Assert.Equal(["crusade:upgHpM004"], source.Ids);
+    }
+
+    [Fact]
     public async Task CreatesLinkedGoalsWithSharedAggregateIdAndDependsOnEdge()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
