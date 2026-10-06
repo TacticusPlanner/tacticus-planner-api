@@ -3809,6 +3809,75 @@
           "stars": 14
         }
       ]
+    },
+    {
+      "id": "darkaBossAsmodaiLEG",
+      "name": "Asmodai",
+      "meleeDamage": "Power",
+      "meleeHits": 4,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [
+        "Terrifying"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilities": [
+        "ExemplarOfHate"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "FearedInterrogator"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_darka_asmodai_01.png",
+      "stats": [
+        {
+          "abilityLevel": 47,
+          "damage": 1531,
+          "armour": 1760,
+          "health": 6889,
+          "progressionIndex": 15,
+          "rank": 16,
+          "stars": 11
+        }
+      ]
+    },
+    {
+      "id": "darkaBossCompanionLEG",
+      "name": "Forcas",
+      "meleeDamage": "Power",
+      "meleeHits": 6,
+      "rangedDamage": null,
+      "rangedHits": null,
+      "distance": null,
+      "movement": 3,
+      "traits": [
+        "Camouflage",
+        "Parry"
+      ],
+      "activeAbilityDamage": [
+        "Power"
+      ],
+      "activeAbilities": [
+        "CalibaniteGreatsword"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "EnmityForTheUnworthy"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_darka_companion_01.png",
+      "stats": [
+        {
+          "abilityLevel": 47,
+          "damage": 918,
+          "armour": 1607,
+          "health": 6889,
+          "progressionIndex": 15,
+          "rank": 16,
+          "stars": 11
+        }
+      ]
     }
   ]
 }

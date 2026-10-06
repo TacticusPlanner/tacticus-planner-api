@@ -45,6 +45,7 @@ public static class GameCatalogDatasets
         "units-sisterhood",
         "units-spacewolves",
         "units-tau",
+        "units-thelostandthedamned",
         "units-thousandsons",
         "units-tyranids",
         "units-ultramarines",
@@ -165,6 +166,7 @@ public static class GameCatalogDatasets
         "lres-astarlysander",
         "lres-taufarsight",
         "lres-votanuthar",
+        "lres-lostabile",
     ];
 
     /// <summary>

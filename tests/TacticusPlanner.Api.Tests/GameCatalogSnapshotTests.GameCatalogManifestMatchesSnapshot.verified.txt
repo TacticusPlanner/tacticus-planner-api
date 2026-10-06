@@ -26,7 +26,7 @@
     },
     {
       key: characters,
-      hash: d1c9cca75d145b28d75cef362e02132efd240bd2815f05d1367bdfb90b47aa92,
+      hash: 0909aabdd36034c21881b38c7731b1575b9d1a6fc1988356f1c636f1e331ed70,
       url: /api/v1/game-catalog/characters
     },
     {
@@ -51,7 +51,7 @@
     },
     {
       key: lre-battles,
-      hash: b077e016aa11ef3d43ea8b6422e53c42ce4b5e220a1d8b5d80f460ca00146c59,
+      hash: a88c8ae123a8e05508279e73221ba32d3319ce93ca87418cc0e7fdef679d8b0c,
       url: /api/v1/game-catalog/lre-battles
     },
     {
@@ -61,7 +61,7 @@
     },
     {
       key: lres,
-      hash: 9179d8893555e8ecc4053d8774f0273ef28bcd2bf0f06eb624b32ad3566b02a6,
+      hash: 97f4a1018a15faf92a1b2ac483c4b80f5cf951c9a3c8d7d251c66f969dd48634,
       url: /api/v1/game-catalog/lres
     },
     {
@@ -76,7 +76,7 @@
     },
     {
       key: npcs,
-      hash: af5438c959d301ba16a4e90951b808959d23f3ac71641ed52dc4a0977c3b291a,
+      hash: 1f9ddef756373b5349df3fbca45e47ad33d5d30d0b791b537c14f730f945dd69,
       url: /api/v1/game-catalog/npcs
     },
     {
@@ -101,7 +101,7 @@
     },
     {
       key: upgrades,
-      hash: 55db714538b74e564e975d0c3c1a9b5589bd0dddecfd93eff6160227e7d4e421,
+      hash: a6f9bf63451737521c255af8c30612844b3451fc0f78bfe5bac34e0dad41b34b,
       url: /api/v1/game-catalog/upgrades
     }
   ]
