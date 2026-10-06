@@ -1,0 +1,263 @@
+{
+  "alliance": "Chaos",
+  "factionId": "TheLostAndTheDamned",
+  "name": "The Lost and the Damned",
+  "characters": [
+    {
+      "id": "lostaBile",
+      "name": "Fabius Bile",
+      "health": 90,
+      "damage": 33,
+      "armour": 19,
+      "initialRarity": "Legendary",
+      "meleeDamage": "Physical",
+      "meleeHits": 3,
+      "rangedDamage": "Toxic",
+      "rangedHits": 1,
+      "rangeDistance": 2,
+      "movement": 3,
+      "traits": [
+        "Healer",
+        "Resilient"
+      ],
+      "activeAbilityDamage": [],
+      "activeAbilityNames": [
+        "PrimeTestSubject"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilityNames": [
+        "DiabolicRegeneration"
+      ],
+      "equipmentSlots": [
+        "I_Crit",
+        "I_Defensive",
+        "I_Booster_Crit"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_losta_bile_01.png",
+      "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_losta_bile_01.png",
+      "rankUpUpgrades": [
+        {
+          "rank": "Stone1",
+          "upgradeIds": [
+            "upgHpC007",
+            "upgHpC010",
+            "upgDmgC009",
+            "upgDmgC014",
+            "upgArmC003",
+            "upgArmC013"
+          ]
+        },
+        {
+          "rank": "Stone2",
+          "upgradeIds": [
+            "upgHpC014",
+            "upgHpC002",
+            "upgDmgU012",
+            "upgDmgU016C",
+            "upgArmC013",
+            "upgArmC006"
+          ]
+        },
+        {
+          "rank": "Stone3",
+          "upgradeIds": [
+            "upgHpU014",
+            "upgHpU004C",
+            "upgDmgC008",
+            "upgDmgC003",
+            "upgArmU005",
+            "upgArmU009"
+          ]
+        },
+        {
+          "rank": "Iron1",
+          "upgradeIds": [
+            "upgHpU005C",
+            "upgHpU017",
+            "upgDmgU012",
+            "upgDmgU014",
+            "upgArmU009",
+            "upgArmU010C"
+          ]
+        },
+        {
+          "rank": "Iron2",
+          "upgradeIds": [
+            "upgHpU014",
+            "upgHpR017C",
+            "upgDmgU008C",
+            "upgDmgU019",
+            "upgArmR005",
+            "upgArmU013"
+          ]
+        },
+        {
+          "rank": "Iron3",
+          "upgradeIds": [
+            "upgHpR012C",
+            "upgHpU009",
+            "upgDmgR039",
+            "upgDmgR012C",
+            "upgArmU010C",
+            "upgArmR010"
+          ]
+        },
+        {
+          "rank": "Bronze1",
+          "upgradeIds": [
+            "upgHpR039",
+            "upgHpR008",
+            "upgDmgR14C",
+            "upgDmgR003",
+            "upgArmR003C",
+            "upgArmR012C"
+          ]
+        },
+        {
+          "rank": "Bronze2",
+          "upgradeIds": [
+            "upgHpE039C",
+            "upgHpR004C",
+            "upgDmgR005",
+            "upgDmgE009C",
+            "upgArmR023",
+            "upgArmR013C"
+          ]
+        },
+        {
+          "rank": "Bronze3",
+          "upgradeIds": [
+            "upgHpR008",
+            "upgHpE001C",
+            "upgDmgE039C",
+            "upgDmgR016C",
+            "upgArmE023C",
+            "upgArmE009"
+          ]
+        },
+        {
+          "rank": "Silver1",
+          "upgradeIds": [
+            "upgHpE039C",
+            "upgHpE017",
+            "upgDmgE039C",
+            "upgDmgE011",
+            "upgArmE023C",
+            "upgArmE004C"
+          ]
+        },
+        {
+          "rank": "Silver2",
+          "upgradeIds": [
+            "upgHpL103",
+            "upgHpE008C",
+            "upgDmgL039C",
+            "upgDmgE009C",
+            "upgArmE023C",
+            "upgArmE006C"
+          ]
+        },
+        {
+          "rank": "Silver3",
+          "upgradeIds": [
+            "upgHpE039C",
+            "upgHpL017C",
+            "upgDmgE039C",
+            "upgDmgL016C",
+            "upgArmL202",
+            "upgArmL004C"
+          ]
+        },
+        {
+          "rank": "Gold1",
+          "upgradeIds": [
+            "upgHpL039C",
+            "upgHpL001C",
+            "upgDmgL003",
+            "upgDmgL009C",
+            "upgArmL023C",
+            "upgArmL006C"
+          ]
+        },
+        {
+          "rank": "Gold2",
+          "upgradeIds": [
+            "upgHpL123C",
+            "upgHpL012C",
+            "upgDmgL039C",
+            "upgDmgL016C",
+            "upgArmL023C",
+            "upgArmL011C"
+          ]
+        },
+        {
+          "rank": "Gold3",
+          "upgradeIds": [
+            "upgHpL039C",
+            "upgHpL011C",
+            "upgDmgL139C",
+            "upgDmgL010C",
+            "upgArmL139C",
+            "upgArmL006C"
+          ]
+        },
+        {
+          "rank": "Diamond1",
+          "upgradeIds": [
+            "upgHpL123C",
+            "upgHpL013C",
+            "upgDmgL139C",
+            "upgDmgL006C",
+            "upgArmL139C",
+            "upgArmL004C"
+          ]
+        },
+        {
+          "rank": "Diamond2",
+          "upgradeIds": [
+            "upgHpL123C",
+            "upgHpL211C",
+            "upgDmgL139C",
+            "upgDmgL211C",
+            "upgArmL139C",
+            "upgArmL211C"
+          ]
+        },
+        {
+          "rank": "Diamond3",
+          "upgradeIds": [
+            "upgHpL123C",
+            "upgHpL211C",
+            "upgDmgM211C",
+            "upgDmgL211C",
+            "upgArmM213C",
+            "upgArmL211C"
+          ]
+        },
+        {
+          "rank": "Adamantine1",
+          "upgradeIds": [
+            "upgHpM144C",
+            "upgHpL211C",
+            "upgDmgM211C",
+            "upgDmgL211C",
+            "upgArmM214C",
+            "upgArmL211C"
+          ]
+        },
+        {
+          "rank": "Adamantine2",
+          "upgradeIds": [
+            "upgHpECS",
+            "upgHpCS",
+            "upgDmgECS",
+            "upgDmgCS",
+            "upgArmECS",
+            "upgArmCS"
+          ]
+        }
+      ]
+    }
+  ],
+  "mows": []
+}

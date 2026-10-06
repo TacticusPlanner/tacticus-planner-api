@@ -47,7 +47,7 @@ public sealed class NpcValidationTests
         Assert.Equal(11, snapshot.NpcList.Count(npc => npc.Kind == "machineOfWar"));
         Assert.Equal(56, snapshot.NpcList.Count(npc => npc.Kind == "object"));
         Assert.All(snapshot.NpcList.Where(npc => npc.Kind == "object"), npc => Assert.Equal("Objects", npc.FactionId));
-        Assert.Equal(534, snapshot.NpcList.Count);
+        Assert.Equal(539, snapshot.NpcList.Count);
 
         var warden = snapshot.NpcList.Single(npc => npc.Id == "necroBossWarden");
         Assert.Equal(("Necrons", "Xenos", "unit"), (warden.FactionId, warden.Alliance, warden.Kind));

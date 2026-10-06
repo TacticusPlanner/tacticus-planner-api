@@ -2748,6 +2748,96 @@
           "stars": 11
         }
       ]
+    },
+    {
+      "id": "eldarBossLhykhis",
+      "name": "Lhykhis",
+      "meleeDamage": "Gauss",
+      "meleeHits": 5,
+      "rangedDamage": "Eviscerate",
+      "rangedHits": 5,
+      "distance": 2,
+      "movement": 4,
+      "traits": [
+        "Infiltrate",
+        "Flying"
+      ],
+      "activeAbilityDamage": [
+        "Eviscerate"
+      ],
+      "activeAbilities": [
+        "EmpyricAmbush"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "WhisperingWeb"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_aelda_lhykhis_01.png",
+      "stats": [
+        {
+          "abilityLevel": 23,
+          "damage": 130,
+          "armour": 239,
+          "health": 815,
+          "progressionIndex": 12,
+          "rank": 8,
+          "stars": 8
+        },
+        {
+          "abilityLevel": 29,
+          "damage": 216,
+          "armour": 396,
+          "health": 1349,
+          "progressionIndex": 13,
+          "rank": 10,
+          "stars": 9
+        },
+        {
+          "abilityLevel": 32,
+          "damage": 284,
+          "armour": 521,
+          "health": 1777,
+          "progressionIndex": 14,
+          "rank": 11,
+          "stars": 10
+        },
+        {
+          "abilityLevel": 38,
+          "damage": 468,
+          "armour": 858,
+          "health": 2925,
+          "progressionIndex": 15,
+          "rank": 13,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 44,
+          "damage": 734,
+          "armour": 1345,
+          "health": 4585,
+          "progressionIndex": 15,
+          "rank": 15,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 47,
+          "damage": 918,
+          "armour": 1684,
+          "health": 5741,
+          "progressionIndex": 15,
+          "rank": 16,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 1150,
+          "armour": 2108,
+          "health": 7187,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        }
+      ]
     }
   ]
 }

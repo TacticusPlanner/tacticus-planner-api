@@ -2078,5 +2078,29 @@
         "count": 9
       }
     ]
+  },
+  {
+    "id": "upgHpE144C",
+    "material": "Symbol of Chaos",
+    "snowprintId": "upgHpE144C",
+    "label": "Symbol of Chaos",
+    "rarity": "Epic",
+    "stat": "Health",
+    "icon": "snowprint_assets/upgrade_materials/ui_icon_upgrade_upgHpE144C.png",
+    "craftable": true,
+    "recipe": [
+      {
+        "material": "upgHpR029",
+        "count": 9
+      },
+      {
+        "material": "upgDmgR038",
+        "count": 9
+      },
+      {
+        "material": "upgArmR023",
+        "count": 9
+      }
+    ]
   }
 ]
