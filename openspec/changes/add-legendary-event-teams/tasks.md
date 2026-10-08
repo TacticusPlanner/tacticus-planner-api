@@ -1,6 +1,6 @@
 # Tasks
 
-Companion apps change: `tacticus-planner-apps/openspec/changes/add-legendary-event-teams`. Apply this change first.
+Companion apps change: `tacticus-planner-apps/openspec/changes/add-legendary-event-teams`. Apply this API change first; the apps change needs the plan endpoints in the Aspire stack.
 
 ## 1. Domain and persistence
 
