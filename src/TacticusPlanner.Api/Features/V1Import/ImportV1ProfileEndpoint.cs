@@ -27,7 +27,9 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
                 + "Goals are created directly by this operation, in V1 priority order — the response carries "
                 + "one outcome per source V1 goal (created, skipped, or failed), plus one per automatically "
                 + "added prerequisite. The goals part is refused (no goals created) when the account has no "
-                + "player data snapshot.";
+                + "player data snapshot. The legendaryEventPlans part creates one Legendary Event plan per V1 event "
+                + "(never touching a plan that already has teams) and reports one outcome per V1 event in "
+                + "legendaryEventOutcomes.";
         });
     }
 
@@ -74,6 +76,10 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
             ? await ImportCampaignEventProgressAsync(profileId.Value, v1.CampaignEventProgress, ct)
             : ImportPartResult.NotSelected();
 
+        var legendaryEvents = selection.LegendaryEventPlans
+            ? await Resolve<V1LegendaryEventImportService>().ImportAsync(profileId.Value, v1.LegendaryEvents, ct)
+            : new V1LegendaryEventImportResult(ImportPartResult.NotSelected(), []);
+
         V1GoalImportResult goalResult;
         ImportPartResult goals;
         if (!selection.Goals)
@@ -105,6 +111,8 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
             goalResult.Outcomes
         )
         {
+            LegendaryEventPlans = legendaryEvents.Part,
+            LegendaryEventOutcomes = legendaryEvents.Outcomes,
             ProfileId = profileId.Value.Value,
             PlayerName = personalKey.PlayerName,
             PowerLevel = personalKey.PowerLevel,
@@ -437,7 +445,9 @@ public sealed record ImportV1Selection(
     // Automatic prerequisite synthesis (Unlock/Ascension/Level) for imported goals — same rules and
     // minimum targets the manual create-goal flow applies (rewrite-v1-goal-import). Defaults on, matching
     // the manual flow's own default.
-    bool AutomaticPrerequisites = true
+    bool AutomaticPrerequisites = true,
+    // V1 Legendary Event teams and notes (leTeams / leProgress). Off unless asked for.
+    bool LegendaryEventPlans = false
 );
 
 public sealed record ImportV1ProfileRequest(string? Username, string? Password, ImportV1Selection? Import);
@@ -460,6 +470,11 @@ public sealed record ImportV1ProfileResponse(
     IReadOnlyList<V1GoalOutcome> Outcomes
 )
 {
+    public ImportPartResult LegendaryEventPlans { get; init; } = ImportPartResult.NotSelected();
+
+    /// <summary>One outcome per V1 event (ascending V1 id) when <c>legendaryEventPlans</c> was selected.</summary>
+    public IReadOnlyList<V1LegendaryEventOutcome> LegendaryEventOutcomes { get; init; } = [];
+
     public Guid ProfileId { get; init; }
     public string? PlayerName { get; init; }
     public int PowerLevel { get; init; }

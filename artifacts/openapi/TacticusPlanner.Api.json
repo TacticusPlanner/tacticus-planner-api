@@ -2706,7 +2706,7 @@
           "Me"
         ],
         "summary": "Selectively imports integration data, progress, and goals from V1.",
-        "description": "V1 credentials are used once and never persisted. After profile retrieval, each selected part is applied independently and reports Imported, Skipped, or Failed. Goals are created directly by this operation, in V1 priority order — the response carries one outcome per source V1 goal (created, skipped, or failed), plus one per automatically added prerequisite. The goals part is refused (no goals created) when the account has no player data snapshot.",
+        "description": "V1 credentials are used once and never persisted. After profile retrieval, each selected part is applied independently and reports Imported, Skipped, or Failed. Goals are created directly by this operation, in V1 priority order — the response carries one outcome per source V1 goal (created, skipped, or failed), plus one per automatically added prerequisite. The goals part is refused (no goals created) when the account has no player data snapshot. The legendaryEventPlans part creates one Legendary Event plan per V1 event (never touching a plan that already has teams) and reports one outcome per V1 event in legendaryEventOutcomes.",
         "operationId": "TacticusPlannerApiFeaturesV1ImportImportV1ProfileEndpoint",
         "requestBody": {
           "content": {
@@ -2972,6 +2972,18 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/TacticusPlannerApiFeaturesV1ImportV1GoalOutcome"
+        }
+      },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesV1ImportV1LegendaryEventIssue": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerApiFeaturesV1ImportV1LegendaryEventIssue"
+        }
+      },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesV1ImportV1LegendaryEventOutcome": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerApiFeaturesV1ImportV1LegendaryEventOutcome"
         }
       },
       "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogAmountByRarity": {
@@ -7310,6 +7322,12 @@
           "outcomes": {
             "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesV1ImportV1GoalOutcome"
           },
+          "legendaryEventPlans": {
+            "$ref": "#/components/schemas/TacticusPlannerApiFeaturesV1ImportImportPartResult"
+          },
+          "legendaryEventOutcomes": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesV1ImportV1LegendaryEventOutcome"
+          },
           "profileId": {
             "type": "string",
             "format": "uuid"
@@ -7376,6 +7394,10 @@
           "automaticPrerequisites": {
             "type": "boolean",
             "default": true
+          },
+          "legendaryEventPlans": {
+            "type": "boolean",
+            "default": false
           }
         }
       },
@@ -7431,6 +7453,68 @@
               "null",
               "string"
             ]
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesV1ImportV1LegendaryEventIssue": {
+        "required": [
+          "code",
+          "teamName",
+          "value"
+        ],
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "teamName": {
+            "type": "string"
+          },
+          "value": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesV1ImportV1LegendaryEventOutcome": {
+        "required": [
+          "eventId",
+          "v1EventId",
+          "status",
+          "code",
+          "message",
+          "teamsImported",
+          "issues"
+        ],
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "v1EventId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "status": {
+            "type": "string"
+          },
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "teamsImported": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "issues": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesV1ImportV1LegendaryEventIssue"
           }
         }
       },

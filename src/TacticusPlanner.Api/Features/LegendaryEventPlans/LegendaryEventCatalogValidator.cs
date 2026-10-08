@@ -29,13 +29,7 @@ public sealed class LegendaryEventCatalogValidator(IGameCatalogProvider catalog)
     public GameCatalogLreView? FindEvent(string eventId) =>
         catalog.Current.LreViews.FirstOrDefault(view => view.Id == eventId);
 
-    public static GameCatalogLreTrackView? FindLane(GameCatalogLreView lre, string? laneId) => laneId switch
-    {
-        "alpha" => lre.Alpha,
-        "beta" => lre.Beta,
-        "gamma" => lre.Gamma,
-        _ => null,
-    };
+    public static GameCatalogLreTrackView? FindLane(GameCatalogLreView lre, string? laneId) => lre.Lane(laneId);
 
     public static bool TryParseSource(string? value, out LegendaryEventDepthSource source)
     {
