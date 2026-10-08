@@ -2,7 +2,7 @@
 
 ## Why
 
-Stage 2 of the V2 Legendary Event plan ("Teams and plan persistence", docs plan §5, [ADR 0008](https://github.com/TacticusPlanner/tacticus-planner-docs/blob/main/decisions/adr/0008-lre-owned-teams.md)) is the first stage with persisted state. Stage 1 shipped the hub, the synced progress grid and the eligibility leaderboard from catalog and synced data alone; every later stage (run inputs, tokenomics, clear-depth estimation, goals integration, history) reads from the plan and teams this change introduces. The Wave 1 survey's fourth-ranked LRE pain point is the V1 team builder, and 34% of LRE users reuse teams across events, so persisted, lane-scoped teams with a cross-event copy path are the next useful thing to ship.
+Stage 2 of the V2 Legendary Event plan ("Teams and plan persistence", docs plan §5, [ADR 0008](https://github.com/TacticusPlanner/tacticus-planner-docs/blob/main/decisions/adr/0008-lre-owned-teams.md)) is the first stage with persisted state. Stage 1 shipped the hub, the synced progress grid and the eligibility leaderboard from catalog and synced data alone; every later stage (run inputs, tokenomics, clear-depth estimation, goals integration, history) reads from the plan and teams this change introduces. The Wave 1 survey's fourth-ranked LRE pain point is the V1 team builder, so persisted, lane-scoped teams are the next useful thing to ship. (Cross-event copying was dropped from the apps change on 2026-10-08; it needs nothing from the API beyond reading other plans.)
 
 The API currently has no Legendary Event planning state at all: `PlayerDataOverride` explicitly excludes LRE annotations and the V1 import client ignores `leTeams`.
 
