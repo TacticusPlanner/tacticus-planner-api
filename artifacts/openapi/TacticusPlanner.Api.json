@@ -1507,6 +1507,408 @@
         ]
       }
     },
+    "/api/v1/me/legendary-event-plans/{eventId}": {
+      "get": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Reads the caller's plan for a Legendary Event.",
+        "description": "A missing plan reads as an empty plan at revision 0; nothing is created. Reads never validate against the catalog, so a plan written under an older catalog still reads.",
+        "operationId": "TacticusPlannerApiFeaturesLegendaryEventPlansGetLegendaryEventPlanEndpoint",
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventPlanResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is missing required identity claims."
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "The event is not a current catalog Legendary Event."
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Writes the plan-level fields (notes, showPaidOptions), creating the plan if needed.",
+        "operationId": "TacticusPlannerApiFeaturesLegendaryEventPlansUpdateLegendaryEventPlanEndpoint",
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansUpdateLegendaryEventPlanRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The whole plan after the write.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventPlanResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A field fails validation against the current catalog; the error names the field."
+          },
+          "401": {
+            "description": "The request is missing required identity claims."
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "The event is not a current catalog Legendary Event, or the team is not on this plan."
+          },
+          "409": {
+            "description": "expectedRevision is stale or another write won (issueCode legendaryEventPlanStale), or a reorder's ids are not the lane's team set (legendaryEventOrderSetMismatch). Carries the current plan.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventPlanConflictResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/me/legendary-event-plans/{eventId}/teams": {
+      "post": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Creates a team on a lane, appended after the lane's existing teams.",
+        "description": "A non-null expectedBattleClears stores the depth for the given run only.",
+        "operationId": "TacticusPlannerApiFeaturesLegendaryEventPlansCreateLegendaryEventTeamEndpoint",
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansCreateLegendaryEventTeamRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The whole plan after the write.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventPlanResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A field fails validation against the current catalog; the error names the field."
+          },
+          "401": {
+            "description": "The request is missing required identity claims."
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "The event is not a current catalog Legendary Event, or the team is not on this plan."
+          },
+          "409": {
+            "description": "expectedRevision is stale or another write won (issueCode legendaryEventPlanStale), or a reorder's ids are not the lane's team set (legendaryEventOrderSetMismatch). Carries the current plan.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventPlanConflictResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/me/legendary-event-plans/{eventId}/teams/order": {
+      "put": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Replaces one lane's team order with the given complete id set.",
+        "description": "Sending the current order succeeds without bumping the revision.",
+        "operationId": "TacticusPlannerApiFeaturesLegendaryEventPlansUpdateLegendaryEventTeamOrderEndpoint",
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansUpdateLegendaryEventTeamOrderRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The whole plan after the write.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventPlanResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A field fails validation against the current catalog; the error names the field."
+          },
+          "401": {
+            "description": "The request is missing required identity claims."
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "The event is not a current catalog Legendary Event, or the team is not on this plan."
+          },
+          "409": {
+            "description": "expectedRevision is stale or another write won (issueCode legendaryEventPlanStale), or a reorder's ids are not the lane's team set (legendaryEventOrderSetMismatch). Carries the current plan.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventPlanConflictResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/me/legendary-event-plans/{eventId}/teams/{teamId}": {
+      "put": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Replaces a team's name, members, objectives and the given run's clear depth.",
+        "description": "The lane and order are kept (a body with laneId is rejected); a null expectedBattleClears deletes only the given run's depth.",
+        "operationId": "TacticusPlannerApiFeaturesLegendaryEventPlansUpdateLegendaryEventTeamEndpoint",
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansUpdateLegendaryEventTeamRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The whole plan after the write.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventPlanResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A field fails validation against the current catalog; the error names the field."
+          },
+          "401": {
+            "description": "The request is missing required identity claims."
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "The event is not a current catalog Legendary Event, or the team is not on this plan."
+          },
+          "409": {
+            "description": "expectedRevision is stale or another write won (issueCode legendaryEventPlanStale), or a reorder's ids are not the lane's team set (legendaryEventOrderSetMismatch). Carries the current plan.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventPlanConflictResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Deletes a team and re-densifies its lane's order.",
+        "operationId": "TacticusPlannerApiFeaturesLegendaryEventPlansDeleteLegendaryEventTeamEndpoint",
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "teamId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "expectedRevision",
+            "in": "query",
+            "schema": {
+              "type": [
+                "null",
+                "integer"
+              ],
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The whole plan after the write.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventPlanResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A field fails validation against the current catalog; the error names the field."
+          },
+          "401": {
+            "description": "The request is missing required identity claims."
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "The event is not a current catalog Legendary Event, or the team is not on this plan."
+          },
+          "409": {
+            "description": "expectedRevision is stale or another write won (issueCode legendaryEventPlanStale), or a reorder's ids are not the lane's team set (legendaryEventOrderSetMismatch). Carries the current plan.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventPlanConflictResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
     "/api/v1/me/player-data-overrides/campaign-events-progress": {
       "get": {
         "tags": [
@@ -2492,6 +2894,13 @@
           "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemString"
         }
       },
+      "SystemCollectionsGenericIReadOnlyListOfSystemGuid": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
       "SystemCollectionsGenericIReadOnlyListOfSystemInt32": {
         "type": "array",
         "items": {
@@ -2521,6 +2930,18 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGuildsGuildRaidPrimeStatusResponse"
+        }
+      },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventTeamResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventTeamResponse"
+        }
+      },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventTeamRunDepthResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventTeamRunDepthResponse"
         }
       },
       "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesPlayerDataOverridesCampaignEventProgressOverrideRequest": {
@@ -5691,6 +6112,291 @@
         "properties": {
           "guildApiToken": {
             "type": "string"
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesLegendaryEventPlansCreateLegendaryEventTeamRequest": {
+        "required": [
+          "expectedRevision",
+          "laneId",
+          "name",
+          "memberUnitIds",
+          "reserveUnitId",
+          "objectiveIndexes",
+          "run",
+          "expectedBattleClears",
+          "expectedBattleClearsSource"
+        ],
+        "type": "object",
+        "properties": {
+          "expectedRevision": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int64"
+          },
+          "laneId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "memberUnitIds": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemString"
+          },
+          "reserveUnitId": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "objectiveIndexes": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemInt32"
+          },
+          "run": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "expectedBattleClears": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "expectedBattleClearsSource": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventPlanConflictResponse": {
+        "required": [
+          "issueCode",
+          "message",
+          "plan"
+        ],
+        "type": "object",
+        "properties": {
+          "issueCode": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "plan": {
+            "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventPlanResponse"
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventPlanResponse": {
+        "required": [
+          "eventId",
+          "revision",
+          "catalogVersion",
+          "notes",
+          "showPaidOptions",
+          "teams"
+        ],
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "catalogVersion": {
+            "type": "string"
+          },
+          "notes": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "showPaidOptions": {
+            "type": "boolean"
+          },
+          "teams": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventTeamResponse"
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventTeamResponse": {
+        "required": [
+          "id",
+          "laneId",
+          "name",
+          "sortOrder",
+          "memberUnitIds",
+          "reserveUnitId",
+          "objectiveIndexes",
+          "runDepths"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "laneId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "sortOrder": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "memberUnitIds": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemString"
+          },
+          "reserveUnitId": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "objectiveIndexes": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemInt32"
+          },
+          "runDepths": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventTeamRunDepthResponse"
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventTeamRunDepthResponse": {
+        "required": [
+          "run",
+          "expectedBattleClears",
+          "expectedBattleClearsSource",
+          "recordedAt"
+        ],
+        "type": "object",
+        "properties": {
+          "run": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "expectedBattleClears": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "expectedBattleClearsSource": {
+            "type": "string"
+          },
+          "recordedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesLegendaryEventPlansUpdateLegendaryEventPlanRequest": {
+        "required": [
+          "expectedRevision",
+          "notes",
+          "showPaidOptions"
+        ],
+        "type": "object",
+        "properties": {
+          "expectedRevision": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int64"
+          },
+          "notes": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "showPaidOptions": {
+            "type": "boolean"
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesLegendaryEventPlansUpdateLegendaryEventTeamOrderRequest": {
+        "required": [
+          "expectedRevision",
+          "laneId",
+          "teamIds"
+        ],
+        "type": "object",
+        "properties": {
+          "expectedRevision": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int64"
+          },
+          "laneId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "teamIds": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemGuid"
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesLegendaryEventPlansUpdateLegendaryEventTeamRequest": {
+        "required": [
+          "expectedRevision",
+          "name",
+          "memberUnitIds",
+          "reserveUnitId",
+          "objectiveIndexes",
+          "run",
+          "expectedBattleClears",
+          "expectedBattleClearsSource"
+        ],
+        "type": "object",
+        "properties": {
+          "expectedRevision": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "memberUnitIds": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemString"
+          },
+          "reserveUnitId": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "objectiveIndexes": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemInt32"
+          },
+          "run": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "expectedBattleClears": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "expectedBattleClearsSource": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "laneId": {
+            "type": [
+              "null",
+              "string"
+            ]
           }
         }
       },

@@ -2,6 +2,7 @@ using TacticusPlanner.Domain.Accounts;
 using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.GuildRaids;
 using TacticusPlanner.Domain.Guilds;
+using TacticusPlanner.Domain.LegendaryEvents;
 using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Domain.Projects;
@@ -27,4 +28,6 @@ namespace TacticusPlanner.Persistence;
 [EfCoreConverter<UnitId>]
 [EfCoreConverter<GoalId>]
 [EfCoreConverter<ProjectId>]
+[EfCoreConverter<LegendaryEventPlanId>]
+[EfCoreConverter<LegendaryEventTeamId>]
 internal sealed partial class VogenEfCoreConverters;

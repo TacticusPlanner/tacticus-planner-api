@@ -9,6 +9,7 @@ using TacticusPlanner.Api.Features.Analytics;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Api.Features.Guilds;
+using TacticusPlanner.Api.Features.LegendaryEventPlans;
 using TacticusPlanner.Api.Features.PlayerData;
 using TacticusPlanner.Api.Features.Projects;
 using TacticusPlanner.Api.Features.TacticusIntegration;
@@ -62,6 +63,7 @@ builder.Services.AddAnalyticsFeature(builder.Configuration, validateOnStart: !is
 builder.Services.AddAuthFeature(builder.Configuration);
 builder.Services.AddGoalsFeature();
 builder.Services.AddGuildsFeature();
+builder.Services.AddLegendaryEventPlansFeature();
 builder.Services.AddPlayerDataFeature();
 builder.Services.AddProjectsFeature();
 builder.Services.AddTacticusIntegrationFeature();
