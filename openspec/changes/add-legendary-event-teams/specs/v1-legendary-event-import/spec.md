@@ -95,7 +95,13 @@ When the profile's plan for the resolved event already has at least one team, th
 
 ### Requirement: The part result summarises the events
 
-The part SHALL report `Imported` when at least one event imported, `Skipped` with code `no_legendary_event_imported` when every event was skipped, and `Failed` when every event failed. The response SHALL carry the per-event outcomes in `legendaryEventOutcomes`, in V1 key order.
+The part SHALL report `Imported` when at least one event imported; otherwise `Failed` with code `legendary_event_import_failed` when at least one event failed (whether or not others were skipped); otherwise `Skipped` with code `no_legendary_event_imported`. The response SHALL carry the per-event outcomes in `legendaryEventOutcomes`, in V1 key order.
+
+#### Scenario: Skipped and failed without an import
+
+- **GIVEN** one event is not in the catalog and another fails to write
+- **WHEN** the part runs
+- **THEN** the part is `Failed` with code `legendary_event_import_failed` and both per-event outcomes are reported
 
 #### Scenario: Mixed result
 

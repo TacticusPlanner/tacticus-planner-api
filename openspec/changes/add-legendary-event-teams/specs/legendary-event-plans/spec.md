@@ -125,7 +125,7 @@ On create and update the system SHALL reject, with 400 and the offending field n
 
 ### Requirement: One revision per plan guards every mutation
 
-Every mutation (`PUT` plan, `POST`/`PUT`/`DELETE` team, `PUT` order) SHALL carry `expectedRevision`. When it differs from the plan's current revision (0 for a plan that does not exist yet), the system SHALL make no change and respond 409 with `LegendaryEventPlanConflictResponse { issueCode: "legendaryEventPlanStale", message, plan }` carrying the current plan. A concurrent write detected at save time SHALL produce the same response after re-reading the plan. Every successful mutation SHALL bump the plan revision by exactly one and respond with the whole plan.
+Every mutation (`PUT` plan, `POST`/`PUT`/`DELETE` team, `PUT` order) SHALL carry `expectedRevision`. When it differs from the plan's current revision (0 for a plan that does not exist yet), the system SHALL make no change and respond 409 with `LegendaryEventPlanConflictResponse { issueCode: "legendaryEventPlanStale", message, plan }` carrying the current plan. A concurrent write detected at save time, including a unique-key violation when two callers create the missing plan at once, SHALL produce the same response after re-reading the plan. Every successful mutation SHALL bump the plan revision by exactly one and respond with the whole plan, with one exception: a `PUT …/teams/order` whose order is already current succeeds without bumping the revision (see "Lane order is replaced as a whole set").
 
 #### Scenario: Stale revision
 
@@ -138,6 +138,12 @@ Every mutation (`PUT` plan, `POST`/`PUT`/`DELETE` team, `PUT` order) SHALL carry
 - **GIVEN** no plan exists for the event
 - **WHEN** a team is created with `expectedRevision` 1
 - **THEN** the response is 409 with the empty revision-0 plan
+
+#### Scenario: Concurrent first writers
+
+- **GIVEN** no plan exists for the event
+- **WHEN** two callers each create a team with `expectedRevision` 0 at the same time
+- **THEN** exactly one plan row exists, one caller succeeds with revision 1 and the other receives 409 carrying that plan
 
 #### Scenario: Concurrent writers
 
