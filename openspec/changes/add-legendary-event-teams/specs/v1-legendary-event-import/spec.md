@@ -45,7 +45,7 @@ The import SHALL map each V1 event (numeric `LegendaryEventEnum` key) to the cat
 
 ### Requirement: Teams, units and objectives are resolved by the documented rules
 
-For each V1 team the import SHALL: use `teams` when non-empty, otherwise synthesise teams from the legacy `alpha`/`beta`/`gamma` maps; map `section` to the lane as-is and skip a team with an unknown lane (`unknown_lane`); resolve unit ids from `charSnowprintIds`, then `charactersIds`, then embedded `characters[].snowprintId`, through the V1 rename aliases, then require the unit in the catalog (`unknown_unit`, unit dropped) and in the lane's `availableUnitIds` (`unit_not_allowed_on_lane`, unit dropped); keep the first five units when more resolve (`team_truncated`); skip a team with no remaining unit (`empty_team`); resolve each `restrictionsIds` entry against the lane's objectives by regenerated V1 display name or catalog name, case-insensitively after whitespace normalisation with the known legacy spellings, dropping unresolved entries (`unknown_objective`); carry `expectedBattleClears` as a `manual` depth clamped to the lane's battle count, stored under the profile's synced current run for the event (run 1 when the account has no synced entry) and omitted when not positive; merge teams within one lane whose member sets are identical, unioning objectives (`duplicate_team_merged`). Every drop, truncation or merge SHALL appear as an issue `(code, teamName, value)` on the event's outcome. A team with zero resolved objectives SHALL still be imported.
+For each V1 team the import SHALL: use `teams` when non-empty, otherwise synthesise teams from the legacy `alpha`/`beta`/`gamma` maps; map `section` to the lane as-is and skip a team with an unknown lane (`unknown_lane`); resolve unit ids from `charSnowprintIds`, then `charactersIds`, then embedded `characters[].snowprintId`, through the V1 rename aliases, then require the unit in the catalog (`unknown_unit`, unit dropped) and in the lane's `availableUnitIds` (`unit_not_allowed_on_lane`, unit dropped); keep a unit that resolves more than once only at its first position and report each repeat (`duplicate_unit`); keep the first five remaining units when more resolve (`team_truncated`); skip a team with no remaining unit (`empty_team`); resolve each `restrictionsIds` entry against the lane's objectives by regenerated V1 display name or catalog name, case-insensitively after whitespace normalisation with the known legacy spellings, dropping unresolved entries (`unknown_objective`); carry `expectedBattleClears` as a `manual` depth clamped to the lane's battle count, stored under the profile's synced current run for the event (run 1 when the account has no synced entry) and omitted when not positive; merge teams within one lane whose member sets are identical, unioning objectives, keeping the first team's name and the first positive depth, and reporting a later team's differing positive depth as discarded (`conflicting_depth_discarded`, value = the discarded depth) alongside `duplicate_team_merged`. Every drop, truncation or merge SHALL appear as an issue `(code, teamName, value)` on the event's outcome. A team with zero resolved objectives SHALL still be imported.
 
 #### Scenario: Objective names resolve across V1 and catalog spellings
 
@@ -58,6 +58,18 @@ For each V1 team the import SHALL: use `teams` when non-empty, otherwise synthes
 - **GIVEN** a V1 team with units `[u1, u2, unknownX]` where `u1` and `u2` are allowed on the lane
 - **WHEN** the team is imported
 - **THEN** the team is created with members `[u1, u2]` and the outcome lists an issue `unknown_unit` with value `unknownX` and the team's name
+
+#### Scenario: Repeated unit kept once
+
+- **GIVEN** a V1 team whose references resolve to `[u1, u2, u1]`
+- **WHEN** the team is imported
+- **THEN** the team's members are `[u1, u2]` and the outcome lists an issue `duplicate_unit` with value `u1`
+
+#### Scenario: Merged teams keep the first depth
+
+- **GIVEN** two Alpha teams with identical members, the first with `expectedBattleClears` 7 and the second with 9
+- **WHEN** they are imported
+- **THEN** one team is created with the run depth 7, and the outcome lists `duplicate_team_merged` and `conflicting_depth_discarded` with value 9
 
 #### Scenario: Legacy alias resolves
 
