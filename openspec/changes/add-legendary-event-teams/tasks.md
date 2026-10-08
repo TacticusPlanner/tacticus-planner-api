@@ -1,0 +1,35 @@
+# Tasks
+
+Companion apps change: `tacticus-planner-apps/openspec/changes/add-legendary-event-teams`. Apply this change first.
+
+## 1. Domain and persistence
+
+- [ ] 1.1 Add `src/TacticusPlanner.Domain/LegendaryEvents/` with `LegendaryEventPlan : BaseEntity<LegendaryEventPlanId>, IRevisionedEntity` (`ProfileId`, `EventId`, `CatalogVersion`, `Notes`, `ShowPaidOptions`, `Teams`), `LegendaryEventTeam : BaseEntity<LegendaryEventTeamId>` (`PlanId`, `LaneId`, `Name`, `SortOrder`, `ExpectedBattleClears`, `ExpectedBattleClearsSource` enum `Estimate|Manual`, `Members`, `Objectives`), `LegendaryEventTeamMember` (`TeamId`, `Reserve`, `Position`, `UnitId`), `LegendaryEventTeamObjective` (`TeamId`, `ObjectiveIndex`); Vogen ids registered in `VogenEfCoreConverters` (design D6).
+- [ ] 1.2 Add EF configurations under `src/TacticusPlanner.Persistence/Configurations/`: tables `legendary_event_plans`, `legendary_event_teams`, `legendary_event_team_members`, `legendary_event_team_objectives`; unique `(profile_id, event_id)`; index `(plan_id, lane_id)`; member PK `(team_id, reserve, position)` and unique `(team_id, unit_id)`; objective PK `(team_id, objective_index)`; CHECK constraints for lane id, member position/reserve, depth source enum as string; `Revision` as concurrency token; cascades profile → plan → team → member/objective (design D1, D6, D10).
+- [ ] 1.3 Register the `DbSet`s and the profile query filters in `PlannerDbContext` (`plan.ProfileId`, `team.Plan!.ProfileId`, `member.Team!.Plan!.ProfileId`, `objective.Team!.Plan!.ProfileId`); verify the existing `PlannerDbContext` model test (if any) still passes.
+- [ ] 1.4 Add migration `AddLegendaryEventPlans` with `dotnet ef migrations add`; verify it round-trips in `tests/TacticusPlanner.Persistence.IntegrationTests` (new `LegendaryEventPlansMigrationPostgresTests`: migrate, insert through raw SQL, assert constraints reject a duplicate unit in a team and a lane id outside the set, assert account purge cascades).
+
+## 2. Plan and team endpoints
+
+- [ ] 2.1 Add `Features/LegendaryEventPlans/` with `DependencyInjection.cs` wired in `Program.cs`, `LegendaryEventPlanResponse`/`LegendaryEventTeamResponse` records and a single `LegendaryEventPlanProjection` that loads a plan with teams, members and objectives and maps it (teams ordered by lane then `sortOrder`, members by position, objectives ascending) (design D8).
+- [ ] 2.2 Add `LegendaryEventCatalogValidator` (in the feature slice, using `IGameCatalogProvider.Current.LreViews`): resolve event (404 when absent), lane by key, validate member/reserve unit ids against `availableUnitIds`, objective indexes against `unitsRestrictions[].index`, depth against `battleIds.Count`, depth/source pairing, name length; returns field-named failures (design D7); unit-test it directly in `tests/TacticusPlanner.Api.Tests/LegendaryEventCatalogValidatorTests.cs`.
+- [ ] 2.3 Add `LegendaryEventPlanWriter` that runs one mutation inside the execution strategy and a transaction: load-or-new plan, check `expectedRevision` (0 for missing), apply, set `CatalogVersion`, mark the plan modified, save, catch `DbUpdateConcurrencyException` → clear tracker, re-read, 409; return the projection or the `LegendaryEventPlanConflictResponse { issueCode, message, plan }` (design D4).
+- [ ] 2.4 Endpoints: `GET me/legendary-event-plans/{eventId}` (empty revision-0 plan when missing), `PUT me/legendary-event-plans/{eventId}` (`expectedRevision`, `notes`, `showPaidOptions`), `POST …/teams`, `PUT …/teams/{teamId}` (400 when body has `laneId`, 404 unknown team), `DELETE …/teams/{teamId}?expectedRevision=` (re-densify lane), `PUT …/teams/order` (`laneId`, `teamIds`; 409 `legendaryEventOrderSetMismatch`; unchanged order keeps the revision) with FastEndpoints validators and `Summary(...)` docs (design D5, D8).
+- [ ] 2.5 Endpoint tests in `tests/TacticusPlanner.Api.Tests/LegendaryEventPlanEndpointTests.cs` covering every scenario in `specs/legendary-event-plans/spec.md`: empty read, unknown event 404, lazy create, append order, update keeps lane and order, delete re-densifies, each 400 validation, order set mismatch 409, stale revision 409 with plan, lazy create with wrong revision, response ordering; plus a Postgres test for the concurrent-writer 409 and sort-order density after a permutation.
+
+## 3. V1 import part
+
+- [ ] 3.1 Extend `TacticusV1Client`'s `V1UserData` with `LeTeams`, `LegendaryEvents3`, `LeProgress`, `LegendaryEventsProgress` as loosely typed records (`V1LegendaryEventTeams { Id, Name, Teams[], Alpha, Beta, Gamma }`, `V1LreTeam { Id, Name, Section, RestrictionsIds, CharSnowprintIds, CharactersIds, Characters[], ExpectedBattleClears }`, `V1LreProgress { Notes }`), a `ReadLegendaryEvents` method producing `V1LegendaryEventImportData(IsPresent, Events)`, and the new field on `TacticusV1Profile` (default in the 2-arg constructor) (design D9).
+- [ ] 3.2 Add `GameCatalogLreLookups` in `src/TacticusPlanner.GameCatalog` exposing raw numeric id → served `lres` id and lane lookup by key; add `V1LegendaryEventObjectiveNames` porting V1 `objectiveDisplayName` (including the Terminator overrides, `Min|Max <n> hits`, `Ranged`/`Melee`, `No <x>`) with the normalisation and alias table; unit-test name regeneration against every objective of every catalog event (no two objectives of one lane may regenerate to the same name).
+- [ ] 3.3 Add `V1LegendaryEventImportService` implementing design D9 steps 1–8 with `V1LegendaryEventOutcome` and `V1LegendaryEventIssue` records, each event in its own transaction via `LegendaryEventPlanWriter`; add selection flag `LegendaryEventPlans`, validator OR-clause, `ImportLegendaryEventPlansAsync` in `ImportV1ProfileEndpoint`, response property `LegendaryEventPlans` and `LegendaryEventOutcomes`.
+- [ ] 3.4 Tests in `tests/TacticusPlanner.Api.Tests/V1LegendaryEventImportEndpointTests.cs` using `FakeTacticusV1Client.ConfigureProfile`: not selected, missing keys, legacy key, event not in catalog, objective spelling resolution, unit dropped, alias, empty team, depth clamp, duplicate merge, `plan_already_exists` on re-import, notes carried, mixed part result; verify the goals and onslaught import tests still pass.
+
+## 4. Contract and verification
+
+- [ ] 4.1 Build and verify `artifacts/openapi/TacticusPlanner.Api.json` contains the five plan routes and the new import fields; diff it against the shapes in design D8 and note any naming differences for the apps change.
+- [ ] 4.2 Live check via `aspire run`: create, edit, reorder and delete a team for `astarLysander` on a provisioned profile; confirm a stale revision returns the 409 body; confirm `DELETE /me` removes the rows.
+- [ ] 4.3 Gates: `dotnet format TacticusPlanner.slnx --verify-no-changes --no-restore`, `dotnet build TacticusPlanner.slnx -c Release --no-restore`, `dotnet test TacticusPlanner.slnx -c Release --no-build`, `git diff --check`.
+
+## Deferred / out-of-session
+
+- Amend `tacticus-planner-docs/architecture/data/events.md` (`objective_index` instead of `objective_id`; tables in `public` with prefix; `catalog_version`) when this change is archived.
