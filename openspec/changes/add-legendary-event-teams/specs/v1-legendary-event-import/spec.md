@@ -45,7 +45,7 @@ The import SHALL map each V1 event (numeric `LegendaryEventEnum` key) to the cat
 
 ### Requirement: Teams, units and objectives are resolved by the documented rules
 
-For each V1 team the import SHALL: use `teams` when non-empty, otherwise synthesise teams from the legacy `alpha`/`beta`/`gamma` maps; map `section` to the lane as-is and skip a team with an unknown lane (`unknown_lane`); resolve unit ids from `charSnowprintIds`, then `charactersIds`, then embedded `characters[].snowprintId`, through the V1 rename aliases, then require the unit in the catalog (`unknown_unit`, unit dropped) and in the lane's `availableUnitIds` (`unit_not_allowed_on_lane`, unit dropped); keep the first five units when more resolve (`team_truncated`); skip a team with no remaining unit (`empty_team`); resolve each `restrictionsIds` entry against the lane's objectives by regenerated V1 display name or catalog name, case-insensitively after whitespace normalisation with the known legacy spellings, dropping unresolved entries (`unknown_objective`); carry `expectedBattleClears` as a `manual` depth clamped to the lane's battle count and null when not positive; merge teams within one lane whose member sets are identical, unioning objectives (`duplicate_team_merged`). Every drop, truncation or merge SHALL appear as an issue `(code, teamName, value)` on the event's outcome. A team with zero resolved objectives SHALL still be imported.
+For each V1 team the import SHALL: use `teams` when non-empty, otherwise synthesise teams from the legacy `alpha`/`beta`/`gamma` maps; map `section` to the lane as-is and skip a team with an unknown lane (`unknown_lane`); resolve unit ids from `charSnowprintIds`, then `charactersIds`, then embedded `characters[].snowprintId`, through the V1 rename aliases, then require the unit in the catalog (`unknown_unit`, unit dropped) and in the lane's `availableUnitIds` (`unit_not_allowed_on_lane`, unit dropped); keep the first five units when more resolve (`team_truncated`); skip a team with no remaining unit (`empty_team`); resolve each `restrictionsIds` entry against the lane's objectives by regenerated V1 display name or catalog name, case-insensitively after whitespace normalisation with the known legacy spellings, dropping unresolved entries (`unknown_objective`); carry `expectedBattleClears` as a `manual` depth clamped to the lane's battle count, stored under the profile's synced current run for the event (run 1 when the account has no synced entry) and omitted when not positive; merge teams within one lane whose member sets are identical, unioning objectives (`duplicate_team_merged`). Every drop, truncation or merge SHALL appear as an issue `(code, teamName, value)` on the event's outcome. A team with zero resolved objectives SHALL still be imported.
 
 #### Scenario: Objective names resolve across V1 and catalog spellings
 
@@ -73,9 +73,15 @@ For each V1 team the import SHALL: use `teams` when non-empty, otherwise synthes
 
 #### Scenario: Depth clamped
 
-- **GIVEN** a V1 team with `expectedBattleClears` 25 on an 18-battle lane
+- **GIVEN** a V1 team with `expectedBattleClears` 25 on an 18-battle lane and the profile's synced progress says the event is in run 2
 - **WHEN** the team is imported
-- **THEN** the team has `expectedBattleClears` 18 with source `manual`
+- **THEN** the team's `runDepths` is `[{run 2, 18, manual}]`
+
+#### Scenario: Depth without a synced run
+
+- **GIVEN** a V1 team with `expectedBattleClears` 5 and no synced progress entry for the event
+- **WHEN** the team is imported
+- **THEN** the team's `runDepths` is `[{run 1, 5, manual}]`
 
 ### Requirement: Existing V2 teams are never replaced
 
