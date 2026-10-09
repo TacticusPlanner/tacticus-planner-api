@@ -178,7 +178,7 @@ public sealed class LegendaryEventPlansMigrationPostgresTests
         var swapped = await writer.WriteAsync(profileId, EventId, 4, entity =>
         {
             var team = entity.Teams.Single(candidate => candidate.Id == ids["A"]);
-            LegendaryEventPlanWriter.ApplyContent(team, new("A", ["astarCyrus", "ultraInceptorSgt"], null, [1]));
+            writer.ReplaceContent(team, new("A", ["astarCyrus", "ultraInceptorSgt"], null, [1]));
             return LegendaryEventMutationOutcome.Changed;
         }, ct);
         var okSwap = Assert.IsType<LegendaryEventPlanWriteResult.Ok>(swapped);
@@ -188,7 +188,7 @@ public sealed class LegendaryEventPlansMigrationPostgresTests
         var okDelete = Assert.IsType<LegendaryEventPlanWriteResult.Ok>(deleted);
         Assert.Equal(6, okDelete.Plan.Revision);
         Assert.Equal([("C", 0), ("B", 1)], okDelete.Plan.Teams.Select(team => (team.Name, team.SortOrder)));
-        Assert.Equal(2, await CountAsync(connectionString, "legendary_event_team_members"));
+        Assert.Equal(4, await CountAsync(connectionString, "legendary_event_team_members")); // B and C, two members each
     }
 
     // ----- Helpers -----

@@ -62,7 +62,7 @@ public sealed class UpdateLegendaryEventTeamEndpoint : Endpoint<UpdateLegendaryE
                 return LegendaryEventMutationOutcome.Unchanged;
             }
 
-            LegendaryEventPlanWriter.ApplyContent(team, content);
+            writer.ReplaceContent(team, content);
             LegendaryEventPlanWriter.ApplyRunDepth(team, depth, writer.Now);
             return LegendaryEventMutationOutcome.Changed;
         }, ct);

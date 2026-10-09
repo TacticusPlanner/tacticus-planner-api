@@ -49,6 +49,10 @@ public sealed class LegendaryEventPlanWriter(
 {
     private const string UniqueViolation = "23505";
 
+    // Teams whose members and objectives ReplaceContent cleared during the current mutation; their new rows
+    // are inserted only after the deletes are flushed (see WriteOnceAsync).
+    private readonly List<(LegendaryEventTeam Team, LegendaryEventTeamContent Content)> pendingContent = [];
+
     public DateTimeOffset Now => timeProvider.GetUtcNow();
 
     public async Task<LegendaryEventPlanWriteResult> WriteAsync(
@@ -79,6 +83,7 @@ public sealed class LegendaryEventPlanWriter(
         CancellationToken ct)
     {
         db.ChangeTracker.Clear();
+        pendingContent.Clear();
         await using var transaction = transactional ? await db.Database.BeginTransactionAsync(ct) : null;
 
         var plan = await projection.LoadTrackedAsync(eventId, ct);
@@ -103,6 +108,21 @@ public sealed class LegendaryEventPlanWriter(
                 return new LegendaryEventPlanWriteResult.OrderSetMismatch(LegendaryEventPlanProjection.ToResponse(plan));
             case LegendaryEventMutationOutcome.Unchanged:
                 return new LegendaryEventPlanWriteResult.Ok(LegendaryEventPlanProjection.ToResponse(plan));
+        }
+
+        if (pendingContent.Count > 0)
+        {
+            // Member rows are keyed by slot, so EF would turn "delete slot 0, insert slot 0" into one UPDATE
+            // and a position swap would trip the unique (team_id, unit_id) index mid-statement. Flushing the
+            // deletes first, inside the same transaction and before the plan row is touched (so the revision
+            // is bumped exactly once, by the final save), keeps the swap legal.
+            await db.SaveChangesAsync(ct);
+            foreach (var (team, content) in pendingContent)
+            {
+                FillContent(team, content);
+            }
+
+            pendingContent.Clear();
         }
 
         plan.CatalogVersion = GameCatalogRelease.Version;
@@ -159,7 +179,7 @@ public sealed class LegendaryEventPlanWriter(
             Name = content.Name,
             SortOrder = laneTeams.Count == 0 ? 0 : laneTeams.Max(existing => existing.SortOrder) + 1,
         };
-        ApplyContent(team, content);
+        FillContent(team, content);
         if (depth is not null)
         {
             ApplyRunDepth(team, depth, now);
@@ -169,13 +189,22 @@ public sealed class LegendaryEventPlanWriter(
         return team;
     }
 
-    /// <summary>Replaces name, members, reserve and objectives; lane and order are untouched. Members and
-    /// objectives are replaced wholesale (delete then insert) rather than edited in place, so swapping two
-    /// units' positions never trips the unique <c>(team_id, unit_id)</c> index mid-statement.</summary>
-    public static void ApplyContent(LegendaryEventTeam team, LegendaryEventTeamContent content)
+    /// <summary>Replaces an existing team's name, members, reserve and objectives; lane and order are
+    /// untouched. The old member and objective rows are deleted now and the new ones inserted by the writer
+    /// only after that delete is flushed, so swapping two units' positions never trips the unique
+    /// <c>(team_id, unit_id)</c> index. Only valid inside a <see cref="WriteAsync"/> mutation.</summary>
+    public void ReplaceContent(LegendaryEventTeam team, LegendaryEventTeamContent content)
     {
         team.Name = content.Name;
         team.Members.Clear();
+        team.Objectives.Clear();
+        pendingContent.Add((team, content));
+    }
+
+    /// <summary>Fills a team that has no member or objective rows yet.</summary>
+    private static void FillContent(LegendaryEventTeam team, LegendaryEventTeamContent content)
+    {
+        team.Name = content.Name;
         for (var position = 0; position < content.MemberUnitIds.Count; position++)
         {
             team.Members.Add(new LegendaryEventTeamMember
@@ -192,7 +221,6 @@ public sealed class LegendaryEventPlanWriter(
             team.Members.Add(new LegendaryEventTeamMember { TeamId = team.Id, Reserve = true, Position = 0, UnitId = reserve });
         }
 
-        team.Objectives.Clear();
         foreach (var index in content.ObjectiveIndexes.Distinct().Order())
         {
             team.Objectives.Add(new LegendaryEventTeamObjective { TeamId = team.Id, ObjectiveIndex = index });
