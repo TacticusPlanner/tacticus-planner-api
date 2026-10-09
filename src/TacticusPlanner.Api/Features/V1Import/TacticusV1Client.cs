@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Net.Http.Headers;
 using System.Text.Json;
 
@@ -21,7 +22,10 @@ public sealed record TacticusV1Profile(
     string? GuildApiKey,
     IReadOnlyList<V1Goal> Goals,
     V1OnslaughtImportData OnslaughtProgress,
-    V1CampaignEventProgressImportData CampaignEventProgress
+    V1CampaignEventProgressImportData CampaignEventProgress,
+    // Optional so the older fixtures that build a profile positionally keep compiling; a null reads as
+    // "no LRE keys in the V1 blob" (see LegendaryEventsOrMissing).
+    V1LegendaryEventImportData? LegendaryEvents = null
 )
 {
     public TacticusV1Profile(string? tacticusApiKey, string? tacticusUserId)
@@ -29,6 +33,47 @@ public sealed record TacticusV1Profile(
             V1CampaignEventProgressImportData.Missing())
     {
     }
+
+    public V1LegendaryEventImportData LegendaryEventsOrMissing => LegendaryEvents ?? V1LegendaryEventImportData.Missing();
+}
+
+/// <summary>One V1 event's teams and notes, keyed by V1's numeric <c>LegendaryEventEnum</c>. The legacy
+/// <c>alpha</c>/<c>beta</c>/<c>gamma</c> maps (restriction name → unit ids) are only read when
+/// <see cref="Teams"/> is empty, as V1's own loader does.</summary>
+public sealed record V1LegendaryEventSource(
+    int V1EventId,
+    IReadOnlyList<V1LreTeam> Teams,
+    IReadOnlyDictionary<string, IReadOnlyList<string>> LegacyAlpha,
+    IReadOnlyDictionary<string, IReadOnlyList<string>> LegacyBeta,
+    IReadOnlyDictionary<string, IReadOnlyList<string>> LegacyGamma,
+    string? Notes
+);
+
+/// <summary>A V1 <c>ILreTeam</c>. Unit ids may be snowprint ids (<see cref="CharSnowprintIds"/>), legacy
+/// character names (<see cref="CharactersIds"/>) or embedded objects (<see cref="Characters"/>); objectives
+/// (<see cref="RestrictionsIds"/>) are display names, not indexes.</summary>
+public sealed record V1LreTeam(
+    string? Id,
+    string? Name,
+    string? Section,
+    List<string>? RestrictionsIds,
+    List<string>? CharSnowprintIds,
+    List<string>? CharactersIds,
+    List<V1LreTeamCharacter>? Characters,
+    int? ExpectedBattleClears
+);
+
+public sealed record V1LreTeamCharacter(string? SnowprintId, string? Name);
+
+/// <summary>Distinguishes a profile with no V1 LRE team keys from one whose keys exist but cannot be read.
+/// The import endpoint reports those cases as Skipped and Failed respectively.</summary>
+public sealed record V1LegendaryEventImportData(bool IsPresent, IReadOnlyList<V1LegendaryEventSource>? Events)
+{
+    public static V1LegendaryEventImportData Missing() => new(false, null);
+
+    public static V1LegendaryEventImportData Invalid() => new(true, null);
+
+    public static V1LegendaryEventImportData Valid(IReadOnlyList<V1LegendaryEventSource> events) => new(true, events);
 }
 
 public sealed record V1CampaignEventProgress(string CampaignGroupId, string Type, int CompletedBattleCount);
@@ -160,9 +205,77 @@ public sealed class TacticusV1Client(IHttpClientFactory httpClientFactory) : ITa
             string.IsNullOrWhiteSpace(payload.TacticusGuildApiKey) ? null : payload.TacticusGuildApiKey,
             ReadGoals(payload.Data),
             ReadOnslaughtProgress(payload.Data),
-            ReadCampaignEventProgress(payload.Data)
+            ReadCampaignEventProgress(payload.Data),
+            ReadLegendaryEvents(payload.Data)
         );
     }
+
+    /// <summary>Reads <c>leTeams</c> (falling back to the pre-V2-schema <c>legendaryEvents3</c>) and the
+    /// per-event notes from <c>leProgress</c> (falling back to <c>legendaryEventsProgress</c>). The blobs are
+    /// kept as raw JSON on <see cref="V1UserData"/> so a malformed one is reported as Invalid for this part
+    /// alone instead of failing the whole profile read.</summary>
+    internal static V1LegendaryEventImportData ReadLegendaryEvents(V1UserData? data)
+    {
+        var teamsElement = PresentObject(data?.LeTeams) ?? PresentObject(data?.LegendaryEvents3);
+        if (teamsElement is null)
+        {
+            return V1LegendaryEventImportData.Missing();
+        }
+
+        try
+        {
+            var teamsByEvent = teamsElement.Value.Deserialize<Dictionary<string, V1LegendaryEventTeamsData?>>(WebJsonOptions) ?? [];
+            var notesByEvent = ReadNotes(PresentObject(data?.LeProgress) ?? PresentObject(data?.LegendaryEventsProgress));
+            var events = new List<V1LegendaryEventSource>();
+            foreach (var (key, value) in teamsByEvent)
+            {
+                if (!int.TryParse(key, NumberStyles.Integer, CultureInfo.InvariantCulture, out var v1EventId))
+                {
+                    continue;
+                }
+
+                events.Add(new V1LegendaryEventSource(
+                    v1EventId,
+                    value?.Teams ?? [],
+                    LegacyMap(value?.Alpha),
+                    LegacyMap(value?.Beta),
+                    LegacyMap(value?.Gamma),
+                    notesByEvent.GetValueOrDefault(v1EventId)));
+            }
+
+            return V1LegendaryEventImportData.Valid(events);
+        }
+        catch (JsonException)
+        {
+            return V1LegendaryEventImportData.Invalid();
+        }
+    }
+
+    private static JsonElement? PresentObject(JsonElement? element) =>
+        element is { ValueKind: JsonValueKind.Object } value ? value : null;
+
+    private static Dictionary<int, string?> ReadNotes(JsonElement? progressElement)
+    {
+        var notes = new Dictionary<int, string?>();
+        if (progressElement is null)
+        {
+            return notes;
+        }
+
+        var progressByEvent = progressElement.Value.Deserialize<Dictionary<string, V1LreProgressData?>>(WebJsonOptions) ?? [];
+        foreach (var (key, value) in progressByEvent)
+        {
+            if (int.TryParse(key, NumberStyles.Integer, CultureInfo.InvariantCulture, out var v1EventId))
+            {
+                notes[v1EventId] = value?.Notes;
+            }
+        }
+
+        return notes;
+    }
+
+    private static Dictionary<string, IReadOnlyList<string>> LegacyMap(Dictionary<string, List<string>?>? map) =>
+        (map ?? []).ToDictionary(pair => pair.Key, pair => (IReadOnlyList<string>)(pair.Value ?? []), StringComparer.Ordinal);
 
     private static List<V1Goal> ReadGoals(V1UserData? data) => data?.Goals ?? [];
 
@@ -276,8 +389,24 @@ public sealed class TacticusV1Client(IHttpClientFactory httpClientFactory) : ITa
 internal sealed record V1UserData(
     List<V1Goal>? Goals,
     V1OnslaughtPreferencesData? OnslaughtPreferences,
-    Dictionary<string, int>? CampaignsProgress
+    Dictionary<string, int>? CampaignsProgress,
+    // The LRE blobs stay raw here and are parsed by TacticusV1Client.ReadLegendaryEvents, so a malformed
+    // one fails only the legendaryEventPlans part. Older accounts may carry the pre-V2-schema keys
+    // (legendaryEvents3 / legendaryEventsProgress) instead; both spellings are read.
+    JsonElement? LeTeams = null,
+    JsonElement? LegendaryEvents3 = null,
+    JsonElement? LeProgress = null,
+    JsonElement? LegendaryEventsProgress = null
 );
+
+internal sealed record V1LegendaryEventTeamsData(
+    List<V1LreTeam>? Teams,
+    Dictionary<string, List<string>?>? Alpha,
+    Dictionary<string, List<string>?>? Beta,
+    Dictionary<string, List<string>?>? Gamma
+);
+
+internal sealed record V1LreProgressData(string? Notes);
 
 internal sealed record V1OnslaughtPreferencesData(
     V1OnslaughtAllianceData? Imperial,

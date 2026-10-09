@@ -21,13 +21,14 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
         Post("me/v1-import");
         Summary(summary =>
         {
-            summary.Summary = "Selectively imports integration data, progress, and goals from V1.";
+            summary.Summary = "Selectively imports integration data, progress, goals and Legendary Event teams from V1.";
             summary.Description = "V1 credentials are used once and never persisted. After profile retrieval, "
                 + "each selected part is applied independently and reports Imported, Skipped, or Failed. "
                 + "Goals are created directly by this operation, in V1 priority order — the response carries "
                 + "one outcome per source V1 goal (created, skipped, or failed), plus one per automatically "
                 + "added prerequisite. The goals part is refused (no goals created) when the account has no "
-                + "player data snapshot.";
+                + "player data snapshot. Legendary Event teams and notes are created as plans, one per catalog "
+                + "event, with one outcome per V1 event; a plan that already has teams is left untouched.";
         });
     }
 
@@ -95,6 +96,10 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
                 : new ImportPartResult("Imported", null, null);
         }
 
+        var legendaryEvents = selection.LegendaryEventPlans
+            ? await Resolve<V1LegendaryEventImportService>().ImportAsync(profileId.Value, v1.LegendaryEventsOrMissing, ct)
+            : new V1LegendaryEventImportResult(ImportPartResult.NotSelected(), []);
+
         await Send.OkAsync(new ImportV1ProfileResponse(
             userId,
             personalKey.Part,
@@ -105,6 +110,8 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
             goalResult.Outcomes
         )
         {
+            LegendaryEventPlans = legendaryEvents.Part,
+            LegendaryEventOutcomes = legendaryEvents.Outcomes,
             ProfileId = profileId.Value.Value,
             PlayerName = personalKey.PlayerName,
             PowerLevel = personalKey.PowerLevel,
@@ -437,7 +444,9 @@ public sealed record ImportV1Selection(
     // Automatic prerequisite synthesis (Unlock/Ascension/Level) for imported goals — same rules and
     // minimum targets the manual create-goal flow applies (rewrite-v1-goal-import). Defaults on, matching
     // the manual flow's own default.
-    bool AutomaticPrerequisites = true
+    bool AutomaticPrerequisites = true,
+    // V1 Legendary Event teams and per-event notes, one plan per catalog event (v1-legendary-event-import).
+    bool LegendaryEventPlans = false
 );
 
 public sealed record ImportV1ProfileRequest(string? Username, string? Password, ImportV1Selection? Import);
@@ -460,6 +469,11 @@ public sealed record ImportV1ProfileResponse(
     IReadOnlyList<V1GoalOutcome> Outcomes
 )
 {
+    /// <summary>The legendaryEventPlans part, with one outcome per V1 event in
+    /// <see cref="LegendaryEventOutcomes"/> (V1 key order).</summary>
+    public ImportPartResult LegendaryEventPlans { get; init; } = ImportPartResult.NotSelected();
+    public IReadOnlyList<V1LegendaryEventOutcome> LegendaryEventOutcomes { get; init; } = [];
+
     public Guid ProfileId { get; init; }
     public string? PlayerName { get; init; }
     public int PowerLevel { get; init; }
