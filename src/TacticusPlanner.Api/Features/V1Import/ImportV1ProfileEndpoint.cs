@@ -27,7 +27,9 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
                 + "Goals are created directly by this operation, in V1 priority order — the response carries "
                 + "one outcome per source V1 goal (created, skipped, or failed), plus one per automatically "
                 + "added prerequisite. The goals part is refused (no goals created) when the account has no "
-                + "player data snapshot.";
+                + "player data snapshot. The legendaryEventPlans part creates one Legendary Event plan per V1 event "
+                + "(never touching a plan that already has teams) and reports one outcome per V1 event in "
+                + "legendaryEventOutcomes.";
         });
     }
 
@@ -74,6 +76,18 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
             ? await ImportCampaignEventProgressAsync(profileId.Value, v1.CampaignEventProgress, ct)
             : ImportPartResult.NotSelected();
 
+        // Goals refuse without a player-data snapshot (every starting point and already-reached check needs
+        // live data), and the Legendary Event import reads each event's current run from it. On a brand-new
+        // account that snapshot would otherwise not exist until whatever later request happens to sync it —
+        // near-guaranteeing a goals refusal and run-1 depths on a first import. Sync it here, once, before
+        // either part runs.
+        if (selection.Goals || selection.LegendaryEventPlans)
+            await EnsurePlayerDataSyncedAsync(profileId.Value, ct);
+
+        var legendaryEvents = selection.LegendaryEventPlans
+            ? await Resolve<V1LegendaryEventImportService>().ImportAsync(profileId.Value, v1.LegendaryEvents, ct)
+            : new V1LegendaryEventImportResult(ImportPartResult.NotSelected(), []);
+
         V1GoalImportResult goalResult;
         ImportPartResult goals;
         if (!selection.Goals)
@@ -83,11 +97,6 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
         }
         else
         {
-            // V1GoalImportService refuses without a player-data snapshot (every starting point and
-            // already-reached check needs live data). On a brand-new account that snapshot would
-            // otherwise not exist until whatever later request happens to sync it — near-guaranteeing
-            // the refusal on a first import. Sync it here, once, before goals run.
-            await EnsurePlayerDataSyncedAsync(profileId.Value, ct);
             goalResult = await Resolve<V1GoalImportService>().ImportAsync(
                 profileId.Value, v1.Goals, selection.AutomaticPrerequisites, ct);
             goals = goalResult.Refused
@@ -105,6 +114,8 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
             goalResult.Outcomes
         )
         {
+            LegendaryEventPlans = legendaryEvents.Part,
+            LegendaryEventOutcomes = legendaryEvents.Outcomes,
             ProfileId = profileId.Value.Value,
             PlayerName = personalKey.PlayerName,
             PowerLevel = personalKey.PowerLevel,
@@ -128,8 +139,9 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
     }
 
     /// <summary>No-ops when a snapshot already exists (the common case on a re-import) or when no
-    /// Tacticus API key is available to sync with — goals import below then refuses on its own terms
-    /// with <c>player_data_required</c>, exactly as if this call were never made.</summary>
+    /// Tacticus API key is available to sync with — goals import then refuses on its own terms
+    /// with <c>player_data_required</c>, and Legendary Event depths land on run 1, exactly as if this call were
+    /// never made.</summary>
     private async Task EnsurePlayerDataSyncedAsync(ProfileId profileId, CancellationToken ct)
     {
         var db = Resolve<PlannerDbContext>();
@@ -156,7 +168,7 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
         catch (Exception exception) when (exception is ApiException or HttpRequestException)
         {
             // Best-effort, as documented above: the Tacticus API being unreachable here just leaves
-            // goals refusing with player_data_required, same as before this sync existed.
+            // goals refusing with player_data_required (and LRE depths on run 1), same as before this sync existed.
         }
     }
 
@@ -437,7 +449,9 @@ public sealed record ImportV1Selection(
     // Automatic prerequisite synthesis (Unlock/Ascension/Level) for imported goals — same rules and
     // minimum targets the manual create-goal flow applies (rewrite-v1-goal-import). Defaults on, matching
     // the manual flow's own default.
-    bool AutomaticPrerequisites = true
+    bool AutomaticPrerequisites = true,
+    // V1 Legendary Event teams and notes (leTeams / leProgress). Off unless asked for.
+    bool LegendaryEventPlans = false
 );
 
 public sealed record ImportV1ProfileRequest(string? Username, string? Password, ImportV1Selection? Import);
@@ -460,6 +474,11 @@ public sealed record ImportV1ProfileResponse(
     IReadOnlyList<V1GoalOutcome> Outcomes
 )
 {
+    public ImportPartResult LegendaryEventPlans { get; init; } = ImportPartResult.NotSelected();
+
+    /// <summary>One outcome per V1 event (ascending V1 id) when <c>legendaryEventPlans</c> was selected.</summary>
+    public IReadOnlyList<V1LegendaryEventOutcome> LegendaryEventOutcomes { get; init; } = [];
+
     public Guid ProfileId { get; init; }
     public string? PlayerName { get; init; }
     public int PowerLevel { get; init; }

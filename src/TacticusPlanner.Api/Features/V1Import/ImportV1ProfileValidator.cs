@@ -28,7 +28,8 @@ public sealed class ImportV1ProfileValidator : Validator<ImportV1ProfileRequest>
                     || selection.GuildApiToken
                     || selection.Goals
                     || selection.OnslaughtProgress
-                    || selection.CampaignEventProgress))
+                    || selection.CampaignEventProgress
+                    || selection.LegendaryEventPlans))
             .WithMessage("Select at least one V1 profile part to import.");
     }
 }

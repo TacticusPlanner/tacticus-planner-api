@@ -4,6 +4,7 @@ using TacticusPlanner.Domain.Accounts;
 using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.GuildRaids;
 using TacticusPlanner.Domain.Guilds;
+using TacticusPlanner.Domain.LegendaryEvents;
 using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Domain.Projects;
@@ -52,6 +53,16 @@ public sealed class PlannerDbContext(
     public DbSet<Project> Projects => Set<Project>();
 
     public DbSet<ProjectGoal> ProjectGoals => Set<ProjectGoal>();
+
+    public DbSet<LegendaryEventPlan> LegendaryEventPlans => Set<LegendaryEventPlan>();
+
+    public DbSet<LegendaryEventTeam> LegendaryEventTeams => Set<LegendaryEventTeam>();
+
+    public DbSet<LegendaryEventTeamMember> LegendaryEventTeamMembers => Set<LegendaryEventTeamMember>();
+
+    public DbSet<LegendaryEventTeamObjective> LegendaryEventTeamObjectives => Set<LegendaryEventTeamObjective>();
+
+    public DbSet<LegendaryEventTeamRunDepth> LegendaryEventTeamRunDepths => Set<LegendaryEventTeamRunDepth>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -114,8 +125,18 @@ public sealed class PlannerDbContext(
         // ProfileId is a separate foreign key alongside the entity's own primary key.
         modelBuilder.Entity<Goal>().HasQueryFilter(entity => entity.ProfileId == CurrentProfileId);
         modelBuilder.Entity<Project>().HasQueryFilter(entity => entity.ProfileId == CurrentProfileId);
+        modelBuilder.Entity<LegendaryEventPlan>().HasQueryFilter(entity => entity.ProfileId == CurrentProfileId);
 
         // Join table with no ProfileId of its own: scoped through its parent Project.
         modelBuilder.Entity<ProjectGoal>().HasQueryFilter(entity => entity.Project!.ProfileId == CurrentProfileId);
+
+        // Legendary Event plan children: scoped through their plan.
+        modelBuilder.Entity<LegendaryEventTeam>().HasQueryFilter(entity => entity.Plan!.ProfileId == CurrentProfileId);
+        modelBuilder.Entity<LegendaryEventTeamMember>()
+            .HasQueryFilter(entity => entity.Team!.Plan!.ProfileId == CurrentProfileId);
+        modelBuilder.Entity<LegendaryEventTeamObjective>()
+            .HasQueryFilter(entity => entity.Team!.Plan!.ProfileId == CurrentProfileId);
+        modelBuilder.Entity<LegendaryEventTeamRunDepth>()
+            .HasQueryFilter(entity => entity.Team!.Plan!.ProfileId == CurrentProfileId);
     }
 }
