@@ -109,14 +109,10 @@ public sealed class V1LegendaryEventImportService(
         var issues = new List<V1LegendaryEventIssue>();
         var sourceTeams = v1Event.Teams.Count > 0 ? v1Event.Teams : SynthesizeLegacyTeams(v1Event);
         var run = currentRuns.GetValueOrDefault(lre.Id, LegendaryEventPlanRules.MinRun);
-        var resolved = new List<ResolvedTeam>();
-        foreach (var team in sourceTeams)
-        {
-            if (ResolveTeam(lre, team, run, issues) is { } resolvedTeam)
-            {
-                resolved.Add(resolvedTeam);
-            }
-        }
+        var resolved = sourceTeams
+            .Select(team => ResolveTeam(lre, team, run, issues))
+            .OfType<ResolvedTeam>()
+            .ToList();
 
         var merged = MergeDuplicates(resolved, issues);
         var notes = string.IsNullOrWhiteSpace(v1Event.Notes) ? null : v1Event.Notes.Trim();
