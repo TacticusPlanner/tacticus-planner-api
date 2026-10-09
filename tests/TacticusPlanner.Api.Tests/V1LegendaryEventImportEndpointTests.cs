@@ -9,6 +9,7 @@ using TacticusPlanner.Domain.PlayerData.Chunks;
 using TacticusPlanner.GameCatalog;
 using TacticusPlanner.GameCatalog.Models;
 using TacticusPlanner.Persistence;
+using TacticusApiPlayer = TacticusPlanner.TacticusApi.Models.Player;
 
 namespace TacticusPlanner.Api.Tests;
 
@@ -270,7 +271,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
 
         var outcome = Assert.Single(body.LegendaryEventOutcomes);
         Assert.Equal(("Skipped", "plan_already_exists"), (outcome.Status, outcome.Code));
-        Assert.Equal(("Skipped", "no_legendary_event_imported"), (body.LegendaryEventPlans.Status, body.LegendaryEventPlans.Code));
+        Assert.Equal(("Skipped", "legendary_events_skipped"), (body.LegendaryEventPlans.Status, body.LegendaryEventPlans.Code));
         var after = await ReadPlanAsync(client);
         Assert.Equal((before.Revision, 1), (after.Revision, after.Teams.Count));
     }
@@ -323,13 +324,138 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
     }
 
     [Fact]
-    public async Task SkippedWithoutAnImportReportsNoLegendaryEventImported()
+    public async Task SkippedEventsWithoutAnImportReportLegendaryEventsSkipped()
     {
         var (client, _) = await ClientAsync();
 
         var body = await ImportAsync(client, Configure(TeamsJson(DanteV1Id, Team("Old", "alpha", "bloodDante"))));
 
+        Assert.Equal(("Skipped", "legendary_events_skipped"), (body.LegendaryEventPlans.Status, body.LegendaryEventPlans.Code));
+    }
+
+    [Fact]
+    public async Task NoResolvableTeamsReportNoLegendaryEventImported()
+    {
+        var (client, _) = await ClientAsync();
+
+        var body = await ImportAsync(client, Configure(TeamsJson(LysanderV1Id, Team("Ghosts", "alpha", "unknownX"))));
+
         Assert.Equal(("Skipped", "no_legendary_event_imported"), (body.LegendaryEventPlans.Status, body.LegendaryEventPlans.Code));
+        Assert.Equal("No V1 Legendary Event had teams to import.", body.LegendaryEventPlans.Message);
+    }
+
+    [Fact]
+    public async Task NullEntriesInV1TeamsAreSkipped()
+    {
+        var (client, _) = await ClientAsync();
+        var json = $$"""
+            {"leTeams": {"15": {"teams": [
+              null,
+              {"name": "Holes", "section": "alpha", "charSnowprintIds": [null, "{{Alpha[0]}}"], "restrictionsIds": [null]},
+              {"name": "Embedded", "section": "alpha", "characters": [null, {"snowprintId": "{{Alpha[1]}}"}]}
+            ] } } }
+            """;
+
+        var body = await ImportAsync(client, Configure(json));
+
+        Assert.Equal("Imported", body.LegendaryEventPlans.Status);
+        var plan = await ReadPlanAsync(client);
+        Assert.Equal([[Alpha[0]], [Alpha[1]]], plan.Teams.Select(team => team.MemberUnitIds));
+        Assert.Equal(
+            [("unknown_unit", "Holes", null), ("unknown_objective", "Holes", null), ("unknown_unit", "Embedded", "")],
+            Issues(body));
+    }
+
+    [Fact]
+    public async Task NullEntriesInLegacyLaneMapsAreSkipped()
+    {
+        var (client, _) = await ClientAsync();
+        var objectives = Lysander.Alpha.UnitsRestrictions;
+        var json = $$"""
+            {"leTeams": {"15": {
+              "teams": [null],
+              "alpha": { "{{objectives[0].Name}}": [null, "{{Alpha[0]}}"], "{{objectives[1].Name}}": null }
+            } } }
+            """;
+
+        var body = await ImportAsync(client, Configure(json));
+
+        Assert.Equal("Imported", body.LegendaryEventPlans.Status);
+        var team = Assert.Single((await ReadPlanAsync(client)).Teams);
+        Assert.Equal([Alpha[0]], team.MemberUnitIds);
+        Assert.Equal([objectives[0].Index], team.ObjectiveIndexes);
+    }
+
+    [Fact]
+    public async Task ExistingV2NotesAreNeverOverwritten()
+    {
+        var (client, _) = await ClientAsync();
+        var created = await client.PutAsJsonAsync(
+            $"/api/v1/me/legendary-event-plans/{LysanderId}", new UpdateLegendaryEventPlanRequest(0, "My V2 notes", false), Ct);
+        created.EnsureSuccessStatusCode();
+        var json = $$"""
+            {
+              "leTeams": {{TeamsObjectByKey(LysanderV1Id, Team("A", "alpha", Alpha[0]))}},
+              "leProgress": { "15": { "notes": "V1 notes" } }
+            }
+            """;
+
+        var body = await ImportAsync(client, Configure(json));
+
+        var plan = await ReadPlanAsync(client);
+        Assert.Equal("My V2 notes", plan.Notes);
+        Assert.Single(plan.Teams);
+        Assert.Equal([("existing_notes_kept", null, null)], Issues(body));
+    }
+
+    [Fact]
+    public async Task LongNotesAreTruncatedWithoutSplittingASurrogatePair()
+    {
+        var (client, _) = await ClientAsync();
+        // The emoji (a surrogate pair) straddles the 2000-char limit, so the cut lands before it.
+        var notes = new string('a', 1999) + "\uD83D\uDE00" + "tail";
+        var json = $$"""
+            {
+              "leTeams": {{TeamsObjectByKey(LysanderV1Id, Team("A", "alpha", Alpha[0]))}},
+              "leProgress": { "15": { "notes": "{{notes}}" } }
+            }
+            """;
+
+        var body = await ImportAsync(client, Configure(json));
+
+        Assert.Equal(new string('a', 1999), (await ReadPlanAsync(client)).Notes);
+        Assert.Equal([("notes_truncated", null, "2005")], Issues(body));
+    }
+
+    [Fact]
+    public async Task PlayerDataIsSyncedBeforeTheImportSoDepthsLandOnTheCurrentRun()
+    {
+        var (client, _) = await ClientAsync();
+        var apiKey = $"lre-run-{Guid.NewGuid()}";
+        var player = FakeTacticusApi.BuildPlayerResponse();
+        player.Player.Progress.LegendaryEvents =
+        [
+            new TacticusApiPlayer.LegendaryEvent { Id = LysanderId, Lanes = [], CurrentEvent = new() { Run = 3 } },
+        ];
+        FakeTacticusApi.ConfigurePlayerResponse(apiKey, player);
+        var data = JsonSerializer.Deserialize<V1UserData>(
+            TeamsJson(LysanderV1Id, Team("Deep", "alpha", Alpha[0]) with { ExpectedBattleClears = 4 }),
+            TacticusV1Client.WebJsonOptions);
+        var username = FakeTacticusV1Client.ConfigureProfile(new TacticusV1Profile(apiKey, null)
+        {
+            LegendaryEvents = TacticusV1Client.ReadLegendaryEvents(data),
+        });
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/v1-import",
+            new ImportV1ProfileRequest(
+                username, FakeTacticusV1Client.ValidPassword,
+                new ImportV1Selection(true, false, false, false, false, false, LegendaryEventPlans: true)),
+            Ct);
+        response.EnsureSuccessStatusCode();
+
+        var depth = Assert.Single((await ReadPlanAsync(client)).Teams[0].RunDepths);
+        Assert.Equal((3, 4), (depth.Run, depth.ExpectedBattleClears));
     }
 
     [Fact]
@@ -365,7 +491,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
         });
     }
 
-    private static List<(string Code, string TeamName, string? Value)> Issues(ImportV1ProfileResponse body) =>
+    private static List<(string Code, string? TeamName, string? Value)> Issues(ImportV1ProfileResponse body) =>
         body.LegendaryEventOutcomes.SelectMany(outcome => outcome.Issues)
             .Select(issue => (issue.Code, issue.TeamName, issue.Value))
             .ToList();

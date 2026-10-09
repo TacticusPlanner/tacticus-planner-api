@@ -7468,7 +7468,10 @@
             "type": "string"
           },
           "teamName": {
-            "type": "string"
+            "type": [
+              "null",
+              "string"
+            ]
           },
           "value": {
             "type": [

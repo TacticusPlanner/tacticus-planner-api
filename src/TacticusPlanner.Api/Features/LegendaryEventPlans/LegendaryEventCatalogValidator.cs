@@ -26,6 +26,9 @@ public sealed record LegendaryEventFieldFailure(string Field, string Message);
 /// </summary>
 public sealed class LegendaryEventCatalogValidator(IGameCatalogProvider catalog)
 {
+    public static readonly LegendaryEventFieldFailure UnknownLane =
+        new("laneId", $"laneId must be one of {string.Join(", ", LegendaryEventValidation.LaneIds)}.");
+
     public GameCatalogLreView? FindEvent(string eventId) =>
         catalog.Current.LreViews.FirstOrDefault(view => view.Id == eventId);
 
@@ -59,7 +62,7 @@ public sealed class LegendaryEventCatalogValidator(IGameCatalogProvider catalog)
         var lane = FindLane(lre, laneId);
         if (lane is null)
         {
-            failures.Add(new("laneId", "laneId must be one of alpha, beta or gamma."));
+            failures.Add(UnknownLane);
             return failures;
         }
 

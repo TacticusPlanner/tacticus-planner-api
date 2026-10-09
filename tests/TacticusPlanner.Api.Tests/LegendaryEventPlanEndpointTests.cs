@@ -173,6 +173,22 @@ public sealed class LegendaryEventPlanEndpointTests(PlannerApiFactory factory) :
     }
 
     [Fact]
+    public async Task UpdateIsValidatedAgainstTheStoredTeamsLane()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var plan = await CreateAsync(client, Team(0, "beta", [BetaUnits[0]], "t"));
+        var team = plan.Teams[0];
+        var alphaOnly = AlphaUnits.Except(BetaUnits).First();
+
+        var response = await UpdateAsync(client, team.Id, Update(plan.Revision, team) with { MemberUnitIds = [alphaOnly] });
+
+        await AssertBadRequestAsync(response, "memberUnitIds");
+        var after = await ReadPlanAsync(await client.GetAsync(PlanUrl, Ct));
+        Assert.Equal(plan.Revision, after.Revision);
+        Assert.Equal([BetaUnits[0]], after.Teams[0].MemberUnitIds);
+    }
+
+    [Fact]
     public async Task UnknownTeamIs404()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);

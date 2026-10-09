@@ -1,6 +1,5 @@
 using FastEndpoints;
 using FluentValidation;
-using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Domain.LegendaryEvents;
 using TacticusPlanner.Persistence;
 
@@ -114,39 +113,37 @@ public sealed class UpdateLegendaryEventTeamEndpoint : LegendaryEventPlanEndpoin
 
     public override async Task HandleAsync(UpdateLegendaryEventTeamRequest req, CancellationToken ct)
     {
+        // A body with laneId is rejected by UpdateLegendaryEventTeamValidator before this runs.
         if (await ResolveAsync(ct) is not { } resolved)
             return;
-
-        if (req.LaneId is not null)
-        {
-            await RejectAsync([new("laneId", "A team cannot change lane; delete it and create it on the other lane.")], ct);
-            return;
-        }
 
         var teamId = LegendaryEventTeamId.From(Route<Guid>("teamId"));
         var fields = new LegendaryEventTeamFields(
             req.Name, req.MemberUnitIds, req.ReserveUnitId, req.ObjectiveIndexes, req.Run,
             req.ExpectedBattleClears, req.ExpectedBattleClearsSource);
 
-        // The lane comes from the stored team, so look it up before validating units and objectives against it.
-        var db = Resolve<PlannerDbContext>();
-        var laneId = await db.LegendaryEventTeams
-            .Where(team => team.Id == teamId && team.Plan!.EventId == resolved.Event.Id)
-            .Select(team => team.LaneId)
-            .FirstOrDefaultAsync(ct);
-        if (laneId is null)
+        // The lane comes from the stored team, so units and objectives are validated against the loaded plan.
+        IReadOnlyList<LegendaryEventFieldFailure> failures = [];
+        var result = await Resolve<LegendaryEventPlanWriter>().WriteAsync(
+            resolved.ProfileId, resolved.Event.Id, req.ExpectedRevision,
+            (context, token) =>
+            {
+                var team = context.Plan.Teams.FirstOrDefault(entry => entry.Id == teamId);
+                if (team is null)
+                    return Task.FromResult(LegendaryEventPlanMutation.TeamNotFound);
+
+                failures = LegendaryEventCatalogValidator.ValidateTeam(resolved.Event, team.LaneId, fields);
+                return failures.Count > 0
+                    ? Task.FromResult(LegendaryEventPlanMutation.Rejected)
+                    : LegendaryEventTeamMutations.UpdateTeamAsync(context, teamId, fields, token);
+            },
+            ct);
+        if (result is LegendaryEventPlanWriteResult.Rejected)
         {
-            await Send.NotFoundAsync(ct);
+            await RejectAsync(failures, ct);
             return;
         }
 
-        if (await RejectAsync(LegendaryEventCatalogValidator.ValidateTeam(resolved.Event, laneId, fields), ct))
-            return;
-
-        var result = await Resolve<LegendaryEventPlanWriter>().WriteAsync(
-            resolved.ProfileId, resolved.Event.Id, req.ExpectedRevision,
-            (context, token) => LegendaryEventTeamMutations.UpdateTeamAsync(context, teamId, fields, token),
-            ct);
         await SendResultAsync(result, ct);
     }
 }
@@ -204,7 +201,7 @@ public sealed class UpdateLegendaryEventTeamOrderEndpoint
 
         if (LegendaryEventCatalogValidator.FindLane(resolved.Event, req.LaneId) is null)
         {
-            await RejectAsync([new("laneId", "laneId must be one of alpha, beta or gamma.")], ct);
+            await RejectAsync([LegendaryEventCatalogValidator.UnknownLane], ct);
             return;
         }
 

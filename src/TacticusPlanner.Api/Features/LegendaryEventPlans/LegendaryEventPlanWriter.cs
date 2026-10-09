@@ -22,6 +22,9 @@ public enum LegendaryEventPlanMutation
 
     /// <summary>A reorder whose ids are not exactly the lane's team set.</summary>
     OrderSetMismatch,
+
+    /// <summary>The fields fail validation against the loaded plan; the mutation reports why itself.</summary>
+    Rejected,
 }
 
 public abstract record LegendaryEventPlanWriteResult
@@ -35,6 +38,8 @@ public abstract record LegendaryEventPlanWriteResult
     public sealed record Conflict(LegendaryEventPlanConflictResponse Body) : LegendaryEventPlanWriteResult;
 
     public sealed record TeamNotFound : LegendaryEventPlanWriteResult;
+
+    public sealed record Rejected : LegendaryEventPlanWriteResult;
 }
 
 /// <summary>Context handed to a mutation: the tracked plan plus a way to flush row removals before the rows that
@@ -92,6 +97,8 @@ public sealed class LegendaryEventPlanWriter(PlannerDbContext db, TimeProvider t
                 {
                     case LegendaryEventPlanMutation.TeamNotFound:
                         return Outcome.NotFound;
+                    case LegendaryEventPlanMutation.Rejected:
+                        return Outcome.Invalid;
                     case LegendaryEventPlanMutation.OrderSetMismatch:
                         return Outcome.Stale(LegendaryEventPlanIssueCodes.OrderSetMismatch);
                     case LegendaryEventPlanMutation.Unchanged:
@@ -110,7 +117,7 @@ public sealed class LegendaryEventPlanWriter(PlannerDbContext db, TimeProvider t
             {
                 return Outcome.Stale(LegendaryEventPlanIssueCodes.Stale);
             }
-            catch (DbUpdateException exception) when (IsUniqueViolation(exception))
+            catch (DbUpdateException exception) when (IsPlanUniqueViolation(exception))
             {
                 return Outcome.Stale(LegendaryEventPlanIssueCodes.Stale);
             }
@@ -118,6 +125,8 @@ public sealed class LegendaryEventPlanWriter(PlannerDbContext db, TimeProvider t
 
         if (outcome.Plan is { } saved)
             return new LegendaryEventPlanWriteResult.Saved(saved);
+        if (outcome.Rejected)
+            return new LegendaryEventPlanWriteResult.Rejected();
         if (outcome.IssueCode is null)
             return new LegendaryEventPlanWriteResult.TeamNotFound();
 
@@ -142,12 +151,22 @@ public sealed class LegendaryEventPlanWriter(PlannerDbContext db, TimeProvider t
             CatalogVersion = GameCatalogRelease.Version,
         };
 
-    private static bool IsUniqueViolation(DbUpdateException exception) =>
-        exception.InnerException is PostgresException { SqlState: PostgresErrorCodes.UniqueViolation };
+    private const string PlanUniqueIndex = "ix_legendary_event_plans_profile_id_event_id";
 
-    private sealed record Outcome(LegendaryEventPlanResponse? Plan, string? IssueCode)
+    /// <summary>Only the plan's own <c>(profile_id, event_id)</c> race is a stale write; any other unique
+    /// violation is a bug and is rethrown.</summary>
+    private static bool IsPlanUniqueViolation(DbUpdateException exception) =>
+        exception.InnerException is PostgresException
+        {
+            SqlState: PostgresErrorCodes.UniqueViolation,
+            ConstraintName: PlanUniqueIndex,
+        };
+
+    private sealed record Outcome(LegendaryEventPlanResponse? Plan, string? IssueCode, bool Rejected = false)
     {
         public static readonly Outcome NotFound = new(null, null);
+
+        public static readonly Outcome Invalid = new(null, null, Rejected: true);
 
         public static Outcome Done(LegendaryEventPlanResponse plan) => new(plan, null);
 
