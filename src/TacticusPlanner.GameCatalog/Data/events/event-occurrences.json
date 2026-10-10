@@ -173,5 +173,110 @@
     "startUtc": "2026-08-23T00:00:00Z",
     "endUtc": "2026-08-30T00:00:00Z",
     "parameters": { "newContentDebut": true, "featuredMowId": "tauBroadside" }
+  },
+  {
+    "id": "occ-2026-10-10-hse-against-the-tide",
+    "definitionId": "hse-against-the-tide",
+    "startUtc": "2026-10-10T08:00:00Z",
+    "endUtc": "2026-10-17T08:00:00Z",
+    "parameters": null
+  },
+  {
+    "id": "occ-2026-10-19-hse-trait-boost-psyker",
+    "definitionId": "hse-trait-boost-psyker",
+    "startUtc": "2026-10-19T08:00:00Z",
+    "endUtc": "2026-10-23T08:00:00Z",
+    "parameters": null
+  },
+  {
+    "id": "occ-2026-10-26-hse-global-operation-imperator",
+    "definitionId": "hse-global-operation-imperator",
+    "startUtc": "2026-10-26T08:00:00Z",
+    "endUtc": "2026-11-01T08:00:00Z",
+    "parameters": null
+  },
+  {
+    "id": "occ-2026-10-26-hse-faction-focus",
+    "definitionId": "hse-faction-focus",
+    "startUtc": "2026-10-26T08:00:00Z",
+    "endUtc": "2026-11-01T08:00:00Z",
+    "parameters": null
+  },
+  {
+    "id": "occ-2026-11-05-hse-warp-surge",
+    "definitionId": "hse-warp-surge",
+    "startUtc": "2026-11-05T08:00:00Z",
+    "endUtc": "2026-11-08T08:00:00Z",
+    "parameters": null
+  },
+  {
+    "id": "occ-2026-11-12-hse-training-rush",
+    "definitionId": "hse-training-rush",
+    "startUtc": "2026-11-12T08:00:00Z",
+    "endUtc": "2026-11-14T08:00:00Z",
+    "parameters": null
+  },
+  {
+    "id": "occ-2026-10-14-ta-faction-war-legendary-no-mow",
+    "definitionId": "ta-faction-war",
+    "startUtc": "2026-10-14T00:00:00Z",
+    "endUtc": "2026-10-17T00:00:00Z",
+    "parameters": { "rarityCap": "Legendary", "includesMow": false }
+  },
+  {
+    "id": "occ-2026-10-15-campaign-event-19",
+    "definitionId": "campaign-event",
+    "startUtc": "2026-10-15T00:00:00Z",
+    "endUtc": "2026-10-29T00:00:00Z",
+    "parameters": { "newContentDebut": false }
+  },
+  {
+    "id": "occ-2026-10-20-crusade-season-2",
+    "definitionId": "crusade-season",
+    "startUtc": "2026-10-20T00:00:00Z",
+    "endUtc": "2026-10-21T00:00:00Z",
+    "parameters": null
+  },
+  {
+    "id": "occ-2026-10-21-quest-nubari-vs-black-legion",
+    "definitionId": "quest",
+    "startUtc": "2026-10-21T00:00:00Z",
+    "endUtc": "2026-10-24T00:00:00Z",
+    "parameters": { "featuredCharacterId": "astarEradicator", "enemyFactionId": "BlackLegion" }
+  },
+  {
+    "id": "occ-2026-10-24-guild-war-season-28",
+    "definitionId": "guild-war-season",
+    "startUtc": "2026-10-24T00:00:00Z",
+    "endUtc": "2026-11-08T00:00:00Z",
+    "parameters": { "season": 28 }
+  },
+  {
+    "id": "occ-2026-10-27-ta-power-ups-legendary-mow",
+    "definitionId": "ta-power-ups",
+    "startUtc": "2026-10-27T00:00:00Z",
+    "endUtc": "2026-10-31T00:00:00Z",
+    "parameters": { "rarityCap": "Legendary", "includesMow": true }
+  },
+  {
+    "id": "occ-2026-11-02-incursion",
+    "definitionId": "incursion",
+    "startUtc": "2026-11-02T00:00:00Z",
+    "endUtc": "2026-11-07T00:00:00Z",
+    "parameters": { "newContentDebut": false }
+  },
+  {
+    "id": "occ-2026-11-08-legendary-event-fabius-bile-iter1",
+    "definitionId": "legendary-event",
+    "startUtc": "2026-11-08T00:00:00Z",
+    "endUtc": "2026-11-15T00:00:00Z",
+    "parameters": { "featuredCharacterId": "lostaBile", "iterationNumber": 1 }
+  },
+  {
+    "id": "occ-2026-11-11-quest-kimm-vs-orks",
+    "definitionId": "quest",
+    "startUtc": "2026-11-11T00:00:00Z",
+    "endUtc": "2026-11-14T00:00:00Z",
+    "parameters": { "featuredCharacterId": "votanChampion", "enemyFactionId": "Orks" }
   }
 ]
