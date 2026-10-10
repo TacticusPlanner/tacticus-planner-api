@@ -98,7 +98,8 @@
       "Custodes",
       "EmperorsChildren",
       "LeaguesOfVotann",
-      "AdeptusAstartes"
+      "AdeptusAstartes",
+      "TheLostAndTheDamned"
     ],
     "levels": [
       {
@@ -237,7 +238,8 @@
       "Orks",
       "ThousandSons",
       "WorldEaters",
-      "EmperorsChildren"
+      "EmperorsChildren",
+      "TheLostAndTheDamned"
     ],
     "levels": [
       {
@@ -431,7 +433,8 @@
       "Custodes",
       "EmperorsChildren",
       "LeaguesOfVotann",
-      "AdeptusAstartes"
+      "AdeptusAstartes",
+      "TheLostAndTheDamned"
     ],
     "levels": [
       {
@@ -708,7 +711,8 @@
       "Orks",
       "ThousandSons",
       "WorldEaters",
-      "EmperorsChildren"
+      "EmperorsChildren",
+      "TheLostAndTheDamned"
     ],
     "levels": [
       {
@@ -962,7 +966,8 @@
       "Custodes",
       "EmperorsChildren",
       "LeaguesOfVotann",
-      "AdeptusAstartes"
+      "AdeptusAstartes",
+      "TheLostAndTheDamned"
     ],
     "levels": [
       {
@@ -1285,7 +1290,8 @@
       "Orks",
       "ThousandSons",
       "WorldEaters",
-      "EmperorsChildren"
+      "EmperorsChildren",
+      "TheLostAndTheDamned"
     ],
     "levels": [
       {
@@ -1386,7 +1392,8 @@
       "Custodes",
       "EmperorsChildren",
       "LeaguesOfVotann",
-      "AdeptusAstartes"
+      "AdeptusAstartes",
+      "TheLostAndTheDamned"
     ],
     "levels": [
       {
@@ -1740,7 +1747,8 @@
       "Custodes",
       "EmperorsChildren",
       "LeaguesOfVotann",
-      "AdeptusAstartes"
+      "AdeptusAstartes",
+      "TheLostAndTheDamned"
     ],
     "levels": [
       {
@@ -1971,7 +1979,8 @@
       "Orks",
       "ThousandSons",
       "WorldEaters",
-      "EmperorsChildren"
+      "EmperorsChildren",
+      "TheLostAndTheDamned"
     ],
     "levels": [
       {
@@ -2141,7 +2150,8 @@
       "Custodes",
       "EmperorsChildren",
       "LeaguesOfVotann",
-      "AdeptusAstartes"
+      "AdeptusAstartes",
+      "TheLostAndTheDamned"
     ],
     "levels": [
       {
@@ -2326,7 +2336,8 @@
       "Orks",
       "ThousandSons",
       "WorldEaters",
-      "EmperorsChildren"
+      "EmperorsChildren",
+      "TheLostAndTheDamned"
     ],
     "levels": [
       {
@@ -2511,6 +2522,81 @@
         "stats": {
           "armor": 476,
           "hp": 892
+        }
+      }
+    ]
+  },
+  {
+    "id": "R_Defensive_Thrydderghyre",
+    "name": "Thrydderghyre",
+    "rarity": "Mythic",
+    "type": "I_Defensive",
+    "abilityId": "Thrydderghyre",
+    "isRelic": true,
+    "isUniqueRelic": false,
+    "allowedUnits": [
+      "thousTzaangor"
+    ],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "hp": 600,
+          "armor": 320
+        }
+      },
+      {
+        "stats": {
+          "hp": 633,
+          "armor": 338
+        }
+      },
+      {
+        "stats": {
+          "hp": 665,
+          "armor": 355
+        }
+      },
+      {
+        "stats": {
+          "hp": 698,
+          "armor": 372
+        }
+      },
+      {
+        "stats": {
+          "hp": 730,
+          "armor": 390
+        }
+      },
+      {
+        "stats": {
+          "hp": 762,
+          "armor": 407
+        }
+      },
+      {
+        "stats": {
+          "hp": 795,
+          "armor": 424
+        }
+      },
+      {
+        "stats": {
+          "hp": 827,
+          "armor": 441
+        }
+      },
+      {
+        "stats": {
+          "hp": 860,
+          "armor": 459
+        }
+      },
+      {
+        "stats": {
+          "hp": 892,
+          "armor": 476
         }
       }
     ]

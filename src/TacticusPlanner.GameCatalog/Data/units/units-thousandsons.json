@@ -1293,7 +1293,7 @@
     {
       "id": "thousTzaangor",
       "name": "Yazaghor",
-      "health": 65,
+      "health": 75,
       "damage": 49,
       "armour": 14,
       "initialRarity": "Common",

@@ -149,6 +149,15 @@
           "stars": 2
         },
         {
+          "abilityLevel": 26,
+          "damage": 302,
+          "armour": 218,
+          "health": 967,
+          "progressionIndex": 8,
+          "rank": 9,
+          "stars": 6
+        },
+        {
           "abilityLevel": 50,
           "damage": 2168,
           "armour": 1561,
@@ -326,6 +335,15 @@
           "stars": 6
         },
         {
+          "abilityLevel": 35,
+          "damage": 614,
+          "armour": 534,
+          "health": 2403,
+          "progressionIndex": 11,
+          "rank": 12,
+          "stars": 8
+        },
+        {
           "abilityLevel": 50,
           "damage": 1994,
           "armour": 1734,
@@ -335,13 +353,13 @@
           "stars": 9
         },
         {
-          "abilityLevel": 26,
-          "damage": 278,
-          "armour": 242,
-          "health": 1088,
-          "progressionIndex": 8,
-          "rank": 9,
-          "stars": 6
+          "abilityLevel": 60,
+          "damage": 3948,
+          "armour": 3433,
+          "health": 15450,
+          "progressionIndex": 19,
+          "rank": 19,
+          "stars": 14
         }
       ]
     },
@@ -635,6 +653,15 @@
       "icon": "snowprint_assets/characters/ui_image_portrait_orkss_runtherd_01.png",
       "stats": [
         {
+          "abilityLevel": 8,
+          "damage": 71,
+          "armour": 42,
+          "health": 283,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        },
+        {
           "abilityLevel": 35,
           "damage": 757,
           "armour": 454,
@@ -776,13 +803,13 @@
           "stars": 11
         },
         {
-          "abilityLevel": 55,
-          "damage": 3416,
-          "armour": 3416,
-          "health": 13140,
-          "progressionIndex": 18,
-          "rank": 18,
-          "stars": 13
+          "abilityLevel": 60,
+          "damage": 4463,
+          "armour": 4463,
+          "health": 17167,
+          "progressionIndex": 19,
+          "rank": 19,
+          "stars": 14
         }
       ]
     },

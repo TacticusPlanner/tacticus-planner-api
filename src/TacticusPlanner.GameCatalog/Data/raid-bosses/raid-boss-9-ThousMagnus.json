@@ -624,7 +624,7 @@
       "QuestUnitId": "thousInfernalMaster",
       "Stats": [
         {
-          "Health": 1260,
+          "Health": 1440,
           "Damage": 18,
           "FixedArmor": 20,
           "Rank": 0,
@@ -634,7 +634,7 @@
           "AbilityLevel": 1
         },
         {
-          "Health": 1890,
+          "Health": 2160,
           "Damage": 25,
           "FixedArmor": 28,
           "Rank": 1,
@@ -644,7 +644,7 @@
           "AbilityLevel": 3
         },
         {
-          "Health": 2520,
+          "Health": 2880,
           "Damage": 31,
           "FixedArmor": 35,
           "Rank": 2,
@@ -654,7 +654,7 @@
           "AbilityLevel": 5
         },
         {
-          "Health": 3150,
+          "Health": 3600,
           "Damage": 39,
           "FixedArmor": 44,
           "Rank": 2,
@@ -664,7 +664,7 @@
           "AbilityLevel": 7
         },
         {
-          "Health": 6300,
+          "Health": 7200,
           "Damage": 45,
           "FixedArmor": 51,
           "Rank": 3,
@@ -674,7 +674,7 @@
           "AbilityLevel": 9
         },
         {
-          "Health": 8400,
+          "Health": 9600,
           "Damage": 57,
           "FixedArmor": 64,
           "Rank": 4,
@@ -684,7 +684,7 @@
           "AbilityLevel": 11
         },
         {
-          "Health": 10500,
+          "Health": 12000,
           "Damage": 66,
           "FixedArmor": 74,
           "Rank": 4,
@@ -694,7 +694,7 @@
           "AbilityLevel": 13
         },
         {
-          "Health": 12600,
+          "Health": 14400,
           "Damage": 83,
           "FixedArmor": 93,
           "Rank": 5,
@@ -704,7 +704,7 @@
           "AbilityLevel": 15
         },
         {
-          "Health": 25200,
+          "Health": 28800,
           "Damage": 111,
           "FixedArmor": 125,
           "Rank": 6,
@@ -714,7 +714,7 @@
           "AbilityLevel": 18
         },
         {
-          "Health": 31500,
+          "Health": 36000,
           "Damage": 129,
           "FixedArmor": 145,
           "Rank": 7,
@@ -724,7 +724,7 @@
           "AbilityLevel": 20
         },
         {
-          "Health": 37800,
+          "Health": 43200,
           "Damage": 150,
           "FixedArmor": 168,
           "Rank": 7,
@@ -734,7 +734,7 @@
           "AbilityLevel": 22
         },
         {
-          "Health": 44100,
+          "Health": 50400,
           "Damage": 186,
           "FixedArmor": 208,
           "Rank": 8,
@@ -744,7 +744,7 @@
           "AbilityLevel": 24
         },
         {
-          "Health": 84000,
+          "Health": 96000,
           "Damage": 233,
           "FixedArmor": 260,
           "Rank": 9,
@@ -754,7 +754,7 @@
           "AbilityLevel": 27
         },
         {
-          "Health": 105000,
+          "Health": 120000,
           "Damage": 288,
           "FixedArmor": 321,
           "Rank": 10,
@@ -764,7 +764,7 @@
           "AbilityLevel": 29
         },
         {
-          "Health": 126000,
+          "Health": 144000,
           "Damage": 334,
           "FixedArmor": 372,
           "Rank": 10,
@@ -774,7 +774,7 @@
           "AbilityLevel": 31
         },
         {
-          "Health": 147000,
+          "Health": 168000,
           "Damage": 411,
           "FixedArmor": 458,
           "Rank": 11,
@@ -784,7 +784,7 @@
           "AbilityLevel": 33
         },
         {
-          "Health": 175000,
+          "Health": 200000,
           "Damage": 478,
           "FixedArmor": 532,
           "Rank": 12,
@@ -794,7 +794,7 @@
           "AbilityLevel": 35
         },
         {
-          "Health": 350000,
+          "Health": 400000,
           "Damage": 598,
           "FixedArmor": 666,
           "Rank": 13,
@@ -804,7 +804,7 @@
           "AbilityLevel": 38
         },
         {
-          "Health": 525000,
+          "Health": 600000,
           "Damage": 790,
           "FixedArmor": 880,
           "Rank": 14,
@@ -814,7 +814,7 @@
           "AbilityLevel": 41
         },
         {
-          "Health": 700000,
+          "Health": 800000,
           "Damage": 989,
           "FixedArmor": 1102,
           "Rank": 15,
@@ -824,7 +824,7 @@
           "AbilityLevel": 44
         },
         {
-          "Health": 875000,
+          "Health": 1000000,
           "Damage": 1303,
           "FixedArmor": 1452,
           "Rank": 16,
@@ -834,7 +834,7 @@
           "AbilityLevel": 47
         },
         {
-          "Health": 1050000,
+          "Health": 1200000,
           "Damage": 1713,
           "FixedArmor": 1909,
           "Rank": 17,
@@ -844,7 +844,7 @@
           "AbilityLevel": 50
         },
         {
-          "Health": 2100000,
+          "Health": 2400000,
           "Damage": 1991,
           "FixedArmor": 2219,
           "Rank": 18,
@@ -855,7 +855,7 @@
           "RelicAbilityLevel": 2
         },
         {
-          "Health": 2625000,
+          "Health": 3000000,
           "Damage": 2254,
           "FixedArmor": 2512,
           "Rank": 18,
@@ -866,7 +866,7 @@
           "RelicAbilityLevel": 4
         },
         {
-          "Health": 3150000,
+          "Health": 3600000,
           "Damage": 2449,
           "FixedArmor": 2730,
           "Rank": 19,
@@ -877,7 +877,7 @@
           "RelicAbilityLevel": 6
         },
         {
-          "Health": 3675000,
+          "Health": 4200000,
           "Damage": 2772,
           "FixedArmor": 3090,
           "Rank": 19,
@@ -888,7 +888,7 @@
           "RelicAbilityLevel": 8
         },
         {
-          "Health": 4550000,
+          "Health": 5200000,
           "Damage": 3121,
           "FixedArmor": 3479,
           "Rank": 20,
@@ -1154,7 +1154,7 @@
         },
         {
           "Health": 3741,
-          "Damage": 981,
+          "Damage": 900,
           "FixedArmor": 0,
           "Rank": 18,
           "StarLevel": 12,
@@ -1164,7 +1164,7 @@
         },
         {
           "Health": 4161,
-          "Damage": 1110,
+          "Damage": 1001,
           "FixedArmor": 0,
           "Rank": 18,
           "StarLevel": 13,
@@ -1174,7 +1174,7 @@
         },
         {
           "Health": 4403,
-          "Damage": 1206,
+          "Damage": 1059,
           "FixedArmor": 0,
           "Rank": 19,
           "StarLevel": 13,
@@ -1184,7 +1184,7 @@
         },
         {
           "Health": 4856,
-          "Damage": 1365,
+          "Damage": 1168,
           "FixedArmor": 0,
           "Rank": 19,
           "StarLevel": 14,
@@ -1194,7 +1194,7 @@
         },
         {
           "Health": 5331,
-          "Damage": 1537,
+          "Damage": 1282,
           "FixedArmor": 0,
           "Rank": 20,
           "StarLevel": 14,
@@ -1450,7 +1450,7 @@
         },
         {
           "Health": 4629,
-          "Damage": 1991,
+          "Damage": 1826,
           "FixedArmor": 0,
           "Rank": 18,
           "StarLevel": 12,
@@ -1460,7 +1460,7 @@
         },
         {
           "Health": 5148,
-          "Damage": 2254,
+          "Damage": 2031,
           "FixedArmor": 0,
           "Rank": 18,
           "StarLevel": 13,
@@ -1470,7 +1470,7 @@
         },
         {
           "Health": 5447,
-          "Damage": 2449,
+          "Damage": 2149,
           "FixedArmor": 0,
           "Rank": 19,
           "StarLevel": 13,
@@ -1480,7 +1480,7 @@
         },
         {
           "Health": 6007,
-          "Damage": 2772,
+          "Damage": 2370,
           "FixedArmor": 0,
           "Rank": 19,
           "StarLevel": 14,
@@ -1490,7 +1490,7 @@
         },
         {
           "Health": 6595,
-          "Damage": 3121,
+          "Damage": 2602,
           "FixedArmor": 0,
           "Rank": 20,
           "StarLevel": 14,
@@ -1742,8 +1742,8 @@
         },
         {
           "Health": 6181,
-          "Damage": 2891,
-          "FixedArmor": 2891,
+          "Damage": 2651,
+          "FixedArmor": 2651,
           "Rank": 18,
           "StarLevel": 12,
           "BaseRarity": "Mythic",
@@ -1752,8 +1752,8 @@
         },
         {
           "Health": 6875,
-          "Damage": 3272,
-          "FixedArmor": 3272,
+          "Damage": 2948,
+          "FixedArmor": 2948,
           "Rank": 18,
           "StarLevel": 13,
           "BaseRarity": "Mythic",
@@ -1762,8 +1762,8 @@
         },
         {
           "Health": 7274,
-          "Damage": 3556,
-          "FixedArmor": 3556,
+          "Damage": 3119,
+          "FixedArmor": 3119,
           "Rank": 19,
           "StarLevel": 13,
           "BaseRarity": "Mythic",
@@ -1772,8 +1772,8 @@
         },
         {
           "Health": 8022,
-          "Damage": 4025,
-          "FixedArmor": 4025,
+          "Damage": 3440,
+          "FixedArmor": 3440,
           "Rank": 19,
           "StarLevel": 14,
           "BaseRarity": "Mythic",
@@ -1782,8 +1782,8 @@
         },
         {
           "Health": 8807,
-          "Damage": 4532,
-          "FixedArmor": 4532,
+          "Damage": 3777,
+          "FixedArmor": 3777,
           "Rank": 20,
           "StarLevel": 14,
           "BaseRarity": "Mythic",
@@ -2037,8 +2037,8 @@
         },
         {
           "Health": 10747,
-          "Damage": 2332,
-          "FixedArmor": 3326,
+          "Damage": 2138,
+          "FixedArmor": 3049,
           "Rank": 18,
           "StarLevel": 12,
           "BaseRarity": "Mythic",
@@ -2047,8 +2047,8 @@
         },
         {
           "Health": 11953,
-          "Damage": 2640,
-          "FixedArmor": 3765,
+          "Damage": 2378,
+          "FixedArmor": 3391,
           "Rank": 18,
           "StarLevel": 13,
           "BaseRarity": "Mythic",
@@ -2057,8 +2057,8 @@
         },
         {
           "Health": 12648,
-          "Damage": 2869,
-          "FixedArmor": 4091,
+          "Damage": 2516,
+          "FixedArmor": 3588,
           "Rank": 19,
           "StarLevel": 13,
           "BaseRarity": "Mythic",
@@ -2067,8 +2067,8 @@
         },
         {
           "Health": 13949,
-          "Damage": 3247,
-          "FixedArmor": 4630,
+          "Damage": 2775,
+          "FixedArmor": 3957,
           "Rank": 19,
           "StarLevel": 14,
           "BaseRarity": "Mythic",
@@ -2077,8 +2077,8 @@
         },
         {
           "Health": 15314,
-          "Damage": 3656,
-          "FixedArmor": 5213,
+          "Damage": 3047,
+          "FixedArmor": 4344,
           "Rank": 20,
           "StarLevel": 14,
           "BaseRarity": "Mythic",
@@ -2332,7 +2332,7 @@
         },
         {
           "Health": 4629,
-          "Damage": 1991,
+          "Damage": 1826,
           "FixedArmor": 0,
           "Rank": 18,
           "StarLevel": 12,
@@ -2342,7 +2342,7 @@
         },
         {
           "Health": 5148,
-          "Damage": 2254,
+          "Damage": 2031,
           "FixedArmor": 0,
           "Rank": 18,
           "StarLevel": 13,
@@ -2352,7 +2352,7 @@
         },
         {
           "Health": 5447,
-          "Damage": 2449,
+          "Damage": 2149,
           "FixedArmor": 0,
           "Rank": 19,
           "StarLevel": 13,
@@ -2362,7 +2362,7 @@
         },
         {
           "Health": 6007,
-          "Damage": 2772,
+          "Damage": 2370,
           "FixedArmor": 0,
           "Rank": 19,
           "StarLevel": 14,
@@ -2372,7 +2372,7 @@
         },
         {
           "Health": 6595,
-          "Damage": 3121,
+          "Damage": 2602,
           "FixedArmor": 0,
           "Rank": 20,
           "StarLevel": 14,

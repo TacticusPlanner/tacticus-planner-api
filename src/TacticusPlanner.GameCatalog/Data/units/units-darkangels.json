@@ -263,11 +263,11 @@
       "health": 95,
       "damage": 28,
       "armour": 24,
-      "initialRarity": "Epic",
+      "initialRarity": "Legendary",
       "meleeDamage": "Power",
       "meleeHits": 3,
       "rangedDamage": "Plasma",
-      "rangedHits": 1,
+      "rangedHits": 2,
       "rangeDistance": 2,
       "movement": 3,
       "traits": [
@@ -281,9 +281,11 @@
       "activeAbilityNames": [
         "DarkTalonStrike"
       ],
-      "passiveAbilityDamage": [],
+      "passiveAbilityDamage": [
+        "Plasma"
+      ],
       "passiveAbilityNames": [
-        "LionHelm"
+        "MasterfulTactician"
       ],
       "equipmentSlots": [
         "I_Crit",

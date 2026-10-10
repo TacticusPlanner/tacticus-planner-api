@@ -1291,6 +1291,264 @@
           ]
         }
       ]
+    },
+    {
+      "id": "orksWeirdboy",
+      "name": "Zapspitta",
+      "health": 100,
+      "damage": 12,
+      "armour": 13,
+      "initialRarity": "Rare",
+      "meleeDamage": "Psychic",
+      "meleeHits": 3,
+      "rangedDamage": "Psychic",
+      "rangedHits": 2,
+      "rangeDistance": 2,
+      "movement": 3,
+      "traits": [
+        "GetStuckIn",
+        "Psyker",
+        "Explodes"
+      ],
+      "activeAbilityDamage": [
+        "Psychic"
+      ],
+      "activeAbilityNames": [
+        "PowerVomit"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilityNames": [
+        "WaaaghEnergy"
+      ],
+      "equipmentSlots": [
+        "I_Crit",
+        "I_Defensive",
+        "I_Booster_Crit"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_orkss_weirdboy_01.png",
+      "roundIcon": "snowprint_assets/characters/ui_image_RoundPortrait_orkss_weirdboy_01.png",
+      "rankUpUpgrades": [
+        {
+          "rank": "Stone1",
+          "upgradeIds": [
+            "upgHpC015",
+            "upgHpC008",
+            "upgDmgC009",
+            "upgDmgC014",
+            "upgArmC004",
+            "upgArmC012"
+          ]
+        },
+        {
+          "rank": "Stone2",
+          "upgradeIds": [
+            "upgHpC001",
+            "upgHpC015",
+            "upgDmgU012",
+            "upgDmgU016C",
+            "upgArmC012",
+            "upgArmC006"
+          ]
+        },
+        {
+          "rank": "Stone3",
+          "upgradeIds": [
+            "upgHpU001",
+            "upgHpU018C",
+            "upgDmgC013",
+            "upgDmgC003",
+            "upgArmU008",
+            "upgArmU002"
+          ]
+        },
+        {
+          "rank": "Iron1",
+          "upgradeIds": [
+            "upgHpU018C",
+            "upgHpU016",
+            "upgDmgU012",
+            "upgDmgU014",
+            "upgArmU002",
+            "upgArmU003C"
+          ]
+        },
+        {
+          "rank": "Iron2",
+          "upgradeIds": [
+            "upgHpU001",
+            "upgHpR016C",
+            "upgDmgU018C",
+            "upgDmgU019",
+            "upgArmR006",
+            "upgArmU013"
+          ]
+        },
+        {
+          "rank": "Iron3",
+          "upgradeIds": [
+            "upgHpR003C",
+            "upgHpU007",
+            "upgDmgR026",
+            "upgDmgR012C",
+            "upgArmU003C",
+            "upgArmR010"
+          ]
+        },
+        {
+          "rank": "Bronze1",
+          "upgradeIds": [
+            "upgHpR010",
+            "upgHpR014",
+            "upgDmgR13C",
+            "upgDmgR006",
+            "upgArmR007C",
+            "upgArmR008C"
+          ]
+        },
+        {
+          "rank": "Bronze2",
+          "upgradeIds": [
+            "upgHpE005C",
+            "upgHpR013C",
+            "upgDmgR006",
+            "upgDmgE009C",
+            "upgArmR026",
+            "upgArmR013C"
+          ]
+        },
+        {
+          "rank": "Bronze3",
+          "upgradeIds": [
+            "upgHpR019",
+            "upgHpE007C",
+            "upgDmgE026C",
+            "upgDmgR016C",
+            "upgArmE026C",
+            "upgArmE009"
+          ]
+        },
+        {
+          "rank": "Silver1",
+          "upgradeIds": [
+            "upgHpE005C",
+            "upgHpE015",
+            "upgDmgE026C",
+            "upgDmgE011",
+            "upgArmE026C",
+            "upgArmE002C"
+          ]
+        },
+        {
+          "rank": "Silver2",
+          "upgradeIds": [
+            "upgHpL106",
+            "upgHpE014C",
+            "upgDmgL026C",
+            "upgDmgE009C",
+            "upgArmE026C",
+            "upgArmE012C"
+          ]
+        },
+        {
+          "rank": "Silver3",
+          "upgradeIds": [
+            "upgHpE005C",
+            "upgHpL011C",
+            "upgDmgE026C",
+            "upgDmgL016C",
+            "upgArmL202",
+            "upgArmL002C"
+          ]
+        },
+        {
+          "rank": "Gold1",
+          "upgradeIds": [
+            "upgHpL006C",
+            "upgHpL009C",
+            "upgDmgL202",
+            "upgDmgL009C",
+            "upgArmL026C",
+            "upgArmL008C"
+          ]
+        },
+        {
+          "rank": "Gold2",
+          "upgradeIds": [
+            "upgHpL126C",
+            "upgHpL014C",
+            "upgDmgL026C",
+            "upgDmgL016C",
+            "upgArmL026C",
+            "upgArmL011C"
+          ]
+        },
+        {
+          "rank": "Gold3",
+          "upgradeIds": [
+            "upgHpL006C",
+            "upgHpL009C",
+            "upgDmgL126C",
+            "upgDmgL008C",
+            "upgArmL126C",
+            "upgArmL008C"
+          ]
+        },
+        {
+          "rank": "Diamond1",
+          "upgradeIds": [
+            "upgHpL126C",
+            "upgHpL017C",
+            "upgDmgL126C",
+            "upgDmgL006C",
+            "upgArmL126C",
+            "upgArmL002C"
+          ]
+        },
+        {
+          "rank": "Diamond2",
+          "upgradeIds": [
+            "upgHpL126C",
+            "upgHpL211C",
+            "upgDmgL126C",
+            "upgDmgL211C",
+            "upgArmL126C",
+            "upgArmL211C"
+          ]
+        },
+        {
+          "rank": "Diamond3",
+          "upgradeIds": [
+            "upgHpL126C",
+            "upgHpL211C",
+            "upgDmgM211C",
+            "upgDmgL211C",
+            "upgArmM213C",
+            "upgArmL211C"
+          ]
+        },
+        {
+          "rank": "Adamantine1",
+          "upgradeIds": [
+            "upgHpM126C",
+            "upgHpL211C",
+            "upgDmgM211C",
+            "upgDmgL211C",
+            "upgArmM214C",
+            "upgArmL211C"
+          ]
+        },
+        {
+          "rank": "Adamantine2",
+          "upgradeIds": [
+            "upgHpECS",
+            "upgHpCS",
+            "upgDmgECS",
+            "upgDmgCS",
+            "upgArmECS",
+            "upgArmCS"
+          ]
+        }
+      ]
     }
   ],
   "mows": [

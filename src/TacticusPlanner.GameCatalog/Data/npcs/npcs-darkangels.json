@@ -42,7 +42,7 @@
       "meleeDamage": "Power",
       "meleeHits": 3,
       "rangedDamage": "Plasma",
-      "rangedHits": 1,
+      "rangedHits": 2,
       "distance": 2,
       "movement": 3,
       "traits": [
@@ -56,9 +56,11 @@
       "activeAbilities": [
         "DarkTalonStrike"
       ],
-      "passiveAbilityDamage": [],
+      "passiveAbilityDamage": [
+        "Plasma"
+      ],
       "passiveAbilities": [
-        "LionHelm"
+        "MasterfulTactician"
       ],
       "icon": "snowprint_assets/characters/ui_image_portrait_darka_azrael_01.png",
       "stats": [
@@ -2292,7 +2294,7 @@
       "meleeDamage": "Power",
       "meleeHits": 3,
       "rangedDamage": "Plasma",
-      "rangedHits": 1,
+      "rangedHits": 2,
       "distance": 2,
       "movement": 3,
       "traits": [
@@ -2306,9 +2308,11 @@
       "activeAbilities": [
         "DarkTalonStrike"
       ],
-      "passiveAbilityDamage": [],
+      "passiveAbilityDamage": [
+        "Plasma"
+      ],
       "passiveAbilities": [
-        "LionHelm"
+        "MasterfulTactician"
       ],
       "icon": "snowprint_assets/characters/ui_image_portrait_darka_azrael_01.png",
       "stats": [

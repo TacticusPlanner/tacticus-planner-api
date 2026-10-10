@@ -861,6 +861,89 @@
           "stars": 14
         }
       ]
+    },
+    {
+      "id": "votanChampion_LHE",
+      "name": "Kimm",
+      "meleeDamage": "Eviscerate",
+      "meleeHits": 2,
+      "rangedDamage": "Bolter",
+      "rangedHits": 2,
+      "distance": 2,
+      "movement": 2,
+      "traits": [
+        "PrioritisedEfficiency",
+        "RapidAssault",
+        "Unstoppable"
+      ],
+      "activeAbilityDamage": [
+        "DirectDamage",
+        "Physical"
+      ],
+      "activeAbilities": [
+        "MassDriverAccelerator"
+      ],
+      "passiveAbilityDamage": [],
+      "passiveAbilities": [
+        "ModifiedExoarmour"
+      ],
+      "icon": "snowprint_assets/characters/ui_image_portrait_votan_champion_01.png",
+      "stats": [
+        {
+          "abilityLevel": 8,
+          "damage": 91,
+          "armour": 79,
+          "health": 282,
+          "progressionIndex": 2,
+          "rank": 3,
+          "stars": 2
+        },
+        {
+          "abilityLevel": 17,
+          "damage": 207,
+          "armour": 181,
+          "health": 647,
+          "progressionIndex": 5,
+          "rank": 6,
+          "stars": 4
+        },
+        {
+          "abilityLevel": 26,
+          "damage": 465,
+          "armour": 407,
+          "health": 1452,
+          "progressionIndex": 8,
+          "rank": 9,
+          "stars": 6
+        },
+        {
+          "abilityLevel": 35,
+          "damage": 1026,
+          "armour": 896,
+          "health": 3203,
+          "progressionIndex": 11,
+          "rank": 12,
+          "stars": 8
+        },
+        {
+          "abilityLevel": 50,
+          "damage": 3679,
+          "armour": 3221,
+          "health": 11499,
+          "progressionIndex": 15,
+          "rank": 17,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 65,
+          "damage": 5587,
+          "armour": 4890,
+          "health": 17461,
+          "progressionIndex": 19,
+          "rank": 20,
+          "stars": 14
+        }
+      ]
     }
   ]
 }
