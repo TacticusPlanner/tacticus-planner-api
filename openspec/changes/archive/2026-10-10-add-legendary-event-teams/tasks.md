@@ -27,7 +27,7 @@ Companion apps change: `tacticus-planner-apps/openspec/changes/add-legendary-eve
 ## 4. Contract and verification
 
 - [x] 4.1 Build and verify `artifacts/openapi/TacticusPlanner.Api.json` contains the five plan routes and the new import fields; diff it against the shapes in design D8 and note any naming differences for the apps change.
-- [ ] 4.2 Live check via `aspire run`: create, edit, reorder and delete a team for `astarLysander` on a provisioned profile; confirm a stale revision returns the 409 body; confirm `DELETE /me` removes the rows.
+- [ ] 4.2 Live check via `aspire run`: create, edit, reorder and delete a team for `astarLysander` on a provisioned profile; confirm a stale revision returns the 409 body; confirm `DELETE /me` removes the rows. — not run (cloud session has no Entra token; covered by Postgres integration tests)
 - [x] 4.3 Gates: `dotnet format TacticusPlanner.slnx --verify-no-changes --no-restore`, `dotnet build TacticusPlanner.slnx -c Release --no-restore`, `dotnet test TacticusPlanner.slnx -c Release --no-build`, `git diff --check`.
 
 ## Deferred / out-of-session
