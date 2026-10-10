@@ -25,7 +25,8 @@
       "Genestealers",
       "EmperorsChildren",
       "LeaguesOfVotann",
-      "AdeptusAstartes"
+      "AdeptusAstartes",
+      "TheLostAndTheDamned"
     ],
     "levels": [
       {
@@ -169,7 +170,8 @@
       "DeathGuard",
       "ThousandSons",
       "WorldEaters",
-      "EmperorsChildren"
+      "EmperorsChildren",
+      "TheLostAndTheDamned"
     ],
     "levels": [
       {
@@ -388,7 +390,8 @@
       "Genestealers",
       "EmperorsChildren",
       "LeaguesOfVotann",
-      "AdeptusAstartes"
+      "AdeptusAstartes",
+      "TheLostAndTheDamned"
     ],
     "levels": [
       {
@@ -676,7 +679,8 @@
       "DeathGuard",
       "ThousandSons",
       "WorldEaters",
-      "EmperorsChildren"
+      "EmperorsChildren",
+      "TheLostAndTheDamned"
     ],
     "levels": [
       {
@@ -1111,7 +1115,8 @@
       "Genestealers",
       "EmperorsChildren",
       "LeaguesOfVotann",
-      "AdeptusAstartes"
+      "AdeptusAstartes",
+      "TheLostAndTheDamned"
     ],
     "levels": [
       {
@@ -1447,7 +1452,8 @@
       "DeathGuard",
       "ThousandSons",
       "WorldEaters",
-      "EmperorsChildren"
+      "EmperorsChildren",
+      "TheLostAndTheDamned"
     ],
     "levels": [
       {
@@ -2035,7 +2041,8 @@
       "Genestealers",
       "EmperorsChildren",
       "LeaguesOfVotann",
-      "AdeptusAstartes"
+      "AdeptusAstartes",
+      "TheLostAndTheDamned"
     ],
     "levels": [
       {
@@ -2272,7 +2279,8 @@
       "DeathGuard",
       "ThousandSons",
       "WorldEaters",
-      "EmperorsChildren"
+      "EmperorsChildren",
+      "TheLostAndTheDamned"
     ],
     "levels": [
       {
@@ -2743,7 +2751,8 @@
       "Genestealers",
       "EmperorsChildren",
       "LeaguesOfVotann",
-      "AdeptusAstartes"
+      "AdeptusAstartes",
+      "TheLostAndTheDamned"
     ],
     "levels": [
       {
@@ -2983,7 +2992,8 @@
       "DeathGuard",
       "ThousandSons",
       "WorldEaters",
-      "EmperorsChildren"
+      "EmperorsChildren",
+      "TheLostAndTheDamned"
     ],
     "levels": [
       {
@@ -3346,7 +3356,8 @@
       "Genestealers",
       "EmperorsChildren",
       "LeaguesOfVotann",
-      "AdeptusAstartes"
+      "AdeptusAstartes",
+      "TheLostAndTheDamned"
     ],
     "levels": [
       {
@@ -3587,7 +3598,8 @@
       "DeathGuard",
       "ThousandSons",
       "WorldEaters",
-      "EmperorsChildren"
+      "EmperorsChildren",
+      "TheLostAndTheDamned"
     ],
     "levels": [
       {
@@ -5134,6 +5146,81 @@
         "stats": {
           "critChance": 25,
           "critDamage": 2185
+        }
+      }
+    ]
+  },
+  {
+    "id": "R_Crit_Fidelity",
+    "name": "Fidelity",
+    "rarity": "Mythic",
+    "type": "I_Crit",
+    "abilityId": "Fidelity",
+    "isRelic": true,
+    "isUniqueRelic": true,
+    "allowedUnits": [
+      "tauAunShi"
+    ],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "critChance": 35,
+          "critDamage": 1050
+        }
+      },
+      {
+        "stats": {
+          "critChance": 35,
+          "critDamage": 1107
+        }
+      },
+      {
+        "stats": {
+          "critChance": 35,
+          "critDamage": 1164
+        }
+      },
+      {
+        "stats": {
+          "critChance": 35,
+          "critDamage": 1221
+        }
+      },
+      {
+        "stats": {
+          "critChance": 35,
+          "critDamage": 1277
+        }
+      },
+      {
+        "stats": {
+          "critChance": 35,
+          "critDamage": 1334
+        }
+      },
+      {
+        "stats": {
+          "critChance": 35,
+          "critDamage": 1391
+        }
+      },
+      {
+        "stats": {
+          "critChance": 35,
+          "critDamage": 1447
+        }
+      },
+      {
+        "stats": {
+          "critChance": 35,
+          "critDamage": 1504
+        }
+      },
+      {
+        "stats": {
+          "critChance": 35,
+          "critDamage": 1561
         }
       }
     ]

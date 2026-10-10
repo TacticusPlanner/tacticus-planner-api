@@ -1,7 +1,7 @@
 ﻿{
-  version: dev-2026-09-02,
+  version: dev-2026-10-10,
   schemaVersion: 4,
-  gameVersion: 1.42,
+  gameVersion: 1.43,
   sourceHash: {time-dependent},
   datasets: [
     {
@@ -11,7 +11,7 @@
     },
     {
       key: campaign-battles,
-      hash: 826c2899d3312579b85ba8d46aecdb08fb69ff7500c1c7372aa05bf49b6c1937,
+      hash: 6a5f52cccf26c4682fa7bc260fd309e2db9f8b3e499ca0027258b3442b796a5f,
       url: /api/v1/game-catalog/campaign-battles
     },
     {
@@ -26,12 +26,12 @@
     },
     {
       key: characters,
-      hash: 0909aabdd36034c21881b38c7731b1575b9d1a6fc1988356f1c636f1e331ed70,
+      hash: 41f6f09bb5ed47365e4c91ba613744ad64a4adbbca03d044cbbb4f3f93e1245d,
       url: /api/v1/game-catalog/characters
     },
     {
       key: equipment,
-      hash: a1770ad1f5a96d9c98c518059c369e8823267c69b163111e43e63ec1985bfb69,
+      hash: aae72f1520a88e7ed66af5ed549edc533d8eefc8e212f471c8ff439ed5508cf1,
       url: /api/v1/game-catalog/equipment
     },
     {
@@ -61,7 +61,7 @@
     },
     {
       key: lres,
-      hash: 97f4a1018a15faf92a1b2ac483c4b80f5cf951c9a3c8d7d251c66f969dd48634,
+      hash: eb291fc0f24a32497f23b0e83ef6c96abe2e396e2a5d20210f86cf64c2d3275e,
       url: /api/v1/game-catalog/lres
     },
     {
@@ -76,7 +76,7 @@
     },
     {
       key: npcs,
-      hash: 1f9ddef756373b5349df3fbca45e47ad33d5d30d0b791b537c14f730f945dd69,
+      hash: d90d5ac15f112e024ab9b9710641c59b7bf235692ef2de0c3cef1feb1b15b978,
       url: /api/v1/game-catalog/npcs
     },
     {
@@ -86,12 +86,12 @@
     },
     {
       key: raid-bosses,
-      hash: 9a0cd036bf50c2a1c8ba61ae7f56409d501ee81993c03564ac4f0e36bdba850e,
+      hash: 6fb75188fa5ded0f8b40df2f0762bd204b032b26d86d5bdbb987c552e6df4f53,
       url: /api/v1/game-catalog/raid-bosses
     },
     {
       key: shops,
-      hash: ddee0877e0ee18f085f0a0c974103cae6cd052a1b2f2003416568da73b1c1353,
+      hash: 247051ce08560fd23565b0e411964d11fdc476059a4f8f161a35835c1323932f,
       url: /api/v1/game-catalog/shops
     },
     {

@@ -81,6 +81,15 @@
           "progressionIndex": 15,
           "rank": 15,
           "stars": 11
+        },
+        {
+          "abilityLevel": 47,
+          "damage": 1123,
+          "armour": 1363,
+          "health": 6415,
+          "progressionIndex": 17,
+          "rank": 16,
+          "stars": 12
         }
       ]
     },
@@ -263,13 +272,13 @@
           "stars": 11
         },
         {
-          "abilityLevel": 26,
-          "damage": 193,
-          "armour": 193,
-          "health": 907,
-          "progressionIndex": 8,
-          "rank": 9,
-          "stars": 6
+          "abilityLevel": 44,
+          "damage": 978,
+          "armour": 978,
+          "health": 4585,
+          "progressionIndex": 15,
+          "rank": 15,
+          "stars": 11
         }
       ]
     },
@@ -503,6 +512,15 @@
           "health": 2925,
           "progressionIndex": 15,
           "rank": 13,
+          "stars": 11
+        },
+        {
+          "abilityLevel": 44,
+          "damage": 1162,
+          "armour": 1100,
+          "health": 4585,
+          "progressionIndex": 15,
+          "rank": 15,
           "stars": 11
         }
       ]

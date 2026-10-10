@@ -61,7 +61,8 @@
       "Custodes",
       "EmperorsChildren",
       "LeaguesOfVotann",
-      "AdeptusAstartes"
+      "AdeptusAstartes",
+      "TheLostAndTheDamned"
     ],
     "levels": [
       {
@@ -182,7 +183,8 @@
       "Custodes",
       "EmperorsChildren",
       "LeaguesOfVotann",
-      "AdeptusAstartes"
+      "AdeptusAstartes",
+      "TheLostAndTheDamned"
     ],
     "levels": [
       {
@@ -351,7 +353,8 @@
       "Custodes",
       "EmperorsChildren",
       "LeaguesOfVotann",
-      "AdeptusAstartes"
+      "AdeptusAstartes",
+      "TheLostAndTheDamned"
     ],
     "levels": [
       {
@@ -453,7 +456,8 @@
       "Custodes",
       "EmperorsChildren",
       "LeaguesOfVotann",
-      "AdeptusAstartes"
+      "AdeptusAstartes",
+      "TheLostAndTheDamned"
     ],
     "levels": [
       {
@@ -604,7 +608,8 @@
       "Custodes",
       "EmperorsChildren",
       "LeaguesOfVotann",
-      "AdeptusAstartes"
+      "AdeptusAstartes",
+      "TheLostAndTheDamned"
     ],
     "levels": [
       {
@@ -725,7 +730,8 @@
       "Custodes",
       "EmperorsChildren",
       "LeaguesOfVotann",
-      "AdeptusAstartes"
+      "AdeptusAstartes",
+      "TheLostAndTheDamned"
     ],
     "levels": [
       {
@@ -845,6 +851,81 @@
     "isUniqueRelic": true,
     "allowedUnits": [
       "eldarAutarch"
+    ],
+    "allowedFactions": [],
+    "levels": [
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 350
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 369
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 388
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 407
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 426
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 445
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 464
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 483
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 502
+        }
+      },
+      {
+        "stats": {
+          "blockChanceBonus": 6,
+          "blockDamageBonus": 521
+        }
+      }
+    ]
+  },
+  {
+    "id": "R_Booster_Block_LionHelmRelic",
+    "name": "Lion Helm",
+    "rarity": "Mythic",
+    "type": "I_Booster_Block",
+    "abilityId": "LionHelmRelic",
+    "isRelic": true,
+    "isUniqueRelic": true,
+    "allowedUnits": [
+      "darkaAzrael"
     ],
     "allowedFactions": [],
     "levels": [
