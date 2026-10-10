@@ -110,34 +110,36 @@ public sealed class LegendaryEventPlanWriter(
                 return new LegendaryEventPlanWriteResult.Ok(LegendaryEventPlanProjection.ToResponse(plan));
         }
 
-        if (pendingContent.Count > 0)
-        {
-            // Member rows are keyed by slot, so EF would turn "delete slot 0, insert slot 0" into one UPDATE
-            // and a position swap would trip the unique (team_id, unit_id) index mid-statement. Flushing the
-            // deletes first, inside the same transaction and before the plan row is touched (so the revision
-            // is bumped exactly once, by the final save), keeps the swap legal.
-            await db.SaveChangesAsync(ct);
-            foreach (var (team, content) in pendingContent)
-            {
-                FillContent(team, content);
-            }
-
-            pendingContent.Clear();
-        }
-
-        plan.CatalogVersion = GameCatalogRelease.Version;
-        if (isNew)
-        {
-            db.LegendaryEventPlans.Add(plan);
-        }
-        else
-        {
-            // Child-row changes alone never mark the root modified; every mutation is a plan write.
-            db.Entry(plan).Property(entity => entity.UpdatedAt).IsModified = true;
-        }
-
         try
         {
+            if (pendingContent.Count > 0)
+            {
+                // Member rows are keyed by slot, so EF would turn "delete slot 0, insert slot 0" into one
+                // UPDATE and a position swap would trip the unique (team_id, unit_id) index mid-statement.
+                // Flushing the deletes first, inside the same transaction and before the plan row is touched
+                // (so the revision is bumped exactly once, by the final save), keeps the swap legal. A slot
+                // a concurrent writer already removed makes this delete affect no row, which EF reports as
+                // a concurrency exception: the same stale answer as a lost revision race.
+                await db.SaveChangesAsync(ct);
+                foreach (var (team, content) in pendingContent)
+                {
+                    FillContent(team, content);
+                }
+
+                pendingContent.Clear();
+            }
+
+            plan.CatalogVersion = GameCatalogRelease.Version;
+            if (isNew)
+            {
+                db.LegendaryEventPlans.Add(plan);
+            }
+            else
+            {
+                // Child-row changes alone never mark the root modified; every mutation is a plan write.
+                db.Entry(plan).Property(entity => entity.UpdatedAt).IsModified = true;
+            }
+
             await db.SaveChangesAsync(ct);
         }
         catch (Exception exception) when (exception is DbUpdateConcurrencyException
