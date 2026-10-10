@@ -8,7 +8,7 @@ Stage 5 of the V2 Legendary Event plan ("Clear-depth estimation", docs plan §5;
 
 - **New served dataset `lre-clear-estimate`**: one record with the power ratio, the calibration metadata (sample count, date) and per-unit efficiency coefficients for Legendary Event battles. A unit absent from the list has coefficient 1.0, so an empty list is valid and is the starting state.
 - **Raw file** `Data/lre-clear-estimate.json`, validated on load (unit ids exist as characters, coefficients and ratio positive and bounded, no duplicates), listed in the public manifest with its hash.
-- No endpoint, table or migration. No server-side calculation (ADR 0009). The estimate is not persisted (apps design D2).
+- No calculation endpoint, table or migration; the dataset is served by the existing catalog route as `GET /api/v1/game-catalog/lre-clear-estimate`. No server-side calculation (ADR 0009). The estimate is not persisted (apps design D2).
 
 Out of scope: the estimate calculation and UI (companion apps change), the anonymised community aggregate ("players with team power P cleared battle X"; plan §5 "later, separate change", needs a privacy review), and who curates coefficients long-term (open question).
 
