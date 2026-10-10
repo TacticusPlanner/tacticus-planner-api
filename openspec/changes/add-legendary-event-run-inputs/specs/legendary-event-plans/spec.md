@@ -40,11 +40,44 @@ Assumptions:
 - **WHEN** the caller writes run 1 with the same values and `expectedRevision` 6
 - **THEN** the response is 200 with the plan at revision 6
 
+### Requirement: Maybe clear and Stop here annotations are stored per objective cell
+
+A plan SHALL store, per lane, battle and objective cell, at most one annotation with status `maybeClear` or `stopHere` and the time it was last written (`updatedAt`). A cell SHALL be identified as the synced progress identifies it: `laneId`, `battleIndex` (0-based) and `objectiveId` (0 for defeat-all, 1–5 for the lane objective whose catalog `index` is `objectiveId − 1`). `PUT /me/legendary-event-plans/{eventId}/annotations` with `{ expectedRevision, laneId, battleIndex, objectiveIds, status }` SHALL set `status` on each listed cell of that battle, or remove their annotations when `status` is null, and SHALL leave every other cell untouched. The system SHALL reject with 400, naming the field, a `laneId` outside `alpha|beta|gamma`, a `battleIndex` outside 0..(lane battle count − 1), an empty `objectiveIds`, more than six or a repeated entry, an entry outside 0..(the lane's objective count), and a `status` other than `maybeClear`, `stopHere` or null. Annotations SHALL be stored whatever the synced progress says; whether one applies is decided by the client (an annotation applies only to a cell the synced progress shows not cleared). A sync SHALL never create, change or remove annotations. Deleting the plan or the account SHALL remove its annotations.
+
+#### Scenario: Mark one cell on a new plan
+
+- **GIVEN** no plan exists for `votanUthar`
+- **WHEN** the caller sends `PUT …/votanUthar/annotations` with `expectedRevision` 0, `laneId` `alpha`, `battleIndex` 6, `objectiveIds` `[3]`, `status` `stopHere`
+- **THEN** the plan is created at revision 1 and `annotations` is `[{alpha, 6, 3, stopHere, updatedAt}]`
+
+#### Scenario: Mark a whole battle, then clear one cell
+
+- **GIVEN** a plan at revision 2 with no annotations
+- **WHEN** the caller marks alpha `battleIndex` 7, `objectiveIds` `[0, 1, 2, 4]`, `maybeClear`, then sends `objectiveIds` `[2]` with `status` null at revision 3
+- **THEN** the plan is at revision 4 and alpha `battleIndex` 7 has annotations on objective ids 0, 1 and 4 only
+
+#### Scenario: Objective outside the lane
+
+- **WHEN** the caller sends `objectiveIds` `[6]`
+- **THEN** the response is 400 naming `objectiveIds` and nothing changes
+
+#### Scenario: Battle outside the lane
+
+- **GIVEN** the alpha lane has 18 battles
+- **WHEN** the caller sends `battleIndex` 18
+- **THEN** the response is 400 naming `battleIndex`
+
+#### Scenario: Unchanged annotation keeps the revision
+
+- **GIVEN** alpha `battleIndex` 6, `objectiveId` 3 is `stopHere` at plan revision 5
+- **WHEN** the caller sets the same cell to `stopHere` with `expectedRevision` 5, or clears a cell that has no annotation
+- **THEN** the response is 200 with the plan at revision 5
+
 ## MODIFIED Requirements
 
 ### Requirement: One revision per plan guards every mutation
 
-Every mutation (`PUT` plan, `POST`/`PUT`/`DELETE` team, `PUT` order, `PUT` run inputs) SHALL carry `expectedRevision`. When it differs from the plan's current revision (0 for a plan that does not exist yet), the system SHALL make no change and respond 409 with `LegendaryEventPlanConflictResponse { issueCode: "legendaryEventPlanStale", message, plan }` carrying the current plan. A concurrent write detected at save time, including a unique-key violation when two callers create the missing plan at once, SHALL produce the same response after re-reading the plan. Every successful mutation SHALL bump the plan revision by exactly one and respond with the whole plan, with two exceptions that succeed without bumping the revision: a `PUT …/teams/order` whose order is already current (see "Lane order is replaced as a whole set"), and a `PUT …/runs/{run}` whose values equal the stored run inputs, or are all zero/false for a run with no stored inputs (see "Run inputs are stored per run").
+Every mutation (`PUT` plan, `POST`/`PUT`/`DELETE` team, `PUT` order, `PUT` run inputs, `PUT` annotations) SHALL carry `expectedRevision`. When it differs from the plan's current revision (0 for a plan that does not exist yet), the system SHALL make no change and respond 409 with `LegendaryEventPlanConflictResponse { issueCode: "legendaryEventPlanStale", message, plan }` carrying the current plan. A concurrent write detected at save time, including a unique-key violation when two callers create the missing plan at once, SHALL produce the same response after re-reading the plan. Every successful mutation SHALL bump the plan revision by exactly one and respond with the whole plan, with three exceptions that succeed without bumping the revision: a `PUT …/teams/order` whose order is already current (see "Lane order is replaced as a whole set"), and a `PUT …/runs/{run}` whose values equal the stored run inputs, or are all zero/false for a run with no stored inputs (see "Run inputs are stored per run"), and a `PUT …/annotations` that changes no cell (see "Maybe clear and Stop here annotations are stored per objective cell").
 
 #### Scenario: Stale revision
 
@@ -78,7 +111,7 @@ Every mutation (`PUT` plan, `POST`/`PUT`/`DELETE` team, `PUT` order, `PUT` run i
 
 ### Requirement: Served plan shape
 
-Every plan endpoint SHALL respond with the same `LegendaryEventPlanResponse`: `eventId`, `revision`, `catalogVersion`, `notes`, `showPaidOptions`, `teams` ordered by lane (`alpha`, `beta`, `gamma`) then `sortOrder`, and `runs` ascending by run with one entry per stored run. Each team SHALL carry `id`, `laneId`, `name`, `sortOrder`, `memberUnitIds` in position order, `reserveUnitId` (null when none), `objectiveIndexes` ascending, and `runDepths` ascending by run with one entry per stored run (`run`, `expectedBattleClears`, `expectedBattleClearsSource`, `recordedAt`); a team with no depth has an empty `runDepths`. Each `runs` entry SHALL carry `run`, `regularMissions`, `premiumMissions`, `bundlePurchased`, `closeShards` and `updatedAt`; a plan with no stored run inputs has an empty `runs`. Ids only: no unit, objective or event display strings are served.
+Every plan endpoint SHALL respond with the same `LegendaryEventPlanResponse`: `eventId`, `revision`, `catalogVersion`, `notes`, `showPaidOptions`, `teams` ordered by lane (`alpha`, `beta`, `gamma`) then `sortOrder`, `runs` ascending by run with one entry per stored run, and `annotations` ordered by lane (`alpha`, `beta`, `gamma`), then `battleIndex`, then `objectiveId`. Each team SHALL carry `id`, `laneId`, `name`, `sortOrder`, `memberUnitIds` in position order, `reserveUnitId` (null when none), `objectiveIndexes` ascending, and `runDepths` ascending by run with one entry per stored run (`run`, `expectedBattleClears`, `expectedBattleClearsSource`, `recordedAt`); a team with no depth has an empty `runDepths`. Each `runs` entry SHALL carry `run`, `regularMissions`, `premiumMissions`, `bundlePurchased`, `closeShards` and `updatedAt`; a plan with no stored run inputs has an empty `runs`. Each `annotations` entry SHALL carry `laneId`, `battleIndex`, `objectiveId`, `status` and `updatedAt`; a plan with none has an empty `annotations`. Ids only: no unit, objective or event display strings are served.
 
 #### Scenario: Team ordering in the response
 
@@ -101,4 +134,10 @@ Every plan endpoint SHALL respond with the same `LegendaryEventPlanResponse`: `e
 #### Scenario: Empty plan has no runs
 
 - **WHEN** a missing plan is read
-- **THEN** `runs` is an empty list
+- **THEN** `runs` and `annotations` are empty lists
+
+#### Scenario: Annotations in the response
+
+- **GIVEN** annotations (lane/`battleIndex`/`objectiveId`) on beta/2/1, alpha/9/0 and alpha/3/5
+- **WHEN** the plan is read
+- **THEN** `annotations` lists alpha/3/5, alpha/9/0, beta/2/1
