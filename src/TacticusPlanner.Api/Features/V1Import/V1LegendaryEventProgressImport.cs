@@ -119,7 +119,7 @@ public static class V1LegendaryEventProgressImport
                 continue;
             }
 
-            if (battleIndex is not { } index || index != Math.Floor(index) || index < 0 || index >= lane.BattleIds.Count)
+            if (battleIndex is not { } index || !double.IsInteger(index) || index < 0 || index >= lane.BattleIds.Count)
             {
                 Report("unknown_battle", $"{laneKey}:{Format(battleIndex)}");
                 continue;
@@ -160,9 +160,9 @@ public static class V1LegendaryEventProgressImport
         IReadOnlyList<V1ImportedAnnotation> annotations)
     {
         var plan = context.Plan;
-        foreach (var inputs in runInputs.Where(inputs => plan.Runs.All(run => run.Run != inputs.Run)))
-        {
-            var row = new LegendaryEventRunProgress
+        var runRows = runInputs
+            .Where(inputs => plan.Runs.All(run => run.Run != inputs.Run))
+            .Select(inputs => new LegendaryEventRunProgress
             {
                 PlanId = plan.Id,
                 Run = inputs.Run,
@@ -171,17 +171,20 @@ public static class V1LegendaryEventProgressImport
                 BundlePurchased = inputs.BundlePurchased,
                 CloseShards = inputs.CloseShards,
                 UpdatedAt = context.Now,
-            };
+            })
+            .ToList();
+        foreach (var row in runRows)
+        {
             plan.Runs.Add(row);
             context.Db.Add(row);
         }
 
-        foreach (var annotation in annotations.Where(annotation => !plan.Annotations.Any(existing =>
-            existing.LaneId == annotation.LaneId
-            && existing.BattleIndex == annotation.BattleIndex
-            && existing.ObjectiveId == annotation.ObjectiveId)))
-        {
-            var row = new LegendaryEventObjectiveAnnotation
+        var annotationRows = annotations
+            .Where(annotation => !plan.Annotations.Any(existing =>
+                existing.LaneId == annotation.LaneId
+                && existing.BattleIndex == annotation.BattleIndex
+                && existing.ObjectiveId == annotation.ObjectiveId))
+            .Select(annotation => new LegendaryEventObjectiveAnnotation
             {
                 PlanId = plan.Id,
                 LaneId = annotation.LaneId,
@@ -189,7 +192,10 @@ public static class V1LegendaryEventProgressImport
                 ObjectiveId = annotation.ObjectiveId,
                 Status = annotation.Status,
                 UpdatedAt = context.Now,
-            };
+            })
+            .ToList();
+        foreach (var row in annotationRows)
+        {
             plan.Annotations.Add(row);
             context.Db.Add(row);
         }
@@ -216,14 +222,11 @@ public static class V1LegendaryEventProgressImport
         switch (statuses)
         {
             case { ValueKind: JsonValueKind.Object } byIndex:
-                foreach (var entry in byIndex.EnumerateObject())
+                foreach (var entry in byIndex.EnumerateObject().Where(entry => Number(entry.Value) is not null))
                 {
-                    if (Number(entry.Value) is { } status)
-                    {
-                        yield return (
-                            double.TryParse(entry.Name, NumberStyles.Float, CultureInfo.InvariantCulture, out var index) ? index : null,
-                            (int)status);
-                    }
+                    yield return (
+                        double.TryParse(entry.Name, NumberStyles.Float, CultureInfo.InvariantCulture, out var index) ? index : null,
+                        (int)Number(entry.Value)!.Value);
                 }
 
                 break;
@@ -244,7 +247,7 @@ public static class V1LegendaryEventProgressImport
     {
         var number = Number(value) ?? 0;
         var clamped = (int)Math.Clamp(Math.Floor(number), 0, max);
-        if (clamped != number)
+        if (!number.Equals(clamped))
             issues.Add(new("run_input_clamped", null, $"{run}:{field}:{Format(number)}"));
         return clamped;
     }
