@@ -5,13 +5,46 @@ namespace TacticusPlanner.Api.Features.LegendaryEventPlans;
 /// <summary>The one served plan shape, returned by every plan endpoint (design D8). Ids only: no unit,
 /// objective or event display strings.</summary>
 /// <param name="Teams">Ordered by lane (alpha, beta, gamma), then <c>sortOrder</c>.</param>
+/// <param name="Runs">Run inputs, one entry per stored run, ascending by run; absent runs read as all zeros.</param>
+/// <param name="Annotations">Maybe clear / Stop here marks, ordered by lane, then <c>battleIndex</c>, then
+/// <c>objectiveId</c>. The client applies a mark only while synced progress shows its cell not cleared.</param>
 public sealed record LegendaryEventPlanResponse(
     string EventId,
     long Revision,
     string CatalogVersion,
     string? Notes,
     bool ShowPaidOptions,
-    IReadOnlyList<LegendaryEventTeamResponse> Teams
+    IReadOnlyList<LegendaryEventTeamResponse> Teams,
+    IReadOnlyList<LegendaryEventRunProgressResponse> Runs,
+    IReadOnlyList<LegendaryEventObjectiveAnnotationResponse> Annotations
+);
+
+/// <param name="Run">The event run, 1–3.</param>
+/// <param name="RegularMissions">0..the event's catalog <c>regularMissions</c> count.</param>
+/// <param name="PremiumMissions">0..the event's catalog <c>premiumMissions</c> count.</param>
+/// <param name="CloseShards">"Oh So Close" shards, 0–75.</param>
+/// <param name="UpdatedAt">When this run's inputs were last written (UTC).</param>
+public sealed record LegendaryEventRunProgressResponse(
+    int Run,
+    int RegularMissions,
+    int PremiumMissions,
+    bool BundlePurchased,
+    int CloseShards,
+    DateTimeOffset UpdatedAt
+);
+
+/// <param name="LaneId"><c>alpha</c>, <c>beta</c> or <c>gamma</c>.</param>
+/// <param name="BattleIndex">0-based, as the synced encounters.</param>
+/// <param name="ObjectiveId">0 for defeat-all, 1–5 for the lane objective whose catalog <c>index</c> is
+/// <c>objectiveId − 1</c>.</param>
+/// <param name="Status"><c>maybeClear</c> or <c>stopHere</c>.</param>
+/// <param name="UpdatedAt">When this cell's mark was last written (UTC).</param>
+public sealed record LegendaryEventObjectiveAnnotationResponse(
+    string LaneId,
+    int BattleIndex,
+    int ObjectiveId,
+    string Status,
+    DateTimeOffset UpdatedAt
 );
 
 /// <param name="MemberUnitIds">Line-up in position order (1–5 units).</param>
@@ -92,3 +125,28 @@ public sealed class DeleteLegendaryEventTeamRequest
 
 /// <param name="TeamIds">The complete set of the lane's team ids, in the desired order.</param>
 public sealed record UpdateLegendaryEventTeamOrderRequest(long ExpectedRevision, string LaneId, IReadOnlyList<Guid> TeamIds);
+
+/// <param name="ExpectedRevision">The plan revision the caller last read (0 for a plan that does not exist).</param>
+/// <param name="RegularMissions">0..the event's catalog <c>regularMissions</c> count.</param>
+/// <param name="PremiumMissions">0..the event's catalog <c>premiumMissions</c> count.</param>
+/// <param name="CloseShards">"Oh So Close" shards, 0–75.</param>
+public sealed record UpdateLegendaryEventRunInputsRequest(
+    long ExpectedRevision,
+    int RegularMissions,
+    int PremiumMissions,
+    bool BundlePurchased,
+    int CloseShards
+);
+
+/// <param name="ExpectedRevision">The plan revision the caller last read (0 for a plan that does not exist).</param>
+/// <param name="BattleIndex">0-based battle index within the lane.</param>
+/// <param name="ObjectiveIds">1–6 distinct cells of that battle: 0 for defeat-all, 1..the lane's objective
+/// count for its objectives.</param>
+/// <param name="Status"><c>maybeClear</c>, <c>stopHere</c>, or null to remove the listed cells' marks.</param>
+public sealed record UpdateLegendaryEventAnnotationsRequest(
+    long ExpectedRevision,
+    string LaneId,
+    int BattleIndex,
+    IReadOnlyList<int> ObjectiveIds,
+    string? Status
+);

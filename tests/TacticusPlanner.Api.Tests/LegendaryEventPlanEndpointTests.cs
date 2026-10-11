@@ -361,7 +361,7 @@ public sealed class LegendaryEventPlanEndpointTests(PlannerApiFactory factory) :
 
         using var document = JsonDocument.Parse(await client.GetStringAsync(PlanUrl, Ct));
         var root = document.RootElement;
-        Assert.Equal(["eventId", "revision", "catalogVersion", "notes", "showPaidOptions", "teams"],
+        Assert.Equal(["eventId", "revision", "catalogVersion", "notes", "showPaidOptions", "teams", "runs", "annotations"],
             root.EnumerateObject().Select(property => property.Name));
         var team = root.GetProperty("teams")[0];
         Assert.Equal(["id", "laneId", "name", "sortOrder", "memberUnitIds", "reserveUnitId", "objectiveIndexes", "runDepths"],

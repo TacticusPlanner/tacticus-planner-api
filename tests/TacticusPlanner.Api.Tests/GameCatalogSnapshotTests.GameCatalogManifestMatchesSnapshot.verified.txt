@@ -55,13 +55,8 @@
       url: /api/v1/game-catalog/lre-battles
     },
     {
-      key: lre-common,
-      hash: 6ea3eb75b4b74ba00353a368c4933aba508a77893da07100f374bf97f1ea03e1,
-      url: /api/v1/game-catalog/lre-common
-    },
-    {
       key: lres,
-      hash: eb291fc0f24a32497f23b0e83ef6c96abe2e396e2a5d20210f86cf64c2d3275e,
+      hash: 9664dd42348f7a38886fc2daf809cc7d24595d5cde7a0bbf6372a869661da379,
       url: /api/v1/game-catalog/lres
     },
     {

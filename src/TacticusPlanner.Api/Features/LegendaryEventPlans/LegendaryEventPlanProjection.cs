@@ -13,6 +13,8 @@ public static class LegendaryEventPlanProjection
             .Include(plan => plan.Teams).ThenInclude(team => team.Members)
             .Include(plan => plan.Teams).ThenInclude(team => team.Objectives)
             .Include(plan => plan.Teams).ThenInclude(team => team.RunDepths)
+            .Include(plan => plan.Runs)
+            .Include(plan => plan.Annotations)
             .AsSplitQuery();
 
     /// <summary>Scoped to the caller's profile by <see cref="PlannerDbContext"/>'s global query filter.</summary>
@@ -24,7 +26,7 @@ public static class LegendaryEventPlanProjection
     }
 
     public static LegendaryEventPlanResponse Empty(string eventId) =>
-        new(eventId, 0, GameCatalogRelease.Version, null, false, []);
+        new(eventId, 0, GameCatalogRelease.Version, null, false, [], [], []);
 
     public static LegendaryEventPlanResponse Map(LegendaryEventPlan plan) =>
         new(
@@ -37,7 +39,27 @@ public static class LegendaryEventPlanProjection
                 .OrderBy(team => LaneOrder(team.LaneId))
                 .ThenBy(team => team.SortOrder)
                 .Select(MapTeam)
+                .ToList(),
+            plan.Runs
+                .OrderBy(run => run.Run)
+                .Select(run => new LegendaryEventRunProgressResponse(
+                    run.Run, run.RegularMissions, run.PremiumMissions, run.BundlePurchased, run.CloseShards,
+                    run.UpdatedAt))
+                .ToList(),
+            plan.Annotations
+                .OrderBy(annotation => LaneOrder(annotation.LaneId))
+                .ThenBy(annotation => annotation.BattleIndex)
+                .ThenBy(annotation => annotation.ObjectiveId)
+                .Select(annotation => new LegendaryEventObjectiveAnnotationResponse(
+                    annotation.LaneId, annotation.BattleIndex, annotation.ObjectiveId,
+                    StatusName(annotation.Status), annotation.UpdatedAt))
                 .ToList());
+
+    public static string StatusName(LegendaryEventAnnotationStatus status) => status switch
+    {
+        LegendaryEventAnnotationStatus.StopHere => LegendaryEventValidation.StopHereStatus,
+        _ => LegendaryEventValidation.MaybeClearStatus,
+    };
 
     public static string SourceName(LegendaryEventDepthSource source) => source switch
     {

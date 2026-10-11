@@ -519,6 +519,50 @@ namespace TacticusPlanner.Persistence.Migrations
                     b.ToTable("guild_members", (string)null);
                 });
 
+            modelBuilder.Entity("TacticusPlanner.Domain.LegendaryEvents.LegendaryEventObjectiveAnnotation", b =>
+                {
+                    b.Property<Guid>("PlanId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("plan_id");
+
+                    b.Property<string>("LaneId")
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)")
+                        .HasColumnName("lane_id");
+
+                    b.Property<int>("BattleIndex")
+                        .HasColumnType("integer")
+                        .HasColumnName("battle_index");
+
+                    b.Property<int>("ObjectiveId")
+                        .HasColumnType("integer")
+                        .HasColumnName("objective_id");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)")
+                        .HasColumnName("status");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("PlanId", "LaneId", "BattleIndex", "ObjectiveId")
+                        .HasName("pk_legendary_event_objective_annotations");
+
+                    b.ToTable("legendary_event_objective_annotations", null, t =>
+                        {
+                            t.HasCheckConstraint("ck_legendary_event_objective_annotations_battle_index", "battle_index >= 0");
+
+                            t.HasCheckConstraint("ck_legendary_event_objective_annotations_lane_id", "lane_id IN ('alpha', 'beta', 'gamma')");
+
+                            t.HasCheckConstraint("ck_legendary_event_objective_annotations_objective_id", "objective_id BETWEEN 0 AND 5");
+
+                            t.HasCheckConstraint("ck_legendary_event_objective_annotations_status", "status IN ('maybeClear', 'stopHere')");
+                        });
+                });
+
             modelBuilder.Entity("TacticusPlanner.Domain.LegendaryEvents.LegendaryEventPlan", b =>
                 {
                     b.Property<Guid>("Id")
@@ -571,6 +615,51 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasDatabaseName("ix_legendary_event_plans_profile_id_event_id");
 
                     b.ToTable("legendary_event_plans", (string)null);
+                });
+
+            modelBuilder.Entity("TacticusPlanner.Domain.LegendaryEvents.LegendaryEventRunProgress", b =>
+                {
+                    b.Property<Guid>("PlanId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("plan_id");
+
+                    b.Property<int>("Run")
+                        .HasColumnType("integer")
+                        .HasColumnName("run");
+
+                    b.Property<bool>("BundlePurchased")
+                        .HasColumnType("boolean")
+                        .HasColumnName("bundle_purchased");
+
+                    b.Property<int>("CloseShards")
+                        .HasColumnType("integer")
+                        .HasColumnName("close_shards");
+
+                    b.Property<int>("PremiumMissions")
+                        .HasColumnType("integer")
+                        .HasColumnName("premium_missions");
+
+                    b.Property<int>("RegularMissions")
+                        .HasColumnType("integer")
+                        .HasColumnName("regular_missions");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("PlanId", "Run")
+                        .HasName("pk_legendary_event_run_progress");
+
+                    b.ToTable("legendary_event_run_progress", null, t =>
+                        {
+                            t.HasCheckConstraint("ck_legendary_event_run_progress_close_shards", "close_shards >= 0");
+
+                            t.HasCheckConstraint("ck_legendary_event_run_progress_premium_missions", "premium_missions >= 0");
+
+                            t.HasCheckConstraint("ck_legendary_event_run_progress_regular_missions", "regular_missions >= 0");
+
+                            t.HasCheckConstraint("ck_legendary_event_run_progress_run", "run BETWEEN 1 AND 3");
+                        });
                 });
 
             modelBuilder.Entity("TacticusPlanner.Domain.LegendaryEvents.LegendaryEventTeam", b =>
@@ -1685,6 +1774,18 @@ namespace TacticusPlanner.Persistence.Migrations
                     b.Navigation("Profile");
                 });
 
+            modelBuilder.Entity("TacticusPlanner.Domain.LegendaryEvents.LegendaryEventObjectiveAnnotation", b =>
+                {
+                    b.HasOne("TacticusPlanner.Domain.LegendaryEvents.LegendaryEventPlan", "Plan")
+                        .WithMany("Annotations")
+                        .HasForeignKey("PlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_legendary_event_objective_annotations_legendary_event_plans");
+
+                    b.Navigation("Plan");
+                });
+
             modelBuilder.Entity("TacticusPlanner.Domain.LegendaryEvents.LegendaryEventPlan", b =>
                 {
                     b.HasOne("TacticusPlanner.Domain.Profiles.Profile", "Profile")
@@ -1695,6 +1796,18 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasConstraintName("fk_legendary_event_plans_profiles_profile_id");
 
                     b.Navigation("Profile");
+                });
+
+            modelBuilder.Entity("TacticusPlanner.Domain.LegendaryEvents.LegendaryEventRunProgress", b =>
+                {
+                    b.HasOne("TacticusPlanner.Domain.LegendaryEvents.LegendaryEventPlan", "Plan")
+                        .WithMany("Runs")
+                        .HasForeignKey("PlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_legendary_event_run_progress_legendary_event_plans_plan_id");
+
+                    b.Navigation("Plan");
                 });
 
             modelBuilder.Entity("TacticusPlanner.Domain.LegendaryEvents.LegendaryEventTeam", b =>
@@ -3054,6 +3167,10 @@ namespace TacticusPlanner.Persistence.Migrations
 
             modelBuilder.Entity("TacticusPlanner.Domain.LegendaryEvents.LegendaryEventPlan", b =>
                 {
+                    b.Navigation("Annotations");
+
+                    b.Navigation("Runs");
+
                     b.Navigation("Teams");
                 });
 

@@ -10,10 +10,11 @@ using TacticusPlanner.Persistence;
 namespace TacticusPlanner.Api.Features.V1Import;
 
 /// <summary>
-/// The <c>legendaryEventPlans</c> part of the V1 import (design D9): resolves each V1 event, its teams, units and
-/// objectives onto the catalog, and writes one plan per event through <see cref="LegendaryEventPlanWriter"/>, each
-/// in its own transaction. A plan that already has teams is never touched. Every dropped unit, objective or team
-/// is reported as an issue on that event's outcome.
+/// The <c>legendaryEventPlans</c> part of the V1 import (Stage 2 design D9, Stage 3 design D7): resolves each V1
+/// event, its teams, units and objectives onto the catalog, and writes one plan per event through
+/// <see cref="LegendaryEventPlanWriter"/>, each in its own transaction. A plan that already has teams never gets
+/// teams; its run inputs, marks and notes are still evaluated by their own rules and never overwrite V2 values.
+/// Every dropped unit, objective, team, run input or mark is reported as an issue on that event's outcome.
 /// </summary>
 public sealed partial class V1LegendaryEventImportService(
     PlannerDbContext db,
@@ -57,7 +58,7 @@ public sealed partial class V1LegendaryEventImportService(
         var runs = await SyncedRunsAsync(profileId, ct);
         var outcomes = new List<V1LegendaryEventOutcome>();
         foreach (var v1Event in source.Events)
-            outcomes.Add(await ImportEventAsync(profileId, catalog, units, runs, v1Event, ct));
+            outcomes.Add(await ImportEventAsync(profileId, catalog, units, runs, source.ShowPaidOptions, v1Event, ct));
 
         return new V1LegendaryEventImportResult(PartResult(outcomes), outcomes);
     }
@@ -80,6 +81,7 @@ public sealed partial class V1LegendaryEventImportService(
         GameCatalogSnapshot catalog,
         UnitResolver units,
         IReadOnlyDictionary<string, int> runs,
+        bool? showP2POptions,
         V1LegendaryEventSource v1Event,
         CancellationToken ct)
     {
@@ -88,44 +90,69 @@ public sealed partial class V1LegendaryEventImportService(
         if (lre is null)
         {
             return Outcome(null, v1Event, "Skipped", "event_not_in_catalog",
-                "This Legendary Event is not available in V2 yet.", 0, []);
+                "This Legendary Event is not available in V2 yet.", 0, 0, 0, []);
         }
 
         var issues = new List<V1LegendaryEventIssue>();
         var run = runs.GetValueOrDefault(lre.Id, LegendaryEventValidation.MinRun);
-        var teams = ResolveTeams(lre, units, SourceTeams(v1Event.Teams, units), run, issues);
+        var teams = v1Event.Teams is null ? new List<ResolvedTeam>() : ResolveTeams(lre, units, SourceTeams(v1Event.Teams, units), run, issues);
 
         var existing = await db.LegendaryEventPlans.AsNoTracking()
             .Where(plan => plan.EventId == lre.Id)
-            .Select(plan => new { plan.Revision, plan.Notes, HasTeams = plan.Teams.Any() })
+            .Select(plan => new
+            {
+                plan.Revision,
+                plan.Notes,
+                HasTeams = plan.Teams.Any(),
+                Runs = plan.Runs.Select(entry => entry.Run).ToList(),
+                Cells = plan.Annotations
+                    .Select(entry => new { entry.LaneId, entry.BattleIndex, entry.ObjectiveId })
+                    .ToList(),
+            })
             .FirstOrDefaultAsync(ct);
-        if (existing?.HasTeams == true)
-        {
-            return Outcome(lre.Id, v1Event, "Skipped", "plan_already_exists",
-                "A V2 plan with teams already exists for this event; it was left unchanged.", 0, issues);
-        }
-
+        var writeTeams = existing?.HasTeams != true && teams.Count > 0;
+        var runInputs = V1LegendaryEventProgressImport.ResolveRunInputs(
+            lre, v1Event.Progress?.Overview, existing?.Runs ?? [], issues);
+        var annotations = V1LegendaryEventProgressImport.ResolveAnnotations(
+            lre, v1Event.Progress,
+            existing?.Cells.Select(cell => (cell.LaneId, cell.BattleIndex, cell.ObjectiveId)).ToHashSet() ?? [],
+            issues);
         var notes = ImportedNotes(v1Event.Notes, existing?.Notes, issues);
-        if (teams.Count == 0 && notes is null)
+
+        if (!writeTeams && runInputs.Count == 0 && annotations.Count == 0 && notes is null)
         {
-            return Outcome(lre.Id, v1Event, "Skipped", "no_legendary_event_imported",
-                "No V1 team for this event could be resolved.", 0, issues);
+            return existing?.HasTeams == true
+                ? Outcome(lre.Id, v1Event, "Skipped", "plan_already_exists",
+                    "A V2 plan with teams already exists for this event and everything else was already in V2; it was "
+                    + "left unchanged.", 0, 0, 0, issues)
+                : Outcome(lre.Id, v1Event, "Skipped", "no_legendary_event_imported",
+                    "No V1 team for this event could be resolved.", 0, 0, 0, issues);
         }
 
+        var importedTeams = writeTeams ? teams : [];
+        var showPaidOptions = existing is null ? showP2POptions : null;
         try
         {
             var result = await writer.WriteAsync(profileId, lre.Id, existing?.Revision ?? 0, (context, _) =>
             {
                 if (notes is not null)
                     context.Plan.Notes = notes;
-                foreach (var team in teams)
+                if (showPaidOptions is { } paid)
+                    context.Plan.ShowPaidOptions = paid;
+                foreach (var team in importedTeams)
                     LegendaryEventTeamMutations.CreateTeam(context, team.LaneId, team.Fields);
+                V1LegendaryEventProgressImport.Apply(context, runInputs, annotations);
                 return Task.FromResult(LegendaryEventPlanMutation.Applied);
             }, ct);
             if (result is LegendaryEventPlanWriteResult.Saved)
             {
-                return Outcome(lre.Id, v1Event, "Imported", "imported",
-                    $"Imported {teams.Count} team(s).", teams.Count, issues);
+                return writeTeams
+                    ? Outcome(lre.Id, v1Event, "Imported", "imported",
+                        $"Imported {importedTeams.Count} team(s).", importedTeams.Count, runInputs.Count,
+                        annotations.Count, issues)
+                    : Outcome(lre.Id, v1Event, "Imported", "inputs_imported",
+                        "Imported run inputs, marks or notes; no team was imported.", 0, runInputs.Count,
+                        annotations.Count, issues);
             }
         }
         catch (DbUpdateException exception)
@@ -135,7 +162,7 @@ public sealed partial class V1LegendaryEventImportService(
 
         db.ChangeTracker.Clear();
         return Outcome(lre.Id, v1Event, "Failed", "legendary_event_import_failed",
-            "The teams for this event could not be saved. Try again.", 0, issues);
+            "This event could not be saved. Try again.", 0, 0, 0, issues);
     }
 
     /// <summary>The V1 notes to write, or null: an existing V2 plan's notes are never overwritten, and notes over
@@ -342,8 +369,9 @@ public sealed partial class V1LegendaryEventImportService(
 
     private static V1LegendaryEventOutcome Outcome(
         string? eventId, V1LegendaryEventSource v1Event, string status, string code, string message,
-        int teamsImported, IReadOnlyList<V1LegendaryEventIssue> issues) =>
-        new(eventId, v1Event.V1EventId, status, code, message, teamsImported, issues);
+        int teamsImported, int runInputsImported, int annotationsImported, IReadOnlyList<V1LegendaryEventIssue> issues) =>
+        new(eventId, v1Event.V1EventId, status, code, message, teamsImported, runInputsImported, annotationsImported,
+            issues);
 
     private sealed class ResolvedTeam(string laneId, string name, List<string> members, List<int> objectives, int? depth, int run)
     {
@@ -390,10 +418,13 @@ public sealed partial class V1LegendaryEventImportService(
 /// <param name="EventId">The catalog event id, or null when the V1 event is not in the catalog.</param>
 /// <param name="V1EventId">V1's numeric <c>LegendaryEventEnum</c> key.</param>
 /// <param name="Status"><c>Imported</c>, <c>Skipped</c> or <c>Failed</c>.</param>
-/// <param name="Code"><c>imported</c>, <c>plan_already_exists</c>, <c>event_not_in_catalog</c>,
+/// <param name="Code"><c>imported</c> (at least one team written), <c>inputs_imported</c> (run inputs, marks
+/// and/or notes written but no team), <c>plan_already_exists</c>, <c>event_not_in_catalog</c>,
 /// <c>no_legendary_event_imported</c> or <c>legendary_event_import_failed</c>.</param>
-/// <param name="Issues">Team-level issues, plus the plan-level <c>notes_truncated</c> and
-/// <c>existing_notes_kept</c> (whose <c>teamName</c> is null).</param>
+/// <param name="RunInputsImported">Run input rows written.</param>
+/// <param name="AnnotationsImported">Maybe clear / Stop here marks written.</param>
+/// <param name="Issues">Team-level issues, plus the plan-level notes, run-input and mark issues (whose
+/// <c>teamName</c> is null).</param>
 public sealed record V1LegendaryEventOutcome(
     string? EventId,
     int V1EventId,
@@ -401,18 +432,25 @@ public sealed record V1LegendaryEventOutcome(
     string Code,
     string Message,
     int TeamsImported,
+    int RunInputsImported,
+    int AnnotationsImported,
     IReadOnlyList<V1LegendaryEventIssue> Issues
 );
 
-/// <summary>Something dropped, truncated or merged while resolving one V1 team, or the event's notes.</summary>
+/// <summary>Something dropped, truncated, kept or merged while resolving one V1 team, the event's notes, its run
+/// inputs or its Maybe clear / Stop here marks.</summary>
 /// <param name="Code"><c>unknown_unit</c>, <c>unit_not_allowed_on_lane</c>, <c>duplicate_unit</c>,
 /// <c>unknown_objective</c>, <c>unknown_lane</c>, <c>empty_team</c>, <c>team_truncated</c>,
 /// <c>duplicate_team_merged</c> or <c>conflicting_depth_discarded</c>; for the notes, <c>notes_truncated</c> or
-/// <c>existing_notes_kept</c> (the V2 plan already had notes, so the V1 notes were not imported).</param>
-/// <param name="TeamName">The V1 team's name; null for a notes issue.</param>
+/// <c>existing_notes_kept</c> (the V2 plan already had notes, so the V1 notes were not imported); for run inputs,
+/// <c>run_input_clamped</c>, <c>unknown_run</c> or <c>existing_run_inputs_kept</c>; for marks,
+/// <c>unknown_lane</c>, <c>unknown_battle</c>, <c>unknown_objective</c> or
+/// <c>existing_annotations_kept</c>.</param>
+/// <param name="TeamName">The V1 team's name; null for a notes, run-input or mark issue.</param>
 /// <param name="Value">The dropped unit or objective (null when V1 held a null entry), the merged-into team's
-/// name, the discarded depth, the resolved unit count before truncation, or the V1 notes' length before
-/// truncation.</param>
+/// name, the discarded depth, the resolved unit count before truncation, the V1 notes' length before
+/// truncation, <c>run:field:original</c> for a clamp, the run key, <c>lane:index</c> or <c>lane:name</c> for a
+/// skipped mark, or the number of marks kept.</param>
 public sealed record V1LegendaryEventIssue(string Code, string? TeamName, string? Value);
 
 public sealed record V1LegendaryEventImportResult(ImportPartResult Part, IReadOnlyList<V1LegendaryEventOutcome> Outcomes);

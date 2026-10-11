@@ -43,7 +43,6 @@ public sealed record GameCatalogSnapshot(
     IReadOnlyList<GameCatalogCampaignDefinitionView> CampaignDefinitionViews,
     IReadOnlyList<GameCatalogLreView> LreViews,
     IReadOnlyList<GameCatalogLreBattleView> LreBattleViews,
-    IReadOnlyList<GameCatalogLreCommon> LreCommonViews,
     IReadOnlyList<GameCatalogEventDefinition> EventDefinitionViews,
     IReadOnlyDictionary<string, IReadOnlyList<GameCatalogEventsCalendarEntry>> EventsCalendar,
     IReadOnlyList<GameCatalogShopView> ShopViews,

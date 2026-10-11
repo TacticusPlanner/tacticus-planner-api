@@ -47,7 +47,6 @@ public static partial class GameCatalogValidator
         RequireNonEmpty(GameCatalogDatasets.CampaignDefinitions, snapshot.CampaignDefinitionViews.Count, errors);
         RequireNonEmpty(GameCatalogDatasets.Lres, snapshot.LreViews.Count, errors);
         RequireNonEmpty(GameCatalogDatasets.LreBattles, snapshot.LreBattleViews.Count, errors);
-        RequireNonEmpty(GameCatalogDatasets.LreCommon, snapshot.LreCommonViews.Count, errors);
         RequireNonEmpty(GameCatalogDatasets.EventDefinitionsServed, snapshot.EventDefinitionViews.Count, errors);
         RequireNonEmpty(GameCatalogDatasets.EventsCalendar, snapshot.EventsCalendar.Count, errors);
         RequireNonEmpty(GameCatalogDatasets.Shops, snapshot.ShopViews.Count, errors);

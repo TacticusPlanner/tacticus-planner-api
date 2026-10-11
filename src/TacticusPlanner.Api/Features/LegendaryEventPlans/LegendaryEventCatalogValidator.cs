@@ -91,6 +91,88 @@ public sealed class LegendaryEventCatalogValidator(IGameCatalogProvider catalog)
         return failures;
     }
 
+    /// <summary>Run inputs (Stage 3 design D3): the route's run is 1–3, missions are within the event's catalog
+    /// mission counts and close shards within 0–75. Paid fields are validated whatever showPaidOptions says.</summary>
+    public static IReadOnlyList<LegendaryEventFieldFailure> ValidateRunInputs(
+        GameCatalogLreView lre, string? run, UpdateLegendaryEventRunInputsRequest request)
+    {
+        var failures = new List<LegendaryEventFieldFailure>();
+        if (ParseRun(run) is null)
+            failures.Add(new("run", $"run must be {LegendaryEventValidation.MinRun}–{LegendaryEventValidation.MaxRun}."));
+
+        var regular = lre.RegularMissions.Count;
+        if (request.RegularMissions < 0 || request.RegularMissions > regular)
+            failures.Add(new("regularMissions", $"regularMissions must be 0–{regular} for this event."));
+
+        var premium = lre.PremiumMissions.Count;
+        if (request.PremiumMissions < 0 || request.PremiumMissions > premium)
+            failures.Add(new("premiumMissions", $"premiumMissions must be 0–{premium} for this event."));
+
+        if (request.CloseShards is < 0 or > LegendaryEventValidation.MaxCloseShards)
+            failures.Add(new("closeShards", $"closeShards must be 0–{LegendaryEventValidation.MaxCloseShards}."));
+
+        return failures;
+    }
+
+    /// <summary>The route's run as 1–3, or null when it is not a number in range.</summary>
+    public static int? ParseRun(string? run) =>
+        int.TryParse(run, System.Globalization.NumberStyles.None, System.Globalization.CultureInfo.InvariantCulture, out var value)
+            && value is >= LegendaryEventValidation.MinRun and <= LegendaryEventValidation.MaxRun
+            ? value
+            : null;
+
+    /// <summary>An annotation write (Stage 3 design D6): the lane exists, the battle is on it, the cells are 1–6
+    /// distinct objective ids of that lane (0 is defeat-all) and the status is maybeClear, stopHere or null.</summary>
+    public static IReadOnlyList<LegendaryEventFieldFailure> ValidateAnnotations(
+        GameCatalogLreView lre, UpdateLegendaryEventAnnotationsRequest request)
+    {
+        var failures = new List<LegendaryEventFieldFailure>();
+        var lane = FindLane(lre, request.LaneId);
+        if (lane is null)
+        {
+            failures.Add(UnknownLane);
+        }
+        else
+        {
+            var battles = lane.BattleIds.Count;
+            if (request.BattleIndex < 0 || request.BattleIndex >= battles)
+                failures.Add(new("battleIndex", $"battleIndex must be 0–{battles - 1} for this lane."));
+
+            var objectiveIds = request.ObjectiveIds ?? [];
+            var maxObjectiveId = lane.UnitsRestrictions.Count;
+            if (objectiveIds.Count is 0 or > LegendaryEventValidation.MaxObjectiveId + 1)
+                failures.Add(new("objectiveIds", $"objectiveIds must list 1–{LegendaryEventValidation.MaxObjectiveId + 1} cells."));
+            else if (objectiveIds.Any(id => id < 0 || id > maxObjectiveId))
+                failures.Add(new("objectiveIds", $"Every objective id must be 0–{maxObjectiveId} for this lane."));
+            else if (objectiveIds.Distinct().Count() != objectiveIds.Count)
+                failures.Add(new("objectiveIds", "An objective id can be listed only once."));
+        }
+
+        if (request.Status is not null && !TryParseStatus(request.Status, out _))
+        {
+            failures.Add(new("status",
+                $"status must be {LegendaryEventValidation.MaybeClearStatus}, {LegendaryEventValidation.StopHereStatus} or null."));
+        }
+
+        return failures;
+    }
+
+    public static bool TryParseStatus(string? value, out LegendaryEventAnnotationStatus status)
+    {
+        switch (value)
+        {
+            case LegendaryEventValidation.MaybeClearStatus:
+                status = LegendaryEventAnnotationStatus.MaybeClear;
+                return true;
+            case LegendaryEventValidation.StopHereStatus:
+                status = LegendaryEventAnnotationStatus.StopHere;
+                return true;
+            default:
+                status = default;
+                return false;
+        }
+    }
+
     private static void ValidateUnits(
         GameCatalogLreTrackView lane, LegendaryEventTeamFields fields, List<LegendaryEventFieldFailure> failures)
     {

@@ -27,4 +27,9 @@ public class LegendaryEventPlan : BaseEntity<LegendaryEventPlanId>, IRevisionedE
     public virtual Profile? Profile { get; set; }
 
     public virtual ICollection<LegendaryEventTeam> Teams { get; set; } = new List<LegendaryEventTeam>();
+
+    public virtual ICollection<LegendaryEventRunProgress> Runs { get; set; } = new List<LegendaryEventRunProgress>();
+
+    public virtual ICollection<LegendaryEventObjectiveAnnotation> Annotations { get; set; } =
+        new List<LegendaryEventObjectiveAnnotation>();
 }
