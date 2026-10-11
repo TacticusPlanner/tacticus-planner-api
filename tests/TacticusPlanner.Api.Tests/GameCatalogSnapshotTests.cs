@@ -53,6 +53,29 @@ public sealed class GameCatalogSnapshotTests(GameCatalogApiFactory factory)
     }
 
     [Fact]
+    public async Task LreClearEstimateIsServedAnonymouslyAsOneUncalibratedRecord()
+    {
+        var client = factory.CreateClient();
+
+        using var request = new HttpRequestMessage(HttpMethod.Get, "/api/v1/game-catalog/lre-clear-estimate");
+        request.Headers.Add(TestAuthenticationHandler.NoAuthHeader, "1");
+        var response = await client.SendAsync(request, TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var payload = JsonNode.Parse(await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken))!.AsObject();
+        Assert.Equal("lre-clear-estimate", payload["datasetKey"]!.GetValue<string>());
+
+        var record = Assert.Single(payload["data"]!.AsArray())!.AsObject();
+        Assert.Equal(["id", "powerRatio", "calibration", "unitCoefficients"], record.Select(property => property.Key));
+        Assert.Equal("lre-clear-estimate", record["id"]!.GetValue<string>());
+        Assert.Equal(1.0, record["powerRatio"]!.GetValue<double>());
+        Assert.Equal(0, record["calibration"]!["sampleCount"]!.GetValue<int>());
+        Assert.Null(record["calibration"]!["calibratedOn"]);
+        Assert.Empty(record["unitCoefficients"]!.AsArray());
+    }
+
+    [Fact]
     public async Task GuildRaidMetaDatasetIsAnonymousAndIdOnly()
     {
         var client = factory.CreateClient();

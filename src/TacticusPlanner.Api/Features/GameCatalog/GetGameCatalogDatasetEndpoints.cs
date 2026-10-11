@@ -222,6 +222,20 @@ public sealed class GetGameCatalogLreCommonEndpoint(IGameCatalogProvider catalog
     }
 }
 
+public sealed class GetGameCatalogLreClearEstimateEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogLreClearEstimate>>(catalog, GameCatalogDatasets.LreClearEstimate)
+{
+    protected override IReadOnlyList<GameCatalogLreClearEstimate> Payload => Snapshot.LreClearEstimateViews;
+
+    public override void Configure()
+    {
+        Get("game-catalog/lre-clear-estimate");
+        ConfigureServed(
+            "Gets the LRE clear-estimate parameters.",
+            "The single clear-estimate record: the power ratio, its calibration metadata, and the per-unit efficiency coefficients (a unit not listed has coefficient 1.0).");
+    }
+}
+
 public sealed class GetGameCatalogEventDefinitionsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogEventDefinition>>(catalog, GameCatalogDatasets.EventDefinitionsServed)
 {

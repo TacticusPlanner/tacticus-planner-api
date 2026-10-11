@@ -38,6 +38,7 @@ public static class GameCatalogLoader
         var onslaughtRewards = LoadDataset<IReadOnlyList<GameCatalogOnslaughtReward>>(GameCatalogDatasets.OnslaughtRewards);
         var eventDefinitions = LoadDataset<IReadOnlyList<GameCatalogEventDefinition>>(GameCatalogDatasets.EventDefinitions);
         var eventOccurrences = LoadDataset<IReadOnlyList<GameCatalogEventOccurrence>>(GameCatalogDatasets.EventOccurrences);
+        var lreClearEstimateRaw = LoadDataset<IReadOnlyList<GameCatalogLreClearEstimate>>(GameCatalogDatasets.LreClearEstimate);
 
         var npcsByFaction = new Dictionary<string, GameCatalogFactionNpcs>(StringComparer.Ordinal);
         foreach (var key in GameCatalogDatasets.NpcFactions)
@@ -93,6 +94,7 @@ public static class GameCatalogLoader
         var lreViews = GameCatalogDenormalizer.BuildLres(lresByEvent, unitsByFaction);
         var lreBattleViews = GameCatalogDenormalizer.BuildLreBattles(lresByEvent);
         var lreCommonViews = GameCatalogDenormalizer.BuildLreCommon(lresByEvent);
+        var lreClearEstimateViews = GameCatalogDenormalizer.BuildLreClearEstimate(lreClearEstimateRaw);
         var eventDefinitionViews = GameCatalogDenormalizer.BuildEventDefinitions(eventDefinitions);
         var loadTime = DateTimeOffset.UtcNow;
         var eventsCalendar = GameCatalogDenormalizer.BuildEventsCalendar(eventDefinitions, eventOccurrences, loadTime);
@@ -118,6 +120,7 @@ public static class GameCatalogLoader
             [GameCatalogDatasets.Lres] = GameCatalogHashing.ComputeCanonicalJsonHash(lreViews, JsonOptions),
             [GameCatalogDatasets.LreBattles] = GameCatalogHashing.ComputeCanonicalJsonHash(lreBattleViews, JsonOptions),
             [GameCatalogDatasets.LreCommon] = GameCatalogHashing.ComputeCanonicalJsonHash(lreCommonViews, JsonOptions),
+            [GameCatalogDatasets.LreClearEstimate] = GameCatalogHashing.ComputeCanonicalJsonHash(lreClearEstimateViews, JsonOptions),
             [GameCatalogDatasets.EventDefinitionsServed] = GameCatalogHashing.ComputeCanonicalJsonHash(eventDefinitionViews, JsonOptions),
             [GameCatalogDatasets.EventsCalendar] = GameCatalogHashing.ComputeCanonicalJsonHash(eventsCalendar, JsonOptions),
             [GameCatalogDatasets.Shops] = GameCatalogHashing.ComputeCanonicalJsonHash(shopViews, JsonOptions),
@@ -150,6 +153,7 @@ public static class GameCatalogLoader
             new ReadOnlyDictionary<string, GameCatalogRawShop>(rawShopsBySourceKey),
             raidBossRawData,
             guildRaidMetaRawData,
+            new ReadOnlyCollection<GameCatalogLreClearEstimate>(lreClearEstimateRaw.ToArray()),
             characterViews,
             npcList,
             mowList,
@@ -164,6 +168,7 @@ public static class GameCatalogLoader
             lreViews,
             lreBattleViews,
             lreCommonViews,
+            lreClearEstimateViews,
             eventDefinitionViews,
             eventsCalendar,
             shopViews,

@@ -14,6 +14,10 @@ public static class GameCatalogDatasets
     public const string OnslaughtRewards = "onslaught-rewards";
     public const string EventDefinitions = "event-definitions";
     public const string EventOccurrences = "event-occurrences";
+    // lre-clear-estimate is a single curated record (power ratio, calibration metadata, per-unit
+    // efficiency coefficients), raw and served under the same key; denormalization only sorts the
+    // coefficients by unit id. See Models/LreClearEstimate.cs.
+    public const string LreClearEstimate = "lre-clear-estimate";
 
     // Route/key prefixes for the split dataset families.
     public const string UnitsPrefix = "units";
@@ -268,6 +272,7 @@ public static class GameCatalogDatasets
         OnslaughtRewards,
         EventDefinitions,
         EventOccurrences,
+        LreClearEstimate,
         .. NpcFactions,
         .. EquipmentTypes,
         .. UpgradeRarities,
@@ -349,6 +354,7 @@ public static class GameCatalogDatasets
         Lres,
         LreBattles,
         LreCommon,
+        LreClearEstimate,
         EventDefinitionsServed,
         EventsCalendar,
         Shops,

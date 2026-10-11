@@ -55,6 +55,11 @@
       url: /api/v1/game-catalog/lre-battles
     },
     {
+      key: lre-clear-estimate,
+      hash: c155fb9ac4da26e6fb82424acdfedd0d13fb7db47fad1c0edfd8cf4c420f11f7,
+      url: /api/v1/game-catalog/lre-clear-estimate
+    },
+    {
       key: lre-common,
       hash: 6ea3eb75b4b74ba00353a368c4933aba508a77893da07100f374bf97f1ea03e1,
       url: /api/v1/game-catalog/lre-common

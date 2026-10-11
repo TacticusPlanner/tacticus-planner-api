@@ -1,0 +1,11 @@
+[
+  {
+    "id": "lre-clear-estimate",
+    "powerRatio": 1.0,
+    "calibration": {
+      "sampleCount": 0,
+      "calibratedOn": null
+    },
+    "unitCoefficients": []
+  }
+]
