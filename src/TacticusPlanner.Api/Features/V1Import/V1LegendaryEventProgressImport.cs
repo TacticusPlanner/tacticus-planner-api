@@ -252,13 +252,14 @@ public static class V1LegendaryEventProgressImport
         return clamped;
     }
 
-    /// <summary>V1 numbers are loose: a JSON number, a numeric string or a boolean (as 1/0); anything else is
-    /// null.</summary>
+    /// <summary>V1 numbers are loose: a JSON number, a finite numeric string or a boolean (as 1/0); anything else
+    /// (including "NaN" or "Infinity") is null.</summary>
     private static double? Number(JsonElement? value) => value switch
     {
         { ValueKind: JsonValueKind.Number } number => number.GetDouble(),
         { ValueKind: JsonValueKind.String } text when double.TryParse(
-            text.GetString(), NumberStyles.Float, CultureInfo.InvariantCulture, out var parsed) => parsed,
+            text.GetString(), NumberStyles.Float, CultureInfo.InvariantCulture, out var parsed)
+            && double.IsFinite(parsed) => parsed,
         { ValueKind: JsonValueKind.True } => 1,
         { ValueKind: JsonValueKind.False } => 0,
         _ => null,
