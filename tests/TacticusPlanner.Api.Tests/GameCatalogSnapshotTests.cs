@@ -53,6 +53,52 @@ public sealed class GameCatalogSnapshotTests(GameCatalogApiFactory factory)
     }
 
     [Fact]
+    public async Task MythicQuestsAreServedAnonymouslyWithStructuredRewards()
+    {
+        var client = factory.CreateClient();
+
+        using var request = new HttpRequestMessage(HttpMethod.Get, "/api/v1/game-catalog/mythic-quests");
+        request.Headers.Add(TestAuthenticationHandler.NoAuthHeader, "1");
+        var response = await client.SendAsync(request, TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var payload = JsonNode.Parse(await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken))!.AsObject();
+        Assert.Equal("mythic-quests", payload["datasetKey"]!.GetValue<string>());
+
+        var data = payload["data"]!.AsArray();
+        Assert.Equal(117, data.Count);
+        var abaddon = data.Single(row => row!["unitId"]!.GetValue<string>() == "blackAbaddon")!.AsObject();
+        Assert.Equal(["unitId", "quests"], abaddon.Select(property => property.Key));
+
+        var quest = abaddon["quests"]![0]!.AsObject();
+        Assert.Equal(["number", "tasks", "rewards"], quest.Select(property => property.Key));
+        Assert.Equal(["locaKey", "target", "parameters"], quest["tasks"]![0]!.AsObject().Select(property => property.Key));
+        var shards = quest["rewards"]![0]!.AsObject();
+        Assert.Equal(["type", "amount", "unitId"], shards.Select(property => property.Key));
+        Assert.Equal("MythicShards", shards["type"]!.GetValue<string>());
+        Assert.Equal(4, shards["amount"]!.GetValue<int>());
+    }
+
+    [Fact]
+    public async Task MowsCarryTheirMythicAbility()
+    {
+        var client = factory.CreateClient();
+
+        using var request = new HttpRequestMessage(HttpMethod.Get, "/api/v1/game-catalog/mows");
+        request.Headers.Add(TestAuthenticationHandler.NoAuthHeader, "1");
+        var response = await client.SendAsync(request, TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+        var data = JsonNode.Parse(await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken))!["data"]!.AsArray();
+        Assert.All(data, mow => Assert.Equal(["name"], mow!["mythicAbility"]!.AsObject().Select(property => property.Key)));
+        Assert.Equal(
+            "WisdomOfTheAncients",
+            data.Single(mow => mow!["id"]!.GetValue<string>() == "ultraDreadnought")!["mythicAbility"]!["name"]!.GetValue<string>());
+    }
+
+    [Fact]
     public async Task GuildRaidMetaDatasetIsAnonymousAndIdOnly()
     {
         var client = factory.CreateClient();

@@ -1907,6 +1907,9 @@
             "upgDmgL211C"
           ]
         ]
+      },
+      "mythicAbility": {
+        "name": "HyperCorrosiveAcid"
       }
     }
   ]

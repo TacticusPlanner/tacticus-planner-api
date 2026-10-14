@@ -2163,6 +2163,9 @@
             "upgDmgL214C"
           ]
         ]
+      },
+      "mythicAbility": {
+        "name": "GuardianConstruct"
       }
     }
   ]
