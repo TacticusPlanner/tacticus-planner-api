@@ -61,6 +61,25 @@ public sealed class MythicQuestValidationTests
         AssertSingleError(Validate(Character(quest: n => Quest(n, withTask: n != 3))), "MissingTasks");
 
     [Fact]
+    public void BlankCharacterIdFails()
+    {
+        var errors = Validate(Character(""));
+
+        var error = Assert.Single(errors);
+        Assert.Equal(GameCatalogDatasets.MythicQuests, error.Dataset);
+        Assert.Equal("RequiredField", error.Code);
+    }
+
+    [Fact]
+    public void QuestWithMoreThanFourTasksFails()
+    {
+        var task = new GameCatalogRawMythicQuestTask("DealDamageWithHero_description", 1, new Dictionary<string, string>());
+        var crowded = new GameCatalogRawMythicQuest(1, ["gold:1"], [task, task, task, task, task]);
+
+        AssertSingleError(Validate(Character(quest: n => n == 1 ? crowded : Quest(n))), "TooManyTasks");
+    }
+
+    [Fact]
     public void TaskTargetBelowOneFails() =>
         AssertSingleError(Validate(Character(quest: n => Quest(n, target: n == 2 ? 0 : 1))), "InvalidTarget");
 

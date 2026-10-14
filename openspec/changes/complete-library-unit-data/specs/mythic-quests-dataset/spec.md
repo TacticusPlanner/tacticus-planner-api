@@ -95,7 +95,7 @@ type needs:
 
 The catalog loader SHALL fail startup, naming the dataset, when the raw `mythic-quests` source is missing or
 empty; when a record's `unitId` is not a catalog character; when a character's quest numbers are not exactly
-1 to 5; when a quest has no task or a task has a `target` below 1; or when a reward string matches none of the
+1 to 5; when a `characterId` is blank; when a quest has no task or more than four, or a task has a `target` below 1; or when a reward string matches none of the
 patterns above, names an `equipmentId` that is not a catalog equipment id, or names a `MythicShards` `unitId`
 that is not a catalog character. A task's `heroId` parameter SHALL NOT be validated against the catalog: V1
 names summons and NPCs there (`votanNpc2Steeljack`, `astarNpc1HaywireMine`, `tauSmnDroneSniper`), and one of

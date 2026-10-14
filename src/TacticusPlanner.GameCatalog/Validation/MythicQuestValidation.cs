@@ -5,6 +5,7 @@ namespace TacticusPlanner.GameCatalog.Validation;
 public static partial class GameCatalogValidator
 {
     private static readonly int[] MythicQuestNumbers = [1, 2, 3, 4, 5];
+    private const int MaxTasksPerQuest = 4;
 
     private static void ValidateMythicQuests(GameCatalogSnapshot snapshot, List<GameCatalogValidationError> errors)
     {
@@ -33,6 +34,8 @@ public static partial class GameCatalogValidator
 
         foreach (var character in raw)
         {
+            // RequireReference skips blank values, so a blank id must be rejected on its own.
+            Require(dataset, "(record)", character.CharacterId, "characterId", errors);
             RequireReference(dataset, character.CharacterId, "characterId", character.CharacterId, characterIds, errors);
 
             if (!character.Quests.Select(quest => quest.Number).Order().SequenceEqual(MythicQuestNumbers))
@@ -48,6 +51,11 @@ public static partial class GameCatalogValidator
                 if (quest.Tasks.Count == 0)
                 {
                     errors.Add(new GameCatalogValidationError(dataset, "MissingTasks", $"Quest '{owner}' has no tasks."));
+                }
+                else if (quest.Tasks.Count > MaxTasksPerQuest)
+                {
+                    errors.Add(new GameCatalogValidationError(
+                        dataset, "TooManyTasks", $"Quest '{owner}' has {quest.Tasks.Count} tasks; at most {MaxTasksPerQuest} are allowed."));
                 }
 
                 if (quest.Tasks.Any(task => task.Target < 1))
