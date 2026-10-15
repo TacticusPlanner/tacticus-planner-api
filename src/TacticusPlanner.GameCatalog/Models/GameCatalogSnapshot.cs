@@ -46,6 +46,7 @@ public sealed record GameCatalogSnapshot(
     IReadOnlyList<GameCatalogCampaignDefinitionView> CampaignDefinitionViews,
     IReadOnlyList<GameCatalogLreView> LreViews,
     IReadOnlyList<GameCatalogLreBattleView> LreBattleViews,
+    IReadOnlyList<GameCatalogHordeModeTiers> HordeModeTiersViews,
     IReadOnlyList<GameCatalogEventDefinition> EventDefinitionViews,
     IReadOnlyDictionary<string, IReadOnlyList<GameCatalogEventsCalendarEntry>> EventsCalendar,
     IReadOnlyList<GameCatalogShopView> ShopViews,

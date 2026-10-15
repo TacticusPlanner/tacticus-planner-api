@@ -14,6 +14,10 @@ public static class GameCatalogDatasets
     public const string OnslaughtRewards = "onslaught-rewards";
     public const string EventDefinitions = "event-definitions";
     public const string EventOccurrences = "event-occurrences";
+    // horde-mode-tiers is a single curated S/A/B/C tier list of characters for horde modes, with each
+    // tier's power multiplier; denormalization only sorts the characters by unit id.
+    // See Models/HordeModeTiers.cs.
+    public const string HordeModeTiers = "horde-mode-tiers";
     public const string MythicQuests = "mythic-quests";
 
     // Route/key prefixes for the split dataset families.
@@ -269,6 +273,7 @@ public static class GameCatalogDatasets
         OnslaughtRewards,
         EventDefinitions,
         EventOccurrences,
+        HordeModeTiers,
         MythicQuests,
         .. NpcFactions,
         .. EquipmentTypes,
@@ -354,6 +359,7 @@ public static class GameCatalogDatasets
         CampaignDefinitions,
         Lres,
         LreBattles,
+        HordeModeTiers,
         EventDefinitionsServed,
         EventsCalendar,
         Shops,
