@@ -16,7 +16,7 @@ disclaimer and third-party trademark, copyright, game-data, and asset rights.
 
 ## Prerequisites
 
-- .NET SDK 10.0.301 or a newer 10.0 patch
+- .NET SDK 10.0.402 or a newer 10.0 patch
 - Docker Desktop or another OCI-compatible container runtime
 - The Aspire CLI, used to run and manage the local AppHost (see
   [Install the Aspire CLI](#install-the-aspire-cli) below)
