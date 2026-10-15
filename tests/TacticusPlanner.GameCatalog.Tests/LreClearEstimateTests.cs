@@ -85,6 +85,22 @@ public sealed class LreClearEstimateTests
     }
 
     [Fact]
+    public void MissingCoefficientsAreServedAsAnEmptyList()
+    {
+        var served = GameCatalogDenormalizer.BuildLreClearEstimate([Record() with { UnitCoefficients = null! }]);
+
+        Assert.Empty(Assert.Single(served).UnitCoefficients);
+    }
+
+    [Fact]
+    public void WrongRecordIdFails() =>
+        AssertSingleError(Validate(Record() with { Id = "not-the-id" }), "not-the-id");
+
+    [Fact]
+    public void MissingCalibrationFails() =>
+        AssertSingleError(Validate(Record() with { Calibration = null! }), "calibration");
+
+    [Fact]
     public void ValidRecordWithCoefficientsPasses()
     {
         Assert.Empty(Validate(Record(

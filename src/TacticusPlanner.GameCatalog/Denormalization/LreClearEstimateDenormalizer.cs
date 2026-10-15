@@ -12,7 +12,7 @@ internal static partial class GameCatalogDenormalizer
         raw
             .Select(record => record with
             {
-                UnitCoefficients = record.UnitCoefficients
+                UnitCoefficients = (record.UnitCoefficients ?? [])
                     .OrderBy(coefficient => coefficient.UnitId, StringComparer.Ordinal)
                     .ToArray(),
             })
