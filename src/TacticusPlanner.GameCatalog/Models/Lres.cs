@@ -120,7 +120,18 @@ public sealed record GameCatalogLreView(
     IReadOnlyList<string> PremiumMissions,
     GameCatalogLreTrackView Alpha,
     GameCatalogLreTrackView Beta,
-    GameCatalogLreTrackView Gamma
+    GameCatalogLreTrackView Gamma,
+    // The event's own reward ladder, copied from its raw file (ladders differ between events).
+    GameCatalogLreRewards Rewards
+);
+
+// An event's reward ladder: points milestones with their currency payouts, chest costs, the event unit's
+// incremental progression shard thresholds and the shards each chest grants. The client derives every total.
+public sealed record GameCatalogLreRewards(
+    IReadOnlyList<GameCatalogLrePointsMilestone> PointsMilestones,
+    IReadOnlyList<GameCatalogLreChestsMilestone> ChestsMilestones,
+    GameCatalogLreProgression Progression,
+    int ShardsPerChest
 );
 
 // A single LRE battle in the lre-battles dataset. Keyed by "{lreId}-{track}-{number}" and tagged with its
@@ -135,13 +146,4 @@ public sealed record GameCatalogLreBattleView(
     int Tier,
     IReadOnlyList<string> DisallowedFactions,
     IReadOnlyList<GameCatalogLreWave> Waves
-);
-
-// The shared, event-independent LRE reward ladder, served once as the single lre-common record.
-public sealed record GameCatalogLreCommon(
-    string Id,
-    IReadOnlyList<GameCatalogLrePointsMilestone> PointsMilestones,
-    IReadOnlyList<GameCatalogLreChestsMilestone> ChestsMilestones,
-    GameCatalogLreProgression Progression,
-    int ShardsPerChest
 );

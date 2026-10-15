@@ -94,7 +94,6 @@ public static class GameCatalogLoader
         var campaignDefinitionViews = GameCatalogDenormalizer.BuildCampaignDefinitions(campaignGroups);
         var lreViews = GameCatalogDenormalizer.BuildLres(lresByEvent, unitsByFaction);
         var lreBattleViews = GameCatalogDenormalizer.BuildLreBattles(lresByEvent);
-        var lreCommonViews = GameCatalogDenormalizer.BuildLreCommon(lresByEvent);
         var hordeModeTiersViews = GameCatalogDenormalizer.BuildHordeModeTiers(hordeModeTiersRaw);
         var eventDefinitionViews = GameCatalogDenormalizer.BuildEventDefinitions(eventDefinitions);
         var loadTime = DateTimeOffset.UtcNow;
@@ -121,7 +120,6 @@ public static class GameCatalogLoader
             [GameCatalogDatasets.CampaignDefinitions] = GameCatalogHashing.ComputeCanonicalJsonHash(campaignDefinitionViews, JsonOptions),
             [GameCatalogDatasets.Lres] = GameCatalogHashing.ComputeCanonicalJsonHash(lreViews, JsonOptions),
             [GameCatalogDatasets.LreBattles] = GameCatalogHashing.ComputeCanonicalJsonHash(lreBattleViews, JsonOptions),
-            [GameCatalogDatasets.LreCommon] = GameCatalogHashing.ComputeCanonicalJsonHash(lreCommonViews, JsonOptions),
             [GameCatalogDatasets.HordeModeTiers] = GameCatalogHashing.ComputeCanonicalJsonHash(hordeModeTiersViews, JsonOptions),
             [GameCatalogDatasets.EventDefinitionsServed] = GameCatalogHashing.ComputeCanonicalJsonHash(eventDefinitionViews, JsonOptions),
             [GameCatalogDatasets.EventsCalendar] = GameCatalogHashing.ComputeCanonicalJsonHash(eventsCalendar, JsonOptions),
@@ -170,7 +168,6 @@ public static class GameCatalogLoader
             campaignDefinitionViews,
             lreViews,
             lreBattleViews,
-            lreCommonViews,
             hordeModeTiersViews,
             eventDefinitionViews,
             eventsCalendar,

@@ -269,30 +269,6 @@
         }
       }
     },
-    "/api/v1/game-catalog/lre-common": {
-      "get": {
-        "tags": [
-          "Game-Catalog"
-        ],
-        "summary": "Gets the shared LRE reward ladder.",
-        "operationId": "TacticusPlannerApiFeaturesGameCatalogGetGameCatalogLreCommonEndpoint",
-        "responses": {
-          "200": {
-            "description": "The single shared LRE reward ladder (points/chests milestones, progression, shards per chest).",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGameCatalogGameCatalogDatasetEnvelopeOfSystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLreCommon"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        }
-      }
-    },
     "/api/v1/game-catalog/lres": {
       "get": {
         "tags": [
@@ -1667,6 +1643,152 @@
         ]
       }
     },
+    "/api/v1/me/legendary-event-plans/{eventId}/annotations": {
+      "put": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Sets or clears Maybe clear / Stop here marks on cells of one battle.",
+        "description": "status maybeClear or stopHere marks every listed cell; null removes their marks. Other cells are untouched; a write that changes no cell succeeds without bumping the revision. Marks are stored whatever the synced progress says; the client applies one only to a cell not yet cleared.",
+        "operationId": "TacticusPlannerApiFeaturesLegendaryEventPlansUpdateLegendaryEventAnnotationsEndpoint",
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansUpdateLegendaryEventAnnotationsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The whole plan after the write.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventPlanResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A field fails validation against the current catalog; the error names the field."
+          },
+          "401": {
+            "description": "The request is missing required identity claims."
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "The event is not a current catalog Legendary Event, or the team is not on this plan."
+          },
+          "409": {
+            "description": "expectedRevision is stale or another write won (issueCode legendaryEventPlanStale), or a reorder's ids are not the lane's team set (legendaryEventOrderSetMismatch). Carries the current plan.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventPlanConflictResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/me/legendary-event-plans/{eventId}/runs/{run}": {
+      "put": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Writes one run's inputs (missions, premium missions, bundle, close shards).",
+        "description": "Upserts the given run (1–3) and leaves the other runs untouched. Values equal to the stored run, or all zero for a run with none, succeed without bumping the revision.",
+        "operationId": "TacticusPlannerApiFeaturesLegendaryEventPlansUpdateLegendaryEventRunInputsEndpoint",
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "run",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansUpdateLegendaryEventRunInputsRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The whole plan after the write.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventPlanResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A field fails validation against the current catalog; the error names the field."
+          },
+          "401": {
+            "description": "The request is missing required identity claims."
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "The event is not a current catalog Legendary Event, or the team is not on this plan."
+          },
+          "409": {
+            "description": "expectedRevision is stale or another write won (issueCode legendaryEventPlanStale), or a reorder's ids are not the lane's team set (legendaryEventOrderSetMismatch). Carries the current plan.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventPlanConflictResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
     "/api/v1/me/legendary-event-plans/{eventId}/teams": {
       "post": {
         "tags": [
@@ -2986,6 +3108,18 @@
           "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGuildsGuildRaidPrimeStatusResponse"
         }
       },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventObjectiveAnnotationResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventObjectiveAnnotationResponse"
+        }
+      },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventRunProgressResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventRunProgressResponse"
+        }
+      },
       "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventTeamResponse": {
         "type": "array",
         "items": {
@@ -3200,12 +3334,6 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogLreChestsMilestone"
-        }
-      },
-      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLreCommon": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogLreCommon"
         }
       },
       "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLreEnemy": {
@@ -4016,50 +4144,6 @@
             "oneOf": [
               {
                 "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLreBattleView"
-              }
-            ]
-          }
-        }
-      },
-      "TacticusPlannerApiFeaturesGameCatalogGameCatalogDatasetEnvelopeOfSystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLreCommon": {
-        "required": [
-          "version",
-          "schemaVersion",
-          "gameVersion",
-          "sourceHash",
-          "datasetKey",
-          "datasetHash",
-          "data"
-        ],
-        "type": "object",
-        "properties": {
-          "version": {
-            "type": "string"
-          },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "gameVersion": {
-            "type": "string"
-          },
-          "sourceHash": {
-            "type": "string"
-          },
-          "datasetKey": {
-            "type": "string"
-          },
-          "datasetHash": {
-            "type": "string"
-          },
-          "data": {
-            "type": [
-              "null",
-              "array"
-            ],
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLreCommon"
               }
             ]
           }
@@ -6368,6 +6452,36 @@
           }
         }
       },
+      "TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventObjectiveAnnotationResponse": {
+        "required": [
+          "laneId",
+          "battleIndex",
+          "objectiveId",
+          "status",
+          "updatedAt"
+        ],
+        "type": "object",
+        "properties": {
+          "laneId": {
+            "type": "string"
+          },
+          "battleIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "objectiveId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "status": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
       "TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventPlanConflictResponse": {
         "required": [
           "issueCode",
@@ -6394,7 +6508,9 @@
           "catalogVersion",
           "notes",
           "showPaidOptions",
-          "teams"
+          "teams",
+          "runs",
+          "annotations"
         ],
         "type": "object",
         "properties": {
@@ -6419,6 +6535,48 @@
           },
           "teams": {
             "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventTeamResponse"
+          },
+          "runs": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventRunProgressResponse"
+          },
+          "annotations": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventObjectiveAnnotationResponse"
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventRunProgressResponse": {
+        "required": [
+          "run",
+          "regularMissions",
+          "premiumMissions",
+          "bundlePurchased",
+          "closeShards",
+          "updatedAt"
+        ],
+        "type": "object",
+        "properties": {
+          "run": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "regularMissions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "premiumMissions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "bundlePurchased": {
+            "type": "boolean"
+          },
+          "closeShards": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
           }
         }
       },
@@ -6492,6 +6650,40 @@
           }
         }
       },
+      "TacticusPlannerApiFeaturesLegendaryEventPlansUpdateLegendaryEventAnnotationsRequest": {
+        "required": [
+          "expectedRevision",
+          "laneId",
+          "battleIndex",
+          "objectiveIds",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "expectedRevision": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int64"
+          },
+          "laneId": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "battleIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "objectiveIds": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemInt32"
+          },
+          "status": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
       "TacticusPlannerApiFeaturesLegendaryEventPlansUpdateLegendaryEventPlanRequest": {
         "required": [
           "expectedRevision",
@@ -6513,6 +6705,38 @@
           },
           "showPaidOptions": {
             "type": "boolean"
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesLegendaryEventPlansUpdateLegendaryEventRunInputsRequest": {
+        "required": [
+          "expectedRevision",
+          "regularMissions",
+          "premiumMissions",
+          "bundlePurchased",
+          "closeShards"
+        ],
+        "type": "object",
+        "properties": {
+          "expectedRevision": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int64"
+          },
+          "regularMissions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "premiumMissions": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "bundlePurchased": {
+            "type": "boolean"
+          },
+          "closeShards": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -7673,6 +7897,8 @@
           "code",
           "message",
           "teamsImported",
+          "runInputsImported",
+          "annotationsImported",
           "issues"
         ],
         "type": "object",
@@ -7697,6 +7923,14 @@
             "type": "string"
           },
           "teamsImported": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "runInputsImported": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "annotationsImported": {
             "type": "integer",
             "format": "int32"
           },
@@ -8715,34 +8949,6 @@
           }
         }
       },
-      "TacticusPlannerGameCatalogModelsGameCatalogLreCommon": {
-        "required": [
-          "id",
-          "pointsMilestones",
-          "chestsMilestones",
-          "progression",
-          "shardsPerChest"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "pointsMilestones": {
-            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLrePointsMilestone"
-          },
-          "chestsMilestones": {
-            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLreChestsMilestone"
-          },
-          "progression": {
-            "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogLreProgression"
-          },
-          "shardsPerChest": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
       "TacticusPlannerGameCatalogModelsGameCatalogLreEnemy": {
         "required": [
           "id",
@@ -8867,6 +9073,30 @@
           }
         }
       },
+      "TacticusPlannerGameCatalogModelsGameCatalogLreRewards": {
+        "required": [
+          "pointsMilestones",
+          "chestsMilestones",
+          "progression",
+          "shardsPerChest"
+        ],
+        "type": "object",
+        "properties": {
+          "pointsMilestones": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLrePointsMilestone"
+          },
+          "chestsMilestones": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLreChestsMilestone"
+          },
+          "progression": {
+            "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogLreProgression"
+          },
+          "shardsPerChest": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "TacticusPlannerGameCatalogModelsGameCatalogLreTrackEnemies": {
         "required": [
           "label",
@@ -8938,7 +9168,8 @@
           "premiumMissions",
           "alpha",
           "beta",
-          "gamma"
+          "gamma",
+          "rewards"
         ],
         "type": "object",
         "properties": {
@@ -8976,6 +9207,9 @@
           },
           "gamma": {
             "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogLreTrackView"
+          },
+          "rewards": {
+            "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogLreRewards"
           }
         }
       },

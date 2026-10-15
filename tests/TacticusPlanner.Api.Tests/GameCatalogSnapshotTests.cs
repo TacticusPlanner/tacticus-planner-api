@@ -31,6 +31,17 @@ public sealed class GameCatalogSnapshotTests(GameCatalogApiFactory factory)
     }
 
     [Fact]
+    public async Task TheSharedLreLadderIsNoLongerServed()
+    {
+        // Authenticated, so an unmatched route reads as 404 rather than the anonymous 401 fallback.
+        var client = factory.CreateClient();
+
+        var response = await client.GetAsync("/api/v1/game-catalog/lre-common", TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
+    [Fact]
     public async Task CharacterAbilityCostsAreServedAnonymouslyForLevels2To60()
     {
         var client = factory.CreateClient();

@@ -14,9 +14,10 @@ using Xunit;
 namespace TacticusPlanner.Persistence.IntegrationTests;
 
 /// <summary>
-/// Relational coverage for <c>AddLegendaryEventPlans</c> (LRE Stage 2): the CHECK and unique constraints the
-/// InMemory API tests cannot exercise, the cascade from account purge, the plan-revision 409 when two writers
-/// race (including two lazy creators), and dense lane order after a permutation.
+/// Relational coverage for <c>AddLegendaryEventPlans</c> (LRE Stage 2) and
+/// <c>AddLegendaryEventRunInputsAndAnnotations</c> (Stage 3): the CHECK and unique constraints the InMemory API
+/// tests cannot exercise, the cascade from account purge, the plan-revision 409 when two writers race (including
+/// two lazy creators), and dense lane order after a permutation.
 /// </summary>
 public sealed class LegendaryEventPlansMigrationPostgresTests
 {
@@ -80,6 +81,71 @@ public sealed class LegendaryEventPlansMigrationPostgresTests
         {
             Assert.Equal(0L, await CountAsync(connectionString, table));
         }
+    }
+
+    [Fact]
+    public async Task RunInputAndAnnotationConstraintsRejectBadRowsAndAccountPurgeCascades()
+    {
+        await using var postgres = new PostgreSqlBuilder("postgres:18-alpine").Build();
+        await postgres.StartAsync(Ct);
+        var connectionString = postgres.GetConnectionString();
+        var (options, profileId) = await MigrateAndSeedProfileAsync(connectionString);
+
+        // Written through the EF model, so the status conversion and the CHECKs agree.
+        var plan = Saved(await WriteAsync(options, profileId, 0, (context, _) =>
+        {
+            LegendaryEventPlanInputMutations.SetRunInputs(
+                context, 1, new UpdateLegendaryEventRunInputsRequest(0, 10, 2, true, 25));
+            return Task.FromResult(LegendaryEventPlanInputMutations.SetAnnotations(
+                context, "alpha", 6, [0, 3], LegendaryEventAnnotationStatus.StopHere));
+        }));
+        Assert.Equal((10, 2, true, 25), (plan.Runs[0].RegularMissions, plan.Runs[0].PremiumMissions,
+            plan.Runs[0].BundlePurchased, plan.Runs[0].CloseShards));
+        Assert.Equal(["stopHere", "stopHere"], plan.Annotations.Select(annotation => annotation.Status));
+
+        plan = Saved(await WriteAsync(options, profileId, plan.Revision, (context, _) =>
+            Task.FromResult(LegendaryEventPlanInputMutations.SetAnnotations(
+                context, "alpha", 6, [3], LegendaryEventAnnotationStatus.MaybeClear))));
+        Assert.Equal(["stopHere", "maybeClear"], plan.Annotations.Select(annotation => annotation.Status));
+
+        var planId = Guid.Empty;
+        await using (var connection = new NpgsqlConnection(connectionString))
+        {
+            await connection.OpenAsync(Ct);
+            await using var command = connection.CreateCommand();
+            command.CommandText = "SELECT id FROM legendary_event_plans";
+            planId = (Guid)(await command.ExecuteScalarAsync(Ct))!;
+        }
+
+        string[][] rejected =
+        [
+            ["ck_legendary_event_run_progress_run",
+                "INSERT INTO legendary_event_run_progress (plan_id, run, regular_missions, premium_missions, bundle_purchased, close_shards, updated_at) VALUES (@plan, 4, 0, 0, FALSE, 0, now())"],
+            ["ck_legendary_event_run_progress_regular_missions",
+                "INSERT INTO legendary_event_run_progress (plan_id, run, regular_missions, premium_missions, bundle_purchased, close_shards, updated_at) VALUES (@plan, 2, -1, 0, FALSE, 0, now())"],
+            ["ck_legendary_event_run_progress_close_shards",
+                "INSERT INTO legendary_event_run_progress (plan_id, run, regular_missions, premium_missions, bundle_purchased, close_shards, updated_at) VALUES (@plan, 2, 0, 0, FALSE, -25, now())"],
+            ["pk_legendary_event_run_progress",
+                "INSERT INTO legendary_event_run_progress (plan_id, run, regular_missions, premium_missions, bundle_purchased, close_shards, updated_at) VALUES (@plan, 1, 0, 0, FALSE, 0, now())"],
+            ["ck_legendary_event_objective_annotations_objective_id",
+                "INSERT INTO legendary_event_objective_annotations (plan_id, lane_id, battle_index, objective_id, status, updated_at) VALUES (@plan, 'alpha', 0, 6, 'stopHere', now())"],
+            ["ck_legendary_event_objective_annotations_status",
+                "INSERT INTO legendary_event_objective_annotations (plan_id, lane_id, battle_index, objective_id, status, updated_at) VALUES (@plan, 'alpha', 0, 0, 'cleared', now())"],
+            ["ck_legendary_event_objective_annotations_lane_id",
+                "INSERT INTO legendary_event_objective_annotations (plan_id, lane_id, battle_index, objective_id, status, updated_at) VALUES (@plan, 'delta', 0, 0, 'stopHere', now())"],
+            ["ck_legendary_event_objective_annotations_battle_index",
+                "INSERT INTO legendary_event_objective_annotations (plan_id, lane_id, battle_index, objective_id, status, updated_at) VALUES (@plan, 'alpha', -1, 0, 'stopHere', now())"],
+        ];
+        foreach (var (constraint, sql) in rejected.Select(entry => (entry[0], entry[1])))
+        {
+            var exception = await Assert.ThrowsAsync<PostgresException>(() => ExecuteAsync(connectionString, sql, ("plan", planId)));
+            Assert.Equal(constraint, exception.ConstraintName);
+        }
+
+        await ExecuteAsync(connectionString, "DELETE FROM accounts");
+
+        Assert.Equal(0L, await CountAsync(connectionString, "legendary_event_run_progress"));
+        Assert.Equal(0L, await CountAsync(connectionString, "legendary_event_objective_annotations"));
     }
 
     [Fact]

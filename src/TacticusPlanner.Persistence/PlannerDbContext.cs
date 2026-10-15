@@ -64,6 +64,11 @@ public sealed class PlannerDbContext(
 
     public DbSet<LegendaryEventTeamRunDepth> LegendaryEventTeamRunDepths => Set<LegendaryEventTeamRunDepth>();
 
+    public DbSet<LegendaryEventRunProgress> LegendaryEventRunProgress => Set<LegendaryEventRunProgress>();
+
+    public DbSet<LegendaryEventObjectiveAnnotation> LegendaryEventObjectiveAnnotations =>
+        Set<LegendaryEventObjectiveAnnotation>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(PlannerDbContext).Assembly);
@@ -138,5 +143,9 @@ public sealed class PlannerDbContext(
             .HasQueryFilter(entity => entity.Team!.Plan!.ProfileId == CurrentProfileId);
         modelBuilder.Entity<LegendaryEventTeamRunDepth>()
             .HasQueryFilter(entity => entity.Team!.Plan!.ProfileId == CurrentProfileId);
+        modelBuilder.Entity<LegendaryEventRunProgress>()
+            .HasQueryFilter(entity => entity.Plan!.ProfileId == CurrentProfileId);
+        modelBuilder.Entity<LegendaryEventObjectiveAnnotation>()
+            .HasQueryFilter(entity => entity.Plan!.ProfileId == CurrentProfileId);
     }
 }
