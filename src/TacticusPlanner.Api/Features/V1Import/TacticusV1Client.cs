@@ -106,9 +106,10 @@ public sealed record V1LreOccurrence(
     JsonElement? OhSoCloseShards = null
 );
 
-/// <summary>A V1 compact requirement: <see cref="Statuses"/> maps a battle index to a <c>RequirementStatus</c>
-/// (an object keyed by index, or an array by position). States are not read.</summary>
-public sealed record V1LreCompactRequirement(JsonElement? Statuses = null);
+/// <summary>A V1 compact requirement: <see cref="Statuses"/> maps a battle index to a <c>RequirementStatus</c> and
+/// <see cref="States"/> to a <c>ProgressState</c> (each an object keyed by index, or an array by position). A
+/// battle with no status and state 2 (blocked) reads as Stop here, as V1 reads it.</summary>
+public sealed record V1LreCompactRequirement(JsonElement? Statuses = null, JsonElement? States = null);
 
 /// <summary>V1's legacy per-battle progress.</summary>
 public sealed record V1LreBattleProgress(

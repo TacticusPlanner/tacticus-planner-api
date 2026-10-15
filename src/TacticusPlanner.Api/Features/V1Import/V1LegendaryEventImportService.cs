@@ -126,7 +126,7 @@ public sealed partial class V1LegendaryEventImportService(
                     "A V2 plan with teams already exists for this event and everything else was already in V2; it was "
                     + "left unchanged.", 0, 0, 0, issues)
                 : Outcome(lre.Id, v1Event, "Skipped", "no_legendary_event_imported",
-                    "No V1 team for this event could be resolved.", 0, 0, 0, issues);
+                    "Nothing from V1 for this event could be imported.", 0, 0, 0, issues);
         }
 
         var importedTeams = writeTeams ? teams : [];

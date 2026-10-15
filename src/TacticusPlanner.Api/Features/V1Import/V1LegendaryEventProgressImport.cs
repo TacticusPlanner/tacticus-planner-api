@@ -80,8 +80,15 @@ public static class V1LegendaryEventProgressImport
             {
                 foreach (var (requirementId, requirement) in requirements ?? [])
                 {
-                    foreach (var (battleIndex, status) in Statuses(requirement?.Statuses))
-                        marks.Add((laneKey, battleIndex, requirementId, status));
+                    // As V1 reads it: a battle with no status but a blocked state (an older save re-saved as
+                    // compact) is Stop here, the same fallback as the legacy format below.
+                    var statuses = ByIndex(requirement?.Statuses).ToList();
+                    var withStatus = statuses.Select(entry => entry.BattleIndex).ToHashSet();
+                    foreach (var (battleIndex, status) in statuses)
+                        marks.Add((laneKey, battleIndex, requirementId, (int)status));
+                    foreach (var (battleIndex, _) in ByIndex(requirement?.States)
+                                 .Where(entry => entry.Value.Equals(BlockedState) && !withStatus.Contains(entry.BattleIndex)))
+                        marks.Add((laneKey, battleIndex, requirementId, StopHere));
                 }
             }
         }
@@ -215,18 +222,18 @@ public static class V1LegendaryEventProgressImport
         return objective is null ? null : objective.Index + 1;
     }
 
-    /// <summary>A compact requirement's statuses as (battle index, status): an object keyed by index or an array
-    /// by position; entries that are not numbers are skipped.</summary>
-    private static IEnumerable<(double? BattleIndex, int Status)> Statuses(JsonElement? statuses)
+    /// <summary>A compact requirement's statuses or states as (battle index, value): an object keyed by index or an
+    /// array by position; entries that are not numbers are skipped.</summary>
+    private static IEnumerable<(double? BattleIndex, double Value)> ByIndex(JsonElement? values)
     {
-        switch (statuses)
+        switch (values)
         {
             case { ValueKind: JsonValueKind.Object } byIndex:
                 foreach (var entry in byIndex.EnumerateObject().Where(entry => Number(entry.Value) is not null))
                 {
                     yield return (
                         double.TryParse(entry.Name, NumberStyles.Float, CultureInfo.InvariantCulture, out var index) ? index : null,
-                        (int)Number(entry.Value)!.Value);
+                        Number(entry.Value)!.Value);
                 }
 
                 break;
@@ -234,8 +241,8 @@ public static class V1LegendaryEventProgressImport
                 var position = 0;
                 foreach (var entry in byPosition.EnumerateArray())
                 {
-                    if (Number(entry) is { } status)
-                        yield return (position, (int)status);
+                    if (Number(entry) is { } value)
+                        yield return (position, value);
                     position++;
                 }
 

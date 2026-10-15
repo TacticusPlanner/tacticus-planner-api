@@ -598,6 +598,26 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
     }
 
     [Fact]
+    public async Task CompactBlockedStateWithoutAStatusIsImportedAsStopHere()
+    {
+        var (client, _) = await ClientAsync();
+        var flying = Lysander.Alpha.UnitsRestrictions.Single(restriction => restriction.Name == "Flying");
+        var json = """
+            {"leProgress": {"15": {"compactProgress": {"alpha": {
+              "_defeatAll": { "states": [0, 2] },
+              "Flying": { "states": { "3": 2, "4": 2 }, "statuses": { "4": 1 } }
+            } } } } }
+            """;
+
+        await ImportAsync(client, Configure(json));
+
+        Assert.Equal(
+            [("alpha", 1, 0, "stopHere"), ("alpha", 3, flying.Index + 1, "stopHere")],
+            (await ReadPlanAsync(client)).Annotations.Select(annotation =>
+                (annotation.LaneId, annotation.BattleIndex, annotation.ObjectiveId, annotation.Status)));
+    }
+
+    [Fact]
     public async Task LegacyBlockedStateIsImportedAsStopHere()
     {
         var (client, _) = await ClientAsync();
