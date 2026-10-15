@@ -73,11 +73,15 @@ public sealed class UpdateOnslaughtProgressEndpoint
             return;
         }
 
+        // A null alliance means "not set": no record is stored for it, so GET reports IsSet = false.
         overrides.OnslaughtProgressOverrides =
         [
-            req.Imperial.ToRecord("Imperial"),
-            req.Xenos.ToRecord("Xenos"),
-            req.Chaos.ToRecord("Chaos"),
+            .. new[]
+            {
+                req.Imperial?.ToRecord("Imperial"),
+                req.Xenos?.ToRecord("Xenos"),
+                req.Chaos?.ToRecord("Chaos"),
+            }.OfType<OnslaughtProgressOverrideRecord>(),
         ];
         if (db.Entry(overrides).State != EntityState.Added)
         {
@@ -101,7 +105,12 @@ public sealed class UpdateOnslaughtProgressEndpoint
     }
 }
 
-public sealed record OnslaughtAllianceProgressResponse(string Sector, int Tier)
+/// <summary>
+/// One alliance's saved Onslaught position. <see cref="IsSet"/> is false when the player has never
+/// saved a position for the alliance; Sector/Tier then carry the Stone 1 placeholder and must not be
+/// treated as the player's real progress.
+/// </summary>
+public sealed record OnslaughtAllianceProgressResponse(string Sector, int Tier, bool IsSet)
 {
     internal static OnslaughtAllianceProgressResponse From(
         IReadOnlyCollection<OnslaughtProgressOverrideRecord> records,
@@ -109,7 +118,7 @@ public sealed record OnslaughtAllianceProgressResponse(string Sector, int Tier)
     {
         var progress = records.FirstOrDefault(record =>
             string.Equals(record.Alliance, alliance, StringComparison.OrdinalIgnoreCase));
-        return progress is null ? new("Stone", 1) : new(progress.Sector, progress.Tier);
+        return progress is null ? new("Stone", 1, false) : new(progress.Sector, progress.Tier, true);
     }
 }
 
@@ -136,10 +145,13 @@ public sealed record OnslaughtAllianceProgressRequest(string Sector, int Tier)
     };
 }
 
+/// <summary>
+/// Replaces all three alliances' Onslaught positions. A null alliance clears it back to "not set".
+/// </summary>
 public sealed record UpdateOnslaughtProgressRequest(
-    OnslaughtAllianceProgressRequest Imperial,
-    OnslaughtAllianceProgressRequest Xenos,
-    OnslaughtAllianceProgressRequest Chaos,
+    OnslaughtAllianceProgressRequest? Imperial,
+    OnslaughtAllianceProgressRequest? Xenos,
+    OnslaughtAllianceProgressRequest? Chaos,
     long Revision);
 
 public sealed class UpdateOnslaughtProgressValidator : Validator<UpdateOnslaughtProgressRequest>
@@ -149,9 +161,9 @@ public sealed class UpdateOnslaughtProgressValidator : Validator<UpdateOnslaught
 
     public UpdateOnslaughtProgressValidator()
     {
-        RuleFor(request => request.Imperial).NotNull().SetValidator(new AllianceProgressValidator());
-        RuleFor(request => request.Xenos).NotNull().SetValidator(new AllianceProgressValidator());
-        RuleFor(request => request.Chaos).NotNull().SetValidator(new AllianceProgressValidator());
+        RuleFor(request => request.Imperial!).SetValidator(new AllianceProgressValidator()).When(request => request.Imperial is not null);
+        RuleFor(request => request.Xenos!).SetValidator(new AllianceProgressValidator()).When(request => request.Xenos is not null);
+        RuleFor(request => request.Chaos!).SetValidator(new AllianceProgressValidator()).When(request => request.Chaos is not null);
         RuleFor(request => request.Revision).GreaterThanOrEqualTo(0);
     }
 

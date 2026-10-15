@@ -6617,7 +6617,8 @@
       "TacticusPlannerApiFeaturesPlayerDataOverridesOnslaughtAllianceProgressResponse": {
         "required": [
           "sector",
-          "tier"
+          "tier",
+          "isSet"
         ],
         "type": "object",
         "properties": {
@@ -6627,6 +6628,9 @@
           "tier": {
             "type": "integer",
             "format": "int32"
+          },
+          "isSet": {
+            "type": "boolean"
           }
         }
       },
@@ -6681,13 +6685,37 @@
         "type": "object",
         "properties": {
           "imperial": {
-            "$ref": "#/components/schemas/TacticusPlannerApiFeaturesPlayerDataOverridesOnslaughtAllianceProgressRequest"
+            "type": [
+              "null",
+              "object"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesPlayerDataOverridesOnslaughtAllianceProgressRequest"
+              }
+            ]
           },
           "xenos": {
-            "$ref": "#/components/schemas/TacticusPlannerApiFeaturesPlayerDataOverridesOnslaughtAllianceProgressRequest"
+            "type": [
+              "null",
+              "object"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesPlayerDataOverridesOnslaughtAllianceProgressRequest"
+              }
+            ]
           },
           "chaos": {
-            "$ref": "#/components/schemas/TacticusPlannerApiFeaturesPlayerDataOverridesOnslaughtAllianceProgressRequest"
+            "type": [
+              "null",
+              "object"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesPlayerDataOverridesOnslaughtAllianceProgressRequest"
+              }
+            ]
           },
           "revision": {
             "minimum": 0,

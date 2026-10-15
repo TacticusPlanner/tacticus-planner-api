@@ -204,9 +204,9 @@ public sealed class V1ImportEndpointTests(PlannerApiFactory factory) : IClassFix
         var progress = await client.GetFromJsonAsync<OnslaughtProgressResponse>(
             "/api/v1/me/player-data-overrides/onslaught-progress",
             TestContext.Current.CancellationToken);
-        Assert.Equal(new("Gold", 2), progress!.Imperial);
-        Assert.Equal(new("Diamond", 4), progress.Xenos);
-        Assert.Equal(new("Silver", 3), progress.Chaos);
+        Assert.Equal(new("Gold", 2, true), progress!.Imperial);
+        Assert.Equal(new("Diamond", 4, true), progress.Xenos);
+        Assert.Equal(new("Silver", 3, true), progress.Chaos);
     }
 
     [Fact]
@@ -257,9 +257,9 @@ public sealed class V1ImportEndpointTests(PlannerApiFactory factory) : IClassFix
         var progress = await client.GetFromJsonAsync<OnslaughtProgressResponse>(
             "/api/v1/me/player-data-overrides/onslaught-progress",
             TestContext.Current.CancellationToken);
-        Assert.Equal(new("Iron", 2), progress!.Imperial);
-        Assert.Equal(new("Gold", 3), progress.Xenos);
-        Assert.Equal(new("Stone", 4), progress.Chaos);
+        Assert.Equal(new("Iron", 2, true), progress!.Imperial);
+        Assert.Equal(new("Gold", 3, true), progress.Xenos);
+        Assert.Equal(new("Stone", 4, true), progress.Chaos);
     }
 
     [Fact]
