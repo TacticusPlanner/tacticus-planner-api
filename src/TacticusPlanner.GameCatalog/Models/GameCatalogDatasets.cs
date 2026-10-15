@@ -18,6 +18,7 @@ public static class GameCatalogDatasets
     // efficiency coefficients), raw and served under the same key; denormalization only sorts the
     // coefficients by unit id. See Models/LreClearEstimate.cs.
     public const string LreClearEstimate = "lre-clear-estimate";
+    public const string MythicQuests = "mythic-quests";
 
     // Route/key prefixes for the split dataset families.
     public const string UnitsPrefix = "units";
@@ -273,6 +274,7 @@ public static class GameCatalogDatasets
         EventDefinitions,
         EventOccurrences,
         LreClearEstimate,
+        MythicQuests,
         .. NpcFactions,
         .. EquipmentTypes,
         .. UpgradeRarities,
@@ -335,6 +337,11 @@ public static class GameCatalogDatasets
     // guild_boss.json; no raw file is served directly. See Denormalization/RaidBossDenormalizer.cs and
     // specs/raid-bosses-dataset in raid-bosses-library.
     public const string RaidBosses = "raid-bosses";
+    // mythic-quests is a plain array, one record per character with quests (ordered by unitId), built from the
+    // same-named raw file ported from V1's mythic_quests data. Reward "type[:amount]" strings are parsed into
+    // structured records; task text templates are not served (they are client game text keyed by locaKey).
+    // See Denormalization/MythicQuestDenormalizer.cs.
+    public const string MythicQuestsServed = MythicQuests;
 
     /// <summary>The denormalized datasets exposed by the manifest / served by the catalog endpoints.</summary>
     public static readonly IReadOnlyList<string> Served =
@@ -360,5 +367,6 @@ public static class GameCatalogDatasets
         Shops,
         RaidBosses,
         GuildRaidMeta,
+        MythicQuestsServed,
     ];
 }

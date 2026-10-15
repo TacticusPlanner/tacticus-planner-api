@@ -146,7 +146,15 @@ genuine game changes.
   `"Stone I"` → `Stone1`). `new-character-data2.json` is **not** used by the catalog.
 - **mows** (`units-{faction}.json` `mows[]`): from V1 `mow/data/new-mow-data.json` `mows[]`
   (`snowprintId`→`id`; `primaryAbility`/`secondaryAbility` each `{name, recipes[][]}`); shared
-  `upgradeCosts` → `mow-upgrade-costs.json`.
+  `upgradeCosts` → `mow-upgrade-costs.json`. `mythicAbility` (`{name}`, no recipes) comes from a
+  **different** V1 file, `mow/data/new-mows-data2.json` `mythicAbilities[0]`, matched by `id` — a new MoW
+  needs it from there.
+- **mythic-quests** (`mythic-quests.json`): from V1 `mythic_quests/data/mythic-quests.json` `quests[]`
+  (keep `characterId`, `quests[].number`, `quests[].rewards` as V1's `"type[:amount]"` strings,
+  `quests[].tasks[]` `locaKey`/`target`/`taskParameters`; drop `characterName` and quest/task `name`). The
+  server parses rewards with a closed pattern set — a new reward kind fails startup until
+  `MythicQuestRewardParser` learns it. V1's `terms[]` (task text templates, English only) are **not**
+  catalog data: they go to the apps `mythicQuestTasks` namespace (`apps/web/public/locales/en/`).
 - **npcs** (`npcs-{faction}.json` `npcs[]`, faction-less ones in `npcs-objects.json`): from V1
   `npc/data/new-npc-data.json` (`Name`→`name`, `Stats[]`→`stats[]` with camelCase keys and
   `Armor`→`armour`; **missing numeric stat fields ⇒ `0`**). Ability-damage keys are the newer
@@ -175,10 +183,19 @@ genuine game changes.
 - **client-side companion** (`tacticus-planner-apps`): new characters/equipment/traits need assets under
   `apps/web/public/game_catalog/` (portraits `characters/ui_image_RoundPortrait_{slug}_01.png` + full
   `ui_image_portrait_*`, equipment `equipment/ui_icon_item_{id}.png`, traits
-  `traits/ui_icon_trait_{slug}_01.png`), an entry in
-  `packages/game-catalog/src/game-entities/character-icon-overrides.ts` when the id→slug derivation
-  diverges from the asset filename, and display names in `apps/web/public/locales/en/characters.json`.
-  Source assets from `tacticusplanner/src/assets/images/snowprint_assets/`.
+  `traits/ui_icon_trait_{slug}_01.png`, relic abilities `abilities/ui_icon_ability2_{abilityId}.png`), an
+  entry in `packages/game-catalog/src/game-entities/character-icon-overrides.ts` when the id→slug
+  derivation diverges from the asset filename, and display names in
+  `apps/web/public/locales/en/characters.json`. Source assets from
+  `tacticusplanner/src/assets/images/snowprint_assets/`. **Asset filenames must match the catalog id
+  exactly, including letter case** — V1's files sometimes differ in case (`DaemonFleshPlate` vs the id
+  `DaemonfleshPlate`), which works on Windows and breaks on the case-sensitive host; rename on copy.
+- **client-side game text** (`tacticus-planner-apps`): ability rules text (`npcAbilityText`, all four
+  locales) is generated from the catalog's ability ids plus V1's ability table and localized descriptions.
+  After any refresh that touches characters, npcs, mows or relic equipment, run
+  `node apps/web/scripts/generate-ability-text-i18n.mjs` in the apps repo (it reads this repo's `Data/**`
+  and V1 from the sibling checkouts); it fails when the uncovered-id set or a relic ability icon drifts
+  from its known gaps. Commit the regenerated locale files with the refresh.
 
 **Finish:** bump `GameVersion` (and usually `Version`) in `GameCatalogRelease.cs`; leave `SchemaVersion`
 unless a served shape changed. Then run the checklist below and promote the manifest snapshot.
