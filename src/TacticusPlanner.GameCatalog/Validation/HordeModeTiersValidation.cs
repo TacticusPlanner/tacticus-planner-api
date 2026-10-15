@@ -55,15 +55,12 @@ public static partial class GameCatalogValidator
                 $"Dataset '{dataset}' tiers '{string.Join(", ", tierNames)}' must be '{string.Join(", ", HordeModeTierNames)}' in that order."));
         }
 
-        foreach (var tier in tiers)
+        foreach (var tier in tiers.Where(tier => !(tier.Multiplier > 0 && tier.Multiplier <= MaxHordeModeMultiplier)))
         {
-            if (!(tier.Multiplier > 0 && tier.Multiplier <= MaxHordeModeMultiplier))
-            {
-                errors.Add(new GameCatalogValidationError(
-                    dataset,
-                    code,
-                    $"Dataset '{dataset}' tier '{tier.Tier}' multiplier '{FormatCatalogNumber(tier.Multiplier)}' must be in (0, {FormatCatalogNumber(MaxHordeModeMultiplier)}]."));
-            }
+            errors.Add(new GameCatalogValidationError(
+                dataset,
+                code,
+                $"Dataset '{dataset}' tier '{tier.Tier}' multiplier '{FormatCatalogNumber(tier.Multiplier)}' must be in (0, {FormatCatalogNumber(MaxHordeModeMultiplier)}]."));
         }
 
         var seen = new HashSet<string>(StringComparer.Ordinal);
