@@ -42,17 +42,17 @@ public sealed class HomeScreenEventCalendarTests
 
         (string Def, string Start, string End)[] expected =
         [
-            ("hse-against-the-tide", "2026-09-12T08:00:00Z", "2026-09-19T08:00:00Z"),
-            ("hse-purge-order", "2026-09-22T08:00:00Z", "2026-09-26T08:00:00Z"),
-            ("hse-squig-smash", "2026-09-28T08:00:00Z", "2026-10-01T08:00:00Z"),
-            ("hse-machine-hunt", "2026-10-02T08:00:00Z", "2026-10-06T08:00:00Z"),
-            ("hse-training-rush", "2026-10-06T08:00:00Z", "2026-10-10T08:00:00Z"),
-            ("hse-against-the-tide", "2026-10-10T08:00:00Z", "2026-10-17T08:00:00Z"),
-            ("hse-trait-boost-psyker", "2026-10-19T08:00:00Z", "2026-10-23T08:00:00Z"),
-            ("hse-global-operation-imperator", "2026-10-26T08:00:00Z", "2026-11-01T08:00:00Z"),
-            ("hse-faction-focus", "2026-10-26T08:00:00Z", "2026-11-01T08:00:00Z"),
-            ("hse-warp-surge", "2026-11-05T08:00:00Z", "2026-11-08T08:00:00Z"),
-            ("hse-training-rush", "2026-11-12T08:00:00Z", "2026-11-14T08:00:00Z"),
+            ("hse-against-the-tide", "2026-09-11T23:00:00Z", "2026-09-18T23:00:00Z"),
+            ("hse-purge-order", "2026-09-21T23:00:00Z", "2026-09-25T23:00:00Z"),
+            ("hse-squig-smash", "2026-09-27T23:00:00Z", "2026-09-30T23:00:00Z"),
+            ("hse-machine-hunt", "2026-10-01T23:00:00Z", "2026-10-05T23:00:00Z"),
+            ("hse-training-rush", "2026-10-05T23:00:00Z", "2026-10-09T23:00:00Z"),
+            ("hse-against-the-tide", "2026-10-09T23:00:00Z", "2026-10-15T23:00:00Z"),
+            ("hse-trait-boost-psyker", "2026-10-18T23:00:00Z", "2026-10-21T23:00:00Z"),
+            ("hse-global-operation-imperator", "2026-10-26T00:00:00Z", "2026-11-01T00:00:00Z"),
+            ("hse-faction-focus", "2026-10-26T00:00:00Z", "2026-11-01T00:00:00Z"),
+            ("hse-warp-surge", "2026-11-05T00:00:00Z", "2026-11-08T00:00:00Z"),
+            ("hse-training-rush", "2026-11-12T00:00:00Z", "2026-11-14T00:00:00Z"),
         ];
         foreach (var (def, start, end) in expected)
             Assert.Contains(snapshot.EventOccurrences, o =>
