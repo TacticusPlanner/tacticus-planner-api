@@ -50,14 +50,19 @@
       url: /api/v1/game-catalog/guild-raid-meta
     },
     {
+      key: horde-mode-tiers,
+      hash: 2830fda5ae3bf1e6b0833674ebff273bcfb986fd4e6cb2249556207ff83564e6,
+      url: /api/v1/game-catalog/horde-mode-tiers
+    },
+    {
+      key: legendary-event-clear-estimate,
+      hash: c2dfca660192cb56d526d67d450ce8dd5079421dfe8f7c666bb2d6a7bfd5f341,
+      url: /api/v1/game-catalog/legendary-event-clear-estimate
+    },
+    {
       key: lre-battles,
       hash: a88c8ae123a8e05508279e73221ba32d3319ce93ca87418cc0e7fdef679d8b0c,
       url: /api/v1/game-catalog/lre-battles
-    },
-    {
-      key: lre-clear-estimate,
-      hash: c155fb9ac4da26e6fb82424acdfedd0d13fb7db47fad1c0edfd8cf4c420f11f7,
-      url: /api/v1/game-catalog/lre-clear-estimate
     },
     {
       key: lre-common,

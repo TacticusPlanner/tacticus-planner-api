@@ -234,17 +234,31 @@ public sealed class GetGameCatalogLreCommonEndpoint(IGameCatalogProvider catalog
     }
 }
 
-public sealed class GetGameCatalogLreClearEstimateEndpoint(IGameCatalogProvider catalog)
-    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogLreClearEstimate>>(catalog, GameCatalogDatasets.LreClearEstimate)
+public sealed class GetGameCatalogLegendaryEventClearEstimateEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogLegendaryEventClearEstimate>>(catalog, GameCatalogDatasets.LegendaryEventClearEstimate)
 {
-    protected override IReadOnlyList<GameCatalogLreClearEstimate> Payload => Snapshot.LreClearEstimateViews;
+    protected override IReadOnlyList<GameCatalogLegendaryEventClearEstimate> Payload => Snapshot.LegendaryEventClearEstimateViews;
 
     public override void Configure()
     {
-        Get("game-catalog/lre-clear-estimate");
+        Get("game-catalog/legendary-event-clear-estimate");
         ConfigureServed(
-            "Gets the LRE clear-estimate parameters.",
-            "The single clear-estimate record: the power ratio, its calibration metadata, and the per-unit efficiency coefficients (a unit not listed has coefficient 1.0).");
+            "Gets the Legendary Event clear-estimate parameters.",
+            "The single clear-estimate record: the power ratio and its calibration metadata.");
+    }
+}
+
+public sealed class GetGameCatalogHordeModeTiersEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogHordeModeTiers>>(catalog, GameCatalogDatasets.HordeModeTiers)
+{
+    protected override IReadOnlyList<GameCatalogHordeModeTiers> Payload => Snapshot.HordeModeTiersViews;
+
+    public override void Configure()
+    {
+        Get("game-catalog/horde-mode-tiers");
+        ConfigureServed(
+            "Gets the horde-mode character tier list.",
+            "The single S/A/B/C tier list of characters for horde modes, with each tier's power multiplier (a character not listed is unrated, multiplier 1.0).");
     }
 }
 

@@ -221,6 +221,54 @@
         }
       }
     },
+    "/api/v1/game-catalog/horde-mode-tiers": {
+      "get": {
+        "tags": [
+          "Game-Catalog"
+        ],
+        "summary": "Gets the horde-mode character tier list.",
+        "operationId": "TacticusPlannerApiFeaturesGameCatalogGetGameCatalogHordeModeTiersEndpoint",
+        "responses": {
+          "200": {
+            "description": "The single S/A/B/C tier list of characters for horde modes, with each tier's power multiplier (a character not listed is unrated, multiplier 1.0).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGameCatalogGameCatalogDatasetEnvelopeOfSystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogHordeModeTiers"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/api/v1/game-catalog/legendary-event-clear-estimate": {
+      "get": {
+        "tags": [
+          "Game-Catalog"
+        ],
+        "summary": "Gets the Legendary Event clear-estimate parameters.",
+        "operationId": "TacticusPlannerApiFeaturesGameCatalogGetGameCatalogLegendaryEventClearEstimateEndpoint",
+        "responses": {
+          "200": {
+            "description": "The single clear-estimate record: the power ratio and its calibration metadata.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGameCatalogGameCatalogDatasetEnvelopeOfSystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLegendaryEventClearEstimate"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
     "/api/v1/game-catalog/lre-battles": {
       "get": {
         "tags": [
@@ -235,30 +283,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGameCatalogGameCatalogDatasetEnvelopeOfSystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLreBattleView"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Forbidden"
-          }
-        }
-      }
-    },
-    "/api/v1/game-catalog/lre-clear-estimate": {
-      "get": {
-        "tags": [
-          "Game-Catalog"
-        ],
-        "summary": "Gets the LRE clear-estimate parameters.",
-        "operationId": "TacticusPlannerApiFeaturesGameCatalogGetGameCatalogLreClearEstimateEndpoint",
-        "responses": {
-          "200": {
-            "description": "The single clear-estimate record: the power ratio, its calibration metadata, and the per-unit efficiency coefficients (a unit not listed has coefficient 1.0).",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGameCatalogGameCatalogDatasetEnvelopeOfSystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLreClearEstimate"
                 }
               }
             }
@@ -3172,6 +3196,30 @@
           "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogGuildRaidMetaRecommendationView"
         }
       },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogHordeModeCharacter": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogHordeModeCharacter"
+        }
+      },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogHordeModeTier": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogHordeModeTier"
+        }
+      },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogHordeModeTiers": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogHordeModeTiers"
+        }
+      },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLegendaryEventClearEstimate": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogLegendaryEventClearEstimate"
+        }
+      },
       "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLreBattleView": {
         "type": "array",
         "items": {
@@ -3182,12 +3230,6 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogLreChestsMilestone"
-        }
-      },
-      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLreClearEstimate": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogLreClearEstimate"
         }
       },
       "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLreCommon": {
@@ -3218,12 +3260,6 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogLreRestriction"
-        }
-      },
-      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLreUnitCoefficient": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogLreUnitCoefficient"
         }
       },
       "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLreView": {
@@ -3927,6 +3963,94 @@
           }
         }
       },
+      "TacticusPlannerApiFeaturesGameCatalogGameCatalogDatasetEnvelopeOfSystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogHordeModeTiers": {
+        "required": [
+          "version",
+          "schemaVersion",
+          "gameVersion",
+          "sourceHash",
+          "datasetKey",
+          "datasetHash",
+          "data"
+        ],
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "schemaVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gameVersion": {
+            "type": "string"
+          },
+          "sourceHash": {
+            "type": "string"
+          },
+          "datasetKey": {
+            "type": "string"
+          },
+          "datasetHash": {
+            "type": "string"
+          },
+          "data": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogHordeModeTiers"
+              }
+            ]
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesGameCatalogGameCatalogDatasetEnvelopeOfSystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLegendaryEventClearEstimate": {
+        "required": [
+          "version",
+          "schemaVersion",
+          "gameVersion",
+          "sourceHash",
+          "datasetKey",
+          "datasetHash",
+          "data"
+        ],
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "schemaVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gameVersion": {
+            "type": "string"
+          },
+          "sourceHash": {
+            "type": "string"
+          },
+          "datasetKey": {
+            "type": "string"
+          },
+          "datasetHash": {
+            "type": "string"
+          },
+          "data": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLegendaryEventClearEstimate"
+              }
+            ]
+          }
+        }
+      },
       "TacticusPlannerApiFeaturesGameCatalogGameCatalogDatasetEnvelopeOfSystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLreBattleView": {
         "required": [
           "version",
@@ -3966,50 +4090,6 @@
             "oneOf": [
               {
                 "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLreBattleView"
-              }
-            ]
-          }
-        }
-      },
-      "TacticusPlannerApiFeaturesGameCatalogGameCatalogDatasetEnvelopeOfSystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLreClearEstimate": {
-        "required": [
-          "version",
-          "schemaVersion",
-          "gameVersion",
-          "sourceHash",
-          "datasetKey",
-          "datasetHash",
-          "data"
-        ],
-        "type": "object",
-        "properties": {
-          "version": {
-            "type": "string"
-          },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "gameVersion": {
-            "type": "string"
-          },
-          "sourceHash": {
-            "type": "string"
-          },
-          "datasetKey": {
-            "type": "string"
-          },
-          "datasetHash": {
-            "type": "string"
-          },
-          "data": {
-            "type": [
-              "null",
-              "array"
-            ],
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLreClearEstimate"
               }
             ]
           }
@@ -8589,6 +8669,95 @@
           }
         }
       },
+      "TacticusPlannerGameCatalogModelsGameCatalogHordeModeCharacter": {
+        "required": [
+          "unitId",
+          "tier"
+        ],
+        "type": "object",
+        "properties": {
+          "unitId": {
+            "type": "string"
+          },
+          "tier": {
+            "type": "string"
+          }
+        }
+      },
+      "TacticusPlannerGameCatalogModelsGameCatalogHordeModeTier": {
+        "required": [
+          "tier",
+          "multiplier"
+        ],
+        "type": "object",
+        "properties": {
+          "tier": {
+            "type": "string"
+          },
+          "multiplier": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "TacticusPlannerGameCatalogModelsGameCatalogHordeModeTiers": {
+        "required": [
+          "id",
+          "tiers",
+          "characters"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "tiers": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogHordeModeTier"
+          },
+          "characters": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogHordeModeCharacter"
+          }
+        }
+      },
+      "TacticusPlannerGameCatalogModelsGameCatalogLegendaryEventClearEstimate": {
+        "required": [
+          "id",
+          "powerRatio",
+          "calibration"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "powerRatio": {
+            "type": "number",
+            "format": "double"
+          },
+          "calibration": {
+            "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogLegendaryEventClearEstimateCalibration"
+          }
+        }
+      },
+      "TacticusPlannerGameCatalogModelsGameCatalogLegendaryEventClearEstimateCalibration": {
+        "required": [
+          "sampleCount",
+          "calibratedOn"
+        ],
+        "type": "object",
+        "properties": {
+          "sampleCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "calibratedOn": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
       "TacticusPlannerGameCatalogModelsGameCatalogLreBattleView": {
         "required": [
           "id",
@@ -8649,49 +8818,6 @@
           "engramCost": {
             "type": "integer",
             "format": "int32"
-          }
-        }
-      },
-      "TacticusPlannerGameCatalogModelsGameCatalogLreClearEstimate": {
-        "required": [
-          "id",
-          "powerRatio",
-          "calibration",
-          "unitCoefficients"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "powerRatio": {
-            "type": "number",
-            "format": "double"
-          },
-          "calibration": {
-            "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogLreClearEstimateCalibration"
-          },
-          "unitCoefficients": {
-            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLreUnitCoefficient"
-          }
-        }
-      },
-      "TacticusPlannerGameCatalogModelsGameCatalogLreClearEstimateCalibration": {
-        "required": [
-          "sampleCount",
-          "calibratedOn"
-        ],
-        "type": "object",
-        "properties": {
-          "sampleCount": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "calibratedOn": {
-            "type": [
-              "null",
-              "string"
-            ]
           }
         }
       },
@@ -8903,22 +9029,6 @@
           },
           "availableUnitIds": {
             "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemString"
-          }
-        }
-      },
-      "TacticusPlannerGameCatalogModelsGameCatalogLreUnitCoefficient": {
-        "required": [
-          "unitId",
-          "coefficient"
-        ],
-        "type": "object",
-        "properties": {
-          "unitId": {
-            "type": "string"
-          },
-          "coefficient": {
-            "type": "number",
-            "format": "double"
           }
         }
       },

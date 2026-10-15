@@ -38,7 +38,8 @@ public static partial class GameCatalogValidator
         ValidateRaidBosses(snapshot, errors);
         ValidateNpcs(snapshot, errors);
         ValidateGuildRaidMeta(snapshot, errors);
-        ValidateLreClearEstimate(snapshot, errors);
+        ValidateLegendaryEventClearEstimate(snapshot, errors);
+        ValidateHordeModeTiers(snapshot, errors);
         ValidateServedProjections(snapshot, errors);
 
         return errors;

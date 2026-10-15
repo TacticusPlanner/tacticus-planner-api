@@ -29,8 +29,6 @@ public sealed record GameCatalogSnapshot(
     // encounter unit / field-npc / modifier cross-reference checks run over the raw collections.
     GameCatalogRaidBossRawData RaidBossRawData,
     GameCatalogGuildRaidMetaRawData GuildRaidMetaRawData,
-    // Raw lre-clear-estimate records (authoring order). Kept for validation (exactly one record).
-    IReadOnlyList<GameCatalogLreClearEstimate> LreClearEstimateRaw,
     // Raw mythic quests (reward strings unparsed). Kept for validation — the reward parse and character /
     // equipment cross-reference checks run over the raw strings.
     IReadOnlyList<GameCatalogRawMythicQuests> MythicQuests,
@@ -49,7 +47,8 @@ public sealed record GameCatalogSnapshot(
     IReadOnlyList<GameCatalogLreView> LreViews,
     IReadOnlyList<GameCatalogLreBattleView> LreBattleViews,
     IReadOnlyList<GameCatalogLreCommon> LreCommonViews,
-    IReadOnlyList<GameCatalogLreClearEstimate> LreClearEstimateViews,
+    IReadOnlyList<GameCatalogLegendaryEventClearEstimate> LegendaryEventClearEstimateViews,
+    IReadOnlyList<GameCatalogHordeModeTiers> HordeModeTiersViews,
     IReadOnlyList<GameCatalogEventDefinition> EventDefinitionViews,
     IReadOnlyDictionary<string, IReadOnlyList<GameCatalogEventsCalendarEntry>> EventsCalendar,
     IReadOnlyList<GameCatalogShopView> ShopViews,

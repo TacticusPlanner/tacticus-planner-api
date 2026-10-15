@@ -99,26 +99,45 @@ public sealed class GameCatalogSnapshotTests(GameCatalogApiFactory factory)
     }
 
     [Fact]
-    public async Task LreClearEstimateIsServedAnonymouslyAsOneUncalibratedRecord()
+    public async Task LegendaryEventClearEstimateIsServedAnonymouslyAsOneUncalibratedRecord()
+    {
+        var payload = await GetAnonymousDataset("legendary-event-clear-estimate");
+        Assert.Equal("legendary-event-clear-estimate", payload["datasetKey"]!.GetValue<string>());
+
+        var record = Assert.Single(payload["data"]!.AsArray())!.AsObject();
+        Assert.Equal(["id", "powerRatio", "calibration"], record.Select(property => property.Key));
+        Assert.Equal("legendary-event-clear-estimate", record["id"]!.GetValue<string>());
+        Assert.Equal(1.0, record["powerRatio"]!.GetValue<double>());
+        Assert.Equal(0, record["calibration"]!["sampleCount"]!.GetValue<int>());
+        Assert.Null(record["calibration"]!["calibratedOn"]);
+    }
+
+    [Fact]
+    public async Task HordeModeTiersAreServedAnonymouslyWithCharactersSortedById()
+    {
+        var payload = await GetAnonymousDataset("horde-mode-tiers");
+        Assert.Equal("horde-mode-tiers", payload["datasetKey"]!.GetValue<string>());
+
+        var record = Assert.Single(payload["data"]!.AsArray())!.AsObject();
+        Assert.Equal(["id", "tiers", "characters"], record.Select(property => property.Key));
+        Assert.Equal(["S", "A", "B", "C"], record["tiers"]!.AsArray().Select(tier => tier!["tier"]!.GetValue<string>()));
+        Assert.Equal(["tier", "multiplier"], record["tiers"]![0]!.AsObject().Select(property => property.Key));
+
+        var unitIds = record["characters"]!.AsArray().Select(character => character!["unitId"]!.GetValue<string>()).ToArray();
+        Assert.Equal(unitIds.Order(StringComparer.Ordinal), unitIds);
+        Assert.Equal(["unitId", "tier"], record["characters"]![0]!.AsObject().Select(property => property.Key));
+    }
+
+    private async Task<JsonObject> GetAnonymousDataset(string datasetKey)
     {
         var client = factory.CreateClient();
 
-        using var request = new HttpRequestMessage(HttpMethod.Get, "/api/v1/game-catalog/lre-clear-estimate");
+        using var request = new HttpRequestMessage(HttpMethod.Get, $"/api/v1/game-catalog/{datasetKey}");
         request.Headers.Add(TestAuthenticationHandler.NoAuthHeader, "1");
         var response = await client.SendAsync(request, TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-
-        var payload = JsonNode.Parse(await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken))!.AsObject();
-        Assert.Equal("lre-clear-estimate", payload["datasetKey"]!.GetValue<string>());
-
-        var record = Assert.Single(payload["data"]!.AsArray())!.AsObject();
-        Assert.Equal(["id", "powerRatio", "calibration", "unitCoefficients"], record.Select(property => property.Key));
-        Assert.Equal("lre-clear-estimate", record["id"]!.GetValue<string>());
-        Assert.Equal(1.0, record["powerRatio"]!.GetValue<double>());
-        Assert.Equal(0, record["calibration"]!["sampleCount"]!.GetValue<int>());
-        Assert.Null(record["calibration"]!["calibratedOn"]);
-        Assert.Empty(record["unitCoefficients"]!.AsArray());
+        return JsonNode.Parse(await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken))!.AsObject();
     }
 
     [Fact]

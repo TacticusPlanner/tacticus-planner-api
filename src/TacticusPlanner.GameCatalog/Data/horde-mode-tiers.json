@@ -1,0 +1,22 @@
+[
+  {
+    "id": "horde-mode-tiers",
+    "tiers": [
+      { "tier": "S", "multiplier": 1.3 },
+      { "tier": "A", "multiplier": 1.2 },
+      { "tier": "B", "multiplier": 1.1 },
+      { "tier": "C", "multiplier": 0.9 }
+    ],
+    "characters": [
+      { "unitId": "custoBladeChampion", "tier": "S" },
+      { "unitId": "tauMarksman", "tier": "S" },
+      { "unitId": "orksWarboss", "tier": "S" },
+      { "unitId": "adeptCelestine", "tier": "S" },
+      { "unitId": "necroSpyder", "tier": "A" },
+      { "unitId": "blackPossession", "tier": "A" },
+      { "unitId": "necroOverlord", "tier": "A" },
+      { "unitId": "blackTerminator", "tier": "B" },
+      { "unitId": "ultraInceptorSgt", "tier": "B" }
+    ]
+  }
+]
