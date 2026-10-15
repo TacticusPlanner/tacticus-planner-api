@@ -234,20 +234,6 @@ public sealed class GetGameCatalogLreCommonEndpoint(IGameCatalogProvider catalog
     }
 }
 
-public sealed class GetGameCatalogLegendaryEventClearEstimateEndpoint(IGameCatalogProvider catalog)
-    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogLegendaryEventClearEstimate>>(catalog, GameCatalogDatasets.LegendaryEventClearEstimate)
-{
-    protected override IReadOnlyList<GameCatalogLegendaryEventClearEstimate> Payload => Snapshot.LegendaryEventClearEstimateViews;
-
-    public override void Configure()
-    {
-        Get("game-catalog/legendary-event-clear-estimate");
-        ConfigureServed(
-            "Gets the Legendary Event clear-estimate parameters.",
-            "The single clear-estimate record: the power ratio and its calibration metadata.");
-    }
-}
-
 public sealed class GetGameCatalogHordeModeTiersEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogHordeModeTiers>>(catalog, GameCatalogDatasets.HordeModeTiers)
 {
@@ -258,7 +244,7 @@ public sealed class GetGameCatalogHordeModeTiersEndpoint(IGameCatalogProvider ca
         Get("game-catalog/horde-mode-tiers");
         ConfigureServed(
             "Gets the horde-mode character tier list.",
-            "The single S/A/B/C tier list of characters for horde modes, with each tier's power multiplier (a character not listed is unrated, multiplier 1.0).");
+            "The single S/A/B/C tier list of characters for horde modes, with each tier's power multiplier ; a character may override its tier's multiplier, and one not listed is unrated, multiplier 1.0).");
     }
 }
 

@@ -52,9 +52,10 @@ public sealed class HordeModeTiersTests
         var record = Assert.Single(snapshot.HordeModeTiersViews);
         Assert.Equal("horde-mode-tiers", record.Id);
         Assert.Equal(["S", "A", "B", "C"], record.Tiers.Select(tier => tier.Tier));
-        Assert.Equal(9, record.Characters.Count);
-        Assert.Contains(record.Characters, character => character is { UnitId: "custoBladeChampion", Tier: "S" });
-        Assert.Contains(record.Characters, character => character is { UnitId: "ultraInceptorSgt", Tier: "B" });
+        Assert.Equal([1.85, 1.55, 1.25, 1.05], record.Tiers.Select(tier => tier.Multiplier));
+        Assert.Equal(21, record.Characters.Count);
+        Assert.Contains(record.Characters, character => character is { UnitId: "custoBladeChampion", Tier: "S", Multiplier: 2.0 });
+        Assert.Contains(record.Characters, character => character is { UnitId: "ultraEliminatorSgt", Tier: "C", Multiplier: 1.0 });
     }
 
     [Fact]
@@ -145,6 +146,43 @@ public sealed class HordeModeTiersTests
     [Fact]
     public void MultiplierUpperBoundIsInclusive() =>
         Assert.Empty(Validate(Record() with { Tiers = [new("S", 5), .. DefaultTiers[1..]] }));
+
+    [Fact]
+    public void CharacterMultiplierOverridePasses() =>
+        Assert.Empty(Validate(Record(new("ultraTigurius", "S", 1.45), new("ultraCalgar", "C", 5))));
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(5.1)]
+    [InlineData(-1)]
+    public void CharacterMultiplierOverrideOutOfBoundsFails(double multiplier) =>
+        AssertSingleError(
+            Validate(Record(new GameCatalogHordeModeCharacter("ultraTigurius", "S", multiplier))),
+            "ultraTigurius",
+            $"multiplier '{multiplier.ToString(System.Globalization.CultureInfo.InvariantCulture)}'");
+
+    [Fact]
+    public void CharacterMultiplierIsSerializedOnlyWhenSet()
+    {
+        var json = JsonSerializer.SerializeToNode(
+            Record(new("ultraTigurius", "S", 1.45), new("ultraCalgar", "C")), JsonOptions)!;
+        var characters = json["characters"]!.AsArray();
+
+        Assert.Equal(["unitId", "tier", "multiplier"], characters[0]!.AsObject().Select(property => property.Key));
+        Assert.Equal(1.45, characters[0]!["multiplier"]!.GetValue<double>());
+        Assert.Equal(["unitId", "tier"], characters[1]!.AsObject().Select(property => property.Key));
+    }
+
+    [Fact]
+    public void CharacterMultiplierIsReadFromTheRawFile()
+    {
+        var record = JsonSerializer.Deserialize<GameCatalogHordeModeTiers>(
+            """{"id":"horde-mode-tiers","tiers":[],"characters":[{"unitId":"a","tier":"S","multiplier":1.4},{"unitId":"b","tier":"A"}]}""",
+            JsonOptions)!;
+
+        Assert.Equal(1.4, record.Characters[0].Multiplier);
+        Assert.Null(record.Characters[1].Multiplier);
+    }
 
     [Fact]
     public void NotExactlyOneRecordFails()

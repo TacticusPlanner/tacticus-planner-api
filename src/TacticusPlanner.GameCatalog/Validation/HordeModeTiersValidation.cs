@@ -1,3 +1,4 @@
+using System.Globalization;
 using TacticusPlanner.GameCatalog.Models;
 
 namespace TacticusPlanner.GameCatalog.Validation;
@@ -19,7 +20,8 @@ public static partial class GameCatalogValidator
     /// <summary>
     /// Validates the <c>horde-mode-tiers</c> file: exactly one record with the dataset's id; <c>tiers</c>
     /// lists S, A, B and C in that order, each with a <c>multiplier</c> in (0, 5]; every character's
-    /// <c>unitId</c> is a catalog character id (not a MoW or NPC) listed once, with one of those tiers.
+    /// <c>unitId</c> is a catalog character id (not a MoW or NPC) listed once, with one of those tiers and,
+    /// when set, its own <c>multiplier</c> override in (0, 5].
     /// Each failure is an <c>InvalidHordeModeTiers</c> error naming the offending value.
     /// </summary>
     internal static void ValidateHordeModeTiers(
@@ -55,7 +57,7 @@ public static partial class GameCatalogValidator
                 $"Dataset '{dataset}' tiers '{string.Join(", ", tierNames)}' must be '{string.Join(", ", HordeModeTierNames)}' in that order."));
         }
 
-        foreach (var tier in tiers.Where(tier => !(tier.Multiplier > 0 && tier.Multiplier <= MaxHordeModeMultiplier)))
+        foreach (var tier in tiers.Where(tier => !IsHordeModeMultiplier(tier.Multiplier)))
         {
             errors.Add(new GameCatalogValidationError(
                 dataset,
@@ -84,6 +86,19 @@ public static partial class GameCatalogValidator
                     code,
                     $"Dataset '{dataset}' unitId '{character.UnitId}' tier '{character.Tier}' must be one of {string.Join(", ", HordeModeTierNames)}."));
             }
+
+            if (character.Multiplier is { } multiplier && !IsHordeModeMultiplier(multiplier))
+            {
+                errors.Add(new GameCatalogValidationError(
+                    dataset,
+                    code,
+                    $"Dataset '{dataset}' unitId '{character.UnitId}' multiplier '{FormatCatalogNumber(multiplier)}' must be in (0, {FormatCatalogNumber(MaxHordeModeMultiplier)}]."));
+            }
         }
     }
+
+    private static bool IsHordeModeMultiplier(double multiplier) =>
+        multiplier > 0 && multiplier <= MaxHordeModeMultiplier;
+
+    private static string FormatCatalogNumber(double value) => value.ToString(CultureInfo.InvariantCulture);
 }

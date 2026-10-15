@@ -38,7 +38,6 @@ public static class GameCatalogLoader
         var onslaughtRewards = LoadDataset<IReadOnlyList<GameCatalogOnslaughtReward>>(GameCatalogDatasets.OnslaughtRewards);
         var eventDefinitions = LoadDataset<IReadOnlyList<GameCatalogEventDefinition>>(GameCatalogDatasets.EventDefinitions);
         var eventOccurrences = LoadDataset<IReadOnlyList<GameCatalogEventOccurrence>>(GameCatalogDatasets.EventOccurrences);
-        var legendaryEventClearEstimateViews = LoadDataset<IReadOnlyList<GameCatalogLegendaryEventClearEstimate>>(GameCatalogDatasets.LegendaryEventClearEstimate);
         var hordeModeTiersRaw = LoadDataset<IReadOnlyList<GameCatalogHordeModeTiers>>(GameCatalogDatasets.HordeModeTiers);
         var mythicQuests = LoadDataset<IReadOnlyList<GameCatalogRawMythicQuests>>(GameCatalogDatasets.MythicQuests);
 
@@ -123,7 +122,6 @@ public static class GameCatalogLoader
             [GameCatalogDatasets.Lres] = GameCatalogHashing.ComputeCanonicalJsonHash(lreViews, JsonOptions),
             [GameCatalogDatasets.LreBattles] = GameCatalogHashing.ComputeCanonicalJsonHash(lreBattleViews, JsonOptions),
             [GameCatalogDatasets.LreCommon] = GameCatalogHashing.ComputeCanonicalJsonHash(lreCommonViews, JsonOptions),
-            [GameCatalogDatasets.LegendaryEventClearEstimate] = GameCatalogHashing.ComputeCanonicalJsonHash(legendaryEventClearEstimateViews, JsonOptions),
             [GameCatalogDatasets.HordeModeTiers] = GameCatalogHashing.ComputeCanonicalJsonHash(hordeModeTiersViews, JsonOptions),
             [GameCatalogDatasets.EventDefinitionsServed] = GameCatalogHashing.ComputeCanonicalJsonHash(eventDefinitionViews, JsonOptions),
             [GameCatalogDatasets.EventsCalendar] = GameCatalogHashing.ComputeCanonicalJsonHash(eventsCalendar, JsonOptions),
@@ -173,7 +171,6 @@ public static class GameCatalogLoader
             lreViews,
             lreBattleViews,
             lreCommonViews,
-            legendaryEventClearEstimateViews,
             hordeModeTiersViews,
             eventDefinitionViews,
             eventsCalendar,

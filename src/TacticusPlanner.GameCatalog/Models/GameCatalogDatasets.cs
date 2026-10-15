@@ -14,9 +14,6 @@ public static class GameCatalogDatasets
     public const string OnslaughtRewards = "onslaught-rewards";
     public const string EventDefinitions = "event-definitions";
     public const string EventOccurrences = "event-occurrences";
-    // legendary-event-clear-estimate is a single curated record (power ratio and calibration metadata),
-    // raw and served under the same key, as-is. See Models/LegendaryEventClearEstimate.cs.
-    public const string LegendaryEventClearEstimate = "legendary-event-clear-estimate";
     // horde-mode-tiers is a single curated S/A/B/C tier list of characters for horde modes, with each
     // tier's power multiplier; denormalization only sorts the characters by unit id.
     // See Models/HordeModeTiers.cs.
@@ -276,7 +273,6 @@ public static class GameCatalogDatasets
         OnslaughtRewards,
         EventDefinitions,
         EventOccurrences,
-        LegendaryEventClearEstimate,
         HordeModeTiers,
         MythicQuests,
         .. NpcFactions,
@@ -365,7 +361,6 @@ public static class GameCatalogDatasets
         Lres,
         LreBattles,
         LreCommon,
-        LegendaryEventClearEstimate,
         HordeModeTiers,
         EventDefinitionsServed,
         EventsCalendar,

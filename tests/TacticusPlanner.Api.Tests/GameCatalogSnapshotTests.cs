@@ -99,20 +99,6 @@ public sealed class GameCatalogSnapshotTests(GameCatalogApiFactory factory)
     }
 
     [Fact]
-    public async Task LegendaryEventClearEstimateIsServedAnonymouslyAsOneUncalibratedRecord()
-    {
-        var payload = await GetAnonymousDataset("legendary-event-clear-estimate");
-        Assert.Equal("legendary-event-clear-estimate", payload["datasetKey"]!.GetValue<string>());
-
-        var record = Assert.Single(payload["data"]!.AsArray())!.AsObject();
-        Assert.Equal(["id", "powerRatio", "calibration"], record.Select(property => property.Key));
-        Assert.Equal("legendary-event-clear-estimate", record["id"]!.GetValue<string>());
-        Assert.Equal(1.0, record["powerRatio"]!.GetValue<double>());
-        Assert.Equal(0, record["calibration"]!["sampleCount"]!.GetValue<int>());
-        Assert.Null(record["calibration"]!["calibratedOn"]);
-    }
-
-    [Fact]
     public async Task HordeModeTiersAreServedAnonymouslyWithCharactersSortedById()
     {
         var payload = await GetAnonymousDataset("horde-mode-tiers");
@@ -125,7 +111,10 @@ public sealed class GameCatalogSnapshotTests(GameCatalogApiFactory factory)
 
         var unitIds = record["characters"]!.AsArray().Select(character => character!["unitId"]!.GetValue<string>()).ToArray();
         Assert.Equal(unitIds.Order(StringComparer.Ordinal), unitIds);
-        Assert.Equal(["unitId", "tier"], record["characters"]![0]!.AsObject().Select(property => property.Key));
+        // Every seeded character carries its own multiplier override alongside its tier.
+        Assert.All(
+            record["characters"]!.AsArray(),
+            character => Assert.Equal(["unitId", "tier", "multiplier"], character!.AsObject().Select(property => property.Key)));
     }
 
     private async Task<JsonObject> GetAnonymousDataset(string datasetKey)

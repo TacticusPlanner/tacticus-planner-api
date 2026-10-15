@@ -2,21 +2,33 @@
   {
     "id": "horde-mode-tiers",
     "tiers": [
-      { "tier": "S", "multiplier": 1.3 },
-      { "tier": "A", "multiplier": 1.2 },
-      { "tier": "B", "multiplier": 1.1 },
-      { "tier": "C", "multiplier": 0.9 }
+      { "tier": "S", "multiplier": 1.85 },
+      { "tier": "A", "multiplier": 1.55 },
+      { "tier": "B", "multiplier": 1.25 },
+      { "tier": "C", "multiplier": 1.05 }
     ],
     "characters": [
-      { "unitId": "custoBladeChampion", "tier": "S" },
-      { "unitId": "tauMarksman", "tier": "S" },
-      { "unitId": "orksWarboss", "tier": "S" },
-      { "unitId": "adeptCelestine", "tier": "S" },
-      { "unitId": "necroSpyder", "tier": "A" },
-      { "unitId": "blackPossession", "tier": "A" },
-      { "unitId": "necroOverlord", "tier": "A" },
-      { "unitId": "blackTerminator", "tier": "B" },
-      { "unitId": "ultraInceptorSgt", "tier": "B" }
+      { "unitId": "custoBladeChampion", "tier": "S", "multiplier": 2.0 },
+      { "unitId": "adeptHospitaller", "tier": "S", "multiplier": 1.95 },
+      { "unitId": "tauMarksman", "tier": "S", "multiplier": 1.9 },
+      { "unitId": "ultraInceptorSgt", "tier": "S", "multiplier": 1.85 },
+      { "unitId": "necroSpyder", "tier": "S", "multiplier": 1.8 },
+      { "unitId": "admecMarshall", "tier": "S", "multiplier": 1.75 },
+      { "unitId": "ultraCalgar", "tier": "A", "multiplier": 1.65 },
+      { "unitId": "adeptRetributor", "tier": "A", "multiplier": 1.6 },
+      { "unitId": "worldTerminator", "tier": "A", "multiplier": 1.55 },
+      { "unitId": "thousInfernalMaster", "tier": "A", "multiplier": 1.5 },
+      { "unitId": "deathRotbone", "tier": "A", "multiplier": 1.45 },
+      { "unitId": "tauCrisis", "tier": "A", "multiplier": 1.4 },
+      { "unitId": "eldarFarseer", "tier": "B", "multiplier": 1.35 },
+      { "unitId": "orksWarboss", "tier": "B", "multiplier": 1.3 },
+      { "unitId": "blackPossession", "tier": "B", "multiplier": 1.25 },
+      { "unitId": "templAggressor", "tier": "B", "multiplier": 1.2 },
+      { "unitId": "orksBigMek", "tier": "B", "multiplier": 1.15 },
+      { "unitId": "deathBlightlord", "tier": "C", "multiplier": 1.1 },
+      { "unitId": "blackTerminator", "tier": "C", "multiplier": 1.05 },
+      { "unitId": "ultraTigurius", "tier": "C", "multiplier": 1.0 },
+      { "unitId": "ultraEliminatorSgt", "tier": "C", "multiplier": 1.0 }
     ]
   }
 ]

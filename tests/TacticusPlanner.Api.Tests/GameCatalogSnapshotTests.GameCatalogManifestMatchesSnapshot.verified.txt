@@ -51,13 +51,8 @@
     },
     {
       key: horde-mode-tiers,
-      hash: 2830fda5ae3bf1e6b0833674ebff273bcfb986fd4e6cb2249556207ff83564e6,
+      hash: 280e6306c5a70d55c2353c6dc4862d0615e17ece5e6f6ab36314e660fa2bc25b,
       url: /api/v1/game-catalog/horde-mode-tiers
-    },
-    {
-      key: legendary-event-clear-estimate,
-      hash: c2dfca660192cb56d526d67d450ce8dd5079421dfe8f7c666bb2d6a7bfd5f341,
-      url: /api/v1/game-catalog/legendary-event-clear-estimate
     },
     {
       key: lre-battles,

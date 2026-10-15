@@ -82,36 +82,25 @@ Raw `Data/**` records may still carry extra fields the models don't bind (`icon`
   date-indexed projection built from `event-definitions` + `event-occurrences` relative to load-time
   "now", so its hash (and `sourceHash`) legitimately changes every process start.
 
-## Legendary Event clear estimate
-
-`Data/legendary-event-clear-estimate.json` is a single hand-curated record (a one-element array), served
-as-is as `legendary-event-clear-estimate`. The client uses it to estimate how many battles of a Legendary
-Event lane a team, or one unit, clears; the server computes nothing.
-
-- **`powerRatio`** (in (0, 10]): a team clears battle k when its summed effective power ≥
-  `powerRatio` × that battle's `lre-battles` `power`. Lower it if estimates are too pessimistic.
-- **`calibration`**: `sampleCount` (≥ 0) is how many manual team depths the ratio was fitted on
-  (the apps' `calibratePowerRatio`); `calibratedOn` is the `yyyy-MM-dd` date of that fit, and must be
-  `null` while `sampleCount` is 0. The client labels estimates "uncalibrated" while `sampleCount` is 0.
-- Effective power is combat power × the unit's `horde-mode-tiers` multiplier (below), so the ratio and
-  the tier multipliers interact: **change them together, in one PR, with the evidence** (sample count,
-  interquartile range, the overrides that motivated a tier change) in the PR description.
-- Bounds and pairing are enforced at load (`Validation/LegendaryEventClearEstimateValidation.cs`,
-  `InvalidLegendaryEventClearEstimate`). A value change only moves this dataset's hash; no schema bump.
-
 ## Horde-mode tiers
 
 `Data/horde-mode-tiers.json` is a single hand-curated tier list (a one-element array) of how well a
 character does in horde-style modes (many waves of weak enemies: Legendary Events today), served as
 `horde-mode-tiers` with `characters` sorted by `unitId`. It is mode-agnostic on purpose; a consumer
-decides how to use it (the Legendary Event clear estimate multiplies combat power by the tier multiplier).
+decides how to use it. The apps' Legendary Event clear estimate multiplies combat power by each
+character's multiplier and compares it with `lre-battles` `power` through a power ratio that lives in
+the apps code (not in the catalog), so ratio changes ship as a web release.
 
 - **`tiers`**: exactly `S`, `A`, `B`, `C` in that order, each `{ tier, multiplier }` with multiplier in
-  (0, 5]. A character not listed is untiered and gets 1.0 (the baseline), so tiers above the baseline
-  are > 1 and `C` is < 1.
-- **`characters`** (`{ unitId, tier }`): `unitId` must be a character id (not a MoW or NPC), listed once;
-  `tier` must be one of the tier names. Rank by summoning value, AoE / multi-hit and sustain.
-- Enforced at load (`Validation/HordeModeTiersValidation.cs`, `InvalidHordeModeTiers`).
+  (0, 5]. A character not listed is untiered and gets 1.0 (the baseline); the seeded tiers are all
+  at or above it (S 1.85, A 1.55, B 1.25, C 1.05).
+- **`characters`** (`{ unitId, tier, multiplier? }`): `unitId` must be a character id (not a MoW or NPC),
+  listed once; `tier` must be one of the tier names. Rank by summoning value, AoE / multi-hit and
+  sustain. **`multiplier`** is an optional per-character override in (0, 5] that replaces the tier's
+  value for that character; use it only for fine tuning within a tier, with the evidence (estimate vs
+  manual depth overrides) in the PR description. It is omitted from the served JSON when not set.
+- Enforced at load (`Validation/HordeModeTiersValidation.cs`, `InvalidHordeModeTiers`). A value change
+  only moves this dataset's hash; no schema bump.
 
 ## Cross-cutting data conventions
 
