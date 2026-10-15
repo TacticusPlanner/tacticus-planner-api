@@ -102,6 +102,18 @@ public sealed class GetGameCatalogCharacterAbilityCostsEndpoint(IGameCatalogProv
     }
 }
 
+public sealed class GetGameCatalogMythicQuestsEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogMythicQuestsView>>(catalog, GameCatalogDatasets.MythicQuestsServed)
+{
+    protected override IReadOnlyList<GameCatalogMythicQuestsView> Payload => Snapshot.MythicQuestViews;
+
+    public override void Configure()
+    {
+        Get("game-catalog/mythic-quests");
+        ConfigureServed("Gets game catalog mythic quests.", "Each character's mythic quests with tasks and structured rewards.");
+    }
+}
+
 public sealed class GetGameCatalogAscensionCostsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogAscensionCostView>>(catalog, GameCatalogDatasets.AscensionCostsServed)
 {

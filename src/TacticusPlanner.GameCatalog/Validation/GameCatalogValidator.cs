@@ -30,6 +30,8 @@ public static partial class GameCatalogValidator
         ValidateUniqueIds(GameCatalogDatasets.Shops, snapshot.ShopViews, shop => shop.Id, errors);
         ValidateCharacterAbilityCosts(snapshot.CharacterAbilityCosts, errors);
         ValidateLreRewards(snapshot.Lres, errors);
+        ValidateMowMythicAbilities(snapshot.Mows, errors);
+        ValidateMythicQuests(snapshot, errors);
         ValidateRequiredFields(snapshot, errors);
         ValidateReferences(snapshot, errors);
         ValidateEvents(snapshot, errors);
