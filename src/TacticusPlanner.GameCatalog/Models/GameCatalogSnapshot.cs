@@ -29,6 +29,9 @@ public sealed record GameCatalogSnapshot(
     // encounter unit / field-npc / modifier cross-reference checks run over the raw collections.
     GameCatalogRaidBossRawData RaidBossRawData,
     GameCatalogGuildRaidMetaRawData GuildRaidMetaRawData,
+    // Raw mythic quests (reward strings unparsed). Kept for validation — the reward parse and character /
+    // equipment cross-reference checks run over the raw strings.
+    IReadOnlyList<GameCatalogRawMythicQuests> MythicQuests,
     // Served (denormalized) payloads — the public catalog surface.
     IReadOnlyList<GameCatalogCharacterView> CharacterViews,
     IReadOnlyList<GameCatalogNpc> NpcList,
@@ -48,7 +51,8 @@ public sealed record GameCatalogSnapshot(
     IReadOnlyDictionary<string, IReadOnlyList<GameCatalogEventsCalendarEntry>> EventsCalendar,
     IReadOnlyList<GameCatalogShopView> ShopViews,
     GameCatalogRaidBossesView RaidBossesView,
-    GameCatalogGuildRaidMetaView GuildRaidMetaView
+    GameCatalogGuildRaidMetaView GuildRaidMetaView,
+    IReadOnlyList<GameCatalogMythicQuestsView> MythicQuestViews
 )
 {
     // The manifest served to clients: release metadata + per-dataset hash and download url. Built from the

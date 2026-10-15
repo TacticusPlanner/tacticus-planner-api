@@ -2151,6 +2151,9 @@
             "upgDmgL214C"
           ]
         ]
+      },
+      "mythicAbility": {
+        "name": "OnMyPosition"
       }
     }
   ]

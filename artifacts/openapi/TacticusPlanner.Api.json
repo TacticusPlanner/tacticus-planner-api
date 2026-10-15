@@ -369,6 +369,30 @@
         }
       }
     },
+    "/api/v1/game-catalog/mythic-quests": {
+      "get": {
+        "tags": [
+          "Game-Catalog"
+        ],
+        "summary": "Gets game catalog mythic quests.",
+        "operationId": "TacticusPlannerApiFeaturesGameCatalogGetGameCatalogMythicQuestsEndpoint",
+        "responses": {
+          "200": {
+            "description": "Each character's mythic quests with tasks and structured rewards.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGameCatalogGameCatalogDatasetEnvelopeOfSystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogMythicQuestsView"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
     "/api/v1/game-catalog/npcs": {
       "get": {
         "tags": [
@@ -2879,6 +2903,12 @@
           "format": "int32"
         }
       },
+      "SystemCollectionsGenericIReadOnlyDictionaryOfSystemStringAndSystemString": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
+      },
       "SystemCollectionsGenericIReadOnlyDictionaryOfSystemStringAndSystemTextJsonJsonElement": {
         "type": "object"
       },
@@ -3028,24 +3058,6 @@
           "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogCampaignPotentialRewardView"
         }
       },
-      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogCharacterAbilityCostView": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogCharacterAbilityCostView"
-        }
-      },
-      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogCharacterRankUp": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogCharacterRankUp"
-        }
-      },
-      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogCharacterView": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogCharacterView"
-        }
-      },
       "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogEquipmentLevel": {
         "type": "array",
         "items": {
@@ -3118,16 +3130,28 @@
           "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogGuildRaidMetaRecommendationView"
         }
       },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogCharacterAbilityCostView": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogCharacterAbilityCostView"
+        }
+      },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogCharacterRankUp": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogCharacterRankUp"
+        }
+      },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogCharacterView": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogCharacterView"
+        }
+      },
       "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLreBattleView": {
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogLreBattleView"
-        }
-      },
-      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLreChestsMilestone": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogLreChestsMilestone"
         }
       },
       "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLreCommon": {
@@ -3146,6 +3170,12 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogLreFilter"
+        }
+      },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLreChestsMilestone": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogLreChestsMilestone"
         }
       },
       "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLrePointsMilestone": {
@@ -3188,6 +3218,30 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogMowUpgradeCostView"
+        }
+      },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogMythicQuestRewardView": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogMythicQuestRewardView"
+        }
+      },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogMythicQuestsView": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogMythicQuestsView"
+        }
+      },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogMythicQuestTaskView": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogMythicQuestTaskView"
+        }
+      },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogMythicQuestView": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogMythicQuestView"
         }
       },
       "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogNpc": {
@@ -3661,94 +3715,6 @@
           }
         }
       },
-      "TacticusPlannerApiFeaturesGameCatalogGameCatalogDatasetEnvelopeOfSystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogCharacterAbilityCostView": {
-        "required": [
-          "version",
-          "schemaVersion",
-          "gameVersion",
-          "sourceHash",
-          "datasetKey",
-          "datasetHash",
-          "data"
-        ],
-        "type": "object",
-        "properties": {
-          "version": {
-            "type": "string"
-          },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "gameVersion": {
-            "type": "string"
-          },
-          "sourceHash": {
-            "type": "string"
-          },
-          "datasetKey": {
-            "type": "string"
-          },
-          "datasetHash": {
-            "type": "string"
-          },
-          "data": {
-            "type": [
-              "null",
-              "array"
-            ],
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogCharacterAbilityCostView"
-              }
-            ]
-          }
-        }
-      },
-      "TacticusPlannerApiFeaturesGameCatalogGameCatalogDatasetEnvelopeOfSystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogCharacterView": {
-        "required": [
-          "version",
-          "schemaVersion",
-          "gameVersion",
-          "sourceHash",
-          "datasetKey",
-          "datasetHash",
-          "data"
-        ],
-        "type": "object",
-        "properties": {
-          "version": {
-            "type": "string"
-          },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "gameVersion": {
-            "type": "string"
-          },
-          "sourceHash": {
-            "type": "string"
-          },
-          "datasetKey": {
-            "type": "string"
-          },
-          "datasetHash": {
-            "type": "string"
-          },
-          "data": {
-            "type": [
-              "null",
-              "array"
-            ],
-            "oneOf": [
-              {
-                "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogCharacterView"
-              }
-            ]
-          }
-        }
-      },
       "TacticusPlannerApiFeaturesGameCatalogGameCatalogDatasetEnvelopeOfSystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogEquipmentView": {
         "required": [
           "version",
@@ -3832,6 +3798,94 @@
             "oneOf": [
               {
                 "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogEventDefinition"
+              }
+            ]
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesGameCatalogGameCatalogDatasetEnvelopeOfSystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogCharacterAbilityCostView": {
+        "required": [
+          "version",
+          "schemaVersion",
+          "gameVersion",
+          "sourceHash",
+          "datasetKey",
+          "datasetHash",
+          "data"
+        ],
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "schemaVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gameVersion": {
+            "type": "string"
+          },
+          "sourceHash": {
+            "type": "string"
+          },
+          "datasetKey": {
+            "type": "string"
+          },
+          "datasetHash": {
+            "type": "string"
+          },
+          "data": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogCharacterAbilityCostView"
+              }
+            ]
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesGameCatalogGameCatalogDatasetEnvelopeOfSystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogCharacterView": {
+        "required": [
+          "version",
+          "schemaVersion",
+          "gameVersion",
+          "sourceHash",
+          "datasetKey",
+          "datasetHash",
+          "data"
+        ],
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "schemaVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gameVersion": {
+            "type": "string"
+          },
+          "sourceHash": {
+            "type": "string"
+          },
+          "datasetKey": {
+            "type": "string"
+          },
+          "datasetHash": {
+            "type": "string"
+          },
+          "data": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogCharacterView"
               }
             ]
           }
@@ -4052,6 +4106,50 @@
             "oneOf": [
               {
                 "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogMowUpgradeCostView"
+              }
+            ]
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesGameCatalogGameCatalogDatasetEnvelopeOfSystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogMythicQuestsView": {
+        "required": [
+          "version",
+          "schemaVersion",
+          "gameVersion",
+          "sourceHash",
+          "datasetKey",
+          "datasetHash",
+          "data"
+        ],
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "schemaVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gameVersion": {
+            "type": "string"
+          },
+          "sourceHash": {
+            "type": "string"
+          },
+          "datasetKey": {
+            "type": "string"
+          },
+          "datasetHash": {
+            "type": "string"
+          },
+          "data": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogMythicQuestsView"
               }
             ]
           }
@@ -7838,157 +7936,6 @@
           }
         }
       },
-      "TacticusPlannerGameCatalogModelsGameCatalogCharacterAbilityCostView": {
-        "required": [
-          "level",
-          "gold",
-          "badges"
-        ],
-        "type": "object",
-        "properties": {
-          "level": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "gold": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "badges": {
-            "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogAmountByRarity"
-          }
-        }
-      },
-      "TacticusPlannerGameCatalogModelsGameCatalogCharacterRankUp": {
-        "required": [
-          "rank",
-          "upgradeIds"
-        ],
-        "type": "object",
-        "properties": {
-          "rank": {
-            "type": "string"
-          },
-          "upgradeIds": {
-            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemString"
-          }
-        }
-      },
-      "TacticusPlannerGameCatalogModelsGameCatalogCharacterView": {
-        "required": [
-          "id",
-          "name",
-          "faction",
-          "alliance",
-          "health",
-          "damage",
-          "armour",
-          "initialRarity",
-          "meleeDamage",
-          "meleeHits",
-          "rangedDamage",
-          "rangedHits",
-          "rangeDistance",
-          "movement",
-          "traits",
-          "activeAbilityDamage",
-          "activeAbilityNames",
-          "passiveAbilityDamage",
-          "passiveAbilityNames",
-          "equipmentSlots",
-          "rankUpUpgrades",
-          "shardLocations",
-          "eligibleEquipment"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string"
-          },
-          "name": {
-            "type": "string"
-          },
-          "faction": {
-            "type": "string"
-          },
-          "alliance": {
-            "type": "string"
-          },
-          "health": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "damage": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "armour": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "initialRarity": {
-            "type": "string"
-          },
-          "meleeDamage": {
-            "type": "string"
-          },
-          "meleeHits": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "rangedDamage": {
-            "type": [
-              "null",
-              "string"
-            ]
-          },
-          "rangedHits": {
-            "type": [
-              "null",
-              "integer"
-            ],
-            "format": "int32"
-          },
-          "rangeDistance": {
-            "type": [
-              "null",
-              "integer"
-            ],
-            "format": "int32"
-          },
-          "movement": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "traits": {
-            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemString"
-          },
-          "activeAbilityDamage": {
-            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemString"
-          },
-          "activeAbilityNames": {
-            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemString"
-          },
-          "passiveAbilityDamage": {
-            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemString"
-          },
-          "passiveAbilityNames": {
-            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemString"
-          },
-          "equipmentSlots": {
-            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemString"
-          },
-          "rankUpUpgrades": {
-            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogCharacterRankUp"
-          },
-          "shardLocations": {
-            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogFarmLocation"
-          },
-          "eligibleEquipment": {
-            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogEquipmentSlot"
-          }
-        }
-      },
       "TacticusPlannerGameCatalogModelsGameCatalogEquipmentLevel": {
         "required": [
           "stats"
@@ -8411,6 +8358,157 @@
           }
         }
       },
+      "TacticusPlannerGameCatalogModelsGameCatalogCharacterAbilityCostView": {
+        "required": [
+          "level",
+          "gold",
+          "badges"
+        ],
+        "type": "object",
+        "properties": {
+          "level": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gold": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "badges": {
+            "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogAmountByRarity"
+          }
+        }
+      },
+      "TacticusPlannerGameCatalogModelsGameCatalogCharacterRankUp": {
+        "required": [
+          "rank",
+          "upgradeIds"
+        ],
+        "type": "object",
+        "properties": {
+          "rank": {
+            "type": "string"
+          },
+          "upgradeIds": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemString"
+          }
+        }
+      },
+      "TacticusPlannerGameCatalogModelsGameCatalogCharacterView": {
+        "required": [
+          "id",
+          "name",
+          "faction",
+          "alliance",
+          "health",
+          "damage",
+          "armour",
+          "initialRarity",
+          "meleeDamage",
+          "meleeHits",
+          "rangedDamage",
+          "rangedHits",
+          "rangeDistance",
+          "movement",
+          "traits",
+          "activeAbilityDamage",
+          "activeAbilityNames",
+          "passiveAbilityDamage",
+          "passiveAbilityNames",
+          "equipmentSlots",
+          "rankUpUpgrades",
+          "shardLocations",
+          "eligibleEquipment"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "faction": {
+            "type": "string"
+          },
+          "alliance": {
+            "type": "string"
+          },
+          "health": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "damage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "armour": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "initialRarity": {
+            "type": "string"
+          },
+          "meleeDamage": {
+            "type": "string"
+          },
+          "meleeHits": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rangedDamage": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "rangedHits": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "rangeDistance": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "movement": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "traits": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemString"
+          },
+          "activeAbilityDamage": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemString"
+          },
+          "activeAbilityNames": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemString"
+          },
+          "passiveAbilityDamage": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemString"
+          },
+          "passiveAbilityNames": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemString"
+          },
+          "equipmentSlots": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemString"
+          },
+          "rankUpUpgrades": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogCharacterRankUp"
+          },
+          "shardLocations": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogFarmLocation"
+          },
+          "eligibleEquipment": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogEquipmentSlot"
+          }
+        }
+      },
       "TacticusPlannerGameCatalogModelsGameCatalogLreBattleView": {
         "required": [
           "id",
@@ -8454,23 +8552,6 @@
           },
           "waves": {
             "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLreWave"
-          }
-        }
-      },
-      "TacticusPlannerGameCatalogModelsGameCatalogLreChestsMilestone": {
-        "required": [
-          "chestLevel",
-          "engramCost"
-        ],
-        "type": "object",
-        "properties": {
-          "chestLevel": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "engramCost": {
-            "type": "integer",
-            "format": "int32"
           }
         }
       },
@@ -8539,6 +8620,23 @@
           },
           "exclude": {
             "type": "boolean"
+          }
+        }
+      },
+      "TacticusPlannerGameCatalogModelsGameCatalogLreChestsMilestone": {
+        "required": [
+          "chestLevel",
+          "engramCost"
+        ],
+        "type": "object",
+        "properties": {
+          "chestLevel": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "engramCost": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -8838,6 +8936,17 @@
           },
           "secondaryAbility": {
             "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogMowAbility"
+          },
+          "mythicAbility": {
+            "type": [
+              "null",
+              "object"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogMowMythicAbility"
+              }
+            ]
           }
         }
       },
@@ -8853,6 +8962,17 @@
           },
           "recipes": {
             "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemCollectionsGenericIReadOnlyListOfSystemString"
+          }
+        }
+      },
+      "TacticusPlannerGameCatalogModelsGameCatalogMowMythicAbility": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
           }
         }
       },
@@ -8896,6 +9016,101 @@
           "components": {
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "TacticusPlannerGameCatalogModelsGameCatalogMythicQuestRewardView": {
+        "required": [
+          "type",
+          "amount"
+        ],
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "amount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "unitId": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "rarity": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "alliance": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "equipmentId": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "TacticusPlannerGameCatalogModelsGameCatalogMythicQuestsView": {
+        "required": [
+          "unitId",
+          "quests"
+        ],
+        "type": "object",
+        "properties": {
+          "unitId": {
+            "type": "string"
+          },
+          "quests": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogMythicQuestView"
+          }
+        }
+      },
+      "TacticusPlannerGameCatalogModelsGameCatalogMythicQuestTaskView": {
+        "required": [
+          "locaKey",
+          "target",
+          "parameters"
+        ],
+        "type": "object",
+        "properties": {
+          "locaKey": {
+            "type": "string"
+          },
+          "target": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "parameters": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyDictionaryOfSystemStringAndSystemString"
+          }
+        }
+      },
+      "TacticusPlannerGameCatalogModelsGameCatalogMythicQuestView": {
+        "required": [
+          "number",
+          "tasks",
+          "rewards"
+        ],
+        "type": "object",
+        "properties": {
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tasks": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogMythicQuestTaskView"
+          },
+          "rewards": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogMythicQuestRewardView"
           }
         }
       },

@@ -38,6 +38,7 @@ public static class GameCatalogLoader
         var onslaughtRewards = LoadDataset<IReadOnlyList<GameCatalogOnslaughtReward>>(GameCatalogDatasets.OnslaughtRewards);
         var eventDefinitions = LoadDataset<IReadOnlyList<GameCatalogEventDefinition>>(GameCatalogDatasets.EventDefinitions);
         var eventOccurrences = LoadDataset<IReadOnlyList<GameCatalogEventOccurrence>>(GameCatalogDatasets.EventOccurrences);
+        var mythicQuests = LoadDataset<IReadOnlyList<GameCatalogRawMythicQuests>>(GameCatalogDatasets.MythicQuests);
 
         var npcsByFaction = new Dictionary<string, GameCatalogFactionNpcs>(StringComparer.Ordinal);
         foreach (var key in GameCatalogDatasets.NpcFactions)
@@ -99,6 +100,7 @@ public static class GameCatalogLoader
         var shopViews = GameCatalogDenormalizer.BuildShops(rawShopsBySourceKey);
         var raidBossesView = GameCatalogDenormalizer.BuildRaidBosses(raidBossRawData);
         var guildRaidMetaView = GameCatalogDenormalizer.BuildGuildRaidMeta(guildRaidMetaRawData);
+        var mythicQuestViews = GameCatalogDenormalizer.BuildMythicQuests(mythicQuests);
 
         // Served dataset hashes are computed over the canonical JSON of each denormalized payload.
         var datasetHashes = new Dictionary<string, string>(StringComparer.Ordinal)
@@ -123,6 +125,7 @@ public static class GameCatalogLoader
             [GameCatalogDatasets.Shops] = GameCatalogHashing.ComputeCanonicalJsonHash(shopViews, JsonOptions),
             [GameCatalogDatasets.RaidBosses] = GameCatalogHashing.ComputeCanonicalJsonHash(raidBossesView, JsonOptions),
             [GameCatalogDatasets.GuildRaidMeta] = GameCatalogHashing.ComputeCanonicalJsonHash(guildRaidMetaView, JsonOptions),
+            [GameCatalogDatasets.MythicQuestsServed] = GameCatalogHashing.ComputeCanonicalJsonHash(mythicQuestViews, JsonOptions),
         };
 
         var snapshot = new GameCatalogSnapshot(
@@ -150,6 +153,7 @@ public static class GameCatalogLoader
             new ReadOnlyDictionary<string, GameCatalogRawShop>(rawShopsBySourceKey),
             raidBossRawData,
             guildRaidMetaRawData,
+            new ReadOnlyCollection<GameCatalogRawMythicQuests>(mythicQuests.ToArray()),
             characterViews,
             npcList,
             mowList,
@@ -168,7 +172,8 @@ public static class GameCatalogLoader
             eventsCalendar,
             shopViews,
             raidBossesView,
-            guildRaidMetaView);
+            guildRaidMetaView,
+            mythicQuestViews);
 
         var errors = GameCatalogValidator.Validate(snapshot);
         if (errors.Count > 0)

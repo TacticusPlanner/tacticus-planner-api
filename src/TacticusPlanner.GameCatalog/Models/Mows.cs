@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace TacticusPlanner.GameCatalog.Models;
 
 public sealed record GameCatalogMow(
@@ -7,13 +9,20 @@ public sealed record GameCatalogMow(
     string Faction,
     string Alliance,
     GameCatalogMowAbility PrimaryAbility,
-    GameCatalogMowAbility SecondaryAbility
+    GameCatalogMowAbility SecondaryAbility,
+    // The ability unlocked at Mythic rarity, ported from V1's new-mows-data2.json mythicAbilities[0]. It
+    // levels with the MoW's blue stars, not upgrade materials, so it carries no recipes. Omitted (not null)
+    // when unknown.
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    GameCatalogMowMythicAbility? MythicAbility = null
 );
 
 public sealed record GameCatalogMowAbility(
     string Name,
     IReadOnlyList<IReadOnlyList<string>> Recipes
 );
+
+public sealed record GameCatalogMowMythicAbility(string Name);
 
 public sealed record GameCatalogMowUpgradeCost(
     int Gold,

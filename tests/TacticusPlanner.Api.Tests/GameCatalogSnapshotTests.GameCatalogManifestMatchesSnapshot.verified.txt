@@ -1,6 +1,6 @@
 ﻿{
-  version: dev-2026-10-10,
-  schemaVersion: 4,
+  version: dev-2026-10-14,
+  schemaVersion: 5,
   gameVersion: 1.43,
   sourceHash: {time-dependent},
   datasets: [
@@ -71,8 +71,13 @@
     },
     {
       key: mows,
-      hash: 923b170b21dfe3ed59decd8531c9853f9dac7caabb2751f1bf484d0c501f65b4,
+      hash: 62fd5b8072cbe1565e9c691f1926e2ef04052f93e3bf0f31712e3991fd2e4e8d,
       url: /api/v1/game-catalog/mows
+    },
+    {
+      key: mythic-quests,
+      hash: b3805fdf320472631197db3c5059b6897d95bbf899377365bdb9112f371eb1ad,
+      url: /api/v1/game-catalog/mythic-quests
     },
     {
       key: npcs,

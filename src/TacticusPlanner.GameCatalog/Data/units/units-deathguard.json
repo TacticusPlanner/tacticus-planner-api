@@ -1909,6 +1909,9 @@
             "upgDmgL214C"
           ]
         ]
+      },
+      "mythicAbility": {
+        "name": "BlightedLand"
       }
     }
   ]
