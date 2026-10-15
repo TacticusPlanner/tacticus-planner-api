@@ -9,9 +9,21 @@ on:
       - synchronize
       - reopened
       - ready_for_review
+    paths-ignore:
+      - '**/*.md'
+      - 'openspec/**'
+      - '.claude/**'
+      - '.agents/**'
+      - LICENSE
   push:
     branches:
       - main
+    paths-ignore:
+      - '**/*.md'
+      - 'openspec/**'
+      - '.claude/**'
+      - '.agents/**'
+      - LICENSE
   workflow_dispatch:
 
 permissions:
