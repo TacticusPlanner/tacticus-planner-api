@@ -16,7 +16,7 @@
 - **WHEN** `events-calendar` is served
 - **THEN** `hse-faction-focus` and `hse-global-operation-imperator` run from 2026-10-26T00:00:00Z to 2026-11-01T00:00:00Z, and `hse-warp-surge` from 2026-11-05T00:00:00Z to 2026-11-08T00:00:00Z
 
-#### Scenario: Update 1.42 and 1.43 runs are present
+#### Scenario: Update 1.42 runs are present
 - **WHEN** `events-calendar` is served
 - **THEN** it contains `hse-against-the-tide` (2026-09-11T23:00:00Z to 2026-09-18T23:00:00Z), `hse-purge-order` (2026-09-21T23:00:00Z to 2026-09-25T23:00:00Z), `hse-squig-smash` (2026-09-27T23:00:00Z to 2026-09-30T23:00:00Z), `hse-training-rush` (2026-10-05T23:00:00Z to 2026-10-09T23:00:00Z), `hse-against-the-tide` (2026-10-09T23:00:00Z to 2026-10-15T23:00:00Z) and `hse-trait-boost-psyker` (2026-10-18T23:00:00Z to 2026-10-21T23:00:00Z)
 
