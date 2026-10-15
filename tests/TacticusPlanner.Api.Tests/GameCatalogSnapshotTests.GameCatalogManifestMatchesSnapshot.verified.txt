@@ -50,6 +50,11 @@
       url: /api/v1/game-catalog/guild-raid-meta
     },
     {
+      key: horde-mode-tiers,
+      hash: 280e6306c5a70d55c2353c6dc4862d0615e17ece5e6f6ab36314e660fa2bc25b,
+      url: /api/v1/game-catalog/horde-mode-tiers
+    },
+    {
       key: lre-battles,
       hash: a88c8ae123a8e05508279e73221ba32d3319ce93ca87418cc0e7fdef679d8b0c,
       url: /api/v1/game-catalog/lre-battles

@@ -99,6 +99,37 @@ public sealed class GameCatalogSnapshotTests(GameCatalogApiFactory factory)
     }
 
     [Fact]
+    public async Task HordeModeTiersAreServedAnonymouslyWithCharactersSortedById()
+    {
+        var payload = await GetAnonymousDataset("horde-mode-tiers");
+        Assert.Equal("horde-mode-tiers", payload["datasetKey"]!.GetValue<string>());
+
+        var record = Assert.Single(payload["data"]!.AsArray())!.AsObject();
+        Assert.Equal(["id", "tiers", "characters"], record.Select(property => property.Key));
+        Assert.Equal(["S", "A", "B", "C"], record["tiers"]!.AsArray().Select(tier => tier!["tier"]!.GetValue<string>()));
+        Assert.Equal(["tier", "multiplier"], record["tiers"]![0]!.AsObject().Select(property => property.Key));
+
+        var unitIds = record["characters"]!.AsArray().Select(character => character!["unitId"]!.GetValue<string>()).ToArray();
+        Assert.Equal(unitIds.Order(StringComparer.Ordinal), unitIds);
+        // Every seeded character carries its own multiplier override alongside its tier.
+        Assert.All(
+            record["characters"]!.AsArray(),
+            character => Assert.Equal(["unitId", "tier", "multiplier"], character!.AsObject().Select(property => property.Key)));
+    }
+
+    private async Task<JsonObject> GetAnonymousDataset(string datasetKey)
+    {
+        var client = factory.CreateClient();
+
+        using var request = new HttpRequestMessage(HttpMethod.Get, $"/api/v1/game-catalog/{datasetKey}");
+        request.Headers.Add(TestAuthenticationHandler.NoAuthHeader, "1");
+        var response = await client.SendAsync(request, TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        return JsonNode.Parse(await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken))!.AsObject();
+    }
+
+    [Fact]
     public async Task GuildRaidMetaDatasetIsAnonymousAndIdOnly()
     {
         var client = factory.CreateClient();

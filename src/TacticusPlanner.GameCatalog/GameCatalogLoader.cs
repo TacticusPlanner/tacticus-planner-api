@@ -38,6 +38,7 @@ public static class GameCatalogLoader
         var onslaughtRewards = LoadDataset<IReadOnlyList<GameCatalogOnslaughtReward>>(GameCatalogDatasets.OnslaughtRewards);
         var eventDefinitions = LoadDataset<IReadOnlyList<GameCatalogEventDefinition>>(GameCatalogDatasets.EventDefinitions);
         var eventOccurrences = LoadDataset<IReadOnlyList<GameCatalogEventOccurrence>>(GameCatalogDatasets.EventOccurrences);
+        var hordeModeTiersRaw = LoadDataset<IReadOnlyList<GameCatalogHordeModeTiers>>(GameCatalogDatasets.HordeModeTiers);
         var mythicQuests = LoadDataset<IReadOnlyList<GameCatalogRawMythicQuests>>(GameCatalogDatasets.MythicQuests);
 
         var npcsByFaction = new Dictionary<string, GameCatalogFactionNpcs>(StringComparer.Ordinal);
@@ -94,6 +95,7 @@ public static class GameCatalogLoader
         var lreViews = GameCatalogDenormalizer.BuildLres(lresByEvent, unitsByFaction);
         var lreBattleViews = GameCatalogDenormalizer.BuildLreBattles(lresByEvent);
         var lreCommonViews = GameCatalogDenormalizer.BuildLreCommon(lresByEvent);
+        var hordeModeTiersViews = GameCatalogDenormalizer.BuildHordeModeTiers(hordeModeTiersRaw);
         var eventDefinitionViews = GameCatalogDenormalizer.BuildEventDefinitions(eventDefinitions);
         var loadTime = DateTimeOffset.UtcNow;
         var eventsCalendar = GameCatalogDenormalizer.BuildEventsCalendar(eventDefinitions, eventOccurrences, loadTime);
@@ -120,6 +122,7 @@ public static class GameCatalogLoader
             [GameCatalogDatasets.Lres] = GameCatalogHashing.ComputeCanonicalJsonHash(lreViews, JsonOptions),
             [GameCatalogDatasets.LreBattles] = GameCatalogHashing.ComputeCanonicalJsonHash(lreBattleViews, JsonOptions),
             [GameCatalogDatasets.LreCommon] = GameCatalogHashing.ComputeCanonicalJsonHash(lreCommonViews, JsonOptions),
+            [GameCatalogDatasets.HordeModeTiers] = GameCatalogHashing.ComputeCanonicalJsonHash(hordeModeTiersViews, JsonOptions),
             [GameCatalogDatasets.EventDefinitionsServed] = GameCatalogHashing.ComputeCanonicalJsonHash(eventDefinitionViews, JsonOptions),
             [GameCatalogDatasets.EventsCalendar] = GameCatalogHashing.ComputeCanonicalJsonHash(eventsCalendar, JsonOptions),
             [GameCatalogDatasets.Shops] = GameCatalogHashing.ComputeCanonicalJsonHash(shopViews, JsonOptions),
@@ -168,6 +171,7 @@ public static class GameCatalogLoader
             lreViews,
             lreBattleViews,
             lreCommonViews,
+            hordeModeTiersViews,
             eventDefinitionViews,
             eventsCalendar,
             shopViews,

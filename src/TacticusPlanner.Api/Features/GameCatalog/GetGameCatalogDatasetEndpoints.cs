@@ -234,6 +234,20 @@ public sealed class GetGameCatalogLreCommonEndpoint(IGameCatalogProvider catalog
     }
 }
 
+public sealed class GetGameCatalogHordeModeTiersEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogHordeModeTiers>>(catalog, GameCatalogDatasets.HordeModeTiers)
+{
+    protected override IReadOnlyList<GameCatalogHordeModeTiers> Payload => Snapshot.HordeModeTiersViews;
+
+    public override void Configure()
+    {
+        Get("game-catalog/horde-mode-tiers");
+        ConfigureServed(
+            "Gets the horde-mode character tier list.",
+            "The single S/A/B/C tier list of characters for horde modes, with each tier's power multiplier ; a character may override its tier's multiplier, and one not listed is unrated, multiplier 1.0).");
+    }
+}
+
 public sealed class GetGameCatalogEventDefinitionsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogEventDefinition>>(catalog, GameCatalogDatasets.EventDefinitionsServed)
 {
