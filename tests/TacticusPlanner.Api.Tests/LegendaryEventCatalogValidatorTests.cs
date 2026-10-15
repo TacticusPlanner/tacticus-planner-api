@@ -75,4 +75,36 @@ public sealed class LegendaryEventCatalogValidatorTests(PlannerApiFactory factor
         Assert.Empty(LegendaryEventCatalogValidator.ValidatePlan(new string('n', 2000)));
         Assert.Equal("notes", Assert.Single(LegendaryEventCatalogValidator.ValidatePlan(new string('n', 2001))).Field);
     }
+
+    [Theory]
+    [InlineData("1", 10, 10, 75, null)]
+    [InlineData("3", 0, 0, 0, null)]
+    [InlineData("4", 0, 0, 0, "run")]
+    [InlineData("01x", 0, 0, 0, "run")]
+    [InlineData(null, 0, 0, 0, "run")]
+    [InlineData("2", 11, 0, 0, "regularMissions")]
+    [InlineData("2", 0, -1, 0, "premiumMissions")]
+    [InlineData("2", 0, 0, 76, "closeShards")]
+    public void RunInputsAreBoundedByTheEventsMissions(string? run, int regular, int premium, int closeShards, string? failingField)
+    {
+        var failures = LegendaryEventCatalogValidator.ValidateRunInputs(
+            Lre, run, new UpdateLegendaryEventRunInputsRequest(0, regular, premium, true, closeShards));
+
+        Assert.Equal(failingField is null ? [] : [failingField], failures.Select(failure => failure.Field));
+    }
+
+    [Fact]
+    public void AnnotationsAreBoundedByTheLane()
+    {
+        var battles = Lre.Alpha.BattleIds.Count;
+        var objectives = Lre.Alpha.UnitsRestrictions.Count;
+
+        Assert.Empty(LegendaryEventCatalogValidator.ValidateAnnotations(
+            Lre, new UpdateLegendaryEventAnnotationsRequest(0, "alpha", battles - 1, [0, objectives], null)));
+        Assert.Equal(["battleIndex", "objectiveIds", "status"], LegendaryEventCatalogValidator.ValidateAnnotations(
+                Lre, new UpdateLegendaryEventAnnotationsRequest(0, "alpha", battles, [objectives + 1], "blocked"))
+            .Select(failure => failure.Field));
+        Assert.Equal("laneId", Assert.Single(LegendaryEventCatalogValidator.ValidateAnnotations(
+            Lre, new UpdateLegendaryEventAnnotationsRequest(0, "delta", 0, [0], "stopHere"))).Field);
+    }
 }

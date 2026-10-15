@@ -251,3 +251,88 @@ public sealed class UpdateLegendaryEventTeamOrderValidator : Validator<UpdateLeg
         RuleFor(request => request.TeamIds).NotNull();
     }
 }
+
+public sealed class UpdateLegendaryEventRunInputsEndpoint : LegendaryEventPlanEndpointBase<UpdateLegendaryEventRunInputsRequest>
+{
+    public override void Configure()
+    {
+        Put($"{Route}/runs/{{run}}");
+        Summary(summary =>
+        {
+            summary.Summary = "Writes one run's inputs (missions, premium missions, bundle, close shards).";
+            summary.Description = "Upserts the given run (1–3) and leaves the other runs untouched. Values equal to "
+                + "the stored run, or all zero for a run with none, succeed without bumping the revision.";
+            DescribeWrite(summary);
+        });
+    }
+
+    public override async Task HandleAsync(UpdateLegendaryEventRunInputsRequest req, CancellationToken ct)
+    {
+        var runValue = Route<string>("run", isRequired: false);
+        if (await ResolveAsync(ct) is not { } resolved
+            || await RejectAsync(LegendaryEventCatalogValidator.ValidateRunInputs(resolved.Event, runValue, req), ct))
+        {
+            return;
+        }
+
+        var run = LegendaryEventCatalogValidator.ParseRun(runValue)!.Value;
+        var result = await Resolve<LegendaryEventPlanWriter>().WriteAsync(
+            resolved.ProfileId, resolved.Event.Id, req.ExpectedRevision,
+            (context, _) => Task.FromResult(LegendaryEventPlanInputMutations.SetRunInputs(context, run, req)),
+            ct);
+        await SendResultAsync(result, ct);
+    }
+}
+
+public sealed class UpdateLegendaryEventAnnotationsEndpoint
+    : LegendaryEventPlanEndpointBase<UpdateLegendaryEventAnnotationsRequest>
+{
+    public override void Configure()
+    {
+        Put($"{Route}/annotations");
+        Summary(summary =>
+        {
+            summary.Summary = "Sets or clears Maybe clear / Stop here marks on cells of one battle.";
+            summary.Description = "status maybeClear or stopHere marks every listed cell; null removes their marks. "
+                + "Other cells are untouched; a write that changes no cell succeeds without bumping the revision. "
+                + "Marks are stored whatever the synced progress says; the client applies one only to a cell not "
+                + "yet cleared.";
+            DescribeWrite(summary);
+        });
+    }
+
+    public override async Task HandleAsync(UpdateLegendaryEventAnnotationsRequest req, CancellationToken ct)
+    {
+        if (await ResolveAsync(ct) is not { } resolved
+            || await RejectAsync(LegendaryEventCatalogValidator.ValidateAnnotations(resolved.Event, req), ct))
+        {
+            return;
+        }
+
+        LegendaryEventAnnotationStatus? status = LegendaryEventCatalogValidator.TryParseStatus(req.Status, out var parsed)
+            ? parsed
+            : null;
+        var result = await Resolve<LegendaryEventPlanWriter>().WriteAsync(
+            resolved.ProfileId, resolved.Event.Id, req.ExpectedRevision,
+            (context, _) => Task.FromResult(LegendaryEventPlanInputMutations.SetAnnotations(
+                context, req.LaneId, req.BattleIndex, req.ObjectiveIds, status)),
+            ct);
+        await SendResultAsync(result, ct);
+    }
+}
+
+public sealed class UpdateLegendaryEventRunInputsValidator : Validator<UpdateLegendaryEventRunInputsRequest>
+{
+    public UpdateLegendaryEventRunInputsValidator() =>
+        RuleFor(request => request.ExpectedRevision).GreaterThanOrEqualTo(0);
+}
+
+public sealed class UpdateLegendaryEventAnnotationsValidator : Validator<UpdateLegendaryEventAnnotationsRequest>
+{
+    public UpdateLegendaryEventAnnotationsValidator()
+    {
+        RuleFor(request => request.ExpectedRevision).GreaterThanOrEqualTo(0);
+        RuleFor(request => request.LaneId).NotEmpty();
+        RuleFor(request => request.ObjectiveIds).NotNull();
+    }
+}

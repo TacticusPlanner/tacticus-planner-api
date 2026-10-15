@@ -29,6 +29,7 @@ public static partial class GameCatalogValidator
         ValidateUniqueIds(GameCatalogDatasets.EventOccurrences, snapshot.EventOccurrences, occurrence => occurrence.Id, errors);
         ValidateUniqueIds(GameCatalogDatasets.Shops, snapshot.ShopViews, shop => shop.Id, errors);
         ValidateCharacterAbilityCosts(snapshot.CharacterAbilityCosts, errors);
+        ValidateLreRewards(snapshot.Lres, errors);
         ValidateMowMythicAbilities(snapshot.Mows, errors);
         ValidateMythicQuests(snapshot, errors);
         ValidateRequiredFields(snapshot, errors);
@@ -38,6 +39,7 @@ public static partial class GameCatalogValidator
         ValidateRaidBosses(snapshot, errors);
         ValidateNpcs(snapshot, errors);
         ValidateGuildRaidMeta(snapshot, errors);
+        ValidateHordeModeTiers(snapshot, errors);
         ValidateServedProjections(snapshot, errors);
 
         return errors;

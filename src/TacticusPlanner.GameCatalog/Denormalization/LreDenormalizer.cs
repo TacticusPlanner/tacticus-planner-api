@@ -30,7 +30,8 @@ internal static partial class GameCatalogDenormalizer
                 lre.PremiumMissions,
                 BuildTrackView(lre.UnitSnowprintId, "alpha", lre.Alpha, roster),
                 BuildTrackView(lre.UnitSnowprintId, "beta", lre.Beta, roster),
-                BuildTrackView(lre.UnitSnowprintId, "gamma", lre.Gamma, roster)))
+                BuildTrackView(lre.UnitSnowprintId, "gamma", lre.Gamma, roster),
+                new GameCatalogLreRewards(lre.PointsMilestones, lre.ChestsMilestones, lre.Progression, lre.ShardsPerChest)))
             .ToArray();
     }
 
@@ -62,26 +63,6 @@ internal static partial class GameCatalogDenormalizer
                     battle.DisallowedFactions,
                     battle.Waves))))
             .ToArray();
-
-    // lre-common: the reward ladder is identical across every event, so serve it once as a single record.
-    public static IReadOnlyList<GameCatalogLreCommon> BuildLreCommon(
-        IReadOnlyDictionary<string, GameCatalogLre> lresByEvent)
-    {
-        var source = lresByEvent
-            .OrderBy(pair => pair.Key, StringComparer.Ordinal)
-            .Select(pair => pair.Value)
-            .First();
-
-        return
-        [
-            new GameCatalogLreCommon(
-                GameCatalogDatasets.LreCommon,
-                source.PointsMilestones,
-                source.ChestsMilestones,
-                source.Progression,
-                source.ShardsPerChest),
-        ];
-    }
 
     // The source carries one upcoming-event date (e.g. "Sun, 01 February 2026 00:00:00 GMT"). Normalize it
     // to ISO 8601 UTC and expose it as the per-event-stage start-date array (one element today); the client

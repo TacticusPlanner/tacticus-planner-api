@@ -5,7 +5,7 @@ using TacticusPlanner.Domain.LegendaryEvents;
 namespace TacticusPlanner.Persistence.Configurations;
 
 /// <summary>
-/// Legendary Event plans and their teams (LRE Stage 2). Tables live in <c>public</c> with a
+/// Legendary Event plans and their teams (LRE Stage 2) and their run inputs and annotations (Stage 3). Tables live in <c>public</c> with a
 /// <c>legendary_event_</c> prefix like every other table; cascades run profile → plan → team →
 /// member/objective/run depth so account purge removes everything.
 /// </summary>
@@ -156,6 +156,84 @@ public sealed class LegendaryEventTeamRunDepthConfiguration : IEntityTypeConfigu
             .HasOne(entity => entity.Team)
             .WithMany(team => team.RunDepths)
             .HasForeignKey(entity => entity.TeamId)
+            .OnDelete(DeleteBehavior.Cascade);
+    }
+}
+
+/// <summary>Run inputs per plan and run (LRE Stage 3, design D1).</summary>
+public sealed class LegendaryEventRunProgressConfiguration : IEntityTypeConfiguration<LegendaryEventRunProgress>
+{
+    public void Configure(EntityTypeBuilder<LegendaryEventRunProgress> builder)
+    {
+        var run = PostgresNaming.SnakeCase(nameof(LegendaryEventRunProgress.Run));
+        var regular = PostgresNaming.SnakeCase(nameof(LegendaryEventRunProgress.RegularMissions));
+        var premium = PostgresNaming.SnakeCase(nameof(LegendaryEventRunProgress.PremiumMissions));
+        var closeShards = PostgresNaming.SnakeCase(nameof(LegendaryEventRunProgress.CloseShards));
+        builder.ToTable("legendary_event_run_progress", table =>
+        {
+            table.HasCheckConstraint(
+                "ck_legendary_event_run_progress_run",
+                $"{run} BETWEEN {LegendaryEventValidation.MinRun} AND {LegendaryEventValidation.MaxRun}");
+            table.HasCheckConstraint("ck_legendary_event_run_progress_regular_missions", $"{regular} >= 0");
+            table.HasCheckConstraint("ck_legendary_event_run_progress_premium_missions", $"{premium} >= 0");
+            table.HasCheckConstraint("ck_legendary_event_run_progress_close_shards", $"{closeShards} >= 0");
+        });
+        builder.HasKey(entity => new { entity.PlanId, entity.Run });
+
+        builder.Property(entity => entity.PlanId).HasVogenConversion();
+        builder.Property(entity => entity.UpdatedAt).IsRequired();
+
+        builder
+            .HasOne(entity => entity.Plan)
+            .WithMany(plan => plan.Runs)
+            .HasForeignKey(entity => entity.PlanId)
+            .OnDelete(DeleteBehavior.Cascade);
+    }
+}
+
+/// <summary>Maybe clear / Stop here marks per objective cell (LRE Stage 3, design D6). The status is stored as
+/// its served name.</summary>
+public sealed class LegendaryEventObjectiveAnnotationConfiguration
+    : IEntityTypeConfiguration<LegendaryEventObjectiveAnnotation>
+{
+    public void Configure(EntityTypeBuilder<LegendaryEventObjectiveAnnotation> builder)
+    {
+        var laneId = PostgresNaming.SnakeCase(nameof(LegendaryEventObjectiveAnnotation.LaneId));
+        var battleIndex = PostgresNaming.SnakeCase(nameof(LegendaryEventObjectiveAnnotation.BattleIndex));
+        var objectiveId = PostgresNaming.SnakeCase(nameof(LegendaryEventObjectiveAnnotation.ObjectiveId));
+        var status = PostgresNaming.SnakeCase(nameof(LegendaryEventObjectiveAnnotation.Status));
+        var lanes = string.Join(", ", LegendaryEventValidation.LaneIds.Select(lane => $"'{lane}'"));
+        builder.ToTable("legendary_event_objective_annotations", table =>
+        {
+            table.HasCheckConstraint("ck_legendary_event_objective_annotations_lane_id", $"{laneId} IN ({lanes})");
+            table.HasCheckConstraint("ck_legendary_event_objective_annotations_battle_index", $"{battleIndex} >= 0");
+            table.HasCheckConstraint(
+                "ck_legendary_event_objective_annotations_objective_id",
+                $"{objectiveId} BETWEEN 0 AND {LegendaryEventValidation.MaxObjectiveId}");
+            table.HasCheckConstraint(
+                "ck_legendary_event_objective_annotations_status",
+                $"{status} IN ('{LegendaryEventValidation.MaybeClearStatus}', '{LegendaryEventValidation.StopHereStatus}')");
+        });
+        builder.HasKey(entity => new { entity.PlanId, entity.LaneId, entity.BattleIndex, entity.ObjectiveId });
+
+        builder.Property(entity => entity.PlanId).HasVogenConversion();
+        builder.Property(entity => entity.LaneId).HasMaxLength(16).IsRequired();
+        builder.Property(entity => entity.Status)
+            .HasConversion(
+                value => value == LegendaryEventAnnotationStatus.StopHere
+                    ? LegendaryEventValidation.StopHereStatus
+                    : LegendaryEventValidation.MaybeClearStatus,
+                value => value == LegendaryEventValidation.StopHereStatus
+                    ? LegendaryEventAnnotationStatus.StopHere
+                    : LegendaryEventAnnotationStatus.MaybeClear)
+            .HasMaxLength(16)
+            .IsRequired();
+        builder.Property(entity => entity.UpdatedAt).IsRequired();
+
+        builder
+            .HasOne(entity => entity.Plan)
+            .WithMany(plan => plan.Annotations)
+            .HasForeignKey(entity => entity.PlanId)
             .OnDelete(DeleteBehavior.Cascade);
     }
 }

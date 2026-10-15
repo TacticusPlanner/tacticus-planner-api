@@ -14,6 +14,10 @@ public static class GameCatalogDatasets
     public const string OnslaughtRewards = "onslaught-rewards";
     public const string EventDefinitions = "event-definitions";
     public const string EventOccurrences = "event-occurrences";
+    // horde-mode-tiers is a single curated S/A/B/C tier list of characters for horde modes, with each
+    // tier's power multiplier; denormalization only sorts the characters by unit id.
+    // See Models/HordeModeTiers.cs.
+    public const string HordeModeTiers = "horde-mode-tiers";
     public const string MythicQuests = "mythic-quests";
 
     // Route/key prefixes for the split dataset families.
@@ -269,6 +273,7 @@ public static class GameCatalogDatasets
         OnslaughtRewards,
         EventDefinitions,
         EventOccurrences,
+        HordeModeTiers,
         MythicQuests,
         .. NpcFactions,
         .. EquipmentTypes,
@@ -307,11 +312,10 @@ public static class GameCatalogDatasets
     public const string CampaignBattles = "campaign-battles";
     public const string CampaignDefinitions = "campaign-definitions";
     // lres is the lightweight per-event list (tracks reference their battles by id); lre-battles holds the
-    // bulky per-battle wave data (keyed "{lreId}-{track}-{number}"); lre-common is the single shared reward
-    // ladder (identical across every event).
+    // bulky per-battle wave data (keyed "{lreId}-{track}-{number}"). Each lres record carries its own reward
+    // ladder; there is no shared ladder dataset (ladders differ between events).
     public const string Lres = "lres";
     public const string LreBattles = "lre-battles";
-    public const string LreCommon = "lre-common";
     // event-definitions is served as-is (structural rules only, no denormalization needed beyond the
     // raw->view pass-through). events-calendar is the denormalized, date-indexed projection built from
     // event-definitions + event-occurrences (see Denormalization/EventsDenormalizer.cs); raw
@@ -355,7 +359,7 @@ public static class GameCatalogDatasets
         CampaignDefinitions,
         Lres,
         LreBattles,
-        LreCommon,
+        HordeModeTiers,
         EventDefinitionsServed,
         EventsCalendar,
         Shops,

@@ -222,15 +222,17 @@ public sealed class GetGameCatalogLreBattlesEndpoint(IGameCatalogProvider catalo
     }
 }
 
-public sealed class GetGameCatalogLreCommonEndpoint(IGameCatalogProvider catalog)
-    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogLreCommon>>(catalog, GameCatalogDatasets.LreCommon)
+public sealed class GetGameCatalogHordeModeTiersEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogHordeModeTiers>>(catalog, GameCatalogDatasets.HordeModeTiers)
 {
-    protected override IReadOnlyList<GameCatalogLreCommon> Payload => Snapshot.LreCommonViews;
+    protected override IReadOnlyList<GameCatalogHordeModeTiers> Payload => Snapshot.HordeModeTiersViews;
 
     public override void Configure()
     {
-        Get("game-catalog/lre-common");
-        ConfigureServed("Gets the shared LRE reward ladder.", "The single shared LRE reward ladder (points/chests milestones, progression, shards per chest).");
+        Get("game-catalog/horde-mode-tiers");
+        ConfigureServed(
+            "Gets the horde-mode character tier list.",
+            "The single S/A/B/C tier list of characters for horde modes, with each tier's power multiplier ; a character may override its tier's multiplier, and one not listed is unrated, multiplier 1.0).");
     }
 }
 

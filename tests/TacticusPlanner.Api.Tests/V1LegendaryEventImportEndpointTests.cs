@@ -24,10 +24,14 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
     private const int LysanderV1Id = 15;
     private const string LysanderId = "astarLysander";
     private const int DanteV1Id = 10;
+    private const int UtharV1Id = 14;
+    private const string UtharId = "votanUthar";
 
     private readonly GameCatalogSnapshot catalog = factory.Services.GetRequiredService<IGameCatalogProvider>().Current;
 
     private GameCatalogLreView Lysander => catalog.LreViews.Single(view => view.Id == LysanderId);
+
+    private GameCatalogLreView Uthar => catalog.LreViews.Single(view => view.Id == UtharId);
 
     private IReadOnlyList<string> Alpha => Lysander.Alpha.AvailableUnitIds;
 
@@ -47,7 +51,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
     }
 
     [Fact]
-    public async Task MissingTeamsKeysAreSkipped()
+    public async Task MissingTeamsAndProgressKeysAreSkipped()
     {
         var (client, _) = await ClientAsync();
 
@@ -468,6 +472,311 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
 
         Assert.Equal("missing_onslaught_progress", body.OnslaughtProgress.Code);
         Assert.Equal("missing_legendary_event_plans", body.LegendaryEventPlans.Code);
+    }
+
+    [Fact]
+    public async Task OverviewIsImportedWithAClamp()
+    {
+        var (client, _) = await ClientAsync();
+        var json = """
+            {"leProgress": {"14": {"overview": {
+              "1": { "regularMissions": 10, "premiumMissions": 0, "bundle": 0 },
+              "2": { "regularMissions": 12, "premiumMissions": 0, "bundle": 1, "ohSoCloseShards": 25 },
+              "3": { "regularMissions": 0, "premiumMissions": 0, "bundle": 0, "ohSoCloseShards": 0 },
+              "4": { "regularMissions": 1 }
+            } } } }
+            """;
+
+        var body = await ImportAsync(client, Configure(json));
+
+        var outcome = Assert.Single(body.LegendaryEventOutcomes);
+        Assert.Equal((UtharId, "Imported", "inputs_imported", 0, 2), (outcome.EventId, outcome.Status, outcome.Code,
+            outcome.TeamsImported, outcome.RunInputsImported));
+        Assert.Equal([("run_input_clamped", null, "2:regularMissions:12"), ("unknown_run", null, "4")], Issues(body));
+        Assert.Equal(
+            [(1, 10, 0, false, 0), (2, 10, 0, true, 25)],
+            (await ReadPlanAsync(client, UtharId)).Runs.Select(run =>
+                (run.Run, run.RegularMissions, run.PremiumMissions, run.BundlePurchased, run.CloseShards)));
+    }
+
+    [Fact]
+    public async Task RunInputsReachAPlanThatAlreadyHasTeams()
+    {
+        var (client, _) = await ClientAsync();
+        await ImportAsync(client, Configure(TeamsJson(LysanderV1Id, Team("A", "alpha", Alpha[0]))));
+        var json = $$"""
+            {
+              "leTeams": {{TeamsObjectByKey(LysanderV1Id, Team("A", "alpha", Alpha[0]))}},
+              "leProgress": { "15": { "overview": { "1": { "regularMissions": 7, "premiumMissions": 0, "bundle": 0 } } } }
+            }
+            """;
+
+        var body = await ImportAsync(client, Configure(json));
+
+        var outcome = Assert.Single(body.LegendaryEventOutcomes);
+        Assert.Equal(("Imported", "inputs_imported", 0, 1), (outcome.Status, outcome.Code, outcome.TeamsImported, outcome.RunInputsImported));
+        Assert.Equal("Imported", body.LegendaryEventPlans.Status);
+        var plan = await ReadPlanAsync(client);
+        Assert.Single(plan.Teams);
+        Assert.Equal(7, Assert.Single(plan.Runs).RegularMissions);
+    }
+
+    [Fact]
+    public async Task ExistingV2RunInputsAreKept()
+    {
+        var (client, _) = await ClientAsync();
+        await client.PutAsJsonAsync($"/api/v1/me/legendary-event-plans/{LysanderId}/runs/1",
+            new UpdateLegendaryEventRunInputsRequest(0, 3, 0, false, 0), Ct);
+        var json = """
+            {"leProgress": {"15": {"overview": {
+              "1": { "regularMissions": 10, "premiumMissions": 0, "bundle": 0 },
+              "2": { "regularMissions": 5, "premiumMissions": 0, "bundle": 0 }
+            } } } }
+            """;
+
+        var body = await ImportAsync(client, Configure(json));
+
+        Assert.Equal([("existing_run_inputs_kept", null, "1")], Issues(body));
+        Assert.Equal([(1, 3), (2, 5)],
+            (await ReadPlanAsync(client)).Runs.Select(run => (run.Run, run.RegularMissions)));
+    }
+
+    [Fact]
+    public async Task PaidOptionsAreCarriedOnANewPlanOnly()
+    {
+        var (client, _) = await ClientAsync();
+        await client.PutAsJsonAsync($"/api/v1/me/legendary-event-plans/{LysanderId}",
+            new UpdateLegendaryEventPlanRequest(0, null, false), Ct);
+        var json = $$"""
+            {
+              "leTeams": {
+                "{{UtharV1Id}}": {{TeamsObject(UtharV1Id, Team("U", "alpha", Uthar.Alpha.AvailableUnitIds[0]))}},
+                "{{LysanderV1Id}}": {{TeamsObject(LysanderV1Id, Team("L", "alpha", Alpha[0]))}}
+              },
+              "leSettings": { "showP2POptions": true }
+            }
+            """;
+
+        await ImportAsync(client, Configure(json));
+
+        Assert.True((await ReadPlanAsync(client, UtharId)).ShowPaidOptions);
+        Assert.False((await ReadPlanAsync(client)).ShowPaidOptions);
+    }
+
+    [Fact]
+    public async Task AnAbsentPaidOptionsSettingKeepsTheV2Default()
+    {
+        var (client, _) = await ClientAsync();
+
+        await ImportAsync(client, Configure(TeamsJson(LysanderV1Id, Team("L", "alpha", Alpha[0]))));
+
+        Assert.False((await ReadPlanAsync(client)).ShowPaidOptions);
+    }
+
+    [Fact]
+    public async Task CompactStatusesAreImportedAsAnnotations()
+    {
+        var (client, _) = await ClientAsync();
+        var flying = Lysander.Alpha.UnitsRestrictions.Single(restriction => restriction.Name == "Flying");
+        var json = """
+            {"leProgress": {"15": {"compactProgress": {"alpha": {
+              "Flying": { "states": [], "statuses": { "6": 3, "7": 1, "9": 4 } },
+              "_defeatAll": { "states": [], "statuses": { "8": 2 } },
+              "_killPoints": { "states": [], "statuses": { "8": 3 } },
+              "_highScore": { "states": [], "statuses": [0, 2] }
+            } } } } }
+            """;
+
+        var body = await ImportAsync(client, Configure(json));
+
+        var outcome = Assert.Single(body.LegendaryEventOutcomes);
+        Assert.Equal(("Imported", "inputs_imported", 3), (outcome.Status, outcome.Code, outcome.AnnotationsImported));
+        Assert.Equal(
+            [("alpha", 1, 0, "maybeClear"), ("alpha", 6, flying.Index + 1, "stopHere"), ("alpha", 8, 0, "stopHere")],
+            (await ReadPlanAsync(client)).Annotations.Select(annotation =>
+                (annotation.LaneId, annotation.BattleIndex, annotation.ObjectiveId, annotation.Status)));
+    }
+
+    [Fact]
+    public async Task CompactBlockedStateWithoutAStatusIsImportedAsStopHere()
+    {
+        var (client, _) = await ClientAsync();
+        var flying = Lysander.Alpha.UnitsRestrictions.Single(restriction => restriction.Name == "Flying");
+        var json = """
+            {"leProgress": {"15": {"compactProgress": {"alpha": {
+              "_defeatAll": { "states": [0, 2] },
+              "Flying": { "states": { "3": 2, "4": 2 }, "statuses": { "4": 1 } }
+            } } } } }
+            """;
+
+        await ImportAsync(client, Configure(json));
+
+        Assert.Equal(
+            [("alpha", 1, 0, "stopHere"), ("alpha", 3, flying.Index + 1, "stopHere")],
+            (await ReadPlanAsync(client)).Annotations.Select(annotation =>
+                (annotation.LaneId, annotation.BattleIndex, annotation.ObjectiveId, annotation.Status)));
+    }
+
+    [Fact]
+    public async Task LegacyBlockedStateIsImportedAsStopHere()
+    {
+        var (client, _) = await ClientAsync();
+        var json = """
+            {"legendaryEventsProgress": {"15": {"battlesProgress": [
+              { "trackId": "beta", "battleIndex": 2, "requirements": [
+                { "id": "_defeatAll", "state": 2 },
+                { "id": "_killPoints", "state": 1 }
+              ] },
+              { "trackId": "gamma", "battleIndex": 4, "requirements": [ { "id": "_defeatAll", "state": 0, "status": 2 } ] }
+            ] } } }
+            """;
+
+        await ImportAsync(client, Configure(json));
+
+        Assert.Equal(
+            [("beta", 2, 0, "stopHere"), ("gamma", 4, 0, "maybeClear")],
+            (await ReadPlanAsync(client)).Annotations.Select(annotation =>
+                (annotation.LaneId, annotation.BattleIndex, annotation.ObjectiveId, annotation.Status)));
+    }
+
+    [Fact]
+    public async Task UnresolvableMarksAreSkippedAndReported()
+    {
+        var (client, _) = await ClientAsync();
+        var json = """
+            {"leProgress": {"15": {"compactProgress": {
+              "alpha": {
+                "Psyker": { "statuses": { "3": 3, "4": 2 } },
+                "_defeatAll": { "statuses": { "18": 3, "2": 3 } }
+              },
+              "delta": { "_defeatAll": { "statuses": { "1": 3 } } }
+            } } } }
+            """;
+
+        var body = await ImportAsync(client, Configure(json));
+
+        Assert.Equal(
+            [("unknown_objective", null, "alpha:Psyker"), ("unknown_battle", null, "alpha:18"), ("unknown_lane", null, "delta")],
+            Issues(body));
+        Assert.Equal(1, body.LegendaryEventOutcomes[0].AnnotationsImported);
+    }
+
+    [Fact]
+    public async Task ExistingV2AnnotationsAreKept()
+    {
+        var (client, _) = await ClientAsync();
+        var flying = Lysander.Alpha.UnitsRestrictions.Single(restriction => restriction.Name == "Flying");
+        await client.PutAsJsonAsync($"/api/v1/me/legendary-event-plans/{LysanderId}/annotations",
+            new UpdateLegendaryEventAnnotationsRequest(0, "alpha", 6, [flying.Index + 1], "maybeClear"), Ct);
+        var json = """
+            {"leProgress": {"15": {"compactProgress": {"alpha": { "Flying": { "statuses": { "6": 3 } } } } } } }
+            """;
+
+        var body = await ImportAsync(client, Configure(json));
+
+        Assert.Equal([("existing_annotations_kept", null, "1")], Issues(body));
+        Assert.Equal(("Skipped", "no_legendary_event_imported"), (body.LegendaryEventOutcomes[0].Status, body.LegendaryEventOutcomes[0].Code));
+        Assert.Equal("maybeClear", Assert.Single((await ReadPlanAsync(client)).Annotations).Status);
+    }
+
+    [Fact]
+    public async Task ProgressWithoutTeamsIsNotMissing()
+    {
+        var (client, _) = await ClientAsync();
+        var json = """
+            {"leProgress": {"13": {"overview": {"1": { "regularMissions": 4, "premiumMissions": 0, "bundle": 0 } } } } }
+            """;
+
+        var body = await ImportAsync(client, Configure(json));
+
+        Assert.Equal("Imported", body.LegendaryEventPlans.Status);
+        var outcome = Assert.Single(body.LegendaryEventOutcomes);
+        Assert.Equal((13, "tauFarsight", "inputs_imported", 0), (outcome.V1EventId, outcome.EventId, outcome.Code, outcome.TeamsImported));
+    }
+
+    [Fact]
+    public async Task EventsAreTheUnionOfTheTeamsAndProgressKeys()
+    {
+        var (client, _) = await ClientAsync();
+        var json = $$"""
+            {
+              "leTeams": {{TeamsObjectByKey(LysanderV1Id, Team("A", "alpha", Alpha[0]))}},
+              "leProgress": {
+                "13": { "overview": { "1": { "regularMissions": 4, "premiumMissions": 0, "bundle": 0 } } },
+                "16": null,
+                "notAnEvent": { "notes": "ignored" }
+              }
+            }
+            """;
+
+        var body = await ImportAsync(client, Configure(json));
+
+        Assert.Equal([13, 15], body.LegendaryEventOutcomes.Select(outcome => outcome.V1EventId));
+        Assert.Equal(["inputs_imported", "imported"], body.LegendaryEventOutcomes.Select(outcome => outcome.Code));
+    }
+
+    [Fact]
+    public async Task ReImportOfEverythingSkipsWithPlanAlreadyExists()
+    {
+        var (client, _) = await ClientAsync();
+        var json = $$"""
+            {
+              "leTeams": {{TeamsObjectByKey(LysanderV1Id, Team("A", "alpha", Alpha[0]))}},
+              "leProgress": { "15": {
+                "notes": "Save tokens for beta",
+                "overview": { "1": { "regularMissions": 7, "premiumMissions": 0, "bundle": 0 } },
+                "compactProgress": { "alpha": { "_defeatAll": { "statuses": { "3": 2 } } } }
+              } }
+            }
+            """;
+        var username = Configure(json);
+        await ImportAsync(client, username);
+        var before = await ReadPlanAsync(client);
+
+        var body = await ImportAsync(client, username);
+
+        var outcome = Assert.Single(body.LegendaryEventOutcomes);
+        Assert.Equal(("Skipped", "plan_already_exists"), (outcome.Status, outcome.Code));
+        var after = await ReadPlanAsync(client);
+        Assert.Equal((before.Revision, 1, 1, 1), (after.Revision, after.Teams.Count, after.Runs.Count, after.Annotations.Count));
+    }
+
+    [Fact]
+    public async Task NotesReachAPlanWithTeamsButNoNotes()
+    {
+        var (client, _) = await ClientAsync();
+        await ImportAsync(client, Configure(TeamsJson(LysanderV1Id, Team("A", "alpha", Alpha[0]))));
+        var json = $$"""
+            {
+              "leTeams": {{TeamsObjectByKey(LysanderV1Id, Team("A", "alpha", Alpha[0]))}},
+              "leProgress": { "15": { "notes": "Save tokens for beta" } }
+            }
+            """;
+
+        var body = await ImportAsync(client, Configure(json));
+
+        Assert.Equal(("Imported", "inputs_imported"), (body.LegendaryEventOutcomes[0].Status, body.LegendaryEventOutcomes[0].Code));
+        var plan = await ReadPlanAsync(client);
+        Assert.Equal(("Save tokens for beta", 1), (plan.Notes, plan.Teams.Count));
+    }
+
+    [Fact]
+    public async Task AnUnreadableProgressEntryOnlyDropsItsInputs()
+    {
+        var (client, _) = await ClientAsync();
+        var json = $$"""
+            {
+              "leTeams": {{TeamsObjectByKey(LysanderV1Id, Team("A", "alpha", Alpha[0]))}},
+              "leProgress": { "15": { "notes": 7, "overview": "broken" } }
+            }
+            """;
+
+        var body = await ImportAsync(client, Configure(json));
+
+        Assert.Equal("imported", Assert.Single(body.LegendaryEventOutcomes).Code);
+        var plan = await ReadPlanAsync(client);
+        Assert.Null(plan.Notes);
+        Assert.Empty(plan.Runs);
     }
 
     private static V1LreTeam Team(string name, string lane, params string[] units) =>
