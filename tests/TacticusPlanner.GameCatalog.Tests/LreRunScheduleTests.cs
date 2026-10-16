@@ -147,4 +147,29 @@ public sealed class LreRunScheduleTests
         Assert.Contains("index 1", error.Message, StringComparison.Ordinal);
         Assert.Contains("strictly ascending", error.Message, StringComparison.Ordinal);
     }
+
+    [Theory]
+    [InlineData("8 March")]
+    [InlineData("12:00")]
+    [InlineData("2026-03-08")]
+    public void APartialDateFailsInsteadOfFillingFromTheClock(string partial)
+    {
+        var error = Assert.Single(Validate("2026-01-04T00:00:00Z", partial));
+
+        Assert.Equal("InvalidRunStartDates", error.Code);
+        Assert.Contains($"index 1 ('{partial}')", error.Message, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void TheCatalogValidatorRunsTheRunStartsCheck()
+    {
+        var raw = Raw("votanUthar");
+        var broken = Snapshot.LresByEvent.ToDictionary(
+            pair => pair.Key,
+            pair => pair.Value.UnitSnowprintId == "votanUthar" ? raw with { RunStartDatesUtc = ["soon"] } : pair.Value);
+
+        var errors = GameCatalogValidator.Validate(Snapshot with { LresByEvent = broken });
+
+        Assert.Contains(errors, error => error.Code == "InvalidRunStartDates" && error.Message.Contains("votanUthar", StringComparison.Ordinal));
+    }
 }

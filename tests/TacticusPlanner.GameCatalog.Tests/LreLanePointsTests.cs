@@ -85,4 +85,17 @@ public sealed class LreLanePointsTests
         Assert.Contains("Gamma", error.Message, StringComparison.Ordinal);
         Assert.Contains("defeatAll is empty", error.Message, StringComparison.Ordinal);
     }
+
+    [Fact]
+    public void TheCatalogValidatorRunsTheLanePointsCheck()
+    {
+        var raw = Raw("votanUthar");
+        var broken = Snapshot.LresByEvent.ToDictionary(
+            pair => pair.Key,
+            pair => pair.Value.UnitSnowprintId == "votanUthar" ? raw with { Alpha = raw.Alpha with { KillPoints = 34 } } : pair.Value);
+
+        var errors = GameCatalogValidator.Validate(Snapshot with { LresByEvent = broken });
+
+        Assert.Contains(errors, error => error.Code == "InvalidLaneKillPoints" && error.Message.Contains("votanUthar", StringComparison.Ordinal));
+    }
 }

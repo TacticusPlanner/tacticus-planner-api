@@ -74,10 +74,20 @@ internal static partial class GameCatalogDenormalizer
                 ?? start)
             .ToArray();
 
-    // Parses one raw run start (RFC 1123 or ISO 8601) as a UTC instant; null when it is not a date.
+    // Accepted raw run start formats: RFC 1123 with an abbreviated or full month name, and ISO 8601 in UTC.
+    // Exact formats keep partial values such as "8 March" or "12:00" from filling in from the current clock.
+    private static readonly string[] LreRunStartFormats =
+    [
+        "r",
+        "ddd, dd MMMM yyyy HH:mm:ss 'GMT'",
+        "yyyy-MM-dd'T'HH:mm:ss'Z'",
+        "yyyy-MM-dd'T'HH:mm:ss.FFFFFFF'Z'",
+    ];
+
+    // Parses one raw run start as a UTC instant; null when it is not a full date in an accepted format.
     internal static DateTimeOffset? ParseLreRunStart(string? value) =>
         !string.IsNullOrWhiteSpace(value)
-        && DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture,
+        && DateTimeOffset.TryParseExact(value, LreRunStartFormats, CultureInfo.InvariantCulture,
             DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal, out var parsed)
             ? parsed.ToUniversalTime()
             : null;
