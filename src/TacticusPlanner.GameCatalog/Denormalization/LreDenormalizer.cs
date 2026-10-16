@@ -22,7 +22,6 @@ internal static partial class GameCatalogDenormalizer
             .Select(lre => new GameCatalogLreView(
                 lre.UnitSnowprintId,
                 lre.Name,
-                lre.Finished,
                 BuildEventStageStartDates(lre.RunStartDatesUtc),
                 lre.BattlesCount,
                 lre.ConstraintsCount,

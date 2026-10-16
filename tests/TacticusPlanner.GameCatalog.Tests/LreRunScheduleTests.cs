@@ -7,8 +7,8 @@ namespace TacticusPlanner.GameCatalog.Tests;
 
 /// <summary>Covers <c>fix-legendary-event-run-and-goal</c>'s <c>legendary-event-run-schedule</c> capability: the
 /// served <c>eventStageStartDatesUtc</c> is the raw <c>runStartDatesUtc</c> normalised to ISO 8601 UTC with the
-/// index as run - 1, the legacy single <c>nextEventDateUtc</c> is not read, and the loader rejects malformed
-/// schedules.</summary>
+/// index as run - 1, no derived run or lifecycle field (run number, next run, finished) is served, and the
+/// loader rejects malformed schedules.</summary>
 public sealed class LreRunScheduleTests
 {
     private static readonly GameCatalogSnapshot Snapshot = GameCatalogLoader.Load();
@@ -72,15 +72,34 @@ public sealed class LreRunScheduleTests
     }
 
     [Fact]
-    public void AnAbsentFieldReadsAsEmptyAndTheLegacySingleDateIsIgnored()
+    public void AnAbsentFieldReadsAsEmpty()
     {
         var raw = System.Text.Json.JsonSerializer.Deserialize<GameCatalogLre>(
-            """{ "unitSnowprintId": "votanUthar", "nextEventDateUtc": "Sun, 04 October 2026 00:00:00 GMT" }""",
+            """{ "unitSnowprintId": "votanUthar" }""",
             WebJson)!;
 
         Assert.NotNull(raw.RunStartDatesUtc);
         Assert.Empty(raw.RunStartDatesUtc);
         Assert.Empty(Serve(Raw("votanUthar") with { RunStartDatesUtc = raw.RunStartDatesUtc }).EventStageStartDatesUtc);
+    }
+
+    [Fact]
+    public void TheRawFilesCarryNoDerivableScheduleFields()
+    {
+        var assembly = typeof(GameCatalogLoader).Assembly;
+        var resources = assembly.GetManifestResourceNames()
+            .Where(name => name.Contains(".lres-", StringComparison.Ordinal) && name.EndsWith(".json", StringComparison.Ordinal))
+            .ToArray();
+
+        Assert.Equal(Snapshot.Lres.Count, resources.Length);
+        foreach (var resource in resources)
+        {
+            using var stream = assembly.GetManifestResourceStream(resource)!;
+            using var document = System.Text.Json.JsonDocument.Parse(stream);
+            var keys = document.RootElement.EnumerateObject().Select(property => property.Name).ToArray();
+
+            Assert.DoesNotContain(keys, key => key is "eventStage" or "nextEventDate" or "nextEventDateUtc" or "finished");
+        }
     }
 
     [Fact]
@@ -94,7 +113,8 @@ public sealed class LreRunScheduleTests
             && (name.Contains("Run", StringComparison.Ordinal)
                 || name.Contains("Stage", StringComparison.Ordinal)
                 || name.Contains("Lifecycle", StringComparison.Ordinal)
-                || name.Contains("Next", StringComparison.Ordinal)));
+                || name.Contains("Next", StringComparison.Ordinal)
+                || name.Contains("Finished", StringComparison.Ordinal)));
     }
 
     [Theory]

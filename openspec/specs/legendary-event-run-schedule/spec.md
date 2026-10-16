@@ -23,7 +23,7 @@ Every record of the served `lres` dataset SHALL carry `eventStageStartDatesUtc`,
 
 ### Requirement: The served array is derived from the raw run starts
 
-The served `eventStageStartDatesUtc` SHALL be the raw file's `runStartDatesUtc` with each entry normalised to ISO 8601 UTC, in the same order. A raw file with an absent or empty `runStartDatesUtc` SHALL serve an empty array. The raw files' former single `nextEventDateUtc` and V1's `eventStage` SHALL NOT be read.
+The served `eventStageStartDatesUtc` SHALL be the raw file's `runStartDatesUtc` with each entry normalised to ISO 8601 UTC, in the same order. A raw file with an absent or empty `runStartDatesUtc` SHALL serve an empty array. The raw files SHALL NOT carry `eventStage`, `nextEventDate`, `nextEventDateUtc` or `finished`, since each is derivable from `runStartDatesUtc`.
 
 #### Scenario: Event with no announced run
 
@@ -31,20 +31,14 @@ The served `eventStageStartDatesUtc` SHALL be the raw file's `runStartDatesUtc` 
 - **WHEN** the dataset is served
 - **THEN** the record carries `eventStageStartDatesUtc` `[]`
 
-#### Scenario: Legacy single date is ignored
-
-- **GIVEN** a raw file that still has `nextEventDateUtc` `"Sun, 04 October 2026 00:00:00 GMT"` and no `runStartDatesUtc`
-- **WHEN** the dataset is served
-- **THEN** the record carries `[]`, because a lone date does not say which run it starts
-
 ### Requirement: The server sends no derived run information
 
-The server SHALL NOT send a run number, a lifecycle state, a "next run" or an "ended runs" value for an event; the client derives them from `eventStageStartDatesUtc` and the current instant.
+The server SHALL NOT send a run number, a lifecycle state, a "next run", an "ended runs" value or a `finished` flag for an event; the client derives them from `eventStageStartDatesUtc` and the current instant (an event is finished once all three run starts are listed and run 3's 7 days have passed).
 
 #### Scenario: Served record shape
 
 - **WHEN** the `lres` dataset is read
-- **THEN** each record carries the schedule only as `eventStageStartDatesUtc` and no other run or lifecycle field
+- **THEN** each record carries the schedule only as `eventStageStartDatesUtc` and no other run, lifecycle or `finished` field
 
 ### Requirement: The loader rejects invalid run start dates
 

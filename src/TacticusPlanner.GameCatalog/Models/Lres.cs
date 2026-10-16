@@ -28,7 +28,6 @@ public sealed record GameCatalogLre(
     int Id,
     string UnitSnowprintId,
     string Name,
-    bool Finished,
     // The announced run starts in run order (index = run - 1, at most 3), RFC 1123 or ISO 8601 UTC. Input to
     // the served EventStageStartDatesUtc array; not served directly. Absent in the raw file reads as empty.
     IReadOnlyList<string> RunStartDatesUtc,
@@ -116,9 +115,9 @@ public sealed record GameCatalogLreView(
     // The event's unit snowprint id (e.g. "emperLucius") — used as the stable string id of the LRE.
     string Id,
     string Name,
-    bool Finished,
     // Run start instants in ISO 8601 UTC, indexed by run (element 0 starts run 1); only announced runs are
-    // listed, with no gaps. The client derives the current, ended and next run from this array.
+    // listed, with no gaps. The client derives the current, ended and next run, and whether the event has
+    // finished (all three runs over), from this array.
     IReadOnlyList<string> EventStageStartDatesUtc,
     int BattlesCount,
     int ConstraintsCount,

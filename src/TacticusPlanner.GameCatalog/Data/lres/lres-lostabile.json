@@ -4,13 +4,9 @@
   "unitSnowprintId": "lostaBile",
   "name": "Fabius Bile",
   "wikiLink": "https://tacticus.wiki.gg/wiki/Legendary_Character_Events",
-  "eventStage": 1,
-  "nextEventDate": "November 08, 2026",
-  "nextEventDateUtc": "Sun, 08 November 2026 00:00:00 GMT",
   "runStartDatesUtc": [
     "Sun, 08 November 2026 00:00:00 GMT"
   ],
-  "finished": false,
   "regularMissions": [
     "Defeat 5 waves of enemies in any wave-based game mode, Deal 1000 damage",
     "Defeat 30 Daemon enemies",
