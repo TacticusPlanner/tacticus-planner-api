@@ -89,11 +89,12 @@ public sealed class LegendaryEventRunRecordRecorder(PlannerDbContext db, IGameCa
     public void Discard()
     {
         var roots = new[] { typeof(LegendaryEventRunRecord).FullName!, typeof(RosterSnapshot).FullName! };
-        foreach (var entry in db.ChangeTracker.Entries().ToList())
-        {
-            if (roots.Any(root => entry.Metadata.Name == root || entry.Metadata.Name.StartsWith(root + ".", StringComparison.Ordinal)))
-                entry.State = EntityState.Detached;
-        }
+        var staged = db.ChangeTracker.Entries()
+            .Where(entry => roots.Any(root => entry.Metadata.Name == root
+                || entry.Metadata.Name.StartsWith(root + ".", StringComparison.Ordinal)))
+            .ToList();
+        foreach (var entry in staged)
+            entry.State = EntityState.Detached;
     }
 
     private async Task<List<LegendaryEventRunRecordTeam>> LoadTeamsAsync(
