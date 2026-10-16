@@ -13,6 +13,9 @@ public static partial class GameCatalogValidator
     public static IReadOnlyList<GameCatalogValidationError> Validate(GameCatalogSnapshot snapshot)
     {
         var errors = new List<GameCatalogValidationError>();
+        // Read from LresByEvent so a `snapshot with { LresByEvent = ... }` reaches the LRE checks
+        // (the Lres list is captured when the snapshot is constructed).
+        var lres = snapshot.LresByEvent.Values.ToArray();
 
         ValidateManifestDatasets(snapshot, errors);
         ValidateUniqueIds(GameCatalogDatasets.UnitsPrefix, snapshot.Characters, character => character.Id, errors);
@@ -29,8 +32,8 @@ public static partial class GameCatalogValidator
         ValidateUniqueIds(GameCatalogDatasets.EventOccurrences, snapshot.EventOccurrences, occurrence => occurrence.Id, errors);
         ValidateUniqueIds(GameCatalogDatasets.Shops, snapshot.ShopViews, shop => shop.Id, errors);
         ValidateCharacterAbilityCosts(snapshot.CharacterAbilityCosts, errors);
-        ValidateLreRewards(snapshot.Lres, errors);
-        ValidateLreLanePoints(snapshot.Lres, errors);
+        ValidateLreRewards(lres, errors);
+        ValidateLreLanePoints(lres, errors);
         ValidateMowMythicAbilities(snapshot.Mows, errors);
         ValidateMythicQuests(snapshot, errors);
         ValidateRequiredFields(snapshot, errors);
