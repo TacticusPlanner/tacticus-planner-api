@@ -48,7 +48,7 @@ The system SHALL persist at most one plan per profile and catalog Legendary Even
 
 ### Requirement: Teams belong to one lane of the plan
 
-A team SHALL belong to exactly one lane (`alpha`, `beta` or `gamma`) of its plan and SHALL carry a trimmed `name` of 1–60 characters, an ordered list of 1–5 member unit ids, at most one reserve unit id, a set of covered objective indexes, at most one clear depth per run 1–3 (`expectedBattleClears` with its `expectedBattleClearsSource`, `estimate` or `manual`, and the time it was last written), and a `sortOrder` that is dense and 0-based within its lane. No unit SHALL appear twice in one team (members and reserve together). A team MAY cover zero objectives.
+A team SHALL belong to exactly one lane (`alpha`, `beta` or `gamma`) of its plan and SHALL carry a trimmed `name` of 1–60 characters, an ordered list of 3–5 member unit ids, at most one reserve unit id, a set of covered objective indexes, at most one clear depth per run 1–3 (`expectedBattleClears` with its `expectedBattleClearsSource`, `estimate` or `manual`, and the time it was last written), and a `sortOrder` that is dense and 0-based within its lane. No unit SHALL appear twice in one team (members and reserve together). A team MAY cover zero objectives. A team stored with fewer than three members (written before this rule) SHALL stay readable, deletable and in its lane order, but any create or update that leaves a team below three members SHALL be rejected.
 
 #### Scenario: Create a team
 
@@ -96,9 +96,27 @@ A team SHALL belong to exactly one lane (`alpha`, `beta` or `gamma`) of its plan
 - **WHEN** `PUT` or `DELETE …/teams/{teamId}` names a team that is not on this plan
 - **THEN** the response is 404
 
+#### Scenario: A short team written earlier stays readable
+
+- **GIVEN** a stored alpha team with members `[u1, u2]` written before the minimum existed
+- **WHEN** the plan is read, the team is reordered within alpha, or the team is deleted
+- **THEN** each call succeeds and the team is returned, kept in the new order, or removed
+
+#### Scenario: Updating a short team without completing it
+
+- **GIVEN** the same stored team with members `[u1, u2]`
+- **WHEN** the caller sends `PUT …/teams/{teamId}` with members `[u1, u2]` and a new name
+- **THEN** the response is 400 naming `memberUnitIds` and the team is unchanged
+
+#### Scenario: Completing a short team
+
+- **GIVEN** the same stored team
+- **WHEN** the caller sends `PUT …/teams/{teamId}` with members `[u1, u2, u3]`
+- **THEN** the response is 200 and the team has three members
+
 ### Requirement: Every team write is validated against the current Game Catalog
 
-On create and update the system SHALL reject, with 400 and the offending field name, a `laneId` outside `alpha|beta|gamma`; a member or reserve unit id not present in that lane's `availableUnitIds`; a repeated unit; an `objectiveIndexes` entry that is not an `index` of that lane's `unitsRestrictions`, or a repeated index; a `run` outside 1..3; an `expectedBattleClears` outside 1..(battle count of the lane); a non-null depth without a source, or a source without a depth; an empty or over-long name. The plan's `catalogVersion` SHALL be set to the current catalog version on every successful write.
+On create and update the system SHALL reject, with 400 and the offending field name, a `laneId` outside `alpha|beta|gamma`; a team with fewer than three or more than five members (the reserve does not count); a member or reserve unit id not present in that lane's `availableUnitIds`; a repeated unit; an `objectiveIndexes` entry that is not an `index` of that lane's `unitsRestrictions`, or a repeated index; a `run` outside 1..3; an `expectedBattleClears` outside 1..(battle count of the lane); a non-null depth without a source, or a source without a depth; an empty or over-long name. The plan's `catalogVersion` SHALL be set to the current catalog version on every successful write.
 
 #### Scenario: Unit not allowed on the lane
 
@@ -132,6 +150,26 @@ On create and update the system SHALL reject, with 400 and the offending field n
 - **GIVEN** a plan written under an earlier catalog version whose objective indexes no longer validate
 - **WHEN** the plan is read
 - **THEN** the response is 200 with the stored ids and the stored `catalogVersion`
+
+#### Scenario: Team below the minimum
+
+- **WHEN** a team is created on alpha with `memberUnitIds` `[u1, u2]`
+- **THEN** the response is 400 naming `memberUnitIds` and no team is created
+
+#### Scenario: Reserve does not count toward the minimum
+
+- **WHEN** a team is created with `memberUnitIds` `[u1, u2]` and `reserveUnitId` `u3`
+- **THEN** the response is 400 naming `memberUnitIds`
+
+#### Scenario: Team above the maximum
+
+- **WHEN** a team is created with six members
+- **THEN** the response is 400 naming `memberUnitIds`
+
+#### Scenario: Exactly three and exactly five members are accepted
+
+- **WHEN** teams are created with three members and with five members
+- **THEN** both responses are 200
 
 ### Requirement: Lane order is replaced as a whole set
 

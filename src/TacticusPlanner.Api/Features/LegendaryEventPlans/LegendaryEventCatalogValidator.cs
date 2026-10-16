@@ -178,9 +178,10 @@ public sealed class LegendaryEventCatalogValidator(IGameCatalogProvider catalog)
     {
         var allowed = lane.AvailableUnitIds.ToHashSet(StringComparer.Ordinal);
         var members = fields.MemberUnitIds ?? [];
-        if (members.Count is 0 or > LegendaryEventValidation.MaxMembers)
+        if (members.Count is < LegendaryEventValidation.MinMembers or > LegendaryEventValidation.MaxMembers)
         {
-            failures.Add(new("memberUnitIds", $"A team has 1–{LegendaryEventValidation.MaxMembers} members."));
+            failures.Add(new("memberUnitIds",
+                $"A team has {LegendaryEventValidation.MinMembers}–{LegendaryEventValidation.MaxMembers} members."));
         }
         else if (members.Any(unitId => unitId is null || !allowed.Contains(unitId)))
         {

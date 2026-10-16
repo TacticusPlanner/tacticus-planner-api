@@ -24,7 +24,7 @@ public sealed class LegendaryEventCatalogValidatorTests(PlannerApiFactory factor
     {
         var units = Lre.Alpha.AvailableUnitIds;
         var fields = new LegendaryEventTeamFields(
-            "Melee", [units[0], units[1]], units[2], [Lre.Alpha.UnitsRestrictions[0].Index], 3,
+            "Melee", [units[0], units[1], units[2]], units[3], [Lre.Alpha.UnitsRestrictions[0].Index], 3,
             Lre.Alpha.BattleIds.Count, "estimate");
 
         Assert.Empty(LegendaryEventCatalogValidator.ValidateTeam(Lre, "alpha", fields));
@@ -54,6 +54,32 @@ public sealed class LegendaryEventCatalogValidatorTests(PlannerApiFactory factor
     }
 
     [Theory]
+    [InlineData(2, false, false)]
+    [InlineData(2, true, false)]
+    [InlineData(3, false, true)]
+    [InlineData(5, false, true)]
+    [InlineData(6, false, false)]
+    public void ATeamHasThreeToFiveMembersAndTheReserveDoesNotCount(int memberCount, bool withReserve, bool valid)
+    {
+        var units = Lre.Alpha.AvailableUnitIds;
+        var fields = new LegendaryEventTeamFields(
+            "Team", [.. units.Take(memberCount)], withReserve ? units[memberCount] : null, [], 1, null, null);
+
+        var failures = LegendaryEventCatalogValidator.ValidateTeam(Lre, "alpha", fields);
+
+        if (valid)
+        {
+            Assert.Empty(failures);
+        }
+        else
+        {
+            var failure = Assert.Single(failures);
+            Assert.Equal("memberUnitIds", failure.Field);
+            Assert.Equal("A team has 3–5 members.", failure.Message);
+        }
+    }
+
+    [Theory]
     [InlineData(null, null, null)]
     [InlineData(4, "manual", null)]
     [InlineData(4, null, "expectedBattleClearsSource")]
@@ -62,7 +88,7 @@ public sealed class LegendaryEventCatalogValidatorTests(PlannerApiFactory factor
     public void DepthAndSourceTravelTogether(int? depth, string? source, string? failingField)
     {
         var fields = new LegendaryEventTeamFields(
-            "t", [Lre.Alpha.AvailableUnitIds[0]], null, [], 1, depth, source);
+            "t", [.. Lre.Alpha.AvailableUnitIds.Take(3)], null, [], 1, depth, source);
 
         var failures = LegendaryEventCatalogValidator.ValidateTeam(Lre, "alpha", fields);
 

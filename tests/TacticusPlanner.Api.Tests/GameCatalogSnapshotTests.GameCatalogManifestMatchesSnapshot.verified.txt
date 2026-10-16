@@ -1,5 +1,5 @@
 ﻿{
-  version: dev-2026-10-14,
+  version: dev-2026-10-16,
   schemaVersion: 5,
   gameVersion: 1.43,
   sourceHash: {time-dependent},
@@ -61,7 +61,7 @@
     },
     {
       key: lres,
-      hash: 9664dd42348f7a38886fc2daf809cc7d24595d5cde7a0bbf6372a869661da379,
+      hash: 69064a9c1e4965664f1a9db6d4611ae49807060da2f81489be153f5da01e338f,
       url: /api/v1/game-catalog/lres
     },
     {

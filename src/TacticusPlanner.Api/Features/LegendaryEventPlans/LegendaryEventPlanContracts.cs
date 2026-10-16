@@ -47,7 +47,7 @@ public sealed record LegendaryEventObjectiveAnnotationResponse(
     DateTimeOffset UpdatedAt
 );
 
-/// <param name="MemberUnitIds">Line-up in position order (1–5 units).</param>
+/// <param name="MemberUnitIds">Line-up in position order (3–5 units; fewer only on a team stored before the minimum).</param>
 /// <param name="ObjectiveIndexes">Covered lane objective indexes, ascending.</param>
 /// <param name="RunDepths">One entry per stored run, ascending by run; empty when no depth is set.</param>
 public sealed record LegendaryEventTeamResponse(

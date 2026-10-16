@@ -11,8 +11,8 @@ data lives as embedded JSON under `src/TacticusPlanner.GameCatalog/Data/**`; the
 set of consolidated, self-contained datasets computed at runtime (reference tables inlined — the client
 never joins). The served data carries only **structural/identity** fields: presentation is the client's job
 (no `icon`/`roundIcon`/`iconId`/`wikiLink` on served records — the client derives icons and links from ids).
-Raw `Data/**` records may still carry extra fields the models don't bind (`icon`, `wikiLink`, `eventStage`,
-`iconId` on LRE restrictions); these are silently ignored on deserialize.
+Raw `Data/**` records may still carry extra fields the models don't bind (`icon`, `wikiLink`, `iconId` on LRE
+restrictions); these are silently ignored on deserialize.
 
 ## Pipeline (where things live — read the code for current values, not this file)
 
@@ -70,7 +70,24 @@ Raw `Data/**` records may still carry extra fields the models don't bind (`icon`
     Each track (alpha/beta/gamma) resolves `availableUnitIds` at runtime (apply `allowedUnitsFilter` to
     the character roster — so adding a character changes every track that doesn't exclude its
     alliance/faction) and references its battles by `battleIds`. Event timing is `eventStageStartDatesUtc`
-    (ISO-8601-UTC array, one element per stage; the client derives the current stage from it).
+    (`string[]` of `yyyy-MM-ddTHH:mm:ssZ`), served from the raw file's **`runStartDatesUtc`** (RFC 1123 or
+    ISO 8601 UTC, normalised in order by `BuildEventStageStartDates`). **The index is the run number − 1**
+    (element 0 starts run 1, element 2 run 3). Only announced runs are listed, as a **prefix with no gaps**
+    (a later run cannot be listed before every earlier one); absent or `[]` serves `[]` ("no announced run").
+    The client derives the current, ended and next run, and whether the event is finished (all 3 starts
+    known and run 3's 7 days over), from the array (a run is a 7-day window); the server sends no run
+    number, lifecycle or `finished` flag (the served catalog is hashed and must not depend on the clock).
+    Raw files carry no `eventStage`, `nextEventDate`/`nextEventDateUtc` or `finished` either — all are
+    derivable from `runStartDatesUtc`; don't re-add them when importing from V1. Enforced at load
+    (`Validation/LreRunStartsValidation.cs`, `InvalidRunStartDates`): at most 3 entries, each parseable,
+    strictly ascending, consecutive starts **at least 7 days apart** (closer would overlap). **To add the
+    next run** when it is announced, append its start (`"Sun, 21 March 2027 00:00:00 GMT"`) to the event's
+    `runStartDatesUtc`; it is a content-only change (the `lres` hash moves, no `SchemaVersion` bump).
+    A track's `killPoints` is its **defeat-all base** (clients use it as the per-battle defeat-all points
+    in per-unit points), not a kill score: it **must equal `defeatAll[0]`** (later `defeatAll` values may
+    grow), and `defeatAll` must not be empty — enforced at load (`Validation/LreLanePointsValidation.cs`,
+    `InvalidLaneKillPoints`). Example: `lres-votanuthar.json` once carried `tauFarsight`'s 34 / 26 / 17
+    (copied from the wrong file) instead of 30 / 34 / 43, skewing every Uthar leaderboard figure.
   - **`lre-battles`** — the bulky per-battle records (`waves` trees), keyed `"{lreId}-{track}-{number}"`,
     tagged with `lreId` + `track`.
   - **`lre-common`** — a reward ladder (`pointsMilestones`, `chestsMilestones`, `progression`,
@@ -169,7 +186,11 @@ genuine game changes.
   impractical; scope changes to id adds/removes and reward changes, and be wary that battle-id renames
   ripple into API tests + the player-data transformer.
 - **LRE**: V1 migrated to a machine-generated format (`lre/data/{n}-{unit}.json` +
-  `lre/data/new-le-battle-data.json` `legendaryEvents[]` + hand-kept `lre/data/lre-event-dates.ts`). The
+  `lre/data/new-le-battle-data.json` `legendaryEvents[]` + hand-kept `lre/data/lre-event-dates.ts`).
+  `lre-event-dates.ts` holds **one** date per event (the next run, with no run number) and has gone stale
+  (on 2026-10-16 it had Fabius Bile on 2026-11-11 and old Lysander/Farsight dates); use it only as a hint
+  for where that date goes in `runStartDatesUtc` (its index is that run's number − 1, cross-checked against
+  V1's `eventStage`), and take confirmed run dates from the maintainers. The
   catalog's raw `lres-*.json` shape mirrors V1's *older* hand-authored format, so derive it using the
   semantics in V1's `lre/data/new-format-adapter.ts` — `buildStaticLegendaryEvent`, `buildTrackName`
   (reconstructs `"Alpha (No Xenos)"` from `disallowedFactions`), `questsToMissionText` (task→string),

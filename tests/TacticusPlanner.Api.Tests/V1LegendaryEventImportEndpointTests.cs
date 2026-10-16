@@ -41,7 +41,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
     public async Task PartNotSelectedLeavesPlansAlone()
     {
         var (client, _) = await ClientAsync();
-        var username = Configure(TeamsJson(LysanderV1Id, Team("A", "alpha", Alpha[0])));
+        var username = Configure(TeamsJson(LysanderV1Id, Team("A", "alpha", AlphaTeam())));
 
         var body = await ImportAsync(client, username, selected: false, onslaught: true);
 
@@ -77,7 +77,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
         var (client, _) = await ClientAsync();
         var json = $$"""
             {
-              "legendaryEvents3": {{TeamsObjectByKey(LysanderV1Id, Team("Legacy", "alpha", Alpha[0]))}},
+              "legendaryEvents3": {{TeamsObjectByKey(LysanderV1Id, Team("Legacy", "alpha", AlphaTeam()))}},
               "legendaryEventsProgress": { "15": { "notes": "Old notes" } }
             }
             """;
@@ -99,9 +99,9 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
             {"leTeams": {"15": {
               "teams": [],
               "alpha": {
-                "{{objectives[0].Name}}": ["{{Alpha[0]}}", "{{Alpha[1]}}"],
-                "{{objectives[1].Name}}": ["{{Alpha[1]}}", "{{Alpha[0]}}"],
-                "{{objectives[2].Name}}": ["{{Alpha[2]}}"],
+                "{{objectives[0].Name}}": ["{{Alpha[0]}}", "{{Alpha[1]}}", "{{Alpha[2]}}"],
+                "{{objectives[1].Name}}": ["{{Alpha[1]}}", "{{Alpha[2]}}", "{{Alpha[0]}}"],
+                "{{objectives[2].Name}}": ["{{Alpha[3]}}", "{{Alpha[4]}}", "{{Alpha[5]}}"],
                 "{{objectives[3].Name}}": []
               }
             } } }
@@ -112,7 +112,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
         var plan = await ReadPlanAsync(client);
         Assert.Equal(["Team 1 - alpha", "Team 2 - alpha"], plan.Teams.Select(team => team.Name));
         Assert.Equal([objectives[0].Index, objectives[1].Index], plan.Teams[0].ObjectiveIndexes);
-        Assert.Equal([Alpha[0], Alpha[1]], plan.Teams[0].MemberUnitIds);
+        Assert.Equal([Alpha[0], Alpha[1], Alpha[2]], plan.Teams[0].MemberUnitIds);
     }
 
     [Fact]
@@ -122,7 +122,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
         var json = $$"""
             {"leTeams": {
               "{{DanteV1Id}}": {{TeamsObject(DanteV1Id, Team("Old", "alpha", "bloodDante"))}},
-              "{{LysanderV1Id}}": {{TeamsObject(LysanderV1Id, Team("Melee", "alpha", Alpha[0], Alpha[1]))}}
+              "{{LysanderV1Id}}": {{TeamsObject(LysanderV1Id, Team("Melee", "alpha", Alpha[0], Alpha[1], Alpha[2]))}}
             } }
             """;
 
@@ -135,7 +135,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
         Assert.Equal(1, body.LegendaryEventOutcomes[1].TeamsImported);
         var team = Assert.Single((await ReadPlanAsync(client)).Teams);
         Assert.Equal(("alpha", "Melee", 0), (team.LaneId, team.Name, team.SortOrder));
-        Assert.Equal([Alpha[0], Alpha[1]], team.MemberUnitIds);
+        Assert.Equal([Alpha[0], Alpha[1], Alpha[2]], team.MemberUnitIds);
     }
 
     [Fact]
@@ -146,7 +146,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
         var minHits = restrictions.Single(restriction => restriction.Filter.Kind == "MinHits");
         var noResilient = restrictions.Single(restriction => restriction.Filter is { Kind: "Trait", Target: "Resilient", Exclude: true });
         var flying = restrictions.Single(restriction => restriction.Filter is { Kind: "Trait", Target: "Flying" });
-        var team = Team("Mixed", "alpha", Alpha[0]) with
+        var team = Team("Mixed", "alpha", AlphaTeam()) with
         {
             RestrictionsIds = [$"Min {minHits.Filter.Target} hits", "No Resiliant", "  FLYING ", "Not an objective"],
         };
@@ -164,11 +164,11 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
     {
         var (client, _) = await ClientAsync();
         var notAllowed = Lysander.Beta.AvailableUnitIds.Except(Alpha).First();
-        var team = Team("Dropped", "alpha", Alpha[0], Alpha[1], "unknownX", notAllowed, Alpha[0]);
+        var team = Team("Dropped", "alpha", Alpha[0], Alpha[1], "unknownX", notAllowed, Alpha[0], Alpha[2]);
 
         var body = await ImportAsync(client, Configure(TeamsJson(LysanderV1Id, team)));
 
-        Assert.Equal([Alpha[0], Alpha[1]], (await ReadPlanAsync(client)).Teams[0].MemberUnitIds);
+        Assert.Equal([Alpha[0], Alpha[1], Alpha[2]], (await ReadPlanAsync(client)).Teams[0].MemberUnitIds);
         Assert.Equal(
             [("unknown_unit", "Dropped", "unknownX"), ("unit_not_allowed_on_lane", "Dropped", notAllowed),
                 ("duplicate_unit", "Dropped", Alpha[0])],
@@ -178,11 +178,11 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
     [Fact]
     public async Task LegacyNamesAndAliasesResolveToCatalogIds()
     {
-        var named = catalog.Characters.First(character => Alpha.Contains(character.Id) && character.Id != Alpha[0]);
+        var named = catalog.Characters.Where(character => Alpha.Contains(character.Id) && character.Id != Alpha[0]).Take(3).ToList();
         var (client, _) = await ClientAsync();
-        await ImportAsync(client, Configure(TeamsJson(
-            LysanderV1Id, new V1LreTeam(Name: "Names", Section: "alpha", CharactersIds: [named.Name.ToUpperInvariant()]))));
-        Assert.Equal([named.Id], (await ReadPlanAsync(client)).Teams[0].MemberUnitIds);
+        await ImportAsync(client, Configure(TeamsJson(LysanderV1Id, new V1LreTeam(
+            Name: "Names", Section: "alpha", CharactersIds: [.. named.Select(character => character.Name.ToUpperInvariant())]))));
+        Assert.Equal(named.Select(character => character.Id), (await ReadPlanAsync(client)).Teams[0].MemberUnitIds);
 
         var aliasLane = catalog.LreViews
             .SelectMany(view => new[] { ("alpha", view.Alpha), ("beta", view.Beta), ("gamma", view.Gamma) }
@@ -190,8 +190,9 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
             .First(entry => entry.Lane.AvailableUnitIds.Contains("genesPatriarch"));
         var v1Id = catalog.Lres.Single(lre => lre.UnitSnowprintId == aliasLane.View.Id).Id;
         (client, _) = await ClientAsync();
-        await ImportAsync(client, Configure(TeamsJson(v1Id, Team("Alias", aliasLane.LaneId, "Patermine"))));
-        Assert.Equal(["genesPatriarch"], (await ReadPlanAsync(client, aliasLane.View.Id)).Teams[0].MemberUnitIds);
+        var others = aliasLane.Lane.AvailableUnitIds.Where(unitId => unitId != "genesPatriarch").Take(2).ToList();
+        await ImportAsync(client, Configure(TeamsJson(v1Id, Team("Alias", aliasLane.LaneId, ["Patermine", .. others]))));
+        Assert.Equal(["genesPatriarch", .. others], (await ReadPlanAsync(client, aliasLane.View.Id)).Teams[0].MemberUnitIds);
     }
 
     [Fact]
@@ -214,11 +215,34 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
     }
 
     [Fact]
+    public async Task TeamsLeftWithFewerThanThreeUnitsAreSkippedAsTooSmall()
+    {
+        var (client, _) = await ClientAsync();
+        var notAllowed = Lysander.Beta.AvailableUnitIds.Except(Alpha).First();
+        var json = TeamsJson(LysanderV1Id,
+            Team("Pair", "alpha", Alpha[0], Alpha[1]),
+            Team("Trimmed", "alpha", Alpha[2], notAllowed, Alpha[3]),
+            Team("Solo", "alpha", Alpha[4], "unknownX"),
+            Team("Trio", "alpha", AlphaTeam(3)));
+
+        var body = await ImportAsync(client, Configure(json));
+
+        var team = Assert.Single((await ReadPlanAsync(client)).Teams);
+        Assert.Equal("Trio", team.Name);
+        Assert.Equal(AlphaTeam(3), team.MemberUnitIds);
+        Assert.Equal(1, Assert.Single(body.LegendaryEventOutcomes).TeamsImported);
+        Assert.Equal(
+            [("team_too_small", "Pair", "2"), ("unit_not_allowed_on_lane", "Trimmed", notAllowed),
+                ("team_too_small", "Trimmed", "2"), ("unknown_unit", "Solo", "unknownX"), ("team_too_small", "Solo", "1")],
+            Issues(body));
+    }
+
+    [Fact]
     public async Task DepthIsClampedAndStoredUnderTheSyncedRun()
     {
         var (client, subject) = await ClientAsync();
         await SeedSyncedRunAsync(subject, LysanderId, 2);
-        var team = Team("Deep", "alpha", Alpha[0]) with { ExpectedBattleClears = 25 };
+        var team = Team("Deep", "alpha", AlphaTeam()) with { ExpectedBattleClears = 25 };
 
         await ImportAsync(client, Configure(TeamsJson(LysanderV1Id, team)));
 
@@ -231,8 +255,8 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
     {
         var (client, _) = await ClientAsync();
         var json = TeamsJson(LysanderV1Id,
-            Team("Five", "alpha", Alpha[0]) with { ExpectedBattleClears = 5 },
-            Team("Zero", "alpha", Alpha[1]) with { ExpectedBattleClears = 0 });
+            Team("Five", "alpha", AlphaTeam()) with { ExpectedBattleClears = 5 },
+            Team("Zero", "alpha", AlphaTeam(3)) with { ExpectedBattleClears = 0 });
 
         await ImportAsync(client, Configure(json));
 
@@ -247,9 +271,9 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
         var (client, _) = await ClientAsync();
         var objectives = Lysander.Alpha.UnitsRestrictions;
         var json = TeamsJson(LysanderV1Id,
-            Team("First", "alpha", Alpha[0], Alpha[1]) with { ExpectedBattleClears = 7, RestrictionsIds = [objectives[0].Name] },
-            Team("Second", "alpha", Alpha[1], Alpha[0]) with { ExpectedBattleClears = 9, RestrictionsIds = [objectives[1].Name] },
-            Team("Other lane", "beta", Lysander.Beta.AvailableUnitIds[0]));
+            Team("First", "alpha", Alpha[0], Alpha[1], Alpha[2]) with { ExpectedBattleClears = 7, RestrictionsIds = [objectives[0].Name] },
+            Team("Second", "alpha", Alpha[1], Alpha[2], Alpha[0]) with { ExpectedBattleClears = 9, RestrictionsIds = [objectives[1].Name] },
+            Team("Other lane", "beta", [.. Lysander.Beta.AvailableUnitIds.Take(3)]));
 
         var body = await ImportAsync(client, Configure(json));
 
@@ -267,7 +291,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
     public async Task ReImportSkipsAPlanThatAlreadyHasTeams()
     {
         var (client, _) = await ClientAsync();
-        var username = Configure(TeamsJson(LysanderV1Id, Team("A", "alpha", Alpha[0])));
+        var username = Configure(TeamsJson(LysanderV1Id, Team("A", "alpha", AlphaTeam())));
         await ImportAsync(client, username);
         var before = await ReadPlanAsync(client);
 
@@ -289,7 +313,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
         created.EnsureSuccessStatusCode();
         var json = $$"""
             {
-              "leTeams": {{TeamsObjectByKey(LysanderV1Id, Team("A", "alpha", Alpha[0]))}},
+              "leTeams": {{TeamsObjectByKey(LysanderV1Id, Team("A", "alpha", AlphaTeam()))}},
               "leProgress": { "15": { "notes": "Save tokens for beta", "compactProgress": { "alpha": {} } } }
             }
             """;
@@ -308,12 +332,12 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
         var uthar = catalog.LreViews.Single(view => view.Id == "votanUthar");
         var utharV1Id = catalog.Lres.Single(lre => lre.UnitSnowprintId == uthar.Id).Id;
         await client.PostAsJsonAsync($"/api/v1/me/legendary-event-plans/{uthar.Id}/teams",
-            new CreateLegendaryEventTeamRequest(0, "alpha", "Mine", [uthar.Alpha.AvailableUnitIds[0]], null, [], 1, null, null), Ct);
+            new CreateLegendaryEventTeamRequest(0, "alpha", "Mine", [.. uthar.Alpha.AvailableUnitIds.Take(3)], null, [], 1, null, null), Ct);
         var json = $$"""
             {"leTeams": {
               "{{DanteV1Id}}": {{TeamsObject(DanteV1Id, Team("Old", "alpha", "bloodDante"))}},
-              "{{utharV1Id}}": {{TeamsObject(utharV1Id, Team("Theirs", "alpha", uthar.Alpha.AvailableUnitIds[1]))}},
-              "{{LysanderV1Id}}": {{TeamsObject(LysanderV1Id, Team("New", "alpha", Alpha[0]))}}
+              "{{utharV1Id}}": {{TeamsObject(utharV1Id, Team("Theirs", "alpha", [.. uthar.Alpha.AvailableUnitIds.Skip(1).Take(3)]))}},
+              "{{LysanderV1Id}}": {{TeamsObject(LysanderV1Id, Team("New", "alpha", AlphaTeam()))}}
             } }
             """;
 
@@ -355,8 +379,9 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
         var json = $$"""
             {"leTeams": {"15": {"teams": [
               null,
-              {"name": "Holes", "section": "alpha", "charSnowprintIds": [null, "{{Alpha[0]}}"], "restrictionsIds": [null]},
-              {"name": "Embedded", "section": "alpha", "characters": [null, {"snowprintId": "{{Alpha[1]}}"}]}
+              {"name": "Holes", "section": "alpha", "charSnowprintIds": [null, "{{Alpha[0]}}", "{{Alpha[1]}}", "{{Alpha[2]}}"], "restrictionsIds": [null]},
+              {"name": "Embedded", "section": "alpha", "characters": [
+                null, {"snowprintId": "{{Alpha[3]}}"}, {"snowprintId": "{{Alpha[4]}}"}, {"snowprintId": "{{Alpha[5]}}"}]}
             ] } } }
             """;
 
@@ -364,7 +389,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
 
         Assert.Equal("Imported", body.LegendaryEventPlans.Status);
         var plan = await ReadPlanAsync(client);
-        Assert.Equal([[Alpha[0]], [Alpha[1]]], plan.Teams.Select(team => team.MemberUnitIds));
+        Assert.Equal([AlphaTeam(), AlphaTeam(3)], plan.Teams.Select(team => team.MemberUnitIds));
         Assert.Equal(
             [("unknown_unit", "Holes", null), ("unknown_objective", "Holes", null), ("unknown_unit", "Embedded", "")],
             Issues(body));
@@ -378,7 +403,9 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
         var json = $$"""
             {"leTeams": {"15": {
               "teams": [null],
-              "alpha": { "{{objectives[0].Name}}": [null, "{{Alpha[0]}}"], "{{objectives[1].Name}}": null }
+              "alpha": {
+                "{{objectives[0].Name}}": [null, "{{Alpha[0]}}", "{{Alpha[1]}}", "{{Alpha[2]}}"], "{{objectives[1].Name}}": null
+              }
             } } }
             """;
 
@@ -386,7 +413,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
 
         Assert.Equal("Imported", body.LegendaryEventPlans.Status);
         var team = Assert.Single((await ReadPlanAsync(client)).Teams);
-        Assert.Equal([Alpha[0]], team.MemberUnitIds);
+        Assert.Equal(AlphaTeam(), team.MemberUnitIds);
         Assert.Equal([objectives[0].Index], team.ObjectiveIndexes);
     }
 
@@ -399,7 +426,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
         created.EnsureSuccessStatusCode();
         var json = $$"""
             {
-              "leTeams": {{TeamsObjectByKey(LysanderV1Id, Team("A", "alpha", Alpha[0]))}},
+              "leTeams": {{TeamsObjectByKey(LysanderV1Id, Team("A", "alpha", AlphaTeam()))}},
               "leProgress": { "15": { "notes": "V1 notes" } }
             }
             """;
@@ -420,7 +447,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
         var notes = new string('a', 1999) + "\uD83D\uDE00" + "tail";
         var json = $$"""
             {
-              "leTeams": {{TeamsObjectByKey(LysanderV1Id, Team("A", "alpha", Alpha[0]))}},
+              "leTeams": {{TeamsObjectByKey(LysanderV1Id, Team("A", "alpha", AlphaTeam()))}},
               "leProgress": { "15": { "notes": "{{notes}}" } }
             }
             """;
@@ -443,7 +470,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
         ];
         FakeTacticusApi.ConfigurePlayerResponse(apiKey, player);
         var data = JsonSerializer.Deserialize<V1UserData>(
-            TeamsJson(LysanderV1Id, Team("Deep", "alpha", Alpha[0]) with { ExpectedBattleClears = 4 }),
+            TeamsJson(LysanderV1Id, Team("Deep", "alpha", AlphaTeam()) with { ExpectedBattleClears = 4 }),
             TacticusV1Client.WebJsonOptions);
         var username = FakeTacticusV1Client.ConfigureProfile(new TacticusV1Profile(apiKey, null)
         {
@@ -503,10 +530,10 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
     public async Task RunInputsReachAPlanThatAlreadyHasTeams()
     {
         var (client, _) = await ClientAsync();
-        await ImportAsync(client, Configure(TeamsJson(LysanderV1Id, Team("A", "alpha", Alpha[0]))));
+        await ImportAsync(client, Configure(TeamsJson(LysanderV1Id, Team("A", "alpha", AlphaTeam()))));
         var json = $$"""
             {
-              "leTeams": {{TeamsObjectByKey(LysanderV1Id, Team("A", "alpha", Alpha[0]))}},
+              "leTeams": {{TeamsObjectByKey(LysanderV1Id, Team("A", "alpha", AlphaTeam()))}},
               "leProgress": { "15": { "overview": { "1": { "regularMissions": 7, "premiumMissions": 0, "bundle": 0 } } } }
             }
             """;
@@ -550,8 +577,8 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
         var json = $$"""
             {
               "leTeams": {
-                "{{UtharV1Id}}": {{TeamsObject(UtharV1Id, Team("U", "alpha", Uthar.Alpha.AvailableUnitIds[0]))}},
-                "{{LysanderV1Id}}": {{TeamsObject(LysanderV1Id, Team("L", "alpha", Alpha[0]))}}
+                "{{UtharV1Id}}": {{TeamsObject(UtharV1Id, Team("U", "alpha", [.. Uthar.Alpha.AvailableUnitIds.Take(3)]))}},
+                "{{LysanderV1Id}}": {{TeamsObject(LysanderV1Id, Team("L", "alpha", AlphaTeam()))}}
               },
               "leSettings": { "showP2POptions": true }
             }
@@ -568,7 +595,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
     {
         var (client, _) = await ClientAsync();
 
-        await ImportAsync(client, Configure(TeamsJson(LysanderV1Id, Team("L", "alpha", Alpha[0]))));
+        await ImportAsync(client, Configure(TeamsJson(LysanderV1Id, Team("L", "alpha", AlphaTeam()))));
 
         Assert.False((await ReadPlanAsync(client)).ShowPaidOptions);
     }
@@ -700,7 +727,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
         var (client, _) = await ClientAsync();
         var json = $$"""
             {
-              "leTeams": {{TeamsObjectByKey(LysanderV1Id, Team("A", "alpha", Alpha[0]))}},
+              "leTeams": {{TeamsObjectByKey(LysanderV1Id, Team("A", "alpha", AlphaTeam()))}},
               "leProgress": {
                 "13": { "overview": { "1": { "regularMissions": 4, "premiumMissions": 0, "bundle": 0 } } },
                 "16": null,
@@ -721,7 +748,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
         var (client, _) = await ClientAsync();
         var json = $$"""
             {
-              "leTeams": {{TeamsObjectByKey(LysanderV1Id, Team("A", "alpha", Alpha[0]))}},
+              "leTeams": {{TeamsObjectByKey(LysanderV1Id, Team("A", "alpha", AlphaTeam()))}},
               "leProgress": { "15": {
                 "notes": "Save tokens for beta",
                 "overview": { "1": { "regularMissions": 7, "premiumMissions": 0, "bundle": 0 } },
@@ -745,10 +772,10 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
     public async Task NotesReachAPlanWithTeamsButNoNotes()
     {
         var (client, _) = await ClientAsync();
-        await ImportAsync(client, Configure(TeamsJson(LysanderV1Id, Team("A", "alpha", Alpha[0]))));
+        await ImportAsync(client, Configure(TeamsJson(LysanderV1Id, Team("A", "alpha", AlphaTeam()))));
         var json = $$"""
             {
-              "leTeams": {{TeamsObjectByKey(LysanderV1Id, Team("A", "alpha", Alpha[0]))}},
+              "leTeams": {{TeamsObjectByKey(LysanderV1Id, Team("A", "alpha", AlphaTeam()))}},
               "leProgress": { "15": { "notes": "Save tokens for beta" } }
             }
             """;
@@ -766,7 +793,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
         var (client, _) = await ClientAsync();
         var json = $$"""
             {
-              "leTeams": {{TeamsObjectByKey(LysanderV1Id, Team("A", "alpha", Alpha[0]))}},
+              "leTeams": {{TeamsObjectByKey(LysanderV1Id, Team("A", "alpha", AlphaTeam()))}},
               "leProgress": { "15": { "notes": 7, "overview": "broken" } }
             }
             """;
@@ -778,6 +805,9 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
         Assert.Null(plan.Notes);
         Assert.Empty(plan.Runs);
     }
+
+    /// <summary>Three consecutive alpha units from <paramref name="start"/>: the smallest team that imports.</summary>
+    private string[] AlphaTeam(int start = 0) => [.. Alpha.Skip(start).Take(3)];
 
     private static V1LreTeam Team(string name, string lane, params string[] units) =>
         new(Name: name, Section: lane, RestrictionsIds: [], CharSnowprintIds: [.. units]);

@@ -4,10 +4,9 @@
   "unitSnowprintId": "astarLysander",
   "name": "Lysander",
   "wikiLink": "https://tacticus.wiki.gg/wiki/Legendary_Character_Events",
-  "eventStage": 1,
-  "nextEventDate": "TBA",
-  "nextEventDateUtc": "",
-  "finished": false,
+  "runStartDatesUtc": [
+    "Sun, 30 August 2026 00:00:00 GMT"
+  ],
   "regularMissions": [
     "Defeat 5 waves of enemies in any wave-based game mode, Deal 1000 damage",
     "Defeat 30 Orks",

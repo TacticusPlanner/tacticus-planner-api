@@ -9643,7 +9643,6 @@
         "required": [
           "id",
           "name",
-          "finished",
           "eventStageStartDatesUtc",
           "battlesCount",
           "constraintsCount",
@@ -9661,9 +9660,6 @@
           },
           "name": {
             "type": "string"
-          },
-          "finished": {
-            "type": "boolean"
           },
           "eventStageStartDatesUtc": {
             "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemString"

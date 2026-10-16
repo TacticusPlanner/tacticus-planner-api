@@ -22,8 +22,7 @@ internal static partial class GameCatalogDenormalizer
             .Select(lre => new GameCatalogLreView(
                 lre.UnitSnowprintId,
                 lre.Name,
-                lre.Finished,
-                BuildEventStageStartDates(lre.NextEventDateUtc),
+                BuildEventStageStartDates(lre.RunStartDatesUtc),
                 lre.BattlesCount,
                 lre.ConstraintsCount,
                 lre.RegularMissions,
@@ -64,20 +63,33 @@ internal static partial class GameCatalogDenormalizer
                     battle.Waves))))
             .ToArray();
 
-    // The source carries one upcoming-event date (e.g. "Sun, 01 February 2026 00:00:00 GMT"). Normalize it
-    // to ISO 8601 UTC and expose it as the per-event-stage start-date array (one element today); the client
-    // derives the current event stage from this array.
-    private static IReadOnlyList<string> BuildEventStageStartDates(string? nextEventDateUtc)
-    {
-        if (string.IsNullOrWhiteSpace(nextEventDateUtc)
-            || !DateTimeOffset.TryParse(nextEventDateUtc, CultureInfo.InvariantCulture,
-                DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal, out var parsed))
-        {
-            return [];
-        }
+    // The raw file lists the announced run starts in run order (e.g. "Sun, 08 March 2026 00:00:00 GMT").
+    // Normalise each to ISO 8601 UTC, keeping the order, so the served index is the run number minus one.
+    // An unparseable entry is passed through unchanged; validation (ValidateLreRunStarts, which runs after
+    // denormalization) rejects it, so it never reaches a served payload.
+    private static string[] BuildEventStageStartDates(IReadOnlyList<string> runStartDatesUtc) =>
+        runStartDatesUtc
+            .Select(start => ParseLreRunStart(start)?.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture)
+                ?? start)
+            .ToArray();
 
-        return [parsed.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture)];
-    }
+    // Accepted raw run start formats: RFC 1123 with an abbreviated or full month name, and ISO 8601 in UTC.
+    // Exact formats keep partial values such as "8 March" or "12:00" from filling in from the current clock.
+    private static readonly string[] LreRunStartFormats =
+    [
+        "r",
+        "ddd, dd MMMM yyyy HH:mm:ss 'GMT'",
+        "yyyy-MM-dd'T'HH:mm:ss'Z'",
+        "yyyy-MM-dd'T'HH:mm:ss.FFFFFFF'Z'",
+    ];
+
+    // Parses one raw run start as a UTC instant; null when it is not a full date in an accepted format.
+    internal static DateTimeOffset? ParseLreRunStart(string? value) =>
+        !string.IsNullOrWhiteSpace(value)
+        && DateTimeOffset.TryParseExact(value, LreRunStartFormats, CultureInfo.InvariantCulture,
+            DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal, out var parsed)
+            ? parsed.ToUniversalTime()
+            : null;
 
     private static GameCatalogLreTrackView BuildTrackView(
         string lreId,
