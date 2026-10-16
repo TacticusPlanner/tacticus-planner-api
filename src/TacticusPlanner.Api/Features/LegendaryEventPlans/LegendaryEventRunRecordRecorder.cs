@@ -78,8 +78,8 @@ public sealed class LegendaryEventRunRecordRecorder(PlannerDbContext db, IGameCa
             {
                 existing.TakenAt = now;
                 existing.CatalogVersion = GameCatalogRelease.Version;
-                existing.Characters = characters.Select(CloneCharacter).ToList();
-                existing.Mows = mows.Select(CloneMow).ToList();
+                existing.Characters = characters.OrderBy(unit => unit.UnitId.Value, StringComparer.Ordinal).Select(CloneCharacter).ToList();
+                existing.Mows = mows.OrderBy(unit => unit.UnitId.Value, StringComparer.Ordinal).Select(CloneMow).ToList();
             }
         }
     }
@@ -146,8 +146,8 @@ public sealed class LegendaryEventRunRecordRecorder(PlannerDbContext db, IGameCa
             Source = RosterSnapshotSource.LegendaryEventRun,
             TakenAt = now,
             CatalogVersion = GameCatalogRelease.Version,
-            Characters = characters.Select(CloneCharacter).ToList(),
-            Mows = mows.Select(CloneMow).ToList(),
+            Characters = characters.OrderBy(unit => unit.UnitId.Value, StringComparer.Ordinal).Select(CloneCharacter).ToList(),
+            Mows = mows.OrderBy(unit => unit.UnitId.Value, StringComparer.Ordinal).Select(CloneMow).ToList(),
         };
 
     private static bool HasEncounters(LreProgressRecord entry) =>
