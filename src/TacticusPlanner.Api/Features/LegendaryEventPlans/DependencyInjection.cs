@@ -6,6 +6,7 @@ public static class DependencyInjection
     {
         services.AddScoped<LegendaryEventCatalogValidator>();
         services.AddScoped<LegendaryEventPlanWriter>();
+        services.AddScoped<LegendaryEventRunRecordRecorder>();
 
         return services;
     }

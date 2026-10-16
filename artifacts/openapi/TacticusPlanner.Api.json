@@ -1531,13 +1531,49 @@
         ]
       }
     },
+    "/api/v1/me/legendary-event-plans": {
+      "get": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Lists every stored plan of the caller's profile.",
+        "description": "Ordered by eventId (ordinal). Only stored plans are listed: a catalog event with no plan written is not returned as an empty plan. Plans whose event left the catalog are included.",
+        "operationId": "TacticusPlannerApiFeaturesLegendaryEventPlansListLegendaryEventPlansEndpoint",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventPlanListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is missing required identity claims."
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "The caller has no profile."
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
     "/api/v1/me/legendary-event-plans/{eventId}": {
       "get": {
         "tags": [
           "Me"
         ],
         "summary": "Reads the caller's plan for a Legendary Event.",
-        "description": "A missing plan reads as an empty plan at revision 0; nothing is created. Reads never validate against the catalog, so a plan written under an older catalog still reads.",
+        "description": "A missing plan reads as an empty plan at revision 0; nothing is created. Reads never validate against the catalog, so a plan written under an older catalog still reads, and a stored plan stays readable after its event leaves the catalog.",
         "operationId": "TacticusPlannerApiFeaturesLegendaryEventPlansGetLegendaryEventPlanEndpoint",
         "parameters": [
           {
@@ -1567,7 +1603,7 @@
             "description": "Forbidden"
           },
           "404": {
-            "description": "The event is not a current catalog Legendary Event."
+            "description": "The event is not a current catalog Legendary Event and the caller has no stored plan for it."
           }
         },
         "security": [
@@ -1703,6 +1739,52 @@
                 }
               }
             }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/me/legendary-event-plans/{eventId}/run-records": {
+      "get": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Reads the caller's run records for a Legendary Event, newest first.",
+        "description": "Records are written by player sync only. Each embeds the run's roster snapshot, or null when it was removed. A current catalog event with no records reads as an empty list; an event that left the catalog keeps answering with its records.",
+        "operationId": "TacticusPlannerApiFeaturesLegendaryEventPlansGetLegendaryEventRunRecordsEndpoint",
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventRunRecordsResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is missing required identity claims."
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "The event is neither a current catalog Legendary Event nor has any record for the caller."
           }
         },
         "security": [
@@ -3114,10 +3196,34 @@
           "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventObjectiveAnnotationResponse"
         }
       },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventPlanResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventPlanResponse"
+        }
+      },
       "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventRunProgressResponse": {
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventRunProgressResponse"
+        }
+      },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventRunRecordEncounterResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventRunRecordEncounterResponse"
+        }
+      },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventRunRecordResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventRunRecordResponse"
+        }
+      },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventRunRecordTeamResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventRunRecordTeamResponse"
         }
       },
       "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventTeamResponse": {
@@ -3172,6 +3278,18 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/TacticusPlannerApiFeaturesV1ImportV1LegendaryEventOutcome"
+        }
+      },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerDomainPlayerDataChunksPlayerCharacterRecord": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerDomainPlayerDataChunksPlayerCharacterRecord"
+        }
+      },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerDomainPlayerDataChunksPlayerMowRecord": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerDomainPlayerDataChunksPlayerMowRecord"
         }
       },
       "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogAmountByRarity": {
@@ -3637,6 +3755,18 @@
       },
       "SystemCollectionsGenericListOfTacticusPlannerDomainGoalsCampaignBattleId": {
         "type": "array"
+      },
+      "SystemCollectionsGenericListOfTacticusPlannerDomainPlayerDataChunksPlayerUnitAbilityRecord": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerDomainPlayerDataChunksPlayerUnitAbilityRecord"
+        }
+      },
+      "SystemCollectionsGenericListOfTacticusPlannerDomainPlayerDataChunksPlayerUnitEquipmentSlotRecord": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerDomainPlayerDataChunksPlayerUnitEquipmentSlotRecord"
+        }
       },
       "SystemNullableOfSystemTextJsonJsonElement": { },
       "TacticusPlannerApiFeaturesCurrentUserCurrentUserResponse": {
@@ -6501,6 +6631,17 @@
           }
         }
       },
+      "TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventPlanListResponse": {
+        "required": [
+          "plans"
+        ],
+        "type": "object",
+        "properties": {
+          "plans": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventPlanResponse"
+          }
+        }
+      },
       "TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventPlanResponse": {
         "required": [
           "eventId",
@@ -6580,6 +6721,191 @@
           }
         }
       },
+      "TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventRunRecordEncounterResponse": {
+        "required": [
+          "objectivesCleared",
+          "highScore"
+        ],
+        "type": "object",
+        "properties": {
+          "objectivesCleared": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemInt32"
+          },
+          "highScore": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventRunRecordLanesResponse": {
+        "required": [
+          "alpha",
+          "beta",
+          "gamma"
+        ],
+        "type": "object",
+        "properties": {
+          "alpha": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventRunRecordEncounterResponse"
+              }
+            ]
+          },
+          "beta": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventRunRecordEncounterResponse"
+              }
+            ]
+          },
+          "gamma": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventRunRecordEncounterResponse"
+              }
+            ]
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventRunRecordResponse": {
+        "required": [
+          "id",
+          "run",
+          "startedAt",
+          "progressAt",
+          "catalogVersion",
+          "points",
+          "lanes",
+          "teams",
+          "rosterSnapshot"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "run": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "progressAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "catalogVersion": {
+            "type": "string"
+          },
+          "points": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lanes": {
+            "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventRunRecordLanesResponse"
+          },
+          "teams": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventRunRecordTeamResponse"
+          },
+          "rosterSnapshot": {
+            "type": [
+              "null",
+              "object"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesLegendaryEventPlansRosterSnapshotResponse"
+              }
+            ]
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventRunRecordsResponse": {
+        "required": [
+          "eventId",
+          "records"
+        ],
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string"
+          },
+          "records": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventRunRecordResponse"
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventRunRecordTeamResponse": {
+        "required": [
+          "teamId",
+          "laneId",
+          "name",
+          "sortOrder",
+          "memberUnitIds",
+          "reserveUnitId",
+          "objectiveIndexes",
+          "expectedBattleClears",
+          "expectedBattleClearsSource"
+        ],
+        "type": "object",
+        "properties": {
+          "teamId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "laneId": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "sortOrder": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "memberUnitIds": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemString"
+          },
+          "reserveUnitId": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "objectiveIndexes": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemInt32"
+          },
+          "expectedBattleClears": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "expectedBattleClearsSource": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
       "TacticusPlannerApiFeaturesLegendaryEventPlansLegendaryEventTeamResponse": {
         "required": [
           "id",
@@ -6647,6 +6973,35 @@
           "recordedAt": {
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesLegendaryEventPlansRosterSnapshotResponse": {
+        "required": [
+          "id",
+          "takenAt",
+          "catalogVersion",
+          "characters",
+          "mows"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "takenAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "catalogVersion": {
+            "type": "string"
+          },
+          "characters": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerDomainPlayerDataChunksPlayerCharacterRecord"
+          },
+          "mows": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerDomainPlayerDataChunksPlayerMowRecord"
           }
         }
       },
@@ -8004,6 +8359,106 @@
         ],
         "type": "string"
       },
+      "TacticusPlannerDomainPlayerDataChunksPlayerCharacterRecord": {
+        "type": "object",
+        "properties": {
+          "rank": {
+            "$ref": "#/components/schemas/TacticusPlannerGameDomainUnitRank"
+          },
+          "equippedItems": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericListOfTacticusPlannerDomainPlayerDataChunksPlayerUnitEquipmentSlotRecord"
+          },
+          "unitId": {
+            "$ref": "#/components/schemas/TacticusPlannerDomainPlayerDataUnitId"
+          },
+          "progressionIndex": {
+            "$ref": "#/components/schemas/TacticusPlannerGameDomainUnitProgression"
+          },
+          "xp": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "xpLevel": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "shards": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "mythicShards": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "abilities": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericListOfTacticusPlannerDomainPlayerDataChunksPlayerUnitAbilityRecord"
+          },
+          "appliedUpgradeSlots": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericListOfSystemInt32"
+          }
+        }
+      },
+      "TacticusPlannerDomainPlayerDataChunksPlayerMowRecord": {
+        "type": "object",
+        "properties": {
+          "unitId": {
+            "$ref": "#/components/schemas/TacticusPlannerDomainPlayerDataUnitId"
+          },
+          "progressionIndex": {
+            "$ref": "#/components/schemas/TacticusPlannerGameDomainUnitProgression"
+          },
+          "xp": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "xpLevel": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "shards": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "mythicShards": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "abilities": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericListOfTacticusPlannerDomainPlayerDataChunksPlayerUnitAbilityRecord"
+          },
+          "appliedUpgradeSlots": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericListOfSystemInt32"
+          }
+        }
+      },
+      "TacticusPlannerDomainPlayerDataChunksPlayerUnitAbilityRecord": {
+        "type": "object",
+        "properties": {
+          "abilityId": {
+            "type": "string"
+          },
+          "level": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "TacticusPlannerDomainPlayerDataChunksPlayerUnitEquipmentSlotRecord": {
+        "type": "object",
+        "properties": {
+          "slotId": {
+            "type": "string"
+          },
+          "equipmentId": {
+            "type": "string"
+          },
+          "level": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "TacticusPlannerDomainPlayerDataUnitId": { },
       "TacticusPlannerGameCatalogModelsGameCatalogAmountByRarity": {
         "required": [
           "rarity",
