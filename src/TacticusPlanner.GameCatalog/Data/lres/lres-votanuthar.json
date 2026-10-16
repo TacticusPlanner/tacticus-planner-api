@@ -7,6 +7,10 @@
   "eventStage": 2,
   "nextEventDate": "October 04, 2026",
   "nextEventDateUtc": "Sun, 04 October 2026 00:00:00 GMT",
+  "runStartDatesUtc": [
+    "Sun, 08 March 2026 00:00:00 GMT",
+    "Sun, 04 October 2026 00:00:00 GMT"
+  ],
   "finished": false,
   "regularMissions": [
     "Defeat 5 waves of enemies in any wave-based game mode, Deal 1000 damage",

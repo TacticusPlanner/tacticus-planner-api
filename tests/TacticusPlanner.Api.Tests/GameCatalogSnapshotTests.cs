@@ -128,6 +128,19 @@ public sealed class GameCatalogSnapshotTests(GameCatalogApiFactory factory)
             character => Assert.Equal(["unitId", "tier", "multiplier"], character!.AsObject().Select(property => property.Key)));
     }
 
+    [Theory]
+    [InlineData("votanUthar", new[] { "2026-03-08T00:00:00Z", "2026-10-04T00:00:00Z" })]
+    [InlineData("tauFarsight", new[] { "2025-12-28T00:00:00Z", "2026-06-21T00:00:00Z" })]
+    [InlineData("astarLysander", new[] { "2026-08-30T00:00:00Z" })]
+    [InlineData("lostaBile", new[] { "2026-11-08T00:00:00Z" })]
+    public async Task LresServeTheirRunStartsIndexedByRun(string id, string[] expected)
+    {
+        var payload = await GetAnonymousDataset("lres");
+
+        var record = payload["data"]!.AsArray().Single(lre => lre!["id"]!.GetValue<string>() == id)!.AsObject();
+        Assert.Equal(expected, record["eventStageStartDatesUtc"]!.AsArray().Select(start => start!.GetValue<string>()));
+    }
+
     private async Task<JsonObject> GetAnonymousDataset(string datasetKey)
     {
         var client = factory.CreateClient();

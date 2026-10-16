@@ -23,7 +23,7 @@ internal static partial class GameCatalogDenormalizer
                 lre.UnitSnowprintId,
                 lre.Name,
                 lre.Finished,
-                BuildEventStageStartDates(lre.NextEventDateUtc),
+                BuildEventStageStartDates(lre.RunStartDatesUtc),
                 lre.BattlesCount,
                 lre.ConstraintsCount,
                 lre.RegularMissions,
@@ -64,20 +64,23 @@ internal static partial class GameCatalogDenormalizer
                     battle.Waves))))
             .ToArray();
 
-    // The source carries one upcoming-event date (e.g. "Sun, 01 February 2026 00:00:00 GMT"). Normalize it
-    // to ISO 8601 UTC and expose it as the per-event-stage start-date array (one element today); the client
-    // derives the current event stage from this array.
-    private static IReadOnlyList<string> BuildEventStageStartDates(string? nextEventDateUtc)
-    {
-        if (string.IsNullOrWhiteSpace(nextEventDateUtc)
-            || !DateTimeOffset.TryParse(nextEventDateUtc, CultureInfo.InvariantCulture,
-                DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal, out var parsed))
-        {
-            return [];
-        }
+    // The raw file lists the announced run starts in run order (e.g. "Sun, 08 March 2026 00:00:00 GMT").
+    // Normalise each to ISO 8601 UTC, keeping the order, so the served index is the run number minus one.
+    // An unparseable entry is passed through unchanged; validation (ValidateLreRunStarts, which runs after
+    // denormalization) rejects it, so it never reaches a served payload.
+    private static string[] BuildEventStageStartDates(IReadOnlyList<string> runStartDatesUtc) =>
+        runStartDatesUtc
+            .Select(start => ParseLreRunStart(start)?.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture)
+                ?? start)
+            .ToArray();
 
-        return [parsed.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture)];
-    }
+    // Parses one raw run start (RFC 1123 or ISO 8601) as a UTC instant; null when it is not a date.
+    internal static DateTimeOffset? ParseLreRunStart(string? value) =>
+        !string.IsNullOrWhiteSpace(value)
+        && DateTimeOffset.TryParse(value, CultureInfo.InvariantCulture,
+            DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal, out var parsed)
+            ? parsed.ToUniversalTime()
+            : null;
 
     private static GameCatalogLreTrackView BuildTrackView(
         string lreId,

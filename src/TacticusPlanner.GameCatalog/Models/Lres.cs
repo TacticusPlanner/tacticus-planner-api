@@ -29,8 +29,9 @@ public sealed record GameCatalogLre(
     string UnitSnowprintId,
     string Name,
     bool Finished,
-    // Kept only as the input to the served EventStageStartDatesUtc array; not served directly.
-    string? NextEventDateUtc,
+    // The announced run starts in run order (index = run - 1, at most 3), RFC 1123 or ISO 8601 UTC. Input to
+    // the served EventStageStartDatesUtc array; not served directly. Absent in the raw file reads as empty.
+    IReadOnlyList<string> RunStartDatesUtc,
     int BattlesCount,
     int ConstraintsCount,
     IReadOnlyList<string> RegularMissions,
@@ -42,7 +43,11 @@ public sealed record GameCatalogLre(
     IReadOnlyList<GameCatalogLreChestsMilestone> ChestsMilestones,
     int ShardsPerChest,
     GameCatalogLreProgression Progression
-);
+)
+{
+    // System.Text.Json passes null for a missing constructor parameter; normalise it to an empty schedule.
+    public IReadOnlyList<string> RunStartDatesUtc { get; init; } = RunStartDatesUtc ?? [];
+}
 
 public sealed record GameCatalogLreTrack(
     string Name,
@@ -112,7 +117,8 @@ public sealed record GameCatalogLreView(
     string Id,
     string Name,
     bool Finished,
-    // Per-event-stage start dates in ISO 8601 UTC. The client derives the current stage from this array.
+    // Run start instants in ISO 8601 UTC, indexed by run (element 0 starts run 1); only announced runs are
+    // listed, with no gaps. The client derives the current, ended and next run from this array.
     IReadOnlyList<string> EventStageStartDatesUtc,
     int BattlesCount,
     int ConstraintsCount,
