@@ -14,15 +14,15 @@ For each V1 team the import SHALL: use the trimmed V1 `name` cut to 60 character
 
 #### Scenario: Unit dropped but team kept
 
-- **GIVEN** a V1 team with units `[u1, u2, unknownX]` where `u1` and `u2` are allowed on the lane
+- **GIVEN** a V1 team with units `[u1, u2, u3, unknownX]` where `u1`, `u2` and `u3` are allowed on the lane
 - **WHEN** the team is imported
-- **THEN** the team is created with members `[u1, u2]` and the outcome lists an issue `unknown_unit` with value `unknownX` and the team's name
+- **THEN** the team is created with members `[u1, u2, u3]` and the outcome lists an issue `unknown_unit` with value `unknownX` and the team's name
 
 #### Scenario: Repeated unit kept once
 
-- **GIVEN** a V1 team whose references resolve to `[u1, u2, u1]`
+- **GIVEN** a V1 team whose references resolve to `[u1, u2, u3, u1]`
 - **WHEN** the team is imported
-- **THEN** the team's members are `[u1, u2]` and the outcome lists an issue `duplicate_unit` with value `u1`
+- **THEN** the team's members are `[u1, u2, u3]` and the outcome lists an issue `duplicate_unit` with value `u1`
 
 #### Scenario: Merged teams keep the first depth
 

@@ -1,10 +1,13 @@
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TacticusPlanner.Api.Features.LegendaryEventPlans;
+using TacticusPlanner.Domain.LegendaryEvents;
 using TacticusPlanner.GameCatalog;
 using TacticusPlanner.GameCatalog.Models;
+using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Tests;
 
@@ -51,7 +54,7 @@ public sealed class LegendaryEventPlanEndpointTests(PlannerApiFactory factory) :
         Assert.Equal(HttpStatusCode.NotFound,
             (await client.PutAsJsonAsync(unknown, new UpdateLegendaryEventPlanRequest(0, null, false), Ct)).StatusCode);
         Assert.Equal(HttpStatusCode.NotFound,
-            (await client.PostAsJsonAsync($"{unknown}/teams", Team(0, "alpha", [AlphaUnits[0]]), Ct)).StatusCode);
+            (await client.PostAsJsonAsync($"{unknown}/teams", Team(0, "alpha", Members(AlphaUnits)), Ct)).StatusCode);
     }
 
     [Fact]
@@ -108,10 +111,10 @@ public sealed class LegendaryEventPlanEndpointTests(PlannerApiFactory factory) :
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var plan = await CreateAsync(client, Team(0, "gamma", [lre.Gamma.AvailableUnitIds[0]], "g0"));
-        plan = await CreateAsync(client, Team(plan.Revision, "alpha", [AlphaUnits[0]], "a0"));
-        plan = await CreateAsync(client, Team(plan.Revision, "beta", [BetaUnits[0]], "b0"));
-        plan = await CreateAsync(client, Team(plan.Revision, "alpha", [AlphaUnits[1]], "a1"));
+        var plan = await CreateAsync(client, Team(0, "gamma", Members(lre.Gamma.AvailableUnitIds), "g0"));
+        plan = await CreateAsync(client, Team(plan.Revision, "alpha", Members(AlphaUnits), "a0"));
+        plan = await CreateAsync(client, Team(plan.Revision, "beta", Members(BetaUnits), "b0"));
+        plan = await CreateAsync(client, Team(plan.Revision, "alpha", Members(AlphaUnits, 1), "a1"));
 
         Assert.Equal(4, plan.Revision);
         Assert.Equal(["a0", "a1", "b0", "g0"], plan.Teams.Select(team => team.Name));
@@ -122,7 +125,7 @@ public sealed class LegendaryEventPlanEndpointTests(PlannerApiFactory factory) :
     public async Task UpdateReplacesFieldsAndKeepsLaneAndOrder()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
-        var plan = await CreateAsync(client, Team(0, "alpha", [AlphaUnits[0]], "first"));
+        var plan = await CreateAsync(client, Team(0, "alpha", Members(AlphaUnits), "first"));
         plan = await CreateAsync(client, Team(plan.Revision, "alpha", [AlphaUnits[0], AlphaUnits[1], AlphaUnits[2]], "second", reserve: AlphaUnits[3], objectives: [0]));
         var second = plan.Teams[1];
 
@@ -143,7 +146,7 @@ public sealed class LegendaryEventPlanEndpointTests(PlannerApiFactory factory) :
     public async Task ADepthWriteTouchesOnlyItsRun()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
-        var plan = await CreateAsync(client, Team(0, "alpha", [AlphaUnits[0]], "t", depth: 7));
+        var plan = await CreateAsync(client, Team(0, "alpha", Members(AlphaUnits), "t", depth: 7));
         var team = plan.Teams[0];
         var run1RecordedAt = team.RunDepths[0].RecordedAt;
 
@@ -164,7 +167,7 @@ public sealed class LegendaryEventPlanEndpointTests(PlannerApiFactory factory) :
     public async Task UpdateWithLaneIdIsRejected()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
-        var plan = await CreateAsync(client, Team(0, "alpha", [AlphaUnits[0]], "t"));
+        var plan = await CreateAsync(client, Team(0, "alpha", Members(AlphaUnits), "t"));
         var team = plan.Teams[0];
 
         var response = await UpdateAsync(client, team.Id, Update(plan.Revision, team) with { LaneId = "beta" });
@@ -176,23 +179,23 @@ public sealed class LegendaryEventPlanEndpointTests(PlannerApiFactory factory) :
     public async Task UpdateIsValidatedAgainstTheStoredTeamsLane()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
-        var plan = await CreateAsync(client, Team(0, "beta", [BetaUnits[0]], "t"));
+        var plan = await CreateAsync(client, Team(0, "beta", Members(BetaUnits), "t"));
         var team = plan.Teams[0];
         var alphaOnly = AlphaUnits.Except(BetaUnits).First();
 
-        var response = await UpdateAsync(client, team.Id, Update(plan.Revision, team) with { MemberUnitIds = [alphaOnly] });
+        var response = await UpdateAsync(client, team.Id, Update(plan.Revision, team) with { MemberUnitIds = [alphaOnly, BetaUnits[1], BetaUnits[2]] });
 
         await AssertBadRequestAsync(response, "memberUnitIds");
         var after = await ReadPlanAsync(await client.GetAsync(PlanUrl, Ct));
         Assert.Equal(plan.Revision, after.Revision);
-        Assert.Equal([BetaUnits[0]], after.Teams[0].MemberUnitIds);
+        Assert.Equal(Members(BetaUnits), after.Teams[0].MemberUnitIds);
     }
 
     [Fact]
     public async Task UnknownTeamIs404()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
-        var plan = await CreateAsync(client, Team(0, "alpha", [AlphaUnits[0]], "t"));
+        var plan = await CreateAsync(client, Team(0, "alpha", Members(AlphaUnits), "t"));
         var missing = Guid.NewGuid();
 
         Assert.Equal(HttpStatusCode.NotFound,
@@ -205,9 +208,9 @@ public sealed class LegendaryEventPlanEndpointTests(PlannerApiFactory factory) :
     public async Task DeleteReDensifiesTheLane()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
-        var plan = await CreateAsync(client, Team(0, "alpha", [AlphaUnits[0]], "A"));
-        plan = await CreateAsync(client, Team(plan.Revision, "alpha", [AlphaUnits[1]], "B"));
-        plan = await CreateAsync(client, Team(plan.Revision, "alpha", [AlphaUnits[2]], "C"));
+        var plan = await CreateAsync(client, Team(0, "alpha", Members(AlphaUnits), "A"));
+        plan = await CreateAsync(client, Team(plan.Revision, "alpha", Members(AlphaUnits, 1), "B"));
+        plan = await CreateAsync(client, Team(plan.Revision, "alpha", Members(AlphaUnits, 2), "C"));
 
         plan = await ReadPlanAsync(await client.DeleteAsync(
             $"{PlanUrl}/teams/{plan.Teams[1].Id}?expectedRevision={plan.Revision}", Ct));
@@ -220,12 +223,13 @@ public sealed class LegendaryEventPlanEndpointTests(PlannerApiFactory factory) :
     public async Task DeleteWithoutExpectedRevisionIsRejected()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
-        var plan = await CreateAsync(client, Team(0, "alpha", [AlphaUnits[0]], "A"));
+        var plan = await CreateAsync(client, Team(0, "alpha", Members(AlphaUnits), "A"));
 
         await AssertBadRequestAsync(await client.DeleteAsync($"{PlanUrl}/teams/{plan.Teams[0].Id}", Ct), "expectedRevision");
     }
 
-    public static TheoryData<string> InvalidTeams => ["laneId", "memberUnitIds", "duplicateMember", "tooManyMembers",
+    public static TheoryData<string> InvalidTeams => ["laneId", "memberUnitIds", "duplicateMember", "tooFewMembers",
+        "tooFewMembersWithReserve", "tooManyMembers",
         "reserveUnitId", "reserveIsMember", "objectiveIndexes", "duplicateObjective", "run", "expectedBattleClears",
         "missingSource", "sourceWithoutDepth", "unknownSource", "name", "longName"];
 
@@ -235,12 +239,15 @@ public sealed class LegendaryEventPlanEndpointTests(PlannerApiFactory factory) :
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var notAllowed = BetaUnits.Except(AlphaUnits).First();
-        var valid = Team(0, "alpha", [AlphaUnits[0], AlphaUnits[1]], "t", depth: 3);
+        var valid = Team(0, "alpha", Members(AlphaUnits), "t", depth: 3);
         var (request, field) = scenario switch
         {
             "laneId" => (valid with { LaneId = "delta" }, "laneId"),
-            "memberUnitIds" => (valid with { MemberUnitIds = [notAllowed] }, "memberUnitIds"),
-            "duplicateMember" => (valid with { MemberUnitIds = [AlphaUnits[0], AlphaUnits[0]] }, "memberUnitIds"),
+            "memberUnitIds" => (valid with { MemberUnitIds = [notAllowed, AlphaUnits[1], AlphaUnits[2]] }, "memberUnitIds"),
+            "duplicateMember" => (valid with { MemberUnitIds = [AlphaUnits[0], AlphaUnits[0], AlphaUnits[1]] }, "memberUnitIds"),
+            "tooFewMembers" => (valid with { MemberUnitIds = [AlphaUnits[0], AlphaUnits[1]] }, "memberUnitIds"),
+            "tooFewMembersWithReserve" => (valid with { MemberUnitIds = [AlphaUnits[0], AlphaUnits[1]], ReserveUnitId = AlphaUnits[2] },
+                "memberUnitIds"),
             "tooManyMembers" => (valid with { MemberUnitIds = AlphaUnits.Take(6).ToList() }, "memberUnitIds"),
             "reserveUnitId" => (valid with { ReserveUnitId = notAllowed }, "reserveUnitId"),
             "reserveIsMember" => (valid with { ReserveUnitId = AlphaUnits[0] }, "reserveUnitId"),
@@ -261,11 +268,54 @@ public sealed class LegendaryEventPlanEndpointTests(PlannerApiFactory factory) :
     }
 
     [Fact]
+    public async Task AStoredShortTeamStaysReadableReorderableAndDeletable()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var plan = await CreateAsync(client, Team(0, "alpha", Members(AlphaUnits), "Short"));
+        plan = await CreateAsync(client, Team(plan.Revision, "alpha", Members(AlphaUnits, 3), "Full"));
+        var (shortId, fullId) = (plan.Teams[0].Id, plan.Teams[1].Id);
+        await TrimToTwoMembersAsync(shortId);
+
+        plan = await ReadPlanAsync(await client.GetAsync(PlanUrl, Ct));
+        Assert.Equal([AlphaUnits[0], AlphaUnits[1]], plan.Teams.Single(team => team.Id == shortId).MemberUnitIds);
+
+        plan = await ReadPlanAsync(await ReorderAsync(client, plan.Revision, [fullId, shortId]));
+        Assert.Equal([("Full", 0), ("Short", 1)], plan.Teams.Select(team => (team.Name, team.SortOrder)));
+
+        plan = await ReadPlanAsync(await client.DeleteAsync(
+            $"{PlanUrl}/teams/{shortId}?expectedRevision={plan.Revision}", Ct));
+        Assert.Equal(["Full"], plan.Teams.Select(team => team.Name));
+    }
+
+    [Fact]
+    public async Task AStoredShortTeamCanOnlyBeUpdatedByCompletingIt()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var plan = await CreateAsync(client, Team(0, "alpha", Members(AlphaUnits), "Short"));
+        var teamId = plan.Teams[0].Id;
+        await TrimToTwoMembersAsync(teamId);
+        plan = await ReadPlanAsync(await client.GetAsync(PlanUrl, Ct));
+        var stored = plan.Teams[0];
+
+        await AssertBadRequestAsync(
+            await UpdateAsync(client, teamId, Update(plan.Revision, stored) with { Name = "Renamed" }), "memberUnitIds");
+        await AssertBadRequestAsync(
+            await UpdateAsync(client, teamId, Update(plan.Revision, stored, depth: 5)), "memberUnitIds");
+        var unchanged = await ReadPlanAsync(await client.GetAsync(PlanUrl, Ct));
+        Assert.Equal(plan.Revision, unchanged.Revision);
+        Assert.Equivalent(stored, unchanged.Teams[0]);
+
+        var completed = await ReadPlanAsync(await UpdateAsync(client, teamId,
+            Update(plan.Revision, stored) with { MemberUnitIds = [AlphaUnits[0], AlphaUnits[1], AlphaUnits[2]] }));
+        Assert.Equal([AlphaUnits[0], AlphaUnits[1], AlphaUnits[2]], completed.Teams[0].MemberUnitIds);
+    }
+
+    [Fact]
     public async Task ATeamMayCoverZeroObjectives()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var plan = await CreateAsync(client, Team(0, "alpha", [AlphaUnits[0]], "t"));
+        var plan = await CreateAsync(client, Team(0, "alpha", Members(AlphaUnits), "t"));
 
         Assert.Empty(plan.Teams[0].ObjectiveIndexes);
         Assert.Empty(plan.Teams[0].RunDepths);
@@ -318,7 +368,7 @@ public sealed class LegendaryEventPlanEndpointTests(PlannerApiFactory factory) :
         var plan = await ThreeAlphaTeamsAsync(client);
 
         var conflict = await ReadConflictAsync(await client.PostAsJsonAsync(
-            $"{PlanUrl}/teams", Team(plan.Revision - 1, "alpha", [AlphaUnits[3]], "D"), Ct));
+            $"{PlanUrl}/teams", Team(plan.Revision - 1, "alpha", Members(AlphaUnits, 3), "D"), Ct));
 
         Assert.Equal(LegendaryEventPlanIssueCodes.Stale, conflict.IssueCode);
         Assert.Equal(3, conflict.Plan.Revision);
@@ -332,7 +382,7 @@ public sealed class LegendaryEventPlanEndpointTests(PlannerApiFactory factory) :
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
         var conflict = await ReadConflictAsync(await client.PostAsJsonAsync(
-            $"{PlanUrl}/teams", Team(1, "alpha", [AlphaUnits[0]], "t"), Ct));
+            $"{PlanUrl}/teams", Team(1, "alpha", Members(AlphaUnits), "t"), Ct));
 
         Assert.Equal(LegendaryEventPlanIssueCodes.Stale, conflict.IssueCode);
         Assert.Equal(0, conflict.Plan.Revision);
@@ -344,7 +394,7 @@ public sealed class LegendaryEventPlanEndpointTests(PlannerApiFactory factory) :
     {
         var owner = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var other = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
-        var plan = await CreateAsync(owner, Team(0, "alpha", [AlphaUnits[0]], "mine"));
+        var plan = await CreateAsync(owner, Team(0, "alpha", Members(AlphaUnits), "mine"));
 
         var seen = await ReadPlanAsync(await other.GetAsync(PlanUrl, Ct));
         Assert.Equal(0, seen.Revision);
@@ -357,7 +407,7 @@ public sealed class LegendaryEventPlanEndpointTests(PlannerApiFactory factory) :
     public async Task ServedJsonUsesTheContractFieldNames()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
-        await CreateAsync(client, Team(0, "alpha", [AlphaUnits[0]], "t", depth: 2));
+        await CreateAsync(client, Team(0, "alpha", Members(AlphaUnits), "t", depth: 2));
 
         using var document = JsonDocument.Parse(await client.GetStringAsync(PlanUrl, Ct));
         var root = document.RootElement;
@@ -372,10 +422,28 @@ public sealed class LegendaryEventPlanEndpointTests(PlannerApiFactory factory) :
 
     private async Task<LegendaryEventPlanResponse> ThreeAlphaTeamsAsync(HttpClient client)
     {
-        var plan = await CreateAsync(client, Team(0, "alpha", [AlphaUnits[0]], "A"));
-        plan = await CreateAsync(client, Team(plan.Revision, "alpha", [AlphaUnits[1]], "B"));
-        return await CreateAsync(client, Team(plan.Revision, "alpha", [AlphaUnits[2]], "C"));
+        var plan = await CreateAsync(client, Team(0, "alpha", Members(AlphaUnits), "A"));
+        plan = await CreateAsync(client, Team(plan.Revision, "alpha", Members(AlphaUnits, 1), "B"));
+        return await CreateAsync(client, Team(plan.Revision, "alpha", Members(AlphaUnits, 2), "C"));
     }
+
+    /// <summary>Drops the last line-up member of a stored team, standing in for a two-member team written before
+    /// the three-member minimum existed.</summary>
+    private async Task TrimToTwoMembersAsync(Guid teamId)
+    {
+        using var scope = factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
+        // IgnoreQueryFilters: this scope has no HttpContext, so the profile query filter has no profile to scope to.
+        var members = await db.LegendaryEventTeamMembers.IgnoreQueryFilters()
+            .Where(member => member.TeamId == LegendaryEventTeamId.From(teamId) && !member.Reserve)
+            .ToListAsync(Ct);
+        Assert.Equal(3, members.Count);
+        db.LegendaryEventTeamMembers.Remove(members.MaxBy(member => member.Position)!);
+        await db.SaveChangesAsync(Ct);
+    }
+
+    /// <summary>Three consecutive units of a lane from <paramref name="start"/>: the smallest valid team.</summary>
+    private static List<string> Members(IReadOnlyList<string> laneUnits, int start = 0) => [.. laneUnits.Skip(start).Take(3)];
 
     private static CreateLegendaryEventTeamRequest Team(
         long revision, string laneId, IReadOnlyList<string> members, string name = "Team",

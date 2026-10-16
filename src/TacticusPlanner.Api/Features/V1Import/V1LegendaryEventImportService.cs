@@ -257,6 +257,12 @@ public sealed partial class V1LegendaryEventImportService(
                 continue;
             }
 
+            if (members.Count < LegendaryEventValidation.MinMembers)
+            {
+                issues.Add(new("team_too_small", name, members.Count.ToString(CultureInfo.InvariantCulture)));
+                continue;
+            }
+
             var objectives = new List<int>();
             foreach (var v1Name in source.RestrictionsIds ?? [])
             {
@@ -440,17 +446,17 @@ public sealed record V1LegendaryEventOutcome(
 /// <summary>Something dropped, truncated, kept or merged while resolving one V1 team, the event's notes, its run
 /// inputs or its Maybe clear / Stop here marks.</summary>
 /// <param name="Code"><c>unknown_unit</c>, <c>unit_not_allowed_on_lane</c>, <c>duplicate_unit</c>,
-/// <c>unknown_objective</c>, <c>unknown_lane</c>, <c>empty_team</c>, <c>team_truncated</c>,
-/// <c>duplicate_team_merged</c> or <c>conflicting_depth_discarded</c>; for the notes, <c>notes_truncated</c> or
-/// <c>existing_notes_kept</c> (the V2 plan already had notes, so the V1 notes were not imported); for run inputs,
-/// <c>run_input_clamped</c>, <c>unknown_run</c> or <c>existing_run_inputs_kept</c>; for marks,
-/// <c>unknown_lane</c>, <c>unknown_battle</c>, <c>unknown_objective</c> or
-/// <c>existing_annotations_kept</c>.</param>
+/// <c>unknown_objective</c>, <c>unknown_lane</c>, <c>empty_team</c>, <c>team_too_small</c> (one or two units
+/// remained; a team needs three), <c>team_truncated</c>, <c>duplicate_team_merged</c> or
+/// <c>conflicting_depth_discarded</c>; for the notes, <c>notes_truncated</c> or <c>existing_notes_kept</c> (the
+/// V2 plan already had notes, so the V1 notes were not imported); for run inputs, <c>run_input_clamped</c>,
+/// <c>unknown_run</c> or <c>existing_run_inputs_kept</c>; for marks, <c>unknown_lane</c>, <c>unknown_battle</c>,
+/// <c>unknown_objective</c> or <c>existing_annotations_kept</c>.</param>
 /// <param name="TeamName">The V1 team's name; null for a notes, run-input or mark issue.</param>
 /// <param name="Value">The dropped unit or objective (null when V1 held a null entry), the merged-into team's
-/// name, the discarded depth, the resolved unit count before truncation, the V1 notes' length before
-/// truncation, <c>run:field:original</c> for a clamp, the run key, <c>lane:index</c> or <c>lane:name</c> for a
-/// skipped mark, or the number of marks kept.</param>
+/// name, the discarded depth, the resolved unit count before truncation, the remaining unit count of a team too
+/// small to import, the V1 notes' length before truncation, <c>run:field:original</c> for a clamp, the run key,
+/// <c>lane:index</c> or <c>lane:name</c> for a skipped mark, or the number of marks kept.</param>
 public sealed record V1LegendaryEventIssue(string Code, string? TeamName, string? Value);
 
 public sealed record V1LegendaryEventImportResult(ImportPartResult Part, IReadOnlyList<V1LegendaryEventOutcome> Outcomes);

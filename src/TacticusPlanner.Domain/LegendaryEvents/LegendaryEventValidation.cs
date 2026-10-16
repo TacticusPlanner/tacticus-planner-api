@@ -15,6 +15,9 @@ public static class LegendaryEventValidation
 
     public const int MaxUnitIdLength = 128;
 
+    /// <summary>The fewest non-reserve members a team can field in the game; the reserve does not count.</summary>
+    public const int MinMembers = 3;
+
     public const int MaxMembers = 5;
 
     public const int MinRun = 1;
