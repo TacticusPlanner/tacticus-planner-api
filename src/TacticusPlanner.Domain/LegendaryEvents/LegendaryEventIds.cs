@@ -8,3 +8,6 @@ public readonly partial struct LegendaryEventPlanId : IGuidValueObject;
 
 [ValueObject<Guid>]
 public readonly partial struct LegendaryEventTeamId : IGuidValueObject;
+
+[ValueObject<Guid>]
+public readonly partial struct LegendaryEventRunRecordId : IGuidValueObject;

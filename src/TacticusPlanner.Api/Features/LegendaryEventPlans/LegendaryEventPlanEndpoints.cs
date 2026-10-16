@@ -1,7 +1,6 @@
 using FastEndpoints;
 using FluentValidation;
 using TacticusPlanner.Domain.LegendaryEvents;
-using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.LegendaryEventPlans;
 
@@ -14,21 +13,24 @@ public sealed class GetLegendaryEventPlanEndpoint : LegendaryEventPlanEndpointBa
         {
             summary.Summary = "Reads the caller's plan for a Legendary Event.";
             summary.Description = "A missing plan reads as an empty plan at revision 0; nothing is created. Reads "
-                + "never validate against the catalog, so a plan written under an older catalog still reads.";
+                + "never validate against the catalog, so a plan written under an older catalog still reads, and a "
+                + "stored plan stays readable after its event leaves the catalog.";
             summary.Response<LegendaryEventPlanResponse>(StatusCodes.Status200OK);
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
-            summary.Response(StatusCodes.Status404NotFound, "The event is not a current catalog Legendary Event.");
+            summary.Response(StatusCodes.Status404NotFound,
+                "The event is not a current catalog Legendary Event and the caller has no stored plan for it.");
         });
     }
 
     public override async Task HandleAsync(EmptyRequest req, CancellationToken ct)
     {
-        if (await ResolveAsync(ct) is not { } resolved)
+        if (await ResolveReadAsync(ct) is not { } resolved)
             return;
 
-        var plan = await Resolve<PlannerDbContext>().LoadPlanAsync(resolved.Event.Id, tracked: false, ct);
         await Send.OkAsync(
-            plan is null ? LegendaryEventPlanProjection.Empty(resolved.Event.Id) : LegendaryEventPlanProjection.Map(plan),
+            resolved.Plan is null
+                ? LegendaryEventPlanProjection.Empty(resolved.EventId)
+                : LegendaryEventPlanProjection.Map(resolved.Plan),
             ct);
     }
 }

@@ -82,7 +82,7 @@ public static class LegendaryEventPlanProjection
                     depth.Run, depth.ExpectedBattleClears, SourceName(depth.Source), depth.RecordedAt))
                 .ToList());
 
-    private static int LaneOrder(string laneId)
+    public static int LaneOrder(string laneId)
     {
         for (var index = 0; index < LegendaryEventValidation.LaneIds.Count; index++)
         {

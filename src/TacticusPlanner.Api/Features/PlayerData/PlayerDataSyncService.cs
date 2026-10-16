@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using Refit;
+using TacticusPlanner.Api.Features.LegendaryEventPlans;
 using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Persistence;
 using TacticusPlanner.TacticusApi;
@@ -20,6 +21,7 @@ public sealed class PlayerDataSyncService(
     PlannerDbContext db,
     ITacticusApi tacticusApi,
     PlayerDataTransformer transformer,
+    LegendaryEventRunRecordRecorder runRecordRecorder,
     TimeProvider timeProvider)
 {
     private static readonly IReadOnlyDictionary<string, Action<PlayerDataSnapshotEntity, PlayerDataTransformResult>> ChunkSetters =
@@ -70,6 +72,8 @@ public sealed class PlayerDataSyncService(
             db.PlayerDataSnapshots.Add(snapshot);
         }
 
+        await RecordRunsAsync(profileId, transformed, syncedAt, ct);
+
         if (integration is not null)
         {
             integration.TacticusSyncLastSucceededAt = syncedAt;
@@ -89,11 +93,21 @@ public sealed class PlayerDataSyncService(
             db.Entry(snapshot).State = EntityState.Detached;
             snapshot = await db.PlayerDataSnapshots.FirstAsync(entity => entity.Id == profileId, ct);
             ApplyTransform(snapshot, transformed, isNew: false, syncedAt);
+            // The winner may have recorded the same runs; restage against what it committed.
+            runRecordRecorder.Discard();
+            await RecordRunsAsync(profileId, transformed, syncedAt, ct);
             await db.SaveChangesAsync(ct);
         }
 
         return new PlayerDataSyncResult.Success(snapshot);
     }
+
+    /// <summary>Opens or refreshes Legendary Event run records in the same unit of work as the snapshot
+    /// (LRE Stage 7).</summary>
+    private Task RecordRunsAsync(
+        ProfileId profileId, PlayerDataTransformResult transformed, DateTimeOffset syncedAt, CancellationToken ct) =>
+        runRecordRecorder.ApplyAsync(
+            profileId, transformed.LreProgress, transformed.Characters, transformed.Mows, syncedAt, ct);
 
     private static void ApplyTransform(
         PlayerDataSnapshotEntity snapshot, PlayerDataTransformResult transformed, bool isNew, DateTimeOffset syncedAt)

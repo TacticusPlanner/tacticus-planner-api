@@ -1,8 +1,10 @@
 using FastEndpoints;
 using FluentValidation.Results;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Domain.LegendaryEvents;
 using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.GameCatalog.Models;
+using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.LegendaryEventPlans;
 
@@ -24,6 +26,28 @@ public abstract class LegendaryEventPlanEndpointBase<TRequest> : Endpoint<TReque
         }
 
         return (profileId, lre);
+    }
+
+    /// <summary>Read mode (LRE Stage 7, design D5): the caller and their stored plan, which stays readable after its
+    /// event leaves the catalog. 404 when the caller has no profile, or the id is outside the catalog with no stored
+    /// plan. A null plan means a current catalog event the caller never wrote.</summary>
+    protected async Task<(string EventId, LegendaryEventPlan? Plan)?> ResolveReadAsync(CancellationToken ct)
+    {
+        var eventId = Route<string>("eventId")!;
+        if (ProcessorState<CurrentUserState>().ProfileId is null)
+        {
+            await Send.NotFoundAsync(ct);
+            return null;
+        }
+
+        var plan = await Resolve<PlannerDbContext>().LoadPlanAsync(eventId, tracked: false, ct);
+        if (plan is null && Resolve<LegendaryEventCatalogValidator>().FindEvent(eventId) is null)
+        {
+            await Send.NotFoundAsync(ct);
+            return null;
+        }
+
+        return (eventId, plan);
     }
 
     protected async Task<bool> RejectAsync(IReadOnlyList<LegendaryEventFieldFailure> failures, CancellationToken ct)
