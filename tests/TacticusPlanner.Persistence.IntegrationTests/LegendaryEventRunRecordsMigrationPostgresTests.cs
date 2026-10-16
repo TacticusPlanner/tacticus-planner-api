@@ -62,8 +62,6 @@ public sealed class LegendaryEventRunRecordsMigrationPostgresTests
                 "INSERT INTO legendary_event_run_records (id, profile_id, event_id, run, started_at, progress_at, catalog_version, points, lanes, teams, roster_snapshot_id, created_at, updated_at) VALUES (gen_random_uuid(), @profile, 'votanUthar', 1, now(), now(), 'v', 0, '{}', '[]', @snapshot, now(), now())"],
             ["ck_roster_snapshots_source",
                 "INSERT INTO roster_snapshots (id, profile_id, source, taken_at, catalog_version, characters, mows, created_at, updated_at) VALUES (gen_random_uuid(), @profile, 'manual', now(), 'v', '[]', '[]', now(), now())"],
-            ["ck_roster_snapshots_name",
-                $"INSERT INTO roster_snapshots (id, profile_id, source, name, taken_at, catalog_version, characters, mows, created_at, updated_at) VALUES (gen_random_uuid(), @profile, 'legendaryEventRun', '{new string('n', 61)}', now(), 'v', '[]', '[]', now(), now())"],
         ];
         foreach (var (constraint, sql) in rejected.Select(entry => (entry[0], entry[1])))
         {
@@ -71,6 +69,12 @@ public sealed class LegendaryEventRunRecordsMigrationPostgresTests
                 connectionString, sql, ("profile", profileId.Value), ("snapshot", snapshotId)));
             Assert.Equal(constraint, exception.ConstraintName);
         }
+
+        // The name column is varchar(60), so an over-long name fails on length before its CHECK runs.
+        var tooLong = await Assert.ThrowsAsync<PostgresException>(() => ExecuteAsync(connectionString,
+            $"INSERT INTO roster_snapshots (id, profile_id, source, name, taken_at, catalog_version, characters, mows, created_at, updated_at) VALUES (gen_random_uuid(), @profile, 'legendaryEventRun', '{new string('n', 61)}', now(), 'v', '[]', '[]', now(), now())",
+            ("profile", profileId.Value)));
+        Assert.Equal(PostgresErrorCodes.StringDataRightTruncation, tooLong.SqlState);
 
         await ExecuteAsync(connectionString, "DELETE FROM roster_snapshots");
         Assert.Equal(1L, await CountAsync(connectionString, "legendary_event_run_records"));
