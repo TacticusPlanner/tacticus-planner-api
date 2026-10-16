@@ -10,7 +10,7 @@ On every successful player sync, the system SHALL examine each record of the inc
 - otherwise it SHALL **refresh** `latest` when the incoming compact lanes differ from the stored lanes;
 - otherwise it SHALL leave `latest` unchanged.
 
-Opening sets `startedAt` and `progressAt` to the sync time; refreshing sets `progressAt` only. Both SHALL write the record's `lanes`, `points`, `catalogVersion`, `teams` and `roster` from the incoming snapshot and the profile's plan at that moment. The write SHALL commit in the same transaction as the snapshot, and a sync that fails or is retried SHALL leave exactly the records a single successful sync would have left. Events outside the catalog, entries with no run, and entries with no encounters SHALL be ignored.
+Opening sets `startedAt` and `progressAt` to the sync time; refreshing sets `progressAt` only. Both SHALL write the record's `lanes`, `points`, `catalogVersion` and `teams` from the incoming snapshot and the profile's plan at that moment, and SHALL write its roster snapshot (see `roster-snapshots`): opening inserts one, refreshing rewrites the record's existing one. The write SHALL commit in the same transaction as the snapshot, and a sync that fails or is retried SHALL leave exactly the records a single successful sync would have left. Events outside the catalog, entries with no run, and entries with no encounters SHALL be ignored.
 
 Assumptions:
 
@@ -28,13 +28,13 @@ Assumptions:
 
 - **GIVEN** that record, and a later sync whose Alpha entry adds battle 2 `{ objectivesCleared [0], highScore 30 }`
 - **WHEN** the sync completes
-- **THEN** the same record now has two Alpha encounters, a new `progressAt`, the unchanged `startedAt`, and the roster and teams as of this sync
+- **THEN** the same record now has two Alpha encounters, a new `progressAt`, the unchanged `startedAt`, and its roster snapshot and teams as of this sync
 
 #### Scenario: A sync with unchanged progress keeps the record frozen
 
 - **GIVEN** the record above, and the player ranks up a team member and syncs, with Uthar's encounters unchanged
 - **WHEN** the sync completes
-- **THEN** the record's `progressAt`, `roster` and `teams` are unchanged
+- **THEN** the record's `progressAt`, `teams` and roster snapshot are unchanged
 
 #### Scenario: The next run opens a new record
 
@@ -59,9 +59,9 @@ Assumptions:
 - **WHEN** the sync completes
 - **THEN** no Lysander record is opened
 
-### Requirement: A run record stores lanes, teams and roster as of its last progress
+### Requirement: A run record stores lanes, teams and a roster snapshot as of its last progress
 
-A run record SHALL store: `run` (1–3); `startedAt` and `progressAt` (UTC); the `catalogVersion` and the synced event `points` at `progressAt`; `lanes` with `alpha`, `beta`, `gamma`, each null (as synced) or the synced encounters in order as `{ objectivesCleared: int[], highScore: int }` (synced `encounterPoints` SHALL NOT be stored); `teams`, the profile's plan teams for the event at `progressAt` in lane then `sortOrder` order, each `{ teamId, laneId, name, sortOrder, memberUnitIds, reserveUnitId, objectiveIndexes, expectedBattleClears, expectedBattleClearsSource }` with the depth being that team's stored depth for the record's `run` or null (an empty list when there is no plan or no team); and `roster`, every owned character or MoW in the snapshot whose id is in the `availableUnitIds` of at least one lane of the event, ordered by `unitId`, each `{ unitId, progressionIndex, rank, xpLevel, appliedUpgradeSlots, abilities: [{ abilityId, level }] }` with `rank` null for a MoW. Records SHALL be scoped to the caller's profile and SHALL be removed with the account. Records SHALL NOT be editable through the API.
+A run record SHALL store: `run` (1–3); `startedAt` and `progressAt` (UTC); the `catalogVersion` and the synced event `points` at `progressAt`; `lanes` with `alpha`, `beta`, `gamma`, each null (as synced) or the synced encounters in order as `{ objectivesCleared: int[], highScore: int }` (synced `encounterPoints` SHALL NOT be stored); `teams`, the profile's plan teams for the event at `progressAt` in lane then `sortOrder` order, each `{ teamId, laneId, name, sortOrder, memberUnitIds, reserveUnitId, objectiveIndexes, expectedBattleClears, expectedBattleClearsSource }` with the depth being that team's stored depth for the record's `run` or null (an empty list when there is no plan or no team); and a reference to its own roster snapshot (`source` `legendaryEventRun`), which SHALL be null only when that snapshot has been removed. Records SHALL be scoped to the caller's profile and SHALL be removed with the account. Records SHALL NOT be editable through the API.
 
 #### Scenario: Teams snapshot carries the run's depth
 
@@ -69,11 +69,11 @@ A run record SHALL store: `run` (1–3); `startedAt` and `progressAt` (UTC); the
 - **WHEN** a sync opens a run 2 record
 - **THEN** its `teams` holds "Ultras" with those members and objectives, `expectedBattleClears` 7 and `expectedBattleClearsSource` `estimate`
 
-#### Scenario: Roster holds only owned units the event allows
+#### Scenario: Each record has its own roster snapshot
 
-- **GIVEN** the synced roster owns `ultraCalgar` (Diamond1, `Legendary:RedFiveStars`) and `tauFarsight`, Uthar's lanes allow `ultraCalgar` and not `tauFarsight`, and `ultraTigurius` is allowed but not owned
-- **WHEN** a sync opens an Uthar record
-- **THEN** `roster` contains `ultraCalgar` with rank `Diamond1` and progression `Legendary:RedFiveStars`, and contains neither `tauFarsight` nor `ultraTigurius`
+- **GIVEN** a sync opens an Uthar run 2 record while an Uthar run 1 record exists
+- **WHEN** the sync completes
+- **THEN** the run 2 record references a new `legendaryEventRun` roster snapshot and the run 1 record's snapshot is unchanged
 
 #### Scenario: Account purge removes records
 
@@ -82,7 +82,7 @@ A run record SHALL store: `run` (1–3); `startedAt` and `progressAt` (UTC); the
 
 ### Requirement: Run records are readable per event
 
-`GET /me/legendary-event-plans/{eventId}/run-records` SHALL return `LegendaryEventRunRecordsResponse { eventId, records }`, where `records` lists the caller's records for that event, newest `startedAt` first, each `{ id, run, startedAt, progressAt, catalogVersion, points, lanes, teams, roster }` in the stored shapes. A current catalog event with no records SHALL answer 200 with `records` `[]`. An id that is neither a current catalog `lres` id nor has any record for the caller SHALL answer 404. An event that left the catalog SHALL keep answering with its records.
+`GET /me/legendary-event-plans/{eventId}/run-records` SHALL return `LegendaryEventRunRecordsResponse { eventId, records }`, where `records` lists the caller's records for that event, newest `startedAt` first, each `{ id, run, startedAt, progressAt, catalogVersion, points, lanes, teams, rosterSnapshot }` in the stored shapes, where `rosterSnapshot` is the record's roster snapshot as `{ id, takenAt, catalogVersion, characters, mows }`, or null when it has been removed. A current catalog event with no records SHALL answer 200 with `records` `[]`. An id that is neither a current catalog `lres` id nor has any record for the caller SHALL answer 404. An event that left the catalog SHALL keep answering with its records.
 
 #### Scenario: Records newest first
 

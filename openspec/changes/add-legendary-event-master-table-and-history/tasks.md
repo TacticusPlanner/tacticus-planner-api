@@ -4,27 +4,27 @@ Companion apps change: `tacticus-planner-apps/openspec/changes/add-legendary-eve
 
 ## 1. Domain and persistence
 
-- [ ] 1.1 Add `LegendaryEventRunRecord` (`Id`, `ProfileId`, `EventId`, `Run`, `StartedAt`, `ProgressAt`, `CatalogVersion`, `Points`, `Lanes`, `Teams`, `Roster`) and the owned records `LegendaryEventRunRecordLanes`, `…Encounter`, `…TeamSnapshot`, `…RosterUnit`, `…Ability` under `src/TacticusPlanner.Domain/LegendaryEvents/` (design D1).
-- [ ] 1.2 EF configuration: table `legendary_event_run_records`, jsonb `lanes`/`teams`/`roster` via `ToJson()`, CHECK `run` 1–3, index `(profile_id, event_id, started_at desc)`, FK cascade from profiles, query filter on the current profile in `PlannerDbContext`.
-- [ ] 1.3 Migration `dotnet ef migrations add AddLegendaryEventRunRecords`; add a Postgres integration test asserting the CHECK rejects run 4 and account purge removes records.
+- [ ] 1.1 Add `RosterSnapshot` (`Id`, `ProfileId`, `Source`, `Name`, `TakenAt`, `CatalogVersion`, `Characters`, `Mows`) with its unit records under `src/TacticusPlanner.Domain/RosterSnapshots/` (design D4), and `LegendaryEventRunRecord` (`Id`, `ProfileId`, `EventId`, `Run`, `StartedAt`, `ProgressAt`, `CatalogVersion`, `Points`, `Lanes`, `Teams`, `RosterSnapshotId`) and the owned records `LegendaryEventRunRecordLanes`, `…Encounter`, `…TeamSnapshot`, `…RosterUnit`, `…Ability` under `src/TacticusPlanner.Domain/LegendaryEvents/` (design D1).
+- [ ] 1.2 EF configuration: table `roster_snapshots` (jsonb `characters`/`mows` via `ToJson()`, CHECK `source` in (`legendaryEventRun`), CHECK `name` length ≤ 60, index `(profile_id, taken_at desc)`, FK cascade from profiles); table `legendary_event_run_records` (jsonb `lanes`/`teams` via `ToJson()`, CHECK `run` 1–3, index `(profile_id, event_id, started_at desc)`, FK cascade from profiles, unique `roster_snapshot_id` FK set null on delete); query filters on both, query filter on the current profile in `PlannerDbContext`.
+- [ ] 1.3 Migration `dotnet ef migrations add AddLegendaryEventRunRecords`; add a Postgres integration test asserting the CHECKs reject run 4 and an unknown source, the unique snapshot reference, set-null on snapshot delete, and that account purge removes records and snapshots.
 
 ## 2. Capture at sync
 
-- [ ] 2.1 Add `Features/LegendaryEventPlans/LegendaryEventRunRecordRecorder.cs` with the open / refresh / no-op rule, the superset reset check, the teams snapshot with the run's depth and the roster scoped to the event's `availableUnitIds` (design D2–D4).
+- [ ] 2.1 Add `Features/LegendaryEventPlans/LegendaryEventRunRecordRecorder.cs` with the open / refresh / no-op rule, the superset reset check, the teams snapshot with the run's depth, and the roster snapshot inserted on open and rewritten in place on refresh (design D2–D4).
 - [ ] 2.2 Call it from `PlayerDataSyncService.SyncAsync` after `ApplyTransform` and before `SaveChangesAsync`, and on the unique-key retry path against the winner's row; verify a retried sync leaves one record.
-- [ ] 2.3 Tests (`LegendaryEventRunRecordRecorderTests.cs` unit, plus a sync endpoint test) for every scenario of "A run record is opened or refreshed on every sync" and "A run record stores lanes, teams and roster as of its last progress".
+- [ ] 2.3 Tests (`LegendaryEventRunRecordRecorderTests.cs` unit, plus a sync endpoint test) for every scenario of "A run record is opened or refreshed on every sync" and "A run record stores lanes, teams and a roster snapshot as of its last progress", plus every scenario of `specs/roster-snapshots/spec.md`.
 
 ## 3. Endpoints
 
 - [ ] 3.1 Add read mode to `LegendaryEventPlanEndpointBase.ResolveAsync`: a GET for an id outside the catalog returns the stored plan when one exists, else 404; writes unchanged (design D5).
 - [ ] 3.2 Add `GET me/legendary-event-plans` (`LegendaryEventPlanListResponse`) through `LegendaryEventPlanProjection`, ordered by `eventId` ordinal, with `Summary(...)`.
-- [ ] 3.3 Add `GET me/legendary-event-plans/{eventId}/run-records` (`LegendaryEventRunRecordsResponse`, newest first; 200 empty for a catalog id; 404 when neither catalog nor records) (design D6).
+- [ ] 3.3 Add `GET me/legendary-event-plans/{eventId}/run-records` (`LegendaryEventRunRecordsResponse` with the joined `rosterSnapshot`, newest first; 200 empty for a catalog id; 404 when neither catalog nor records) (design D6).
 - [ ] 3.4 Endpoint tests in `LegendaryEventPlanEndpointTests.cs` (or a sibling) for every scenario of the `legendary-event-plans` delta (stored plan outlives catalog, writes 404, list ordering, empty list, profile isolation) and of "Run records are readable per event".
 - [ ] 3.5 Verify the regenerated `artifacts/openapi/TacticusPlanner.Api.json` carries both endpoints and their response schemas, and that the apps change's hand-written types match it.
 
 ## 4. Docs
 
-- [ ] 4.1 In `tacticus-planner-docs`: add `legendary_event_run_records` to `architecture/data/events.md`; mark the feature spec's Stage 7 API bullets done and drop its finished-events rule; add the between-syncs capture risk to plan §8.
+- [ ] 4.1 In `tacticus-planner-docs`: add `legendary_event_run_records` to `architecture/data/events.md` and `roster_snapshots` to the player-data model, noting the later V1 roster-snapshots port; mark the feature spec's Stage 7 API bullets done and drop its finished-events rule; add the between-syncs capture risk to plan §8.
 
 ## 5. Gates
 

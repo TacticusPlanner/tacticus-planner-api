@@ -10,17 +10,18 @@ Stage 7 of the V2 Legendary Event plan ("Cross-event: master table and history",
 ## What Changes
 
 - **Plan list.** New `GET /me/legendary-event-plans` returns every stored plan of the caller in the existing `LegendaryEventPlanResponse` shape, ordered by `eventId`. A stored plan stays readable (list and single read) after its event leaves the catalog; writes to such a plan still 404.
-- **Run records captured at sync.** New table `legendary_event_run_records` (profile × event × run occurrence). On every successful player sync, for each catalog event in the incoming `lre-progress` chunk with a `currentEventRun`, the server opens a record when the run number changes or progress resets, and refreshes it whenever that event's lane progress changes. A record keeps the run number, when it was first seen and last changed, the event points, the compact per-lane encounters (`objectivesCleared`, `highScore`), the plan's teams with their depth for that run, and the progression of every owned unit the event allows, all as of the last sync that changed that run's progress. Written in the same transaction as the snapshot. Migration included; no backfill (history starts with the first sync after deploy).
+- **Run records captured at sync.** New table `legendary_event_run_records` (profile × event × run occurrence). On every successful player sync, for each catalog event in the incoming `lre-progress` chunk with a `currentEventRun`, the server opens a record when the run number changes or progress resets, and refreshes it whenever that event's lane progress changes. A record keeps the run number, when it was first seen and last changed, the event points, the compact per-lane encounters (`objectivesCleared`, `highScore`), and the plan's teams with their depth for that run, as of the last sync that changed that run's progress. The run's roster is stored as a row of a new general **`roster_snapshots`** table (whole owned roster: characters and MoWs with progression, rank, XP level, shards, abilities, upgrades and equipment) that the record points at. This lays the foundation for porting V1's roster snapshots feature later; only the run-record source is wired now, with no snapshot endpoints. Written in the same transaction as the snapshot. Migration included; no backfill (history starts with the first sync after deploy).
 - **Run records read.** New `GET /me/legendary-event-plans/{eventId}/run-records` returns the event's records, newest first.
 - **OpenAPI artifact** regenerated.
 
-Out of scope: the master table, tier list and history UI (client side, ADR 0009), adding finished events to the catalog (Severyn, 2026-10-16: not needed), any community aggregate of run records, editing or deleting run records, and capturing runs that start and end between two syncs (see design risks).
+Out of scope: manual or named roster snapshots, their endpoints and the V1 roster-snapshots import (the later port of V1 `/input/roster-snapshots`); the master table, tier list and history UI (client side, ADR 0009), adding finished events to the catalog (Severyn, 2026-10-16: not needed), any community aggregate of run records, editing or deleting run records, and capturing runs that start and end between two syncs (see design risks).
 
 ## Capabilities
 
 ### New Capabilities
 
 - `legendary-event-run-records`: when a run record is opened and refreshed during sync, what it stores, its read endpoint and served shape.
+- `roster-snapshots`: the general roster snapshot row (owner, source, name, time, whole owned roster), how run records create and rewrite theirs, and what is left for the later V1 port.
 
 ### Modified Capabilities
 
@@ -29,7 +30,7 @@ Out of scope: the master table, tier list and history UI (client side, ADR 0009)
 ## Impact
 
 - Companion apps change: `tacticus-planner-apps/openspec/changes/add-legendary-event-master-table-and-history`; apply API first. Shared contracts: `GET /api/v1/me/legendary-event-plans` (`LegendaryEventPlanListResponse`), `GET /api/v1/me/legendary-event-plans/{eventId}/run-records` (`LegendaryEventRunRecordsResponse`).
-- `src/TacticusPlanner.Domain/LegendaryEvents/` (new `LegendaryEventRunRecord`), `src/TacticusPlanner.Persistence` (configuration, query filter, one migration), `src/TacticusPlanner.Api/Features/PlayerData/PlayerDataSyncService.cs` (record capture), new `Features/LegendaryEventPlans/LegendaryEventRunRecordRecorder.cs`, `Features/LegendaryEventPlans/*` (list and run-records endpoints, read resolution), `artifacts/openapi/TacticusPlanner.Api.json`.
+- `src/TacticusPlanner.Domain/LegendaryEvents/` (new `LegendaryEventRunRecord`), new `src/TacticusPlanner.Domain/RosterSnapshots/` (`RosterSnapshot`), `src/TacticusPlanner.Persistence` (configuration, query filter, one migration), `src/TacticusPlanner.Api/Features/PlayerData/PlayerDataSyncService.cs` (record capture), new `Features/LegendaryEventPlans/LegendaryEventRunRecordRecorder.cs`, `Features/LegendaryEventPlans/*` (list and run-records endpoints, read resolution), `artifacts/openapi/TacticusPlanner.Api.json`.
 - Tests: `tests/TacticusPlanner.Api.Tests` (list, read after catalog drop, run-records endpoint, sync capture), `tests/TacticusPlanner.Persistence.IntegrationTests` (migration, constraints, cascade).
 - No infra change. The apps change also adds a Tier List page, which reads the already-served `horde-mode-tiers` dataset and needs nothing here.
-- Docs: `architecture/data/events.md` gains `legendary_event_run_records`; the feature spec's Stage 7 bullets are marked done and its "finished events enter the catalog" rule is dropped; plan §8 gains the between-syncs capture risk.
+- Docs: `architecture/data/events.md` gains `legendary_event_run_records`, and the player-data model page gains `roster_snapshots`; the feature spec's Stage 7 bullets are marked done and its "finished events enter the catalog" rule is dropped; plan §8 gains the between-syncs capture risk.
