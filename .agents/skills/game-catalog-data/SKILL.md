@@ -71,6 +71,11 @@ Raw `Data/**` records may still carry extra fields the models don't bind (`icon`
     the character roster — so adding a character changes every track that doesn't exclude its
     alliance/faction) and references its battles by `battleIds`. Event timing is `eventStageStartDatesUtc`
     (ISO-8601-UTC array, one element per stage; the client derives the current stage from it).
+    A track's `killPoints` is its **defeat-all base** (clients use it as the per-battle defeat-all points
+    in per-unit points), not a kill score: it **must equal `defeatAll[0]`** (later `defeatAll` values may
+    grow), and `defeatAll` must not be empty — enforced at load (`Validation/LreLanePointsValidation.cs`,
+    `InvalidLaneKillPoints`). Example: `lres-votanuthar.json` once carried `tauFarsight`'s 34 / 26 / 17
+    (copied from the wrong file) instead of 30 / 34 / 43, skewing every Uthar leaderboard figure.
   - **`lre-battles`** — the bulky per-battle records (`waves` trees), keyed `"{lreId}-{track}-{number}"`,
     tagged with `lreId` + `track`.
   - **`lre-common`** — a reward ladder (`pointsMilestones`, `chestsMilestones`, `progression`,

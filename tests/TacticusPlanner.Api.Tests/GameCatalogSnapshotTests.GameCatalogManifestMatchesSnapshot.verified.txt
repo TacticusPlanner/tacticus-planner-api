@@ -61,7 +61,7 @@
     },
     {
       key: lres,
-      hash: 9664dd42348f7a38886fc2daf809cc7d24595d5cde7a0bbf6372a869661da379,
+      hash: c1bc4535727a1700844d9f3df90393b7a8a50d95539b6c4286018da66fdc8b24,
       url: /api/v1/game-catalog/lres
     },
     {

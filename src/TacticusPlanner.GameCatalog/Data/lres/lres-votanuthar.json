@@ -38,7 +38,7 @@
       "label": "Necrons",
       "link": "https://tacticus.wiki.gg/wiki/Necrons#NPC_Units"
     },
-    "killPoints": 34,
+    "killPoints": 30,
     "battlesPoints": [
       29,
       31,
@@ -2671,7 +2671,7 @@
       "label": "AdMech and Black Templars",
       "link": "https://tacticus.wiki.gg/wiki/AdMech#NPC_Units"
     },
-    "killPoints": 26,
+    "killPoints": 34,
     "battlesPoints": [
       30,
       32,
@@ -5218,7 +5218,7 @@
       "label": "Death Guard",
       "link": "https://tacticus.wiki.gg/wiki/Death_Guard#NPC_Units"
     },
-    "killPoints": 17,
+    "killPoints": 43,
     "battlesPoints": [
       29,
       28,
