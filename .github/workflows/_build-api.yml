@@ -3,6 +3,11 @@ name: Build API
 on:
   workflow_call:
     inputs:
+      skip:
+        description: Skip the build (reports the check as skipped, which satisfies required checks).
+        required: false
+        type: boolean
+        default: false
       ref:
         description: Git ref to check out. Defaults to the triggering ref.
         required: false
@@ -17,6 +22,7 @@ on:
 jobs:
   build:
     name: Build API
+    if: ${{ !inputs.skip }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
