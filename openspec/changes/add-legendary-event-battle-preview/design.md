@@ -22,7 +22,7 @@ Raw `lres-*.json` and the served record share one C# record. Renaming the proper
 
 ### D3. Schema version
 
-A served field rename is a breaking shape change, so `GameCatalogRelease.SchemaVersion` goes from 5 to 6 (per the `game-catalog-data` skill). The manifest snapshot changes in `schemaVersion` and the `lres` / `lre-battles` hashes (`lres` because its raw source bytes change, if its hash covers them; the snapshot shows which).
+A served field rename is a breaking shape change, so `GameCatalogRelease.SchemaVersion` goes from 5 to 6 (per the `game-catalog-data` skill). The manifest snapshot changes in `schemaVersion` and the `lre-battles` hash only (`lres` hashes its denormalized payload, which carries battle ids, not waves).
 
 ### D4. No range validation
 
