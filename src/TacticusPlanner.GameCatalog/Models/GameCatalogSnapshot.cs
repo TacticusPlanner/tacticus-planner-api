@@ -16,6 +16,7 @@ public sealed record GameCatalogSnapshot(
     IReadOnlyList<GameCatalogOnslaughtReward> OnslaughtRewards,
     IReadOnlyList<GameCatalogEventDefinition> EventDefinitions,
     IReadOnlyList<GameCatalogEventOccurrence> EventOccurrences,
+    IReadOnlyList<GameCatalogHseScoring> HseScoring,
     IReadOnlyDictionary<string, GameCatalogFactionNpcs> NpcsByFaction,
     IReadOnlyDictionary<string, IReadOnlyList<GameCatalogEquipment>> EquipmentByType,
     IReadOnlyDictionary<string, IReadOnlyList<GameCatalogUpgrade>> UpgradesByRarity,

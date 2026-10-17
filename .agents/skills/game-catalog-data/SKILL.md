@@ -98,6 +98,10 @@ restrictions); these are silently ignored on deserialize.
 - **events** — `event-definitions` is served roughly as-is (structural rules); `events-calendar` is a
   date-indexed projection built from `event-definitions` + `event-occurrences` relative to load-time
   "now", so its hash (and `sourceHash`) legitimately changes every process start.
+  A Home Screen Event definition with an entry in the raw `home-screen-event-scoring.json` gets it merged
+  into its served `config` as `config.hse` (variants → tiers/milestones/repeat, trackers, modifiers; see
+  `EventsDenormalizer.BuildEventDefinitions`). An occurrence resolves its variant by `hseVariant`, else
+  `targetFactionId`, else `default`; validation fails the load when one resolves to nothing.
 
 ## Horde-mode tiers
 
@@ -217,6 +221,13 @@ genuine game changes.
   `node apps/web/scripts/generate-ability-text-i18n.mjs` in the apps repo (it reads this repo's `Data/**`
   and V1 from the sibling checkouts); it fails when the uncovered-id set or a relic ability icon drifts
   from its known gaps. Commit the regenerated locale files with the refresh.
+
+- **HSE scoring** (`Data/events/home-screen-event-scoring.json`): regenerate from V1's
+  `src/fsd/4-entities/homescreen_events/data/*.json` with
+  `python3 .agents/skills/game-catalog-data/scripts/import-hse-scoring.py ../tacticusplanner` (run from
+  this repo's root). Its `SOURCES` table maps each V1 file to a definition id and variant key; add a row
+  for a new V1 file (and the definition in `event-definitions.json` first), and give a new occurrence an
+  `hseVariant` parameter when its ladder isn't the definition's `default`. Guild-raid trackers are dropped.
 
 **Finish:** bump `GameVersion` (and usually `Version`) in `GameCatalogRelease.cs`; leave `SchemaVersion`
 unless a served shape changed. Then run the checklist below and promote the manifest snapshot.
