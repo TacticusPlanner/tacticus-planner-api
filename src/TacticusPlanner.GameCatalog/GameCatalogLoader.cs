@@ -38,6 +38,7 @@ public static class GameCatalogLoader
         var onslaughtRewards = LoadDataset<IReadOnlyList<GameCatalogOnslaughtReward>>(GameCatalogDatasets.OnslaughtRewards);
         var eventDefinitions = LoadDataset<IReadOnlyList<GameCatalogEventDefinition>>(GameCatalogDatasets.EventDefinitions);
         var eventOccurrences = LoadDataset<IReadOnlyList<GameCatalogEventOccurrence>>(GameCatalogDatasets.EventOccurrences);
+        var hseScoring = LoadDataset<IReadOnlyList<GameCatalogHseScoring>>(GameCatalogDatasets.HomeScreenEventScoring);
         var hordeModeTiersRaw = LoadDataset<IReadOnlyList<GameCatalogHordeModeTiers>>(GameCatalogDatasets.HordeModeTiers);
         var mythicQuests = LoadDataset<IReadOnlyList<GameCatalogRawMythicQuests>>(GameCatalogDatasets.MythicQuests);
 
@@ -95,7 +96,7 @@ public static class GameCatalogLoader
         var lreViews = GameCatalogDenormalizer.BuildLres(lresByEvent, unitsByFaction);
         var lreBattleViews = GameCatalogDenormalizer.BuildLreBattles(lresByEvent);
         var hordeModeTiersViews = GameCatalogDenormalizer.BuildHordeModeTiers(hordeModeTiersRaw);
-        var eventDefinitionViews = GameCatalogDenormalizer.BuildEventDefinitions(eventDefinitions);
+        var eventDefinitionViews = GameCatalogDenormalizer.BuildEventDefinitions(eventDefinitions, hseScoring);
         var loadTime = DateTimeOffset.UtcNow;
         var eventsCalendar = GameCatalogDenormalizer.BuildEventsCalendar(eventDefinitions, eventOccurrences, loadTime);
         var shopViews = GameCatalogDenormalizer.BuildShops(rawShopsBySourceKey);
@@ -145,6 +146,7 @@ public static class GameCatalogLoader
             new ReadOnlyCollection<GameCatalogOnslaughtReward>(onslaughtRewards.ToArray()),
             eventDefinitions,
             eventOccurrences,
+            new ReadOnlyCollection<GameCatalogHseScoring>(hseScoring.ToArray()),
             new ReadOnlyDictionary<string, GameCatalogFactionNpcs>(npcsByFaction),
             new ReadOnlyDictionary<string, IReadOnlyList<GameCatalogEquipment>>(equipmentByType),
             new ReadOnlyDictionary<string, IReadOnlyList<GameCatalogUpgrade>>(upgradesByRarity),

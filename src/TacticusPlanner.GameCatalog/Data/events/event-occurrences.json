@@ -200,7 +200,7 @@
     "definitionId": "hse-faction-focus",
     "startUtc": "2026-10-26T08:00:00Z",
     "endUtc": "2026-11-01T08:00:00Z",
-    "parameters": null
+    "parameters": { "hseVariant": "october-2026" }
   },
   {
     "id": "occ-2026-11-05-hse-warp-surge",

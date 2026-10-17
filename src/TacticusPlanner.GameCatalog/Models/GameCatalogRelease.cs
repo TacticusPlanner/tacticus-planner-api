@@ -8,7 +8,7 @@ namespace TacticusPlanner.GameCatalog.Models;
 public static class GameCatalogRelease
 {
     /// <summary>Human-readable release tag for the embedded snapshot.</summary>
-    public const string Version = "dev-2026-10-16";
+    public const string Version = "dev-2026-10-17";
 
     /// <summary>Denormalized payload schema version; bump when a served dataset's shape changes.</summary>
     public const int SchemaVersion = 5;

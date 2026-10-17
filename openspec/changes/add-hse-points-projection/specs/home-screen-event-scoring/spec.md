@@ -36,10 +36,13 @@ UnitFilter: {
 }
 Restriction: { allowed: string[] | null, disallowed: string[] | null }
 Modifier:
-  | { kind: "UnitXp", multiplier: number, gameModes: Restriction | null, player: UnitFilter | null }
+  | { kind: "UnitXp", multiplier: number | null, multiplierByRarity: { [rarity: string]: number } | null,
+      sameFactionTeam: boolean, gameModes: Restriction | null, player: UnitFilter | null }
   | { kind: "StatBoost", healthPct: int, damagePct: int, armourPct: int,
       gameModes: Restriction | null, player: UnitFilter | null }
 ```
+
+A `UnitXp` modifier carries exactly one of `multiplier` (flat) and `multiplierByRarity` (keyed by the unit's rarity, as in Training Rush and Warp Surge); `sameFactionTeam` is true when the bonus applies only to a full team of one faction. A `StatBoost` targets its units through `player.tags` (a trait) or `player.factionIds` (Faction Boost, 11th Edition). Fields of the other modifier kind are omitted.
 
 Game-mode ids SHALL be the catalog names `Arena`, `TournamentArena`, `Onslaught`, `SalvageRun`, `Campaign`, `MirrorCampaign`, `EliteCampaign`, `MirrorEliteCampaign`, `CampaignEvent`, `Survival`, `LegendaryEvent`, `MachinesOfWarEvent`, `GuildWars`, `LinearHeroEvent`. A `Restriction` passes a value when the value is not in `disallowed` and, if `allowed` is set, is in `allowed`. Existing `config` keys (`gameModes`, `statBonus`, `xpBonusTiers`) SHALL be kept. A definition without scoring data (Against the Tide) SHALL have no `config.hse`.
 

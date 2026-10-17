@@ -45,7 +45,7 @@ The import is a one-off script kept under `scripts/` (or the skill), not a build
 - Game-mode ids: `PvP` to `Arena`, `SyncPVP` to `TournamentArena`, `Waves` to `Onslaught`, `TreasureBeach` to `SalvageRun`; all other ids (`Campaign`, `MirrorCampaign`, `EliteCampaign`, `MirrorEliteCampaign`, `CampaignEvent`, `Survival`, `LegendaryEvent`, `MachinesOfWarEvent`, `GuildWars`, `LinearHeroEvent`) unchanged.
 - Trackers of type `raidBattles` are dropped: in every datamine they duplicate a `killUnits` tracker with the same points and restrictions.
 - Tracker `traitRestrictions` (enemy traits or alliance), `factionRestrictions` (enemy faction), `unitId` (enemy unit), `playerTraitRestrictions` (own unit traits or alliance) and `playerFactionRestrictions` (own unit faction) become the `enemy` and `player` filters.
-- Modifiers `unitXp` (`modifier` 300 with `percentageModifier`) become `UnitXp` with `multiplier` 3; `battleEnvironmentAbility` `EnvStatBoost:*` becomes `StatBoost` with the ability constants `healthPct`, `dmgPct`, `armorPct` and its `trait` as the player filter.
+- Modifiers `unitXp` (`modifier` 300 with `percentageModifier`) become `UnitXp` with `multiplier` 3; `battleEnvironmentAbility` `EnvStatBoost:*` becomes `StatBoost` with the ability constants `healthPct`, `dmgPct`, `armorPct` and its `trait` (or `factionId`) as the player filter; other environment abilities (such as Squig Smash's) are skipped. Rarity-scaled XP (`modifierByRarity`) becomes `multiplierByRarity`, and the same-faction-team flag becomes `sameFactionTeam`.
 - Display strings (`locaKey`, descriptions) and offers are not imported.
 
 ### D5. Validation
