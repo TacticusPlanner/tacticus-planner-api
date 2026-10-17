@@ -7466,6 +7466,10 @@
         "type": "object",
         "properties": {
           "imperial": {
+            "type": [
+              "null",
+              "object"
+            ],
             "oneOf": [
               {
                 "$ref": "#/components/schemas/TacticusPlannerApiFeaturesPlayerDataOverridesOnslaughtAllianceProgressRequest"
@@ -7473,6 +7477,10 @@
             ]
           },
           "xenos": {
+            "type": [
+              "null",
+              "object"
+            ],
             "oneOf": [
               {
                 "$ref": "#/components/schemas/TacticusPlannerApiFeaturesPlayerDataOverridesOnslaughtAllianceProgressRequest"
@@ -7480,6 +7488,10 @@
             ]
           },
           "chaos": {
+            "type": [
+              "null",
+              "object"
+            ],
             "oneOf": [
               {
                 "$ref": "#/components/schemas/TacticusPlannerApiFeaturesPlayerDataOverridesOnslaughtAllianceProgressRequest"
