@@ -128,8 +128,10 @@ reconciled field by field: `heroProgressionSteps` / `heroProgressionStepsMoW` (2
 `heroProgressionSteps` / `mowProgressionSteps` with a `step` index), `damageProfileModifiers`,
 `traitPowerModifiers`, `abilityPowerModifiers` (`{baseMultiplier}`, served as `modifier`), and
 `abilityPowerCurve` (`active`/`passive` by ability level − 1, `relic` by relic level − 1). `lineup.{unitId}`
-carries only `powerMultiplier` (percent, absent ⇒ 100) and, for characters, `upgradesStatIncrease` (one
-row per `rankUpUpgrades` row, same order as its `upgradeIds`). Modifier maps are served as lists sorted by
+carries only `powerMultiplier` (percent, absent ⇒ 100) and, for characters, V1's `upgrades` plus
+`upgradesStatIncrease` (one row per rank, each value the increase of the upgrade id at the same position).
+`upgrades` must equal the character's `rankUpUpgrades` ids in order, so a rank-up refresh that reorders or
+changes ids fails startup until the power rows are reconciled with it. Modifier maps are served as lists sorted by
 id; a trait or ability not listed is 100 (the catalog lacks V1's `Hero`/`MachineOfWar` traits, both 100).
 
 - **Source:** V1 `src/fsd/4-entities/unit/character-power/data/character-power-units.json` (same keys).
@@ -139,7 +141,7 @@ id; a trait or ability not listed is 100 (the catalog lacks V1's `Hero`/`Machine
 - **A new character or MoW needs a `lineup` entry** (and a damage type needs a `damageProfileModifiers`
   entry); otherwise startup fails. Unreleased lineup units are skipped.
 - Enforced at load (`Validation/UnitPowerValidation.cs`, `InvalidUnitPower`): 20 steps with positive
-  multipliers, a lineup entry per catalog unit, stat rows aligned with `rankUpUpgrades`, no negative
+  multipliers, a lineup entry per catalog unit, `upgrades` / stat rows aligned with `rankUpUpgrades`, no negative
   values, every rank-up upgrade raises Health/Damage/Armour, curves reach the highest ability level of
   `character-ability-costs` and the longest relic. A value change only moves this dataset's hash.
 

@@ -26,7 +26,8 @@ public static partial class GameCatalogValidator
     /// Validates the raw <c>unit-power</c> file against the catalog it powers: both progression lists have
     /// exactly 20 steps with positive multipliers; every catalog character and MoW has a <c>lineup</c>
     /// entry; a character's <c>upgradesStatIncrease</c> has a row for each catalog <c>rankUpUpgrades</c>
-    /// row, as long as that rank's <c>upgradeIds</c>; no value is negative; every rank-up upgrade id is a
+    /// row, as long as that rank's <c>upgradeIds</c>, and its <c>upgrades</c> rows equal those ids in
+    /// order (so each increase pairs with its upgrade); no value is negative; every rank-up upgrade id is a
     /// catalog upgrade raising Health, Damage or Armour; every non-empty character or NPC weapon damage
     /// type has a damage profile modifier; the active and passive curves reach the highest ability level
     /// <c>character-ability-costs</c> reaches; and no relic has more levels than the relic curve. Lineup
@@ -180,9 +181,15 @@ public static partial class GameCatalogValidator
                 Fail($"unit '{character.Id}' upgradesStatIncrease has {rows.Count} rows, fewer than its {character.RankUpUpgrades.Count} rankUpUpgrades rows.");
             }
 
+            var upgradeRows = entry.Upgrades ?? [];
             for (var index = 0; index < character.RankUpUpgrades.Count; index++)
             {
                 var rankUp = character.RankUpUpgrades[index];
+                if (index >= upgradeRows.Count || !upgradeRows[index].SequenceEqual(rankUp.UpgradeIds, StringComparer.Ordinal))
+                {
+                    Fail($"unit '{character.Id}' rank '{rankUp.Rank}' upgrades must equal the catalog rankUpUpgrades ids in the same order, so each upgradesStatIncrease value pairs with its upgrade.");
+                }
+
                 if (index < rows.Count && rows[index].Count != rankUp.UpgradeIds.Count)
                 {
                     Fail($"unit '{character.Id}' rank '{rankUp.Rank}' upgradesStatIncrease has {rows[index].Count} values, but the rank has {rankUp.UpgradeIds.Count} upgrade ids.");

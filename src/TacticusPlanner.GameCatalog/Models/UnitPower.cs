@@ -36,11 +36,14 @@ public sealed record GameCatalogRawAbilityPowerModifier(int BaseMultiplier);
 
 /// <summary>
 /// A unit's own power fields. <see cref="PowerMultiplier"/> is a percentage, absent meaning 100.
-/// <see cref="UpgradesStatIncrease"/> is one row per rank, aligned with the character's
-/// <c>rankUpUpgrades</c> upgrade ids (absent for MoWs).
+/// <see cref="UpgradesStatIncrease"/> is one row per rank, each value the stat increase of the upgrade id
+/// at the same position in <see cref="Upgrades"/> (V1's slot order); validation requires
+/// <see cref="Upgrades"/> to equal the character's catalog <c>rankUpUpgrades</c> ids, so a reordered or
+/// changed rank-up cannot silently pair an increase with the wrong upgrade. Both are absent for MoWs.
 /// </summary>
 public sealed record GameCatalogRawUnitPowerEntry(
     int? PowerMultiplier,
+    IReadOnlyList<IReadOnlyList<string>>? Upgrades,
     IReadOnlyList<IReadOnlyList<int>>? UpgradesStatIncrease
 );
 

@@ -120,7 +120,7 @@ public sealed class UnitPowerTests
     public void MissingPowerMultiplierDefaultsTo100AndRowsAreTruncatedToTheCatalogRanks()
     {
         var rows = Snapshot.UnitPower.Lineup["ultraTigurius"].UpgradesStatIncrease!;
-        var raw = WithLineup("ultraTigurius", new GameCatalogRawUnitPowerEntry(null, [.. rows, [1, 2, 3, 4, 5, 6]]));
+        var raw = WithLineup("ultraTigurius", Snapshot.UnitPower.Lineup["ultraTigurius"] with { PowerMultiplier = null, UpgradesStatIncrease = [.. rows, [1, 2, 3, 4, 5, 6]] });
 
         var record = Assert.Single(GameCatalogDenormalizer.BuildUnitPower(raw, Snapshot.Characters, Snapshot.Mows));
 
@@ -132,7 +132,7 @@ public sealed class UnitPowerTests
     [Fact]
     public void LineupUnitsTheCatalogDoesNotHaveAreSkipped()
     {
-        var raw = WithLineup("unreleasedHero", new GameCatalogRawUnitPowerEntry(110, [[1, 2, 3, 4, 5, 6]]));
+        var raw = WithLineup("unreleasedHero", new GameCatalogRawUnitPowerEntry(110, [["upgHpC003"]], [[1]]));
 
         var record = Assert.Single(GameCatalogDenormalizer.BuildUnitPower(raw, Snapshot.Characters, Snapshot.Mows));
 
@@ -159,7 +159,7 @@ public sealed class UnitPowerTests
         var rows = Snapshot.UnitPower.Lineup["ultraTigurius"].UpgradesStatIncrease!.ToArray();
         rows[0] = [1, 2, 3, 4, 5];
 
-        var errors = Validate(WithLineup("ultraTigurius", new GameCatalogRawUnitPowerEntry(null, rows)));
+        var errors = Validate(WithLineup("ultraTigurius", Snapshot.UnitPower.Lineup["ultraTigurius"] with { UpgradesStatIncrease = rows }));
 
         AssertSingleError(errors, "ultraTigurius", "Stone1");
     }
@@ -169,9 +169,22 @@ public sealed class UnitPowerTests
     {
         var rows = Snapshot.UnitPower.Lineup["ultraTigurius"].UpgradesStatIncrease!.Take(19).ToArray();
 
-        var errors = Validate(WithLineup("ultraTigurius", new GameCatalogRawUnitPowerEntry(null, rows)));
+        var errors = Validate(WithLineup("ultraTigurius", Snapshot.UnitPower.Lineup["ultraTigurius"] with { UpgradesStatIncrease = rows }));
 
         AssertSingleError(errors, "ultraTigurius", "19 rows");
+    }
+
+    [Fact]
+    public void RejectsRankUpIdsReorderedAgainstTheStatIncreases()
+    {
+        var tigurius = Assert.Single(Snapshot.Characters, character => character.Id == "ultraTigurius");
+        var rankUps = tigurius.RankUpUpgrades.ToArray();
+        var ids = rankUps[12].UpgradeIds;
+        rankUps[12] = rankUps[12] with { UpgradeIds = [ids[2], ids[1], ids[0], .. ids.Skip(3)] };
+
+        var errors = Validate(characters: [.. Snapshot.Characters.Where(c => c.Id != "ultraTigurius"), tigurius with { RankUpUpgrades = rankUps }]);
+
+        AssertSingleError(errors, "ultraTigurius", "Gold1");
     }
 
     [Fact]
@@ -198,8 +211,10 @@ public sealed class UnitPowerTests
         var tigurius = Assert.Single(Snapshot.Characters, character => character.Id == "ultraTigurius");
         var rankUps = tigurius.RankUpUpgrades.ToArray();
         rankUps[0] = rankUps[0] with { UpgradeIds = [.. rankUps[0].UpgradeIds.Take(5), "notAnUpgrade"] };
+        var entry = Snapshot.UnitPower.Lineup["ultraTigurius"];
+        var raw = WithLineup("ultraTigurius", entry with { Upgrades = [rankUps[0].UpgradeIds, .. entry.Upgrades!.Skip(1)] });
 
-        var errors = Validate(characters: [.. Snapshot.Characters.Where(c => c.Id != "ultraTigurius"), tigurius with { RankUpUpgrades = rankUps }]);
+        var errors = Validate(raw, characters: [.. Snapshot.Characters.Where(c => c.Id != "ultraTigurius"), tigurius with { RankUpUpgrades = rankUps }]);
 
         AssertSingleError(errors, "ultraTigurius", "notAnUpgrade");
     }
