@@ -1,6 +1,6 @@
 ﻿{
   version: dev-2026-10-16,
-  schemaVersion: 5,
+  schemaVersion: 6,
   gameVersion: 1.43,
   sourceHash: {time-dependent},
   datasets: [
@@ -56,7 +56,7 @@
     },
     {
       key: lre-battles,
-      hash: a88c8ae123a8e05508279e73221ba32d3319ce93ca87418cc0e7fdef679d8b0c,
+      hash: 7eff4417c7a928fb9ab871424c76115ccffc661acf8a869b983d90afa7951879,
       url: /api/v1/game-catalog/lre-battles
     },
     {
