@@ -24,7 +24,7 @@ Contract surface shared with the apps change: the served `unit-power` dataset (s
 - **Raw file is V1's shape.** `unit-power.json` keeps V1's `character-power-units.json` keys, trimmed to `lineup.{id}.{powerMultiplier, upgradesStatIncrease}` plus the global tables. Refreshing it each patch is then a mechanical copy and trim, which the `game-catalog-data` skill documents.
 - **Denormalization** (`UnitPowerDenormalizer`): it maps the raw file to the served shape, sorts the lists ordinally, defaults `powerMultiplier` to 100, truncates `upgradesStatIncrease` to the catalog row count, and emits `[]` for MoWs. Raw units that are not in the catalog are dropped.
 
-Manifest impact: one new entry `unit-power`. The manifest snapshot test and `GameCatalogRelease.SchemaVersion` (5 → 6) change. No EF Core migration, no endpoint change, and no change to `artifacts/openapi`.
+Manifest impact: one new entry `unit-power`. The manifest snapshot test and `GameCatalogRelease.SchemaVersion` (5 → 6) change. It is served at `/api/v1/game-catalog/unit-power` by a new `GetGameCatalogUnitPowerEndpoint` (one endpoint per served dataset), so `artifacts/openapi` regenerates. No EF Core migration.
 
 ## Risks / Trade-offs
 

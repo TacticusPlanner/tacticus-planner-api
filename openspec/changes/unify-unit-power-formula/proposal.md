@@ -26,4 +26,4 @@ Companion change: **`unify-unit-power-formula`** in `tacticus-planner-apps`. It 
 
 - `src/TacticusPlanner.GameCatalog`: new raw `Data/unit-power.json`, model `Models/UnitPower.cs`, denormalizer, validator, `GameCatalogDatasets.UnitPower`, manifest entry.
 - `tests/TacticusPlanner.GameCatalog.Tests`: denormalization, validation and manifest snapshot coverage.
-- No endpoint, EF Core schema or migration change. The dataset is served through the existing game-catalog routes and manifest.
+- One new endpoint, `/api/v1/game-catalog/unit-power` (one per served dataset, like the others), so the OpenAPI artifact regenerates. No EF Core schema or migration change.

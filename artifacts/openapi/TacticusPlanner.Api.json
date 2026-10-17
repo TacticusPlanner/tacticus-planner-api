@@ -489,6 +489,30 @@
         }
       }
     },
+    "/api/v1/game-catalog/unit-power": {
+      "get": {
+        "tags": [
+          "Game-Catalog"
+        ],
+        "summary": "Gets the unit power tables.",
+        "operationId": "TacticusPlannerApiFeaturesGameCatalogGetGameCatalogUnitPowerEndpoint",
+        "responses": {
+          "200": {
+            "description": "The single record of power tables the in-game power formula reads: hero and MoW progression multipliers, damage profile, trait and ability power modifiers (percent; a trait or ability not listed is 100), ability power curves, and each character's and MoW's power multiplier and per-rank upgrade stat increases.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TacticusPlannerApiFeaturesGameCatalogGameCatalogDatasetEnvelopeOfSystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogUnitPower"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
     "/api/v1/game-catalog/unlock-shard-costs": {
       "get": {
         "tags": [
@@ -3146,6 +3170,12 @@
           "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogRaidBossSeasonView"
         }
       },
+      "SystemCollectionsGenericIReadOnlyListOfSystemCollectionsGenericIReadOnlyListOfSystemInt32": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemInt32"
+        }
+      },
       "SystemCollectionsGenericIReadOnlyListOfSystemCollectionsGenericIReadOnlyListOfSystemString": {
         "type": "array",
         "items": {
@@ -3292,6 +3322,12 @@
           "$ref": "#/components/schemas/TacticusPlannerDomainPlayerDataChunksPlayerMowRecord"
         }
       },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogAbilityPowerModifier": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogAbilityPowerModifier"
+        }
+      },
       "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogAmountByRarity": {
         "type": "array",
         "items": {
@@ -3350,6 +3386,12 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogCharacterView"
+        }
+      },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogDamageProfileModifier": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogDamageProfileModifier"
         }
       },
       "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogEquipmentLevel": {
@@ -3422,6 +3464,12 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogGuildRaidMetaRecommendationView"
+        }
+      },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogHeroPowerStep": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogHeroPowerStep"
         }
       },
       "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogHordeModeCharacter": {
@@ -3500,6 +3548,12 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogMow"
+        }
+      },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogMowPowerStep": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogMowPowerStep"
         }
       },
       "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogMowUpgradeCostView": {
@@ -3614,6 +3668,24 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogShopView"
+        }
+      },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogTraitPowerModifier": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogTraitPowerModifier"
+        }
+      },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogUnitPower": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogUnitPower"
+        }
+      },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogUnitPowerUnit": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogUnitPowerUnit"
         }
       },
       "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogUnlockShardCostView": {
@@ -4582,6 +4654,50 @@
             "oneOf": [
               {
                 "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogShopView"
+              }
+            ]
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesGameCatalogGameCatalogDatasetEnvelopeOfSystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogUnitPower": {
+        "required": [
+          "version",
+          "schemaVersion",
+          "gameVersion",
+          "sourceHash",
+          "datasetKey",
+          "datasetHash",
+          "data"
+        ],
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "schemaVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gameVersion": {
+            "type": "string"
+          },
+          "sourceHash": {
+            "type": "string"
+          },
+          "datasetKey": {
+            "type": "string"
+          },
+          "datasetHash": {
+            "type": "string"
+          },
+          "data": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogUnitPower"
               }
             ]
           }
@@ -7350,10 +7466,6 @@
         "type": "object",
         "properties": {
           "imperial": {
-            "type": [
-              "null",
-              "object"
-            ],
             "oneOf": [
               {
                 "$ref": "#/components/schemas/TacticusPlannerApiFeaturesPlayerDataOverridesOnslaughtAllianceProgressRequest"
@@ -7361,10 +7473,6 @@
             ]
           },
           "xenos": {
-            "type": [
-              "null",
-              "object"
-            ],
             "oneOf": [
               {
                 "$ref": "#/components/schemas/TacticusPlannerApiFeaturesPlayerDataOverridesOnslaughtAllianceProgressRequest"
@@ -7372,10 +7480,6 @@
             ]
           },
           "chaos": {
-            "type": [
-              "null",
-              "object"
-            ],
             "oneOf": [
               {
                 "$ref": "#/components/schemas/TacticusPlannerApiFeaturesPlayerDataOverridesOnslaughtAllianceProgressRequest"
@@ -8459,6 +8563,41 @@
         }
       },
       "TacticusPlannerDomainPlayerDataUnitId": { },
+      "TacticusPlannerGameCatalogModelsGameCatalogAbilityPowerCurves": {
+        "required": [
+          "active",
+          "passive",
+          "relic"
+        ],
+        "type": "object",
+        "properties": {
+          "active": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemInt32"
+          },
+          "passive": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemInt32"
+          },
+          "relic": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemInt32"
+          }
+        }
+      },
+      "TacticusPlannerGameCatalogModelsGameCatalogAbilityPowerModifier": {
+        "required": [
+          "abilityId",
+          "modifier"
+        ],
+        "type": "object",
+        "properties": {
+          "abilityId": {
+            "type": "string"
+          },
+          "modifier": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "TacticusPlannerGameCatalogModelsGameCatalogAmountByRarity": {
         "required": [
           "rarity",
@@ -8890,6 +9029,22 @@
           }
         }
       },
+      "TacticusPlannerGameCatalogModelsGameCatalogDamageProfileModifier": {
+        "required": [
+          "damageType",
+          "modifier"
+        ],
+        "type": "object",
+        "properties": {
+          "damageType": {
+            "type": "string"
+          },
+          "modifier": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "TacticusPlannerGameCatalogModelsGameCatalogEquipmentLevel": {
         "required": [
           "stats"
@@ -9309,6 +9464,28 @@
           },
           "primes": {
             "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogGuildRaidMetaPrimeView"
+          }
+        }
+      },
+      "TacticusPlannerGameCatalogModelsGameCatalogHeroPowerStep": {
+        "required": [
+          "step",
+          "unitStatMultiplierPct",
+          "abilityPowerMultiplier"
+        ],
+        "type": "object",
+        "properties": {
+          "step": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "unitStatMultiplierPct": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "abilityPowerMultiplier": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -9829,6 +10006,28 @@
         "properties": {
           "name": {
             "type": "string"
+          }
+        }
+      },
+      "TacticusPlannerGameCatalogModelsGameCatalogMowPowerStep": {
+        "required": [
+          "step",
+          "abilityPowerMultiplier",
+          "mythicAbilityPower"
+        ],
+        "type": "object",
+        "properties": {
+          "step": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "abilityPowerMultiplier": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "mythicAbilityPower": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -10700,6 +10899,81 @@
           },
           "slots": {
             "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogShopSlotView"
+          }
+        }
+      },
+      "TacticusPlannerGameCatalogModelsGameCatalogTraitPowerModifier": {
+        "required": [
+          "traitId",
+          "modifier"
+        ],
+        "type": "object",
+        "properties": {
+          "traitId": {
+            "type": "string"
+          },
+          "modifier": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "TacticusPlannerGameCatalogModelsGameCatalogUnitPower": {
+        "required": [
+          "id",
+          "heroProgressionSteps",
+          "mowProgressionSteps",
+          "damageProfileModifiers",
+          "traitPowerModifiers",
+          "abilityPowerModifiers",
+          "abilityPowerCurves",
+          "units"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "heroProgressionSteps": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogHeroPowerStep"
+          },
+          "mowProgressionSteps": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogMowPowerStep"
+          },
+          "damageProfileModifiers": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogDamageProfileModifier"
+          },
+          "traitPowerModifiers": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogTraitPowerModifier"
+          },
+          "abilityPowerModifiers": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogAbilityPowerModifier"
+          },
+          "abilityPowerCurves": {
+            "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogAbilityPowerCurves"
+          },
+          "units": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogUnitPowerUnit"
+          }
+        }
+      },
+      "TacticusPlannerGameCatalogModelsGameCatalogUnitPowerUnit": {
+        "required": [
+          "unitId",
+          "powerMultiplier",
+          "rankUpStatIncreases"
+        ],
+        "type": "object",
+        "properties": {
+          "unitId": {
+            "type": "string"
+          },
+          "powerMultiplier": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rankUpStatIncreases": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemCollectionsGenericIReadOnlyListOfSystemInt32"
           }
         }
       },

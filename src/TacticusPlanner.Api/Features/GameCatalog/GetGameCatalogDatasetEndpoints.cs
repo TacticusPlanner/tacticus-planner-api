@@ -236,6 +236,20 @@ public sealed class GetGameCatalogHordeModeTiersEndpoint(IGameCatalogProvider ca
     }
 }
 
+public sealed class GetGameCatalogUnitPowerEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogUnitPower>>(catalog, GameCatalogDatasets.UnitPower)
+{
+    protected override IReadOnlyList<GameCatalogUnitPower> Payload => Snapshot.UnitPowerViews;
+
+    public override void Configure()
+    {
+        Get("game-catalog/unit-power");
+        ConfigureServed(
+            "Gets the unit power tables.",
+            "The single record of power tables the in-game power formula reads: hero and MoW progression multipliers, damage profile, trait and ability power modifiers (percent; a trait or ability not listed is 100), ability power curves, and each character's and MoW's power multiplier and per-rank upgrade stat increases.");
+    }
+}
+
 public sealed class GetGameCatalogEventDefinitionsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogEventDefinition>>(catalog, GameCatalogDatasets.EventDefinitionsServed)
 {

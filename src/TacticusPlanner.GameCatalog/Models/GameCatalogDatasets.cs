@@ -19,6 +19,9 @@ public static class GameCatalogDatasets
     // See Models/HordeModeTiers.cs.
     public const string HordeModeTiers = "horde-mode-tiers";
     public const string MythicQuests = "mythic-quests";
+    // unit-power is the single record of power tables, progression multipliers and per-unit power fields
+    // the client's in-game power formula reads (raw file: V1's game-config slice). See Models/UnitPower.cs.
+    public const string UnitPower = "unit-power";
 
     // Route/key prefixes for the split dataset families.
     public const string UnitsPrefix = "units";
@@ -275,6 +278,7 @@ public static class GameCatalogDatasets
         EventOccurrences,
         HordeModeTiers,
         MythicQuests,
+        UnitPower,
         .. NpcFactions,
         .. EquipmentTypes,
         .. UpgradeRarities,
@@ -366,5 +370,6 @@ public static class GameCatalogDatasets
         RaidBosses,
         GuildRaidMeta,
         MythicQuestsServed,
+        UnitPower,
     ];
 }

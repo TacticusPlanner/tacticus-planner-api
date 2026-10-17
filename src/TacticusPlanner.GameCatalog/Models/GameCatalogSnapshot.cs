@@ -32,6 +32,9 @@ public sealed record GameCatalogSnapshot(
     // Raw mythic quests (reward strings unparsed). Kept for validation — the reward parse and character /
     // equipment cross-reference checks run over the raw strings.
     IReadOnlyList<GameCatalogRawMythicQuests> MythicQuests,
+    // Raw unit-power file. Kept for validation — the lineup / damage-type / upgrade-stat checks run over
+    // the raw maps against the raw unit, npc and upgrade collections.
+    GameCatalogRawUnitPower UnitPower,
     // Served (denormalized) payloads — the public catalog surface.
     IReadOnlyList<GameCatalogCharacterView> CharacterViews,
     IReadOnlyList<GameCatalogNpc> NpcList,
@@ -52,7 +55,8 @@ public sealed record GameCatalogSnapshot(
     IReadOnlyList<GameCatalogShopView> ShopViews,
     GameCatalogRaidBossesView RaidBossesView,
     GameCatalogGuildRaidMetaView GuildRaidMetaView,
-    IReadOnlyList<GameCatalogMythicQuestsView> MythicQuestViews
+    IReadOnlyList<GameCatalogMythicQuestsView> MythicQuestViews,
+    IReadOnlyList<GameCatalogUnitPower> UnitPowerViews
 )
 {
     // The manifest served to clients: release metadata + per-dataset hash and download url. Built from the
