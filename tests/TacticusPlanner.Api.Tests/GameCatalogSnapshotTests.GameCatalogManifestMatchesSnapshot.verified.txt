@@ -1,6 +1,6 @@
 ﻿{
-  version: dev-2026-10-16,
-  schemaVersion: 6,
+  version: dev-2026-10-18,
+  schemaVersion: 7,
   gameVersion: 1.43,
   sourceHash: {time-dependent},
   datasets: [
@@ -98,6 +98,11 @@
       key: shops,
       hash: 247051ce08560fd23565b0e411964d11fdc476059a4f8f161a35835c1323932f,
       url: /api/v1/game-catalog/shops
+    },
+    {
+      key: unit-power,
+      hash: 57679ffb62bba11a21e538761b546fb16acb7544b93e3be6cc02e5df30242854,
+      url: /api/v1/game-catalog/unit-power
     },
     {
       key: unlock-shard-costs,
