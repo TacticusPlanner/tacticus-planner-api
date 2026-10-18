@@ -13,7 +13,7 @@
 - **D is ×1.00, same as untiered.** D means "evaluated, weak in horde modes"; untiered means "not evaluated". Neither penalises.
 - **Every character carries its own `multiplier`.** The tier default is then only a fallback for future entries without one.
 - **Ranges are not validated.** The (0, 5] bound stays. Enforcing per-tier ranges would block deliberate outliers for little gain.
-- **Raw dataset change only.** No denormalizer change; the served shape is unchanged, so `SchemaVersion` stays and only `Version` bumps. The manifest hash for `horde-mode-tiers` changes and the snapshot test is re-verified.
+- **Raw dataset change only.** No denormalizer change; the served shape is unchanged, so `SchemaVersion` stays; `Version` is already today's tag (`dev-2026-10-18`). The manifest hash for `horde-mode-tiers` changes and the snapshot test is re-verified.
 - **No EF Core migration.**
 
 ## Revised list

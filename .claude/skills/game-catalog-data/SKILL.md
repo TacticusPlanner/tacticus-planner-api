@@ -122,7 +122,8 @@ the apps code (not in the catalog), so ratio changes ship as a web release.
   listed once; `tier` must be one of the tier names. Rank by summoning value, AoE / multi-hit and
   sustain. **`multiplier`** is an optional per-character override in (0, 5] that replaces the tier's
   value for that character; every seeded character sets one, to rank it within its tier. Put the
-  evidence (estimate vs manual depth overrides) for a change in the PR description. It is omitted from the served JSON when not set.
+  evidence (estimate vs manual depth overrides) for a change in the PR description. It is omitted
+  from the served JSON when not set.
 - Enforced at load (`Validation/HordeModeTiersValidation.cs`, `InvalidHordeModeTiers`). A value change
   only moves this dataset's hash; no schema bump.
 
