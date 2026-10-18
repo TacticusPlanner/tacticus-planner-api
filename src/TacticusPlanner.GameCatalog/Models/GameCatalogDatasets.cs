@@ -14,6 +14,9 @@ public static class GameCatalogDatasets
     public const string OnslaughtRewards = "onslaught-rewards";
     public const string EventDefinitions = "event-definitions";
     public const string EventOccurrences = "event-occurrences";
+    // Raw per-definition HSE scoring (ladders, trackers, modifiers) imported from V1's datamine; merged into
+    // the served event-definitions as config.hse, never served on its own.
+    public const string HomeScreenEventScoring = "home-screen-event-scoring";
     // horde-mode-tiers is a single curated S/A/B/C tier list of characters for horde modes, with each
     // tier's power multiplier; denormalization only sorts the characters by unit id.
     // See Models/HordeModeTiers.cs.
@@ -276,6 +279,7 @@ public static class GameCatalogDatasets
         OnslaughtRewards,
         EventDefinitions,
         EventOccurrences,
+        HomeScreenEventScoring,
         HordeModeTiers,
         MythicQuests,
         UnitPower,
@@ -320,8 +324,8 @@ public static class GameCatalogDatasets
     // ladder; there is no shared ladder dataset (ladders differ between events).
     public const string Lres = "lres";
     public const string LreBattles = "lre-battles";
-    // event-definitions is served as-is (structural rules only, no denormalization needed beyond the
-    // raw->view pass-through). events-calendar is the denormalized, date-indexed projection built from
+    // event-definitions is served with each Home Screen Event definition's scoring merged into its config as
+    // config.hse (from the raw home-screen-event-scoring file). events-calendar is the denormalized, date-indexed projection built from
     // event-definitions + event-occurrences (see Denormalization/EventsDenormalizer.cs); raw
     // event-occurrences itself is never served directly — see design.md Decision 1 in
     // add-game-events-calendar-dataset.
