@@ -74,9 +74,11 @@ public sealed record GameCatalogLreWave(
     IReadOnlyList<GameCatalogLreEnemy> Enemies
 );
 
+// A wave enemy: the npc id, its 1-based position in that npc's served stats ladder (V1's N in "{npcId}:{N}";
+// not a star count, and not checked against the ladder length) and how many of it the wave spawns.
 public sealed record GameCatalogLreEnemy(
     string Id,
-    int Stars,
+    int LadderIndex,
     int Count
 );
 

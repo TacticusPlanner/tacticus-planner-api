@@ -9624,7 +9624,7 @@
       "TacticusPlannerGameCatalogModelsGameCatalogLreEnemy": {
         "required": [
           "id",
-          "stars",
+          "ladderIndex",
           "count"
         ],
         "type": "object",
@@ -9632,7 +9632,7 @@
           "id": {
             "type": "string"
           },
-          "stars": {
+          "ladderIndex": {
             "type": "integer",
             "format": "int32"
           },

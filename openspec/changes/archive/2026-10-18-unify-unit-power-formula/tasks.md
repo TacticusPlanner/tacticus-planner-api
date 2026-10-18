@@ -9,7 +9,7 @@
 
 - [x] 2.1 Implement `UnitPowerDenormalizer` (sorting, `powerMultiplier` default 100, truncation to the catalog row count, `[]` for MoWs, skipping non-catalog units), and verify with denormalization tests for the Tigurius, Biovore and missing-multiplier scenarios.
 - [x] 2.2 Implement `UnitPowerValidation` for every rejection listed in the spec, and verify with one validation test per rule (new character, misaligned row, unknown damage type, short curve, relic levels, non-positive multiplier).
-- [x] 2.3 Register the dataset in the manifest, bump `GameCatalogRelease.SchemaVersion` to 6 and `Version`, add `GetGameCatalogUnitPowerEndpoint` (`/api/v1/game-catalog/unit-power`) and regenerate `artifacts/openapi`, update the manifest snapshot test, and verify `unit-power` appears with a hash.
+- [x] 2.3 Register the dataset in the manifest, bump `GameCatalogRelease.SchemaVersion` to 7 and `Version`, add `GetGameCatalogUnitPowerEndpoint` (`/api/v1/game-catalog/unit-power`) and regenerate `artifacts/openapi`, update the manifest snapshot test, and verify `unit-power` appears with a hash.
 
 ## 3. Documentation
 

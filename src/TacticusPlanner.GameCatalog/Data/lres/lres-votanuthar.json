@@ -165,7 +165,7 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 2,
+                "ladderIndex": 2,
                 "count": 6
               }
             ]
@@ -176,7 +176,7 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 2,
+                "ladderIndex": 2,
                 "count": 4
               }
             ]
@@ -187,7 +187,7 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 2,
+                "ladderIndex": 2,
                 "count": 4
               }
             ]
@@ -198,7 +198,7 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 2,
+                "ladderIndex": 2,
                 "count": 5
               }
             ]
@@ -209,12 +209,12 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 2,
+                "ladderIndex": 2,
                 "count": 2
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 3,
+                "ladderIndex": 3,
                 "count": 2
               }
             ]
@@ -225,7 +225,7 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 2,
+                "ladderIndex": 2,
                 "count": 6
               }
             ]
@@ -253,12 +253,12 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 4,
+                "ladderIndex": 4,
                 "count": 5
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 5,
+                "ladderIndex": 5,
                 "count": 2
               }
             ]
@@ -269,7 +269,7 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 4,
+                "ladderIndex": 4,
                 "count": 6
               }
             ]
@@ -280,7 +280,7 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 4,
+                "ladderIndex": 4,
                 "count": 4
               }
             ]
@@ -291,7 +291,7 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 4,
+                "ladderIndex": 4,
                 "count": 4
               }
             ]
@@ -302,7 +302,7 @@
             "enemies": [
               {
                 "id": "necroNpc1Warrior",
-                "stars": 5,
+                "ladderIndex": 5,
                 "count": 4
               }
             ]
@@ -313,12 +313,12 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 4,
+                "ladderIndex": 4,
                 "count": 4
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 2
               }
             ]
@@ -346,12 +346,12 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 5,
+                "ladderIndex": 5,
                 "count": 3
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 4
               }
             ]
@@ -362,12 +362,12 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 5,
+                "ladderIndex": 5,
                 "count": 2
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 4
               }
             ]
@@ -378,12 +378,12 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 5,
+                "ladderIndex": 5,
                 "count": 3
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 2
               }
             ]
@@ -394,12 +394,12 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 2
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 3
               }
             ]
@@ -410,7 +410,7 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 6
               }
             ]
@@ -421,17 +421,17 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 2
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 2
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 2
               }
             ]
@@ -459,17 +459,17 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 4
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 2
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 1
               }
             ]
@@ -480,12 +480,12 @@
             "enemies": [
               {
                 "id": "necroNpc5Swarm",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 2
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 4
               }
             ]
@@ -496,12 +496,12 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 2
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 5
               }
             ]
@@ -512,12 +512,12 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 3
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 3
               }
             ]
@@ -528,17 +528,17 @@
             "enemies": [
               {
                 "id": "necroNpc5Swarm",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 1
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 4
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 1
               }
             ]
@@ -549,7 +549,7 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 7
               }
             ]
@@ -577,17 +577,17 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 5
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 2
               },
               {
                 "id": "necroNpc5Swarm",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 2
               }
             ]
@@ -598,12 +598,12 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 2
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 3
               }
             ]
@@ -614,17 +614,17 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 2
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 3
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 1
               }
             ]
@@ -635,17 +635,17 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 3
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 2
               },
               {
                 "id": "necroNpc5Swarm",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 1
               }
             ]
@@ -656,12 +656,12 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 5
               },
               {
                 "id": "necroNpc5Swarm",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 2
               }
             ]
@@ -672,17 +672,17 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 3
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 2
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 3
               }
             ]
@@ -710,17 +710,17 @@
             "enemies": [
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 1
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 3
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 3
               }
             ]
@@ -731,17 +731,17 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 3
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 5
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 1
               }
             ]
@@ -752,17 +752,17 @@
             "enemies": [
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 1
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 1
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 5
               }
             ]
@@ -773,12 +773,12 @@
             "enemies": [
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 1
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 5
               }
             ]
@@ -789,17 +789,17 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 2
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 5
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 1
               }
             ]
@@ -810,17 +810,17 @@
             "enemies": [
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 2
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 2
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 2
               }
             ]
@@ -848,22 +848,22 @@
             "enemies": [
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 1
               },
               {
                 "id": "necroNpc5Swarm",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 2
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 2
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 3
               }
             ]
@@ -874,12 +874,12 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 4
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 2
               }
             ]
@@ -890,22 +890,22 @@
             "enemies": [
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 1
               },
               {
                 "id": "necroNpc5Swarm",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 1
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 4
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 1
               }
             ]
@@ -916,17 +916,17 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 2
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 6
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 1
               }
             ]
@@ -937,7 +937,7 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 8
               }
             ]
@@ -948,17 +948,17 @@
             "enemies": [
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 2
               },
               {
                 "id": "necroNpc5Swarm",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 1
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 4
               }
             ]
@@ -986,17 +986,17 @@
             "enemies": [
               {
                 "id": "necroNpc5Swarm",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 2
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 4
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 3
               }
             ]
@@ -1007,12 +1007,12 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 5
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 2
               }
             ]
@@ -1023,17 +1023,17 @@
             "enemies": [
               {
                 "id": "necroNpc5Swarm",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 2
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 3
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 2
               }
             ]
@@ -1044,12 +1044,12 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 5
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 4
               }
             ]
@@ -1060,12 +1060,12 @@
             "enemies": [
               {
                 "id": "necroNpc1Warrior",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 6
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 3
               }
             ]
@@ -1076,17 +1076,17 @@
             "enemies": [
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 2
               },
               {
                 "id": "necroNpc5Swarm",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 2
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 2
               }
             ]
@@ -1114,12 +1114,12 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 6
               },
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 2
               }
             ]
@@ -1130,17 +1130,17 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 3
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 3
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 1
               }
             ]
@@ -1151,17 +1151,17 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 3
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 5
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 1
               }
             ]
@@ -1172,12 +1172,12 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 6
               },
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 1
               }
             ]
@@ -1188,22 +1188,22 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 2
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 3
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 1
               },
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 1
               }
             ]
@@ -1214,22 +1214,22 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 3
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 4
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 1
               },
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 1
               }
             ]
@@ -1257,22 +1257,22 @@
             "enemies": [
               {
                 "id": "necroBossDestroyer",
-                "stars": 4,
+                "ladderIndex": 4,
                 "count": 1
               },
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 1
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 2
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 4
               }
             ]
@@ -1283,22 +1283,22 @@
             "enemies": [
               {
                 "id": "necroBossPlasmancer",
-                "stars": 2,
+                "ladderIndex": 2,
                 "count": 1
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 4
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 2
               },
               {
                 "id": "necroNpc5Swarm",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 2
               }
             ]
@@ -1309,12 +1309,12 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 3
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 4
               }
             ]
@@ -1325,17 +1325,17 @@
             "enemies": [
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 2
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 4
               },
               {
                 "id": "necroNpc5Swarm",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 2
               }
             ]
@@ -1346,17 +1346,17 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 5
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 2
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 2
               }
             ]
@@ -1367,22 +1367,22 @@
             "enemies": [
               {
                 "id": "necroBossWarden",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 1
               },
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 1
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 4
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 2
               }
             ]
@@ -1410,17 +1410,17 @@
             "enemies": [
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 1
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 5
               },
               {
                 "id": "necroNpc5Swarm",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 2
               }
             ]
@@ -1431,22 +1431,22 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 3
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 4
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 1
               },
               {
                 "id": "necroNpc5Swarm",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 1
               }
             ]
@@ -1457,17 +1457,17 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 3
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 4
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 1
               }
             ]
@@ -1478,22 +1478,22 @@
             "enemies": [
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 1
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 3
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 3
               },
               {
                 "id": "necroNpc5Swarm",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 1
               }
             ]
@@ -1504,17 +1504,17 @@
             "enemies": [
               {
                 "id": "necroBossSpyderLEG",
-                "stars": 2,
+                "ladderIndex": 2,
                 "count": 1
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 2
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 3
               }
             ]
@@ -1525,22 +1525,22 @@
             "enemies": [
               {
                 "id": "necroBossWarden",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 1
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 3
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 2
               },
               {
                 "id": "necroNpc5Swarm",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 2
               }
             ]
@@ -1568,22 +1568,22 @@
             "enemies": [
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 2
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 4
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 1
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 2
               }
             ]
@@ -1594,22 +1594,22 @@
             "enemies": [
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 1
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 4
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 3
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 1
               }
             ]
@@ -1620,22 +1620,22 @@
             "enemies": [
               {
                 "id": "necroNpc5Swarm",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 2
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 5
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 1
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 2
               }
             ]
@@ -1646,22 +1646,22 @@
             "enemies": [
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 2
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 3
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 2
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 1
               }
             ]
@@ -1672,22 +1672,22 @@
             "enemies": [
               {
                 "id": "necroNpc5Swarm",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 2
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 2
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 4
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 2
               }
             ]
@@ -1698,22 +1698,22 @@
             "enemies": [
               {
                 "id": "necroBossOverlord",
-                "stars": 2,
+                "ladderIndex": 2,
                 "count": 1
               },
               {
                 "id": "necroBossDestroyer",
-                "stars": 5,
+                "ladderIndex": 5,
                 "count": 1
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 2
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 3
               }
             ]
@@ -1741,27 +1741,27 @@
             "enemies": [
               {
                 "id": "necroNpc5Swarm",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 1
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 3
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 2
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 1
               },
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 2
               }
             ]
@@ -1772,22 +1772,22 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 5
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 2
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 2
               },
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 1
               }
             ]
@@ -1798,22 +1798,22 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 5
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 2
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 1
               },
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 1
               }
             ]
@@ -1824,12 +1824,12 @@
             "enemies": [
               {
                 "id": "necroNpc5Swarm",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 1
               },
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 4
               }
             ]
@@ -1840,22 +1840,22 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 4
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 2
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 1
               },
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 2
               }
             ]
@@ -1866,22 +1866,22 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 4
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 1
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 2
               },
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 2
               }
             ]
@@ -1909,22 +1909,22 @@
             "enemies": [
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 1
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 3
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 4
               },
               {
                 "id": "necroNpc5Swarm",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 2
               }
             ]
@@ -1935,17 +1935,17 @@
             "enemies": [
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 3
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 4
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 4
               }
             ]
@@ -1956,17 +1956,17 @@
             "enemies": [
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 1
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 6
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 2
               }
             ]
@@ -1977,22 +1977,22 @@
             "enemies": [
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 1
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 4
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 3
               },
               {
                 "id": "necroNpc5Swarm",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 1
               }
             ]
@@ -2003,12 +2003,12 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 6
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 4
               }
             ]
@@ -2019,22 +2019,22 @@
             "enemies": [
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 2
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 3
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 4
               },
               {
                 "id": "necroNpc5Swarm",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 1
               }
             ]
@@ -2062,22 +2062,22 @@
             "enemies": [
               {
                 "id": "necroNpc5Swarm",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 3
               },
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 1
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 2
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 5
               }
             ]
@@ -2088,22 +2088,22 @@
             "enemies": [
               {
                 "id": "necroNpc5Swarm",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 2
               },
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 1
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 5
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 2
               }
             ]
@@ -2114,17 +2114,17 @@
             "enemies": [
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 2
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 2
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 6
               }
             ]
@@ -2135,22 +2135,22 @@
             "enemies": [
               {
                 "id": "necroNpc5Swarm",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 1
               },
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 1
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 2
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 7
               }
             ]
@@ -2161,22 +2161,22 @@
             "enemies": [
               {
                 "id": "necroNpc5Swarm",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 2
               },
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 2
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 2
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 2
               }
             ]
@@ -2187,22 +2187,22 @@
             "enemies": [
               {
                 "id": "necroNpc5Swarm",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 2
               },
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 2
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 2
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 3
               }
             ]
@@ -2230,12 +2230,12 @@
             "enemies": [
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 2
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 29,
+                "ladderIndex": 29,
                 "count": 8
               }
             ]
@@ -2246,12 +2246,12 @@
             "enemies": [
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 4
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 4
               }
             ]
@@ -2262,12 +2262,12 @@
             "enemies": [
               {
                 "id": "necroNpc1Warrior",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 5
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 29,
+                "ladderIndex": 29,
                 "count": 5
               }
             ]
@@ -2278,12 +2278,12 @@
             "enemies": [
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 2
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 29,
+                "ladderIndex": 29,
                 "count": 8
               }
             ]
@@ -2294,12 +2294,12 @@
             "enemies": [
               {
                 "id": "necroNpc1Warrior",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 8
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 29,
+                "ladderIndex": 29,
                 "count": 2
               }
             ]
@@ -2310,17 +2310,17 @@
             "enemies": [
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 2
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 4
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 29,
+                "ladderIndex": 29,
                 "count": 3
               }
             ]
@@ -2348,17 +2348,17 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 4
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 6
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 1
               }
             ]
@@ -2369,17 +2369,17 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 2
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 5
               },
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 3
               }
             ]
@@ -2390,22 +2390,22 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 4
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 2
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 2
               },
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 1
               }
             ]
@@ -2416,22 +2416,22 @@
             "enemies": [
               {
                 "id": "necroNpc5Swarm",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 2
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 2
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 4
               },
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 2
               }
             ]
@@ -2442,22 +2442,22 @@
             "enemies": [
               {
                 "id": "necroNpc5Swarm",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 2
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 4
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 2
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 3
               }
             ]
@@ -2468,17 +2468,17 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 3
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 4
               },
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 3
               }
             ]
@@ -2506,27 +2506,27 @@
             "enemies": [
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 1
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 2
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 3
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 3
               },
               {
                 "id": "necroNpc5Swarm",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 2
               }
             ]
@@ -2537,17 +2537,17 @@
             "enemies": [
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 1
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 5
               },
               {
                 "id": "necroNpc5Swarm",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 2
               }
             ]
@@ -2558,22 +2558,22 @@
             "enemies": [
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 3
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 5
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 2
               },
               {
                 "id": "necroNpc5Swarm",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 1
               }
             ]
@@ -2584,22 +2584,22 @@
             "enemies": [
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 1
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 2
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 4
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 3
               }
             ]
@@ -2610,27 +2610,27 @@
             "enemies": [
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 1
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 3
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 5
               },
               {
                 "id": "necroNpc3Deathmark",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 1
               },
               {
                 "id": "necroNpc5Swarm",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 1
               }
             ]
@@ -2641,22 +2641,22 @@
             "enemies": [
               {
                 "id": "necroNpc4Destroyer",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 2
               },
               {
                 "id": "necroNpc2FlayedOne",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 2
               },
               {
                 "id": "necroNpc1Warrior",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 2
               },
               {
                 "id": "necroNpc5Swarm",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 2
               }
             ]
@@ -2801,7 +2801,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 2,
+                "ladderIndex": 2,
                 "count": 7
               }
             ]
@@ -2812,7 +2812,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 2,
+                "ladderIndex": 2,
                 "count": 5
               }
             ]
@@ -2823,7 +2823,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 2,
+                "ladderIndex": 2,
                 "count": 4
               }
             ]
@@ -2834,7 +2834,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 2,
+                "ladderIndex": 2,
                 "count": 4
               }
             ]
@@ -2845,7 +2845,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 2,
+                "ladderIndex": 2,
                 "count": 3
               }
             ]
@@ -2856,7 +2856,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 2,
+                "ladderIndex": 2,
                 "count": 7
               }
             ]
@@ -2887,12 +2887,12 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 5,
+                "ladderIndex": 5,
                 "count": 5
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 5,
+                "ladderIndex": 5,
                 "count": 2
               }
             ]
@@ -2903,7 +2903,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 5,
+                "ladderIndex": 5,
                 "count": 5
               }
             ]
@@ -2914,7 +2914,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 5,
+                "ladderIndex": 5,
                 "count": 4
               }
             ]
@@ -2925,7 +2925,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 5,
+                "ladderIndex": 5,
                 "count": 5
               }
             ]
@@ -2936,12 +2936,12 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 5,
+                "ladderIndex": 5,
                 "count": 3
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 5,
+                "ladderIndex": 5,
                 "count": 1
               }
             ]
@@ -2952,12 +2952,12 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 5,
+                "ladderIndex": 5,
                 "count": 6
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 1
               }
             ]
@@ -2988,7 +2988,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 8
               }
             ]
@@ -2999,12 +2999,12 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 3
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 3
               }
             ]
@@ -3015,7 +3015,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 7
               }
             ]
@@ -3026,12 +3026,12 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 2
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 3
               }
             ]
@@ -3042,7 +3042,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 7
               }
             ]
@@ -3053,12 +3053,12 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 5
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 2
               }
             ]
@@ -3089,12 +3089,12 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 6
               }
             ]
@@ -3105,12 +3105,12 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 3
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 2
               }
             ]
@@ -3121,12 +3121,12 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 1
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 7
               }
             ]
@@ -3137,12 +3137,12 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 1
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 5
               }
             ]
@@ -3153,7 +3153,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 8
               }
             ]
@@ -3164,17 +3164,17 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 3
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 2
               }
             ]
@@ -3205,12 +3205,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 6
               }
             ]
@@ -3221,12 +3221,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 4
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 3
               }
             ]
@@ -3237,12 +3237,12 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 3
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 2
               }
             ]
@@ -3253,7 +3253,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 7
               }
             ]
@@ -3264,17 +3264,17 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 2
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 2
               }
             ]
@@ -3285,12 +3285,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 4
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 5
               }
             ]
@@ -3321,17 +3321,17 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 2
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 3
               }
             ]
@@ -3342,17 +3342,17 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 3
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 2
               }
             ]
@@ -3363,12 +3363,12 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 5
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 2
               }
             ]
@@ -3379,12 +3379,12 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 1
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 5
               }
             ]
@@ -3395,12 +3395,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 5
               }
             ]
@@ -3411,17 +3411,17 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 2
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 4
               }
             ]
@@ -3452,17 +3452,17 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 1
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 4
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 2
               }
             ]
@@ -3473,12 +3473,12 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 6
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 2
               }
             ]
@@ -3489,12 +3489,12 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 4
               }
             ]
@@ -3505,12 +3505,12 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 7
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 2
               }
             ]
@@ -3521,17 +3521,17 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 3
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 2
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 1
               }
             ]
@@ -3542,17 +3542,17 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 1
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 5
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 1
               }
             ]
@@ -3583,17 +3583,17 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 3
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 5
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 1
               }
             ]
@@ -3604,12 +3604,12 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 1
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 5
               }
             ]
@@ -3620,22 +3620,22 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 1
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 2
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 2
               }
             ]
@@ -3646,12 +3646,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 5
               }
             ]
@@ -3662,17 +3662,17 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 1
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 4
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 1
               }
             ]
@@ -3683,17 +3683,17 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 1
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 3
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 5
               }
             ]
@@ -3724,17 +3724,17 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 5
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 2
               }
             ]
@@ -3745,12 +3745,12 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 6
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 1
               }
             ]
@@ -3761,22 +3761,22 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 1
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 1
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 3
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 3
               }
             ]
@@ -3787,17 +3787,17 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 3
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 1
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 2
               }
             ]
@@ -3808,12 +3808,12 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 4
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 3
               }
             ]
@@ -3824,17 +3824,17 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 4
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 2
               }
             ]
@@ -3865,22 +3865,22 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 3
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 2
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 1
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 2
               }
             ]
@@ -3891,12 +3891,12 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 1
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 6
               }
             ]
@@ -3907,22 +3907,22 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 2
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 2
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 2
               }
             ]
@@ -3933,12 +3933,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 7
               }
             ]
@@ -3949,22 +3949,22 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 1
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 3
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 1
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 2
               }
             ]
@@ -3975,22 +3975,22 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 3
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 1
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 1
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 2
               }
             ]
@@ -4021,22 +4021,22 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 3
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 2
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 1
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 2
               }
             ]
@@ -4047,22 +4047,22 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 3
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 2
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 1
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 1
               }
             ]
@@ -4073,22 +4073,22 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 2
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 2
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 1
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 2
               }
             ]
@@ -4099,12 +4099,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 1
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 8
               }
             ]
@@ -4115,22 +4115,22 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 2
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 1
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 1
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 4
               }
             ]
@@ -4141,22 +4141,22 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 4
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 2
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 1
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 1
               }
             ]
@@ -4187,17 +4187,17 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 3
               },
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 3
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 2
               }
             ]
@@ -4208,17 +4208,17 @@
             "enemies": [
               {
                 "id": "admecBossMarshallLEG",
-                "stars": 2,
+                "ladderIndex": 2,
                 "count": 1
               },
               {
                 "id": "admecBossManipulusLEG",
-                "stars": 2,
+                "ladderIndex": 2,
                 "count": 1
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 5
               }
             ]
@@ -4229,17 +4229,17 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 5
               },
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 2
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 2
               }
             ]
@@ -4250,17 +4250,17 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 3
               },
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 3
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 1
               }
             ]
@@ -4271,17 +4271,17 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 4
               },
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 3
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 1
               }
             ]
@@ -4292,17 +4292,17 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 3
               },
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 2
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 3
               }
             ]
@@ -4333,17 +4333,17 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 4
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 2
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 3
               }
             ]
@@ -4354,17 +4354,17 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 3
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 3
               },
               {
                 "id": "admecBossDestroyer",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 1
               }
             ]
@@ -4375,17 +4375,17 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 3
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 3
               }
             ]
@@ -4396,7 +4396,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 9
               }
             ]
@@ -4407,17 +4407,17 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 1
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 5
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 3
               }
             ]
@@ -4428,17 +4428,17 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 4
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 2
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 3
               }
             ]
@@ -4469,22 +4469,22 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 3
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 1
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 5
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 1
               }
             ]
@@ -4495,22 +4495,22 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 1
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 5
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 1
               }
             ]
@@ -4521,22 +4521,22 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 2
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 1
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 4
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 2
               }
             ]
@@ -4547,27 +4547,27 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 1
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 1
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 3
               },
               {
                 "id": "admecBossManipulusLEG",
-                "stars": 2,
+                "ladderIndex": 2,
                 "count": 1
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 2
               }
             ]
@@ -4578,22 +4578,22 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 1
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 1
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 3
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 1
               }
             ]
@@ -4604,22 +4604,22 @@
             "enemies": [
               {
                 "id": "admecBossDominusLEG",
-                "stars": 1,
+                "ladderIndex": 1,
                 "count": 1
               },
               {
                 "id": "admecBossRuststalkerLEG",
-                "stars": 1,
+                "ladderIndex": 1,
                 "count": 1
               },
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 1
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 5
               }
             ]
@@ -4650,17 +4650,17 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 5
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 3
               }
             ]
@@ -4671,17 +4671,17 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 3
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 2
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 3
               }
             ]
@@ -4692,17 +4692,17 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 2
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 2
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 4
               }
             ]
@@ -4713,12 +4713,12 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 4
               }
             ]
@@ -4729,12 +4729,12 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 7
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 2
               }
             ]
@@ -4745,17 +4745,17 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 4
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 1
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 4
               }
             ]
@@ -4786,22 +4786,22 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 3
               },
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 2
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 3
               }
             ]
@@ -4812,22 +4812,22 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 3
               },
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 3
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 1
               }
             ]
@@ -4838,17 +4838,17 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 2
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 5
               }
             ]
@@ -4859,17 +4859,17 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 3
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 3
               }
             ]
@@ -4880,22 +4880,22 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 4
               },
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 1
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 2
               }
             ]
@@ -4906,17 +4906,17 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 3
               },
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 4
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 2
               }
             ]
@@ -4947,12 +4947,12 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 5
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 5
               }
             ]
@@ -4963,17 +4963,17 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 3
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 3
               }
             ]
@@ -4984,12 +4984,12 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 5
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 4
               }
             ]
@@ -5000,12 +5000,12 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 4
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 3
               }
             ]
@@ -5016,17 +5016,17 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 4
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 2
               }
             ]
@@ -5037,17 +5037,17 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 4
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 2
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 3
               }
             ]
@@ -5078,17 +5078,17 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 39,
+                "ladderIndex": 39,
                 "count": 2
               },
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 5
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 39,
+                "ladderIndex": 39,
                 "count": 3
               }
             ]
@@ -5099,17 +5099,17 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 4
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 39,
+                "ladderIndex": 39,
                 "count": 4
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 39,
+                "ladderIndex": 39,
                 "count": 1
               }
             ]
@@ -5120,22 +5120,22 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 2
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 39,
+                "ladderIndex": 39,
                 "count": 2
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 39,
+                "ladderIndex": 39,
                 "count": 2
               }
             ]
@@ -5146,22 +5146,22 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 39,
+                "ladderIndex": 39,
                 "count": 3
               },
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 2
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 2
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 39,
+                "ladderIndex": 39,
                 "count": 3
               }
             ]
@@ -5172,17 +5172,17 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 39,
+                "ladderIndex": 39,
                 "count": 2
               },
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 3
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 39,
+                "ladderIndex": 39,
                 "count": 4
               }
             ]
@@ -5193,17 +5193,17 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 39,
+                "ladderIndex": 39,
                 "count": 4
               },
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 2
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 39,
+                "ladderIndex": 39,
                 "count": 4
               }
             ]
@@ -5343,7 +5343,7 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 4,
+                "ladderIndex": 4,
                 "count": 6
               }
             ]
@@ -5354,7 +5354,7 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 4,
+                "ladderIndex": 4,
                 "count": 5
               }
             ]
@@ -5365,12 +5365,12 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 4,
+                "ladderIndex": 4,
                 "count": 3
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 3,
+                "ladderIndex": 3,
                 "count": 1
               }
             ]
@@ -5381,7 +5381,7 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 4,
+                "ladderIndex": 4,
                 "count": 4
               }
             ]
@@ -5392,12 +5392,12 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 4,
+                "ladderIndex": 4,
                 "count": 3
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 3,
+                "ladderIndex": 3,
                 "count": 1
               }
             ]
@@ -5408,7 +5408,7 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 4,
+                "ladderIndex": 4,
                 "count": 6
               }
             ]
@@ -5434,12 +5434,12 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 5
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 1
               }
             ]
@@ -5450,7 +5450,7 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 5
               }
             ]
@@ -5461,12 +5461,12 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 1
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 2
               }
             ]
@@ -5477,7 +5477,7 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 4
               }
             ]
@@ -5488,12 +5488,12 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 2
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 1
               }
             ]
@@ -5504,7 +5504,7 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 7
               }
             ]
@@ -5530,12 +5530,12 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 6
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 2
               }
             ]
@@ -5546,7 +5546,7 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 6
               }
             ]
@@ -5557,7 +5557,7 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 5
               }
             ]
@@ -5568,12 +5568,12 @@
             "enemies": [
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 3
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 2
               }
             ]
@@ -5584,7 +5584,7 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 7
               }
             ]
@@ -5595,12 +5595,12 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 4
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 2
               }
             ]
@@ -5626,12 +5626,12 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 5
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 2
               }
             ]
@@ -5642,12 +5642,12 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 4
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 1
               }
             ]
@@ -5658,12 +5658,12 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 1
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 4
               }
             ]
@@ -5674,7 +5674,7 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 6
               }
             ]
@@ -5685,12 +5685,12 @@
             "enemies": [
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 2
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 2
               }
             ]
@@ -5701,17 +5701,17 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 1
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 3
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 1
               }
             ]
@@ -5737,12 +5737,12 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 1
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 7
               }
             ]
@@ -5753,12 +5753,12 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 4
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 3
               }
             ]
@@ -5769,12 +5769,12 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 1
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 4
               }
             ]
@@ -5785,7 +5785,7 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 7
               }
             ]
@@ -5796,12 +5796,12 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 3
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 2
               }
             ]
@@ -5812,12 +5812,12 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 2
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 6
               }
             ]
@@ -5843,12 +5843,12 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 4
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 3
               }
             ]
@@ -5859,17 +5859,17 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 2
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 3
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 1
               }
             ]
@@ -5880,12 +5880,12 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 1
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 6
               }
             ]
@@ -5896,12 +5896,12 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 7
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 1
               }
             ]
@@ -5912,12 +5912,12 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 2
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 4
               }
             ]
@@ -5928,12 +5928,12 @@
             "enemies": [
               {
                 "id": "deathNpc4BlightlordTerminator",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 1
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 5
               }
             ]
@@ -5959,17 +5959,17 @@
             "enemies": [
               {
                 "id": "deathNpc4BlightlordTerminator",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 1
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 4
               },
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 1
               }
             ]
@@ -5980,12 +5980,12 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 6
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 2
               }
             ]
@@ -5996,17 +5996,17 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 2
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 3
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 1
               }
             ]
@@ -6017,7 +6017,7 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 7
               }
             ]
@@ -6028,12 +6028,12 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 1
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 5
               }
             ]
@@ -6044,17 +6044,17 @@
             "enemies": [
               {
                 "id": "deathNpc4BlightlordTerminator",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 1
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 5
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 2
               }
             ]
@@ -6080,12 +6080,12 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 4
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 4
               }
             ]
@@ -6096,12 +6096,12 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 2
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 2
               }
             ]
@@ -6112,12 +6112,12 @@
             "enemies": [
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 2
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 4
               }
             ]
@@ -6128,12 +6128,12 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 7
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 1
               }
             ]
@@ -6144,12 +6144,12 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 2
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 3
               }
             ]
@@ -6160,12 +6160,12 @@
             "enemies": [
               {
                 "id": "deathNpc4BlightlordTerminator",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 1
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 4
               }
             ]
@@ -6191,17 +6191,17 @@
             "enemies": [
               {
                 "id": "deathNpc4BlightlordTerminator",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 1
               },
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 1
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 4
               }
             ]
@@ -6212,12 +6212,12 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 6
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 2
               }
             ]
@@ -6228,12 +6228,12 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 1
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 5
               }
             ]
@@ -6244,12 +6244,12 @@
             "enemies": [
               {
                 "id": "deathNpc4BlightlordTerminator",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 1
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 4
               }
             ]
@@ -6260,12 +6260,12 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 2
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 2
               }
             ]
@@ -6276,12 +6276,12 @@
             "enemies": [
               {
                 "id": "deathNpc4BlightlordTerminator",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 1
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 6
               }
             ]
@@ -6307,17 +6307,17 @@
             "enemies": [
               {
                 "id": "deathNpc4BlightlordTerminator",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 1
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 4
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 3
               }
             ]
@@ -6328,12 +6328,12 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 2
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 4
               }
             ]
@@ -6344,12 +6344,12 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 6
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 1
               }
             ]
@@ -6360,17 +6360,17 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 1
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 5
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 1
               }
             ]
@@ -6381,12 +6381,12 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 2
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 3
               }
             ]
@@ -6397,17 +6397,17 @@
             "enemies": [
               {
                 "id": "deathNpc4BlightlordTerminator",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 2
               },
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 1
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 4
               }
             ]
@@ -6433,17 +6433,17 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 1
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 5
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 1
               }
             ]
@@ -6454,12 +6454,12 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 5
               },
               {
                 "id": "deathNpcPutrifier",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 1
               }
             ]
@@ -6470,12 +6470,12 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 5
               },
               {
                 "id": "deathNpcBlightbringer",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 1
               }
             ]
@@ -6486,12 +6486,12 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 1
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 4
               }
             ]
@@ -6502,7 +6502,7 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 5
               }
             ]
@@ -6513,12 +6513,12 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 2
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 5
               }
             ]
@@ -6544,17 +6544,17 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 5
               },
               {
                 "id": "deathNpcBlightlord",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 1
               },
               {
                 "id": "deathNpcRotbone",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 1
               }
             ]
@@ -6565,12 +6565,12 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 5
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 2
               }
             ]
@@ -6581,12 +6581,12 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 1
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 7
               }
             ]
@@ -6597,12 +6597,12 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 2
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 5
               }
             ]
@@ -6613,12 +6613,12 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 2
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 6
               }
             ]
@@ -6629,12 +6629,12 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 7
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 2
               }
             ]
@@ -6660,17 +6660,17 @@
             "enemies": [
               {
                 "id": "deathNpc4BlightlordTerminator",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 2
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 4
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 2
               }
             ]
@@ -6681,17 +6681,17 @@
             "enemies": [
               {
                 "id": "deathNpc4BlightlordTerminator",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 1
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 4
               },
               {
                 "id": "deathNpcTyphus",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 1
               }
             ]
@@ -6702,17 +6702,17 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 1
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 4
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 2
               }
             ]
@@ -6723,17 +6723,17 @@
             "enemies": [
               {
                 "id": "deathNpc4BlightlordTerminator",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 1
               },
               {
                 "id": "deathNpcBlightbringer",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 1
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 4
               }
             ]
@@ -6744,7 +6744,7 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 9
               }
             ]
@@ -6755,17 +6755,17 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 1
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 5
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 2
               }
             ]
@@ -6791,17 +6791,17 @@
             "enemies": [
               {
                 "id": "deathNpc4BlightlordTerminator",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 1
               },
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 2
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 5
               }
             ]
@@ -6812,17 +6812,17 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 2
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 4
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 2
               }
             ]
@@ -6833,7 +6833,7 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 7
               }
             ]
@@ -6844,17 +6844,17 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 2
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 4
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 2
               }
             ]
@@ -6865,17 +6865,17 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 3
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 2
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 1
               }
             ]
@@ -6886,17 +6886,17 @@
             "enemies": [
               {
                 "id": "deathNpc4BlightlordTerminator",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 2
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 3
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 3
               }
             ]
@@ -6922,17 +6922,17 @@
             "enemies": [
               {
                 "id": "deathNpc4BlightlordTerminator",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 1
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 5
               },
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 2
               }
             ]
@@ -6943,12 +6943,12 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 5
               },
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 4
               }
             ]
@@ -6959,12 +6959,12 @@
             "enemies": [
               {
                 "id": "deathNpc4BlightlordTerminator",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 3
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 6
               }
             ]
@@ -6975,17 +6975,17 @@
             "enemies": [
               {
                 "id": "deathNpc4BlightlordTerminator",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 1
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 5
               },
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 3
               }
             ]
@@ -6996,12 +6996,12 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 5
               },
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 3
               }
             ]
@@ -7012,12 +7012,12 @@
             "enemies": [
               {
                 "id": "deathNpc4BlightlordTerminator",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 4
               },
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 3
               }
             ]
@@ -7043,17 +7043,17 @@
             "enemies": [
               {
                 "id": "deathNpc4BlightlordTerminator",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 2
               },
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 1
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 36,
+                "ladderIndex": 36,
                 "count": 7
               }
             ]
@@ -7064,22 +7064,22 @@
             "enemies": [
               {
                 "id": "deathNpc4BlightlordTerminator",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 1
               },
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 3
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 36,
+                "ladderIndex": 36,
                 "count": 2
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 35,
+                "ladderIndex": 35,
                 "count": 2
               }
             ]
@@ -7090,22 +7090,22 @@
             "enemies": [
               {
                 "id": "deathNpc4BlightlordTerminator",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 1
               },
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 2
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 36,
+                "ladderIndex": 36,
                 "count": 3
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 35,
+                "ladderIndex": 35,
                 "count": 2
               }
             ]
@@ -7116,12 +7116,12 @@
             "enemies": [
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 36,
+                "ladderIndex": 36,
                 "count": 8
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 35,
+                "ladderIndex": 35,
                 "count": 2
               }
             ]
@@ -7132,22 +7132,22 @@
             "enemies": [
               {
                 "id": "deathNpc4BlightlordTerminator",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 1
               },
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 1
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 36,
+                "ladderIndex": 36,
                 "count": 5
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 35,
+                "ladderIndex": 35,
                 "count": 2
               }
             ]
@@ -7158,17 +7158,17 @@
             "enemies": [
               {
                 "id": "deathNpc4BlightlordTerminator",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 1
               },
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 3
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 36,
+                "ladderIndex": 36,
                 "count": 3
               }
             ]
@@ -7194,22 +7194,22 @@
             "enemies": [
               {
                 "id": "deathNpc4BlightlordTerminator",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 2
               },
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 1
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 3
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 39,
+                "ladderIndex": 39,
                 "count": 3
               }
             ]
@@ -7220,12 +7220,12 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 3
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 5
               }
             ]
@@ -7236,17 +7236,17 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 1
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 7
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 2
               }
             ]
@@ -7257,17 +7257,17 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 2
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 6
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 2
               }
             ]
@@ -7278,17 +7278,17 @@
             "enemies": [
               {
                 "id": "deathNpc4BlightlordTerminator",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 1
               },
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 2
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 3
               }
             ]
@@ -7299,22 +7299,22 @@
             "enemies": [
               {
                 "id": "deathNpc4BlightlordTerminator",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 3
               },
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 1
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 3
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 1
               }
             ]
@@ -7340,17 +7340,17 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 35,
+                "ladderIndex": 35,
                 "count": 3
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 43,
+                "ladderIndex": 43,
                 "count": 5
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 42,
+                "ladderIndex": 42,
                 "count": 2
               }
             ]
@@ -7361,17 +7361,17 @@
             "enemies": [
               {
                 "id": "deathNpc4BlightlordTerminator",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 2
               },
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 35,
+                "ladderIndex": 35,
                 "count": 1
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 43,
+                "ladderIndex": 43,
                 "count": 7
               }
             ]
@@ -7382,12 +7382,12 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 35,
+                "ladderIndex": 35,
                 "count": 4
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 43,
+                "ladderIndex": 43,
                 "count": 3
               }
             ]
@@ -7398,17 +7398,17 @@
             "enemies": [
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 35,
+                "ladderIndex": 35,
                 "count": 3
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 43,
+                "ladderIndex": 43,
                 "count": 4
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 43,
+                "ladderIndex": 43,
                 "count": 2
               }
             ]
@@ -7419,12 +7419,12 @@
             "enemies": [
               {
                 "id": "deathNpc4BlightlordTerminator",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 3
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 43,
+                "ladderIndex": 43,
                 "count": 3
               }
             ]
@@ -7435,22 +7435,22 @@
             "enemies": [
               {
                 "id": "deathNpc4BlightlordTerminator",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 2
               },
               {
                 "id": "deathNpc2PlagueMarine",
-                "stars": 35,
+                "ladderIndex": 35,
                 "count": 2
               },
               {
                 "id": "deathNpc1Poxwalker",
-                "stars": 43,
+                "ladderIndex": 43,
                 "count": 3
               },
               {
                 "id": "deathNpc3Nurglings",
-                "stars": 43,
+                "ladderIndex": 43,
                 "count": 1
               }
             ]
