@@ -147,8 +147,8 @@ public static partial class GameCatalogValidator
         // ---- per-unit entries -----------------------------------------------------------------
         var lineup = raw.Lineup ?? new Dictionary<string, GameCatalogRawUnitPowerEntry>();
         var upgradeStats = upgrades
-            .GroupBy(upgrade => upgrade.Id, StringComparer.OrdinalIgnoreCase)
-            .ToDictionary(group => group.Key, group => group.First().Stat, StringComparer.OrdinalIgnoreCase);
+            .GroupBy(upgrade => upgrade.Id, StringComparer.Ordinal)
+            .ToDictionary(group => group.Key, group => group.First().Stat, StringComparer.Ordinal);
 
         foreach (var mow in mows)
         {

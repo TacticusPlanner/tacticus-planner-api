@@ -137,7 +137,9 @@ id; a trait or ability not listed is 100 (the catalog lacks V1's `Hero`/`Machine
 - **Source:** V1 `src/fsd/4-entities/unit/character-power/data/character-power-units.json` (same keys).
   `character-power-items.json` and `character-power-upgrades.json` are **not** ported: they match
   `equipment-*` and `upgrades-*` (`stat`). V1's `heroProgressionStepsPerUnit` overrides change only costs,
-  so they are not served.
+  so they are not served. **On every refresh, diff each override against `default`**: if one changes
+  `unitStatMultiplierPct` or `abilityPowerMultiplier`, nothing fails, so the served steps silently become
+  wrong for that unit; add per-unit steps to the served record (and the apps formula) before importing it.
 - **A new character or MoW needs a `lineup` entry** (and a damage type needs a `damageProfileModifiers`
   entry); otherwise startup fails. Unreleased lineup units are skipped.
 - Enforced at load (`Validation/UnitPowerValidation.cs`, `InvalidUnitPower`): 20 steps with positive
