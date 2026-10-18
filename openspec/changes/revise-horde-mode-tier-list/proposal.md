@@ -9,7 +9,7 @@ The horde-mode tier list seeded with the Legendary Event clear estimates has 21 
 - The validator accepts exactly S, A, B, C, D in that order. The per-tier ranges (S 1.80–2.00, A 1.60–1.79, B 1.35–1.59, C 1.10–1.34, D 1.00–1.09) are authoring guidance and are not validated, so a deliberate outlier stays possible.
 - Bump `GameCatalogRelease.Version` (data changes). `SchemaVersion` stays: the served shape is unchanged.
 
-Out of scope, for a later change if wanted: per-character strategy text (strengths, how to use, synergies, relic advice) and relic-conditional multipliers. Both need new served fields plus localized display text on the client.
+Out of scope here, proposed as follow-up changes on the same branch: relic-conditional multipliers (`add-horde-mode-relic-ratings`) and per-character strategy (`add-horde-mode-strategy-notes`).
 
 Companion change: **`revise-horde-mode-tier-list`** in `tacticus-planner-apps`. It gives the D tier its own colour on the Tier List and team-picker tiles and updates the Tier List spec. This API half applies first.
 
