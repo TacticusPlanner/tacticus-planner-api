@@ -635,6 +635,20 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("close_shards");
 
+                    b.PrimitiveCollection<List<int>>("CompletedPremiumMissions")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer[]")
+                        .HasColumnName("completed_premium_missions")
+                        .HasDefaultValueSql("'{}'");
+
+                    b.PrimitiveCollection<List<int>>("CompletedRegularMissions")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer[]")
+                        .HasColumnName("completed_regular_missions")
+                        .HasDefaultValueSql("'{}'");
+
                     b.Property<int>("PremiumMissions")
                         .HasColumnType("integer")
                         .HasColumnName("premium_missions");

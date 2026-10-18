@@ -8,11 +8,20 @@ public class LegendaryEventRunProgress
 
     public int Run { get; set; }
 
-    /// <summary>Regular missions completed, 0..the event's catalog <c>regularMissions</c> count.</summary>
+    /// <summary>Regular missions the run will complete (forecast count), 0..the event's catalog <c>regularMissions</c> count.</summary>
     public int RegularMissions { get; set; }
 
-    /// <summary>Premium missions completed, 0..the event's catalog <c>premiumMissions</c> count.</summary>
+    /// <summary>Premium missions the run will complete (forecast count), 0..the event's catalog <c>premiumMissions</c> count.</summary>
     public int PremiumMissions { get; set; }
+
+    /// <summary>Catalog indices (0-based) of the event's regular missions already completed in this run: distinct,
+    /// ascending, each below the catalog <c>regularMissions</c> count, and no more of them than
+    /// <see cref="RegularMissions"/>.</summary>
+    public List<int> CompletedRegularMissions { get; set; } = [];
+
+    /// <summary>Catalog indices (0-based) of the event's premium missions already completed in this run, under the
+    /// same rules as <see cref="CompletedRegularMissions"/> against <see cref="PremiumMissions"/>.</summary>
+    public List<int> CompletedPremiumMissions { get; set; } = [];
 
     /// <summary>Whether the 300-currency bundle was bought for this run.</summary>
     public bool BundlePurchased { get; set; }

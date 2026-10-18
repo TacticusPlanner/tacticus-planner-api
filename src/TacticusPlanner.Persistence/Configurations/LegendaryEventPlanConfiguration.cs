@@ -182,6 +182,10 @@ public sealed class LegendaryEventRunProgressConfiguration : IEntityTypeConfigur
 
         builder.Property(entity => entity.PlanId).HasVogenConversion();
         builder.Property(entity => entity.UpdatedAt).IsRequired();
+        // Completed mission indices (design D2 of add-legendary-event-mission-tracking), stored ascending as
+        // integer[]; rows written before the columns existed read as none completed.
+        builder.PrimitiveCollection(entity => entity.CompletedRegularMissions).IsRequired().HasDefaultValueSql("'{}'");
+        builder.PrimitiveCollection(entity => entity.CompletedPremiumMissions).IsRequired().HasDefaultValueSql("'{}'");
 
         builder
             .HasOne(entity => entity.Plan)

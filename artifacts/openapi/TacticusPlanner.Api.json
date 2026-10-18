@@ -1823,8 +1823,8 @@
         "tags": [
           "Me"
         ],
-        "summary": "Writes one run's inputs (missions, premium missions, bundle, close shards).",
-        "description": "Upserts the given run (1–3) and leaves the other runs untouched. Values equal to the stored run, or all zero for a run with none, succeed without bumping the revision.",
+        "summary": "Writes one run's inputs (missions, completed missions, bundle, close shards).",
+        "description": "Upserts the given run (1–3) and leaves the other runs untouched. Completed mission arrays list distinct catalog indices, absent means none, and are stored ascending; each count must be at least its completed array's length. Values equal to the stored run, or all zero for a run with none, succeed without bumping the revision.",
         "operationId": "TacticusPlannerApiFeaturesLegendaryEventPlansUpdateLegendaryEventRunInputsEndpoint",
         "parameters": [
           {
@@ -3512,6 +3512,12 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogLreFilter"
+        }
+      },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLreMission": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogLreMission"
         }
       },
       "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLrePointsMilestone": {
@@ -6806,6 +6812,8 @@
           "run",
           "regularMissions",
           "premiumMissions",
+          "completedRegularMissions",
+          "completedPremiumMissions",
           "bundlePurchased",
           "closeShards",
           "updatedAt"
@@ -6823,6 +6831,12 @@
           "premiumMissions": {
             "type": "integer",
             "format": "int32"
+          },
+          "completedRegularMissions": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemInt32"
+          },
+          "completedPremiumMissions": {
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemInt32"
           },
           "bundlePurchased": {
             "type": "boolean"
@@ -7208,6 +7222,28 @@
           "closeShards": {
             "type": "integer",
             "format": "int32"
+          },
+          "completedRegularMissions": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemInt32"
+              }
+            ]
+          },
+          "completedPremiumMissions": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemInt32"
+              }
+            ]
           }
         }
       },
@@ -9661,6 +9697,59 @@
           }
         }
       },
+      "TacticusPlannerGameCatalogModelsGameCatalogLreMission": {
+        "required": [
+          "index",
+          "kind",
+          "count",
+          "faction",
+          "alliance",
+          "damageType",
+          "trait",
+          "text"
+        ],
+        "type": "object",
+        "properties": {
+          "index": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "faction": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "alliance": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "damageType": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "trait": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "text": {
+            "type": "string"
+          }
+        }
+      },
       "TacticusPlannerGameCatalogModelsGameCatalogLrePointsMilestone": {
         "required": [
           "milestone",
@@ -9862,10 +9951,10 @@
             "format": "int32"
           },
           "regularMissions": {
-            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemString"
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLreMission"
           },
           "premiumMissions": {
-            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemString"
+            "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogLreMission"
           },
           "alpha": {
             "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogLreTrackView"

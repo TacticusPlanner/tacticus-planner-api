@@ -43,8 +43,9 @@ public static class LegendaryEventPlanProjection
             plan.Runs
                 .OrderBy(run => run.Run)
                 .Select(run => new LegendaryEventRunProgressResponse(
-                    run.Run, run.RegularMissions, run.PremiumMissions, run.BundlePurchased, run.CloseShards,
-                    run.UpdatedAt))
+                    run.Run, run.RegularMissions, run.PremiumMissions,
+                    run.CompletedRegularMissions.Order().ToList(), run.CompletedPremiumMissions.Order().ToList(),
+                    run.BundlePurchased, run.CloseShards, run.UpdatedAt))
                 .ToList(),
             plan.Annotations
                 .OrderBy(annotation => LaneOrder(annotation.LaneId))

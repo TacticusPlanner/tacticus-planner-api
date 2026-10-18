@@ -88,6 +88,22 @@ restrictions); these are silently ignored on deserialize.
     grow), and `defeatAll` must not be empty — enforced at load (`Validation/LreLanePointsValidation.cs`,
     `InvalidLaneKillPoints`). Example: `lres-votanuthar.json` once carried `tauFarsight`'s 34 / 26 / 17
     (copied from the wrong file) instead of 30 / 34 / 43, skewing every Uthar leaderboard figure.
+    **Missions** (`regularMissions` / `premiumMissions`) stay V1's English lines in the raw file (V1's
+    `questsToMissionText` output, so a refresh stays a copy) and are served as typed records
+    `{ index, kind, count, faction, alliance, damageType, trait, text }` (raw order, `text` = the raw line,
+    unused parameters `null`). `LreDenormalizer` matches each line against the ordered `LreMissionTemplates`
+    (first match wins; the bare `"Defeat N <faction>"` fallback is last) and maps the captured label through an
+    explicit alias table to the catalog id: factions → units/npcs `factionId` (`"AdMechs"` → `AdeptusMechanicus`,
+    `"T'au"` → `Tau`, `"Death Guard"` → `DeathGuard`), alliances → `Imperial`/`Chaos`/`Xenos`, damage types →
+    the units/npcs damage strings (`Bolter`, `Piercing`…), traits → `Data/enums.json` trait ids (V1's labels:
+    `"Big Target"` → `BigTarget`, `"Final Vengeance"` → `FinalJustice`, `"Deep Strike"` → `TeleportStrike`).
+    `"Defeat N Daemon enemies"` (V1's `SlayEnemiesOfTrait`) is kind `defeatFaction` with `trait` `Daemon` and
+    `faction` null. `Validation/LreMissionsValidation.cs` (`UnparsedMission`) fails the load on a line no
+    template matches or a label with no alias, naming the event, file, list, index and line. **To add a mission
+    template** (a new V1 quest task): add a `[GeneratedRegex]` with `count` (and at most one `label`) groups, a
+    `LreMissionKinds` constant if the kind is new, and a `LreMissionTemplates` entry ahead of any broader
+    pattern; then extend `LreMissionsTests` and bump `SchemaVersion` (a new `kind` is a contract change for the
+    client, which must map it). A new label for an existing kind is just an alias-table row (content-only).
   - **`lre-battles`** — the bulky per-battle records (`waves` trees), keyed `"{lreId}-{track}-{number}"`,
     tagged with `lreId` + `track`.
   - **`lre-common`** — a reward ladder (`pointsMilestones`, `chestsMilestones`, `progression`,

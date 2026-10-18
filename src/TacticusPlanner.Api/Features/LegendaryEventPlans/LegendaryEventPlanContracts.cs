@@ -22,12 +22,16 @@ public sealed record LegendaryEventPlanResponse(
 /// <param name="Run">The event run, 1–3.</param>
 /// <param name="RegularMissions">0..the event's catalog <c>regularMissions</c> count.</param>
 /// <param name="PremiumMissions">0..the event's catalog <c>premiumMissions</c> count.</param>
+/// <param name="CompletedRegularMissions">Catalog indices of the regular missions already completed, ascending.</param>
+/// <param name="CompletedPremiumMissions">Catalog indices of the premium missions already completed, ascending.</param>
 /// <param name="CloseShards">"Oh So Close" shards, 0–75.</param>
 /// <param name="UpdatedAt">When this run's inputs were last written (UTC).</param>
 public sealed record LegendaryEventRunProgressResponse(
     int Run,
     int RegularMissions,
     int PremiumMissions,
+    IReadOnlyList<int> CompletedRegularMissions,
+    IReadOnlyList<int> CompletedPremiumMissions,
     bool BundlePurchased,
     int CloseShards,
     DateTimeOffset UpdatedAt
@@ -130,12 +134,18 @@ public sealed record UpdateLegendaryEventTeamOrderRequest(long ExpectedRevision,
 /// <param name="RegularMissions">0..the event's catalog <c>regularMissions</c> count.</param>
 /// <param name="PremiumMissions">0..the event's catalog <c>premiumMissions</c> count.</param>
 /// <param name="CloseShards">"Oh So Close" shards, 0–75.</param>
+/// <param name="CompletedRegularMissions">Distinct catalog indices (0..count−1) of the regular missions already
+/// completed; at most <paramref name="RegularMissions"/> of them. Absent means none. Stored ascending.</param>
+/// <param name="CompletedPremiumMissions">Distinct catalog indices (0..count−1) of the premium missions already
+/// completed; at most <paramref name="PremiumMissions"/> of them. Absent means none. Stored ascending.</param>
 public sealed record UpdateLegendaryEventRunInputsRequest(
     long ExpectedRevision,
     int RegularMissions,
     int PremiumMissions,
     bool BundlePurchased,
-    int CloseShards
+    int CloseShards,
+    IReadOnlyList<int>? CompletedRegularMissions = null,
+    IReadOnlyList<int>? CompletedPremiumMissions = null
 );
 
 /// <param name="ExpectedRevision">The plan revision the caller last read (0 for a plan that does not exist).</param>

@@ -123,13 +123,30 @@ public sealed record GameCatalogLreView(
     IReadOnlyList<string> EventStageStartDatesUtc,
     int BattlesCount,
     int ConstraintsCount,
-    IReadOnlyList<string> RegularMissions,
-    IReadOnlyList<string> PremiumMissions,
+    // The raw mission lines parsed into typed records, in raw order (see GameCatalogLreMission).
+    IReadOnlyList<GameCatalogLreMission> RegularMissions,
+    IReadOnlyList<GameCatalogLreMission> PremiumMissions,
     GameCatalogLreTrackView Alpha,
     GameCatalogLreTrackView Beta,
     GameCatalogLreTrackView Gamma,
     // The event's own reward ladder, copied from its raw file (ladders differ between events).
     GameCatalogLreRewards Rewards
+);
+
+// One served event mission, parsed from its raw English line by LreDenormalizer's ordered templates. Index is its
+// 0-based position in the raw list; Text is the raw line. Kind is one of the LreMissionKinds values and names
+// which parameters apply; the ones it does not use are null. Faction, Alliance, DamageType and Trait carry the
+// catalog's ids (units/npcs factionId, alliance, damage-type and trait strings), never the display labels.
+// "Defeat N <trait> enemies" (e.g. "Daemon enemies") is kind defeatFaction with Trait set and Faction null.
+public sealed record GameCatalogLreMission(
+    int Index,
+    string Kind,
+    int Count,
+    string? Faction,
+    string? Alliance,
+    string? DamageType,
+    string? Trait,
+    string Text
 );
 
 // An event's reward ladder: points milestones with their currency payouts, chest costs, the event unit's
@@ -154,3 +171,32 @@ public sealed record GameCatalogLreBattleView(
     IReadOnlyList<string> DisallowedFactions,
     IReadOnlyList<GameCatalogLreWave> Waves
 );
+
+/// <summary>The served <c>kind</c> values of <see cref="GameCatalogLreMission"/>.</summary>
+public static class LreMissionKinds
+{
+    /// <summary>Defeat N waves in any wave-based mode (and deal plain damage); <c>count</c> = N.</summary>
+    public const string AnyBattle = "anyBattle";
+
+    /// <summary>Defeat N enemies of a faction (<c>faction</c>), or of a trait-defined group such as Daemons
+    /// (<c>trait</c>, <c>faction</c> null).</summary>
+    public const string DefeatFaction = "defeatFaction";
+
+    /// <summary>Use abilities N times with units of an alliance (<c>alliance</c>).</summary>
+    public const string UseAbilitiesWithAlliance = "useAbilitiesWithAlliance";
+
+    /// <summary>Defeat N waves and deal damage of a type (<c>damageType</c>).</summary>
+    public const string DamageType = "damageType";
+
+    /// <summary>Defeat N enemies with units of an alliance (<c>alliance</c>).</summary>
+    public const string DefeatWithAlliance = "defeatWithAlliance";
+
+    /// <summary>Win N battles without deploying characters with a trait (<c>trait</c>).</summary>
+    public const string WinWithoutTrait = "winWithoutTrait";
+
+    /// <summary>Win N battles without summoning any units.</summary>
+    public const string WinWithoutSummon = "winWithoutSummon";
+
+    /// <summary>Defeat N enemies with damage of a type (<c>damageType</c>).</summary>
+    public const string DefeatWithDamageType = "defeatWithDamageType";
+}
