@@ -30,7 +30,8 @@ public sealed class GetLegendaryEventPlanEndpoint : LegendaryEventPlanEndpointBa
         await Send.OkAsync(
             resolved.Plan is null
                 ? LegendaryEventPlanProjection.Empty(resolved.EventId)
-                : LegendaryEventPlanProjection.Map(resolved.Plan),
+                : LegendaryEventPlanProjection.Map(
+                    resolved.Plan, Resolve<LegendaryEventCatalogValidator>().FindEvent(resolved.EventId)),
             ct);
     }
 }

@@ -103,7 +103,9 @@ restrictions); these are silently ignored on deserialize.
     template** (a new V1 quest task): add a `[GeneratedRegex]` with `count` (and at most one `label`) groups, a
     `LreMissionKinds` constant if the kind is new, and a `LreMissionTemplates` entry ahead of any broader
     pattern; then extend `LreMissionsTests` and bump `SchemaVersion` (a new `kind` is a contract change for the
-    client, which must map it). A new label for an existing kind is just an alias-table row (content-only).
+    client, which must map it). A new label for an existing kind is just an alias-table row (content-only). A refresh must not reorder or shrink a live
+    event's mission lists: plans store ticks as positional indices, so a reorder moves ticks onto other
+    missions (a shrink only drops the ticks past the end, on read).
   - **`lre-battles`** — the bulky per-battle records (`waves` trees), keyed `"{lreId}-{track}-{number}"`,
     tagged with `lreId` + `track`.
   - **`lre-common`** — a reward ladder (`pointsMilestones`, `chestsMilestones`, `progression`,

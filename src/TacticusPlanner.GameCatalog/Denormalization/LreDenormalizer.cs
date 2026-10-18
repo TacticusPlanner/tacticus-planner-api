@@ -26,8 +26,8 @@ internal static partial class GameCatalogDenormalizer
                 BuildEventStageStartDates(lre.RunStartDatesUtc),
                 lre.BattlesCount,
                 lre.ConstraintsCount,
-                BuildLreMissions(lre.RegularMissions),
-                BuildLreMissions(lre.PremiumMissions),
+                BuildLreMissions(lre.RegularMissions ?? []),
+                BuildLreMissions(lre.PremiumMissions ?? []),
                 BuildTrackView(lre.UnitSnowprintId, "alpha", lre.Alpha, roster),
                 BuildTrackView(lre.UnitSnowprintId, "beta", lre.Beta, roster),
                 BuildTrackView(lre.UnitSnowprintId, "gamma", lre.Gamma, roster),
@@ -261,10 +261,12 @@ internal static partial class GameCatalogDenormalizer
             ["Blast"] = "Blast",
             ["Bolter"] = "Bolter",
             ["Chain"] = "Chain",
+            ["DirectDamage"] = "DirectDamage",
             ["Energy"] = "Energy",
             ["Eviscerate"] = "Eviscerate",
             ["Flame"] = "Flame",
             ["Gauss"] = "Gauss",
+            ["HeavyRound"] = "HeavyRound",
             ["Las"] = "Las",
             ["Melta"] = "Melta",
             ["Particle"] = "Particle",
@@ -280,13 +282,14 @@ internal static partial class GameCatalogDenormalizer
 
     /// <summary>Trait labels (V1's <c>Trait</c> enum labels) -> the catalog trait ids (units/npcs <c>traits</c>,
     /// <c>Data/enums.json</c>). Note the renamed ones: "Final Vengeance" is <c>FinalJustice</c>, "Deep Strike"
-    /// is <c>TeleportStrike</c>. "Daemon" also backs the "Defeat N Daemon enemies" missions.</summary>
+    /// is <c>TeleportStrike</c>. "Daemon" also backs the "Defeat N Daemon enemies" missions. "Beast Slayer" is
+    /// deliberately absent: V1 labels <c>BeastSnagga</c> that way while <c>enums.json</c> also has a
+    /// <c>BeastSlayer</c>, so such a line fails the load rather than map to a guessed trait.</summary>
     internal static readonly IReadOnlyDictionary<string, string> LreMissionTraitAliases =
         new Dictionary<string, string>(StringComparer.Ordinal)
         {
             ["Act of Faith"] = "ActOfFaith",
             ["Ambush"] = "Ambush",
-            ["Beast Slayer"] = "BeastSlayer",
             ["Big Target"] = "BigTarget",
             ["Blessings of Khorne"] = "BlessingsOfKhorne",
             ["Camouflage"] = "Camouflage",
