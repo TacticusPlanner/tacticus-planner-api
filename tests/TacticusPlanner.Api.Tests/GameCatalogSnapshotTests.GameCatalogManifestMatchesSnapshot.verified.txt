@@ -51,7 +51,7 @@
     },
     {
       key: horde-mode-tiers,
-      hash: 280e6306c5a70d55c2353c6dc4862d0615e17ece5e6f6ab36314e660fa2bc25b,
+      hash: fa9fe5f5d5e9c477e75a56d954bc978a9180285ce47ba8c6fc06a07483ae7562,
       url: /api/v1/game-catalog/horde-mode-tiers
     },
     {
