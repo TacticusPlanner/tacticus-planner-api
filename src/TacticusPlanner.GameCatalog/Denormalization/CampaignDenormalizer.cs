@@ -60,7 +60,7 @@ internal static partial class GameCatalogDenormalizer
             battle.NodeNumber,
             battle.BattleIndex,
             battle.Slots,
-            DailyAttemptsForType(battle.Type),
+            DailyAttemptsFor(battle, group),
             new GameCatalogCampaignRewardsView(battle.Rewards.Guaranteed, potential),
             battle.EnemyPower,
             group.AlliesAlliance,
@@ -72,8 +72,20 @@ internal static partial class GameCatalogDenormalizer
             battle.DetailedEnemyTypes);
     }
 
+    // The early Indomitus nodes I06-I14 (the 3-energy ones) cap at 3 attempts/day (confirmed by the product owner).
+    private const string IndomitusGroupId = "campaign1";
+    private const int IndomitusLowCapFirstNode = 6;
+    private const int IndomitusLowCapLastNode = 14;
+
+    private static int DailyAttemptsFor(GameCatalogCampaignBattle battle, GameCatalogCampaignGroup group) =>
+        group.GroupId == IndomitusGroupId && battle.Type == "Standard" && !battle.Challenge
+            && battle.NodeNumber is >= IndomitusLowCapFirstNode and <= IndomitusLowCapLastNode
+            ? 3
+            : DailyAttemptsForType(battle.Type);
+
     // Fixed daily attempt caps per Tacticus campaign type (product-confirmed): Elite/EliteMirror nodes
-    // cap at 6 attempts/day, every other type (Standard/Mirror/Extremis) caps at 10.
+    // cap at 6 attempts/day, every other type (Standard/Mirror/Extremis) caps at 10, except the low-cap
+    // Indomitus nodes above.
     private static int DailyAttemptsForType(string type) => type switch
     {
         "Elite" or "EliteMirror" => 6,

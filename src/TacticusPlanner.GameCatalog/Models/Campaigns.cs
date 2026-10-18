@@ -109,8 +109,8 @@ public sealed record GameCatalogCampaignBattleView(
     int BattleIndex,
     int Slots,
     // The battle's daily attempt cap, derived from Type (not authored per-battle — see
-    // GameCatalogDenormalizer.DailyAttemptsForType) since it's a fixed game rule per campaign
-    // difficulty, not per-node data.
+    // GameCatalogDenormalizer.DailyAttemptsFor) since it's a fixed game rule per campaign
+    // difficulty, except the early Indomitus nodes I06-I14, which cap at 3.
     int DailyAttempts,
     GameCatalogCampaignRewardsView Rewards,
     int EnemyPower,
