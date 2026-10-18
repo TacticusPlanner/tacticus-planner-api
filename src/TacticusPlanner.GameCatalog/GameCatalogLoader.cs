@@ -41,6 +41,7 @@ public static class GameCatalogLoader
         var hseScoring = LoadDataset<IReadOnlyList<GameCatalogHseScoring>>(GameCatalogDatasets.HomeScreenEventScoring);
         var hordeModeTiersRaw = LoadDataset<IReadOnlyList<GameCatalogHordeModeTiers>>(GameCatalogDatasets.HordeModeTiers);
         var mythicQuests = LoadDataset<IReadOnlyList<GameCatalogRawMythicQuests>>(GameCatalogDatasets.MythicQuests);
+        var unitPower = LoadDataset<GameCatalogRawUnitPower>(GameCatalogDatasets.UnitPower);
 
         var npcsByFaction = new Dictionary<string, GameCatalogFactionNpcs>(StringComparer.Ordinal);
         foreach (var key in GameCatalogDatasets.NpcFactions)
@@ -103,6 +104,10 @@ public static class GameCatalogLoader
         var raidBossesView = GameCatalogDenormalizer.BuildRaidBosses(raidBossRawData);
         var guildRaidMetaView = GameCatalogDenormalizer.BuildGuildRaidMeta(guildRaidMetaRawData);
         var mythicQuestViews = GameCatalogDenormalizer.BuildMythicQuests(mythicQuests);
+        var unitPowerViews = GameCatalogDenormalizer.BuildUnitPower(
+            unitPower,
+            unitsByFaction.Values.SelectMany(faction => faction.Characters).ToArray(),
+            unitsByFaction.Values.SelectMany(faction => faction.Mows).ToArray());
 
         // Served dataset hashes are computed over the canonical JSON of each denormalized payload.
         var datasetHashes = new Dictionary<string, string>(StringComparer.Ordinal)
@@ -128,6 +133,7 @@ public static class GameCatalogLoader
             [GameCatalogDatasets.RaidBosses] = GameCatalogHashing.ComputeCanonicalJsonHash(raidBossesView, JsonOptions),
             [GameCatalogDatasets.GuildRaidMeta] = GameCatalogHashing.ComputeCanonicalJsonHash(guildRaidMetaView, JsonOptions),
             [GameCatalogDatasets.MythicQuestsServed] = GameCatalogHashing.ComputeCanonicalJsonHash(mythicQuestViews, JsonOptions),
+            [GameCatalogDatasets.UnitPower] = GameCatalogHashing.ComputeCanonicalJsonHash(unitPowerViews, JsonOptions),
         };
 
         var snapshot = new GameCatalogSnapshot(
@@ -157,6 +163,7 @@ public static class GameCatalogLoader
             raidBossRawData,
             guildRaidMetaRawData,
             new ReadOnlyCollection<GameCatalogRawMythicQuests>(mythicQuests.ToArray()),
+            unitPower,
             characterViews,
             npcList,
             mowList,
@@ -176,7 +183,8 @@ public static class GameCatalogLoader
             shopViews,
             raidBossesView,
             guildRaidMetaView,
-            mythicQuestViews);
+            mythicQuestViews,
+            unitPowerViews);
 
         var errors = GameCatalogValidator.Validate(snapshot);
         if (errors.Count > 0)

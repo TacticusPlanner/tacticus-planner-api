@@ -1,3 +1,4 @@
+using System.Text.Json;
 using TacticusPlanner.GameCatalog.Models;
 using TacticusPlanner.GameCatalog.Validation;
 using Xunit;
@@ -6,7 +7,8 @@ namespace TacticusPlanner.GameCatalog.Tests;
 
 /// <summary>Covers <c>add-legendary-event-run-inputs</c>'s <c>legendary-event-reward-ladder</c> capability: each
 /// served <c>lres</c> record carries its own reward ladder, malformed ladders fail validation, and no shared
-/// <c>lre-common</c> dataset is served.</summary>
+/// <c>lre-common</c> dataset is served. Also covers <c>add-legendary-event-battle-preview</c>'s
+/// <c>legendary-event-battles-dataset</c> capability: wave enemies carry a 1-based <c>ladderIndex</c>.</summary>
 public sealed class LreDenormalizerTests
 {
     private static readonly GameCatalogSnapshot Snapshot = GameCatalogLoader.Load();
@@ -96,5 +98,50 @@ public sealed class LreDenormalizerTests
         Assert.DoesNotContain("lre-common", Snapshot.Manifest.Datasets.Select(dataset => dataset.Key));
         Assert.Contains(GameCatalogDatasets.Lres, Snapshot.Manifest.Datasets.Select(dataset => dataset.Key));
         Assert.Contains(GameCatalogDatasets.LreBattles, Snapshot.Manifest.Datasets.Select(dataset => dataset.Key));
+    }
+
+    private static readonly JsonSerializerOptions WebJson = new(JsonSerializerDefaults.Web);
+
+    private static GameCatalogLreBattleView Battle(string id) => Snapshot.LreBattleViews.Single(battle => battle.Id == id);
+
+    [Fact]
+    public void ServedWaveEnemiesCarryTheirLadderIndex()
+    {
+        var battle = Battle("astarLysander-alpha-1");
+
+        Assert.Equal(("astarLysander", "alpha", "LE1_26", 1, 994), (battle.LreId, battle.Track, battle.MapId, battle.Number, battle.Power));
+        var wave = battle.Waves[0];
+        Assert.Equal((1, 147), (wave.Round, wave.Power));
+        Assert.Equal([new GameCatalogLreEnemy("orksNpc1Grot", 4, 7)], wave.Enemies);
+    }
+
+    [Fact]
+    public void EveryRawWaveEnemyHasALadderIndex()
+    {
+        // A raw enemy still keyed `stars` would deserialize with LadderIndex 0.
+        var enemies = Snapshot.LreBattleViews.SelectMany(battle => battle.Waves).SelectMany(wave => wave.Enemies).ToList();
+
+        Assert.Equal(3_048, enemies.Count);
+        Assert.All(enemies, enemy => Assert.True(enemy.LadderIndex >= 1, $"{enemy.Id} has ladderIndex {enemy.LadderIndex}"));
+    }
+
+    [Fact]
+    public void ServedBattlesSerializeLadderIndexAndNoStars()
+    {
+        var json = JsonSerializer.Serialize(Snapshot.LreBattleViews, WebJson);
+
+        Assert.Contains("\"ladderIndex\":4", json);
+        Assert.DoesNotContain("\"stars\"", json);
+    }
+
+    [Fact]
+    public void ALadderIndexPastTheLadderIsServedAsIs()
+    {
+        var helbrecht = Battle("astarLysander-beta-13").Waves
+            .SelectMany(wave => wave.Enemies)
+            .Single(enemy => enemy.Id == "templBossHelbrecht");
+
+        Assert.Equal(3, helbrecht.LadderIndex);
+        Assert.Equal(2, Snapshot.Npcs.Single(npc => npc.Id == "templBossHelbrecht").Stats.Count);
     }
 }

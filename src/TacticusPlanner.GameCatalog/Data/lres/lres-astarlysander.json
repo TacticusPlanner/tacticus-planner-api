@@ -164,7 +164,7 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 4,
+                "ladderIndex": 4,
                 "count": 7
               }
             ]
@@ -175,12 +175,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 5,
+                "ladderIndex": 5,
                 "count": 3
               },
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 3,
+                "ladderIndex": 3,
                 "count": 1
               }
             ]
@@ -191,12 +191,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 5,
+                "ladderIndex": 5,
                 "count": 3
               },
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 3,
+                "ladderIndex": 3,
                 "count": 2
               }
             ]
@@ -207,7 +207,7 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 5,
+                "ladderIndex": 5,
                 "count": 6
               }
             ]
@@ -218,7 +218,7 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 3,
+                "ladderIndex": 3,
                 "count": 4
               }
             ]
@@ -229,12 +229,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 5,
+                "ladderIndex": 5,
                 "count": 4
               },
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 3,
+                "ladderIndex": 3,
                 "count": 2
               }
             ]
@@ -262,12 +262,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 3
               },
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 3
               }
             ]
@@ -278,7 +278,7 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 3
               }
             ]
@@ -289,12 +289,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 3
               },
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 2
               }
             ]
@@ -305,7 +305,7 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 5
               }
             ]
@@ -316,12 +316,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 2
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 2
               }
             ]
@@ -332,7 +332,7 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 5
               }
             ]
@@ -360,7 +360,7 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 11
               }
             ]
@@ -371,12 +371,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 2
               },
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 3
               }
             ]
@@ -387,7 +387,7 @@
             "enemies": [
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 3
               }
             ]
@@ -398,12 +398,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 3
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 2
               }
             ]
@@ -414,7 +414,7 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 4
               }
             ]
@@ -425,12 +425,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 2
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 3
               }
             ]
@@ -458,7 +458,7 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 5
               }
             ]
@@ -469,12 +469,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 7
               },
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 2
               }
             ]
@@ -485,12 +485,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 3
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 2
               }
             ]
@@ -501,12 +501,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 7
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 2
               }
             ]
@@ -517,12 +517,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 2
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 2
               }
             ]
@@ -533,7 +533,7 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 5
               }
             ]
@@ -561,17 +561,17 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 4
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 2
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 2
               }
             ]
@@ -582,17 +582,17 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 3
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 2
               },
               {
                 "id": "orksNpc7Squig",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 2
               }
             ]
@@ -603,12 +603,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 2
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 3
               }
             ]
@@ -619,17 +619,17 @@
             "enemies": [
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 2
               },
               {
                 "id": "orksNpc7Squig",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 3
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 4
               }
             ]
@@ -640,12 +640,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 5
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 3
               }
             ]
@@ -656,12 +656,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 4
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 3
               }
             ]
@@ -689,12 +689,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 6
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 2
               }
             ]
@@ -705,17 +705,17 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 3
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 2
               },
               {
                 "id": "orksNpc7Squig",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 3
               }
             ]
@@ -726,12 +726,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 2
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 5
               }
             ]
@@ -742,17 +742,17 @@
             "enemies": [
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 2
               },
               {
                 "id": "orksNpc7Squig",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 3
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 4
               }
             ]
@@ -763,7 +763,7 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 8
               }
             ]
@@ -774,12 +774,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 4
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 4
               }
             ]
@@ -807,7 +807,7 @@
             "enemies": [
               {
                 "id": "orksNpc7Squig",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 7
               }
             ]
@@ -818,12 +818,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 4
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 5
               }
             ]
@@ -834,12 +834,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 2
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 4
               }
             ]
@@ -850,7 +850,7 @@
             "enemies": [
               {
                 "id": "orksNpc7Squig",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 7
               }
             ]
@@ -861,12 +861,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 3
               },
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 4
               }
             ]
@@ -877,12 +877,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 4
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 5
               }
             ]
@@ -910,12 +910,12 @@
             "enemies": [
               {
                 "id": "orksNpc7Squig",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 3
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 7
               }
             ]
@@ -926,12 +926,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 5
               },
               {
                 "id": "orksNpc6Stormboy",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 3
               }
             ]
@@ -942,12 +942,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 2
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 4
               }
             ]
@@ -958,12 +958,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 5
               },
               {
                 "id": "orksNpc6Stormboy",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 3
               }
             ]
@@ -974,12 +974,12 @@
             "enemies": [
               {
                 "id": "orksNpc7Squig",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 3
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 7
               }
             ]
@@ -990,12 +990,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 2
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 4
               }
             ]
@@ -1023,12 +1023,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 3
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 8
               }
             ]
@@ -1039,12 +1039,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 4
               },
               {
                 "id": "orksNpc6Stormboy",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 2
               }
             ]
@@ -1055,12 +1055,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 3
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 2
               }
             ]
@@ -1071,12 +1071,12 @@
             "enemies": [
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 3
               },
               {
                 "id": "orksNpc6Stormboy",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 2
               }
             ]
@@ -1087,12 +1087,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 3
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 8
               }
             ]
@@ -1103,12 +1103,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 4
               },
               {
                 "id": "orksNpc6Stormboy",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 2
               }
             ]
@@ -1136,12 +1136,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 11
               },
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 1
               }
             ]
@@ -1152,7 +1152,7 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 6
               }
             ]
@@ -1163,12 +1163,12 @@
             "enemies": [
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 3
               },
               {
                 "id": "orksNpc6Stormboy",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 3
               }
             ]
@@ -1179,12 +1179,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 3
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 2
               }
             ]
@@ -1195,12 +1195,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 8
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 3
               }
             ]
@@ -1211,7 +1211,7 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 6
               }
             ]
@@ -1239,12 +1239,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 6
               },
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 4
               }
             ]
@@ -1255,7 +1255,7 @@
             "enemies": [
               {
                 "id": "orksNpc6Stormboy",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 7
               }
             ]
@@ -1266,7 +1266,7 @@
             "enemies": [
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 7
               }
             ]
@@ -1277,7 +1277,7 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 8
               }
             ]
@@ -1288,17 +1288,17 @@
             "enemies": [
               {
                 "id": "orksBossBigMekLEG",
-                "stars": 1,
+                "ladderIndex": 1,
                 "count": 1
               },
               {
                 "id": "orksBossKillaKanLEG",
-                "stars": 1,
+                "ladderIndex": 1,
                 "count": 1
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 4
               }
             ]
@@ -1309,12 +1309,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 6
               },
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 4
               }
             ]
@@ -1342,12 +1342,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 37,
+                "ladderIndex": 37,
                 "count": 4
               },
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 36,
+                "ladderIndex": 36,
                 "count": 6
               }
             ]
@@ -1358,12 +1358,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 37,
+                "ladderIndex": 37,
                 "count": 6
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 36,
+                "ladderIndex": 36,
                 "count": 3
               }
             ]
@@ -1374,12 +1374,12 @@
             "enemies": [
               {
                 "id": "orksBossNobLEG",
-                "stars": 1,
+                "ladderIndex": 1,
                 "count": 1
               },
               {
                 "id": "orksNpc7Squig",
-                "stars": 36,
+                "ladderIndex": 36,
                 "count": 5
               }
             ]
@@ -1390,12 +1390,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 37,
+                "ladderIndex": 37,
                 "count": 6
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 36,
+                "ladderIndex": 36,
                 "count": 3
               }
             ]
@@ -1406,7 +1406,7 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 36,
+                "ladderIndex": 36,
                 "count": 7
               }
             ]
@@ -1417,7 +1417,7 @@
             "enemies": [
               {
                 "id": "orksNpc7Squig",
-                "stars": 36,
+                "ladderIndex": 36,
                 "count": 6
               }
             ]
@@ -1445,12 +1445,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 39,
+                "ladderIndex": 39,
                 "count": 6
               },
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 4
               }
             ]
@@ -1461,12 +1461,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 39,
+                "ladderIndex": 39,
                 "count": 6
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 4
               }
             ]
@@ -1477,12 +1477,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 4
               },
               {
                 "id": "orksNpc6Stormboy",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 3
               }
             ]
@@ -1493,17 +1493,17 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 2
               },
               {
                 "id": "orksBossRuntherdLEG",
-                "stars": 1,
+                "ladderIndex": 1,
                 "count": 1
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 2
               }
             ]
@@ -1514,12 +1514,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 4
               },
               {
                 "id": "orksNpc6Stormboy",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 3
               }
             ]
@@ -1530,12 +1530,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 39,
+                "ladderIndex": 39,
                 "count": 5
               },
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 4
               }
             ]
@@ -1563,17 +1563,17 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 5
               },
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 3
               },
               {
                 "id": "orksNpc7Squig",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 3
               }
             ]
@@ -1584,12 +1584,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 3
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 4
               }
             ]
@@ -1600,17 +1600,17 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 2
               },
               {
                 "id": "orksBossWarboss",
-                "stars": 4,
+                "ladderIndex": 4,
                 "count": 1
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 3
               }
             ]
@@ -1621,17 +1621,17 @@
             "enemies": [
               {
                 "id": "orksNpc7Squig",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 3
               },
               {
                 "id": "orksNpc6Stormboy",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 3
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 5
               }
             ]
@@ -1642,12 +1642,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 4
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 4
               }
             ]
@@ -1658,7 +1658,7 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 6
               }
             ]
@@ -1686,12 +1686,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 42,
+                "ladderIndex": 42,
                 "count": 5
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 43,
+                "ladderIndex": 43,
                 "count": 3
               }
             ]
@@ -1702,12 +1702,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 43,
+                "ladderIndex": 43,
                 "count": 8
               },
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 42,
+                "ladderIndex": 42,
                 "count": 4
               }
             ]
@@ -1718,7 +1718,7 @@
             "enemies": [
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 43,
+                "ladderIndex": 43,
                 "count": 7
               }
             ]
@@ -1729,12 +1729,12 @@
             "enemies": [
               {
                 "id": "orksNpc7Squig",
-                "stars": 42,
+                "ladderIndex": 42,
                 "count": 6
               },
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 42,
+                "ladderIndex": 42,
                 "count": 2
               }
             ]
@@ -1745,12 +1745,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 43,
+                "ladderIndex": 43,
                 "count": 8
               },
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 42,
+                "ladderIndex": 42,
                 "count": 4
               }
             ]
@@ -1761,7 +1761,7 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 42,
+                "ladderIndex": 42,
                 "count": 6
               }
             ]
@@ -1789,17 +1789,17 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 45,
+                "ladderIndex": 45,
                 "count": 5
               },
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 45,
+                "ladderIndex": 45,
                 "count": 3
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 45,
+                "ladderIndex": 45,
                 "count": 3
               }
             ]
@@ -1810,12 +1810,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 45,
+                "ladderIndex": 45,
                 "count": 6
               },
               {
                 "id": "orksNpc7Squig",
-                "stars": 45,
+                "ladderIndex": 45,
                 "count": 5
               }
             ]
@@ -1826,17 +1826,17 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 45,
+                "ladderIndex": 45,
                 "count": 3
               },
               {
                 "id": "orksNpc6Stormboy",
-                "stars": 45,
+                "ladderIndex": 45,
                 "count": 2
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 45,
+                "ladderIndex": 45,
                 "count": 2
               }
             ]
@@ -1847,17 +1847,17 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 45,
+                "ladderIndex": 45,
                 "count": 3
               },
               {
                 "id": "orksNpc6Stormboy",
-                "stars": 45,
+                "ladderIndex": 45,
                 "count": 2
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 45,
+                "ladderIndex": 45,
                 "count": 2
               }
             ]
@@ -1868,17 +1868,17 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 45,
+                "ladderIndex": 45,
                 "count": 5
               },
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 45,
+                "ladderIndex": 45,
                 "count": 1
               },
               {
                 "id": "orksNpc7Squig",
-                "stars": 45,
+                "ladderIndex": 45,
                 "count": 5
               }
             ]
@@ -1889,17 +1889,17 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 45,
+                "ladderIndex": 45,
                 "count": 5
               },
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 45,
+                "ladderIndex": 45,
                 "count": 3
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 45,
+                "ladderIndex": 45,
                 "count": 3
               }
             ]
@@ -1927,12 +1927,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 52,
+                "ladderIndex": 52,
                 "count": 7
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 49,
+                "ladderIndex": 49,
                 "count": 5
               }
             ]
@@ -1943,12 +1943,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 50,
+                "ladderIndex": 50,
                 "count": 6
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 52,
+                "ladderIndex": 52,
                 "count": 3
               }
             ]
@@ -1959,12 +1959,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 52,
+                "ladderIndex": 52,
                 "count": 8
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 49,
+                "ladderIndex": 49,
                 "count": 4
               }
             ]
@@ -1975,12 +1975,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 50,
+                "ladderIndex": 50,
                 "count": 3
               },
               {
                 "id": "orksNpc6Stormboy",
-                "stars": 52,
+                "ladderIndex": 52,
                 "count": 4
               }
             ]
@@ -1991,12 +1991,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 50,
+                "ladderIndex": 50,
                 "count": 6
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 52,
+                "ladderIndex": 52,
                 "count": 6
               }
             ]
@@ -2007,12 +2007,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 50,
+                "ladderIndex": 50,
                 "count": 6
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 52,
+                "ladderIndex": 52,
                 "count": 6
               }
             ]
@@ -2040,7 +2040,7 @@
             "enemies": [
               {
                 "id": "orksNpc7Squig",
-                "stars": 52,
+                "ladderIndex": 52,
                 "count": 8
               }
             ]
@@ -2051,12 +2051,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 53,
+                "ladderIndex": 53,
                 "count": 6
               },
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 53,
+                "ladderIndex": 53,
                 "count": 6
               }
             ]
@@ -2067,12 +2067,12 @@
             "enemies": [
               {
                 "id": "orksNpc7Squig",
-                "stars": 52,
+                "ladderIndex": 52,
                 "count": 3
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 52,
+                "ladderIndex": 52,
                 "count": 4
               }
             ]
@@ -2083,7 +2083,7 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 53,
+                "ladderIndex": 53,
                 "count": 7
               }
             ]
@@ -2094,12 +2094,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 53,
+                "ladderIndex": 53,
                 "count": 6
               },
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 53,
+                "ladderIndex": 53,
                 "count": 6
               }
             ]
@@ -2110,17 +2110,17 @@
             "enemies": [
               {
                 "id": "orksNpc7Squig",
-                "stars": 52,
+                "ladderIndex": 52,
                 "count": 3
               },
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 53,
+                "ladderIndex": 53,
                 "count": 4
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 53,
+                "ladderIndex": 53,
                 "count": 4
               }
             ]
@@ -2265,7 +2265,7 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 2,
+                "ladderIndex": 2,
                 "count": 7
               }
             ]
@@ -2276,12 +2276,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 2,
+                "ladderIndex": 2,
                 "count": 2
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 1,
+                "ladderIndex": 1,
                 "count": 3
               }
             ]
@@ -2292,7 +2292,7 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 2,
+                "ladderIndex": 2,
                 "count": 5
               }
             ]
@@ -2303,12 +2303,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 2,
+                "ladderIndex": 2,
                 "count": 2
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 1,
+                "ladderIndex": 1,
                 "count": 2
               }
             ]
@@ -2319,7 +2319,7 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 2,
+                "ladderIndex": 2,
                 "count": 5
               }
             ]
@@ -2330,12 +2330,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 2,
+                "ladderIndex": 2,
                 "count": 2
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 1,
+                "ladderIndex": 1,
                 "count": 3
               }
             ]
@@ -2366,12 +2366,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 4
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 2
               }
             ]
@@ -2382,7 +2382,7 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 5
               }
             ]
@@ -2393,12 +2393,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 1
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 4
               }
             ]
@@ -2409,7 +2409,7 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 7
               }
             ]
@@ -2420,12 +2420,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 1
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 4
               }
             ]
@@ -2436,12 +2436,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 4
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 2
               }
             ]
@@ -2472,7 +2472,7 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 8
               }
             ]
@@ -2483,12 +2483,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 3
               },
               {
                 "id": "templNpc3InitiatePyreblaster",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 3
               }
             ]
@@ -2499,7 +2499,7 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 6
               }
             ]
@@ -2510,7 +2510,7 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 6
               }
             ]
@@ -2521,12 +2521,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 3
               },
               {
                 "id": "templNpc3InitiatePyreblaster",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 3
               }
             ]
@@ -2537,7 +2537,7 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 6
               }
             ]
@@ -2568,12 +2568,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 3
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 3
               }
             ]
@@ -2584,12 +2584,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 3
               },
               {
                 "id": "templNpc3InitiatePyreblaster",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 2
               }
             ]
@@ -2600,12 +2600,12 @@
             "enemies": [
               {
                 "id": "templNpc3InitiatePyreblaster",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 1
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 4
               }
             ]
@@ -2616,7 +2616,7 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 5
               }
             ]
@@ -2627,12 +2627,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 3
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 3
               }
             ]
@@ -2643,12 +2643,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 3
               },
               {
                 "id": "templNpc3InitiatePyreblaster",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 2
               }
             ]
@@ -2679,12 +2679,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 5
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 2
               }
             ]
@@ -2695,17 +2695,17 @@
             "enemies": [
               {
                 "id": "templNpc4Aggressor",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 1
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 2
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 4
               }
             ]
@@ -2716,12 +2716,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 4
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 4
               }
             ]
@@ -2732,12 +2732,12 @@
             "enemies": [
               {
                 "id": "templNpc4Aggressor",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 1
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 4
               }
             ]
@@ -2748,7 +2748,7 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 7
               }
             ]
@@ -2759,17 +2759,17 @@
             "enemies": [
               {
                 "id": "templNpc4Aggressor",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 2
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 2
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 3
               }
             ]
@@ -2800,12 +2800,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 6
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 2
               }
             ]
@@ -2816,22 +2816,22 @@
             "enemies": [
               {
                 "id": "templNpc4Aggressor",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 1
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 2
               },
               {
                 "id": "templNpc3InitiatePyreblaster",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 2
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 2
               }
             ]
@@ -2842,17 +2842,17 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 4
               },
               {
                 "id": "templNpc3InitiatePyreblaster",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 2
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 2
               }
             ]
@@ -2863,12 +2863,12 @@
             "enemies": [
               {
                 "id": "templNpc4Aggressor",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 1
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 4
               }
             ]
@@ -2879,7 +2879,7 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 8
               }
             ]
@@ -2890,17 +2890,17 @@
             "enemies": [
               {
                 "id": "templNpc4Aggressor",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 2
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 2
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 2
               }
             ]
@@ -2931,17 +2931,17 @@
             "enemies": [
               {
                 "id": "templNpc4Aggressor",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 1
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 5
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 2
               }
             ]
@@ -2952,12 +2952,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 5
               },
               {
                 "id": "templNpc3InitiatePyreblaster",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 1
               }
             ]
@@ -2968,12 +2968,12 @@
             "enemies": [
               {
                 "id": "templNpc4Aggressor",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 2
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 3
               }
             ]
@@ -2984,12 +2984,12 @@
             "enemies": [
               {
                 "id": "templNpc2Neophyte",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 5
               },
               {
                 "id": "templNpc3InitiatePyreblaster",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 2
               }
             ]
@@ -3000,12 +3000,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 4
               },
               {
                 "id": "templNpc4Aggressor",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 1
               }
             ]
@@ -3016,12 +3016,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 4
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 4
               }
             ]
@@ -3052,12 +3052,12 @@
             "enemies": [
               {
                 "id": "templNpc4Aggressor",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 1
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 6
               }
             ]
@@ -3068,17 +3068,17 @@
             "enemies": [
               {
                 "id": "templNpc4Aggressor",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 1
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 2
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 3
               }
             ]
@@ -3089,12 +3089,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 4
               },
               {
                 "id": "templNpc4Aggressor",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 1
               }
             ]
@@ -3105,17 +3105,17 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 4
               },
               {
                 "id": "templNpc4Aggressor",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 1
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 2
               }
             ]
@@ -3126,12 +3126,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 5
               },
               {
                 "id": "templNpc4Aggressor",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 1
               }
             ]
@@ -3142,17 +3142,17 @@
             "enemies": [
               {
                 "id": "templNpc4Aggressor",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 1
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 3
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 4
               }
             ]
@@ -3183,12 +3183,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 6
               },
               {
                 "id": "templNpc3InitiatePyreblaster",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 2
               }
             ]
@@ -3199,12 +3199,12 @@
             "enemies": [
               {
                 "id": "templNpc4Aggressor",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 1
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 7
               }
             ]
@@ -3215,12 +3215,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 4
               },
               {
                 "id": "templNpc3InitiatePyreblaster",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 2
               }
             ]
@@ -3231,12 +3231,12 @@
             "enemies": [
               {
                 "id": "templNpc4Aggressor",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 1
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 7
               }
             ]
@@ -3247,12 +3247,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 4
               },
               {
                 "id": "templNpc3InitiatePyreblaster",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 2
               }
             ]
@@ -3263,7 +3263,7 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 7
               }
             ]
@@ -3294,12 +3294,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 6
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 3
               }
             ]
@@ -3310,17 +3310,17 @@
             "enemies": [
               {
                 "id": "templNpc4Aggressor",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 1
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 5
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 1
               }
             ]
@@ -3331,17 +3331,17 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 4
               },
               {
                 "id": "templNpc4Aggressor",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 1
               },
               {
                 "id": "templBossAncient",
-                "stars": 3,
+                "ladderIndex": 3,
                 "count": 1
               }
             ]
@@ -3352,17 +3352,17 @@
             "enemies": [
               {
                 "id": "templNpc2Neophyte",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 3
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 2
               },
               {
                 "id": "templNpc3InitiatePyreblaster",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 2
               }
             ]
@@ -3373,12 +3373,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 5
               },
               {
                 "id": "templNpc4Aggressor",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 1
               }
             ]
@@ -3389,17 +3389,17 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 3
               },
               {
                 "id": "templNpc4Aggressor",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 1
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 4
               }
             ]
@@ -3430,12 +3430,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 4
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 4
               }
             ]
@@ -3446,12 +3446,12 @@
             "enemies": [
               {
                 "id": "templBossChampionLEG",
-                "stars": 1,
+                "ladderIndex": 1,
                 "count": 1
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 3
               }
             ]
@@ -3462,12 +3462,12 @@
             "enemies": [
               {
                 "id": "templNpc4Aggressor",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 1
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 7
               }
             ]
@@ -3478,12 +3478,12 @@
             "enemies": [
               {
                 "id": "templNpc2Neophyte",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 4
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 5
               }
             ]
@@ -3494,12 +3494,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 5
               },
               {
                 "id": "templNpc4Aggressor",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 1
               }
             ]
@@ -3510,12 +3510,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 4
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 4
               }
             ]
@@ -3546,12 +3546,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 5
               },
               {
                 "id": "templNpc3InitiatePyreblaster",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 2
               }
             ]
@@ -3562,12 +3562,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 5
               },
               {
                 "id": "templNpc3InitiatePyreblaster",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 1
               }
             ]
@@ -3578,12 +3578,12 @@
             "enemies": [
               {
                 "id": "templNpc2Neophyte",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 3
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 6
               }
             ]
@@ -3594,17 +3594,17 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 1
               },
               {
                 "id": "templBossAggressorLEG",
-                "stars": 1,
+                "ladderIndex": 1,
                 "count": 1
               },
               {
                 "id": "templNpc3InitiatePyreblaster",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 2
               }
             ]
@@ -3615,12 +3615,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 6
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 3
               }
             ]
@@ -3631,12 +3631,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 8
               },
               {
                 "id": "templNpc3InitiatePyreblaster",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 1
               }
             ]
@@ -3667,12 +3667,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 5
               },
               {
                 "id": "templNpc4Aggressor",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 2
               }
             ]
@@ -3683,17 +3683,17 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 3
               },
               {
                 "id": "templBossHelbrecht",
-                "stars": 3,
+                "ladderIndex": 3,
                 "count": 1
               },
               {
                 "id": "templNpc3InitiatePyreblaster",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 3
               }
             ]
@@ -3704,12 +3704,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 7
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 4
               }
             ]
@@ -3720,17 +3720,17 @@
             "enemies": [
               {
                 "id": "templNpc4Aggressor",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 1
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 4
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 2
               }
             ]
@@ -3741,17 +3741,17 @@
             "enemies": [
               {
                 "id": "templNpc4Aggressor",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 1
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 4
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 2
               }
             ]
@@ -3762,12 +3762,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 7
               },
               {
                 "id": "templNpc4Aggressor",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 1
               }
             ]
@@ -3798,7 +3798,7 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 9
               }
             ]
@@ -3809,12 +3809,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 2
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 6
               }
             ]
@@ -3825,12 +3825,12 @@
             "enemies": [
               {
                 "id": "templNpc4Aggressor",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 2
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 4
               }
             ]
@@ -3841,17 +3841,17 @@
             "enemies": [
               {
                 "id": "templNpc4Aggressor",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 1
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 3
               },
               {
                 "id": "templNpc3InitiatePyreblaster",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 3
               }
             ]
@@ -3862,17 +3862,17 @@
             "enemies": [
               {
                 "id": "templBossSwordBrother",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 1
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 3
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 4
               }
             ]
@@ -3883,12 +3883,12 @@
             "enemies": [
               {
                 "id": "templNpc4Aggressor",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 1
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 7
               }
             ]
@@ -3919,12 +3919,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 6
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 4
               }
             ]
@@ -3935,17 +3935,17 @@
             "enemies": [
               {
                 "id": "templNpc4Aggressor",
-                "stars": 29,
+                "ladderIndex": 29,
                 "count": 1
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 4
               },
               {
                 "id": "templNpc3InitiatePyreblaster",
-                "stars": 29,
+                "ladderIndex": 29,
                 "count": 2
               }
             ]
@@ -3956,12 +3956,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 5
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 4
               }
             ]
@@ -3972,7 +3972,7 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 10
               }
             ]
@@ -3983,12 +3983,12 @@
             "enemies": [
               {
                 "id": "templNpc4Aggressor",
-                "stars": 29,
+                "ladderIndex": 29,
                 "count": 1
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 6
               }
             ]
@@ -3999,12 +3999,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 4
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 2
               }
             ]
@@ -4035,12 +4035,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 6
               },
               {
                 "id": "templNpc3InitiatePyreblaster",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 4
               }
             ]
@@ -4051,12 +4051,12 @@
             "enemies": [
               {
                 "id": "templNpc4Aggressor",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 2
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 6
               }
             ]
@@ -4067,12 +4067,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 7
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 3
               }
             ]
@@ -4083,12 +4083,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 7
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 3
               }
             ]
@@ -4099,12 +4099,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 6
               },
               {
                 "id": "templNpc3InitiatePyreblaster",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 4
               }
             ]
@@ -4115,12 +4115,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 6
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 3
               }
             ]
@@ -4151,17 +4151,17 @@
             "enemies": [
               {
                 "id": "templNpc4Aggressor",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 2
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 6
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 2
               }
             ]
@@ -4172,12 +4172,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 6
               },
               {
                 "id": "templNpc4Aggressor",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 2
               }
             ]
@@ -4188,17 +4188,17 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 4
               },
               {
                 "id": "templNpc4Aggressor",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 1
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 5
               }
             ]
@@ -4209,17 +4209,17 @@
             "enemies": [
               {
                 "id": "templNpc4Aggressor",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 1
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 5
               },
               {
                 "id": "templNpc3InitiatePyreblaster",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 2
               }
             ]
@@ -4230,12 +4230,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 6
               },
               {
                 "id": "templNpc4Aggressor",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 2
               }
             ]
@@ -4246,12 +4246,12 @@
             "enemies": [
               {
                 "id": "templNpc3InitiatePyreblaster",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 2
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 8
               }
             ]
@@ -4282,7 +4282,7 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 11
               }
             ]
@@ -4293,17 +4293,17 @@
             "enemies": [
               {
                 "id": "templNpc4Aggressor",
-                "stars": 35,
+                "ladderIndex": 35,
                 "count": 1
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 3
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 37,
+                "ladderIndex": 37,
                 "count": 6
               }
             ]
@@ -4314,17 +4314,17 @@
             "enemies": [
               {
                 "id": "templNpc4Aggressor",
-                "stars": 35,
+                "ladderIndex": 35,
                 "count": 2
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 4
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 37,
+                "ladderIndex": 37,
                 "count": 3
               }
             ]
@@ -4335,7 +4335,7 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 11
               }
             ]
@@ -4346,12 +4346,12 @@
             "enemies": [
               {
                 "id": "templNpc1Initiate",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 6
               },
               {
                 "id": "templNpc3InitiatePyreblaster",
-                "stars": 37,
+                "ladderIndex": 37,
                 "count": 3
               }
             ]
@@ -4362,17 +4362,17 @@
             "enemies": [
               {
                 "id": "templNpc4Aggressor",
-                "stars": 35,
+                "ladderIndex": 35,
                 "count": 1
               },
               {
                 "id": "templNpc1Initiate",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 3
               },
               {
                 "id": "templNpc2Neophyte",
-                "stars": 37,
+                "ladderIndex": 37,
                 "count": 6
               }
             ]
@@ -4512,7 +4512,7 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 4,
+                "ladderIndex": 4,
                 "count": 7
               }
             ]
@@ -4523,12 +4523,12 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 4,
+                "ladderIndex": 4,
                 "count": 2
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 4,
+                "ladderIndex": 4,
                 "count": 3
               }
             ]
@@ -4539,7 +4539,7 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 4,
+                "ladderIndex": 4,
                 "count": 3
               }
             ]
@@ -4550,7 +4550,7 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 4,
+                "ladderIndex": 4,
                 "count": 7
               }
             ]
@@ -4561,12 +4561,12 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 4,
+                "ladderIndex": 4,
                 "count": 3
               },
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 4,
+                "ladderIndex": 4,
                 "count": 2
               }
             ]
@@ -4577,12 +4577,12 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 4,
+                "ladderIndex": 4,
                 "count": 2
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 4,
+                "ladderIndex": 4,
                 "count": 3
               }
             ]
@@ -4608,12 +4608,12 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 3
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 5
               }
             ]
@@ -4624,12 +4624,12 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 4
               },
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 2
               }
             ]
@@ -4640,7 +4640,7 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 6
               }
             ]
@@ -4651,12 +4651,12 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 3
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 2
               }
             ]
@@ -4667,12 +4667,12 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 4
               },
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 2
               }
             ]
@@ -4683,12 +4683,12 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 4
               },
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 2
               }
             ]
@@ -4714,12 +4714,12 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 3
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 5
               }
             ]
@@ -4730,12 +4730,12 @@
             "enemies": [
               {
                 "id": "blackNpc2Terminator",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 1
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 4
               }
             ]
@@ -4746,17 +4746,17 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 3
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 1
               },
               {
                 "id": "blackNpc2Terminator",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 1
               }
             ]
@@ -4767,7 +4767,7 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 9
               }
             ]
@@ -4778,12 +4778,12 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 5
               },
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 2
               }
             ]
@@ -4794,12 +4794,12 @@
             "enemies": [
               {
                 "id": "blackNpc2Terminator",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 1
               },
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 3
               }
             ]
@@ -4825,7 +4825,7 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 7
               }
             ]
@@ -4836,17 +4836,17 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 2
               },
               {
                 "id": "blackNpc2Terminator",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 1
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 5
               }
             ]
@@ -4857,17 +4857,17 @@
             "enemies": [
               {
                 "id": "blackNpc2Terminator",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 1
               },
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 2
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 1
               }
             ]
@@ -4878,12 +4878,12 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 6
               },
               {
                 "id": "blackNpc2Terminator",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 1
               }
             ]
@@ -4894,12 +4894,12 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 2
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 5
               }
             ]
@@ -4910,17 +4910,17 @@
             "enemies": [
               {
                 "id": "blackNpc2Terminator",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 1
               },
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 1
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 3
               }
             ]
@@ -4946,12 +4946,12 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 2
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 7
               }
             ]
@@ -4962,12 +4962,12 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 5
               },
               {
                 "id": "blackNpc4Havoc",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 1
               }
             ]
@@ -4978,12 +4978,12 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 6
               },
               {
                 "id": "blackNpc4Havoc",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 1
               }
             ]
@@ -4994,17 +4994,17 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 1
               },
               {
                 "id": "blackNpc4Havoc",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 1
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 2
               }
             ]
@@ -5015,12 +5015,12 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 6
               },
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 2
               }
             ]
@@ -5031,17 +5031,17 @@
             "enemies": [
               {
                 "id": "blackNpc4Havoc",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 2
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 4
               },
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 1
               }
             ]
@@ -5067,17 +5067,17 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 2
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 4
               },
               {
                 "id": "blackNpc4Havoc",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 2
               }
             ]
@@ -5088,17 +5088,17 @@
             "enemies": [
               {
                 "id": "blackNpc2Terminator",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 2
               },
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 1
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 3
               }
             ]
@@ -5109,17 +5109,17 @@
             "enemies": [
               {
                 "id": "blackNpc4Havoc",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 1
               },
               {
                 "id": "blackNpc2Terminator",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 1
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 5
               }
             ]
@@ -5130,17 +5130,17 @@
             "enemies": [
               {
                 "id": "blackNpc4Havoc",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 1
               },
               {
                 "id": "blackNpc2Terminator",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 2
               },
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 2
               }
             ]
@@ -5151,12 +5151,12 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 4
               },
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 2
               }
             ]
@@ -5167,12 +5167,12 @@
             "enemies": [
               {
                 "id": "blackNpc4Havoc",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 2
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 6
               }
             ]
@@ -5198,12 +5198,12 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 5
               },
               {
                 "id": "blackNpc4Havoc",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 3
               }
             ]
@@ -5214,17 +5214,17 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 3
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 3
               },
               {
                 "id": "blackNpc4Havoc",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 1
               }
             ]
@@ -5235,17 +5235,17 @@
             "enemies": [
               {
                 "id": "blackNpc2Terminator",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 2
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 4
               },
               {
                 "id": "blackNpc4Havoc",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 1
               }
             ]
@@ -5256,17 +5256,17 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 3
               },
               {
                 "id": "blackNpc2Terminator",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 1
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 3
               }
             ]
@@ -5277,12 +5277,12 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 8
               },
               {
                 "id": "blackNpc2Terminator",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 1
               }
             ]
@@ -5293,17 +5293,17 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 5
               },
               {
                 "id": "blackNpc2Terminator",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 1
               },
               {
                 "id": "blackNpc4Havoc",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 1
               }
             ]
@@ -5329,12 +5329,12 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 6
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 5
               }
             ]
@@ -5345,17 +5345,17 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 2
               },
               {
                 "id": "blackNpc4Havoc",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 2
               },
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 2
               }
             ]
@@ -5366,12 +5366,12 @@
             "enemies": [
               {
                 "id": "blackNpc2Terminator",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 2
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 7
               }
             ]
@@ -5382,17 +5382,17 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 2
               },
               {
                 "id": "blackNpc4Havoc",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 2
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 2
               }
             ]
@@ -5403,17 +5403,17 @@
             "enemies": [
               {
                 "id": "blackNpc2Terminator",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 2
               },
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 2
               },
               {
                 "id": "blackNpc4Havoc",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 2
               }
             ]
@@ -5424,17 +5424,17 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 3
               },
               {
                 "id": "blackNpc4Havoc",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 1
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 7
               }
             ]
@@ -5460,17 +5460,17 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 6
               },
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 2
               },
               {
                 "id": "blackNpc4Havoc",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 2
               }
             ]
@@ -5481,12 +5481,12 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 7
               },
               {
                 "id": "blackNpc2Terminator",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 2
               }
             ]
@@ -5497,17 +5497,17 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 2
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 2
               },
               {
                 "id": "blackNpc4Havoc",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 2
               }
             ]
@@ -5518,12 +5518,12 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 3
               },
               {
                 "id": "blackNpc4Havoc",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 1
               }
             ]
@@ -5534,12 +5534,12 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 5
               },
               {
                 "id": "blackNpc2Terminator",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 1
               }
             ]
@@ -5550,12 +5550,12 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 3
               },
               {
                 "id": "blackNpc4Havoc",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 3
               }
             ]
@@ -5581,12 +5581,12 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 7
               },
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 5
               }
             ]
@@ -5597,17 +5597,17 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 3
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 4
               },
               {
                 "id": "blackNpc4Havoc",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 1
               }
             ]
@@ -5618,12 +5618,12 @@
             "enemies": [
               {
                 "id": "blackNpc2Terminator",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 2
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 6
               }
             ]
@@ -5634,17 +5634,17 @@
             "enemies": [
               {
                 "id": "blackNpc4Havoc",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 2
               },
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 2
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 3
               }
             ]
@@ -5655,17 +5655,17 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 1
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 4
               },
               {
                 "id": "blackBossPossession",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 1
               }
             ]
@@ -5676,17 +5676,17 @@
             "enemies": [
               {
                 "id": "blackNpc2Terminator",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 1
               },
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 3
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 5
               }
             ]
@@ -5712,12 +5712,12 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 6
               },
               {
                 "id": "blackNpc4Havoc",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 2
               }
             ]
@@ -5728,12 +5728,12 @@
             "enemies": [
               {
                 "id": "blackBossTerminatorLEG",
-                "stars": 2,
+                "ladderIndex": 2,
                 "count": 1
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 5
               }
             ]
@@ -5744,17 +5744,17 @@
             "enemies": [
               {
                 "id": "blackNpc2Terminator",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 1
               },
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 3
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 4
               }
             ]
@@ -5765,17 +5765,17 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 2
               },
               {
                 "id": "blackNpc4Havoc",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 1
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 6
               }
             ]
@@ -5786,17 +5786,17 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 4
               },
               {
                 "id": "blackNpc2Terminator",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 1
               },
               {
                 "id": "blackNpc4Havoc",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 1
               }
             ]
@@ -5807,12 +5807,12 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 10
               },
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 2
               }
             ]
@@ -5838,12 +5838,12 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 8
               },
               {
                 "id": "blackNpc4Havoc",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 1
               }
             ]
@@ -5854,17 +5854,17 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 3
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 3
               },
               {
                 "id": "blackNpc2Terminator",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 1
               }
             ]
@@ -5875,17 +5875,17 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 2
               },
               {
                 "id": "blackBossHaarkenLEG",
-                "stars": 1,
+                "ladderIndex": 1,
                 "count": 1
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 2
               }
             ]
@@ -5896,12 +5896,12 @@
             "enemies": [
               {
                 "id": "blackNpc4Havoc",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 2
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 4
               }
             ]
@@ -5912,17 +5912,17 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 8
               },
               {
                 "id": "blackNpc2Terminator",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 1
               },
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 2
               }
             ]
@@ -5933,17 +5933,17 @@
             "enemies": [
               {
                 "id": "blackNpc2Terminator",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 1
               },
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 3
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 4
               }
             ]
@@ -5969,12 +5969,12 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 4
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 8
               }
             ]
@@ -5985,17 +5985,17 @@
             "enemies": [
               {
                 "id": "blackNpc2Terminator",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 1
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 5
               },
               {
                 "id": "blackBossObliteratorLEG",
-                "stars": 1,
+                "ladderIndex": 1,
                 "count": 1
               }
             ]
@@ -6006,12 +6006,12 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 4
               },
               {
                 "id": "blackNpc2Terminator",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 2
               }
             ]
@@ -6022,17 +6022,17 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 3
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 4
               },
               {
                 "id": "blackNpc4Havoc",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 1
               }
             ]
@@ -6043,12 +6043,12 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 3
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 9
               }
             ]
@@ -6059,17 +6059,17 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 2
               },
               {
                 "id": "blackNpc2Terminator",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 1
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 7
               }
             ]
@@ -6095,12 +6095,12 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 29,
+                "ladderIndex": 29,
                 "count": 8
               },
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 29,
+                "ladderIndex": 29,
                 "count": 4
               }
             ]
@@ -6111,12 +6111,12 @@
             "enemies": [
               {
                 "id": "blackNpc2Terminator",
-                "stars": 29,
+                "ladderIndex": 29,
                 "count": 2
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 29,
+                "ladderIndex": 29,
                 "count": 4
               }
             ]
@@ -6127,17 +6127,17 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 29,
+                "ladderIndex": 29,
                 "count": 2
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 29,
+                "ladderIndex": 29,
                 "count": 4
               },
               {
                 "id": "blackNpc4Havoc",
-                "stars": 29,
+                "ladderIndex": 29,
                 "count": 2
               }
             ]
@@ -6148,17 +6148,17 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 29,
+                "ladderIndex": 29,
                 "count": 2
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 29,
+                "ladderIndex": 29,
                 "count": 5
               },
               {
                 "id": "blackBossAbaddonLEG",
-                "stars": 2,
+                "ladderIndex": 2,
                 "count": 1
               }
             ]
@@ -6169,17 +6169,17 @@
             "enemies": [
               {
                 "id": "blackNpc4Havoc",
-                "stars": 29,
+                "ladderIndex": 29,
                 "count": 2
               },
               {
                 "id": "blackNpc2Terminator",
-                "stars": 29,
+                "ladderIndex": 29,
                 "count": 1
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 29,
+                "ladderIndex": 29,
                 "count": 3
               }
             ]
@@ -6190,12 +6190,12 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 29,
+                "ladderIndex": 29,
                 "count": 8
               },
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 29,
+                "ladderIndex": 29,
                 "count": 2
               }
             ]
@@ -6221,12 +6221,12 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 3
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 8
               }
             ]
@@ -6237,12 +6237,12 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 6
               },
               {
                 "id": "blackNpc2Terminator",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 2
               }
             ]
@@ -6253,12 +6253,12 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 3
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 5
               }
             ]
@@ -6269,12 +6269,12 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 6
               },
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 3
               }
             ]
@@ -6285,17 +6285,17 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 5
               },
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 2
               },
               {
                 "id": "blackNpc2Terminator",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 1
               }
             ]
@@ -6306,12 +6306,12 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 6
               },
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 3
               }
             ]
@@ -6337,12 +6337,12 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 10
               },
               {
                 "id": "blackNpc4Havoc",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 2
               }
             ]
@@ -6353,17 +6353,17 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 3
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 3
               },
               {
                 "id": "blackNpc2Terminator",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 2
               }
             ]
@@ -6374,22 +6374,22 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 7
               },
               {
                 "id": "blackNpc2Terminator",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 1
               },
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 3
               },
               {
                 "id": "blackNpc4Havoc",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 1
               }
             ]
@@ -6400,17 +6400,17 @@
             "enemies": [
               {
                 "id": "blackNpc2Terminator",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 1
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 6
               },
               {
                 "id": "blackNpc4Havoc",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 1
               }
             ]
@@ -6421,22 +6421,22 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 3
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 2
               },
               {
                 "id": "blackNpc4Havoc",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 1
               },
               {
                 "id": "blackNpc2Terminator",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 2
               }
             ]
@@ -6447,17 +6447,17 @@
             "enemies": [
               {
                 "id": "blackNpc2Terminator",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 1
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 9
               },
               {
                 "id": "blackNpc4Havoc",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 1
               }
             ]
@@ -6483,12 +6483,12 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 6
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 41,
+                "ladderIndex": 41,
                 "count": 6
               }
             ]
@@ -6499,17 +6499,17 @@
             "enemies": [
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 41,
+                "ladderIndex": 41,
                 "count": 6
               },
               {
                 "id": "blackNpc4Havoc",
-                "stars": 37,
+                "ladderIndex": 37,
                 "count": 1
               },
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 2
               }
             ]
@@ -6520,17 +6520,17 @@
             "enemies": [
               {
                 "id": "blackNpc2Terminator",
-                "stars": 37,
+                "ladderIndex": 37,
                 "count": 2
               },
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 2
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 41,
+                "ladderIndex": 41,
                 "count": 4
               }
             ]
@@ -6541,17 +6541,17 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 3
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 41,
+                "ladderIndex": 41,
                 "count": 8
               },
               {
                 "id": "blackNpc4Havoc",
-                "stars": 37,
+                "ladderIndex": 37,
                 "count": 1
               }
             ]
@@ -6562,17 +6562,17 @@
             "enemies": [
               {
                 "id": "blackNpc2Terminator",
-                "stars": 37,
+                "ladderIndex": 37,
                 "count": 2
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 41,
+                "ladderIndex": 41,
                 "count": 3
               },
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 2
               }
             ]
@@ -6583,17 +6583,17 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 3
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 41,
+                "ladderIndex": 41,
                 "count": 8
               },
               {
                 "id": "blackNpc4Havoc",
-                "stars": 37,
+                "ladderIndex": 37,
                 "count": 1
               }
             ]
@@ -6619,12 +6619,12 @@
             "enemies": [
               {
                 "id": "blackNpc4Havoc",
-                "stars": 42,
+                "ladderIndex": 42,
                 "count": 2
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 42,
+                "ladderIndex": 42,
                 "count": 8
               }
             ]
@@ -6635,17 +6635,17 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 2
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 42,
+                "ladderIndex": 42,
                 "count": 3
               },
               {
                 "id": "blackNpc4Havoc",
-                "stars": 42,
+                "ladderIndex": 42,
                 "count": 2
               }
             ]
@@ -6656,17 +6656,17 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 2
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 42,
+                "ladderIndex": 42,
                 "count": 7
               },
               {
                 "id": "blackNpc2Terminator",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 1
               }
             ]
@@ -6677,12 +6677,12 @@
             "enemies": [
               {
                 "id": "blackNpc4Havoc",
-                "stars": 42,
+                "ladderIndex": 42,
                 "count": 1
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 42,
+                "ladderIndex": 42,
                 "count": 9
               }
             ]
@@ -6693,12 +6693,12 @@
             "enemies": [
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 2
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 42,
+                "ladderIndex": 42,
                 "count": 10
               }
             ]
@@ -6709,22 +6709,22 @@
             "enemies": [
               {
                 "id": "blackNpc2Terminator",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 1
               },
               {
                 "id": "blackNpc3TraitorGuardsman",
-                "stars": 42,
+                "ladderIndex": 42,
                 "count": 6
               },
               {
                 "id": "blackNpc1Bloodletter",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 2
               },
               {
                 "id": "blackNpc4Havoc",
-                "stars": 42,
+                "ladderIndex": 42,
                 "count": 1
               }
             ]

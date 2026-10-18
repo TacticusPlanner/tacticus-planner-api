@@ -1,6 +1,6 @@
 ﻿{
   version: dev-2026-10-18,
-  schemaVersion: 5,
+  schemaVersion: 7,
   gameVersion: 1.43,
   sourceHash: {time-dependent},
   datasets: [
@@ -56,7 +56,7 @@
     },
     {
       key: lre-battles,
-      hash: a88c8ae123a8e05508279e73221ba32d3319ce93ca87418cc0e7fdef679d8b0c,
+      hash: 7eff4417c7a928fb9ab871424c76115ccffc661acf8a869b983d90afa7951879,
       url: /api/v1/game-catalog/lre-battles
     },
     {
@@ -98,6 +98,11 @@
       key: shops,
       hash: 247051ce08560fd23565b0e411964d11fdc476059a4f8f161a35835c1323932f,
       url: /api/v1/game-catalog/shops
+    },
+    {
+      key: unit-power,
+      hash: 57679ffb62bba11a21e538761b546fb16acb7544b93e3be6cc02e5df30242854,
+      url: /api/v1/game-catalog/unit-power
     },
     {
       key: unlock-shard-costs,

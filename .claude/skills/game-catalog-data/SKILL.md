@@ -123,6 +123,34 @@ the apps code (not in the catalog), so ratio changes ship as a web release.
 - Enforced at load (`Validation/HordeModeTiersValidation.cs`, `InvalidHordeModeTiers`). A value change
   only moves this dataset's hash; no schema bump.
 
+## Unit power
+
+`Data/unit-power.json` is V1's slice of Snowprint's client game config that the in-game power formula
+reads (the apps compute character, MoW and NPC power from it plus `units-*`, `npcs-*`, `equipment-*` and
+`upgrades-*`), served as the single `unit-power` record. Raw keys keep V1's names so a patch can be
+reconciled field by field: `heroProgressionSteps` / `heroProgressionStepsMoW` (20 steps each; served as
+`heroProgressionSteps` / `mowProgressionSteps` with a `step` index), `damageProfileModifiers`,
+`traitPowerModifiers`, `abilityPowerModifiers` (`{baseMultiplier}`, served as `modifier`), and
+`abilityPowerCurve` (`active`/`passive` by ability level − 1, `relic` by relic level − 1). `lineup.{unitId}`
+carries only `powerMultiplier` (percent, absent ⇒ 100) and, for characters, V1's `upgrades` plus
+`upgradesStatIncrease` (one row per rank, each value the increase of the upgrade id at the same position).
+`upgrades` must equal the character's `rankUpUpgrades` ids in order, so a rank-up refresh that reorders or
+changes ids fails startup until the power rows are reconciled with it. Modifier maps are served as lists sorted by
+id; a trait or ability not listed is 100 (the catalog lacks V1's `Hero`/`MachineOfWar` traits, both 100).
+
+- **Source:** V1 `src/fsd/4-entities/unit/character-power/data/character-power-units.json` (same keys).
+  `character-power-items.json` and `character-power-upgrades.json` are **not** ported: they match
+  `equipment-*` and `upgrades-*` (`stat`). V1's `heroProgressionStepsPerUnit` overrides change only costs,
+  so they are not served. **On every refresh, diff each override against `default`**: if one changes
+  `unitStatMultiplierPct` or `abilityPowerMultiplier`, nothing fails, so the served steps silently become
+  wrong for that unit; add per-unit steps to the served record (and the apps formula) before importing it.
+- **A new character or MoW needs a `lineup` entry** (and a damage type needs a `damageProfileModifiers`
+  entry); otherwise startup fails. Unreleased lineup units are skipped.
+- Enforced at load (`Validation/UnitPowerValidation.cs`, `InvalidUnitPower`): 20 steps with positive
+  multipliers, a lineup entry per catalog unit, `upgrades` / stat rows aligned with `rankUpUpgrades`, no negative
+  values, every rank-up upgrade raises Health/Damage/Armour, curves reach the highest ability level of
+  `character-ability-costs` and the longest relic. A value change only moves this dataset's hash.
+
 ## Cross-cutting data conventions
 
 - **drop-chances** (`drop-chances.json`): potential campaign rewards reference `chanceId` =
@@ -185,6 +213,8 @@ genuine game changes.
   (keyed by id in a dict; the catalog record adds `id` and keeps only `levels[].stats`, dropping V1's
   per-level cost fields — cost comes from `equipment-upgrade-costs.json`).
 - **upgrades**: from V1 `upgrade/data/new-recipe-data.json`.
+- **unit-power**: from V1 `unit/character-power/data/character-power-units.json`; reconcile the global
+  tables and each catalog unit's `lineup` `powerMultiplier` / `upgradesStatIncrease` (see **Unit power**).
 - **campaign-battles**: from V1 `campaign/data/new-battle-data.json`. The catalog shape is heavily
   denormalized (resolved enemy tables, rank labels) with no surviving transform — a full re-derivation is
   impractical; scope changes to id adds/removes and reward changes, and be wary that battle-id renames
@@ -198,8 +228,10 @@ genuine game changes.
   catalog's raw `lres-*.json` shape mirrors V1's *older* hand-authored format, so derive it using the
   semantics in V1's `lre/data/new-format-adapter.ts` — `buildStaticLegendaryEvent`, `buildTrackName`
   (reconstructs `"Alpha (No Xenos)"` from `disallowedFactions`), `questsToMissionText` (task→string),
-  `toLegacyPointsMilestones` / `toLegacyChestMilestones`. Wave enemies are `"{npcId}:{stars}"` strings;
-  aggregate identical `(id, stars)` to `{id, stars, count}`. `bonusObjectives` → `unitsRestrictions`
+  `toLegacyPointsMilestones` / `toLegacyChestMilestones`. Wave enemies are `"{npcId}:{N}"` strings,
+  where `N` is the 1-based position in the npc's stats ladder (not a star count; it reaches 56); aggregate
+  identical `(id, N)` to `{id, ladderIndex: N, count}`. Do not range-check it: some boss entries point past
+  their ladder and the client shows them as level unknown. `bonusObjectives` → `unitsRestrictions`
   (`{name, points, iconId, filter:{kind,target,exclude}, index}` — `iconId` is not served). Track
   `allowedUnitsFilter` derives from `disallowedFactions` (a full alliance roster ⇒
   `[{kind:Alliance, target:<alliance>, exclude:true}]`). Add/remove events by editing
