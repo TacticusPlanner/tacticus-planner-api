@@ -194,8 +194,10 @@ genuine game changes.
   catalog's raw `lres-*.json` shape mirrors V1's *older* hand-authored format, so derive it using the
   semantics in V1's `lre/data/new-format-adapter.ts` — `buildStaticLegendaryEvent`, `buildTrackName`
   (reconstructs `"Alpha (No Xenos)"` from `disallowedFactions`), `questsToMissionText` (task→string),
-  `toLegacyPointsMilestones` / `toLegacyChestMilestones`. Wave enemies are `"{npcId}:{stars}"` strings;
-  aggregate identical `(id, stars)` to `{id, stars, count}`. `bonusObjectives` → `unitsRestrictions`
+  `toLegacyPointsMilestones` / `toLegacyChestMilestones`. Wave enemies are `"{npcId}:{N}"` strings,
+  where `N` is the 1-based position in the npc's stats ladder (not a star count; it reaches 56); aggregate
+  identical `(id, N)` to `{id, ladderIndex: N, count}`. Do not range-check it: some boss entries point past
+  their ladder and the client shows them as level unknown. `bonusObjectives` → `unitsRestrictions`
   (`{name, points, iconId, filter:{kind,target,exclude}, index}` — `iconId` is not served). Track
   `allowedUnitsFilter` derives from `disallowedFactions` (a full alliance roster ⇒
   `[{kind:Alliance, target:<alliance>, exclude:true}]`). Add/remove events by editing

@@ -168,7 +168,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 3,
+                "ladderIndex": 3,
                 "count": 4
               }
             ]
@@ -179,7 +179,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 2,
+                "ladderIndex": 2,
                 "count": 5
               }
             ]
@@ -190,7 +190,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 3,
+                "ladderIndex": 3,
                 "count": 4
               }
             ]
@@ -201,7 +201,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 1,
+                "ladderIndex": 1,
                 "count": 7
               }
             ]
@@ -212,7 +212,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 4,
+                "ladderIndex": 4,
                 "count": 3
               }
             ]
@@ -223,7 +223,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 2,
+                "ladderIndex": 2,
                 "count": 6
               }
             ]
@@ -254,7 +254,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 5,
+                "ladderIndex": 5,
                 "count": 6
               }
             ]
@@ -265,12 +265,12 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 4
               },
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 5,
+                "ladderIndex": 5,
                 "count": 1
               }
             ]
@@ -281,12 +281,12 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 5,
+                "ladderIndex": 5,
                 "count": 3
               }
             ]
@@ -297,7 +297,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 5,
+                "ladderIndex": 5,
                 "count": 5
               }
             ]
@@ -308,7 +308,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 5
               }
             ]
@@ -319,12 +319,12 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 5,
+                "ladderIndex": 5,
                 "count": 3
               },
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 3
               }
             ]
@@ -355,7 +355,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 8
               }
             ]
@@ -366,12 +366,12 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 3
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 5,
+                "ladderIndex": 5,
                 "count": 8
               }
             ]
@@ -382,7 +382,7 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 4
               }
             ]
@@ -393,7 +393,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 5
               }
             ]
@@ -404,12 +404,12 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 4
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 1
               }
             ]
@@ -420,12 +420,12 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 3
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 3
               }
             ]
@@ -456,12 +456,12 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 1
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 6
               }
             ]
@@ -472,12 +472,12 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 3
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 3
               }
             ]
@@ -488,7 +488,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 8
               }
             ]
@@ -499,12 +499,12 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 4
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 5
               }
             ]
@@ -515,7 +515,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 7
               }
             ]
@@ -526,12 +526,12 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 3
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 3
               }
             ]
@@ -562,17 +562,17 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 2
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 1
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 4
               }
             ]
@@ -583,7 +583,7 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 6
               }
             ]
@@ -594,7 +594,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 11
               }
             ]
@@ -605,17 +605,17 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 2
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 3
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 3
               }
             ]
@@ -626,7 +626,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 7
               }
             ]
@@ -637,17 +637,17 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 1
               },
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 4
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 2
               }
             ]
@@ -678,17 +678,17 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 1
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 4
               },
               {
                 "id": "astraNpc4Mortar",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 1
               }
             ]
@@ -699,12 +699,12 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 7
               }
             ]
@@ -715,17 +715,17 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 2
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 1
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 4
               }
             ]
@@ -736,12 +736,12 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 5
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 1
               }
             ]
@@ -752,12 +752,12 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 4
               },
               {
                 "id": "astraNpc4Mortar",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 2
               }
             ]
@@ -768,17 +768,17 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 3
               },
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 1
               }
             ]
@@ -809,17 +809,17 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 3
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 1
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 3
               }
             ]
@@ -830,12 +830,12 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 3
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 2
               }
             ]
@@ -846,7 +846,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 7
               }
             ]
@@ -857,12 +857,12 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 7
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 1
               }
             ]
@@ -873,7 +873,7 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 6
               }
             ]
@@ -884,22 +884,22 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 3
               },
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 1
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 4
               },
               {
                 "id": "astraNpc4Mortar",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 1
               }
             ]
@@ -930,12 +930,12 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 7
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 2
               }
             ]
@@ -946,17 +946,17 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 3
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 1
               },
               {
                 "id": "astraNpc4Mortar",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 2
               }
             ]
@@ -967,17 +967,17 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 4
               },
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 3
               },
               {
                 "id": "astraNpc4Mortar",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 1
               }
             ]
@@ -988,17 +988,17 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 3
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 1
               },
               {
                 "id": "astraNpc4Mortar",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 3
               }
             ]
@@ -1009,12 +1009,12 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 4
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 3
               }
             ]
@@ -1025,12 +1025,12 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 8
               },
               {
                 "id": "astraNpc4Mortar",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 3
               }
             ]
@@ -1061,7 +1061,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 6
               }
             ]
@@ -1072,7 +1072,7 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 9
               }
             ]
@@ -1083,12 +1083,12 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 5
               }
             ]
@@ -1099,17 +1099,17 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 3
               },
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 1
               },
               {
                 "id": "astraNpc4Mortar",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 2
               }
             ]
@@ -1120,7 +1120,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 9
               }
             ]
@@ -1131,12 +1131,12 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 5
               },
               {
                 "id": "astraNpc4Mortar",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 3
               }
             ]
@@ -1167,12 +1167,12 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 7
               },
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 4
               }
             ]
@@ -1183,12 +1183,12 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 4
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 3
               }
             ]
@@ -1199,12 +1199,12 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 3
               },
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 5
               }
             ]
@@ -1215,12 +1215,12 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 4
               },
               {
                 "id": "astraNpc4Mortar",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 4
               }
             ]
@@ -1231,17 +1231,17 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 2
               },
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 1
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 6
               }
             ]
@@ -1252,17 +1252,17 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 3
               },
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 4
               },
               {
                 "id": "astraNpc4Mortar",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 3
               }
             ]
@@ -1293,12 +1293,12 @@
             "enemies": [
               {
                 "id": "astraNpc4Mortar",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 4
               },
               {
                 "id": "astraNpc1Guardsman",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 5
               }
             ]
@@ -1309,12 +1309,12 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 3
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 8
               }
             ]
@@ -1325,17 +1325,17 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 4
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 2
               },
               {
                 "id": "astraNpc4Mortar",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 1
               }
             ]
@@ -1346,7 +1346,7 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 9
               }
             ]
@@ -1357,17 +1357,17 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 4
               },
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 2
               },
               {
                 "id": "astraNpc1Guardsman",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 2
               }
             ]
@@ -1378,12 +1378,12 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 5
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 4
               }
             ]
@@ -1414,12 +1414,12 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 3
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 3
               }
             ]
@@ -1430,7 +1430,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 9
               }
             ]
@@ -1441,12 +1441,12 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 3
               },
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 4
               }
             ]
@@ -1457,17 +1457,17 @@
             "enemies": [
               {
                 "id": "admecBossManipulus",
-                "stars": 2,
+                "ladderIndex": 2,
                 "count": 1
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 1
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 7
               }
             ]
@@ -1478,12 +1478,12 @@
             "enemies": [
               {
                 "id": "admecBossDestroyer",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 1
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 7
               }
             ]
@@ -1494,17 +1494,17 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 4
               },
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 3
               },
               {
                 "id": "astraNpc4Mortar",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 2
               }
             ]
@@ -1535,12 +1535,12 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 8
               },
               {
                 "id": "astraNpc1Guardsman",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 1
               }
             ]
@@ -1551,12 +1551,12 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 4
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 1
               }
             ]
@@ -1567,17 +1567,17 @@
             "enemies": [
               {
                 "id": "admecBossRuststalkerLEG",
-                "stars": 1,
+                "ladderIndex": 1,
                 "count": 1
               },
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 5
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 2
               }
             ]
@@ -1588,12 +1588,12 @@
             "enemies": [
               {
                 "id": "admecBossMarshall",
-                "stars": 2,
+                "ladderIndex": 2,
                 "count": 1
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 6
               }
             ]
@@ -1604,17 +1604,17 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 3
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 1
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 4
               }
             ]
@@ -1625,17 +1625,17 @@
             "enemies": [
               {
                 "id": "admecBossDominusLEG",
-                "stars": 1,
+                "ladderIndex": 1,
                 "count": 1
               },
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 5
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 3
               }
             ]
@@ -1666,12 +1666,12 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 7
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 1
               }
             ]
@@ -1682,7 +1682,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 11
               }
             ]
@@ -1693,12 +1693,12 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 4
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 3
               }
             ]
@@ -1709,7 +1709,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 7
               }
             ]
@@ -1720,12 +1720,12 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 5
               },
               {
                 "id": "astraNpc4Mortar",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 2
               }
             ]
@@ -1736,17 +1736,17 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 3
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 5
               }
             ]
@@ -1777,12 +1777,12 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 8
               },
               {
                 "id": "astraNpc1Guardsman",
-                "stars": 37,
+                "ladderIndex": 37,
                 "count": 3
               }
             ]
@@ -1793,12 +1793,12 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 4
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 3
               }
             ]
@@ -1809,12 +1809,12 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 29,
+                "ladderIndex": 29,
                 "count": 3
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 5
               }
             ]
@@ -1825,7 +1825,7 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 8
               }
             ]
@@ -1836,7 +1836,7 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 9
               }
             ]
@@ -1847,12 +1847,12 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 3
               },
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 4
               }
             ]
@@ -1883,12 +1883,12 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 6
               },
               {
                 "id": "astraNpc4Mortar",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 4
               }
             ]
@@ -1899,12 +1899,12 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 35,
+                "ladderIndex": 35,
                 "count": 4
               },
               {
                 "id": "astraNpc1Guardsman",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 1
               }
             ]
@@ -1915,12 +1915,12 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 1
               },
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 7
               }
             ]
@@ -1931,12 +1931,12 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 5
               },
               {
                 "id": "astraNpc4Mortar",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 3
               }
             ]
@@ -1947,12 +1947,12 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 35,
+                "ladderIndex": 35,
                 "count": 4
               },
               {
                 "id": "astraNpc1Guardsman",
-                "stars": 41,
+                "ladderIndex": 41,
                 "count": 6
               }
             ]
@@ -1963,12 +1963,12 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 5
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 4
               }
             ]
@@ -1999,12 +1999,12 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 35,
+                "ladderIndex": 35,
                 "count": 7
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 35,
+                "ladderIndex": 35,
                 "count": 1
               }
             ]
@@ -2015,12 +2015,12 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 5
               }
             ]
@@ -2031,12 +2031,12 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 37,
+                "ladderIndex": 37,
                 "count": 7
               },
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 1
               }
             ]
@@ -2047,7 +2047,7 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 5
               }
             ]
@@ -2058,12 +2058,12 @@
             "enemies": [
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 35,
+                "ladderIndex": 35,
                 "count": 8
               },
               {
                 "id": "astraNpc4Mortar",
-                "stars": 36,
+                "ladderIndex": 36,
                 "count": 2
               }
             ]
@@ -2074,12 +2074,12 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 37,
+                "ladderIndex": 37,
                 "count": 5
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 37,
+                "ladderIndex": 37,
                 "count": 3
               }
             ]
@@ -2110,7 +2110,7 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 37,
+                "ladderIndex": 37,
                 "count": 11
               }
             ]
@@ -2121,12 +2121,12 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 37,
+                "ladderIndex": 37,
                 "count": 2
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 5
               }
             ]
@@ -2137,17 +2137,17 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 4
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 39,
+                "ladderIndex": 39,
                 "count": 3
               },
               {
                 "id": "astraNpc4Mortar",
-                "stars": 39,
+                "ladderIndex": 39,
                 "count": 3
               }
             ]
@@ -2158,12 +2158,12 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 4
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 37,
+                "ladderIndex": 37,
                 "count": 4
               }
             ]
@@ -2174,12 +2174,12 @@
             "enemies": [
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 39,
+                "ladderIndex": 39,
                 "count": 4
               },
               {
                 "id": "astraNpc1Guardsman",
-                "stars": 41,
+                "ladderIndex": 41,
                 "count": 5
               }
             ]
@@ -2190,17 +2190,17 @@
             "enemies": [
               {
                 "id": "admecNpc3Electropriest",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 6
               },
               {
                 "id": "admecNpc2Techpriest",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 2
               },
               {
                 "id": "admecNpc1Vanguard",
-                "stars": 37,
+                "ladderIndex": 37,
                 "count": 3
               }
             ]
@@ -2342,7 +2342,7 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 3,
+                "ladderIndex": 3,
                 "count": 6
               }
             ]
@@ -2353,7 +2353,7 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 4,
+                "ladderIndex": 4,
                 "count": 4
               }
             ]
@@ -2364,7 +2364,7 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 3,
+                "ladderIndex": 3,
                 "count": 5
               }
             ]
@@ -2375,7 +2375,7 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 3,
+                "ladderIndex": 3,
                 "count": 4
               }
             ]
@@ -2386,12 +2386,12 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 3,
+                "ladderIndex": 3,
                 "count": 4
               },
               {
                 "id": "tauNpc3DroneShield",
-                "stars": 3,
+                "ladderIndex": 3,
                 "count": 2
               }
             ]
@@ -2402,12 +2402,12 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 4,
+                "ladderIndex": 4,
                 "count": 4
               },
               {
                 "id": "tauNpc3DroneShield",
-                "stars": 3,
+                "ladderIndex": 3,
                 "count": 1
               }
             ]
@@ -2435,7 +2435,7 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 6
               }
             ]
@@ -2446,7 +2446,7 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 4
               }
             ]
@@ -2457,7 +2457,7 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 5
               }
             ]
@@ -2468,7 +2468,7 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 4
               }
             ]
@@ -2479,12 +2479,12 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 3
               },
               {
                 "id": "tauNpc3DroneShield",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 2
               }
             ]
@@ -2495,7 +2495,7 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 6
               }
             ]
@@ -2523,12 +2523,12 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 1
               },
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 6
               }
             ]
@@ -2539,12 +2539,12 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 3
               },
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 3
               }
             ]
@@ -2555,17 +2555,17 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 2
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 1
               },
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 3
               }
             ]
@@ -2576,17 +2576,17 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 2
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 2
               },
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 3
               }
             ]
@@ -2597,7 +2597,7 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 6
               }
             ]
@@ -2608,7 +2608,7 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 8
               }
             ]
@@ -2636,7 +2636,7 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 8
               }
             ]
@@ -2647,12 +2647,12 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 4
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 4
               }
             ]
@@ -2663,7 +2663,7 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 11
               }
             ]
@@ -2674,17 +2674,17 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 1
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 4
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 3
               }
             ]
@@ -2695,12 +2695,12 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 9
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 1
               }
             ]
@@ -2711,12 +2711,12 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 5
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 2
               }
             ]
@@ -2744,12 +2744,12 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 7
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 1
               }
             ]
@@ -2760,7 +2760,7 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 6
               }
             ]
@@ -2771,12 +2771,12 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 4
               },
               {
                 "id": "tauNpc5StealthSuit",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 1
               }
             ]
@@ -2787,12 +2787,12 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 3
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 3
               }
             ]
@@ -2803,12 +2803,12 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 6
               },
               {
                 "id": "tauNpc3DroneShield",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 1
               }
             ]
@@ -2819,17 +2819,17 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 3
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 4
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 3
               }
             ]
@@ -2857,17 +2857,17 @@
             "enemies": [
               {
                 "id": "tauNpc5StealthSuit",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 3
               },
               {
                 "id": "tauNpc3DroneShield",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 1
               },
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 4
               }
             ]
@@ -2878,7 +2878,7 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 10
               }
             ]
@@ -2889,17 +2889,17 @@
             "enemies": [
               {
                 "id": "tauNpc5StealthSuit",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 2
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 2
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 1
               }
             ]
@@ -2910,17 +2910,17 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 3
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 5
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 3
               }
             ]
@@ -2931,17 +2931,17 @@
             "enemies": [
               {
                 "id": "tauNpc5StealthSuit",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 1
               },
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 6
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 2
               }
             ]
@@ -2952,17 +2952,17 @@
             "enemies": [
               {
                 "id": "tauNpc5StealthSuit",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 3
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 2
               },
               {
                 "id": "tauNpc3DroneShield",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 4
               }
             ]
@@ -2990,7 +2990,7 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 7
               }
             ]
@@ -3001,12 +3001,12 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 4
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 3
               }
             ]
@@ -3017,17 +3017,17 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 4
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 2
               },
               {
                 "id": "tauNpc3DroneShield",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 3
               }
             ]
@@ -3038,12 +3038,12 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 4
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 5
               }
             ]
@@ -3054,12 +3054,12 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 5
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 3
               }
             ]
@@ -3070,22 +3070,22 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 3
               },
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 2
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 3
               },
               {
                 "id": "tauNpc3DroneShield",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 2
               }
             ]
@@ -3113,17 +3113,17 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 2
               },
               {
                 "id": "tauNpc5StealthSuit",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 1
               },
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 5
               }
             ]
@@ -3134,12 +3134,12 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 7
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 3
               }
             ]
@@ -3150,12 +3150,12 @@
             "enemies": [
               {
                 "id": "tauNpc5StealthSuit",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 4
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 1
               }
             ]
@@ -3166,7 +3166,7 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 12
               }
             ]
@@ -3177,17 +3177,17 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 6
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 3
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 1
               }
             ]
@@ -3198,22 +3198,22 @@
             "enemies": [
               {
                 "id": "tauNpc5StealthSuit",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 3
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 1
               },
               {
                 "id": "tauNpc3DroneShield",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 2
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 3
               }
             ]
@@ -3241,7 +3241,7 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 4
               }
             ]
@@ -3252,12 +3252,12 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 6
               },
               {
                 "id": "tauNpc3DroneShield",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 1
               }
             ]
@@ -3268,17 +3268,17 @@
             "enemies": [
               {
                 "id": "tauNpc5StealthSuit",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 1
               },
               {
                 "id": "tauNpc3DroneShield",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 1
               },
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 4
               }
             ]
@@ -3289,17 +3289,17 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 6
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 2
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 1
               }
             ]
@@ -3310,17 +3310,17 @@
             "enemies": [
               {
                 "id": "tauNpc5StealthSuit",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 2
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 2
               },
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 1
               }
             ]
@@ -3331,17 +3331,17 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 3
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 3
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 3
               }
             ]
@@ -3369,7 +3369,7 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 10
               }
             ]
@@ -3380,12 +3380,12 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 4
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 5
               }
             ]
@@ -3396,22 +3396,22 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 2
               },
               {
                 "id": "tauNpc5StealthSuit",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 1
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 4
               },
               {
                 "id": "tauNpc3DroneShield",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 1
               }
             ]
@@ -3422,22 +3422,22 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 3
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 4
               },
               {
                 "id": "tauNpc3DroneShield",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 2
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 1
               }
             ]
@@ -3448,17 +3448,17 @@
             "enemies": [
               {
                 "id": "tauNpc5StealthSuit",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 2
               },
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 2
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 3
               }
             ]
@@ -3469,22 +3469,22 @@
             "enemies": [
               {
                 "id": "tauNpc5StealthSuit",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 1
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 4
               },
               {
                 "id": "tauNpc3DroneShield",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 3
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 2
               }
             ]
@@ -3512,17 +3512,17 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 4
               },
               {
                 "id": "tauNpc5StealthSuit",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 2
               },
               {
                 "id": "tauNpc3DroneShield",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 3
               }
             ]
@@ -3533,12 +3533,12 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 5
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 5
               }
             ]
@@ -3549,17 +3549,17 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 3
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 4
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 4
               }
             ]
@@ -3570,12 +3570,12 @@
             "enemies": [
               {
                 "id": "tauNpc5StealthSuit",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 4
               },
               {
                 "id": "tauNpc3DroneShield",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 5
               }
             ]
@@ -3586,17 +3586,17 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 2
               },
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 5
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 1
               }
             ]
@@ -3607,22 +3607,22 @@
             "enemies": [
               {
                 "id": "tauNpc5StealthSuit",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 2
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 4
               },
               {
                 "id": "tauNpc3DroneShield",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 1
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 2
               }
             ]
@@ -3650,12 +3650,12 @@
             "enemies": [
               {
                 "id": "tauNpc5StealthSuit",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 1
               },
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 8
               }
             ]
@@ -3666,17 +3666,17 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 2
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 1
               },
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 7
               }
             ]
@@ -3687,17 +3687,17 @@
             "enemies": [
               {
                 "id": "tauBossDarkstrider",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 1
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 4
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 2
               }
             ]
@@ -3708,22 +3708,22 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 3
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 3
               },
               {
                 "id": "tauNpc3DroneShield",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 2
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 1
               }
             ]
@@ -3734,17 +3734,17 @@
             "enemies": [
               {
                 "id": "tauNpc5StealthSuit",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 3
               },
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 1
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 2
               }
             ]
@@ -3755,22 +3755,22 @@
             "enemies": [
               {
                 "id": "tauBossCrisis",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 1
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 4
               },
               {
                 "id": "tauNpc3DroneShield",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 2
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 3
               }
             ]
@@ -3798,22 +3798,22 @@
             "enemies": [
               {
                 "id": "tauNpc5StealthSuit",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 2
               },
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 4
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 2
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 1
               }
             ]
@@ -3824,17 +3824,17 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 3
               },
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 4
               },
               {
                 "id": "tauNpc3DroneShield",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 3
               }
             ]
@@ -3845,17 +3845,17 @@
             "enemies": [
               {
                 "id": "tauBossShadowsun",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 1
               },
               {
                 "id": "tauNpc5StealthSuit",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 1
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 4
               }
             ]
@@ -3866,12 +3866,12 @@
             "enemies": [
               {
                 "id": "tauBossMarksman",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 1
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 9
               }
             ]
@@ -3882,7 +3882,7 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 12
               }
             ]
@@ -3893,22 +3893,22 @@
             "enemies": [
               {
                 "id": "tauBossAunShi",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 1
               },
               {
                 "id": "tauNpc5StealthSuit",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 2
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 4
               },
               {
                 "id": "tauNpc3DroneShield",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 2
               }
             ]
@@ -3936,12 +3936,12 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 7
               },
               {
                 "id": "tauNpc3DroneShield",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 5
               }
             ]
@@ -3952,12 +3952,12 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 4
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 3
               }
             ]
@@ -3968,7 +3968,7 @@
             "enemies": [
               {
                 "id": "tauNpc5StealthSuit",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 4
               }
             ]
@@ -3979,12 +3979,12 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 6
               },
               {
                 "id": "tauNpc3DroneShield",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 3
               }
             ]
@@ -3995,22 +3995,22 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 29,
+                "ladderIndex": 29,
                 "count": 4
               },
               {
                 "id": "tauNpc5StealthSuit",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 1
               },
               {
                 "id": "tauNpc3DroneShield",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 3
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 1
               }
             ]
@@ -4021,12 +4021,12 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 29,
+                "ladderIndex": 29,
                 "count": 6
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 29,
+                "ladderIndex": 29,
                 "count": 6
               }
             ]
@@ -4054,7 +4054,7 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 11
               }
             ]
@@ -4065,17 +4065,17 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 5
               },
               {
                 "id": "tauNpc3DroneShield",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 2
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 1
               }
             ]
@@ -4086,12 +4086,12 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 5
               },
               {
                 "id": "tauNpc5StealthSuit",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 2
               }
             ]
@@ -4102,12 +4102,12 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 5
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 4
               }
             ]
@@ -4118,17 +4118,17 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 3
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 3
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 1
               }
             ]
@@ -4139,17 +4139,17 @@
             "enemies": [
               {
                 "id": "tauBossDarkstrider",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 1
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 7
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 4
               }
             ]
@@ -4177,7 +4177,7 @@
             "enemies": [
               {
                 "id": "tauNpc5StealthSuit",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 4
               }
             ]
@@ -4188,12 +4188,12 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 6
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 5
               }
             ]
@@ -4204,12 +4204,12 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 7
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 2
               }
             ]
@@ -4220,12 +4220,12 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 6
               },
               {
                 "id": "tauNpc3DroneShield",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 5
               }
             ]
@@ -4236,22 +4236,22 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 3
               },
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 5
               },
               {
                 "id": "tauNpc3DroneShield",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 1
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 2
               }
             ]
@@ -4262,17 +4262,17 @@
             "enemies": [
               {
                 "id": "tauNpcFarsight",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 1
               },
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 2
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 6
               }
             ]
@@ -4300,22 +4300,22 @@
             "enemies": [
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 2
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 1
               },
               {
                 "id": "tauNpc5StealthSuit",
-                "stars": 35,
+                "ladderIndex": 35,
                 "count": 1
               },
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 37,
+                "ladderIndex": 37,
                 "count": 5
               }
             ]
@@ -4326,17 +4326,17 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 3
               },
               {
                 "id": "tauNpc5StealthSuit",
-                "stars": 36,
+                "ladderIndex": 36,
                 "count": 1
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 4
               }
             ]
@@ -4347,7 +4347,7 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 39,
+                "ladderIndex": 39,
                 "count": 9
               }
             ]
@@ -4358,7 +4358,7 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 37,
+                "ladderIndex": 37,
                 "count": 12
               }
             ]
@@ -4369,12 +4369,12 @@
             "enemies": [
               {
                 "id": "tauNpc5StealthSuit",
-                "stars": 35,
+                "ladderIndex": 35,
                 "count": 2
               },
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 37,
+                "ladderIndex": 37,
                 "count": 5
               }
             ]
@@ -4385,12 +4385,12 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 37,
+                "ladderIndex": 37,
                 "count": 7
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 5
               }
             ]
@@ -4418,17 +4418,17 @@
             "enemies": [
               {
                 "id": "tauNpc5StealthSuit",
-                "stars": 35,
+                "ladderIndex": 35,
                 "count": 3
               },
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 41,
+                "ladderIndex": 41,
                 "count": 2
               },
               {
                 "id": "tauNpc3DroneShield",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 3
               }
             ]
@@ -4439,17 +4439,17 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 6
               },
               {
                 "id": "tauNpc3DroneShield",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 1
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 5
               }
             ]
@@ -4460,17 +4460,17 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 5
               },
               {
                 "id": "tauNpc5StealthSuit",
-                "stars": 35,
+                "ladderIndex": 35,
                 "count": 2
               },
               {
                 "id": "tauNpc3DroneShield",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 3
               }
             ]
@@ -4481,17 +4481,17 @@
             "enemies": [
               {
                 "id": "tauNpc6Carnivore",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 7
               },
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 3
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 2
               }
             ]
@@ -4502,7 +4502,7 @@
             "enemies": [
               {
                 "id": "tauNpc5StealthSuit",
-                "stars": 37,
+                "ladderIndex": 37,
                 "count": 4
               }
             ]
@@ -4513,22 +4513,22 @@
             "enemies": [
               {
                 "id": "tauNpc1FireWarrior",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 5
               },
               {
                 "id": "tauNpc5StealthSuit",
-                "stars": 37,
+                "ladderIndex": 37,
                 "count": 1
               },
               {
                 "id": "tauNpc2DroneSniper",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 3
               },
               {
                 "id": "tauNpc3DroneShield",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 3
               }
             ]
@@ -4674,7 +4674,7 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 5,
+                "ladderIndex": 5,
                 "count": 6
               }
             ]
@@ -4685,12 +4685,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 5,
+                "ladderIndex": 5,
                 "count": 1
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 5,
+                "ladderIndex": 5,
                 "count": 3
               }
             ]
@@ -4701,7 +4701,7 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 5,
+                "ladderIndex": 5,
                 "count": 6
               }
             ]
@@ -4712,12 +4712,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 4,
+                "ladderIndex": 4,
                 "count": 2
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 4,
+                "ladderIndex": 4,
                 "count": 3
               }
             ]
@@ -4728,7 +4728,7 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 4,
+                "ladderIndex": 4,
                 "count": 6
               }
             ]
@@ -4739,12 +4739,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 4,
+                "ladderIndex": 4,
                 "count": 3
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 3,
+                "ladderIndex": 3,
                 "count": 3
               }
             ]
@@ -4771,7 +4771,7 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 6
               }
             ]
@@ -4782,12 +4782,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 2
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 3
               }
             ]
@@ -4798,7 +4798,7 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 5
               }
             ]
@@ -4809,17 +4809,17 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 2
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 1
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 3
               }
             ]
@@ -4830,7 +4830,7 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 8
               }
             ]
@@ -4841,12 +4841,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 7,
+                "ladderIndex": 7,
                 "count": 3
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 6,
+                "ladderIndex": 6,
                 "count": 4
               }
             ]
@@ -4873,12 +4873,12 @@
             "enemies": [
               {
                 "id": "orksNpc7Squig",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 3
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 7
               }
             ]
@@ -4889,17 +4889,17 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 2
               },
               {
                 "id": "orksNpc7Squig",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 3
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 2
               }
             ]
@@ -4910,17 +4910,17 @@
             "enemies": [
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 2
               },
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 1
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 6
               }
             ]
@@ -4931,12 +4931,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 4
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 3
               }
             ]
@@ -4947,12 +4947,12 @@
             "enemies": [
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 3
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 4
               }
             ]
@@ -4963,17 +4963,17 @@
             "enemies": [
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 9,
+                "ladderIndex": 9,
                 "count": 2
               },
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 2
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 8,
+                "ladderIndex": 8,
                 "count": 3
               }
             ]
@@ -5000,12 +5000,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 5
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 2
               }
             ]
@@ -5016,12 +5016,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 12,
+                "ladderIndex": 12,
                 "count": 2
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 9
               }
             ]
@@ -5032,7 +5032,7 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 7
               }
             ]
@@ -5043,12 +5043,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 4
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 3
               }
             ]
@@ -5059,12 +5059,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 5
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 5
               }
             ]
@@ -5075,12 +5075,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 10,
+                "ladderIndex": 10,
                 "count": 6
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 11,
+                "ladderIndex": 11,
                 "count": 3
               }
             ]
@@ -5107,12 +5107,12 @@
             "enemies": [
               {
                 "id": "orksNpc7Squig",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 6
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 2
               }
             ]
@@ -5123,17 +5123,17 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 4
               },
               {
                 "id": "orksNpc7Squig",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 2
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 5
               }
             ]
@@ -5144,12 +5144,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 6
               },
               {
                 "id": "orksNpc7Squig",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 2
               }
             ]
@@ -5160,7 +5160,7 @@
             "enemies": [
               {
                 "id": "orksNpc7Squig",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 5
               }
             ]
@@ -5171,12 +5171,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 15,
+                "ladderIndex": 15,
                 "count": 5
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 7
               }
             ]
@@ -5187,17 +5187,17 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 5
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 16,
+                "ladderIndex": 16,
                 "count": 3
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 3
               }
             ]
@@ -5224,12 +5224,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 7
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 2
               }
             ]
@@ -5240,12 +5240,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 4
               },
               {
                 "id": "orksNpc6Stormboy",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 5
               }
             ]
@@ -5256,17 +5256,17 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 3
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 3
               },
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 2
               }
             ]
@@ -5277,12 +5277,12 @@
             "enemies": [
               {
                 "id": "orksNpc7Squig",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 4
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 7
               }
             ]
@@ -5293,17 +5293,17 @@
             "enemies": [
               {
                 "id": "orksNpc6Stormboy",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 2
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 2
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 19,
+                "ladderIndex": 19,
                 "count": 6
               }
             ]
@@ -5314,17 +5314,17 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 5
               },
               {
                 "id": "orksNpc6Stormboy",
-                "stars": 18,
+                "ladderIndex": 18,
                 "count": 6
               },
               {
                 "id": "orksNpc7Squig",
-                "stars": 17,
+                "ladderIndex": 17,
                 "count": 1
               }
             ]
@@ -5351,17 +5351,17 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 5
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 3
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 20,
+                "ladderIndex": 20,
                 "count": 3
               }
             ]
@@ -5372,12 +5372,12 @@
             "enemies": [
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 4
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 8
               }
             ]
@@ -5388,12 +5388,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 22,
+                "ladderIndex": 22,
                 "count": 7
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 23,
+                "ladderIndex": 23,
                 "count": 3
               }
             ]
@@ -5404,7 +5404,7 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 9
               }
             ]
@@ -5415,12 +5415,12 @@
             "enemies": [
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 5
               },
               {
                 "id": "orksNpc7Squig",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 3
               }
             ]
@@ -5431,17 +5431,17 @@
             "enemies": [
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 6
               },
               {
                 "id": "orksNpc7Squig",
-                "stars": 21,
+                "ladderIndex": 21,
                 "count": 2
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 4
               }
             ]
@@ -5468,7 +5468,7 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 10
               }
             ]
@@ -5479,12 +5479,12 @@
             "enemies": [
               {
                 "id": "orksNpc7Squig",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 4
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 24,
+                "ladderIndex": 24,
                 "count": 5
               }
             ]
@@ -5495,12 +5495,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 6
               },
               {
                 "id": "orksNpc6Stormboy",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 3
               }
             ]
@@ -5511,12 +5511,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 3
               },
               {
                 "id": "orksNpc6Stormboy",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 7
               }
             ]
@@ -5527,12 +5527,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 27,
+                "ladderIndex": 27,
                 "count": 4
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 7
               }
             ]
@@ -5543,22 +5543,22 @@
             "enemies": [
               {
                 "id": "orksNpc7Squig",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 5
               },
               {
                 "id": "orksNpc6Stormboy",
-                "stars": 25,
+                "ladderIndex": 25,
                 "count": 1
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 26,
+                "ladderIndex": 26,
                 "count": 2
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 28,
+                "ladderIndex": 28,
                 "count": 2
               }
             ]
@@ -5585,12 +5585,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 5
               },
               {
                 "id": "orksNpc7Squig",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 2
               }
             ]
@@ -5601,12 +5601,12 @@
             "enemies": [
               {
                 "id": "orksNpc7Squig",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 5
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 3
               }
             ]
@@ -5617,12 +5617,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 2
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 5
               }
             ]
@@ -5633,12 +5633,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 3
               },
               {
                 "id": "orksNpc7Squig",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 5
               }
             ]
@@ -5649,12 +5649,12 @@
             "enemies": [
               {
                 "id": "orksNpc7Squig",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 3
               },
               {
                 "id": "orksNpc6Stormboy",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 6
               }
             ]
@@ -5665,17 +5665,17 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 30,
+                "ladderIndex": 30,
                 "count": 6
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 1
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 5
               }
             ]
@@ -5702,12 +5702,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 6
               },
               {
                 "id": "orksNpc6Stormboy",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 6
               }
             ]
@@ -5718,12 +5718,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 35,
+                "ladderIndex": 35,
                 "count": 5
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 5
               }
             ]
@@ -5734,17 +5734,17 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 3
               },
               {
                 "id": "orksNpc6Stormboy",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 2
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 3
               }
             ]
@@ -5755,12 +5755,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 6
               },
               {
                 "id": "orksNpc7Squig",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 2
               }
             ]
@@ -5771,17 +5771,17 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 3
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 2
               },
               {
                 "id": "orksNpc7Squig",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 5
               }
             ]
@@ -5792,17 +5792,17 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 3
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 35,
+                "ladderIndex": 35,
                 "count": 1
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 7
               }
             ]
@@ -5829,12 +5829,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 3
               },
               {
                 "id": "orksNpc7Squig",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 5
               }
             ]
@@ -5845,12 +5845,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 4
               },
               {
                 "id": "orksNpc6Stormboy",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 5
               }
             ]
@@ -5861,22 +5861,22 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 2
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 3
               },
               {
                 "id": "orksNpc6Stormboy",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 2
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 35,
+                "ladderIndex": 35,
                 "count": 5
               }
             ]
@@ -5887,17 +5887,17 @@
             "enemies": [
               {
                 "id": "orksNpcBigMek",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 1
               },
               {
                 "id": "orksNpc7Squig",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 3
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 35,
+                "ladderIndex": 35,
                 "count": 7
               }
             ]
@@ -5908,17 +5908,17 @@
             "enemies": [
               {
                 "id": "orksNpcKillaKan",
-                "stars": 13,
+                "ladderIndex": 13,
                 "count": 1
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 5
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 36,
+                "ladderIndex": 36,
                 "count": 5
               }
             ]
@@ -5929,12 +5929,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 35,
+                "ladderIndex": 35,
                 "count": 5
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 3
               }
             ]
@@ -5961,17 +5961,17 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 5
               },
               {
                 "id": "orksNpc7Squig",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 5
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 37,
+                "ladderIndex": 37,
                 "count": 2
               }
             ]
@@ -5982,17 +5982,17 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 3
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 34,
+                "ladderIndex": 34,
                 "count": 4
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 37,
+                "ladderIndex": 37,
                 "count": 4
               }
             ]
@@ -6003,17 +6003,17 @@
             "enemies": [
               {
                 "id": "orksNpcNob",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 1
               },
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 3
               },
               {
                 "id": "orksNpc6Stormboy",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 4
               }
             ]
@@ -6024,12 +6024,12 @@
             "enemies": [
               {
                 "id": "orksNpcRuntherd",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 1
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 37,
+                "ladderIndex": 37,
                 "count": 9
               }
             ]
@@ -6040,7 +6040,7 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 33,
+                "ladderIndex": 33,
                 "count": 11
               }
             ]
@@ -6051,22 +6051,22 @@
             "enemies": [
               {
                 "id": "orksNpcWarboss",
-                "stars": 14,
+                "ladderIndex": 14,
                 "count": 1
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 31,
+                "ladderIndex": 31,
                 "count": 3
               },
               {
                 "id": "orksNpc7Squig",
-                "stars": 32,
+                "ladderIndex": 32,
                 "count": 3
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 36,
+                "ladderIndex": 36,
                 "count": 2
               }
             ]
@@ -6093,17 +6093,17 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 39,
+                "ladderIndex": 39,
                 "count": 2
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 1
               },
               {
                 "id": "orksNpc7Squig",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 4
               }
             ]
@@ -6114,17 +6114,17 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 35,
+                "ladderIndex": 35,
                 "count": 5
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 1
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 35,
+                "ladderIndex": 35,
                 "count": 5
               }
             ]
@@ -6135,7 +6135,7 @@
             "enemies": [
               {
                 "id": "orksNpc7Squig",
-                "stars": 36,
+                "ladderIndex": 36,
                 "count": 11
               }
             ]
@@ -6146,12 +6146,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 37,
+                "ladderIndex": 37,
                 "count": 6
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 3
               }
             ]
@@ -6162,7 +6162,7 @@
             "enemies": [
               {
                 "id": "orksNpc6Stormboy",
-                "stars": 37,
+                "ladderIndex": 37,
                 "count": 9
               }
             ]
@@ -6173,17 +6173,17 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 37,
+                "ladderIndex": 37,
                 "count": 3
               },
               {
                 "id": "orksNpc7Squig",
-                "stars": 36,
+                "ladderIndex": 36,
                 "count": 6
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 3
               }
             ]
@@ -6210,12 +6210,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 3
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 37,
+                "ladderIndex": 37,
                 "count": 8
               }
             ]
@@ -6226,12 +6226,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 2
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 41,
+                "ladderIndex": 41,
                 "count": 10
               }
             ]
@@ -6242,12 +6242,12 @@
             "enemies": [
               {
                 "id": "orksNpc7Squig",
-                "stars": 41,
+                "ladderIndex": 41,
                 "count": 5
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 41,
+                "ladderIndex": 41,
                 "count": 1
               }
             ]
@@ -6258,7 +6258,7 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 38,
+                "ladderIndex": 38,
                 "count": 11
               }
             ]
@@ -6269,12 +6269,12 @@
             "enemies": [
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 39,
+                "ladderIndex": 39,
                 "count": 4
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 41,
+                "ladderIndex": 41,
                 "count": 5
               }
             ]
@@ -6285,12 +6285,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 39,
+                "ladderIndex": 39,
                 "count": 5
               },
               {
                 "id": "orksNpc7Squig",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 4
               }
             ]
@@ -6317,12 +6317,12 @@
             "enemies": [
               {
                 "id": "orksNpc7Squig",
-                "stars": 41,
+                "ladderIndex": 41,
                 "count": 9
               },
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 1
               }
             ]
@@ -6333,17 +6333,17 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 41,
+                "ladderIndex": 41,
                 "count": 5
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 41,
+                "ladderIndex": 41,
                 "count": 3
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 41,
+                "ladderIndex": 41,
                 "count": 1
               }
             ]
@@ -6354,12 +6354,12 @@
             "enemies": [
               {
                 "id": "orksNpc7Squig",
-                "stars": 39,
+                "ladderIndex": 39,
                 "count": 3
               },
               {
                 "id": "orksNpc6Stormboy",
-                "stars": 41,
+                "ladderIndex": 41,
                 "count": 9
               }
             ]
@@ -6370,12 +6370,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 43,
+                "ladderIndex": 43,
                 "count": 5
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 42,
+                "ladderIndex": 42,
                 "count": 3
               }
             ]
@@ -6386,12 +6386,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 42,
+                "ladderIndex": 42,
                 "count": 8
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 42,
+                "ladderIndex": 42,
                 "count": 2
               }
             ]
@@ -6402,12 +6402,12 @@
             "enemies": [
               {
                 "id": "orksNpc7Squig",
-                "stars": 40,
+                "ladderIndex": 40,
                 "count": 6
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 42,
+                "ladderIndex": 42,
                 "count": 5
               }
             ]
@@ -6434,12 +6434,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 46,
+                "ladderIndex": 46,
                 "count": 6
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 46,
+                "ladderIndex": 46,
                 "count": 3
               }
             ]
@@ -6450,12 +6450,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 48,
+                "ladderIndex": 48,
                 "count": 5
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 48,
+                "ladderIndex": 48,
                 "count": 1
               }
             ]
@@ -6466,17 +6466,17 @@
             "enemies": [
               {
                 "id": "orksNpc7Squig",
-                "stars": 46,
+                "ladderIndex": 46,
                 "count": 5
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 48,
+                "ladderIndex": 48,
                 "count": 1
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 46,
+                "ladderIndex": 46,
                 "count": 2
               }
             ]
@@ -6487,7 +6487,7 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 48,
+                "ladderIndex": 48,
                 "count": 6
               }
             ]
@@ -6498,12 +6498,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 46,
+                "ladderIndex": 46,
                 "count": 4
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 46,
+                "ladderIndex": 46,
                 "count": 3
               }
             ]
@@ -6514,7 +6514,7 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 44,
+                "ladderIndex": 44,
                 "count": 10
               }
             ]
@@ -6541,12 +6541,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 49,
+                "ladderIndex": 49,
                 "count": 7
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 49,
+                "ladderIndex": 49,
                 "count": 4
               }
             ]
@@ -6557,12 +6557,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 50,
+                "ladderIndex": 50,
                 "count": 3
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 48,
+                "ladderIndex": 48,
                 "count": 4
               }
             ]
@@ -6573,12 +6573,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 49,
+                "ladderIndex": 49,
                 "count": 4
               },
               {
                 "id": "orksNpc6Stormboy",
-                "stars": 47,
+                "ladderIndex": 47,
                 "count": 6
               }
             ]
@@ -6589,12 +6589,12 @@
             "enemies": [
               {
                 "id": "orksNpc1Grot",
-                "stars": 48,
+                "ladderIndex": 48,
                 "count": 2
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 47,
+                "ladderIndex": 47,
                 "count": 8
               }
             ]
@@ -6605,12 +6605,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 47,
+                "ladderIndex": 47,
                 "count": 2
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 44,
+                "ladderIndex": 44,
                 "count": 10
               }
             ]
@@ -6621,12 +6621,12 @@
             "enemies": [
               {
                 "id": "orksNpc7Squig",
-                "stars": 48,
+                "ladderIndex": 48,
                 "count": 3
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 46,
+                "ladderIndex": 46,
                 "count": 6
               }
             ]
@@ -6653,12 +6653,12 @@
             "enemies": [
               {
                 "id": "orksNpc7Squig",
-                "stars": 51,
+                "ladderIndex": 51,
                 "count": 5
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 50,
+                "ladderIndex": 50,
                 "count": 3
               }
             ]
@@ -6669,12 +6669,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 50,
+                "ladderIndex": 50,
                 "count": 4
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 49,
+                "ladderIndex": 49,
                 "count": 5
               }
             ]
@@ -6685,12 +6685,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 56,
+                "ladderIndex": 56,
                 "count": 3
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 56,
+                "ladderIndex": 56,
                 "count": 9
               }
             ]
@@ -6701,12 +6701,12 @@
             "enemies": [
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 53,
+                "ladderIndex": 53,
                 "count": 6
               },
               {
                 "id": "orksNpc7Squig",
-                "stars": 51,
+                "ladderIndex": 51,
                 "count": 2
               }
             ]
@@ -6717,7 +6717,7 @@
             "enemies": [
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 50,
+                "ladderIndex": 50,
                 "count": 8
               }
             ]
@@ -6728,22 +6728,22 @@
             "enemies": [
               {
                 "id": "orksNpc7Squig",
-                "stars": 51,
+                "ladderIndex": 51,
                 "count": 3
               },
               {
                 "id": "orksNpc1Grot",
-                "stars": 56,
+                "ladderIndex": 56,
                 "count": 1
               },
               {
                 "id": "orksNpc2OrkBoy",
-                "stars": 52,
+                "ladderIndex": 52,
                 "count": 4
               },
               {
                 "id": "orksNpc3GrotTank",
-                "stars": 50,
+                "ladderIndex": 50,
                 "count": 3
               }
             ]
