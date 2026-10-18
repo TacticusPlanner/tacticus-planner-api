@@ -24,6 +24,27 @@ public static partial class GameCatalogValidator
         "DispatchExpedition",
     };
 
+    private static readonly HashSet<string> ValidHseModifierKinds = new(StringComparer.Ordinal) { "UnitXp", "StatBoost" };
+
+    // Catalog game-mode names (specs/home-screen-event-scoring); a typo would silently disable a mode.
+    private static readonly HashSet<string> ValidHseGameModes = new(StringComparer.Ordinal)
+    {
+        "Arena",
+        "TournamentArena",
+        "Onslaught",
+        "SalvageRun",
+        "Campaign",
+        "MirrorCampaign",
+        "EliteCampaign",
+        "MirrorEliteCampaign",
+        "CampaignEvent",
+        "Survival",
+        "LegendaryEvent",
+        "MachinesOfWarEvent",
+        "GuildWars",
+        "LinearHeroEvent",
+    };
+
     private static void ValidateHseScoring(GameCatalogSnapshot snapshot, List<GameCatalogValidationError> errors) =>
         ValidateHseScoring(snapshot.EventDefinitions, snapshot.EventOccurrences, snapshot.HseScoring, errors);
 
@@ -59,6 +80,21 @@ public static partial class GameCatalogValidator
             {
                 errors.Add(new GameCatalogValidationError(
                     dataset, "InvalidReference", $"Scoring references '{entry.DefinitionId}', which is a '{definition.Type}', not a Home Screen Event."));
+            }
+
+            // The merge keeps every authored config key, so it needs an object to merge into and no authored 'hse'.
+            if (definition.Config is { } config && config.ValueKind != JsonValueKind.Null)
+            {
+                if (config.ValueKind != JsonValueKind.Object)
+                {
+                    errors.Add(new GameCatalogValidationError(
+                        GameCatalogDatasets.EventDefinitions, "InvalidValue", $"'{entry.DefinitionId}' has scoring but its config is a {config.ValueKind}, not an object."));
+                }
+                else if (config.TryGetProperty("hse", out _))
+                {
+                    errors.Add(new GameCatalogValidationError(
+                        GameCatalogDatasets.EventDefinitions, "InvalidValue", $"'{entry.DefinitionId}' authors config.hse, which the scoring merge would overwrite."));
+                }
             }
 
             if (entry.Variants.Count == 0)
@@ -135,6 +171,8 @@ public static partial class GameCatalogValidator
             errors.Add(new GameCatalogValidationError(dataset, "RequiredField", $"'{label}' has no tiers."));
         }
 
+        ValidateUniqueIds(dataset, variant.Tiers, tier => $"{label}/{tier.Tier}", errors);
+
         foreach (var tier in variant.Tiers)
         {
             var tierLabel = $"{label}/{tier.Tier}";
@@ -184,6 +222,34 @@ public static partial class GameCatalogValidator
             {
                 errors.Add(new GameCatalogValidationError(dataset, "InvalidValue", $"'{label}' has a '{tracker.Kind}' tracker with {tracker.Points} points."));
             }
+
+            ValidateHseGameModes($"{label} '{tracker.Kind}' tracker", tracker.GameModes, errors);
+        }
+
+        foreach (var modifier in variant.Modifiers)
+        {
+            if (!ValidHseModifierKinds.Contains(modifier.Kind))
+            {
+                errors.Add(new GameCatalogValidationError(dataset, "InvalidValue", $"'{label}' has unrecognized modifier kind '{modifier.Kind}'."));
+            }
+
+            if (modifier.Kind == "UnitXp" && (modifier.Multiplier is null) == (modifier.MultiplierByRarity is null))
+            {
+                errors.Add(new GameCatalogValidationError(
+                    dataset, "InvalidValue", $"'{label}' has a UnitXp modifier without exactly one of multiplier and multiplierByRarity."));
+            }
+
+            ValidateHseGameModes($"{label} '{modifier.Kind}' modifier", modifier.GameModes, errors);
+        }
+    }
+
+    private static void ValidateHseGameModes(string label, GameCatalogHseRestriction? gameModes, List<GameCatalogValidationError> errors)
+    {
+        var modes = (gameModes?.Allowed ?? []).Concat(gameModes?.Disallowed ?? []);
+        foreach (var mode in modes.Where(mode => !ValidHseGameModes.Contains(mode)))
+        {
+            errors.Add(new GameCatalogValidationError(
+                GameCatalogDatasets.HomeScreenEventScoring, "InvalidValue", $"{label} names unknown game mode '{mode}'."));
         }
     }
 }

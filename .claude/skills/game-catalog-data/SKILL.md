@@ -227,7 +227,9 @@ genuine game changes.
   `python3 .agents/skills/game-catalog-data/scripts/import-hse-scoring.py ../tacticusplanner` (run from
   this repo's root). Its `SOURCES` table maps each V1 file to a definition id and variant key; add a row
   for a new V1 file (and the definition in `event-definitions.json` first), and give a new occurrence an
-  `hseVariant` parameter when its ladder isn't the definition's `default`. Guild-raid trackers are dropped.
+  `hseVariant` parameter when its ladder isn't the definition's `default`. `raidBattles` (campaign sweep)
+  trackers are dropped; each one's modes are covered by a `killUnits` tracker with equal points. The script
+  raises on V1 shapes it can't represent (empty allow lists, unknown tiers, per-tier tracker differences).
 
 **Finish:** bump `GameVersion` (and usually `Version`) in `GameCatalogRelease.cs`; leave `SchemaVersion`
 unless a served shape changed. Then run the checklist below and promote the manifest snapshot.

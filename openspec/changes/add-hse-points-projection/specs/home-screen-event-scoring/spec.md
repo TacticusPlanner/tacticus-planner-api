@@ -63,10 +63,10 @@ Game-mode ids SHALL be the catalog names `Arena`, `TournamentArena`, `Onslaught`
 
 - **THEN** `hse-global-operation-imperator` has a single `default` variant with `scope` `Global` and a `Default` tier ending at 4,600,000
 
-#### Scenario: Duplicate raid trackers are dropped
+#### Scenario: Campaign sweep trackers are dropped
 
-- **GIVEN** the Machine Hunt datamine has `killUnits` and `raidBattles` trackers with equal points and restrictions
-- **THEN** only the `KillUnits` trackers are served
+- **GIVEN** the Machine Hunt datamine has two `killUnits` trackers and two `raidBattles` (campaign sweep) trackers, each sweep tracker's modes covered by a `killUnits` tracker with equal points
+- **THEN** only the two `KillUnits` trackers (3 and 5 points) are served
 
 #### Scenario: No scoring data
 
@@ -74,7 +74,7 @@ Game-mode ids SHALL be the catalog names `Arena`, `TournamentArena`, `Onslaught`
 
 ### Requirement: An occurrence resolves to one variant
 
-For an HSE occurrence the variant SHALL be: the variant whose `variantKey` equals `parameters.hseVariant` when that parameter is set; else the variant whose key equals `parameters.targetFactionId` when one exists; else the `default` variant. Clients SHALL apply the same rule; the server SHALL NOT add a resolved-variant field to calendar entries.
+For an HSE occurrence the variant SHALL be: the variant whose `variantKey` equals `parameters.hseVariant` when that parameter is set; else the variant whose key equals `parameters.targetFactionId` when one exists; else the `default` variant. Clients SHALL apply the same rule; the server SHALL NOT add a resolved-variant field to calendar entries. One occurrence shows one variant, so a week whose personal and Global ladders run at the same time (the 11th Edition weeks) needs two overlapping occurrences, the Global one naming its variant with `hseVariant`.
 
 #### Scenario: Faction Boost for Dark Angels
 
@@ -88,7 +88,7 @@ For an HSE occurrence the variant SHALL be: the variant whose `variantKey` equal
 
 ### Requirement: Scoring data is derived from the V1 datamine and validated
 
-The raw `home-screen-event-scoring.json` SHALL be produced from the V1 datamine by the documented import: tier keys capitalized; non-endless rewards become cumulative milestones and the trailing endless reward becomes `repeat` (its value is the per-repeat step, `endlessCap` becomes `cap`); `rewardId:quantity` strings split (quantity 1 without a suffix); V1 game-mode ids mapped (`PvP` to `Arena`, `SyncPVP` to `TournamentArena`, `Waves` to `Onslaught`, `TreasureBeach` to `SalvageRun`, others unchanged); `raidBattles` trackers dropped; `unitXp` percentage modifiers divided by 100. Catalog loading SHALL fail when a scoring entry references an unknown or non-HSE definition, a variant has no tier, milestones are not strictly increasing, a repeat step or tracker points value is not positive, or an occurrence's `hseVariant` is not a variant of its definition.
+The raw `home-screen-event-scoring.json` SHALL be produced from the V1 datamine by the documented import: tier keys capitalized; non-endless rewards become cumulative milestones and the trailing endless reward becomes `repeat` (its value is the per-repeat step, `endlessCap` becomes `cap`); `rewardId:quantity` strings split (quantity 1 without a suffix); V1 game-mode ids mapped (`PvP` to `Arena`, `SyncPVP` to `TournamentArena`, `Waves` to `Onslaught`, `TreasureBeach` to `SalvageRun`, others unchanged); `raidBattles` (campaign sweep) trackers dropped, since each one's modes are covered by a `killUnits` tracker with equal points; `unitXp` percentage modifiers divided by 100. The import SHALL refuse V1 shapes it cannot represent: an empty `allowed` list, an unknown tier key, trackers or modifiers that differ between tiers, and a `unitXp` operator other than `multiply`. Catalog loading SHALL fail when a scoring entry references an unknown or non-HSE definition, the definition's authored `config` is not an object or already has `hse`, a variant has no tier or repeats a tier, milestones are not strictly increasing, a repeat step or tracker points value is not positive, a game mode is not a catalog name, a modifier kind is unknown, a `UnitXp` modifier lacks exactly one of `multiplier` and `multiplierByRarity`, or an occurrence's `hseVariant` is not a variant of its definition.
 
 #### Scenario: Non-increasing ladder fails the build
 

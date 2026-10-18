@@ -101,11 +101,14 @@ public sealed class HseScoringTests
     }
 
     [Fact]
-    public void DropsGuildRaidTrackersAndLeavesUnscoredDefinitionsAlone()
+    public void DropsCampaignSweepTrackersAndLeavesUnscoredDefinitionsAlone()
     {
+        // V1's Machine Hunt also has two raidBattles (campaign sweep) trackers; serving them would double-count.
         var machineHunt = ServedVariant("hse-machine-hunt", "default");
-        Assert.All(machineHunt.GetProperty("trackers").EnumerateArray(), tracker =>
-            Assert.DoesNotContain("GuildRaid", tracker.GetProperty("gameModes").GetRawText(), StringComparison.Ordinal));
+        var trackers = machineHunt.GetProperty("trackers").EnumerateArray()
+            .Select(tracker => (Kind: tracker.GetProperty("kind").GetString(), Points: tracker.GetProperty("points").GetInt32()))
+            .ToArray();
+        Assert.Equal([("KillUnits", 3), ("KillUnits", 5)], trackers);
 
         var againstTheTide = GameCatalogLoader.Load().EventDefinitionViews.Single(definition => definition.Id == "hse-against-the-tide");
         Assert.False(againstTheTide.Config is { ValueKind: JsonValueKind.Object } config && config.TryGetProperty("hse", out _));
@@ -190,5 +193,50 @@ public sealed class HseScoringTests
         Assert.Equal(2, unresolved.Length);
         Assert.Contains(unresolved, message => message.Contains("occ-orphan", StringComparison.Ordinal));
         Assert.Contains(unresolved, message => message.Contains("occ-none", StringComparison.Ordinal));
+    }
+
+    [Fact]
+    public void ScoredDefinitionConfigMustBeAnObjectWithoutHse()
+    {
+        var errors = Validate(
+            [Definition("hse-array", config: Json("not-an-object")), Definition("hse-authored", config: Json(new { hse = 1 })), Definition("hse-ok", config: Json(new { keep = 1 }))],
+            [],
+            [
+                new GameCatalogHseScoring("hse-array", [Variant("default")]),
+                new GameCatalogHseScoring("hse-authored", [Variant("default")]),
+                new GameCatalogHseScoring("hse-ok", [Variant("default")]),
+            ]);
+
+        Assert.Equal(2, errors.Count);
+        Assert.Contains(errors, error => error.Message.Contains("'hse-array'", StringComparison.Ordinal) && error.Message.Contains("not an object", StringComparison.Ordinal));
+        Assert.Contains(errors, error => error.Message.Contains("'hse-authored'", StringComparison.Ordinal) && error.Message.Contains("config.hse", StringComparison.Ordinal));
+    }
+
+    [Fact]
+    public void DuplicateTiersUnknownGameModesAndBadModifiersFail()
+    {
+        var tier = new GameCatalogHseTier("High", [new GameCatalogHseMilestone(10, "gold", 1)], null);
+        var trackers = new[]
+        {
+            new GameCatalogHseTracker("KillUnits", 1, null, new GameCatalogHseRestriction(["Pvp"], null), null, null),
+        };
+        var variant = Variant("default", tiers: [tier, tier], trackers: trackers) with
+        {
+            Modifiers =
+            [
+                new GameCatalogHseModifier("Dance", null, null, null, null, null, null, null, null),
+                new GameCatalogHseModifier("UnitXp", null, null, false, null, null, null, null, null),
+                new GameCatalogHseModifier("UnitXp", 2, new Dictionary<string, double> { ["Common"] = 2 }, false, null, null, null, null, null),
+                new GameCatalogHseModifier("UnitXp", 3, null, false, null, null, null, new GameCatalogHseRestriction(null, ["Raids"]), null),
+            ],
+        };
+
+        var errors = Validate([Definition("hse-a")], [], [new GameCatalogHseScoring("hse-a", [variant])]);
+
+        Assert.Contains(errors, error => error.Code == "DuplicateId" && error.Message.Contains("hse-a/default/High", StringComparison.Ordinal));
+        Assert.Contains(errors, error => error.Message.Contains("unknown game mode 'Pvp'", StringComparison.Ordinal));
+        Assert.Contains(errors, error => error.Message.Contains("unknown game mode 'Raids'", StringComparison.Ordinal));
+        Assert.Contains(errors, error => error.Message.Contains("modifier kind 'Dance'", StringComparison.Ordinal));
+        Assert.Equal(2, errors.Count(error => error.Message.Contains("exactly one of multiplier", StringComparison.Ordinal)));
     }
 }

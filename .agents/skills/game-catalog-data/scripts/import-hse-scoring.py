@@ -76,6 +76,9 @@ def restriction(raw, map_value=lambda value: value):
         return None
     allowed = raw.get("allowed")
     disallowed = raw.get("disallowed")
+    if allowed is not None and len(allowed) == 0:
+        # V1's matchesRestriction treats an empty allow list as "nothing passes"; null would mean "all pass".
+        raise ValueError(f"empty allowed list in restriction {raw}")
     if not allowed and not disallowed:
         return None
     return {
@@ -115,7 +118,7 @@ def trackers(raw):
     result = []
     for tracker in raw.get("liveEventConfig", {}).get("trackers", []):
         if tracker["type"] == "raidBattles":
-            continue  # always duplicates a killUnits tracker with the same points and restrictions
+            continue  # campaign sweep; each one's modes are covered by a killUnits tracker with equal points
         unit_id = tracker.get("unitId")
         result.append({
             "kind": TRACKER_KINDS[tracker["type"]],
@@ -134,6 +137,8 @@ def modifiers(raw):
     for modifier in raw.get("liveEventConfig", {}).get("modifiers", []):
         modes = game_modes(modifier.get("gameModeRestrictions"))
         if modifier["type"] == "unitXp":
+            if modifier.get("operator", "multiply") != "multiply":
+                raise ValueError(f"unhandled unitXp operator {modifier['operator']}")
             scale = 100 if modifier.get("percentageModifier") else 1
             by_rarity = modifier.get("modifiers")
             result.append({
@@ -169,8 +174,15 @@ def modifiers(raw):
 def variant(path, variant_key, scope):
     data = json.loads(path.read_text(encoding="utf-8"))
     tiers_raw = data["tiers"]
+    unknown = set(tiers_raw) - set(TIER_ORDER)
+    if unknown:
+        raise ValueError(f"{path.name}: unknown tier keys {sorted(unknown)}")
     keys = [key for key in TIER_ORDER if key in tiers_raw]
     first = tiers_raw[keys[0]]
+    for key in keys[1:]:
+        for field in ("trackers", "modifiers"):
+            if tiers_raw[key]["liveEventConfig"].get(field) != first["liveEventConfig"].get(field):
+                raise ValueError(f"{path.name}: tier '{key}' {field} differ from tier '{keys[0]}'")
     result_tiers = []
     for key in keys:
         milestones, repeat = tier(tiers_raw[key])
@@ -179,7 +191,7 @@ def variant(path, variant_key, scope):
         "variantKey": variant_key,
         "scope": scope,
         "tiers": result_tiers,
-        # Trackers and modifiers are identical across power tiers in every datamine; take the first.
+        # Trackers and modifiers are identical across power tiers (checked above); take the first.
         "trackers": trackers(first),
         "modifiers": modifiers(first),
     }

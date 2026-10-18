@@ -7,7 +7,7 @@ The V2 HSE page can only help with the four events that score from campaign raid
 ## What Changes
 
 - New raw dataset `Data/events/home-screen-event-scoring.json`, imported once from the V1 datamine and normalized: per HSE definition, one or more **variants** (Faction Boost per target faction, Defeat Waves 1 and 2, the October 2026 Faction Focus, the global 11th-edition events), each with **milestone tiers**, **trackers** and **modifiers**.
-- `EventsDenormalizer` merges each definition's scoring into its served `event-definitions` record as `config.hse` (existing `gameModes` / `statBonus` / `xpBonusTiers` keys are kept). Game-mode ids are normalized to catalog names (`PvP` to `Arena`, `Waves` to `Onslaught`, `TreasureBeach` to `SalvageRun`, `SyncPVP` to `TournamentArena`); reward strings split into id and quantity; duplicate `raidBattles` trackers are dropped.
+- `EventsDenormalizer` merges each definition's scoring into its served `event-definitions` record as `config.hse` (existing `gameModes` / `statBonus` / `xpBonusTiers` keys are kept). Game-mode ids are normalized to catalog names (`PvP` to `Arena`, `Waves` to `Onslaught`, `TreasureBeach` to `SalvageRun`, `SyncPVP` to `TournamentArena`); reward strings split into id and quantity; `raidBattles` (campaign sweep) trackers, already covered by `killUnits` trackers with equal points, are dropped.
 - An HSE occurrence may name its variant with an optional `hseVariant` parameter; validation rejects an unknown variant.
 - The `game-catalog-data` skill gains a "refresh HSE scoring from the V1 datamine" step.
 
