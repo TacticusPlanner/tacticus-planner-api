@@ -22,11 +22,17 @@ public sealed class ProjectConfiguration : IEntityTypeConfiguration<Project>
         builder.Property(entity => entity.Color).HasMaxLength(ProjectValidation.MaxColorLength);
         builder.Property(entity => entity.Status).HasConversion<string>().IsRequired();
         builder.Property(entity => entity.Type).HasConversion<string>().IsRequired();
+        builder.Property(entity => entity.TargetKind).HasConversion<string>();
+        builder.Property(entity => entity.TargetEventId).HasMaxLength(ProjectValidation.MaxTargetEventIdLength);
         builder.Property(entity => entity.Revision).IsConcurrencyToken();
         builder.Property(entity => entity.CreatedAt).IsRequired();
         builder.Property(entity => entity.UpdatedAt).IsRequired();
 
         builder.HasIndex([nameof(Project.ProfileId)], "ix_projects_profile_id");
+        // The Legendary Event page lists the projects targeting it.
+        builder.HasIndex(
+            [nameof(Project.ProfileId), nameof(Project.TargetKind), nameof(Project.TargetEventId)],
+            "ix_projects_profile_id_target");
         // Exactly one Default project per profile — makes lazy provisioning race-safe.
         builder
             .HasIndex([nameof(Project.ProfileId)], "ix_projects_profile_id_default")

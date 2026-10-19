@@ -1,5 +1,6 @@
 using FastEndpoints;
 using FluentValidation;
+using FluentValidation.Results;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Domain.Projects;
 using TacticusPlanner.Persistence;
@@ -15,7 +16,7 @@ public sealed class CreateProjectEndpoint : Endpoint<CreateProjectRequest, Proje
         {
             summary.Summary = "Creates a new project.";
             summary.Response<ProjectSummaryResponse>(StatusCodes.Status200OK, "The newly created project.");
-            summary.Response(StatusCodes.Status400BadRequest, "A blank name.");
+            summary.Response(StatusCodes.Status400BadRequest, "A blank name or an invalid target.");
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
             summary.Response(StatusCodes.Status404NotFound, "The authenticated account/profile has not been provisioned.");
         });
@@ -38,6 +39,13 @@ public sealed class CreateProjectEndpoint : Endpoint<CreateProjectRequest, Proje
             return;
         }
 
+        if (Resolve<ProjectTargets>().Validate(req.Target, ProjectType.Custom) is { } failure)
+        {
+            AddError(new ValidationFailure(failure.Field, failure.Message));
+            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+            return;
+        }
+
         var db = Resolve<PlannerDbContext>();
 
         var project = Map.ToEntity(req);
@@ -52,7 +60,12 @@ public sealed class CreateProjectEndpoint : Endpoint<CreateProjectRequest, Proje
     }
 }
 
-public sealed record CreateProjectRequest(string Name, string? Description, string? Color);
+public sealed record CreateProjectRequest(
+    string Name,
+    string? Description,
+    string? Color,
+    ProjectTargetDto? Target = null
+);
 
 public sealed class CreateProjectValidator : Validator<CreateProjectRequest>
 {
@@ -61,5 +74,9 @@ public sealed class CreateProjectValidator : Validator<CreateProjectRequest>
         RuleFor(request => request.Name).MaximumLength(ProjectValidation.MaxNameLength);
         RuleFor(request => request.Description).MaximumLength(ProjectValidation.MaxDescriptionLength);
         RuleFor(request => request.Color).MaximumLength(ProjectValidation.MaxColorLength);
+        RuleFor(request => request.Target!.EventId)
+            .MaximumLength(ProjectValidation.MaxTargetEventIdLength)
+            .OverridePropertyName("target.eventId")
+            .When(request => request.Target is not null);
     }
 }

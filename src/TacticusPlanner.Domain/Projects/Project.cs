@@ -26,6 +26,12 @@ public class Project : BaseEntity<ProjectId>, IRevisionedEntity
 
     public ProjectType Type { get; set; }
 
+    /// <summary>What the project relates to, with <see cref="TargetEventId"/>; both null when it has no target.
+    /// The Default project never has one.</summary>
+    public ProjectTargetKind? TargetKind { get; set; }
+
+    public string? TargetEventId { get; set; }
+
     public virtual Profile? Profile { get; set; }
 
     public virtual ICollection<ProjectGoal> ProjectGoals { get; set; } = new List<ProjectGoal>();
