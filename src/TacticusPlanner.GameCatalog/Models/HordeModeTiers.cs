@@ -15,7 +15,7 @@ public sealed record GameCatalogHordeModeTiers(
     IReadOnlyList<GameCatalogHordeModeCharacter> Characters
 );
 
-/// <summary>One tier (<c>S</c>, <c>A</c>, <c>B</c> or <c>C</c>) and its power multiplier, in (0, 5].</summary>
+/// <summary>One tier (<c>S</c>, <c>A</c>, <c>B</c>, <c>C</c> or <c>D</c>) and its power multiplier, in (0, 5].</summary>
 public sealed record GameCatalogHordeModeTier(
     string Tier,
     double Multiplier
@@ -23,11 +23,28 @@ public sealed record GameCatalogHordeModeTier(
 
 /// <summary>
 /// A character's horde-mode tier, and optionally its own multiplier in (0, 5] that replaces the tier's
-/// for this character (fine tuning within a tier). Omitted from the served JSON when not set.
+/// for this character (fine tuning within a tier), and optionally its <see cref="Synergies"/>: up to six
+/// recommended teammates as character ids, best first (served in authoring order), and optionally its
+/// <see cref="Relics"/>: relic-conditional multipliers (served sorted by equipment id). All three are
+/// omitted from the served JSON when not set; denormalization serves an empty list as not set.
 /// </summary>
 public sealed record GameCatalogHordeModeCharacter(
     string UnitId,
     string Tier,
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    double? Multiplier = null
+    double? Multiplier = null,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    IReadOnlyList<string>? Synergies = null,
+    [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    IReadOnlyList<GameCatalogHordeModeRelic>? Relics = null
+);
+
+/// <summary>
+/// A relic-conditional rating: the multiplier in (0, 5], at least the character's base effective one,
+/// that replaces the base while the character has the catalog relic <see cref="EquipmentId"/> equipped
+/// (at any level; the highest applies when several are). The client decides whether it applies.
+/// </summary>
+public sealed record GameCatalogHordeModeRelic(
+    string EquipmentId,
+    double Multiplier
 );
