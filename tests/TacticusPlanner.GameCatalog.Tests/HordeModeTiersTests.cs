@@ -211,8 +211,8 @@ public sealed class HordeModeTiersTests
     public void SynergiesKeepTheirOrderAndAnEmptyListIsServedAsNotSet()
     {
         var served = Assert.Single(GameCatalogDenormalizer.BuildHordeModeTiers([Record(
-            new("ultraTigurius", "S", Synergies: ["ultraCalgar", "bloodDante"]),
-            new("ultraCalgar", "A", Synergies: []))]));
+            new GameCatalogHordeModeCharacter("ultraTigurius", "S", Synergies: ["ultraCalgar", "bloodDante"]),
+            new GameCatalogHordeModeCharacter("ultraCalgar", "A", Synergies: []))]));
 
         Assert.Equal(["ultraCalgar", "bloodDante"], served.Characters.Single(character => character.UnitId == "ultraTigurius").Synergies);
         Assert.Null(served.Characters.Single(character => character.UnitId == "ultraCalgar").Synergies);
@@ -222,7 +222,7 @@ public sealed class HordeModeTiersTests
     public void SynergiesAreSerializedOnlyWhenSet()
     {
         var json = JsonSerializer.SerializeToNode(
-            Record(new("ultraTigurius", "S", Synergies: ["ultraCalgar"]), new("ultraCalgar", "C")), JsonOptions)!;
+            Record(new GameCatalogHordeModeCharacter("ultraTigurius", "S", Synergies: ["ultraCalgar"]), new("ultraCalgar", "C")), JsonOptions)!;
         var characters = json["characters"]!.AsArray();
 
         Assert.Equal(["unitId", "tier", "synergies"], characters[0]!.AsObject().Select(property => property.Key));
@@ -231,20 +231,20 @@ public sealed class HordeModeTiersTests
 
     [Fact]
     public void ValidSynergiesPass() =>
-        Assert.Empty(Validate(Record(new("ultraTigurius", "S", Synergies: ["ultraCalgar", "bloodDante"]))));
+        Assert.Empty(Validate(Record(new GameCatalogHordeModeCharacter("ultraTigurius", "S", Synergies: ["ultraCalgar", "bloodDante"]))));
 
     [Fact]
     public void UnknownSynergyFails() =>
-        AssertSingleError(Validate(Record(new("ultraTigurius", "S", Synergies: ["notAUnit"]))), "ultraTigurius", "notAUnit");
+        AssertSingleError(Validate(Record(new GameCatalogHordeModeCharacter("ultraTigurius", "S", Synergies: ["notAUnit"]))), "ultraTigurius", "notAUnit");
 
     [Fact]
     public void SelfSynergyFails() =>
-        AssertSingleError(Validate(Record(new("ultraTigurius", "S", Synergies: ["ultraTigurius"]))), "ultraTigurius", "itself");
+        AssertSingleError(Validate(Record(new GameCatalogHordeModeCharacter("ultraTigurius", "S", Synergies: ["ultraTigurius"]))), "ultraTigurius", "itself");
 
     [Fact]
     public void DuplicateSynergyFails() =>
         AssertSingleError(
-            Validate(Record(new("ultraTigurius", "S", Synergies: ["ultraCalgar", "ultraCalgar"]))),
+            Validate(Record(new GameCatalogHordeModeCharacter("ultraTigurius", "S", Synergies: ["ultraCalgar", "ultraCalgar"]))),
             "ultraTigurius",
             "'ultraCalgar' is listed more than once");
 
@@ -257,7 +257,7 @@ public sealed class HordeModeTiersTests
         var synergies = characterIds.Where(id => id != "ultraTigurius").Order(StringComparer.Ordinal).Take(7).ToArray();
 
         var errors = new List<GameCatalogValidationError>();
-        GameCatalogValidator.ValidateHordeModeTiers([Record(new("ultraTigurius", "S", Synergies: synergies))], characterIds, errors);
+        GameCatalogValidator.ValidateHordeModeTiers([Record(new GameCatalogHordeModeCharacter("ultraTigurius", "S", Synergies: synergies))], characterIds, errors);
 
         AssertSingleError(errors, "ultraTigurius", "7 synergies", "at most 6");
     }
