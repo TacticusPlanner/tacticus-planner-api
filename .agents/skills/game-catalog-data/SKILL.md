@@ -142,6 +142,10 @@ the apps code (not in the catalog), so ratio changes ship as a web release.
   value for that character; every seeded character sets one, to rank it within its tier. Put the
   evidence (estimate vs manual depth overrides) for a change in the PR description. It is omitted
   from the served JSON when not set.
+- **`synergies`** (optional, on a character): up to 6 recommended teammates as character ids, best
+  first, served in authoring order (the order ranks them, so it moves the hash); not the character
+  itself, no duplicates; omitted when empty. Only ids: the strategy text (strengths, how to use, relic
+  advice) is client locale content in the apps' `hordeStrategy` namespace.
 - Enforced at load (`Validation/HordeModeTiersValidation.cs`, `InvalidHordeModeTiers`). A value change
   only moves this dataset's hash; no schema bump.
 

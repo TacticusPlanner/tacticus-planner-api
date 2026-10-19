@@ -10,6 +10,9 @@ public static partial class GameCatalogValidator
 
     private const double MaxHordeModeMultiplier = 5;
 
+    /// <summary>The most synergies one character may list: one row of portraits.</summary>
+    private const int MaxHordeModeSynergies = 6;
+
     private static void ValidateHordeModeTiers(GameCatalogSnapshot snapshot, List<GameCatalogValidationError> errors)
     {
         var characterIds = new HashSet<string>(snapshot.Characters.Select(character => character.Id), StringComparer.Ordinal);
@@ -21,7 +24,8 @@ public static partial class GameCatalogValidator
     /// Validates the <c>horde-mode-tiers</c> file: exactly one record with the dataset's id; <c>tiers</c>
     /// lists S, A, B, C and D in that order, each with a <c>multiplier</c> in (0, 5]; every character's
     /// <c>unitId</c> is a catalog character id (not a MoW or NPC) listed once, with one of those tiers and,
-    /// when set, its own <c>multiplier</c> override in (0, 5].
+    /// when set, its own <c>multiplier</c> override in (0, 5]; each of its <c>synergies</c>, when set, is a
+    /// catalog character id other than itself, listed once, and there are at most 6.
     /// Each failure is an <c>InvalidHordeModeTiers</c> error naming the offending value.
     /// </summary>
     internal static void ValidateHordeModeTiers(
@@ -93,6 +97,52 @@ public static partial class GameCatalogValidator
                     dataset,
                     code,
                     $"Dataset '{dataset}' unitId '{character.UnitId}' multiplier '{FormatCatalogNumber(multiplier)}' must be in (0, {FormatCatalogNumber(MaxHordeModeMultiplier)}]."));
+            }
+
+            ValidateHordeModeSynergies(character, characterIds, errors);
+        }
+    }
+
+    private static void ValidateHordeModeSynergies(
+        GameCatalogHordeModeCharacter character,
+        HashSet<string> characterIds,
+        List<GameCatalogValidationError> errors)
+    {
+        const string dataset = GameCatalogDatasets.HordeModeTiers;
+        const string code = "InvalidHordeModeTiers";
+
+        var synergies = character.Synergies ?? [];
+        if (synergies.Count > MaxHordeModeSynergies)
+        {
+            errors.Add(new GameCatalogValidationError(
+                dataset,
+                code,
+                $"Dataset '{dataset}' unitId '{character.UnitId}' lists {synergies.Count} synergies, at most {MaxHordeModeSynergies} allowed."));
+        }
+
+        var seen = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var synergy in synergies)
+        {
+            if (string.IsNullOrWhiteSpace(synergy) || !characterIds.Contains(synergy))
+            {
+                errors.Add(new GameCatalogValidationError(
+                    dataset,
+                    code,
+                    $"Dataset '{dataset}' unitId '{character.UnitId}' synergy '{synergy}' is not a catalog character id."));
+            }
+            else if (synergy == character.UnitId)
+            {
+                errors.Add(new GameCatalogValidationError(
+                    dataset,
+                    code,
+                    $"Dataset '{dataset}' unitId '{character.UnitId}' lists itself as a synergy."));
+            }
+            else if (!seen.Add(synergy))
+            {
+                errors.Add(new GameCatalogValidationError(
+                    dataset,
+                    code,
+                    $"Dataset '{dataset}' unitId '{character.UnitId}' synergy '{synergy}' is listed more than once."));
             }
         }
     }

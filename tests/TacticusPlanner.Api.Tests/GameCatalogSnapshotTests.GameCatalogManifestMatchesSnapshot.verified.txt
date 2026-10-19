@@ -1,6 +1,6 @@
 ﻿{
-  version: dev-2026-10-18.1,
-  schemaVersion: 8,
+  version: dev-2026-10-19,
+  schemaVersion: 9,
   gameVersion: 1.43,
   sourceHash: {time-dependent},
   datasets: [
@@ -51,7 +51,7 @@
     },
     {
       key: horde-mode-tiers,
-      hash: fa9fe5f5d5e9c477e75a56d954bc978a9180285ce47ba8c6fc06a07483ae7562,
+      hash: c33ffffa150340f7794255c0d843879d83f9ad3fb542c71b6485ee0e71d76683,
       url: /api/v1/game-catalog/horde-mode-tiers
     },
     {

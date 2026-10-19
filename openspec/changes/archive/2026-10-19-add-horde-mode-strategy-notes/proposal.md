@@ -9,7 +9,7 @@ Severyn's tier list revision (2026-10-18) pairs each rating with strategy: stren
 - Validate each synergy id: a catalog character, not the character itself, no duplicates, at most 6.
 - Bump `GameCatalogRelease.SchemaVersion` and `Version`.
 
-Depends on **`revise-horde-mode-tier-list`** and **`add-horde-mode-relic-ratings`** (relic advice is shown next to the relic ratings). Companion change: **`add-horde-mode-strategy-notes`** in `tacticus-planner-apps`, which holds all strategy text in a new locale namespace and shows it on the Tier List. This API half applies first.
+Depends on **`revise-horde-mode-tier-list`** (archived). It no longer depends on **`add-horde-mode-relic-ratings`**: Severyn chose to build the strategy notes first (2026-10-19), so relic advice is shown as its own block in the Strategy section. Companion change: **`add-horde-mode-strategy-notes`** in `tacticus-planner-apps`, which holds all strategy text in a new locale namespace and shows it on the Tier List. This API half applies first.
 
 ## Capabilities
 

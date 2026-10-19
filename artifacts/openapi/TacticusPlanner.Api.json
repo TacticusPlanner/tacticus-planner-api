@@ -9544,6 +9544,17 @@
               "number"
             ],
             "format": "double"
+          },
+          "synergies": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemString"
+              }
+            ]
           }
         }
       },

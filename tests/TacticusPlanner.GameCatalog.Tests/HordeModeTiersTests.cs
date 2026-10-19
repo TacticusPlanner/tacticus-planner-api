@@ -62,6 +62,18 @@ public sealed class HordeModeTiersTests
     }
 
     [Fact]
+    public void InitialDatasetServesTheSeedSynergiesInAuthoringOrder()
+    {
+        var characters = Assert.Single(GameCatalogLoader.Load().HordeModeTiersViews).Characters;
+
+        Assert.Equal(
+            ["deathRotbone", "worldTerminator", "blackAbaddon"],
+            Assert.Single(characters, character => character.UnitId == "blackTerminator").Synergies);
+        Assert.Null(Assert.Single(characters, character => character.UnitId == "custoBladeChampion").Synergies);
+        Assert.Equal(9, characters.Count(character => character.Synergies is not null));
+    }
+
+    [Fact]
     public void DatasetIsListedInTheManifestWithAHash()
     {
         var snapshot = GameCatalogLoader.Load();
@@ -193,6 +205,61 @@ public sealed class HordeModeTiersTests
 
         Assert.Equal(1.4, record.Characters[0].Multiplier);
         Assert.Null(record.Characters[1].Multiplier);
+    }
+
+    [Fact]
+    public void SynergiesKeepTheirOrderAndAnEmptyListIsServedAsNotSet()
+    {
+        var served = Assert.Single(GameCatalogDenormalizer.BuildHordeModeTiers([Record(
+            new("ultraTigurius", "S", Synergies: ["ultraCalgar", "bloodDante"]),
+            new("ultraCalgar", "A", Synergies: []))]));
+
+        Assert.Equal(["ultraCalgar", "bloodDante"], served.Characters.Single(character => character.UnitId == "ultraTigurius").Synergies);
+        Assert.Null(served.Characters.Single(character => character.UnitId == "ultraCalgar").Synergies);
+    }
+
+    [Fact]
+    public void SynergiesAreSerializedOnlyWhenSet()
+    {
+        var json = JsonSerializer.SerializeToNode(
+            Record(new("ultraTigurius", "S", Synergies: ["ultraCalgar"]), new("ultraCalgar", "C")), JsonOptions)!;
+        var characters = json["characters"]!.AsArray();
+
+        Assert.Equal(["unitId", "tier", "synergies"], characters[0]!.AsObject().Select(property => property.Key));
+        Assert.Equal(["unitId", "tier"], characters[1]!.AsObject().Select(property => property.Key));
+    }
+
+    [Fact]
+    public void ValidSynergiesPass() =>
+        Assert.Empty(Validate(Record(new("ultraTigurius", "S", Synergies: ["ultraCalgar", "bloodDante"]))));
+
+    [Fact]
+    public void UnknownSynergyFails() =>
+        AssertSingleError(Validate(Record(new("ultraTigurius", "S", Synergies: ["notAUnit"]))), "ultraTigurius", "notAUnit");
+
+    [Fact]
+    public void SelfSynergyFails() =>
+        AssertSingleError(Validate(Record(new("ultraTigurius", "S", Synergies: ["ultraTigurius"]))), "ultraTigurius", "itself");
+
+    [Fact]
+    public void DuplicateSynergyFails() =>
+        AssertSingleError(
+            Validate(Record(new("ultraTigurius", "S", Synergies: ["ultraCalgar", "ultraCalgar"]))),
+            "ultraTigurius",
+            "'ultraCalgar' is listed more than once");
+
+    [Fact]
+    public void MoreThanSixSynergiesFail()
+    {
+        // Seven distinct real character ids, so only the count fails.
+        var snapshot = GameCatalogLoader.Load();
+        var characterIds = new HashSet<string>(snapshot.Characters.Select(character => character.Id), StringComparer.Ordinal);
+        var synergies = characterIds.Where(id => id != "ultraTigurius").Order(StringComparer.Ordinal).Take(7).ToArray();
+
+        var errors = new List<GameCatalogValidationError>();
+        GameCatalogValidator.ValidateHordeModeTiers([Record(new("ultraTigurius", "S", Synergies: synergies))], characterIds, errors);
+
+        AssertSingleError(errors, "ultraTigurius", "7 synergies", "at most 6");
     }
 
     [Fact]
