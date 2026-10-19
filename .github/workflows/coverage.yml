@@ -53,7 +53,6 @@ jobs:
             echo code=false >> "$GITHUB_OUTPUT"
           fi
 
-jobs:
   coverage:
     name: Coverage
     needs: changes
