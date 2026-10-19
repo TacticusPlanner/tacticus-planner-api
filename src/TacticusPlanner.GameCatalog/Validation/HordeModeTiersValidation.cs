@@ -6,7 +6,7 @@ namespace TacticusPlanner.GameCatalog.Validation;
 public static partial class GameCatalogValidator
 {
     /// <summary>The horde-mode tiers, best first; the file lists exactly these, in this order.</summary>
-    internal static readonly IReadOnlyList<string> HordeModeTierNames = ["S", "A", "B", "C"];
+    internal static readonly IReadOnlyList<string> HordeModeTierNames = ["S", "A", "B", "C", "D"];
 
     private const double MaxHordeModeMultiplier = 5;
 
@@ -19,7 +19,7 @@ public static partial class GameCatalogValidator
 
     /// <summary>
     /// Validates the <c>horde-mode-tiers</c> file: exactly one record with the dataset's id; <c>tiers</c>
-    /// lists S, A, B and C in that order, each with a <c>multiplier</c> in (0, 5]; every character's
+    /// lists S, A, B, C and D in that order, each with a <c>multiplier</c> in (0, 5]; every character's
     /// <c>unitId</c> is a catalog character id (not a MoW or NPC) listed once, with one of those tiers and,
     /// when set, its own <c>multiplier</c> override in (0, 5].
     /// Each failure is an <c>InvalidHordeModeTiers</c> error naming the offending value.

@@ -11,7 +11,7 @@
     },
     {
       key: campaign-battles,
-      hash: 6a5f52cccf26c4682fa7bc260fd309e2db9f8b3e499ca0027258b3442b796a5f,
+      hash: f9ca80971caf60a484c2b2013d6aa7ef6c65a08902a18b4650f860736263ecd1,
       url: /api/v1/game-catalog/campaign-battles
     },
     {
@@ -51,7 +51,7 @@
     },
     {
       key: horde-mode-tiers,
-      hash: 280e6306c5a70d55c2353c6dc4862d0615e17ece5e6f6ab36314e660fa2bc25b,
+      hash: fa9fe5f5d5e9c477e75a56d954bc978a9180285ce47ba8c6fc06a07483ae7562,
       url: /api/v1/game-catalog/horde-mode-tiers
     },
     {

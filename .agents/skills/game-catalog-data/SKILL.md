@@ -130,14 +130,18 @@ decides how to use it. The apps' Legendary Event clear estimate multiplies comba
 character's multiplier and compares it with `lre-battles` `power` through a power ratio that lives in
 the apps code (not in the catalog), so ratio changes ship as a web release.
 
-- **`tiers`**: exactly `S`, `A`, `B`, `C` in that order, each `{ tier, multiplier }` with multiplier in
-  (0, 5]. A character not listed is untiered and gets 1.0 (the baseline); the seeded tiers are all
-  at or above it (S 1.85, A 1.55, B 1.25, C 1.05).
+- **`tiers`**: exactly `S`, `A`, `B`, `C`, `D` in that order, each `{ tier, multiplier }` with multiplier
+  in (0, 5]. A character not listed is untiered ("not yet evaluated") and gets 1.0 (the baseline); the
+  seeded tiers are all at or above it (S 1.90, A 1.70, B 1.45, C 1.20, D 1.00). D means "evaluated, weak
+  in horde modes", so it shares the untiered 1.0 rather than penalising. Authoring ranges for a
+  character's own multiplier (not validated): S 1.80–2.00, A 1.60–1.79, B 1.35–1.59, C 1.10–1.34,
+  D 1.00–1.09.
 - **`characters`** (`{ unitId, tier, multiplier? }`): `unitId` must be a character id (not a MoW or NPC),
   listed once; `tier` must be one of the tier names. Rank by summoning value, AoE / multi-hit and
   sustain. **`multiplier`** is an optional per-character override in (0, 5] that replaces the tier's
-  value for that character; use it only for fine tuning within a tier, with the evidence (estimate vs
-  manual depth overrides) in the PR description. It is omitted from the served JSON when not set.
+  value for that character; every seeded character sets one, to rank it within its tier. Put the
+  evidence (estimate vs manual depth overrides) for a change in the PR description. It is omitted
+  from the served JSON when not set.
 - Enforced at load (`Validation/HordeModeTiersValidation.cs`, `InvalidHordeModeTiers`). A value change
   only moves this dataset's hash; no schema bump.
 

@@ -232,7 +232,7 @@ public sealed class GetGameCatalogHordeModeTiersEndpoint(IGameCatalogProvider ca
         Get("game-catalog/horde-mode-tiers");
         ConfigureServed(
             "Gets the horde-mode character tier list.",
-            "The single S/A/B/C tier list of characters for horde modes, with each tier's power multiplier ; a character may override its tier's multiplier, and one not listed is unrated, multiplier 1.0).");
+            "The single S/A/B/C/D tier list of characters for horde modes, with each tier's power multiplier ; a character may override its tier's multiplier, and one not listed is unrated, multiplier 1.0).");
     }
 }
 

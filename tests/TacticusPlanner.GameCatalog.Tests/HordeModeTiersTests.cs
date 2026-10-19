@@ -20,6 +20,7 @@ public sealed class HordeModeTiersTests
         new("A", 1.2),
         new("B", 1.1),
         new("C", 0.9),
+        new("D", 0.8),
     ];
 
     private static GameCatalogHordeModeTiers Record(params GameCatalogHordeModeCharacter[] characters) =>
@@ -45,17 +46,19 @@ public sealed class HordeModeTiersTests
     }
 
     [Fact]
-    public void InitialDatasetLoadsTheFourTiersAndTheCuratedCharacters()
+    public void InitialDatasetLoadsTheFiveTiersAndTheCuratedCharacters()
     {
         var snapshot = GameCatalogLoader.Load();
 
         var record = Assert.Single(snapshot.HordeModeTiersViews);
         Assert.Equal("horde-mode-tiers", record.Id);
-        Assert.Equal(["S", "A", "B", "C"], record.Tiers.Select(tier => tier.Tier));
-        Assert.Equal([1.85, 1.55, 1.25, 1.05], record.Tiers.Select(tier => tier.Multiplier));
-        Assert.Equal(21, record.Characters.Count);
+        Assert.Equal(["S", "A", "B", "C", "D"], record.Tiers.Select(tier => tier.Tier));
+        Assert.Equal([1.9, 1.7, 1.45, 1.2, 1.0], record.Tiers.Select(tier => tier.Multiplier));
+        Assert.Equal(47, record.Characters.Count);
         Assert.Contains(record.Characters, character => character is { UnitId: "custoBladeChampion", Tier: "S", Multiplier: 2.0 });
-        Assert.Contains(record.Characters, character => character is { UnitId: "ultraEliminatorSgt", Tier: "C", Multiplier: 1.0 });
+        Assert.Contains(record.Characters, character => character is { UnitId: "deathBlightlord", Tier: "S", Multiplier: 1.9 });
+        Assert.Contains(record.Characters, character => character is { UnitId: "blackTerminator", Tier: "A", Multiplier: 1.76 });
+        Assert.Contains(record.Characters, character => character is { UnitId: "ultraEliminatorSgt", Tier: "D", Multiplier: 1.0 });
     }
 
     [Fact]
@@ -121,17 +124,25 @@ public sealed class HordeModeTiersTests
 
     [Fact]
     public void UnknownTierFails() =>
-        AssertSingleError(Validate(Record(new GameCatalogHordeModeCharacter("ultraCalgar", "D"))), "ultraCalgar", "'D'");
+        AssertSingleError(Validate(Record(new GameCatalogHordeModeCharacter("ultraCalgar", "E"))), "ultraCalgar", "'E'");
+
+    [Fact]
+    public void TierDPasses() =>
+        Assert.Empty(Validate(Record(new GameCatalogHordeModeCharacter("ultraTigurius", "D", 1.0))));
 
     [Fact]
     public void TiersOutOfOrderFail() =>
         AssertSingleError(
-            Validate(Record() with { Tiers = [new("A", 1.2), new("S", 1.3), new("B", 1.1), new("C", 0.9)] }),
-            "'A, S, B, C'");
+            Validate(Record() with { Tiers = [new("A", 1.2), new("S", 1.3), new("B", 1.1), new("C", 0.9), new("D", 0.8)] }),
+            "'A, S, B, C, D'");
 
     [Fact]
     public void MissingTierFails() =>
         AssertSingleError(Validate(Record() with { Tiers = DefaultTiers[..3] }), "'S, A, B'");
+
+    [Fact]
+    public void MissingTierDFails() =>
+        AssertSingleError(Validate(Record() with { Tiers = DefaultTiers[..4] }), "'S, A, B, C'", "'S, A, B, C, D'");
 
     [Theory]
     [InlineData(0)]

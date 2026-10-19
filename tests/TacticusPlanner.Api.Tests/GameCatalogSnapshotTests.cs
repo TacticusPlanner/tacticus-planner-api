@@ -117,7 +117,7 @@ public sealed class GameCatalogSnapshotTests(GameCatalogApiFactory factory)
 
         var record = Assert.Single(payload["data"]!.AsArray())!.AsObject();
         Assert.Equal(["id", "tiers", "characters"], record.Select(property => property.Key));
-        Assert.Equal(["S", "A", "B", "C"], record["tiers"]!.AsArray().Select(tier => tier!["tier"]!.GetValue<string>()));
+        Assert.Equal(["S", "A", "B", "C", "D"], record["tiers"]!.AsArray().Select(tier => tier!["tier"]!.GetValue<string>()));
         Assert.Equal(["tier", "multiplier"], record["tiers"]![0]!.AsObject().Select(property => property.Key));
 
         var unitIds = record["characters"]!.AsArray().Select(character => character!["unitId"]!.GetValue<string>()).ToArray();
