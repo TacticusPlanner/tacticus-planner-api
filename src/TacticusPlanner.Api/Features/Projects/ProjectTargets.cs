@@ -16,10 +16,12 @@ public sealed class ProjectTargets(IGameCatalogProvider catalog)
     public const string LegendaryEventKind = "legendaryEvent";
 
     /// <summary>The field and message of the first problem with <paramref name="target"/>, or null when it can be
-    /// stored on a project of <paramref name="type"/>. A null target is always valid.</summary>
-    public (string Field, string Message)? Validate(ProjectTargetDto? target, ProjectType type)
+    /// stored on a project of <paramref name="type"/>. A null target is always valid, and so is resending the
+    /// <paramref name="stored"/> one: renaming or archiving a project whose event the catalog dropped still saves.</summary>
+    public (string Field, string Message)? Validate(
+        ProjectTargetDto? target, ProjectType type, ProjectTargetDto? stored = null)
     {
-        if (target is null)
+        if (target is null || target == stored)
         {
             return null;
         }

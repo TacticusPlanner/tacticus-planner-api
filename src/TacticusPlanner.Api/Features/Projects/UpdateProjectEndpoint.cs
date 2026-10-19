@@ -54,7 +54,7 @@ public sealed class UpdateProjectEndpoint : Endpoint<UpdateProjectRequest, Proje
             return;
         }
 
-        if (Resolve<ProjectTargets>().Validate(req.Target, project.Type) is { } failure)
+        if (Resolve<ProjectTargets>().Validate(req.Target, project.Type, ProjectTargets.ToDto(project)) is { } failure)
         {
             AddError(new ValidationFailure(failure.Field, failure.Message));
             await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);

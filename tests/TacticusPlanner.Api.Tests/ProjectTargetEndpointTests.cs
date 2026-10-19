@@ -1,7 +1,11 @@
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using TacticusPlanner.Api.Features.Projects;
+using TacticusPlanner.Domain.Projects;
+using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Tests;
 
@@ -72,6 +76,44 @@ public sealed class ProjectTargetEndpointTests(PlannerApiFactory factory) : ICla
         var updated = await UpdateAsync(client, project, "Active", null);
 
         Assert.Null(updated.Target);
+    }
+
+    [Fact]
+    public async Task UpdateWithTheTargetFieldAbsentClearsIt()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var project = await CreateAsync(client, Uthar);
+
+        var response = await client.PutAsJsonAsync(
+            $"{ProjectsUrl}/{project.ProjectId}",
+            new { name = project.Name, status = "Active", revision = project.Revision },
+            Ct);
+
+        Assert.True(response.IsSuccessStatusCode, await response.Content.ReadAsStringAsync(Ct));
+        Assert.Null((await response.Content.ReadFromJsonAsync<ProjectSummaryResponse>(Ct))!.Target);
+    }
+
+    [Fact]
+    public async Task ResendingATargetWhoseEventLeftTheCatalogStillSaves()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var project = await CreateAsync(client, Uthar);
+        using (var scope = factory.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
+            // IgnoreQueryFilters: this scope has no HttpContext to scope the profile filter to.
+            var stored = await db.Projects.IgnoreQueryFilters()
+                .SingleAsync(entity => entity.Id == ProjectId.From(project.ProjectId), Ct);
+            stored.TargetEventId = "retiredEvent";
+            await db.SaveChangesAsync(Ct);
+        }
+        var list = await client.GetFromJsonAsync<ListProjectsResponse>(ProjectsUrl, Ct);
+        var current = list!.Projects.Single(entry => entry.ProjectId == project.ProjectId);
+        var retired = new ProjectTargetDto("legendaryEvent", "retiredEvent");
+
+        var archived = await UpdateAsync(client, current, "Archived", retired);
+
+        Assert.Equal(retired, archived.Target);
     }
 
     [Fact]
