@@ -1,4 +1,9 @@
-## ADDED Requirements
+# project-event-target Specification
+
+## Purpose
+Lets a project say what it relates to: an optional target, today a Legendary Event from the Game Catalog, so the planner can find the projects that belong to an event.
+
+## Requirements
 
 ### Requirement: Projects store an optional event target
 
@@ -7,7 +12,7 @@ A project SHALL store an optional target of `kind` `legendaryEvent` and an `even
 #### Scenario: Create with a target
 
 - **WHEN** the caller posts `{ name "Uthar run 3", target { kind "legendaryEvent", eventId "votanUthar" } }`
-- **THEN** the response is 201 and the project carries that target
+- **THEN** the response is 200 and the project carries that target
 
 #### Scenario: Unknown event
 

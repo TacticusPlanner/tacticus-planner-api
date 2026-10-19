@@ -1082,6 +1082,15 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasColumnType("text")
                         .HasColumnName("status");
 
+                    b.Property<string>("TargetEventId")
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("target_event_id");
+
+                    b.Property<string>("TargetKind")
+                        .HasColumnType("text")
+                        .HasColumnName("target_kind");
+
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("text")
@@ -1101,6 +1110,9 @@ namespace TacticusPlanner.Persistence.Migrations
                         .IsUnique()
                         .HasDatabaseName("ix_projects_profile_id_default")
                         .HasFilter("type = 'Default'");
+
+                    b.HasIndex(new[] { "ProfileId", "TargetKind", "TargetEventId" }, "ix_projects_profile_id_target")
+                        .HasDatabaseName("ix_projects_profile_id_target_kind_target_event_id");
 
                     b.ToTable("projects", (string)null);
                 });

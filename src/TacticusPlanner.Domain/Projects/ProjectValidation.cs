@@ -10,4 +10,7 @@ public static class ProjectValidation
 
     /// <summary>A CSS hex color (<c>#rrggbb</c>) plus headroom, not a name.</summary>
     public const int MaxColorLength = 16;
+
+    /// <summary>A catalog event id (for example <c>votanUthar</c>) plus headroom.</summary>
+    public const int MaxTargetEventIdLength = 64;
 }

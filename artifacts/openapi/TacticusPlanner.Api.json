@@ -2430,7 +2430,7 @@
             }
           },
           "400": {
-            "description": "A blank name."
+            "description": "A blank name or an invalid target."
           },
           "401": {
             "description": "The request is missing required identity claims."
@@ -2489,6 +2489,7 @@
           "Me"
         ],
         "summary": "Updates or archives a project.",
+        "description": "An absent or null target clears it; archiving keeps it.",
         "operationId": "TacticusPlannerApiFeaturesProjectsUpdateProjectEndpoint",
         "parameters": [
           {
@@ -7635,6 +7636,17 @@
               "null",
               "string"
             ]
+          },
+          "target": {
+            "type": [
+              "null",
+              "object"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesProjectsProjectTargetDto"
+              }
+            ]
           }
         }
       },
@@ -7876,6 +7888,7 @@
           "color",
           "status",
           "isDefault",
+          "target",
           "revision",
           "createdAt",
           "updatedAt"
@@ -7907,6 +7920,17 @@
           "isDefault": {
             "type": "boolean"
           },
+          "target": {
+            "type": [
+              "null",
+              "object"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesProjectsProjectTargetDto"
+              }
+            ]
+          },
           "revision": {
             "type": "integer",
             "format": "int64"
@@ -7918,6 +7942,21 @@
           "updatedAt": {
             "type": "string",
             "format": "date-time"
+          }
+        }
+      },
+      "TacticusPlannerApiFeaturesProjectsProjectTargetDto": {
+        "required": [
+          "kind",
+          "eventId"
+        ],
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string"
+          },
+          "eventId": {
+            "type": "string"
           }
         }
       },
@@ -8005,6 +8044,17 @@
             "minimum": 0,
             "type": "integer",
             "format": "int64"
+          },
+          "target": {
+            "type": [
+              "null",
+              "object"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/TacticusPlannerApiFeaturesProjectsProjectTargetDto"
+              }
+            ]
           }
         }
       },

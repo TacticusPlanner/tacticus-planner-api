@@ -1,5 +1,6 @@
 using FastEndpoints;
 using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Domain.Projects;
@@ -15,6 +16,7 @@ public sealed class UpdateProjectEndpoint : Endpoint<UpdateProjectRequest, Proje
         Summary(summary =>
         {
             summary.Summary = "Updates or archives a project.";
+            summary.Description = "An absent or null target clears it; archiving keeps it.";
             summary.Response<ProjectSummaryResponse>(StatusCodes.Status200OK);
             summary.Response<ProjectConflictResponse>(StatusCodes.Status409Conflict);
         });
@@ -52,10 +54,18 @@ public sealed class UpdateProjectEndpoint : Endpoint<UpdateProjectRequest, Proje
             return;
         }
 
+        if (Resolve<ProjectTargets>().Validate(req.Target, project.Type) is { } failure)
+        {
+            AddError(new ValidationFailure(failure.Field, failure.Message));
+            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+            return;
+        }
+
         project.Name = req.Name.Trim();
         project.Description = string.IsNullOrWhiteSpace(req.Description) ? null : req.Description.Trim();
         project.Color = string.IsNullOrWhiteSpace(req.Color) ? null : req.Color.Trim();
         project.Status = status;
+        ProjectTargets.Apply(project, req.Target);
 
         try
         {
@@ -82,7 +92,8 @@ public sealed record UpdateProjectRequest(
     string? Description,
     string? Color,
     string Status,
-    long Revision
+    long Revision,
+    ProjectTargetDto? Target = null
 );
 
 public sealed record ProjectConflictResponse(string IssueCode, string Message);
@@ -97,5 +108,9 @@ public sealed class UpdateProjectValidator : Validator<UpdateProjectRequest>
                 && Enum.IsDefined(status))
             .WithMessage("Status must be Active, Paused, or Archived.");
         RuleFor(request => request.Revision).GreaterThanOrEqualTo(0);
+        RuleFor(request => request.Target!.EventId)
+            .MaximumLength(ProjectValidation.MaxTargetEventIdLength)
+            .OverridePropertyName("target.eventId")
+            .When(request => request.Target is not null);
     }
 }
