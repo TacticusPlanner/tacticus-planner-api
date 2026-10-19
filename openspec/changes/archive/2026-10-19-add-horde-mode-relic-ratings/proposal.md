@@ -9,7 +9,7 @@ Some characters are much stronger in horde-style modes once they hold a specific
 - Validate that each `equipmentId` is a catalog relic the character may equip, listed once per character, with a multiplier in (0, 5] and not below the character's base effective multiplier.
 - Bump `GameCatalogRelease.SchemaVersion` (the served shape gains a field) and `Version`.
 
-Depends on **`revise-horde-mode-tier-list`** (applies first). Companion change: **`add-horde-mode-relic-ratings`** in `tacticus-planner-apps`, which uses the relic multiplier in clear estimates when the synced roster has the relic equipped and shows it on the Tier List. This API half applies first.
+Depends on **`revise-horde-mode-tier-list`** (archived). Built in the same PR as **`add-horde-mode-strategy-notes`** (Severyn, 2026-10-19), after it. Companion change: **`add-horde-mode-relic-ratings`** in `tacticus-planner-apps`, which uses the relic multiplier in clear estimates when the synced roster has the relic equipped and shows it on the Tier List. This API half applies first.
 
 ## Capabilities
 

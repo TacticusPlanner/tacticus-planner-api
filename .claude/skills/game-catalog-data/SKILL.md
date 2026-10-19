@@ -146,8 +146,13 @@ the apps code (not in the catalog), so ratio changes ship as a web release.
   first, served in authoring order (the order ranks them, so it moves the hash); not the character
   itself, no duplicates; omitted when empty. Only ids: the strategy text (strengths, how to use, relic
   advice) is client locale content in the apps' `hordeStrategy` namespace.
+- **`relics`** (optional, on a character): `{ equipmentId, multiplier }[]`, relic-conditional ratings.
+  `equipmentId` must be a catalog relic (`isRelic`) whose `allowedUnits` includes the character, once
+  per character; `multiplier` in (0, 5] and not below the character's base effective multiplier.
+  Served sorted by `equipmentId`, omitted when empty. The client applies the highest one whose relic
+  the synced roster has equipped (any level) in place of the base; the Tier List still ranks by base.
 - Enforced at load (`Validation/HordeModeTiersValidation.cs`, `InvalidHordeModeTiers`). A value change
-  only moves this dataset's hash; no schema bump.
+  only moves this dataset's hash; a new field bumps `SchemaVersion`.
 
 ## Unit power
 

@@ -15,7 +15,8 @@ After `revise-horde-mode-tier-list`, each `horde-mode-tiers` character has a tie
 - **A relic multiplier must be ≥ the character's base effective multiplier.** A relic never lowers a rating.
 - **Validation reads the equipment catalog.** `ValidateHordeModeTiers` gains the relic ids with their `allowedUnits`; an id whose equipment is not `isRelic` or does not allow that character is rejected.
 - **Values for "Potential S/A".** Severyn's notes give exact values for four relics and "potential S" or "potential A" for four. Those default to the bottom of the next tier's range (S 1.80, A 1.60), to be calibrated later.
-- **Raw dataset and model change.** The denormalizer is unchanged apart from passing `relics` through, served sorted by `equipmentId` (ordinal) so authoring order does not change the hash; an empty or missing list is omitted. `SchemaVersion` bumps. No EF Core migration.
+- **Raw dataset and model change.** The denormalizer is unchanged apart from passing `relics` through, served sorted by `equipmentId` (ordinal) so authoring order does not change the hash; an empty or missing list is omitted. `SchemaVersion` bumps (9 → 10) and `Version` becomes `dev-2026-10-19.1`. No EF Core migration.
+- **Validation takes the relics as a map** from relic id to its `allowedUnits`, built from the catalog equipment where `isRelic`; the base checked against is the character's own multiplier, else its tier's.
 
 ## Seed relic ratings
 

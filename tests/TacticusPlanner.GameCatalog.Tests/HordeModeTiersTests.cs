@@ -26,12 +26,22 @@ public sealed class HordeModeTiersTests
     private static GameCatalogHordeModeTiers Record(params GameCatalogHordeModeCharacter[] characters) =>
         new(GameCatalogDatasets.HordeModeTiers, DefaultTiers, characters);
 
+    // Relic id -> the units allowed to equip it.
+    private static readonly Dictionary<string, IReadOnlySet<string>> RelicAllowedUnits = new(StringComparer.Ordinal)
+    {
+        ["R_Crit_Lakrimae"] = new HashSet<string>(["ultraTigurius"], StringComparer.Ordinal),
+        ["R_Block_DaemonfleshPlate"] = new HashSet<string>(["ultraTigurius", "ultraCalgar"], StringComparer.Ordinal),
+    };
+
     private static List<GameCatalogValidationError> Validate(params GameCatalogHordeModeTiers[] records)
     {
         var errors = new List<GameCatalogValidationError>();
-        GameCatalogValidator.ValidateHordeModeTiers(records, CharacterIds, errors);
+        GameCatalogValidator.ValidateHordeModeTiers(records, CharacterIds, errors, RelicAllowedUnits);
         return errors;
     }
+
+    private static GameCatalogHordeModeCharacter WithRelics(string unitId, string tier, double? multiplier, params GameCatalogHordeModeRelic[] relics) =>
+        new(unitId, tier, multiplier, Relics: relics);
 
     private static void AssertSingleError(List<GameCatalogValidationError> errors, params string[] expectedFragments)
     {
@@ -205,6 +215,91 @@ public sealed class HordeModeTiersTests
 
         Assert.Equal(1.4, record.Characters[0].Multiplier);
         Assert.Null(record.Characters[1].Multiplier);
+    }
+
+    [Fact]
+    public void InitialDatasetServesTheSeedRelicRatings()
+    {
+        var characters = Assert.Single(GameCatalogLoader.Load().HordeModeTiersViews).Characters;
+
+        var revas = Assert.Single(characters, character => character.UnitId == "tauCrisis");
+        var relic = Assert.Single(revas.Relics!);
+        Assert.Equal(new GameCatalogHordeModeRelic("R_Crit_Dw02AdvancedBurstCannon", 1.98), relic);
+        Assert.Null(Assert.Single(characters, character => character.UnitId == "ultraCalgar").Relics);
+        Assert.Equal(8, characters.Count(character => character.Relics is not null));
+    }
+
+    [Fact]
+    public void RelicsAreSortedByEquipmentIdAndTheHashIgnoresAuthoringOrder()
+    {
+        var lakrimae = new GameCatalogHordeModeRelic("R_Crit_Lakrimae", 1.5);
+        var plate = new GameCatalogHordeModeRelic("R_Block_DaemonfleshPlate", 1.6);
+        var served = GameCatalogDenormalizer.BuildHordeModeTiers([Record(WithRelics("ultraTigurius", "S", null, lakrimae, plate))]);
+        var servedReversed = GameCatalogDenormalizer.BuildHordeModeTiers([Record(WithRelics("ultraTigurius", "S", null, plate, lakrimae))]);
+
+        Assert.Equal(
+            ["R_Block_DaemonfleshPlate", "R_Crit_Lakrimae"],
+            Assert.Single(Assert.Single(served).Characters).Relics!.Select(relic => relic.EquipmentId));
+        Assert.Equal(
+            GameCatalogHashing.ComputeCanonicalJsonHash(served, JsonOptions),
+            GameCatalogHashing.ComputeCanonicalJsonHash(servedReversed, JsonOptions));
+    }
+
+    [Fact]
+    public void EmptyRelicsAreServedAsNotSet() =>
+        Assert.Null(Assert.Single(Assert.Single(
+            GameCatalogDenormalizer.BuildHordeModeTiers([Record(WithRelics("ultraTigurius", "S", null))])).Characters).Relics);
+
+    [Fact]
+    public void ValidRelicsPass() =>
+        Assert.Empty(Validate(Record(WithRelics("ultraTigurius", "S", 1.4, new GameCatalogHordeModeRelic("R_Crit_Lakrimae", 1.5), new GameCatalogHordeModeRelic("R_Block_DaemonfleshPlate", 1.4)))));
+
+    [Fact]
+    public void RelicTheCharacterCannotEquipFails() =>
+        AssertSingleError(Validate(Record(WithRelics("ultraCalgar", "S", null, new GameCatalogHordeModeRelic("R_Crit_Lakrimae", 1.5)))), "ultraCalgar", "R_Crit_Lakrimae");
+
+    [Fact]
+    public void NonRelicFails() =>
+        AssertSingleError(Validate(Record(WithRelics("ultraTigurius", "S", null, new GameCatalogHordeModeRelic("I_Crit_C001", 1.5)))), "ultraTigurius", "I_Crit_C001");
+
+    [Fact]
+    public void DuplicateRelicFails() =>
+        AssertSingleError(
+            Validate(Record(WithRelics("ultraTigurius", "S", null, new GameCatalogHordeModeRelic("R_Crit_Lakrimae", 1.5), new GameCatalogHordeModeRelic("R_Crit_Lakrimae", 1.6)))),
+            "ultraTigurius",
+            "'R_Crit_Lakrimae' is listed more than once");
+
+    [Fact]
+    public void RelicBelowTheBaseMultiplierFails() =>
+        AssertSingleError(
+            Validate(Record(WithRelics("ultraTigurius", "S", 1.92, new GameCatalogHordeModeRelic("R_Crit_Lakrimae", 1.5)))),
+            "ultraTigurius",
+            "'1.5'",
+            "below");
+
+    [Fact]
+    public void RelicBelowTheTierMultiplierFails() =>
+        AssertSingleError(Validate(Record(WithRelics("ultraTigurius", "S", null, new GameCatalogHordeModeRelic("R_Crit_Lakrimae", 1.2)))), "ultraTigurius", "'1.3'");
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(5.1)]
+    public void RelicMultiplierOutOfBoundsFails(double multiplier) =>
+        AssertSingleError(
+            Validate(Record(WithRelics("ultraTigurius", "S", null, new GameCatalogHordeModeRelic("R_Crit_Lakrimae", multiplier)))),
+            "ultraTigurius",
+            "must be in (0, 5]");
+
+    [Fact]
+    public void RelicsAreSerializedOnlyWhenSet()
+    {
+        var json = JsonSerializer.SerializeToNode(
+            Record(WithRelics("ultraTigurius", "S", 1.4, new GameCatalogHordeModeRelic("R_Crit_Lakrimae", 1.5)), new("ultraCalgar", "C")), JsonOptions)!;
+        var characters = json["characters"]!.AsArray();
+
+        Assert.Equal(["unitId", "tier", "multiplier", "relics"], characters[0]!.AsObject().Select(property => property.Key));
+        Assert.Equal(["equipmentId", "multiplier"], characters[0]!["relics"]![0]!.AsObject().Select(property => property.Key));
+        Assert.Equal(["unitId", "tier"], characters[1]!.AsObject().Select(property => property.Key));
     }
 
     [Fact]

@@ -3478,6 +3478,12 @@
           "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogHordeModeCharacter"
         }
       },
+      "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogHordeModeRelic": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/TacticusPlannerGameCatalogModelsGameCatalogHordeModeRelic"
+        }
+      },
       "SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogHordeModeTier": {
         "type": "array",
         "items": {
@@ -9555,6 +9561,33 @@
                 "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfSystemString"
               }
             ]
+          },
+          "relics": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/SystemCollectionsGenericIReadOnlyListOfTacticusPlannerGameCatalogModelsGameCatalogHordeModeRelic"
+              }
+            ]
+          }
+        }
+      },
+      "TacticusPlannerGameCatalogModelsGameCatalogHordeModeRelic": {
+        "required": [
+          "equipmentId",
+          "multiplier"
+        ],
+        "type": "object",
+        "properties": {
+          "equipmentId": {
+            "type": "string"
+          },
+          "multiplier": {
+            "type": "number",
+            "format": "double"
           }
         }
       },
