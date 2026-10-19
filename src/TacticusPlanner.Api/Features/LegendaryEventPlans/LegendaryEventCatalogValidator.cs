@@ -92,7 +92,8 @@ public sealed class LegendaryEventCatalogValidator(IGameCatalogProvider catalog)
     }
 
     /// <summary>Run inputs (Stage 3 design D3): the route's run is 1–3, missions are within the event's catalog
-    /// mission counts and close shards within 0–75. Paid fields are validated whatever showPaidOptions says.</summary>
+    /// mission counts, completed missions are distinct catalog indices no more numerous than their count
+    /// (add-legendary-event-mission-tracking design D2) and close shards within 0–75. Paid fields are validated whatever showPaidOptions says.</summary>
     public static IReadOnlyList<LegendaryEventFieldFailure> ValidateRunInputs(
         GameCatalogLreView lre, string? run, UpdateLegendaryEventRunInputsRequest request)
     {
@@ -100,18 +101,37 @@ public sealed class LegendaryEventCatalogValidator(IGameCatalogProvider catalog)
         if (ParseRun(run) is null)
             failures.Add(new("run", $"run must be {LegendaryEventValidation.MinRun}–{LegendaryEventValidation.MaxRun}."));
 
-        var regular = lre.RegularMissions.Count;
-        if (request.RegularMissions < 0 || request.RegularMissions > regular)
-            failures.Add(new("regularMissions", $"regularMissions must be 0–{regular} for this event."));
-
-        var premium = lre.PremiumMissions.Count;
-        if (request.PremiumMissions < 0 || request.PremiumMissions > premium)
-            failures.Add(new("premiumMissions", $"premiumMissions must be 0–{premium} for this event."));
+        ValidateMissions(
+            "regularMissions", request.RegularMissions, lre.RegularMissions.Count,
+            "completedRegularMissions", request.CompletedRegularMissions, failures);
+        ValidateMissions(
+            "premiumMissions", request.PremiumMissions, lre.PremiumMissions.Count,
+            "completedPremiumMissions", request.CompletedPremiumMissions, failures);
 
         if (request.CloseShards is < 0 or > LegendaryEventValidation.MaxCloseShards)
             failures.Add(new("closeShards", $"closeShards must be 0–{LegendaryEventValidation.MaxCloseShards}."));
 
         return failures;
+    }
+
+    private static void ValidateMissions(
+        string countField,
+        int count,
+        int catalogCount,
+        string completedField,
+        IReadOnlyList<int>? completed,
+        List<LegendaryEventFieldFailure> failures)
+    {
+        if (count < 0 || count > catalogCount)
+            failures.Add(new(countField, $"{countField} must be 0–{catalogCount} for this event."));
+
+        var indices = completed ?? [];
+        if (indices.Any(index => index < 0 || index >= catalogCount))
+            failures.Add(new(completedField, $"Every {completedField} index must be 0–{catalogCount - 1} for this event."));
+        else if (indices.Distinct().Count() != indices.Count)
+            failures.Add(new(completedField, $"A mission can be listed in {completedField} only once."));
+        else if (count >= 0 && count <= catalogCount && count < indices.Count)
+            failures.Add(new(countField, $"{countField} must be at least the {indices.Count} missions in {completedField}."));
     }
 
     /// <summary>The route's run as 1–3, or null when it is not a number in range.</summary>

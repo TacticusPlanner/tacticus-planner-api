@@ -35,7 +35,7 @@ public sealed class ListLegendaryEventPlansEndpoint : EndpointWithoutRequest<Leg
         await Send.OkAsync(
             new LegendaryEventPlanListResponse(plans
                 .OrderBy(plan => plan.EventId, StringComparer.Ordinal)
-                .Select(LegendaryEventPlanProjection.Map)
+                .Select(plan => LegendaryEventPlanProjection.Map(plan))
                 .ToList()),
             ct);
     }

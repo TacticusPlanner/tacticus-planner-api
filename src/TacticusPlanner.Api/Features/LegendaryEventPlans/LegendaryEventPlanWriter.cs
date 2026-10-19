@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using TacticusPlanner.Domain.LegendaryEvents;
 using TacticusPlanner.Domain.Profiles;
+using TacticusPlanner.GameCatalog;
 using TacticusPlanner.GameCatalog.Models;
 using TacticusPlanner.Persistence;
 
@@ -65,7 +66,8 @@ public sealed class LegendaryEventPlanMutationContext(PlannerDbContext db, Legen
 /// concurrency failure at save, or the unique <c>(profile_id, event_id)</c> violation when two callers create the
 /// missing plan at once all answer <c>legendaryEventPlanStale</c> with a fresh read of the current plan.
 /// </summary>
-public sealed class LegendaryEventPlanWriter(PlannerDbContext db, TimeProvider timeProvider)
+public sealed class LegendaryEventPlanWriter(
+    PlannerDbContext db, TimeProvider timeProvider, IGameCatalogProvider? catalog = null)
 {
     public async Task<LegendaryEventPlanWriteResult> WriteAsync(
         ProfileId profileId,
@@ -102,7 +104,7 @@ public sealed class LegendaryEventPlanWriter(PlannerDbContext db, TimeProvider t
                     case LegendaryEventPlanMutation.OrderSetMismatch:
                         return Outcome.Stale(LegendaryEventPlanIssueCodes.OrderSetMismatch);
                     case LegendaryEventPlanMutation.Unchanged:
-                        return Outcome.Done(created ? LegendaryEventPlanProjection.Empty(eventId) : LegendaryEventPlanProjection.Map(plan));
+                        return Outcome.Done(created ? LegendaryEventPlanProjection.Empty(eventId) : LegendaryEventPlanProjection.Map(plan, CatalogEvent(eventId)));
                 }
 
                 plan.CatalogVersion = GameCatalogRelease.Version;
@@ -111,7 +113,7 @@ public sealed class LegendaryEventPlanWriter(PlannerDbContext db, TimeProvider t
                 await db.SaveChangesAsync(ct);
                 if (transaction is not null)
                     await transaction.CommitAsync(ct);
-                return Outcome.Done(LegendaryEventPlanProjection.Map(plan));
+                return Outcome.Done(LegendaryEventPlanProjection.Map(plan, CatalogEvent(eventId)));
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -133,7 +135,7 @@ public sealed class LegendaryEventPlanWriter(PlannerDbContext db, TimeProvider t
         // Outside the (rolled back) transaction: read what is committed now.
         db.ChangeTracker.Clear();
         var current = await db.LoadPlanAsync(eventId, tracked: false, ct);
-        var body = current is null ? LegendaryEventPlanProjection.Empty(eventId) : LegendaryEventPlanProjection.Map(current);
+        var body = current is null ? LegendaryEventPlanProjection.Empty(eventId) : LegendaryEventPlanProjection.Map(current, CatalogEvent(eventId));
         return new LegendaryEventPlanWriteResult.Conflict(new LegendaryEventPlanConflictResponse(
             outcome.IssueCode,
             outcome.IssueCode == LegendaryEventPlanIssueCodes.OrderSetMismatch
@@ -141,6 +143,9 @@ public sealed class LegendaryEventPlanWriter(PlannerDbContext db, TimeProvider t
                 : "The plan changed since it was loaded. Review the current plan and try again.",
             body));
     }
+
+    private GameCatalogLreView? CatalogEvent(string eventId) =>
+        catalog?.Current.LreViews.FirstOrDefault(view => view.Id == eventId);
 
     private static LegendaryEventPlan NewPlan(ProfileId profileId, string eventId) =>
         new()

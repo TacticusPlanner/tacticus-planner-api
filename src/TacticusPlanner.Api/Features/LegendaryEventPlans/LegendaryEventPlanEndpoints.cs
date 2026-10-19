@@ -30,7 +30,8 @@ public sealed class GetLegendaryEventPlanEndpoint : LegendaryEventPlanEndpointBa
         await Send.OkAsync(
             resolved.Plan is null
                 ? LegendaryEventPlanProjection.Empty(resolved.EventId)
-                : LegendaryEventPlanProjection.Map(resolved.Plan),
+                : LegendaryEventPlanProjection.Map(
+                    resolved.Plan, Resolve<LegendaryEventCatalogValidator>().FindEvent(resolved.EventId)),
             ct);
     }
 }
@@ -261,9 +262,11 @@ public sealed class UpdateLegendaryEventRunInputsEndpoint : LegendaryEventPlanEn
         Put($"{Route}/runs/{{run}}");
         Summary(summary =>
         {
-            summary.Summary = "Writes one run's inputs (missions, premium missions, bundle, close shards).";
-            summary.Description = "Upserts the given run (1–3) and leaves the other runs untouched. Values equal to "
-                + "the stored run, or all zero for a run with none, succeed without bumping the revision.";
+            summary.Summary = "Writes one run's inputs (missions, completed missions, bundle, close shards).";
+            summary.Description = "Upserts the given run (1–3) and leaves the other runs untouched. Completed mission "
+                + "arrays list distinct catalog indices, absent means none, and are stored ascending; each count must be "
+                + "at least its completed array's length. Values equal to the stored run, or all zero for a run with "
+                + "none, succeed without bumping the revision.";
             DescribeWrite(summary);
         });
     }

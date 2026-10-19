@@ -7,17 +7,22 @@ namespace TacticusPlanner.Api.Features.LegendaryEventPlans;
 /// nothing answers <see cref="LegendaryEventPlanMutation.Unchanged"/> so the revision is kept (design D2, D6).</summary>
 public static class LegendaryEventPlanInputMutations
 {
-    /// <summary>Upserts one run's inputs; other runs are untouched. Values equal to the stored row, or all zero
-    /// for a run with no row, change nothing. There is no delete: zeros are the reset.</summary>
+    /// <summary>Upserts one run's inputs; other runs are untouched. Values equal to the stored row (completed
+    /// arrays compared as sorted sets), or all zero and no completed missions for a run with no row, change nothing. There is no delete: zeros are the reset.</summary>
     public static LegendaryEventPlanMutation SetRunInputs(
         LegendaryEventPlanMutationContext context, int run, UpdateLegendaryEventRunInputsRequest request)
     {
         var plan = context.Plan;
+        var completedRegular = Sorted(request.CompletedRegularMissions);
+        var completedPremium = Sorted(request.CompletedPremiumMissions);
         var existing = plan.Runs.FirstOrDefault(entry => entry.Run == run);
         if (existing is null)
         {
-            if (request is { RegularMissions: 0, PremiumMissions: 0, BundlePurchased: false, CloseShards: 0 })
+            if (request is { RegularMissions: 0, PremiumMissions: 0, BundlePurchased: false, CloseShards: 0 }
+                && completedRegular.Count == 0 && completedPremium.Count == 0)
+            {
                 return LegendaryEventPlanMutation.Unchanged;
+            }
 
             existing = new LegendaryEventRunProgress { PlanId = plan.Id, Run = run };
             plan.Runs.Add(existing);
@@ -26,18 +31,26 @@ public static class LegendaryEventPlanInputMutations
         else if (existing.RegularMissions == request.RegularMissions
             && existing.PremiumMissions == request.PremiumMissions
             && existing.BundlePurchased == request.BundlePurchased
-            && existing.CloseShards == request.CloseShards)
+            && existing.CloseShards == request.CloseShards
+            && existing.CompletedRegularMissions.SequenceEqual(completedRegular)
+            && existing.CompletedPremiumMissions.SequenceEqual(completedPremium))
         {
             return LegendaryEventPlanMutation.Unchanged;
         }
 
         existing.RegularMissions = request.RegularMissions;
         existing.PremiumMissions = request.PremiumMissions;
+        existing.CompletedRegularMissions = completedRegular;
+        existing.CompletedPremiumMissions = completedPremium;
         existing.BundlePurchased = request.BundlePurchased;
         existing.CloseShards = request.CloseShards;
         existing.UpdatedAt = context.Now;
         return LegendaryEventPlanMutation.Applied;
     }
+
+    // Completed mission indices are stored ascending, so equal sets compare equal whatever order they were sent in.
+    // Validation already rejected duplicates; an absent array means none.
+    private static List<int> Sorted(IReadOnlyList<int>? indices) => (indices ?? []).Order().ToList();
 
     /// <summary>Sets <paramref name="status"/> on the listed cells of one battle, or removes their marks when it
     /// is null; every other cell is untouched.</summary>

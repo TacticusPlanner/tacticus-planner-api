@@ -95,12 +95,14 @@ public sealed class LegendaryEventPlansMigrationPostgresTests
         var plan = Saved(await WriteAsync(options, profileId, 0, (context, _) =>
         {
             LegendaryEventPlanInputMutations.SetRunInputs(
-                context, 1, new UpdateLegendaryEventRunInputsRequest(0, 10, 2, true, 25));
+                context, 1, new UpdateLegendaryEventRunInputsRequest(0, 10, 2, true, 25, [5, 1], [0]));
             return Task.FromResult(LegendaryEventPlanInputMutations.SetAnnotations(
                 context, "alpha", 6, [0, 3], LegendaryEventAnnotationStatus.StopHere));
         }));
         Assert.Equal((10, 2, true, 25), (plan.Runs[0].RegularMissions, plan.Runs[0].PremiumMissions,
             plan.Runs[0].BundlePurchased, plan.Runs[0].CloseShards));
+        Assert.Equal([1, 5], plan.Runs[0].CompletedRegularMissions);
+        Assert.Equal([0], plan.Runs[0].CompletedPremiumMissions);
         Assert.Equal(["stopHere", "stopHere"], plan.Annotations.Select(annotation => annotation.Status));
 
         plan = Saved(await WriteAsync(options, profileId, plan.Revision, (context, _) =>

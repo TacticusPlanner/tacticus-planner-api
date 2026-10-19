@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Text.RegularExpressions;
 using TacticusPlanner.GameCatalog.Models;
 
 namespace TacticusPlanner.GameCatalog.Denormalization;
@@ -25,8 +26,8 @@ internal static partial class GameCatalogDenormalizer
                 BuildEventStageStartDates(lre.RunStartDatesUtc),
                 lre.BattlesCount,
                 lre.ConstraintsCount,
-                lre.RegularMissions,
-                lre.PremiumMissions,
+                BuildLreMissions(lre.RegularMissions ?? []),
+                BuildLreMissions(lre.PremiumMissions ?? []),
                 BuildTrackView(lre.UnitSnowprintId, "alpha", lre.Alpha, roster),
                 BuildTrackView(lre.UnitSnowprintId, "beta", lre.Beta, roster),
                 BuildTrackView(lre.UnitSnowprintId, "gamma", lre.Gamma, roster),
@@ -125,4 +126,265 @@ internal static partial class GameCatalogDenormalizer
 
         return filter.Exclude ? !matches : matches;
     }
+
+    // ---- missions ------------------------------------------------------------------------------------------
+    // Raw files keep V1's English mission lines (V1's questsToMissionText output) so a refresh from the V1
+    // datamine stays a copy. Each line is matched against LreMissionTemplates in order; the first match names the
+    // kind, its count (group "count") and at most one label (group "label") that the template's alias table maps
+    // to a catalog id. A line no template matches, or a label with no alias, is served as an Unparsed placeholder;
+    // ValidateLreMissions (which runs after denormalization) re-parses the raw lines and fails the load, so a
+    // placeholder never reaches a served payload.
+
+    /// <summary>Kind of the placeholder a line that fails to parse denormalizes to; never served (the load fails).</summary>
+    internal const string UnparsedLreMissionKind = "unparsed";
+
+    private static GameCatalogLreMission[] BuildLreMissions(IReadOnlyList<string> lines) =>
+        lines
+            .Select((text, index) => ParseLreMission(index, text, out _)
+                ?? new GameCatalogLreMission(index, UnparsedLreMissionKind, 0, null, null, null, null, text))
+            .ToArray();
+
+    /// <summary>Which typed parameter a template's label group fills.</summary>
+    internal enum LreMissionLabel
+    {
+        None,
+        Faction,
+        Alliance,
+        DamageType,
+        Trait,
+    }
+
+    internal sealed record LreMissionTemplate(Regex Pattern, string Kind, LreMissionLabel Label);
+
+    // Ordered: the first template whose pattern matches the whole line wins. The "Defeat N <label>" fallback is
+    // last so every more specific "Defeat N ..." line is claimed first.
+    internal static readonly LreMissionTemplate[] LreMissionTemplates =
+    [
+        new(AnyBattleMissionPattern(), LreMissionKinds.AnyBattle, LreMissionLabel.None),
+        new(DamageTypeMissionPattern(), LreMissionKinds.DamageType, LreMissionLabel.DamageType),
+        new(UseAbilitiesWithAllianceMissionPattern(), LreMissionKinds.UseAbilitiesWithAlliance, LreMissionLabel.Alliance),
+        new(DefeatWithAllianceMissionPattern(), LreMissionKinds.DefeatWithAlliance, LreMissionLabel.Alliance),
+        new(DefeatWithDamageTypeMissionPattern(), LreMissionKinds.DefeatWithDamageType, LreMissionLabel.DamageType),
+        new(WinWithoutSummonMissionPattern(), LreMissionKinds.WinWithoutSummon, LreMissionLabel.None),
+        new(WinWithoutTraitMissionPattern(), LreMissionKinds.WinWithoutTrait, LreMissionLabel.Trait),
+        // "Defeat 30 Daemon enemies" (V1's SlayEnemiesOfTrait): a trait-defined enemy group, served as
+        // defeatFaction with Trait set and Faction null; the client matches it by npc trait.
+        new(DefeatTraitEnemiesMissionPattern(), LreMissionKinds.DefeatFaction, LreMissionLabel.Trait),
+        new(DefeatFactionMissionPattern(), LreMissionKinds.DefeatFaction, LreMissionLabel.Faction),
+    ];
+
+    // "Defeat 5 waves of enemies in any wave-based game mode, Deal 1000 damage"
+    [GeneratedRegex(@"^Defeat (?<count>\d+) waves of enemies in any wave-based game mode, Deal \d+ damage$", RegexOptions.CultureInvariant)]
+    private static partial Regex AnyBattleMissionPattern();
+
+    // "Defeat 15 waves of enemies in any wave-based game mode, Deal 25k Piercing damage"
+    [GeneratedRegex(@"^Defeat (?<count>\d+) waves of enemies in any wave-based game mode, Deal \d+k (?<label>[^,]+) damage$", RegexOptions.CultureInvariant)]
+    private static partial Regex DamageTypeMissionPattern();
+
+    // "Use abilities 15 times with Imperial units, Deal 10k damage with Abilities"
+    [GeneratedRegex(@"^Use abilities (?<count>\d+) times with (?<label>[^,]+) units, Deal \d+k damage with Abilities$", RegexOptions.CultureInvariant)]
+    private static partial Regex UseAbilitiesWithAllianceMissionPattern();
+
+    // "Defeat 30 enemies with Chaos units"
+    [GeneratedRegex(@"^Defeat (?<count>\d+) enemies with (?<label>[^,]+) units$", RegexOptions.CultureInvariant)]
+    private static partial Regex DefeatWithAllianceMissionPattern();
+
+    // "Defeat 75 enemies with Bolter Damage"
+    [GeneratedRegex(@"^Defeat (?<count>\d+) enemies with (?<label>[^,]+) Damage$", RegexOptions.CultureInvariant)]
+    private static partial Regex DefeatWithDamageTypeMissionPattern();
+
+    // "Win 1 battle without Summoning any units"
+    [GeneratedRegex(@"^Win (?<count>\d+) battles? without Summoning any units$", RegexOptions.CultureInvariant)]
+    private static partial Regex WinWithoutSummonMissionPattern();
+
+    // "Win 5 battles without deploying any Big Target characters"
+    [GeneratedRegex(@"^Win (?<count>\d+) battles? without deploying any (?<label>[^,]+) characters$", RegexOptions.CultureInvariant)]
+    private static partial Regex WinWithoutTraitMissionPattern();
+
+    // "Defeat 30 Daemon enemies"
+    [GeneratedRegex(@"^Defeat (?<count>\d+) (?<label>[^,]+) enemies$", RegexOptions.CultureInvariant)]
+    private static partial Regex DefeatTraitEnemiesMissionPattern();
+
+    // "Defeat 30 Necrons", "Defeat 75 AdMechs", "Defeat 100 Death Guard"
+    [GeneratedRegex(@"^Defeat (?<count>\d+) (?<label>[^,\d]+)$", RegexOptions.CultureInvariant)]
+    private static partial Regex DefeatFactionMissionPattern();
+
+    // Alias tables: the label as it appears in mission text (V1's wording) -> the catalog id. Explicit on purpose:
+    // a label not listed fails the load instead of guessing an id. Entries beyond today's missions follow V1's
+    // labels so a refresh that reuses them parses without a code change.
+
+    /// <summary>Faction labels (V1's faction names, with its mission-text overrides "AdMechs" and "T'au") ->
+    /// units/npcs <c>factionId</c>.</summary>
+    internal static readonly IReadOnlyDictionary<string, string> LreMissionFactionAliases =
+        new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            ["Adepta Sororitas"] = "Sisterhood",
+            ["Adeptus Astartes"] = "AdeptusAstartes",
+            ["Adeptus Custodes"] = "Custodes",
+            ["AdMechs"] = "AdeptusMechanicus",
+            ["Aeldari"] = "Aeldari",
+            ["Astra Militarum"] = "AstraMilitarum",
+            ["Black Legion"] = "BlackLegion",
+            ["Black Templars"] = "BlackTemplars",
+            ["Blood Angels"] = "BloodAngels",
+            ["Dark Angels"] = "DarkAngels",
+            ["Death Guard"] = "DeathGuard",
+            ["Emperor's Children"] = "EmperorsChildren",
+            ["Genestealer Cults"] = "Genestealers",
+            ["Leagues of Votann"] = "LeaguesOfVotann",
+            ["Necrons"] = "Necrons",
+            ["Orks"] = "Orks",
+            ["Space Wolves"] = "SpaceWolves",
+            ["T'au"] = "Tau",
+            ["The Lost and the Damned"] = "TheLostAndTheDamned",
+            ["Thousand Sons"] = "ThousandSons",
+            ["Tyranids"] = "Tyranids",
+            ["Ultramarines"] = "Ultramarines",
+            ["World Eaters"] = "WorldEaters",
+        };
+
+    /// <summary>Alliance labels -> units <c>alliance</c>.</summary>
+    internal static readonly IReadOnlyDictionary<string, string> LreMissionAllianceAliases =
+        new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            ["Chaos"] = "Chaos",
+            ["Imperial"] = "Imperial",
+            ["Xenos"] = "Xenos",
+        };
+
+    /// <summary>Damage-type labels -> the damage-type strings of units/npcs (<c>meleeDamage</c>,
+    /// <c>rangedDamage</c>, ability damage) and of LRE <c>DamageType</c> filters.</summary>
+    internal static readonly IReadOnlyDictionary<string, string> LreMissionDamageTypeAliases =
+        new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            ["Bio"] = "Bio",
+            ["Blast"] = "Blast",
+            ["Bolter"] = "Bolter",
+            ["Chain"] = "Chain",
+            ["DirectDamage"] = "DirectDamage",
+            ["Energy"] = "Energy",
+            ["Eviscerate"] = "Eviscerate",
+            ["Flame"] = "Flame",
+            ["Gauss"] = "Gauss",
+            ["HeavyRound"] = "HeavyRound",
+            ["Las"] = "Las",
+            ["Melta"] = "Melta",
+            ["Particle"] = "Particle",
+            ["Physical"] = "Physical",
+            ["Piercing"] = "Piercing",
+            ["Plasma"] = "Plasma",
+            ["Power"] = "Power",
+            ["Projectile"] = "Projectile",
+            ["Psychic"] = "Psychic",
+            ["Pulse"] = "Pulse",
+            ["Toxic"] = "Toxic",
+        };
+
+    /// <summary>Trait labels (V1's <c>Trait</c> enum labels) -> the catalog trait ids (units/npcs <c>traits</c>,
+    /// <c>Data/enums.json</c>). Note the renamed ones: "Final Vengeance" is <c>FinalJustice</c>, "Deep Strike"
+    /// is <c>TeleportStrike</c>. "Daemon" also backs the "Defeat N Daemon enemies" missions. "Beast Slayer" is
+    /// deliberately absent: V1 labels <c>BeastSnagga</c> that way while <c>enums.json</c> also has a
+    /// <c>BeastSlayer</c>, so such a line fails the load rather than map to a guessed trait.</summary>
+    internal static readonly IReadOnlyDictionary<string, string> LreMissionTraitAliases =
+        new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            ["Act of Faith"] = "ActOfFaith",
+            ["Ambush"] = "Ambush",
+            ["Big Target"] = "BigTarget",
+            ["Blessings of Khorne"] = "BlessingsOfKhorne",
+            ["Camouflage"] = "Camouflage",
+            ["Contagions of Nurgle"] = "ContagionsOfNurgle",
+            ["Crushing Strike"] = "CrushingStrike",
+            ["Daemon"] = "Daemon",
+            ["Deep Strike"] = "TeleportStrike",
+            ["Explodes"] = "Explodes",
+            ["Final Vengeance"] = "FinalJustice",
+            ["Flying"] = "Flying",
+            ["Get Stuck In"] = "GetStuckIn",
+            ["Healer"] = "Healer",
+            ["Heavy Weapon"] = "HeavyWeapon",
+            ["Indirect Fire"] = "IndirectFire",
+            ["Infiltrate"] = "Infiltrate",
+            ["Let the Galaxy Burn"] = "LetTheGalaxyBurn",
+            ["Living Metal"] = "LivingMetal",
+            ["Martial Ka'tah"] = "MartialKatah",
+            ["Mechanic"] = "Mechanic",
+            ["Mechanical"] = "Mechanical",
+            ["MK X Gravis"] = "MkXGravis",
+            ["Overwatch"] = "Overwatch",
+            ["Parry"] = "Parry",
+            ["Psyker"] = "Psyker",
+            ["Putrid Explosion"] = "PutridExplosion",
+            ["Rapid Assault"] = "RapidAssault",
+            ["Ranged Specialist"] = "RangedSpecialist",
+            ["Resilient"] = "Resilient",
+            ["Shadow in the Warp"] = "ShadowInTheWarp",
+            ["Suppressive Fire"] = "SuppressiveFire",
+            ["Synapse"] = "Synapse",
+            ["Terminator Armour"] = "TerminatorArmour",
+            ["Terrifying"] = "Terrifying",
+            ["Thrill Seekers"] = "ThrillSeekers",
+            ["Unstoppable"] = "Unstoppable",
+            ["Vehicle"] = "Vehicle",
+            ["Weaver of Fates"] = "WeaverOfFate",
+        };
+
+    /// <summary>Parses one raw mission line; null with <paramref name="problem"/> set when no template matches or
+    /// the matched template's label has no alias.</summary>
+    internal static GameCatalogLreMission? ParseLreMission(int index, string? text, out string? problem)
+    {
+        var line = text ?? string.Empty;
+        foreach (var template in LreMissionTemplates)
+        {
+            var match = template.Pattern.Match(line);
+            if (!match.Success)
+                continue;
+
+            if (!int.TryParse(match.Groups["count"].Value, NumberStyles.None, CultureInfo.InvariantCulture, out var count))
+            {
+                problem = $"count '{match.Groups["count"].Value}' is not a number";
+                return null;
+            }
+
+            string? id = null;
+            if (template.Label != LreMissionLabel.None)
+            {
+                var label = match.Groups["label"].Value;
+                var aliases = template.Label switch
+                {
+                    LreMissionLabel.Faction => LreMissionFactionAliases,
+                    LreMissionLabel.Alliance => LreMissionAllianceAliases,
+                    LreMissionLabel.DamageType => LreMissionDamageTypeAliases,
+                    _ => LreMissionTraitAliases,
+                };
+                if (!aliases.TryGetValue(label, out id))
+                {
+                    problem = $"{template.Kind} names unknown {LabelName(template.Label)} '{label}' (add it to the {LabelName(template.Label)} alias table)";
+                    return null;
+                }
+            }
+
+            problem = null;
+            return new GameCatalogLreMission(
+                index,
+                template.Kind,
+                count,
+                template.Label == LreMissionLabel.Faction ? id : null,
+                template.Label == LreMissionLabel.Alliance ? id : null,
+                template.Label == LreMissionLabel.DamageType ? id : null,
+                template.Label == LreMissionLabel.Trait ? id : null,
+                line);
+        }
+
+        problem = "matches no mission template (add one to LreMissionTemplates)";
+        return null;
+    }
+
+    private static string LabelName(LreMissionLabel label) => label switch
+    {
+        LreMissionLabel.Faction => "faction",
+        LreMissionLabel.Alliance => "alliance",
+        LreMissionLabel.DamageType => "damage type",
+        _ => "trait",
+    };
 }

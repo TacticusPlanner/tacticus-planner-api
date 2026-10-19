@@ -8,7 +8,8 @@ namespace TacticusPlanner.Api.Tests;
 /// <summary>
 /// Covers <c>add-legendary-event-run-inputs</c>'s <c>legendary-event-plans</c> delta: run inputs per run
 /// (<c>PUT …/runs/{run}</c>) and Maybe clear / Stop here annotations per objective cell (<c>PUT …/annotations</c>),
-/// both under the plan's revision contract, and their place in the served plan.
+/// both under the plan's revision contract, and their place in the served plan. Also covers
+/// <c>add-legendary-event-mission-tracking</c>'s delta: the completed mission arrays on run inputs.
 /// </summary>
 public sealed class LegendaryEventRunInputsEndpointTests(PlannerApiFactory factory) : IClassFixture<PlannerApiFactory>
 {
@@ -136,6 +137,129 @@ public sealed class LegendaryEventRunInputsEndpointTests(PlannerApiFactory facto
         Assert.Equal(LegendaryEventPlanIssueCodes.Stale, conflict.IssueCode);
         Assert.Equal(3, conflict.Plan.Revision);
         Assert.Equal(3, conflict.Plan.Runs[0].RegularMissions);
+    }
+
+    [Fact]
+    public async Task CompletedMissionsAreStoredSortedOnANewPlan()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var plan = await ReadPlanAsync(await WriteRunAsync(client, 2, new(0, 6, 0, false, 0, [3, 1])));
+
+        Assert.Equal(1, plan.Revision);
+        var run = Assert.Single(plan.Runs);
+        Assert.Equal((2, 6, 0, false, 0), (run.Run, run.RegularMissions, run.PremiumMissions, run.BundlePurchased, run.CloseShards));
+        Assert.Equal([1, 3], run.CompletedRegularMissions);
+        Assert.Empty(run.CompletedPremiumMissions);
+        var read = Assert.Single((await ReadPlanAsync(await client.GetAsync(PlanUrl, Ct))).Runs);
+        Assert.Equal([1, 3], read.CompletedRegularMissions);
+        Assert.Empty(read.CompletedPremiumMissions);
+    }
+
+    [Fact]
+    public async Task ARunWriteWithCompletedMissionsTouchesOnlyItsRun()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var plan = await ReadPlanAsync(await WriteRunAsync(client, 1, new(0, 10, 0, false, 0, [0, 9])));
+        plan = await ReadPlanAsync(await client.PutAsJsonAsync(PlanUrl, new UpdateLegendaryEventPlanRequest(plan.Revision, null, false), Ct));
+        plan = await ReadPlanAsync(await client.PutAsJsonAsync(PlanUrl, new UpdateLegendaryEventPlanRequest(plan.Revision, "n", false), Ct));
+        plan = await ReadPlanAsync(await client.PutAsJsonAsync(PlanUrl, new UpdateLegendaryEventPlanRequest(plan.Revision, "m", false), Ct));
+        Assert.Equal(4, plan.Revision);
+
+        plan = await ReadPlanAsync(await WriteRunAsync(client, 3, new(plan.Revision, 10, 2, true, 0, [], [7])));
+
+        Assert.Equal(5, plan.Revision);
+        Assert.Equal(
+            [(1, 10, 0, "0,9", "", false), (3, 10, 2, "", "7", true)],
+            plan.Runs.Select(run => (run.Run, run.RegularMissions, run.PremiumMissions,
+                string.Join(',', run.CompletedRegularMissions), string.Join(',', run.CompletedPremiumMissions), run.BundlePurchased)));
+    }
+
+    [Theory]
+    [InlineData(1, 0, new[] { 0, 2 }, new int[0], "regularMissions")]
+    [InlineData(10, 0, new int[0], new[] { 0 }, "premiumMissions")]
+    [InlineData(10, 10, new int[0], new[] { 10 }, "completedPremiumMissions")]
+    [InlineData(10, 10, new int[0], new[] { -1 }, "completedPremiumMissions")]
+    [InlineData(10, 10, new[] { 10 }, new int[0], "completedRegularMissions")]
+    [InlineData(10, 10, new[] { 2, 2 }, new int[0], "completedRegularMissions")]
+    [InlineData(10, 10, new int[0], new[] { 4, 1, 4 }, "completedPremiumMissions")]
+    public async Task InvalidCompletedMissionsAreRejected(int regular, int premium, int[] completedRegular, int[] completedPremium, string field)
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await WriteRunAsync(client, 1, new(0, regular, premium, false, 0, completedRegular, completedPremium));
+
+        await AssertBadRequestAsync(response, field);
+        Assert.Equal(0, (await ReadPlanAsync(await client.GetAsync(PlanUrl, Ct))).Revision);
+    }
+
+    [Fact]
+    public async Task CountBelowTicksLeavesAStoredRunUnchanged()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var plan = await ReadPlanAsync(await WriteRunAsync(client, 1, new(0, 3, 0, false, 0, [0, 1])));
+
+        await AssertBadRequestAsync(await WriteRunAsync(client, 1, new(plan.Revision, 1, 0, false, 0, [0, 2])), "regularMissions");
+
+        plan = await ReadPlanAsync(await client.GetAsync(PlanUrl, Ct));
+        Assert.Equal((1L, 3), (plan.Revision, plan.Runs[0].RegularMissions));
+        Assert.Equal([0, 1], plan.Runs[0].CompletedRegularMissions);
+    }
+
+    [Fact]
+    public async Task AbsentCompletedArraysMeanNone()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var plan = await ReadPlanAsync(await WriteRunAsync(client, 1, new(0, 10, 2, false, 0, [4], [1])));
+
+        var response = await client.PutAsJsonAsync($"{PlanUrl}/runs/1", new
+        {
+            expectedRevision = plan.Revision,
+            regularMissions = 10,
+            premiumMissions = 2,
+            bundlePurchased = false,
+            closeShards = 0,
+        }, Ct);
+        plan = await ReadPlanAsync(response);
+
+        Assert.Equal(2, plan.Revision);
+        Assert.Empty(plan.Runs[0].CompletedRegularMissions);
+        Assert.Empty(plan.Runs[0].CompletedPremiumMissions);
+    }
+
+    [Fact]
+    public async Task UnchangedCompletedMissionsKeepTheRevision()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var plan = await ReadPlanAsync(await WriteRunAsync(client, 1, new(0, 10, 3, false, 0, [2, 5], [0])));
+        var stored = plan.Runs[0].UpdatedAt;
+
+        var same = await ReadPlanAsync(await WriteRunAsync(client, 1, new(plan.Revision, 10, 3, false, 0, [5, 2], [0])));
+        Assert.Equal((1L, stored), (same.Revision, same.Runs[0].UpdatedAt));
+
+        var ticked = await ReadPlanAsync(await WriteRunAsync(client, 1, new(plan.Revision, 10, 3, false, 0, [2, 5, 6], [0])));
+        Assert.Equal(2, ticked.Revision);
+        Assert.Equal([2, 5, 6], ticked.Runs[0].CompletedRegularMissions);
+
+        var unticked = await ReadPlanAsync(await WriteRunAsync(client, 1, new(ticked.Revision, 10, 3, false, 0, [2, 5, 6])));
+        Assert.Equal(3, unticked.Revision);
+        Assert.Empty(unticked.Runs[0].CompletedPremiumMissions);
+    }
+
+    [Fact]
+    public async Task UnchangedEmptyCompletedMissionsKeepTheRevision()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var plan = await ReadPlanAsync(await WriteRunAsync(client, 1, new(0, 10, 0, false, 0)));
+        for (var revision = plan.Revision; revision < 6;)
+        {
+            plan = await ReadPlanAsync(await client.PutAsJsonAsync(PlanUrl, new UpdateLegendaryEventPlanRequest(revision, $"n{revision}", false), Ct));
+            revision = plan.Revision;
+        }
+
+        plan = await ReadPlanAsync(await WriteRunAsync(client, 1, new(6, 10, 0, false, 0, [], [])));
+
+        Assert.Equal(6, plan.Revision);
     }
 
     [Fact]
@@ -270,7 +394,9 @@ public sealed class LegendaryEventRunInputsEndpointTests(PlannerApiFactory facto
 
         using var document = JsonDocument.Parse(await client.GetStringAsync(PlanUrl, Ct));
         var root = document.RootElement;
-        Assert.Equal(["run", "regularMissions", "premiumMissions", "bundlePurchased", "closeShards", "updatedAt"],
+        Assert.Equal(
+            ["run", "regularMissions", "premiumMissions", "completedRegularMissions", "completedPremiumMissions",
+                "bundlePurchased", "closeShards", "updatedAt"],
             root.GetProperty("runs")[0].EnumerateObject().Select(property => property.Name));
         Assert.Equal(["laneId", "battleIndex", "objectiveId", "status", "updatedAt"],
             root.GetProperty("annotations")[0].EnumerateObject().Select(property => property.Name));

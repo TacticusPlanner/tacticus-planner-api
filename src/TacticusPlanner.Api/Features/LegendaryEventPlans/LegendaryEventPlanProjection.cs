@@ -28,7 +28,10 @@ public static class LegendaryEventPlanProjection
     public static LegendaryEventPlanResponse Empty(string eventId) =>
         new(eventId, 0, GameCatalogRelease.Version, null, false, [], [], []);
 
-    public static LegendaryEventPlanResponse Map(LegendaryEventPlan plan) =>
+    /// <param name="lre">The event's current catalog view, when it has one: stored mission ticks past its mission
+    /// lists (a refresh shortened them) are dropped, so the client never resends an index a write would reject.
+    /// </param>
+    public static LegendaryEventPlanResponse Map(LegendaryEventPlan plan, GameCatalogLreView? lre = null) =>
         new(
             plan.EventId,
             plan.Revision,
@@ -43,8 +46,10 @@ public static class LegendaryEventPlanProjection
             plan.Runs
                 .OrderBy(run => run.Run)
                 .Select(run => new LegendaryEventRunProgressResponse(
-                    run.Run, run.RegularMissions, run.PremiumMissions, run.BundlePurchased, run.CloseShards,
-                    run.UpdatedAt))
+                    run.Run, run.RegularMissions, run.PremiumMissions,
+                    InCatalog(run.CompletedRegularMissions, lre?.RegularMissions.Count),
+                    InCatalog(run.CompletedPremiumMissions, lre?.PremiumMissions.Count),
+                    run.BundlePurchased, run.CloseShards, run.UpdatedAt))
                 .ToList(),
             plan.Annotations
                 .OrderBy(annotation => LaneOrder(annotation.LaneId))
@@ -54,6 +59,9 @@ public static class LegendaryEventPlanProjection
                     annotation.LaneId, annotation.BattleIndex, annotation.ObjectiveId,
                     StatusName(annotation.Status), annotation.UpdatedAt))
                 .ToList());
+
+    private static List<int> InCatalog(IEnumerable<int> indices, int? catalogCount) =>
+        indices.Where(index => catalogCount is null || index < catalogCount).Order().ToList();
 
     public static string StatusName(LegendaryEventAnnotationStatus status) => status switch
     {
