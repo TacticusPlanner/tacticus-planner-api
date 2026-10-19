@@ -122,10 +122,18 @@ public sealed class GameCatalogSnapshotTests(GameCatalogApiFactory factory)
 
         var unitIds = record["characters"]!.AsArray().Select(character => character!["unitId"]!.GetValue<string>()).ToArray();
         Assert.Equal(unitIds.Order(StringComparer.Ordinal), unitIds);
-        // Every seeded character carries its own multiplier override alongside its tier.
+        // Every seeded character carries its own multiplier override alongside its tier, and synergies
+        // (served last, in authoring order) only when the strategy notes name teammates.
         Assert.All(
             record["characters"]!.AsArray(),
-            character => Assert.Equal(["unitId", "tier", "multiplier"], character!.AsObject().Select(property => property.Key)));
+            character => Assert.Equal(
+                ["unitId", "tier", "multiplier"],
+                character!.AsObject().Select(property => property.Key).Where(key => key != "synergies")));
+        var angrax = record["characters"]!.AsArray().Single(character => character!["unitId"]!.GetValue<string>() == "blackTerminator")!;
+        Assert.Equal(["unitId", "tier", "multiplier", "synergies"], angrax.AsObject().Select(property => property.Key));
+        Assert.Equal(
+            ["deathRotbone", "worldTerminator", "blackAbaddon"],
+            angrax["synergies"]!.AsArray().Select(synergy => synergy!.GetValue<string>()));
     }
 
     [Theory]
