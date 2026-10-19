@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 namespace TacticusPlanner.GameCatalog.Models;
 
 /// <summary>
-/// The single <c>horde-mode-tiers</c> record: a curated S/A/B/C tier list of how well characters do in
+/// The single <c>horde-mode-tiers</c> record: a curated S/A/B/C/D tier list of how well characters do in
 /// horde modes (waves of enemies, such as Legendary Events and Survival), and the power multiplier each
 /// tier applies. A character may override its tier's multiplier with its own. A character not listed is
 /// unrated and has multiplier 1.0, applied by the client (the server never expands it). Denormalization

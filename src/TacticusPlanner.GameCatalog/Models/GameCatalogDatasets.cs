@@ -17,7 +17,7 @@ public static class GameCatalogDatasets
     // Raw per-definition HSE scoring (ladders, trackers, modifiers) imported from V1's datamine; merged into
     // the served event-definitions as config.hse, never served on its own.
     public const string HomeScreenEventScoring = "home-screen-event-scoring";
-    // horde-mode-tiers is a single curated S/A/B/C tier list of characters for horde modes, with each
+    // horde-mode-tiers is a single curated S/A/B/C/D tier list of characters for horde modes, with each
     // tier's power multiplier; denormalization only sorts the characters by unit id.
     // See Models/HordeModeTiers.cs.
     public const string HordeModeTiers = "horde-mode-tiers";
