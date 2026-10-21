@@ -92,10 +92,10 @@ public sealed class GoalCombinedEditor(
                             finalProjectIds, goal.EntityType, goal.EntityId, goal.GoalType,
                             RankTargetKey.For(goal.GoalType, goal.Config), goal.Id),
                         membershipProjectIds, ct);
-                    if (result is GoalEditResult.Applied && transaction is not null)
+                    if (result is GoalEditResult.Applied)
                         await transaction.CommitAsync(ct);
                 }
-                else if (transaction is not null)
+                else
                 {
                     await transaction.RollbackAsync(ct);
                 }

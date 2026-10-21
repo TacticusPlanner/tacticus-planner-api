@@ -156,8 +156,7 @@ public sealed class UpdateGoalStatusEndpoint : Endpoint<UpdateGoalStatusRequest,
                 }
 
                 await Resolve<GoalOrderService>().CompleteAsync(ct);
-                if (transaction is not null)
-                    await transaction.CommitAsync(ct);
+                await transaction.CommitAsync(ct);
                 await Send.OkAsync(Map.ToDetail(goal, membershipProjectIds.Select(id => id.Value).ToList()), ct);
             }, ct);
 

@@ -114,7 +114,7 @@ public sealed class UpdateGoalTargetEndpoint : Endpoint<UpdateGoalTargetRequest,
                             membershipProjectIds, goal.EntityType, goal.EntityId, goal.GoalType,
                             RankTargetKey.For(goal.GoalType, goal.Config), goal.Id),
                         membershipProjectIds, ct);
-                    if (result is GoalEditResult.Applied && transaction is not null)
+                    if (result is GoalEditResult.Applied)
                         await transaction.CommitAsync(ct);
                 }
 

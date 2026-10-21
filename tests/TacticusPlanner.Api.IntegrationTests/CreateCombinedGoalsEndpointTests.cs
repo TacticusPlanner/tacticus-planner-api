@@ -1,0 +1,439 @@
+using System.Net;
+using System.Net.Http.Json;
+using TacticusPlanner.Api.Features.Goals;
+using TacticusPlanner.Api.Features.Projects;
+using TacticusPlanner.GameDomain;
+
+namespace TacticusPlanner.Api.IntegrationTests;
+
+public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) : IClassFixture<PlannerApiFactory>
+{
+    private static readonly CreateCombinedGoalsRequest UnlockThenRank = new(
+        "character",
+        "blackTerminator",
+        null,
+        [
+            new CombinedGoalSpec("unlock", new CreateGoalConfigRequest(), []),
+            new CombinedGoalSpec(
+                "rank",
+                new CreateGoalConfigRequest(Rank: new RankTargetRequest(0, false, 0, 15, false, 0)),
+                [0]
+            ),
+        ]
+    );
+
+    [Fact]
+    public async Task PersistsAMythicMaterialShopSourceOnTheCombinedRankGoal()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var rankSpec = UnlockThenRank.Goals[1];
+        var request = UnlockThenRank with
+        {
+            Goals =
+            [
+                UnlockThenRank.Goals[0],
+                rankSpec with
+                {
+                    Config = rankSpec.Config with
+                    {
+                        AcquisitionSources = [new AcquisitionSourceRequest("Shop", ["crusade:upgHpM004"])],
+                    },
+                },
+            ],
+        };
+
+        var response = await client.PostAsJsonAsync("/api/v1/me/goals/combined", request, TestContext.Current.CancellationToken);
+        response.EnsureSuccessStatusCode();
+        var created = await response.Content.ReadFromJsonAsync<CreateCombinedGoalsResponse>(TestContext.Current.CancellationToken);
+
+        Assert.NotNull(created);
+        var source = Assert.Single(created.Goals[1].Config.AcquisitionSources!);
+        Assert.Equal(["crusade:upgHpM004"], source.Ids);
+    }
+
+    [Fact]
+    public async Task CreatesLinkedGoalsWithSharedAggregateIdAndDependsOnEdge()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals/combined",
+            UnlockThenRank,
+            TestContext.Current.CancellationToken
+        );
+        response.EnsureSuccessStatusCode();
+        var created = await response.Content.ReadFromJsonAsync<CreateCombinedGoalsResponse>(TestContext.Current.CancellationToken);
+
+        Assert.NotNull(created);
+        Assert.Equal(2, created.Goals.Count);
+        var unlock = created.Goals[0];
+        var rank = created.Goals[1];
+
+        Assert.Equal("Unlock", unlock.GoalType);
+        Assert.Equal("Rank", rank.GoalType);
+
+        Assert.Empty(unlock.DependsOn);
+        Assert.Equal([unlock.GoalId], rank.DependsOn);
+
+        var defaultProject = await GetDefaultProjectAsync(client);
+        var membersResponse = await client.GetFromJsonAsync<ListProjectGoalsResponse>(
+            $"/api/v1/me/projects/{defaultProject.ProjectId}/goals",
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(membersResponse);
+        var unlockMember = membersResponse.Goals.Single(entry => entry.Goal.GoalId == unlock.GoalId);
+        var rankMember = membersResponse.Goals.Single(entry => entry.Goal.GoalId == rank.GoalId);
+        Assert.NotEqual(unlockMember.Goal.GlobalPriority, rankMember.Goal.GlobalPriority);
+    }
+
+    [Fact]
+    public async Task CombinedGoalsReceiveAutomaticContiguousPriorities()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var defaultProject = await GetDefaultProjectAsync(client);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals/combined",
+            UnlockThenRank with
+            {
+                Projects = [new ProjectPriorityRequest(defaultProject.ProjectId)],
+            },
+            TestContext.Current.CancellationToken
+        );
+        response.EnsureSuccessStatusCode();
+        var created = await response.Content.ReadFromJsonAsync<CreateCombinedGoalsResponse>(TestContext.Current.CancellationToken);
+        Assert.NotNull(created);
+        var unlock = created.Goals[0];
+        var rank = created.Goals[1];
+
+        var members = await client.GetFromJsonAsync<ListProjectGoalsResponse>(
+            $"/api/v1/me/projects/{defaultProject.ProjectId}/goals",
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(members);
+        // Priorities are assigned automatically and contiguously in request order, so the combined set
+        // occupies 1 and 2 in the otherwise empty default project.
+        Assert.Equal(1, members.Goals.Single(entry => entry.Goal.GoalId == unlock.GoalId).Goal.GlobalPriority);
+        Assert.Equal(2, members.Goals.Single(entry => entry.Goal.GoalId == rank.GoalId).Goal.GlobalPriority);
+    }
+
+    [Fact]
+    public async Task ProjectMembershipWithoutPriorityIsAccepted()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var defaultProject = await GetDefaultProjectAsync(client);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals/combined",
+            UnlockThenRank with
+            {
+                Projects = [new ProjectPriorityRequest(defaultProject.ProjectId)],
+            },
+            TestContext.Current.CancellationToken
+        );
+
+        response.EnsureSuccessStatusCode();
+    }
+
+    [Fact]
+    public async Task PersistsExpandedImmutableSnapshotFromCombinedSpec()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var snapshot = new CreateGoalSnapshotRequest(
+            InitialRank: "Silver1",
+            InitialProgression: "Rare:FourStars",
+            InitialActiveAbilityLevel: 20,
+            InitialPassiveAbilityLevel: 18,
+            InitialRequirement: [new GoalSnapshotResourceRequest("material-1", 30)],
+            InitialInventoryContribution: [new GoalSnapshotResourceRequest("material-1", 5)]
+        );
+        var request = UnlockThenRank with
+        {
+            Goals = [UnlockThenRank.Goals[1] with { DependsOnIndex = [], Snapshot = snapshot }],
+        };
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals/combined",
+            request,
+            TestContext.Current.CancellationToken
+        );
+        response.EnsureSuccessStatusCode();
+        var created = await response.Content.ReadFromJsonAsync<CreateCombinedGoalsResponse>(TestContext.Current.CancellationToken);
+
+        var stored = Assert.Single(created!.Goals).Snapshot;
+        Assert.NotNull(stored);
+        Assert.Equal(UnitRank.Silver1, stored.InitialRank);
+        Assert.Equal(UnitProgression.RareFourStars, stored.InitialProgression);
+        Assert.Equal(30, Assert.Single(stored.InitialRequirement).Count);
+        Assert.Equal(5, Assert.Single(stored.InitialInventoryContribution).Count);
+    }
+
+    [Fact]
+    public async Task CreateInCustomProjectStartsAllGoalsActive()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var otherProjectResponse = await client.PostAsJsonAsync(
+            "/api/v1/me/projects",
+            new CreateProjectRequest("Event Prep", null, null),
+            TestContext.Current.CancellationToken
+        );
+        var otherProject = await otherProjectResponse.Content.ReadFromJsonAsync<ProjectSummaryResponse>(TestContext.Current.CancellationToken);
+        Assert.NotNull(otherProject);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals/combined",
+            UnlockThenRank with { Projects = [new ProjectPriorityRequest(otherProject.ProjectId)] },
+            TestContext.Current.CancellationToken
+        );
+        response.EnsureSuccessStatusCode();
+        var created = await response.Content.ReadFromJsonAsync<CreateCombinedGoalsResponse>(TestContext.Current.CancellationToken);
+
+        Assert.NotNull(created);
+        Assert.Equal(2, created.Goals.Count);
+        Assert.All(created.Goals, goal => Assert.Equal("Active", goal.Status));
+    }
+
+    [Fact]
+    public async Task CreateWithStartPausedPausesTheWholeDependencyChain()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals/combined",
+            UnlockThenRank with { StartPaused = true },
+            TestContext.Current.CancellationToken
+        );
+        response.EnsureSuccessStatusCode();
+        var created = await response.Content.ReadFromJsonAsync<CreateCombinedGoalsResponse>(TestContext.Current.CancellationToken);
+
+        Assert.NotNull(created);
+        // Both the prerequisite (Unlock) and its dependent (Rank) — the flag is request-wide, so the chain
+        // never lands half-paused.
+        Assert.Equal(2, created.Goals.Count);
+        Assert.All(created.Goals, goal => Assert.Equal("Paused", goal.Status));
+    }
+
+    [Fact]
+    public async Task UnknownProjectIsRejected()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals/combined",
+            UnlockThenRank with { Projects = [new ProjectPriorityRequest(Guid.NewGuid())] },
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task CreateWithMultipleProjectIdsAddsEveryGoalToEachProject()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var defaultProject = await GetDefaultProjectAsync(client);
+        var otherProjectResponse = await client.PostAsJsonAsync(
+            "/api/v1/me/projects",
+            new CreateProjectRequest("Event Prep", null, null),
+            TestContext.Current.CancellationToken
+        );
+        var otherProject = await otherProjectResponse.Content.ReadFromJsonAsync<ProjectSummaryResponse>(TestContext.Current.CancellationToken);
+        Assert.NotNull(otherProject);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals/combined",
+            UnlockThenRank with
+            {
+                Projects =
+                [
+                    new ProjectPriorityRequest(defaultProject.ProjectId),
+                    new ProjectPriorityRequest(otherProject.ProjectId),
+                ],
+            },
+            TestContext.Current.CancellationToken
+        );
+        response.EnsureSuccessStatusCode();
+        var created = await response.Content.ReadFromJsonAsync<CreateCombinedGoalsResponse>(TestContext.Current.CancellationToken);
+
+        Assert.NotNull(created);
+        Assert.All(
+            created.Goals,
+            goal => Assert.Equal(
+                new HashSet<Guid> { defaultProject.ProjectId, otherProject.ProjectId },
+                goal.ProjectIds.ToHashSet()
+            )
+        );
+
+        var otherMembers = await client.GetFromJsonAsync<ListProjectGoalsResponse>(
+            $"/api/v1/me/projects/{otherProject.ProjectId}/goals",
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(otherMembers);
+        Assert.Equal(created.Goals.Count, otherMembers.Goals.Count);
+    }
+
+    [Fact]
+    public async Task ForwardDependsOnIndexIsRejected()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var request = UnlockThenRank with
+        {
+            Goals =
+            [
+                new CombinedGoalSpec("unlock", new CreateGoalConfigRequest(), [1]), // forward reference
+                new CombinedGoalSpec(
+                    "rank",
+                    new CreateGoalConfigRequest(Rank: new RankTargetRequest(0, false, 0, 15, false, 0)),
+                    []
+                ),
+            ],
+        };
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals/combined",
+            request,
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task EmptyGoalsListIsRejected()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals/combined",
+            UnlockThenRank with { Goals = [] },
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task DeferredGoalTypeIsRejected()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var request = UnlockThenRank with
+        {
+            Goals = [new CombinedGoalSpec("material", new CreateGoalConfigRequest(), [])],
+        };
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals/combined",
+            request,
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task MowRequestWithARankGoalIsRejected()
+    {
+        // Machines of War have no rank ladder (plan §16 phase 6) — rejected even when Rank isn't the
+        // only spec in the request.
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var request = UnlockThenRank with { EntityType = "mow", EntityId = "astraOrdnanceBattery" };
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals/combined",
+            request,
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task MowUnlockGoalIsRejectedBecauseUnlockRequiresCharacterShardLocations()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var request = new CreateCombinedGoalsRequest(
+            "mow",
+            "astraOrdnanceBattery",
+            null,
+            [
+                new CombinedGoalSpec("unlock", new CreateGoalConfigRequest(), []),
+                new CombinedGoalSpec(
+                    "ability",
+                    new CreateGoalConfigRequest(Ability: new AbilityTargetRequest(0, 3, 0, 3)),
+                    [0]
+                ),
+            ]
+        );
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals/combined",
+            request,
+            TestContext.Current.CancellationToken
+        );
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task DuplicateGoalTypeWithinTheSameRequestIsRejected()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var request = UnlockThenRank with
+        {
+            Goals =
+            [
+                .. UnlockThenRank.Goals,
+                new CombinedGoalSpec(
+                    "rank",
+                    new CreateGoalConfigRequest(Rank: new RankTargetRequest(0, false, 0, 10, false, 0)),
+                    []
+                ),
+            ],
+        };
+
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/me/goals/combined",
+            request,
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task ConflictingWithAnExistingActiveSameKindGoalIsRejected()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var firstResponse = await client.PostAsJsonAsync(
+            "/api/v1/me/goals/combined",
+            UnlockThenRank,
+            TestContext.Current.CancellationToken
+        );
+        firstResponse.EnsureSuccessStatusCode();
+
+        // The character is now unlocked (Unlock goal Active) and has an Active Rank goal — resubmitting
+        // the same combined request would create a second Active goal of each of those same kinds.
+        var secondResponse = await client.PostAsJsonAsync(
+            "/api/v1/me/goals/combined",
+            UnlockThenRank,
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.Conflict, secondResponse.StatusCode);
+    }
+
+    private static async Task<ProjectSummaryResponse> GetDefaultProjectAsync(HttpClient client)
+    {
+        var response = await client.GetFromJsonAsync<ListProjectsResponse>(
+            "/api/v1/me/projects",
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(response);
+        return response.Projects.Single(project => project.IsDefault);
+    }
+}

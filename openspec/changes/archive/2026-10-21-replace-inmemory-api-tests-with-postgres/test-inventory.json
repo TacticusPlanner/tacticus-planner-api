@@ -1,0 +1,3599 @@
+{
+  "sourceCommit": "2e6cdd5",
+  "convention": "Methods and all inline/member-data attributes retained; destination differs only for database-backed tests. New host/regression tests are additional.",
+  "files": [
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/AcquisitionSourceRulesTests.cs",
+      "after": "tests/TacticusPlanner.Api.Tests/AcquisitionSourceRulesTests.cs",
+      "tests": [
+        {
+          "method": "ShapeAcceptsShardAndMythicMaterialOffers",
+          "attributes": [
+            "[Theory]",
+            "    [InlineData(\"guild:upgHpM004\")]",
+            "    [InlineData(\"rogue-trader:upgHpM001\")]",
+            "    [InlineData(\"guild:shards_ragnar\")]",
+            "    [InlineData(\"guild:mythicShards_ragnar\")]"
+          ]
+        },
+        {
+          "method": "ShapeRejectsOtherRewardTypes",
+          "attributes": [
+            "[Theory]",
+            "    [InlineData(\"guild:upgDmgL202\")]",
+            "    [InlineData(\"guild:upgHpM005\")]",
+            "    [InlineData(\"upgHpM004\")]"
+          ]
+        },
+        {
+          "method": "MythicMaterialOffersAreAcceptedOnMaterialGoals",
+          "attributes": [
+            "[Theory]",
+            "    [InlineData(GoalType.Rank, GoalEntityType.Character)]",
+            "    [InlineData(GoalType.Upgrade, GoalEntityType.Character)]",
+            "    [InlineData(GoalType.Upgrade, GoalEntityType.Mow)]",
+            "    [InlineData(GoalType.Ability, GoalEntityType.Mow)]"
+          ]
+        },
+        {
+          "method": "ShardOfferIsRejectedOnRankGoal",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "MythicMaterialOfferIsRejectedOnAscensionGoal",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UnknownShopIsRejectedOnRankGoal",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "NonShopKindsAreRejectedOnRankGoal",
+          "attributes": [
+            "[Theory]",
+            "    [InlineData(AcquisitionSourceKinds.Campaign)]",
+            "    [InlineData(AcquisitionSourceKinds.Onslaught)]"
+          ]
+        },
+        {
+          "method": "ShopIsRejectedOnCharacterAbilityGoal",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ShopIsRejectedOnMowUnlockGoal",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ShardOfferStillAcceptedOnCharacterUnlockGoal",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/AnalyticsIdentityDeriverTests.cs",
+      "after": "tests/TacticusPlanner.Api.Tests/AnalyticsIdentityDeriverTests.cs",
+      "tests": [
+        {
+          "method": "SameAccountDerivesTheSameIdEveryTime",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "DifferentAccountsDeriveDifferentIds",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "IdIsNotTheAccountIdentifierInAnyEncoding",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "DifferentDestinationsDeriveUnlinkableIds",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "KnowingTheAccountIdWithoutTheKeyCannotProduceTheAnalyticsId",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "IdsDoNotSortInAccountCreationOrder",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/CampaignEventProgressEndpointTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/CampaignEventProgressEndpointTests.cs",
+      "tests": [
+        {
+          "method": "PutPersistsRegularAndExactChallengeProgressAndPreservesOnslaught",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "PutRejectsNonChallengeCrossEventAndCrossTypeIds",
+          "attributes": [
+            "[Theory]",
+            "    [InlineData(\"AMS01\", \"Standard\")]",
+            "    [InlineData(\"TSC3B\", \"Standard\")]",
+            "    [InlineData(\"AMSC3B\", \"Extremis\")]"
+          ]
+        },
+        {
+          "method": "PutRejectsDuplicatesInvalidCountsAndStaleRevision",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/CreateCombinedGoalsEndpointTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/CreateCombinedGoalsEndpointTests.cs",
+      "tests": [
+        {
+          "method": "PersistsAMythicMaterialShopSourceOnTheCombinedRankGoal",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreatesLinkedGoalsWithSharedAggregateIdAndDependsOnEdge",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CombinedGoalsReceiveAutomaticContiguousPriorities",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ProjectMembershipWithoutPriorityIsAccepted",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "PersistsExpandedImmutableSnapshotFromCombinedSpec",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateInCustomProjectStartsAllGoalsActive",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateWithStartPausedPausesTheWholeDependencyChain",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UnknownProjectIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateWithMultipleProjectIdsAddsEveryGoalToEachProject",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ForwardDependsOnIndexIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "EmptyGoalsListIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "DeferredGoalTypeIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "MowRequestWithARankGoalIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "MowUnlockGoalIsRejectedBecauseUnlockRequiresCharacterShardLocations",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "DuplicateGoalTypeWithinTheSameRequestIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ConflictingWithAnExistingActiveSameKindGoalIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/CurrentUserEndpointTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/CurrentUserEndpointTests.cs",
+      "tests": [
+        {
+          "method": "FirstCallProvisionsAccountWithOnboardingIncomplete",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "RepeatedCallsAreIdempotent",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ResponseCarriesTheIndependentlyDerivedAnalyticsId",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "FirstAccessReportsAccountRegisteredExactlyOnce",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UnauthenticatedRequestIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/DisplayNameEndpointTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/DisplayNameEndpointTests.cs",
+      "tests": [
+        {
+          "method": "ProviderNameIsOnlyAPrivateSuggestion",
+          "attributes": [
+            "[Theory]",
+            "    [InlineData(\"Ada Lovelace\")]",
+            "    [InlineData(\"ada@example.com\")]"
+          ]
+        },
+        {
+          "method": "AbsentProviderNameLeavesNoSuggestion",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ConfirmingTrimsSavesAndSurvivesReload",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "InvalidNamesAreRejectedWithoutChangingTheProfile",
+          "attributes": [
+            "[Theory]",
+            "    [InlineData(\"   \")]",
+            "    [InlineData(\"\")]",
+            "    [InlineData(\"bad\\u0007name\")]",
+            "    [InlineData(\"line\\nbreak\")]"
+          ]
+        },
+        {
+          "method": "NameLongerThanEightyCharactersIsRejectedButEightyIsAccepted",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UpdateOnlyChangesTheCallersProfile",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UpdateRequiresAuthentication",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "V1LoginReturnsAPrivateSuggestionWithoutStoringIt",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "FailedV1LoginReturnsNoSuggestion",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "LaterV1ImportPreservesTheChosenName",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/GameCatalogSnapshotTests.cs",
+      "after": "tests/TacticusPlanner.Api.Tests/GameCatalogSnapshotTests.cs",
+      "tests": [
+        {
+          "method": "GameCatalogManifestMatchesSnapshot",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "TheSharedLreLadderIsNoLongerServed",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CharacterAbilityCostsAreServedAnonymouslyForLevels2To60",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "MythicQuestsAreServedAnonymouslyWithStructuredRewards",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "MowsCarryTheirMythicAbility",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "HordeModeTiersAreServedAnonymouslyWithCharactersSortedById",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "LresServeTheirRunStartsIndexedByRun",
+          "attributes": [
+            "[Theory]",
+            "    [InlineData(\"votanUthar\", new[] { \"2026-03-08T00:00:00Z\", \"2026-10-04T00:00:00Z\" })]",
+            "    [InlineData(\"tauFarsight\", new[] { \"2025-12-28T00:00:00Z\", \"2026-06-21T00:00:00Z\" })]",
+            "    [InlineData(\"astarLysander\", new[] { \"2026-08-30T00:00:00Z\" })]",
+            "    [InlineData(\"lostaBile\", new[] { \"2026-11-08T00:00:00Z\" })]"
+          ]
+        },
+        {
+          "method": "GuildRaidMetaDatasetIsAnonymousAndIdOnly",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/GetMyGuildEndpointTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/GetMyGuildEndpointTests.cs",
+      "tests": [
+        {
+          "method": "UnauthenticatedRequestIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UnprovisionedAccountIsNotFound",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "NoTacticusUserIdConfiguredReturnsTacticusUserIdRequiredState",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ConfiguredUserWithNoLinkedGuildReturnsUnregisteredState",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "RegisteredGuildReturnsOrderedMaskedProjectionForTheLeader",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "NonLeaderLinkedMemberSeesCanSynchronizeFalse",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/GetMyGuildRaidStatusEndpointTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/GetMyGuildRaidStatusEndpointTests.cs",
+      "tests": [
+        {
+          "method": "UnprovisionedProfileIsNotFoundAndUnregisteredProfileConflicts",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "NeverSynchronizedOrTokenlessGuildConflictsWithoutRaidCall",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ReadyGuildWithNoObservationYetConflictsOnReadWithoutUpstreamCall",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ForcedRefreshPersistsAndSubsequentReadsNeverCallUpstream",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "SuffixlessUnitIdUsesCatalogProgressionAndRepairsPersistedAttack",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "NoActiveSeasonIsSuccessfulAndReadsReuseItWithoutUpstreamCalls",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "RefreshWithinCooldownReturnsPersistedResultWithoutCallingUpstreamAgain",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "RefreshAfterCooldownExpiresCallsUpstreamAgain",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "TransientFailureAfterCooldownReturnsPersistedStaleOnBothRefreshAndRead",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "RejectedCredentialAfterCooldownReturnsBadGatewayAndDoesNotServeStale",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "RetainedObservationThatNoLongerResolvesInCatalogReturnsBadGatewayOnRead",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "TransientFailureWithoutRetainedObservationIsUnavailable",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "OverlappingForcedRefreshesShareOneUpstreamOperation",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "RefreshArrivingWhileAnotherIsInFlightJoinsItInsteadOfReadingAStaleCooldownResult",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CancellingOneRefreshRequestDoesNotAffectAnotherCallersJoinedFlight",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/GlobalGoalOrderEndpointTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/GlobalGoalOrderEndpointTests.cs",
+      "tests": [
+        {
+          "method": "GoalsAppendToTheGlobalOrderOnceRegardlessOfProjectCount",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ReorderAppliesAcrossUnitsAndProjectsAndAdvancesTheRevision",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ReorderThatChangesNothingKeepsTheRevision",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ReorderRejectsStaleRevisionMissingUnknownAndDuplicateGoalsWithoutChangingAnything",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ReorderRejectsAGoalCreatedAfterTheOrderWasLoaded",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ReorderIsScopedToTheCallersProfile",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ReorderAcceptsADependentAheadOfItsPrerequisite",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "LifecycleKeepsTheOrderDenseAndAdvancesTheRevisionOnlyWhenTheSetChanges",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "MembershipChangesNeverChangeTheOrderOrItsRevision",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "MovingAProjectGoalUpTakesTheDisplacedGoalsGlobalPosition",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "MovingAProjectGoalDownTakesTheDisplacedGoalsGlobalPosition",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ProjectMoveRejectsNonMembersSelfMovesAndStaleRevisionsWithoutChangingAnything",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ProjectMoveForAnotherProfilesProjectIsNotFound",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/GoalAbilityCapEffectiveProgressionTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/GoalAbilityCapEffectiveProgressionTests.cs",
+      "tests": [
+        {
+          "method": "AbilityAboveLiveCapIsAcceptedWithADependedUponAscension",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "AbilityAboveLiveCapIsRejectedWithoutAnAscension",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "AbilityAboveEvenTheAscendedCapIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UndeclaredAscensionDoesNotRaiseTheCap",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "DependencyOnANonAscensionSpecDoesNotRaiseTheCap",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "NoPlayerDataDerivesTheEffectiveProgressionSolelyFromTheDependedUponAscension",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "SingleGoalCreationIsUnaffected",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/GoalEditEndpointTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/GoalEditEndpointTests.cs",
+      "tests": [
+        {
+          "method": "AllFourSectionsApplyTogetherWithASingleRevisionBump",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "EachSectionAloneLeavesTheOthersUntouched",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "EmptyRequestIsANoOp",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UnknownAndForeignGoalsAre404",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "InvalidTargetRejectsTheWholeRequestAndNamesTheTarget",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "InvalidDetailsNameTheFieldExactlyAsTheDetailsEndpointDoes",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "EmptyOrUnknownProjectListsAreRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ProjectSlotCheckSeesTheNewTargetAndNothingIsSaved",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "StaleGoalRevisionIs409WithTheCurrentGoalAndValidNotesAreNotSaved",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "StaleOrderRevisionIs409WithTheCurrentOrderAndTheValidTargetIsNotSaved",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "PositionOutOfRangeIs400AndAFailingLastSectionLeavesEarlierSectionsUnwritten",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "PriorityOnAGoalWithoutAPositionIs400",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "MoveByPositionShiftsTheGoalsBetweenTheOldAndNewPositions",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "MoveDownAndUnchangedPositions",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UnchangedTargetInACombinedEditIsANoOpNotAnError",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/GoalsEndpointTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/GoalsEndpointTests.cs",
+      "tests": [
+        {
+          "method": "OpenApiDocumentReplacesAscensionFarmingWithAcquisitionSources",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UnauthenticatedListIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UnprovisionedAccountListIsNotFound",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateGoalThenAppearsInList",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateGoalWithMultipleProjectIdsAddsToEachProject",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateGoalWithExplicitPriorityIsHonoredOverAutoAppend",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateGoalProjectMembershipUsesAutomaticPriority",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateGoalInCustomProjectStartsActive",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateGoalWithStartPausedStartsPaused",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateGoalWithoutStartPausedStartsActive",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateStartPausedGoalInOccupiedSlotIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateUnlockGoalWithUnavailableCampaignAcquisitionSourceIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateAscensionGoalWithUnavailableCampaignAcquisitionSourceIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateUnlockGoalAcceptsAMythicShardNodeAsACampaignSource",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateUnlockGoalAcceptsAKnownShardNodeAsACampaignSource",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateAscensionGoalAcceptsRegularAndMythicShardNodesInOneCampaignSource",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateAscensionGoalAcceptsAnOnslaughtSource",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateUnlockGoalRejectsAnOnslaughtSource",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateMowAscensionGoalRejectsAnOnslaughtSource",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateAscensionGoalRejectsAnOnslaughtSourceWithIds",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateGoalRejectsAnUnknownAcquisitionSourceKind",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateGoalRejectsANullAcquisitionSourceElement",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateGoalRejectsANullAcquisitionSourceIdsList",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateAscensionGoalRejectsAMalformedShopOfferId",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateAscensionGoalRejectsAShopOfferNamingAnUnknownShop",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateCharacterUnlockGoalAcceptsAShopSource",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateUnlockGoalForAShopOnlyCharacterIsAccepted",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateMowUnlockGoalRejectsAShopSource",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateGoalUnknownEntityTypeIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateGoalUndefinedNumericEnumIsRejected",
+          "attributes": [
+            "[Theory]",
+            "    [InlineData(\"0\", \"rank\")]",
+            "    [InlineData(\"999\", \"rank\")]",
+            "    [InlineData(\"character\", \"0\")]",
+            "    [InlineData(\"character\", \"999\")]"
+          ]
+        },
+        {
+          "method": "CreateGoalUndefinedNumericFarmingStrategyIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateGoalDeferredGoalTypeOrEntityTypeIsRejected",
+          "attributes": [
+            "[Theory]",
+            "    [InlineData(\"upgrade\", \"rank\")]",
+            "    [InlineData(\"character\", \"material\")]",
+            "    [InlineData(\"mow\", \"rank\")]"
+          ]
+        },
+        {
+          "method": "CreateMowAbilityGoalIsAccepted",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UpdateGoalChangesNotesAndFarmingLocationOverride",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UpdateGoalAddsAShopAcquisitionSource",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UpdateGoalOmittingAcquisitionSourcesRetainsTheExistingSelection",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UpdateGoalRejectsAnUnknownAcquisitionSourceKind",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UpdateGoalStatusTransitionsAndAppendsEvent",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UpdateGoalStatusUnknownStatusIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UpdateGoalStatusUndefinedNumericStatusIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UpdateGoalRejectsUnsupportedFarmingStrategyForGoalType",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ListGoalsExcludesArchivedByDefaultButArchivedQueryReturnsThem",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "DeleteGoalRemovesRowPermanently",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "GetGoalOwnedByAnotherProfileIsNotFound",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UpdateGoalProjectsAddsGoalToAnotherProject",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UpdateGoalProjectsRemovesGoalFromProjectKeepingItInAnother",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UpdateGoalProjectsEmptyListIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UpdateGoalProjectsUnknownProjectIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UpdateGoalProjectsForAnotherProfilesGoalIsNotFound",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateGoalConflictingWithActiveSameKindGoalIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateGoalConflictingWithPausedSameKindGoalIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateGoalAllowedWhenSameKindGoalIsCompletedOrArchived",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ResumingGoalConflictingWithAnotherActiveSameKindGoalIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "PausingAlreadyActiveGoalDoesNotConflictWithItself",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "SameInFlightGoalTypeIsAllowedInSeparateProjectsButNotWhenProjectsOverlap",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ResumeAcrossSeveralProjectsIsRejectedAtomicallyWhenOneProjectConflicts",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateRankGoalRoundTripsMythicMaterialShopSourcesAndFarmingLocations",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateRankGoalKeepsAnExplicitEmptyShopSourceDistinctFromNull",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateRankGoalRejectsNonMythicMaterialShopOffers",
+          "attributes": [
+            "[Theory]",
+            "    [InlineData(\"guild:shards_blackTerminator\")]",
+            "    [InlineData(\"guild:upgDmgL202\")]"
+          ]
+        },
+        {
+          "method": "CreateAscensionGoalRejectsAMythicMaterialShopOffer",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/GoalStatusInvarianceTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/GoalStatusInvarianceTests.cs",
+      "tests": [
+        {
+          "method": "AddingAMembershipThroughTheGoalDoesNotChangeStatus",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "AddingAMembershipThroughTheProjectDoesNotChangeStatus",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "RemovingAMembershipDoesNotChangeStatus",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/GoalTargetEditEndpointTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/GoalTargetEditEndpointTests.cs",
+      "tests": [
+        {
+          "method": "RankTargetAdvancesInPlaceKeepingIdentityMembershipsOrderAndSnapshot",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "NonTargetFieldsAreUnchangedByATargetEdit",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "AscensionTargetCanBeEdited",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "AbilityTargetCanBeEdited",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UpgradeTargetCanBeEditedAndIsRecordedInHistory",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UpgradeRangeCanBeReplacedClearedAndIsRecordedInHistory",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "InvalidUpgradeRangeIsRejectedOnEditAndNothingChanges",
+          "attributes": [
+            "[Theory]",
+            "    [InlineData(3, 3)]",
+            "    [InlineData(-1, 2)]",
+            "    [InlineData(0, 999)]"
+          ]
+        },
+        {
+          "method": "UnlockGoalHasNoAdjustableTarget",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "HistoricalGoalTargetCannotBeEdited",
+          "attributes": [
+            "[Theory]",
+            "    [InlineData(\"completed\")]",
+            "    [InlineData(\"archived\")]"
+          ]
+        },
+        {
+          "method": "MalformedOrMismatchedTargetGroupsAreRejectedWithoutChange",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "InvalidUpgradeTargetsAreRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "AlreadyReachedTargetIsSavedWithoutChangingStatus",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "RankTargetHeldInAnotherOfTheGoalsProjectsIsAnAtomicConflict",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "RankCollisionNamesEveryConflictingProject",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "MissingUpgradeListOrBlankIdsAreABadRequestNotAServerError",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "EditedRankTargetFreesTheOldSlotAndOccupiesTheNewOne",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "StaleRevisionIsRejectedWithTheCurrentGoalAndNoOverwrite",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "RetryingAnIdenticalTargetLeavesRevisionAndHistoryUnchanged",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "GoalDetailExposesAMonotonicRevision",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "OtherUsersGoalIsNotFound",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "InvalidRankTargetsAreRejectedWithCreationRules",
+          "attributes": [
+            "[Theory]",
+            "[InlineData(1)] // not above the stored baseline start",
+            "[InlineData(0)]",
+            "[InlineData(999)] // beyond the rank ladder"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/GuildRaidStatusProjectorTests.cs",
+      "after": "tests/TacticusPlanner.Api.Tests/GuildRaidStatusProjectorTests.cs",
+      "tests": [
+        {
+          "method": "NoActiveSeasonSerializesDiscriminatorFreshnessAndNullSeason",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "NoAttacksSelectsFirstConfiguredBossAtCatalogHp",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "LivingBossUsesObservedHpAndDefeatedBossAdvances",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "DefeatingLastSetAdvancesTierAndDefeatingLastPositionUsesConfiguredLoop",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "DefeatingFinalPositionWithAnInvalidConfiguredLoopTargetThrows",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "PrimeHpAndModifiersUseCurrentObservationAndIgnoreOlderLoopAttack",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "PrimeWithUnknownCatalogHpKeepsHpThresholdAndActivationNull",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ExplicitMatchingOccurrenceSuppliesEndsAtAndAbsenceDoesNotInferOne",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/LegendaryEventCatalogValidatorTests.cs",
+      "after": "tests/TacticusPlanner.Api.Tests/LegendaryEventCatalogValidatorTests.cs",
+      "tests": [
+        {
+          "method": "FindsCurrentEventsOnly",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "AValidTeamHasNoFailures",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "AnUnknownLaneStopsValidationAtTheLane",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ReportsEveryFailingFieldOnce",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ATeamHasThreeToFiveMembersAndTheReserveDoesNotCount",
+          "attributes": [
+            "[Theory]",
+            "    [InlineData(2, false, false)]",
+            "    [InlineData(2, true, false)]",
+            "    [InlineData(3, false, true)]",
+            "    [InlineData(5, false, true)]",
+            "    [InlineData(6, false, false)]"
+          ]
+        },
+        {
+          "method": "DepthAndSourceTravelTogether",
+          "attributes": [
+            "[Theory]",
+            "    [InlineData(null, null, null)]",
+            "    [InlineData(4, \"manual\", null)]",
+            "    [InlineData(4, null, \"expectedBattleClearsSource\")]",
+            "    [InlineData(null, \"estimate\", \"expectedBattleClearsSource\")]",
+            "    [InlineData(4, \"Manual\", \"expectedBattleClearsSource\")]"
+          ]
+        },
+        {
+          "method": "NotesAreLimitedTo2000Characters",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "RunInputsAreBoundedByTheEventsMissions",
+          "attributes": [
+            "[Theory]",
+            "    [InlineData(\"1\", 10, 10, 75, null)]",
+            "    [InlineData(\"3\", 0, 0, 0, null)]",
+            "    [InlineData(\"4\", 0, 0, 0, \"run\")]",
+            "    [InlineData(\"01x\", 0, 0, 0, \"run\")]",
+            "    [InlineData(null, 0, 0, 0, \"run\")]",
+            "    [InlineData(\"2\", 11, 0, 0, \"regularMissions\")]",
+            "    [InlineData(\"2\", 0, -1, 0, \"premiumMissions\")]",
+            "    [InlineData(\"2\", 0, 0, 76, \"closeShards\")]"
+          ]
+        },
+        {
+          "method": "AnnotationsAreBoundedByTheLane",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/LegendaryEventPlanEndpointTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/LegendaryEventPlanEndpointTests.cs",
+      "tests": [
+        {
+          "method": "MissingPlanReadsAsEmptyRevisionZeroPlan",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UnknownEventIs404ForReadsAndWrites",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "PlanLevelWriteCreatesThePlan",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "NotesOverTheLimitAreRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateTeamLazilyCreatesThePlanAndServesTheTeam",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "TeamsAreAppendedPerLaneAndServedInLaneThenOrder",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UpdateReplacesFieldsAndKeepsLaneAndOrder",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ADepthWriteTouchesOnlyItsRun",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UpdateWithLaneIdIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UpdateIsValidatedAgainstTheStoredTeamsLane",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UnknownTeamIs404",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "DeleteReDensifiesTheLane",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "DeleteWithoutExpectedRevisionIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "InvalidTeamsAreRejectedNamingTheField",
+          "attributes": [
+            "[Theory]",
+            "    [MemberData(nameof(InvalidTeams))]"
+          ]
+        },
+        {
+          "method": "AStoredShortTeamStaysReadableReorderableAndDeletable",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "AStoredShortTeamCanOnlyBeUpdatedByCompletingIt",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ATeamMayCoverZeroObjectives",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ReorderReplacesTheLaneOrderAndBumpsTheRevision",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ReorderToTheCurrentOrderKeepsTheRevision",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ReorderSetMismatchIs409WithTheCurrentPlan",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "StaleRevisionIs409WithTheCurrentPlanAndChangesNothing",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "LazyCreationRequiresRevisionZero",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "PlansAreScopedToTheCallersProfile",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ServedJsonUsesTheContractFieldNames",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/LegendaryEventPlanProjectionTests.cs",
+      "after": "tests/TacticusPlanner.Api.Tests/LegendaryEventPlanProjectionTests.cs",
+      "tests": [
+        {
+          "method": "TicksPastTheCatalogMissionListsAreDropped",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "TicksAreServedSortedWhenTheCatalogEventIsGone",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/LegendaryEventRunInputsEndpointTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/LegendaryEventRunInputsEndpointTests.cs",
+      "tests": [
+        {
+          "method": "RunWriteCreatesThePlan",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ARunWriteTouchesOnlyItsRun",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "RunsAreServedAscendingWithAbsentRunsOmitted",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "OutOfRangeRunInputsAreRejected",
+          "attributes": [
+            "[Theory]",
+            "    [InlineData(\"1\", 11, 0, 0, \"regularMissions\")]",
+            "    [InlineData(\"1\", -1, 0, 0, \"regularMissions\")]",
+            "    [InlineData(\"1\", 0, 11, 0, \"premiumMissions\")]",
+            "    [InlineData(\"1\", 0, 0, 76, \"closeShards\")]",
+            "    [InlineData(\"1\", 0, 0, -25, \"closeShards\")]",
+            "    [InlineData(\"4\", 0, 0, 0, \"run\")]",
+            "    [InlineData(\"0\", 0, 0, 0, \"run\")]",
+            "    [InlineData(\"two\", 0, 0, 0, \"run\")]"
+          ]
+        },
+        {
+          "method": "PaidInputsAreStoredWhenPaidOptionsAreHidden",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UnchangedRunInputsKeepTheRevision",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "AllZeroInputsForAnAbsentRunCreateNothing",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ZerosResetAStoredRun",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "AStaleRunWriteIsAConflict",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CompletedMissionsAreStoredSortedOnANewPlan",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ARunWriteWithCompletedMissionsTouchesOnlyItsRun",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "InvalidCompletedMissionsAreRejected",
+          "attributes": [
+            "[Theory]",
+            "    [InlineData(1, 0, new[] { 0, 2 }, new int[0], \"regularMissions\")]",
+            "    [InlineData(10, 0, new int[0], new[] { 0 }, \"premiumMissions\")]",
+            "    [InlineData(10, 10, new int[0], new[] { 10 }, \"completedPremiumMissions\")]",
+            "    [InlineData(10, 10, new int[0], new[] { -1 }, \"completedPremiumMissions\")]",
+            "    [InlineData(10, 10, new[] { 10 }, new int[0], \"completedRegularMissions\")]",
+            "    [InlineData(10, 10, new[] { 2, 2 }, new int[0], \"completedRegularMissions\")]",
+            "    [InlineData(10, 10, new int[0], new[] { 4, 1, 4 }, \"completedPremiumMissions\")]"
+          ]
+        },
+        {
+          "method": "CountBelowTicksLeavesAStoredRunUnchanged",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "AbsentCompletedArraysMeanNone",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UnchangedCompletedMissionsKeepTheRevision",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UnchangedEmptyCompletedMissionsKeepTheRevision",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "MarkOneCellOnANewPlan",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "MarkAWholeBattleThenClearOneCell",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ChangingAMarkReplacesItsStatus",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "AnnotationsAreOrderedByLaneBattleAndObjective",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "InvalidAnnotationWritesAreRejected",
+          "attributes": [
+            "[Theory]",
+            "    [InlineData(\"delta\", 0, new[] { 0 }, \"stopHere\", \"laneId\")]",
+            "    [InlineData(\"alpha\", 18, new[] { 0 }, \"stopHere\", \"battleIndex\")]",
+            "    [InlineData(\"alpha\", -1, new[] { 0 }, \"stopHere\", \"battleIndex\")]",
+            "    [InlineData(\"alpha\", 0, new[] { 6 }, \"stopHere\", \"objectiveIds\")]",
+            "    [InlineData(\"alpha\", 0, new[] { -1 }, \"stopHere\", \"objectiveIds\")]",
+            "    [InlineData(\"alpha\", 0, new int[0], \"stopHere\", \"objectiveIds\")]",
+            "    [InlineData(\"alpha\", 0, new[] { 1, 1 }, \"stopHere\", \"objectiveIds\")]",
+            "    [InlineData(\"alpha\", 0, new[] { 0, 1, 2, 3, 4, 5, 0 }, \"stopHere\", \"objectiveIds\")]",
+            "    [InlineData(\"alpha\", 0, new[] { 0 }, \"cleared\", \"status\")]"
+          ]
+        },
+        {
+          "method": "UnchangedAnnotationsKeepTheRevision",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ClearingOnAMissingPlanCreatesNothing",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "AStaleAnnotationWriteIsAConflict",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "EmptyPlanServesEmptyRunsAndAnnotations",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ServedJsonUsesTheContractFieldNames",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/LegendaryEventRunRecordEndpointTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/LegendaryEventRunRecordEndpointTests.cs",
+      "tests": [
+        {
+          "method": "FirstSyncDuringARunOpensARecord",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ProgressWithinTheRunRefreshesTheRecord",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ASyncWithUnchangedProgressKeepsTheRecordFrozen",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "TheNextRunOpensANewRecordWithItsOwnSnapshot",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "AResetWithTheSameRunNumberOpensANewRecord",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "EventsOutsideTheCatalogAndEntriesWithNoEncountersAreIgnored",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "TeamsSnapshotCarriesTheRunsDepth",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ACatalogEventWithNoRecordsReadsAsAnEmptyList",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "RecordsAreScopedToTheCallersProfile",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "PlanListReturnsStoredPlansInEventIdOrder",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "AStoredPlanOutlivesItsCatalogEventButRejectsWrites",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/LevelGoalTypeRemovedTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/LevelGoalTypeRemovedTests.cs",
+      "tests": [
+        {
+          "method": "CreatingACombinedLevelGoalIsRejectedAndNothingIsCreated",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreatingALevelGoalIsRejected",
+          "attributes": [
+            "[Theory]",
+            "[InlineData(\"level\")]",
+            "[InlineData(\"Level\")]",
+            "[InlineData(\"7\")] // the removed enum value must not parse from its old numeric form either"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/OnslaughtProgressEndpointTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/OnslaughtProgressEndpointTests.cs",
+      "tests": [
+        {
+          "method": "GetReportsUnsetDefaultsAndPutPersistsAllAlliances",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "PutPreservesOtherPlayerDataOverrides",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "PutWithNullAllianceLeavesItUnset",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "PutRejectsInvalidProgress",
+          "attributes": [
+            "[Theory]",
+            "    [InlineData(\"Wood\", 1)]",
+            "    [InlineData(\"Stone\", 0)]",
+            "    [InlineData(\"Stone\", 5)]"
+          ]
+        },
+        {
+          "method": "PutRejectsStaleRevision",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/PlannerApiFactoryConfigurationTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/PlannerApiFactoryConfigurationTests.cs",
+      "tests": [
+        {
+          "method": "AnalyticsProjectTokenIsClearedRegardlessOfCommittedAppsettings",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/PlannerDbContextQueryFilterTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/PlannerDbContextQueryFilterTests.cs",
+      "tests": [
+        {
+          "method": "GoalsProjectsUserSettingsAndProjectGoalsAreIsolatedBetweenProfiles",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "EveryProfileOwnedEntityHasAQueryFilter",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/PlayerDataSyncEndpointTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/PlayerDataSyncEndpointTests.cs",
+      "tests": [
+        {
+          "method": "UnauthenticatedRequestIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UnprovisionedAccountIsNotFound",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "NoTacticusApiKeyConfiguredIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "SuccessfulSyncReturnsAManifestWithEveryChunk",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "IdenticalRepeatedResponseRetainsChunkHashesAndAdvancesSuccessfulSyncMetadata",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "LockedCharacterShardChangesUnderSameConfigHashUpdateOnlyInventoryShards",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "RosterProgressionChangesUnderSameConfigHashUpdateOnlyCharacters",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UpstreamFreshnessAdvancesIndependentlyFromConfigAndContentHashes",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "SyncWithChangedConfigHashUpdatesTheStoredSnapshot",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "SyncWithChangedConfigHashOnlyChangesTheChunksThatActuallyDiffer",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ChunkEndpointRejectsUnknownKeysAndServesKnownOnesWithConditionalSupport",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/PlayerDataTransformerTests.cs",
+      "after": "tests/TacticusPlanner.Api.Tests/PlayerDataTransformerTests.cs",
+      "tests": [
+        {
+          "method": "SplitsUnitsIntoCharactersAndMowsByRealCatalogId",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "SplitsInventoryUpgradesAndItemsIntoTheirOwnChunksAndKeepsRequisitionOrdersInInventory",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "MergesRegularAndMythicShardsButExcludesAlreadyUnlockedUnits",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "SumsMowComponentsPerGrandAllianceInsteadOfKeepingPerItemRows",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "SplitsCampaignProgressByEventIdAndSimplifiesToIdentityPlusHighWaterMark",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CatalogCampaignEventBattleIndicesMatchTheUpstreamPerTrackIndices",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "PopulatesLiveProgressWithBattleAttemptsAndTheActiveCampaignEventId",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "DistinguishesBattleAttemptsFromTwoTiersOfTheSameEventCampaignByType",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "MapsLreLanesOntoNamedAlphaBetaGammaTracksMatchingTheCatalogsLreModel",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "HashingIsDeterministicForIdenticalInputAndChangesWithContent",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ExtractsConfigHashAndLastUpdatedOnFromMetadata",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/ProductAnalyticsTests.cs",
+      "after": "tests/TacticusPlanner.Api.Tests/ProductAnalyticsTests.cs",
+      "tests": [
+        {
+          "method": "NoProjectTokenSelectsTheInertImplementation",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "EveryDeclaredEventMethodTakesOnlyTheAnalyticsId",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/ProgressionRulesPrerequisiteTests.cs",
+      "after": "tests/TacticusPlanner.Api.Tests/ProgressionRulesPrerequisiteTests.cs",
+      "tests": [
+        {
+          "method": "MinimumProgressionForRankAboveTheLadderFallsBackToTheTopRatherThanThrowing",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "MaxRankForProgressionIsTheInverseOfMinimumProgressionForRank",
+          "attributes": [
+            "[Theory]",
+            "    [InlineData(UnitProgression.CommonNone, UnitRank.Iron1)]",
+            "    [InlineData(UnitProgression.UncommonTwoStars, UnitRank.Bronze1)]",
+            "    [InlineData(UnitProgression.RareFourStars, UnitRank.Silver1)]",
+            "    [InlineData(UnitProgression.EpicRedOneStar, UnitRank.Gold1)]",
+            "    [InlineData(UnitProgression.LegendaryRedThreeStars, UnitRank.Diamond3)]",
+            "    [InlineData(UnitProgression.MythicOneBlueStar, UnitRank.Adamantine2)]"
+          ]
+        },
+        {
+          "method": "MinimumProgressionForAbilityLevelIsTheInverseOfTheAbilityCapTable",
+          "attributes": [
+            "[Theory]",
+            "    [InlineData(8, UnitProgression.CommonNone)]",
+            "    [InlineData(9, UnitProgression.UncommonTwoStars)]",
+            "    [InlineData(17, UnitProgression.UncommonTwoStars)]",
+            "    [InlineData(18, UnitProgression.RareFourStars)]",
+            "    [InlineData(26, UnitProgression.RareFourStars)]",
+            "    [InlineData(27, UnitProgression.EpicRedOneStar)]",
+            "    [InlineData(35, UnitProgression.EpicRedOneStar)]",
+            "    [InlineData(36, UnitProgression.LegendaryRedThreeStars)]",
+            "    [InlineData(50, UnitProgression.LegendaryRedThreeStars)]",
+            "    [InlineData(51, UnitProgression.MythicOneBlueStar)]",
+            "    [InlineData(60, UnitProgression.MythicOneBlueStar)]"
+          ]
+        },
+        {
+          "method": "MinimumProgressionForAbilityLevelRoundTripsEveryRarityCap",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "MinimumProgressionForAbilityLevelAboveTheLadderFallsBackToTheTopRatherThanThrowing",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "MinimumProgressionForRankMatchesEveryRarityBoundary",
+          "attributes": [
+            "[Theory]",
+            "[InlineData(UnitRank.Stone1, UnitProgression.CommonNone)]",
+            "[InlineData(UnitRank.Stone3, UnitProgression.CommonNone)]",
+            "[InlineData(UnitRank.Iron1, UnitProgression.CommonNone)] // Common's own max rank",
+            "[InlineData(UnitRank.Iron2, UnitProgression.UncommonTwoStars)] // above Common's cap -> Uncommon",
+            "[InlineData(UnitRank.Bronze1, UnitProgression.UncommonTwoStars)] // Uncommon's own max rank",
+            "[InlineData(UnitRank.Bronze2, UnitProgression.RareFourStars)]",
+            "[InlineData(UnitRank.Silver1, UnitProgression.RareFourStars)] // Rare's own max rank",
+            "[InlineData(UnitRank.Silver2, UnitProgression.EpicRedOneStar)]",
+            "[InlineData(UnitRank.Gold1, UnitProgression.EpicRedOneStar)] // Epic's own max rank",
+            "[InlineData(UnitRank.Gold2, UnitProgression.LegendaryRedThreeStars)]",
+            "[InlineData(UnitRank.Diamond3, UnitProgression.LegendaryRedThreeStars)] // Legendary's own max rank",
+            "[InlineData(UnitRank.Adamantine1, UnitProgression.MythicOneBlueStar)]",
+            "[InlineData(UnitRank.Adamantine2, UnitProgression.MythicOneBlueStar)] // Mythic's own max rank"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/ProgressionRulesTests.cs",
+      "after": "tests/TacticusPlanner.Api.Tests/ProgressionRulesTests.cs",
+      "tests": [
+        {
+          "method": "ResolvesRarityAndAbilityCapFromTypedProgression",
+          "attributes": [
+            "[Theory]",
+            "    [InlineData(UnitProgression.CommonTwoStars, \"Common\", 8)]",
+            "    [InlineData(UnitProgression.UncommonTwoStars, \"Uncommon\", 17)]",
+            "    [InlineData(UnitProgression.RareRedOneStar, \"Rare\", 26)]",
+            "    [InlineData(UnitProgression.EpicRedThreeStars, \"Epic\", 35)]",
+            "    [InlineData(UnitProgression.LegendaryOneBlueStar, \"Legendary\", 50)]",
+            "    [InlineData(UnitProgression.MythicMythicWings, \"Mythic\", 60)]"
+          ]
+        },
+        {
+          "method": "RejectsProgressionOutsideTheKnownLadder",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/ProjectMembershipReplacementTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/ProjectMembershipReplacementTests.cs",
+      "tests": [
+        {
+          "method": "FreshReplacementCommitsAndKeepsEveryGlobalPositionAndTheOrderRevision",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "StaleReviewedSetIsRejectedAtomicallyWithTheCurrentIds",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ConcurrentReorderDoesNotMakeAMembershipSaveStale",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UnknownGoalRejectsTheWholeBatch",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "RemovingAGoalsOnlyProjectBlocksTheWholeBatchAndNamesTheGoal",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "OccupiedSlotRejectsTheWholeBatchWithTheStructuredSlotConflict",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "MissingExpectedGoalIdsIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/ProjectsEndpointTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/ProjectsEndpointTests.cs",
+      "tests": [
+        {
+          "method": "ListProjectsProvisionsDefaultProjectOnFirstAccess",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ListProjectsIsIdempotentDoesNotDuplicateDefaultProject",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateProjectBlankNameIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ActivateProjectRouteIsGone",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ProjectSummaryHasNoActivePlanFlag",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UpdateProjectRenamesAndArchivesContainer",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UpdateProjectRejectsStaleRevisionWithIssueCode",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "DefaultProjectCannotBeArchived",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UpdateProjectGoalsKeepsTheGoalsGlobalPosition",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UpdateProjectGoalsRemovingGoalsOnlyProjectIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UpdateProjectGoalsStatusBulkPausesActiveGoalsOnly",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ListProjectGoalsReturnsMembersInGlobalPriorityOrder",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ListProjectGoalsForAnotherProfilesProjectIsNotFound",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ProjectMembershipReplacementRejectsTwoInFlightGoalsForOneSlot",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "MembershipReplacementIgnoresSubmittedPriorityForExistingAndNewMembers",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/ProjectTargetEndpointTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/ProjectTargetEndpointTests.cs",
+      "tests": [
+        {
+          "method": "CreateWithTargetReturnsIt",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ProjectWithoutTargetServesNull",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateRejectsAnInvalidTarget",
+          "attributes": [
+            "[Theory]",
+            "    [InlineData(\"legendaryEvent\", \"notAnEvent\", \"target.eventId\")]",
+            "    [InlineData(\"guildRaid\", \"votanUthar\", \"target.kind\")]"
+          ]
+        },
+        {
+          "method": "DefaultProjectCannotHaveATarget",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UpdateWithoutTargetClearsIt",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UpdateWithTheTargetFieldAbsentClearsIt",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ResendingATargetWhoseEventLeftTheCatalogStillSaves",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ArchivingKeepsTheTarget",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/PurgeAccountEndpointTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/PurgeAccountEndpointTests.cs",
+      "tests": [
+        {
+          "method": "PurgeDeletesTheAccountAndSubsequentMeReprovisionsAFreshOne",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "PurgeIsIdempotentForAnAccountThatWasNeverProvisioned",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/PurgeGuildEndpointTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/PurgeGuildEndpointTests.cs",
+      "tests": [
+        {
+          "method": "UnauthenticatedRequestIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UnprovisionedAccountIsNotFound",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "NoLinkedGuildIsForbidden",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "NonLeaderLinkedMemberIsForbidden",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "LeaderCanPurgeAndAllMembersAreRemoved",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "AnyCurrentMemberCanReRegisterAfterAPurge",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/RankMilestonesEndpointTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/RankMilestonesEndpointTests.cs",
+      "tests": [
+        {
+          "method": "DistinctRankTargetsCoexistInOneProjectAndStayIndependentlyManageable",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ExactDuplicateRankTargetIsRejectedNamingTheExistingGoalAndTarget",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "EquivalentPointFiveAndThreeAppliedSlotsAreTheSameTarget",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ClearAndPartialAppliedSlotsOfTheSameRankAreDistinctTargets",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CombinedCreationAllowsADistinctTargetAndRejectsAnExactDuplicate",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "AddingAGoalToAProjectHoldingItsTargetFailsAtomicallyAndNamesThatProject",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "AddingADistinctTargetToAProjectHoldingAnotherMilestoneSucceeds",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ProjectMembershipReplacementRejectsTwoGoalsWithTheSameTargetAndAcceptsDistinctOnes",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ResumingAnArchivedRankGoalConflictsOnlyWithTheSameTarget",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CompletedMilestoneDoesNotBlockANewGoalAtTheSameTarget",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/RankTargetKeyTests.cs",
+      "after": "tests/TacticusPlanner.Api.Tests/RankTargetKeyTests.cs",
+      "tests": [
+        {
+          "method": "DifferentRanksAreDistinctEvenWithTheSameSlots",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "PointFiveIsIgnoredFromAdamantine1",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "OnlyRankGoalsWithATargetGetAKey",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "EquivalentEndStatesShareOneKey",
+          "attributes": [
+            "[Theory]",
+            "[InlineData(false, 3, true, 0)] // three applied slots == point-five below Adamantine1",
+            "[InlineData(false, 7, false, 3)] // applied slots cap at the 3-slot row below Adamantine1"
+          ]
+        },
+        {
+          "method": "DistinctEndStatesHaveDistinctKeys",
+          "attributes": [
+            "[Theory]",
+            "[InlineData(false, 0, false, 2)] // clean vs partially applied",
+            "[InlineData(false, 2, true, 0)] // partial vs full row"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/RegisterGuildEndpointTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/RegisterGuildEndpointTests.cs",
+      "tests": [
+        {
+          "method": "UnauthenticatedRequestIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UnprovisionedAccountIsNotFound",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "BlankTokenIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "NoTacticusUserIdConfiguredIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CallerAbsentFromFreshRosterIsForbidden",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CallerBelowCoLeaderIsForbidden",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "MalformedUpstreamDataIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UpstreamRejectedTokenIsBadRequest",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UpstreamUnavailableReturnsServiceUnavailable",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "SuccessfulRegistrationPersistsAndReturnsTheGuild",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ReRegisteringTheSameUpstreamGuildUpdatesRatherThanDuplicating",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "FirstRegistrationReportsGuildRegistered",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ReRegisteringAnExistingGuildDoesNotReReportGuildRegistered",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "RejectedRegistrationDoesNotReportGuildRegistered",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "NoEmittedEventCarriesPersonalOrGuildData",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "AlreadyConfiguredProfileIsLinkedImmediatelyOnRegistration",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/SyncMyGuildEndpointTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/SyncMyGuildEndpointTests.cs",
+      "tests": [
+        {
+          "method": "UnauthenticatedRequestIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UnprovisionedAccountIsNotFound",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "NoLinkedGuildIsForbidden",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "DemotedCallerIsForbiddenAndNoDataIsChanged",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "SuccessfulSyncRefreshesGuildDataUsingTheStoredToken",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "DepartedMembersAreRemovedOnSync",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "LinkedMembersLastActiveInPlannerReflectsTheirAccountLastSeenAt",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/TacticusApiRegistrationTests.cs",
+      "after": "tests/TacticusPlanner.Api.Tests/TacticusApiRegistrationTests.cs",
+      "tests": [
+        {
+          "method": "TacticusApiClientResolvesWithoutReflectionBuilder",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/TacticusIntegrationEndpointTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/TacticusIntegrationEndpointTests.cs",
+      "tests": [
+        {
+          "method": "ValidKeySavesIntegrationAndReturnsMaskedValues",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "InvalidKeyIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UnprovisionedAccountIsNotFound",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UserIdCanBeUpdatedWithoutResubmittingTheApiKey",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UserIdCanBeClearedIndependentlyOfTheApiKey",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/UpgradeGoalsEndpointTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/UpgradeGoalsEndpointTests.cs",
+      "tests": [
+        {
+          "method": "CreateUpgradeGoalWithRelevantMaterialIsAccepted",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateUpgradeGoalForMowWithRelevantMaterialIsAccepted",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateUpgradeGoalWithDecomposedIngredientIsAccepted",
+          "attributes": [
+            "[Theory]",
+            "    [InlineData(CharacterIngredientUpgradeId)]",
+            "    [InlineData(CharacterNestedIngredientUpgradeId)]"
+          ]
+        },
+        {
+          "method": "CreateUpgradeGoalForMowWithDecomposedIngredientIsAccepted",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateUpgradeGoalWithIrrelevantMaterialIsRejected",
+          "attributes": [
+            "[Theory]",
+            "    [InlineData(\"not-a-real-upgrade-id\")]",
+            "    [InlineData(UnrelatedUpgradeId)]"
+          ]
+        },
+        {
+          "method": "CreateUpgradeGoalWithDuplicateTargetsIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateUpgradeGoalWithNonPositiveQuantityIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreateCombinedUpgradeGoalIsAccepted",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CharacterUpgradeGoalWithRankRangeRoundTrips",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "MowUpgradeGoalAcceptsOneOrBothAbilityRanges",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UpgradeGoalWithoutRangesReadsBackNullGroups",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "InvalidUpgradeRangesAreRejectedOnCreate",
+          "attributes": [
+            "[Theory]",
+            "    [MemberData(nameof(InvalidRangeRequests))]"
+          ]
+        },
+        {
+          "method": "CharacterUpgradeGoalUpdateRoundTripsAMythicMaterialShopSource",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "MowUpgradeGoalUpdateRoundTripsAMythicMaterialShopSource",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "MowAbilityGoalCreateRoundTripsAMythicMaterialShopSource",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CharacterAbilityGoalRejectsAShopSource",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/UserJotTokenEndpointTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/UserJotTokenEndpointTests.cs",
+      "tests": [
+        {
+          "method": "AuthenticatedUserReceivesSignedTokenWithCoreClaims",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "TokenReflectsTheAccountsDisplayNameIncludingFreshEdits",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ProviderSuggestionNeverAppearsInTheToken",
+          "attributes": [
+            "[Theory]",
+            "    [InlineData(\"Ada Lovelace\")]",
+            "    [InlineData(\"ada@example.com\")]"
+          ]
+        },
+        {
+          "method": "EachCallIssuesADistinctToken",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UnauthenticatedRequestIsRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "MissingProjectSecretFailsAtStartup",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ResponseNeverContainsTheProjectSecret",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/UserSettingsEndpointTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/UserSettingsEndpointTests.cs",
+      "tests": [
+        {
+          "method": "GetCreatesProfileDefaultsAndPutPersistsSupportedValues",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "PutRejectsUnsupportedEnergy",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "PutRejectsUnsupportedXpBookRarity",
+          "attributes": [
+            "[Theory]",
+            "    [InlineData(\"Godly\")]",
+            "    [InlineData(\"\")]"
+          ]
+        },
+        {
+          "method": "PutRejectsMissingXpBookRarity",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "PutRejectsAStaleRevision",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/V1GoalImportEndpointTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/V1GoalImportEndpointTests.cs",
+      "tests": [
+        {
+          "method": "GoalsAreRefusedWithoutPlayerDataAndNoGoalsAreCreated",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "GoalsSyncAndImportSucceedOnTheFirstRequestWhenAValidKeyIsAvailable",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "OtherSelectedPartsStillProcessWhenGoalsAreRefusedForLackOfAKeyToSyncWith",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ImportingAfterASyncSucceeds",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "OutcomeCountMatchesTheSourceProfile",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "SeveralGoalsForOneUnitAreReportedIndividually",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "OutcomesFollowV1PriorityOrder",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "AlreadyReachedTargetIsSkipped",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "AlreadyExistingGoalIsSkippedAndCarriesTheExistingGoalId",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "DuplicateRankGoalsWithTheSameEndMergeIntoOneGoalAndCombineNotes",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "DistinctRankTargetsImportAsSeparateMilestonesWithTheirOwnNotesInV1Order",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "DuplicateRankGoalsWithEquivalentEndsMergeAndKeepThePointFiveRepresentation",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ReimportingAfterTheRankTargetWasEditedInPlaceStillSkipsTheImportedGoal",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ReimportingAHigherRankTargetCreatesItBesideTheExistingMilestone",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "DuplicateAscensionGoalsUnionTheirAcquisitionSources",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "AnExistingAscensionGoalThatAlreadyReachesTheNeededTargetReportsNoShortfall",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "DuplicateAbilityGoalsKeepTheHigherPriorityOne",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UnsupportedV1GoalTypeIsNotImportedAndPromisesNoFutureSupport",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UnknownUnitIsNotImportedAndCarriesTheRawV1Identifier",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "InvalidProgressionTargetIsNotImported",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "MissingTargetIsNotImported",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "OneRejectedTargetDoesNotDiscardTheOthers",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CreatedGoalsCarryASnapshotBuiltFromPlayerData",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "V1NotesSurviveTheImport",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "OnslaughtOnlyAscensionKeepsOnslaughtAndNoCampaignSource",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CombinedFarmingImportsBothSources",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "NoCampaignUsageOmitsTheCampaignSource",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "MachineOfWarAscensionOmitsTheInvalidOnslaughtSourceAndIsStillCreated",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UnlockIsCreatedForAUnitNotInTheRosterAndWiredAsADependency",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UnlockIsNotSynthesizedWhenTheUnitsOwnImportedGoalsAlreadyIncludeOne",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UnlockIsNotSynthesizedWhenTheAccountAlreadyHasOne",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "AscensionIsSynthesizedAtTheMinimumSatisfyingTargetAndNoLevelGoalIsCreated",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "OnePrerequisiteCoversSeveralImportedGoals",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "AnImportedAscensionGoalBelowWhatAnotherGoalNeedsSuppressesSynthesisAndReportsTheShortfall",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UnlockIsNeverSynthesizedForAMachineOfWarNotInTheRoster",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "PrerequisitesAreNotCreatedWhenNotSelected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ARequirementAlreadyMetNeedsNoPrerequisite",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ImportPreservesV1sExactInterleavedPriorityOrder",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "APrerequisitePrecedesTheGoalThatDependsOnIt",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ImportHonoursEachGoalsPlanningChoice",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "AGoalWithNoDailyRaidsFlagImportsActive",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ASynthesizedPrerequisiteIsActiveWhenAnyOfItsUnitsGoalsIs",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ASynthesizedPrerequisiteIsPausedWhenEveryGoalOfItsUnitIs",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "MergedDuplicateGoalsKeepTheActiveChoice",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ReimportingTheSameProfileCreatesNoDuplicatesAndReportsSkipped",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/V1ImportEndpointTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/V1ImportEndpointTests.cs",
+      "tests": [
+        {
+          "method": "ValidCredentialsImportTacticusKeyAndUserId",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "InvalidV1CredentialsAreRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "MissingSelectedPartIsReportedWithoutFailingCredentialImport",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "MissingCredentialsAreRejected",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "OnslaughtImportReplacesAllAllianceProgressAndSupportsCompletedSectorTier",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "MissingOnslaughtProgressIsSkipped",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "InvalidOnslaughtProgressFailsWithoutReplacingExistingOverrides",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CampaignEventImportMergesRegularProgressAndPreservesChallengeIds",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "InvalidCampaignEventImportDoesNotChangeOverrides",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/V1LegendaryEventImportEndpointTests.cs",
+      "after": "tests/TacticusPlanner.Api.IntegrationTests/V1LegendaryEventImportEndpointTests.cs",
+      "tests": [
+        {
+          "method": "PartNotSelectedLeavesPlansAlone",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "MissingTeamsAndProgressKeysAreSkipped",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UnreadableTeamsFailThePart",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "LegacyKeysAreReadWhenTheCurrentOnesAreAbsent",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "LegacyLaneMapsAreConvertedWhenTeamsIsEmpty",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "EventsAreResolvedThroughTheCatalogAndReportedOnceEach",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ObjectiveNamesResolveAcrossV1AndCatalogSpellings",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UnresolvableUnitsAreDroppedAndTheTeamKept",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "LegacyNamesAndAliasesResolveToCatalogIds",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "EmptyAndUnknownLaneTeamsAreSkippedAndLongTeamsTruncated",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "TeamsLeftWithFewerThanThreeUnitsAreSkippedAsTooSmall",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "DepthIsClampedAndStoredUnderTheSyncedRun",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "DepthWithoutASyncedRunLandsOnRunOneAndZeroDepthIsOmitted",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "IdenticalTeamsInALaneAreMergedKeepingTheFirstDepth",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ReImportSkipsAPlanThatAlreadyHasTeams",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ImportFillsAnExistingEmptyPlanAndCarriesNotes",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "MixedEventsImportThePart",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "SkippedEventsWithoutAnImportReportLegendaryEventsSkipped",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "NoResolvableTeamsReportNoLegendaryEventImported",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "NullEntriesInV1TeamsAreSkipped",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "NullEntriesInLegacyLaneMapsAreSkipped",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ExistingV2NotesAreNeverOverwritten",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "LongNotesAreTruncatedWithoutSplittingASurrogatePair",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "PlayerDataIsSyncedBeforeTheImportSoDepthsLandOnTheCurrentRun",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "GoalsAndOnslaughtPartsStillImportAlongside",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "OverviewIsImportedWithAClamp",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "RunInputsReachAPlanThatAlreadyHasTeams",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ExistingV2RunInputsAreKept",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "PaidOptionsAreCarriedOnANewPlanOnly",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "AnAbsentPaidOptionsSettingKeepsTheV2Default",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CompactStatusesAreImportedAsAnnotations",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "CompactBlockedStateWithoutAStatusIsImportedAsStopHere",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "LegacyBlockedStateIsImportedAsStopHere",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "UnresolvableMarksAreSkippedAndReported",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ExistingV2AnnotationsAreKept",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ProgressWithoutTeamsIsNotMissing",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "EventsAreTheUnionOfTheTeamsAndProgressKeys",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ReImportOfEverythingSkipsWithPlanAlreadyExists",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "NotesReachAPlanWithTeamsButNoNotes",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "AnUnreadableProgressEntryOnlyDropsItsInputs",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    },
+    {
+      "before": "tests/TacticusPlanner.Api.Tests/V1ImportEndpointTests.cs",
+      "after": "tests/TacticusPlanner.Api.Tests/V1ImportParsingTests.cs",
+      "tests": [
+        {
+          "method": "ParsesCurrentV1OnslaughtPreferencesShapeAndNormalizesSectorNames",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ParsesV1ShardSourceFieldsPreviouslyDroppedEntirely",
+          "attributes": [
+            "[Fact]"
+          ]
+        },
+        {
+          "method": "ParsesOnlyRegularCampaignEventProgressFromCurrentV1Shape",
+          "attributes": [
+            "[Fact]"
+          ]
+        }
+      ]
+    }
+  ]
+}

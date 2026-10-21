@@ -43,7 +43,7 @@ internal static class GoalEditSaver
     public static async Task<GoalEditResult> SaveAsync(
         PlannerDbContext db,
         ProjectGoalPlanningService planning,
-        IDbContextTransaction? transaction,
+        IDbContextTransaction transaction,
         GoalId goalId,
         ProjectGoalSlotLookup slot,
         List<ProjectId>? staleProjectIds,
@@ -57,11 +57,9 @@ internal static class GoalEditSaver
         catch (DbUpdateConcurrencyException) when (staleProjectIds is not null)
         {
             // Something outside the project locks (e.g. a notes edit) bumped the revision after we read it.
-            if (transaction is not null)
-            {
-                await transaction.RollbackAsync(ct);
-                await transaction.DisposeAsync();
-            }
+            await transaction.RollbackAsync(ct);
+            await transaction.DisposeAsync();
+
 
             db.ChangeTracker.Clear();
             var current = await db.Goals.AsNoTracking().FirstOrDefaultAsync(entity => entity.Id == goalId, ct);

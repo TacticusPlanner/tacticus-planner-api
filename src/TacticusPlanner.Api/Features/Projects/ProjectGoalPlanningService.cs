@@ -11,15 +11,9 @@ public sealed class ProjectGoalPlanningService(PlannerDbContext db)
 {
     public async Task ExecuteLockedMutationAsync(
         IEnumerable<ProjectId> projectIds,
-        Func<IDbContextTransaction?, Task> mutation,
+        Func<IDbContextTransaction, Task> mutation,
         CancellationToken ct)
     {
-        if (!db.Database.IsRelational())
-        {
-            await mutation(null);
-            return;
-        }
-
         var orderedProjectIds = projectIds.Distinct().OrderBy(id => id.Value).ToList();
         // strategy.ExecuteAsync is NOT a working retry here: it re-runs the delegate against the same
         // DbContext without resetting the change tracker (a retried attempt re-adds an already-tracked
@@ -125,15 +119,13 @@ public sealed class ProjectGoalPlanningService(PlannerDbContext db)
     }
 
     public async Task<ProjectGoalSlotConflictResponse?> FindConflictAfterFailedSaveAsync(
-        IDbContextTransaction? transaction,
+        IDbContextTransaction transaction,
         IEnumerable<ProjectGoalSlotLookup> slots,
         CancellationToken ct)
     {
-        if (transaction is not null)
-        {
-            await transaction.RollbackAsync(ct);
-            await transaction.DisposeAsync();
-        }
+        await transaction.RollbackAsync(ct);
+        await transaction.DisposeAsync();
+
 
         db.ChangeTracker.Clear();
         foreach (var slot in slots)

@@ -231,8 +231,7 @@ public sealed class CreateCombinedGoalsEndpoint
             }
 
             await order.CompleteAsync(ct);
-            if (transaction is not null)
-                await transaction.CommitAsync(ct);
+            await transaction.CommitAsync(ct);
 
             var projectIds = targetProjects.Select(project => project.Id.Value).ToList();
             await Send.OkAsync(

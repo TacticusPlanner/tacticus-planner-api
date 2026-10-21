@@ -10,7 +10,7 @@ using TacticusPlanner.GameCatalog.Models;
 
 namespace TacticusPlanner.Api.Tests;
 
-public sealed class GuildRaidStatusProjectorTests(PlannerApiFactory factory) : IClassFixture<PlannerApiFactory>
+public sealed class GuildRaidStatusProjectorTests(GameCatalogApiFactory factory) : IClassFixture<GameCatalogApiFactory>
 {
     private static readonly DateTimeOffset ObservedAt = new(2026, 9, 11, 12, 0, 0, TimeSpan.Zero);
     private readonly GameCatalogSnapshot catalog = factory.Services.GetRequiredService<IGameCatalogProvider>().Current;

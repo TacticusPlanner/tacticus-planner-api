@@ -133,8 +133,7 @@ public sealed class CreateGoalEndpoint : Endpoint<CreateGoalRequest, GoalDetailR
             }
 
             await Resolve<GoalOrderService>().CompleteAsync(ct);
-            if (transaction is not null)
-                await transaction.CommitAsync(ct);
+            await transaction.CommitAsync(ct);
 
             var projectIds = targetProjects.Select(project => project.Id.Value).ToList();
             await Send.OkAsync(Map.ToDetail(goal, projectIds), ct);
