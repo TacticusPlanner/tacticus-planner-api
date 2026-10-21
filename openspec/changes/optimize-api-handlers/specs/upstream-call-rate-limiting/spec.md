@@ -6,7 +6,7 @@ Endpoints that call the upstream Tacticus or V1 APIs on the caller's behalf are 
 
 ### Requirement: Upstream-calling endpoints are limited per profile
 
-The system SHALL apply a per-profile request limit to `POST tacticus-api-key/validate`, `PUT me/tacticus-integration`, `POST tacticus-integration/player-sync`, `POST guilds/register`, `POST guilds/me/sync` and `POST me/v1-import`. Limits SHALL be configurable; defaults are 10 requests per minute for key validation and integration updates, and 6 requests per hour for player sync, guild register, guild sync and V1 import. Other endpoints SHALL NOT be limited.
+The system SHALL limit `POST tacticus-api-key/validate` and `PUT me/tacticus-integration` to 10 requests/minute by default (`upstream-fast`). `POST tacticus-integration/player-sync`, `POST guilds/register`, `POST guilds/me/sync`, and `POST me/v1-import` SHALL default to 6 requests/hour (`upstream-slow`). Limits SHALL be configurable and per profile. Other endpoints SHALL NOT be limited.
 
 #### Scenario: Within the limit
 
@@ -29,6 +29,26 @@ The system SHALL apply a per-profile request limit to `POST tacticus-api-key/val
 
 - **WHEN** a profile issues 100 `GET me/goals` requests in a minute
 - **THEN** every request is processed normally
+
+### Requirement: Each endpoint has its own fixed-window bucket
+
+Buckets SHALL be keyed by `(profileId, HTTP method, canonical endpoint)`; use `(issuer, subject)` for identity before profile provisioning. Endpoints sharing a policy SHALL NOT share quota. Windows SHALL be fixed, non-overlapping, and anchored at the bucket's first accepted request, with no carry-over permits or queued requests.
+
+#### Scenario: Endpoints do not share quota
+
+- **GIVEN** a profile has exhausted key validation and guild sync
+- **WHEN** it calls integration update or player sync with unused quota
+- **THEN** each request is evaluated against its own endpoint bucket
+
+### Requirement: Retry-After describes the rejecting window
+
+A 429 SHALL carry `Retry-After` as integer delay-seconds `max(1, ceil((windowEndUtc - nowUtc).TotalSeconds))` for the rejecting window. At the exact reset boundary, the renewed window SHALL be evaluated before deciding whether to reject.
+
+#### Scenario: Retry delay and the reset boundary
+
+- **GIVEN** an exhausted bucket whose window ends at T
+- **WHEN** it rejects a request at T minus 1.2 seconds
+- **THEN** `Retry-After` is `2`, and a request at T can consume a renewed permit
 
 ### Requirement: Rate-limit responses are not counted as upstream attempts
 

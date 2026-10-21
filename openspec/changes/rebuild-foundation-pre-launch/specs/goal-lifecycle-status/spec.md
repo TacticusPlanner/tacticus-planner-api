@@ -2,28 +2,33 @@
 
 ### Requirement: A caller can deliberately create a paused goal
 
-Goal creation (`POST /me/goals`, single or combined) SHALL accept an optional request flag that creates the goals in the `Paused` status instead of `Active`. The flag SHALL default to not paused when it is absent. The flag SHALL apply uniformly to every goal in the request; it SHALL NOT be settable per goal.
+Goal creation (`POST /me/goals`, single or combined) SHALL accept an optional request-level JSON boolean `startPaused` that creates the goals in the `Paused` status instead of `Active`. Absent or false SHALL create Active goals. Explicit null or a non-boolean value SHALL return 400 naming `startPaused` without creating any goal. The flag SHALL apply uniformly to every goal in the request; it SHALL NOT be settable per goal, and a per-spec `startPaused` field SHALL be rejected.
 
 #### Scenario: Paused creation is honored
 
-- **WHEN** the caller creates a goal with the paused flag set
+- **WHEN** the caller creates a goal with `startPaused: true`
 - **THEN** the created goal has the `Paused` status
 
 #### Scenario: Omitting the flag creates an active goal
 
-- **WHEN** the caller creates a goal without the paused flag
+- **WHEN** the caller creates a goal without `startPaused`
 - **THEN** the created goal has the `Active` status
 
 #### Scenario: Combined creation pauses the whole set
 
-- **WHEN** the caller creates a combined set of goals with the paused flag set
+- **WHEN** the caller creates a combined set of goals with `startPaused: true`
 - **THEN** every goal created by that request, including the prerequisite goals of its dependency chain, has the `Paused` status
 
 #### Scenario: A paused new goal still occupies its project slot
 
 - **GIVEN** the profile has an `Active` goal for a unit and goal type
-- **WHEN** the caller creates another goal for the same unit and goal type with the paused flag set
+- **WHEN** the caller creates another goal for the same unit and goal type with `startPaused: true`
 - **THEN** the request is rejected as a slot conflict, because `Paused` occupies the slot exactly as `Active` does
+
+#### Scenario: Invalid paused-creation field is rejected atomically
+
+- **WHEN** a caller sends `startPaused: null`, a non-boolean value, or a per-goal `startPaused` field
+- **THEN** the response is 400 naming the field and no goal is created
 
 ### Requirement: Project membership operations do not change a goal's status
 

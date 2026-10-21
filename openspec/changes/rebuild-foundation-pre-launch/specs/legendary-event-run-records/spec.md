@@ -23,7 +23,7 @@ A run record SHALL store: `run` (1–3); `startedAt` and `progressAt` (UTC); the
 
 ### Requirement: Run records are readable per event
 
-`GET /me/legendary-event-plans/{eventId}/run-records?limit=&after=` SHALL return `{ eventId, records, nextAfter }`, where `records` lists the caller's records for that event newest `startedAt` first, each `{ id, run, startedAt, progressAt, catalogVersion, points, lanes, teams }` (no roster), at most `limit` (default 20, maximum 100). `after` is the `startedAt` of the last record of the previous page; `nextAfter` is the cursor for the next page or null when there are no more records. A current catalog event with no records SHALL answer 200 with `records` `[]`. An id that is neither a current catalog `lres` id nor has any record for the caller SHALL answer 404. An event that left the catalog SHALL keep answering with its records.
+`GET /me/legendary-event-plans/{eventId}/run-records?limit=&after=` SHALL return `{ eventId, records, nextAfter }`, where `records` lists the caller's records for that event ordered by `startedAt DESC, id DESC`, each `{ id, run, startedAt, progressAt, catalogVersion, points, lanes, teams }` (no roster), at most `limit` (default 20, maximum 100). `after` SHALL be an opaque, versioned base64url cursor encoding both the UTC `startedAt` and UUID `id` of the last record of the previous page; `nextAfter` SHALL encode the same pair or be null when no more records exist. The next-page predicate SHALL use the lexicographic less-than comparison on `(startedAt, id)`, matching that descending order. Malformed cursors SHALL return 400 naming `after`. A current catalog event with no records SHALL answer 200 with `records` `[]`. An id that is neither a current catalog `lres` id nor has any record for the caller SHALL answer 404. An event that left the catalog SHALL keep answering with its records.
 
 #### Scenario: Records newest first
 
@@ -36,6 +36,17 @@ A run record SHALL store: `run` (1–3); `startedAt` and `progressAt` (UTC); the
 - **GIVEN** 25 Uthar records
 - **WHEN** the caller requests with `limit` 20 and then with `after` set to the returned `nextAfter`
 - **THEN** the first response holds the 20 newest with a non-null `nextAfter`, the second holds the remaining 5 with `nextAfter` null, and no record appears twice
+
+#### Scenario: Equal timestamps across a page boundary
+
+- **GIVEN** more than one page of records share the same `startedAt` and have distinct ids
+- **WHEN** the caller follows `nextAfter` until it is null
+- **THEN** records are ordered by descending id within that timestamp and every record appears exactly once
+
+#### Scenario: Invalid cursor
+
+- **WHEN** the caller sends a malformed `after` cursor or an unsupported cursor version
+- **THEN** the response is 400 naming `after`
 
 #### Scenario: Invalid limit
 
@@ -73,3 +84,13 @@ A run record SHALL store: `run` (1–3); `startedAt` and `progressAt` (UTC); the
 
 - **WHEN** the caller requests the roster of another profile's record
 - **THEN** the response is 404
+
+### Requirement: Paging and roster changes share the client cutover
+
+The new paged response and on-demand roster endpoint SHALL be exposed only after the companion client consumes every page, follows compound cursors, and fetches rosters separately. Artifact publication may precede client readiness, but promotion SHALL use the coordinated API/client cutover defined in `api-error-contract`, with no old client exposed to the new response.
+
+#### Scenario: Companion client is not ready
+
+- **GIVEN** an API image supports paged run records without inline rosters but the current client expects the old response
+- **WHEN** promotion is requested
+- **THEN** the new response stays unexposed until the matched client passes contract tests and both versions complete the coordinated deployment

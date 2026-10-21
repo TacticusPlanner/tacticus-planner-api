@@ -6,7 +6,7 @@ Every error the API returns has one shape, so a client needs one parser and one 
 
 ### Requirement: Errors are problem details with an issue code
 
-Every non-2xx/3xx response SHALL have `Content-Type: application/problem+json` and a body with `type`, `title`, `status`, `detail`, `instance`, `traceId` and an `issueCode` string. Validation failures (400) SHALL additionally carry `errors`, a map of field name to messages. No other error body shape SHALL be returned by any endpoint, including unhandled exceptions (500, `issueCode` `internal`).
+Every writable 4xx/5xx response SHALL have `Content-Type: application/problem+json` and a body with `type`, `title`, `status`, `detail`, `instance`, `traceId` and `issueCode`. Validation failures SHALL additionally carry `errors`, a field-to-messages map. This contract applies before response headers start; no alternate error body shape SHALL be emitted while writable.
 
 #### Scenario: Validation error
 
@@ -23,6 +23,25 @@ Every non-2xx/3xx response SHALL have `Content-Type: application/problem+json` a
 - **WHEN** an endpoint throws an unexpected exception
 - **THEN** the response is 500 `application/problem+json` with `issueCode` `internal` and a `traceId`, and no stack trace
 
+### Requirement: Framework failures use the shared problem writer
+
+Routing, authentication, and authorization failures SHALL use the same writer as endpoint failures: 404 `notFound`, 405 `methodNotAllowed`, 401 `unauthorized`, and 403 `forbidden`. Status-code and authentication handling SHALL retain required headers, including `WWW-Authenticate` and `Allow`.
+
+#### Scenario: Framework-generated errors
+
+- **WHEN** routing, authentication, or authorization produces 404, 405, 401, or 403 before headers start
+- **THEN** the shared writer emits all problem fields and the matching issue code, retaining required headers
+
+### Requirement: Started responses are not rewritten
+
+After headers start, the API SHALL NOT append a problem document or rewrite status/headers. An unexpected failure SHALL be logged with its trace id, without exposing a stack trace, and the connection/stream SHALL be aborted.
+
+#### Scenario: Failure after response headers started
+
+- **GIVEN** response headers and some body bytes have already been sent
+- **WHEN** an unexpected exception occurs
+- **THEN** the API logs the trace id and aborts without appending a problem document
+
 ### Requirement: Conflicts carry the current state
 
 Every 409 SHALL carry `issueCode` naming the conflict (`goalRevisionStale`, `goalOrderStale`, `slotOccupied`, `membershipStale`, `projectRevisionStale`, `legendaryEventPlanStale`, `legendaryEventOrderSetMismatch`, `concurrency`) and, where the conflicting resource is known, its current representation under `current` in the same shape the resource's read endpoint returns, so the client can resynchronise without a second read.
@@ -35,12 +54,12 @@ Every 409 SHALL carry `issueCode` naming the conflict (`goalRevisionStale`, `goa
 #### Scenario: Stale order
 
 - **WHEN** a reorder carries a stale `expectedOrderRevision`
-- **THEN** the response is 409 with `issueCode` `goalOrderStale` and `current` holding `{ orderRevision, goalIds }`
+- **THEN** the response is 409 with `issueCode` `goalOrderStale` and `current` holding `{ revision, goalIds }`
 
 #### Scenario: Optimistic concurrency at save
 
 - **WHEN** two writers update the same user settings and the second hits the concurrency token
-- **THEN** the second receives 409 with `issueCode` `concurrency`
+- **THEN** the second receives 409 with `issueCode` `concurrency` and `current` holding the latest settings read representation `{ dailyEnergy, xpBookRarity, revision }`, re-read after the failed write
 
 ### Requirement: Rate-limit and upstream errors use the same shape
 
@@ -50,3 +69,13 @@ Every 409 SHALL carry `issueCode` naming the conflict (`goalRevisionStale`, `goa
 
 - **WHEN** the Tacticus API times out during a player sync
 - **THEN** the response is 503 `application/problem+json` with `issueCode` `upstreamUnavailable`
+
+### Requirement: Breaking error contracts are exposed with the matching client
+
+The new problem-details contract SHALL become available only in a coordinated API/client release after both paired changes pass CI/review and client contract tests. Automatic API promotion SHALL be gated before the API merge; artifact publication may precede the client merge. A sequential deployment SHALL keep the environment inaccessible until both versions are installed and joint smoke tests pass. A legacy error-shape shim is not required for this pre-launch cutover.
+
+#### Scenario: API artifact is ready before the client
+
+- **GIVEN** the new API image and OpenAPI artifact are published but the companion client is not ready
+- **WHEN** deployment readiness is evaluated
+- **THEN** promotion of the new contract remains blocked and the old client is never served the new errors

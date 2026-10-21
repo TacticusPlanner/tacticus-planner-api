@@ -22,7 +22,7 @@ The `target` section of `PUT /me/goals/{goalId}` SHALL accept `{ expectedRevisio
 
 ### Requirement: Edited targets receive creation-equivalent validation and slot checks
 
-The new end target SHALL pass the same catalog range, entity/type, target-shape, and dependency-cap rules as creation, evaluated against the goal's persisted baseline and current catalog. A target that is already reached in synced player data MAY be saved if valid relative to that baseline; it SHALL have zero remaining need but SHALL not silently change stored lifecycle status. A Rank target SHALL be checked against the profile's other in-flight Rank goals for the unit; an occupied target SHALL return 409 `slotOccupied` naming the existing goal. Validation or conflict failure SHALL be atomic.
+The new end target SHALL pass the same catalog range, entity/type, target-shape, and dependency-cap rules as creation, evaluated against the goal's persisted baseline and current catalog. A target that is already reached in synced player data SHALL be saved when valid relative to that baseline and current catalog, subject to the same explicit revision and slot-conflict rules as any other valid target; it SHALL have zero remaining need but SHALL not silently change stored lifecycle status. A Rank target SHALL be checked against the profile's other in-flight Rank goals for the unit; an occupied target SHALL return 409 `slotOccupied` naming the existing goal. Validation or conflict failure SHALL be atomic.
 
 #### Scenario: Edit to an already reached target
 

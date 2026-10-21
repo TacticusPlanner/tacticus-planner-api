@@ -6,7 +6,7 @@ The goals list and the projects list together are the complete, self-sufficient 
 
 ### Requirement: The goals list returns full goal detail
 
-`GET /me/goals` SHALL return `{ goals, orderRevision }` where each entry is the same goal detail `GET /me/goals/{goalId}` returns: identity, status, notes, `config`, `snapshot`, `dependsOn`, `projectIds`, `revision`, `globalPriority`, `createdAt`, `updatedAt`. In-flight goals come first in global order, then the rest newest first. `?archived=true` lists only archived goals. No summary shape exists.
+`GET /me/goals` SHALL return `{ goals, orderRevision }` where each entry is the same goal detail `GET /me/goals/{goalId}` returns: identity, status, notes, `config`, `snapshot`, `dependsOn`, `projectIds`, `revision`, `globalPriority`, `createdAt`, `updatedAt`. In-flight goals come first in global order, then the rest newest first. Absent or `?archived=false` excludes Archived goals; `?archived=true` lists only Archived goals. No summary shape exists.
 
 #### Scenario: List entry equals detail
 
@@ -32,8 +32,18 @@ Each entry of `GET /me/projects` SHALL carry `goalIds`, the ids of its member go
 
 #### Scenario: Membership agrees in both directions
 
-- **WHEN** the caller reads both lists
+- **WHEN** the caller reads both lists with the same `archived` selector
 - **THEN** goal G lists project P in `projectIds` exactly when P lists G in `goalIds`
+
+### Requirement: Both lists use the same archived-goal selector
+
+Both list endpoints SHALL default to non-Archived goals; `archived=true` SHALL select only Archived goals. On the projects list this selector SHALL filter `goalIds`, not project rows: projects with no matching members SHALL remain with `goalIds: []`. Bidirectional membership and counts SHALL use lists with the same selector.
+
+#### Scenario: Archived memberships agree in both list modes
+
+- **GIVEN** project P contains Active goal A and Archived goal Z
+- **WHEN** both lists are read with default selectors and then with `archived=true`
+- **THEN** the default goals list contains A and P has `goalIds [A]`; the archived goals list contains Z and P has `goalIds [Z]`, with both goals carrying P in `projectIds` in their respective mode
 
 ### Requirement: Goal history is not served
 

@@ -22,10 +22,10 @@ Decisions already taken with the owner: in-flight goal slots become **per profil
 - Goal mutations collapse to `PUT me/goals/{id}` (today's `/edit` semantics), `POST me/goals/status` (bulk `{goalIds, status}`, replacing `POST me/goals/{id}/status` and `POST me/projects/{id}/goals/status`), `PUT me/goals/order`, `DELETE me/goals/{id}`. `PUT me/goals/{id}/target`, `/projects`, the plain `PUT`, and the single-goal `POST me/goals` are removed; `POST me/goals` takes the combined request.
 - Slot conflicts name the conflicting goal only (no project list). `GoalEvent`, `GoalTargetSnapshot` and the `events` field leave the contract.
 - `POST tacticus-integration/player-sync` moves to `POST me/player-data/sync`. `POST tacticus-api-key/validate` is removed (unused). The `guilds/me[...]` routes stay as they are (four guild-raid requirements name them; renaming buys nothing).
-- `GET me/legendary-event-plans/{eventId}/run-records` is cursor-paged (`startedAt` desc) and excludes the roster; `GET .../run-records/{recordId}/roster` serves it on demand.
-- Every error response is RFC 7807 `ProblemDetails` with an `issueCode` extension; the six bespoke 409 records and FastEndpoints' `ErrorResponse` shape are retired. Conflict bodies keep carrying the current resource state under `current`.
-- Catalog dataset URLs in the manifest carry the dataset hash; dataset responses are `Cache-Control: public, max-age=31536000, immutable`.
-- Every mutation returns the updated resource (plus `orderRevision` where the global order can change).
+- `GET me/legendary-event-plans/{eventId}/run-records` is cursor-paged (`startedAt DESC, id DESC`, cursor containing both values) and excludes the roster; `GET .../run-records/{recordId}/roster` serves it on demand.
+- Every writable error response is RFC 7807 `ProblemDetails` with an `issueCode` extension; the six bespoke 409 records and FastEndpoints' `ErrorResponse` shape are retired. Conflict bodies keep carrying the current resource state under `current`.
+- Catalog dataset URLs in the manifest carry the complete unencoded-envelope hash (including release metadata); the manifest payload hash stays separate; dataset responses are `Cache-Control: public, max-age=31536000, immutable`.
+- Every mutation returns the updated resource; combined edit returns `{ goal, order }`, with order `{ revision, goalIds }` when priority is supplied and null otherwise. Goal/project lists use matching archive selectors for membership ids. Creation names its request-level boolean `startPaused` (default false; explicit null is invalid).
 
 ## Capabilities
 
@@ -54,4 +54,5 @@ Checked and deliberately not modified (requirements are storage-agnostic): `guil
 - Tests: delete `AddGlobalGoalPriorityMigrationTests`, `GoalAcquisitionSourcesMigrationTests`, `LegendaryEventPlansMigrationPostgresTests`, `LegendaryEventRunRecordsMigrationPostgresTests`, `RemoveActiveProjectMigrationTests`, `RemoveLevelGoalsMigrationTests`; rewrite slot/concurrency Postgres tests for the profile-scoped indexes; endpoint tests follow the new routes.
 - `tacticus-planner-docs`: supersede ADR 0001 (single `public` schema with prefixes is the decision), amend `architecture/data.md` JSONB section to match ADR 0002/0007 and this change, add an ADR for "aggregate-as-jsonb with validator-enforced invariants".
 - `tacticus-planner-infra`: staging/production database is dropped and recreated (no data migration).
-- Depends on nothing; `optimize-api-handlers` may land before or after (its internal changes are re-based onto the new tables if after).
+- Apply after the completed PostgreSQL API-test prerequisite and `optimize-api-handlers`, preserving the established PostgreSQL host and measurement convention.
+- Apply/merge API before apps to generate the contract artifact, but gate automatic staging promotion before API merge. Publish the new error, paging/roster, and goal contracts only with the matching client: coordinated deployment, or an inaccessible environment until both halves deploy and joint smoke tests pass. No legacy compatibility shim is needed pre-launch.

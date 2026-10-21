@@ -2,13 +2,13 @@
 
 ### Requirement: An owner can edit a goal through one atomic request
 
-`PUT /me/goals/{goalId}` SHALL accept a request with these optional sections: `target` (`expectedRevision` plus the goal kind's end-target payload), `details` (`notes`, `farmingLocationIds`, `farmingStrategy`, `acquisitionSources`), `projectIds` (the complete replacement membership list), and `priority` (`position`, 1-based, and `expectedOrderRevision`). A section that is absent SHALL leave that aspect unchanged. A request with no section SHALL succeed as a no-op. On success the response SHALL be 200 with the updated goal detail, plus the new order (`revision` and `goalIds`) when `priority` was supplied. Every applied section SHALL be committed together or none SHALL be, with a single revision increase. This is the only goal edit route.
+`PUT /me/goals/{goalId}` SHALL accept a request with these optional sections: `target` (`expectedRevision` plus the goal kind's end-target payload), `details` (`notes`, `farmingLocationIds`, `farmingStrategy`, `acquisitionSources`), `projectIds` (the complete replacement membership list), and `priority` (`position`, 1-based, and `expectedOrderRevision`). A section that is absent SHALL leave that aspect unchanged. A request with no section SHALL succeed as a no-op. On success the response SHALL be 200 with `{ goal, order }`: `goal` SHALL contain the updated goal detail (including its own `revision`); `order` SHALL contain `{ revision, goalIds }` when `priority` was supplied, and SHALL be null otherwise. The order uses the existing `PUT /me/goals/order` field names. Every applied section SHALL be committed together or none SHALL be, with a single revision increase. This is the only goal edit route.
 
 #### Scenario: Several sections at once
 
 - **GIVEN** an Active goal
 - **WHEN** the owner submits a new target, new notes, and a new position in one request
-- **THEN** all three are saved and the response carries the updated goal and the new order
+- **THEN** all three are saved and the response carries `{ goal, order }` with the goal revision under `goal.revision` and the order revision under `order.revision`
 
 #### Scenario: Absent sections are untouched
 
@@ -18,7 +18,7 @@
 #### Scenario: Empty request
 
 - **WHEN** the owner submits no section
-- **THEN** the response is 200 with the unchanged goal and no revision change
+- **THEN** the response is 200 with the unchanged goal under `goal`, `order: null`, and no revision change
 
 #### Scenario: Unknown or foreign goal
 

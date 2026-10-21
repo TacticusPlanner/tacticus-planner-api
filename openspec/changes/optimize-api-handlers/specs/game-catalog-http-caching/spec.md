@@ -6,18 +6,34 @@ Served game-catalog datasets are content-addressed and public, so clients and in
 
 ### Requirement: Dataset responses carry a content ETag
 
-Every `GET game-catalog/{dataset}` response SHALL carry an `ETag` derived from that dataset's content hash (the same hash the manifest lists for it) and a `Cache-Control` header that permits caching but requires revalidation. Two responses for the same dataset content SHALL carry the same `ETag`; a changed dataset SHALL carry a different one.
+Every dataset response SHALL carry a strong `ETag` covering the complete served envelope (`Version`, `SchemaVersion`, `GameVersion`, `SourceHash`, `DatasetKey`, `DatasetHash`, `Data`). The manifest payload hash alone SHALL NOT determine this validator. Equal complete representations SHALL have equal validators; changes to data or release metadata SHALL change it.
 
-#### Scenario: ETag matches the manifest hash
+#### Scenario: Envelope and manifest describe the same snapshot
 
-- **WHEN** a client fetches `game-catalog/manifest` and then `game-catalog/characters`
-- **THEN** the dataset response's `ETag` corresponds to the manifest's hash for `characters` and the response carries `Cache-Control`
+- **WHEN** a client fetches `game-catalog/manifest` and then `game-catalog/characters` from one catalog snapshot
+- **THEN** the envelope's dataset hash matches the manifest's `characters` hash, and the response ETag covers that envelope's data and release metadata
+
+#### Scenario: Metadata-only release invalidates the cached envelope
+
+- **GIVEN** a cached dataset response whose payload hash stays unchanged across a release
+- **WHEN** the new release changes `SourceHash` or `Version` and the client revalidates with the old ETag
+- **THEN** the response is 200 with the new envelope metadata and a different ETag
 
 #### Scenario: Content change changes the ETag
 
 - **GIVEN** a dataset response with `ETag` E1
 - **WHEN** the served catalog is replaced by one whose `characters` content differs
 - **THEN** the next `characters` response carries an `ETag` different from E1
+
+### Requirement: Cache headers distinguish encoding variants
+
+Strong validators SHALL distinguish identity, Brotli, and gzip representations of the same envelope. Responses SHALL carry `Vary: Accept-Encoding` and `Cache-Control: public, max-age=0, must-revalidate`.
+
+#### Scenario: Content-encoding variants have distinct strong validators
+
+- **WHEN** the same envelope is served as identity, Brotli, and gzip
+- **THEN** each encoded representation has its own strong ETag and `Vary: Accept-Encoding`
+
 
 ### Requirement: Dataset requests honour If-None-Match
 

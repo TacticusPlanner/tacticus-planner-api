@@ -90,20 +90,38 @@ jobs:
         run: >
           dotnet test tests/TacticusPlanner.Api.Tests/TacticusPlanner.Api.Tests.csproj
           --configuration Release --no-build --collect:"XPlat Code Coverage"
-          --results-directory ./coverage/api
+          --logger trx --results-directory ./coverage/api
+
+      - name: Test API integration with coverage
+        run: >
+          dotnet test tests/TacticusPlanner.Api.IntegrationTests/TacticusPlanner.Api.IntegrationTests.csproj
+          --configuration Release --no-build --collect:"XPlat Code Coverage"
+          --logger trx --results-directory ./coverage/api-integration
+
+      - name: Test persistence integration with coverage
+        run: >
+          dotnet test tests/TacticusPlanner.Persistence.IntegrationTests/TacticusPlanner.Persistence.IntegrationTests.csproj
+          --configuration Release --no-build --collect:"XPlat Code Coverage"
+          --logger trx --results-directory ./coverage/persistence
 
       - name: Test GameCatalog with coverage
         run: >
           dotnet test tests/TacticusPlanner.GameCatalog.Tests/TacticusPlanner.GameCatalog.Tests.csproj
           --configuration Release --no-build --collect:"XPlat Code Coverage"
-          --results-directory ./coverage/game-catalog
+          --logger trx --results-directory ./coverage/game-catalog
 
       - name: Resolve coverage file paths
         id: coverage-files
         shell: bash
         run: |
-          echo "api=$(find ./coverage/api -name coverage.cobertura.xml)" >> "$GITHUB_OUTPUT"
-          echo "game-catalog=$(find ./coverage/game-catalog -name coverage.cobertura.xml)" >> "$GITHUB_OUTPUT"
+          for label in api api-integration persistence game-catalog; do
+            file=$(find "./coverage/$label" -name coverage.cobertura.xml -print -quit)
+            if [ -z "$file" ]; then
+              echo "Missing coverage report for $label" >&2
+              exit 1
+            fi
+            echo "$label=$file" >> "$GITHUB_OUTPUT"
+          done
 
       - name: Upload API coverage
         uses: actions/upload-code-coverage@v1
@@ -112,9 +130,31 @@ jobs:
           language: C#
           label: coverage/api
 
+      - name: Upload API integration coverage
+        uses: actions/upload-code-coverage@v1
+        with:
+          file: ${{ steps.coverage-files.outputs.api-integration }}
+          language: C#
+          label: coverage/api-integration
+
+      - name: Upload persistence integration coverage
+        uses: actions/upload-code-coverage@v1
+        with:
+          file: ${{ steps.coverage-files.outputs.persistence }}
+          language: C#
+          label: coverage/persistence
+
       - name: Upload GameCatalog coverage
         uses: actions/upload-code-coverage@v1
         with:
           file: ${{ steps.coverage-files.outputs.game-catalog }}
           language: C#
           label: coverage/game-catalog
+
+      - name: Retain coverage test results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage-test-results
+          path: coverage/
+          if-no-files-found: ignore

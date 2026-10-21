@@ -34,9 +34,9 @@ The invariant SHALL apply atomically to single creation, combined creation, targ
 
 #### Scenario: Resume conflicts in one membership
 
-- **GIVEN** a Paused goal and another in-flight goal occupying the same slot (created while the first was Completed)
-- **WHEN** the first goal is transitioned into an in-flight status
-- **THEN** the transition is rejected and identifies the occupying goal
+- **GIVEN** a Completed goal A followed by creation of another Active/Paused goal B occupying the same slot
+- **WHEN** the caller attempts to transition A to Paused
+- **THEN** the transition is rejected with 409 `slotOccupied` identifying B, and A remains Completed
 
 #### Scenario: Shared goal occupies each project once
 
