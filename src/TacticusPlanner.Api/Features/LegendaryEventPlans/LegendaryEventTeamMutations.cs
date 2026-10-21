@@ -21,7 +21,7 @@ public static class LegendaryEventTeamMutations
         var laneTeams = plan.Teams.Where(team => team.LaneId == laneId).ToList();
         var team = new LegendaryEventTeam
         {
-            Id = LegendaryEventTeamId.From(Guid.NewGuid()),
+            Id = LegendaryEventTeamId.From(Guid.CreateVersion7()),
             PlanId = plan.Id,
             LaneId = laneId,
             Name = fields.Name!.Trim(),

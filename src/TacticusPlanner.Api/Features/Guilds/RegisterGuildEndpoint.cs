@@ -2,6 +2,7 @@ using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Analytics;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Api.Features.UpstreamRateLimiting;
 using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.Guilds;
@@ -16,6 +17,7 @@ public sealed class RegisterGuildEndpoint : Endpoint<RegisterGuildRequest, Regis
     public override void Configure()
     {
         Post("guilds/register");
+        Options(builder => builder.WithMetadata(UpstreamRateLimit.Slow));
         Summary(summary =>
         {
             summary.Summary = "Registers a Tacticus guild using a Guild-scoped API token.";
@@ -29,6 +31,7 @@ public sealed class RegisterGuildEndpoint : Endpoint<RegisterGuildRequest, Regis
                 "Blank/invalid token, malformed upstream guild response, or no Tacticus User ID configured."
             );
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
+            summary.Response(StatusCodes.Status429TooManyRequests, UpstreamRateLimit.ResponseDescription);
             summary.Response(StatusCodes.Status403Forbidden, "The caller is absent from the guild or below Co-Leader.");
             summary.Response(
                 StatusCodes.Status404NotFound,

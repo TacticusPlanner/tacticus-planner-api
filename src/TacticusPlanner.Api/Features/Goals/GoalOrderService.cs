@@ -42,24 +42,30 @@ public sealed class GoalOrderService(PlannerDbContext db)
         await db.SaveChangesAsync(ct);
         if (!changed) return;
 
-        var ordered = await LoadInFlightAsync(ct);
-        Renumber(ordered);
-        var profile = await LoadProfileAsync(ct);
+        // Appends and the save above leave the order dense unless a goal was released, so the full rows are
+        // loaded only when positions actually need rewriting.
+        var positions = await db.Goals.AsNoTracking()
+            .Where(entity => entity.GlobalPriority != null)
+            .OrderBy(entity => entity.GlobalPriority)
+            .Select(entity => entity.GlobalPriority)
+            .ToListAsync(ct);
+        if (!positions.Select((position, index) => position == index + 1).All(dense => dense))
+        {
+            Renumber(await LoadInFlightAsync(ct));
+        }
+
+        var profile = LockedProfile;
         profile.GoalOrderRevision++;
         await db.SaveChangesAsync(ct);
         changed = false;
         nextPosition = null;
     }
 
-    /// <summary>The profile as it stands under the lock. Callers may load it
-    /// (tracked) before the lock is taken, and EF would hand back that stale instance, so the revision
-    /// would be incremented from a value read before a concurrent reorder committed.</summary>
-    private async Task<Domain.Profiles.Profile> LoadProfileAsync(CancellationToken ct)
-    {
-        var profile = await db.Profiles.FirstAsync(ct);
-        await db.Entry(profile).ReloadAsync(ct);
-        return profile;
-    }
+    /// <summary>The profile as it stands under the lock: <see cref="Projects.ProjectGoalPlanningService"/>
+    /// loads it (tracked) when it takes the row lock, so no further query is needed.</summary>
+    private Domain.Profiles.Profile LockedProfile => db.Profiles.Local.SingleOrDefault()
+        ?? throw new InvalidOperationException(
+            "The goal order can only change inside ProjectGoalPlanningService.ExecuteLockedMutationAsync.");
 
     /// <summary>The current revision and in-flight goal ids in order.</summary>
     public async Task<GoalOrderSnapshot> ReadAsync(CancellationToken ct)
@@ -79,7 +85,7 @@ public sealed class GoalOrderService(PlannerDbContext db)
     public async Task<GoalOrderResult> ReorderAsync(
         IReadOnlyList<GoalId> requested, long expectedRevision, CancellationToken ct)
     {
-        var profile = await LoadProfileAsync(ct);
+        var profile = LockedProfile;
         var ordered = await LoadInFlightAsync(ct);
         GoalOrderOutcome? rejection = null;
         if (expectedRevision != profile.GoalOrderRevision)
@@ -100,7 +106,7 @@ public sealed class GoalOrderService(PlannerDbContext db)
     public async Task<GoalOrderResult> MoveAsync(
         GoalId goalId, GoalId displacedGoalId, long expectedRevision, CancellationToken ct)
     {
-        var profile = await LoadProfileAsync(ct);
+        var profile = LockedProfile;
         var ordered = await LoadInFlightAsync(ct);
         var from = ordered.FindIndex(goal => goal.Id == goalId);
         var to = ordered.FindIndex(goal => goal.Id == displacedGoalId);
@@ -127,7 +133,7 @@ public sealed class GoalOrderService(PlannerDbContext db)
     public async Task<GoalOrderResult> MoveToPositionAsync(
         GoalId goalId, int position, long expectedRevision, CancellationToken ct)
     {
-        var profile = await LoadProfileAsync(ct);
+        var profile = LockedProfile;
         var ordered = await LoadInFlightAsync(ct);
         var from = ordered.FindIndex(goal => goal.Id == goalId);
         GoalOrderOutcome? rejection = null;

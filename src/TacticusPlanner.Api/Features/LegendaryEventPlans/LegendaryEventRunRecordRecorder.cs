@@ -50,7 +50,7 @@ public sealed class LegendaryEventRunRecordRecorder(PlannerDbContext db, IGameCa
                 db.RosterSnapshots.Add(snapshot);
                 db.LegendaryEventRunRecords.Add(new LegendaryEventRunRecord
                 {
-                    Id = LegendaryEventRunRecordId.From(Guid.NewGuid()),
+                    Id = LegendaryEventRunRecordId.From(Guid.CreateVersion7()),
                     ProfileId = profileId,
                     EventId = eventId,
                     Run = run,
@@ -141,7 +141,7 @@ public sealed class LegendaryEventRunRecordRecorder(PlannerDbContext db, IGameCa
         DateTimeOffset now) =>
         new()
         {
-            Id = RosterSnapshotId.From(Guid.NewGuid()),
+            Id = RosterSnapshotId.From(Guid.CreateVersion7()),
             ProfileId = profileId,
             Source = RosterSnapshotSource.LegendaryEventRun,
             TakenAt = now,

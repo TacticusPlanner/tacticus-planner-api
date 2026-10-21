@@ -40,10 +40,16 @@ public sealed class ProjectGoalPlanningService(PlannerDbContext db)
             // of rows that reference it, which take FOR KEY SHARE, are not blocked): it serializes every mutation of the account's global
             // goal order (see GoalOrderService) and fixes the lock order (profile, then projects ascending),
             // so paths that need both cannot deadlock.
-            var profileId = await db.Profiles.Select(profile => profile.Id).SingleAsync(ct);
-            _ = await db.Database
-                .SqlQueryRaw<int>("SELECT 1 AS \"Value\" FROM profiles WHERE id = {0} FOR NO KEY UPDATE", profileId.Value)
-                .SingleAsync(ct);
+            // One statement locks the row and loads it (tracked), so GoalOrderService reads the revision as it
+            // stands under the lock. A caller that tracked the profile earlier would otherwise keep its stale
+            // values, so that instance is refreshed.
+            var alreadyTracked = db.Profiles.Local.Count > 0;
+            var profile = await db.LockCurrentProfileAsync(ct);
+            if (alreadyTracked)
+            {
+                await db.Entry(profile).ReloadAsync(ct);
+            }
+
             foreach (var projectId in orderedProjectIds)
             {
                 _ = await db.Database

@@ -71,7 +71,7 @@ public sealed class GuildRaidPersistencePostgresTests
     }
 
     [Fact]
-    public async Task MigrationEnforcesOwnershipIdempotencyAndSelectiveCurrentUserQuery()
+    public async Task MigrationEnforcesOwnershipAndIdempotency()
     {
         await using var postgres = new PostgreSqlBuilder("postgres:18-alpine").Build();
         await postgres.StartAsync(TestContext.Current.CancellationToken);
@@ -116,25 +116,6 @@ public sealed class GuildRaidPersistencePostgresTests
             ActiveSeasonId = season.Id,
         });
         await db.SaveChangesAsync(TestContext.Current.CancellationToken);
-
-        db.ChangeTracker.Clear();
-        var repository = new GuildRaidAttackRepository(db);
-        var sql = repository.QueryCurrentUserAttacks(season.Id, currentHash).ToQueryString();
-        Assert.Contains("guild_raid_season_id", sql);
-        Assert.Contains("tacticus_user_id_hash", sql);
-        Assert.Contains("ORDER BY", sql);
-        Assert.Contains("completed_at", sql);
-        Assert.DoesNotContain("guild_raid_attack_units", sql);
-
-        var projection = await repository.GetCurrentUserAttacksAsync(
-            season.Id,
-            currentHash,
-            includeUnits: true,
-            TestContext.Current.CancellationToken);
-        var selected = Assert.Single(projection);
-        Assert.Equal("current", selected.UnitSetId);
-        Assert.Equal("current-unit", Assert.Single(selected.Units).UnitId);
-        Assert.DoesNotContain(projection, attack => attack.UnitSetId == "other");
 
         var duplicate = Attack(season.Id, currentHash, "duplicate", DateTimeOffset.UtcNow);
         duplicate.ContentHash = current.ContentHash;

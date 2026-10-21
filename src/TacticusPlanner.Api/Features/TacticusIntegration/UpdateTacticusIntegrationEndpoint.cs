@@ -1,6 +1,7 @@
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Api.Features.UpstreamRateLimiting;
 using TacticusPlanner.Api.Http;
 using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Persistence;
@@ -15,6 +16,7 @@ public sealed class UpdateTacticusIntegrationEndpoint
     public override void Configure()
     {
         Put("me/tacticus-integration");
+        Options(builder => builder.WithMetadata(UpstreamRateLimit.Fast));
         Summary(summary =>
         {
             summary.Summary = "Updates the authenticated user's Tacticus integration settings.";
@@ -27,6 +29,7 @@ public sealed class UpdateTacticusIntegrationEndpoint
             );
             summary.Response(StatusCodes.Status400BadRequest, "The Tacticus API key is missing or invalid.");
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
+            summary.Response(StatusCodes.Status429TooManyRequests, UpstreamRateLimit.ResponseDescription);
             summary.Response(StatusCodes.Status403Forbidden, "The authenticated user cannot access the API.");
             summary.Response(StatusCodes.Status404NotFound, "The authenticated user has not signed up yet.");
         });

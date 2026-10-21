@@ -3,8 +3,11 @@ using System.Net.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TacticusPlanner.Api.Features.Guilds;
+using TacticusPlanner.Domain.GuildRaids;
 using TacticusPlanner.Domain.GuildRaids.Enums;
+using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.GameCatalog;
+using TacticusPlanner.GameCatalog.Models;
 using TacticusPlanner.Persistence;
 using TacticusPlanner.TacticusApi.Models.Guild;
 using TacticusPlanner.TacticusApi.Models.GuildRaid;
@@ -389,6 +392,128 @@ public sealed class GetMyGuildRaidStatusEndpointTests(PlannerApiFactory factory)
 
         (await survivor).EnsureSuccessStatusCode();
         Assert.Equal(1, factory.TacticusApi.GuildRaidCallCount(ready.Token));
+    }
+
+    [Fact]
+    public async Task BoundedLoadEqualsTheFullSeasonProjectionForAThousandAttacks()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var ready = await RegisterAsync();
+        var catalog = factory.Services.GetRequiredService<IGameCatalogProvider>().Current;
+        var config = catalog.RaidBossesView.Seasons.OrderBy(pair => pair.Key, StringComparer.Ordinal).First();
+        var positions = config.Value.Tiers.SelectMany(tier => tier.Sets.Select(set => (Tier: tier.Tier, Set: set))).ToList();
+        var currentIndex = positions.FindIndex(1, position => position.Set.Encounters.Count(e => e.EncounterType != "Boss") >= 2);
+        Assert.True(currentIndex > 0, "The season config needs a later set with two side encounters.");
+        var previous = positions[currentIndex - 1];
+        var current = positions[currentIndex];
+        var boss = current.Set.Encounters.First(encounter => encounter.EncounterType == "Boss");
+        var sides = current.Set.Encounters.Where(encounter => encounter.EncounterType != "Boss").OrderBy(e => e.EncounterIndex).ToList();
+        var origin = DateTimeOffset.UtcNow.AddHours(-2);
+        var attacks = new List<GuildRaidAttack>();
+
+        GuildRaidAttack Attack(
+            (int Tier, GameCatalogRaidBossSetView Set) position,
+            GameCatalogRaidBossEncounterView encounter,
+            int remaining,
+            int maximum,
+            TimeSpan at) => new()
+            {
+                Id = GuildRaidAttackId.From(Guid.CreateVersion7()),
+                ContentHash = Guid.NewGuid().ToString("N"),
+                TacticusUserIdHash = TacticusUserIdHash.From(new byte[32]),
+                Tier = position.Tier,
+                Set = position.Set.Set,
+                EncounterIndex = encounter.EncounterIndex,
+                RemainingHp = remaining,
+                MaximumHp = maximum,
+                EncounterType = encounter.EncounterType == "Boss" ? GuildRaidEncounterType.Boss : GuildRaidEncounterType.SideBoss,
+                UnitSetId = encounter.UnitSetId,
+                ProgressionIndex = encounter.ProgressionIndex,
+                Difficulty = GuildRaidDifficulty.Common,
+                DamageDealt = 1,
+                DamageType = GuildRaidDamageType.Battle,
+                CompletedAt = origin + at,
+            };
+
+        // The previous set's boss is defeated first; everything before that kill must stay out of the projection.
+        var previousBoss = previous.Set.Encounters.First(encounter => encounter.EncounterType == "Boss");
+        attacks.Add(Attack(previous, previousBoss, 0, 1000, TimeSpan.Zero));
+        foreach (var prime in previous.Set.Encounters.Where(encounter => encounter.EncounterType != "Boss"))
+        {
+            attacks.Add(Attack(previous, prime, 7, 1000, TimeSpan.FromSeconds(-30)));
+        }
+
+        // A sparse side encounter hit once, immediately after the kill; then a busy boss and a busy side encounter.
+        attacks.Add(Attack(current, sides[1], 400, 1000, TimeSpan.FromSeconds(1)));
+        for (var index = 0; index < 400; index++)
+        {
+            attacks.Add(Attack(current, boss, 1000 - index - 1, 1000, TimeSpan.FromSeconds(10 + index)));
+        }
+
+        for (var index = 0; attacks.Count < 1000; index++)
+        {
+            attacks.Add(Attack(current, sides[0], 900 - index, 1000, TimeSpan.FromSeconds(500 + index)));
+        }
+
+        await using (var scope = factory.Services.CreateAsyncScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
+            var guildId = await db.Guilds.Where(guild => guild.Tag == ready.Tag).Select(guild => guild.Id).SingleAsync(ct);
+            var observed = DateTimeOffset.UtcNow;
+            var season = new GuildRaidSeason
+            {
+                Id = GuildRaidSeasonId.From(Guid.CreateVersion7()),
+                GuildId = guildId,
+                SeasonNumber = 77,
+                SeasonConfigId = config.Key,
+                ObservedAt = observed,
+            };
+            foreach (var attack in attacks)
+            {
+                season.Attacks.Add(attack);
+            }
+
+            db.GuildRaidSeasons.Add(season);
+            db.GuildRaidSyncStates.Add(new GuildRaidSyncState
+            {
+                GuildId = guildId,
+                State = GuildRaidObservationState.Active,
+                ObservedAt = observed,
+                LastAttemptedAt = observed,
+                ActiveSeasonId = season.Id,
+            });
+            await db.SaveChangesAsync(ct);
+        }
+
+        var response = await ready.Client.GetAsync(StatusPath, ct);
+        response.EnsureSuccessStatusCode();
+        var actual = await response.Content.ReadFromJsonAsync<GuildRaidStatusResponse>(ct);
+
+        await using var verification = factory.Services.CreateAsyncScope();
+        var verificationDb = verification.ServiceProvider.GetRequiredService<PlannerDbContext>();
+        var state = await verificationDb.GuildRaidSyncStates.AsNoTracking()
+            .SingleAsync(entity => entity.Guild!.Tag == ready.Tag, ct);
+        var full = await verificationDb.GuildRaidSeasons.AsNoTracking().Include(entity => entity.Attacks)
+            .SingleAsync(entity => entity.Id == state.ActiveSeasonId, ct);
+        Assert.Equal(1000, full.Attacks.Count);
+        full.Attacks = [.. full.Attacks.OrderBy(attack => attack.CompletedAt).ThenBy(attack => attack.Id)];
+        var guild = await verificationDb.Guilds.AsNoTracking().SingleAsync(entity => entity.Tag == ready.Tag, ct);
+        var expected = GuildRaidStatusProjector.Project(
+            state, full, catalog, guild.LastSyncSucceededAt!.Value, GuildRaidFreshness.Fresh);
+
+        Assert.Equal(
+            System.Text.Json.JsonSerializer.Serialize(expected, System.Text.Json.JsonSerializerOptions.Web),
+            System.Text.Json.JsonSerializer.Serialize(actual, System.Text.Json.JsonSerializerOptions.Web));
+        // The projection is non-trivial: the position advanced past the kill, the sparse side encounter kept
+        // its single observation and the busy one its latest.
+        Assert.Equal(boss.UnitSetId, actual!.Season!.Boss.UnitSetId);
+        Assert.Equal(400, actual.Season.Primes.Single(prime => prime.EncounterIndex == sides[1].EncounterIndex).RemainingHp);
+        // Every read of the 1000 attacks is bounded: a single-row lookup or one latest row per encounter.
+        var attackReads = factory.CommandTextsFor(response).Where(text => text.Contains("FROM guild_raid_attacks", StringComparison.Ordinal)).ToList();
+        Assert.Equal(3, attackReads.Count);
+        Assert.All(attackReads, text => Assert.True(
+            text.Contains("LIMIT 1", StringComparison.Ordinal) || text.Contains("row <= 1", StringComparison.Ordinal), text));
+        Assert.True(factory.CommandsFor(response) <= 7, $"{factory.CommandsFor(response)} commands");
     }
 
     private async Task<ReadyGuild> RegisterAsync()

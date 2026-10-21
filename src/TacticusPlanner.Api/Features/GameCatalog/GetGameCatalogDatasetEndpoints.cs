@@ -1,4 +1,11 @@
+using System.Collections.Concurrent;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
+using System.Text.Json;
 using FastEndpoints;
+using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.Net.Http.Headers;
+using TacticusPlanner.Api.Http;
 using TacticusPlanner.GameCatalog;
 using TacticusPlanner.GameCatalog.Models;
 
@@ -6,29 +13,51 @@ namespace TacticusPlanner.Api.Features.GameCatalog;
 
 /// <summary>
 /// Serves one whole denormalized dataset (no route parameter). The payload is already self-contained
-/// (reference tables inlined), so the client consumes it without any cross-dataset joins.
+/// (reference tables inlined), so the client consumes it without any cross-dataset joins. The strong
+/// <c>ETag</c> covers the complete envelope (release metadata and data) and the negotiated content
+/// encoding, so a metadata-only release or a different encoding never revalidates against a stale copy.
 /// </summary>
 public abstract class ServedDatasetEndpoint<TPayload>(IGameCatalogProvider catalog, string datasetKey)
     : EndpointWithoutRequest<GameCatalogDatasetEnvelope<TPayload>>
 {
-    protected GameCatalogSnapshot Snapshot => catalog.Current;
+    private static readonly ConditionalWeakTable<GameCatalogSnapshot, ConcurrentDictionary<string, string>> Digests = new();
 
-    protected abstract TPayload Payload { get; }
+    protected abstract TPayload PayloadOf(GameCatalogSnapshot snapshot);
 
-    public override Task HandleAsync(CancellationToken ct)
+    public override async Task HandleAsync(CancellationToken ct)
     {
-        var snapshot = Snapshot;
-        var response = new GameCatalogDatasetEnvelope<TPayload>(
+        var snapshot = catalog.Current;
+        var envelope = new GameCatalogDatasetEnvelope<TPayload>(
             snapshot.Version,
             snapshot.SchemaVersion,
             snapshot.GameVersion,
             snapshot.SourceHash,
             datasetKey,
             snapshot.DatasetHashes[datasetKey],
-            Payload
+            PayloadOf(snapshot)
         );
 
-        return Send.OkAsync(response, ct);
+        // ponytail: the digest is of the identity JSON plus an encoding token, not of the compressed bytes
+        // (the compression middleware runs after the endpoint); distinct per encoding, stable per content.
+        var encoding = HttpContext.RequestServices.GetRequiredService<IResponseCompressionProvider>()
+            .GetCompressionProvider(HttpContext)?.EncodingName;
+        var digest = Digests.GetValue(snapshot, _ => new()).GetOrAdd(
+            datasetKey,
+            _ => Convert.ToHexStringLower(SHA256.HashData(JsonSerializer.SerializeToUtf8Bytes(envelope, JsonSerializerOptions.Web)))
+        );
+        var etag = ETagHelper.CreateEtag(encoding is null ? digest : $"{digest}-{encoding}");
+
+        HttpContext.Response.Headers.CacheControl = "public, max-age=0, must-revalidate";
+        HttpContext.Response.Headers.Vary = HeaderNames.AcceptEncoding;
+
+        if (ETagHelper.TryApplyNotModified(HttpContext, etag))
+        {
+            await Send.NotModifiedAsync(ct);
+            return;
+        }
+
+        HttpContext.Response.Headers.ETag = etag;
+        await Send.OkAsync(envelope, ct);
     }
 
     protected void ConfigureServed(string summary, string okDescription)
@@ -38,6 +67,7 @@ public abstract class ServedDatasetEndpoint<TPayload>(IGameCatalogProvider catal
         {
             endpointSummary.Summary = summary;
             endpointSummary.Response<GameCatalogDatasetEnvelope<TPayload>>(StatusCodes.Status200OK, okDescription);
+            endpointSummary.Response(StatusCodes.Status304NotModified, "The dataset has not changed.");
         });
     }
 }
@@ -45,7 +75,7 @@ public abstract class ServedDatasetEndpoint<TPayload>(IGameCatalogProvider catal
 public sealed class GetGameCatalogCharactersEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogCharacterView>>(catalog, GameCatalogDatasets.Characters)
 {
-    protected override IReadOnlyList<GameCatalogCharacterView> Payload => Snapshot.CharacterViews;
+    protected override IReadOnlyList<GameCatalogCharacterView> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.CharacterViews;
 
     public override void Configure()
     {
@@ -57,7 +87,7 @@ public sealed class GetGameCatalogCharactersEndpoint(IGameCatalogProvider catalo
 public sealed class GetGameCatalogNpcsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogNpc>>(catalog, GameCatalogDatasets.Npcs)
 {
-    protected override IReadOnlyList<GameCatalogNpc> Payload => Snapshot.NpcList;
+    protected override IReadOnlyList<GameCatalogNpc> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.NpcList;
 
     public override void Configure()
     {
@@ -69,7 +99,7 @@ public sealed class GetGameCatalogNpcsEndpoint(IGameCatalogProvider catalog)
 public sealed class GetGameCatalogMowsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogMow>>(catalog, GameCatalogDatasets.Mows)
 {
-    protected override IReadOnlyList<GameCatalogMow> Payload => Snapshot.MowList;
+    protected override IReadOnlyList<GameCatalogMow> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.MowList;
 
     public override void Configure()
     {
@@ -81,7 +111,7 @@ public sealed class GetGameCatalogMowsEndpoint(IGameCatalogProvider catalog)
 public sealed class GetGameCatalogMowUpgradeCostsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogMowUpgradeCostView>>(catalog, GameCatalogDatasets.MowUpgradeCostsServed)
 {
-    protected override IReadOnlyList<GameCatalogMowUpgradeCostView> Payload => Snapshot.MowUpgradeCostViews;
+    protected override IReadOnlyList<GameCatalogMowUpgradeCostView> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.MowUpgradeCostViews;
 
     public override void Configure()
     {
@@ -93,7 +123,7 @@ public sealed class GetGameCatalogMowUpgradeCostsEndpoint(IGameCatalogProvider c
 public sealed class GetGameCatalogCharacterAbilityCostsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogCharacterAbilityCostView>>(catalog, GameCatalogDatasets.CharacterAbilityCostsServed)
 {
-    protected override IReadOnlyList<GameCatalogCharacterAbilityCostView> Payload => Snapshot.CharacterAbilityCostViews;
+    protected override IReadOnlyList<GameCatalogCharacterAbilityCostView> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.CharacterAbilityCostViews;
 
     public override void Configure()
     {
@@ -105,7 +135,7 @@ public sealed class GetGameCatalogCharacterAbilityCostsEndpoint(IGameCatalogProv
 public sealed class GetGameCatalogMythicQuestsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogMythicQuestsView>>(catalog, GameCatalogDatasets.MythicQuestsServed)
 {
-    protected override IReadOnlyList<GameCatalogMythicQuestsView> Payload => Snapshot.MythicQuestViews;
+    protected override IReadOnlyList<GameCatalogMythicQuestsView> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.MythicQuestViews;
 
     public override void Configure()
     {
@@ -117,7 +147,7 @@ public sealed class GetGameCatalogMythicQuestsEndpoint(IGameCatalogProvider cata
 public sealed class GetGameCatalogAscensionCostsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogAscensionCostView>>(catalog, GameCatalogDatasets.AscensionCostsServed)
 {
-    protected override IReadOnlyList<GameCatalogAscensionCostView> Payload => Snapshot.AscensionCostViews;
+    protected override IReadOnlyList<GameCatalogAscensionCostView> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.AscensionCostViews;
 
     public override void Configure()
     {
@@ -129,7 +159,7 @@ public sealed class GetGameCatalogAscensionCostsEndpoint(IGameCatalogProvider ca
 public sealed class GetGameCatalogUnlockShardCostsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogUnlockShardCostView>>(catalog, GameCatalogDatasets.UnlockShardCostsServed)
 {
-    protected override IReadOnlyList<GameCatalogUnlockShardCostView> Payload => Snapshot.UnlockShardCostViews;
+    protected override IReadOnlyList<GameCatalogUnlockShardCostView> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.UnlockShardCostViews;
 
     public override void Configure()
     {
@@ -141,7 +171,7 @@ public sealed class GetGameCatalogUnlockShardCostsEndpoint(IGameCatalogProvider 
 public sealed class GetGameCatalogOnslaughtRewardsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogOnslaughtReward>>(catalog, GameCatalogDatasets.OnslaughtRewards)
 {
-    protected override IReadOnlyList<GameCatalogOnslaughtReward> Payload => Snapshot.OnslaughtRewards;
+    protected override IReadOnlyList<GameCatalogOnslaughtReward> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.OnslaughtRewards;
 
     public override void Configure()
     {
@@ -153,7 +183,7 @@ public sealed class GetGameCatalogOnslaughtRewardsEndpoint(IGameCatalogProvider 
 public sealed class GetGameCatalogUpgradesEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogUpgradeView>>(catalog, GameCatalogDatasets.Upgrades)
 {
-    protected override IReadOnlyList<GameCatalogUpgradeView> Payload => Snapshot.UpgradeViews;
+    protected override IReadOnlyList<GameCatalogUpgradeView> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.UpgradeViews;
 
     public override void Configure()
     {
@@ -165,7 +195,7 @@ public sealed class GetGameCatalogUpgradesEndpoint(IGameCatalogProvider catalog)
 public sealed class GetGameCatalogEquipmentEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogEquipmentView>>(catalog, GameCatalogDatasets.Equipment)
 {
-    protected override IReadOnlyList<GameCatalogEquipmentView> Payload => Snapshot.EquipmentViews;
+    protected override IReadOnlyList<GameCatalogEquipmentView> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.EquipmentViews;
 
     public override void Configure()
     {
@@ -177,7 +207,7 @@ public sealed class GetGameCatalogEquipmentEndpoint(IGameCatalogProvider catalog
 public sealed class GetGameCatalogCampaignBattlesEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogCampaignBattleView>>(catalog, GameCatalogDatasets.CampaignBattles)
 {
-    protected override IReadOnlyList<GameCatalogCampaignBattleView> Payload => Snapshot.CampaignBattleViews;
+    protected override IReadOnlyList<GameCatalogCampaignBattleView> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.CampaignBattleViews;
 
     public override void Configure()
     {
@@ -189,7 +219,7 @@ public sealed class GetGameCatalogCampaignBattlesEndpoint(IGameCatalogProvider c
 public sealed class GetGameCatalogCampaignDefinitionsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogCampaignDefinitionView>>(catalog, GameCatalogDatasets.CampaignDefinitions)
 {
-    protected override IReadOnlyList<GameCatalogCampaignDefinitionView> Payload => Snapshot.CampaignDefinitionViews;
+    protected override IReadOnlyList<GameCatalogCampaignDefinitionView> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.CampaignDefinitionViews;
 
     public override void Configure()
     {
@@ -201,7 +231,7 @@ public sealed class GetGameCatalogCampaignDefinitionsEndpoint(IGameCatalogProvid
 public sealed class GetGameCatalogLresEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogLreView>>(catalog, GameCatalogDatasets.Lres)
 {
-    protected override IReadOnlyList<GameCatalogLreView> Payload => Snapshot.LreViews;
+    protected override IReadOnlyList<GameCatalogLreView> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.LreViews;
 
     public override void Configure()
     {
@@ -213,7 +243,7 @@ public sealed class GetGameCatalogLresEndpoint(IGameCatalogProvider catalog)
 public sealed class GetGameCatalogLreBattlesEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogLreBattleView>>(catalog, GameCatalogDatasets.LreBattles)
 {
-    protected override IReadOnlyList<GameCatalogLreBattleView> Payload => Snapshot.LreBattleViews;
+    protected override IReadOnlyList<GameCatalogLreBattleView> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.LreBattleViews;
 
     public override void Configure()
     {
@@ -225,7 +255,7 @@ public sealed class GetGameCatalogLreBattlesEndpoint(IGameCatalogProvider catalo
 public sealed class GetGameCatalogHordeModeTiersEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogHordeModeTiers>>(catalog, GameCatalogDatasets.HordeModeTiers)
 {
-    protected override IReadOnlyList<GameCatalogHordeModeTiers> Payload => Snapshot.HordeModeTiersViews;
+    protected override IReadOnlyList<GameCatalogHordeModeTiers> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.HordeModeTiersViews;
 
     public override void Configure()
     {
@@ -239,7 +269,7 @@ public sealed class GetGameCatalogHordeModeTiersEndpoint(IGameCatalogProvider ca
 public sealed class GetGameCatalogUnitPowerEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogUnitPower>>(catalog, GameCatalogDatasets.UnitPower)
 {
-    protected override IReadOnlyList<GameCatalogUnitPower> Payload => Snapshot.UnitPowerViews;
+    protected override IReadOnlyList<GameCatalogUnitPower> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.UnitPowerViews;
 
     public override void Configure()
     {
@@ -253,7 +283,7 @@ public sealed class GetGameCatalogUnitPowerEndpoint(IGameCatalogProvider catalog
 public sealed class GetGameCatalogEventDefinitionsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogEventDefinition>>(catalog, GameCatalogDatasets.EventDefinitionsServed)
 {
-    protected override IReadOnlyList<GameCatalogEventDefinition> Payload => Snapshot.EventDefinitionViews;
+    protected override IReadOnlyList<GameCatalogEventDefinition> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.EventDefinitionViews;
 
     public override void Configure()
     {
@@ -265,7 +295,7 @@ public sealed class GetGameCatalogEventDefinitionsEndpoint(IGameCatalogProvider 
 public sealed class GetGameCatalogEventsCalendarEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyDictionary<string, IReadOnlyList<GameCatalogEventsCalendarEntry>>>(catalog, GameCatalogDatasets.EventsCalendar)
 {
-    protected override IReadOnlyDictionary<string, IReadOnlyList<GameCatalogEventsCalendarEntry>> Payload => Snapshot.EventsCalendar;
+    protected override IReadOnlyDictionary<string, IReadOnlyList<GameCatalogEventsCalendarEntry>> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.EventsCalendar;
 
     public override void Configure()
     {
@@ -279,7 +309,7 @@ public sealed class GetGameCatalogEventsCalendarEndpoint(IGameCatalogProvider ca
 public sealed class GetGameCatalogShopsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogShopView>>(catalog, GameCatalogDatasets.Shops)
 {
-    protected override IReadOnlyList<GameCatalogShopView> Payload => Snapshot.ShopViews;
+    protected override IReadOnlyList<GameCatalogShopView> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.ShopViews;
 
     public override void Configure()
     {
@@ -293,7 +323,7 @@ public sealed class GetGameCatalogShopsEndpoint(IGameCatalogProvider catalog)
 public sealed class GetGameCatalogRaidBossesEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<GameCatalogRaidBossesView>(catalog, GameCatalogDatasets.RaidBosses)
 {
-    protected override GameCatalogRaidBossesView Payload => Snapshot.RaidBossesView;
+    protected override GameCatalogRaidBossesView PayloadOf(GameCatalogSnapshot snapshot) => snapshot.RaidBossesView;
 
     public override void Configure()
     {
@@ -307,7 +337,7 @@ public sealed class GetGameCatalogRaidBossesEndpoint(IGameCatalogProvider catalo
 public sealed class GetGameCatalogGuildRaidMetaEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<GameCatalogGuildRaidMetaView>(catalog, GameCatalogDatasets.GuildRaidMeta)
 {
-    protected override GameCatalogGuildRaidMetaView Payload => Snapshot.GuildRaidMetaView;
+    protected override GameCatalogGuildRaidMetaView PayloadOf(GameCatalogSnapshot snapshot) => snapshot.GuildRaidMetaView;
 
     public override void Configure()
     {

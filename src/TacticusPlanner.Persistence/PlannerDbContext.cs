@@ -25,6 +25,13 @@ public sealed class PlannerDbContext(
     /// pooled (see <see cref="ICurrentProfileProvider"/>) and reused across requests/profiles.</summary>
     private ProfileId? CurrentProfileId => currentProfile.ProfileId;
 
+    /// <summary>Locks the current profile's row (<c>FOR NO KEY UPDATE</c>: its key is never written, so
+    /// inserts of rows that reference it are not blocked) and returns it tracked, in one statement. Must run
+    /// inside a transaction.</summary>
+    public Task<Profile> LockCurrentProfileAsync(CancellationToken ct) =>
+        Profiles.FromSqlRaw("SELECT * FROM profiles WHERE id = {0} FOR NO KEY UPDATE", CurrentProfileId!.Value.Value)
+            .SingleAsync(ct);
+
     public DbSet<Account> Accounts => Set<Account>();
 
     public DbSet<Profile> Profiles => Set<Profile>();

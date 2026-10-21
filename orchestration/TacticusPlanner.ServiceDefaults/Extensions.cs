@@ -1,6 +1,8 @@
+using System.IO.Compression;
 using Azure.Monitor.OpenTelemetry.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
@@ -20,6 +22,20 @@ public static class Extensions
     )
     {
         builder.ConfigureOpenTelemetry();
+
+        // Brotli is preferred over gzip; HTTPS is safe because responses carry no attacker-reflected secrets.
+        builder.Services.AddResponseCompression(options =>
+        {
+            options.EnableForHttps = true;
+            options.Providers.Add<BrotliCompressionProvider>();
+            options.Providers.Add<GzipCompressionProvider>();
+            options.MimeTypes = [.. ResponseCompressionDefaults.MimeTypes, "application/problem+json"];
+        });
+
+        // The default "Fastest" Brotli level compresses the catalog datasets worse than gzip does (1.1 MB vs 0.66 MB
+        // for the whole first visit); Optimal gets it to ~0.35 MB at negligible CPU cost, SmallestSize costs seconds.
+        builder.Services.Configure<BrotliCompressionProviderOptions>(options => options.Level = CompressionLevel.Optimal);
+        builder.Services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Optimal);
 
         builder.Services.AddServiceDiscovery();
         builder.Services.AddHealthChecks()

@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Domain.Goals;
+using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.PlayerData.Chunks;
 using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.GameCatalog;
@@ -8,6 +9,9 @@ using TacticusPlanner.GameDomain;
 using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.Goals;
+
+/// <summary>The caller's synced character and Machine of War for one catalog id (each null when not owned).</summary>
+public readonly record struct PlayerUnits(PlayerCharacterRecord? Character, PlayerMowRecord? Mow);
 
 public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalogProvider catalog)
 {
@@ -62,6 +66,38 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
         CreateGoalConfigRequest config,
         CancellationToken ct,
         UnitProgression? effectiveProgressionFloor = null,
+        bool againstBaseline = false) =>
+        Validate(
+            await LoadUnitsAsync(profileId, entityId, ct),
+            entityType,
+            entityId,
+            goalType,
+            config,
+            effectiveProgressionFloor,
+            againstBaseline);
+
+    /// <summary>Reads only the targeted character and Machine of War out of the player-data snapshot (the
+    /// owned JSON collections are filtered in SQL) instead of materializing the whole 11-column row.</summary>
+    public async Task<PlayerUnits> LoadUnitsAsync(ProfileId profileId, string entityId, CancellationToken ct)
+    {
+        var unitId = UnitId.From(entityId);
+        return await db.PlayerDataSnapshots.AsNoTracking()
+            .Where(item => item.Id == profileId)
+            .Select(item => new PlayerUnits(
+                item.Characters.FirstOrDefault(unit => unit.UnitId == unitId),
+                item.Mows.FirstOrDefault(unit => unit.UnitId == unitId)))
+            .FirstOrDefaultAsync(ct);
+    }
+
+    /// <summary><see cref="ValidateAsync"/> for a caller that already resolved <paramref name="units"/> (a combined
+    /// create resolves the roster once for all of its specs).</summary>
+    public string? Validate(
+        PlayerUnits units,
+        GoalEntityType entityType,
+        string entityId,
+        GoalType goalType,
+        CreateGoalConfigRequest config,
+        UnitProgression? effectiveProgressionFloor = null,
         bool againstBaseline = false)
     {
         var character = catalog.Current.CharacterViews.FirstOrDefault(item => item.Id == entityId);
@@ -72,11 +108,8 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
             return "The selected unit is not present in the Game Catalog.";
         }
 
-        var snapshot = await db.PlayerDataSnapshots.AsNoTracking()
-            .FirstOrDefaultAsync(item => item.Id == profileId, ct);
-        var playerCharacter = snapshot?.Characters.FirstOrDefault(item => item.UnitId.Value == entityId);
-        var playerMow = snapshot?.Mows.FirstOrDefault(item => item.UnitId.Value == entityId);
-        var playerUnit = (PlayerBaseUnitRecord?)playerCharacter ?? playerMow;
+        var playerCharacter = units.Character;
+        var playerUnit = (PlayerBaseUnitRecord?)playerCharacter ?? units.Mow;
 
         // Each goal type is only ever valid for one entity type (Rank/Unlock: Character only;
         // Ascension/Ability/Upgrade: Character or Mow) — checked once

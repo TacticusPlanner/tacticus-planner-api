@@ -13,12 +13,6 @@ internal static class ReadyGuildResolver
 {
     public static async Task<ReadyGuildResult> ResolveAsync(PlannerDbContext db, ProfileId profileId, CancellationToken ct)
     {
-        var profileExists = await db.Profiles.AsNoTracking().AnyAsync(entity => entity.Id == profileId, ct);
-        if (!profileExists)
-        {
-            return new ReadyGuildResult.ProfileNotFound();
-        }
-
         var guild = await db.GuildMembers.AsNoTracking()
             .Where(member => member.ProfileId == profileId)
             .Select(member => member.Guild)
@@ -44,5 +38,4 @@ internal abstract record ReadyGuildResult
 {
     public sealed record Ready(Guild Guild) : ReadyGuildResult;
     public sealed record NotReady(string Message) : ReadyGuildResult;
-    public sealed record ProfileNotFound : ReadyGuildResult;
 }

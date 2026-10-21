@@ -153,16 +153,16 @@ public sealed class GuildSyncService(
             member => TacticusUserIdHash.FromNullable(hashService.ComputeHash(member.UserId.ToString()))
         );
 
-        // Loaded once per sync and matched in memory: byte[] equality does not translate cleanly to SQL,
-        // and Planner's total linkable-profile count is modest, so this avoids one query per member.
+        // Filtered by hash in SQL, so only profiles that match an upstream member are read.
         // IgnoreQueryFilters: linking deliberately spans every profile, not just the caller's — guild
         // membership is its own authorization boundary (see PlannerDbContext.ApplyProfileQueryFilters'
         // note on Guild/GuildMember), so the global profile query filter must not narrow this to the
         // caller alone.
+        var memberHashes = hashesByUserId.Values.Where(hash => hash is not null).ToList();
         var linkableProfiles = await db.Profiles
             .IgnoreQueryFilters()
             .AsNoTracking()
-            .Where(profile => profile.TacticusUserIdHash != null)
+            .Where(profile => memberHashes.Contains(profile.TacticusUserIdHash))
             .Select(profile => new
             {
                 profile.Id,

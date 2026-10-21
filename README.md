@@ -171,6 +171,8 @@ do not commit secrets.
 | `TacticusApi__BaseUrl` | Base URL of the upstream Tacticus game API used to validate personal API keys |
 | `V1Api__BaseUrl` | Base URL of the legacy V1 planner backend used by V1 profile import |
 | `V1Api__FunctionsKey` | Azure Functions `x-functions-key` for the V1 backend's `LoginUser`/`GetUserData` HTTP triggers (`AuthorizationLevel.Function`); sent as a header on every V1 request when set |
+| `RateLimiting__UpstreamFastPerMinute` | Optional, default `10`. Per-profile, per-endpoint requests/minute for `POST tacticus-api-key/validate` and `PUT me/tacticus-integration`; excess requests get `429` with `Retry-After` |
+| `RateLimiting__UpstreamSlowPerHour` | Optional, default `6`. Per-profile, per-endpoint requests/hour for `POST tacticus-integration/player-sync`, `POST guilds/register`, `POST guilds/me/sync` and `POST me/v1-import` |
 | `ColumnEncryption__CurrentKeyVersion` | Logical key version used to encrypt new/updated sensitive columns |
 | `ColumnEncryption__Keys__<version>` | Base64/base64url 32-byte AES-256 key for the matching key version |
 | `Analytics__ProjectToken` | PostHog project token (public — identifies the project, not a secret) |

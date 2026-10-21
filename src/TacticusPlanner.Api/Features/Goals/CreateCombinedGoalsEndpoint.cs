@@ -65,6 +65,8 @@ public sealed class CreateCombinedGoalsEndpoint
             return;
         }
 
+        // One roster read for every spec in the request.
+        var units = await targetValidation.LoadUnitsAsync(profileId, req.EntityId.Trim(), ct);
         var requestGoalTypes = new HashSet<GoalType>();
         var parsedGoalTypes = new List<GoalType>(req.Goals.Count);
         // Each spec's transitive dependency closure, computed in one forward pass — DependsOnIndex is
@@ -101,8 +103,8 @@ public sealed class CreateCombinedGoalsEndpoint
             UnitProgression? effectiveProgressionFloor =
                 ascensionEndIndices.Count > 0 ? (UnitProgression)ascensionEndIndices.Max() : null;
 
-            if (await targetValidation.ValidateAsync(
-                profileId, entityType, req.EntityId.Trim(), goalType, spec.Config, ct, effectiveProgressionFloor)
+            if (targetValidation.Validate(
+                units, entityType, req.EntityId.Trim(), goalType, spec.Config, effectiveProgressionFloor)
                 is { } targetError)
             {
                 AddError(targetError);

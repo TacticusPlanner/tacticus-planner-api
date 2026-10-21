@@ -6,7 +6,6 @@ public static class DependencyInjection
     {
         services.AddScoped<GuildSyncService>();
         services.AddScoped<GuildRaidStatusService>();
-        services.AddScoped<GuildRaidAttackRepository>();
         services.AddSingleton<GuildRaidRefreshCoordinator>();
 
         return services;

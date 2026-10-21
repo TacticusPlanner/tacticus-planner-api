@@ -23,6 +23,9 @@
               }
             }
           },
+          "304": {
+            "description": "The dataset has not changed."
+          },
           "403": {
             "description": "Forbidden"
           }
@@ -46,6 +49,9 @@
                 }
               }
             }
+          },
+          "304": {
+            "description": "The dataset has not changed."
           },
           "403": {
             "description": "Forbidden"
@@ -71,6 +77,9 @@
               }
             }
           },
+          "304": {
+            "description": "The dataset has not changed."
+          },
           "403": {
             "description": "Forbidden"
           }
@@ -94,6 +103,9 @@
                 }
               }
             }
+          },
+          "304": {
+            "description": "The dataset has not changed."
           },
           "403": {
             "description": "Forbidden"
@@ -119,6 +131,9 @@
               }
             }
           },
+          "304": {
+            "description": "The dataset has not changed."
+          },
           "403": {
             "description": "Forbidden"
           }
@@ -142,6 +157,9 @@
                 }
               }
             }
+          },
+          "304": {
+            "description": "The dataset has not changed."
           },
           "403": {
             "description": "Forbidden"
@@ -167,6 +185,9 @@
               }
             }
           },
+          "304": {
+            "description": "The dataset has not changed."
+          },
           "403": {
             "description": "Forbidden"
           }
@@ -190,6 +211,9 @@
                 }
               }
             }
+          },
+          "304": {
+            "description": "The dataset has not changed."
           },
           "403": {
             "description": "Forbidden"
@@ -215,6 +239,9 @@
               }
             }
           },
+          "304": {
+            "description": "The dataset has not changed."
+          },
           "403": {
             "description": "Forbidden"
           }
@@ -238,6 +265,9 @@
                 }
               }
             }
+          },
+          "304": {
+            "description": "The dataset has not changed."
           },
           "403": {
             "description": "Forbidden"
@@ -263,6 +293,9 @@
               }
             }
           },
+          "304": {
+            "description": "The dataset has not changed."
+          },
           "403": {
             "description": "Forbidden"
           }
@@ -286,6 +319,9 @@
                 }
               }
             }
+          },
+          "304": {
+            "description": "The dataset has not changed."
           },
           "403": {
             "description": "Forbidden"
@@ -339,6 +375,9 @@
               }
             }
           },
+          "304": {
+            "description": "The dataset has not changed."
+          },
           "403": {
             "description": "Forbidden"
           }
@@ -362,6 +401,9 @@
                 }
               }
             }
+          },
+          "304": {
+            "description": "The dataset has not changed."
           },
           "403": {
             "description": "Forbidden"
@@ -387,6 +429,9 @@
               }
             }
           },
+          "304": {
+            "description": "The dataset has not changed."
+          },
           "403": {
             "description": "Forbidden"
           }
@@ -410,6 +455,9 @@
                 }
               }
             }
+          },
+          "304": {
+            "description": "The dataset has not changed."
           },
           "403": {
             "description": "Forbidden"
@@ -435,6 +483,9 @@
               }
             }
           },
+          "304": {
+            "description": "The dataset has not changed."
+          },
           "403": {
             "description": "Forbidden"
           }
@@ -458,6 +509,9 @@
                 }
               }
             }
+          },
+          "304": {
+            "description": "The dataset has not changed."
           },
           "403": {
             "description": "Forbidden"
@@ -483,6 +537,9 @@
               }
             }
           },
+          "304": {
+            "description": "The dataset has not changed."
+          },
           "403": {
             "description": "Forbidden"
           }
@@ -506,6 +563,9 @@
                 }
               }
             }
+          },
+          "304": {
+            "description": "The dataset has not changed."
           },
           "403": {
             "description": "Forbidden"
@@ -531,6 +591,9 @@
               }
             }
           },
+          "304": {
+            "description": "The dataset has not changed."
+          },
           "403": {
             "description": "Forbidden"
           }
@@ -554,6 +617,9 @@
                 }
               }
             }
+          },
+          "304": {
+            "description": "The dataset has not changed."
           },
           "403": {
             "description": "Forbidden"
@@ -745,6 +811,9 @@
           "409": {
             "description": "A database uniqueness conflict with an existing guild or membership."
           },
+          "429": {
+            "description": "The per-profile upstream-call limit for this endpoint is exhausted; see Retry-After."
+          },
           "503": {
             "description": "The Tacticus API is currently unavailable."
           }
@@ -799,6 +868,9 @@
           },
           "409": {
             "description": "A database uniqueness conflict with an existing guild or membership."
+          },
+          "429": {
+            "description": "The per-profile upstream-call limit for this endpoint is exhausted; see Retry-After."
           },
           "503": {
             "description": "The Tacticus API is currently unavailable."
@@ -2850,6 +2922,9 @@
           },
           "404": {
             "description": "The authenticated user has not signed up yet."
+          },
+          "429": {
+            "description": "The per-profile upstream-call limit for this endpoint is exhausted; see Retry-After."
           }
         },
         "security": [
@@ -3021,6 +3096,9 @@
           },
           "403": {
             "description": "Forbidden"
+          },
+          "429": {
+            "description": "The per-profile upstream-call limit for this endpoint is exhausted; see Retry-After."
           }
         },
         "security": [
@@ -3066,6 +3144,9 @@
           },
           "403": {
             "description": "The authenticated user cannot access the API."
+          },
+          "429": {
+            "description": "The per-profile upstream-call limit for this endpoint is exhausted; see Retry-After."
           }
         },
         "security": [
@@ -3105,6 +3186,9 @@
           },
           "404": {
             "description": "The authenticated user has not signed up yet."
+          },
+          "429": {
+            "description": "The per-profile upstream-call limit for this endpoint is exhausted; see Retry-After."
           }
         },
         "security": [

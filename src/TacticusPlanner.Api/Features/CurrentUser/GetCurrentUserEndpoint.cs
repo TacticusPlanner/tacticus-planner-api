@@ -17,6 +17,8 @@ public sealed class GetCurrentUserEndpoint : EndpointWithoutRequest<CurrentUserR
     /// collide with one. Provider claims are never persisted as the name.</summary>
     public const string NoDisplayName = "";
 
+    private static readonly TimeSpan LastSeenWriteInterval = TimeSpan.FromHours(1);
+
     public override void Configure()
     {
         Get("me");
@@ -52,8 +54,14 @@ public sealed class GetCurrentUserEndpoint : EndpointWithoutRequest<CurrentUserR
             account = await ProvisionAccountAsync(db, state.Issuer, state.Subject, User, ct);
         }
 
-        account!.LastSeenAt = Resolve<TimeProvider>().GetUtcNow();
-        await db.SaveChangesAsync(ct);
+        // last_seen_at only feeds the "last active in Planner" display, so hourly precision is enough and
+        // the common repeat call writes nothing.
+        var now = Resolve<TimeProvider>().GetUtcNow();
+        if (account!.LastSeenAt is not { } lastSeenAt || now - lastSeenAt >= LastSeenWriteInterval)
+        {
+            account.LastSeenAt = now;
+            await db.SaveChangesAsync(ct);
+        }
 
         var profile = account.Profile!;
         var hasName = profile.DisplayName != NoDisplayName;

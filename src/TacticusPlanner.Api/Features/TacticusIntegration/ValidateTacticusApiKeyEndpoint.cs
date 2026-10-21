@@ -1,4 +1,5 @@
 using FastEndpoints;
+using TacticusPlanner.Api.Features.UpstreamRateLimiting;
 
 namespace TacticusPlanner.Api.Features.TacticusIntegration;
 
@@ -8,6 +9,7 @@ public sealed class ValidateTacticusApiKeyEndpoint
     public override void Configure()
     {
         Post("tacticus-api-key/validate");
+        Options(builder => builder.WithMetadata(UpstreamRateLimit.Fast));
         Summary(summary =>
         {
             summary.Summary = "Validates a Tacticus API key.";
@@ -17,6 +19,7 @@ public sealed class ValidateTacticusApiKeyEndpoint
             );
             summary.Response(StatusCodes.Status400BadRequest, "The Tacticus API key is missing or invalid.");
             summary.Response(StatusCodes.Status401Unauthorized, "The request is not authenticated.");
+            summary.Response(StatusCodes.Status429TooManyRequests, UpstreamRateLimit.ResponseDescription);
             summary.Response(StatusCodes.Status403Forbidden, "The authenticated user cannot access the API.");
         });
     }
