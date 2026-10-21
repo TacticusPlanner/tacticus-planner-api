@@ -147,7 +147,7 @@ public sealed class LegendaryEventPlanWriter(
     private static LegendaryEventPlan NewPlan(ProfileId profileId, string eventId) =>
         new()
         {
-            Id = LegendaryEventPlanId.From(Guid.NewGuid()),
+            Id = LegendaryEventPlanId.From(Guid.CreateVersion7()),
             ProfileId = profileId,
             EventId = eventId,
             CatalogVersion = GameCatalogRelease.Version,

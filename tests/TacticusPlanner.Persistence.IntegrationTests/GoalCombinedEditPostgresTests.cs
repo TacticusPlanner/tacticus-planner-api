@@ -186,16 +186,23 @@ public sealed class GoalCombinedEditPostgresTests
             Config = RankConfig(rankEnd),
             Events = [new GoalEvent { At = now, Type = GoalEventType.Created }],
         };
-        db.Goals.Add(goal);
         var order = scope.ServiceProvider.GetRequiredService<GoalOrderService>();
-        await order.AppendAsync(goal, ct);
-        foreach (var projectId in projectIds)
-        {
-            var project = await db.Projects.SingleAsync(entity => entity.Id == projectId, ct);
-            db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(project, goal, now));
-        }
+        await scope.ServiceProvider.GetRequiredService<ProjectGoalPlanningService>().ExecuteLockedMutationAsync(
+            projectIds,
+            async transaction =>
+            {
+                db.Goals.Add(goal);
+                await order.AppendAsync(goal, ct);
+                foreach (var projectId in projectIds)
+                {
+                    var project = await db.Projects.SingleAsync(entity => entity.Id == projectId, ct);
+                    db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(project, goal, now));
+                }
 
-        await order.CompleteAsync(ct);
+                await order.CompleteAsync(ct);
+                await transaction.CommitAsync(ct);
+            },
+            ct);
         return goal.Id;
     }
 

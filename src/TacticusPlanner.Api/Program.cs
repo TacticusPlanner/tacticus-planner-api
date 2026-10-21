@@ -13,6 +13,7 @@ using TacticusPlanner.Api.Features.LegendaryEventPlans;
 using TacticusPlanner.Api.Features.PlayerData;
 using TacticusPlanner.Api.Features.Projects;
 using TacticusPlanner.Api.Features.TacticusIntegration;
+using TacticusPlanner.Api.Features.UpstreamRateLimiting;
 using TacticusPlanner.Api.Features.UserJot;
 using TacticusPlanner.Api.Features.V1Import;
 using TacticusPlanner.Api.Http;
@@ -67,6 +68,7 @@ builder.Services.AddLegendaryEventPlansFeature();
 builder.Services.AddPlayerDataFeature();
 builder.Services.AddProjectsFeature();
 builder.Services.AddTacticusIntegrationFeature();
+builder.Services.AddUpstreamRateLimiting(builder.Configuration);
 builder.Services.AddUserJotFeature(builder.Configuration, validateOnStart: !isOpenApiDocumentGeneration);
 builder.Services.AddV1ImportFeature(builder.Configuration);
 
@@ -103,6 +105,7 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+app.UseResponseCompression();
 app.UseExceptionHandler();
 app.UseCors("Frontend");
 app.UseAuthentication();
@@ -122,6 +125,7 @@ app.UseFastEndpoints(options =>
     {
         endpoint.Policies(AuthorizationPolicies.AccessAsUser);
         endpoint.PreProcessor<CurrentUserPreProcessor>(Order.Before);
+        endpoint.PreProcessor<UpstreamRateLimitPreProcessor>(Order.Before);
     };
 });
 

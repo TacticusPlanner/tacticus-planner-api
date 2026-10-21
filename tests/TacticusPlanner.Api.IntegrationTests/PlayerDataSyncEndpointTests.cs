@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TacticusPlanner.Api.Features.PlayerData;
 using TacticusPlanner.Api.Features.TacticusIntegration;
 using TacticusPlanner.Persistence;
+using TacticusPlanner.TacticusApi.Models.Player;
 
 namespace TacticusPlanner.Api.IntegrationTests;
 
@@ -260,6 +261,149 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
         conditionalRequest.Headers.TryAddWithoutValidation("If-None-Match", etag);
         var notModified = await client.SendAsync(conditionalRequest, TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotModified, notModified.StatusCode);
+    }
+
+    private const string SyncPath = "/api/v1/tacticus-integration/player-sync";
+
+    private static PlayerResponse ContentVariant(int rank, int xp = 200000) =>
+        FakeTacticusApi.BuildPlayerResponse(progressionIndex: 11, xp: xp, rank: rank);
+
+    [Fact]
+    public async Task ChangedChunksAreWrittenEvenWhenTheConfigHashIsUnchanged()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var subject = NewSubject();
+        var client = await CreateProvisionedClientAsync(subject);
+        await ConfigureTacticusKeyAsync(client, FakeTacticusApi.ValidKey);
+        try
+        {
+            factory.TacticusApi.ConfigurePlayerResponse(FakeTacticusApi.ValidKey, ContentVariant(rank: 12));
+            var first = await (await client.PostAsync(SyncPath, null, ct)).Content.ReadFromJsonAsync<PlayerDataManifest>(ct);
+            var revision = await GetRevisionAsync(subject);
+            factory.TacticusApi.ConfigurePlayerResponse(FakeTacticusApi.ValidKey, ContentVariant(rank: 14, xp: 250000));
+
+            var second = await (await client.PostAsync(SyncPath, null, ct)).Content.ReadFromJsonAsync<PlayerDataManifest>(ct);
+
+            Assert.Equal(first!.GameConfigHash, second!.GameConfigHash);
+            AssertOnlyChunkChanged(first, second, PlayerDataChunkKeys.Characters);
+            Assert.Equal(revision + 1, await GetRevisionAsync(subject));
+            Assert.Equal(
+                second.Chunks.Single(chunk => chunk.Key == PlayerDataChunkKeys.Characters).Hash,
+                (await GetStoredStateAsync(subject)).ChunkHashes[PlayerDataChunkKeys.Characters]);
+            Assert.Equal(14, await StoredRankAsync(subject));
+        }
+        finally
+        {
+            factory.TacticusApi.ConfigurePlayerResponse(FakeTacticusApi.ValidKey, FakeTacticusApi.BuildPlayerResponse());
+        }
+    }
+
+    [Fact]
+    public async Task SlowSyncRacingANewerCommitIsRejectedWithoutOverwritingOrPartialRecords()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var subject = NewSubject();
+        var client = await CreateProvisionedClientAsync(subject);
+        await ConfigureTacticusKeyAsync(client, FakeTacticusApi.ValidKey);
+        try
+        {
+            factory.TacticusApi.ConfigurePlayerResponse(FakeTacticusApi.ValidKey, ContentVariant(rank: 12));
+            (await client.PostAsync(SyncPath, null, ct)).EnsureSuccessStatusCode();
+            var revision = await GetRevisionAsync(subject);
+
+            factory.TacticusApi.ConfigurePlayerResponse(FakeTacticusApi.ValidKey, ContentVariant(rank: 13));
+            var hold = factory.TacticusApi.HoldNextPlayerCall(FakeTacticusApi.ValidKey);
+            var slow = client.PostAsync(SyncPath, null, ct);
+            await hold.Reached.Task.WaitAsync(TimeSpan.FromSeconds(30), ct);
+
+            factory.TacticusApi.ConfigurePlayerResponse(FakeTacticusApi.ValidKey, ContentVariant(rank: 14));
+            var winner = await client.PostAsync(SyncPath, null, ct);
+            winner.EnsureSuccessStatusCode();
+            var winnerManifest = await winner.Content.ReadFromJsonAsync<PlayerDataManifest>(ct);
+            hold.Release.SetResult();
+            var loser = await slow;
+
+            Assert.Equal(HttpStatusCode.Conflict, loser.StatusCode);
+            Assert.Equal(revision + 1, await GetRevisionAsync(subject));
+            Assert.Equal(14, await StoredRankAsync(subject));
+            var stored = await GetStoredStateAsync(subject);
+            Assert.Equal(winnerManifest!.SyncedAt, stored.LastSucceededAt);
+            Assert.Equal(
+                winnerManifest.Chunks.Single(chunk => chunk.Key == PlayerDataChunkKeys.Characters).Hash,
+                stored.ChunkHashes[PlayerDataChunkKeys.Characters]);
+        }
+        finally
+        {
+            factory.TacticusApi.ConfigurePlayerResponse(FakeTacticusApi.ValidKey, FakeTacticusApi.BuildPlayerResponse());
+        }
+    }
+
+    [Fact]
+    public async Task RacingFirstInsertsWithDifferentContentLeaveOneWinnerAndAConflict()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var subject = NewSubject();
+        var client = await CreateProvisionedClientAsync(subject);
+        await ConfigureTacticusKeyAsync(client, FakeTacticusApi.ValidKey);
+        try
+        {
+            factory.TacticusApi.ConfigurePlayerResponse(FakeTacticusApi.ValidKey, ContentVariant(rank: 13));
+            var hold = factory.TacticusApi.HoldNextPlayerCall(FakeTacticusApi.ValidKey);
+            var slow = client.PostAsync(SyncPath, null, ct);
+            await hold.Reached.Task.WaitAsync(TimeSpan.FromSeconds(30), ct);
+
+            factory.TacticusApi.ConfigurePlayerResponse(FakeTacticusApi.ValidKey, ContentVariant(rank: 12));
+            (await client.PostAsync(SyncPath, null, ct)).EnsureSuccessStatusCode();
+            var revision = await GetRevisionAsync(subject);
+            hold.Release.SetResult();
+            var loser = await slow;
+
+            Assert.Equal(HttpStatusCode.Conflict, loser.StatusCode);
+            Assert.Equal(revision, await GetRevisionAsync(subject));
+            Assert.Equal(12, await StoredRankAsync(subject));
+        }
+        finally
+        {
+            factory.TacticusApi.ConfigurePlayerResponse(FakeTacticusApi.ValidKey, FakeTacticusApi.BuildPlayerResponse());
+        }
+    }
+
+    [Fact]
+    public async Task RacingFirstInsertsWithIdenticalContentBothSucceed()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var subject = NewSubject();
+        var client = await CreateProvisionedClientAsync(subject);
+        await ConfigureTacticusKeyAsync(client, FakeTacticusApi.ValidKey);
+        try
+        {
+            factory.TacticusApi.ConfigurePlayerResponse(FakeTacticusApi.ValidKey, ContentVariant(rank: 12));
+            var hold = factory.TacticusApi.HoldNextPlayerCall(FakeTacticusApi.ValidKey);
+            var slow = client.PostAsync(SyncPath, null, ct);
+            await hold.Reached.Task.WaitAsync(TimeSpan.FromSeconds(30), ct);
+            (await client.PostAsync(SyncPath, null, ct)).EnsureSuccessStatusCode();
+            var revision = await GetRevisionAsync(subject);
+            hold.Release.SetResult();
+
+            var converged = await slow;
+
+            Assert.Equal(HttpStatusCode.OK, converged.StatusCode);
+            Assert.Equal(revision + 1, await GetRevisionAsync(subject));
+            Assert.Equal(12, await StoredRankAsync(subject));
+        }
+        finally
+        {
+            factory.TacticusApi.ConfigurePlayerResponse(FakeTacticusApi.ValidKey, FakeTacticusApi.BuildPlayerResponse());
+        }
+    }
+
+    private async Task<int> StoredRankAsync(string subject)
+    {
+        using var scope = factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
+        var snapshot = await db.PlayerDataSnapshots.IgnoreQueryFilters().AsNoTracking()
+            .SingleAsync(entity => entity.Profile!.Account!.Subject == subject, TestContext.Current.CancellationToken);
+        return (int)snapshot.Characters.Single().Rank;
     }
 
     private async Task<long> GetRevisionAsync(string subject)

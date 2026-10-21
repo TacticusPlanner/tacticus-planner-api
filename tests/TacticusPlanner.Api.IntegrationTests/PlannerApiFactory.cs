@@ -27,6 +27,8 @@ public sealed class PlannerApiFactory : WebApplicationFactory<Program>
 
     public int CommandsFor(HttpResponseMessage response) => Services.GetRequiredService<RequestCommandCounter>().CommandsFor(response);
 
+    public IReadOnlyList<string> CommandTextsFor(HttpResponseMessage response) => Services.GetRequiredService<RequestCommandCounter>().CommandTextsFor(response);
+
     public string ConnectionString => database.ConnectionString;
 
     protected override void Dispose(bool disposing)

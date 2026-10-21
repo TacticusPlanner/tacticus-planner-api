@@ -5,6 +5,7 @@ using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Api.Features.Guilds;
 using TacticusPlanner.Api.Features.PlayerData;
 using TacticusPlanner.Api.Features.TacticusIntegration;
+using TacticusPlanner.Api.Features.UpstreamRateLimiting;
 using TacticusPlanner.Api.Http;
 using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.Profiles;
@@ -19,6 +20,7 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
     public override void Configure()
     {
         Post("me/v1-import");
+        Options(builder => builder.WithMetadata(UpstreamRateLimit.Slow));
         Summary(summary =>
         {
             summary.Summary = "Selectively imports integration data, progress, and goals from V1.";
@@ -30,6 +32,7 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
                 + "player data snapshot. The legendaryEventPlans part creates one Legendary Event plan per V1 event "
                 + "(never touching a plan that already has teams) and reports one outcome per V1 event in "
                 + "legendaryEventOutcomes.";
+            summary.Response(StatusCodes.Status429TooManyRequests, UpstreamRateLimit.ResponseDescription);
         });
     }
 

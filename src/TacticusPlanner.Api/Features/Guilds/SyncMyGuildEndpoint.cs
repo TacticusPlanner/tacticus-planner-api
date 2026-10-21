@@ -1,6 +1,7 @@
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Api.Features.UpstreamRateLimiting;
 using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.Guilds;
@@ -16,6 +17,7 @@ public sealed class SyncMyGuildEndpoint : EndpointWithoutRequest<RegisteredGuild
     public override void Configure()
     {
         Post("guilds/me/sync");
+        Options(builder => builder.WithMetadata(UpstreamRateLimit.Slow));
         Summary(summary =>
         {
             summary.Summary = "Re-synchronizes the authenticated user's guild from the Tacticus API.";
@@ -25,6 +27,7 @@ public sealed class SyncMyGuildEndpoint : EndpointWithoutRequest<RegisteredGuild
             summary.Response<RegisteredGuildResponse>(StatusCodes.Status200OK, "The refreshed guild projection.");
             summary.Response(StatusCodes.Status400BadRequest, "The upstream guild response was malformed.");
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
+            summary.Response(StatusCodes.Status429TooManyRequests, UpstreamRateLimit.ResponseDescription);
             summary.Response(
                 StatusCodes.Status403Forbidden,
                 "No linked/registered guild, no stored token, or the caller is no longer Leader/Co-Leader."

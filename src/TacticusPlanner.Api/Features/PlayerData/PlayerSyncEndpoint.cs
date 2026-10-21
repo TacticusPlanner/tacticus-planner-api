@@ -1,6 +1,7 @@
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Api.Features.UpstreamRateLimiting;
 using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.PlayerData;
@@ -19,6 +20,7 @@ public sealed class PlayerSyncEndpoint : EndpointWithoutRequest<PlayerDataManife
     public override void Configure()
     {
         Post("tacticus-integration/player-sync");
+        Options(builder => builder.WithMetadata(UpstreamRateLimit.Slow));
         Summary(summary =>
         {
             summary.Summary = "Syncs the authenticated user's player data from the Tacticus API.";
@@ -28,6 +30,7 @@ public sealed class PlayerSyncEndpoint : EndpointWithoutRequest<PlayerDataManife
             summary.Response<PlayerDataManifest>(StatusCodes.Status200OK, "The current player-data manifest.");
             summary.Response(StatusCodes.Status400BadRequest, "No Tacticus API key is configured, or the Tacticus API rejected it.");
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
+            summary.Response(StatusCodes.Status429TooManyRequests, UpstreamRateLimit.ResponseDescription);
             summary.Response(StatusCodes.Status404NotFound, "The authenticated user has not signed up yet.");
         });
     }

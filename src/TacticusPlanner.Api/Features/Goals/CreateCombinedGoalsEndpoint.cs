@@ -65,6 +65,8 @@ public sealed class CreateCombinedGoalsEndpoint
             return;
         }
 
+        // One roster read for every spec in the request.
+        var units = await targetValidation.LoadUnitsAsync(profileId, req.EntityId.Trim(), ct);
         var requestGoalTypes = new HashSet<GoalType>();
         var parsedGoalTypes = new List<GoalType>(req.Goals.Count);
         // Each spec's transitive dependency closure, computed in one forward pass — DependsOnIndex is
@@ -101,8 +103,8 @@ public sealed class CreateCombinedGoalsEndpoint
             UnitProgression? effectiveProgressionFloor =
                 ascensionEndIndices.Count > 0 ? (UnitProgression)ascensionEndIndices.Max() : null;
 
-            if (await targetValidation.ValidateAsync(
-                profileId, entityType, req.EntityId.Trim(), goalType, spec.Config, ct, effectiveProgressionFloor)
+            if (targetValidation.Validate(
+                units, entityType, req.EntityId.Trim(), goalType, spec.Config, effectiveProgressionFloor)
                 is { } targetError)
             {
                 AddError(targetError);
@@ -156,16 +158,13 @@ public sealed class CreateCombinedGoalsEndpoint
             var slotKeys = parsedGoalTypes
                 .Select((goalType, i) => (goalType, key: RankTargetKey.For(goalType, GoalMapper.MapConfig(req.Goals[i].Config))))
                 .ToList();
-            foreach (var (goalType, rankTargetKey) in slotKeys)
+            if (await planning.FindFirstConflictAsync(
+                targetProjects.Select(project => project.Id), entityType, req.EntityId.Trim(),
+                slotKeys.Select(slot => (slot.goalType, slot.key)).ToList(), ct) is { } existingConflict)
             {
-                if (await planning.FindConflictAsync(
-                    targetProjects.Select(project => project.Id), entityType, req.EntityId.Trim(), goalType,
-                    rankTargetKey, null, ct) is { } conflict)
-                {
-                    HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
-                    await HttpContext.Response.WriteAsJsonAsync(conflict, ct);
-                    return;
-                }
+                HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+                await HttpContext.Response.WriteAsJsonAsync(existingConflict, ct);
+                return;
             }
 
             // Built as a materialized, indexable List (not a lazy .Select) so each spec's index has a real

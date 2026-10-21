@@ -40,10 +40,16 @@ public sealed class ProjectGoalPlanningService(PlannerDbContext db)
             // of rows that reference it, which take FOR KEY SHARE, are not blocked): it serializes every mutation of the account's global
             // goal order (see GoalOrderService) and fixes the lock order (profile, then projects ascending),
             // so paths that need both cannot deadlock.
-            var profileId = await db.Profiles.Select(profile => profile.Id).SingleAsync(ct);
-            _ = await db.Database
-                .SqlQueryRaw<int>("SELECT 1 AS \"Value\" FROM profiles WHERE id = {0} FOR NO KEY UPDATE", profileId.Value)
-                .SingleAsync(ct);
+            // One statement locks the row and loads it (tracked), so GoalOrderService reads the revision as it
+            // stands under the lock. A caller that tracked the profile earlier would otherwise keep its stale
+            // values, so that instance is refreshed.
+            var alreadyTracked = db.Profiles.Local.Count > 0;
+            var profile = await db.LockCurrentProfileAsync(ct);
+            if (alreadyTracked)
+            {
+                await db.Entry(profile).ReloadAsync(ct);
+            }
+
             foreach (var projectId in orderedProjectIds)
             {
                 _ = await db.Database
@@ -98,25 +104,64 @@ public sealed class ProjectGoalPlanningService(PlannerDbContext db)
             .Join(db.Projects, entry => entry.ProjectId, project => project.Id, (entry, project) => new { entry, project })
             .OrderBy(value => value.project.Id)
             .ToListAsync(ct);
-        if (found.Count == 0)
-            return null;
+        return found.Count == 0
+            ? null
+            : ToConflict(found.Select(value => new OccupiedSlot(value.entry, value.project)).ToList());
+    }
 
+    /// <summary>One query for several slots of the same unit and projects (a combined create): returns the
+    /// conflict of the first slot, in the order given, that is occupied.</summary>
+    public async Task<ProjectGoalSlotConflictResponse?> FindFirstConflictAsync(
+        IEnumerable<ProjectId> projectIds,
+        GoalEntityType entityType,
+        string entityId,
+        IReadOnlyList<(GoalType GoalType, string? RankTargetKey)> slots,
+        CancellationToken ct)
+    {
+        var ids = projectIds.Distinct().ToList();
+        var goalTypes = slots.Select(slot => slot.GoalType).Distinct().ToList();
+        var occupied = await db.ProjectGoals
+            .Where(entry => ids.Contains(entry.ProjectId)
+                && entry.EntityType == entityType
+                && entry.EntityId == entityId
+                && goalTypes.Contains(entry.GoalType)
+                && entry.OccupiesInFlightSlot)
+            .Join(db.Projects, entry => entry.ProjectId, project => project.Id, (entry, project) => new { entry, project })
+            .OrderBy(value => value.project.Id)
+            .ToListAsync(ct);
+        foreach (var (goalType, rankTargetKey) in slots)
+        {
+            var found = occupied
+                .Where(value => value.entry.GoalType == goalType && value.entry.RankTargetKey == rankTargetKey)
+                .Select(value => new OccupiedSlot(value.entry, value.project))
+                .ToList();
+            if (found.Count > 0)
+                return ToConflict(found);
+        }
+
+        return null;
+    }
+
+    private static ProjectGoalSlotConflictResponse ToConflict(List<OccupiedSlot> found)
+    {
         var first = found[0];
         return new ProjectGoalSlotConflictResponse(
             "projectGoalSlotOccupied",
-            ConflictMessage(first.project.Name, first.entry.GoalType, first.entry.RankTargetKey),
-            first.project.Id.Value,
-            first.project.Name,
-            first.entry.EntityType.ToString(),
-            first.entry.EntityId,
-            first.entry.GoalType.ToString(),
-            first.entry.GoalId.Value,
-            first.entry.RankTargetKey,
+            ConflictMessage(first.Project.Name, first.Entry.GoalType, first.Entry.RankTargetKey),
+            first.Project.Id.Value,
+            first.Project.Name,
+            first.Entry.EntityType.ToString(),
+            first.Entry.EntityId,
+            first.Entry.GoalType.ToString(),
+            first.Entry.GoalId.Value,
+            first.Entry.RankTargetKey,
             found
                 .Select(value => new ProjectGoalSlotConflictEntry(
-                    value.project.Id.Value, value.project.Name, value.entry.GoalId.Value))
+                    value.Project.Id.Value, value.Project.Name, value.Entry.GoalId.Value))
                 .ToList());
     }
+
+    private sealed record OccupiedSlot(ProjectGoal Entry, Project Project);
 
     public async Task<ProjectGoalSlotConflictResponse?> FindConflictAfterFailedSaveAsync(
         IDbContextTransaction transaction,

@@ -39,9 +39,6 @@ public sealed class RefreshMyGuildRaidStatusEndpoint : EndpointWithoutRequest<Gu
             case ReadyGuildResult.Ready ready:
                 guild = ready.Guild;
                 break;
-            case ReadyGuildResult.ProfileNotFound:
-                await Send.NotFoundAsync(ct);
-                return;
             case ReadyGuildResult.NotReady notReady:
                 AddError(notReady.Message);
                 await Send.ErrorsAsync(StatusCodes.Status409Conflict, ct);

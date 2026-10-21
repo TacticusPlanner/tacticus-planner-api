@@ -171,12 +171,53 @@ public sealed class GuildRaidStatusService(
         GuildRaidSeason? season = null;
         if (state.ActiveSeasonId is { } seasonId)
         {
-            season = await db.GuildRaidSeasons.AsNoTracking()
-                .Include(entity => entity.Attacks)
-                .FirstOrDefaultAsync(entity => entity.Id == seasonId, ct);
+            season = await db.GuildRaidSeasons.AsNoTracking().FirstOrDefaultAsync(entity => entity.Id == seasonId, ct);
+            if (season is not null)
+            {
+                foreach (var attack in await LoadProjectedAttacksAsync(seasonId, ct))
+                {
+                    season.Attacks.Add(attack);
+                }
+            }
         }
 
         return new RetainedObservation(state, season);
+    }
+
+    /// <summary>
+    /// The attacks <see cref="GuildRaidStatusProjector"/> actually reads, instead of the whole season: the latest
+    /// boss attack (current position), the latest defeated boss attack (observation cutoff), and the latest attack
+    /// after that cutoff for every encounter identity, so a busy encounter can never hide a sparse one. Ties on
+    /// <c>CompletedAt</c> resolve by id, and the result is ordered the same way, so the projection equals the
+    /// one over the full retained season.
+    /// </summary>
+    private async Task<List<GuildRaidAttack>> LoadProjectedAttacksAsync(GuildRaidSeasonId seasonId, CancellationToken ct)
+    {
+        var attacks = db.GuildRaidAttacks.AsNoTracking().Where(attack => attack.GuildRaidSeasonId == seasonId);
+        var bossAttacks = attacks.Where(attack => attack.EncounterType == GuildRaidEncounterType.Boss);
+        var latestBoss = await bossAttacks
+            .OrderByDescending(attack => attack.CompletedAt).ThenByDescending(attack => attack.Id)
+            .FirstOrDefaultAsync(ct);
+        var latestDefeated = latestBoss is { RemainingHp: 0 }
+            ? latestBoss
+            : await bossAttacks.Where(attack => attack.RemainingHp == 0)
+                .OrderByDescending(attack => attack.CompletedAt).ThenByDescending(attack => attack.Id)
+                .FirstOrDefaultAsync(ct);
+        DateTimeOffset? cutoff = latestDefeated?.CompletedAt;
+
+        var latestPerEncounter = await attacks
+            .Where(attack => cutoff == null || attack.CompletedAt > cutoff)
+            .GroupBy(attack => new { attack.Tier, attack.Set, attack.EncounterIndex, attack.UnitSetId })
+            .Select(group => group
+                .OrderByDescending(attack => attack.CompletedAt).ThenByDescending(attack => attack.Id)
+                .First())
+            .ToListAsync(ct);
+
+        return new[] { latestBoss, latestDefeated }.OfType<GuildRaidAttack>()
+            .Concat(latestPerEncounter)
+            .DistinctBy(attack => attack.Id)
+            .OrderBy(attack => attack.CompletedAt).ThenBy(attack => attack.Id)
+            .ToList();
     }
 
     private async Task<RetainedObservation> PersistAsync(

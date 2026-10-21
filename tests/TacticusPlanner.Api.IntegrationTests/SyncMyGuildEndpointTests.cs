@@ -183,4 +183,30 @@ public sealed class SyncMyGuildEndpointTests : IAsyncLifetime
         Assert.True(memberEntry.IsLinked);
         Assert.NotNull(memberEntry.LastActiveInPlannerOn);
     }
+
+    [Fact]
+    public async Task LinkingFiltersProfilesByMemberHashInSqlAndStillLinksOnlyGuildMembers()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var (leaderClient, leaderTacticusUserId) = await GuildTestHelpers.CreateGuildReadyClientAsync(factory);
+        var (_, memberTacticusUserId) = await GuildTestHelpers.CreateGuildReadyClientAsync(factory);
+        _ = await GuildTestHelpers.CreateGuildReadyClientAsync(factory); // a linkable profile outside the guild
+        var token = $"guild-token-{Guid.NewGuid()}";
+        factory.TacticusApi.ConfigureGuildResponse(
+            token,
+            FakeTacticusApi.BuildGuildResponse(
+                Guid.NewGuid(), $"H{Guid.NewGuid():N}"[..10], "Guild", 1,
+                (leaderTacticusUserId, GuildRole.LEADER, 10, null),
+                (memberTacticusUserId, GuildRole.MEMBER, 5, null)));
+        (await leaderClient.PostAsJsonAsync("/api/v1/guilds/register", new RegisterGuildRequest(token), ct)).EnsureSuccessStatusCode();
+
+        var response = await leaderClient.PostAsync("/api/v1/guilds/me/sync", null, ct);
+
+        response.EnsureSuccessStatusCode();
+        var body = await response.Content.ReadFromJsonAsync<RegisteredGuildResponse>(ct);
+        Assert.All(body!.Members, member => Assert.True(member.IsLinked));
+        var linking = Assert.Single(factory.CommandTextsFor(response), text =>
+            text.Contains("FROM profiles", StringComparison.Ordinal) && text.Contains("last_seen_at", StringComparison.Ordinal));
+        Assert.Contains("tacticus_user_id_hash = ANY", linking);
+    }
 }
