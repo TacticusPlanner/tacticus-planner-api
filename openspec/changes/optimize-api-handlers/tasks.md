@@ -38,7 +38,7 @@ After (current ceilings): `GET me/goals` 3, `POST me/goals` 10, `POST me/goals/c
 ## 6. Verification
 
 - [x] 6.1 `dotnet format TacticusPlanner.slnx --verify-no-changes --no-restore`, `dotnet build TacticusPlanner.slnx -c Release --no-restore`, `dotnet test TacticusPlanner.slnx -c Release --no-build` all green; `docker build -f src/TacticusPlanner.Api/Dockerfile .` succeeds
-- [ ] 6.2 (partial: measured in-process against the real API, not through Aspire/browser — manifest + 22 datasets, 23 requests: identity 4,984,821 B; gzip Optimal 367,320 B; br Optimal 347,318 B = 93 % reduction; Brotli's default Fastest level gave only 1,103,082 B, so both providers are set to Optimal) Through the Aspire stack, capture a browser network export of first-visit catalog load before/after and record total transferred bytes in this file (expected ≥ 70 % reduction); record the per-endpoint command counts before/after from 1.2/3.5
+- [x] 6.2 (Aspire stack, Chrome, HTTP/2: manifest + 22 datasets = 23 requests replayed from the API origin because the web client's catalog sync sits behind MSAL sign-in. Transferred 354,218 B (body 347,318 B) vs 4,984,821 B uncompressed = 92.9 % reduction; ETag revalidation returns 304. Brotli's default Fastest level gave only 1,103,082 B, so both providers are set to Optimal) Through the Aspire stack, capture a browser network export of first-visit catalog load before/after and record total transferred bytes in this file (expected ≥ 70 % reduction); record the per-endpoint command counts before/after from 1.2/3.5
 
 ## Workflow follow-up
 
