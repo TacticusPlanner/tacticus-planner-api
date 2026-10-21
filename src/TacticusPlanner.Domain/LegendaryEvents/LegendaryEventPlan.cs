@@ -4,9 +4,10 @@ using TacticusPlanner.Domain.Profiles;
 namespace TacticusPlanner.Domain.LegendaryEvents;
 
 /// <summary>
-/// A profile's plan for one Legendary Event (LRE Stage 2): its lane teams and plan-level fields. One plan per
-/// (profile, catalog event id). <see cref="Revision"/> guards every mutation of the plan or its teams, so a
-/// team write always touches the plan row (see <c>LegendaryEventPlanWriter</c>).
+/// A profile's plan for one Legendary Event (LRE Stage 2): its lane teams, run inputs, annotations and plan-level
+/// fields, read and written whole as one row (the children are jsonb). One plan per (profile, catalog event id).
+/// <see cref="Revision"/> guards every mutation (see <c>LegendaryEventPlanWriter</c>); the shape invariants the
+/// database no longer sees are asserted by <see cref="LegendaryEventValidation.AssertInvariants"/> before save.
 /// </summary>
 public class LegendaryEventPlan : BaseEntity<LegendaryEventPlanId>, IRevisionedEntity
 {
@@ -26,10 +27,9 @@ public class LegendaryEventPlan : BaseEntity<LegendaryEventPlanId>, IRevisionedE
 
     public virtual Profile? Profile { get; set; }
 
-    public virtual ICollection<LegendaryEventTeam> Teams { get; set; } = new List<LegendaryEventTeam>();
+    public List<LegendaryEventTeamRecord> Teams { get; set; } = [];
 
-    public virtual ICollection<LegendaryEventRunProgress> Runs { get; set; } = new List<LegendaryEventRunProgress>();
+    public List<LegendaryEventRunProgress> Runs { get; set; } = [];
 
-    public virtual ICollection<LegendaryEventObjectiveAnnotation> Annotations { get; set; } =
-        new List<LegendaryEventObjectiveAnnotation>();
+    public List<LegendaryEventObjectiveAnnotation> Annotations { get; set; } = [];
 }

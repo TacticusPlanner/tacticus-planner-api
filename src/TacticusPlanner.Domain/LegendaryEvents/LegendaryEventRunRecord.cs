@@ -6,7 +6,7 @@ namespace TacticusPlanner.Domain.LegendaryEvents;
 
 /// <summary>
 /// One run occurrence of a Legendary Event as the profile played it (LRE Stage 7, design D1): what was cleared,
-/// with which plan teams, and a reference to the roster as it was. Written only by sync (opened or refreshed,
+/// with which plan teams, and the roster as it was (inline). Written only by sync (opened or refreshed,
 /// design D2), never through the API; keyed by the catalog event id with no FK, so it outlives the catalog entry.
 /// </summary>
 public class LegendaryEventRunRecord : BaseEntity<LegendaryEventRunRecordId>
@@ -33,14 +33,12 @@ public class LegendaryEventRunRecord : BaseEntity<LegendaryEventRunRecordId>
 
     public LegendaryEventRunRecordLanes Lanes { get; set; } = new();
 
-    /// <summary>The plan's teams at <see cref="ProgressAt"/>, in lane then sort order.</summary>
-    public List<LegendaryEventRunRecordTeam> Teams { get; set; } = [];
+    /// <summary>The plan's teams at <see cref="ProgressAt"/>, in lane then sort order (copies of the plan's teams;
+    /// the served depth is each team's depth for <see cref="Run"/>).</summary>
+    public List<LegendaryEventTeamRecord> Teams { get; set; } = [];
 
-    /// <summary>This record's own <see cref="RosterSnapshotSource.LegendaryEventRun"/> snapshot; null only once
-    /// that snapshot has been removed.</summary>
-    public RosterSnapshotId? RosterSnapshotId { get; set; }
-
-    public virtual RosterSnapshot? RosterSnapshot { get; set; }
+    /// <summary>This record's own roster snapshot, never null; read on demand, never with the record list.</summary>
+    public RosterSnapshot Roster { get; set; } = new();
 
     public virtual Profile? Profile { get; set; }
 }
@@ -68,26 +66,3 @@ public sealed class LegendaryEventRunRecordEncounter
     public int HighScore { get; set; }
 }
 
-/// <summary>A plan team as it was at the record's last progress; the depth is the team's depth for the record's
-/// run, or null.</summary>
-public sealed class LegendaryEventRunRecordTeam
-{
-    public Guid TeamId { get; set; }
-
-    public string LaneId { get; set; } = string.Empty;
-
-    public string Name { get; set; } = string.Empty;
-
-    public int SortOrder { get; set; }
-
-    public List<string> MemberUnitIds { get; set; } = [];
-
-    public string? ReserveUnitId { get; set; }
-
-    public List<int> ObjectiveIndexes { get; set; } = [];
-
-    public int? ExpectedBattleClears { get; set; }
-
-    /// <summary><c>estimate</c> or <c>manual</c> when <see cref="ExpectedBattleClears"/> is set.</summary>
-    public string? ExpectedBattleClearsSource { get; set; }
-}

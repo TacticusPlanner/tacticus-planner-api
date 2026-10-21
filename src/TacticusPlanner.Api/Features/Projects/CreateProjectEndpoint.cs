@@ -2,6 +2,7 @@ using FastEndpoints;
 using FluentValidation;
 using FluentValidation.Results;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Api.Http;
 using TacticusPlanner.Domain.Projects;
 using TacticusPlanner.Persistence;
 
@@ -27,7 +28,7 @@ public sealed class CreateProjectEndpoint : Endpoint<CreateProjectRequest, Proje
         var state = ProcessorState<CurrentUserState>();
         if (state.ProfileId is not { } profileId)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 
@@ -56,7 +57,7 @@ public sealed class CreateProjectEndpoint : Endpoint<CreateProjectRequest, Proje
         db.Projects.Add(project);
         await db.SaveChangesAsync(ct);
 
-        await Send.OkAsync(Map.ToSummary(project), ct);
+        await Send.OkAsync(Map.ToSummary(project, []), ct);
     }
 }
 

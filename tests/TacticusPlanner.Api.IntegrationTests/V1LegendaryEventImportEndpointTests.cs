@@ -861,11 +861,11 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
     {
         using var scope = factory.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
-        var account = await db.Accounts.IgnoreQueryFilters().Include(entity => entity.Profile)
+        var profile = await db.Profiles.IgnoreQueryFilters()
             .FirstAsync(entity => entity.Subject == subject, Ct);
         db.PlayerDataSnapshots.Add(new PlayerDataSnapshot
         {
-            Id = account.Profile!.Id,
+            Id = profile.Id,
             LreProgress = [new LreProgressRecord { Id = UnitId.From(eventId), CurrentEventRun = run }],
         });
         await db.SaveChangesAsync(Ct);

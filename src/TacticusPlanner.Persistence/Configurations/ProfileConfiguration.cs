@@ -14,7 +14,9 @@ public sealed class ProfileConfiguration : IEntityTypeConfiguration<Profile>
         builder.Property(entity => entity.Id)
             .HasVogenConversion()
             .ValueGeneratedNever();
-        builder.Property(entity => entity.AccountId).HasVogenConversion().IsRequired();
+        builder.Property(entity => entity.Issuer).IsRequired();
+        builder.Property(entity => entity.Subject).IsRequired();
+        builder.Property(entity => entity.LastSeenAt);
         builder.Property(entity => entity.DisplayName).IsRequired();
         builder.Property(entity => entity.TacticusUserId);
         builder.Property(entity => entity.TacticusUserIdHash)
@@ -28,7 +30,7 @@ public sealed class ProfileConfiguration : IEntityTypeConfiguration<Profile>
         builder.Property(entity => entity.CreatedAt).IsRequired();
         builder.Property(entity => entity.UpdatedAt).IsRequired();
 
-        builder.HasIndex(entity => entity.AccountId).IsUnique();
+        builder.HasIndex(entity => new { entity.Issuer, entity.Subject }).IsUnique();
         builder
             .HasIndex(entity => entity.TacticusUserIdHash)
             .IsUnique()

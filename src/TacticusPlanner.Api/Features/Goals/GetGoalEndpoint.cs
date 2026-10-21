@@ -1,6 +1,7 @@
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Api.Http;
 using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Persistence;
 
@@ -13,7 +14,7 @@ public sealed class GetGoalEndpoint : EndpointWithoutRequest<GoalDetailResponse,
         Get("me/goals/{goalId}");
         Summary(summary =>
         {
-            summary.Summary = "Gets a single goal's full detail, including config, milestones, snapshot, and events.";
+            summary.Summary = "Gets a single goal's full detail (the same shape the goals list serves).";
             summary.Response<GoalDetailResponse>(StatusCodes.Status200OK, "The goal.");
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
             summary.Response(StatusCodes.Status404NotFound, "No matching goal owned by the caller.");
@@ -25,7 +26,7 @@ public sealed class GetGoalEndpoint : EndpointWithoutRequest<GoalDetailResponse,
         var state = ProcessorState<CurrentUserState>();
         if (state.ProfileId is null)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 
@@ -39,7 +40,7 @@ public sealed class GetGoalEndpoint : EndpointWithoutRequest<GoalDetailResponse,
 
         if (goal is null)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 

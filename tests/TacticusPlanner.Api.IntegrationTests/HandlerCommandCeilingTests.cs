@@ -10,17 +10,20 @@ using TacticusPlanner.TacticusApi.Models.Shared;
 
 namespace TacticusPlanner.Api.IntegrationTests;
 
-/// <summary>Regression gate for optimize-api-handlers: whole-request PostgreSQL command counts per
-/// endpoint, asserted as maxima so a handler cannot silently grow more round trips.</summary>
+/// <summary>Regression gate for optimize-api-handlers and rebuild-foundation-pre-launch: whole-request PostgreSQL
+/// command counts per endpoint (including the caller's profile lookup), asserted as maxima so a handler cannot
+/// silently grow more round trips.</summary>
 public sealed class HandlerCommandCeilingTests(PlannerApiFactory factory) : IClassFixture<PlannerApiFactory>
 {
     private const int ListGoals = 3;
-    private const int CreateGoal = 10;
-    private const int CombinedOneSpec = 10;
-    private const int CombinedThreeSpecs = 10;
-    private const int CompleteGoal = 12;
+    private const int CreateGoal = 6;
+    private const int CombinedOneSpec = 6;
+    private const int CombinedThreeSpecs = 6;
+    private const int CompleteGoal = 5;
     private const int DeleteGoal = 6;
     private const int ReorderGoals = 4;
+    private const int EditGoal = 6;
+    private const int LegendaryEventPlanMutation = 3;
     // Three more small reads than the single whole-season load they replace, in exchange for O(1) rows.
     private const int RaidStatus = 7;
     private const int PlayerSync = 6;
@@ -54,10 +57,10 @@ public sealed class HandlerCommandCeilingTests(PlannerApiFactory factory) : ICla
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         await CreateAsync(client);
-        AssertWithin(CreateGoal, await client.PostAsJsonAsync("/api/v1/me/goals", Rank with
+        AssertWithin(CreateGoal, await client.PostGoalAsync(Rank with
         {
             Config = new CreateGoalConfigRequest(Rank: new RankTargetRequest(1, false, 0, 4, false, 0)),
-        }, TestContext.Current.CancellationToken));
+        }));
     }
 
     [Fact]
@@ -65,7 +68,7 @@ public sealed class HandlerCommandCeilingTests(PlannerApiFactory factory) : ICla
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         AssertWithin(CombinedOneSpec, await client.PostAsJsonAsync(
-            "/api/v1/me/goals/combined", Combined(Unlock), TestContext.Current.CancellationToken));
+            "/api/v1/me/goals", Combined(Unlock), TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -73,7 +76,7 @@ public sealed class HandlerCommandCeilingTests(PlannerApiFactory factory) : ICla
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         AssertWithin(CombinedThreeSpecs, await client.PostAsJsonAsync(
-            "/api/v1/me/goals/combined", Combined(Unlock, RankAfterUnlock, Ability), TestContext.Current.CancellationToken));
+            "/api/v1/me/goals", Combined(Unlock, RankAfterUnlock, Ability), TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -85,8 +88,9 @@ public sealed class HandlerCommandCeilingTests(PlannerApiFactory factory) : ICla
         await CreateSecondAsync(client);
 
         // Completing the first goal leaves a gap that must be renumbered: the heaviest status path.
+        var revision = (await client.ListGoalsAsync()).OrderRevision;
         AssertWithin(CompleteGoal, await client.PostAsJsonAsync(
-            $"/api/v1/me/goals/{first.GoalId}/status", new UpdateGoalStatusRequest("completed"), ct));
+            "/api/v1/me/goals/status", new UpdateGoalsStatusRequest([first.GoalId], "completed", revision), ct));
     }
 
     [Fact]
@@ -100,14 +104,45 @@ public sealed class HandlerCommandCeilingTests(PlannerApiFactory factory) : ICla
             $"/api/v1/me/goals/{second.GoalId}", TestContext.Current.CancellationToken));
     }
 
+    [Fact]
+    public async Task EditGoalStaysWithinCeiling()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var first = await CreateAsync(client);
+        await CreateSecondAsync(client);
+        var revision = (await client.ListGoalsAsync()).OrderRevision;
+
+        // Every section at once: the heaviest edit.
+        AssertWithin(EditGoal, await client.EditGoalAsync(first.GoalId, new EditGoalRequest(
+            Target: new UpdateGoalTargetRequest(first.Revision, new GoalTargetEditRequest(Rank: new RankEndTargetRequest(5, false, 0))),
+            Details: new UpdateGoalRequest("notes", null),
+            ProjectIds: first.ProjectIds,
+            Priority: new EditGoalPriorityRequest(2, revision))));
+    }
+
+    [Fact]
+    public async Task LegendaryEventPlanMutationStaysWithinCeiling()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var ct = TestContext.Current.CancellationToken;
+        (await client.PutAsJsonAsync(
+            "/api/v1/me/legendary-event-plans/votanUthar",
+            new TacticusPlanner.Api.Features.LegendaryEventPlans.UpdateLegendaryEventPlanRequest(0, "first", false), ct))
+            .EnsureSuccessStatusCode();
+
+        AssertWithin(LegendaryEventPlanMutation, await client.PutAsJsonAsync(
+            "/api/v1/me/legendary-event-plans/votanUthar",
+            new TacticusPlanner.Api.Features.LegendaryEventPlans.UpdateLegendaryEventPlanRequest(1, "second", true), ct));
+    }
+
     private static async Task<GoalDetailResponse> CreateSecondAsync(HttpClient client)
     {
-        var response = await client.PostAsJsonAsync("/api/v1/me/goals", Rank with
+        var response = await client.PostGoalAsync(Rank with
         {
             Config = new CreateGoalConfigRequest(Rank: new RankTargetRequest(1, false, 0, 4, false, 0)),
-        }, TestContext.Current.CancellationToken);
+        });
         response.EnsureSuccessStatusCode();
-        return (await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken))!;
+        return (await response.ReadCreatedGoalAsync())!;
     }
 
     [Fact]
@@ -151,22 +186,26 @@ public sealed class HandlerCommandCeilingTests(PlannerApiFactory factory) : ICla
             .EnsureSuccessStatusCode();
 
         // The second sync is the steady-state path: the snapshot row already exists.
-        (await client.PostAsync("/api/v1/tacticus-integration/player-sync", null, ct)).EnsureSuccessStatusCode();
-        AssertWithin(PlayerSync, await client.PostAsync("/api/v1/tacticus-integration/player-sync", null, ct));
+        (await client.PostAsync("/api/v1/me/player-data/sync", null, ct)).EnsureSuccessStatusCode();
+        AssertWithin(PlayerSync, await client.PostAsync("/api/v1/me/player-data/sync", null, ct));
     }
 
     private static async Task<GoalDetailResponse> CreateAsync(HttpClient client)
     {
-        var response = await client.PostAsJsonAsync("/api/v1/me/goals", Rank, TestContext.Current.CancellationToken);
+        var response = await client.PostGoalAsync(Rank);
         response.EnsureSuccessStatusCode();
-        return (await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken))!;
+        return (await response.ReadCreatedGoalAsync())!;
     }
 
     private void AssertWithin(int ceiling, HttpResponseMessage response)
     {
         response.EnsureSuccessStatusCode();
         var actual = factory.CommandsFor(response);
-        Assert.True(actual <= ceiling, $"{response.RequestMessage!.Method} {response.RequestMessage.RequestUri!.AbsolutePath}: {actual} commands, ceiling {ceiling}");
+        Assert.True(
+            actual <= ceiling,
+            $"{response.RequestMessage!.Method} {response.RequestMessage.RequestUri!.AbsolutePath}: {actual} commands, ceiling {ceiling}"
+                + string.Concat(factory.CommandTextsFor(response).Select(text =>
+                    Environment.NewLine + "  " + string.Concat(text.ReplaceLineEndings(" ").Take(140)))));
     }
 
     private GuildRaidResponse ActiveRaid()

@@ -7,8 +7,8 @@ namespace TacticusPlanner.Api.IntegrationTests;
 /// <summary>
 /// Regression guard for goal-lifecycle-status: "Project membership operations do not change a goal's
 /// status". Membership changes (through either direction of the membership endpoints) may not move a goal
-/// between Active and Paused — a goal's status changes only through an operation that explicitly targets
-/// it. This already holds, and these tests keep it holding.
+/// between Active and Paused — a goal's status changes only through <c>POST me/goals/status</c>, which names the
+/// goals it transitions (covered by <see cref="GoalBulkStatusEndpointTests"/>).
 /// </summary>
 public sealed class GoalStatusInvarianceTests(PlannerApiFactory factory) : IClassFixture<PlannerApiFactory>
 {
@@ -27,18 +27,14 @@ public sealed class GoalStatusInvarianceTests(PlannerApiFactory factory) : IClas
         var defaultProject = await GetDefaultProjectAsync(client);
         var projectB = await CreateProjectAsync(client, "Event Prep");
 
-        var goal = await CreateGoalAsync(client, RankGoal with
+        var goal = await client.CreateGoalAsync(RankGoal with
         {
             Projects = [new ProjectPriorityRequest(defaultProject.ProjectId)],
             StartPaused = true,
         });
         Assert.Equal("Paused", goal.Status);
 
-        var response = await client.PutAsJsonAsync(
-            $"/api/v1/me/goals/{goal.GoalId}/projects",
-            new UpdateGoalProjectsRequest([defaultProject.ProjectId, projectB.ProjectId]),
-            TestContext.Current.CancellationToken
-        );
+        var response = await client.PutProjectsAsync(goal.GoalId, [defaultProject.ProjectId, projectB.ProjectId]);
         response.EnsureSuccessStatusCode();
 
         Assert.Equal("Paused", (await GetGoalAsync(client, goal.GoalId)).Status);
@@ -51,7 +47,7 @@ public sealed class GoalStatusInvarianceTests(PlannerApiFactory factory) : IClas
         var defaultProject = await GetDefaultProjectAsync(client);
         var projectB = await CreateProjectAsync(client, "Event Prep");
 
-        var goal = await CreateGoalAsync(client, RankGoal with
+        var goal = await client.CreateGoalAsync(RankGoal with
         {
             Projects = [new ProjectPriorityRequest(defaultProject.ProjectId)],
             StartPaused = true,
@@ -74,7 +70,7 @@ public sealed class GoalStatusInvarianceTests(PlannerApiFactory factory) : IClas
         var defaultProject = await GetDefaultProjectAsync(client);
         var projectB = await CreateProjectAsync(client, "Event Prep");
 
-        var goal = await CreateGoalAsync(client, RankGoal with
+        var goal = await client.CreateGoalAsync(RankGoal with
         {
             Projects =
             [
@@ -84,11 +80,7 @@ public sealed class GoalStatusInvarianceTests(PlannerApiFactory factory) : IClas
         });
         Assert.Equal("Active", goal.Status);
 
-        var response = await client.PutAsJsonAsync(
-            $"/api/v1/me/goals/{goal.GoalId}/projects",
-            new UpdateGoalProjectsRequest([projectB.ProjectId]),
-            TestContext.Current.CancellationToken
-        );
+        var response = await client.PutProjectsAsync(goal.GoalId, [projectB.ProjectId]);
         response.EnsureSuccessStatusCode();
 
         Assert.Equal("Active", (await GetGoalAsync(client, goal.GoalId)).Status);
@@ -106,17 +98,6 @@ public sealed class GoalStatusInvarianceTests(PlannerApiFactory factory) : IClas
             TestContext.Current.CancellationToken);
         Assert.NotNull(project);
         return project;
-    }
-
-    private static async Task<GoalDetailResponse> CreateGoalAsync(HttpClient client, CreateGoalRequest request)
-    {
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals", request, TestContext.Current.CancellationToken);
-        response.EnsureSuccessStatusCode();
-        var goal = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(
-            TestContext.Current.CancellationToken);
-        Assert.NotNull(goal);
-        return goal;
     }
 
     private static async Task<GoalDetailResponse> GetGoalAsync(HttpClient client, Guid goalId) =>

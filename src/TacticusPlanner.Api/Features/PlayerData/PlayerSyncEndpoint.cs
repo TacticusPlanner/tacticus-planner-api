@@ -2,6 +2,7 @@ using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Api.Features.UpstreamRateLimiting;
+using TacticusPlanner.Api.Http;
 using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.PlayerData;
@@ -19,7 +20,7 @@ public sealed class PlayerSyncEndpoint : EndpointWithoutRequest<PlayerDataManife
 {
     public override void Configure()
     {
-        Post("tacticus-integration/player-sync");
+        Post("me/player-data/sync");
         Options(builder => builder.WithMetadata(UpstreamRateLimit.Slow));
         Summary(summary =>
         {
@@ -31,6 +32,7 @@ public sealed class PlayerSyncEndpoint : EndpointWithoutRequest<PlayerDataManife
             summary.Response(StatusCodes.Status400BadRequest, "No Tacticus API key is configured, or the Tacticus API rejected it.");
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
             summary.Response(StatusCodes.Status429TooManyRequests, UpstreamRateLimit.ResponseDescription);
+            summary.Response(StatusCodes.Status503ServiceUnavailable, "The Tacticus API failed or timed out (upstreamUnavailable).");
             summary.Response(StatusCodes.Status404NotFound, "The authenticated user has not signed up yet.");
         });
     }
@@ -40,14 +42,14 @@ public sealed class PlayerSyncEndpoint : EndpointWithoutRequest<PlayerDataManife
         var state = ProcessorState<CurrentUserState>();
         if (state.ProfileId is not { } profileId)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 
         var db = Resolve<PlannerDbContext>();
 
         // TacticusIntegration is keyed 1:1 by the same ProfileId, so this is a direct primary-key lookup —
-        // no Account/Profile join, and the (potentially large) PlayerDataSnapshot row isn't touched yet.
+        // no profile join, and the (potentially large) PlayerDataSnapshot row isn't touched yet.
         var apiKey = await db.TacticusIntegrations
             .Where(entity => entity.Id == profileId)
             .Select(entity => entity.TacticusApiKey)
@@ -60,6 +62,13 @@ public sealed class PlayerSyncEndpoint : EndpointWithoutRequest<PlayerDataManife
         }
 
         var result = await Resolve<PlayerDataSyncService>().SyncAsync(profileId, apiKey, ct);
+        if (result is PlayerDataSyncResult.UpstreamUnavailable)
+        {
+            await this.SendProblemAsync(
+                StatusCodes.Status503ServiceUnavailable, ct, "The Tacticus API is currently unavailable. Try again shortly.");
+            return;
+        }
+
         if (result is not PlayerDataSyncResult.Success success)
         {
             AddError("The Tacticus API could not fetch player data for the configured key.");

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Analytics;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Api.Features.UpstreamRateLimiting;
+using TacticusPlanner.Api.Http;
 using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.Guilds;
@@ -50,7 +51,7 @@ public sealed class RegisterGuildEndpoint : Endpoint<RegisterGuildRequest, Regis
         var state = ProcessorState<CurrentUserState>();
         if (state.ProfileId is not { } profileId)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 
@@ -71,7 +72,7 @@ public sealed class RegisterGuildEndpoint : Endpoint<RegisterGuildRequest, Regis
 
         if (profile is null)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 
@@ -87,7 +88,7 @@ public sealed class RegisterGuildEndpoint : Endpoint<RegisterGuildRequest, Regis
 
         if (result is GuildSyncResult.Success success)
         {
-            if (success.WasCreated && state.AccountId is { } accountId)
+            if (success.WasCreated)
             {
                 ProductAnalyticsReporter.TryReport(
                     Resolve<ILogger<RegisterGuildEndpoint>>(),
@@ -95,7 +96,7 @@ public sealed class RegisterGuildEndpoint : Endpoint<RegisterGuildRequest, Regis
                     () =>
                     {
                         var analyticsId = Resolve<AnalyticsIdentityDeriver>()
-                            .Derive(accountId, AnalyticsIdentityDeriver.PostHogDestination);
+                            .Derive(profileId, AnalyticsIdentityDeriver.PostHogDestination);
                         Resolve<IProductAnalytics>().GuildRegistered(analyticsId);
                     }
                 );

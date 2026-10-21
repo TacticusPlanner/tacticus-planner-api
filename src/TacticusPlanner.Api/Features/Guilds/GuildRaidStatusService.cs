@@ -265,8 +265,8 @@ public sealed class GuildRaidStatusService(
                 $"The Tacticus API returned unknown Guild Raid config '{response.SeasonConfigId}'.");
         }
 
+        // Attack units are inline jsonb on each attack: loaded with it, never queried on their own.
         var season = await db.GuildRaidSeasons.Include(entity => entity.Attacks)
-            .ThenInclude(attack => attack.Units)
             .FirstOrDefaultAsync(entity => entity.GuildId == guildId && entity.SeasonNumber == response.Season, ct);
         season ??= new GuildRaidSeason
         {
@@ -338,14 +338,13 @@ public sealed class GuildRaidStatusService(
             for (var index = 0; index < entry.HeroDetails.Count; index++)
             {
                 attack.Units.Add(BuildUnit(
-                    attack.Id,
                     entry.HeroDetails[index],
                     GuildRaidAttackUnitKind.Hero,
                     index));
             }
             if (entry.MachineOfWarDetails is { } mow)
             {
-                attack.Units.Add(BuildUnit(attack.Id, mow, GuildRaidAttackUnitKind.MachineOfWar, 0));
+                attack.Units.Add(BuildUnit(mow, GuildRaidAttackUnitKind.MachineOfWar, 0));
             }
             season.Attacks.Add(attack);
             existingAttacks.Add(contentHash, attack);
@@ -358,13 +357,10 @@ public sealed class GuildRaidStatusService(
     }
 
     private static GuildRaidAttackUnit BuildUnit(
-        GuildRaidAttackId attackId,
         GuildRaidUnit unit,
         GuildRaidAttackUnitKind kind,
         int position) => new()
         {
-            Id = GuildRaidAttackUnitId.From(Guid.CreateVersion7()),
-            GuildRaidAttackId = attackId,
             UnitId = unit.UnitId,
             Kind = kind,
             Position = position,

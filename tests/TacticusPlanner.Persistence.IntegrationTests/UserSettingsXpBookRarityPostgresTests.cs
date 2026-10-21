@@ -42,10 +42,8 @@ public sealed class UserSettingsXpBookRarityPostgresTests
             await connection.OpenAsync(TestContext.Current.CancellationToken);
             await using var command = connection.CreateCommand();
             command.CommandText = """
-                INSERT INTO accounts (id, issuer, subject, created_at, updated_at)
-                VALUES (gen_random_uuid(), 'test', 'legacy-xp-book-rarity', now(), now());
-                INSERT INTO profiles (id, account_id, display_name, created_at, updated_at)
-                SELECT @profile, id, 'Legacy Settings Profile', now(), now() FROM accounts WHERE subject = 'legacy-xp-book-rarity';
+                INSERT INTO profiles (id, issuer, subject, display_name, created_at, updated_at)
+                VALUES (@profile, 'test', 'legacy-xp-book-rarity', 'Legacy Settings Profile', now(), now());
                 INSERT INTO user_settings (id, revision, created_at, updated_at, settings)
                 VALUES (@profile, 0, now(), now(), '{"DailyEnergy": 638}'::jsonb);
                 """;

@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 using Microsoft.Extensions.Options;
 using TacticusPlanner.Api.Features.Analytics;
 using TacticusPlanner.Api.Features.CurrentUser;
-using TacticusPlanner.Domain.Accounts;
+using TacticusPlanner.Domain.Profiles;
 
 namespace TacticusPlanner.Api.IntegrationTests;
 
@@ -54,7 +54,7 @@ public sealed class CurrentUserEndpointTests(PlannerApiFactory factory) : IClass
             IdentityKey = Convert.ToBase64String(PlannerApiFactory.TestAnalyticsIdentityKey),
         }));
         var expected = deriver.Derive(
-            AccountId.From(body.ApplicationUserId),
+            ProfileId.From(body.ApplicationUserId),
             AnalyticsIdentityDeriver.PostHogDestination
         );
 

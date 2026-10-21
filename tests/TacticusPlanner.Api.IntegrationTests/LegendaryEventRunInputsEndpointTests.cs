@@ -417,12 +417,11 @@ public sealed class LegendaryEventRunInputsEndpointTests(PlannerApiFactory facto
         return plan;
     }
 
-    private static async Task<LegendaryEventPlanConflictResponse> ReadConflictAsync(HttpResponseMessage response)
+    /// <summary>A plan conflict: the problem's issue code and the plan under <c>current</c>.</summary>
+    private static async Task<(string IssueCode, LegendaryEventPlanResponse Plan)> ReadConflictAsync(HttpResponseMessage response)
     {
         Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
-        var conflict = await response.Content.ReadFromJsonAsync<LegendaryEventPlanConflictResponse>(Ct);
-        Assert.NotNull(conflict);
-        return conflict;
+        return ((await response.ReadIssueCodeAsync())!, await response.ReadCurrentAsync<LegendaryEventPlanResponse>());
     }
 
     private static async Task AssertBadRequestAsync(HttpResponseMessage response, string field)

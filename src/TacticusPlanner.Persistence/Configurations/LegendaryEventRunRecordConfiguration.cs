@@ -1,23 +1,19 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using TacticusPlanner.Domain.LegendaryEvents;
-using TacticusPlanner.Domain.RosterSnapshots;
 
 namespace TacticusPlanner.Persistence.Configurations;
 
 /// <summary>
-/// Legendary Event run records (LRE Stage 7, design D1). Lanes and teams are read and written whole and never
-/// queried inside, so they are jsonb. <c>event_id</c> has no FK: a record outlives its catalog entry. Each record
-/// owns one roster snapshot (unique FK, set null if the snapshot is ever removed).
+/// Legendary Event run records (LRE Stage 7, design D1). Lanes, teams and the roster snapshot are read and
+/// written whole and never queried inside, so they are jsonb. <c>event_id</c> has no FK: a record outlives its
+/// catalog entry. The run range is asserted by the recorder, which only opens runs 1–3.
 /// </summary>
 public sealed class LegendaryEventRunRecordConfiguration : IEntityTypeConfiguration<LegendaryEventRunRecord>
 {
     public void Configure(EntityTypeBuilder<LegendaryEventRunRecord> builder)
     {
-        var run = PostgresNaming.SnakeCase(nameof(LegendaryEventRunRecord.Run));
-        builder.ToTable("legendary_event_run_records", table => table.HasCheckConstraint(
-            "ck_legendary_event_run_records_run",
-            $"{run} BETWEEN {LegendaryEventValidation.MinRun} AND {LegendaryEventValidation.MaxRun}"));
+        builder.ToTable("legendary_event_run_records");
         builder.HasKey(entity => entity.Id);
 
         builder.Property(entity => entity.Id)
@@ -37,12 +33,6 @@ public sealed class LegendaryEventRunRecordConfiguration : IEntityTypeConfigurat
         builder.Property(entity => entity.CreatedAt).IsRequired();
         builder.Property(entity => entity.UpdatedAt).IsRequired();
 
-        // HasVogenConversion() only targets the non-nullable struct overload (see GuildConfiguration).
-        builder.Property(entity => entity.RosterSnapshotId)
-            .HasConversion(
-                id => id.HasValue ? id.Value.Value : (Guid?)null,
-                value => value.HasValue ? RosterSnapshotId.From(value.Value) : (RosterSnapshotId?)null);
-
         builder.OwnsOne(entity => entity.Lanes, lanes =>
         {
             lanes.ToJson("lanes");
@@ -51,21 +41,31 @@ public sealed class LegendaryEventRunRecordConfiguration : IEntityTypeConfigurat
             lanes.OwnsOne(lane => lane.Gamma, track => track.OwnsMany(t => t.Encounters));
         });
 
-        builder.OwnsMany(entity => entity.Teams, teams => teams.ToJson("teams"));
+        builder.OwnsMany(entity => entity.Teams, teams =>
+        {
+            teams.ToJson("teams");
+            teams.OwnsMany(team => team.RunDepths, depths =>
+                depths.Property(depth => depth.Source).HasConversion<string>());
+        });
 
-        builder.HasIndex(entity => new { entity.ProfileId, entity.EventId, entity.StartedAt })
-            .IsDescending(false, false, true)
-            .HasDatabaseName("ix_legendary_event_run_records_profile_id_event_id_started_at");
+        // The units reuse the synced characters / mows chunk records, mapped as PlayerDataSnapshotConfiguration
+        // maps them.
+        builder.OwnsOne(entity => entity.Roster, roster =>
+        {
+            roster.ToJson("roster");
+            roster.OwnsMany(value => value.Characters, characters =>
+            {
+                characters.OwnsMany(unit => unit.Abilities);
+                characters.OwnsMany(unit => unit.EquippedItems);
+            });
+            roster.OwnsMany(value => value.Mows, mows => mows.OwnsMany(unit => unit.Abilities));
+        });
+        builder.Navigation(entity => entity.Roster).IsRequired();
 
-        builder.HasIndex(entity => entity.RosterSnapshotId)
-            .IsUnique()
-            .HasDatabaseName("ix_legendary_event_run_records_roster_snapshot_id");
-
-        builder
-            .HasOne(entity => entity.RosterSnapshot)
-            .WithOne()
-            .HasForeignKey<LegendaryEventRunRecord>(entity => entity.RosterSnapshotId)
-            .OnDelete(DeleteBehavior.SetNull);
+        // Serves the paged read: newest first with the id as the tiebreak (the cursor carries both).
+        builder.HasIndex(entity => new { entity.ProfileId, entity.EventId, entity.StartedAt, entity.Id })
+            .IsDescending(false, false, true, true)
+            .HasDatabaseName("ix_legendary_event_run_records_profile_id_event_id_started_at_id");
 
         builder
             .HasOne(entity => entity.Profile)

@@ -11,15 +11,13 @@ namespace TacticusPlanner.Api.Features.Goals;
 /// <param name="ProjectIds">The goal's project memberships after the edit.</param>
 /// <param name="Order">The order after the move; null unless the request carried <c>priority</c>.</param>
 public sealed record GoalEditOutcome(
-    GoalEditResult Result, Goal? Goal, List<ProjectId> ProjectIds, GoalOrderSnapshot? Order);
+    GoalEditResult Result, Goal? Goal, List<Guid> ProjectIds, GoalOrderSnapshot? Order);
 
 /// <summary>
-/// The all-or-nothing combined edit behind <see cref="EditGoalEndpoint"/> (<c>goal-combined-edit</c>): the
-/// target, details, projects and priority cores run in that order inside one
-/// <see cref="ProjectGoalPlanningService.ExecuteLockedMutationAsync"/> delegate, with one
-/// <c>SaveChangesAsync</c> and one commit. Any non-applied result rolls the transaction back. It writes no
-/// HTTP response: the caller maps the returned outcome once the delegate has returned (the execution
-/// strategy may not replay a delegate that already wrote one).
+/// The all-or-nothing edit behind <see cref="EditGoalEndpoint"/> (<c>goal-combined-edit</c>): the target,
+/// details, projects and priority sections run in that order inside one profile-locked transaction, against the
+/// goal and memberships re-read under the lock, with one <c>SaveChangesAsync</c> and one commit. Any non-applied
+/// result rolls the transaction back. It writes no HTTP response.
 /// </summary>
 public sealed class GoalCombinedEditor(
     PlannerDbContext db,
@@ -27,86 +25,60 @@ public sealed class GoalCombinedEditor(
     GoalTargetEditor targetEditor,
     GoalDetailsEditor detailsEditor,
     GoalMembershipEditor membershipEditor,
-    GoalOrderService orderService)
+    GoalOrderService orderService,
+    TimeProvider timeProvider)
 {
     public async Task<GoalEditOutcome> ApplyAsync(
         ProfileId profileId, GoalId goalId, EditGoalRequest req, CancellationToken ct)
     {
-        // Scoped to the caller's profile by PlannerDbContext's global query filter.
-        var goal = await db.Goals.FirstOrDefaultAsync(entity => entity.Id == goalId, ct);
-        if (goal is null)
-            return Failed(new GoalEditResult.NotFound());
-
-        var requestedProjectIds = req.ProjectIds?.Distinct().Select(ProjectId.From).ToHashSet();
-        var ownedProjects = new List<Project>();
-        if (requestedProjectIds is not null)
+        var requestedProjectIds = req.ProjectIds?.Select(ProjectId.From).ToHashSet();
+        var requested = requestedProjectIds?.ToList() ?? [];
+        var outcome = Failed(new GoalEditResult.NotFound());
+        await planning.ExecuteLockedMutationAsync(async transaction =>
         {
-            ownedProjects = await db.Projects.Where(entity => requestedProjectIds.Contains(entity.Id)).ToListAsync(ct);
-            if (ownedProjects.Count != requestedProjectIds.Count)
-                return Failed(new GoalEditResult.Invalid("ProjectIds", "Unknown project."));
-        }
+            // Read under the lock, so a status/target/membership change committed while this request waited is
+            // seen: the goal (tracked), its memberships and how many requested projects the caller owns, in one
+            // statement. Scoped to the caller's profile by PlannerDbContext's global query filter.
+            var row = await db.Goals
+                .Where(entity => entity.Id == goalId)
+                .Select(entity => new
+                {
+                    Goal = entity,
+                    Memberships = db.ProjectGoals.Where(entry => entry.GoalId == entity.Id).ToList(),
+                    OwnedRequested = db.Projects.Count(project => requested.Contains(project.Id)),
+                })
+                .FirstOrDefaultAsync(ct);
+            if (row is null)
+                return;
 
-        // Only the sections that read or write memberships need the goal's current projects locked; a
-        // details- or priority-only edit takes just the profile lock, like the order endpoint.
-        var needsMemberships = req.Target is not null || requestedProjectIds is not null;
-        var lockedProjectIds = (needsMemberships
-                ? await db.ProjectGoals.Where(entry => entry.GoalId == goalId).Select(entry => entry.ProjectId).ToListAsync(ct)
-                : [])
-            .Union(requestedProjectIds ?? [])
-            .ToList();
-
-        // Same restart-on-membership-drift loop as the target and projects endpoints.
-        while (true)
-        {
-            List<ProjectId>? restartWithProjectIds = null;
-            var outcome = Failed(new GoalEditResult.NotFound());
-
-            await planning.ExecuteLockedMutationAsync(lockedProjectIds, async transaction =>
+            if (requestedProjectIds is not null && row.OwnedRequested != requestedProjectIds.Count)
             {
-                // Re-read under the lock (Config/Events included) and re-derive the lock set from the
-                // reloaded memberships; restart wider when they drifted.
-                var reloaded = await db.ReloadGoalAsync(goal, ct);
-                if (reloaded is null)
-                    return;
+                outcome = Failed(new GoalEditResult.Invalid("ProjectIds", "Unknown project."));
+                return;
+            }
 
-                goal = reloaded;
-                var memberships = await db.ProjectGoals.Where(entry => entry.GoalId == goalId).ToListAsync(ct);
-                var membershipProjectIds = memberships.Select(entry => entry.ProjectId).ToList();
-                var neededProjectIds = (needsMemberships ? membershipProjectIds : [])
-                    .Union(requestedProjectIds ?? [])
-                    .ToList();
-                if (neededProjectIds.Except(lockedProjectIds).Any())
-                {
-                    restartWithProjectIds = neededProjectIds.Union(lockedProjectIds).ToList();
-                    return;
-                }
+            var goal = row.Goal;
+            var memberships = row.Memberships;
+            var projectIds = memberships.Select(entry => entry.ProjectId.Value).ToList();
 
-                var (result, order) = await ApplySectionsAsync(
-                    req, profileId, goal, membershipProjectIds, requestedProjectIds, ownedProjects, memberships, ct);
-                var finalProjectIds = requestedProjectIds?.ToList() ?? membershipProjectIds;
+            var (result, order) = await ApplySectionsAsync(req, profileId, goal, projectIds, requestedProjectIds, memberships, ct);
+            if (requestedProjectIds is not null)
+                projectIds = requestedProjectIds.Select(id => id.Value).ToList();
+
+            if (result is GoalEditResult.Applied)
+            {
+                result = await GoalEditSaver.SaveAsync(db, planning, transaction, goal, ct);
                 if (result is GoalEditResult.Applied)
-                {
-                    result = await GoalEditSaver.SaveAsync(
-                        db, planning, transaction, goalId,
-                        new ProjectGoalSlotLookup(
-                            finalProjectIds, goal.EntityType, goal.EntityId, goal.GoalType,
-                            RankTargetKey.For(goal.GoalType, goal.Config), goal.Id),
-                        membershipProjectIds, ct);
-                    if (result is GoalEditResult.Applied)
-                        await transaction.CommitAsync(ct);
-                }
-                else
-                {
-                    await transaction.RollbackAsync(ct);
-                }
+                    await transaction.CommitAsync(ct);
+            }
+            else
+            {
+                await transaction.RollbackAsync(ct);
+            }
 
-                outcome = new GoalEditOutcome(result, goal, finalProjectIds, order);
-            }, ct);
-
-            if (restartWithProjectIds is null)
-                return outcome;
-            lockedProjectIds = restartWithProjectIds;
-        }
+            outcome = new GoalEditOutcome(result, goal, projectIds, order);
+        }, ct);
+        return outcome;
     }
 
     private static GoalEditOutcome Failed(GoalEditResult result) => new(result, null, [], null);
@@ -115,34 +87,23 @@ public sealed class GoalCombinedEditor(
         EditGoalRequest req,
         ProfileId profileId,
         Goal goal,
-        List<ProjectId> membershipProjectIds,
+        List<Guid> projectIds,
         HashSet<ProjectId>? requestedProjectIds,
-        List<Project> ownedProjects,
         List<ProjectGoal> memberships,
         CancellationToken ct)
     {
-        GoalEditResult result;
         if (req.Target is { } target)
         {
-            result = await targetEditor.ApplyAsync(
-                profileId, goal, membershipProjectIds, target.Target, target.ExpectedRevision, ct);
+            var result = await targetEditor.ApplyAsync(profileId, goal, projectIds, target.Target, target.ExpectedRevision, ct);
             if (result is not GoalEditResult.Applied)
                 return (result, null);
         }
 
-        if (req.Details is { } details)
-        {
-            result = detailsEditor.Apply(goal, details);
-            if (result is GoalEditResult.Invalid invalid)
-                return (invalid with { Field = $"Details.{invalid.Field}" }, null);
-        }
+        if (req.Details is { } details && detailsEditor.Apply(goal, details) is GoalEditResult.Invalid invalidDetails)
+            return (invalidDetails with { Field = $"Details.{invalidDetails.Field}" }, null);
 
         if (requestedProjectIds is not null)
-        {
-            result = await membershipEditor.ApplyAsync(goal, requestedProjectIds, ownedProjects, memberships, ct);
-            if (result is not GoalEditResult.Applied)
-                return (result, null);
-        }
+            membershipEditor.Apply(goal, requestedProjectIds, memberships, timeProvider.GetUtcNow());
 
         if (req.Priority is { } priority)
         {

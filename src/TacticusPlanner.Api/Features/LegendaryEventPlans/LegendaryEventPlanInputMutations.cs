@@ -2,8 +2,8 @@ using TacticusPlanner.Domain.LegendaryEvents;
 
 namespace TacticusPlanner.Api.Features.LegendaryEventPlans;
 
-/// <summary>Run input and annotation changes behind the Stage 3 plan endpoints, applied to a tracked plan inside
-/// <see cref="LegendaryEventPlanWriter"/>. Inputs are already validated against the catalog. A write that changes
+/// <summary>Run input and annotation changes behind the Stage 3 plan endpoints: in-memory edits of the loaded plan
+/// inside <see cref="LegendaryEventPlanWriter"/>. Inputs are already validated against the catalog. A write that changes
 /// nothing answers <see cref="LegendaryEventPlanMutation.Unchanged"/> so the revision is kept (design D2, D6).</summary>
 public static class LegendaryEventPlanInputMutations
 {
@@ -24,9 +24,9 @@ public static class LegendaryEventPlanInputMutations
                 return LegendaryEventPlanMutation.Unchanged;
             }
 
-            existing = new LegendaryEventRunProgress { PlanId = plan.Id, Run = run };
+            existing = new LegendaryEventRunProgress { Run = run };
+            // Appended, never re-sorted: owned JSON items are tracked by position. Reads order by run.
             plan.Runs.Add(existing);
-            context.Db.Add(existing);
         }
         else if (existing.RegularMissions == request.RegularMissions
             && existing.PremiumMissions == request.PremiumMissions
@@ -73,7 +73,6 @@ public static class LegendaryEventPlanInputMutations
                     continue;
 
                 plan.Annotations.Remove(existing);
-                context.Db.Remove(existing);
                 changed = true;
                 continue;
             }
@@ -82,13 +81,11 @@ public static class LegendaryEventPlanInputMutations
             {
                 existing = new LegendaryEventObjectiveAnnotation
                 {
-                    PlanId = plan.Id,
                     LaneId = laneId,
                     BattleIndex = battleIndex,
                     ObjectiveId = objectiveId,
                 };
                 plan.Annotations.Add(existing);
-                context.Db.Add(existing);
             }
             else if (existing.Status == value)
             {

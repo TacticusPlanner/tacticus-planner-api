@@ -64,10 +64,10 @@ public sealed class IntegrationHostTests
             var dbB = scopeB.ServiceProvider.GetRequiredService<PlannerDbContext>();
             Assert.True(dbA.Database.CreateExecutionStrategy().RetriesOnFailure);
             Assert.Empty(await dbA.Database.GetPendingMigrationsAsync(ct));
-            var accountA = await dbA.Accounts.SingleAsync(ct);
-            var accountB = await dbB.Accounts.SingleAsync(ct);
-            Assert.NotEqual(accountA.Id, accountB.Id);
-            Assert.False(await dbB.Accounts.AnyAsync(account => account.Id == accountA.Id, ct));
+            var profileA = await dbA.Profiles.IgnoreQueryFilters().SingleAsync(ct);
+            var profileB = await dbB.Profiles.IgnoreQueryFilters().SingleAsync(ct);
+            Assert.NotEqual(profileA.Id, profileB.Id);
+            Assert.False(await dbB.Profiles.IgnoreQueryFilters().AnyAsync(profile => profile.Id == profileA.Id, ct));
         }
         finally
         {

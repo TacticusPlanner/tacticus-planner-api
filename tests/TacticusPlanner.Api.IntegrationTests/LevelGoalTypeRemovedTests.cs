@@ -18,10 +18,7 @@ public sealed class LevelGoalTypeRemovedTests(PlannerApiFactory factory) : IClas
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            new CreateGoalRequest("character", CharacterId, goalType, new CreateGoalConfigRequest(), null),
-            TestContext.Current.CancellationToken);
+        var response = await client.PostGoalAsync(new CreateGoalRequest("character", CharacterId, goalType, new CreateGoalConfigRequest(), null));
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var goals = await client.GetFromJsonAsync<ListGoalsResponse>("/api/v1/me/goals", TestContext.Current.CancellationToken);
@@ -34,7 +31,7 @@ public sealed class LevelGoalTypeRemovedTests(PlannerApiFactory factory) : IClas
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
         var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals/combined",
+            "/api/v1/me/goals",
             new CreateCombinedGoalsRequest(
                 "character",
                 CharacterId,

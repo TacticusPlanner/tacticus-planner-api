@@ -2,7 +2,9 @@ using FastEndpoints;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Api.Http;
 using TacticusPlanner.Domain.PlayerData;
+using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.PlayerDataOverrides;
@@ -20,7 +22,7 @@ public sealed class GetOnslaughtProgressEndpoint : EndpointWithoutRequest<Onslau
         var profileId = ProcessorState<CurrentUserState>().ProfileId;
         if (profileId is null)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 
@@ -47,7 +49,7 @@ public sealed class UpdateOnslaughtProgressEndpoint
         var profileId = ProcessorState<CurrentUserState>().ProfileId;
         if (profileId is null)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 
@@ -58,8 +60,7 @@ public sealed class UpdateOnslaughtProgressEndpoint
         {
             if (req.Revision != 0)
             {
-                AddError("Player data overrides changed on another device. Refresh and try again.");
-                await Send.ErrorsAsync(StatusCodes.Status409Conflict, ct);
+                await SendConflictAsync(db, profileIdValue, ct);
                 return;
             }
 
@@ -68,8 +69,7 @@ public sealed class UpdateOnslaughtProgressEndpoint
         }
         else if (overrides.Revision != req.Revision)
         {
-            AddError("Player data overrides changed on another device. Refresh and try again.");
-            await Send.ErrorsAsync(StatusCodes.Status409Conflict, ct);
+            await SendConflictAsync(db, profileIdValue, ct);
             return;
         }
 
@@ -96,12 +96,22 @@ public sealed class UpdateOnslaughtProgressEndpoint
         }
         catch (DbUpdateConcurrencyException)
         {
-            AddError("Player data overrides changed on another device. Refresh and try again.");
-            await Send.ErrorsAsync(StatusCodes.Status409Conflict, ct);
+            await SendConflictAsync(db, profileIdValue, ct);
             return;
         }
 
         await Send.OkAsync(OnslaughtProgressResponse.From(overrides), ct);
+    }
+
+    /// <summary>409 <c>concurrency</c> with the overrides re-read after the failed write, in the read shape.</summary>
+    private async Task SendConflictAsync(PlannerDbContext db, ProfileId profileId, CancellationToken ct)
+    {
+        db.ChangeTracker.Clear();
+        var current = await db.PlayerDataOverrides.AsNoTracking().FirstOrDefaultAsync(entity => entity.Id == profileId, ct)
+            ?? new PlayerDataOverride { Id = profileId };
+        await this.SendConflictAsync(
+            ApiProblems.Concurrency, "Player data overrides changed on another device. Refresh and try again.",
+            OnslaughtProgressResponse.From(current), ct);
     }
 }
 

@@ -168,7 +168,7 @@ public sealed class GuildSyncService(
                 profile.Id,
                 profile.TacticusUserIdHash,
                 profile.DisplayName,
-                LastSeenAt = profile.Account!.LastSeenAt,
+                profile.LastSeenAt,
             })
             .ToListAsync(ct);
 

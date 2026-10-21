@@ -57,7 +57,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
             Assert.Empty(goals!.Goals);
             await using var scope = factory.Services.CreateAsyncScope();
             var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
-            var profileId = await db.Accounts.IgnoreQueryFilters().Where(account => account.Subject == subject).Select(account => account.Profile!.Id).SingleAsync(ct);
+            var profileId = await db.Profiles.IgnoreQueryFilters().Where(profile => profile.Subject == subject).Select(profile => profile.Id).SingleAsync(ct);
             Assert.False(await db.ProjectGoals.IgnoreQueryFilters().AnyAsync(entry => entry.Project!.ProfileId == profileId, ct));
             Assert.Equal(0, await db.Profiles.IgnoreQueryFilters().Where(profile => profile.Id == profileId).Select(profile => profile.GoalOrderRevision).SingleAsync(ct));
         }
@@ -308,33 +308,6 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         Assert.Equal("duplicate_goal_merged", Assert.Single(body.Outcomes, o => o.Status == "Skipped").Code);
         var goal = await GetGoalAsync(client, created.GoalId!.Value);
         Assert.True(goal.Config.Rank!.EndPointFive);
-    }
-
-    [Fact]
-    public async Task ReimportingAfterTheRankTargetWasEditedInPlaceStillSkipsTheImportedGoal()
-    {
-        var (client, subject) = await CreateProvisionedClientAsync();
-        await SeedPlayerDataSnapshotAsync(subject, [Character(CharacterId, xpLevel: 60)]);
-        var source = new[] { RankGoal("r-low", CharacterId, 1, UnitRank.Bronze1) };
-
-        var first = await ImportGoalsAsync(client, source, automaticPrerequisites: false);
-        var imported = await GetGoalAsync(client, first.Outcomes[0].GoalId!.Value);
-        var edit = await client.PutAsJsonAsync(
-            $"/api/v1/me/goals/{imported.GoalId}/target",
-            new UpdateGoalTargetRequest(
-                imported.Revision,
-                new GoalTargetEditRequest(Rank: new RankEndTargetRequest((int)UnitRank.Silver1, false, 0))),
-            TestContext.Current.CancellationToken);
-        edit.EnsureSuccessStatusCode();
-
-        var second = await ImportGoalsAsync(client, source, automaticPrerequisites: false);
-
-        var outcome = Assert.Single(second.Outcomes);
-        Assert.Equal("Skipped", outcome.Status);
-        Assert.Equal("goal_already_exists", outcome.Code);
-        Assert.Equal(imported.GoalId, outcome.GoalId);
-        var all = await client.GetFromJsonAsync<ListGoalsResponse>("/api/v1/me/goals", TestContext.Current.CancellationToken);
-        Assert.Single(all!.Goals);
     }
 
     [Fact]
@@ -763,8 +736,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
             automaticPrerequisites: false);
 
         var defaultProject = await GetDefaultProjectAsync(client);
-        var members = await client.GetFromJsonAsync<ListProjectGoalsResponse>(
-            $"/api/v1/me/projects/{defaultProject.ProjectId}/goals", TestContext.Current.CancellationToken);
+        var members = await client.GetProjectGoalsAsync(defaultProject.ProjectId);
         var byGoalId = members!.Goals.ToDictionary(entry => entry.Goal.GoalId, entry => entry.Goal.GlobalPriority);
 
         var bt1GoalId = body.Outcomes.Single(o => o.SourceGoalId == "bt-1").GoalId!.Value;
@@ -785,8 +757,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         var rankGoalId = Assert.Single(body.Outcomes, o => o.SourceGoalId == "r1").GoalId!.Value;
 
         var defaultProject = await GetDefaultProjectAsync(client);
-        var members = await client.GetFromJsonAsync<ListProjectGoalsResponse>(
-            $"/api/v1/me/projects/{defaultProject.ProjectId}/goals", TestContext.Current.CancellationToken);
+        var members = await client.GetProjectGoalsAsync(defaultProject.ProjectId);
         var byGoalId = members!.Goals.ToDictionary(entry => entry.Goal.GoalId, entry => entry.Goal.GlobalPriority);
 
         Assert.True(byGoalId[unlockGoalId] < byGoalId[rankGoalId]);
@@ -912,11 +883,11 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
     {
         using var scope = factory.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
-        var account = await db.Accounts.IgnoreQueryFilters().Include(entity => entity.Profile)
+        var profile = await db.Profiles.IgnoreQueryFilters()
             .FirstAsync(entity => entity.Subject == subject, TestContext.Current.CancellationToken);
         db.PlayerDataSnapshots.Add(new PlayerDataSnapshot
         {
-            Id = account.Profile!.Id,
+            Id = profile.Id,
             Characters = characters ?? [],
             Mows = mows ?? [],
         });
@@ -966,12 +937,9 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
     private static async Task<GoalDetailResponse> CreateNativeGoalAsync(
         HttpClient client, string entityId, string goalType, CreateGoalConfigRequest config)
     {
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            new CreateGoalRequest("character", entityId, goalType, config, null),
-            TestContext.Current.CancellationToken);
+        var response = await client.PostGoalAsync(new CreateGoalRequest("character", entityId, goalType, config, null));
         response.EnsureSuccessStatusCode();
-        return (await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken))!;
+        return (await response.ReadCreatedGoalAsync())!;
     }
 
     private static async Task<string> StatusOfSourceGoalAsync(

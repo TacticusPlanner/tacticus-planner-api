@@ -37,8 +37,8 @@ public class GuildMember : BaseEntity<GuildMemberId>, IRevisionedEntity
     /// itself, not Planner.</summary>
     public long? LastActiveInGameOn { get; set; }
 
-    /// <summary>The linked profile's owning <c>Account.LastSeenAt</c> at sync time — last active in
-    /// Tacticus Planner. Null when unlinked, or when the linked account has never made an authenticated
+    /// <summary>The linked profile's <c>Profile.LastSeenAt</c> at sync time — last active in
+    /// Tacticus Planner. Null when unlinked, or when the linked profile has never made an authenticated
     /// request.</summary>
     public DateTimeOffset? LastActiveInPlannerOn { get; set; }
 

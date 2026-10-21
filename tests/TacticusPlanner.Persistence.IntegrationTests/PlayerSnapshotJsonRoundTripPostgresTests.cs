@@ -117,11 +117,8 @@ public sealed class PlayerSnapshotJsonRoundTripPostgresTests
         await connection.OpenAsync(TestContext.Current.CancellationToken);
         await using var command = connection.CreateCommand();
         command.CommandText = """
-            WITH account AS (
-                INSERT INTO accounts (id, issuer, subject, created_at, updated_at)
-                VALUES (gen_random_uuid(), 'test', @name, now(), now()) RETURNING id)
-            INSERT INTO profiles (id, account_id, display_name, created_at, updated_at)
-            SELECT @profile, id, @name, now(), now() FROM account;
+            INSERT INTO profiles (id, issuer, subject, display_name, created_at, updated_at)
+            VALUES (@profile, 'test', @name, @name, now(), now());
             """;
         command.Parameters.AddWithValue("profile", profileId.Value);
         command.Parameters.AddWithValue("name", name);

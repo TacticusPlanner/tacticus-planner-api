@@ -2,6 +2,8 @@ using FastEndpoints;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Api.Http;
+using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Persistence;
 using UserSettingsData = TacticusPlanner.Domain.UserSettings.UserSettingsData;
 using UserSettingsEntity = TacticusPlanner.Domain.UserSettings.UserSettings;
@@ -22,7 +24,7 @@ public sealed class UpdateUserSettingsEndpoint
         var profileId = ProcessorState<CurrentUserState>().ProfileId;
         if (profileId is null)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 
@@ -33,7 +35,7 @@ public sealed class UpdateUserSettingsEndpoint
         {
             if (req.Revision != 0)
             {
-                await Send.ErrorsAsync(StatusCodes.Status409Conflict, ct);
+                await SendConflictAsync(db, profileIdValue, ct);
                 return;
             }
 
@@ -42,8 +44,7 @@ public sealed class UpdateUserSettingsEndpoint
         }
         else if (settings.Revision != req.Revision)
         {
-            AddError("User settings changed on another device. Refresh and try again.");
-            await Send.ErrorsAsync(StatusCodes.Status409Conflict, ct);
+            await SendConflictAsync(db, profileIdValue, ct);
             return;
         }
 
@@ -63,12 +64,23 @@ public sealed class UpdateUserSettingsEndpoint
         }
         catch (DbUpdateConcurrencyException)
         {
-            AddError("User settings changed on another device. Refresh and try again.");
-            await Send.ErrorsAsync(StatusCodes.Status409Conflict, ct);
+            await SendConflictAsync(db, profileIdValue, ct);
             return;
         }
 
         await Send.OkAsync(UserSettingsResponse.From(settings), ct);
+    }
+
+    /// <summary>409 <c>concurrency</c> with the settings re-read after the failed write, in the read shape (a
+    /// missing row reads as the defaults at revision 0).</summary>
+    private async Task SendConflictAsync(PlannerDbContext db, ProfileId profileId, CancellationToken ct)
+    {
+        db.ChangeTracker.Clear();
+        var current = await db.UserSettings.AsNoTracking().FirstOrDefaultAsync(entity => entity.Id == profileId, ct)
+            ?? new UserSettingsEntity { Id = profileId };
+        await this.SendConflictAsync(
+            ApiProblems.Concurrency, "User settings changed on another device. Refresh and try again.",
+            UserSettingsResponse.From(current), ct);
     }
 }
 

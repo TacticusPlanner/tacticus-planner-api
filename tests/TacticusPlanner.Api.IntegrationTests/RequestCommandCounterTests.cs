@@ -31,7 +31,7 @@ public sealed class RequestCommandCounterTests(PlannerApiFactory factory) : ICla
         });
         await using var scope = factory.Services.CreateAsyncScope();
         var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
-        _ = await db.Accounts.CountAsync(ct);
+        _ = await db.Profiles.IgnoreQueryFilters().CountAsync(ct);
         Assert.Equal(expected, factory.CommandsFor(baseline));
         Assert.All(responses, response => Assert.Equal(expected, factory.CommandsFor(response)));
     }

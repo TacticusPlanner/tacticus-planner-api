@@ -28,8 +28,8 @@ public sealed class ProjectConfiguration : IEntityTypeConfiguration<Project>
         builder.Property(entity => entity.CreatedAt).IsRequired();
         builder.Property(entity => entity.UpdatedAt).IsRequired();
 
-        builder.HasIndex([nameof(Project.ProfileId)], "ix_projects_profile_id");
-        // The Legendary Event page lists the projects targeting it.
+        // The Legendary Event page lists the projects targeting it; its leading profile_id also serves the
+        // profile's project list and the FK.
         builder.HasIndex(
             [nameof(Project.ProfileId), nameof(Project.TargetKind), nameof(Project.TargetEventId)],
             "ix_projects_profile_id_target");

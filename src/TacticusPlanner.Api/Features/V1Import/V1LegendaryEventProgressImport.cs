@@ -171,7 +171,6 @@ public static class V1LegendaryEventProgressImport
             .Where(inputs => plan.Runs.All(run => run.Run != inputs.Run))
             .Select(inputs => new LegendaryEventRunProgress
             {
-                PlanId = plan.Id,
                 Run = inputs.Run,
                 RegularMissions = inputs.RegularMissions,
                 PremiumMissions = inputs.PremiumMissions,
@@ -180,11 +179,7 @@ public static class V1LegendaryEventProgressImport
                 UpdatedAt = context.Now,
             })
             .ToList();
-        foreach (var row in runRows)
-        {
-            plan.Runs.Add(row);
-            context.Db.Add(row);
-        }
+        plan.Runs.AddRange(runRows);
 
         var annotationRows = annotations
             .Where(annotation => !plan.Annotations.Any(existing =>
@@ -193,7 +188,6 @@ public static class V1LegendaryEventProgressImport
                 && existing.ObjectiveId == annotation.ObjectiveId))
             .Select(annotation => new LegendaryEventObjectiveAnnotation
             {
-                PlanId = plan.Id,
                 LaneId = annotation.LaneId,
                 BattleIndex = annotation.BattleIndex,
                 ObjectiveId = annotation.ObjectiveId,
@@ -201,11 +195,7 @@ public static class V1LegendaryEventProgressImport
                 UpdatedAt = context.Now,
             })
             .ToList();
-        foreach (var row in annotationRows)
-        {
-            plan.Annotations.Add(row);
-            context.Db.Add(row);
-        }
+        plan.Annotations.AddRange(annotationRows);
     }
 
     /// <summary>The V2 cell of a V1 requirement id: defeat-all (and the score pseudo-objectives) is 0, a lane

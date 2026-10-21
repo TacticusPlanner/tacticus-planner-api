@@ -269,11 +269,9 @@ public sealed class V1GoalImportService(
     }
 
     /// <summary>
-    /// Indexes the account's existing goals for the "already imported" check. A Rank goal is filed under its
-    /// current end target <em>and</em> every target it has held (the previous/new targets of its
-    /// <c>TargetChanged</c> events), so a goal the user later edited in place still matches the V1 source it
-    /// was imported from — otherwise re-importing would create a second Rank goal at the original target.
-    /// The first goal seen for a key wins, as before.
+    /// Indexes the account's existing goals for the "already imported" check, by slot: a Rank goal under its
+    /// current normalized end target (no target history is kept, so a goal edited in place matches only its
+    /// current target). The first goal seen for a key wins.
     /// </summary>
     private static Dictionary<GoalKey, ExistingGoalRef> ExistingGoalsByKey(IEnumerable<Goal> existingRows)
     {
@@ -281,22 +279,9 @@ public sealed class V1GoalImportService(
         foreach (var row in existingRows)
         {
             var reference = new ExistingGoalRef(row.Id.Value, row.Config);
-            var keys = new HashSet<string?> { RankTargetKey.For(row.GoalType, row.Config) };
-            if (row.GoalType == GoalType.Rank)
-            {
-                var heldTargets = row.Events
-                    .SelectMany(goalEvent => new[] { goalEvent.PreviousTarget, goalEvent.NewTarget })
-                    .Where(target => target?.RankEnd is not null);
-                foreach (var target in heldTargets)
-                {
-                    keys.Add(RankTargetKey.From(target!.RankEnd!.Value, target.RankEndPointFive ?? false, target.RankEndAppliedUpgrades ?? 0));
-                }
-            }
-
-            foreach (var key in keys)
-            {
-                byKey.TryAdd(new GoalKey(row.EntityType, row.EntityId, row.GoalType, key), reference);
-            }
+            byKey.TryAdd(
+                new GoalKey(row.EntityType, row.EntityId, row.GoalType, RankTargetKey.For(row.GoalType, row.Config)),
+                reference);
         }
 
         return byKey;
@@ -408,7 +393,7 @@ public sealed class V1GoalImportService(
 
         var project = await projects.EnsureDefaultProjectAsync(profileId, ct);
 
-        await planning.ExecuteLockedMutationAsync([project.Id], async transaction =>
+        await planning.ExecuteLockedMutationAsync(async transaction =>
         {
             var now = timeProvider.GetUtcNow();
             var staged = new Dictionary<int, Goal>();
@@ -466,7 +451,7 @@ public sealed class V1GoalImportService(
                         // Every candidate of this unit gets a DependsOn edge to Unlock (below), so its
                         // earliest dependent is simply the unit's first candidate by V1 order.
                         var anchorIndex = unitCandidates.Min(candidate => candidate.OriginalIndex);
-                        var unlockGoal = BuildGoal(profileId, unitKey, GoalType.Unlock, unlockConfig, null, prerequisiteStatus, now, playerUnit);
+                        var unlockGoal = BuildGoal(profileId, unitKey, GoalType.Unlock, unlockConfig, null, prerequisiteStatus, playerUnit);
                         db.Goals.Add(unlockGoal);
                         pending.Add((unlockGoal, anchorIndex, 0));
                         unlockGoalId = unlockGoal.Id.Value;
@@ -490,7 +475,7 @@ public sealed class V1GoalImportService(
                     var ascensionGoal = BuildGoal(
                         profileId, unitKey, GoalType.Ascension,
                         new CreateGoalConfigRequest(Progression: new ProgressionTargetRequest(startWire, endWire)),
-                        null, prerequisiteStatus, now, playerUnit);
+                        null, prerequisiteStatus, playerUnit);
                     if (unlockGoalId is { } unlockId) ascensionGoal.DependsOn.Add(unlockId);
                     db.Goals.Add(ascensionGoal);
                     pending.Add((ascensionGoal, anchorIndex, 1));
@@ -515,7 +500,7 @@ public sealed class V1GoalImportService(
                     }
                     else
                     {
-                        var goal = BuildGoal(profileId, unitKey, GoalType.Ascension, ownAscension.Config, ownAscension.Notes, StatusOf(ownAscension), now, playerUnit);
+                        var goal = BuildGoal(profileId, unitKey, GoalType.Ascension, ownAscension.Config, ownAscension.Notes, StatusOf(ownAscension), playerUnit);
                         goal.DependsOn = dependsOn;
                         db.Goals.Add(goal);
                         pending.Add((goal, ownAscension.OriginalIndex, 3));
@@ -554,7 +539,7 @@ public sealed class V1GoalImportService(
                         continue;
                     }
 
-                    var goal = BuildGoal(profileId, unitKey, candidate.Key.GoalType, candidate.Config, candidate.Notes, StatusOf(candidate), now, playerUnit);
+                    var goal = BuildGoal(profileId, unitKey, candidate.Key.GoalType, candidate.Config, candidate.Notes, StatusOf(candidate), playerUnit);
                     goal.DependsOn = dependsOn;
                     db.Goals.Add(goal);
                     pending.Add((goal, candidate.OriginalIndex, 3));
@@ -568,18 +553,18 @@ public sealed class V1GoalImportService(
             foreach (var (goal, _, _) in pending.OrderBy(entry => entry.AnchorIndex).ThenBy(entry => entry.SubOrder))
             {
                 await order.AppendAsync(goal, ct);
-                db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(project, goal, now));
+                db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(project.Id, goal.Id, now));
             }
 
             try
             {
                 await db.SaveChangesAsync(ct);
             }
-            catch (DbUpdateException ex) when (GoalConflictDetection.IsProjectSlotConflict(ex))
+            catch (DbUpdateException ex) when (ProjectGoalPlanningService.IsSlotViolation(ex))
             {
                 // Defensive only: the account-wide dedupe pass above already rules this out for a
                 // single-writer import; this only fires on a genuine race with a concurrent mutation
-                // against the same project. Roll back and report every still-pending candidate as failed
+                // for the same profile. Roll back and report every still-pending candidate as failed
                 // rather than losing the whole batch.
                 await transaction.RollbackAsync(ct);
                 db.ChangeTracker.Clear();
@@ -715,7 +700,9 @@ public sealed class V1GoalImportService(
 
     private static Goal BuildGoal(
         ProfileId profileId, UnitKey unitKey, GoalType goalType, CreateGoalConfigRequest config, string? notes,
-        GoalStatus status, DateTimeOffset now, PlayerBaseUnitRecord? playerUnit) => new(unitKey.EntityType, unitKey.EntityId, goalType)
+        GoalStatus status, PlayerBaseUnitRecord? playerUnit)
+    {
+        var goal = new Goal(unitKey.EntityType, unitKey.EntityId, goalType)
         {
             Id = GoalId.From(Guid.CreateVersion7()),
             ProfileId = profileId,
@@ -723,8 +710,10 @@ public sealed class V1GoalImportService(
             Notes = notes,
             Config = GoalMapper.MapConfig(config),
             Snapshot = BuildSnapshot(playerUnit),
-            Events = [new GoalEvent { At = now, Type = GoalEventType.Created }],
         };
+        goal.RefreshRankTargetKey();
+        return goal;
+    }
 
     /// <summary>The goal's initial-state snapshot, built server-side from the already-loaded player data
     /// (design.md: "The snapshot is built server-side from the player data the translator already

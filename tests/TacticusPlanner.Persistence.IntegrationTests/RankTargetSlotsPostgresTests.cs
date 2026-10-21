@@ -1,301 +1,120 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql;
 using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Api.Features.Projects;
 using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Domain.Projects;
-using TacticusPlanner.Persistence.Encryption;
-using Testcontainers.PostgreSql;
+using TacticusPlanner.Persistence.Configurations;
 using Xunit;
 
 namespace TacticusPlanner.Persistence.IntegrationTests;
 
 /// <summary>
-/// Covers the <c>TargetSpecificRankSlots</c> migration (openspec change support-multiple-rank-milestones):
-/// existing Rank memberships are backfilled with the same normalized key the C# <c>RankTargetKey</c>
-/// produces, and the replacement partial indexes let distinct Rank targets coexist while rejecting an
-/// exact duplicate and keeping the non-Rank one-per-unit/type rule.
+/// The in-flight slot indexes on <c>goals</c>, scoped by profile (<c>project-goal-slots</c>): a non-Rank goal holds
+/// (unit, type), a Rank goal (unit, normalized end target), only while Active or Paused, whatever its projects.
 /// </summary>
 public sealed class RankTargetSlotsPostgresTests
 {
     [Fact]
-    public async Task MigrationBackfillsRankKeysAndIndexesSeparateRankTargets()
+    public async Task SlotIndexesRejectDuplicatesAndAcceptDistinctRankTargets()
     {
-        await using var postgres = new PostgreSqlBuilder("postgres:18-alpine").Build();
-        await postgres.StartAsync(TestContext.Current.CancellationToken);
-        var connectionString = postgres.GetConnectionString();
-
-        var options = new DbContextOptionsBuilder<PlannerDbContext>()
-            .UseNpgsql(connectionString)
-            .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
-            .Options;
-        await using var db = new PlannerDbContext(options, new PassthroughEncryption(), new NoProfile());
-        var migrator = db.Database.GetService<IMigrator>();
-        await migrator.MigrateAsync("20260911182421_AddGuildRaidStatus", TestContext.Current.CancellationToken);
-
-        var profileId = Guid.NewGuid();
-        var projectId = Guid.NewGuid();
-        var cleanGoal = Guid.NewGuid();
-        var pointFiveGoal = Guid.NewGuid();
-        var threeSlotsGoal = Guid.NewGuid();
-        var adamantineGoal = Guid.NewGuid();
-        var abilityGoal = Guid.NewGuid();
-
-        await using (var connection = new NpgsqlConnection(connectionString))
-        {
-            await connection.OpenAsync(TestContext.Current.CancellationToken);
-            await using var command = connection.CreateCommand();
-            command.CommandText = """
-                INSERT INTO accounts (id, issuer, subject, created_at, updated_at)
-                VALUES (gen_random_uuid(), 'test', 'rank-slots', now(), now());
-                INSERT INTO profiles (id, account_id, display_name, created_at, updated_at)
-                SELECT @profile, id, 'Rank slots', now(), now() FROM accounts LIMIT 1;
-                INSERT INTO projects (id, revision, profile_id, name, status, type, created_at, updated_at)
-                VALUES (@project, 0, @profile, 'Ranks', 'Active', 'User', now(), now());
-
-                INSERT INTO goals (id, revision, profile_id, entity_type, entity_id, goal_type, status,
-                                   depends_on, created_at, updated_at, config, events)
-                VALUES
-                (@clean, 0, @profile, 'Character', 'a', 'Rank', 'Active', ARRAY[]::uuid[], now(), now(),
-                 '{"Rank":{"Start":1,"End":12,"EndPointFive":false,"EndAppliedUpgrades":0}}', '[]'),
-                (@pointFive, 0, @profile, 'Character', 'b', 'Rank', 'Active', ARRAY[]::uuid[], now(), now(),
-                 '{"Rank":{"Start":1,"End":12,"EndPointFive":true,"EndAppliedUpgrades":0}}', '[]'),
-                (@threeSlots, 0, @profile, 'Character', 'c', 'Rank', 'Active', ARRAY[]::uuid[], now(), now(),
-                 '{"Rank":{"Start":1,"End":12,"EndPointFive":false,"EndAppliedUpgrades":3}}', '[]'),
-                (@adamantine, 0, @profile, 'Character', 'd', 'Rank', 'Active', ARRAY[]::uuid[], now(), now(),
-                 '{"Rank":{"Start":1,"End":18,"EndPointFive":true,"EndAppliedUpgrades":2}}', '[]'),
-                (@ability, 0, @profile, 'Mow', 'e', 'Ability', 'Active', ARRAY[]::uuid[], now(), now(),
-                 '{"Ability":{"ActiveStart":1,"ActiveEnd":2,"PassiveStart":1,"PassiveEnd":2}}', '[]');
-
-                INSERT INTO project_goals (project_id, goal_id, priority, entity_type, entity_id, goal_type,
-                                           occupies_in_flight_slot, created_at)
-                VALUES
-                (@project, @clean, 1, 'Character', 'a', 'Rank', TRUE, now()),
-                (@project, @pointFive, 2, 'Character', 'b', 'Rank', TRUE, now()),
-                (@project, @threeSlots, 3, 'Character', 'c', 'Rank', TRUE, now()),
-                (@project, @adamantine, 4, 'Character', 'd', 'Rank', TRUE, now()),
-                (@project, @ability, 5, 'Mow', 'e', 'Ability', TRUE, now());
-                """;
-            command.Parameters.AddWithValue("profile", profileId);
-            command.Parameters.AddWithValue("project", projectId);
-            command.Parameters.AddWithValue("clean", cleanGoal);
-            command.Parameters.AddWithValue("pointFive", pointFiveGoal);
-            command.Parameters.AddWithValue("threeSlots", threeSlotsGoal);
-            command.Parameters.AddWithValue("adamantine", adamantineGoal);
-            command.Parameters.AddWithValue("ability", abilityGoal);
-            await command.ExecuteNonQueryAsync(TestContext.Current.CancellationToken);
-        }
-
-        await migrator.MigrateAsync(cancellationToken: TestContext.Current.CancellationToken);
-
-        await using var verify = new NpgsqlConnection(connectionString);
-        await verify.OpenAsync(TestContext.Current.CancellationToken);
-        // Same rules as RankTargetKey.From: point-five == three applied slots below Adamantine1, and
-        // point-five is ignored at Adamantine1+.
-        Assert.Equal("12:0", await KeyAsync(verify, cleanGoal));
-        Assert.Equal("12:3", await KeyAsync(verify, pointFiveGoal));
-        Assert.Equal("12:3", await KeyAsync(verify, threeSlotsGoal));
-        Assert.Equal("18:2", await KeyAsync(verify, adamantineGoal));
-        Assert.Null(await KeyAsync(verify, abilityGoal));
-
-        // A second in-flight Rank goal with a distinct target for the same unit is accepted; the exact
-        // same target is rejected; a duplicate non-Rank slot is still rejected.
-        await InsertMembershipAsync(verify, projectId, "a", "Rank", "13:0");
-        await Assert.ThrowsAsync<PostgresException>(() => InsertMembershipAsync(verify, projectId, "a", "Rank", "13:0"));
-        await Assert.ThrowsAsync<PostgresException>(() => InsertMembershipAsync(verify, projectId, "e", "Ability", null, "Mow"));
-    }
-
-    /// <summary>Hard delete (what <c>DeleteGoalEndpoint</c> does) cascades every project membership, so the
-    /// Rank target is free again in each project and a recreation is a brand-new goal with only the
-    /// explicitly requested memberships. The cascade is a database FK behavior, hence Postgres.</summary>
-    [Fact]
-    public async Task DeletingARankGoalReleasesItsTargetInEveryProjectAndRecreationIsFresh()
-    {
-        await using var postgres = new PostgreSqlBuilder("postgres:18-alpine").Build();
-        await postgres.StartAsync(TestContext.Current.CancellationToken);
-        var connectionString = postgres.GetConnectionString();
+        await using var database = await PostgresTestDatabase.StartAsync();
         var ct = TestContext.Current.CancellationToken;
 
-        var profileId = ProfileId.From(Guid.NewGuid());
-        var projectIds = new[] { ProjectId.From(Guid.NewGuid()), ProjectId.From(Guid.NewGuid()) };
-        var options = new DbContextOptionsBuilder<PlannerDbContext>()
-            .UseNpgsql(connectionString)
-            .UseSnakeCaseNamingConvention()
-            .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
-            .Options;
-        await using (var migrationDb = new PlannerDbContext(options, new PassthroughEncryption(), new NoProfile()))
-        {
-            await migrationDb.Database.GetService<IMigrator>().MigrateAsync(cancellationToken: ct);
-        }
+        await AddAsync(database, RankGoal(database.ProfileId, end: 12));
+        // Point-five below Adamantine1 is the same end state as three applied slots: one normalized target.
+        await AddAsync(database, RankGoal(database.ProfileId, end: 12, appliedUpgrades: 3));
+        var duplicateRank = await Assert.ThrowsAsync<DbUpdateException>(
+            () => AddAsync(database, RankGoal(database.ProfileId, end: 12, pointFive: true)));
+        Assert.True(ProjectGoalPlanningService.IsSlotViolation(duplicateRank));
+        Assert.Equal(GoalSlotIndexes.RankTarget, (duplicateRank.InnerException as PostgresException)?.ConstraintName);
 
-        await using (var connection = new NpgsqlConnection(connectionString))
-        {
-            await connection.OpenAsync(ct);
-            await using var command = connection.CreateCommand();
-            command.CommandText = """
-                INSERT INTO accounts (id, issuer, subject, created_at, updated_at)
-                VALUES (gen_random_uuid(), 'test', 'rank-delete', now(), now());
-                INSERT INTO profiles (id, account_id, display_name, created_at, updated_at)
-                SELECT @profile, id, 'Rank delete', now(), now() FROM accounts LIMIT 1;
-                INSERT INTO projects (id, revision, profile_id, name, status, type, created_at, updated_at)
-                VALUES (@a, 0, @profile, 'A', 'Active', 'Custom', now(), now()),
-                       (@b, 0, @profile, 'B', 'Active', 'Custom', now(), now());
-                """;
-            command.Parameters.AddWithValue("profile", profileId.Value);
-            command.Parameters.AddWithValue("a", projectIds[0].Value);
-            command.Parameters.AddWithValue("b", projectIds[1].Value);
-            await command.ExecuteNonQueryAsync(ct);
-        }
+        await AddAsync(database, AbilityGoal(database.ProfileId));
+        var duplicateSlot = await Assert.ThrowsAsync<DbUpdateException>(() => AddAsync(database, AbilityGoal(database.ProfileId)));
+        Assert.True(ProjectGoalPlanningService.IsSlotViolation(duplicateSlot));
+        Assert.Equal(GoalSlotIndexes.Slot, (duplicateSlot.InnerException as PostgresException)?.ConstraintName);
 
-        var original = await AddRankGoalInBothProjectsAsync(options, profileId, projectIds, status: GoalStatus.Paused);
+        // Historical goals hold no slot, and another profile's goals never collide.
+        await AddAsync(database, RankGoal(database.ProfileId, end: 12, status: GoalStatus.Completed));
+        await AddAsync(database, AbilityGoal(database.ProfileId, GoalStatus.Archived));
+        var otherProfile = ProfileId.From(Guid.CreateVersion7());
+        await database.SeedProfileAsync(otherProfile);
+        await AddAsync(database, RankGoal(otherProfile, end: 12), otherProfile);
+        await AddAsync(database, AbilityGoal(otherProfile), otherProfile);
 
-        await using (var db = new PlannerDbContext(options, new PassthroughEncryption(), new StaticProfile(profileId)))
+        await using var db = database.CreateContext();
+        Assert.Equal(
+            ["12:0", "12:3", "12:0"],
+            await db.Goals.Where(goal => goal.GoalType == GoalType.Rank).OrderBy(goal => goal.CreatedAt)
+                .Select(goal => goal.RankTargetKey!).ToListAsync(ct));
+    }
+
+    /// <summary>Hard delete (what <c>DeleteGoalEndpoint</c> does) cascades the goal's memberships and frees its
+    /// slot, so a recreation is a brand-new goal with only the explicitly requested memberships.</summary>
+    [Fact]
+    public async Task DeletingARankGoalReleasesItsSlotAndRecreationIsFresh()
+    {
+        await using var database = await PostgresTestDatabase.StartAsync(projects: 2);
+        var ct = TestContext.Current.CancellationToken;
+
+        var original = await AddAsync(database, RankGoal(database.ProfileId, end: 12, status: GoalStatus.Paused), memberOf: database.ProjectIds);
+        await using (var db = database.CreateContext())
         {
             db.Goals.Remove(await db.Goals.SingleAsync(goal => goal.Id == original, ct));
             await db.SaveChangesAsync(ct);
         }
 
-        // The unique index would reject either recreation if a stale membership still held the target.
-        var recreated = await AddRankGoalInBothProjectsAsync(options, profileId, projectIds, status: GoalStatus.Active);
+        var recreated = await AddAsync(database, RankGoal(database.ProfileId, end: 12), memberOf: database.ProjectIds);
 
-        await using var verify = new PlannerDbContext(options, new PassthroughEncryption(), new StaticProfile(profileId));
+        await using var verify = database.CreateContext();
         Assert.NotEqual(original, recreated);
         Assert.Equal(0, await verify.ProjectGoals.CountAsync(entry => entry.GoalId == original, ct));
-        var memberships = await verify.ProjectGoals.Where(entry => entry.GoalId == recreated).ToListAsync(ct);
-        Assert.Equal(2, memberships.Count);
-        Assert.All(memberships, entry => Assert.Equal("12:0", entry.RankTargetKey));
+        Assert.Equal(2, await verify.ProjectGoals.CountAsync(entry => entry.GoalId == recreated, ct));
         var goal = await verify.Goals.SingleAsync(entry => entry.Id == recreated, ct);
         Assert.Equal(GoalStatus.Active, goal.Status);
-        Assert.Equal([GoalEventType.Created], goal.Events.Select(entry => entry.Type));
+        Assert.Equal("12:0", goal.RankTargetKey);
     }
 
-    /// <summary>The database backstop for a Rank race: when the friendly pre-check is bypassed and two goals
-    /// claim the same Rank target in one project, the Rank-target index rejects the second — and that
-    /// violation must be recognised as a slot conflict (so endpoints answer 409, not 500), like the
-    /// non-Rank index's.</summary>
-    [Fact]
-    public async Task RankTargetIndexViolationIsRecognisedAsASlotConflict()
+    internal static Goal RankGoal(
+        ProfileId profileId, int end, bool pointFive = false, int appliedUpgrades = 0,
+        GoalStatus status = GoalStatus.Active, string unit = "ragnar")
     {
-        await using var postgres = new PostgreSqlBuilder("postgres:18-alpine").Build();
-        await postgres.StartAsync(TestContext.Current.CancellationToken);
-        var connectionString = postgres.GetConnectionString();
-        var ct = TestContext.Current.CancellationToken;
-        var profileId = ProfileId.From(Guid.NewGuid());
-        var projectId = ProjectId.From(Guid.NewGuid());
-        var options = new DbContextOptionsBuilder<PlannerDbContext>()
-            .UseNpgsql(connectionString)
-            .UseSnakeCaseNamingConvention()
-            .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
-            .Options;
-        await using (var migrationDb = new PlannerDbContext(options, new PassthroughEncryption(), new NoProfile()))
-        {
-            await migrationDb.Database.GetService<IMigrator>().MigrateAsync(cancellationToken: ct);
-        }
-
-        await using (var connection = new NpgsqlConnection(connectionString))
-        {
-            await connection.OpenAsync(ct);
-            await using var command = connection.CreateCommand();
-            command.CommandText = """
-                INSERT INTO accounts (id, issuer, subject, created_at, updated_at)
-                VALUES (gen_random_uuid(), 'test', 'rank-race', now(), now());
-                INSERT INTO profiles (id, account_id, display_name, created_at, updated_at)
-                SELECT @profile, id, 'Rank race', now(), now() FROM accounts LIMIT 1;
-                INSERT INTO projects (id, revision, profile_id, name, status, type, created_at, updated_at)
-                VALUES (@project, 0, @profile, 'A', 'Active', 'Custom', now(), now());
-                """;
-            command.Parameters.AddWithValue("profile", profileId.Value);
-            command.Parameters.AddWithValue("project", projectId.Value);
-            await command.ExecuteNonQueryAsync(ct);
-        }
-
-        await AddRankGoalInBothProjectsAsync(options, profileId, [projectId], GoalStatus.Active);
-        var raced = await Assert.ThrowsAsync<DbUpdateException>(
-            () => AddRankGoalInBothProjectsAsync(options, profileId, [projectId], GoalStatus.Active));
-
-        Assert.True(GoalConflictDetection.IsProjectSlotConflict(raced));
-        Assert.Equal("ix_project_goals_one_in_flight_rank_target", (raced.InnerException as PostgresException)?.ConstraintName);
-    }
-
-    private static async Task<GoalId> AddRankGoalInBothProjectsAsync(
-        DbContextOptions<PlannerDbContext> options, ProfileId profileId, ProjectId[] projectIds, GoalStatus status)
-    {
-        await using var db = new PlannerDbContext(options, new PassthroughEncryption(), new StaticProfile(profileId));
-        var now = DateTimeOffset.UtcNow;
-        var goal = new Goal(GoalEntityType.Character, "ragnar", GoalType.Rank)
+        var goal = new Goal(GoalEntityType.Character, unit, GoalType.Rank)
         {
             Id = GoalId.From(Guid.CreateVersion7()),
             ProfileId = profileId,
             Status = status,
-            Config = new GoalConfig { Rank = new RankTarget { Start = 1, End = 12 } },
-            Events = [new GoalEvent { At = now, Type = GoalEventType.Created }],
+            Config = new GoalConfig
+            {
+                Rank = new RankTarget { Start = 1, End = end, EndPointFive = pointFive, EndAppliedUpgrades = appliedUpgrades },
+            },
         };
-        db.Goals.Add(goal);
-        await new GoalOrderService(db).AppendAsync(goal, TestContext.Current.CancellationToken);
-        foreach (var projectId in projectIds)
-        {
-            var project = await db.Projects.SingleAsync(entity => entity.Id == projectId, TestContext.Current.CancellationToken);
-            db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(project, goal, now));
-        }
+        goal.RefreshRankTargetKey();
+        return goal;
+    }
 
+    private static Goal AbilityGoal(ProfileId profileId, GoalStatus status = GoalStatus.Active) =>
+        new(GoalEntityType.Mow, "forgefiend", GoalType.Ability)
+        {
+            Id = GoalId.From(Guid.CreateVersion7()),
+            ProfileId = profileId,
+            Status = status,
+            Config = new GoalConfig { Ability = new AbilityTarget { ActiveStart = 1, ActiveEnd = 2, PassiveStart = 1, PassiveEnd = 2 } },
+        };
+
+    /// <summary>Saves one goal straight through EF (no friendly pre-check), in the profile's order when in
+    /// flight and in the given projects.</summary>
+    internal static async Task<GoalId> AddAsync(
+        PostgresTestDatabase database, Goal goal, ProfileId? profileId = null, IReadOnlyList<ProjectId>? memberOf = null)
+    {
+        await using var db = database.CreateContext(profileId ?? database.ProfileId);
+        db.Goals.Add(goal);
+        if (ProjectGoalPlanningService.IsInFlight(goal.Status))
+            await new GoalOrderService(db).AppendAsync(goal, TestContext.Current.CancellationToken);
+        foreach (var projectId in memberOf ?? [])
+            db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(projectId, goal.Id, DateTimeOffset.UtcNow));
         await db.SaveChangesAsync(TestContext.Current.CancellationToken);
         return goal.Id;
-    }
-
-    private static async Task<string?> KeyAsync(NpgsqlConnection connection, Guid goalId)
-    {
-        await using var command = connection.CreateCommand();
-        command.CommandText = "SELECT rank_target_key FROM project_goals WHERE goal_id = @goal;";
-        command.Parameters.AddWithValue("goal", goalId);
-        return await command.ExecuteScalarAsync(TestContext.Current.CancellationToken) as string;
-    }
-
-    /// <summary>Inserts a goal row plus an in-flight membership; a unique-index violation on the membership
-    /// surfaces as a <see cref="PostgresException"/>.</summary>
-    private static async Task InsertMembershipAsync(
-        NpgsqlConnection connection, Guid projectId, string entityId, string goalType, string? rankKey,
-        string entityType = "Character")
-    {
-        var goalId = Guid.NewGuid();
-        await using var command = connection.CreateCommand();
-        command.CommandText = """
-            INSERT INTO goals (id, revision, profile_id, entity_type, entity_id, goal_type, status,
-                               depends_on, created_at, updated_at, config, events, global_priority)
-            SELECT @goal, 0, p.profile_id, @entityType, @entityId, @goalType, 'Active',
-                   ARRAY[]::uuid[], now(), now(), '{}', '[]',
-                   (SELECT coalesce(max(g.global_priority), 0) + 1 FROM goals g WHERE g.profile_id = p.profile_id)
-            FROM projects p WHERE p.id = @project;
-            INSERT INTO project_goals (project_id, goal_id, entity_type, entity_id, goal_type,
-                                       occupies_in_flight_slot, rank_target_key, created_at)
-            VALUES (@project, @goal, @entityType, @entityId, @goalType, TRUE, @rankKey, now());
-            """;
-        command.Parameters.AddWithValue("goal", goalId);
-        command.Parameters.AddWithValue("project", projectId);
-        command.Parameters.AddWithValue("entityType", entityType);
-        command.Parameters.AddWithValue("entityId", entityId);
-        command.Parameters.AddWithValue("goalType", goalType);
-        command.Parameters.AddWithValue("rankKey", (object?)rankKey ?? DBNull.Value);
-        await command.ExecuteNonQueryAsync(TestContext.Current.CancellationToken);
-    }
-
-    private sealed class PassthroughEncryption : IColumnEncryptionService
-    {
-        public string? Encrypt(string? plaintext) => plaintext;
-
-        public string? Decrypt(string? envelope) => envelope;
-    }
-
-    private sealed class NoProfile : ICurrentProfileProvider
-    {
-        public ProfileId? ProfileId => null;
-    }
-
-    private sealed class StaticProfile(ProfileId profileId) : ICurrentProfileProvider
-    {
-        public ProfileId? ProfileId { get; } = profileId;
     }
 }

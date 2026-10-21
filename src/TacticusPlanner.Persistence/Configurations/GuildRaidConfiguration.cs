@@ -67,8 +67,12 @@ public sealed class GuildRaidAttackConfiguration : IEntityTypeConfiguration<Guil
         builder.Property(entity => entity.Difficulty).HasConversion<string>().HasMaxLength(32).IsRequired();
         builder.Property(entity => entity.DamageType).HasConversion<string>().HasMaxLength(32).IsRequired();
         builder.Property(entity => entity.CompletedAt).IsRequired();
-        builder.Property(entity => entity.CreatedAt).IsRequired();
-        builder.Property(entity => entity.UpdatedAt).IsRequired();
+        // Read whole with its attack, never queried inside; add a GIN index if unit-level queries appear.
+        builder.OwnsMany(entity => entity.Units, units =>
+        {
+            units.ToJson("units");
+            units.Property(unit => unit.Kind).HasConversion<string>();
+        });
         builder.HasIndex(entity => new { entity.GuildRaidSeasonId, entity.ContentHash }).IsUnique();
         builder.HasIndex(entity => new
         {
@@ -78,23 +82,5 @@ public sealed class GuildRaidAttackConfiguration : IEntityTypeConfiguration<Guil
         });
         builder.HasOne(entity => entity.Season).WithMany(entity => entity.Attacks)
             .HasForeignKey(entity => entity.GuildRaidSeasonId).OnDelete(DeleteBehavior.Cascade);
-    }
-}
-
-public sealed class GuildRaidAttackUnitConfiguration : IEntityTypeConfiguration<GuildRaidAttackUnit>
-{
-    public void Configure(EntityTypeBuilder<GuildRaidAttackUnit> builder)
-    {
-        builder.ToTable("guild_raid_attack_units");
-        builder.HasKey(entity => entity.Id);
-        builder.Property(entity => entity.Id).HasVogenConversion().ValueGeneratedNever();
-        builder.Property(entity => entity.GuildRaidAttackId).HasVogenConversion().IsRequired();
-        builder.Property(entity => entity.UnitId).HasMaxLength(128).IsRequired();
-        builder.Property(entity => entity.Kind).HasConversion<string>().HasMaxLength(16).IsRequired();
-        builder.Property(entity => entity.CreatedAt).IsRequired();
-        builder.Property(entity => entity.UpdatedAt).IsRequired();
-        builder.HasIndex(entity => new { entity.GuildRaidAttackId, entity.Kind, entity.Position }).IsUnique();
-        builder.HasOne(entity => entity.Attack).WithMany(entity => entity.Units)
-            .HasForeignKey(entity => entity.GuildRaidAttackId).OnDelete(DeleteBehavior.Cascade);
     }
 }

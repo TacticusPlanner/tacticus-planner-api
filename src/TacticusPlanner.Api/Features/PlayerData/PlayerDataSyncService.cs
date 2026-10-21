@@ -114,6 +114,12 @@ public sealed class PlayerDataSyncService(
             await db.SaveChangesAsync(ct);
             return new PlayerDataSyncResult.UpstreamRejected();
         }
+        catch (Exception exception) when (exception is ApiException or HttpRequestException
+            || (exception is TaskCanceledException && !ct.IsCancellationRequested))
+        {
+            await db.SaveChangesAsync(ct);
+            return new PlayerDataSyncResult.UpstreamUnavailable();
+        }
 
         var transformed = transformer.Transform(response);
         var syncedAt = timeProvider.GetUtcNow();
@@ -231,7 +237,6 @@ public sealed class PlayerDataSyncService(
         var assignments = new List<string>
         {
             "config_hash = @config_hash",
-            "tacticus_last_updated_on = @last_updated_on",
             "source_hash = @source_hash",
             "schema_version = @schema_version",
             "synced_at = @synced_at",
@@ -244,7 +249,6 @@ public sealed class PlayerDataSyncService(
             new("id", profileId.Value),
             new("revision", stored.Revision),
             new("config_hash", transformed.ConfigHash),
-            new("last_updated_on", transformed.TacticusLastUpdatedOn),
             new("source_hash", transformed.SourceHash),
             new("schema_version", PlayerDataTransformer.CurrentSchemaVersion),
             new("synced_at", syncedAt),
@@ -288,7 +292,6 @@ public sealed class PlayerDataSyncService(
         var existingChunkHashes = snapshot.ChunkHashes;
 
         snapshot.ConfigHash = transformed.ConfigHash;
-        snapshot.TacticusLastUpdatedOn = transformed.TacticusLastUpdatedOn;
         snapshot.SourceHash = transformed.SourceHash;
         snapshot.SchemaVersion = PlayerDataTransformer.CurrentSchemaVersion;
         snapshot.SyncedAt = syncedAt;
@@ -317,4 +320,7 @@ public abstract record PlayerDataSyncResult
     public sealed record Success(PlayerDataSnapshotEntity Snapshot) : PlayerDataSyncResult;
 
     public sealed record UpstreamRejected : PlayerDataSyncResult;
+
+    /// <summary>The Tacticus API failed or timed out; nothing was synced.</summary>
+    public sealed record UpstreamUnavailable : PlayerDataSyncResult;
 }

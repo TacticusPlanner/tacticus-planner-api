@@ -1,6 +1,7 @@
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Api.Http;
 using TacticusPlanner.Persistence;
 using UserSettingsData = TacticusPlanner.Domain.UserSettings.UserSettingsData;
 using UserSettingsEntity = TacticusPlanner.Domain.UserSettings.UserSettings;
@@ -20,7 +21,7 @@ public sealed class GetUserSettingsEndpoint : EndpointWithoutRequest<UserSetting
         var profileId = ProcessorState<CurrentUserState>().ProfileId;
         if (profileId is null)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 

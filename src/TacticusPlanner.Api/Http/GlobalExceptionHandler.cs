@@ -4,6 +4,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace TacticusPlanner.Api.Http;
 
+/// <summary>
+/// The last-resort error writer (<c>api-error-contract</c>): an unexpected exception becomes a 500 <c>internal</c>
+/// problem (no stack trace), an optimistic-concurrency failure no endpoint handled a 409 <c>concurrency</c>, and a
+/// bad request from the framework a 400. Once response headers have started nothing may be rewritten or appended,
+/// so the failure is logged with its trace id and the connection aborted.
+/// </summary>
 public sealed partial class GlobalExceptionHandler(
     ILogger<GlobalExceptionHandler> logger,
     IProblemDetailsService problemDetailsService
@@ -15,31 +21,24 @@ public sealed partial class GlobalExceptionHandler(
         CancellationToken cancellationToken
     )
     {
-        if (httpContext.Response.HasStarted)
-        {
-            return false;
-        }
-
         var statusCode = GetStatusCode(exception);
         LogUnhandledRequestException(logger, exception, httpContext.TraceIdentifier, statusCode);
 
+        if (httpContext.Response.HasStarted)
+        {
+            httpContext.Abort();
+            return true;
+        }
+
         httpContext.Response.StatusCode = statusCode;
+        var problem = new ProblemDetails { Status = statusCode };
+        if (statusCode == StatusCodes.Status409Conflict)
+            problem.Extensions["issueCode"] = ApiProblems.Concurrency;
 
         return await problemDetailsService.TryWriteAsync(new ProblemDetailsContext
         {
             HttpContext = httpContext,
-            Exception = exception,
-            ProblemDetails = new ProblemDetails
-            {
-                Status = statusCode,
-                Title = GetTitle(statusCode),
-                Detail = GetDetail(statusCode),
-                Instance = httpContext.Request.Path,
-                Extensions =
-                {
-                    ["traceId"] = httpContext.TraceIdentifier,
-                },
-            },
+            ProblemDetails = problem,
         });
     }
 
@@ -51,28 +50,6 @@ public sealed partial class GlobalExceptionHandler(
             UnauthorizedAccessException => StatusCodes.Status403Forbidden,
             DbUpdateConcurrencyException => StatusCodes.Status409Conflict,
             _ => StatusCodes.Status500InternalServerError,
-        };
-    }
-
-    private static string GetTitle(int statusCode)
-    {
-        return statusCode switch
-        {
-            StatusCodes.Status400BadRequest => "Bad request.",
-            StatusCodes.Status403Forbidden => "Forbidden.",
-            StatusCodes.Status409Conflict => "Conflict.",
-            _ => "An unexpected error occurred.",
-        };
-    }
-
-    private static string GetDetail(int statusCode)
-    {
-        return statusCode switch
-        {
-            StatusCodes.Status400BadRequest => "The request could not be processed.",
-            StatusCodes.Status403Forbidden => "The request is not allowed.",
-            StatusCodes.Status409Conflict => "The request conflicted with the current resource state.",
-            _ => "The request failed. Use the traceId when contacting support.",
         };
     }
 

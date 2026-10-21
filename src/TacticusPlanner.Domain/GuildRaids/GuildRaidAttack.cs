@@ -1,14 +1,17 @@
-using TacticusPlanner.Domain.Common;
 using TacticusPlanner.Domain.GuildRaids.Enums;
 using TacticusPlanner.Domain.Profiles;
 
 namespace TacticusPlanner.Domain.GuildRaids;
 
 /// <summary>
-/// Normalized, idempotently persisted upstream attack against one Guild Raid encounter.
+/// Normalized, idempotently persisted upstream attack against one Guild Raid encounter. Immutable once
+/// written, so it carries no audit timestamps: <see cref="StartedAt"/>/<see cref="CompletedAt"/> are the
+/// domain facts.
 /// </summary>
-public class GuildRaidAttack : BaseEntity<GuildRaidAttackId>
+public class GuildRaidAttack
 {
+    public GuildRaidAttackId Id { get; set; }
+
     /// <summary>
     /// Owning persisted season; attacks are deleted when that season is deleted.
     /// </summary>
@@ -98,7 +101,33 @@ public class GuildRaidAttack : BaseEntity<GuildRaidAttackId>
     public virtual GuildRaidSeason? Season { get; set; }
 
     /// <summary>
-    /// Heroes and optional Machine of War reported for this attack, without loading units from other attacks.
+    /// Heroes and optional Machine of War reported for this attack, stored inline (jsonb).
     /// </summary>
-    public virtual ICollection<GuildRaidAttackUnit> Units { get; set; } = new List<GuildRaidAttackUnit>();
+    public List<GuildRaidAttackUnit> Units { get; set; } = [];
+}
+
+/// <summary>
+/// One hero or Machine of War reported as participating in a persisted Guild Raid attack.
+/// </summary>
+public sealed class GuildRaidAttackUnit
+{
+    /// <summary>
+    /// Loosely typed upstream unit key, for example <c>titus</c> or a Machine of War unit ID.
+    /// </summary>
+    public required string UnitId { get; set; }
+
+    /// <summary>
+    /// Identifies whether <see cref="UnitId"/> came from hero details or Machine of War details.
+    /// </summary>
+    public GuildRaidAttackUnitKind Kind { get; set; }
+
+    /// <summary>
+    /// Zero-based order in the upstream hero collection; always <c>0</c> for the single Machine of War slot.
+    /// </summary>
+    public int Position { get; set; }
+
+    /// <summary>
+    /// Snapshot of the upstream unit power at attack time, for example <c>125000</c>.
+    /// </summary>
+    public int Power { get; set; }
 }

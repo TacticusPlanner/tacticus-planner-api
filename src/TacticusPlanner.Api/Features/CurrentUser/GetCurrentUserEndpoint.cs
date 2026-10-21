@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Analytics;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Api.Http;
-using TacticusPlanner.Domain.Accounts;
 using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Domain.Projects;
 using TacticusPlanner.Persistence;
@@ -26,7 +25,7 @@ public sealed class GetCurrentUserEndpoint : EndpointWithoutRequest<CurrentUserR
         {
             summary.Summary = "Gets the authenticated user's planner account, creating it on first access.";
             summary.Description = "Every authenticated caller has a planner account: this endpoint creates the "
-                + "Account and Profile on first access if they do not exist yet. displayName is the user-confirmed "
+                + "profile on first access if they do not exist yet. displayName is the user-confirmed "
                 + "name or null; suggestedDisplayName is a private, editable suggestion that is never public "
                 + "identity. Tacticus integration values are never returned in full — only a masked preview and "
                 + "whether onboarding is complete.";
@@ -44,30 +43,29 @@ public sealed class GetCurrentUserEndpoint : EndpointWithoutRequest<CurrentUserR
         var state = ProcessorState<CurrentUserState>();
         var db = Resolve<PlannerDbContext>();
 
-        var account = state.AccountId is { } accountId
-            ? await FindAccountAsync(db, accountId, ct)
+        var profile = state.ProfileId is { } profileId
+            ? await FindProfileAsync(db, profileId, ct)
             : null;
 
-        var isNewAccount = account?.Profile is null;
+        var isNewAccount = profile is null;
         if (isNewAccount)
         {
-            account = await ProvisionAccountAsync(db, state.Issuer, state.Subject, User, ct);
+            profile = await ProvisionProfileAsync(db, state.Issuer, state.Subject, ct);
         }
 
         // last_seen_at only feeds the "last active in Planner" display, so hourly precision is enough and
         // the common repeat call writes nothing.
         var now = Resolve<TimeProvider>().GetUtcNow();
-        if (account!.LastSeenAt is not { } lastSeenAt || now - lastSeenAt >= LastSeenWriteInterval)
+        if (profile!.LastSeenAt is not { } lastSeenAt || now - lastSeenAt >= LastSeenWriteInterval)
         {
-            account.LastSeenAt = now;
+            profile.LastSeenAt = now;
             await db.SaveChangesAsync(ct);
         }
 
-        var profile = account.Profile!;
         var hasName = profile.DisplayName != NoDisplayName;
         var tacticusApiKey = profile.TacticusIntegration?.TacticusApiKey;
         var analyticsId = Resolve<AnalyticsIdentityDeriver>()
-            .Derive(account.Id, AnalyticsIdentityDeriver.PostHogDestination);
+            .Derive(profile.Id, AnalyticsIdentityDeriver.PostHogDestination);
 
         if (isNewAccount)
         {
@@ -79,7 +77,7 @@ public sealed class GetCurrentUserEndpoint : EndpointWithoutRequest<CurrentUserR
         }
 
         await Send.OkAsync(new CurrentUserResponse(
-            account.Id.Value,
+            profile.Id.Value,
             hasName ? profile.DisplayName : null,
             hasName ? null : GetDisplayNameSuggestion(User),
             tacticusApiKey is not null,
@@ -89,11 +87,10 @@ public sealed class GetCurrentUserEndpoint : EndpointWithoutRequest<CurrentUserR
         ), ct);
     }
 
-    private static async Task<Account> ProvisionAccountAsync(
+    private static async Task<Profile> ProvisionProfileAsync(
         PlannerDbContext db,
         string issuer,
         string subject,
-        ClaimsPrincipal user,
         CancellationToken ct
     )
     {
@@ -107,37 +104,30 @@ public sealed class GetCurrentUserEndpoint : EndpointWithoutRequest<CurrentUserR
             Type = ProjectType.Default,
         };
 
-        var account = new Account
+        var profile = new Profile
         {
-            Id = AccountId.From(Guid.CreateVersion7()),
+            Id = profileId,
             Issuer = issuer,
             Subject = subject,
-            Profile = new Profile
-            {
-                Id = profileId,
-                DisplayName = NoDisplayName,
-            },
+            DisplayName = NoDisplayName,
         };
 
-        db.Accounts.Add(account);
+        db.Profiles.Add(profile);
         db.Projects.Add(defaultProject);
 
         await db.SaveChangesAsync(ct);
 
-        return await FindAccountAsync(db, account.Id, ct)
-            ?? throw new InvalidOperationException("Account provisioning failed unexpectedly.");
+        return profile;
     }
 
-    private static Task<Account?> FindAccountAsync(PlannerDbContext db, AccountId accountId, CancellationToken ct)
+    private static Task<Profile?> FindProfileAsync(PlannerDbContext db, ProfileId profileId, CancellationToken ct)
     {
-        // IgnoreQueryFilters: this runs during first-access provisioning, before CurrentUserPreProcessor has
-        // a profile to feed the global query filter — without this, the Profile/TacticusIntegration
-        // navigations would look empty even right after they're created below.
-        return db.Accounts
+        // IgnoreQueryFilters: harmless once CurrentUserPreProcessor has fed the filter, and keeps the
+        // TacticusIntegration navigation visible regardless of filter state.
+        return db.Profiles
             .IgnoreQueryFilters()
-            .Include(account => account.Profile)
-            .ThenInclude(profile => profile!.TacticusIntegration)
-            .FirstOrDefaultAsync(account => account.Id == accountId, ct);
+            .Include(profile => profile.TacticusIntegration)
+            .FirstOrDefaultAsync(profile => profile.Id == profileId, ct);
     }
 
     /// <summary>A private suggestion read live from the token — provider claims are never public identity.</summary>

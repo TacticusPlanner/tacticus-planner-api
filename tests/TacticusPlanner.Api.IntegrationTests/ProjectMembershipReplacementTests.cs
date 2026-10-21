@@ -49,10 +49,10 @@ public sealed class ProjectMembershipReplacementTests(PlannerApiFactory factory)
         var stale = await ReplaceAsync(client, extra, [goals[0], goals[2]], [goals[0]]);
 
         Assert.Equal(HttpStatusCode.Conflict, stale.StatusCode);
-        var body = await stale.Content.ReadFromJsonAsync<ProjectMembershipStaleResponse>(TestContext.Current.CancellationToken);
-        Assert.Equal("projectMembershipStale", body!.IssueCode);
-        Assert.Equal(extra, body.ProjectId);
-        Assert.Equal(new HashSet<Guid> { goals[0], goals[1] }, body.CurrentGoalIds.ToHashSet());
+        Assert.Equal("membershipStale", await stale.ReadIssueCodeAsync());
+        var current = await stale.ReadCurrentAsync<ProjectMembershipResponse>();
+        Assert.Equal(extra, current.ProjectId);
+        Assert.Equal(new HashSet<Guid> { goals[0], goals[1] }, current.GoalIds.ToHashSet());
         Assert.Equal([goals[0], goals[1]], await ProjectMemberIdsAsync(client, extra));
     }
 
@@ -91,43 +91,31 @@ public sealed class ProjectMembershipReplacementTests(PlannerApiFactory factory)
     {
         var (client, extra, goals) = await SevenGoalsWithExtraHoldingAsync(0);
         // A goal that lives only in the extra project.
-        var solo = await client.PostAsJsonAsync(
-            "/api/v1/me/goals", RankMilestone(9) with { Projects = [new ProjectPriorityRequest(extra)] },
-            TestContext.Current.CancellationToken);
-        solo.EnsureSuccessStatusCode();
-        var soloId = (await solo.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken))!.GoalId;
+        var soloId = (await client.CreateGoalAsync(
+            RankMilestone(9) with { Projects = [new ProjectPriorityRequest(extra)] })).GoalId;
 
         // Adds two valid goals but removes the solo goal from its only project.
         var response = await ReplaceAsync(client, extra, [goals[0], goals[1], goals[2]], [goals[0], soloId]);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var body = await response.Content.ReadFromJsonAsync<ProjectLastMembershipResponse>(TestContext.Current.CancellationToken);
-        Assert.Equal("lastProjectMembership", body!.IssueCode);
-        Assert.Equal([soloId], body.BlockedGoalIds);
+        var problem = await response.ReadProblemAsync();
+        Assert.Equal("lastProjectMembership", problem["issueCode"]!.GetValue<string>());
+        Assert.Equal([soloId], problem["blockedGoalIds"]!.AsArray().Select(id => id!.GetValue<Guid>()));
+        Assert.NotNull(problem["errors"]!["goals"]);
         Assert.Equal(new HashSet<Guid> { goals[0], soloId }, (await ProjectMemberIdsAsync(client, extra)).ToHashSet());
     }
 
     [Fact]
-    public async Task OccupiedSlotRejectsTheWholeBatchWithTheStructuredSlotConflict()
+    public async Task MembershipIsNotSlotChecked()
     {
+        // goals[0] and goals[1] are in-flight Rank milestones of one unit (targets 2 and 3): any project may hold
+        // both, since membership cannot create a duplicate slot.
         var (client, extra, goals) = await SevenGoalsWithExtraHoldingAsync(0);
-        // A second in-flight goal for goals[0]'s slot, living only in a third project.
-        var third = await client.PostAsJsonAsync(
-            "/api/v1/me/projects", new CreateProjectRequest("Third", null, null), TestContext.Current.CancellationToken);
-        third.EnsureSuccessStatusCode();
-        var thirdId = (await third.Content.ReadFromJsonAsync<ProjectSummaryResponse>(TestContext.Current.CancellationToken))!.ProjectId;
-        var duplicate = await client.PostAsJsonAsync(
-            "/api/v1/me/goals", RankMilestone(2) with { Projects = [new ProjectPriorityRequest(thirdId)] },
-            TestContext.Current.CancellationToken);
-        duplicate.EnsureSuccessStatusCode();
-        var duplicateId = (await duplicate.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken))!.GoalId;
 
-        var response = await ReplaceAsync(client, extra, [goals[0], duplicateId, goals[3]], [goals[0]]);
+        var response = await ReplaceAsync(client, extra, [goals[0], goals[1]], [goals[0]]);
 
-        Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
-        var body = await response.Content.ReadFromJsonAsync<ProjectGoalSlotConflictResponse>(TestContext.Current.CancellationToken);
-        Assert.Equal("projectGoalSlotOccupied", body!.IssueCode);
-        Assert.Equal([goals[0]], await ProjectMemberIdsAsync(client, extra));
+        response.EnsureSuccessStatusCode();
+        Assert.Equal([goals[0], goals[1]], await ProjectMemberIdsAsync(client, extra));
     }
 
     [Fact]
@@ -163,12 +151,7 @@ public sealed class ProjectMembershipReplacementTests(PlannerApiFactory factory)
 
         var goals = new List<Guid>();
         for (var end = 2; end <= 8; end++)
-        {
-            var response = await client.PostAsJsonAsync(
-                "/api/v1/me/goals", RankMilestone(end), TestContext.Current.CancellationToken);
-            response.EnsureSuccessStatusCode();
-            goals.Add((await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken))!.GoalId);
-        }
+            goals.Add((await client.CreateGoalAsync(RankMilestone(end))).GoalId);
 
         var members = extraIndexes.Select(index => goals[index]).ToList();
         (await ReplaceAsync(client, extra, members, [])).EnsureSuccessStatusCode();
@@ -178,10 +161,6 @@ public sealed class ProjectMembershipReplacementTests(PlannerApiFactory factory)
     private static async Task<ListGoalsResponse> ListGoalsAsync(HttpClient client) =>
         (await client.GetFromJsonAsync<ListGoalsResponse>("/api/v1/me/goals", TestContext.Current.CancellationToken))!;
 
-    private static async Task<List<Guid>> ProjectMemberIdsAsync(HttpClient client, Guid projectId)
-    {
-        var members = await client.GetFromJsonAsync<ListProjectGoalsResponse>(
-            $"/api/v1/me/projects/{projectId}/goals", TestContext.Current.CancellationToken);
-        return members!.Goals.Select(entry => entry.Goal.GoalId).ToList();
-    }
+    private static Task<List<Guid>> ProjectMemberIdsAsync(HttpClient client, Guid projectId) =>
+        client.ProjectGoalIdsAsync(projectId);
 }

@@ -129,16 +129,16 @@ public sealed class UpdateLegendaryEventTeamEndpoint : LegendaryEventPlanEndpoin
         IReadOnlyList<LegendaryEventFieldFailure> failures = [];
         var result = await Resolve<LegendaryEventPlanWriter>().WriteAsync(
             resolved.ProfileId, resolved.Event.Id, req.ExpectedRevision,
-            (context, token) =>
+            (context, _) =>
             {
                 var team = context.Plan.Teams.FirstOrDefault(entry => entry.Id == teamId);
                 if (team is null)
                     return Task.FromResult(LegendaryEventPlanMutation.TeamNotFound);
 
                 failures = LegendaryEventCatalogValidator.ValidateTeam(resolved.Event, team.LaneId, fields);
-                return failures.Count > 0
-                    ? Task.FromResult(LegendaryEventPlanMutation.Rejected)
-                    : LegendaryEventTeamMutations.UpdateTeamAsync(context, teamId, fields, token);
+                return Task.FromResult(failures.Count > 0
+                    ? LegendaryEventPlanMutation.Rejected
+                    : LegendaryEventTeamMutations.UpdateTeam(context, teamId, fields));
             },
             ct);
         if (result is LegendaryEventPlanWriteResult.Rejected)

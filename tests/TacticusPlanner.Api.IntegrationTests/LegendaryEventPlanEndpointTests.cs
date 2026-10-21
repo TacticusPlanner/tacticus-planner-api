@@ -41,6 +41,23 @@ public sealed class LegendaryEventPlanEndpointTests(PlannerApiFactory factory) :
     }
 
     [Fact]
+    public async Task ConcurrentFirstWritersCreateExactlyOnePlan()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var results = await Task.WhenAll(
+            client.PostAsJsonAsync($"{PlanUrl}/teams", Team(0, "alpha", Members(AlphaUnits), "First"), Ct),
+            client.PostAsJsonAsync($"{PlanUrl}/teams", Team(0, "alpha", Members(AlphaUnits, 1), "Second"), Ct));
+
+        var winner = await ReadPlanAsync(Assert.Single(results, response => response.StatusCode == HttpStatusCode.OK));
+        var (issueCode, current) = await ReadConflictAsync(Assert.Single(results, response => response.StatusCode == HttpStatusCode.Conflict));
+        Assert.Equal("legendaryEventPlanStale", issueCode);
+        Assert.Equal(1, winner.Revision);
+        Assert.Equivalent(winner, current);
+        Assert.Single((await ReadPlanAsync(await client.GetAsync(PlanUrl, Ct))).Teams);
+    }
+
+    [Fact]
     public async Task MissingPlanReadsAsEmptyRevisionZeroPlan()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
@@ -449,11 +466,11 @@ public sealed class LegendaryEventPlanEndpointTests(PlannerApiFactory factory) :
         using var scope = factory.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
         // IgnoreQueryFilters: this scope has no HttpContext, so the profile query filter has no profile to scope to.
-        var members = await db.LegendaryEventTeamMembers.IgnoreQueryFilters()
-            .Where(member => member.TeamId == LegendaryEventTeamId.From(teamId) && !member.Reserve)
-            .ToListAsync(Ct);
-        Assert.Equal(3, members.Count);
-        db.LegendaryEventTeamMembers.Remove(members.MaxBy(member => member.Position)!);
+        var plan = (await db.LegendaryEventPlans.IgnoreQueryFilters().ToListAsync(Ct))
+            .Single(entity => entity.Teams.Any(team => team.Id == LegendaryEventTeamId.From(teamId)));
+        var team = plan.Teams.Single(entity => entity.Id == LegendaryEventTeamId.From(teamId));
+        Assert.Equal(3, team.MemberUnitIds.Count);
+        team.MemberUnitIds = team.MemberUnitIds[..2];
         await db.SaveChangesAsync(Ct);
     }
 
@@ -487,12 +504,11 @@ public sealed class LegendaryEventPlanEndpointTests(PlannerApiFactory factory) :
         return plan;
     }
 
-    private static async Task<LegendaryEventPlanConflictResponse> ReadConflictAsync(HttpResponseMessage response)
+    /// <summary>A plan conflict: the problem's issue code and the plan under <c>current</c>.</summary>
+    private static async Task<(string IssueCode, LegendaryEventPlanResponse Plan)> ReadConflictAsync(HttpResponseMessage response)
     {
         Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
-        var conflict = await response.Content.ReadFromJsonAsync<LegendaryEventPlanConflictResponse>(Ct);
-        Assert.NotNull(conflict);
-        return conflict;
+        return ((await response.ReadIssueCodeAsync())!, await response.ReadCurrentAsync<LegendaryEventPlanResponse>());
     }
 
     private static async Task AssertBadRequestAsync(HttpResponseMessage response, string field)

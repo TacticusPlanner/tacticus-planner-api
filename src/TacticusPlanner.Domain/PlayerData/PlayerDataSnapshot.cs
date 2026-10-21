@@ -18,10 +18,6 @@ public class PlayerDataSnapshot : BaseEntity<ProfileId>, IRevisionedEntity
     /// the canonical per-chunk hashes instead.</summary>
     public string ConfigHash { get; set; } = string.Empty;
 
-    /// <summary>Unix seconds from the Tacticus player endpoint's <c>metaData.lastUpdatedOn</c> — when the
-    /// external API itself last refreshed this player's cached data (not when we last synced it).</summary>
-    public long TacticusLastUpdatedOn { get; set; }
-
     /// <summary>Aggregate canonical-content hash over all chunks, mirroring
     /// <c>GameCatalogHashing.ComputeSnapshotHash</c>. Served as the player-data manifest's top-level hash
     /// and strong ETag.</summary>

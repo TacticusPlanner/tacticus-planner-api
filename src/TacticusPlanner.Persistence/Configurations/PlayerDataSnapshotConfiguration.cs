@@ -19,7 +19,6 @@ public sealed class PlayerDataSnapshotConfiguration : IEntityTypeConfiguration<P
             .ValueGeneratedNever();
 
         builder.Property(entity => entity.ConfigHash).IsRequired();
-        builder.Property(entity => entity.TacticusLastUpdatedOn);
         builder.Property(entity => entity.SourceHash).IsRequired();
         builder.Property(entity => entity.SchemaVersion);
         builder.Property(entity => entity.SyncedAt).IsRequired();
@@ -49,7 +48,7 @@ public sealed class PlayerDataSnapshotConfiguration : IEntityTypeConfiguration<P
         // (OwnsOne/OwnsMany + ToJson()) rather than a hand-serialized string, per ADR 0002/0007. Staying
         // on OwnsOne/OwnsMany rather than EF Core 10's ComplexProperty/ComplexCollection: the latter's
         // ToJson() compiles but 500s at query time against this stack for even the simplest flat
-        // collection (confirmed empirically — see GoalConfiguration.Events' comment), so it's not worth
+        // collection (see GoalConfiguration's comment), so it's not worth
         // risking on this file's much deeper nesting.
 
         builder.OwnsOne(entity => entity.PlayerDetails, chunk => chunk.ToJson("player_details"));

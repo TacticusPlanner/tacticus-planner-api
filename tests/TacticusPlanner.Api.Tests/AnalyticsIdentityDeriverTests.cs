@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Options;
 using TacticusPlanner.Api.Features.Analytics;
-using TacticusPlanner.Domain.Accounts;
+using TacticusPlanner.Domain.Profiles;
 
 namespace TacticusPlanner.Api.Tests;
 
@@ -16,7 +16,7 @@ public sealed class AnalyticsIdentityDeriverTests
     public void SameAccountDerivesTheSameIdEveryTime()
     {
         var deriver = CreateDeriver();
-        var accountId = AccountId.From(Guid.CreateVersion7());
+        var accountId = ProfileId.From(Guid.CreateVersion7());
 
         var first = deriver.Derive(accountId, AnalyticsIdentityDeriver.PostHogDestination);
         var second = deriver.Derive(accountId, AnalyticsIdentityDeriver.PostHogDestination);
@@ -29,8 +29,8 @@ public sealed class AnalyticsIdentityDeriverTests
     {
         var deriver = CreateDeriver();
 
-        var first = deriver.Derive(AccountId.From(Guid.CreateVersion7()), AnalyticsIdentityDeriver.PostHogDestination);
-        var second = deriver.Derive(AccountId.From(Guid.CreateVersion7()), AnalyticsIdentityDeriver.PostHogDestination);
+        var first = deriver.Derive(ProfileId.From(Guid.CreateVersion7()), AnalyticsIdentityDeriver.PostHogDestination);
+        var second = deriver.Derive(ProfileId.From(Guid.CreateVersion7()), AnalyticsIdentityDeriver.PostHogDestination);
 
         Assert.NotEqual(first, second);
     }
@@ -39,7 +39,7 @@ public sealed class AnalyticsIdentityDeriverTests
     public void IdIsNotTheAccountIdentifierInAnyEncoding()
     {
         var deriver = CreateDeriver();
-        var accountId = AccountId.From(Guid.CreateVersion7());
+        var accountId = ProfileId.From(Guid.CreateVersion7());
 
         var analyticsId = deriver.Derive(accountId, AnalyticsIdentityDeriver.PostHogDestination);
 
@@ -51,7 +51,7 @@ public sealed class AnalyticsIdentityDeriverTests
     public void DifferentDestinationsDeriveUnlinkableIds()
     {
         var deriver = CreateDeriver();
-        var accountId = AccountId.From(Guid.CreateVersion7());
+        var accountId = ProfileId.From(Guid.CreateVersion7());
 
         var posthog = deriver.Derive(accountId, "posthog");
         var otherDestination = deriver.Derive(accountId, "some-other-vendor");
@@ -64,7 +64,7 @@ public sealed class AnalyticsIdentityDeriverTests
     {
         var deriverA = CreateDeriver([.. Enumerable.Repeat((byte)0xAA, 32)]);
         var deriverB = CreateDeriver([.. Enumerable.Repeat((byte)0xBB, 32)]);
-        var accountId = AccountId.From(Guid.CreateVersion7());
+        var accountId = ProfileId.From(Guid.CreateVersion7());
 
         var idFromA = deriverA.Derive(accountId, AnalyticsIdentityDeriver.PostHogDestination);
         var idFromB = deriverB.Derive(accountId, AnalyticsIdentityDeriver.PostHogDestination);
@@ -81,7 +81,7 @@ public sealed class AnalyticsIdentityDeriverTests
         // "creation time is not recoverable" scenario.
         var deriver = CreateDeriver();
         var accountsInCreationOrder = Enumerable.Range(0, 20)
-            .Select(_ => AccountId.From(Guid.CreateVersion7()))
+            .Select(_ => ProfileId.From(Guid.CreateVersion7()))
             .ToList();
 
         var idsInCreationOrder = accountsInCreationOrder

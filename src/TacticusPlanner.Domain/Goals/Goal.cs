@@ -47,11 +47,16 @@ public class Goal : BaseEntity<GoalId>, IRevisionedEntity
     /// <summary>Null until the estimation engine populates it at creation time (a later phase).</summary>
     public GoalSnapshot? Snapshot { get; set; }
 
-    public List<GoalEvent> Events { get; set; } = [];
+    /// <summary>Normalized end target (<see cref="Goals.RankTargetKey"/>) for a Rank goal, null for every other
+    /// type. Derived from <see cref="Config"/> so a partial unique index can enforce Rank target occupancy;
+    /// refresh it with <see cref="RefreshRankTargetKey"/> after every config write.</summary>
+    public string? RankTargetKey { get; private set; }
 
     /// <summary>Prerequisite edges from combined creation (unlock -> ascend -> rank). Empty until the
     /// combined-creation flow (a later phase) links goals together.</summary>
     public List<Guid> DependsOn { get; set; } = [];
 
     public virtual Profile? Profile { get; set; }
+
+    public void RefreshRankTargetKey() => RankTargetKey = Goals.RankTargetKey.For(GoalType, Config);
 }

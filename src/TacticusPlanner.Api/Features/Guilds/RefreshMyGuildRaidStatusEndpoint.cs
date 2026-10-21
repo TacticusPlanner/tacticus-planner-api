@@ -1,5 +1,6 @@
 using FastEndpoints;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Api.Http;
 using TacticusPlanner.Domain.Guilds;
 using TacticusPlanner.Persistence;
 
@@ -28,7 +29,7 @@ public sealed class RefreshMyGuildRaidStatusEndpoint : EndpointWithoutRequest<Gu
     {
         if (ProcessorState<CurrentUserState>().ProfileId is not { } profileId)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 
@@ -40,7 +41,7 @@ public sealed class RefreshMyGuildRaidStatusEndpoint : EndpointWithoutRequest<Gu
                 guild = ready.Guild;
                 break;
             case ReadyGuildResult.NotReady notReady:
-                AddError(notReady.Message);
+                AddError(notReady.Message, "guildRaidNotReady");
                 await Send.ErrorsAsync(StatusCodes.Status409Conflict, ct);
                 return;
             default:

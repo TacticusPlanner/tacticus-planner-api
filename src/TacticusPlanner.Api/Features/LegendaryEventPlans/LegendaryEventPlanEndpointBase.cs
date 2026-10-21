@@ -1,6 +1,7 @@
 using FastEndpoints;
 using FluentValidation.Results;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Api.Http;
 using TacticusPlanner.Domain.LegendaryEvents;
 using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.GameCatalog.Models;
@@ -21,7 +22,7 @@ public abstract class LegendaryEventPlanEndpointBase<TRequest> : Endpoint<TReque
         var lre = Resolve<LegendaryEventCatalogValidator>().FindEvent(Route<string>("eventId")!);
         if (ProcessorState<CurrentUserState>().ProfileId is not { } profileId || lre is null)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return null;
         }
 
@@ -36,14 +37,14 @@ public abstract class LegendaryEventPlanEndpointBase<TRequest> : Endpoint<TReque
         var eventId = Route<string>("eventId")!;
         if (ProcessorState<CurrentUserState>().ProfileId is null)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return null;
         }
 
         var plan = await Resolve<PlannerDbContext>().LoadPlanAsync(eventId, tracked: false, ct);
         if (plan is null && Resolve<LegendaryEventCatalogValidator>().FindEvent(eventId) is null)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return null;
         }
 
@@ -69,11 +70,10 @@ public abstract class LegendaryEventPlanEndpointBase<TRequest> : Endpoint<TReque
                 await Send.OkAsync(saved.Plan, ct);
                 break;
             case LegendaryEventPlanWriteResult.Conflict conflict:
-                HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
-                await HttpContext.Response.WriteAsJsonAsync(conflict.Body, ct);
+                await this.SendConflictAsync(conflict.IssueCode, conflict.Message, conflict.Current, ct);
                 break;
             default:
-                await Send.NotFoundAsync(ct);
+                await this.SendNotFoundProblemAsync(ct);
                 break;
         }
     }
@@ -86,8 +86,8 @@ public abstract class LegendaryEventPlanEndpointBase<TRequest> : Endpoint<TReque
         summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
         summary.Response(StatusCodes.Status404NotFound, "The event is not a current catalog Legendary Event, or the "
             + "team is not on this plan.");
-        summary.Response<LegendaryEventPlanConflictResponse>(StatusCodes.Status409Conflict,
+        summary.Response(StatusCodes.Status409Conflict,
             "expectedRevision is stale or another write won (issueCode legendaryEventPlanStale), or a reorder's ids "
-            + "are not the lane's team set (legendaryEventOrderSetMismatch). Carries the current plan.");
+            + "are not the lane's team set (legendaryEventOrderSetMismatch). current is the plan as it stands.");
     }
 }

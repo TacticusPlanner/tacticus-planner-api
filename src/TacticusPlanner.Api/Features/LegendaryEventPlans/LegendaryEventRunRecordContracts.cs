@@ -6,9 +6,11 @@ namespace TacticusPlanner.Api.Features.LegendaryEventPlans;
 /// <param name="Plans">Ordered by <c>eventId</c> (ordinal), each exactly as its single <c>GET</c> returns it.</param>
 public sealed record LegendaryEventPlanListResponse(IReadOnlyList<LegendaryEventPlanResponse> Plans);
 
-/// <summary>The caller's run records for one event (LRE Stage 7, design D6).</summary>
-/// <param name="Records">Newest <c>startedAt</c> first.</param>
-public sealed record LegendaryEventRunRecordsResponse(string EventId, IReadOnlyList<LegendaryEventRunRecordResponse> Records);
+/// <summary>One page of the caller's run records for one event.</summary>
+/// <param name="Records">Newest <c>startedAt</c> first, then descending id.</param>
+/// <param name="NextAfter">The cursor of the next page; null on the last page.</param>
+public sealed record LegendaryEventRunRecordsResponse(
+    string EventId, IReadOnlyList<LegendaryEventRunRecordResponse> Records, string? NextAfter);
 
 /// <summary>One run occurrence as of the last sync that changed its progress.</summary>
 /// <param name="Run">The event run, 1–3.</param>
@@ -18,7 +20,7 @@ public sealed record LegendaryEventRunRecordsResponse(string EventId, IReadOnlyL
 /// <param name="Points">The synced event points at <c>progressAt</c>.</param>
 /// <param name="Teams">The plan's teams at <c>progressAt</c>, by lane then <c>sortOrder</c>; empty when there was no
 /// plan or no team.</param>
-/// <param name="RosterSnapshot">The whole owned roster at <c>progressAt</c>; null when the snapshot was removed.</param>
+/// <remarks>The roster is read on demand from <c>.../run-records/{recordId}/roster</c>.</remarks>
 public sealed record LegendaryEventRunRecordResponse(
     Guid Id,
     int Run,
@@ -27,8 +29,7 @@ public sealed record LegendaryEventRunRecordResponse(
     string CatalogVersion,
     int Points,
     LegendaryEventRunRecordLanesResponse Lanes,
-    IReadOnlyList<LegendaryEventRunRecordTeamResponse> Teams,
-    RosterSnapshotResponse? RosterSnapshot
+    IReadOnlyList<LegendaryEventRunRecordTeamResponse> Teams
 );
 
 /// <summary>Each lane is null as synced, or its encounters in battle order.</summary>
@@ -60,7 +61,6 @@ public sealed record LegendaryEventRunRecordTeamResponse(
 /// <summary>A whole owned roster, units in the synced <c>characters</c> / <c>mows</c> chunk shapes.</summary>
 /// <param name="TakenAt">When the units were read (UTC).</param>
 public sealed record RosterSnapshotResponse(
-    Guid Id,
     DateTimeOffset TakenAt,
     string CatalogVersion,
     IReadOnlyList<PlayerCharacterRecord> Characters,

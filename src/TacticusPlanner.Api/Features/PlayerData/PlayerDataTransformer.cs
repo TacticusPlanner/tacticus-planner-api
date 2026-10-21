@@ -104,8 +104,7 @@ public sealed partial class PlayerDataTransformer(IGameCatalogProvider catalog)
             LreProgress: lreProgress,
             ChunkHashes: chunkHashes,
             SourceHash: sourceHash,
-            ConfigHash: response.Metadata?.ConfigHash ?? string.Empty,
-            TacticusLastUpdatedOn: response.Metadata?.LastUpdatedOn ?? 0);
+            ConfigHash: response.Metadata?.ConfigHash ?? string.Empty);
     }
 }
 
@@ -123,6 +122,5 @@ public sealed record PlayerDataTransformResult(
     List<LreProgressRecord> LreProgress,
     Dictionary<string, string> ChunkHashes,
     string SourceHash,
-    string ConfigHash,
-    long TacticusLastUpdatedOn
+    string ConfigHash
 );

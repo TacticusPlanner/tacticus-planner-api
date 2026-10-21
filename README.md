@@ -213,11 +213,30 @@ issuer and audience.
 - Interactive API reference in Development: `/docs`
 - Liveness: `/health/live`
 - Readiness, including PostgreSQL: `/health/ready`
-- Authenticated user (auto-provisions the account/profile on first call): `GET /api/v1/me`
+- Authenticated user (auto-provisions the profile on first call): `GET /api/v1/me`
 - Purge the authenticated user's account and all related data: `DELETE /api/v1/me`
 - Save/update the authenticated user's Tacticus integration: `PUT /api/v1/me/tacticus-integration`
+- Sync player data from the Tacticus API: `POST /api/v1/me/player-data/sync`
 - Import a Tacticus API key/user id from a V1 profile: `POST /api/v1/me/v1-import`
-- Validate a Tacticus API key without persisting it: `POST /api/v1/tacticus-api-key/validate`
+
+Goals and projects (the two lists are the whole planning read model):
+
+| Route | Purpose |
+| --- | --- |
+| `GET /api/v1/me/goals[?archived=true]` | Every goal in full detail (config, snapshot, `projectIds`, `revision`, `globalPriority`) plus `orderRevision` |
+| `GET /api/v1/me/goals/{goalId}` | One goal, the same shape as a list entry |
+| `POST /api/v1/me/goals` | Create one goal, or several linked goals of one unit (`goals[]` with `dependsOnIndex`); request-level `startPaused` |
+| `PUT /api/v1/me/goals/{goalId}` | The only edit route: optional `target`, `details`, `projectIds`, `priority` sections, all-or-nothing; answers `{ goal, order }` |
+| `POST /api/v1/me/goals/status` | Transition one or many goals atomically (`{ goalIds, status, expectedOrderRevision }`) |
+| `PUT /api/v1/me/goals/order` | Replace the in-flight order |
+| `DELETE /api/v1/me/goals/{goalId}` | Delete a goal (unlinks it from dependents' `dependsOn`) |
+| `GET /api/v1/me/projects[?archived=true]` | Projects, each with its member `goalIds` under the same archived selector |
+| `PUT /api/v1/me/projects/{projectId}/goals` | Replace a project's membership (never slot-checked) |
+| `GET /api/v1/me/legendary-event-plans/{eventId}/run-records?limit=&after=` | Run records, newest first, cursor-paged, without rosters |
+| `GET /api/v1/me/legendary-event-plans/{eventId}/run-records/{recordId}/roster` | One record's roster snapshot (ETag/304) |
+
+Every error is RFC 7807 `application/problem+json` with `issueCode` (and `errors` on 400, `current` on a 409
+whose resource is known); see `Http/ApiProblems.cs`.
 
 Future feature endpoints belong under `/api/v1` and require the delegated
 `access_as_user` scope by default. Tacticus API keys, Tacticus user ids, and V1 credentials are never returned to
@@ -237,6 +256,12 @@ Create migrations when the persisted model changes:
 ```powershell
 dotnet ef migrations add <MigrationName> --project src/TacticusPlanner.Persistence --startup-project src/TacticusPlanner.Api
 ```
+
+The schema is one `InitialCreate` migration (recreated pre-launch by `rebuild-foundation-pre-launch`). It is the EF
+model plus exactly one raw statement appended to its `Up`: the deferrable
+`ix_goals_profile_global_priority UNIQUE (profile_id, global_priority)` constraint, which the EF model cannot
+express. `SchemaPostgresTests` fails if a future squash loses it. Database constraints are limited to keys, foreign
+keys, uniqueness, nullability and `ck_goals_global_priority_in_flight`; range and enum rules live in validators.
 
 The API always applies pending migrations before the server accepts requests.
 This behavior is the same in Development, Staging, and Production and does not
@@ -280,12 +305,22 @@ resource, change the database password manually, or reset the local
 `tacticus-planner-postgres-data` Docker volume and let Aspire recreate it.
 
 If `Update Database` fails with an error such as
-`42P07: relation "accounts" already exists`, the local database already has
-tables but does not have matching EF migration history. For this greenfield
-project, reset the local database instead of trying to preserve that partial
-state: use the `api-migrations` resource `Reset Database` command in the
-Aspire Dashboard, or run the `Drop Database` command followed by
-`Update Database`.
+`42P07: relation "profiles" already exists`, the local database already has
+tables but does not have matching EF migration history — for example a database
+created by the migrations that `InitialCreate` replaced. For this greenfield
+project, reset the local database instead of trying to preserve that state: use
+the `api-migrations` resource `Reset Database` command in the Aspire Dashboard,
+or run the `Drop Database` command followed by `Update Database`:
+
+```powershell
+aspire resource api-migrations drop-database --apphost orchestration/TacticusPlanner.AppHost/TacticusPlanner.AppHost.csproj
+aspire resource api-migrations update-database --apphost orchestration/TacticusPlanner.AppHost/TacticusPlanner.AppHost.csproj
+```
+
+The first `GET /api/v1/me` against the fresh database provisions the caller's
+profile and default project. Staging and production have no data to keep
+pre-launch: `tacticus-planner-infra` drops and recreates their databases when
+an image with a replaced migration history is deployed.
 
 ## Container image
 
@@ -355,5 +390,27 @@ Configure the repository's protected `stage` environment with:
 The first workflow run may occur before the Container App is provisioned. In
 that case it publishes the image, reports the immutable digest in the workflow
 summary, and skips deployment successfully. Supply that digest to the initial
-local infrastructure deployment. Subsequent runs update the existing Container
-App automatically.
+local infrastructure deployment.
+
+### Coordinated cutover
+
+A push to `main` always publishes the image (and the OpenAPI artifact is in the
+merged source), but it promotes the image to staging only when the repository
+variable `STAGE_AUTO_DEPLOY` is `true`. Leave it unset or `false` while a
+breaking contract (for example the problem-details errors, the goal routes or
+the paged run records) is merged ahead of its web client, so an old client is
+never served the new contract:
+
+1. Before merging the API change, confirm `STAGE_AUTO_DEPLOY` is not `true`.
+2. Merge the API change; the image is published, staging keeps the previous API.
+3. Regenerate and test the companion client against the merged
+   `artifacts/openapi/TacticusPlanner.Api.json` (errors and `current`,
+   `{ goal, order }`, archive selectors, paged run records and roster reads),
+   and get both changes green in CI and review.
+4. Deploy the matched API (`CD Stage` → Run workflow) and web artifacts together.
+   If they must go one after the other, keep staging inaccessible until both are
+   deployed and the joint smoke test (sign in, goals list, edit, bulk status,
+   Legendary Event overview) passes. A replaced migration history also needs the
+   staging database dropped and recreated (`tacticus-planner-infra`) first.
+5. Reopen access, then set `STAGE_AUTO_DEPLOY=true` to restore automatic
+   promotion.

@@ -39,15 +39,13 @@ public sealed class LegendaryEventRunRecordRecorder(PlannerDbContext db, IGameCa
             var run = entry.CurrentEventRun.Value;
             var lanes = CompactLanes(entry);
             var latest = await db.LegendaryEventRunRecords
-                .Include(record => record.RosterSnapshot)
                 .Where(record => record.ProfileId == profileId && record.EventId == eventId)
                 .OrderByDescending(record => record.StartedAt)
+                .ThenByDescending(record => record.Id)
                 .FirstOrDefaultAsync(ct);
 
             if (latest is null || latest.Run != run || !IsSuperset(lanes, latest.Lanes))
             {
-                var snapshot = NewSnapshot(profileId, characters, mows, now);
-                db.RosterSnapshots.Add(snapshot);
                 db.LegendaryEventRunRecords.Add(new LegendaryEventRunRecord
                 {
                     Id = LegendaryEventRunRecordId.From(Guid.CreateVersion7()),
@@ -59,9 +57,8 @@ public sealed class LegendaryEventRunRecordRecorder(PlannerDbContext db, IGameCa
                     CatalogVersion = GameCatalogRelease.Version,
                     Points = entry.CurrentPoints,
                     Lanes = lanes,
-                    Teams = await LoadTeamsAsync(profileId, eventId, run, ct),
-                    RosterSnapshotId = snapshot.Id,
-                    RosterSnapshot = snapshot,
+                    Teams = await LoadTeamsAsync(profileId, eventId, ct),
+                    Roster = NewRoster(characters, mows, now),
                 });
                 continue;
             }
@@ -73,14 +70,8 @@ public sealed class LegendaryEventRunRecordRecorder(PlannerDbContext db, IGameCa
             latest.CatalogVersion = GameCatalogRelease.Version;
             latest.Points = entry.CurrentPoints;
             latest.Lanes = lanes;
-            latest.Teams = await LoadTeamsAsync(profileId, eventId, run, ct);
-            if (latest.RosterSnapshot is { } existing)
-            {
-                existing.TakenAt = now;
-                existing.CatalogVersion = GameCatalogRelease.Version;
-                existing.Characters = characters.OrderBy(unit => unit.UnitId.Value, StringComparer.Ordinal).Select(CloneCharacter).ToList();
-                existing.Mows = mows.OrderBy(unit => unit.UnitId.Value, StringComparer.Ordinal).Select(CloneMow).ToList();
-            }
+            latest.Teams = await LoadTeamsAsync(profileId, eventId, ct);
+            latest.Roster = NewRoster(characters, mows, now);
         }
     }
 
@@ -88,24 +79,20 @@ public sealed class LegendaryEventRunRecordRecorder(PlannerDbContext db, IGameCa
     /// fresh rows without duplicating records.</summary>
     public void Discard()
     {
-        var roots = new[] { typeof(LegendaryEventRunRecord).FullName!, typeof(RosterSnapshot).FullName! };
+        var root = typeof(LegendaryEventRunRecord).FullName!;
         var staged = db.ChangeTracker.Entries()
-            .Where(entry => roots.Any(root => entry.Metadata.Name == root
-                || entry.Metadata.Name.StartsWith(root + ".", StringComparison.Ordinal)))
+            .Where(entry => entry.Metadata.Name == root
+                || entry.Metadata.Name.StartsWith(root + ".", StringComparison.Ordinal))
             .ToList();
         foreach (var entry in staged)
             entry.State = EntityState.Detached;
     }
 
-    private async Task<List<LegendaryEventRunRecordTeam>> LoadTeamsAsync(
-        ProfileId profileId, string eventId, int run, CancellationToken ct)
+    /// <summary>Copies of the plan's teams, in lane then sort order (the served depth is picked per record run).</summary>
+    private async Task<List<LegendaryEventTeamRecord>> LoadTeamsAsync(ProfileId profileId, string eventId, CancellationToken ct)
     {
         var plan = await db.LegendaryEventPlans
             .AsNoTracking()
-            .Include(entity => entity.Teams).ThenInclude(team => team.Members)
-            .Include(entity => entity.Teams).ThenInclude(team => team.Objectives)
-            .Include(entity => entity.Teams).ThenInclude(team => team.RunDepths)
-            .AsSplitQuery()
             .FirstOrDefaultAsync(entity => entity.ProfileId == profileId && entity.EventId == eventId, ct);
         if (plan is null)
             return [];
@@ -113,37 +100,14 @@ public sealed class LegendaryEventRunRecordRecorder(PlannerDbContext db, IGameCa
         return plan.Teams
             .OrderBy(team => LegendaryEventPlanProjection.LaneOrder(team.LaneId))
             .ThenBy(team => team.SortOrder)
-            .Select(team =>
-            {
-                var depth = team.RunDepths.FirstOrDefault(entity => entity.Run == run);
-                return new LegendaryEventRunRecordTeam
-                {
-                    TeamId = team.Id.Value,
-                    LaneId = team.LaneId,
-                    Name = team.Name,
-                    SortOrder = team.SortOrder,
-                    MemberUnitIds = team.Members.Where(member => !member.Reserve).OrderBy(member => member.Position)
-                        .Select(member => member.UnitId).ToList(),
-                    ReserveUnitId = team.Members.FirstOrDefault(member => member.Reserve)?.UnitId,
-                    ObjectiveIndexes = team.Objectives.Select(objective => objective.ObjectiveIndex).Order().ToList(),
-                    ExpectedBattleClears = depth?.ExpectedBattleClears,
-                    ExpectedBattleClearsSource =
-                        depth is null ? null : LegendaryEventPlanProjection.SourceName(depth.Source),
-                };
-            })
+            .Select(team => team.Clone())
             .ToList();
     }
 
-    private static RosterSnapshot NewSnapshot(
-        ProfileId profileId,
-        IReadOnlyList<PlayerCharacterRecord> characters,
-        IReadOnlyList<PlayerMowRecord> mows,
-        DateTimeOffset now) =>
+    private static RosterSnapshot NewRoster(
+        IReadOnlyList<PlayerCharacterRecord> characters, IReadOnlyList<PlayerMowRecord> mows, DateTimeOffset now) =>
         new()
         {
-            Id = RosterSnapshotId.From(Guid.CreateVersion7()),
-            ProfileId = profileId,
-            Source = RosterSnapshotSource.LegendaryEventRun,
             TakenAt = now,
             CatalogVersion = GameCatalogRelease.Version,
             Characters = characters.OrderBy(unit => unit.UnitId.Value, StringComparer.Ordinal).Select(CloneCharacter).ToList(),
@@ -216,7 +180,7 @@ public sealed class LegendaryEventRunRecordRecorder(PlannerDbContext db, IGameCa
     }
 
     // The synced chunk instances may also be owned by the player-data snapshot in this same unit of work, and EF
-    // tracks an owned instance under one owner only, so the roster snapshot gets its own copies.
+    // tracks an owned instance under one owner only, so the record's roster gets its own copies.
     private static PlayerCharacterRecord CloneCharacter(PlayerCharacterRecord unit) =>
         new()
         {

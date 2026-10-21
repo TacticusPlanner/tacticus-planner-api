@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
+using TacticusPlanner.Api.Http;
 using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Persistence;
 
@@ -8,7 +9,7 @@ namespace TacticusPlanner.Api.Features.Auth;
 
 /// <summary>
 /// Registered once as a global pre-processor (see Program.cs) so every endpoint's identity resolution —
-/// previously copy-pasted <c>iss</c>/<c>sub</c> claim extraction plus an Account/Profile lookup — happens
+/// previously copy-pasted <c>iss</c>/<c>sub</c> claim extraction plus a profile lookup — happens
 /// exactly once per request. Populates <see cref="CurrentUserState"/> for <c>ProcessorState&lt;T&gt;()</c>
 /// to read.
 ///
@@ -34,7 +35,7 @@ public sealed class CurrentUserPreProcessor : IGlobalPreProcessor
             // still gets a clean 401 rather than a null-reference surprise if that ever changes.
             if (!httpContext.ResponseStarted())
             {
-                await httpContext.Response.SendUnauthorizedAsync(ct);
+                await ApiProblems.WriteAsync(httpContext, StatusCodes.Status401Unauthorized);
             }
 
             return;
@@ -46,29 +47,20 @@ public sealed class CurrentUserPreProcessor : IGlobalPreProcessor
 
         var db = httpContext.Resolve<PlannerDbContext>();
         // IgnoreQueryFilters: the profile is not known yet — that's what this query is resolving — so the
-        // global profile query filter (which would hide the Profile navigation entirely) must not apply here.
-        var ids = await db.Accounts
+        // global profile query filter (which would hide every profile) must not apply here.
+        var profileId = await db.Profiles
             .IgnoreQueryFilters()
             .AsNoTracking()
-            .Where(account => account.Issuer == issuer && account.Subject == subject)
-            .Select(account => new
-            {
-                account.Id,
-                ProfileId = account.Profile != null ? (ProfileId?)account.Profile.Id : null,
-            })
+            .Where(profile => profile.Issuer == issuer && profile.Subject == subject)
+            .Select(profile => (ProfileId?)profile.Id)
             .FirstOrDefaultAsync(ct);
 
-        if (ids is not null)
+        if (profileId is { } id)
         {
-            state.AccountId = ids.Id;
-            state.ProfileId = ids.ProfileId;
-
-            if (ids.ProfileId is { } profileId)
-            {
-                // Feeds PlannerDbContext's global query filters for the rest of this request — see
-                // HttpContextCurrentProfileProvider.
-                httpContext.Items[HttpContextCurrentProfileProvider.ProfileIdItemKey] = profileId;
-            }
+            state.ProfileId = id;
+            // Feeds PlannerDbContext's global query filters for the rest of this request — see
+            // HttpContextCurrentProfileProvider.
+            httpContext.Items[HttpContextCurrentProfileProvider.ProfileIdItemKey] = id;
         }
     }
 }

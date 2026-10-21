@@ -75,11 +75,6 @@ public sealed record LegendaryEventTeamRunDepthResponse(
     DateTimeOffset RecordedAt
 );
 
-/// <summary>409 body: <c>legendaryEventPlanStale</c> (stale <c>expectedRevision</c> or a concurrent write) or
-/// <c>legendaryEventOrderSetMismatch</c> (a reorder whose ids are not the lane's team set). Carries the current
-/// plan so the client reloads from the body.</summary>
-public sealed record LegendaryEventPlanConflictResponse(string IssueCode, string Message, LegendaryEventPlanResponse Plan);
-
 public static class LegendaryEventPlanIssueCodes
 {
     public const string Stale = "legendaryEventPlanStale";

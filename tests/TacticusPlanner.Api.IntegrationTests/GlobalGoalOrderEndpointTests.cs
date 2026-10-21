@@ -24,13 +24,10 @@ public sealed class GlobalGoalOrderEndpointTests(PlannerApiFactory factory) : IC
     [Fact]
     public async Task ConcurrentGoalMutationsSerializeSlotConflicts()
     {
-        var ct = TestContext.Current.CancellationToken;
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var project = await DefaultProjectAsync(client);
         var request = RankMilestone(5, project.ProjectId);
-        var results = await Task.WhenAll(
-            client.PostAsJsonAsync("/api/v1/me/goals", request, ct),
-            client.PostAsJsonAsync("/api/v1/me/goals", request, ct));
+        var results = await Task.WhenAll(client.PostGoalAsync(request), client.PostGoalAsync(request));
         Assert.Single(results, response => response.StatusCode == HttpStatusCode.OK);
         Assert.Single(results, response => response.StatusCode == HttpStatusCode.Conflict);
         var goals = await ListGoalsAsync(client);
@@ -153,7 +150,7 @@ public sealed class GlobalGoalOrderEndpointTests(PlannerApiFactory factory) : IC
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var combinedResponse = await client.PostAsJsonAsync(
-            "/api/v1/me/goals/combined",
+            "/api/v1/me/goals",
             new CreateCombinedGoalsRequest(
                 "character",
                 "blackTerminator",
@@ -228,10 +225,7 @@ public sealed class GlobalGoalOrderEndpointTests(PlannerApiFactory factory) : IC
         var before = await ListGoalsAsync(client);
         var defaultProject = await DefaultProjectAsync(client);
 
-        var response = await client.PutAsJsonAsync(
-            $"/api/v1/me/goals/{a.GoalId}/projects",
-            new UpdateGoalProjectsRequest([defaultProject.ProjectId, extra.ProjectId]),
-            TestContext.Current.CancellationToken);
+        var response = await client.PutProjectsAsync(a.GoalId, [defaultProject.ProjectId, extra.ProjectId]);
         response.EnsureSuccessStatusCode();
         var members = await client.PutAsJsonAsync(
             $"/api/v1/me/projects/{extra.ProjectId}/goals",
@@ -338,29 +332,22 @@ public sealed class GlobalGoalOrderEndpointTests(PlannerApiFactory factory) : IC
     private static async Task AssertConflictAsync(HttpResponseMessage response, string issueCode, ListGoalsResponse current)
     {
         Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
-        var body = await response.Content.ReadFromJsonAsync<GoalOrderConflictResponse>(TestContext.Current.CancellationToken);
-        Assert.NotNull(body);
-        Assert.Equal(issueCode, body.IssueCode);
-        Assert.Equal(current.OrderRevision, body.Revision);
-        Assert.Equal(current.Goals.Select(goal => goal.GoalId), body.GoalIds);
+        Assert.Equal(issueCode, await response.ReadIssueCodeAsync());
+        var order = await response.ReadCurrentAsync<GoalOrderResponse>();
+        Assert.Equal(current.OrderRevision, order.Revision);
+        Assert.Equal(current.Goals.Select(goal => goal.GoalId), order.GoalIds);
     }
 
     private static async Task SetStatusAsync(HttpClient client, Guid goalId, string status)
     {
-        var response = await client.PostAsJsonAsync(
-            $"/api/v1/me/goals/{goalId}/status", new UpdateGoalStatusRequest(status), TestContext.Current.CancellationToken);
+        var response = await client.PostStatusAsync(goalId, status);
         response.EnsureSuccessStatusCode();
     }
 
-    private static async Task<ListGoalsResponse> ListGoalsAsync(HttpClient client) =>
-        (await client.GetFromJsonAsync<ListGoalsResponse>("/api/v1/me/goals", TestContext.Current.CancellationToken))!;
+    private static Task<ListGoalsResponse> ListGoalsAsync(HttpClient client) => client.ListGoalsAsync();
 
-    private static async Task<List<Guid>> ProjectMemberIdsAsync(HttpClient client, Guid projectId)
-    {
-        var members = await client.GetFromJsonAsync<ListProjectGoalsResponse>(
-            $"/api/v1/me/projects/{projectId}/goals", TestContext.Current.CancellationToken);
-        return members!.Goals.Select(entry => entry.Goal.GoalId).ToList();
-    }
+    private static Task<List<Guid>> ProjectMemberIdsAsync(HttpClient client, Guid projectId) =>
+        client.ProjectGoalIdsAsync(projectId);
 
     private static async Task<ProjectSummaryResponse> DefaultProjectAsync(HttpClient client)
     {
@@ -377,10 +364,6 @@ public sealed class GlobalGoalOrderEndpointTests(PlannerApiFactory factory) : IC
         return (await response.Content.ReadFromJsonAsync<ProjectSummaryResponse>(TestContext.Current.CancellationToken))!;
     }
 
-    private static async Task<GoalDetailResponse> CreateGoalAsync(HttpClient client, CreateGoalRequest request)
-    {
-        var response = await client.PostAsJsonAsync("/api/v1/me/goals", request, TestContext.Current.CancellationToken);
-        response.EnsureSuccessStatusCode();
-        return (await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken))!;
-    }
+    private static Task<GoalDetailResponse> CreateGoalAsync(HttpClient client, CreateGoalRequest request) =>
+        client.CreateGoalAsync(request);
 }

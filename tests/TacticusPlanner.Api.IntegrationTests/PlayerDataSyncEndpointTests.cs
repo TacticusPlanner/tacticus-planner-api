@@ -18,7 +18,7 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
         client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.NoAuthHeader, "1");
 
         var response = await client.PostAsync(
-            "/api/v1/tacticus-integration/player-sync",
+            "/api/v1/me/player-data/sync",
             content: null,
             TestContext.Current.CancellationToken);
 
@@ -32,7 +32,7 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
         client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.SubjectHeader, NewSubject());
 
         var response = await client.PostAsync(
-            "/api/v1/tacticus-integration/player-sync",
+            "/api/v1/me/player-data/sync",
             content: null,
             TestContext.Current.CancellationToken);
 
@@ -45,7 +45,7 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
         var client = await CreateProvisionedClientAsync();
 
         var response = await client.PostAsync(
-            "/api/v1/tacticus-integration/player-sync",
+            "/api/v1/me/player-data/sync",
             content: null,
             TestContext.Current.CancellationToken);
 
@@ -59,7 +59,7 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
         await ConfigureTacticusKeyAsync(client, FakeTacticusApi.ValidKey);
 
         var response = await client.PostAsync(
-            "/api/v1/tacticus-integration/player-sync",
+            "/api/v1/me/player-data/sync",
             content: null,
             TestContext.Current.CancellationToken);
 
@@ -81,13 +81,13 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
         var client = await CreateProvisionedClientAsync(subject);
         await ConfigureTacticusKeyAsync(client, FakeTacticusApi.ValidKey);
 
-        var first = await client.PostAsync("/api/v1/tacticus-integration/player-sync", null, TestContext.Current.CancellationToken);
+        var first = await client.PostAsync("/api/v1/me/player-data/sync", null, TestContext.Current.CancellationToken);
         var firstManifest = await first.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
         var firstState = await GetStoredStateAsync(subject);
 
         await Task.Delay(10, TestContext.Current.CancellationToken);
 
-        var second = await client.PostAsync("/api/v1/tacticus-integration/player-sync", null, TestContext.Current.CancellationToken);
+        var second = await client.PostAsync("/api/v1/me/player-data/sync", null, TestContext.Current.CancellationToken);
         var secondManifest = await second.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
         var secondState = await GetStoredStateAsync(subject);
 
@@ -109,20 +109,19 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
 
         var client = await CreateProvisionedClientAsync(subject);
         await ConfigureTacticusKeyAsync(client, token);
-        var first = await client.PostAsync("/api/v1/tacticus-integration/player-sync", null, TestContext.Current.CancellationToken);
+        var first = await client.PostAsync("/api/v1/me/player-data/sync", null, TestContext.Current.CancellationToken);
         var firstManifest = await first.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
 
         factory.TacticusApi.ConfigurePlayerResponse(token, FakeTacticusApi.BuildPlayerResponse(
             lastUpdatedOn: FakeTacticusApi.LastUpdatedOnV1 + 60,
             lockedCharacterShards: 298));
-        var second = await client.PostAsync("/api/v1/tacticus-integration/player-sync", null, TestContext.Current.CancellationToken);
+        var second = await client.PostAsync("/api/v1/me/player-data/sync", null, TestContext.Current.CancellationToken);
         var secondManifest = await second.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
         var stored = await GetStoredStateAsync(subject);
 
         Assert.Equal(HttpStatusCode.OK, second.StatusCode);
         Assert.Equal(FakeTacticusApi.ConfigHashV1, secondManifest!.GameConfigHash);
         Assert.Equal(298, stored.LockedCharacterShards);
-        Assert.Equal(FakeTacticusApi.LastUpdatedOnV1 + 60, stored.TacticusLastUpdatedOn);
         AssertOnlyChunkChanged(firstManifest!, secondManifest, PlayerDataChunkKeys.InventoryShards);
     }
 
@@ -134,7 +133,7 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
 
         var client = await CreateProvisionedClientAsync();
         await ConfigureTacticusKeyAsync(client, token);
-        var first = await client.PostAsync("/api/v1/tacticus-integration/player-sync", null, TestContext.Current.CancellationToken);
+        var first = await client.PostAsync("/api/v1/me/player-data/sync", null, TestContext.Current.CancellationToken);
         var firstManifest = await first.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
 
         factory.TacticusApi.ConfigurePlayerResponse(token, FakeTacticusApi.BuildPlayerResponse(
@@ -142,7 +141,7 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
             progressionIndex: 12,
             xp: 210000,
             rank: 13));
-        var second = await client.PostAsync("/api/v1/tacticus-integration/player-sync", null, TestContext.Current.CancellationToken);
+        var second = await client.PostAsync("/api/v1/me/player-data/sync", null, TestContext.Current.CancellationToken);
         var secondManifest = await second.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, second.StatusCode);
@@ -159,12 +158,12 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
 
         var client = await CreateProvisionedClientAsync(subject);
         await ConfigureTacticusKeyAsync(client, token);
-        var first = await client.PostAsync("/api/v1/tacticus-integration/player-sync", null, TestContext.Current.CancellationToken);
+        var first = await client.PostAsync("/api/v1/me/player-data/sync", null, TestContext.Current.CancellationToken);
         var firstManifest = await first.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
 
         factory.TacticusApi.ConfigurePlayerResponse(token, FakeTacticusApi.BuildPlayerResponse(
             lastUpdatedOn: FakeTacticusApi.LastUpdatedOnV1 + 120));
-        var second = await client.PostAsync("/api/v1/tacticus-integration/player-sync", null, TestContext.Current.CancellationToken);
+        var second = await client.PostAsync("/api/v1/me/player-data/sync", null, TestContext.Current.CancellationToken);
         var secondManifest = await second.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
         var stored = await GetStoredStateAsync(subject);
 
@@ -174,7 +173,6 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
         Assert.Equal(
             firstManifest.Chunks.ToDictionary(chunk => chunk.Key, chunk => chunk.Hash),
             secondManifest.Chunks.ToDictionary(chunk => chunk.Key, chunk => chunk.Hash));
-        Assert.Equal(FakeTacticusApi.LastUpdatedOnV1 + 120, stored.TacticusLastUpdatedOn);
     }
 
     [Fact]
@@ -184,12 +182,12 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
         var client = await CreateProvisionedClientAsync(subject);
         await ConfigureTacticusKeyAsync(client, FakeTacticusApi.ValidKey);
 
-        var first = await client.PostAsync("/api/v1/tacticus-integration/player-sync", null, TestContext.Current.CancellationToken);
+        var first = await client.PostAsync("/api/v1/me/player-data/sync", null, TestContext.Current.CancellationToken);
         var firstManifest = await first.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
         var revisionAfterFirst = await GetRevisionAsync(subject);
 
         await ConfigureTacticusKeyAsync(client, FakeTacticusApi.ValidKeyV2);
-        var second = await client.PostAsync("/api/v1/tacticus-integration/player-sync", null, TestContext.Current.CancellationToken);
+        var second = await client.PostAsync("/api/v1/me/player-data/sync", null, TestContext.Current.CancellationToken);
         var secondManifest = await second.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, second.StatusCode);
@@ -210,11 +208,11 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
         var client = await CreateProvisionedClientAsync();
         await ConfigureTacticusKeyAsync(client, FakeTacticusApi.ValidKey);
 
-        var first = await client.PostAsync("/api/v1/tacticus-integration/player-sync", null, TestContext.Current.CancellationToken);
+        var first = await client.PostAsync("/api/v1/me/player-data/sync", null, TestContext.Current.CancellationToken);
         var firstManifest = await first.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
 
         await ConfigureTacticusKeyAsync(client, FakeTacticusApi.ValidKeyV2);
-        var second = await client.PostAsync("/api/v1/tacticus-integration/player-sync", null, TestContext.Current.CancellationToken);
+        var second = await client.PostAsync("/api/v1/me/player-data/sync", null, TestContext.Current.CancellationToken);
         var secondManifest = await second.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, second.StatusCode);
@@ -235,7 +233,7 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
     {
         var client = await CreateProvisionedClientAsync();
         await ConfigureTacticusKeyAsync(client, FakeTacticusApi.ValidKey);
-        await client.PostAsync("/api/v1/tacticus-integration/player-sync", null, TestContext.Current.CancellationToken);
+        await client.PostAsync("/api/v1/me/player-data/sync", null, TestContext.Current.CancellationToken);
 
         // Unknown chunk key is now a validator rejection (malformed request), not a missing-resource 404.
         var unknown = await client.GetAsync("/api/v1/me/player-data/not-a-real-chunk", TestContext.Current.CancellationToken);
@@ -263,7 +261,7 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
         Assert.Equal(HttpStatusCode.NotModified, notModified.StatusCode);
     }
 
-    private const string SyncPath = "/api/v1/tacticus-integration/player-sync";
+    private const string SyncPath = "/api/v1/me/player-data/sync";
 
     private static PlayerResponse ContentVariant(int rank, int xp = 200000) =>
         FakeTacticusApi.BuildPlayerResponse(progressionIndex: 11, xp: xp, rank: rank);
@@ -402,7 +400,7 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
         using var scope = factory.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
         var snapshot = await db.PlayerDataSnapshots.IgnoreQueryFilters().AsNoTracking()
-            .SingleAsync(entity => entity.Profile!.Account!.Subject == subject, TestContext.Current.CancellationToken);
+            .SingleAsync(entity => entity.Profile!.Subject == subject, TestContext.Current.CancellationToken);
         return (int)snapshot.Characters.Single().Rank;
     }
 
@@ -415,9 +413,8 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
         var snapshot = await db.PlayerDataSnapshots
             .IgnoreQueryFilters()
             .Include(entity => entity.Profile)
-            .ThenInclude(entity => entity!.Account)
             .SingleAsync(
-                entity => entity.Profile!.Account!.Subject == subject,
+                entity => entity.Profile!.Subject == subject,
                 TestContext.Current.CancellationToken);
 
         return snapshot.Revision;
@@ -430,9 +427,8 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
         var snapshot = await db.PlayerDataSnapshots
             .IgnoreQueryFilters()
             .Include(entity => entity.Profile)
-            .ThenInclude(entity => entity!.Account)
             .SingleAsync(
-                entity => entity.Profile!.Account!.Subject == subject,
+                entity => entity.Profile!.Subject == subject,
                 TestContext.Current.CancellationToken);
         var lastSucceededAt = await db.TacticusIntegrations
             .IgnoreQueryFilters()
@@ -443,7 +439,6 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
         return new StoredSyncState(
             new Dictionary<string, string>(snapshot.ChunkHashes, StringComparer.Ordinal),
             snapshot.InventoryShards.SingleOrDefault(shard => shard.UnitId.Value == FakeTacticusApi.LockedCharacterUnitId)?.Amount,
-            snapshot.TacticusLastUpdatedOn,
             lastSucceededAt);
     }
 
@@ -488,6 +483,5 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
     private sealed record StoredSyncState(
         IReadOnlyDictionary<string, string> ChunkHashes,
         long? LockedCharacterShards,
-        long TacticusLastUpdatedOn,
         DateTimeOffset? LastSucceededAt);
 }

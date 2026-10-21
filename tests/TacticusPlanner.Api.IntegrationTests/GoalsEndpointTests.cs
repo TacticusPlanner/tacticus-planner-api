@@ -58,19 +58,14 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         // not just lazily by the Projects list endpoint.
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var createResponse = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            RankGoal,
-            TestContext.Current.CancellationToken
-        );
+        var createResponse = await client.PostGoalAsync(RankGoal);
         createResponse.EnsureSuccessStatusCode();
-        var created = await createResponse.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        var created = await createResponse.ReadCreatedGoalAsync();
         Assert.NotNull(created);
         Assert.Equal("Character", created.EntityType);
         Assert.Equal("Rank", created.GoalType);
         Assert.Equal("Active", created.Status);
-        Assert.Single(created.Events);
-        Assert.Equal(GoalEventType.Created, created.Events[0].Type);
+        Assert.True(created.Revision > 0);
 
         var listResponse = await client.GetAsync("/api/v1/me/goals", TestContext.Current.CancellationToken);
         var list = await listResponse.Content.ReadFromJsonAsync<ListGoalsResponse>(TestContext.Current.CancellationToken);
@@ -94,20 +89,16 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         var otherProject = await otherProjectResponse.Content.ReadFromJsonAsync<ProjectSummaryResponse>(TestContext.Current.CancellationToken);
         Assert.NotNull(otherProject);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            RankGoal with
-            {
-                Projects =
+        var response = await client.PostGoalAsync(RankGoal with
+        {
+            Projects =
                 [
                     new ProjectPriorityRequest(defaultProject.ProjectId),
                     new ProjectPriorityRequest(otherProject.ProjectId),
                 ],
-            },
-            TestContext.Current.CancellationToken
-        );
+        });
         response.EnsureSuccessStatusCode();
-        var created = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        var created = await response.ReadCreatedGoalAsync();
 
         Assert.NotNull(created);
         Assert.Equal(
@@ -117,10 +108,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         // Status is independent of membership: the goal starts Active whichever projects it joins.
         Assert.Equal("Active", created.Status);
 
-        var otherMembers = await client.GetFromJsonAsync<ListProjectGoalsResponse>(
-            $"/api/v1/me/projects/{otherProject.ProjectId}/goals",
-            TestContext.Current.CancellationToken
-        );
+        var otherMembers = await client.GetProjectGoalsAsync(otherProject.ProjectId);
         Assert.NotNull(otherMembers);
         Assert.Contains(otherMembers.Goals, entry => entry.Goal.GoalId == created.GoalId);
     }
@@ -134,32 +122,21 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         // one-active-or-paused-per-(entity,type) constraint — occupies priority 1 in the default
         // project via the normal auto-append path, so the Rank goal's explicit priority below is a
         // deliberate insert-at-the-top, not a coincidence.
-        var ascensionGoalResponse = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            new CreateGoalRequest(
+        var ascensionGoalResponse = await client.PostGoalAsync(new CreateGoalRequest(
                 "character",
                 "blackTerminator",
                 "ascension",
                 new CreateGoalConfigRequest(Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar")),
                 null
-            ),
-            TestContext.Current.CancellationToken
-        );
+            ));
         ascensionGoalResponse.EnsureSuccessStatusCode();
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            RankGoal with { Projects = [new ProjectPriorityRequest(defaultProject.ProjectId)] },
-            TestContext.Current.CancellationToken
-        );
+        var response = await client.PostGoalAsync(RankGoal with { Projects = [new ProjectPriorityRequest(defaultProject.ProjectId)] });
         response.EnsureSuccessStatusCode();
-        var created = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        var created = await response.ReadCreatedGoalAsync();
         Assert.NotNull(created);
 
-        var members = await client.GetFromJsonAsync<ListProjectGoalsResponse>(
-            $"/api/v1/me/projects/{defaultProject.ProjectId}/goals",
-            TestContext.Current.CancellationToken
-        );
+        var members = await client.GetProjectGoalsAsync(defaultProject.ProjectId);
         Assert.NotNull(members);
         var priority = Assert.Single(members.Goals, entry => entry.Goal.GoalId == created.GoalId).Goal.GlobalPriority;
         Assert.Equal(2, priority);
@@ -171,11 +148,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var defaultProject = await GetDefaultProjectAsync(client);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            RankGoal with { Projects = [new ProjectPriorityRequest(defaultProject.ProjectId)] },
-            TestContext.Current.CancellationToken
-        );
+        var response = await client.PostGoalAsync(RankGoal with { Projects = [new ProjectPriorityRequest(defaultProject.ProjectId)] });
 
         response.EnsureSuccessStatusCode();
     }
@@ -193,13 +166,9 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         var otherProject = await otherProjectResponse.Content.ReadFromJsonAsync<ProjectSummaryResponse>(TestContext.Current.CancellationToken);
         Assert.NotNull(otherProject);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            RankGoal with { Projects = [new ProjectPriorityRequest(otherProject.ProjectId)] },
-            TestContext.Current.CancellationToken
-        );
+        var response = await client.PostGoalAsync(RankGoal with { Projects = [new ProjectPriorityRequest(otherProject.ProjectId)] });
         response.EnsureSuccessStatusCode();
-        var created = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        var created = await response.ReadCreatedGoalAsync();
 
         Assert.NotNull(created);
         Assert.Equal("Active", created.Status);
@@ -210,13 +179,9 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            RankGoal with { StartPaused = true },
-            TestContext.Current.CancellationToken
-        );
+        var response = await client.PostGoalAsync(RankGoal with { StartPaused = true });
         response.EnsureSuccessStatusCode();
-        var created = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        var created = await response.ReadCreatedGoalAsync();
 
         Assert.NotNull(created);
         Assert.Equal("Paused", created.Status);
@@ -227,13 +192,9 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            RankGoal,
-            TestContext.Current.CancellationToken
-        );
+        var response = await client.PostGoalAsync(RankGoal);
         response.EnsureSuccessStatusCode();
-        var created = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        var created = await response.ReadCreatedGoalAsync();
 
         Assert.NotNull(created);
         Assert.Equal("Active", created.Status);
@@ -247,31 +208,22 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var defaultProject = await GetDefaultProjectAsync(client);
 
-        var first = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            RankGoal with { Projects = [new ProjectPriorityRequest(defaultProject.ProjectId)] },
-            TestContext.Current.CancellationToken
-        );
+        var first = await client.PostGoalAsync(RankGoal with { Projects = [new ProjectPriorityRequest(defaultProject.ProjectId)] });
         first.EnsureSuccessStatusCode();
-        var active = await first.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        var active = await first.ReadCreatedGoalAsync();
         Assert.NotNull(active);
         Assert.Equal("Active", active.Status);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            RankGoal with
-            {
-                Projects = [new ProjectPriorityRequest(defaultProject.ProjectId)],
-                StartPaused = true,
-            },
-            TestContext.Current.CancellationToken
-        );
+        var response = await client.PostGoalAsync(RankGoal with
+        {
+            Projects = [new ProjectPriorityRequest(defaultProject.ProjectId)],
+            StartPaused = true,
+        });
 
         Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
-        var conflict = await response.Content.ReadFromJsonAsync<ProjectGoalSlotConflictResponse>(TestContext.Current.CancellationToken);
-        Assert.NotNull(conflict);
-        Assert.Equal("projectGoalSlotOccupied", conflict.IssueCode);
-        Assert.Equal(active.GoalId, conflict.ExistingGoalId);
+        var conflict = await response.ReadProblemAsync();
+        Assert.Equal("slotOccupied", conflict["issueCode"]!.GetValue<string>());
+        Assert.Equal(active.GoalId, conflict["existingGoalId"]!.GetValue<Guid>());
     }
 
     [Fact]
@@ -279,9 +231,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            new CreateGoalRequest(
+        var response = await client.PostGoalAsync(new CreateGoalRequest(
                 "character",
                 "blackTerminator",
                 "unlock",
@@ -289,9 +239,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
                     AcquisitionSources: [new AcquisitionSourceRequest("Campaign", ["not-a-real-battle"])]
                 ),
                 null
-            ),
-            TestContext.Current.CancellationToken
-        );
+            ));
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -301,9 +249,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            new CreateGoalRequest(
+        var response = await client.PostGoalAsync(new CreateGoalRequest(
                 "character",
                 "blackTerminator",
                 "ascension",
@@ -312,9 +258,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
                     AcquisitionSources: [new AcquisitionSourceRequest("Campaign", ["not-a-real-battle"])]
                 ),
                 null
-            ),
-            TestContext.Current.CancellationToken
-        );
+            ));
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -329,9 +273,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            new CreateGoalRequest(
+        var response = await client.PostGoalAsync(new CreateGoalRequest(
                 "character",
                 "deathBlightlord",
                 "unlock",
@@ -339,9 +281,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
                     AcquisitionSources: [new AcquisitionSourceRequest("Campaign", ["DGE25"])]
                 ),
                 null
-            ),
-            TestContext.Current.CancellationToken
-        );
+            ));
 
         response.EnsureSuccessStatusCode();
     }
@@ -351,9 +291,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            new CreateGoalRequest(
+        var response = await client.PostGoalAsync(new CreateGoalRequest(
                 "character",
                 "deathBlightlord",
                 "unlock",
@@ -361,9 +299,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
                     AcquisitionSources: [new AcquisitionSourceRequest("Campaign", ["DGS06"])]
                 ),
                 null
-            ),
-            TestContext.Current.CancellationToken
-        );
+            ));
 
         response.EnsureSuccessStatusCode();
     }
@@ -373,9 +309,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            new CreateGoalRequest(
+        var response = await client.PostGoalAsync(new CreateGoalRequest(
                 "character",
                 "deathBlightlord",
                 "ascension",
@@ -384,9 +318,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
                     AcquisitionSources: [new AcquisitionSourceRequest("Campaign", ["DGS06", "DGE25"])]
                 ),
                 null
-            ),
-            TestContext.Current.CancellationToken
-        );
+            ));
 
         response.EnsureSuccessStatusCode();
     }
@@ -396,9 +328,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            new CreateGoalRequest(
+        var response = await client.PostGoalAsync(new CreateGoalRequest(
                 "character",
                 "deathBlightlord",
                 "ascension",
@@ -407,9 +337,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
                     AcquisitionSources: [new AcquisitionSourceRequest("Onslaught", [])]
                 ),
                 null
-            ),
-            TestContext.Current.CancellationToken
-        );
+            ));
 
         response.EnsureSuccessStatusCode();
     }
@@ -419,9 +347,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            new CreateGoalRequest(
+        var response = await client.PostGoalAsync(new CreateGoalRequest(
                 "character",
                 "deathBlightlord",
                 "unlock",
@@ -429,9 +355,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
                     AcquisitionSources: [new AcquisitionSourceRequest("Onslaught", [])]
                 ),
                 null
-            ),
-            TestContext.Current.CancellationToken
-        );
+            ));
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -441,9 +365,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            new CreateGoalRequest(
+        var response = await client.PostGoalAsync(new CreateGoalRequest(
                 "mow",
                 "astraOrdnanceBattery",
                 "ascension",
@@ -452,9 +374,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
                     AcquisitionSources: [new AcquisitionSourceRequest("Onslaught", [])]
                 ),
                 null
-            ),
-            TestContext.Current.CancellationToken
-        );
+            ));
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -464,9 +384,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            new CreateGoalRequest(
+        var response = await client.PostGoalAsync(new CreateGoalRequest(
                 "character",
                 "deathBlightlord",
                 "ascension",
@@ -475,9 +393,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
                     AcquisitionSources: [new AcquisitionSourceRequest("Onslaught", ["unexpected"])]
                 ),
                 null
-            ),
-            TestContext.Current.CancellationToken
-        );
+            ));
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -487,9 +403,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            new CreateGoalRequest(
+        var response = await client.PostGoalAsync(new CreateGoalRequest(
                 "character",
                 "deathBlightlord",
                 "ascension",
@@ -498,9 +412,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
                     AcquisitionSources: [new AcquisitionSourceRequest("Auction", [])]
                 ),
                 null
-            ),
-            TestContext.Current.CancellationToken
-        );
+            ));
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -560,9 +472,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            new CreateGoalRequest(
+        var response = await client.PostGoalAsync(new CreateGoalRequest(
                 "character",
                 "deathBlightlord",
                 "ascension",
@@ -571,9 +481,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
                     AcquisitionSources: [new AcquisitionSourceRequest("Shop", ["not-a-shop-offer"])]
                 ),
                 null
-            ),
-            TestContext.Current.CancellationToken
-        );
+            ));
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -583,9 +491,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            new CreateGoalRequest(
+        var response = await client.PostGoalAsync(new CreateGoalRequest(
                 "character",
                 "deathBlightlord",
                 "ascension",
@@ -594,9 +500,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
                     AcquisitionSources: [new AcquisitionSourceRequest("Shop", ["not-a-real-shop:shards_deathBlightlord"])]
                 ),
                 null
-            ),
-            TestContext.Current.CancellationToken
-        );
+            ));
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -606,9 +510,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            new CreateGoalRequest(
+        var response = await client.PostGoalAsync(new CreateGoalRequest(
                 "character",
                 "eldarFarseer",
                 "unlock",
@@ -616,9 +518,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
                     AcquisitionSources: [new AcquisitionSourceRequest("Shop", ["guild:shards_eldarFarseer"])]
                 ),
                 null
-            ),
-            TestContext.Current.CancellationToken
-        );
+            ));
 
         response.EnsureSuccessStatusCode();
     }
@@ -629,9 +529,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         // Kharn has no campaign shard nodes; the Guild War shop is his only shard source.
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            new CreateGoalRequest(
+        var response = await client.PostGoalAsync(new CreateGoalRequest(
                 "character",
                 "worldKharn",
                 "unlock",
@@ -639,9 +537,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
                     AcquisitionSources: [new AcquisitionSourceRequest("Shop", ["war:shards_worldKharn"])]
                 ),
                 null
-            ),
-            TestContext.Current.CancellationToken
-        );
+            ));
 
         response.EnsureSuccessStatusCode();
     }
@@ -653,9 +549,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         // Shop-source gating for MoW goals via Ascension instead.
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            new CreateGoalRequest(
+        var response = await client.PostGoalAsync(new CreateGoalRequest(
                 "mow",
                 "astraOrdnanceBattery",
                 "ascension",
@@ -664,9 +558,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
                     AcquisitionSources: [new AcquisitionSourceRequest("Shop", ["guild:shards_eldarFarseer"])]
                 ),
                 null
-            ),
-            TestContext.Current.CancellationToken
-        );
+            ));
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -676,11 +568,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            RankGoal with { EntityType = "spaceship" },
-            TestContext.Current.CancellationToken
-        );
+        var response = await client.PostGoalAsync(RankGoal with { EntityType = "spaceship" });
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -694,11 +582,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            RankGoal with { EntityType = entityType, GoalType = goalType },
-            TestContext.Current.CancellationToken
-        );
+        var response = await client.PostGoalAsync(RankGoal with { EntityType = entityType, GoalType = goalType });
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -708,11 +592,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            RankGoal with { Config = RankGoal.Config with { FarmingStrategy = "0" } },
-            TestContext.Current.CancellationToken
-        );
+        var response = await client.PostGoalAsync(RankGoal with { Config = RankGoal.Config with { FarmingStrategy = "0" } });
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -725,11 +605,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            RankGoal with { EntityType = entityType, GoalType = goalType },
-            TestContext.Current.CancellationToken
-        );
+        var response = await client.PostGoalAsync(RankGoal with { EntityType = entityType, GoalType = goalType });
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -740,19 +616,15 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         // Machines of War have no rank ladder (plan §16 phase 6) — Ability is their natural goal type.
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            new CreateGoalRequest(
+        var response = await client.PostGoalAsync(new CreateGoalRequest(
                 "mow",
                 "astraOrdnanceBattery",
                 "ability",
                 new CreateGoalConfigRequest(Ability: new AbilityTargetRequest(0, 3, 0, 3)),
                 null
-            ),
-            TestContext.Current.CancellationToken
-        );
+            ));
         response.EnsureSuccessStatusCode();
-        var created = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        var created = await response.ReadCreatedGoalAsync();
 
         Assert.NotNull(created);
         Assert.Equal("Mow", created.EntityType);
@@ -765,13 +637,9 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var created = await CreateGoalAsync(client);
 
-        var updateResponse = await client.PutAsJsonAsync(
-            $"/api/v1/me/goals/{created.GoalId}",
-            new UpdateGoalRequest("remember to farm epic first", [CampaignBattleId.From("node-1")]),
-            TestContext.Current.CancellationToken
-        );
+        var updateResponse = await client.PutDetailsAsync(created.GoalId, new UpdateGoalRequest("remember to farm epic first", [CampaignBattleId.From("node-1")]));
         updateResponse.EnsureSuccessStatusCode();
-        var updated = await updateResponse.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        var updated = await updateResponse.ReadEditedGoalAsync();
 
         Assert.NotNull(updated);
         Assert.Equal("remember to farm epic first", updated.Notes);
@@ -787,33 +655,25 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     public async Task UpdateGoalAddsAShopAcquisitionSource()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
-        var createResponse = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            new CreateGoalRequest(
+        var createResponse = await client.PostGoalAsync(new CreateGoalRequest(
                 "character",
                 "eldarFarseer",
                 "ascension",
                 new CreateGoalConfigRequest(Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar")),
                 null
-            ),
-            TestContext.Current.CancellationToken
-        );
+            ));
         createResponse.EnsureSuccessStatusCode();
-        var created = await createResponse.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        var created = await createResponse.ReadCreatedGoalAsync();
         Assert.NotNull(created);
         Assert.Null(created.Config.AcquisitionSources);
 
-        var updateResponse = await client.PutAsJsonAsync(
-            $"/api/v1/me/goals/{created.GoalId}",
-            new UpdateGoalRequest(
+        var updateResponse = await client.PutDetailsAsync(created.GoalId, new UpdateGoalRequest(
                 null,
                 null,
                 AcquisitionSources: [new AcquisitionSourceRequest("Shop", ["guild:shards_eldarFarseer"])]
-            ),
-            TestContext.Current.CancellationToken
-        );
+            ));
         updateResponse.EnsureSuccessStatusCode();
-        var updated = await updateResponse.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        var updated = await updateResponse.ReadEditedGoalAsync();
 
         Assert.NotNull(updated);
         var source = Assert.Single(updated.Config.AcquisitionSources!);
@@ -825,41 +685,29 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     public async Task UpdateGoalOmittingAcquisitionSourcesRetainsTheExistingSelection()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
-        var createResponse = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            new CreateGoalRequest(
+        var createResponse = await client.PostGoalAsync(new CreateGoalRequest(
                 "character",
                 "eldarFarseer",
                 "ascension",
                 new CreateGoalConfigRequest(Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar")),
                 null
-            ),
-            TestContext.Current.CancellationToken
-        );
+            ));
         createResponse.EnsureSuccessStatusCode();
-        var created = await createResponse.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        var created = await createResponse.ReadCreatedGoalAsync();
         Assert.NotNull(created);
 
-        var withSource = await client.PutAsJsonAsync(
-            $"/api/v1/me/goals/{created.GoalId}",
-            new UpdateGoalRequest(
+        var withSource = await client.PutDetailsAsync(created.GoalId, new UpdateGoalRequest(
                 null,
                 null,
                 AcquisitionSources: [new AcquisitionSourceRequest("Shop", ["guild:shards_eldarFarseer"])]
-            ),
-            TestContext.Current.CancellationToken
-        );
+            ));
         withSource.EnsureSuccessStatusCode();
 
         // A notes-only update — AcquisitionSources omitted (defaults to null) — must not wipe out the
         // selection set above (tacticus-planner-api CodeRabbit review of #44).
-        var notesOnly = await client.PutAsJsonAsync(
-            $"/api/v1/me/goals/{created.GoalId}",
-            new UpdateGoalRequest("just a note", null),
-            TestContext.Current.CancellationToken
-        );
+        var notesOnly = await client.PutDetailsAsync(created.GoalId, new UpdateGoalRequest("just a note", null));
         notesOnly.EnsureSuccessStatusCode();
-        var updated = await notesOnly.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        var updated = await notesOnly.ReadEditedGoalAsync();
 
         Assert.NotNull(updated);
         Assert.Equal("just a note", updated.Notes);
@@ -874,36 +722,28 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var created = await CreateGoalAsync(client);
 
-        var updateResponse = await client.PutAsJsonAsync(
-            $"/api/v1/me/goals/{created.GoalId}",
-            new UpdateGoalRequest(
+        var updateResponse = await client.PutDetailsAsync(created.GoalId, new UpdateGoalRequest(
                 null,
                 null,
                 AcquisitionSources: [new AcquisitionSourceRequest("Auction", [])]
-            ),
-            TestContext.Current.CancellationToken
-        );
+            ));
 
         Assert.Equal(HttpStatusCode.BadRequest, updateResponse.StatusCode);
     }
 
     [Fact]
-    public async Task UpdateGoalStatusTransitionsAndAppendsEvent()
+    public async Task UpdateGoalStatusTransitionsAndBumpsTheRevision()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var created = await CreateGoalAsync(client);
 
-        var pauseResponse = await client.PostAsJsonAsync(
-            $"/api/v1/me/goals/{created.GoalId}/status",
-            new UpdateGoalStatusRequest("paused"),
-            TestContext.Current.CancellationToken
-        );
+        var pauseResponse = await client.PostStatusAsync(created.GoalId, "paused");
         pauseResponse.EnsureSuccessStatusCode();
-        var paused = await pauseResponse.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        var paused = await pauseResponse.ReadStatusGoalAsync();
 
         Assert.NotNull(paused);
         Assert.Equal("Paused", paused.Status);
-        Assert.Contains(paused.Events, evt => evt.Type == GoalEventType.Paused);
+        Assert.Equal(created.Revision + 1, paused.Revision);
     }
 
     [Fact]
@@ -912,11 +752,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var created = await CreateGoalAsync(client);
 
-        var response = await client.PostAsJsonAsync(
-            $"/api/v1/me/goals/{created.GoalId}/status",
-            new UpdateGoalStatusRequest("not-a-status"),
-            TestContext.Current.CancellationToken
-        );
+        var response = await client.PostStatusAsync(created.GoalId, "not-a-status");
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -927,11 +763,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var created = await CreateGoalAsync(client);
 
-        var response = await client.PostAsJsonAsync(
-            $"/api/v1/me/goals/{created.GoalId}/status",
-            new UpdateGoalStatusRequest("0"),
-            TestContext.Current.CancellationToken
-        );
+        var response = await client.PostStatusAsync(created.GoalId, "0");
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -940,27 +772,18 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     public async Task UpdateGoalRejectsUnsupportedFarmingStrategyForGoalType()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
-        var createResponse = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            new CreateGoalRequest(
+        var createResponse = await client.PostGoalAsync(new CreateGoalRequest(
                 "character",
                 "blackTerminator",
                 "ascension",
                 new CreateGoalConfigRequest(Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar")),
                 null
-            ),
-            TestContext.Current.CancellationToken
-        );
+            ));
         createResponse.EnsureSuccessStatusCode();
-        var created = await createResponse.Content.ReadFromJsonAsync<GoalDetailResponse>(
-            TestContext.Current.CancellationToken);
+        var created = await createResponse.ReadCreatedGoalAsync();
         Assert.NotNull(created);
 
-        var response = await client.PutAsJsonAsync(
-            $"/api/v1/me/goals/{created.GoalId}",
-            new UpdateGoalRequest(null, null, "EveryStep"),
-            TestContext.Current.CancellationToken
-        );
+        var response = await client.PutDetailsAsync(created.GoalId, new UpdateGoalRequest(null, null, "EveryStep"));
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -971,11 +794,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var created = await CreateGoalAsync(client);
 
-        var archiveResponse = await client.PostAsJsonAsync(
-            $"/api/v1/me/goals/{created.GoalId}/status",
-            new UpdateGoalStatusRequest("archived"),
-            TestContext.Current.CancellationToken
-        );
+        var archiveResponse = await client.PostStatusAsync(created.GoalId, "archived");
         archiveResponse.EnsureSuccessStatusCode();
 
         var defaultList = await client.GetFromJsonAsync<ListGoalsResponse>(
@@ -1054,13 +873,9 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         var otherProject = await otherProjectResponse.Content.ReadFromJsonAsync<ProjectSummaryResponse>(TestContext.Current.CancellationToken);
         Assert.NotNull(otherProject);
 
-        var response = await client.PutAsJsonAsync(
-            $"/api/v1/me/goals/{created.GoalId}/projects",
-            new UpdateGoalProjectsRequest([defaultProject.ProjectId, otherProject.ProjectId]),
-            TestContext.Current.CancellationToken
-        );
+        var response = await client.PutProjectsAsync(created.GoalId, [defaultProject.ProjectId, otherProject.ProjectId]);
         response.EnsureSuccessStatusCode();
-        var updated = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        var updated = await response.ReadEditedGoalAsync();
 
         Assert.NotNull(updated);
         Assert.Equal(
@@ -1068,10 +883,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
             updated.ProjectIds.ToHashSet()
         );
 
-        var otherMembers = await client.GetFromJsonAsync<ListProjectGoalsResponse>(
-            $"/api/v1/me/projects/{otherProject.ProjectId}/goals",
-            TestContext.Current.CancellationToken
-        );
+        var otherMembers = await client.GetProjectGoalsAsync(otherProject.ProjectId);
         Assert.NotNull(otherMembers);
         Assert.Contains(otherMembers.Goals, entry => entry.Goal.GoalId == created.GoalId);
     }
@@ -1089,54 +901,37 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         var otherProject = await otherProjectResponse.Content.ReadFromJsonAsync<ProjectSummaryResponse>(TestContext.Current.CancellationToken);
         Assert.NotNull(otherProject);
 
-        var createResponse = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            RankGoal with
-            {
-                Projects =
+        var createResponse = await client.PostGoalAsync(RankGoal with
+        {
+            Projects =
                 [
                     new ProjectPriorityRequest(defaultProject.ProjectId),
                     new ProjectPriorityRequest(otherProject.ProjectId),
                 ],
-            },
-            TestContext.Current.CancellationToken
-        );
+        });
         createResponse.EnsureSuccessStatusCode();
-        var created = await createResponse.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        var created = await createResponse.ReadCreatedGoalAsync();
         Assert.NotNull(created);
 
-        var remainingGoalResponse = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            new CreateGoalRequest(
+        var remainingGoalResponse = await client.PostGoalAsync(new CreateGoalRequest(
                 "character",
                 "blackTerminator",
                 "ascension",
                 new CreateGoalConfigRequest(Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar")),
                 null
-            ),
-            TestContext.Current.CancellationToken
-        );
+            ));
         remainingGoalResponse.EnsureSuccessStatusCode();
-        var remainingGoal = await remainingGoalResponse.Content.ReadFromJsonAsync<GoalDetailResponse>(
-            TestContext.Current.CancellationToken
-        );
+        var remainingGoal = await remainingGoalResponse.ReadCreatedGoalAsync();
         Assert.NotNull(remainingGoal);
 
-        var response = await client.PutAsJsonAsync(
-            $"/api/v1/me/goals/{created.GoalId}/projects",
-            new UpdateGoalProjectsRequest([otherProject.ProjectId]),
-            TestContext.Current.CancellationToken
-        );
+        var response = await client.PutProjectsAsync(created.GoalId, [otherProject.ProjectId]);
         response.EnsureSuccessStatusCode();
-        var updated = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        var updated = await response.ReadEditedGoalAsync();
 
         Assert.NotNull(updated);
         Assert.Equal([otherProject.ProjectId], updated.ProjectIds);
 
-        var defaultMembers = await client.GetFromJsonAsync<ListProjectGoalsResponse>(
-            $"/api/v1/me/projects/{defaultProject.ProjectId}/goals",
-            TestContext.Current.CancellationToken
-        );
+        var defaultMembers = await client.GetProjectGoalsAsync(defaultProject.ProjectId);
         Assert.NotNull(defaultMembers);
         Assert.DoesNotContain(defaultMembers.Goals, entry => entry.Goal.GoalId == created.GoalId);
         // Membership changes never touch the account-wide order: the goals created first and second
@@ -1153,11 +948,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var created = await CreateGoalAsync(client);
 
-        var response = await client.PutAsJsonAsync(
-            $"/api/v1/me/goals/{created.GoalId}/projects",
-            new UpdateGoalProjectsRequest([]),
-            TestContext.Current.CancellationToken
-        );
+        var response = await client.PutProjectsAsync(created.GoalId, []);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -1168,11 +959,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var created = await CreateGoalAsync(client);
 
-        var response = await client.PutAsJsonAsync(
-            $"/api/v1/me/goals/{created.GoalId}/projects",
-            new UpdateGoalProjectsRequest([Guid.NewGuid()]),
-            TestContext.Current.CancellationToken
-        );
+        var response = await client.PutProjectsAsync(created.GoalId, [Guid.NewGuid()]);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -1186,11 +973,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         var otherClient = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var otherDefaultProject = await GetDefaultProjectAsync(otherClient);
 
-        var response = await otherClient.PutAsJsonAsync(
-            $"/api/v1/me/goals/{created.GoalId}/projects",
-            new UpdateGoalProjectsRequest([otherDefaultProject.ProjectId]),
-            TestContext.Current.CancellationToken
-        );
+        var response = await otherClient.PutProjectsAsync(created.GoalId, [otherDefaultProject.ProjectId]);
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
@@ -1201,11 +984,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         await CreateGoalAsync(client); // starts Active in the default/active project
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            RankGoal,
-            TestContext.Current.CancellationToken
-        );
+        var response = await client.PostGoalAsync(RankGoal);
 
         Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
     }
@@ -1215,18 +994,10 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var created = await CreateGoalAsync(client);
-        var pauseResponse = await client.PostAsJsonAsync(
-            $"/api/v1/me/goals/{created.GoalId}/status",
-            new UpdateGoalStatusRequest("paused"),
-            TestContext.Current.CancellationToken
-        );
+        var pauseResponse = await client.PostStatusAsync(created.GoalId, "paused");
         pauseResponse.EnsureSuccessStatusCode();
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            RankGoal,
-            TestContext.Current.CancellationToken
-        );
+        var response = await client.PostGoalAsync(RankGoal);
 
         Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
     }
@@ -1236,21 +1007,13 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var created = await CreateGoalAsync(client);
-        var completeResponse = await client.PostAsJsonAsync(
-            $"/api/v1/me/goals/{created.GoalId}/status",
-            new UpdateGoalStatusRequest("completed"),
-            TestContext.Current.CancellationToken
-        );
+        var completeResponse = await client.PostStatusAsync(created.GoalId, "completed");
         completeResponse.EnsureSuccessStatusCode();
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            RankGoal,
-            TestContext.Current.CancellationToken
-        );
+        var response = await client.PostGoalAsync(RankGoal);
 
         response.EnsureSuccessStatusCode();
-        var created2 = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        var created2 = await response.ReadCreatedGoalAsync();
         Assert.NotNull(created2);
         Assert.NotEqual(created.GoalId, created2.GoalId);
     }
@@ -1260,25 +1023,17 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var first = await CreateGoalAsync(client); // Active
-        var pauseResponse = await client.PostAsJsonAsync(
-            $"/api/v1/me/goals/{first.GoalId}/status",
-            new UpdateGoalStatusRequest("archived"),
-            TestContext.Current.CancellationToken
-        );
+        var pauseResponse = await client.PostStatusAsync(first.GoalId, "archived");
         pauseResponse.EnsureSuccessStatusCode();
 
-        var secondResponse = await client.PostAsJsonAsync("/api/v1/me/goals", RankGoal, TestContext.Current.CancellationToken);
+        var secondResponse = await client.PostGoalAsync(RankGoal);
         secondResponse.EnsureSuccessStatusCode();
-        var second = await secondResponse.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        var second = await secondResponse.ReadCreatedGoalAsync();
         Assert.NotNull(second);
 
         // Un-archiving the first goal back to Active would exceed the one-active-or-paused-per-kind
         // limit now that the second goal already occupies that slot.
-        var resumeResponse = await client.PostAsJsonAsync(
-            $"/api/v1/me/goals/{first.GoalId}/status",
-            new UpdateGoalStatusRequest("active"),
-            TestContext.Current.CancellationToken
-        );
+        var resumeResponse = await client.PostStatusAsync(first.GoalId, "active");
 
         Assert.Equal(HttpStatusCode.Conflict, resumeResponse.StatusCode);
     }
@@ -1289,17 +1044,13 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var created = await CreateGoalAsync(client); // Active
 
-        var response = await client.PostAsJsonAsync(
-            $"/api/v1/me/goals/{created.GoalId}/status",
-            new UpdateGoalStatusRequest("paused"),
-            TestContext.Current.CancellationToken
-        );
+        var response = await client.PostStatusAsync(created.GoalId, "paused");
 
         response.EnsureSuccessStatusCode();
     }
 
     [Fact]
-    public async Task SameInFlightGoalTypeIsAllowedInSeparateProjectsButNotWhenProjectsOverlap()
+    public async Task ASecondProjectSharesTheInFlightGoalInsteadOfHoldingItsOwn()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var defaultProject = await GetDefaultProjectAsync(client);
@@ -1313,29 +1064,19 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         Assert.NotNull(secondProject);
 
         var first = await CreateGoalAsync(client);
-        var secondResponse = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            RankGoal with { Projects = [new ProjectPriorityRequest(secondProject.ProjectId)] },
-            TestContext.Current.CancellationToken);
-        secondResponse.EnsureSuccessStatusCode();
-        var second = await secondResponse.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
-        Assert.NotNull(second);
-        Assert.NotEqual(first.GoalId, second.GoalId);
+        var secondResponse = await client.PostGoalAsync(RankGoal with { Projects = [new ProjectPriorityRequest(secondProject.ProjectId)] });
 
-        var overlapResponse = await client.PutAsJsonAsync(
-            $"/api/v1/me/goals/{second.GoalId}/projects",
-            new UpdateGoalProjectsRequest([secondProject.ProjectId, defaultProject.ProjectId]),
-            TestContext.Current.CancellationToken);
-        Assert.Equal(HttpStatusCode.Conflict, overlapResponse.StatusCode);
-        var conflict = await overlapResponse.Content.ReadFromJsonAsync<ProjectGoalSlotConflictResponse>(
-            TestContext.Current.CancellationToken);
-        Assert.NotNull(conflict);
-        Assert.Equal(defaultProject.ProjectId, conflict.ProjectId);
-        Assert.Equal(first.GoalId, conflict.ExistingGoalId);
+        // Slots are per profile: the second project gets the existing goal, not a second instance.
+        Assert.Equal(HttpStatusCode.Conflict, secondResponse.StatusCode);
+        Assert.Equal(first.GoalId, (await secondResponse.ReadProblemAsync())["existingGoalId"]!.GetValue<Guid>());
+        var shared = await client.PutProjectsAsync(first.GoalId, [defaultProject.ProjectId, secondProject.ProjectId]);
+        Assert.Equal(
+            new[] { defaultProject.ProjectId, secondProject.ProjectId }.Order(),
+            (await shared.ReadEditedGoalAsync()).ProjectIds);
     }
 
     [Fact]
-    public async Task ResumeAcrossSeveralProjectsIsRejectedAtomicallyWhenOneProjectConflicts()
+    public async Task ResumeIsRejectedAtomicallyWhenAnotherGoalTookTheSlot()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var firstProject = await GetDefaultProjectAsync(client);
@@ -1346,36 +1087,28 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
             TestContext.Current.CancellationToken);
         Assert.NotNull(secondProject);
 
-        var sharedResponse = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            RankGoal with
-            {
-                Projects = [
+        var sharedResponse = await client.PostGoalAsync(RankGoal with
+        {
+            Projects = [
                 new ProjectPriorityRequest(firstProject.ProjectId),
                 new ProjectPriorityRequest(secondProject.ProjectId),
             ]
-            }, TestContext.Current.CancellationToken);
+        });
         sharedResponse.EnsureSuccessStatusCode();
-        var shared = await sharedResponse.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        var shared = await sharedResponse.ReadCreatedGoalAsync();
         Assert.NotNull(shared);
-        var archive = await client.PostAsJsonAsync(
-            $"/api/v1/me/goals/{shared.GoalId}/status", new UpdateGoalStatusRequest("archived"),
-            TestContext.Current.CancellationToken);
+        var archive = await client.PostStatusAsync(shared.GoalId, "archived");
         archive.EnsureSuccessStatusCode();
 
-        var competing = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            RankGoal with { Projects = [new ProjectPriorityRequest(secondProject.ProjectId)] },
-            TestContext.Current.CancellationToken);
+        var competing = await client.PostGoalAsync(RankGoal with { Projects = [new ProjectPriorityRequest(secondProject.ProjectId)] });
         competing.EnsureSuccessStatusCode();
 
-        var resume = await client.PostAsJsonAsync(
-            $"/api/v1/me/goals/{shared.GoalId}/status", new UpdateGoalStatusRequest("active"),
-            TestContext.Current.CancellationToken);
+        var resume = await client.PostStatusAsync(shared.GoalId, "active");
         Assert.Equal(HttpStatusCode.Conflict, resume.StatusCode);
-        var conflict = await resume.Content.ReadFromJsonAsync<ProjectGoalSlotConflictResponse>(
-            TestContext.Current.CancellationToken);
-        Assert.Equal(secondProject.ProjectId, conflict?.ProjectId);
+        var conflict = await resume.ReadProblemAsync();
+        Assert.Equal("slotOccupied", conflict["issueCode"]!.GetValue<string>());
+        Assert.Equal(shared.GoalId, conflict["goalId"]!.GetValue<Guid>());
+        Assert.Equal((await competing.ReadCreatedGoalAsync()).GoalId, conflict["existingGoalId"]!.GetValue<Guid>());
 
         var unchanged = await client.GetFromJsonAsync<GoalDetailResponse>(
             $"/api/v1/me/goals/{shared.GoalId}", TestContext.Current.CancellationToken);
@@ -1387,20 +1120,16 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            RankGoal with
+        var response = await client.PostGoalAsync(RankGoal with
+        {
+            Config = RankGoal.Config with
             {
-                Config = RankGoal.Config with
-                {
-                    FarmingLocationIds = [CampaignBattleId.From("node-1")],
-                    AcquisitionSources = [new AcquisitionSourceRequest("Shop", ["guild:upgHpM004", "crusade:upgHpM004"])],
-                },
+                FarmingLocationIds = [CampaignBattleId.From("node-1")],
+                AcquisitionSources = [new AcquisitionSourceRequest("Shop", ["guild:upgHpM004", "crusade:upgHpM004"])],
             },
-            TestContext.Current.CancellationToken
-        );
+        });
         response.EnsureSuccessStatusCode();
-        var created = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        var created = await response.ReadCreatedGoalAsync();
 
         Assert.NotNull(created);
         Assert.Equal(["node-1"], created.Config.FarmingLocationIds);
@@ -1414,13 +1143,9 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            RankGoal with { Config = RankGoal.Config with { AcquisitionSources = [new AcquisitionSourceRequest("Shop", [])] } },
-            TestContext.Current.CancellationToken
-        );
+        var response = await client.PostGoalAsync(RankGoal with { Config = RankGoal.Config with { AcquisitionSources = [new AcquisitionSourceRequest("Shop", [])] } });
         response.EnsureSuccessStatusCode();
-        var created = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        var created = await response.ReadCreatedGoalAsync();
 
         // Not collapsed to null (the "every available offer" default): an explicit opt-out survives.
         Assert.NotNull(created);
@@ -1436,11 +1161,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            RankGoal with { Config = RankGoal.Config with { AcquisitionSources = [new AcquisitionSourceRequest("Shop", [offerId])] } },
-            TestContext.Current.CancellationToken
-        );
+        var response = await client.PostGoalAsync(RankGoal with { Config = RankGoal.Config with { AcquisitionSources = [new AcquisitionSourceRequest("Shop", [offerId])] } });
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -1450,9 +1171,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            new CreateGoalRequest(
+        var response = await client.PostGoalAsync(new CreateGoalRequest(
                 "character",
                 "eldarFarseer",
                 "ascension",
@@ -1461,18 +1180,16 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
                     AcquisitionSources: [new AcquisitionSourceRequest("Shop", ["guild:upgHpM004"])]
                 ),
                 null
-            ),
-            TestContext.Current.CancellationToken
-        );
+            ));
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
     private static async Task<GoalDetailResponse> CreateGoalAsync(HttpClient client)
     {
-        var response = await client.PostAsJsonAsync("/api/v1/me/goals", RankGoal, TestContext.Current.CancellationToken);
+        var response = await client.PostGoalAsync(RankGoal);
         response.EnsureSuccessStatusCode();
-        var goal = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        var goal = await response.ReadCreatedGoalAsync();
         Assert.NotNull(goal);
         return goal;
     }

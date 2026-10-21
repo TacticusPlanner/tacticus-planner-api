@@ -54,18 +54,14 @@ public sealed class UpgradeGoalsEndpointTests(PlannerApiFactory factory) : IClas
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            RankGoal with
-            {
-                GoalType = "upgrade",
-                Config = new CreateGoalConfigRequest(
+        var response = await client.PostGoalAsync(RankGoal with
+        {
+            GoalType = "upgrade",
+            Config = new CreateGoalConfigRequest(
                     Upgrade: new UpgradeTargetRequest([new UpgradeMaterialTargetRequest(CharacterRelevantUpgradeId, 3)])),
-            },
-            TestContext.Current.CancellationToken
-        );
+        });
         response.EnsureSuccessStatusCode();
-        var created = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        var created = await response.ReadCreatedGoalAsync();
 
         Assert.NotNull(created);
         Assert.Equal("Upgrade", created.GoalType);
@@ -79,18 +75,14 @@ public sealed class UpgradeGoalsEndpointTests(PlannerApiFactory factory) : IClas
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            MowAbilityGoal with
-            {
-                GoalType = "upgrade",
-                Config = new CreateGoalConfigRequest(
+        var response = await client.PostGoalAsync(MowAbilityGoal with
+        {
+            GoalType = "upgrade",
+            Config = new CreateGoalConfigRequest(
                     Upgrade: new UpgradeTargetRequest([new UpgradeMaterialTargetRequest(MowRelevantUpgradeId, 2)])),
-            },
-            TestContext.Current.CancellationToken
-        );
+        });
         response.EnsureSuccessStatusCode();
-        var created = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        var created = await response.ReadCreatedGoalAsync();
 
         Assert.NotNull(created);
         Assert.Equal("Mow", created.EntityType);
@@ -104,18 +96,14 @@ public sealed class UpgradeGoalsEndpointTests(PlannerApiFactory factory) : IClas
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            RankGoal with
-            {
-                GoalType = "upgrade",
-                Config = new CreateGoalConfigRequest(
+        var response = await client.PostGoalAsync(RankGoal with
+        {
+            GoalType = "upgrade",
+            Config = new CreateGoalConfigRequest(
                     Upgrade: new UpgradeTargetRequest([new UpgradeMaterialTargetRequest(upgradeId, 4)])),
-            },
-            TestContext.Current.CancellationToken
-        );
+        });
         response.EnsureSuccessStatusCode();
-        var created = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        var created = await response.ReadCreatedGoalAsync();
 
         Assert.NotNull(created);
         var target = Assert.Single(created.Config.Upgrade!.Targets);
@@ -127,18 +115,14 @@ public sealed class UpgradeGoalsEndpointTests(PlannerApiFactory factory) : IClas
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            MowAbilityGoal with
-            {
-                GoalType = "upgrade",
-                Config = new CreateGoalConfigRequest(
+        var response = await client.PostGoalAsync(MowAbilityGoal with
+        {
+            GoalType = "upgrade",
+            Config = new CreateGoalConfigRequest(
                     Upgrade: new UpgradeTargetRequest([new UpgradeMaterialTargetRequest(MowIngredientUpgradeId, 2)])),
-            },
-            TestContext.Current.CancellationToken
-        );
+        });
         response.EnsureSuccessStatusCode();
-        var created = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        var created = await response.ReadCreatedGoalAsync();
 
         Assert.NotNull(created);
         Assert.Equal("Mow", created.EntityType);
@@ -152,16 +136,12 @@ public sealed class UpgradeGoalsEndpointTests(PlannerApiFactory factory) : IClas
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            RankGoal with
-            {
-                GoalType = "upgrade",
-                Config = new CreateGoalConfigRequest(
+        var response = await client.PostGoalAsync(RankGoal with
+        {
+            GoalType = "upgrade",
+            Config = new CreateGoalConfigRequest(
                     Upgrade: new UpgradeTargetRequest([new UpgradeMaterialTargetRequest(upgradeId, 1)])),
-            },
-            TestContext.Current.CancellationToken
-        );
+        });
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -171,19 +151,15 @@ public sealed class UpgradeGoalsEndpointTests(PlannerApiFactory factory) : IClas
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            RankGoal with
-            {
-                GoalType = "upgrade",
-                Config = new CreateGoalConfigRequest(Upgrade: new UpgradeTargetRequest(
+        var response = await client.PostGoalAsync(RankGoal with
+        {
+            GoalType = "upgrade",
+            Config = new CreateGoalConfigRequest(Upgrade: new UpgradeTargetRequest(
                 [
                     new UpgradeMaterialTargetRequest(CharacterRelevantUpgradeId, 1),
                     new UpgradeMaterialTargetRequest(CharacterRelevantUpgradeId, 2),
                 ])),
-            },
-            TestContext.Current.CancellationToken
-        );
+        });
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -193,16 +169,12 @@ public sealed class UpgradeGoalsEndpointTests(PlannerApiFactory factory) : IClas
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            RankGoal with
-            {
-                GoalType = "upgrade",
-                Config = new CreateGoalConfigRequest(
+        var response = await client.PostGoalAsync(RankGoal with
+        {
+            GoalType = "upgrade",
+            Config = new CreateGoalConfigRequest(
                     Upgrade: new UpgradeTargetRequest([new UpgradeMaterialTargetRequest(CharacterRelevantUpgradeId, 0)])),
-            },
-            TestContext.Current.CancellationToken
-        );
+        });
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -213,7 +185,7 @@ public sealed class UpgradeGoalsEndpointTests(PlannerApiFactory factory) : IClas
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
         var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals/combined",
+            "/api/v1/me/goals",
             new CreateCombinedGoalsRequest(
                 "character",
                 "blackTerminator",
@@ -249,13 +221,10 @@ public sealed class UpgradeGoalsEndpointTests(PlannerApiFactory factory) : IClas
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            UpgradeGoal("character", "ultraApothecary",
-                new UpgradeTargetRequest([new("upgArmC002", 5)], RankRange: Range((int)UnitRank.Stone2, (int)UnitRank.Iron1 + 1))),
-            TestContext.Current.CancellationToken);
+        var response = await client.PostGoalAsync(UpgradeGoal("character", "ultraApothecary",
+                new UpgradeTargetRequest([new("upgArmC002", 5)], RankRange: Range((int)UnitRank.Stone2, (int)UnitRank.Iron1 + 1))));
         response.EnsureSuccessStatusCode();
-        var created = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        var created = await response.ReadCreatedGoalAsync();
         var fetched = await client.GetFromJsonAsync<GoalDetailResponse>(
             $"/api/v1/me/goals/{created!.GoalId}", TestContext.Current.CancellationToken);
 
@@ -275,10 +244,10 @@ public sealed class UpgradeGoalsEndpointTests(PlannerApiFactory factory) : IClas
 
         activeOnly.EnsureSuccessStatusCode();
         both.EnsureSuccessStatusCode();
-        var a = (await activeOnly.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken))!.Config.Upgrade!;
+        var a = (await activeOnly.ReadCreatedGoalAsync())!.Config.Upgrade!;
         Assert.Equal(new UpgradeRangeResponse(1, 5), a.ActiveRange);
         Assert.Null(a.PassiveRange);
-        var b = (await both.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken))!.Config.Upgrade!;
+        var b = (await both.ReadCreatedGoalAsync())!.Config.Upgrade!;
         Assert.Equal(new UpgradeRangeResponse(2, 4), b.PassiveRange);
     }
 
@@ -289,7 +258,7 @@ public sealed class UpgradeGoalsEndpointTests(PlannerApiFactory factory) : IClas
 
         var response = await PostUpgradeAsync(client, new UpgradeTargetRequest(MowTargets));
 
-        var upgrade = (await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken))!.Config.Upgrade!;
+        var upgrade = (await response.ReadCreatedGoalAsync())!.Config.Upgrade!;
         Assert.Null(upgrade.RankRange);
         Assert.Null(upgrade.ActiveRange);
         Assert.Null(upgrade.PassiveRange);
@@ -315,8 +284,7 @@ public sealed class UpgradeGoalsEndpointTests(PlannerApiFactory factory) : IClas
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var entityId = entityType == "mow" ? "astraOrdnanceBattery" : "ultraApothecary";
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals", UpgradeGoal(entityType, entityId, upgrade), TestContext.Current.CancellationToken);
+        var response = await client.PostGoalAsync(UpgradeGoal(entityType, entityId, upgrade));
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -382,43 +350,36 @@ public sealed class UpgradeGoalsEndpointTests(PlannerApiFactory factory) : IClas
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            new CreateGoalRequest(
+        var response = await client.PostGoalAsync(new CreateGoalRequest(
                 "character",
                 "blackTerminator",
                 "ability",
                 new CreateGoalConfigRequest(
                     Ability: new AbilityTargetRequest(1, 3, 1, 3),
                     AcquisitionSources: [new AcquisitionSourceRequest("Shop", ["guild:upgHpM004"])]),
-                null),
-            TestContext.Current.CancellationToken);
+                null));
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
     private static async Task<GoalDetailResponse> CreateAsync(HttpClient client, CreateGoalRequest request)
     {
-        var response = await client.PostAsJsonAsync("/api/v1/me/goals", request, TestContext.Current.CancellationToken);
+        var response = await client.PostGoalAsync(request);
         response.EnsureSuccessStatusCode();
-        var created = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        var created = await response.ReadCreatedGoalAsync();
         Assert.NotNull(created);
         return created;
     }
 
     private static async Task<AcquisitionSourceResponse> UpdateShopSourceAsync(HttpClient client, Guid goalId, string offerId)
     {
-        var response = await client.PutAsJsonAsync(
-            $"/api/v1/me/goals/{goalId}",
-            new UpdateGoalRequest(null, null, AcquisitionSources: [new AcquisitionSourceRequest("Shop", [offerId])]),
-            TestContext.Current.CancellationToken);
+        var response = await client.PutDetailsAsync(goalId, new UpdateGoalRequest(null, null, AcquisitionSources: [new AcquisitionSourceRequest("Shop", [offerId])]));
         response.EnsureSuccessStatusCode();
-        var updated = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
+        var updated = await response.ReadEditedGoalAsync();
         Assert.NotNull(updated);
         return Assert.Single(updated.Config.AcquisitionSources!);
     }
 
     private static Task<HttpResponseMessage> PostUpgradeAsync(HttpClient client, UpgradeTargetRequest upgrade) =>
-        client.PostAsJsonAsync(
-            "/api/v1/me/goals", UpgradeGoal("mow", "astraOrdnanceBattery", upgrade), TestContext.Current.CancellationToken);
+        client.PostGoalAsync(UpgradeGoal("mow", "astraOrdnanceBattery", upgrade));
 }

@@ -40,7 +40,7 @@ public sealed class UpdateTacticusIntegrationEndpoint
         var state = ProcessorState<CurrentUserState>();
         if (state.ProfileId is not { } profileId)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 
@@ -51,7 +51,7 @@ public sealed class UpdateTacticusIntegrationEndpoint
 
         if (profile is null)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 

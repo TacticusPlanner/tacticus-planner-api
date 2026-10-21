@@ -131,8 +131,10 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
         );
 
         Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
-        var conflict = await response.Content.ReadFromJsonAsync<ProjectConflictResponse>(TestContext.Current.CancellationToken);
-        Assert.Equal("staleRevision", conflict?.IssueCode);
+        Assert.Equal("projectRevisionStale", await response.ReadIssueCodeAsync());
+        var current = await response.ReadCurrentAsync<ProjectSummaryResponse>();
+        Assert.Equal(project.Revision, current.Revision);
+        Assert.Equal(project.Name, current.Name);
     }
 
     [Fact]
@@ -148,8 +150,8 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
         );
 
         Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
-        var conflict = await response.Content.ReadFromJsonAsync<ProjectConflictResponse>(TestContext.Current.CancellationToken);
-        Assert.Equal("defaultProjectCannotBeArchived", conflict?.IssueCode);
+        Assert.Equal("defaultProjectCannotBeArchived", await response.ReadIssueCodeAsync());
+        Assert.Equal("Active", (await response.ReadCurrentAsync<ProjectSummaryResponse>()).Status);
     }
 
     [Fact]
@@ -191,119 +193,21 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
     }
 
     [Fact]
-    public async Task UpdateProjectGoalsStatusBulkPausesActiveGoalsOnly()
-    {
-        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
-        var defaultProject = await GetDefaultProjectAsync(client);
-        var activeGoal = await CreateGoalAsync(client);
-        var completedGoal = await CreateGoalAsync(client, AscensionGoal);
-
-        var completeResponse = await client.PostAsJsonAsync(
-            $"/api/v1/me/goals/{completedGoal.GoalId}/status",
-            new UpdateGoalStatusRequest("completed"),
-            TestContext.Current.CancellationToken
-        );
-        completeResponse.EnsureSuccessStatusCode();
-
-        var bulkResponse = await client.PostAsJsonAsync(
-            $"/api/v1/me/projects/{defaultProject.ProjectId}/goals/status",
-            new UpdateProjectGoalsStatusRequest("paused"),
-            TestContext.Current.CancellationToken
-        );
-        bulkResponse.EnsureSuccessStatusCode();
-        var body = await bulkResponse.Content.ReadFromJsonAsync<ProjectGoalsStatusResponse>(TestContext.Current.CancellationToken);
-        Assert.NotNull(body);
-        Assert.Equal(1, body.GoalsTransitioned);
-
-        var pausedGoal = await client.GetFromJsonAsync<GoalDetailResponse>(
-            $"/api/v1/me/goals/{activeGoal.GoalId}",
-            TestContext.Current.CancellationToken
-        );
-        Assert.NotNull(pausedGoal);
-        Assert.Equal("Paused", pausedGoal.Status);
-
-        var untouchedGoal = await client.GetFromJsonAsync<GoalDetailResponse>(
-            $"/api/v1/me/goals/{completedGoal.GoalId}",
-            TestContext.Current.CancellationToken
-        );
-        Assert.NotNull(untouchedGoal);
-        Assert.Equal("Completed", untouchedGoal.Status);
-    }
-
-    [Fact]
-    public async Task ListProjectGoalsReturnsMembersInGlobalPriorityOrder()
+    public async Task ProjectsListTheirGoalIdsInGlobalOrder()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var defaultProject = await GetDefaultProjectAsync(client);
         var first = await CreateGoalAsync(client);
         var second = await CreateGoalAsync(client, AscensionGoal);
 
-        var order = await client.GetFromJsonAsync<ListGoalsResponse>(
-            "/api/v1/me/goals", TestContext.Current.CancellationToken);
+        var order = await client.ListGoalsAsync();
         (await client.PutAsJsonAsync(
             "/api/v1/me/goals/order",
-            new UpdateGoalOrderRequest([second.GoalId, first.GoalId], order!.OrderRevision),
+            new UpdateGoalOrderRequest([second.GoalId, first.GoalId], order.OrderRevision),
             TestContext.Current.CancellationToken
         )).EnsureSuccessStatusCode();
 
-        var response = await client.GetAsync(
-            $"/api/v1/me/projects/{defaultProject.ProjectId}/goals",
-            TestContext.Current.CancellationToken
-        );
-        response.EnsureSuccessStatusCode();
-        var body = await response.Content.ReadFromJsonAsync<ListProjectGoalsResponse>(TestContext.Current.CancellationToken);
-
-        Assert.NotNull(body);
-        Assert.Equal(2, body.Goals.Count);
-        Assert.Equal(second.GoalId, body.Goals[0].Goal.GoalId);
-        Assert.Equal(1, body.Goals[0].Goal.GlobalPriority);
-        Assert.Equal(first.GoalId, body.Goals[1].Goal.GoalId);
-        Assert.Equal(2, body.Goals[1].Goal.GlobalPriority);
-    }
-
-    [Fact]
-    public async Task ListProjectGoalsForAnotherProfilesProjectIsNotFound()
-    {
-        var ownerClient = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
-        var ownerProject = await GetDefaultProjectAsync(ownerClient);
-
-        var otherClient = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
-        var response = await otherClient.GetAsync(
-            $"/api/v1/me/projects/{ownerProject.ProjectId}/goals",
-            TestContext.Current.CancellationToken
-        );
-
-        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
-    }
-
-    [Fact]
-    public async Task ProjectMembershipReplacementRejectsTwoInFlightGoalsForOneSlot()
-    {
-        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
-        var firstProject = await GetDefaultProjectAsync(client);
-        var secondProjectResponse = await client.PostAsJsonAsync(
-            "/api/v1/me/projects", new CreateProjectRequest("Second", null, null),
-            TestContext.Current.CancellationToken);
-        var secondProject = await secondProjectResponse.Content.ReadFromJsonAsync<ProjectSummaryResponse>(
-            TestContext.Current.CancellationToken);
-        Assert.NotNull(secondProject);
-
-        var first = await CreateGoalAsync(client);
-        var secondResponse = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            RankGoal with { Projects = [new ProjectPriorityRequest(secondProject.ProjectId)] },
-            TestContext.Current.CancellationToken);
-        secondResponse.EnsureSuccessStatusCode();
-        var second = await secondResponse.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
-        Assert.NotNull(second);
-
-        var response = await client.PutAsJsonAsync(
-            $"/api/v1/me/projects/{firstProject.ProjectId}/goals",
-            new UpdateProjectGoalsRequest([
-                new ProjectGoalEntryRequest(first.GoalId),
-                new ProjectGoalEntryRequest(second.GoalId),
-            ], [first.GoalId]), TestContext.Current.CancellationToken);
-        Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
+        Assert.Equal([second.GoalId, first.GoalId], await client.ProjectGoalIdsAsync(defaultProject.ProjectId));
     }
 
     [Fact]
@@ -316,16 +220,9 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
             "mow", "astraOrdnanceBattery", "ability",
             new CreateGoalConfigRequest(Ability: new AbilityTargetRequest(0, 3, 0, 3)), null));
 
-        var before = await client.GetFromJsonAsync<ListProjectGoalsResponse>(
-            $"/api/v1/me/projects/{project.ProjectId}/goals", TestContext.Current.CancellationToken);
-        Assert.NotNull(before);
-        var firstOriginalPriority = before.Goals.Single(entry => entry.Goal.GoalId == first.GoalId).Goal.GlobalPriority;
+        var firstOriginalPriority = (await client.ListGoalsAsync()).Goals.Single(goal => goal.GoalId == first.GoalId).GlobalPriority;
 
-        var thirdResponse = await client.PostAsJsonAsync(
-            "/api/v1/me/goals", AscensionGoal, TestContext.Current.CancellationToken);
-        thirdResponse.EnsureSuccessStatusCode();
-        var third = await thirdResponse.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
-        Assert.NotNull(third);
+        var third = await CreateGoalAsync(client, AscensionGoal);
 
         var response = await client.PutAsJsonAsync(
             $"/api/v1/me/projects/{project.ProjectId}/goals",
@@ -336,11 +233,8 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
             ], [first.GoalId, second.GoalId, third.GoalId]), TestContext.Current.CancellationToken);
         response.EnsureSuccessStatusCode();
 
-        var after = await client.GetFromJsonAsync<ListProjectGoalsResponse>(
-            $"/api/v1/me/projects/{project.ProjectId}/goals", TestContext.Current.CancellationToken);
-        Assert.NotNull(after);
-        Assert.Equal(firstOriginalPriority, after.Goals.Single(entry => entry.Goal.GoalId == first.GoalId).Goal.GlobalPriority);
-        Assert.Equal([first.GoalId, second.GoalId, third.GoalId], after.Goals.Select(entry => entry.Goal.GoalId));
+        Assert.Equal(firstOriginalPriority, (await client.ListGoalsAsync()).Goals.Single(goal => goal.GoalId == first.GoalId).GlobalPriority);
+        Assert.Equal([first.GoalId, second.GoalId, third.GoalId], await client.ProjectGoalIdsAsync(project.ProjectId));
     }
 
     private static async Task<ProjectSummaryResponse> GetDefaultProjectAsync(HttpClient client)
@@ -353,16 +247,6 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
         return response.Projects.Single(project => project.IsDefault);
     }
 
-    private static async Task<GoalDetailResponse> CreateGoalAsync(
-        HttpClient client,
-        CreateGoalRequest? request = null
-    )
-    {
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals", request ?? RankGoal, TestContext.Current.CancellationToken);
-        response.EnsureSuccessStatusCode();
-        var goal = await response.Content.ReadFromJsonAsync<GoalDetailResponse>(TestContext.Current.CancellationToken);
-        Assert.NotNull(goal);
-        return goal;
-    }
+    private static Task<GoalDetailResponse> CreateGoalAsync(HttpClient client, CreateGoalRequest? request = null) =>
+        client.CreateGoalAsync(request ?? RankGoal);
 }

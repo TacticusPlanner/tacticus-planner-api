@@ -39,7 +39,6 @@ public sealed class V1GoalImportOrderingPostgresTests
             .ConfigureWarnings(warnings => warnings.Ignore(RelationalEventId.PendingModelChangesWarning))
             .Options;
 
-        var accountId = Guid.NewGuid();
         var profileId = ProfileId.From(Guid.NewGuid());
         await using (var migrationDb = new PlannerDbContext(options, new PassthroughEncryption(), new NoProfile()))
         {
@@ -51,12 +50,9 @@ public sealed class V1GoalImportOrderingPostgresTests
             await connection.OpenAsync(TestContext.Current.CancellationToken);
             await using var command = connection.CreateCommand();
             command.CommandText = """
-                INSERT INTO accounts (id, issuer, subject, created_at, updated_at)
-                VALUES (@account, 'test', 'v1-import-ordering', now(), now());
-                INSERT INTO profiles (id, account_id, display_name, created_at, updated_at)
-                VALUES (@profile, @account, 'V1 import ordering test', now(), now());
+                INSERT INTO profiles (id, issuer, subject, display_name, created_at, updated_at)
+                VALUES (@profile, 'test', 'v1-import-ordering', 'V1 import ordering test', now(), now());
                 """;
-            command.Parameters.AddWithValue("account", accountId);
             command.Parameters.AddWithValue("profile", profileId.Value);
             await command.ExecuteNonQueryAsync(TestContext.Current.CancellationToken);
         }
@@ -74,10 +70,11 @@ public sealed class V1GoalImportOrderingPostgresTests
         await db.SaveChangesAsync(TestContext.Current.CancellationToken);
 
         var targetValidation = new GoalTargetValidationService(db, catalog);
-        var planning = new ProjectGoalPlanningService(db);
+        var order = new GoalOrderService(db);
+        var planning = new ProjectGoalPlanningService(db, order);
         var projectsService = new ProjectsService(db);
         var importService = new V1GoalImportService(
-            db, catalog, targetValidation, planning, projectsService, new GoalOrderService(db), TimeProvider.System);
+            db, catalog, targetValidation, planning, projectsService, order, TimeProvider.System);
 
         // Interleaved in V1 priority: blackTerminator (1, 3), ultraInceptorSgt (2) — the import must
         // preserve this exact interleaving, not collapse blackTerminator's two goals into one block.

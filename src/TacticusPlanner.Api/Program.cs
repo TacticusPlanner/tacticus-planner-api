@@ -48,7 +48,9 @@ if (!isOpenApiDocumentGeneration)
     builder.Services.AddHostedService<DatabaseMigrationHostedService>();
 }
 
-builder.Services.AddProblemDetails();
+// One problem-details shape for every error (api-error-contract): see ApiProblems.
+builder.Services.AddProblemDetails(options =>
+    options.CustomizeProblemDetails = context => ApiProblems.Complete(context.ProblemDetails, context.HttpContext));
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.Configure<ColumnEncryptionOptions>(
     builder.Configuration.GetSection(ColumnEncryptionOptions.SectionName)
@@ -83,6 +85,11 @@ builder.Services
         options.Title = "Tacticus Planner API";
         options.Version = "v1";
         options.EnableJWTBearerAuth = true;
+        options.ConfigureOpenApi = openApi => openApi.AddDocumentTransformer((document, _, _) =>
+        {
+            ProblemDetailsOpenApi.Apply(document);
+            return Task.CompletedTask;
+        });
     });
 
 var allowedOrigins = builder.Configuration
@@ -107,19 +114,24 @@ var app = builder.Build();
 
 app.UseResponseCompression();
 app.UseExceptionHandler();
+// Empty-bodied framework errors (routing 404/405, authentication 401, authorization 403) get the shared problem
+// body; headers such as Allow and WWW-Authenticate are kept.
+app.UseStatusCodePages();
 app.UseCors("Frontend");
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseFastEndpoints(options =>
 {
     options.Endpoints.RoutePrefix = "api/v1";
+    options.Errors.ContentType = ApiProblems.ContentType;
+    options.Errors.ResponseBuilder = ApiProblems.FromFailures;
 
     // Every endpoint defaults to the authenticated AccessAsUser policy; public endpoints (e.g. the static
     // game-catalog data) opt out with AllowAnonymous() in their own Configure(), which the authorization
     // middleware honours over the applied policy.
     //
     // CurrentUserPreProcessor also runs for every endpoint (including anonymous ones — it no-ops when the
-    // request isn't authenticated), resolving the caller's iss/sub claims and Account/Profile ids exactly
+    // request isn't authenticated), resolving the caller's iss/sub claims and profile id exactly
     // once per request into CurrentUserState, instead of every endpoint re-deriving them itself.
     options.Endpoints.Configurator = endpoint =>
     {

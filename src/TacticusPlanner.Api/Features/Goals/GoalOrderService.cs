@@ -10,19 +10,40 @@ namespace TacticusPlanner.Api.Features.Goals;
 /// inside <see cref="Projects.ProjectGoalPlanningService.ExecuteLockedMutationAsync"/>, which serializes
 /// the account's mutations on its Profile row, so reads here are consistent with the writes that follow.
 /// Positions are always dense (1..N); the unique constraint is deferred, so a reorder can permute them
-/// inside one transaction.
+/// inside one transaction. The in-flight goals are read once per request (tracked) and every order and slot
+/// decision of that request works on them.
 /// </summary>
 public sealed class GoalOrderService(PlannerDbContext db)
 {
+    private List<Goal>? inFlight;
+    private readonly List<Goal> appended = [];
     private int? nextPosition;
     private bool changed;
+    private bool released;
+
+    /// <summary>The goals that were in flight when this request first asked (tracked, so later in-memory
+    /// changes show); read once under the lock.</summary>
+    public async Task<IReadOnlyList<Goal>> InFlightAsync(CancellationToken ct) =>
+        inFlight ??= await db.Goals
+            .Where(entity => entity.GlobalPriority != null)
+            .OrderBy(entity => entity.GlobalPriority)
+            .ToListAsync(ct);
+
+    /// <summary>The order as it stands in memory: the in-flight goals plus this request's appends, by position.</summary>
+    private async Task<List<Goal>> OrderedAsync(CancellationToken ct) =>
+        (await InFlightAsync(ct)).Concat(appended)
+            .Where(goal => goal.GlobalPriority is not null)
+            .Distinct()
+            .OrderBy(goal => goal.GlobalPriority)
+            .ToList();
 
     /// <summary>Puts a newly in-flight goal (creation, or a terminal goal returning to Active/Paused) at the
     /// end of the order. Calls append in call order.</summary>
     public async Task AppendAsync(Goal goal, CancellationToken ct)
     {
-        nextPosition ??= (await db.Goals.MaxAsync(entity => entity.GlobalPriority, ct) ?? 0) + 1;
+        nextPosition ??= ((await OrderedAsync(ct)).LastOrDefault()?.GlobalPriority ?? 0) + 1;
         goal.GlobalPriority = nextPosition++;
+        appended.Add(goal);
         changed = true;
     }
 
@@ -33,31 +54,24 @@ public sealed class GoalOrderService(PlannerDbContext db)
         if (goal.GlobalPriority is null) return;
         goal.GlobalPriority = null;
         changed = true;
+        released = true;
     }
 
-    /// <summary>Persists pending changes, re-densifies the order and advances the order revision — a no-op
-    /// when nothing this request did touched the in-flight set. Call before committing the transaction.</summary>
+    /// <summary>Re-densifies the order, advances the order revision when this request touched the in-flight set,
+    /// and persists every pending change in one save. Call before committing the transaction.</summary>
     public async Task CompleteAsync(CancellationToken ct)
     {
-        await db.SaveChangesAsync(ct);
-        if (!changed) return;
-
-        // Appends and the save above leave the order dense unless a goal was released, so the full rows are
-        // loaded only when positions actually need rewriting.
-        var positions = await db.Goals.AsNoTracking()
-            .Where(entity => entity.GlobalPriority != null)
-            .OrderBy(entity => entity.GlobalPriority)
-            .Select(entity => entity.GlobalPriority)
-            .ToListAsync(ct);
-        if (!positions.Select((position, index) => position == index + 1).All(dense => dense))
+        if (changed)
         {
-            Renumber(await LoadInFlightAsync(ct));
+            // Appends keep the order dense; only a released goal leaves a gap to close.
+            if (released)
+                Renumber(await OrderedAsync(ct));
+            LockedProfile.GoalOrderRevision++;
         }
 
-        var profile = LockedProfile;
-        profile.GoalOrderRevision++;
         await db.SaveChangesAsync(ct);
         changed = false;
+        released = false;
         nextPosition = null;
     }
 
@@ -68,16 +82,8 @@ public sealed class GoalOrderService(PlannerDbContext db)
             "The goal order can only change inside ProjectGoalPlanningService.ExecuteLockedMutationAsync.");
 
     /// <summary>The current revision and in-flight goal ids in order.</summary>
-    public async Task<GoalOrderSnapshot> ReadAsync(CancellationToken ct)
-    {
-        var revision = (await db.Profiles.AsNoTracking().FirstAsync(ct)).GoalOrderRevision;
-        var ids = await db.Goals.AsNoTracking()
-            .Where(entity => entity.GlobalPriority != null)
-            .OrderBy(entity => entity.GlobalPriority)
-            .Select(entity => entity.Id)
-            .ToListAsync(ct);
-        return new GoalOrderSnapshot(revision, ids);
-    }
+    public async Task<GoalOrderSnapshot> ReadAsync(CancellationToken ct) =>
+        new(LockedProfile.GoalOrderRevision, (await OrderedAsync(ct)).Select(goal => goal.Id).ToList());
 
     /// <summary>Replaces the order with <paramref name="requested"/>, which must be exactly the current
     /// in-flight goals (no missing, added, duplicate, foreign or terminal ids) at the expected revision.
@@ -86,7 +92,7 @@ public sealed class GoalOrderService(PlannerDbContext db)
         IReadOnlyList<GoalId> requested, long expectedRevision, CancellationToken ct)
     {
         var profile = LockedProfile;
-        var ordered = await LoadInFlightAsync(ct);
+        var ordered = await OrderedAsync(ct);
         GoalOrderOutcome? rejection = null;
         if (expectedRevision != profile.GoalOrderRevision)
             rejection = GoalOrderOutcome.StaleRevision;
@@ -107,7 +113,7 @@ public sealed class GoalOrderService(PlannerDbContext db)
         GoalId goalId, GoalId displacedGoalId, long expectedRevision, CancellationToken ct)
     {
         var profile = LockedProfile;
-        var ordered = await LoadInFlightAsync(ct);
+        var ordered = await OrderedAsync(ct);
         var from = ordered.FindIndex(goal => goal.Id == goalId);
         var to = ordered.FindIndex(goal => goal.Id == displacedGoalId);
         GoalOrderOutcome? rejection = null;
@@ -134,7 +140,7 @@ public sealed class GoalOrderService(PlannerDbContext db)
         GoalId goalId, int position, long expectedRevision, CancellationToken ct)
     {
         var profile = LockedProfile;
-        var ordered = await LoadInFlightAsync(ct);
+        var ordered = await OrderedAsync(ct);
         var from = ordered.FindIndex(goal => goal.Id == goalId);
         GoalOrderOutcome? rejection = null;
         if (expectedRevision != profile.GoalOrderRevision)
@@ -175,12 +181,6 @@ public sealed class GoalOrderService(PlannerDbContext db)
         for (var index = 0; index < ordered.Count; index++)
             ordered[index].GlobalPriority = index + 1;
     }
-
-    private Task<List<Goal>> LoadInFlightAsync(CancellationToken ct) =>
-        db.Goals
-            .Where(entity => entity.GlobalPriority != null)
-            .OrderBy(entity => entity.GlobalPriority)
-            .ToListAsync(ct);
 }
 
 public enum GoalOrderOutcome

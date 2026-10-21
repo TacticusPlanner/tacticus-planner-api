@@ -1,4 +1,3 @@
-using System.Data;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using TacticusPlanner.Domain.LegendaryEvents;
@@ -36,35 +35,25 @@ public abstract record LegendaryEventPlanWriteResult
 
     public sealed record Saved(LegendaryEventPlanResponse Plan) : LegendaryEventPlanWriteResult;
 
-    public sealed record Conflict(LegendaryEventPlanConflictResponse Body) : LegendaryEventPlanWriteResult;
+    /// <param name="Current">The plan as it stands, read after the rejected write.</param>
+    public sealed record Conflict(string IssueCode, string Message, LegendaryEventPlanResponse Current)
+        : LegendaryEventPlanWriteResult;
 
     public sealed record TeamNotFound : LegendaryEventPlanWriteResult;
 
     public sealed record Rejected : LegendaryEventPlanWriteResult;
 }
 
-/// <summary>Context handed to a mutation: the tracked plan plus a way to flush row removals before the rows that
-/// replace them are added (members and objectives are keyed by position/index, so a replacement row can reuse a
-/// removed row's key or swap units between positions under the unique <c>(team_id, unit_id)</c> index).</summary>
-public sealed class LegendaryEventPlanMutationContext(PlannerDbContext db, LegendaryEventPlan plan, DateTimeOffset now)
-{
-    public LegendaryEventPlan Plan { get; } = plan;
-
-    public DateTimeOffset Now { get; } = now;
-
-    public PlannerDbContext Db { get; } = db;
-
-    /// <summary>Saves pending removals without touching the plan row (no revision bump); the final save does
-    /// that. Runs inside the writer's transaction, so a later conflict rolls these back too.</summary>
-    public Task FlushRemovalsAsync(CancellationToken ct) => Db.SaveChangesAsync(ct);
-}
+/// <summary>Context handed to a mutation: the loaded (tracked) plan aggregate and the write time.</summary>
+public sealed record LegendaryEventPlanMutationContext(LegendaryEventPlan Plan, DateTimeOffset Now);
 
 /// <summary>
-/// Runs one plan mutation under the plan-level revision contract (design D4): load (or lazily create) the plan,
-/// check <c>expectedRevision</c> (0 for a missing plan), apply, pin <c>catalogVersion</c>, mark the plan
-/// modified so <c>EntityMetadataInterceptor</c> bumps its revision, save and commit. A stale revision, a
-/// concurrency failure at save, or the unique <c>(profile_id, event_id)</c> violation when two callers create the
-/// missing plan at once all answer <c>legendaryEventPlanStale</c> with a fresh read of the current plan.
+/// Runs one plan mutation under the plan-level revision contract (design D4): load (or lazily create) the plan
+/// row, check <c>expectedRevision</c> (0 for a missing plan), apply the mutation in memory, assert the plan's
+/// invariants, pin <c>catalogVersion</c>, mark the plan modified so <c>EntityMetadataInterceptor</c> bumps its
+/// revision, and save once — the <c>Revision</c> concurrency token guards the single UPDATE, so no transaction is
+/// needed. A stale revision, a concurrency failure at save, or the unique <c>(profile_id, event_id)</c> violation
+/// when two callers create the missing plan at once all answer <c>legendaryEventPlanStale</c> with a fresh read.
 /// </summary>
 public sealed class LegendaryEventPlanWriter(
     PlannerDbContext db, TimeProvider timeProvider, IGameCatalogProvider? catalog = null)
@@ -76,51 +65,8 @@ public sealed class LegendaryEventPlanWriter(
         Func<LegendaryEventPlanMutationContext, CancellationToken, Task<LegendaryEventPlanMutation>> mutate,
         CancellationToken ct)
     {
-        var strategy = db.Database.CreateExecutionStrategy();
-        var outcome = await strategy.ExecuteAsync(async () =>
-        {
-            db.ChangeTracker.Clear();
-            await using var transaction = await db.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, ct);
-            try
-            {
-                var plan = await db.LoadPlanAsync(eventId, tracked: true, ct);
-                if ((plan?.Revision ?? 0) != expectedRevision)
-                    return Outcome.Stale(LegendaryEventPlanIssueCodes.Stale);
-
-                var created = plan is null;
-                plan ??= NewPlan(profileId, eventId);
-                if (created)
-                    db.LegendaryEventPlans.Add(plan);
-
-                var mutation = await mutate(new LegendaryEventPlanMutationContext(db, plan, timeProvider.GetUtcNow()), ct);
-                switch (mutation)
-                {
-                    case LegendaryEventPlanMutation.TeamNotFound:
-                        return Outcome.NotFound;
-                    case LegendaryEventPlanMutation.Rejected:
-                        return Outcome.Invalid;
-                    case LegendaryEventPlanMutation.OrderSetMismatch:
-                        return Outcome.Stale(LegendaryEventPlanIssueCodes.OrderSetMismatch);
-                    case LegendaryEventPlanMutation.Unchanged:
-                        return Outcome.Done(created ? LegendaryEventPlanProjection.Empty(eventId) : LegendaryEventPlanProjection.Map(plan, CatalogEvent(eventId)));
-                }
-
-                plan.CatalogVersion = GameCatalogRelease.Version;
-                if (!created)
-                    db.Entry(plan).Property(entity => entity.UpdatedAt).IsModified = true;
-                await db.SaveChangesAsync(ct);
-                await transaction.CommitAsync(ct);
-                return Outcome.Done(LegendaryEventPlanProjection.Map(plan, CatalogEvent(eventId)));
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                return Outcome.Stale(LegendaryEventPlanIssueCodes.Stale);
-            }
-            catch (DbUpdateException exception) when (IsPlanUniqueViolation(exception))
-            {
-                return Outcome.Stale(LegendaryEventPlanIssueCodes.Stale);
-            }
-        });
+        db.ChangeTracker.Clear();
+        var outcome = await ApplyAsync(profileId, eventId, expectedRevision, mutate, ct);
 
         if (outcome.Plan is { } saved)
             return new LegendaryEventPlanWriteResult.Saved(saved);
@@ -129,16 +75,64 @@ public sealed class LegendaryEventPlanWriter(
         if (outcome.IssueCode is null)
             return new LegendaryEventPlanWriteResult.TeamNotFound();
 
-        // Outside the (rolled back) transaction: read what is committed now.
+        // Read what is committed now.
         db.ChangeTracker.Clear();
         var current = await db.LoadPlanAsync(eventId, tracked: false, ct);
         var body = current is null ? LegendaryEventPlanProjection.Empty(eventId) : LegendaryEventPlanProjection.Map(current, CatalogEvent(eventId));
-        return new LegendaryEventPlanWriteResult.Conflict(new LegendaryEventPlanConflictResponse(
+        return new LegendaryEventPlanWriteResult.Conflict(
             outcome.IssueCode,
             outcome.IssueCode == LegendaryEventPlanIssueCodes.OrderSetMismatch
                 ? "The lane's teams changed since they were loaded. Review the current order and try again."
                 : "The plan changed since it was loaded. Review the current plan and try again.",
-            body));
+            body);
+    }
+
+    private async Task<Outcome> ApplyAsync(
+        ProfileId profileId,
+        string eventId,
+        long expectedRevision,
+        Func<LegendaryEventPlanMutationContext, CancellationToken, Task<LegendaryEventPlanMutation>> mutate,
+        CancellationToken ct)
+    {
+        try
+        {
+            var plan = await db.LoadPlanAsync(eventId, tracked: true, ct);
+            if ((plan?.Revision ?? 0) != expectedRevision)
+                return Outcome.Stale(LegendaryEventPlanIssueCodes.Stale);
+
+            var created = plan is null;
+            plan ??= NewPlan(profileId, eventId);
+            if (created)
+                db.LegendaryEventPlans.Add(plan);
+
+            var mutation = await mutate(new LegendaryEventPlanMutationContext(plan, timeProvider.GetUtcNow()), ct);
+            switch (mutation)
+            {
+                case LegendaryEventPlanMutation.TeamNotFound:
+                    return Outcome.NotFound;
+                case LegendaryEventPlanMutation.Rejected:
+                    return Outcome.Invalid;
+                case LegendaryEventPlanMutation.OrderSetMismatch:
+                    return Outcome.Stale(LegendaryEventPlanIssueCodes.OrderSetMismatch);
+                case LegendaryEventPlanMutation.Unchanged:
+                    return Outcome.Done(created ? LegendaryEventPlanProjection.Empty(eventId) : LegendaryEventPlanProjection.Map(plan, CatalogEvent(eventId)));
+            }
+
+            LegendaryEventValidation.AssertInvariants(plan);
+            plan.CatalogVersion = GameCatalogRelease.Version;
+            if (!created)
+                db.Entry(plan).Property(entity => entity.UpdatedAt).IsModified = true;
+            await db.SaveChangesAsync(ct);
+            return Outcome.Done(LegendaryEventPlanProjection.Map(plan, CatalogEvent(eventId)));
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            return Outcome.Stale(LegendaryEventPlanIssueCodes.Stale);
+        }
+        catch (DbUpdateException exception) when (IsPlanUniqueViolation(exception))
+        {
+            return Outcome.Stale(LegendaryEventPlanIssueCodes.Stale);
+        }
     }
 
     private GameCatalogLreView? CatalogEvent(string eventId) =>

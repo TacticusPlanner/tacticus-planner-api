@@ -10,8 +10,8 @@ namespace TacticusPlanner.Api.IntegrationTests;
 public sealed class UpstreamRateLimitEndpointTests(PlannerApiFactory factory) : IClassFixture<PlannerApiFactory>
 {
     private const string Sync = "/api/v1/guilds/me/sync";
-    private const string PlayerSync = "/api/v1/tacticus-integration/player-sync";
-    private const string Validate = "/api/v1/tacticus-api-key/validate";
+    private const string PlayerSync = "/api/v1/me/player-data/sync";
+    private const string Integration = "/api/v1/me/tacticus-integration";
 
     private static Task<HttpResponseMessage> PostAsync(HttpClient client, string path) =>
         client.PostAsync(path, null, TestContext.Current.CancellationToken);
@@ -49,15 +49,16 @@ public sealed class UpstreamRateLimitEndpointTests(PlannerApiFactory factory) : 
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var ct = TestContext.Current.CancellationToken;
-        var body = new ValidateTacticusApiKeyRequest(FakeTacticusApi.ValidKey);
+        var body = new UpdateTacticusIntegrationRequest(FakeTacticusApi.ValidKey, null);
 
         for (var index = 0; index < 10; index++)
         {
-            Assert.Equal(HttpStatusCode.OK, (await client.PostAsJsonAsync(Validate, body, ct)).StatusCode);
+            Assert.Equal(HttpStatusCode.OK, (await client.PutAsJsonAsync(Integration, body, ct)).StatusCode);
         }
 
-        var rejected = await client.PostAsJsonAsync(Validate, body, ct);
+        var rejected = await client.PutAsJsonAsync(Integration, body, ct);
         Assert.Equal(HttpStatusCode.TooManyRequests, rejected.StatusCode);
+        Assert.Equal("rateLimited", await rejected.ReadIssueCodeAsync());
         Assert.InRange(rejected.Headers.RetryAfter!.Delta!.Value.TotalSeconds, 1, 60);
     }
 
@@ -111,7 +112,7 @@ public sealed class UpstreamRateLimitEndpointTests(PlannerApiFactory factory) : 
         await using var scope = factory.Services.CreateAsyncScope();
         var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
         var snapshotId = await db.PlayerDataSnapshots.IgnoreQueryFilters()
-            .Where(entity => entity.Profile!.Account!.Subject == subject)
+            .Where(entity => entity.Profile!.Subject == subject)
             .Select(entity => entity.Id)
             .SingleAsync(TestContext.Current.CancellationToken);
         return await db.TacticusIntegrations.IgnoreQueryFilters()

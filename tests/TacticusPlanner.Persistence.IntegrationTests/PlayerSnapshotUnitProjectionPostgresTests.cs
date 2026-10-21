@@ -131,10 +131,8 @@ public sealed class PlayerSnapshotUnitProjectionPostgresTests
         await connection.OpenAsync(ct);
         await using var command = connection.CreateCommand();
         command.CommandText = """
-            INSERT INTO accounts (id, issuer, subject, created_at, updated_at)
-            VALUES (gen_random_uuid(), 'test', 'snapshot-projection', now(), now());
-            INSERT INTO profiles (id, account_id, display_name, created_at, updated_at)
-            SELECT @profile, id, 'Snapshot projection', now(), now() FROM accounts LIMIT 1;
+            INSERT INTO profiles (id, issuer, subject, display_name, created_at, updated_at)
+            VALUES (@profile, 'test', 'snapshot-projection', 'Snapshot projection', now(), now());
             """;
         command.Parameters.AddWithValue("profile", profileId.Value);
         await command.ExecuteNonQueryAsync(ct);

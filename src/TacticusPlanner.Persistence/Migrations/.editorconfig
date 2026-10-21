@@ -1,0 +1,4 @@
+# EF Core migrations are tool-generated: analyzers and formatting skip them. Kept beside them (not in the
+# repository root file) so the API image build, which copies only src/, sees it too.
+[*.cs]
+generated_code = true

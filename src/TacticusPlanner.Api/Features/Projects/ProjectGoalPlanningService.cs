@@ -1,232 +1,107 @@
 using System.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
+using Npgsql;
+using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.Projects;
 using TacticusPlanner.Persistence;
+using TacticusPlanner.Persistence.Configurations;
 
 namespace TacticusPlanner.Api.Features.Projects;
 
-public sealed class ProjectGoalPlanningService(PlannerDbContext db)
+/// <summary>
+/// The concurrency boundary of every goal mutation (create, edit, status, membership, order, delete): one
+/// profile-row lock, and the in-flight slot rule (<c>project-goal-slots</c>) checked with one query on
+/// <c>goals</c>. Membership is not part of the slot: one in-flight goal may belong to any number of projects.
+/// </summary>
+public sealed class ProjectGoalPlanningService(PlannerDbContext db, GoalOrderService order)
 {
-    public async Task ExecuteLockedMutationAsync(
-        IEnumerable<ProjectId> projectIds,
-        Func<IDbContextTransaction, Task> mutation,
-        CancellationToken ct)
+    public async Task ExecuteLockedMutationAsync(Func<IDbContextTransaction, Task> mutation, CancellationToken ct)
     {
-        var orderedProjectIds = projectIds.Distinct().OrderBy(id => id.Value).ToList();
         // strategy.ExecuteAsync is NOT a working retry here: it re-runs the delegate against the same
-        // DbContext without resetting the change tracker (a retried attempt re-adds an already-tracked
-        // entity and throws InvalidOperationException, which is not retried again), and several call
-        // sites write the HTTP response from inside the delegate, so a retry after a partial write would
-        // corrupt it. It stays only because EF Core requires a user-initiated transaction to be created
-        // inside the strategy delegate. The design here avoids retryable failures by construction (see the
-        // isolation-level comment below) rather than relying on this to absorb them. Upgrade path, if ever
-        // needed: hoist response writes out of the delegate and call ChangeTracker.Clear() per attempt.
+        // DbContext without resetting the change tracker, and some call sites write the HTTP response from
+        // inside the delegate. It stays only because EF Core requires a user-initiated transaction to be
+        // created inside the strategy delegate; the design avoids retryable failures by construction.
         var strategy = db.Database.CreateExecutionStrategy();
         await strategy.ExecuteAsync(async () =>
         {
-            // READ COMMITTED, not SERIALIZABLE: the SELECT ... FOR UPDATE below is the actual mutual-
-            // exclusion mechanism (locks are taken in ascending project id order, so multi-project
-            // mutations cannot deadlock). READ COMMITTED is required so that a waiter, once unblocked,
-            // takes a fresh per-statement snapshot and reads the state its predecessor just committed
-            // instead of aborting on a transaction-wide snapshot taken before it started waiting. This is
-            // safe only because every conflict- and ordering-relevant read (slot pre-check, next-priority
-            // lookup, membership load) happens after the lock is held — standing constraint: any future
-            // read used for a conflict or ordering decision must stay inside the lock, or this isolation
-            // level becomes unsafe.
+            // READ COMMITTED, not SERIALIZABLE: the profile row lock below is the mutual-exclusion mechanism, and
+            // a waiter, once unblocked, must take a fresh per-statement snapshot that sees what its predecessor
+            // committed. Safe only because every conflict- and ordering-relevant read happens after the lock is
+            // held — any future read used for such a decision must stay inside the lock.
             await using var transaction = await db.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, ct);
-            // The profile row is locked first, always (FOR NO KEY UPDATE: its key is never written, so inserts
-            // of rows that reference it, which take FOR KEY SHARE, are not blocked): it serializes every mutation of the account's global
-            // goal order (see GoalOrderService) and fixes the lock order (profile, then projects ascending),
-            // so paths that need both cannot deadlock.
-            // One statement locks the row and loads it (tracked), so GoalOrderService reads the revision as it
-            // stands under the lock. A caller that tracked the profile earlier would otherwise keep its stale
-            // values, so that instance is refreshed.
+            // FOR NO KEY UPDATE (its key is never written, so inserts of rows referencing it are not blocked). One
+            // statement locks and loads the row tracked, so GoalOrderService reads the order revision as it stands
+            // under the lock; an instance tracked earlier would keep stale values, so it is refreshed.
             var alreadyTracked = db.Profiles.Local.Count > 0;
             var profile = await db.LockCurrentProfileAsync(ct);
             if (alreadyTracked)
-            {
                 await db.Entry(profile).ReloadAsync(ct);
-            }
-
-            foreach (var projectId in orderedProjectIds)
-            {
-                _ = await db.Database
-                    .SqlQueryRaw<int>(
-                        "SELECT 1 AS \"Value\" FROM projects WHERE id = {0} FOR UPDATE",
-                        projectId.Value)
-                    .SingleAsync(ct);
-            }
 
             await mutation(transaction);
         });
     }
 
-    public static ProjectGoal CreateMembership(Project project, Goal goal, DateTimeOffset now) => new()
+    public static ProjectGoal CreateMembership(ProjectId projectId, GoalId goalId, DateTimeOffset now) => new()
     {
-        ProjectId = project.Id,
-        GoalId = goal.Id,
-        EntityType = goal.EntityType,
-        EntityId = goal.EntityId,
-        GoalType = goal.GoalType,
-        OccupiesInFlightSlot = IsInFlight(goal.Status),
-        RankTargetKey = RankTargetKey.For(goal.GoalType, goal.Config),
+        ProjectId = projectId,
+        GoalId = goalId,
         CreatedAt = now,
     };
 
-    public async Task<ProjectGoalSlotConflictResponse?> FindConflictAsync(
-        IEnumerable<ProjectId> projectIds,
-        GoalEntityType entityType,
-        string entityId,
-        GoalType goalType,
-        string? rankTargetKey,
-        GoalId? excludingGoalId,
-        CancellationToken ct)
+    public static bool IsInFlight(GoalStatus status) => status is GoalStatus.Active or GoalStatus.Paused;
+
+    /// <summary>
+    /// The first of <paramref name="candidates"/> (in the order given) whose slot is held by another in-flight goal
+    /// of the profile, checked against the in-flight goals the request read under the lock. Candidates are checked
+    /// against each other too, so a request cannot put two goals into one slot. Must run under the profile lock.
+    /// </summary>
+    public async Task<GoalSlotConflict?> FindConflictAsync(IReadOnlyList<Goal> candidates, CancellationToken ct) =>
+        candidates.Count == 0 ? null : FindConflict(candidates, await order.InFlightAsync(ct));
+
+    private static GoalSlotConflict? FindConflict(IReadOnlyList<Goal> candidates, IEnumerable<Goal> goals)
     {
-        var ids = projectIds.Distinct().ToList();
-        // rankTargetKey is null for every non-Rank goal, so this compares null to null there (same slot as
-        // before) and only separates Rank goals by their normalized end target.
-        var query = db.ProjectGoals
-            .Where(entry => ids.Contains(entry.ProjectId)
-                && entry.EntityType == entityType
-                && entry.EntityId == entityId
-                && entry.GoalType == goalType
-                && entry.RankTargetKey == rankTargetKey
-                && entry.OccupiesInFlightSlot);
-
-        if (excludingGoalId is { } excluded)
-            query = query.Where(entry => entry.GoalId != excluded);
-
-        // Every occupied project is reported (the first is the top-level conflict for existing callers, the
-        // full list is in Conflicts) so a multi-project change can show all of them, not just one.
-        var found = await query
-            .Join(db.Projects, entry => entry.ProjectId, project => project.Id, (entry, project) => new { entry, project })
-            .OrderBy(value => value.project.Id)
-            .ToListAsync(ct);
-        return found.Count == 0
-            ? null
-            : ToConflict(found.Select(value => new OccupiedSlot(value.entry, value.project)).ToList());
-    }
-
-    /// <summary>One query for several slots of the same unit and projects (a combined create): returns the
-    /// conflict of the first slot, in the order given, that is occupied.</summary>
-    public async Task<ProjectGoalSlotConflictResponse?> FindFirstConflictAsync(
-        IEnumerable<ProjectId> projectIds,
-        GoalEntityType entityType,
-        string entityId,
-        IReadOnlyList<(GoalType GoalType, string? RankTargetKey)> slots,
-        CancellationToken ct)
-    {
-        var ids = projectIds.Distinct().ToList();
-        var goalTypes = slots.Select(slot => slot.GoalType).Distinct().ToList();
-        var occupied = await db.ProjectGoals
-            .Where(entry => ids.Contains(entry.ProjectId)
-                && entry.EntityType == entityType
-                && entry.EntityId == entityId
-                && goalTypes.Contains(entry.GoalType)
-                && entry.OccupiesInFlightSlot)
-            .Join(db.Projects, entry => entry.ProjectId, project => project.Id, (entry, project) => new { entry, project })
-            .OrderBy(value => value.project.Id)
-            .ToListAsync(ct);
-        foreach (var (goalType, rankTargetKey) in slots)
+        var occupants = goals.Where(goal => IsInFlight(goal.Status) && candidates.All(candidate => candidate.Id != goal.Id)).ToList();
+        var claimed = new List<Goal>();
+        foreach (var candidate in candidates)
         {
-            var found = occupied
-                .Where(value => value.entry.GoalType == goalType && value.entry.RankTargetKey == rankTargetKey)
-                .Select(value => new OccupiedSlot(value.entry, value.project))
-                .ToList();
-            if (found.Count > 0)
-                return ToConflict(found);
+            if (occupants.Concat(claimed).FirstOrDefault(other => SameSlot(other, candidate)) is { } existing)
+                return new GoalSlotConflict(candidate, existing);
+            claimed.Add(candidate);
         }
 
         return null;
     }
 
-    private static ProjectGoalSlotConflictResponse ToConflict(List<OccupiedSlot> found)
-    {
-        var first = found[0];
-        return new ProjectGoalSlotConflictResponse(
-            "projectGoalSlotOccupied",
-            ConflictMessage(first.Project.Name, first.Entry.GoalType, first.Entry.RankTargetKey),
-            first.Project.Id.Value,
-            first.Project.Name,
-            first.Entry.EntityType.ToString(),
-            first.Entry.EntityId,
-            first.Entry.GoalType.ToString(),
-            first.Entry.GoalId.Value,
-            first.Entry.RankTargetKey,
-            found
-                .Select(value => new ProjectGoalSlotConflictEntry(
-                    value.Project.Id.Value, value.Project.Name, value.Entry.GoalId.Value))
-                .ToList());
-    }
+    private static bool SameSlot(Goal a, Goal b) =>
+        a.EntityType == b.EntityType
+        && a.EntityId == b.EntityId
+        && a.GoalType == b.GoalType
+        && RankTargetKey.For(a.GoalType, a.Config) == RankTargetKey.For(b.GoalType, b.Config);
 
-    private sealed record OccupiedSlot(ProjectGoal Entry, Project Project);
+    /// <summary>A race that slipped past <see cref="FindConflictAsync"/> and hit one of the slot indexes.</summary>
+    public static bool IsSlotViolation(DbUpdateException exception) =>
+        exception.InnerException is PostgresException { SqlState: PostgresErrorCodes.UniqueViolation } postgres
+            && postgres.ConstraintName is GoalSlotIndexes.Slot or GoalSlotIndexes.RankTarget;
 
-    public async Task<ProjectGoalSlotConflictResponse?> FindConflictAfterFailedSaveAsync(
-        IDbContextTransaction transaction,
-        IEnumerable<ProjectGoalSlotLookup> slots,
-        CancellationToken ct)
+    /// <summary>After a slot violation: rolls the transaction back and finds, in what is committed now, the goal
+    /// holding a candidate's slot.</summary>
+    public async Task<GoalSlotConflict> FindConflictAfterFailedSaveAsync(
+        IDbContextTransaction transaction, IReadOnlyList<Goal> candidates, DbUpdateException exception, CancellationToken ct)
     {
         await transaction.RollbackAsync(ct);
         await transaction.DisposeAsync();
-
-
         db.ChangeTracker.Clear();
-        foreach (var slot in slots)
-        {
-            if (await FindConflictAsync(
-                slot.ProjectIds,
-                slot.EntityType,
-                slot.EntityId,
-                slot.GoalType,
-                slot.RankTargetKey,
-                slot.ExcludingGoalId,
-                ct) is { } conflict)
-            {
-                return conflict;
-            }
-        }
-
-        return null;
+        var entityIds = candidates.Select(goal => goal.EntityId).Distinct().ToList();
+        var committed = await db.Goals.AsNoTracking()
+            .Where(goal => entityIds.Contains(goal.EntityId) && goal.GlobalPriority != null)
+            .ToListAsync(ct);
+        return FindConflict(candidates, committed)
+            ?? throw new InvalidOperationException("A goal slot index failed but no occupying goal was found.", exception);
     }
-
-    public async Task SyncOccupancyAsync(Goal goal, CancellationToken ct)
-    {
-        var memberships = await db.ProjectGoals.Where(entry => entry.GoalId == goal.Id).ToListAsync(ct);
-        foreach (var membership in memberships)
-            membership.OccupiesInFlightSlot = IsInFlight(goal.Status);
-    }
-
-    /// <summary>The 409 message shared by every slot-conflict site (this service and the project-side
-    /// membership endpoint's in-request duplicate check).</summary>
-    public static string ConflictMessage(string projectName, GoalType goalType, string? rankTargetKey) =>
-        rankTargetKey is null
-            ? $"{projectName} already contains an active or paused {goalType} goal for this unit."
-            : $"{projectName} already contains an active or paused {goalType} goal with this target for this unit.";
-
-    private static bool IsInFlight(GoalStatus status) => status is GoalStatus.Active or GoalStatus.Paused;
 }
 
-public sealed record ProjectGoalSlotConflictResponse(
-    string IssueCode,
-    string Message,
-    Guid ProjectId,
-    string ProjectName,
-    string EntityType,
-    string EntityId,
-    string GoalType,
-    Guid ExistingGoalId,
-    string? NormalizedTarget = null,
-    IReadOnlyList<ProjectGoalSlotConflictEntry>? Conflicts = null);
-
-/// <summary>One occupied project and the goal holding the slot there — one per conflicting project.</summary>
-public sealed record ProjectGoalSlotConflictEntry(Guid ProjectId, string ProjectName, Guid ExistingGoalId);
-
-public sealed record ProjectGoalSlotLookup(
-    IReadOnlyCollection<ProjectId> ProjectIds,
-    GoalEntityType EntityType,
-    string EntityId,
-    GoalType GoalType,
-    string? RankTargetKey = null,
-    GoalId? ExcludingGoalId = null);
+/// <param name="Candidate">The goal that wanted the slot.</param>
+/// <param name="Existing">The in-flight goal already holding it.</param>
+public sealed record GoalSlotConflict(Goal Candidate, Goal Existing);

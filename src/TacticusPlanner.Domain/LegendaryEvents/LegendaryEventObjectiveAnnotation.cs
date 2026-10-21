@@ -2,11 +2,9 @@ namespace TacticusPlanner.Domain.LegendaryEvents;
 
 /// <summary>A Maybe clear / Stop here mark on one objective cell of a lane battle (LRE Stage 3). Cells are
 /// identified as the synced progress identifies them; the client applies a mark only while sync shows the cell
-/// not cleared, and sync never touches these rows.</summary>
-public class LegendaryEventObjectiveAnnotation
+/// not cleared, and sync never touches these marks.</summary>
+public sealed class LegendaryEventObjectiveAnnotation
 {
-    public LegendaryEventPlanId PlanId { get; set; }
-
     /// <summary>One of <see cref="LegendaryEventValidation.LaneIds"/>.</summary>
     public required string LaneId { get; set; }
 
@@ -21,8 +19,6 @@ public class LegendaryEventObjectiveAnnotation
 
     /// <summary>When this cell's mark was last written.</summary>
     public DateTimeOffset UpdatedAt { get; set; }
-
-    public virtual LegendaryEventPlan? Plan { get; set; }
 }
 
 public enum LegendaryEventAnnotationStatus

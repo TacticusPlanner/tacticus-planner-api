@@ -13,7 +13,7 @@ public sealed class PurgeAccountEndpoint : EndpointWithoutRequest
         Summary(summary =>
         {
             summary.Summary = "Permanently deletes the authenticated user's planner account and all related data.";
-            summary.Description = "Deletes the Account, Profile, and Tacticus integration rows for the caller. "
+            summary.Description = "Deletes the profile and every row it owns for the caller. "
                 + "This cannot be undone. Also makes a best-effort attempt to delete the corresponding Microsoft "
                 + "Entra External ID identity; see IExternalIdentityDeleter for the current limitation. "
                 + "Idempotent: repeating the request after the account is gone still succeeds.";
@@ -27,18 +27,13 @@ public sealed class PurgeAccountEndpoint : EndpointWithoutRequest
     {
         var state = ProcessorState<CurrentUserState>();
 
-        if (state.AccountId is { } accountId)
+        if (state.ProfileId is { } profileId)
         {
-            var db = Resolve<PlannerDbContext>();
-            var account = await db.Accounts.FirstOrDefaultAsync(entity => entity.Id == accountId, ct);
-
-            if (account is not null)
-            {
-                // Cascade delete (configured in AccountConfiguration/TacticusIntegrationConfiguration) removes
-                // the Profile and TacticusIntegration rows along with the Account.
-                db.Accounts.Remove(account);
-                await db.SaveChangesAsync(ct);
-            }
+            // Profile-owned rows cascade with the profile and guild references are set null, so one statement
+            // removes the whole account.
+            await Resolve<PlannerDbContext>().Profiles
+                .Where(entity => entity.Id == profileId)
+                .ExecuteDeleteAsync(ct);
         }
 
         // Best-effort only: application-side deletion above is authoritative and already complete regardless

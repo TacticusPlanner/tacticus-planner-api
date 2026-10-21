@@ -1,4 +1,3 @@
-using TacticusPlanner.Domain.Accounts;
 using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.GuildRaids;
 using TacticusPlanner.Domain.Guilds;
@@ -6,7 +5,6 @@ using TacticusPlanner.Domain.LegendaryEvents;
 using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Domain.Projects;
-using TacticusPlanner.Domain.RosterSnapshots;
 using Vogen;
 
 namespace TacticusPlanner.Persistence;
@@ -16,13 +14,11 @@ namespace TacticusPlanner.Persistence;
 // ProfileConfiguration previously carried hand-written .HasConversion(id => id.Value, value => X.From(value))
 // blocks instead of .HasVogenConversion() for them (see https://stevedunn.github.io/Vogen/efcoreintegrationhowto.html
 // for how this marker class feeds Vogen's source generator + RegisterAllInVogenEfCoreConverters()).
-[EfCoreConverter<AccountId>]
 [EfCoreConverter<ProfileId>]
 [EfCoreConverter<GuildId>]
 [EfCoreConverter<GuildMemberId>]
 [EfCoreConverter<GuildRaidSeasonId>]
 [EfCoreConverter<GuildRaidAttackId>]
-[EfCoreConverter<GuildRaidAttackUnitId>]
 [EfCoreConverter<TacticusUserId>]
 [EfCoreConverter<TacticusGuildId>]
 [EfCoreConverter<CampaignId>]
@@ -32,5 +28,4 @@ namespace TacticusPlanner.Persistence;
 [EfCoreConverter<LegendaryEventPlanId>]
 [EfCoreConverter<LegendaryEventTeamId>]
 [EfCoreConverter<LegendaryEventRunRecordId>]
-[EfCoreConverter<RosterSnapshotId>]
 internal sealed partial class VogenEfCoreConverters;

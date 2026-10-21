@@ -325,11 +325,10 @@ public sealed class PlayerDataTransformerTests
     }
 
     [Fact]
-    public void ExtractsConfigHashAndLastUpdatedOnFromMetadata()
+    public void ExtractsConfigHashFromMetadata()
     {
         var result = CreateTransformer().Transform(BuildResponse("a-config-hash"));
 
         Assert.Equal("a-config-hash", result.ConfigHash);
-        Assert.Equal(1_780_000_000, result.TacticusLastUpdatedOn);
     }
 }
