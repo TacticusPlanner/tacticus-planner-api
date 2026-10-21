@@ -1,0 +1,64 @@
+# Design
+
+## Context
+
+See proposal.md — Why. Current schema: 24 tables in `public`, UUIDv7 keys, global profile query filters on 17 entities, `Revision` concurrency tokens on 8 aggregates, AES-GCM columns with HMAC lookup side-columns, jsonb via `OwnsOne/OwnsMany().ToJson()` (EF Core 10 `ComplexCollection().ToJson()` is known to fail at query time on this stack — see `GoalConfiguration.cs` comment — so owned types stay). The deferrable unique constraint on `(profile_id, global_priority)` exists only as raw migration SQL.
+
+## Goals / Non-Goals
+
+**Goals:**
+- Goal mutation = one profile lock + ≤ 3 statements; no denormalized membership columns to resync.
+- LE plan operation = 1 SELECT + 1 UPDATE.
+- Planning pages need `GET me/goals` + `GET me/projects` (+ settings/overrides) and nothing per goal or per project.
+- One error shape; one route convention (`me/…` for everything profile-owned).
+- Schema fully described by the EF model plus one documented raw statement.
+
+**Non-Goals:**
+- Named roster snapshots, multi-profile accounts, GraphQL/aggregate "planning-state" endpoint, pagination of goals/projects, output caching, named Postgres schemas (ADR 0001 superseded).
+
+## Decisions
+
+### Schema
+
+1. **Slot indexes on `goals`, scoped by profile.**
+   `UNIQUE (profile_id, entity_type, entity_id, goal_type) WHERE status IN ('Active','Paused') AND goal_type <> 'Rank'` and `UNIQUE (profile_id, entity_type, entity_id, rank_target_key) WHERE status IN ('Active','Paused') AND goal_type = 'Rank'`. `rank_target_key` is a real column written by the mapper on every config write (today it is derived into `project_goals`). `GoalConflictDetection` becomes a single query on `goals`; `SyncOccupancyAsync`, `OccupiesInFlightSlot` and the per-project `FOR UPDATE` chain in `ProjectGoalPlanningService` are deleted; the profile `FOR NO KEY UPDATE` lock stays (it serializes the global order). Alternative: keep per-project slots with the denormalization — rejected by the owner (slot is a per-unit planning rule, projects are grouping).
+2. **`profiles` absorbs `accounts`.** Pre-processor query becomes `SELECT id FROM profiles WHERE issuer=@i AND subject=@s`. `AccountId` type removed; `AnalyticsIdentityDeriver` keys on `ProfileId`. Reversal path documented in the proposal.
+3. **LE plan as one row:** `teams jsonb` (`[{id, laneId, name, sortOrder, members:[{unitId, reserve, position}], objectiveIndexes:[…], runDepths:[{run, expectedBattleClears, source, recordedAt}]}]`), `runs jsonb` (keyed by run), `annotations jsonb` (`[{laneId, battleIndex, objectiveId, status, updatedAt}]`), all `OwnsMany().ToJson()`. Mutations become in-memory edits of the loaded aggregate followed by one `SaveChanges` guarded by `Revision`; `LegendaryEventTeamMutations`' intermediate save disappears. Invariants (lane ∈ {alpha,beta,gamma}, 0 ≤ position < 5, run range, depth ≥ 1, unique unit per team, unique `(lane, sortOrder)`) move into `LegendaryEventValidation` and are asserted by the writer before save. The run-record `teams` jsonb already uses this shape — one canonical record type (`LegendaryEventTeamRecord`) serves both.
+4. **Roster inline on run records** (`roster jsonb` = `{characters, mows}`); `RosterSnapshot` entity, table, `ix_…_roster_snapshot_id` and `RosterSnapshotId` removed. The recorder rewrites the column in place as today.
+5. **Attack units inline** (`units jsonb` = `[{unitId, kind, position, power}]`). Dedup by `content_hash`, the `(season, user_hash, completed_at)` index and the retention rules are unchanged. If a future feature needs unit-level queries, add a GIN index on `units` then.
+6. **Timestamps:** `created_at`/`updated_at` only on aggregate roots and on `guild_members` (sync bookkeeping). `project_goals` keeps `created_at` (membership time is shown). Attacks keep `completed_at`/`started_at` (domain facts) and drop the audit pair.
+7. **Validator-over-CHECK:** enum columns stay `text`; `GoalValidation`/`ProjectValidation`/`LegendaryEventValidation` own the allowed sets (already partly true). Remaining DB constraints: PK/FK/unique/not-null, the deferrable priority uniqueness, and `ck_goals_global_priority_in_flight` (the one invariant the app cannot see atomically). Alternative: Postgres enums — rejected, every added value is a migration for no query benefit.
+8. **Migration reset:** delete `Persistence/Migrations/*`, run `dotnet ef migrations add InitialCreate`, then append to its `Up` the raw `ALTER TABLE goals ADD CONSTRAINT ix_goals_profile_global_priority UNIQUE (profile_id, global_priority) DEFERRABLE INITIALLY DEFERRED;` with a comment pointing to `GoalConfiguration`. Guard: a Persistence integration test asserts the constraint exists and is deferrable, so a future squash cannot lose it.
+
+### API
+
+9. **One goal read shape.** `GoalSummaryResponse` is deleted; `GoalDetailResponse` (minus `events`) is the list item. `projectIds` comes from one `project_goals` query per list (`GROUP BY goal_id`), not per goal. Payload per goal grows by the `config`/`snapshot` jsonb (~1–3 KB); for 100 goals that is one ~200 KB compressed-to-~30 KB response instead of 100 requests. `ProjectSummaryResponse` gains `goalIds` from the same join.
+10. **Mutation routes.** `PUT me/goals/{id}` = today's combined edit (sections optional, each validated as its endpoint did, one transaction, `expectedRevision`). `POST me/goals/status` `{goalIds[], status, expectedOrderRevision?}` runs under the profile lock, applies the lifecycle rules per goal, returns `{goals[], orderRevision, conflicts[]}`; a conflict on any goal fails the whole request (atomic — matches the bulk-membership precedent). Alternative: keep per-goal status route for single clicks — rejected, one route with a one-element array.
+11. **Errors.** `UseProblemDetails` + a FastEndpoints `ErrorResponseBuilder` producing `application/problem+json`; `issueCode` extension enumerates today's codes (`goalOrderStale`, `goalRevisionStale`, `slotOccupied`, `membershipStale`, `projectRevisionStale`, `planRevisionStale`, `validation`, …); 409 bodies add `current` with the resource. `GlobalExceptionHandler` maps `DbUpdateConcurrencyException` → `409/concurrency` as today.
+12. **Catalog URLs** in the manifest become `game-catalog/{dataset}/{hash}`; the handler validates the hash against `DatasetHashes` (404 otherwise) and sets `immutable` caching. The unhashed route stays as `must-revalidate` for ad-hoc use.
+13. **Run-record paging:** `?after=<startedAt>&limit=20` (default 20, max 100), ordered by the existing `(profile_id, event_id, started_at desc)` index; `roster` served by `GET …/run-records/{id}/roster` with the record's `revision`-free ETag (`updated_at`).
+
+### Client coordination
+
+The apps half (`rebuild-foundation-pre-launch` in `tacticus-planner-apps`) deletes the goal-detail fan-outs and per-project goal fetches, adopts the new routes/error shape, and switches bulk status to one request. The regenerated OpenAPI artifact is the shared contract; the apps change regenerates its client from it.
+
+## Risks / Trade-offs
+
+- [`OwnsMany().ToJson()` of a nested collection inside `teams` (members, runDepths) at three levels] → identical depth already works for `player_data_snapshots.inventory`; covered by a Postgres integration test on plan round-trip.
+- [Per-profile slot is stricter than per-project: a user who had the same unit in two projects at different Rank targets loses nothing (targets differ) but two identical in-flight goals in two projects are now one goal in two projects] → that is the intended model; V1 import de-duplicates accordingly.
+- [Bigger goals list payload] → compression (from `optimize-api-handlers`) and `staleTime` (from `tune-client-query-caching`) make it a one-off per 5 min; measured in validation.
+- [Error-shape change breaks every client error handler at once] → one `ApiError` parser in `shared/api/api-client.ts` is the only consumer; updated in the apps half.
+- [Losing migration history] → nothing to preserve pre-launch; the archived changes remain the design record.
+
+## Migration Plan
+
+1. Merge API half: new model, `InitialCreate`, routes, tests, OpenAPI artifact. CI green.
+2. Local: Aspire `api-migrations` → **Drop Database** then start (auto-migrate). Staging/production: `tacticus-planner-infra` drop + recreate the PostgreSQL database (no data migration).
+3. Merge apps half; deploy API before web.
+4. Docs: ADR 0001 → Superseded; `data.md` JSONB section rewritten; new ADR for jsonb aggregates with validator invariants.
+Rollback: previous API image + previous database (snapshot taken before drop); acceptable because there are no users yet.
+
+## Open Questions
+
+- Whether `user_settings` should fold into `profiles.settings jsonb` (saves a table; costs nothing either way) — decide during spec authoring, does not affect other decisions.
+- Default page size for run records (20 proposed) — product call, adjustable without contract change.
