@@ -215,28 +215,52 @@ internal sealed class FakeTacticusApi : ITacticusApi
         return response;
     }
 
-    public Task<PlayerResponse> GetPlayerAsync(string personalApiToken, CancellationToken cancellationToken = default)
+    private readonly ConcurrentDictionary<string, (TaskCompletionSource Reached, TaskCompletionSource Release)> playerHolds = new();
+
+    /// <summary>Makes the next <see cref="GetPlayerAsync"/> call for the token resolve its response, signal
+    /// <c>Reached</c>, and then wait for <c>Release</c> — a slow upstream response.</summary>
+    public (TaskCompletionSource Reached, TaskCompletionSource Release) HoldNextPlayerCall(string personalApiToken)
+    {
+        var hold = (new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously),
+            new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously));
+        playerHolds[personalApiToken] = hold;
+        return hold;
+    }
+
+    public async Task<PlayerResponse> GetPlayerAsync(string personalApiToken, CancellationToken cancellationToken = default)
+    {
+        var response = ResolvePlayerResponse(personalApiToken);
+        if (playerHolds.TryRemove(personalApiToken, out var hold))
+        {
+            hold.Reached.TrySetResult();
+            await hold.Release.Task.WaitAsync(cancellationToken);
+        }
+
+        return response;
+    }
+
+    private PlayerResponse ResolvePlayerResponse(string personalApiToken)
     {
         if (PlayerResponsesByToken.TryGetValue(personalApiToken, out var configuredResponse))
         {
-            return Task.FromResult(configuredResponse);
+            return configuredResponse;
         }
 
         if (personalApiToken == ValidKey)
         {
-            return Task.FromResult(BuildPlayerResponse());
+            return BuildPlayerResponse();
         }
 
         if (personalApiToken == ValidKeyV2)
         {
-            return Task.FromResult(BuildPlayerResponse(
+            return BuildPlayerResponse(
                 configHash: ConfigHashV2,
                 progressionIndex: 12,
                 xp: 210000,
-                rank: 13));
+                rank: 13);
         }
 
-        return Task.FromResult(new PlayerResponse { Player = new Player { Details = null! } });
+        return new PlayerResponse { Player = new Player { Details = null! } };
     }
 
     public async Task<GuildResponse> GetGuildAsync(string guildApiToken, CancellationToken cancellationToken = default)

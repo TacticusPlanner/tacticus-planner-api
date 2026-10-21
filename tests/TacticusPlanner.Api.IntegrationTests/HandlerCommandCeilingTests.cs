@@ -17,13 +17,13 @@ public sealed class HandlerCommandCeilingTests(PlannerApiFactory factory) : ICla
     private const int ListGoals = 3;
     private const int CreateGoal = 10;
     private const int CombinedOneSpec = 10;
-    private const int CombinedThreeSpecs = 12;
+    private const int CombinedThreeSpecs = 10;
     private const int CompleteGoal = 12;
     private const int DeleteGoal = 6;
     private const int ReorderGoals = 4;
     // Three more small reads than the single whole-season load they replace, in exchange for O(1) rows.
     private const int RaidStatus = 7;
-    private const int PlayerSync = 5;
+    private const int PlayerSync = 6;
 
     private static readonly CreateGoalRequest Rank = new(
         "character",

@@ -158,16 +158,13 @@ public sealed class CreateCombinedGoalsEndpoint
             var slotKeys = parsedGoalTypes
                 .Select((goalType, i) => (goalType, key: RankTargetKey.For(goalType, GoalMapper.MapConfig(req.Goals[i].Config))))
                 .ToList();
-            foreach (var (goalType, rankTargetKey) in slotKeys)
+            if (await planning.FindFirstConflictAsync(
+                targetProjects.Select(project => project.Id), entityType, req.EntityId.Trim(),
+                slotKeys.Select(slot => (slot.goalType, slot.key)).ToList(), ct) is { } existingConflict)
             {
-                if (await planning.FindConflictAsync(
-                    targetProjects.Select(project => project.Id), entityType, req.EntityId.Trim(), goalType,
-                    rankTargetKey, null, ct) is { } conflict)
-                {
-                    HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
-                    await HttpContext.Response.WriteAsJsonAsync(conflict, ct);
-                    return;
-                }
+                HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
+                await HttpContext.Response.WriteAsJsonAsync(existingConflict, ct);
+                return;
             }
 
             // Built as a materialized, indexable List (not a lazy .Select) so each spec's index has a real
