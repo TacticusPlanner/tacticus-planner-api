@@ -2,8 +2,8 @@
 
 ## 1. Measurement gate
 
-- [ ] 1.1 Add a `DbCommandInterceptor` registered only by `tests/TacticusPlanner.Api.Tests/PlannerApiFactory.cs` that counts commands per request (keyed by `HttpContext.TraceIdentifier`) and exposes `CommandsFor(response)`; verify a smoke test reads a non-zero count for `GET me/goals`
-- [ ] 1.2 Record the current ceilings in new tests for `GET me/goals`, `POST me/goals/combined` (3 specs), `POST me/goals/{id}/status`, `PUT me/goals/order`, `GET guilds/me/raid-status`, `POST tacticus-integration/player-sync` with the pre-change numbers as the asserted maximum; verify they pass before any handler change
+- [ ] 1.1 Verify prerequisite `replace-inmemory-api-tests-with-postgres` is complete; use `tests/TacticusPlanner.Api.IntegrationTests/PlannerApiFactory.cs` and its existing `CommandsFor(response)` helper. Verify a nonzero `GET me/goals` count with sync/async reader/scalar/nonquery attempts including retries and pre-processors, excluding migration/seed/assertion SQL outside requests and transaction begin/commit; verify concurrent-request isolation before recording baselines.
+- [ ] 1.2 Record the current ceilings in new `TacticusPlanner.Api.IntegrationTests` tests for `GET me/goals`, `POST me/goals/combined` (3 specs), `POST me/goals/{id}/status`, `PUT me/goals/order`, `GET guilds/me/raid-status`, `POST tacticus-integration/player-sync` with the pre-change numbers as the asserted maximum; verify they pass before any handler change
 
 ## 2. HTTP transport
 

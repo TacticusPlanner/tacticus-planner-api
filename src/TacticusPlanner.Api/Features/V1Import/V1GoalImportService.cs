@@ -581,7 +581,7 @@ public sealed class V1GoalImportService(
                 // single-writer import; this only fires on a genuine race with a concurrent mutation
                 // against the same project. Roll back and report every still-pending candidate as failed
                 // rather than losing the whole batch.
-                if (transaction is not null) await transaction.RollbackAsync(ct);
+                await transaction.RollbackAsync(ct);
                 db.ChangeTracker.Clear();
                 foreach (var (index, _) in staged)
                 {
@@ -601,7 +601,7 @@ public sealed class V1GoalImportService(
             }
 
             await order.CompleteAsync(ct);
-            if (transaction is not null) await transaction.CommitAsync(ct);
+            await transaction.CommitAsync(ct);
 
             foreach (var (index, goal) in staged)
             {

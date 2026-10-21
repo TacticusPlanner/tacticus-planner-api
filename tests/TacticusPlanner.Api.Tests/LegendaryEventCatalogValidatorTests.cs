@@ -5,7 +5,7 @@ using TacticusPlanner.GameCatalog.Models;
 
 namespace TacticusPlanner.Api.Tests;
 
-public sealed class LegendaryEventCatalogValidatorTests(PlannerApiFactory factory) : IClassFixture<PlannerApiFactory>
+public sealed class LegendaryEventCatalogValidatorTests(GameCatalogApiFactory factory) : IClassFixture<GameCatalogApiFactory>
 {
     private readonly LegendaryEventCatalogValidator validator =
         new(factory.Services.GetRequiredService<IGameCatalogProvider>());

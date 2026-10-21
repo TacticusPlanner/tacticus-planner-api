@@ -307,13 +307,32 @@ dotnet test TacticusPlanner.slnx -c Release --no-build
 docker build -f src/TacticusPlanner.Api/Dockerfile -t tacticus-planner-api:local .
 ```
 
-`tests/TacticusPlanner.Api.Tests` covers the account/Tacticus-integration/V1-import/purge endpoints against an
-EF Core InMemory-backed `PlannerDbContext` and fake Tacticus/V1 clients (no live PostgreSQL or outbound network
-calls required), plus a snapshot test for the public game catalog manifest. Run it with:
+The test projects have separate responsibilities:
+
+- `TacticusPlanner.Api.Tests`: pure validation/projection tests and database-independent catalog HTTP tests, including the manifest snapshot. No Docker required.
+- `TacticusPlanner.Api.IntegrationTests`: database-backed HTTP behavior with fake authentication, Tacticus/V1 clients, and analytics. Requires Docker Desktop with Linux containers, or a Docker daemon on Linux.
+- `TacticusPlanner.Persistence.IntegrationTests`: migrations, constraints, and direct persistence behavior. Requires Docker.
+- `TacticusPlanner.GameCatalog.Tests`: catalog loading and denormalization. No Docker required.
+
+Run the Docker-free projects independently:
 
 ```powershell
-dotnet test TacticusPlanner.slnx --no-build
+dotnet test tests/TacticusPlanner.Api.Tests
+dotnet test tests/TacticusPlanner.GameCatalog.Tests
 ```
+
+Verify `docker info` succeeds before running integration tests:
+
+```powershell
+dotnet test tests/TacticusPlanner.Api.IntegrationTests
+dotnet test tests/TacticusPlanner.Persistence.IntegrationTests
+```
+
+The API integration assembly shares one disposable PostgreSQL 18 container. Each HTTP factory creates its own uniquely named database before startup. The production pooled Npgsql context, execution strategy, metadata interceptors, and migration hosted service are retained; requests begin only after migrations finish. Host disposal closes its connections and drops only its owned database; assembly teardown removes the container. Factories never reset shared tables or wrap requests in a rollback transaction. Missing Docker is a setup failure with an actionable message, never a skipped test or another provider.
+
+Production persistence must follow the same PostgreSQL path in tests and deployment. Do not add provider switches or transaction/locking bypasses for tests. Configuration `AddInMemoryCollection` and external-boundary fakes are appropriate; replacing persistence is not.
+
+The integration factory exposes `CommandsFor(response)`. A test-only response header correlates the request to the command interceptor. Counts include all EF reader, scalar, and nonquery execution attempts, synchronous or asynchronous, including retries, pre-processors, and handlers. Migration, seed, and assertion SQL outside requests is excluded. Transaction begin/commit operations are not SQL commands. Instrumentation is registered only by the integration test host.
 
 ## Azure staging deployment
 

@@ -10,7 +10,7 @@ namespace TacticusPlanner.Api.Tests;
 /// Covers the served plan's mission ticks against the current catalog: ticks past an event's mission lists (a
 /// refresh shortened them) are dropped on read, so the client never resends an index a run write would reject.
 /// </summary>
-public sealed class LegendaryEventPlanProjectionTests(PlannerApiFactory factory) : IClassFixture<PlannerApiFactory>
+public sealed class LegendaryEventPlanProjectionTests(GameCatalogApiFactory factory) : IClassFixture<GameCatalogApiFactory>
 {
     private readonly GameCatalogLreView uthar = factory.Services.GetRequiredService<IGameCatalogProvider>()
         .Current.LreViews.First(view => view.Id == "votanUthar");

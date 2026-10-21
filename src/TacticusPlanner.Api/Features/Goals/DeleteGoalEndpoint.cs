@@ -52,8 +52,7 @@ public sealed class DeleteGoalEndpoint : EndpointWithoutRequest
             order.Release(goal);
             db.Goals.Remove(goal);
             await order.CompleteAsync(ct);
-            if (transaction is not null)
-                await transaction.CommitAsync(ct);
+            await transaction.CommitAsync(ct);
 
             await Send.NoContentAsync(ct);
         }, ct);

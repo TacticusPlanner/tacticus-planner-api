@@ -141,8 +141,7 @@ public sealed class UpdateGoalProjectsEndpoint : Endpoint<UpdateGoalProjectsRequ
                     return;
                 }
 
-                if (transaction is not null)
-                    await transaction.CommitAsync(ct);
+                await transaction.CommitAsync(ct);
 
                 var projectIds = requestedProjectIds.Select(id => id.Value).ToList();
                 await Send.OkAsync(Map.ToDetail(goal, projectIds), ct);

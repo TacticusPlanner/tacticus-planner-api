@@ -17,14 +17,10 @@ and .NET Aspire for local orchestration.
   See the `game-catalog-data` skill before adding/changing catalog data.
 - `src/TacticusPlanner.TacticusApi`: client for the upstream Tacticus game API
   (used to validate personal API keys).
-- `tests/TacticusPlanner.Api.Tests`: endpoint tests against an EF Core
-  InMemory-backed `PlannerDbContext` and fake Tacticus/V1 clients — no live
-  PostgreSQL or outbound network calls required.
-- `tests/TacticusPlanner.GameCatalog.Tests`: catalog manifest/denormalization
-  tests.
-- `tests/TacticusPlanner.Persistence.IntegrationTests`: Docker-backed
-  PostgreSQL migration and relational-constraint tests. These are kept out of
-  the InMemory API-test project and require a running Docker daemon.
+- `tests/TacticusPlanner.Api.Tests`: Docker-free pure tests and database-independent catalog HTTP tests.
+- `tests/TacticusPlanner.Api.IntegrationTests`: database-backed endpoint tests with production pooled Npgsql, migrations, and external-boundary fakes. Shares a disposable PostgreSQL container; each factory owns an isolated database. Requires Docker.
+- `tests/TacticusPlanner.GameCatalog.Tests`: catalog manifest/denormalization tests.
+- `tests/TacticusPlanner.Persistence.IntegrationTests`: Docker-backed PostgreSQL migration, relational-constraint, and direct persistence tests.
 - `orchestration/TacticusPlanner.AppHost`: .NET Aspire AppHost for local dev —
   starts PostgreSQL, the API, and (via `ClientAppPath`) the external
   `tacticus-planner-apps` React/Vite client. `orchestration/TacticusPlanner.ServiceDefaults`
@@ -69,13 +65,11 @@ Run `dotnet format TacticusPlanner.slnx` before committing; CI verifies with
 
 ## Testing Guidelines
 
-`dotnet test TacticusPlanner.slnx --no-build` runs all test projects. API
-tests use EF Core InMemory and fake external clients — do not add a
-dependency on a live PostgreSQL instance or outbound network calls to
-`TacticusPlanner.Api.Tests`. Persistence integration tests use Testcontainers
-and therefore require Docker. New catalog data/denormalization logic should be
-covered by `TacticusPlanner.GameCatalog.Tests`, including the snapshot test
-for the public catalog manifest when the manifest shape changes.
+`dotnet test TacticusPlanner.slnx --no-build` runs all test projects and requires Docker. Run `dotnet test tests/TacticusPlanner.Api.Tests` and `dotnet test tests/TacticusPlanner.GameCatalog.Tests` for Docker-free coverage. Run `dotnet test tests/TacticusPlanner.Api.IntegrationTests` for PostgreSQL HTTP behavior and `dotnet test tests/TacticusPlanner.Persistence.IntegrationTests` for migrations and direct persistence. Neither API test project may call live upstream services or analytics.
+
+Keep production persistence identical in tests and deployment: no alternate providers or test-driven transaction/locking bypasses. Seed complete relational graphs instead of weakening constraints. The integration host retains production pooling, execution strategy, interceptors, and migration startup. See README for lifecycle, isolation, and Docker troubleshooting.
+
+New catalog data/denormalization logic belongs in `TacticusPlanner.GameCatalog.Tests`, including the public catalog manifest snapshot when its shape changes.
 
 ## Configuration & Security
 

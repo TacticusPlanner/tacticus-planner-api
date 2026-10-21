@@ -80,9 +80,7 @@ public sealed class LegendaryEventPlanWriter(
         var outcome = await strategy.ExecuteAsync(async () =>
         {
             db.ChangeTracker.Clear();
-            await using var transaction = db.Database.IsRelational()
-                ? await db.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, ct)
-                : null;
+            await using var transaction = await db.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, ct);
             try
             {
                 var plan = await db.LoadPlanAsync(eventId, tracked: true, ct);
@@ -111,8 +109,7 @@ public sealed class LegendaryEventPlanWriter(
                 if (!created)
                     db.Entry(plan).Property(entity => entity.UpdatedAt).IsModified = true;
                 await db.SaveChangesAsync(ct);
-                if (transaction is not null)
-                    await transaction.CommitAsync(ct);
+                await transaction.CommitAsync(ct);
                 return Outcome.Done(LegendaryEventPlanProjection.Map(plan, CatalogEvent(eventId)));
             }
             catch (DbUpdateConcurrencyException)

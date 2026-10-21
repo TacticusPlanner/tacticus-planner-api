@@ -29,7 +29,7 @@ public sealed class PlayerDataTransformerTests
     [
         new CampaignProgress
         {
-            Id = FakeTacticusApi.CampaignId, // real catalog groupId (see GameCatalogDatasets)
+            Id = "campaign1", // real catalog groupId (see GameCatalogDatasets)
             Name = "Indomitus",
             Type = "Standard",
             Battles =
@@ -42,7 +42,7 @@ public sealed class PlayerDataTransformerTests
         },
         new CampaignProgress
         {
-            Id = FakeTacticusApi.EventCampaignId,
+            Id = "eventCampaign1",
             Name = string.Empty,
             Type = "Standard",
             Battles =
@@ -63,7 +63,7 @@ public sealed class PlayerDataTransformerTests
             [
                 new Unit
                 {
-                    Id = FakeTacticusApi.CharacterUnitId, // real catalog character id
+                    Id = "ultraTigurius", // real catalog character id
                     Name = "Tigurius",
                     ProgressionIndex = 11,
                     Xp = 200000,
@@ -95,10 +95,10 @@ public sealed class PlayerDataTransformerTests
                 Upgrades = [new Upgrade { Id = "upgHpC004", Name = "Health Common", Amount = 3 }],
                 Shards =
                 [
-                    new Shard { Id = FakeTacticusApi.CharacterUnitId, Amount = 100 },
+                    new Shard { Id = "ultraTigurius", Amount = 100 },
                     new Shard { Id = "necroWarden", Amount = 40 },
                 ],
-                MythicShards = [new Shard { Id = FakeTacticusApi.CharacterUnitId, Amount = 5 }],
+                MythicShards = [new Shard { Id = "ultraTigurius", Amount = 5 }],
                 XpBooks = [],
                 AbilityBadges = new AbilityBadges { Imperial = [], Xenos = [], Chaos = [] },
                 Components =
@@ -156,7 +156,7 @@ public sealed class PlayerDataTransformerTests
         var result = CreateTransformer().Transform(BuildResponse());
 
         var character = Assert.Single(result.Characters);
-        Assert.Equal(FakeTacticusApi.CharacterUnitId, character.UnitId.Value);
+        Assert.Equal("ultraTigurius", character.UnitId.Value);
         Assert.Equal(UnitRank.Gold1, character.Rank);
         Assert.Equal(UnitProgression.EpicRedThreeStars, character.ProgressionIndex);
         Assert.Single(character.Abilities);
@@ -195,7 +195,7 @@ public sealed class PlayerDataTransformerTests
         // ultraTigurius has both a regular and a mythic shard entry in the raw response, but it's
         // already unlocked (present in result.Characters) — its shard counts live on that character
         // record instead (PlayerBaseUnitRecord.Shards/MythicShards), so it must not also appear here.
-        Assert.DoesNotContain(result.InventoryShards, shard => shard.UnitId == FakeTacticusApi.CharacterUnitId);
+        Assert.DoesNotContain(result.InventoryShards, shard => shard.UnitId == "ultraTigurius");
 
         // necroWarden has no matching entry in Units at all — not yet unlocked — so its shard progress
         // is kept, merging the regular-only entry with a defaulted MythicAmount.
@@ -221,12 +221,12 @@ public sealed class PlayerDataTransformerTests
         var result = CreateTransformer().Transform(BuildResponse());
 
         var standard = Assert.Single(result.CampaignProgress);
-        Assert.Equal(FakeTacticusApi.CampaignId, standard.TacticusCampaignId.Value);
+        Assert.Equal("campaign1", standard.TacticusCampaignId.Value);
         Assert.Equal("Standard", standard.Type);
         Assert.Equal(2, standard.HighestCompletedBattleIndex);
 
         var evt = Assert.Single(result.CampaignEventsProgress);
-        Assert.Equal(FakeTacticusApi.EventCampaignId, evt.TacticusCampaignId.Value);
+        Assert.Equal("eventCampaign1", evt.TacticusCampaignId.Value);
         Assert.Equal(1, evt.CompletedBattleCount);
         Assert.Equal(["AMSC3B", "AMSC13B"], evt.CompletedChallengeBattlesIds);
     }
@@ -235,7 +235,7 @@ public sealed class PlayerDataTransformerTests
     public void CatalogCampaignEventBattleIndicesMatchTheUpstreamPerTrackIndices()
     {
         var group = new TestCatalogProvider().Current.CampaignGroups.Values.Single(value =>
-            value.GroupId == FakeTacticusApi.EventCampaignId);
+            value.GroupId == "eventCampaign1");
         var standard = group.Battles.Where(battle => battle.Type == "Standard").ToArray();
 
         Assert.Equal(3, standard.Single(battle => battle.Id == "AMSC3B").BattleIndex);
@@ -252,12 +252,12 @@ public sealed class PlayerDataTransformerTests
         // untouched standard battle is excluded).
         Assert.Equal(4, result.LiveProgress.BattleAttempts.Count);
         Assert.Contains(result.LiveProgress.BattleAttempts, b =>
-            b.TacticusCampaignId == FakeTacticusApi.CampaignId && b.BattleIndex == 2 && b.AttemptsLeft == 2 && b.Type == "Standard");
+            b.TacticusCampaignId == "campaign1" && b.BattleIndex == 2 && b.AttemptsLeft == 2 && b.Type == "Standard");
         Assert.DoesNotContain(result.LiveProgress.BattleAttempts, b =>
-            b.TacticusCampaignId == FakeTacticusApi.CampaignId && b.BattleIndex == 0);
+            b.TacticusCampaignId == "campaign1" && b.BattleIndex == 0);
         Assert.All(result.LiveProgress.BattleAttempts, b => Assert.Equal("Standard", b.Type));
 
-        Assert.Equal(FakeTacticusApi.EventCampaignId, result.LiveProgress.ActiveCampaignEventId?.Value);
+        Assert.Equal("eventCampaign1", result.LiveProgress.ActiveCampaignEventId?.Value);
     }
 
     [Fact]
@@ -270,14 +270,14 @@ public sealed class PlayerDataTransformerTests
         {
             new()
             {
-                Id = FakeTacticusApi.EventCampaignId,
+                Id = "eventCampaign1",
                 Name = string.Empty,
                 Type = "Standard",
                 Battles = [new CampaignLevel { BattleIndex = 0, AttemptsLeft = 9, AttemptsUsed = 6 }],
             },
             new()
             {
-                Id = FakeTacticusApi.EventCampaignId,
+                Id = "eventCampaign1",
                 Name = string.Empty,
                 Type = "Extremis",
                 Battles = [new CampaignLevel { BattleIndex = 0, AttemptsLeft = 4, AttemptsUsed = 2 }],

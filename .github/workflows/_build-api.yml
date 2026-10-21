@@ -59,7 +59,15 @@ jobs:
         run: dotnet build TacticusPlanner.slnx --configuration Release --no-restore
 
       - name: Test
-        run: dotnet test TacticusPlanner.slnx --configuration Release --no-build --collect:"XPlat Code Coverage"
+        run: dotnet test TacticusPlanner.slnx --configuration Release --no-build --collect:"XPlat Code Coverage" --logger trx --results-directory TestResults
+
+      - name: Retain test results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: api-test-results
+          path: TestResults/
+          if-no-files-found: ignore
 
       - name: Build container image
         run: docker build --file src/TacticusPlanner.Api/Dockerfile --tag tacticus-planner-api:${{ github.sha }} .

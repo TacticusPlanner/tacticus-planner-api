@@ -29,4 +29,4 @@ Evidence: `Features/GameCatalog/GetGameCatalogDatasetEndpoints.cs:18-32` vs `Get
 - `src/TacticusPlanner.Api/Features/{GameCatalog,Goals,Guilds,PlayerData,CurrentUser,LegendaryEventPlans}`, `Program.cs` (compression, rate limiter), `orchestration/TacticusPlanner.ServiceDefaults`.
 - OpenAPI artifact: new `304`/`429` responses and headers; no schema changes. No migration.
 - Companion `tacticus-planner-apps` change: **none required** — the catalog client already does hash-based delta sync and will simply benefit; a later apps change may add `If-None-Match` on dataset fetches.
-- Tests: `TacticusPlanner.Api.Tests` gains a per-request DB-command counter (interceptor in `PlannerApiFactory`) with ceilings asserted on the goal/project endpoints; existing behavioral tests stay green.
+- Prerequisite: complete `replace-inmemory-api-tests-with-postgres` first. Database-backed behavior and command measurements use `TacticusPlanner.Api.IntegrationTests/PlannerApiFactory`, with its request-correlated production PostgreSQL counter; pure/catalog tests stay in `TacticusPlanner.Api.Tests`. Endpoint ceilings and before/after measurements remain owned by this change.

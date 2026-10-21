@@ -185,11 +185,6 @@ public sealed class GuildRaidStatusService(
         DateTimeOffset observedAt,
         CancellationToken ct)
     {
-        if (!db.Database.IsRelational())
-        {
-            return await PersistCoreAsync(guildId, response, observedAt, ct);
-        }
-
         var strategy = db.Database.CreateExecutionStrategy();
         return await strategy.ExecuteAsync(async () =>
         {

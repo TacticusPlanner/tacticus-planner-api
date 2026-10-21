@@ -185,8 +185,7 @@ public sealed class UpdateProjectGoalsEndpoint : Endpoint<UpdateProjectGoalsRequ
                 return;
             }
 
-            if (transaction is not null)
-                await transaction.CommitAsync(ct);
+            await transaction.CommitAsync(ct);
 
             var updated = await db.ProjectGoals
                 .AsNoTracking()

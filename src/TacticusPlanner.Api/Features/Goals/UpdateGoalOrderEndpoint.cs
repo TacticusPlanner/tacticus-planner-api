@@ -80,6 +80,7 @@ internal static class GoalOrderResponses
         var http = endpoint.HttpContext;
         if (result.Outcome == GoalOrderOutcome.Ok)
         {
+            // Error responses may be sent outside a mutation; successful writes always supply a transaction.
             if (transaction is not null)
                 await transaction.CommitAsync(ct);
             await http.Response.WriteAsJsonAsync(new GoalOrderResponse(result.Order.Revision, ids), ct);
