@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 
@@ -45,7 +45,6 @@ namespace TacticusPlanner.Persistence.Migrations
                     status = table.Column<string>(type: "text", nullable: false),
                     global_priority = table.Column<int>(type: "integer", nullable: true),
                     notes = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: true),
-                    rank_target_key = table.Column<string>(type: "character varying(16)", maxLength: 16, nullable: true),
                     depends_on = table.Column<List<Guid>>(type: "uuid[]", nullable: false),
                     created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
                     updated_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
@@ -425,20 +424,6 @@ namespace TacticusPlanner.Persistence.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "ix_goals_one_in_flight_rank_target",
-                table: "goals",
-                columns: new[] { "profile_id", "entity_type", "entity_id", "rank_target_key" },
-                unique: true,
-                filter: "status IN ('Active', 'Paused') AND goal_type = 'Rank'");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_goals_one_in_flight_slot",
-                table: "goals",
-                columns: new[] { "profile_id", "entity_type", "entity_id", "goal_type" },
-                unique: true,
-                filter: "status IN ('Active', 'Paused') AND goal_type <> 'Rank'");
 
             migrationBuilder.CreateIndex(
                 name: "ix_goals_profile_id",

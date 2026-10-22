@@ -29,7 +29,6 @@ public sealed class GoalConfiguration : IEntityTypeConfiguration<Goal>
         builder.Property(entity => entity.Status).HasConversion<string>().IsRequired();
         builder.Property(entity => entity.GlobalPriority);
         builder.Property(entity => entity.Notes).HasMaxLength(GoalValidation.MaxNotesLength);
-        builder.Property(entity => entity.RankTargetKey).HasMaxLength(GoalValidation.MaxRankTargetKeyLength);
         builder.Property(entity => entity.Revision).IsConcurrencyToken();
         builder.Property(entity => entity.CreatedAt).IsRequired();
         builder.Property(entity => entity.UpdatedAt).IsRequired();
@@ -76,20 +75,9 @@ public sealed class GoalConfiguration : IEntityTypeConfiguration<Goal>
         // commit, so one transaction can permute or compact positions freely (NULLs are distinct, so
         // historical goals never collide).
 
-        // The in-flight slot rule, per profile: a non-Rank Active/Paused goal occupies (unit, type); a Rank
-        // one occupies (unit, normalized end target), so distinct Rank milestones coexist while an exact
-        // duplicate cannot. The app-level pre-check gives the friendly 409; these indexes are the
-        // concurrency backstop. Completed/Archived goals are outside the filter and never collide.
-        var status = PostgresNaming.SnakeCase(nameof(Goal.Status));
-        var goalType = PostgresNaming.SnakeCase(nameof(Goal.GoalType));
-        builder.HasIndex(entity => new { entity.ProfileId, entity.EntityType, entity.EntityId, entity.GoalType })
-            .IsUnique()
-            .HasFilter($"{status} IN ('Active', 'Paused') AND {goalType} <> 'Rank'")
-            .HasDatabaseName(GoalSlotIndexes.Slot);
-        builder.HasIndex(entity => new { entity.ProfileId, entity.EntityType, entity.EntityId, entity.RankTargetKey })
-            .IsUnique()
-            .HasFilter($"{status} IN ('Active', 'Paused') AND {goalType} = 'Rank'")
-            .HasDatabaseName(GoalSlotIndexes.RankTarget);
+        // The in-flight slot rule (one Active/Paused goal per unit and type; per normalized end target for
+        // Rank) has no index: ProjectGoalPlanningService.FindConflictAsync enforces it under the profile lock
+        // that every goal write takes, so the rule can change without a schema change.
 
         builder
             .HasOne(entity => entity.Profile)
@@ -97,12 +85,4 @@ public sealed class GoalConfiguration : IEntityTypeConfiguration<Goal>
             .HasForeignKey(entity => entity.ProfileId)
             .OnDelete(DeleteBehavior.Cascade);
     }
-}
-
-/// <summary>Names of the two in-flight slot indexes, so a unique violation can be recognised as a slot
-/// conflict.</summary>
-public static class GoalSlotIndexes
-{
-    public const string Slot = "ix_goals_one_in_flight_slot";
-    public const string RankTarget = "ix_goals_one_in_flight_rank_target";
 }

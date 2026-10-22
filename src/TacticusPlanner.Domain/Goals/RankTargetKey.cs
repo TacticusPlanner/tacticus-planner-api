@@ -6,7 +6,7 @@ namespace TacticusPlanner.Domain.Goals;
 /// The canonical identity of a Rank goal's <em>end</em> target: end rank plus the normalized applied-slot
 /// count (<c>"&lt;rank&gt;:&lt;slots&gt;"</c>). Start/baseline and farming strategy are deliberately not part of
 /// it, so two goals reaching the same end state conflict however they got there. Shared by request
-/// validation, the goal's slot index (<c>Goal.RankTargetKey</c>) and V1 import so they can't drift.
+/// validation, the in-flight slot check and V1 import so they can't drift.
 /// </summary>
 public static class RankTargetKey
 {

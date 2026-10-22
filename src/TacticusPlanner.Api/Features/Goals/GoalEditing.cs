@@ -36,12 +36,10 @@ public abstract record GoalEditResult
 
 internal static class GoalEditSaver
 {
-    /// <summary>The single <c>SaveChangesAsync</c> of an edit, with the shared failure mapping: a slot index
-    /// violation becomes <see cref="GoalEditResult.SlotConflict"/> and a concurrent goal revision bump
+    /// <summary>The single <c>SaveChangesAsync</c> of an edit: a concurrent goal revision bump becomes
     /// <see cref="GoalEditResult.StaleRevision"/> (the transaction is rolled back first). Does not commit.</summary>
     public static async Task<GoalEditResult> SaveAsync(
         PlannerDbContext db,
-        ProjectGoalPlanningService planning,
         IDbContextTransaction transaction,
         Goal goal,
         CancellationToken ct)
@@ -60,11 +58,6 @@ internal static class GoalEditSaver
             return current is null
                 ? new GoalEditResult.NotFound()
                 : new GoalEditResult.StaleRevision(current, await db.ProjectIdsAsync(current.Id, ct));
-        }
-        catch (DbUpdateException ex) when (ProjectGoalPlanningService.IsSlotViolation(ex))
-        {
-            return new GoalEditResult.SlotConflict(
-                await planning.FindConflictAfterFailedSaveAsync(transaction, [goal], ex, ct));
         }
     }
 }
@@ -97,12 +90,12 @@ public sealed class GoalTargetEditor(
         if (await ValidateAsync(profileId, goal, target, ct) is { } validationError)
             return new GoalEditResult.Invalid("Target", validationError);
 
-        var previousKey = goal.RankTargetKey;
+        var previousKey = RankTargetKey.For(goal.GoalType, goal.Config);
         ApplyTarget(goal, target);
-        goal.RefreshRankTargetKey();
 
         // Rank occupancy: the new target must be free among the profile's in-flight goals.
-        if (goal.RankTargetKey != previousKey && await planning.FindConflictAsync([goal], ct) is { } conflict)
+        if (RankTargetKey.For(goal.GoalType, goal.Config) != previousKey
+            && await planning.FindConflictAsync([goal], ct) is { } conflict)
             return new GoalEditResult.SlotConflict(conflict);
 
         // The target lives in JSON-owned columns, so changing only it leaves the Goal row itself

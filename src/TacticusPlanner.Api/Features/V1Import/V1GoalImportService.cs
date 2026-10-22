@@ -557,16 +557,11 @@ public sealed class V1GoalImportService(
                 db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(project.Id, goal.Id, now));
             }
 
-            try
+            // The account-wide dedupe pass above read the existing goals before the profile lock, so a
+            // goal created in between could take a slot this batch wants; re-check under the lock. On a
+            // conflict, report every still-pending candidate as failed rather than saving a duplicate.
+            if (await planning.FindConflictAsync(pending.Select(entry => entry.Goal).ToList(), ct) is not null)
             {
-                await db.SaveChangesAsync(ct);
-            }
-            catch (DbUpdateException ex) when (ProjectGoalPlanningService.IsSlotViolation(ex))
-            {
-                // Defensive only: the account-wide dedupe pass above already rules this out for a
-                // single-writer import; this only fires on a genuine race with a concurrent mutation
-                // for the same profile. Roll back and report every still-pending candidate as failed
-                // rather than losing the whole batch.
                 await transaction.RollbackAsync(ct);
                 db.ChangeTracker.Clear();
                 foreach (var (index, _) in staged)
@@ -586,6 +581,7 @@ public sealed class V1GoalImportService(
                 return;
             }
 
+            await db.SaveChangesAsync(ct);
             await order.CompleteAsync(ct);
             await transaction.CommitAsync(ct);
 
@@ -712,7 +708,6 @@ public sealed class V1GoalImportService(
             Config = GoalMapper.MapConfig(config),
             Snapshot = BuildSnapshot(playerUnit),
         };
-        goal.RefreshRankTargetKey();
         return goal;
     }
 

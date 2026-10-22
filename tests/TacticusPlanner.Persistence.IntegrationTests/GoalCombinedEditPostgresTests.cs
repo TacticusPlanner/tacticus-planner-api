@@ -60,7 +60,6 @@ public sealed class GoalCombinedEditPostgresTests
             goals.Values.Select(goal => goal.GlobalPriority!.Value).Order());
         Assert.Equal(3, goals[g1].GlobalPriority);
         Assert.Equal(order + 1, await ReadOrderRevisionAsync(services, profileId));
-        Assert.Equal("8:0", goals[g1].RankTargetKey);
         Assert.Equal(2, await db.ProjectGoals.CountAsync(entry => entry.GoalId == g1, TestContext.Current.CancellationToken));
         _ = g3;
     }
@@ -90,8 +89,8 @@ public sealed class GoalCombinedEditPostgresTests
         var occupant = Guid.CreateVersion7();
         await ExecuteAsync(blocker, """
             INSERT INTO goals (id, revision, profile_id, entity_type, entity_id, goal_type, status, depends_on,
-                               rank_target_key, global_priority, config, created_at, updated_at)
-            VALUES (@goal, 1, @profile, 'Character', 'blackTerminator', 'Rank', 'Active', ARRAY[]::uuid[], '8:0',
+                               global_priority, config, created_at, updated_at)
+            VALUES (@goal, 1, @profile, 'Character', 'blackTerminator', 'Rank', 'Active', ARRAY[]::uuid[],
                     (SELECT max(global_priority) + 1 FROM goals WHERE profile_id = @profile),
                     '{"Rank":{"Start":1,"End":8,"EndPointFive":false,"EndAppliedUpgrades":0}}', now(), now());
             INSERT INTO project_goals (project_id, goal_id, created_at) VALUES (@project, @goal, now());
@@ -181,7 +180,6 @@ public sealed class GoalCombinedEditPostgresTests
             Status = GoalStatus.Active,
             Config = RankConfig(rankEnd),
         };
-        goal.RefreshRankTargetKey();
         var order = scope.ServiceProvider.GetRequiredService<GoalOrderService>();
         await scope.ServiceProvider.GetRequiredService<ProjectGoalPlanningService>().ExecuteLockedMutationAsync(
             async transaction =>

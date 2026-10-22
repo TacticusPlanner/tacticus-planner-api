@@ -153,7 +153,6 @@ public sealed class CreateCombinedGoalsEndpoint
             }
 
             goals[i].DependsOn = indices.Select(index => goals[index].Id.Value).ToList();
-            goals[i].RefreshRankTargetKey();
         }
 
         var now = Resolve<TimeProvider>().GetUtcNow();
@@ -175,17 +174,7 @@ public sealed class CreateCombinedGoalsEndpoint
             foreach (var project in targetProjects)
                 db.ProjectGoals.AddRange(goals.Select(goal => ProjectGoalPlanningService.CreateMembership(project.Id, goal.Id, now)));
 
-            try
-            {
-                await order.CompleteAsync(ct);
-            }
-            catch (DbUpdateException ex) when (ProjectGoalPlanningService.IsSlotViolation(ex))
-            {
-                await GoalProblems.SendSlotConflictAsync(
-                    this, await planning.FindConflictAfterFailedSaveAsync(transaction, goals, ex, ct), ct);
-                return;
-            }
-
+            await order.CompleteAsync(ct);
             await transaction.CommitAsync(ct);
 
             var projectIds = targetProjects.Select(project => project.Id.Value).ToList();

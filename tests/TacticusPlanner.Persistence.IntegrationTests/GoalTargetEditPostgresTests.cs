@@ -69,7 +69,6 @@ public sealed class GoalTargetEditPostgresTests
         goal.Id = GoalId.From(Guid.CreateVersion7());
         goal.ProfileId = database.ProfileId;
         goal.Status = GoalStatus.Active;
-        goal.RefreshRankTargetKey();
         return RankTargetSlotsPostgresTests.AddAsync(database, goal);
     }
 }
