@@ -67,7 +67,7 @@ public sealed class GoalCombinedEditor(
 
             if (result is GoalEditResult.Applied)
             {
-                result = await GoalEditSaver.SaveAsync(db, planning, transaction, goal, ct);
+                result = await GoalEditSaver.SaveAsync(db, transaction, goal, ct);
                 if (result is GoalEditResult.Applied)
                     await transaction.CommitAsync(ct);
             }

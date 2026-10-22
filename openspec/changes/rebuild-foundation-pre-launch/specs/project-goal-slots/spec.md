@@ -1,3 +1,8 @@
+## RENAMED Requirements
+
+- FROM: `### Requirement: Database enforces concurrent slot occupancy`
+- TO: `### Requirement: The profile lock serializes slot checks`
+
 ## MODIFIED Requirements
 
 ### Requirement: In-flight uniqueness is scoped to project
@@ -46,7 +51,7 @@ The invariant SHALL apply atomically to single creation, combined creation, targ
 
 ### Requirement: Conflicts identify affected projects and goals
 
-A friendly pre-check or database constraint conflict SHALL produce the same 409 in the unified error shape with `issueCode` `slotOccupied`, naming the entity type/id, goal type, normalized end target (Rank only) and the existing goal id, and carrying the existing goal under `current`.
+A slot conflict SHALL produce the same 409 in the unified error shape with `issueCode` `slotOccupied`, naming the entity type/id, goal type, normalized end target (Rank only) and the existing goal id, and carrying the existing goal under `current`.
 
 #### Scenario: Multi-project create partially conflicts
 
@@ -54,9 +59,9 @@ A friendly pre-check or database constraint conflict SHALL produce the same 409 
 - **WHEN** one combined request creates Ragnar Unlock, Ascension and Rank Gold1
 - **THEN** the request is rejected atomically with `slotOccupied` identifying the existing Rank goal, and no goal is created
 
-### Requirement: Database enforces concurrent slot occupancy
+### Requirement: The profile lock serializes slot checks
 
-Persistence SHALL include profile-level partial unique constraints on the goal itself that prevent two concurrent transactions from occupying the same non-Rank profile/unit/type slot or the same Rank profile/unit/normalized-end-target slot.
+Every goal write SHALL take the profile lock before checking slots, so two concurrent transactions cannot both occupy the same non-Rank profile/unit/type slot or the same Rank profile/unit/normalized-end-target slot. The rule SHALL NOT be enforced by a database constraint, so it can change without a schema change; a write that bypasses the lock or the check is a defect. V1 import SHALL re-check its new goals under the lock because it reads existing goals before taking it.
 
 #### Scenario: Racing creates target one slot
 

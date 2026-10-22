@@ -50,15 +50,18 @@ public sealed class ProjectGoalConcurrencyPostgresTests
         await AssertContiguousOrderAsync(connectionString, profileId, 2);
     }
 
-    [Fact]
-    public async Task ConcurrentSameSlotCreatesProduceExactlyOneWinnerAndNoUnhandledError()
+    /// <summary>No index backs the slot rule: the profile lock alone must serialize the two checks.</summary>
+    [Theory]
+    [InlineData(GoalType.Rank)]
+    [InlineData(GoalType.Ascension)]
+    public async Task ConcurrentSameSlotCreatesProduceExactlyOneWinnerAndNoUnhandledError(GoalType goalType)
     {
         await using var postgres = await StartPostgresAsync();
         var (connectionString, profileId, projectId) = await SeedEmptyProjectAsync(postgres);
 
         var results = await Task.WhenAll(
-            CreateGoalAsync(connectionString, profileId, projectId, "ragnar", GoalType.Rank),
-            CreateGoalAsync(connectionString, profileId, projectId, "ragnar", GoalType.Rank));
+            CreateGoalAsync(connectionString, profileId, projectId, "ragnar", goalType),
+            CreateGoalAsync(connectionString, profileId, projectId, "ragnar", goalType));
 
         Assert.Equal(1, results.Count(result => result.Succeeded));
         Assert.Equal(1, results.Count(result => !result.Succeeded));
@@ -231,7 +234,6 @@ public sealed class ProjectGoalConcurrencyPostgresTests
                 Status = GoalStatus.Active,
                 Config = new GoalConfig { Rank = new RankTarget { Start = 1, End = 12 } },
             };
-            goal.RefreshRankTargetKey();
             db.Goals.Add(goal);
             await order.AppendAsync(goal, ct);
             await order.CompleteAsync(ct);
@@ -376,7 +378,6 @@ public sealed class ProjectGoalConcurrencyPostgresTests
             Status = GoalStatus.Active,
             Config = config,
         };
-        goal.RefreshRankTargetKey();
 
         await planning.ExecuteLockedMutationAsync(async transaction =>
         {

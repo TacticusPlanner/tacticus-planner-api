@@ -1,55 +1,20 @@
 using Microsoft.EntityFrameworkCore;
-using Npgsql;
 using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Api.Features.Projects;
 using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Domain.Projects;
-using TacticusPlanner.Persistence.Configurations;
 using Xunit;
 
 namespace TacticusPlanner.Persistence.IntegrationTests;
 
 /// <summary>
-/// The in-flight slot indexes on <c>goals</c>, scoped by profile (<c>project-goal-slots</c>): a non-Rank goal holds
-/// (unit, type), a Rank goal (unit, normalized end target), only while Active or Paused, whatever its projects.
+/// Goal rows in the database. No index enforces the in-flight slot rule (<c>project-goal-slots</c>);
+/// <see cref="ProjectGoalPlanningService.FindConflictAsync"/> checks it under the profile lock instead (see
+/// <c>ProjectGoalConcurrencyPostgresTests</c>).
 /// </summary>
 public sealed class RankTargetSlotsPostgresTests
 {
-    [Fact]
-    public async Task SlotIndexesRejectDuplicatesAndAcceptDistinctRankTargets()
-    {
-        await using var database = await PostgresTestDatabase.StartAsync();
-        var ct = TestContext.Current.CancellationToken;
-
-        await AddAsync(database, RankGoal(database.ProfileId, end: 12));
-        // Point-five below Adamantine1 is the same end state as three applied slots: one normalized target.
-        await AddAsync(database, RankGoal(database.ProfileId, end: 12, appliedUpgrades: 3));
-        var duplicateRank = await Assert.ThrowsAsync<DbUpdateException>(
-            () => AddAsync(database, RankGoal(database.ProfileId, end: 12, pointFive: true)));
-        Assert.True(ProjectGoalPlanningService.IsSlotViolation(duplicateRank));
-        Assert.Equal(GoalSlotIndexes.RankTarget, (duplicateRank.InnerException as PostgresException)?.ConstraintName);
-
-        await AddAsync(database, AbilityGoal(database.ProfileId));
-        var duplicateSlot = await Assert.ThrowsAsync<DbUpdateException>(() => AddAsync(database, AbilityGoal(database.ProfileId)));
-        Assert.True(ProjectGoalPlanningService.IsSlotViolation(duplicateSlot));
-        Assert.Equal(GoalSlotIndexes.Slot, (duplicateSlot.InnerException as PostgresException)?.ConstraintName);
-
-        // Historical goals hold no slot, and another profile's goals never collide.
-        await AddAsync(database, RankGoal(database.ProfileId, end: 12, status: GoalStatus.Completed));
-        await AddAsync(database, AbilityGoal(database.ProfileId, GoalStatus.Archived));
-        var otherProfile = ProfileId.From(Guid.CreateVersion7());
-        await database.SeedProfileAsync(otherProfile);
-        await AddAsync(database, RankGoal(otherProfile, end: 12), otherProfile);
-        await AddAsync(database, AbilityGoal(otherProfile), otherProfile);
-
-        await using var db = database.CreateContext();
-        Assert.Equal(
-            ["12:0", "12:3", "12:0"],
-            await db.Goals.Where(goal => goal.GoalType == GoalType.Rank).OrderBy(goal => goal.CreatedAt)
-                .Select(goal => goal.RankTargetKey!).ToListAsync(ct));
-    }
-
     /// <summary>Hard delete (what <c>DeleteGoalEndpoint</c> does) cascades the goal's memberships and frees its
     /// slot, so a recreation is a brand-new goal with only the explicitly requested memberships.</summary>
     [Fact]
@@ -73,7 +38,7 @@ public sealed class RankTargetSlotsPostgresTests
         Assert.Equal(2, await verify.ProjectGoals.CountAsync(entry => entry.GoalId == recreated, ct));
         var goal = await verify.Goals.SingleAsync(entry => entry.Id == recreated, ct);
         Assert.Equal(GoalStatus.Active, goal.Status);
-        Assert.Equal("12:0", goal.RankTargetKey);
+        Assert.Equal(12, goal.Config.Rank!.End);
     }
 
     internal static Goal RankGoal(
@@ -90,7 +55,6 @@ public sealed class RankTargetSlotsPostgresTests
                 Rank = new RankTarget { Start = 1, End = end, EndPointFive = pointFive, EndAppliedUpgrades = appliedUpgrades },
             },
         };
-        goal.RefreshRankTargetKey();
         return goal;
     }
 

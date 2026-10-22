@@ -111,17 +111,7 @@ public sealed class UpdateGoalsStatusEndpoint : Endpoint<UpdateGoalsStatusReques
             foreach (var goal in leaving)
                 order.Release(goal);
 
-            try
-            {
-                await order.CompleteAsync(ct);
-            }
-            catch (DbUpdateException ex) when (ProjectGoalPlanningService.IsSlotViolation(ex))
-            {
-                await GoalProblems.SendSlotConflictAsync(
-                    this, await planning.FindConflictAfterFailedSaveAsync(transaction, entering, ex, ct), ct);
-                return;
-            }
-
+            await order.CompleteAsync(ct);
             await transaction.CommitAsync(ct);
 
             var projectIds = rows.ToDictionary(row => row.Goal.Id, row => row.ProjectIds.Select(id => id.Value).ToList());

@@ -1,19 +1,19 @@
 using System.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Npgsql;
 using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.Projects;
 using TacticusPlanner.Persistence;
-using TacticusPlanner.Persistence.Configurations;
 
 namespace TacticusPlanner.Api.Features.Projects;
 
 /// <summary>
-/// The concurrency boundary of every goal mutation (create, edit, status, membership, order, delete): one
-/// profile-row lock, and the in-flight slot rule (<c>project-goal-slots</c>) checked with one query on
-/// <c>goals</c>. Membership is not part of the slot: one in-flight goal may belong to any number of projects.
+/// The concurrency boundary of every goal mutation (create, edit, status, membership, order, delete, V1
+/// import): one profile-row lock, and the in-flight slot rule (<c>project-goal-slots</c>) checked with one query
+/// on <c>goals</c>. No database index backs the rule, so a goal write that skips the lock or
+/// <see cref="FindConflictAsync"/> can create duplicates. Membership is not part of the slot: one in-flight goal
+/// may belong to any number of projects.
 /// </summary>
 public sealed class ProjectGoalPlanningService(PlannerDbContext db, GoalOrderService order)
 {
@@ -79,27 +79,6 @@ public sealed class ProjectGoalPlanningService(PlannerDbContext db, GoalOrderSer
         && a.EntityId == b.EntityId
         && a.GoalType == b.GoalType
         && RankTargetKey.For(a.GoalType, a.Config) == RankTargetKey.For(b.GoalType, b.Config);
-
-    /// <summary>A race that slipped past <see cref="FindConflictAsync"/> and hit one of the slot indexes.</summary>
-    public static bool IsSlotViolation(DbUpdateException exception) =>
-        exception.InnerException is PostgresException { SqlState: PostgresErrorCodes.UniqueViolation } postgres
-            && postgres.ConstraintName is GoalSlotIndexes.Slot or GoalSlotIndexes.RankTarget;
-
-    /// <summary>After a slot violation: rolls the transaction back and finds, in what is committed now, the goal
-    /// holding a candidate's slot.</summary>
-    public async Task<GoalSlotConflict> FindConflictAfterFailedSaveAsync(
-        IDbContextTransaction transaction, IReadOnlyList<Goal> candidates, DbUpdateException exception, CancellationToken ct)
-    {
-        await transaction.RollbackAsync(ct);
-        await transaction.DisposeAsync();
-        db.ChangeTracker.Clear();
-        var entityIds = candidates.Select(goal => goal.EntityId).Distinct().ToList();
-        var committed = await db.Goals.AsNoTracking()
-            .Where(goal => entityIds.Contains(goal.EntityId) && goal.GlobalPriority != null)
-            .ToListAsync(ct);
-        return FindConflict(candidates, committed)
-            ?? throw new InvalidOperationException("A goal slot index failed but no occupying goal was found.", exception);
-    }
 }
 
 /// <param name="Candidate">The goal that wanted the slot.</param>
