@@ -113,8 +113,8 @@ public sealed class ApiErrorContractTests(PlannerApiFactory factory) : IClassFix
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsync(
-            "/api/v1/me/goals", new StringContent(body, Encoding.UTF8, "application/json"), Ct);
+        using var content = new StringContent(body, Encoding.UTF8, "application/json");
+        var response = await client.PostAsync("/api/v1/me/goals", content, Ct);
 
         var problem = await AssertProblemAsync(response, HttpStatusCode.BadRequest, "validation");
         Assert.Contains(problem["errors"]!.AsObject(), error => error.Key.EndsWith("startPaused", StringComparison.Ordinal));
