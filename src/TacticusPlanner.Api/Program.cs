@@ -95,8 +95,7 @@ builder.Services
         // Schema names are the client's generated type names (openapi-contract); the collision test guards uniqueness.
         options.ShortSchemaNames = true;
         options.ConfigureOpenApi = openApi => openApi
-            .AddSchemaTransformer(ValueObjectOpenApi.Apply)
-            .AddSchemaTransformer(PlayerDataChunkOpenApi.Apply)
+            .MapVogenTypesInVogenOpenApiMarkers()
             .AddDocumentTransformer((document, _, _) =>
         {
             ProblemDetailsOpenApi.Apply(document);

@@ -227,8 +227,7 @@ public sealed class GetLegendaryEventRunRecordRosterEndpoint : EndpointWithoutRe
             .FirstAsync(ct);
         HttpContext.Response.Headers.ETag = etag;
         HttpContext.Response.Headers.CacheControl = "private, no-cache";
-        await Send.OkAsync(
-            new RosterSnapshotResponse(roster.TakenAt, roster.CatalogVersion, roster.Characters, roster.Mows), ct);
+        await Send.OkAsync(RosterSnapshotResponse.From(roster), ct);
     }
 }
 

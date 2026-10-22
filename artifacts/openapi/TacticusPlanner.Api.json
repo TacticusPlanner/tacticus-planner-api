@@ -11106,22 +11106,34 @@
           "$ref": "#/components/schemas/LegendaryEventTeamRunDepthResponse"
         }
       },
-      "IReadOnlyListOfPlayerCharacterRecord": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/PlayerCharacterRecord"
-        }
-      },
       "IReadOnlyListOfPlayerDataManifestChunk": {
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/PlayerDataManifestChunk"
         }
       },
-      "IReadOnlyListOfPlayerMowRecord": {
+      "IReadOnlyListOfRosterAbilityResponse": {
         "type": "array",
         "items": {
-          "$ref": "#/components/schemas/PlayerMowRecord"
+          "$ref": "#/components/schemas/RosterAbilityResponse"
+        }
+      },
+      "IReadOnlyListOfRosterCharacterResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/RosterCharacterResponse"
+        }
+      },
+      "IReadOnlyListOfRosterEquipmentSlotResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/RosterEquipmentSlotResponse"
+        }
+      },
+      "IReadOnlyListOfRosterMowResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/RosterMowResponse"
         }
       },
       "IReadOnlyListOfString": {
@@ -11630,18 +11642,6 @@
           "format": "int32"
         }
       },
-      "ListOfPlayerUnitAbilityRecord": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/PlayerUnitAbilityRecord"
-        }
-      },
-      "ListOfPlayerUnitEquipmentSlotRecord": {
-        "type": "array",
-        "items": {
-          "$ref": "#/components/schemas/PlayerUnitEquipmentSlotRecord"
-        }
-      },
       "ListOfProjectGoalEntryRequest": {
         "type": "array",
         "items": {
@@ -11800,57 +11800,6 @@
         ],
         "type": "string"
       },
-      "PlayerCharacterRecord": {
-        "required": [
-          "rank",
-          "equippedItems",
-          "unitId",
-          "progressionIndex",
-          "xp",
-          "xpLevel",
-          "shards",
-          "mythicShards",
-          "abilities",
-          "appliedUpgradeSlots"
-        ],
-        "type": "object",
-        "properties": {
-          "rank": {
-            "$ref": "#/components/schemas/UnitRank"
-          },
-          "equippedItems": {
-            "$ref": "#/components/schemas/ListOfPlayerUnitEquipmentSlotRecord"
-          },
-          "unitId": {
-            "$ref": "#/components/schemas/UnitId"
-          },
-          "progressionIndex": {
-            "$ref": "#/components/schemas/UnitProgression"
-          },
-          "xp": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "xpLevel": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "shards": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "mythicShards": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "abilities": {
-            "$ref": "#/components/schemas/ListOfPlayerUnitAbilityRecord"
-          },
-          "appliedUpgradeSlots": {
-            "$ref": "#/components/schemas/ListOfInt32"
-          }
-        }
-      },
       "PlayerDataChunkEnvelopeOfObject": {
         "required": [
           "schemaVersion",
@@ -11926,85 +11875,6 @@
           },
           "url": {
             "type": "string"
-          }
-        }
-      },
-      "PlayerMowRecord": {
-        "required": [
-          "unitId",
-          "progressionIndex",
-          "xp",
-          "xpLevel",
-          "shards",
-          "mythicShards",
-          "abilities",
-          "appliedUpgradeSlots"
-        ],
-        "type": "object",
-        "properties": {
-          "unitId": {
-            "$ref": "#/components/schemas/UnitId"
-          },
-          "progressionIndex": {
-            "$ref": "#/components/schemas/UnitProgression"
-          },
-          "xp": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "xpLevel": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "shards": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "mythicShards": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "abilities": {
-            "$ref": "#/components/schemas/ListOfPlayerUnitAbilityRecord"
-          },
-          "appliedUpgradeSlots": {
-            "$ref": "#/components/schemas/ListOfInt32"
-          }
-        }
-      },
-      "PlayerUnitAbilityRecord": {
-        "required": [
-          "abilityId",
-          "level"
-        ],
-        "type": "object",
-        "properties": {
-          "abilityId": {
-            "type": "string"
-          },
-          "level": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
-      "PlayerUnitEquipmentSlotRecord": {
-        "required": [
-          "slotId",
-          "equipmentId",
-          "level"
-        ],
-        "type": "object",
-        "properties": {
-          "slotId": {
-            "type": "string"
-          },
-          "equipmentId": {
-            "type": "string"
-          },
-          "level": {
-            "type": "integer",
-            "format": "int32"
           }
         }
       },
@@ -12353,6 +12223,136 @@
           }
         }
       },
+      "RosterAbilityResponse": {
+        "required": [
+          "abilityId",
+          "level"
+        ],
+        "type": "object",
+        "properties": {
+          "abilityId": {
+            "type": "string"
+          },
+          "level": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "RosterCharacterResponse": {
+        "required": [
+          "unitId",
+          "rank",
+          "progressionIndex",
+          "xp",
+          "xpLevel",
+          "shards",
+          "mythicShards",
+          "abilities",
+          "appliedUpgradeSlots",
+          "equippedItems"
+        ],
+        "type": "object",
+        "properties": {
+          "unitId": {
+            "$ref": "#/components/schemas/UnitId"
+          },
+          "rank": {
+            "$ref": "#/components/schemas/UnitRank"
+          },
+          "progressionIndex": {
+            "$ref": "#/components/schemas/UnitProgression"
+          },
+          "xp": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "xpLevel": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "shards": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "mythicShards": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "abilities": {
+            "$ref": "#/components/schemas/IReadOnlyListOfRosterAbilityResponse"
+          },
+          "appliedUpgradeSlots": {
+            "$ref": "#/components/schemas/IReadOnlyListOfInt32"
+          },
+          "equippedItems": {
+            "$ref": "#/components/schemas/IReadOnlyListOfRosterEquipmentSlotResponse"
+          }
+        }
+      },
+      "RosterEquipmentSlotResponse": {
+        "required": [
+          "slotId",
+          "equipmentId",
+          "level"
+        ],
+        "type": "object",
+        "properties": {
+          "slotId": {
+            "type": "string"
+          },
+          "equipmentId": {
+            "type": "string"
+          },
+          "level": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "RosterMowResponse": {
+        "required": [
+          "unitId",
+          "progressionIndex",
+          "xp",
+          "xpLevel",
+          "shards",
+          "mythicShards",
+          "abilities",
+          "appliedUpgradeSlots"
+        ],
+        "type": "object",
+        "properties": {
+          "unitId": {
+            "$ref": "#/components/schemas/UnitId"
+          },
+          "progressionIndex": {
+            "$ref": "#/components/schemas/UnitProgression"
+          },
+          "xp": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "xpLevel": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "shards": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "mythicShards": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "abilities": {
+            "$ref": "#/components/schemas/IReadOnlyListOfRosterAbilityResponse"
+          },
+          "appliedUpgradeSlots": {
+            "$ref": "#/components/schemas/IReadOnlyListOfInt32"
+          }
+        }
+      },
       "RosterSnapshotResponse": {
         "required": [
           "takenAt",
@@ -12370,10 +12370,10 @@
             "type": "string"
           },
           "characters": {
-            "$ref": "#/components/schemas/IReadOnlyListOfPlayerCharacterRecord"
+            "$ref": "#/components/schemas/IReadOnlyListOfRosterCharacterResponse"
           },
           "mows": {
-            "$ref": "#/components/schemas/IReadOnlyListOfPlayerMowRecord"
+            "$ref": "#/components/schemas/IReadOnlyListOfRosterMowResponse"
           }
         }
       },

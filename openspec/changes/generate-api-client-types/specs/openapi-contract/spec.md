@@ -43,7 +43,7 @@ Every query parameter a route reads SHALL appear in the document as a parameter 
 - **AND** `GET legendary-event-plans/{eventId}/run-records` documents `limit` and `after`
 
 ### Requirement: Response properties are required
-Every property of a planner response (`/api/v1/**` outside `game-catalog`) SHALL be listed as required, because the API always writes it (null included). Problem-details members that only some statuses carry, and the synced player-data chunk shapes, are exempt.
+Every property of a planner response (`/api/v1/**` outside `game-catalog`) SHALL be listed as required, because the API always writes it (null included). Problem-details members that only some statuses carry are exempt. A response SHALL NOT expose a persisted storage type directly; it maps to its own response records.
 
 #### Scenario: Goal detail
 - **WHEN** the document is generated
