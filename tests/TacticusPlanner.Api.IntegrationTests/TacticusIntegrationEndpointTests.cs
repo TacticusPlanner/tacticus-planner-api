@@ -1,5 +1,4 @@
 using System.Net;
-using System.Net.Http.Json;
 using TacticusPlanner.Api.Features.TacticusIntegration;
 
 namespace TacticusPlanner.Api.IntegrationTests;
@@ -12,7 +11,7 @@ public sealed class TacticusIntegrationEndpointTests(PlannerApiFactory factory) 
         var client = await CreateProvisionedClientAsync();
 
         var response = await client.PutAsJsonAsync(
-            "/api/v1/me/tacticus-integration",
+            "/api/v1/account/tacticus-integration",
             new UpdateTacticusIntegrationRequest(FakeTacticusApi.ValidKey, "player-42"),
             TestContext.Current.CancellationToken
         );
@@ -37,7 +36,7 @@ public sealed class TacticusIntegrationEndpointTests(PlannerApiFactory factory) 
         var client = await CreateProvisionedClientAsync();
 
         var response = await client.PutAsJsonAsync(
-            "/api/v1/me/tacticus-integration",
+            "/api/v1/account/tacticus-integration",
             new UpdateTacticusIntegrationRequest("not-a-real-key", null),
             TestContext.Current.CancellationToken
         );
@@ -52,7 +51,7 @@ public sealed class TacticusIntegrationEndpointTests(PlannerApiFactory factory) 
         client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.SubjectHeader, NewSubject());
 
         var response = await client.PutAsJsonAsync(
-            "/api/v1/me/tacticus-integration",
+            "/api/v1/account/tacticus-integration",
             new UpdateTacticusIntegrationRequest(FakeTacticusApi.ValidKey, null),
             TestContext.Current.CancellationToken
         );
@@ -66,13 +65,13 @@ public sealed class TacticusIntegrationEndpointTests(PlannerApiFactory factory) 
         var client = await CreateProvisionedClientAsync();
 
         await client.PutAsJsonAsync(
-            "/api/v1/me/tacticus-integration",
+            "/api/v1/account/tacticus-integration",
             new UpdateTacticusIntegrationRequest(FakeTacticusApi.ValidKey, "original-user-id"),
             TestContext.Current.CancellationToken
         );
 
         var response = await client.PutAsJsonAsync(
-            "/api/v1/me/tacticus-integration",
+            "/api/v1/account/tacticus-integration",
             new UpdateTacticusIntegrationRequest(null, "updated-user-id"),
             TestContext.Current.CancellationToken
         );
@@ -96,13 +95,13 @@ public sealed class TacticusIntegrationEndpointTests(PlannerApiFactory factory) 
         var client = await CreateProvisionedClientAsync();
 
         await client.PutAsJsonAsync(
-            "/api/v1/me/tacticus-integration",
+            "/api/v1/account/tacticus-integration",
             new UpdateTacticusIntegrationRequest(FakeTacticusApi.ValidKey, "some-user-id"),
             TestContext.Current.CancellationToken
         );
 
         var response = await client.PutAsJsonAsync(
-            "/api/v1/me/tacticus-integration",
+            "/api/v1/account/tacticus-integration",
             new UpdateTacticusIntegrationRequest(null, null, ClearTacticusUserId: true),
             TestContext.Current.CancellationToken
         );
@@ -121,8 +120,8 @@ public sealed class TacticusIntegrationEndpointTests(PlannerApiFactory factory) 
         var client = factory.CreateClient();
         client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.SubjectHeader, NewSubject());
 
-        // /me auto-provisions the Account + Profile that the integration endpoint requires to exist.
-        await client.GetAsync("/api/v1/me", TestContext.Current.CancellationToken);
+        // GET /account auto-provisions the Account + Profile that the integration endpoint requires to exist.
+        await client.GetAsync("/api/v1/account", TestContext.Current.CancellationToken);
 
         return client;
     }

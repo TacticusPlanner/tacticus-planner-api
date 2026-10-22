@@ -13,7 +13,7 @@ public sealed class GetUserJotTokenEndpoint : EndpointWithoutRequest<UserJotToke
 
     public override void Configure()
     {
-        Get("me/userjot-token");
+        Get("userjot-token");
         Summary(summary =>
         {
             summary.Summary = "Issues a short-lived signed identity token for the UserJot feedback widget.";

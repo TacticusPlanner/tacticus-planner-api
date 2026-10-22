@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace TacticusPlanner.Domain.LegendaryEvents;
 
 /// <summary>A Maybe clear / Stop here mark on one objective cell of a lane battle (LRE Stage 3). Cells are
@@ -21,8 +23,9 @@ public sealed class LegendaryEventObjectiveAnnotation
     public DateTimeOffset UpdatedAt { get; set; }
 }
 
+/// <summary>Wire names are camelCase (<c>maybeClear</c>/<c>stopHere</c>); storage uses its own explicit conversion.</summary>
 public enum LegendaryEventAnnotationStatus
 {
-    MaybeClear,
-    StopHere,
+    [JsonStringEnumMemberName("maybeClear")] MaybeClear,
+    [JsonStringEnumMemberName("stopHere")] StopHere,
 }

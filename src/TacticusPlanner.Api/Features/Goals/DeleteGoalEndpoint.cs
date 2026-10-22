@@ -11,12 +11,12 @@ namespace TacticusPlanner.Api.Features.Goals;
 /// <summary>Permanently deletes a goal — a hard delete, not a status change. Cascades to its
 /// <c>project_goals</c> memberships, and in the same transaction removes the goal from every dependent's
 /// <c>DependsOn</c>. Archived goals are not deleted by this; they stay retrievable via the archived tab
-/// (<c>GET me/goals?archived=true</c>) until explicitly deleted here.</summary>
+/// (<c>GET goals?archived=true</c>) until explicitly deleted here.</summary>
 public sealed class DeleteGoalEndpoint : EndpointWithoutRequest
 {
     public override void Configure()
     {
-        Delete("me/goals/{goalId}");
+        Delete("goals/{goalId}");
         Summary(summary =>
         {
             summary.Summary = "Permanently deletes a goal.";

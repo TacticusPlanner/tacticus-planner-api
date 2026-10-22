@@ -17,9 +17,9 @@ public sealed class CurrentUserLastSeenTests(PlannerApiFactory factory) : IClass
         var subject = $"last-seen-{Guid.NewGuid()}";
         client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.SubjectHeader, subject);
 
-        var first = await client.GetAsync("/api/v1/me", ct);
-        var second = await client.GetAsync("/api/v1/me", ct);
-        var third = await client.GetAsync("/api/v1/me", ct);
+        var first = await client.GetAsync("/api/v1/account", ct);
+        var second = await client.GetAsync("/api/v1/account", ct);
+        var third = await client.GetAsync("/api/v1/account", ct);
 
         Assert.True(WritesProfile(factory.CommandTextsFor(first)));
         Assert.False(WritesProfile(factory.CommandTextsFor(second)));
@@ -34,7 +34,7 @@ public sealed class CurrentUserLastSeenTests(PlannerApiFactory factory) : IClass
         var client = factory.CreateClient();
         var subject = $"last-seen-{Guid.NewGuid()}";
         client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.SubjectHeader, subject);
-        (await client.GetAsync("/api/v1/me", ct)).EnsureSuccessStatusCode();
+        (await client.GetAsync("/api/v1/account", ct)).EnsureSuccessStatusCode();
         var stale = DateTimeOffset.UtcNow.AddHours(-2);
         await using (var scope = factory.Services.CreateAsyncScope())
         {
@@ -43,7 +43,7 @@ public sealed class CurrentUserLastSeenTests(PlannerApiFactory factory) : IClass
                 .ExecuteUpdateAsync(set => set.SetProperty(profile => profile.LastSeenAt, stale), ct);
         }
 
-        var refreshed = await client.GetAsync("/api/v1/me", ct);
+        var refreshed = await client.GetAsync("/api/v1/account", ct);
 
         Assert.True(WritesProfile(factory.CommandTextsFor(refreshed)));
         Assert.True(await LastSeenAtAsync(subject) > stale.AddHours(1));

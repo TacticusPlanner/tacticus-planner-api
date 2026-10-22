@@ -24,7 +24,7 @@ public sealed class UpdateProjectGoalsEndpoint : Endpoint<UpdateProjectGoalsRequ
 
     public override void Configure()
     {
-        Put("me/projects/{projectId}/goals");
+        Put("projects/{projectId}/goals");
         Summary(summary =>
         {
             summary.Summary = "Replaces a project's goal membership.";

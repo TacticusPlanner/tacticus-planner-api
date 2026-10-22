@@ -1,7 +1,7 @@
 using System.Net;
-using System.Net.Http.Json;
 using TacticusPlanner.Api.Features.Guilds;
 using TacticusPlanner.TacticusApi.Models.Guild;
+using DomainGuildRole = TacticusPlanner.Domain.Guilds.GuildRole;
 
 namespace TacticusPlanner.Api.IntegrationTests;
 
@@ -19,7 +19,7 @@ public sealed class GetMyGuildEndpointTests : IAsyncLifetime
         var client = factory.CreateClient();
         client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.NoAuthHeader, "1");
 
-        var response = await client.GetAsync("/api/v1/guilds/me", TestContext.Current.CancellationToken);
+        var response = await client.GetAsync("/api/v1/guild", TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -30,7 +30,7 @@ public sealed class GetMyGuildEndpointTests : IAsyncLifetime
         var client = factory.CreateClient();
         client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.SubjectHeader, $"guild-me-{Guid.NewGuid()}");
 
-        var response = await client.GetAsync("/api/v1/guilds/me", TestContext.Current.CancellationToken);
+        var response = await client.GetAsync("/api/v1/guild", TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
@@ -40,14 +40,14 @@ public sealed class GetMyGuildEndpointTests : IAsyncLifetime
     {
         var client = factory.CreateClient();
         client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.SubjectHeader, $"guild-me-{Guid.NewGuid()}");
-        await client.GetAsync("/api/v1/me", TestContext.Current.CancellationToken);
+        await client.GetAsync("/api/v1/account", TestContext.Current.CancellationToken);
 
-        var response = await client.GetAsync("/api/v1/guilds/me", TestContext.Current.CancellationToken);
+        var response = await client.GetAsync("/api/v1/guild", TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var body = await response.Content.ReadFromJsonAsync<MyGuildResponse>(TestContext.Current.CancellationToken);
         Assert.NotNull(body);
-        Assert.Equal(GuildStateValues.TacticusUserIdRequired, body.State);
+        Assert.Equal(MyGuildState.TacticusUserIdRequired, body.State);
         Assert.Null(body.Guild);
     }
 
@@ -56,12 +56,12 @@ public sealed class GetMyGuildEndpointTests : IAsyncLifetime
     {
         var (client, _) = await GuildTestHelpers.CreateGuildReadyClientAsync(factory);
 
-        var response = await client.GetAsync("/api/v1/guilds/me", TestContext.Current.CancellationToken);
+        var response = await client.GetAsync("/api/v1/guild", TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var body = await response.Content.ReadFromJsonAsync<MyGuildResponse>(TestContext.Current.CancellationToken);
         Assert.NotNull(body);
-        Assert.Equal(GuildStateValues.Unregistered, body.State);
+        Assert.Equal(MyGuildState.Unregistered, body.State);
         Assert.Null(body.Guild);
     }
 
@@ -88,29 +88,29 @@ public sealed class GetMyGuildEndpointTests : IAsyncLifetime
         );
 
         var registerResponse = await leaderClient.PostAsJsonAsync(
-            "/api/v1/guilds/register",
+            "/api/v1/guild/register",
             new RegisterGuildRequest(token),
             TestContext.Current.CancellationToken
         );
         Assert.Equal(HttpStatusCode.OK, registerResponse.StatusCode);
 
-        var response = await leaderClient.GetAsync("/api/v1/guilds/me", TestContext.Current.CancellationToken);
+        var response = await leaderClient.GetAsync("/api/v1/guild", TestContext.Current.CancellationToken);
         var body = await response.Content.ReadFromJsonAsync<MyGuildResponse>(TestContext.Current.CancellationToken);
 
         Assert.NotNull(body);
-        Assert.Equal(GuildStateValues.Registered, body.State);
+        Assert.Equal(MyGuildState.Registered, body.State);
         var guild = body.Guild;
         Assert.NotNull(guild);
         Assert.Equal("TAG", guild.Tag);
         Assert.Equal("The Guild", guild.Name);
         Assert.Equal(42, guild.Level);
-        Assert.Equal("Leader", guild.CallerRole);
+        Assert.Equal(DomainGuildRole.Leader, guild.CallerRole);
         Assert.True(guild.CanSynchronize);
         Assert.NotNull(guild.LastSyncSucceededAt);
 
         // Leader, then Officer, then Member — per the Guild Phase 1 member-ordering rule.
         Assert.Equal(3, guild.Members.Count);
-        Assert.Equal(["Leader", "Officer", "Member"], guild.Members.Select(member => member.Role));
+        Assert.Equal([DomainGuildRole.Leader, DomainGuildRole.Officer, DomainGuildRole.Member], guild.Members.Select(member => member.Role));
 
         // Unlinked members (officer/member here) never leak their full Tacticus user id.
         var unlinkedMembers = guild.Members.Where(member => !member.IsLinked);
@@ -122,7 +122,7 @@ public sealed class GetMyGuildEndpointTests : IAsyncLifetime
             Assert.Equal(member.MaskedTacticusUserId, member.DisplayLabel);
         });
 
-        var leaderMember = guild.Members.Single(member => member.Role == "Leader");
+        var leaderMember = guild.Members.Single(member => member.Role == DomainGuildRole.Leader);
         Assert.Equal(1_780_000_000_000, leaderMember.LastActiveInGameOn);
     }
 
@@ -147,22 +147,22 @@ public sealed class GetMyGuildEndpointTests : IAsyncLifetime
         );
 
         var registerResponse = await leaderClient.PostAsJsonAsync(
-            "/api/v1/guilds/register",
+            "/api/v1/guild/register",
             new RegisterGuildRequest(token),
             TestContext.Current.CancellationToken
         );
         Assert.Equal(HttpStatusCode.OK, registerResponse.StatusCode);
 
-        var response = await officerClient.GetAsync("/api/v1/guilds/me", TestContext.Current.CancellationToken);
+        var response = await officerClient.GetAsync("/api/v1/guild", TestContext.Current.CancellationToken);
         var body = await response.Content.ReadFromJsonAsync<MyGuildResponse>(TestContext.Current.CancellationToken);
 
         Assert.NotNull(body);
-        Assert.Equal(GuildStateValues.Registered, body.State);
+        Assert.Equal(MyGuildState.Registered, body.State);
         Assert.NotNull(body.Guild);
-        Assert.Equal("Officer", body.Guild.CallerRole);
+        Assert.Equal(DomainGuildRole.Officer, body.Guild.CallerRole);
         Assert.False(body.Guild.CanSynchronize);
 
-        var officerMember = body.Guild.Members.Single(member => member.Role == "Officer");
+        var officerMember = body.Guild.Members.Single(member => member.Role == DomainGuildRole.Officer);
         Assert.True(officerMember.IsLinked);
     }
 }

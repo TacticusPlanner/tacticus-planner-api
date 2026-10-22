@@ -18,7 +18,7 @@ public sealed class PurgeGuildEndpoint : EndpointWithoutRequest
 {
     public override void Configure()
     {
-        Delete("guilds/me");
+        Delete("guild");
         Summary(summary =>
         {
             summary.Summary = "Permanently deletes the caller's guild registration and roster from Planner.";

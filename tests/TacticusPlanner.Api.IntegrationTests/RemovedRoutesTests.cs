@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
+using TacticusPlanner.Domain.Goals;
 
 namespace TacticusPlanner.Api.IntegrationTests;
 
@@ -7,20 +8,20 @@ namespace TacticusPlanner.Api.IntegrationTests;
 public sealed class RemovedRoutesTests(PlannerApiFactory factory) : IClassFixture<PlannerApiFactory>
 {
     [Theory]
-    [InlineData("POST", "me/goals/combined")]
-    [InlineData("PUT", "me/goals/{goal}/target")]
-    [InlineData("PUT", "me/goals/{goal}/projects")]
-    [InlineData("PUT", "me/goals/{goal}/edit")]
-    [InlineData("POST", "me/goals/{goal}/status")]
-    [InlineData("POST", "me/projects/{project}/goals/status")]
-    [InlineData("GET", "me/projects/{project}/goals")]
+    [InlineData("POST", "goals/combined")]
+    [InlineData("PUT", "goals/{goal}/target")]
+    [InlineData("PUT", "goals/{goal}/projects")]
+    [InlineData("PUT", "goals/{goal}/edit")]
+    [InlineData("POST", "goals/{goal}/status")]
+    [InlineData("POST", "projects/{project}/goals/status")]
+    [InlineData("GET", "projects/{project}/goals")]
     [InlineData("POST", "tacticus-integration/player-sync")]
     [InlineData("POST", "tacticus-api-key/validate")]
     public async Task RemovedRouteIsNotFoundOrNotAllowed(string method, string route)
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var goal = await client.CreateGoalAsync(new CreateGoalRequest(
-            "character", "blackTerminator", "unlock", new(), null));
+            GoalEntityType.Character, "blackTerminator", GoalType.Unlock, new(), null));
         var path = "/api/v1/" + route
             .Replace("{goal}", goal.GoalId.ToString(), StringComparison.Ordinal)
             .Replace("{project}", goal.ProjectIds.Single().ToString(), StringComparison.Ordinal);

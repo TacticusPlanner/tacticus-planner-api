@@ -9,7 +9,7 @@ public sealed class PurgeAccountEndpoint : EndpointWithoutRequest
 {
     public override void Configure()
     {
-        Delete("me");
+        Delete("account");
         Summary(summary =>
         {
             summary.Summary = "Permanently deletes the authenticated user's planner account and all related data.";

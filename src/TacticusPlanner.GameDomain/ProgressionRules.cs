@@ -19,6 +19,15 @@ public static class ProgressionRules
     public static int ProgressionIndex(string progression) =>
         Array.IndexOf(ProgressionOrder, progression);
 
+    /// <summary>The "{Rarity}:{Stars}" string a <see cref="UnitProgression"/> is stored and served as.</summary>
+    public static string WireName(UnitProgression progression) => ProgressionOrder[(int)progression];
+
+    /// <summary>Inverse of <see cref="WireName"/> for a stored, already-validated value.</summary>
+    public static UnitProgression FromWireName(string progression) =>
+        ProgressionIndex(progression) is >= 0 and var index
+            ? (UnitProgression)index
+            : throw new ArgumentOutOfRangeException(nameof(progression), progression, "Unknown progression.");
+
     private static readonly Dictionary<string, int> AbilityCaps =
         new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase)
         {

@@ -15,7 +15,7 @@ public sealed class ListLegendaryEventPlansEndpoint : EndpointWithoutRequest<Leg
 {
     public override void Configure()
     {
-        Get("me/legendary-event-plans");
+        Get("legendary-event-plans");
         Summary(summary =>
         {
             summary.Summary = "Lists every stored plan of the caller's profile.";
@@ -46,14 +46,26 @@ public sealed class ListLegendaryEventPlansEndpoint : EndpointWithoutRequest<Leg
     }
 }
 
-public sealed class GetLegendaryEventRunRecordsEndpoint : EndpointWithoutRequest<LegendaryEventRunRecordsResponse>
+public sealed class GetLegendaryEventRunRecordsRequest
+{
+    /// <summary>Page size, 1–100 (default 20).</summary>
+    [QueryParam]
+    public int? Limit { get; init; }
+
+    /// <summary>The opaque <c>nextAfter</c> of the previous page.</summary>
+    [QueryParam]
+    public string? After { get; init; }
+}
+
+public sealed class GetLegendaryEventRunRecordsEndpoint
+    : Endpoint<GetLegendaryEventRunRecordsRequest, LegendaryEventRunRecordsResponse>
 {
     public const int DefaultLimit = 20;
     public const int MaxLimit = 100;
 
     public override void Configure()
     {
-        Get("me/legendary-event-plans/{eventId}/run-records");
+        Get("legendary-event-plans/{eventId}/run-records");
         Summary(summary =>
         {
             summary.Summary = "Reads a page of the caller's run records for a Legendary Event, newest first.";
@@ -70,7 +82,7 @@ public sealed class GetLegendaryEventRunRecordsEndpoint : EndpointWithoutRequest
         });
     }
 
-    public override async Task HandleAsync(CancellationToken ct)
+    public override async Task HandleAsync(GetLegendaryEventRunRecordsRequest req, CancellationToken ct)
     {
         var eventId = Route<string>("eventId")!;
         if (ProcessorState<CurrentUserState>().ProfileId is null)
@@ -79,13 +91,11 @@ public sealed class GetLegendaryEventRunRecordsEndpoint : EndpointWithoutRequest
             return;
         }
 
-        var limitValue = HttpContext.Request.Query["limit"].ToString();
-        var limit = DefaultLimit;
-        if (limitValue.Length > 0 && (!int.TryParse(limitValue, out limit) || limit is < 1 or > MaxLimit))
+        var limit = req.Limit ?? DefaultLimit;
+        if (limit is < 1 or > MaxLimit)
             AddError(new ValidationFailure("limit", $"limit must be between 1 and {MaxLimit}."));
-        var afterValue = HttpContext.Request.Query["after"].ToString();
         RunRecordCursor? after = null;
-        if (afterValue.Length > 0 && !RunRecordCursor.TryDecode(afterValue, out after))
+        if (req.After is { Length: > 0 } afterValue && !RunRecordCursor.TryDecode(afterValue, out after))
             AddError(new ValidationFailure("after", "after is not a valid cursor; pass the nextAfter of the previous page."));
         if (ValidationFailed)
         {
@@ -150,9 +160,9 @@ public sealed class GetLegendaryEventRunRecordsEndpoint : EndpointWithoutRequest
             {
                 var depth = team.RunDepths.FirstOrDefault(entry => entry.Run == run);
                 return new LegendaryEventRunRecordTeamResponse(
-                    team.Id.Value, team.LaneId, team.Name, team.SortOrder, team.MemberUnitIds, team.ReserveUnitId,
+                    team.Id.Value, LegendaryEventValidation.Lane(team.LaneId), team.Name, team.SortOrder, team.MemberUnitIds, team.ReserveUnitId,
                     team.ObjectiveIndexes, depth?.ExpectedBattleClears,
-                    depth is null ? null : LegendaryEventPlanProjection.SourceName(depth.Source));
+                    depth?.Source);
             })
             .ToList();
 
@@ -166,7 +176,7 @@ public sealed class GetLegendaryEventRunRecordRosterEndpoint : EndpointWithoutRe
 {
     public override void Configure()
     {
-        Get("me/legendary-event-plans/{eventId}/run-records/{recordId}/roster");
+        Get("legendary-event-plans/{eventId}/run-records/{recordId}/roster");
         Summary(summary =>
         {
             summary.Summary = "Reads the roster snapshot of one of the caller's run records.";

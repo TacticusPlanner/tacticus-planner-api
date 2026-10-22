@@ -1,6 +1,9 @@
-using System.Net.Http.Json;
+using System.Net;
+using System.Text;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 using TacticusPlanner.Api.Features.Goals;
+using TacticusPlanner.Domain.Goals;
 
 namespace TacticusPlanner.Api.IntegrationTests;
 
@@ -17,20 +20,54 @@ internal static class GoalsTestHelpers
             subject ?? $"goals-{Guid.NewGuid()}"
         );
 
-        await client.GetAsync("/api/v1/me", TestContext.Current.CancellationToken);
+        await client.GetAsync("/api/v1/account", TestContext.Current.CancellationToken);
 
         return client;
     }
 
     private static CancellationToken Ct => TestContext.Current.CancellationToken;
 
-    /// <summary>Creates one goal: a one-spec <c>POST me/goals</c>.</summary>
+    /// <summary>Creates one goal: a one-spec <c>POST goals</c>.</summary>
     public static Task<HttpResponseMessage> PostGoalAsync(this HttpClient client, CreateGoalRequest request) =>
-        client.PostAsJsonAsync("/api/v1/me/goals", request.ToCombined(), Ct);
+        client.PostAsJsonAsync("/api/v1/goals", request.ToCombined(), Ct);
 
-    /// <summary><c>POST me/goals</c> with a combined (multi-spec) request.</summary>
+    /// <summary>Sends a raw JSON body: for values the typed (enum) requests can no longer express.</summary>
+    public static async Task<HttpResponseMessage> SendRawJsonAsync(
+        this HttpClient client, HttpMethod method, string requestUri, string json)
+    {
+        using var content = new StringContent(json, Encoding.UTF8, "application/json");
+        using var request = new HttpRequestMessage(method, requestUri) { Content = content };
+        return await client.SendAsync(request, Ct);
+    }
+
+    /// <summary>Sends <paramref name="request"/> as wire JSON after <paramref name="mutate"/> rewrites it — e.g. to
+    /// put an unknown enum value into one field.</summary>
+    public static Task<HttpResponseMessage> SendMutatedJsonAsync<T>(
+        this HttpClient client, HttpMethod method, string requestUri, T request, Action<JsonNode> mutate)
+    {
+        var node = JsonSerializer.SerializeToNode(request, TestJson.Options)!;
+        mutate(node);
+        return client.SendRawJsonAsync(method, requestUri, node.ToJsonString());
+    }
+
+    /// <summary>One-spec <c>POST goals</c> rewritten by <paramref name="mutate"/> (the combined wire shape:
+    /// <c>entityType</c>, <c>goals[0].goalType</c>, <c>goals[0].config</c>, ...).</summary>
+    public static Task<HttpResponseMessage> PostMutatedGoalAsync(
+        this HttpClient client, CreateGoalRequest request, Action<JsonNode> mutate) =>
+        client.SendMutatedJsonAsync(HttpMethod.Post, "/api/v1/goals", request.ToCombined(), mutate);
+
+    /// <summary>A request-binding failure: 400 validation problem with an error keyed by <paramref name="field"/>.</summary>
+    public static async Task AssertFieldRejectedAsync(this HttpResponseMessage response, string field)
+    {
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        var problem = await response.ReadProblemAsync();
+        Assert.Equal("validation", problem["issueCode"]?.GetValue<string>());
+        Assert.Contains(problem["errors"]!.AsObject(), error => error.Key.EndsWith(field, StringComparison.Ordinal));
+    }
+
+    /// <summary><c>POST goals</c> with a combined (multi-spec) request.</summary>
     public static Task<HttpResponseMessage> PostGoalAsync(this HttpClient client, CreateCombinedGoalsRequest request) =>
-        client.PostAsJsonAsync("/api/v1/me/goals", request, Ct);
+        client.PostAsJsonAsync("/api/v1/goals", request, Ct);
 
     /// <summary>The single goal a one-spec creation returned.</summary>
     public static async Task<GoalDetailResponse> ReadCreatedGoalAsync(this HttpResponseMessage response)
@@ -43,19 +80,19 @@ internal static class GoalsTestHelpers
         await (await client.PostGoalAsync(request)).ReadCreatedGoalAsync();
 
     public static async Task<ListGoalsResponse> ListGoalsAsync(this HttpClient client, bool archived = false) =>
-        (await client.GetFromJsonAsync<ListGoalsResponse>($"/api/v1/me/goals{(archived ? "?archived=true" : "")}", Ct))!;
+        (await client.GetFromJsonAsync<ListGoalsResponse>($"/api/v1/goals{(archived ? "?archived=true" : "")}", Ct))!;
 
-    /// <summary>Transitions goals with <c>POST me/goals/status</c>, reading the current order revision first unless
+    /// <summary>Transitions goals with <c>POST goals/status</c>, reading the current order revision first unless
     /// one is given.</summary>
     public static async Task<HttpResponseMessage> PostStatusAsync(
-        this HttpClient client, string status, long? expectedOrderRevision, params Guid[] goalIds)
+        this HttpClient client, GoalStatus status, long? expectedOrderRevision, params Guid[] goalIds)
     {
         expectedOrderRevision ??= (await client.ListGoalsAsync()).OrderRevision;
         return await client.PostAsJsonAsync(
-            "/api/v1/me/goals/status", new UpdateGoalsStatusRequest([.. goalIds], status, expectedOrderRevision), Ct);
+            "/api/v1/goals/status", new UpdateGoalsStatusRequest([.. goalIds], status, expectedOrderRevision), Ct);
     }
 
-    public static Task<HttpResponseMessage> PostStatusAsync(this HttpClient client, Guid goalId, string status) =>
+    public static Task<HttpResponseMessage> PostStatusAsync(this HttpClient client, Guid goalId, GoalStatus status) =>
         client.PostStatusAsync(status, null, goalId);
 
     /// <summary>The one goal a status change answered with.</summary>
@@ -65,9 +102,9 @@ internal static class GoalsTestHelpers
         return (await response.Content.ReadFromJsonAsync<UpdateGoalsStatusResponse>(Ct))!.Goals.Single();
     }
 
-    /// <summary><c>PUT me/goals/{goalId}</c> with any combination of sections.</summary>
+    /// <summary><c>PUT goals/{goalId}</c> with any combination of sections.</summary>
     public static Task<HttpResponseMessage> EditGoalAsync(this HttpClient client, Guid goalId, EditGoalRequest request) =>
-        client.PutAsJsonAsync($"/api/v1/me/goals/{goalId}", request, Ct);
+        client.PutAsJsonAsync($"/api/v1/goals/{goalId}", request, Ct);
 
     public static Task<HttpResponseMessage> PutTargetAsync(this HttpClient client, Guid goalId, UpdateGoalTargetRequest target) =>
         client.EditGoalAsync(goalId, new EditGoalRequest(Target: target));
@@ -89,7 +126,7 @@ internal static class GoalsTestHelpers
     public static async Task<List<Guid>> ProjectGoalIdsAsync(this HttpClient client, Guid projectId, bool archived = false)
     {
         var projects = await client.GetFromJsonAsync<Features.Projects.ListProjectsResponse>(
-            $"/api/v1/me/projects{(archived ? "?archived=true" : "")}", Ct);
+            $"/api/v1/projects{(archived ? "?archived=true" : "")}", Ct);
         return projects!.Projects.Single(project => project.ProjectId == projectId).GoalIds;
     }
 
@@ -114,15 +151,15 @@ internal static class GoalsTestHelpers
     /// <summary>The problem's <c>current</c> resource, read as <typeparamref name="T"/>.</summary>
     public static async Task<T> ReadCurrentAsync<T>(this HttpResponseMessage response) =>
         System.Text.Json.JsonSerializer.Deserialize<T>(
-            (await response.ReadProblemAsync())["current"], System.Text.Json.JsonSerializerOptions.Web)!;
+            (await response.ReadProblemAsync())["current"], TestJson.Options)!;
 }
 
-/// <summary>The single-goal creation shape, test-side: <c>POST me/goals</c> takes the combined request, so this
+/// <summary>The single-goal creation shape, test-side: <c>POST goals</c> takes the combined request, so this
 /// becomes a one-spec request (<see cref="ToCombined"/>).</summary>
 public sealed record CreateGoalRequest(
-    string EntityType,
+    GoalEntityType EntityType,
     string EntityId,
-    string GoalType,
+    GoalType GoalType,
     CreateGoalConfigRequest Config,
     List<ProjectPriorityRequest>? Projects,
     CreateGoalSnapshotRequest? Snapshot = null,

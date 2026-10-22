@@ -20,7 +20,7 @@ public sealed class PlayerSyncEndpoint : EndpointWithoutRequest<PlayerDataManife
 {
     public override void Configure()
     {
-        Post("me/player-data/sync");
+        Post("player-data/sync");
         Options(builder => builder.WithMetadata(UpstreamRateLimit.Slow));
         Summary(summary =>
         {

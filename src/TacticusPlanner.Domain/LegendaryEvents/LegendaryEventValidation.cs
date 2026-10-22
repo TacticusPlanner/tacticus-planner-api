@@ -1,9 +1,28 @@
+using System.Text.Json.Serialization;
+
 namespace TacticusPlanner.Domain.LegendaryEvents;
+
+/// <summary>A Legendary Event lane on the wire; the domain stores its <see cref="LegendaryEventValidation.LaneIds"/>
+/// key, in the same order.</summary>
+public enum LegendaryEventLaneId
+{
+    [JsonStringEnumMemberName("alpha")] Alpha,
+    [JsonStringEnumMemberName("beta")] Beta,
+    [JsonStringEnumMemberName("gamma")] Gamma,
+}
 
 /// <summary>Shape limits for Legendary Event plans and teams (Stage 2 design D6, D7, D12; Stage 3 run inputs and annotations).</summary>
 public static class LegendaryEventValidation
 {
     public static readonly IReadOnlyList<string> LaneIds = ["alpha", "beta", "gamma"];
+
+    public static string LaneKey(LegendaryEventLaneId lane) => LaneIds[(int)lane];
+
+    /// <summary>Inverse of <see cref="LaneKey"/> for a stored, already-validated key.</summary>
+    public static LegendaryEventLaneId Lane(string laneId) =>
+        LaneIds.ToList().IndexOf(laneId) is >= 0 and var index
+            ? (LegendaryEventLaneId)index
+            : throw new ArgumentOutOfRangeException(nameof(laneId), laneId, "Unknown lane.");
 
     public const int MaxEventIdLength = 128;
 

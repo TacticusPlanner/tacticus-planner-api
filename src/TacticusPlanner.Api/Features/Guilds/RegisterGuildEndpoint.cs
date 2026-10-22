@@ -17,7 +17,7 @@ public sealed class RegisterGuildEndpoint : Endpoint<RegisterGuildRequest, Regis
 {
     public override void Configure()
     {
-        Post("guilds/register");
+        Post("guild/register");
         Options(builder => builder.WithMetadata(UpstreamRateLimit.Slow));
         Summary(summary =>
         {

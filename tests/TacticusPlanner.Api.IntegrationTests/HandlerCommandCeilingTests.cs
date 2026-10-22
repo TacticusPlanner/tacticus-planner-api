@@ -1,8 +1,8 @@
-using System.Net.Http.Json;
 using Microsoft.Extensions.DependencyInjection;
 using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Api.Features.Guilds;
 using TacticusPlanner.Api.Features.TacticusIntegration;
+using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.GameCatalog;
 using TacticusPlanner.TacticusApi.Models.Guild;
 using TacticusPlanner.TacticusApi.Models.GuildRaid;
@@ -29,27 +29,27 @@ public sealed class HandlerCommandCeilingTests(PlannerApiFactory factory) : ICla
     private const int PlayerSync = 6;
 
     private static readonly CreateGoalRequest Rank = new(
-        "character",
+        GoalEntityType.Character,
         "blackTerminator",
-        "rank",
+        GoalType.Rank,
         new CreateGoalConfigRequest(Rank: new RankTargetRequest(1, false, 0, 3, false, 0)),
         null);
 
     private static CreateCombinedGoalsRequest Combined(params CombinedGoalSpec[] goals) =>
-        new("character", "blackTerminator", null, [.. goals]);
+        new(GoalEntityType.Character, "blackTerminator", null, [.. goals]);
 
-    private static readonly CombinedGoalSpec Unlock = new("unlock", new CreateGoalConfigRequest(), []);
+    private static readonly CombinedGoalSpec Unlock = new(GoalType.Unlock, new CreateGoalConfigRequest(), []);
     private static readonly CombinedGoalSpec RankAfterUnlock = new(
-        "rank", new CreateGoalConfigRequest(Rank: new RankTargetRequest(0, false, 0, 15, false, 0)), [0]);
+        GoalType.Rank, new CreateGoalConfigRequest(Rank: new RankTargetRequest(0, false, 0, 15, false, 0)), [0]);
     private static readonly CombinedGoalSpec Ability = new(
-        "ability", new CreateGoalConfigRequest(Ability: new AbilityTargetRequest(0, 3, 0, 3)), []);
+        GoalType.Ability, new CreateGoalConfigRequest(Ability: new AbilityTargetRequest(0, 3, 0, 3)), []);
 
     [Fact]
     public async Task GetGoalsStaysWithinCeiling()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         await CreateAsync(client);
-        AssertWithin(ListGoals, await client.GetAsync("/api/v1/me/goals", TestContext.Current.CancellationToken));
+        AssertWithin(ListGoals, await client.GetAsync("/api/v1/goals", TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -68,7 +68,7 @@ public sealed class HandlerCommandCeilingTests(PlannerApiFactory factory) : ICla
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         AssertWithin(CombinedOneSpec, await client.PostAsJsonAsync(
-            "/api/v1/me/goals", Combined(Unlock), TestContext.Current.CancellationToken));
+            "/api/v1/goals", Combined(Unlock), TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -76,7 +76,7 @@ public sealed class HandlerCommandCeilingTests(PlannerApiFactory factory) : ICla
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         AssertWithin(CombinedThreeSpecs, await client.PostAsJsonAsync(
-            "/api/v1/me/goals", Combined(Unlock, RankAfterUnlock, Ability), TestContext.Current.CancellationToken));
+            "/api/v1/goals", Combined(Unlock, RankAfterUnlock, Ability), TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -90,7 +90,7 @@ public sealed class HandlerCommandCeilingTests(PlannerApiFactory factory) : ICla
         // Completing the first goal leaves a gap that must be renumbered: the heaviest status path.
         var revision = (await client.ListGoalsAsync()).OrderRevision;
         AssertWithin(CompleteGoal, await client.PostAsJsonAsync(
-            "/api/v1/me/goals/status", new UpdateGoalsStatusRequest([first.GoalId], "completed", revision), ct));
+            "/api/v1/goals/status", new UpdateGoalsStatusRequest([first.GoalId], GoalStatus.Completed, revision), ct));
     }
 
     [Fact]
@@ -101,7 +101,7 @@ public sealed class HandlerCommandCeilingTests(PlannerApiFactory factory) : ICla
         var second = await CreateSecondAsync(client);
 
         AssertWithin(DeleteGoal, await client.DeleteAsync(
-            $"/api/v1/me/goals/{second.GoalId}", TestContext.Current.CancellationToken));
+            $"/api/v1/goals/{second.GoalId}", TestContext.Current.CancellationToken));
     }
 
     [Fact]
@@ -126,12 +126,12 @@ public sealed class HandlerCommandCeilingTests(PlannerApiFactory factory) : ICla
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var ct = TestContext.Current.CancellationToken;
         (await client.PutAsJsonAsync(
-            "/api/v1/me/legendary-event-plans/votanUthar",
+            "/api/v1/legendary-event-plans/votanUthar",
             new TacticusPlanner.Api.Features.LegendaryEventPlans.UpdateLegendaryEventPlanRequest(0, "first", false), ct))
             .EnsureSuccessStatusCode();
 
         AssertWithin(LegendaryEventPlanMutation, await client.PutAsJsonAsync(
-            "/api/v1/me/legendary-event-plans/votanUthar",
+            "/api/v1/legendary-event-plans/votanUthar",
             new TacticusPlanner.Api.Features.LegendaryEventPlans.UpdateLegendaryEventPlanRequest(1, "second", true), ct));
     }
 
@@ -152,10 +152,10 @@ public sealed class HandlerCommandCeilingTests(PlannerApiFactory factory) : ICla
         var ct = TestContext.Current.CancellationToken;
         var first = await CreateAsync(client);
         var second = await CreateSecondAsync(client);
-        var list = (await client.GetFromJsonAsync<ListGoalsResponse>("/api/v1/me/goals", ct))!;
+        var list = (await client.GetFromJsonAsync<ListGoalsResponse>("/api/v1/goals", ct))!;
 
         AssertWithin(ReorderGoals, await client.PutAsJsonAsync(
-            "/api/v1/me/goals/order", new UpdateGoalOrderRequest([second.GoalId, first.GoalId], list.OrderRevision), ct));
+            "/api/v1/goals/order", new UpdateGoalOrderRequest([second.GoalId, first.GoalId], list.OrderRevision), ct));
     }
 
     [Fact]
@@ -169,11 +169,11 @@ public sealed class HandlerCommandCeilingTests(PlannerApiFactory factory) : ICla
             FakeTacticusApi.BuildGuildResponse(
                 Guid.NewGuid(), $"C{Guid.NewGuid():N}"[..10], "Ceiling Guild", 10,
                 (tacticusUserId, GuildRole.LEADER, 50, null)));
-        (await client.PostAsJsonAsync("/api/v1/guilds/register", new RegisterGuildRequest(token), ct)).EnsureSuccessStatusCode();
+        (await client.PostAsJsonAsync("/api/v1/guild/register", new RegisterGuildRequest(token), ct)).EnsureSuccessStatusCode();
         factory.TacticusApi.ConfigureGuildRaidResponse(token, ActiveRaid());
-        (await client.PostAsync("/api/v1/guilds/me/raid-status/refresh", null, ct)).EnsureSuccessStatusCode();
+        (await client.PostAsync("/api/v1/guild/raid-status/refresh", null, ct)).EnsureSuccessStatusCode();
 
-        AssertWithin(RaidStatus, await client.GetAsync("/api/v1/guilds/me/raid-status", ct));
+        AssertWithin(RaidStatus, await client.GetAsync("/api/v1/guild/raid-status", ct));
     }
 
     [Fact]
@@ -182,12 +182,12 @@ public sealed class HandlerCommandCeilingTests(PlannerApiFactory factory) : ICla
         var ct = TestContext.Current.CancellationToken;
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         (await client.PutAsJsonAsync(
-            "/api/v1/me/tacticus-integration", new UpdateTacticusIntegrationRequest(FakeTacticusApi.ValidKey, null), ct))
+            "/api/v1/account/tacticus-integration", new UpdateTacticusIntegrationRequest(FakeTacticusApi.ValidKey, null), ct))
             .EnsureSuccessStatusCode();
 
         // The second sync is the steady-state path: the snapshot row already exists.
-        (await client.PostAsync("/api/v1/me/player-data/sync", null, ct)).EnsureSuccessStatusCode();
-        AssertWithin(PlayerSync, await client.PostAsync("/api/v1/me/player-data/sync", null, ct));
+        (await client.PostAsync("/api/v1/player-data/sync", null, ct)).EnsureSuccessStatusCode();
+        AssertWithin(PlayerSync, await client.PostAsync("/api/v1/player-data/sync", null, ct));
     }
 
     private static async Task<GoalDetailResponse> CreateAsync(HttpClient client)

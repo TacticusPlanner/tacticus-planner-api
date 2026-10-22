@@ -42,14 +42,14 @@ public sealed partial class V1LegendaryEventImportService(
         if (!source.IsPresent)
         {
             return new V1LegendaryEventImportResult(
-                new ImportPartResult("Skipped", "missing_legendary_event_plans", "The V1 profile has no Legendary Event teams."),
+                new ImportPartResult(ImportPartStatus.Skipped, "missing_legendary_event_plans", "The V1 profile has no Legendary Event teams."),
                 []);
         }
 
         if (source.Events is null)
         {
             return new V1LegendaryEventImportResult(
-                new ImportPartResult("Failed", "invalid_legendary_event_plans", "The V1 Legendary Event teams could not be read."),
+                new ImportPartResult(ImportPartStatus.Failed, "invalid_legendary_event_plans", "The V1 Legendary Event teams could not be read."),
                 []);
         }
 
@@ -65,13 +65,13 @@ public sealed partial class V1LegendaryEventImportService(
 
     private static ImportPartResult PartResult(List<V1LegendaryEventOutcome> outcomes)
     {
-        if (outcomes.Any(outcome => outcome.Status == "Imported"))
-            return new ImportPartResult("Imported", null, null);
-        if (outcomes.Any(outcome => outcome.Status == "Failed"))
-            return new ImportPartResult("Failed", "legendary_event_import_failed", "No Legendary Event teams could be imported.");
+        if (outcomes.Any(outcome => outcome.Status == ImportPartStatus.Imported))
+            return new ImportPartResult(ImportPartStatus.Imported, null, null);
+        if (outcomes.Any(outcome => outcome.Status == ImportPartStatus.Failed))
+            return new ImportPartResult(ImportPartStatus.Failed, "legendary_event_import_failed", "No Legendary Event teams could be imported.");
         if (outcomes.All(outcome => outcome.Code == "no_legendary_event_imported"))
-            return new ImportPartResult("Skipped", "no_legendary_event_imported", "No V1 Legendary Event had teams to import.");
-        return new ImportPartResult("Skipped", "legendary_events_skipped",
+            return new ImportPartResult(ImportPartStatus.Skipped, "no_legendary_event_imported", "No V1 Legendary Event had teams to import.");
+        return new ImportPartResult(ImportPartStatus.Skipped, "legendary_events_skipped",
             "No Legendary Event plan was imported: each V1 event already has a V2 plan with teams, is not available "
             + "in V2 yet, or had no teams to import. See legendaryEventOutcomes for each event.");
     }
@@ -89,7 +89,7 @@ public sealed partial class V1LegendaryEventImportService(
         var lre = eventId is null ? null : catalog.LreViews.Single(view => view.Id == eventId);
         if (lre is null)
         {
-            return Outcome(null, v1Event, "Skipped", "event_not_in_catalog",
+            return Outcome(null, v1Event, ImportPartStatus.Skipped, "event_not_in_catalog",
                 "This Legendary Event is not available in V2 yet.", 0, 0, 0, []);
         }
 
@@ -122,10 +122,10 @@ public sealed partial class V1LegendaryEventImportService(
         if (!writeTeams && runInputs.Count == 0 && annotations.Count == 0 && notes is null)
         {
             return existing?.HasTeams == true
-                ? Outcome(lre.Id, v1Event, "Skipped", "plan_already_exists",
+                ? Outcome(lre.Id, v1Event, ImportPartStatus.Skipped, "plan_already_exists",
                     "A V2 plan with teams already exists for this event and everything else was already in V2; it was "
                     + "left unchanged.", 0, 0, 0, issues)
-                : Outcome(lre.Id, v1Event, "Skipped", "no_legendary_event_imported",
+                : Outcome(lre.Id, v1Event, ImportPartStatus.Skipped, "no_legendary_event_imported",
                     "Nothing from V1 for this event could be imported.", 0, 0, 0, issues);
         }
 
@@ -147,10 +147,10 @@ public sealed partial class V1LegendaryEventImportService(
             if (result is LegendaryEventPlanWriteResult.Saved)
             {
                 return writeTeams
-                    ? Outcome(lre.Id, v1Event, "Imported", "imported",
+                    ? Outcome(lre.Id, v1Event, ImportPartStatus.Imported, "imported",
                         $"Imported {importedTeams.Count} team(s).", importedTeams.Count, runInputs.Count,
                         annotations.Count, issues)
-                    : Outcome(lre.Id, v1Event, "Imported", "inputs_imported",
+                    : Outcome(lre.Id, v1Event, ImportPartStatus.Imported, "inputs_imported",
                         "Imported run inputs, marks or notes; no team was imported.", 0, runInputs.Count,
                         annotations.Count, issues);
             }
@@ -161,7 +161,7 @@ public sealed partial class V1LegendaryEventImportService(
         }
 
         db.ChangeTracker.Clear();
-        return Outcome(lre.Id, v1Event, "Failed", "legendary_event_import_failed",
+        return Outcome(lre.Id, v1Event, ImportPartStatus.Failed, "legendary_event_import_failed",
             "This event could not be saved. Try again.", 0, 0, 0, issues);
     }
 
@@ -374,7 +374,7 @@ public sealed partial class V1LegendaryEventImportService(
     private static partial void LogEventImportFailed(ILogger logger, Exception exception, string eventId);
 
     private static V1LegendaryEventOutcome Outcome(
-        string? eventId, V1LegendaryEventSource v1Event, string status, string code, string message,
+        string? eventId, V1LegendaryEventSource v1Event, ImportPartStatus status, string code, string message,
         int teamsImported, int runInputsImported, int annotationsImported, IReadOnlyList<V1LegendaryEventIssue> issues) =>
         new(eventId, v1Event.V1EventId, status, code, message, teamsImported, runInputsImported, annotationsImported,
             issues);
@@ -392,7 +392,7 @@ public sealed partial class V1LegendaryEventImportService(
         public int? Depth { get; set; } = depth;
 
         public LegendaryEventTeamFields Fields =>
-            new(Name, Members, null, Objectives, run, Depth, Depth is null ? null : "manual");
+            new(Name, Members, null, Objectives, run, Depth, Depth is null ? null : LegendaryEventDepthSource.Manual);
     }
 
     /// <summary>V1 unit references → catalog unit ids: a catalog id, one of V1's renamed units, or a catalog
@@ -434,7 +434,7 @@ public sealed partial class V1LegendaryEventImportService(
 public sealed record V1LegendaryEventOutcome(
     string? EventId,
     int V1EventId,
-    string Status,
+    ImportPartStatus Status,
     string Code,
     string Message,
     int TeamsImported,

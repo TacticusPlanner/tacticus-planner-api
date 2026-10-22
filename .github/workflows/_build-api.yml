@@ -58,6 +58,10 @@ jobs:
       - name: Build
         run: dotnet build TacticusPlanner.slnx --configuration Release --no-restore
 
+      # The build regenerates the OpenAPI document; a stale committed copy fails here with the diff.
+      - name: Check OpenAPI document is current
+        run: git diff --exit-code -- artifacts/openapi
+
       - name: Test
         run: dotnet test TacticusPlanner.slnx --configuration Release --no-build --collect:"XPlat Code Coverage" --logger trx --results-directory TestResults
 

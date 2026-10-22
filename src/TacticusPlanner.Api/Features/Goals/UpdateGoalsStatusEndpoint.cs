@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using FastEndpoints;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +20,7 @@ public sealed class UpdateGoalsStatusEndpoint : Endpoint<UpdateGoalsStatusReques
 {
     public override void Configure()
     {
-        Post("me/goals/status");
+        Post("goals/status");
         Summary(summary =>
         {
             summary.Summary = "Transitions one or many goals to a status (Active/Paused/Completed/Archived), atomically.";
@@ -45,7 +46,7 @@ public sealed class UpdateGoalsStatusEndpoint : Endpoint<UpdateGoalsStatusReques
             return;
         }
 
-        var status = Enum.Parse<GoalStatus>(req.Status, ignoreCase: true);
+        var status = req.Status;
         var ids = req.GoalIds.Select(GoalId.From).ToList();
         var db = Resolve<PlannerDbContext>();
         var planning = Resolve<ProjectGoalPlanningService>();
@@ -138,7 +139,10 @@ public sealed class UpdateGoalsStatusEndpoint : Endpoint<UpdateGoalsStatusReques
 /// <param name="Status">Active, Paused, Completed or Archived.</param>
 /// <param name="ExpectedOrderRevision">The order revision the client read; required when the in-flight set
 /// changes.</param>
-public sealed record UpdateGoalsStatusRequest(List<Guid> GoalIds, string Status, long? ExpectedOrderRevision = null);
+public sealed record UpdateGoalsStatusRequest(
+    List<Guid> GoalIds,
+    [property: JsonRequired] GoalStatus Status,
+    long? ExpectedOrderRevision = null);
 
 /// <param name="Goals">Every named goal's detail, in request order.</param>
 /// <param name="OrderRevision">The account-wide order revision after the transition.</param>
@@ -154,11 +158,6 @@ public sealed class UpdateGoalsStatusValidator : Validator<UpdateGoalsStatusRequ
             .WithMessage("At least one goal is required.")
             .Must(ids => ids.Distinct().Count() == ids.Count)
             .WithMessage("A goal appears more than once.");
-        RuleFor(request => request.Status)
-            .Must(value => Enum.TryParse<GoalStatus>(value, ignoreCase: true, out var status)
-                && Enum.IsDefined(status)
-                && !int.TryParse(value, out _))
-            .WithMessage("Unknown or unsupported target status.");
         RuleFor(request => request.ExpectedOrderRevision)
             .GreaterThanOrEqualTo(0)
             .When(request => request.ExpectedOrderRevision is not null);

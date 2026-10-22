@@ -1,4 +1,3 @@
-using System.Net.Http.Json;
 using TacticusPlanner.Api.Features.TacticusIntegration;
 
 namespace TacticusPlanner.Api.IntegrationTests;
@@ -22,12 +21,12 @@ internal static class GuildTestHelpers
             subject ?? $"guild-{Guid.NewGuid()}"
         );
 
-        // /me auto-provisions the Account + Profile these endpoints require to exist.
-        await client.GetAsync("/api/v1/me", TestContext.Current.CancellationToken);
+        // GET /account auto-provisions the Account + Profile these endpoints require to exist.
+        await client.GetAsync("/api/v1/account", TestContext.Current.CancellationToken);
 
         var tacticusUserId = Guid.NewGuid();
         var integrationResponse = await client.PutAsJsonAsync(
-            "/api/v1/me/tacticus-integration",
+            "/api/v1/account/tacticus-integration",
             new UpdateTacticusIntegrationRequest(FakeTacticusApi.ValidKey, tacticusUserId.ToString()),
             TestContext.Current.CancellationToken
         );

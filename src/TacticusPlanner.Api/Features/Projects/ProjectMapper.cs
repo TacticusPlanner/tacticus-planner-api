@@ -17,7 +17,7 @@ public sealed class ProjectMapper : Mapper<CreateProjectRequest, ProjectSummaryR
         Description = r.Description,
         Color = r.Color,
         Status = ProjectStatus.Active,
-        TargetKind = r.Target is null ? null : ProjectTargetKind.LegendaryEvent,
+        TargetKind = r.Target?.Kind,
         TargetEventId = r.Target?.EventId,
     };
 
@@ -26,7 +26,7 @@ public sealed class ProjectMapper : Mapper<CreateProjectRequest, ProjectSummaryR
         project.Name,
         project.Description,
         project.Color,
-        project.Status.ToString(),
+        project.Status,
         project.Type == ProjectType.Default,
         ProjectTargets.ToDto(project),
         project.Revision,
@@ -43,7 +43,7 @@ public sealed record ProjectSummaryResponse(
     string Name,
     string? Description,
     string? Color,
-    string Status,
+    ProjectStatus Status,
     bool IsDefault,
     ProjectTargetDto? Target,
     long Revision,

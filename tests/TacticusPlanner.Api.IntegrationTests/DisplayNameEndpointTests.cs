@@ -37,7 +37,7 @@ public sealed class DisplayNameEndpointTests(PlannerApiFactory factory) : IClass
         var client = CreateClient(name: "ada@example.com");
         await GetMeAsync(client);
 
-        var response = await client.PutAsJsonAsync("/api/v1/me/display-name", new { displayName = "  Ada  " }, Ct);
+        var response = await client.PutAsJsonAsync("/api/v1/account/display-name", new { displayName = "  Ada  " }, Ct);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var saved = await response.Content.ReadFromJsonAsync<UpdateDisplayNameResponse>(Ct);
@@ -57,9 +57,9 @@ public sealed class DisplayNameEndpointTests(PlannerApiFactory factory) : IClass
     {
         var client = CreateClient(name: "Suggested");
         await GetMeAsync(client);
-        await client.PutAsJsonAsync("/api/v1/me/display-name", new { displayName = "Kept" }, Ct);
+        await client.PutAsJsonAsync("/api/v1/account/display-name", new { displayName = "Kept" }, Ct);
 
-        var response = await client.PutAsJsonAsync("/api/v1/me/display-name", new { displayName = invalid }, Ct);
+        var response = await client.PutAsJsonAsync("/api/v1/account/display-name", new { displayName = invalid }, Ct);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var me = await GetMeAsync(client);
@@ -72,11 +72,11 @@ public sealed class DisplayNameEndpointTests(PlannerApiFactory factory) : IClass
         var client = CreateClient();
         await GetMeAsync(client);
 
-        var tooLong = await client.PutAsJsonAsync("/api/v1/me/display-name", new { displayName = new string('a', 81) }, Ct);
+        var tooLong = await client.PutAsJsonAsync("/api/v1/account/display-name", new { displayName = new string('a', 81) }, Ct);
         Assert.Equal(HttpStatusCode.BadRequest, tooLong.StatusCode);
         Assert.Null((await GetMeAsync(client)).DisplayName);
 
-        var exact = await client.PutAsJsonAsync("/api/v1/me/display-name", new { displayName = new string('a', 80) }, Ct);
+        var exact = await client.PutAsJsonAsync("/api/v1/account/display-name", new { displayName = new string('a', 80) }, Ct);
         Assert.Equal(HttpStatusCode.OK, exact.StatusCode);
     }
 
@@ -88,7 +88,7 @@ public sealed class DisplayNameEndpointTests(PlannerApiFactory factory) : IClass
         await GetMeAsync(first);
         await GetMeAsync(second);
 
-        await first.PutAsJsonAsync("/api/v1/me/display-name", new { displayName = "First Chosen" }, Ct);
+        await first.PutAsJsonAsync("/api/v1/account/display-name", new { displayName = "First Chosen" }, Ct);
 
         var other = await GetMeAsync(second);
         Assert.Null(other.DisplayName);
@@ -98,7 +98,7 @@ public sealed class DisplayNameEndpointTests(PlannerApiFactory factory) : IClass
     [Fact]
     public async Task UpdateRequiresAuthentication()
     {
-        using var request = new HttpRequestMessage(HttpMethod.Put, "/api/v1/me/display-name")
+        using var request = new HttpRequestMessage(HttpMethod.Put, "/api/v1/account/display-name")
         {
             Content = JsonContent.Create(new { displayName = "Nope" }),
         };
@@ -130,7 +130,7 @@ public sealed class DisplayNameEndpointTests(PlannerApiFactory factory) : IClass
         await GetMeAsync(client);
 
         var response = await client.PostAsJsonAsync(
-            "/api/v1/me/v1-import", V1Request(FakeTacticusV1Client.ValidUsername, "wrong-password"), Ct);
+            "/api/v1/account/v1-import", V1Request(FakeTacticusV1Client.ValidUsername, "wrong-password"), Ct);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         Assert.Null((await GetMeAsync(client)).DisplayName);
@@ -141,7 +141,7 @@ public sealed class DisplayNameEndpointTests(PlannerApiFactory factory) : IClass
     {
         var client = CreateClient(name: "Provider Name");
         await GetMeAsync(client);
-        await client.PutAsJsonAsync("/api/v1/me/display-name", new { displayName = "My Planner Name" }, Ct);
+        await client.PutAsJsonAsync("/api/v1/account/display-name", new { displayName = "My Planner Name" }, Ct);
 
         var body = await ImportAsync(client, FakeTacticusV1Client.ValidUsername);
 
@@ -152,7 +152,7 @@ public sealed class DisplayNameEndpointTests(PlannerApiFactory factory) : IClass
 
     private static async Task<ImportV1ProfileResponse> ImportAsync(HttpClient client, string username)
     {
-        var response = await client.PostAsJsonAsync("/api/v1/me/v1-import", V1Request(username), Ct);
+        var response = await client.PostAsJsonAsync("/api/v1/account/v1-import", V1Request(username), Ct);
         response.EnsureSuccessStatusCode();
         return (await response.Content.ReadFromJsonAsync<ImportV1ProfileResponse>(Ct))!;
     }
@@ -163,7 +163,7 @@ public sealed class DisplayNameEndpointTests(PlannerApiFactory factory) : IClass
         new(username, password, new ImportV1Selection(true, true, false, false, false, false));
 
     private static async Task<CurrentUserResponse> GetMeAsync(HttpClient client) =>
-        (await client.GetFromJsonAsync<CurrentUserResponse>("/api/v1/me", Ct))!;
+        (await client.GetFromJsonAsync<CurrentUserResponse>("/api/v1/account", Ct))!;
 
     private HttpClient CreateClient(string? name = null, bool omitName = false)
     {

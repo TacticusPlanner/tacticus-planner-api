@@ -38,10 +38,10 @@ public sealed class IntegrationHostTests
         Assert.Null(await second.V1Client.LoginAsync(username, FakeTacticusV1Client.ValidPassword, ct));
         var client = first.CreateClient();
         client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.NoAuthHeader, "1");
-        Assert.Equal(HttpStatusCode.Unauthorized, (await client.GetAsync("/api/v1/me", ct)).StatusCode);
+        Assert.Equal(HttpStatusCode.Unauthorized, (await client.GetAsync("/api/v1/account", ct)).StatusCode);
         client.DefaultRequestHeaders.Remove(PlannerTestAuthenticationHandler.NoAuthHeader);
         client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.SubjectHeader, "custom-subject");
-        Assert.Equal(HttpStatusCode.OK, (await client.GetAsync("/api/v1/me", ct)).StatusCode);
+        Assert.Equal(HttpStatusCode.OK, (await client.GetAsync("/api/v1/account", ct)).StatusCode);
     }
 
     [Fact]
@@ -54,8 +54,8 @@ public sealed class IntegrationHostTests
         try
         {
             var responses = await Task.WhenAll(
-                first.CreateClient().GetAsync("/api/v1/me", ct),
-                second.CreateClient().GetAsync("/api/v1/me", ct));
+                first.CreateClient().GetAsync("/api/v1/account", ct),
+                second.CreateClient().GetAsync("/api/v1/account", ct));
             Assert.All(responses, response => Assert.Equal(HttpStatusCode.OK, response.StatusCode));
 
             await using var scopeA = first.Services.CreateAsyncScope();
@@ -80,6 +80,6 @@ public sealed class IntegrationHostTests
         command.CommandText = "SELECT count(*) FROM pg_database WHERE datname = @name";
         command.Parameters.AddWithValue("name", new NpgsqlConnectionStringBuilder(firstConnectionString).Database!);
         Assert.Equal(0L, await command.ExecuteScalarAsync(ct));
-        Assert.Equal(HttpStatusCode.OK, (await second.CreateClient().GetAsync("/api/v1/me", ct)).StatusCode);
+        Assert.Equal(HttpStatusCode.OK, (await second.CreateClient().GetAsync("/api/v1/account", ct)).StatusCode);
     }
 }

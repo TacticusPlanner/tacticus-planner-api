@@ -26,15 +26,13 @@ public static partial class AcquisitionSourceRules
         foreach (var source in sources)
         {
             if (source is null) return "An acquisition source must not be null.";
-            if (!AcquisitionSourceKinds.IsKnown(source.Kind))
-                return $"Unsupported acquisition source kind '{source.Kind}'.";
             if (source.Ids is null) return "An acquisition source's ids must not be null.";
             if (source.Ids.Any(id => id is null)) return "An acquisition source id must not be null.";
 
             if (AcquisitionSourceKinds.RunBased.Contains(source.Kind) && source.Ids.Count > 0)
                 return $"A {source.Kind} acquisition source must not carry ids.";
 
-            if (source.Kind == AcquisitionSourceKinds.Shop
+            if (source.Kind == AcquisitionSourceKind.Shop
                 && source.Ids.Any(id => !ShopOfferIdRegex().IsMatch(id)))
             {
                 return "A shop acquisition source id must be '<shopId>:<rewardType>'.";
@@ -72,7 +70,7 @@ public static partial class AcquisitionSourceRules
 
         foreach (var source in sources)
         {
-            if (source.Kind != AcquisitionSourceKinds.Shop)
+            if (source.Kind != AcquisitionSourceKind.Shop)
                 return "Only shop acquisition sources are valid for this goal.";
 
             foreach (var id in source.Ids ?? [])
@@ -100,7 +98,7 @@ public static partial class AcquisitionSourceRules
         {
             switch (source.Kind)
             {
-                case AcquisitionSourceKinds.Campaign:
+                case AcquisitionSourceKind.Campaign:
                     if ((source.Ids ?? []).Any(id =>
                         !regularShardBattleIds.Contains(id) && !mythicShardBattleIds.Contains(id)))
                     {
@@ -109,13 +107,13 @@ public static partial class AcquisitionSourceRules
 
                     break;
 
-                case AcquisitionSourceKinds.Onslaught:
+                case AcquisitionSourceKind.Onslaught:
                     if (entityType != GoalEntityType.Character || goalType != GoalType.Ascension)
                         return "Onslaught is only available for Character Ascension goals.";
 
                     break;
 
-                case AcquisitionSourceKinds.Shop:
+                case AcquisitionSourceKind.Shop:
                     if (entityType != GoalEntityType.Character)
                         return "Shop acquisition sources are only available for Character goals.";
 

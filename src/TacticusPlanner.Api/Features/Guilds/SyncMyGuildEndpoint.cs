@@ -17,7 +17,7 @@ public sealed class SyncMyGuildEndpoint : EndpointWithoutRequest<RegisteredGuild
 {
     public override void Configure()
     {
-        Post("guilds/me/sync");
+        Post("guild/sync");
         Options(builder => builder.WithMetadata(UpstreamRateLimit.Slow));
         Summary(summary =>
         {

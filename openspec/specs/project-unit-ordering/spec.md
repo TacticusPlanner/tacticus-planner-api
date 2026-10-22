@@ -51,7 +51,7 @@ Goal order SHALL be addressable only through the account-wide operations specifi
 
 ### Requirement: Membership replacement does not accept caller-authored priority
 
-Replacing a project's goal membership (`PUT /me/projects/{id}/goals`) SHALL NOT let the caller set or change global priority. Existing members and newly added members SHALL retain their account-wide positions. A newly created goal receives a global position through creation, not through later membership replacement.
+Replacing a project's goal membership (`PUT /projects/{id}/goals`) SHALL NOT let the caller set or change global priority. Existing members and newly added members SHALL retain their account-wide positions. A newly created goal receives a global position through creation, not through later membership replacement.
 
 #### Scenario: An existing member's priority is unaffected by the request
 - **WHEN** membership replacement retains a goal and submits a legacy priority value

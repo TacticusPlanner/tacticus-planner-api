@@ -23,7 +23,7 @@ public sealed class CreateCombinedGoalsEndpoint
 {
     public override void Configure()
     {
-        Post("me/goals");
+        Post("goals");
         Summary(summary =>
         {
             summary.Summary = "Creates one goal, or several linked goals for one entity, in one call.";
@@ -54,12 +54,7 @@ public sealed class CreateCombinedGoalsEndpoint
         var db = Resolve<PlannerDbContext>();
         var projects = Resolve<ProjectsService>();
         var targetValidation = Resolve<GoalTargetValidationService>();
-        if (!Enum.TryParse<GoalEntityType>(req.EntityType, ignoreCase: true, out var entityType))
-        {
-            AddError(request => request.EntityType, "Unknown entity type.");
-            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
-            return;
-        }
+        var entityType = req.EntityType;
 
         // One roster read for every spec in the request.
         var units = await targetValidation.LoadUnitsAsync(profileId, req.EntityId.Trim(), ct);
@@ -72,13 +67,7 @@ public sealed class CreateCombinedGoalsEndpoint
         for (var i = 0; i < req.Goals.Count; i++)
         {
             var spec = req.Goals[i];
-            if (!Enum.TryParse<GoalType>(spec.GoalType, ignoreCase: true, out var goalType))
-            {
-                AddError(request => request.Goals, "Unknown or not-yet-supported goal type.");
-                await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
-                return;
-            }
-
+            var goalType = spec.GoalType;
             parsedGoalTypes.Add(goalType);
 
             var directDeps = spec.DependsOnIndex ?? [];
@@ -93,8 +82,7 @@ public sealed class CreateCombinedGoalsEndpoint
                 .Where(dependencyIndex => parsedGoalTypes[dependencyIndex] == GoalType.Ascension)
                 .Select(dependencyIndex => req.Goals[dependencyIndex].Config.Progression)
                 .OfType<ProgressionTargetRequest>()
-                .Select(progression => ProgressionRules.ProgressionIndex(progression.End))
-                .Where(endIndex => endIndex >= 0)
+                .Select(progression => (int)progression.End)
                 .ToList();
             UnitProgression? effectiveProgressionFloor =
                 ascensionEndIndices.Count > 0 ? (UnitProgression)ascensionEndIndices.Max() : null;
@@ -208,7 +196,7 @@ public sealed class CreateCombinedGoalsEndpoint
 }
 
 public sealed record CreateCombinedGoalsRequest(
-    string EntityType,
+    [property: JsonRequired] GoalEntityType EntityType,
     string EntityId,
     List<ProjectPriorityRequest>? Projects,
     List<CombinedGoalSpec> Goals,
@@ -223,7 +211,7 @@ public sealed record CreateCombinedGoalsRequest(
 /// <see cref="Goal.DependsOn"/> ids by the endpoint.</summary>
 [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
 public sealed record CombinedGoalSpec(
-    string GoalType,
+    [property: JsonRequired] GoalType GoalType,
     CreateGoalConfigRequest Config,
     List<int> DependsOnIndex,
     CreateGoalSnapshotRequest? Snapshot = null
@@ -240,7 +228,7 @@ public sealed record CreateGoalConfigRequest(
     ProgressionTargetRequest? Progression = null,
     AbilityTargetRequest? Ability = null,
     List<CampaignBattleId>? FarmingLocationIds = null,
-    string? FarmingStrategy = null,
+    FarmingStrategy? FarmingStrategy = null,
     List<AcquisitionSourceRequest>? AcquisitionSources = null,
     UpgradeTargetRequest? Upgrade = null
 );
@@ -252,7 +240,7 @@ public sealed record CreateGoalConfigRequest(
 /// Kept as plain strings (not <see cref="CampaignBattleId"/>) because the id type varies by kind; the
 /// campaign ids are validated against the character's shard nodes in
 /// <see cref="GoalTargetValidationService"/>.</summary>
-public sealed record AcquisitionSourceRequest(string Kind, List<string> Ids);
+public sealed record AcquisitionSourceRequest([property: JsonRequired] AcquisitionSourceKind Kind, List<string> Ids);
 
 public sealed record RankTargetRequest(
     int Start,
@@ -263,7 +251,9 @@ public sealed record RankTargetRequest(
     int EndAppliedUpgrades
 );
 
-public sealed record ProgressionTargetRequest(string Start, string End);
+public sealed record ProgressionTargetRequest(
+    [property: JsonRequired] UnitProgression Start,
+    [property: JsonRequired] UnitProgression End);
 
 public sealed record AbilityTargetRequest(int ActiveStart, int ActiveEnd, int PassiveStart, int PassiveEnd);
 
@@ -283,12 +273,9 @@ public sealed record UpgradeRangeRequest(int? Start, int? End);
 
 public sealed record UpgradeMaterialTargetRequest(string UpgradeId, int Quantity);
 
-/// <summary><see cref="InitialRank"/>/<see cref="InitialProgression"/> are the client's plain wire strings
-/// (e.g. "Gold2", "Common:TwoStars" — the same values <c>Rank</c>/<c>Progression</c> serialize to); an
-/// unparseable value is dropped rather than rejected, see <c>GoalMapper.MapSnapshot</c>.</summary>
 public sealed record CreateGoalSnapshotRequest(
-    string? InitialRank = null,
-    string? InitialProgression = null,
+    UnitRank? InitialRank = null,
+    UnitProgression? InitialProgression = null,
     int? InitialActiveAbilityLevel = null,
     int? InitialPassiveAbilityLevel = null,
     List<GoalSnapshotResourceRequest>? InitialRequirement = null,

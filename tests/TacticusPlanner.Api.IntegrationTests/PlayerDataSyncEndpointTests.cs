@@ -1,5 +1,4 @@
 using System.Net;
-using System.Net.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TacticusPlanner.Api.Features.PlayerData;
@@ -18,7 +17,7 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
         client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.NoAuthHeader, "1");
 
         var response = await client.PostAsync(
-            "/api/v1/me/player-data/sync",
+            "/api/v1/player-data/sync",
             content: null,
             TestContext.Current.CancellationToken);
 
@@ -32,7 +31,7 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
         client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.SubjectHeader, NewSubject());
 
         var response = await client.PostAsync(
-            "/api/v1/me/player-data/sync",
+            "/api/v1/player-data/sync",
             content: null,
             TestContext.Current.CancellationToken);
 
@@ -45,7 +44,7 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
         var client = await CreateProvisionedClientAsync();
 
         var response = await client.PostAsync(
-            "/api/v1/me/player-data/sync",
+            "/api/v1/player-data/sync",
             content: null,
             TestContext.Current.CancellationToken);
 
@@ -59,7 +58,7 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
         await ConfigureTacticusKeyAsync(client, FakeTacticusApi.ValidKey);
 
         var response = await client.PostAsync(
-            "/api/v1/me/player-data/sync",
+            "/api/v1/player-data/sync",
             content: null,
             TestContext.Current.CancellationToken);
 
@@ -81,13 +80,13 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
         var client = await CreateProvisionedClientAsync(subject);
         await ConfigureTacticusKeyAsync(client, FakeTacticusApi.ValidKey);
 
-        var first = await client.PostAsync("/api/v1/me/player-data/sync", null, TestContext.Current.CancellationToken);
+        var first = await client.PostAsync("/api/v1/player-data/sync", null, TestContext.Current.CancellationToken);
         var firstManifest = await first.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
         var firstState = await GetStoredStateAsync(subject);
 
         await Task.Delay(10, TestContext.Current.CancellationToken);
 
-        var second = await client.PostAsync("/api/v1/me/player-data/sync", null, TestContext.Current.CancellationToken);
+        var second = await client.PostAsync("/api/v1/player-data/sync", null, TestContext.Current.CancellationToken);
         var secondManifest = await second.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
         var secondState = await GetStoredStateAsync(subject);
 
@@ -109,13 +108,13 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
 
         var client = await CreateProvisionedClientAsync(subject);
         await ConfigureTacticusKeyAsync(client, token);
-        var first = await client.PostAsync("/api/v1/me/player-data/sync", null, TestContext.Current.CancellationToken);
+        var first = await client.PostAsync("/api/v1/player-data/sync", null, TestContext.Current.CancellationToken);
         var firstManifest = await first.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
 
         factory.TacticusApi.ConfigurePlayerResponse(token, FakeTacticusApi.BuildPlayerResponse(
             lastUpdatedOn: FakeTacticusApi.LastUpdatedOnV1 + 60,
             lockedCharacterShards: 298));
-        var second = await client.PostAsync("/api/v1/me/player-data/sync", null, TestContext.Current.CancellationToken);
+        var second = await client.PostAsync("/api/v1/player-data/sync", null, TestContext.Current.CancellationToken);
         var secondManifest = await second.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
         var stored = await GetStoredStateAsync(subject);
 
@@ -133,7 +132,7 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
 
         var client = await CreateProvisionedClientAsync();
         await ConfigureTacticusKeyAsync(client, token);
-        var first = await client.PostAsync("/api/v1/me/player-data/sync", null, TestContext.Current.CancellationToken);
+        var first = await client.PostAsync("/api/v1/player-data/sync", null, TestContext.Current.CancellationToken);
         var firstManifest = await first.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
 
         factory.TacticusApi.ConfigurePlayerResponse(token, FakeTacticusApi.BuildPlayerResponse(
@@ -141,7 +140,7 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
             progressionIndex: 12,
             xp: 210000,
             rank: 13));
-        var second = await client.PostAsync("/api/v1/me/player-data/sync", null, TestContext.Current.CancellationToken);
+        var second = await client.PostAsync("/api/v1/player-data/sync", null, TestContext.Current.CancellationToken);
         var secondManifest = await second.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, second.StatusCode);
@@ -158,12 +157,12 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
 
         var client = await CreateProvisionedClientAsync(subject);
         await ConfigureTacticusKeyAsync(client, token);
-        var first = await client.PostAsync("/api/v1/me/player-data/sync", null, TestContext.Current.CancellationToken);
+        var first = await client.PostAsync("/api/v1/player-data/sync", null, TestContext.Current.CancellationToken);
         var firstManifest = await first.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
 
         factory.TacticusApi.ConfigurePlayerResponse(token, FakeTacticusApi.BuildPlayerResponse(
             lastUpdatedOn: FakeTacticusApi.LastUpdatedOnV1 + 120));
-        var second = await client.PostAsync("/api/v1/me/player-data/sync", null, TestContext.Current.CancellationToken);
+        var second = await client.PostAsync("/api/v1/player-data/sync", null, TestContext.Current.CancellationToken);
         var secondManifest = await second.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
         var stored = await GetStoredStateAsync(subject);
 
@@ -182,12 +181,12 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
         var client = await CreateProvisionedClientAsync(subject);
         await ConfigureTacticusKeyAsync(client, FakeTacticusApi.ValidKey);
 
-        var first = await client.PostAsync("/api/v1/me/player-data/sync", null, TestContext.Current.CancellationToken);
+        var first = await client.PostAsync("/api/v1/player-data/sync", null, TestContext.Current.CancellationToken);
         var firstManifest = await first.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
         var revisionAfterFirst = await GetRevisionAsync(subject);
 
         await ConfigureTacticusKeyAsync(client, FakeTacticusApi.ValidKeyV2);
-        var second = await client.PostAsync("/api/v1/me/player-data/sync", null, TestContext.Current.CancellationToken);
+        var second = await client.PostAsync("/api/v1/player-data/sync", null, TestContext.Current.CancellationToken);
         var secondManifest = await second.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, second.StatusCode);
@@ -208,11 +207,11 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
         var client = await CreateProvisionedClientAsync();
         await ConfigureTacticusKeyAsync(client, FakeTacticusApi.ValidKey);
 
-        var first = await client.PostAsync("/api/v1/me/player-data/sync", null, TestContext.Current.CancellationToken);
+        var first = await client.PostAsync("/api/v1/player-data/sync", null, TestContext.Current.CancellationToken);
         var firstManifest = await first.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
 
         await ConfigureTacticusKeyAsync(client, FakeTacticusApi.ValidKeyV2);
-        var second = await client.PostAsync("/api/v1/me/player-data/sync", null, TestContext.Current.CancellationToken);
+        var second = await client.PostAsync("/api/v1/player-data/sync", null, TestContext.Current.CancellationToken);
         var secondManifest = await second.Content.ReadFromJsonAsync<PlayerDataManifest>(TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, second.StatusCode);
@@ -233,14 +232,14 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
     {
         var client = await CreateProvisionedClientAsync();
         await ConfigureTacticusKeyAsync(client, FakeTacticusApi.ValidKey);
-        await client.PostAsync("/api/v1/me/player-data/sync", null, TestContext.Current.CancellationToken);
+        await client.PostAsync("/api/v1/player-data/sync", null, TestContext.Current.CancellationToken);
 
         // Unknown chunk key is now a validator rejection (malformed request), not a missing-resource 404.
-        var unknown = await client.GetAsync("/api/v1/me/player-data/not-a-real-chunk", TestContext.Current.CancellationToken);
+        var unknown = await client.GetAsync("/api/v1/player-data/not-a-real-chunk", TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.BadRequest, unknown.StatusCode);
 
         var chunkResponse = await client.GetAsync(
-            $"/api/v1/me/player-data/{PlayerDataChunkKeys.Characters}",
+            $"/api/v1/player-data/{PlayerDataChunkKeys.Characters}",
             TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, chunkResponse.StatusCode);
 
@@ -255,13 +254,13 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
 
         using var conditionalRequest = new HttpRequestMessage(
             HttpMethod.Get,
-            $"/api/v1/me/player-data/{PlayerDataChunkKeys.Characters}");
+            $"/api/v1/player-data/{PlayerDataChunkKeys.Characters}");
         conditionalRequest.Headers.TryAddWithoutValidation("If-None-Match", etag);
         var notModified = await client.SendAsync(conditionalRequest, TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NotModified, notModified.StatusCode);
     }
 
-    private const string SyncPath = "/api/v1/me/player-data/sync";
+    private const string SyncPath = "/api/v1/player-data/sync";
 
     private static PlayerResponse ContentVariant(int rank, int xp = 200000) =>
         FakeTacticusApi.BuildPlayerResponse(progressionIndex: 11, xp: xp, rank: rank);
@@ -462,8 +461,8 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
         var client = factory.CreateClient();
         client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.SubjectHeader, subject ?? NewSubject());
 
-        // /me auto-provisions the Account + Profile that the sync endpoint requires to exist.
-        await client.GetAsync("/api/v1/me", TestContext.Current.CancellationToken);
+        // GET /account auto-provisions the Account + Profile that the sync endpoint requires to exist.
+        await client.GetAsync("/api/v1/account", TestContext.Current.CancellationToken);
 
         return client;
     }
@@ -471,7 +470,7 @@ public sealed class PlayerDataSyncEndpointTests(PlannerApiFactory factory) : ICl
     private static async Task ConfigureTacticusKeyAsync(HttpClient client, string apiKey)
     {
         var response = await client.PutAsJsonAsync(
-            "/api/v1/me/tacticus-integration",
+            "/api/v1/account/tacticus-integration",
             new UpdateTacticusIntegrationRequest(apiKey, null),
             TestContext.Current.CancellationToken);
 

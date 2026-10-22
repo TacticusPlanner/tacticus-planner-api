@@ -9,13 +9,13 @@ using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.LegendaryEventPlans;
 
-/// <summary>Shared plumbing for the <c>me/legendary-event-plans/{eventId}</c> endpoints: resolve the caller and
+/// <summary>Shared plumbing for the <c>legendary-event-plans/{eventId}</c> endpoints: resolve the caller and
 /// the catalog event (404 when either is missing), report field failures as 400, and answer a write result as
 /// 200 / 404 / 409.</summary>
 public abstract class LegendaryEventPlanEndpointBase<TRequest> : Endpoint<TRequest, LegendaryEventPlanResponse>
     where TRequest : notnull
 {
-    protected const string Route = "me/legendary-event-plans/{eventId}";
+    protected const string Route = "legendary-event-plans/{eventId}";
 
     protected async Task<(ProfileId ProfileId, GameCatalogLreView Event)?> ResolveAsync(CancellationToken ct)
     {

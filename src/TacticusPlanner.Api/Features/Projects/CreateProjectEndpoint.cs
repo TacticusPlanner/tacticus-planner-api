@@ -12,7 +12,7 @@ public sealed class CreateProjectEndpoint : Endpoint<CreateProjectRequest, Proje
 {
     public override void Configure()
     {
-        Post("me/projects");
+        Post("projects");
         Summary(summary =>
         {
             summary.Summary = "Creates a new project.";

@@ -1,3 +1,4 @@
+using TacticusPlanner.Domain.LegendaryEvents;
 using TacticusPlanner.Domain.PlayerData.Chunks;
 
 namespace TacticusPlanner.Api.Features.LegendaryEventPlans;
@@ -48,14 +49,14 @@ public sealed record LegendaryEventRunRecordEncounterResponse(IReadOnlyList<int>
 /// <param name="ExpectedBattleClearsSource"><c>estimate</c> or <c>manual</c> when a depth is set.</param>
 public sealed record LegendaryEventRunRecordTeamResponse(
     Guid TeamId,
-    string LaneId,
+    LegendaryEventLaneId LaneId,
     string Name,
     int SortOrder,
     IReadOnlyList<string> MemberUnitIds,
     string? ReserveUnitId,
     IReadOnlyList<int> ObjectiveIndexes,
     int? ExpectedBattleClears,
-    string? ExpectedBattleClearsSource
+    LegendaryEventDepthSource? ExpectedBattleClearsSource
 );
 
 /// <summary>A whole owned roster, units in the synced <c>characters</c> / <c>mows</c> chunk shapes.</summary>

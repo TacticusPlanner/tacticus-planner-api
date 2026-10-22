@@ -1,5 +1,4 @@
 using System.Net;
-using System.Net.Http.Json;
 using Microsoft.Extensions.Options;
 using TacticusPlanner.Api.Features.Analytics;
 using TacticusPlanner.Api.Features.CurrentUser;
@@ -14,7 +13,7 @@ public sealed class CurrentUserEndpointTests(PlannerApiFactory factory) : IClass
     {
         var client = CreateAuthenticatedClient(NewSubject());
 
-        var response = await client.GetAsync("/api/v1/me", TestContext.Current.CancellationToken);
+        var response = await client.GetAsync("/api/v1/account", TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
@@ -32,9 +31,9 @@ public sealed class CurrentUserEndpointTests(PlannerApiFactory factory) : IClass
     {
         var client = CreateAuthenticatedClient(NewSubject());
 
-        var first = await (await client.GetAsync("/api/v1/me", TestContext.Current.CancellationToken))
+        var first = await (await client.GetAsync("/api/v1/account", TestContext.Current.CancellationToken))
             .Content.ReadFromJsonAsync<CurrentUserResponse>(TestContext.Current.CancellationToken);
-        var second = await (await client.GetAsync("/api/v1/me", TestContext.Current.CancellationToken))
+        var second = await (await client.GetAsync("/api/v1/account", TestContext.Current.CancellationToken))
             .Content.ReadFromJsonAsync<CurrentUserResponse>(TestContext.Current.CancellationToken);
 
         Assert.Equal(first!.ApplicationUserId, second!.ApplicationUserId);
@@ -45,7 +44,7 @@ public sealed class CurrentUserEndpointTests(PlannerApiFactory factory) : IClass
     {
         var client = CreateAuthenticatedClient(NewSubject());
 
-        var body = await (await client.GetAsync("/api/v1/me", TestContext.Current.CancellationToken))
+        var body = await (await client.GetAsync("/api/v1/account", TestContext.Current.CancellationToken))
             .Content.ReadFromJsonAsync<CurrentUserResponse>(TestContext.Current.CancellationToken);
 
         Assert.NotNull(body);
@@ -66,9 +65,9 @@ public sealed class CurrentUserEndpointTests(PlannerApiFactory factory) : IClass
     {
         var client = CreateAuthenticatedClient(NewSubject());
 
-        var first = await (await client.GetAsync("/api/v1/me", TestContext.Current.CancellationToken))
+        var first = await (await client.GetAsync("/api/v1/account", TestContext.Current.CancellationToken))
             .Content.ReadFromJsonAsync<CurrentUserResponse>(TestContext.Current.CancellationToken);
-        await client.GetAsync("/api/v1/me", TestContext.Current.CancellationToken);
+        await client.GetAsync("/api/v1/account", TestContext.Current.CancellationToken);
 
         var events = factory.Analytics.GetEvents(first!.AnalyticsId);
 
@@ -80,7 +79,7 @@ public sealed class CurrentUserEndpointTests(PlannerApiFactory factory) : IClass
     {
         var client = factory.CreateClient();
 
-        using var request = new HttpRequestMessage(HttpMethod.Get, "/api/v1/me");
+        using var request = new HttpRequestMessage(HttpMethod.Get, "/api/v1/account");
         request.Headers.Add(PlannerTestAuthenticationHandler.NoAuthHeader, "1");
         var response = await client.SendAsync(request, TestContext.Current.CancellationToken);
 

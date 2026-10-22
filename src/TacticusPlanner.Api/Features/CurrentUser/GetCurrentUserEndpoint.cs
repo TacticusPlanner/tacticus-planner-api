@@ -20,7 +20,7 @@ public sealed class GetCurrentUserEndpoint : EndpointWithoutRequest<CurrentUserR
 
     public override void Configure()
     {
-        Get("me");
+        Get("account");
         Summary(summary =>
         {
             summary.Summary = "Gets the authenticated user's planner account, creating it on first access.";

@@ -1,8 +1,8 @@
 using System.Net;
-using System.Net.Http.Json;
 using System.Text;
 using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Api.Features.Projects;
+using TacticusPlanner.Domain.Goals;
 
 namespace TacticusPlanner.Api.IntegrationTests;
 
@@ -10,9 +10,9 @@ public sealed class ProjectMembershipReplacementTests(PlannerApiFactory factory)
 {
     // Distinct Rank targets for one unit occupy distinct slots, so any number can share a project.
     private static CreateGoalRequest RankMilestone(int end) => new(
-        "character",
+        GoalEntityType.Character,
         "blackTerminator",
-        "rank",
+        GoalType.Rank,
         new CreateGoalConfigRequest(Rank: new RankTargetRequest(1, false, 0, end, false, 0)),
         null);
 
@@ -63,7 +63,7 @@ public sealed class ProjectMembershipReplacementTests(PlannerApiFactory factory)
         var loaded = await ListGoalsAsync(client);
         var reversed = loaded.Goals.Select(goal => goal.GoalId).Reverse().ToList();
         (await client.PutAsJsonAsync(
-            "/api/v1/me/goals/order", new UpdateGoalOrderRequest(reversed, loaded.OrderRevision),
+            "/api/v1/goals/order", new UpdateGoalOrderRequest(reversed, loaded.OrderRevision),
             TestContext.Current.CancellationToken)).EnsureSuccessStatusCode();
         var reordered = await ListGoalsAsync(client);
 
@@ -126,7 +126,7 @@ public sealed class ProjectMembershipReplacementTests(PlannerApiFactory factory)
             $"{{\"goals\":[{{\"goalId\":\"{goals[0]}\"}}]}}", Encoding.UTF8, "application/json");
 
         var response = await client.PutAsync(
-            $"/api/v1/me/projects/{extra}/goals", content, TestContext.Current.CancellationToken);
+            $"/api/v1/projects/{extra}/goals", content, TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -134,7 +134,7 @@ public sealed class ProjectMembershipReplacementTests(PlannerApiFactory factory)
     private static Task<HttpResponseMessage> ReplaceAsync(
         HttpClient client, Guid projectId, List<Guid> desired, List<Guid> expected) =>
         client.PutAsJsonAsync(
-            $"/api/v1/me/projects/{projectId}/goals",
+            $"/api/v1/projects/{projectId}/goals",
             new UpdateProjectGoalsRequest(desired.Select(id => new ProjectGoalEntryRequest(id)).ToList(), expected),
             TestContext.Current.CancellationToken);
 
@@ -145,7 +145,7 @@ public sealed class ProjectMembershipReplacementTests(PlannerApiFactory factory)
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var created = await client.PostAsJsonAsync(
-            "/api/v1/me/projects", new CreateProjectRequest("Extra", null, null), TestContext.Current.CancellationToken);
+            "/api/v1/projects", new CreateProjectRequest("Extra", null, null), TestContext.Current.CancellationToken);
         created.EnsureSuccessStatusCode();
         var extra = (await created.Content.ReadFromJsonAsync<ProjectSummaryResponse>(TestContext.Current.CancellationToken))!.ProjectId;
 
@@ -159,7 +159,7 @@ public sealed class ProjectMembershipReplacementTests(PlannerApiFactory factory)
     }
 
     private static async Task<ListGoalsResponse> ListGoalsAsync(HttpClient client) =>
-        (await client.GetFromJsonAsync<ListGoalsResponse>("/api/v1/me/goals", TestContext.Current.CancellationToken))!;
+        (await client.GetFromJsonAsync<ListGoalsResponse>("/api/v1/goals", TestContext.Current.CancellationToken))!;
 
     private static Task<List<Guid>> ProjectMemberIdsAsync(HttpClient client, Guid projectId) =>
         client.ProjectGoalIdsAsync(projectId);

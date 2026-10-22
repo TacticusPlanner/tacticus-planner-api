@@ -1,5 +1,4 @@
 using System.Net;
-using System.Net.Http.Json;
 using TacticusPlanner.Api.Features.UserSettings;
 
 namespace TacticusPlanner.Api.IntegrationTests;
@@ -12,18 +11,18 @@ public sealed class UserSettingsEndpointTests(PlannerApiFactory factory) : IClas
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
         var initial = await client.GetFromJsonAsync<UserSettingsResponse>(
-            "/api/v1/me/user-settings",
+            "/api/v1/settings",
             TestContext.Current.CancellationToken
         );
 
         Assert.NotNull(initial);
         Assert.Equal(288, initial.DailyEnergy);
-        Assert.Equal("Legendary", initial.XpBookRarity);
+        Assert.Equal(XpBookRarity.Legendary, initial.XpBookRarity);
         Assert.Equal(1, initial.Revision);
 
         var response = await client.PutAsJsonAsync(
-            "/api/v1/me/user-settings",
-            new UpdateUserSettingsRequest(538, "Epic", initial.Revision),
+            "/api/v1/settings",
+            new UpdateUserSettingsRequest(538, XpBookRarity.Epic, initial.Revision),
             TestContext.Current.CancellationToken
         );
         response.EnsureSuccessStatusCode();
@@ -31,7 +30,7 @@ public sealed class UserSettingsEndpointTests(PlannerApiFactory factory) : IClas
 
         Assert.NotNull(updated);
         Assert.Equal(538, updated.DailyEnergy);
-        Assert.Equal("Epic", updated.XpBookRarity);
+        Assert.Equal(XpBookRarity.Epic, updated.XpBookRarity);
         Assert.Equal(2, updated.Revision);
     }
 
@@ -41,8 +40,8 @@ public sealed class UserSettingsEndpointTests(PlannerApiFactory factory) : IClas
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
         var response = await client.PutAsJsonAsync(
-            "/api/v1/me/user-settings",
-            new UpdateUserSettingsRequest(300, "Legendary", 0),
+            "/api/v1/settings",
+            new UpdateUserSettingsRequest(300, XpBookRarity.Legendary, 0),
             TestContext.Current.CancellationToken
         );
 
@@ -56,20 +55,19 @@ public sealed class UserSettingsEndpointTests(PlannerApiFactory factory) : IClas
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PutAsJsonAsync(
-            "/api/v1/me/user-settings",
-            new UpdateUserSettingsRequest(288, xpBookRarity, 0),
-            TestContext.Current.CancellationToken
-        );
+        var response = await client.SendRawJsonAsync(
+            HttpMethod.Put,
+            "/api/v1/settings",
+            $$"""{"dailyEnergy":288,"xpBookRarity":"{{xpBookRarity}}","revision":0}""");
 
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        await response.AssertFieldRejectedAsync("xpBookRarity");
 
         var unchanged = await client.GetFromJsonAsync<UserSettingsResponse>(
-            "/api/v1/me/user-settings",
+            "/api/v1/settings",
             TestContext.Current.CancellationToken
         );
         Assert.NotNull(unchanged);
-        Assert.Equal("Legendary", unchanged.XpBookRarity);
+        Assert.Equal(XpBookRarity.Legendary, unchanged.XpBookRarity);
         Assert.Equal(1, unchanged.Revision);
     }
 
@@ -80,7 +78,7 @@ public sealed class UserSettingsEndpointTests(PlannerApiFactory factory) : IClas
 
         var payload = new { DailyEnergy = 288, Revision = 0 };
         var response = await client.PutAsJsonAsync(
-            "/api/v1/me/user-settings",
+            "/api/v1/settings",
             payload,
             TestContext.Current.CancellationToken
         );
@@ -88,11 +86,11 @@ public sealed class UserSettingsEndpointTests(PlannerApiFactory factory) : IClas
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
         var unchanged = await client.GetFromJsonAsync<UserSettingsResponse>(
-            "/api/v1/me/user-settings",
+            "/api/v1/settings",
             TestContext.Current.CancellationToken
         );
         Assert.NotNull(unchanged);
-        Assert.Equal("Legendary", unchanged.XpBookRarity);
+        Assert.Equal(XpBookRarity.Legendary, unchanged.XpBookRarity);
         Assert.Equal(1, unchanged.Revision);
     }
 
@@ -101,13 +99,13 @@ public sealed class UserSettingsEndpointTests(PlannerApiFactory factory) : IClas
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var current = await client.GetFromJsonAsync<UserSettingsResponse>(
-            "/api/v1/me/user-settings",
+            "/api/v1/settings",
             TestContext.Current.CancellationToken
         );
 
         var response = await client.PutAsJsonAsync(
-            "/api/v1/me/user-settings",
-            new UpdateUserSettingsRequest(378, "Legendary", current!.Revision - 1),
+            "/api/v1/settings",
+            new UpdateUserSettingsRequest(378, XpBookRarity.Legendary, current!.Revision - 1),
             TestContext.Current.CancellationToken
         );
 

@@ -7,7 +7,7 @@ Defines how the onslaught-progress player-data override reports whether each all
 
 ### Requirement: Onslaught progress reports whether each alliance was saved
 
-The onslaught-progress response (`GET` and `PUT me/player-data-overrides/onslaught-progress`) SHALL carry, for each of `imperial`, `xenos` and `chaos`, the fields `sector` (string), `tier` (int, 1–4, where 4 means the sector is complete) and `isSet` (boolean), plus the profile's `revision` (int64). `isSet` SHALL be derived from the stored overrides: `true` when an override record exists for that alliance, `false` otherwise. When `isSet` is `false`, `sector` SHALL be `"Stone"` and `tier` SHALL be `1` as a placeholder that clients MUST NOT treat as the player's progress.
+The onslaught-progress response (`GET` and `PUT player-data-overrides/onslaught-progress`) SHALL carry, for each of `imperial`, `xenos` and `chaos`, the fields `sector` (string), `tier` (int, 1–4, where 4 means the sector is complete) and `isSet` (boolean), plus the profile's `revision` (int64). `isSet` SHALL be derived from the stored overrides: `true` when an override record exists for that alliance, `false` otherwise. When `isSet` is `false`, `sector` SHALL be `"Stone"` and `tier` SHALL be `1` as a placeholder that clients MUST NOT treat as the player's progress.
 
 #### Scenario: Nothing saved
 
