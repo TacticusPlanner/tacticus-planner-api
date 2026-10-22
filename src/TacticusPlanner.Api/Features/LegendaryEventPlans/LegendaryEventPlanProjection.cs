@@ -48,29 +48,17 @@ public static class LegendaryEventPlanProjection
                 .ThenBy(annotation => annotation.BattleIndex)
                 .ThenBy(annotation => annotation.ObjectiveId)
                 .Select(annotation => new LegendaryEventObjectiveAnnotationResponse(
-                    annotation.LaneId, annotation.BattleIndex, annotation.ObjectiveId,
-                    StatusName(annotation.Status), annotation.UpdatedAt))
+                    LegendaryEventValidation.Lane(annotation.LaneId), annotation.BattleIndex, annotation.ObjectiveId,
+                    annotation.Status, annotation.UpdatedAt))
                 .ToList());
 
     private static List<int> InCatalog(IEnumerable<int> indices, int? catalogCount) =>
         indices.Where(index => catalogCount is null || index < catalogCount).Order().ToList();
 
-    public static string StatusName(LegendaryEventAnnotationStatus status) => status switch
-    {
-        LegendaryEventAnnotationStatus.StopHere => LegendaryEventValidation.StopHereStatus,
-        _ => LegendaryEventValidation.MaybeClearStatus,
-    };
-
-    public static string SourceName(LegendaryEventDepthSource source) => source switch
-    {
-        LegendaryEventDepthSource.Estimate => "estimate",
-        _ => "manual",
-    };
-
     private static LegendaryEventTeamResponse MapTeam(LegendaryEventTeamRecord team) =>
         new(
             team.Id.Value,
-            team.LaneId,
+            LegendaryEventValidation.Lane(team.LaneId),
             team.Name,
             team.SortOrder,
             [.. team.MemberUnitIds],
@@ -78,7 +66,7 @@ public static class LegendaryEventPlanProjection
             team.ObjectiveIndexes.Order().ToList(),
             team.RunDepths.OrderBy(depth => depth.Run)
                 .Select(depth => new LegendaryEventTeamRunDepthResponse(
-                    depth.Run, depth.ExpectedBattleClears, SourceName(depth.Source), depth.RecordedAt))
+                    depth.Run, depth.ExpectedBattleClears, depth.Source, depth.RecordedAt))
                 .ToList());
 
     public static int LaneOrder(string laneId)

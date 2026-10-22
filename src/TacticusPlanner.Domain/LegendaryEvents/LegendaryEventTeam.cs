@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace TacticusPlanner.Domain.LegendaryEvents;
 
 /// <summary>A team on one lane of a <see cref="LegendaryEventPlan"/>, stored inline in the plan's <c>teams</c>
@@ -61,8 +63,9 @@ public sealed class LegendaryEventTeamRunDepth
     public DateTimeOffset RecordedAt { get; set; }
 }
 
+/// <summary>Wire names are camelCase (<c>estimate</c>/<c>manual</c>); storage converts by member name.</summary>
 public enum LegendaryEventDepthSource
 {
-    Estimate,
-    Manual,
+    [JsonStringEnumMemberName("estimate")] Estimate,
+    [JsonStringEnumMemberName("manual")] Manual,
 }

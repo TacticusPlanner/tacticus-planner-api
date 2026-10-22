@@ -1,10 +1,10 @@
 using System.Net;
-using System.Net.Http.Json;
 using TacticusPlanner.Api.Features.Goals;
+using TacticusPlanner.Domain.Goals;
 
 namespace TacticusPlanner.Api.IntegrationTests;
 
-/// <summary><c>POST me/goals/status</c> (<c>goal-bulk-status</c>): many goals in one atomic, profile-locked
+/// <summary><c>POST goals/status</c> (<c>goal-bulk-status</c>): many goals in one atomic, profile-locked
 /// transition.</summary>
 public sealed class GoalBulkStatusEndpointTests(PlannerApiFactory factory) : IClassFixture<PlannerApiFactory>
 {
@@ -12,9 +12,9 @@ public sealed class GoalBulkStatusEndpointTests(PlannerApiFactory factory) : ICl
 
     // Distinct Rank end targets of one unit are distinct slots.
     private static CreateGoalRequest Rank(int end) => new(
-        "character",
+        GoalEntityType.Character,
         "blackTerminator",
-        "rank",
+        GoalType.Rank,
         new CreateGoalConfigRequest(Rank: new RankTargetRequest(1, false, 0, end, false, 0)),
         null);
 
@@ -31,17 +31,17 @@ public sealed class GoalBulkStatusEndpointTests(PlannerApiFactory factory) : ICl
         var before = await client.ListGoalsAsync();
 
         var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals/status", new UpdateGoalsStatusRequest([a.GoalId, c.GoalId], "Paused"), Ct);
+            "/api/v1/goals/status", new UpdateGoalsStatusRequest([a.GoalId, c.GoalId], GoalStatus.Paused), Ct);
 
         response.EnsureSuccessStatusCode();
         var body = (await response.Content.ReadFromJsonAsync<UpdateGoalsStatusResponse>(Ct))!;
         Assert.Equal([a.GoalId, c.GoalId], body.Goals.Select(goal => goal.GoalId));
-        Assert.All(body.Goals, goal => Assert.Equal("Paused", goal.Status));
+        Assert.All(body.Goals, goal => Assert.Equal(GoalStatus.Paused, goal.Status));
         Assert.Equal([1, 3], body.Goals.Select(goal => goal.GlobalPriority));
         // Pausing keeps the in-flight set, so the order revision is the current one.
         Assert.Equal(before.OrderRevision, body.OrderRevision);
         var after = await client.ListGoalsAsync();
-        Assert.Equal("Active", after.Goals.Single(goal => goal.GoalId == b.GoalId).Status);
+        Assert.Equal(GoalStatus.Active, after.Goals.Single(goal => goal.GoalId == b.GoalId).Status);
         Assert.Equal(b.Revision, after.Goals.Single(goal => goal.GoalId == b.GoalId).Revision);
     }
 
@@ -51,12 +51,12 @@ public sealed class GoalBulkStatusEndpointTests(PlannerApiFactory factory) : ICl
         var (client, a, b, c) = await ThreeActiveGoalsAsync();
         var before = await client.ListGoalsAsync();
 
-        var response = await client.PostStatusAsync("Completed", before.OrderRevision, a.GoalId);
+        var response = await client.PostStatusAsync(GoalStatus.Completed, before.OrderRevision, a.GoalId);
 
         response.EnsureSuccessStatusCode();
         var body = (await response.Content.ReadFromJsonAsync<UpdateGoalsStatusResponse>(Ct))!;
         var completed = Assert.Single(body.Goals);
-        Assert.Equal("Completed", completed.Status);
+        Assert.Equal(GoalStatus.Completed, completed.Status);
         Assert.Null(completed.GlobalPriority);
         Assert.Equal(before.OrderRevision + 1, body.OrderRevision);
         var after = await client.ListGoalsAsync();
@@ -68,11 +68,11 @@ public sealed class GoalBulkStatusEndpointTests(PlannerApiFactory factory) : ICl
     public async Task AGoalAlreadyInTheStatusIsLeftUntouched()
     {
         var (client, a, _, _) = await ThreeActiveGoalsAsync();
-        var paused = await (await client.PostStatusAsync(a.GoalId, "Paused")).ReadStatusGoalAsync();
+        var paused = await (await client.PostStatusAsync(a.GoalId, GoalStatus.Paused)).ReadStatusGoalAsync();
         var orderRevision = (await client.ListGoalsAsync()).OrderRevision;
 
         var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals/status", new UpdateGoalsStatusRequest([a.GoalId], "Paused"), Ct);
+            "/api/v1/goals/status", new UpdateGoalsStatusRequest([a.GoalId], GoalStatus.Paused), Ct);
 
         response.EnsureSuccessStatusCode();
         var body = (await response.Content.ReadFromJsonAsync<UpdateGoalsStatusResponse>(Ct))!;
@@ -84,11 +84,11 @@ public sealed class GoalBulkStatusEndpointTests(PlannerApiFactory factory) : ICl
     public async Task OneConflictingResumeRejectsTheWholeRequest()
     {
         var (client, a, b, _) = await ThreeActiveGoalsAsync();
-        (await client.PostStatusAsync("Completed", null, a.GoalId, b.GoalId)).EnsureSuccessStatusCode();
+        (await client.PostStatusAsync(GoalStatus.Completed, null, a.GoalId, b.GoalId)).EnsureSuccessStatusCode();
         // Another in-flight goal takes B's slot (Rank 4) while B is Completed.
         var occupant = await client.CreateGoalAsync(Rank(4));
 
-        var response = await client.PostStatusAsync("Active", null, a.GoalId, b.GoalId);
+        var response = await client.PostStatusAsync(GoalStatus.Active, null, a.GoalId, b.GoalId);
 
         Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
         var problem = await response.ReadProblemAsync();
@@ -96,7 +96,7 @@ public sealed class GoalBulkStatusEndpointTests(PlannerApiFactory factory) : ICl
         Assert.Equal(b.GoalId, problem["goalId"]!.GetValue<Guid>());
         Assert.Equal(occupant.GoalId, problem["existingGoalId"]!.GetValue<Guid>());
         Assert.Equal(occupant.GoalId, problem["current"]!["goalId"]!.GetValue<Guid>());
-        Assert.Equal("Completed", (await client.ListGoalsAsync()).Goals.Single(goal => goal.GoalId == a.GoalId).Status);
+        Assert.Equal(GoalStatus.Completed, (await client.ListGoalsAsync()).Goals.Single(goal => goal.GoalId == a.GoalId).Status);
     }
 
     [Fact]
@@ -107,11 +107,11 @@ public sealed class GoalBulkStatusEndpointTests(PlannerApiFactory factory) : ICl
         var foreign = await other.CreateGoalAsync(Rank(3));
 
         var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals/status", new UpdateGoalsStatusRequest([a.GoalId, foreign.GoalId], "Paused"), Ct);
+            "/api/v1/goals/status", new UpdateGoalsStatusRequest([a.GoalId, foreign.GoalId], GoalStatus.Paused), Ct);
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         Assert.Equal("notFound", await response.ReadIssueCodeAsync());
-        Assert.Equal("Active", (await client.ListGoalsAsync()).Goals.Single(goal => goal.GoalId == a.GoalId).Status);
+        Assert.Equal(GoalStatus.Active, (await client.ListGoalsAsync()).Goals.Single(goal => goal.GoalId == a.GoalId).Status);
     }
 
     [Fact]
@@ -120,14 +120,14 @@ public sealed class GoalBulkStatusEndpointTests(PlannerApiFactory factory) : ICl
         var (client, a, b, c) = await ThreeActiveGoalsAsync();
         var stale = (await client.ListGoalsAsync()).OrderRevision - 1;
 
-        var response = await client.PostStatusAsync("Completed", stale, a.GoalId, b.GoalId);
+        var response = await client.PostStatusAsync(GoalStatus.Completed, stale, a.GoalId, b.GoalId);
 
         Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
         Assert.Equal("goalOrderStale", await response.ReadIssueCodeAsync());
         var current = await response.ReadCurrentAsync<GoalOrderResponse>();
         Assert.Equal(stale + 1, current.Revision);
         Assert.Equal([a.GoalId, b.GoalId, c.GoalId], current.GoalIds);
-        Assert.All((await client.ListGoalsAsync()).Goals, goal => Assert.Equal("Active", goal.Status));
+        Assert.All((await client.ListGoalsAsync()).Goals, goal => Assert.Equal(GoalStatus.Active, goal.Status));
     }
 
     [Fact]
@@ -136,7 +136,7 @@ public sealed class GoalBulkStatusEndpointTests(PlannerApiFactory factory) : ICl
         var (client, a, _, _) = await ThreeActiveGoalsAsync();
 
         var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals/status", new UpdateGoalsStatusRequest([a.GoalId], "Archived"), Ct);
+            "/api/v1/goals/status", new UpdateGoalsStatusRequest([a.GoalId], GoalStatus.Archived), Ct);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var problem = await response.ReadProblemAsync();
@@ -152,8 +152,8 @@ public sealed class GoalBulkStatusEndpointTests(PlannerApiFactory factory) : ICl
         var (client, a, _, _) = await ThreeActiveGoalsAsync();
 
         var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals/status",
-            new UpdateGoalsStatusRequest(repeated ? [a.GoalId, a.GoalId] : [], "Paused"),
+            "/api/v1/goals/status",
+            new UpdateGoalsStatusRequest(repeated ? [a.GoalId, a.GoalId] : [], GoalStatus.Paused),
             Ct);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -167,8 +167,8 @@ public sealed class GoalBulkStatusEndpointTests(PlannerApiFactory factory) : ICl
         var revision = (await client.ListGoalsAsync()).OrderRevision;
 
         var results = await Task.WhenAll(
-            client.PostStatusAsync("Completed", revision, a.GoalId, b.GoalId),
-            client.PutAsJsonAsync("/api/v1/me/goals/order", new UpdateGoalOrderRequest([c.GoalId, b.GoalId, a.GoalId], revision), Ct));
+            client.PostStatusAsync(GoalStatus.Completed, revision, a.GoalId, b.GoalId),
+            client.PutAsJsonAsync("/api/v1/goals/order", new UpdateGoalOrderRequest([c.GoalId, b.GoalId, a.GoalId], revision), Ct));
 
         // Serialized by the profile lock: whichever commits second sees a stale revision; never both rejected,
         // never an unhandled error.
@@ -177,7 +177,7 @@ public sealed class GoalBulkStatusEndpointTests(PlannerApiFactory factory) : ICl
         if (results[0].StatusCode == HttpStatusCode.Conflict)
         {
             Assert.Equal("goalOrderStale", await results[0].ReadIssueCodeAsync());
-            (await client.PostStatusAsync("Completed", null, a.GoalId, b.GoalId)).EnsureSuccessStatusCode();
+            (await client.PostStatusAsync(GoalStatus.Completed, null, a.GoalId, b.GoalId)).EnsureSuccessStatusCode();
         }
 
         var inFlight = (await client.ListGoalsAsync()).Goals.Where(goal => goal.GlobalPriority is not null).ToList();

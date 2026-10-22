@@ -20,7 +20,7 @@ public sealed class GlobalExceptionHandlerTests
             .BuildServiceProvider();
         var body = new MemoryStream();
         var context = new DefaultHttpContext { RequestServices = services, TraceIdentifier = "trace-1" };
-        context.Request.Path = "/api/v1/me/goals";
+        context.Request.Path = "/api/v1/goals";
         context.Request.Headers.Accept = "application/json";
         context.Response.Body = body;
         var handler = new GlobalExceptionHandler(
@@ -43,7 +43,7 @@ public sealed class GlobalExceptionHandlerTests
         var problem = JsonNode.Parse(text)!.AsObject();
         Assert.Equal("internal", problem["issueCode"]!.GetValue<string>());
         Assert.Equal("trace-1", problem["traceId"]!.GetValue<string>());
-        Assert.Equal("/api/v1/me/goals", problem["instance"]!.GetValue<string>());
+        Assert.Equal("/api/v1/goals", problem["instance"]!.GetValue<string>());
         Assert.DoesNotContain("secret detail", text, StringComparison.Ordinal);
         Assert.DoesNotContain("at TacticusPlanner", text, StringComparison.Ordinal);
     }

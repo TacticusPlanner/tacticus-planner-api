@@ -85,12 +85,12 @@ public sealed class V1GoalImportService(
             if (existingByKey.TryGetValue(candidate.Key, out var existingGoal))
             {
                 outcomeBySourceIndex[candidate.OriginalIndex] = new V1GoalOutcome(
-                    "Skipped",
+                    V1GoalOutcomeStatus.Skipped,
                     "goal_already_exists",
                     "The account already has a goal of this type for this unit.",
-                    candidate.Key.EntityType.ToString(),
+                    candidate.Key.EntityType,
                     candidate.Key.EntityId,
-                    candidate.Key.GoalType.ToString(),
+                    candidate.Key.GoalType,
                     existingGoal.Id,
                     sourceIdByIndex[candidate.OriginalIndex]);
             }
@@ -113,7 +113,7 @@ public sealed class V1GoalImportService(
             var survivorOutcome = outcomeBySourceIndex[survivorIndex]
                 ?? throw new InvalidOperationException("A merge survivor's outcome must resolve before its duplicates.");
             outcomeBySourceIndex[duplicateIndex] = new V1GoalOutcome(
-                "Skipped",
+                V1GoalOutcomeStatus.Skipped,
                 "duplicate_goal_merged",
                 "Another V1 goal of this type for this unit was imported in its place.",
                 survivorOutcome.EntityType,
@@ -156,7 +156,7 @@ public sealed class V1GoalImportService(
 
         if (entityId is null)
         {
-            return (null, NotImported(sourceGoal, entityType.ToString(), rawUnitId, "unknown_unit",
+            return (null, NotImported(sourceGoal, entityType, rawUnitId, "unknown_unit",
                 "The goal's character or Machine of War is not in the V2 Game Catalog."));
         }
 
@@ -185,7 +185,7 @@ public sealed class V1GoalImportService(
                 var endWire = ProgressionWire(sourceGoal.TargetRarity, sourceGoal.TargetStars);
                 if (endWire is null)
                 {
-                    return (null, NotImported(sourceGoal, entityType.ToString(), entityId, "invalid_progression",
+                    return (null, NotImported(sourceGoal, entityType, entityId, "invalid_progression",
                         "The ascension target is not on the V2 progression ladder."));
                 }
                 if (ProgressionRules.ProgressionIndex(endWire) <= ProgressionRules.ProgressionIndex(currentProgressionWire))
@@ -195,7 +195,8 @@ public sealed class V1GoalImportService(
                 }
                 goalType = GoalType.Ascension;
                 config = new CreateGoalConfigRequest(
-                    Progression: new ProgressionTargetRequest(currentProgressionWire, endWire),
+                    Progression: new ProgressionTargetRequest(
+                        ProgressionRules.FromWireName(currentProgressionWire), ProgressionRules.FromWireName(endWire)),
                     AcquisitionSources: BuildAcquisitionSources(
                         entityType, sourceGoal.ShardFarmType, sourceGoal.CampaignsUsage, sourceGoal.MythicCampaignsUsage));
                 break;
@@ -227,7 +228,7 @@ public sealed class V1GoalImportService(
                 break;
 
             default:
-                return (null, NotImported(sourceGoal, entityType.ToString(), entityId, "missing_target",
+                return (null, NotImported(sourceGoal, entityType, entityId, "missing_target",
                     "The goal is missing a required target."));
         }
 
@@ -254,7 +255,7 @@ public sealed class V1GoalImportService(
                 || string.Equals(shardFarmType, V1ShardFarmType.Both, StringComparison.OrdinalIgnoreCase));
         if (wantsOnslaught)
         {
-            sources.Add(new AcquisitionSourceRequest(AcquisitionSourceKinds.Onslaught, []));
+            sources.Add(new AcquisitionSourceRequest(AcquisitionSourceKind.Onslaught, []));
         }
 
         // CampaignsLocationsUsage is a numeric enum (None = 0, BestTime = 1, LeastEnergy = 2); only "did
@@ -262,7 +263,7 @@ public sealed class V1GoalImportService(
         // farming, which is the closest V2 shape to V1's strategy preference (it names no specific node).
         if ((campaignsUsage ?? 0) != 0 || (mythicCampaignsUsage ?? 0) != 0)
         {
-            sources.Add(new AcquisitionSourceRequest(AcquisitionSourceKinds.Campaign, []));
+            sources.Add(new AcquisitionSourceRequest(AcquisitionSourceKind.Campaign, []));
         }
 
         return sources.Count == 0 ? null : sources;
@@ -327,8 +328,8 @@ public sealed class V1GoalImportService(
             }
             else if (group.Key.GoalType == GoalType.Ascension)
             {
-                var first = ordered.MinBy(goal => ProgressionRules.ProgressionIndex(goal.Config.Progression!.Start))!;
-                var last = ordered.MaxBy(goal => ProgressionRules.ProgressionIndex(goal.Config.Progression!.End))!;
+                var first = ordered.MinBy(goal => goal.Config.Progression!.Start)!;
+                var last = ordered.MaxBy(goal => goal.Config.Progression!.End)!;
                 // Duplicate Ascension goals can carry different valid sources (e.g. one Campaign, one
                 // Onslaught) — union them instead of keeping only the first goal's list.
                 var acquisitionSources = ordered
@@ -471,10 +472,10 @@ public sealed class V1GoalImportService(
                         .Where(candidate => candidate.Key.GoalType is GoalType.Rank or GoalType.Ability)
                         .Min(candidate => candidate.OriginalIndex);
                     var startWire = CurrentProgressionWire(playerUnit);
-                    var endWire = ProgressionRules.ProgressionOrder[(int)targetProgression];
                     var ascensionGoal = BuildGoal(
                         profileId, unitKey, GoalType.Ascension,
-                        new CreateGoalConfigRequest(Progression: new ProgressionTargetRequest(startWire, endWire)),
+                        new CreateGoalConfigRequest(Progression: new ProgressionTargetRequest(
+                            ProgressionRules.FromWireName(startWire), targetProgression)),
                         null, prerequisiteStatus, playerUnit);
                     if (unlockGoalId is { } unlockId) ascensionGoal.DependsOn.Add(unlockId);
                     db.Goals.Add(ascensionGoal);
@@ -506,7 +507,7 @@ public sealed class V1GoalImportService(
                         pending.Add((goal, ownAscension.OriginalIndex, 3));
                         staged[ownAscension.OriginalIndex] = goal;
                         ascensionGoalId = goal.Id.Value;
-                        ascensionFloor = (UnitProgression)ProgressionRules.ProgressionIndex(ownAscension.Config.Progression!.End);
+                        ascensionFloor = ownAscension.Config.Progression!.End;
                     }
                 }
 
@@ -566,16 +567,16 @@ public sealed class V1GoalImportService(
                 foreach (var (index, _) in staged)
                 {
                     outcomeBySourceIndex[index] ??= new V1GoalOutcome(
-                        "Failed", "project_slot_conflict",
+                        V1GoalOutcomeStatus.Failed, "project_slot_conflict",
                         "Another goal for this unit, type and target was created concurrently.",
                         null, null, null, null, sourceIdByIndex[index]);
                 }
                 foreach (var (goal, _) in stagedPrerequisites)
                 {
                     extraOutcomes.Add(new V1GoalOutcome(
-                        "Failed", "project_slot_conflict",
+                        V1GoalOutcomeStatus.Failed, "project_slot_conflict",
                         "Another goal for this unit and type was created concurrently.",
-                        goal.EntityType.ToString(), goal.EntityId, goal.GoalType.ToString(), null, null));
+                        goal.EntityType, goal.EntityId, goal.GoalType, null, null));
                 }
                 return;
             }
@@ -587,12 +588,12 @@ public sealed class V1GoalImportService(
             foreach (var (index, goal) in staged)
             {
                 outcomeBySourceIndex[index] = new V1GoalOutcome(
-                    "Created",
+                    V1GoalOutcomeStatus.Created,
                     "goal_created",
                     "Imported from V1.",
-                    goal.EntityType.ToString(),
+                    goal.EntityType,
                     goal.EntityId,
-                    goal.GoalType.ToString(),
+                    goal.GoalType,
                     goal.Id.Value,
                     sourceIdByIndex[index]);
             }
@@ -653,14 +654,14 @@ public sealed class V1GoalImportService(
                 var ownAscension = unitCandidates.FirstOrDefault(candidate => candidate.Key.GoalType == GoalType.Ascension);
                 if (ownAscension is not null)
                 {
-                    var ownEnd = ProgressionRules.ProgressionIndex(ownAscension.Config.Progression!.End);
+                    var ownEnd = (int)ownAscension.Config.Progression!.End;
                     if (ownEnd < neededProgressionIndex)
                     {
                         ascensionShortfall = new V1GoalOutcome(
-                            "Skipped",
+                            V1GoalOutcomeStatus.Skipped,
                             "prerequisite_target_insufficient",
                             "The imported Ascension goal's target does not reach what another imported goal for this unit requires.",
-                            unitKey.EntityType.ToString(), unitKey.EntityId, GoalType.Ascension.ToString(), null,
+                            unitKey.EntityType, unitKey.EntityId, GoalType.Ascension, null,
                             sourceIdByIndex[ownAscension.OriginalIndex]);
                     }
                 }
@@ -673,10 +674,10 @@ public sealed class V1GoalImportService(
                     if (existingProgressionIndex < neededProgressionIndex)
                     {
                         ascensionShortfall = new V1GoalOutcome(
-                            "Skipped",
+                            V1GoalOutcomeStatus.Skipped,
                             "prerequisite_target_insufficient",
                             "An existing Ascension goal for this unit does not reach what an imported goal requires.",
-                            unitKey.EntityType.ToString(), unitKey.EntityId, GoalType.Ascension.ToString(), existingGoal.Id, null);
+                            unitKey.EntityType, unitKey.EntityId, GoalType.Ascension, existingGoal.Id, null);
                     }
                 }
                 else
@@ -724,12 +725,12 @@ public sealed class V1GoalImportService(
     };
 
     private static V1GoalOutcome PrerequisiteOutcome(Goal prerequisite, int candidateCount) => new(
-        "Created",
+        V1GoalOutcomeStatus.Created,
         "prerequisite_added",
         $"Automatically added because it is required by {candidateCount} imported goal(s) for this unit.",
-        prerequisite.EntityType.ToString(),
+        prerequisite.EntityType,
         prerequisite.EntityId,
-        prerequisite.GoalType.ToString(),
+        prerequisite.GoalType,
         prerequisite.Id.Value,
         null);
 
@@ -738,31 +739,31 @@ public sealed class V1GoalImportService(
     /// is not persisted, and dependents proceed without a dependency edge to it, same as an
     /// <see cref="UnitPrerequisites.AscensionShortfall"/> report.</summary>
     private static V1GoalOutcome FailedPrerequisiteOutcome(UnitKey unitKey, GoalType goalType, string message) => new(
-        "Failed",
+        V1GoalOutcomeStatus.Failed,
         "prerequisite_rejected",
         message,
-        unitKey.EntityType.ToString(),
+        unitKey.EntityType,
         unitKey.EntityId,
-        goalType.ToString(),
+        goalType,
         null,
         null);
 
     private static V1GoalOutcome FailedOutcome(TranslatedGoal candidate, string message, string?[] sourceIdByIndex) => new(
-        "Failed",
+        V1GoalOutcomeStatus.Failed,
         "target_rejected",
         message,
-        candidate.Key.EntityType.ToString(),
+        candidate.Key.EntityType,
         candidate.Key.EntityId,
-        candidate.Key.GoalType.ToString(),
+        candidate.Key.GoalType,
         null,
         sourceIdByIndex[candidate.OriginalIndex]);
 
-    private static V1GoalOutcome NotImported(V1Goal sourceGoal, string? entityType, string? entityId, string code, string message) =>
-        new("Failed", code, message, entityType, entityId, null, null, sourceGoal.Id);
+    private static V1GoalOutcome NotImported(V1Goal sourceGoal, GoalEntityType? entityType, string? entityId, string code, string message) =>
+        new(V1GoalOutcomeStatus.Failed, code, message, entityType, entityId, null, null, sourceGoal.Id);
 
     private static V1GoalOutcome Skipped(
         V1Goal sourceGoal, GoalEntityType entityType, string entityId, GoalType goalType, string code, string message) =>
-        new("Skipped", code, message, entityType.ToString(), entityId, goalType.ToString(), null, sourceGoal.Id);
+        new(V1GoalOutcomeStatus.Skipped, code, message, entityType, entityId, goalType, null, sourceGoal.Id);
 
     private static string? ProgressionWire(int? rarity, int? stars)
     {
@@ -839,12 +840,12 @@ public sealed class V1GoalImportService(
 /// <see cref="SourceGoalId"/> is the originating V1 goal's id, when this outcome corresponds to one (null
 /// for a synthesized prerequisite, which has no single V1 source).</summary>
 public sealed record V1GoalOutcome(
-    string Status,
+    V1GoalOutcomeStatus Status,
     string Code,
     string Message,
-    string? EntityType,
+    GoalEntityType? EntityType,
     string? EntityId,
-    string? GoalType,
+    GoalType? GoalType,
     Guid? GoalId,
     string? SourceGoalId
 );
@@ -854,7 +855,7 @@ public sealed record V1GoalImportResult(IReadOnlyList<V1GoalOutcome> Outcomes, b
     public static V1GoalImportResult CreateRefused() => new(
         [
             new V1GoalOutcome(
-                "Failed",
+                V1GoalOutcomeStatus.Failed,
                 "player_data_required",
                 "Player data must be synced before goals can be imported.",
                 null, null, null, null, null),

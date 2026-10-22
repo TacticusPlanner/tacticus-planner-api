@@ -105,7 +105,7 @@ public static class LegendaryEventTeamMutations
             return;
         }
 
-        if (!LegendaryEventCatalogValidator.TryParseSource(fields.ExpectedBattleClearsSource, out var source))
+        if (fields.ExpectedBattleClearsSource is not { } source)
             throw new InvalidOperationException("The depth source must be validated before it is applied.");
 
         if (existing is null)

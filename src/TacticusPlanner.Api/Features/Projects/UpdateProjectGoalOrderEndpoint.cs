@@ -21,7 +21,7 @@ public sealed class UpdateProjectGoalOrderEndpoint : Endpoint<UpdateProjectGoalO
 {
     public override void Configure()
     {
-        Put("me/projects/{projectId}/goal-order");
+        Put("projects/{projectId}/goal-order");
         Summary(summary =>
         {
             summary.Summary = "Moves a project goal onto the global position of another project goal.";

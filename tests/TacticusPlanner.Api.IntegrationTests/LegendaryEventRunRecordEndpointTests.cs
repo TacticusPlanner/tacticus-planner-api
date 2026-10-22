@@ -1,5 +1,4 @@
 using System.Net;
-using System.Net.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TacticusPlanner.Api.Features.LegendaryEventPlans;
@@ -18,7 +17,7 @@ public sealed class LegendaryEventRunRecordEndpointTests(PlannerApiFactory facto
 {
     private const string Uthar = "votanUthar";
     private const string Lysander = "astarLysander";
-    private const string SyncUrl = "/api/v1/me/player-data/sync";
+    private const string SyncUrl = "/api/v1/player-data/sync";
 
     private readonly GameCatalogLreView uthar = factory.Services.GetRequiredService<IGameCatalogProvider>()
         .Current.LreViews.Single(view => view.Id == Uthar);
@@ -131,7 +130,7 @@ public sealed class LegendaryEventRunRecordEndpointTests(PlannerApiFactory facto
 
         Assert.Empty((await ReadRecordsAsync(client, Lysander)).Records);
         Assert.Equal(HttpStatusCode.NotFound,
-            (await client.GetAsync("/api/v1/me/legendary-event-plans/notAnEvent/run-records", Ct)).StatusCode);
+            (await client.GetAsync("/api/v1/legendary-event-plans/notAnEvent/run-records", Ct)).StatusCode);
     }
 
     [Fact]
@@ -141,20 +140,20 @@ public sealed class LegendaryEventRunRecordEndpointTests(PlannerApiFactory facto
         var members = uthar.Alpha.AvailableUnitIds.Take(3).ToList();
         var objectives = uthar.Alpha.UnitsRestrictions.Select(restriction => restriction.Index).Take(2).ToList();
         var created = await ReadAsync<LegendaryEventPlanResponse>(await client.PostAsJsonAsync(
-            $"/api/v1/me/legendary-event-plans/{Uthar}/teams",
-            new CreateLegendaryEventTeamRequest(0, "alpha", "Ultras", members, null, objectives, 1, 9, "manual"), Ct));
+            $"/api/v1/legendary-event-plans/{Uthar}/teams",
+            new CreateLegendaryEventTeamRequest(0, LegendaryEventLaneId.Alpha, "Ultras", members, null, objectives, 1, 9, LegendaryEventDepthSource.Manual), Ct));
         var team = Assert.Single(created.Teams);
         await ReadAsync<LegendaryEventPlanResponse>(await client.PutAsJsonAsync(
-            $"/api/v1/me/legendary-event-plans/{Uthar}/teams/{team.Id}",
-            new UpdateLegendaryEventTeamRequest(created.Revision, "Ultras", members, null, objectives, 2, 7, "estimate"), Ct));
+            $"/api/v1/legendary-event-plans/{Uthar}/teams/{team.Id}",
+            new UpdateLegendaryEventTeamRequest(created.Revision, "Ultras", members, null, objectives, 2, 7, LegendaryEventDepthSource.Estimate), Ct));
 
         await SyncAsync(client, token, Lre(Uthar, run: 2, alpha: [([0], 10)]));
 
         var snapshot = Assert.Single(Assert.Single((await ReadRecordsAsync(client, Uthar)).Records).Teams);
-        Assert.Equal((team.Id, "alpha", "Ultras", 0), (snapshot.TeamId, snapshot.LaneId, snapshot.Name, snapshot.SortOrder));
+        Assert.Equal((team.Id, LegendaryEventLaneId.Alpha, "Ultras", 0), (snapshot.TeamId, snapshot.LaneId, snapshot.Name, snapshot.SortOrder));
         Assert.Equal(members, snapshot.MemberUnitIds);
         Assert.Equal(objectives.Order(), snapshot.ObjectiveIndexes);
-        Assert.Equal((7, "estimate"), (snapshot.ExpectedBattleClears, snapshot.ExpectedBattleClearsSource));
+        Assert.Equal((7, LegendaryEventDepthSource.Estimate), (snapshot.ExpectedBattleClears, snapshot.ExpectedBattleClearsSource));
     }
 
     [Fact]
@@ -184,18 +183,18 @@ public sealed class LegendaryEventRunRecordEndpointTests(PlannerApiFactory facto
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         Assert.Empty((await ReadPlansAsync(client)).Plans);
 
-        await client.PutAsJsonAsync($"/api/v1/me/legendary-event-plans/{Uthar}",
+        await client.PutAsJsonAsync($"/api/v1/legendary-event-plans/{Uthar}",
             new UpdateLegendaryEventPlanRequest(0, null, true), Ct);
-        await client.PutAsJsonAsync($"/api/v1/me/legendary-event-plans/{Lysander}",
+        await client.PutAsJsonAsync($"/api/v1/legendary-event-plans/{Lysander}",
             new UpdateLegendaryEventPlanRequest(0, "Alpha first", false), Ct);
         var other = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
-        await other.PutAsJsonAsync($"/api/v1/me/legendary-event-plans/{Uthar}",
+        await other.PutAsJsonAsync($"/api/v1/legendary-event-plans/{Uthar}",
             new UpdateLegendaryEventPlanRequest(0, "other", false), Ct);
 
         var plans = (await ReadPlansAsync(client)).Plans;
         Assert.Equal([Lysander, Uthar], plans.Select(plan => plan.EventId));
         Assert.Equivalent(
-            await ReadAsync<LegendaryEventPlanResponse>(await client.GetAsync($"/api/v1/me/legendary-event-plans/{Lysander}", Ct)),
+            await ReadAsync<LegendaryEventPlanResponse>(await client.GetAsync($"/api/v1/legendary-event-plans/{Lysander}", Ct)),
             plans[0]);
         Assert.Equal("Alpha first", plans[0].Notes);
         Assert.Single((await ReadPlansAsync(other)).Plans);
@@ -207,7 +206,7 @@ public sealed class LegendaryEventRunRecordEndpointTests(PlannerApiFactory facto
         var subject = $"lre-retired-{Guid.NewGuid()}";
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory, subject);
         const string retired = "retiredEvent";
-        const string url = $"/api/v1/me/legendary-event-plans/{retired}";
+        const string url = $"/api/v1/legendary-event-plans/{retired}";
         using (var scope = factory.Services.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
@@ -288,7 +287,7 @@ public sealed class LegendaryEventRunRecordEndpointTests(PlannerApiFactory facto
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.GetAsync($"/api/v1/me/legendary-event-plans/{Uthar}/run-records{query}", Ct);
+        var response = await client.GetAsync($"/api/v1/legendary-event-plans/{Uthar}/run-records{query}", Ct);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         Assert.NotNull((await response.ReadProblemAsync())["errors"]![field]);
@@ -300,7 +299,7 @@ public sealed class LegendaryEventRunRecordEndpointTests(PlannerApiFactory facto
         var (client, token) = await CreateSyncingClientAsync();
         await SyncAsync(client, token, Lre(Uthar, run: 2, alpha: [([0, 1, 2], 34)]));
         var record = Assert.Single((await ReadRecordsAsync(client, Uthar)).Records);
-        var url = $"/api/v1/me/legendary-event-plans/{Uthar}/run-records/{record.Id}/roster";
+        var url = $"/api/v1/legendary-event-plans/{Uthar}/run-records/{record.Id}/roster";
 
         var first = await client.GetAsync(url, Ct);
         first.EnsureSuccessStatusCode();
@@ -328,8 +327,8 @@ public sealed class LegendaryEventRunRecordEndpointTests(PlannerApiFactory facto
         var record = Assert.Single((await ReadRecordsAsync(client, Uthar)).Records);
         var other = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var foreign = await other.GetAsync($"/api/v1/me/legendary-event-plans/{Uthar}/run-records/{record.Id}/roster", Ct);
-        var otherEvent = await client.GetAsync($"/api/v1/me/legendary-event-plans/{Lysander}/run-records/{record.Id}/roster", Ct);
+        var foreign = await other.GetAsync($"/api/v1/legendary-event-plans/{Uthar}/run-records/{record.Id}/roster", Ct);
+        var otherEvent = await client.GetAsync($"/api/v1/legendary-event-plans/{Lysander}/run-records/{record.Id}/roster", Ct);
 
         Assert.Equal(HttpStatusCode.NotFound, foreign.StatusCode);
         Assert.Equal(HttpStatusCode.NotFound, otherEvent.StatusCode);
@@ -385,7 +384,7 @@ public sealed class LegendaryEventRunRecordEndpointTests(PlannerApiFactory facto
         var token = $"lre-runs-{Guid.NewGuid()}";
         factory.TacticusApi.ConfigurePlayerResponse(token, FakeTacticusApi.BuildPlayerResponse());
         var response = await client.PutAsJsonAsync(
-            "/api/v1/me/tacticus-integration", new UpdateTacticusIntegrationRequest(token, null), Ct);
+            "/api/v1/account/tacticus-integration", new UpdateTacticusIntegrationRequest(token, null), Ct);
         response.EnsureSuccessStatusCode();
         return (client, token);
     }
@@ -446,14 +445,14 @@ public sealed class LegendaryEventRunRecordEndpointTests(PlannerApiFactory facto
 
     private static async Task<LegendaryEventRunRecordsResponse> ReadRecordsAsync(HttpClient client, string eventId, string query = "") =>
         await ReadAsync<LegendaryEventRunRecordsResponse>(
-            await client.GetAsync($"/api/v1/me/legendary-event-plans/{eventId}/run-records{query}", Ct));
+            await client.GetAsync($"/api/v1/legendary-event-plans/{eventId}/run-records{query}", Ct));
 
     private static async Task<RosterSnapshotResponse> ReadRosterAsync(HttpClient client, string eventId, Guid recordId) =>
         await ReadAsync<RosterSnapshotResponse>(
-            await client.GetAsync($"/api/v1/me/legendary-event-plans/{eventId}/run-records/{recordId}/roster", Ct));
+            await client.GetAsync($"/api/v1/legendary-event-plans/{eventId}/run-records/{recordId}/roster", Ct));
 
     private static async Task<LegendaryEventPlanListResponse> ReadPlansAsync(HttpClient client) =>
-        await ReadAsync<LegendaryEventPlanListResponse>(await client.GetAsync("/api/v1/me/legendary-event-plans", Ct));
+        await ReadAsync<LegendaryEventPlanListResponse>(await client.GetAsync("/api/v1/legendary-event-plans", Ct));
 
     private static async Task<T> ReadAsync<T>(HttpResponseMessage response)
     {

@@ -1,5 +1,4 @@
 using System.Net;
-using System.Net.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TacticusPlanner.Api.Features.TacticusIntegration;
@@ -9,9 +8,9 @@ namespace TacticusPlanner.Api.IntegrationTests;
 
 public sealed class UpstreamRateLimitEndpointTests(PlannerApiFactory factory) : IClassFixture<PlannerApiFactory>
 {
-    private const string Sync = "/api/v1/guilds/me/sync";
-    private const string PlayerSync = "/api/v1/me/player-data/sync";
-    private const string Integration = "/api/v1/me/tacticus-integration";
+    private const string Sync = "/api/v1/guild/sync";
+    private const string PlayerSync = "/api/v1/player-data/sync";
+    private const string Integration = "/api/v1/account/tacticus-integration";
 
     private static Task<HttpResponseMessage> PostAsync(HttpClient client, string path) =>
         client.PostAsync(path, null, TestContext.Current.CancellationToken);
@@ -69,7 +68,7 @@ public sealed class UpstreamRateLimitEndpointTests(PlannerApiFactory factory) : 
 
         for (var index = 0; index < 100; index++)
         {
-            Assert.Equal(HttpStatusCode.OK, (await client.GetAsync("/api/v1/me/goals", TestContext.Current.CancellationToken)).StatusCode);
+            Assert.Equal(HttpStatusCode.OK, (await client.GetAsync("/api/v1/goals", TestContext.Current.CancellationToken)).StatusCode);
         }
     }
 
@@ -80,7 +79,7 @@ public sealed class UpstreamRateLimitEndpointTests(PlannerApiFactory factory) : 
         var subject = $"rate-limit-{Guid.NewGuid()}";
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory, subject);
         (await client.PutAsJsonAsync(
-            "/api/v1/me/tacticus-integration", new UpdateTacticusIntegrationRequest(FakeTacticusApi.ValidKey, null), ct))
+            "/api/v1/account/tacticus-integration", new UpdateTacticusIntegrationRequest(FakeTacticusApi.ValidKey, null), ct))
             .EnsureSuccessStatusCode();
         for (var index = 0; index < 6; index++)
         {

@@ -7,7 +7,7 @@ Defines one account-owned order for all in-flight goals so planning consumers ca
 
 ### Requirement: Account has one canonical in-flight order
 
-Each owned Active or Paused goal SHALL have exactly one account-wide priority position, regardless of its project memberships or whether its unit is a Character or Machine of War. The order SHALL contain each goal ID once. Completed and Archived goals SHALL remain readable but SHALL not occupy an in-flight position. `GET /me/goals` SHALL expose the canonical position and an order revision; listing a project SHALL preserve the same relative positions after filtering.
+Each owned Active or Paused goal SHALL have exactly one account-wide priority position, regardless of its project memberships or whether its unit is a Character or Machine of War. The order SHALL contain each goal ID once. Completed and Archived goals SHALL remain readable but SHALL not occupy an in-flight position. `GET /goals` SHALL expose the canonical position and an order revision; listing a project SHALL preserve the same relative positions after filtering.
 
 #### Scenario: Goal shared by projects
 - **WHEN** one goal belongs to two projects
@@ -19,7 +19,7 @@ Each owned Active or Paused goal SHALL have exactly one account-wide priority po
 
 ### Requirement: Owner can reorder the complete global set
 
-`PUT /me/goals/order` SHALL accept the complete distinct set of the owner's current Active and Paused goal IDs in desired order and an expected order revision. It SHALL change only priority, not goal status, dependencies, targets, or membership. The server SHALL reject missing, duplicate, foreign, terminal, or newly added IDs and stale revisions atomically with a structured conflict response. Dependency order SHALL not be enforced by this operation.
+`PUT /goals/order` SHALL accept the complete distinct set of the owner's current Active and Paused goal IDs in desired order and an expected order revision. It SHALL change only priority, not goal status, dependencies, targets, or membership. The server SHALL reject missing, duplicate, foreign, terminal, or newly added IDs and stale revisions atomically with a structured conflict response. Dependency order SHALL not be enforced by this operation.
 
 #### Scenario: Reorder across projects
 - **WHEN** an owner submits a complete valid set moving a goal in project B ahead of one in project A
@@ -36,7 +36,7 @@ Each owned Active or Paused goal SHALL have exactly one account-wide priority po
 
 ### Requirement: Owner can move a goal within a project's projection
 
-`PUT /me/projects/{projectId}/goal-order` SHALL accept a goal ID, a displaced goal ID and the expected order revision. Both goals SHALL be in-flight members of that project. The server SHALL move the goal to the global position currently held by the displaced goal; every in-flight goal between the two positions, project member or not, SHALL shift one place toward the vacated position, and all other relative positions SHALL be unchanged. The operation SHALL change only priority and SHALL return the new order revision and canonical ordered IDs. It SHALL reject a goal moved onto itself, non-members, non-in-flight or foreign goals, and stale revisions atomically, the stale case with the same structured conflict as the global reorder.
+`PUT /projects/{projectId}/goal-order` SHALL accept a goal ID, a displaced goal ID and the expected order revision. Both goals SHALL be in-flight members of that project. The server SHALL move the goal to the global position currently held by the displaced goal; every in-flight goal between the two positions, project member or not, SHALL shift one place toward the vacated position, and all other relative positions SHALL be unchanged. The operation SHALL change only priority and SHALL return the new order revision and canonical ordered IDs. It SHALL reject a goal moved onto itself, non-members, non-in-flight or foreign goals, and stale revisions atomically, the stale case with the same structured conflict as the global reorder.
 
 #### Scenario: Moving a member up within the project
 - **GIVEN** global order A, B, C, D, E and a project containing A, C and E

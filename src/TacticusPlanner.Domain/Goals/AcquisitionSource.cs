@@ -17,24 +17,22 @@ public sealed class AcquisitionSource
 }
 
 /// <summary>
-/// The server-owned allow-list of <see cref="AcquisitionSource.Kind"/> values. Intentionally growable:
-/// adding <c>Incursion</c> (a MoW-only run-based source, tacticus-planner-apps#106) is a one-line
-/// addition here plus its gating rule in <c>GoalTargetValidationService</c> — no DTO or OpenAPI change.
+/// The server-owned allow-list of <see cref="AcquisitionSource.Kind"/> values (stored by name). Intentionally
+/// growable: adding <c>Incursion</c> (a MoW-only run-based source, tacticus-planner-apps#106) is a member
+/// here plus its gating rule in <c>AcquisitionSourceRules</c>; the OpenAPI document picks the member up.
 /// </summary>
+public enum AcquisitionSourceKind
+{
+    Campaign,
+    Onslaught,
+    Shop,
+}
+
 public static class AcquisitionSourceKinds
 {
-    public const string Campaign = "Campaign";
-    public const string Onslaught = "Onslaught";
-    public const string Shop = "Shop";
-
-    public static readonly IReadOnlySet<string> All =
-        new HashSet<string>(StringComparer.Ordinal) { Campaign, Onslaught, Shop };
-
     /// <summary>Kinds that carry no <see cref="AcquisitionSource.Ids"/> (a non-empty list is rejected).</summary>
-    public static readonly IReadOnlySet<string> RunBased =
-        new HashSet<string>(StringComparer.Ordinal) { Onslaught };
-
-    public static bool IsKnown(string? kind) => kind is not null && All.Contains(kind);
+    public static readonly IReadOnlySet<AcquisitionSourceKind> RunBased =
+        new HashSet<AcquisitionSourceKind> { AcquisitionSourceKind.Onslaught };
 }
 
 /// <summary>

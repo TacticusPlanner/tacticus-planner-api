@@ -138,7 +138,7 @@ public sealed class GoalTargetEditor(
                 && rank.End == target.Rank!.End
                 && rank.EndPointFive == target.Rank.EndPointFive
                 && rank.EndAppliedUpgrades == target.Rank.EndAppliedUpgrades,
-            GoalType.Ascension => config.Progression?.End == target.Progression!.End,
+            GoalType.Ascension => config.Progression?.End == ProgressionRules.WireName(target.Progression!.End),
             GoalType.Ability => config.Ability is { } ability
                 && ability.ActiveEnd == target.Ability!.ActiveEnd
                 && ability.PassiveEnd == target.Ability.PassiveEnd,
@@ -176,7 +176,7 @@ public sealed class GoalTargetEditor(
                 config.Rank.EndAppliedUpgrades = target.Rank.EndAppliedUpgrades;
                 break;
             case GoalType.Ascension:
-                config.Progression!.End = target.Progression!.End;
+                config.Progression!.End = ProgressionRules.WireName(target.Progression!.End);
                 break;
             case GoalType.Ability:
                 config.Ability!.ActiveEnd = target.Ability!.ActiveEnd;
@@ -198,7 +198,7 @@ public sealed class GoalTargetEditor(
         ProfileId profileId, Goal goal, GoalTargetEditRequest target, CancellationToken ct)
     {
         var config = goal.Config;
-        var strategy = config.FarmingStrategy.ToString();
+        var strategy = config.FarmingStrategy;
         var request = goal.GoalType switch
         {
             GoalType.Rank => new CreateGoalConfigRequest(
@@ -207,7 +207,8 @@ public sealed class GoalTargetEditor(
                     target.Rank!.End, target.Rank.EndPointFive, target.Rank.EndAppliedUpgrades),
                 FarmingStrategy: strategy),
             GoalType.Ascension => new CreateGoalConfigRequest(
-                Progression: new ProgressionTargetRequest(config.Progression!.Start, target.Progression!.End),
+                Progression: new ProgressionTargetRequest(
+                    ProgressionRules.FromWireName(config.Progression!.Start), target.Progression!.End),
                 AcquisitionSources: null),
             GoalType.Ability => new CreateGoalConfigRequest(
                 Ability: new AbilityTargetRequest(
@@ -247,15 +248,8 @@ public sealed class GoalDetailsEditor(GoalTargetValidationService validation)
     public GoalEditResult Apply(Goal goal, UpdateGoalRequest req)
     {
         FarmingStrategy? farmingStrategy = null;
-        if (req.FarmingStrategy is not null)
+        if (req.FarmingStrategy is { } parsedStrategy)
         {
-            if (!Enum.TryParse<FarmingStrategy>(req.FarmingStrategy, ignoreCase: true, out var parsedStrategy)
-                || !Enum.IsDefined(parsedStrategy)
-                || int.TryParse(req.FarmingStrategy, out _))
-            {
-                return new GoalEditResult.Invalid(nameof(UpdateGoalRequest.FarmingStrategy), "Unknown farming strategy.");
-            }
-
             if (parsedStrategy != FarmingStrategy.TotalUpgrades
                 && goal.GoalType != GoalType.Rank
                 && !(goal.GoalType == GoalType.Ability && goal.EntityType == GoalEntityType.Mow))

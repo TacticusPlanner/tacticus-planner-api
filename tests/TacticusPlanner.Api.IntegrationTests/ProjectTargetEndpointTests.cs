@@ -1,5 +1,4 @@
 using System.Net;
-using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,8 +11,8 @@ namespace TacticusPlanner.Api.IntegrationTests;
 /// <summary>Spec: project-event-target — a project's optional Legendary Event target.</summary>
 public sealed class ProjectTargetEndpointTests(PlannerApiFactory factory) : IClassFixture<PlannerApiFactory>
 {
-    private const string ProjectsUrl = "/api/v1/me/projects";
-    private static readonly ProjectTargetDto Uthar = new("legendaryEvent", "votanUthar");
+    private const string ProjectsUrl = "/api/v1/projects";
+    private static readonly ProjectTargetDto Uthar = new(ProjectTargetKind.LegendaryEvent, "votanUthar");
 
     private static CancellationToken Ct => TestContext.Current.CancellationToken;
 
@@ -39,17 +38,33 @@ public sealed class ProjectTargetEndpointTests(PlannerApiFactory factory) : ICla
         Assert.Null(project.Target);
     }
 
-    [Theory]
-    [InlineData("legendaryEvent", "notAnEvent", "target.eventId")]
-    [InlineData("guildRaid", "votanUthar", "target.kind")]
-    public async Task CreateRejectsAnInvalidTarget(string kind, string eventId, string field)
+    [Fact]
+    public async Task CreateRejectsAnUnknownTargetEvent()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
         var response = await client.PostAsJsonAsync(
-            ProjectsUrl, new CreateProjectRequest("Uthar run 3", null, null, new ProjectTargetDto(kind, eventId)), Ct);
+            ProjectsUrl,
+            new CreateProjectRequest("Uthar run 3", null, null, new ProjectTargetDto(ProjectTargetKind.LegendaryEvent, "notAnEvent")),
+            Ct);
 
-        await AssertBadRequestAsync(response, field);
+        await AssertBadRequestAsync(response, "target.eventId");
+    }
+
+    [Fact]
+    public async Task CreateRejectsAnUnknownTargetKind()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.SendMutatedJsonAsync(
+            HttpMethod.Post,
+            ProjectsUrl,
+            new CreateProjectRequest("Uthar run 3", null, null, Uthar),
+            body => body["target"]!["kind"] = "guildRaid");
+
+        await response.AssertFieldRejectedAsync("target.kind");
+        var list = await client.GetFromJsonAsync<ListProjectsResponse>(ProjectsUrl, Ct);
+        Assert.DoesNotContain(list!.Projects, project => project.Name == "Uthar run 3");
     }
 
     [Fact]
@@ -61,7 +76,7 @@ public sealed class ProjectTargetEndpointTests(PlannerApiFactory factory) : ICla
 
         var response = await client.PutAsJsonAsync(
             $"{ProjectsUrl}/{defaultProject.ProjectId}",
-            new UpdateProjectRequest(defaultProject.Name, null, null, "Active", defaultProject.Revision, Uthar),
+            new UpdateProjectRequest(defaultProject.Name, null, null, ProjectStatus.Active, defaultProject.Revision, Uthar),
             Ct);
 
         await AssertBadRequestAsync(response, "target");
@@ -73,7 +88,7 @@ public sealed class ProjectTargetEndpointTests(PlannerApiFactory factory) : ICla
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var project = await CreateAsync(client, Uthar);
 
-        var updated = await UpdateAsync(client, project, "Active", null);
+        var updated = await UpdateAsync(client, project, ProjectStatus.Active, null);
 
         Assert.Null(updated.Target);
     }
@@ -109,9 +124,9 @@ public sealed class ProjectTargetEndpointTests(PlannerApiFactory factory) : ICla
         }
         var list = await client.GetFromJsonAsync<ListProjectsResponse>(ProjectsUrl, Ct);
         var current = list!.Projects.Single(entry => entry.ProjectId == project.ProjectId);
-        var retired = new ProjectTargetDto("legendaryEvent", "retiredEvent");
+        var retired = new ProjectTargetDto(ProjectTargetKind.LegendaryEvent, "retiredEvent");
 
-        var archived = await UpdateAsync(client, current, "Archived", retired);
+        var archived = await UpdateAsync(client, current, ProjectStatus.Archived, retired);
 
         Assert.Equal(retired, archived.Target);
     }
@@ -122,8 +137,8 @@ public sealed class ProjectTargetEndpointTests(PlannerApiFactory factory) : ICla
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var project = await CreateAsync(client, Uthar);
 
-        var archived = await UpdateAsync(client, project, "Archived", Uthar);
-        var restored = await UpdateAsync(client, archived, "Active", Uthar);
+        var archived = await UpdateAsync(client, project, ProjectStatus.Archived, Uthar);
+        var restored = await UpdateAsync(client, archived, ProjectStatus.Active, Uthar);
 
         Assert.Equal(Uthar, archived.Target);
         Assert.Equal(Uthar, restored.Target);
@@ -138,7 +153,7 @@ public sealed class ProjectTargetEndpointTests(PlannerApiFactory factory) : ICla
     }
 
     private static async Task<ProjectSummaryResponse> UpdateAsync(
-        HttpClient client, ProjectSummaryResponse project, string status, ProjectTargetDto? target)
+        HttpClient client, ProjectSummaryResponse project, ProjectStatus status, ProjectTargetDto? target)
     {
         var response = await client.PutAsJsonAsync(
             $"{ProjectsUrl}/{project.ProjectId}",

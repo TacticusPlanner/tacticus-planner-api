@@ -16,7 +16,7 @@ public sealed class GetCampaignEventProgressEndpoint
 {
     public override void Configure()
     {
-        Get("me/player-data-overrides/campaign-events-progress");
+        Get("player-data-overrides/campaign-events-progress");
         Summary(summary => summary.Summary = "Gets manual campaign-event progress overrides.");
     }
 
@@ -43,7 +43,7 @@ public sealed class UpdateCampaignEventProgressEndpoint
 {
     public override void Configure()
     {
-        Put("me/player-data-overrides/campaign-events-progress");
+        Put("player-data-overrides/campaign-events-progress");
         Summary(summary => summary.Summary = "Replaces manual campaign-event progress overrides.");
     }
 

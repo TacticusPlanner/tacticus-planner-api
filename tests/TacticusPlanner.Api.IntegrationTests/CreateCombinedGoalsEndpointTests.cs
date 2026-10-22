@@ -1,7 +1,7 @@
 using System.Net;
-using System.Net.Http.Json;
 using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Api.Features.Projects;
+using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.GameDomain;
 
 namespace TacticusPlanner.Api.IntegrationTests;
@@ -9,13 +9,13 @@ namespace TacticusPlanner.Api.IntegrationTests;
 public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) : IClassFixture<PlannerApiFactory>
 {
     private static readonly CreateCombinedGoalsRequest UnlockThenRank = new(
-        "character",
+        GoalEntityType.Character,
         "blackTerminator",
         null,
         [
-            new CombinedGoalSpec("unlock", new CreateGoalConfigRequest(), []),
+            new CombinedGoalSpec(GoalType.Unlock, new CreateGoalConfigRequest(), []),
             new CombinedGoalSpec(
-                "rank",
+                GoalType.Rank,
                 new CreateGoalConfigRequest(Rank: new RankTargetRequest(0, false, 0, 15, false, 0)),
                 [0]
             ),
@@ -36,7 +36,7 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
                 {
                     Config = rankSpec.Config with
                     {
-                        AcquisitionSources = [new AcquisitionSourceRequest("Shop", ["crusade:upgHpM004"])],
+                        AcquisitionSources = [new AcquisitionSourceRequest(AcquisitionSourceKind.Shop, ["crusade:upgHpM004"])],
                     },
                 },
             ],
@@ -65,8 +65,8 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
         var unlock = created.Goals[0];
         var rank = created.Goals[1];
 
-        Assert.Equal("Unlock", unlock.GoalType);
-        Assert.Equal("Rank", rank.GoalType);
+        Assert.Equal(GoalType.Unlock, unlock.GoalType);
+        Assert.Equal(GoalType.Rank, rank.GoalType);
 
         Assert.Empty(unlock.DependsOn);
         Assert.Equal([unlock.GoalId], rank.DependsOn);
@@ -122,8 +122,8 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var snapshot = new CreateGoalSnapshotRequest(
-            InitialRank: "Silver1",
-            InitialProgression: "Rare:FourStars",
+            InitialRank: UnitRank.Silver1,
+            InitialProgression: UnitProgression.RareFourStars,
             InitialActiveAbilityLevel: 20,
             InitialPassiveAbilityLevel: 18,
             InitialRequirement: [new GoalSnapshotResourceRequest("material-1", 30)],
@@ -152,7 +152,7 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
         var otherProjectResponse = await client.PostAsJsonAsync(
-            "/api/v1/me/projects",
+            "/api/v1/projects",
             new CreateProjectRequest("Event Prep", null, null),
             TestContext.Current.CancellationToken
         );
@@ -165,7 +165,7 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
 
         Assert.NotNull(created);
         Assert.Equal(2, created.Goals.Count);
-        Assert.All(created.Goals, goal => Assert.Equal("Active", goal.Status));
+        Assert.All(created.Goals, goal => Assert.Equal(GoalStatus.Active, goal.Status));
     }
 
     [Fact]
@@ -181,7 +181,7 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
         // Both the prerequisite (Unlock) and its dependent (Rank) — the flag is request-wide, so the chain
         // never lands half-paused.
         Assert.Equal(2, created.Goals.Count);
-        Assert.All(created.Goals, goal => Assert.Equal("Paused", goal.Status));
+        Assert.All(created.Goals, goal => Assert.Equal(GoalStatus.Paused, goal.Status));
     }
 
     [Fact]
@@ -200,7 +200,7 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var defaultProject = await GetDefaultProjectAsync(client);
         var otherProjectResponse = await client.PostAsJsonAsync(
-            "/api/v1/me/projects",
+            "/api/v1/projects",
             new CreateProjectRequest("Event Prep", null, null),
             TestContext.Current.CancellationToken
         );
@@ -241,9 +241,9 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
         {
             Goals =
             [
-                new CombinedGoalSpec("unlock", new CreateGoalConfigRequest(), [1]), // forward reference
+                new CombinedGoalSpec(GoalType.Unlock, new CreateGoalConfigRequest(), [1]), // forward reference
                 new CombinedGoalSpec(
-                    "rank",
+                    GoalType.Rank,
                     new CreateGoalConfigRequest(Rank: new RankTargetRequest(0, false, 0, 15, false, 0)),
                     []
                 ),
@@ -272,12 +272,15 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
 
         var request = UnlockThenRank with
         {
-            Goals = [new CombinedGoalSpec("material", new CreateGoalConfigRequest(), [])],
+            Goals = [new CombinedGoalSpec(GoalType.Unlock, new CreateGoalConfigRequest(), [])],
         };
 
-        var response = await client.PostGoalAsync(request);
+        var response = await client.SendMutatedJsonAsync(
+            HttpMethod.Post,
+            "/api/v1/goals", request, body => body["goals"]![0]!["goalType"] = "material");
 
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        await response.AssertFieldRejectedAsync("goalType");
+        Assert.Empty((await client.ListGoalsAsync()).Goals);
     }
 
     [Fact]
@@ -287,7 +290,7 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
         // only spec in the request.
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var request = UnlockThenRank with { EntityType = "mow", EntityId = "astraOrdnanceBattery" };
+        var request = UnlockThenRank with { EntityType = GoalEntityType.Mow, EntityId = "astraOrdnanceBattery" };
 
         var response = await client.PostGoalAsync(request);
 
@@ -300,13 +303,13 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
         var request = new CreateCombinedGoalsRequest(
-            "mow",
+            GoalEntityType.Mow,
             "astraOrdnanceBattery",
             null,
             [
-                new CombinedGoalSpec("unlock", new CreateGoalConfigRequest(), []),
+                new CombinedGoalSpec(GoalType.Unlock, new CreateGoalConfigRequest(), []),
                 new CombinedGoalSpec(
-                    "ability",
+                    GoalType.Ability,
                     new CreateGoalConfigRequest(Ability: new AbilityTargetRequest(0, 3, 0, 3)),
                     [0]
                 ),
@@ -328,7 +331,7 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
             [
                 .. UnlockThenRank.Goals,
                 new CombinedGoalSpec(
-                    "rank",
+                    GoalType.Rank,
                     new CreateGoalConfigRequest(Rank: new RankTargetRequest(0, false, 0, 10, false, 0)),
                     []
                 ),
@@ -357,7 +360,7 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
     private static async Task<ProjectSummaryResponse> GetDefaultProjectAsync(HttpClient client)
     {
         var response = await client.GetFromJsonAsync<ListProjectsResponse>(
-            "/api/v1/me/projects",
+            "/api/v1/projects",
             TestContext.Current.CancellationToken
         );
         Assert.NotNull(response);

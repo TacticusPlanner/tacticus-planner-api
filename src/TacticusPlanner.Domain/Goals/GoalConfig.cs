@@ -5,7 +5,7 @@ namespace TacticusPlanner.Domain.Goals;
 /// field independently nullable (mirrors V1's <c>IPersonalGoal</c> shape at the group level) — only the
 /// group relevant to the owning <see cref="Goal.EntityType"/>/<see cref="Goal.GoalType"/> pair is
 /// populated. The start/baseline is immutable after creation; only the <em>end</em> target can change, and
-/// only through the target section of <c>PUT /me/goals/{id}</c> (revision-checked) — see <c>goal-target-editing</c>.
+/// only through the target section of <c>PUT /goals/{id}</c> (revision-checked) — see <c>goal-target-editing</c>.
 /// </summary>
 public sealed class GoalConfig
 {

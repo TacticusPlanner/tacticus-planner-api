@@ -1,10 +1,10 @@
 using System.Net;
-using System.Net.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Api.Features.Projects;
 using TacticusPlanner.Api.Features.V1Import;
+using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.PlayerData.Chunks;
 using TacticusPlanner.GameDomain;
@@ -48,12 +48,12 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         factory.FailAfterSave = db => db.ChangeTracker.Entries<TacticusPlanner.Domain.Goals.Goal>().Any();
         try
         {
-            var response = await client.PostAsJsonAsync("/api/v1/me/v1-import", new ImportV1ProfileRequest(
+            var response = await client.PostAsJsonAsync("/api/v1/account/v1-import", new ImportV1ProfileRequest(
                 username, FakeTacticusV1Client.ValidPassword,
                 new ImportV1Selection(false, false, false, true, false, false)), ct);
             Assert.Equal(HttpStatusCode.InternalServerError, response.StatusCode);
             Assert.True(factory.FailureInjected);
-            var goals = await client.GetFromJsonAsync<ListGoalsResponse>("/api/v1/me/goals", ct);
+            var goals = await client.GetFromJsonAsync<ListGoalsResponse>("/api/v1/goals", ct);
             Assert.Empty(goals!.Goals);
             await using var scope = factory.Services.CreateAsyncScope();
             var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
@@ -74,13 +74,13 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
 
         var body = await ImportGoalsAsync(client, [RankGoal("r1", CharacterId, 1, UnitRank.Iron1)]);
 
-        Assert.Equal("Failed", body.Goals.Status);
+        Assert.Equal(ImportPartStatus.Failed, body.Goals.Status);
         Assert.Equal("player_data_required", body.Goals.Code);
         var outcome = Assert.Single(body.Outcomes);
-        Assert.Equal("Failed", outcome.Status);
+        Assert.Equal(V1GoalOutcomeStatus.Failed, outcome.Status);
         Assert.Equal("player_data_required", outcome.Code);
 
-        var goals = await client.GetFromJsonAsync<ListGoalsResponse>("/api/v1/me/goals", TestContext.Current.CancellationToken);
+        var goals = await client.GetFromJsonAsync<ListGoalsResponse>("/api/v1/goals", TestContext.Current.CancellationToken);
         Assert.Empty(goals!.Goals);
     }
 
@@ -96,7 +96,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
             V1OnslaughtImportData.Missing(), V1CampaignEventProgressImportData.Missing()));
 
         var response = await client.PostAsJsonAsync(
-            "/api/v1/me/v1-import",
+            "/api/v1/account/v1-import",
             new ImportV1ProfileRequest(
                 username, FakeTacticusV1Client.ValidPassword,
                 new ImportV1Selection(true, true, false, true, false, false)),
@@ -104,12 +104,12 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         response.EnsureSuccessStatusCode();
         var body = await response.Content.ReadFromJsonAsync<ImportV1ProfileResponse>(TestContext.Current.CancellationToken);
 
-        Assert.Equal("Imported", body!.PersonalTacticusApiKey.Status);
-        Assert.Equal("Imported", body.TacticusUserId.Status);
-        Assert.Equal("Imported", body.Goals.Status);
+        Assert.Equal(ImportPartStatus.Imported, body!.PersonalTacticusApiKey.Status);
+        Assert.Equal(ImportPartStatus.Imported, body.TacticusUserId.Status);
+        Assert.Equal(ImportPartStatus.Imported, body.Goals.Status);
         // The character starts unowned in the synced snapshot, so the Rank goal also pulls in its
         // Unlock/Level prerequisites automatically — all three still land as "Created", not refused.
-        Assert.All(body.Outcomes, outcome => Assert.Equal("Created", outcome.Status));
+        Assert.All(body.Outcomes, outcome => Assert.Equal(V1GoalOutcomeStatus.Created, outcome.Status));
         Assert.Contains(body.Outcomes, outcome => outcome.SourceGoalId == "r1");
         _ = subject;
     }
@@ -123,7 +123,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
             V1OnslaughtImportData.Missing(), V1CampaignEventProgressImportData.Missing()));
 
         var response = await client.PostAsJsonAsync(
-            "/api/v1/me/v1-import",
+            "/api/v1/account/v1-import",
             new ImportV1ProfileRequest(
                 username, FakeTacticusV1Client.ValidPassword,
                 new ImportV1Selection(false, true, false, true, false, false)),
@@ -131,9 +131,9 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         response.EnsureSuccessStatusCode();
         var body = await response.Content.ReadFromJsonAsync<ImportV1ProfileResponse>(TestContext.Current.CancellationToken);
 
-        Assert.Equal("Failed", body!.Goals.Status);
+        Assert.Equal(ImportPartStatus.Failed, body!.Goals.Status);
         Assert.Equal("player_data_required", body.Goals.Code);
-        Assert.Equal("Imported", body.TacticusUserId.Status);
+        Assert.Equal(ImportPartStatus.Imported, body.TacticusUserId.Status);
     }
 
     [Fact]
@@ -148,7 +148,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         var body = await ImportGoalsAsync(client, [RankGoal("r1", CharacterId, 1, UnitRank.Iron1)]);
 
         var outcome = Assert.Single(body.Outcomes);
-        Assert.Equal("Created", outcome.Status);
+        Assert.Equal(V1GoalOutcomeStatus.Created, outcome.Status);
     }
 
     // ----- Outcome shape / classification -----
@@ -178,9 +178,9 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
             automaticPrerequisites: false);
 
         Assert.Equal(2, body.Outcomes.Count);
-        Assert.All(body.Outcomes, outcome => Assert.Equal("Created", outcome.Status));
-        Assert.Contains(body.Outcomes, o => o.GoalType == "Rank");
-        Assert.Contains(body.Outcomes, o => o.GoalType == "Ascension");
+        Assert.All(body.Outcomes, outcome => Assert.Equal(V1GoalOutcomeStatus.Created, outcome.Status));
+        Assert.Contains(body.Outcomes, o => o.GoalType == GoalType.Rank);
+        Assert.Contains(body.Outcomes, o => o.GoalType == GoalType.Ascension);
         Assert.Equal(2, body.Outcomes.Select(o => o.GoalId).Distinct().Count());
     }
 
@@ -211,7 +211,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         var body = await ImportGoalsAsync(client, [RankGoal("r1", CharacterId, 1, UnitRank.Iron1)]);
 
         var outcome = Assert.Single(body.Outcomes);
-        Assert.Equal("Skipped", outcome.Status);
+        Assert.Equal(V1GoalOutcomeStatus.Skipped, outcome.Status);
         Assert.Equal("target_already_reached", outcome.Code);
     }
 
@@ -220,13 +220,13 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
     {
         var (client, subject) = await CreateProvisionedClientAsync();
         await SeedPlayerDataSnapshotAsync(subject, [Character(CharacterId)]);
-        var existing = await CreateNativeGoalAsync(client, CharacterId, "ascension",
-            new CreateGoalConfigRequest(Progression: new ProgressionTargetRequest("Common:None", "Common:TwoStars")));
+        var existing = await CreateNativeGoalAsync(client, CharacterId, GoalType.Ascension,
+            new CreateGoalConfigRequest(Progression: new ProgressionTargetRequest(UnitProgression.CommonNone, UnitProgression.CommonTwoStars)));
 
         var body = await ImportGoalsAsync(client, [AscensionGoal("a1", CharacterId, 1, UnitProgression.CommonOneStar)]);
 
         var outcome = Assert.Single(body.Outcomes);
-        Assert.Equal("Skipped", outcome.Status);
+        Assert.Equal(V1GoalOutcomeStatus.Skipped, outcome.Status);
         Assert.Equal("goal_already_exists", outcome.Code);
         Assert.Equal(existing.GoalId, outcome.GoalId);
     }
@@ -245,8 +245,8 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
             ],
             automaticPrerequisites: false);
 
-        var created = Assert.Single(body.Outcomes, o => o.Status == "Created");
-        var merged = Assert.Single(body.Outcomes, o => o.Status == "Skipped");
+        var created = Assert.Single(body.Outcomes, o => o.Status == V1GoalOutcomeStatus.Created);
+        var merged = Assert.Single(body.Outcomes, o => o.Status == V1GoalOutcomeStatus.Skipped);
         Assert.Equal("duplicate_goal_merged", merged.Code);
         Assert.Equal(created.GoalId, merged.GoalId);
         Assert.Equal("r-first", created.SourceGoalId); // higher-priority (earlier) source keeps the slot
@@ -272,7 +272,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
             ],
             automaticPrerequisites: false);
 
-        Assert.All(body.Outcomes, outcome => Assert.Equal("Created", outcome.Status));
+        Assert.All(body.Outcomes, outcome => Assert.Equal(V1GoalOutcomeStatus.Created, outcome.Status));
         var low = await GetGoalAsync(client, body.Outcomes[0].GoalId!.Value);
         var high = await GetGoalAsync(client, body.Outcomes[1].GoalId!.Value);
         Assert.NotEqual(low.GoalId, high.GoalId);
@@ -281,7 +281,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         Assert.Equal("first", low.Notes);
         Assert.Equal("second", high.Notes);
 
-        var listed = await client.GetFromJsonAsync<ListGoalsResponse>("/api/v1/me/goals", TestContext.Current.CancellationToken);
+        var listed = await client.GetFromJsonAsync<ListGoalsResponse>("/api/v1/goals", TestContext.Current.CancellationToken);
         Assert.Equal(2, listed!.Goals.Count);
     }
 
@@ -304,8 +304,8 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
             ],
             automaticPrerequisites: false);
 
-        var created = Assert.Single(body.Outcomes, o => o.Status == "Created");
-        Assert.Equal("duplicate_goal_merged", Assert.Single(body.Outcomes, o => o.Status == "Skipped").Code);
+        var created = Assert.Single(body.Outcomes, o => o.Status == V1GoalOutcomeStatus.Created);
+        Assert.Equal("duplicate_goal_merged", Assert.Single(body.Outcomes, o => o.Status == V1GoalOutcomeStatus.Skipped).Code);
         var goal = await GetGoalAsync(client, created.GoalId!.Value);
         Assert.True(goal.Config.Rank!.EndPointFive);
     }
@@ -323,10 +323,10 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
             [RankGoal("r-low", CharacterId, 1, UnitRank.Bronze1), RankGoal("r-high", CharacterId, 2, UnitRank.Silver1)],
             automaticPrerequisites: false);
 
-        Assert.Equal("Created", first.Outcomes[0].Status);
+        Assert.Equal(V1GoalOutcomeStatus.Created, first.Outcomes[0].Status);
         Assert.Equal("goal_already_exists", second.Outcomes[0].Code);
         Assert.Equal(first.Outcomes[0].GoalId, second.Outcomes[0].GoalId);
-        Assert.Equal("Created", second.Outcomes[1].Status);
+        Assert.Equal(V1GoalOutcomeStatus.Created, second.Outcomes[1].Status);
         Assert.NotEqual(first.Outcomes[0].GoalId, second.Outcomes[1].GoalId);
     }
 
@@ -344,11 +344,11 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
             ],
             automaticPrerequisites: false);
 
-        var created = Assert.Single(body.Outcomes, o => o.Status == "Created");
+        var created = Assert.Single(body.Outcomes, o => o.Status == V1GoalOutcomeStatus.Created);
         var goal = await GetGoalAsync(client, created.GoalId!.Value);
         var kinds = goal.Config.AcquisitionSources!.Select(source => source.Kind).ToHashSet();
-        Assert.Contains("Campaign", kinds);
-        Assert.Contains("Onslaught", kinds);
+        Assert.Contains(AcquisitionSourceKind.Campaign, kinds);
+        Assert.Contains(AcquisitionSourceKind.Onslaught, kinds);
     }
 
     [Fact]
@@ -356,15 +356,15 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
     {
         var (client, subject) = await CreateProvisionedClientAsync();
         await SeedPlayerDataSnapshotAsync(subject, [Character(CharacterId, xpLevel: 60)]);
-        await CreateNativeGoalAsync(client, CharacterId, "ascension",
-            new CreateGoalConfigRequest(Progression: new ProgressionTargetRequest("Common:None", "Mythic:MythicWings")));
+        await CreateNativeGoalAsync(client, CharacterId, GoalType.Ascension,
+            new CreateGoalConfigRequest(Progression: new ProgressionTargetRequest(UnitProgression.CommonNone, UnitProgression.MythicMythicWings)));
 
         var body = await ImportGoalsAsync(client, [RankGoal("r1", CharacterId, 1, UnitRank.Gold1)]);
 
         Assert.DoesNotContain(body.Outcomes, o => o.Code == "prerequisite_target_insufficient");
-        Assert.DoesNotContain(body.Outcomes, o => o.Code == "prerequisite_added" && o.GoalType == "Ascension");
+        Assert.DoesNotContain(body.Outcomes, o => o.Code == "prerequisite_added" && o.GoalType == GoalType.Ascension);
         var rankOutcome = Assert.Single(body.Outcomes, o => o.SourceGoalId == "r1");
-        Assert.Equal("Created", rankOutcome.Status);
+        Assert.Equal(V1GoalOutcomeStatus.Created, rankOutcome.Status);
     }
 
     [Fact]
@@ -378,8 +378,8 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
             [AbilityGoal("ab-low", CharacterId, 1, 5, 0), AbilityGoal("ab-high", CharacterId, 2, 7, 0)],
             automaticPrerequisites: false);
 
-        var created = Assert.Single(body.Outcomes, o => o.Status == "Created");
-        var merged = Assert.Single(body.Outcomes, o => o.Status == "Skipped");
+        var created = Assert.Single(body.Outcomes, o => o.Status == V1GoalOutcomeStatus.Created);
+        var merged = Assert.Single(body.Outcomes, o => o.Status == V1GoalOutcomeStatus.Skipped);
         Assert.Equal("ab-low", created.SourceGoalId);
         Assert.Equal("duplicate_goal_merged", merged.Code);
     }
@@ -393,7 +393,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         var body = await ImportGoalsAsync(client, [UnsupportedGoal("u1", 1, type: 7)]);
 
         var outcome = Assert.Single(body.Outcomes);
-        Assert.Equal("Failed", outcome.Status);
+        Assert.Equal(V1GoalOutcomeStatus.Failed, outcome.Status);
         Assert.Equal("unsupported_goal_type", outcome.Code);
         Assert.DoesNotContain("future", outcome.Message, StringComparison.OrdinalIgnoreCase);
         Assert.DoesNotContain("soon", outcome.Message, StringComparison.OrdinalIgnoreCase);
@@ -409,7 +409,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         var body = await ImportGoalsAsync(client, [RankGoal("r1", "totally-unknown-unit-xyz", 1, UnitRank.Iron1)]);
 
         var outcome = Assert.Single(body.Outcomes);
-        Assert.Equal("Failed", outcome.Status);
+        Assert.Equal(V1GoalOutcomeStatus.Failed, outcome.Status);
         Assert.Equal("unknown_unit", outcome.Code);
         Assert.Equal("totally-unknown-unit-xyz", outcome.EntityId);
     }
@@ -426,7 +426,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
             null, null, 0, 14, null, null, null)]);
 
         var outcome = Assert.Single(body.Outcomes);
-        Assert.Equal("Failed", outcome.Status);
+        Assert.Equal(V1GoalOutcomeStatus.Failed, outcome.Status);
         Assert.Equal("invalid_progression", outcome.Code);
     }
 
@@ -441,7 +441,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
             null, null, null, null, null, null, null)]);
 
         var outcome = Assert.Single(body.Outcomes);
-        Assert.Equal("Failed", outcome.Status);
+        Assert.Equal(V1GoalOutcomeStatus.Failed, outcome.Status);
         Assert.Equal("missing_target", outcome.Code);
     }
 
@@ -464,11 +464,11 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
 
         var valid = Assert.Single(body.Outcomes, o => o.SourceGoalId == "valid");
         var rejected = Assert.Single(body.Outcomes, o => o.SourceGoalId == "over-cap");
-        Assert.Equal("Created", valid.Status);
-        Assert.Equal("Failed", rejected.Status);
+        Assert.Equal(V1GoalOutcomeStatus.Created, valid.Status);
+        Assert.Equal(V1GoalOutcomeStatus.Failed, rejected.Status);
         Assert.Equal("target_rejected", rejected.Code);
 
-        var goals = await client.GetFromJsonAsync<ListGoalsResponse>("/api/v1/me/goals", TestContext.Current.CancellationToken);
+        var goals = await client.GetFromJsonAsync<ListGoalsResponse>("/api/v1/goals", TestContext.Current.CancellationToken);
         Assert.Single(goals!.Goals);
     }
 
@@ -514,8 +514,8 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         var goal = await GetGoalAsync(client, body.Outcomes[0].GoalId!.Value);
 
         var sources = goal.Config.AcquisitionSources!;
-        Assert.Contains(sources, s => s.Kind == "Onslaught");
-        Assert.DoesNotContain(sources, s => s.Kind == "Campaign");
+        Assert.Contains(sources, s => s.Kind == AcquisitionSourceKind.Onslaught);
+        Assert.DoesNotContain(sources, s => s.Kind == AcquisitionSourceKind.Campaign);
     }
 
     [Fact]
@@ -531,8 +531,8 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         var goal = await GetGoalAsync(client, body.Outcomes[0].GoalId!.Value);
 
         var sources = goal.Config.AcquisitionSources!;
-        Assert.Contains(sources, s => s.Kind == "Onslaught");
-        Assert.Contains(sources, s => s.Kind == "Campaign");
+        Assert.Contains(sources, s => s.Kind == AcquisitionSourceKind.Onslaught);
+        Assert.Contains(sources, s => s.Kind == AcquisitionSourceKind.Campaign);
     }
 
     [Fact]
@@ -564,10 +564,10 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
             automaticPrerequisites: false);
 
         var outcome = Assert.Single(body.Outcomes);
-        Assert.Equal("Created", outcome.Status);
+        Assert.Equal(V1GoalOutcomeStatus.Created, outcome.Status);
         var goal = await GetGoalAsync(client, outcome.GoalId!.Value);
-        Assert.DoesNotContain(goal.Config.AcquisitionSources ?? [], s => s.Kind == "Onslaught");
-        Assert.Contains(goal.Config.AcquisitionSources ?? [], s => s.Kind == "Campaign");
+        Assert.DoesNotContain(goal.Config.AcquisitionSources ?? [], s => s.Kind == AcquisitionSourceKind.Onslaught);
+        Assert.Contains(goal.Config.AcquisitionSources ?? [], s => s.Kind == AcquisitionSourceKind.Campaign);
     }
 
     // ----- Automatic prerequisite synthesis -----
@@ -580,9 +580,9 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
 
         var body = await ImportGoalsAsync(client, [RankGoal("r1", CharacterId, 1, UnitRank.Stone2)]);
 
-        var unlock = Assert.Single(body.Outcomes, o => o.Code == "prerequisite_added" && o.GoalType == "Unlock");
+        var unlock = Assert.Single(body.Outcomes, o => o.Code == "prerequisite_added" && o.GoalType == GoalType.Unlock);
         var rankOutcome = Assert.Single(body.Outcomes, o => o.SourceGoalId == "r1");
-        Assert.Equal("Created", rankOutcome.Status);
+        Assert.Equal(V1GoalOutcomeStatus.Created, rankOutcome.Status);
         var rankGoal = await GetGoalAsync(client, rankOutcome.GoalId!.Value);
         Assert.Contains(unlock.GoalId!.Value, rankGoal.DependsOn);
     }
@@ -596,8 +596,8 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         var body = await ImportGoalsAsync(
             client, [UnlockGoal("unlock", CharacterId, 1), RankGoal("r1", CharacterId, 2, UnitRank.Stone2)]);
 
-        Assert.DoesNotContain(body.Outcomes, o => o.Code == "prerequisite_added" && o.GoalType == "Unlock");
-        Assert.Equal("Created", Assert.Single(body.Outcomes, o => o.SourceGoalId == "unlock").Status);
+        Assert.DoesNotContain(body.Outcomes, o => o.Code == "prerequisite_added" && o.GoalType == GoalType.Unlock);
+        Assert.Equal(V1GoalOutcomeStatus.Created, Assert.Single(body.Outcomes, o => o.SourceGoalId == "unlock").Status);
     }
 
     [Fact]
@@ -605,11 +605,11 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
     {
         var (client, subject) = await CreateProvisionedClientAsync();
         await SeedPlayerDataSnapshotAsync(subject, []);
-        await CreateNativeGoalAsync(client, CharacterId, "unlock", new CreateGoalConfigRequest());
+        await CreateNativeGoalAsync(client, CharacterId, GoalType.Unlock, new CreateGoalConfigRequest());
 
         var body = await ImportGoalsAsync(client, [RankGoal("r1", CharacterId, 1, UnitRank.Stone2)]);
 
-        Assert.DoesNotContain(body.Outcomes, o => o.Code == "prerequisite_added" && o.GoalType == "Unlock");
+        Assert.DoesNotContain(body.Outcomes, o => o.Code == "prerequisite_added" && o.GoalType == GoalType.Unlock);
     }
 
     [Fact]
@@ -622,12 +622,12 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
 
         var expectedAscension = ProgressionRules.MinimumProgressionForRank(UnitRank.Gold1);
 
-        var ascensionOutcome = Assert.Single(body.Outcomes, o => o.Code == "prerequisite_added" && o.GoalType == "Ascension");
+        var ascensionOutcome = Assert.Single(body.Outcomes, o => o.Code == "prerequisite_added" && o.GoalType == GoalType.Ascension);
         var rankOutcome = Assert.Single(body.Outcomes, o => o.SourceGoalId == "r1");
 
         var ascensionGoal = await GetGoalAsync(client, ascensionOutcome.GoalId!.Value);
-        Assert.Equal(ProgressionRules.ProgressionOrder[(int)expectedAscension], ascensionGoal.Config.Progression!.End);
-        Assert.DoesNotContain(body.Outcomes, o => o.GoalType == "Level");
+        Assert.Equal(expectedAscension, ascensionGoal.Config.Progression!.End);
+        Assert.DoesNotContain(body.Outcomes, o => o.GoalType.ToString() == "Level");
 
         var rankGoal = await GetGoalAsync(client, rankOutcome.GoalId!.Value);
         Assert.Contains(ascensionOutcome.GoalId.Value, rankGoal.DependsOn);
@@ -644,7 +644,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         var body = await ImportGoalsAsync(
             client, [RankGoal("r1", CharacterId, 1, UnitRank.Gold1), AbilityGoal("ab1", CharacterId, 2, 30, 0)]);
 
-        var ascensionOutcomes = body.Outcomes.Where(o => o.Code == "prerequisite_added" && o.GoalType == "Ascension").ToList();
+        var ascensionOutcomes = body.Outcomes.Where(o => o.Code == "prerequisite_added" && o.GoalType == GoalType.Ascension).ToList();
         Assert.Single(ascensionOutcomes);
         var ascensionGoalId = ascensionOutcomes[0].GoalId!.Value;
 
@@ -667,13 +667,13 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
                 RankGoal("r1", CharacterId, 2, UnitRank.Gold1), // needs EpicRedOneStar, higher than a1's target
             ]);
 
-        Assert.DoesNotContain(body.Outcomes, o => o.Code == "prerequisite_added" && o.GoalType == "Ascension");
+        Assert.DoesNotContain(body.Outcomes, o => o.Code == "prerequisite_added" && o.GoalType == GoalType.Ascension);
         var shortfall = Assert.Single(body.Outcomes, o => o.Code == "prerequisite_target_insufficient");
-        Assert.Equal("Skipped", shortfall.Status);
+        Assert.Equal(V1GoalOutcomeStatus.Skipped, shortfall.Status);
 
-        var ascensionOutcome = Assert.Single(body.Outcomes, o => o.SourceGoalId == "a1" && o.Status == "Created");
+        var ascensionOutcome = Assert.Single(body.Outcomes, o => o.SourceGoalId == "a1" && o.Status == V1GoalOutcomeStatus.Created);
         var ascensionGoal = await GetGoalAsync(client, ascensionOutcome.GoalId!.Value);
-        Assert.Equal("Uncommon:TwoStars", ascensionGoal.Config.Progression!.End); // unchanged
+        Assert.Equal(UnitProgression.UncommonTwoStars, ascensionGoal.Config.Progression!.End); // unchanged
     }
 
     [Fact]
@@ -686,9 +686,9 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
 
         var body = await ImportGoalsAsync(client, [MowAbilityGoal("mow-ab", MowId, 1, 5, 0)]);
 
-        Assert.DoesNotContain(body.Outcomes, o => o.GoalType == "Unlock");
+        Assert.DoesNotContain(body.Outcomes, o => o.GoalType == GoalType.Unlock);
         var outcome = Assert.Single(body.Outcomes, o => o.SourceGoalId == "mow-ab");
-        Assert.Equal("Created", outcome.Status);
+        Assert.Equal(V1GoalOutcomeStatus.Created, outcome.Status);
     }
 
     [Fact]
@@ -700,7 +700,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         var body = await ImportGoalsAsync(client, [RankGoal("r1", CharacterId, 1, UnitRank.Stone2)], automaticPrerequisites: false);
 
         Assert.Single(body.Outcomes);
-        Assert.Equal("Created", body.Outcomes[0].Status);
+        Assert.Equal(V1GoalOutcomeStatus.Created, body.Outcomes[0].Status);
     }
 
     [Fact]
@@ -712,7 +712,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         var body = await ImportGoalsAsync(client, [RankGoal("r1", CharacterId, 1, UnitRank.Adamantine2)]);
 
         Assert.Single(body.Outcomes);
-        Assert.Equal("Created", body.Outcomes[0].Status);
+        Assert.Equal(V1GoalOutcomeStatus.Created, body.Outcomes[0].Status);
     }
 
     // ----- Ordering -----
@@ -753,7 +753,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         await SeedPlayerDataSnapshotAsync(subject, []);
 
         var body = await ImportGoalsAsync(client, [RankGoal("r1", CharacterId, 1, UnitRank.Stone2)]);
-        var unlockGoalId = Assert.Single(body.Outcomes, o => o.GoalType == "Unlock").GoalId!.Value;
+        var unlockGoalId = Assert.Single(body.Outcomes, o => o.GoalType == GoalType.Unlock).GoalId!.Value;
         var rankGoalId = Assert.Single(body.Outcomes, o => o.SourceGoalId == "r1").GoalId!.Value;
 
         var defaultProject = await GetDefaultProjectAsync(client);
@@ -781,8 +781,8 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
             ],
             automaticPrerequisites: false);
 
-        Assert.Equal("Active", await StatusOfSourceGoalAsync(client, body, "planned"));
-        Assert.Equal("Paused", await StatusOfSourceGoalAsync(client, body, "excluded"));
+        Assert.Equal(GoalStatus.Active, await StatusOfSourceGoalAsync(client, body, "planned"));
+        Assert.Equal(GoalStatus.Paused, await StatusOfSourceGoalAsync(client, body, "excluded"));
     }
 
     [Fact]
@@ -795,7 +795,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         var body = await ImportGoalsAsync(
             client, [RankGoal("r1", CharacterId, 1, UnitRank.Iron1, dailyRaids: null)], automaticPrerequisites: false);
 
-        Assert.Equal("Active", await StatusOfSourceGoalAsync(client, body, "r1"));
+        Assert.Equal(GoalStatus.Active, await StatusOfSourceGoalAsync(client, body, "r1"));
     }
 
     [Fact]
@@ -808,9 +808,9 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
 
         var body = await ImportGoalsAsync(client, [RankGoal("r1", CharacterId, 1, UnitRank.Stone2, dailyRaids: true)]);
 
-        var unlock = Assert.Single(body.Outcomes, o => o.Code == "prerequisite_added" && o.GoalType == "Unlock");
-        Assert.Equal("Active", (await GetGoalAsync(client, unlock.GoalId!.Value)).Status);
-        Assert.Equal("Active", await StatusOfSourceGoalAsync(client, body, "r1"));
+        var unlock = Assert.Single(body.Outcomes, o => o.Code == "prerequisite_added" && o.GoalType == GoalType.Unlock);
+        Assert.Equal(GoalStatus.Active, (await GetGoalAsync(client, unlock.GoalId!.Value)).Status);
+        Assert.Equal(GoalStatus.Active, await StatusOfSourceGoalAsync(client, body, "r1"));
     }
 
     [Fact]
@@ -821,9 +821,9 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
 
         var body = await ImportGoalsAsync(client, [RankGoal("r1", CharacterId, 1, UnitRank.Stone2, dailyRaids: false)]);
 
-        var unlock = Assert.Single(body.Outcomes, o => o.Code == "prerequisite_added" && o.GoalType == "Unlock");
-        Assert.Equal("Paused", (await GetGoalAsync(client, unlock.GoalId!.Value)).Status);
-        Assert.Equal("Paused", await StatusOfSourceGoalAsync(client, body, "r1"));
+        var unlock = Assert.Single(body.Outcomes, o => o.Code == "prerequisite_added" && o.GoalType == GoalType.Unlock);
+        Assert.Equal(GoalStatus.Paused, (await GetGoalAsync(client, unlock.GoalId!.Value)).Status);
+        Assert.Equal(GoalStatus.Paused, await StatusOfSourceGoalAsync(client, body, "r1"));
     }
 
     [Fact]
@@ -842,8 +842,8 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
             ],
             automaticPrerequisites: false);
 
-        var created = Assert.Single(body.Outcomes, o => o.Status == "Created");
-        Assert.Equal("Active", (await GetGoalAsync(client, created.GoalId!.Value)).Status);
+        var created = Assert.Single(body.Outcomes, o => o.Status == V1GoalOutcomeStatus.Created);
+        Assert.Equal(GoalStatus.Active, (await GetGoalAsync(client, created.GoalId!.Value)).Status);
     }
 
     // ----- Idempotency -----
@@ -858,12 +858,12 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         var first = await ImportGoalsAsync(client, goals);
         var second = await ImportGoalsAsync(client, goals);
 
-        Assert.Equal("Created", first.Outcomes[0].Status);
-        Assert.Equal("Skipped", second.Outcomes[0].Status);
+        Assert.Equal(V1GoalOutcomeStatus.Created, first.Outcomes[0].Status);
+        Assert.Equal(V1GoalOutcomeStatus.Skipped, second.Outcomes[0].Status);
         Assert.Equal("goal_already_exists", second.Outcomes[0].Code);
         Assert.Equal(first.Outcomes[0].GoalId, second.Outcomes[0].GoalId);
 
-        var allGoals = await client.GetFromJsonAsync<ListGoalsResponse>("/api/v1/me/goals", TestContext.Current.CancellationToken);
+        var allGoals = await client.GetFromJsonAsync<ListGoalsResponse>("/api/v1/goals", TestContext.Current.CancellationToken);
         Assert.Single(allGoals!.Goals);
     }
 
@@ -874,7 +874,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         var subject = $"v1-goal-import-{Guid.NewGuid()}";
         var client = factory.CreateClient();
         client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.SubjectHeader, subject);
-        await client.GetAsync("/api/v1/me", TestContext.Current.CancellationToken);
+        await client.GetAsync("/api/v1/account", TestContext.Current.CancellationToken);
         return (client, subject);
     }
 
@@ -925,7 +925,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         var username = factory.V1Client.ConfigureProfile(new TacticusV1Profile(
             null, null, null, goals, V1OnslaughtImportData.Missing(), V1CampaignEventProgressImportData.Missing()));
         var response = await client.PostAsJsonAsync(
-            "/api/v1/me/v1-import",
+            "/api/v1/account/v1-import",
             new ImportV1ProfileRequest(
                 username, FakeTacticusV1Client.ValidPassword,
                 new ImportV1Selection(false, false, false, true, false, false, automaticPrerequisites)),
@@ -935,28 +935,28 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
     }
 
     private static async Task<GoalDetailResponse> CreateNativeGoalAsync(
-        HttpClient client, string entityId, string goalType, CreateGoalConfigRequest config)
+        HttpClient client, string entityId, GoalType goalType, CreateGoalConfigRequest config)
     {
-        var response = await client.PostGoalAsync(new CreateGoalRequest("character", entityId, goalType, config, null));
+        var response = await client.PostGoalAsync(new CreateGoalRequest(GoalEntityType.Character, entityId, goalType, config, null));
         response.EnsureSuccessStatusCode();
         return (await response.ReadCreatedGoalAsync())!;
     }
 
-    private static async Task<string> StatusOfSourceGoalAsync(
+    private static async Task<GoalStatus> StatusOfSourceGoalAsync(
         HttpClient client, ImportV1ProfileResponse body, string sourceGoalId)
     {
         var outcome = Assert.Single(body.Outcomes, o => o.SourceGoalId == sourceGoalId);
-        Assert.Equal("Created", outcome.Status);
+        Assert.Equal(V1GoalOutcomeStatus.Created, outcome.Status);
         return (await GetGoalAsync(client, outcome.GoalId!.Value)).Status;
     }
 
     private static async Task<GoalDetailResponse> GetGoalAsync(HttpClient client, Guid goalId) =>
-        (await client.GetFromJsonAsync<GoalDetailResponse>($"/api/v1/me/goals/{goalId}", TestContext.Current.CancellationToken))!;
+        (await client.GetFromJsonAsync<GoalDetailResponse>($"/api/v1/goals/{goalId}", TestContext.Current.CancellationToken))!;
 
     private static async Task<ProjectSummaryResponse> GetDefaultProjectAsync(HttpClient client)
     {
         var response = await client.GetFromJsonAsync<ListProjectsResponse>(
-            "/api/v1/me/projects", TestContext.Current.CancellationToken);
+            "/api/v1/projects", TestContext.Current.CancellationToken);
         return response!.Projects.Single(project => project.IsDefault);
     }
 

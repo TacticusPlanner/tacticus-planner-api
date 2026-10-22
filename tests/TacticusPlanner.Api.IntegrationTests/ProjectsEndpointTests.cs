@@ -1,16 +1,18 @@
 using System.Net;
-using System.Net.Http.Json;
 using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Api.Features.Projects;
+using TacticusPlanner.Domain.Goals;
+using TacticusPlanner.Domain.Projects;
+using TacticusPlanner.GameDomain;
 
 namespace TacticusPlanner.Api.IntegrationTests;
 
 public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFixture<PlannerApiFactory>
 {
     private static readonly CreateGoalRequest RankGoal = new(
-        "character",
+        GoalEntityType.Character,
         "blackTerminator",
-        "rank",
+        GoalType.Rank,
         new CreateGoalConfigRequest(Rank: new RankTargetRequest(1, false, 0, 5, false, 0)),
         null
     );
@@ -19,10 +21,10 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
     // two distinct goal rows in one project, and two Rank goals for the same character would now trip
     // the one-active-or-paused-per-(entity,type) constraint (see GoalsEndpointTests).
     private static readonly CreateGoalRequest AscensionGoal = new(
-        "character",
+        GoalEntityType.Character,
         "blackTerminator",
-        "ascension",
-        new CreateGoalConfigRequest(Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar")),
+        GoalType.Ascension,
+        new CreateGoalConfigRequest(Progression: new ProgressionTargetRequest(UnitProgression.CommonNone, UnitProgression.CommonOneStar)),
         null
     );
 
@@ -31,7 +33,7 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.GetAsync("/api/v1/me/projects", TestContext.Current.CancellationToken);
+        var response = await client.GetAsync("/api/v1/projects", TestContext.Current.CancellationToken);
         response.EnsureSuccessStatusCode();
         var body = await response.Content.ReadFromJsonAsync<ListProjectsResponse>(TestContext.Current.CancellationToken);
 
@@ -46,8 +48,8 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        await client.GetAsync("/api/v1/me/projects", TestContext.Current.CancellationToken);
-        var response = await client.GetAsync("/api/v1/me/projects", TestContext.Current.CancellationToken);
+        await client.GetAsync("/api/v1/projects", TestContext.Current.CancellationToken);
+        var response = await client.GetAsync("/api/v1/projects", TestContext.Current.CancellationToken);
         var body = await response.Content.ReadFromJsonAsync<ListProjectsResponse>(TestContext.Current.CancellationToken);
 
         Assert.NotNull(body);
@@ -60,7 +62,7 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
         var response = await client.PostAsJsonAsync(
-            "/api/v1/me/projects",
+            "/api/v1/projects",
             new CreateProjectRequest("   ", null, null),
             TestContext.Current.CancellationToken
         );
@@ -73,12 +75,12 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var projects = await client.GetFromJsonAsync<ListProjectsResponse>(
-            "/api/v1/me/projects", TestContext.Current.CancellationToken);
+            "/api/v1/projects", TestContext.Current.CancellationToken);
         // A real project: the removed endpoint answered 200 for it, so only a missing route passes.
         var projectId = Assert.Single(projects!.Projects).ProjectId;
 
         var response = await client.PostAsync(
-            $"/api/v1/me/projects/{projectId}/activate", null, TestContext.Current.CancellationToken);
+            $"/api/v1/projects/{projectId}/activate", null, TestContext.Current.CancellationToken);
 
         Assert.True(response.StatusCode is HttpStatusCode.NotFound or HttpStatusCode.MethodNotAllowed);
     }
@@ -88,7 +90,7 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var json = await client.GetStringAsync("/api/v1/me/projects", TestContext.Current.CancellationToken);
+        var json = await client.GetStringAsync("/api/v1/projects", TestContext.Current.CancellationToken);
 
         Assert.DoesNotContain("isActivePlan", json, StringComparison.OrdinalIgnoreCase);
     }
@@ -98,7 +100,7 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var createResponse = await client.PostAsJsonAsync(
-            "/api/v1/me/projects",
+            "/api/v1/projects",
             new CreateProjectRequest("Event Prep", null, null),
             TestContext.Current.CancellationToken
         );
@@ -106,15 +108,15 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
         Assert.NotNull(project);
 
         var response = await client.PutAsJsonAsync(
-            $"/api/v1/me/projects/{project.ProjectId}",
-            new UpdateProjectRequest("LRE Prep", "Next event", "#6366f1", "Archived", project.Revision),
+            $"/api/v1/projects/{project.ProjectId}",
+            new UpdateProjectRequest("LRE Prep", "Next event", "#6366f1", ProjectStatus.Archived, project.Revision),
             TestContext.Current.CancellationToken
         );
         response.EnsureSuccessStatusCode();
         var updated = await response.Content.ReadFromJsonAsync<ProjectSummaryResponse>(TestContext.Current.CancellationToken);
         Assert.NotNull(updated);
         Assert.Equal("LRE Prep", updated.Name);
-        Assert.Equal("Archived", updated.Status);
+        Assert.Equal(ProjectStatus.Archived, updated.Status);
         Assert.True(updated.Revision > project.Revision);
     }
 
@@ -125,8 +127,8 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
         var project = await GetDefaultProjectAsync(client);
 
         var response = await client.PutAsJsonAsync(
-            $"/api/v1/me/projects/{project.ProjectId}",
-            new UpdateProjectRequest("Changed", null, null, "Active", project.Revision + 1),
+            $"/api/v1/projects/{project.ProjectId}",
+            new UpdateProjectRequest("Changed", null, null, ProjectStatus.Active, project.Revision + 1),
             TestContext.Current.CancellationToken
         );
 
@@ -144,14 +146,14 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
         var project = await GetDefaultProjectAsync(client);
 
         var response = await client.PutAsJsonAsync(
-            $"/api/v1/me/projects/{project.ProjectId}",
-            new UpdateProjectRequest(project.Name, null, null, "Archived", project.Revision),
+            $"/api/v1/projects/{project.ProjectId}",
+            new UpdateProjectRequest(project.Name, null, null, ProjectStatus.Archived, project.Revision),
             TestContext.Current.CancellationToken
         );
 
         Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
         Assert.Equal("defaultProjectCannotBeArchived", await response.ReadIssueCodeAsync());
-        Assert.Equal("Active", (await response.ReadCurrentAsync<ProjectSummaryResponse>()).Status);
+        Assert.Equal(ProjectStatus.Active, (await response.ReadCurrentAsync<ProjectSummaryResponse>()).Status);
     }
 
     [Fact]
@@ -162,7 +164,7 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
         var goal = await CreateGoalAsync(client);
 
         var response = await client.PutAsJsonAsync(
-            $"/api/v1/me/projects/{defaultProject.ProjectId}/goals",
+            $"/api/v1/projects/{defaultProject.ProjectId}/goals",
             new UpdateProjectGoalsRequest([new ProjectGoalEntryRequest(goal.GoalId)], [goal.GoalId]),
             TestContext.Current.CancellationToken
         );
@@ -183,7 +185,7 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
         var goal = await CreateGoalAsync(client); // created directly into the default project
 
         var response = await client.PutAsJsonAsync(
-            $"/api/v1/me/projects/{defaultProject.ProjectId}/goals",
+            $"/api/v1/projects/{defaultProject.ProjectId}/goals",
             new UpdateProjectGoalsRequest([], [goal.GoalId]),
             TestContext.Current.CancellationToken
         );
@@ -202,7 +204,7 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
 
         var order = await client.ListGoalsAsync();
         (await client.PutAsJsonAsync(
-            "/api/v1/me/goals/order",
+            "/api/v1/goals/order",
             new UpdateGoalOrderRequest([second.GoalId, first.GoalId], order.OrderRevision),
             TestContext.Current.CancellationToken
         )).EnsureSuccessStatusCode();
@@ -217,7 +219,7 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
         var project = await GetDefaultProjectAsync(client);
         var first = await CreateGoalAsync(client);
         var second = await CreateGoalAsync(client, new CreateGoalRequest(
-            "mow", "astraOrdnanceBattery", "ability",
+            GoalEntityType.Mow, "astraOrdnanceBattery", GoalType.Ability,
             new CreateGoalConfigRequest(Ability: new AbilityTargetRequest(0, 3, 0, 3)), null));
 
         var firstOriginalPriority = (await client.ListGoalsAsync()).Goals.Single(goal => goal.GoalId == first.GoalId).GlobalPriority;
@@ -225,7 +227,7 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
         var third = await CreateGoalAsync(client, AscensionGoal);
 
         var response = await client.PutAsJsonAsync(
-            $"/api/v1/me/projects/{project.ProjectId}/goals",
+            $"/api/v1/projects/{project.ProjectId}/goals",
             new UpdateProjectGoalsRequest([
                 new ProjectGoalEntryRequest(first.GoalId),
                 new ProjectGoalEntryRequest(second.GoalId),
@@ -240,7 +242,7 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
     private static async Task<ProjectSummaryResponse> GetDefaultProjectAsync(HttpClient client)
     {
         var response = await client.GetFromJsonAsync<ListProjectsResponse>(
-            "/api/v1/me/projects",
+            "/api/v1/projects",
             TestContext.Current.CancellationToken
         );
         Assert.NotNull(response);

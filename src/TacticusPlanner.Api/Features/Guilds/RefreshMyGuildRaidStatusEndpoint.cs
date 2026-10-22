@@ -10,7 +10,7 @@ public sealed class RefreshMyGuildRaidStatusEndpoint : EndpointWithoutRequest<Gu
 {
     public override void Configure()
     {
-        Post("guilds/me/raid-status/refresh");
+        Post("guild/raid-status/refresh");
         Summary(summary =>
         {
             summary.Summary = "Forces a Guild Raid status refresh for the caller's guild.";

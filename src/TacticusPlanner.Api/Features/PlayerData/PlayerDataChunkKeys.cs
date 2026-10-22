@@ -10,7 +10,7 @@ namespace TacticusPlanner.Api.Features.PlayerData;
 public static class PlayerDataChunkKeys
 {
     /// <summary>Public route prefix the served chunks are mounted under (used to build manifest urls).</summary>
-    public const string RoutePrefix = "/api/v1/me/player-data";
+    public const string RoutePrefix = "/api/v1/player-data";
 
     public const string PlayerDetails = "player-details";
     public const string Characters = "characters";

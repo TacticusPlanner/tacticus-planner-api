@@ -13,7 +13,7 @@ public sealed class UpdateDisplayNameEndpoint : Endpoint<UpdateDisplayNameReques
 
     public override void Configure()
     {
-        Put("me/display-name");
+        Put("account/display-name");
         Summary(summary =>
         {
             summary.Summary = "Confirms or edits the current profile's app-owned display name.";

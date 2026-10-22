@@ -1,21 +1,21 @@
-using System.Net.Http.Json;
 using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Api.Features.Projects;
+using TacticusPlanner.Domain.Goals;
 
 namespace TacticusPlanner.Api.IntegrationTests;
 
 /// <summary>
 /// Regression guard for goal-lifecycle-status: "Project membership operations do not change a goal's
 /// status". Membership changes (through either direction of the membership endpoints) may not move a goal
-/// between Active and Paused — a goal's status changes only through <c>POST me/goals/status</c>, which names the
+/// between Active and Paused — a goal's status changes only through <c>POST goals/status</c>, which names the
 /// goals it transitions (covered by <see cref="GoalBulkStatusEndpointTests"/>).
 /// </summary>
 public sealed class GoalStatusInvarianceTests(PlannerApiFactory factory) : IClassFixture<PlannerApiFactory>
 {
     private static readonly CreateGoalRequest RankGoal = new(
-        "character",
+        GoalEntityType.Character,
         "blackTerminator",
-        "rank",
+        GoalType.Rank,
         new CreateGoalConfigRequest(Rank: new RankTargetRequest(1, false, 0, 5, false, 0)),
         null
     );
@@ -32,12 +32,12 @@ public sealed class GoalStatusInvarianceTests(PlannerApiFactory factory) : IClas
             Projects = [new ProjectPriorityRequest(defaultProject.ProjectId)],
             StartPaused = true,
         });
-        Assert.Equal("Paused", goal.Status);
+        Assert.Equal(GoalStatus.Paused, goal.Status);
 
         var response = await client.PutProjectsAsync(goal.GoalId, [defaultProject.ProjectId, projectB.ProjectId]);
         response.EnsureSuccessStatusCode();
 
-        Assert.Equal("Paused", (await GetGoalAsync(client, goal.GoalId)).Status);
+        Assert.Equal(GoalStatus.Paused, (await GetGoalAsync(client, goal.GoalId)).Status);
     }
 
     [Fact]
@@ -54,13 +54,13 @@ public sealed class GoalStatusInvarianceTests(PlannerApiFactory factory) : IClas
         });
 
         var response = await client.PutAsJsonAsync(
-            $"/api/v1/me/projects/{projectB.ProjectId}/goals",
+            $"/api/v1/projects/{projectB.ProjectId}/goals",
             new UpdateProjectGoalsRequest([new ProjectGoalEntryRequest(goal.GoalId)], []),
             TestContext.Current.CancellationToken
         );
         response.EnsureSuccessStatusCode();
 
-        Assert.Equal("Paused", (await GetGoalAsync(client, goal.GoalId)).Status);
+        Assert.Equal(GoalStatus.Paused, (await GetGoalAsync(client, goal.GoalId)).Status);
     }
 
     [Fact]
@@ -78,18 +78,18 @@ public sealed class GoalStatusInvarianceTests(PlannerApiFactory factory) : IClas
                 new ProjectPriorityRequest(projectB.ProjectId),
             ],
         });
-        Assert.Equal("Active", goal.Status);
+        Assert.Equal(GoalStatus.Active, goal.Status);
 
         var response = await client.PutProjectsAsync(goal.GoalId, [projectB.ProjectId]);
         response.EnsureSuccessStatusCode();
 
-        Assert.Equal("Active", (await GetGoalAsync(client, goal.GoalId)).Status);
+        Assert.Equal(GoalStatus.Active, (await GetGoalAsync(client, goal.GoalId)).Status);
     }
 
     private static async Task<ProjectSummaryResponse> CreateProjectAsync(HttpClient client, string name)
     {
         var response = await client.PostAsJsonAsync(
-            "/api/v1/me/projects",
+            "/api/v1/projects",
             new CreateProjectRequest(name, null, null),
             TestContext.Current.CancellationToken
         );
@@ -102,12 +102,12 @@ public sealed class GoalStatusInvarianceTests(PlannerApiFactory factory) : IClas
 
     private static async Task<GoalDetailResponse> GetGoalAsync(HttpClient client, Guid goalId) =>
         (await client.GetFromJsonAsync<GoalDetailResponse>(
-            $"/api/v1/me/goals/{goalId}", TestContext.Current.CancellationToken))!;
+            $"/api/v1/goals/{goalId}", TestContext.Current.CancellationToken))!;
 
     private static async Task<ProjectSummaryResponse> GetDefaultProjectAsync(HttpClient client)
     {
         var response = await client.GetFromJsonAsync<ListProjectsResponse>(
-            "/api/v1/me/projects", TestContext.Current.CancellationToken);
+            "/api/v1/projects", TestContext.Current.CancellationToken);
         Assert.NotNull(response);
         return response.Projects.Single(project => project.IsDefault);
     }

@@ -1,5 +1,4 @@
 using System.Net;
-using System.Net.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TacticusPlanner.Api.Features.PlayerDataOverrides;
@@ -9,7 +8,7 @@ namespace TacticusPlanner.Api.IntegrationTests;
 
 public sealed class CampaignEventProgressEndpointTests(PlannerApiFactory factory) : IClassFixture<PlannerApiFactory>
 {
-    private const string Path = "/api/v1/me/player-data-overrides/campaign-events-progress";
+    private const string Path = "/api/v1/player-data-overrides/campaign-events-progress";
 
     [Fact]
     public async Task PutPersistsRegularAndExactChallengeProgressAndPreservesOnslaught()
@@ -17,10 +16,10 @@ public sealed class CampaignEventProgressEndpointTests(PlannerApiFactory factory
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var ct = TestContext.Current.CancellationToken;
         var onslaught = await client.GetFromJsonAsync<OnslaughtProgressResponse>(
-            "/api/v1/me/player-data-overrides/onslaught-progress", ct);
+            "/api/v1/player-data-overrides/onslaught-progress", ct);
         var onslaughtResponse = await client.PutAsJsonAsync(
-            "/api/v1/me/player-data-overrides/onslaught-progress",
-            new UpdateOnslaughtProgressRequest(new("Gold", 2), new("Stone", 1), new("Iron", 3), onslaught!.Revision), ct);
+            "/api/v1/player-data-overrides/onslaught-progress",
+            new UpdateOnslaughtProgressRequest(new(OnslaughtSector.Gold, 2), new(OnslaughtSector.Stone, 1), new(OnslaughtSector.Iron, 3), onslaught!.Revision), ct);
         onslaughtResponse.EnsureSuccessStatusCode();
 
         var initial = await client.GetFromJsonAsync<CampaignEventProgressOverridesResponse>(Path, ct);

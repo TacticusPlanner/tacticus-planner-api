@@ -1,9 +1,9 @@
 using System.Net;
-using System.Net.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Api.Features.Projects;
+using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.PlayerData.Chunks;
 using TacticusPlanner.GameDomain;
@@ -11,7 +11,7 @@ using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.IntegrationTests;
 
-/// <summary>Coverage for <c>goal-target-editing</c>: the target section of <c>PUT /me/goals/{id}</c> replaces an
+/// <summary>Coverage for <c>goal-target-editing</c>: the target section of <c>PUT /goals/{id}</c> replaces an
 /// in-flight goal's end target in place, revision-checked, with creation-equivalent validation and the per-profile
 /// slot check. No per-change history is stored.</summary>
 public sealed class GoalTargetEditEndpointTests(PlannerApiFactory factory) : IClassFixture<PlannerApiFactory>
@@ -20,11 +20,11 @@ public sealed class GoalTargetEditEndpointTests(PlannerApiFactory factory) : ICl
     private const string RelevantUpgradeId = "upgHpC014"; // on blackTerminator's rank-up ladder
     private const string UnrelatedUpgradeId = "upgArmC001";
 
-    private static CreateGoalRequest Goal(string goalType, CreateGoalConfigRequest config) =>
-        new("character", CharacterId, goalType, config, null);
+    private static CreateGoalRequest Goal(GoalType goalType, CreateGoalConfigRequest config) =>
+        new(GoalEntityType.Character, CharacterId, goalType, config, null);
 
     private static readonly CreateGoalRequest RankGoal =
-        Goal("rank", new CreateGoalConfigRequest(Rank: new RankTargetRequest(1, false, 0, 5, false, 0)));
+        Goal(GoalType.Rank, new CreateGoalConfigRequest(Rank: new RankTargetRequest(1, false, 0, 5, false, 0)));
 
     private static UpdateGoalTargetRequest RankEdit(long revision, int end, bool pointFive = false, int applied = 0) =>
         new(revision, new GoalTargetEditRequest(Rank: new RankEndTargetRequest(end, pointFive, applied)));
@@ -40,17 +40,17 @@ public sealed class GoalTargetEditEndpointTests(PlannerApiFactory factory) : ICl
             RankGoal with
             {
                 Projects = [new ProjectPriorityRequest(projectA.ProjectId), new ProjectPriorityRequest(projectB.ProjectId)],
-                Snapshot = new CreateGoalSnapshotRequest(InitialRank: "Stone1"),
+                Snapshot = new CreateGoalSnapshotRequest(InitialRank: UnitRank.Stone1),
             });
         var other = await CreateGoalAsync(
             client,
-            Goal("ascension", new CreateGoalConfigRequest(
-                Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar"))) with
+            Goal(GoalType.Ascension, new CreateGoalConfigRequest(
+                Progression: new ProgressionTargetRequest(UnitProgression.CommonNone, UnitProgression.CommonOneStar))) with
             {
                 Projects = [new ProjectPriorityRequest(projectA.ProjectId)],
             });
         var orderBefore = await PrioritiesAsync(client, projectA.ProjectId);
-        var pause = await client.PostStatusAsync(created.GoalId, "paused");
+        var pause = await client.PostStatusAsync(created.GoalId, GoalStatus.Paused);
         pause.EnsureSuccessStatusCode();
         var before = await GetGoalAsync(client, created.GoalId);
 
@@ -64,7 +64,7 @@ public sealed class GoalTargetEditEndpointTests(PlannerApiFactory factory) : ICl
         Assert.Equal(7, fresh.Config.Rank!.End);
         Assert.Equal(before.Config.Rank!.Start, fresh.Config.Rank.Start); // baseline preserved
         Assert.Equal(created.GoalId, fresh.GoalId);
-        Assert.Equal("Paused", fresh.Status); // lifecycle status untouched
+        Assert.Equal(GoalStatus.Paused, fresh.Status); // lifecycle status untouched
         Assert.Equal(before.ProjectIds.Order(), fresh.ProjectIds.Order());
         Assert.Equal(before.Snapshot!.InitialRank, fresh.Snapshot!.InitialRank);
         Assert.Equal(orderBefore, await PrioritiesAsync(client, projectA.ProjectId));
@@ -78,8 +78,8 @@ public sealed class GoalTargetEditEndpointTests(PlannerApiFactory factory) : ICl
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var created = await CreateGoalAsync(
             client,
-            RankGoal with { Config = RankGoal.Config with { FarmingStrategy = "EveryStep" } });
-        var notes = await client.PutDetailsAsync(created.GoalId, new UpdateGoalRequest("keep me", null, "EveryStep"));
+            RankGoal with { Config = RankGoal.Config with { FarmingStrategy = FarmingStrategy.EveryStep } });
+        var notes = await client.PutDetailsAsync(created.GoalId, new UpdateGoalRequest("keep me", null, FarmingStrategy.EveryStep));
         notes.EnsureSuccessStatusCode();
         var before = await GetGoalAsync(client, created.GoalId);
 
@@ -88,7 +88,7 @@ public sealed class GoalTargetEditEndpointTests(PlannerApiFactory factory) : ICl
 
         var after = await GetGoalAsync(client, created.GoalId);
         Assert.Equal("keep me", after.Notes);
-        Assert.Equal("EveryStep", after.Config.FarmingStrategy);
+        Assert.Equal(FarmingStrategy.EveryStep, after.Config.FarmingStrategy);
         Assert.Equal(before.Status, after.Status);
         Assert.Equal(before.CreatedAt, after.CreatedAt);
         Assert.Equal(6, after.Config.Rank!.End);
@@ -101,19 +101,19 @@ public sealed class GoalTargetEditEndpointTests(PlannerApiFactory factory) : ICl
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var created = await CreateGoalAsync(
             client,
-            Goal("ascension", new CreateGoalConfigRequest(
-                Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar"))));
+            Goal(GoalType.Ascension, new CreateGoalConfigRequest(
+                Progression: new ProgressionTargetRequest(UnitProgression.CommonNone, UnitProgression.CommonOneStar))));
 
         var response = await PutTargetAsync(
             client,
             created.GoalId,
             new UpdateGoalTargetRequest(
-                created.Revision, new GoalTargetEditRequest(Progression: new ProgressionEndTargetRequest("Common:TwoStars"))));
+                created.Revision, new GoalTargetEditRequest(Progression: new ProgressionEndTargetRequest(UnitProgression.CommonTwoStars))));
 
         response.EnsureSuccessStatusCode();
         var updated = await GetGoalAsync(client, created.GoalId);
-        Assert.Equal("Common:TwoStars", updated.Config.Progression!.End);
-        Assert.Equal("Common:None", updated.Config.Progression.Start);
+        Assert.Equal(UnitProgression.CommonTwoStars, updated.Config.Progression!.End);
+        Assert.Equal(UnitProgression.CommonNone, updated.Config.Progression.Start);
     }
 
     [Fact]
@@ -121,7 +121,7 @@ public sealed class GoalTargetEditEndpointTests(PlannerApiFactory factory) : ICl
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var created = await CreateGoalAsync(
-            client, Goal("ability", new CreateGoalConfigRequest(Ability: new AbilityTargetRequest(0, 3, 0, 3))));
+            client, Goal(GoalType.Ability, new CreateGoalConfigRequest(Ability: new AbilityTargetRequest(0, 3, 0, 3))));
 
         var response = await PutTargetAsync(
             client,
@@ -141,7 +141,7 @@ public sealed class GoalTargetEditEndpointTests(PlannerApiFactory factory) : ICl
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var created = await CreateGoalAsync(
             client,
-            Goal("upgrade", new CreateGoalConfigRequest(
+            Goal(GoalType.Upgrade, new CreateGoalConfigRequest(
                 Upgrade: new UpgradeTargetRequest([new UpgradeMaterialTargetRequest(RelevantUpgradeId, 2)]))));
 
         var response = await PutTargetAsync(
@@ -165,7 +165,7 @@ public sealed class GoalTargetEditEndpointTests(PlannerApiFactory factory) : ICl
         var targets = new List<UpgradeMaterialTargetRequest> { new(RelevantUpgradeId, 2) };
         var created = await CreateGoalAsync(
             client,
-            Goal("upgrade", new CreateGoalConfigRequest(
+            Goal(GoalType.Upgrade, new CreateGoalConfigRequest(
                 Upgrade: new UpgradeTargetRequest(targets, RankRange: new UpgradeRangeRequest(1, 3)))));
 
         var replace = await PutTargetAsync(
@@ -198,7 +198,7 @@ public sealed class GoalTargetEditEndpointTests(PlannerApiFactory factory) : ICl
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var targets = new List<UpgradeMaterialTargetRequest> { new(RelevantUpgradeId, 2) };
         var created = await CreateGoalAsync(
-            client, Goal("upgrade", new CreateGoalConfigRequest(Upgrade: new UpgradeTargetRequest(targets))));
+            client, Goal(GoalType.Upgrade, new CreateGoalConfigRequest(Upgrade: new UpgradeTargetRequest(targets))));
 
         var response = await PutTargetAsync(
             client,
@@ -217,7 +217,7 @@ public sealed class GoalTargetEditEndpointTests(PlannerApiFactory factory) : ICl
     public async Task UnlockGoalHasNoAdjustableTarget()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
-        var created = await CreateGoalAsync(client, Goal("unlock", new CreateGoalConfigRequest()));
+        var created = await CreateGoalAsync(client, Goal(GoalType.Unlock, new CreateGoalConfigRequest()));
 
         var response = await PutTargetAsync(client, created.GoalId, RankEdit(created.Revision, 7));
 
@@ -226,9 +226,9 @@ public sealed class GoalTargetEditEndpointTests(PlannerApiFactory factory) : ICl
     }
 
     [Theory]
-    [InlineData("completed")]
-    [InlineData("archived")]
-    public async Task HistoricalGoalTargetCannotBeEdited(string status)
+    [InlineData(GoalStatus.Completed)]
+    [InlineData(GoalStatus.Archived)]
+    public async Task HistoricalGoalTargetCannotBeEdited(GoalStatus status)
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var created = await CreateGoalAsync(client, RankGoal);
@@ -286,7 +286,7 @@ public sealed class GoalTargetEditEndpointTests(PlannerApiFactory factory) : ICl
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var upgrade = await CreateGoalAsync(
             client,
-            Goal("upgrade", new CreateGoalConfigRequest(
+            Goal(GoalType.Upgrade, new CreateGoalConfigRequest(
                 Upgrade: new UpgradeTargetRequest([new UpgradeMaterialTargetRequest(RelevantUpgradeId, 2)]))));
 
         var irrelevant = await PutTargetAsync(
@@ -305,7 +305,7 @@ public sealed class GoalTargetEditEndpointTests(PlannerApiFactory factory) : ICl
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory, subject: "target-edit-reached");
         var created = await CreateGoalAsync(
-            client, Goal("rank", new CreateGoalConfigRequest(Rank: new RankTargetRequest(1, false, 0, 12, false, 0))));
+            client, Goal(GoalType.Rank, new CreateGoalConfigRequest(Rank: new RankTargetRequest(1, false, 0, 12, false, 0))));
         await SeedProgressAsync(
             "target-edit-reached",
             new PlayerCharacterRecord { UnitId = UnitId.From(CharacterId), Rank = (UnitRank)8, XpLevel = 60 });
@@ -316,7 +316,7 @@ public sealed class GoalTargetEditEndpointTests(PlannerApiFactory factory) : ICl
         response.EnsureSuccessStatusCode();
         var after = await GetGoalAsync(client, created.GoalId);
         Assert.Equal(5, after.Config.Rank!.End);
-        Assert.Equal("Active", after.Status);
+        Assert.Equal(GoalStatus.Active, after.Status);
     }
 
     [Fact]
@@ -381,15 +381,15 @@ public sealed class GoalTargetEditEndpointTests(PlannerApiFactory factory) : ICl
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var upgrade = await CreateGoalAsync(
             client,
-            Goal("upgrade", new CreateGoalConfigRequest(
+            Goal(GoalType.Upgrade, new CreateGoalConfigRequest(
                 Upgrade: new UpgradeTargetRequest([new UpgradeMaterialTargetRequest(RelevantUpgradeId, 2)]))));
         var ascension = await CreateGoalAsync(
             client,
-            Goal("ascension", new CreateGoalConfigRequest(
-                Progression: new ProgressionTargetRequest("Common:None", "Common:OneStar"))));
+            Goal(GoalType.Ascension, new CreateGoalConfigRequest(
+                Progression: new ProgressionTargetRequest(UnitProgression.CommonNone, UnitProgression.CommonOneStar))));
 
         var noList = await client.PutAsJsonAsync(
-            $"/api/v1/me/goals/{upgrade.GoalId}",
+            $"/api/v1/goals/{upgrade.GoalId}",
             new { target = new { expectedRevision = upgrade.Revision, target = new { upgrade = new { targets = (object?)null } } } },
             TestContext.Current.CancellationToken);
         var blankId = await PutTargetAsync(
@@ -400,7 +400,7 @@ public sealed class GoalTargetEditEndpointTests(PlannerApiFactory factory) : ICl
                 new GoalTargetEditRequest(
                     Upgrade: new UpgradeTargetRequest([new UpgradeMaterialTargetRequest("  ", 1)]))));
         var noStep = await client.PutAsJsonAsync(
-            $"/api/v1/me/goals/{ascension.GoalId}",
+            $"/api/v1/goals/{ascension.GoalId}",
             new { target = new { expectedRevision = ascension.Revision, target = new { progression = new { end = (string?)null } } } },
             TestContext.Current.CancellationToken);
 
@@ -469,7 +469,7 @@ public sealed class GoalTargetEditEndpointTests(PlannerApiFactory factory) : ICl
         var created = await CreateGoalAsync(client, RankGoal);
         Assert.True(created.Revision > 0);
 
-        var paused = await client.PostStatusAsync(created.GoalId, "paused");
+        var paused = await client.PostStatusAsync(created.GoalId, GoalStatus.Paused);
         paused.EnsureSuccessStatusCode();
 
         Assert.True((await GetGoalAsync(client, created.GoalId)).Revision > created.Revision);
@@ -513,7 +513,7 @@ public sealed class GoalTargetEditEndpointTests(PlannerApiFactory factory) : ICl
     private static async Task<GoalDetailResponse> GetGoalAsync(HttpClient client, Guid goalId)
     {
         var goal = await client.GetFromJsonAsync<GoalDetailResponse>(
-            $"/api/v1/me/goals/{goalId}", TestContext.Current.CancellationToken);
+            $"/api/v1/goals/{goalId}", TestContext.Current.CancellationToken);
         Assert.NotNull(goal);
         return goal;
     }
@@ -527,7 +527,7 @@ public sealed class GoalTargetEditEndpointTests(PlannerApiFactory factory) : ICl
     private static async Task<ProjectSummaryResponse> CreateProjectAsync(HttpClient client, string name)
     {
         var response = await client.PostAsJsonAsync(
-            "/api/v1/me/projects", new CreateProjectRequest(name, null, null), TestContext.Current.CancellationToken);
+            "/api/v1/projects", new CreateProjectRequest(name, null, null), TestContext.Current.CancellationToken);
         response.EnsureSuccessStatusCode();
         return await ReadAsync<ProjectSummaryResponse>(response);
     }
@@ -535,7 +535,7 @@ public sealed class GoalTargetEditEndpointTests(PlannerApiFactory factory) : ICl
     private static async Task<ProjectSummaryResponse> GetDefaultProjectAsync(HttpClient client)
     {
         var response = await client.GetFromJsonAsync<ListProjectsResponse>(
-            "/api/v1/me/projects", TestContext.Current.CancellationToken);
+            "/api/v1/projects", TestContext.Current.CancellationToken);
         Assert.NotNull(response);
         return response.Projects.Single(project => project.IsDefault);
     }

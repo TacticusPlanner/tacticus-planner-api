@@ -58,7 +58,7 @@ public sealed class UserSettingsXpBookRarityPostgresTests
         var response = UserSettingsResponse.From(settings);
 
         Assert.Equal(638, response.DailyEnergy);
-        Assert.Equal("Legendary", response.XpBookRarity);
+        Assert.Equal(XpBookRarity.Legendary, response.XpBookRarity);
     }
 
     private sealed class PassthroughEncryption : IColumnEncryptionService

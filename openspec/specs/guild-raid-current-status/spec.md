@@ -8,7 +8,7 @@ Provides an authenticated, normalized view of a registered guild's current raid 
 
 ### Requirement: Current Guild Raid status is scoped to a ready registered guild
 
-The system SHALL expose an authenticated `GET /api/v1/guilds/me/raid-status` endpoint. It SHALL use the caller's linked guild and that guild's stored encrypted API token without returning the token or another member's hit history.
+The system SHALL expose an authenticated `GET /api/v1/guild/raid-status` endpoint. It SHALL use the caller's linked guild and that guild's stored encrypted API token without returning the token or another member's hit history.
 
 The endpoint SHALL return conflict status when the caller has no linked registered guild, the guild has never completed synchronization, the guild has no usable stored token, or the guild has never had a successful Guild Raid status observation persisted. It SHALL preserve the existing not-found behavior for an unprovisioned profile. `GET` SHALL NOT call the upstream Guild Raid API under any circumstance, including these prerequisite-failure cases and the never-observed case.
 
@@ -29,7 +29,7 @@ The endpoint SHALL return conflict status when the caller has no linked register
 
 ### Requirement: The endpoint returns a stable discriminated response
 
-Both `GET /api/v1/guilds/me/raid-status` and `POST /api/v1/guilds/me/raid-status/refresh` SHALL return the same discriminated response on success. Every successful response SHALL contain:
+Both `GET /api/v1/guild/raid-status` and `POST /api/v1/guild/raid-status/refresh` SHALL return the same discriminated response on success. Every successful response SHALL contain:
 
 - `state`: `active` or `noActiveSeason`;
 - `observedAt`: UTC timestamp of the upstream observation represented by the payload;
@@ -151,9 +151,9 @@ A server-side current-user hit read SHALL accept one guild raid season and the a
 
 ### Requirement: Reading status never calls upstream; forced refresh is a separate cooldown-gated endpoint
 
-`GET /api/v1/guilds/me/raid-status` SHALL always return the latest persisted observation for the caller's guild and SHALL NOT call the upstream Guild Raid API, regardless of how old that observation is.
+`GET /api/v1/guild/raid-status` SHALL always return the latest persisted observation for the caller's guild and SHALL NOT call the upstream Guild Raid API, regardless of how old that observation is.
 
-`POST /api/v1/guilds/me/raid-status/refresh` SHALL perform the upstream call, persist a successful result, and return the same discriminated response. It SHALL be gated by a one-minute per-guild cooldown measured from the guild's last sync attempt, successful or failed; a request inside that window SHALL NOT call upstream and SHALL return the current persisted result instead of an error, unless no successful observation has ever been persisted for the guild, in which case it SHALL return a service-unavailable response without calling upstream. Concurrent refresh requests for the same guild within one API instance SHALL share one upstream operation regardless of the cooldown.
+`POST /api/v1/guild/raid-status/refresh` SHALL perform the upstream call, persist a successful result, and return the same discriminated response. It SHALL be gated by a one-minute per-guild cooldown measured from the guild's last sync attempt, successful or failed; a request inside that window SHALL NOT call upstream and SHALL return the current persisted result instead of an error, unless no successful observation has ever been persisted for the guild, in which case it SHALL return a service-unavailable response without calling upstream. Concurrent refresh requests for the same guild within one API instance SHALL share one upstream operation regardless of the cooldown.
 
 #### Scenario: Read never triggers a sync
 
@@ -200,7 +200,7 @@ When the upstream source rejects the guild credential or response data, `POST /r
 
 ### Requirement: A retained observation that cannot be projected is a bad-gateway response
 
-`GET /api/v1/guilds/me/raid-status` never calls upstream, but it still projects the retained observation against the current game-catalog version at read time. If that retained observation can no longer be projected (for example, its season config or a referenced encounter is missing from the current catalog), the endpoint SHALL return a bad-gateway response rather than an empty or malformed body.
+`GET /api/v1/guild/raid-status` never calls upstream, but it still projects the retained observation against the current game-catalog version at read time. If that retained observation can no longer be projected (for example, its season config or a referenced encounter is missing from the current catalog), the endpoint SHALL return a bad-gateway response rather than an empty or malformed body.
 
 #### Scenario: Retained observation no longer resolves against the catalog
 

@@ -15,13 +15,13 @@ public sealed class RequestCommandCounterTests(PlannerApiFactory factory) : ICla
     {
         var ct = TestContext.Current.CancellationToken;
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
-        var baseline = await client.GetAsync("/api/v1/me/goals", ct);
+        var baseline = await client.GetAsync("/api/v1/goals", ct);
         baseline.EnsureSuccessStatusCode();
         var expected = factory.CommandsFor(baseline);
         Assert.True(expected > 0);
         var responses = await Task.WhenAll(
-            client.GetAsync("/api/v1/me/goals", ct),
-            client.GetAsync("/api/v1/me/goals", ct));
+            client.GetAsync("/api/v1/goals", ct),
+            client.GetAsync("/api/v1/goals", ct));
         Assert.NotEqual(responses[0].Headers.GetValues(RequestCommandCounter.Header).Single(),
             responses[1].Headers.GetValues(RequestCommandCounter.Header).Single());
         Assert.All(responses, response =>

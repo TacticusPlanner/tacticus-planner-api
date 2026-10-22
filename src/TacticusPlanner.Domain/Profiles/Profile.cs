@@ -12,7 +12,7 @@ public class Profile : BaseEntity<ProfileId>
 
     public required string Subject { get; set; }
 
-    /// <summary>When this profile was last seen making an authenticated request (updated by <c>GET /me</c>).
+    /// <summary>When this profile was last seen making an authenticated request (updated by <c>GET /account</c>).
     /// Used as the "last active in Planner" signal for guild member rosters.</summary>
     public DateTimeOffset? LastSeenAt { get; set; }
 

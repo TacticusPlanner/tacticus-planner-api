@@ -18,7 +18,7 @@ public sealed class UpdateGoalOrderEndpoint : Endpoint<UpdateGoalOrderRequest, G
 {
     public override void Configure()
     {
-        Put("me/goals/order");
+        Put("goals/order");
         Summary(summary =>
         {
             summary.Summary = "Reorders every in-flight goal in the account-wide order.";

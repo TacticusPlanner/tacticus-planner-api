@@ -1,21 +1,22 @@
 using System.Net;
-using System.Net.Http.Json;
 using System.Text.Json;
 using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Api.Features.Projects;
+using TacticusPlanner.Domain.Goals;
+using TacticusPlanner.GameDomain;
 
 namespace TacticusPlanner.Api.IntegrationTests;
 
-/// <summary>Coverage for <c>goal-combined-edit</c>: <c>PUT /me/goals/{id}</c>, the only goal edit route, applies
+/// <summary>Coverage for <c>goal-combined-edit</c>: <c>PUT /goals/{id}</c>, the only goal edit route, applies
 /// target, details, projects and priority in one all-or-nothing request and answers <c>{ goal, order }</c>.
 /// PostgreSQL HTTP tests cover mapping, validation and rollback semantics (nothing is saved unless every section
 /// applied); the lock behavior is covered by the Postgres integration tests.</summary>
 public sealed class GoalEditEndpointTests(PlannerApiFactory factory) : IClassFixture<PlannerApiFactory>
 {
     private static CreateGoalRequest RankMilestone(int end, params Guid[] projectIds) => new(
-        "character",
+        GoalEntityType.Character,
         "blackTerminator",
-        "rank",
+        GoalType.Rank,
         new CreateGoalConfigRequest(Rank: new RankTargetRequest(1, false, 0, end, false, 0)),
         projectIds.Length == 0 ? null : projectIds.Select(id => new ProjectPriorityRequest(id)).ToList());
 
@@ -136,7 +137,7 @@ public sealed class GoalEditEndpointTests(PlannerApiFactory factory) : IClassFix
 
         // An ascension payload on a Rank goal is invalid.
         var invalid = new UpdateGoalTargetRequest(
-            goal.Revision, new GoalTargetEditRequest(Progression: new ProgressionEndTargetRequest("Common:OneStar")));
+            goal.Revision, new GoalTargetEditRequest(Progression: new ProgressionEndTargetRequest(UnitProgression.CommonOneStar)));
         var response = await EditAsync(client, goal.GoalId, new EditGoalRequest(Target: invalid, Details: Notes("lost")));
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -149,12 +150,13 @@ public sealed class GoalEditEndpointTests(PlannerApiFactory factory) : IClassFix
     {
         var (client, goals) = await FiveGoalsAsync();
 
-        var response = await EditAsync(client, goals[0].GoalId, new EditGoalRequest(
-            Details: new UpdateGoalRequest("x", null, "NotAStrategy")));
+        var response = await client.SendMutatedJsonAsync(
+            HttpMethod.Put,
+            $"/api/v1/goals/{goals[0].GoalId}",
+            new EditGoalRequest(Details: new UpdateGoalRequest("x", null, FarmingStrategy.EveryStep)),
+            request => request["details"]!["farmingStrategy"] = "NotAStrategy");
 
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        Assert.Equal("validation", await response.ReadIssueCodeAsync());
-        Assert.Contains("details.farmingStrategy", await ErrorKeysAsync(response));
+        await response.AssertFieldRejectedAsync("details.farmingStrategy");
         Assert.Null((await GetGoalAsync(client, goals[0].GoalId)).Notes);
     }
 
@@ -275,7 +277,7 @@ public sealed class GoalEditEndpointTests(PlannerApiFactory factory) : IClassFix
     {
         var (client, goals) = await FiveGoalsAsync();
         var order = await ListGoalsAsync(client);
-        (await client.PostStatusAsync(goals[0].GoalId, "completed")).EnsureSuccessStatusCode();
+        (await client.PostStatusAsync(goals[0].GoalId, GoalStatus.Completed)).EnsureSuccessStatusCode();
         order = await ListGoalsAsync(client);
 
         var response = await EditAsync(client, goals[0].GoalId, new EditGoalRequest(
@@ -365,15 +367,15 @@ public sealed class GoalEditEndpointTests(PlannerApiFactory factory) : IClassFix
         client.CreateGoalAsync(request);
 
     private static async Task<GoalDetailResponse> GetGoalAsync(HttpClient client, Guid goalId) =>
-        (await client.GetFromJsonAsync<GoalDetailResponse>($"/api/v1/me/goals/{goalId}", TestContext.Current.CancellationToken))!;
+        (await client.GetFromJsonAsync<GoalDetailResponse>($"/api/v1/goals/{goalId}", TestContext.Current.CancellationToken))!;
 
     private static async Task<ListGoalsResponse> ListGoalsAsync(HttpClient client) =>
-        (await client.GetFromJsonAsync<ListGoalsResponse>("/api/v1/me/goals", TestContext.Current.CancellationToken))!;
+        (await client.GetFromJsonAsync<ListGoalsResponse>("/api/v1/goals", TestContext.Current.CancellationToken))!;
 
     private static async Task<ProjectSummaryResponse> CreateProjectAsync(HttpClient client, string name)
     {
         var response = await client.PostAsJsonAsync(
-            "/api/v1/me/projects", new CreateProjectRequest(name, null, null), TestContext.Current.CancellationToken);
+            "/api/v1/projects", new CreateProjectRequest(name, null, null), TestContext.Current.CancellationToken);
         response.EnsureSuccessStatusCode();
         return await ReadAsync<ProjectSummaryResponse>(response);
     }
@@ -381,7 +383,7 @@ public sealed class GoalEditEndpointTests(PlannerApiFactory factory) : IClassFix
     private static async Task<ProjectSummaryResponse> DefaultProjectAsync(HttpClient client)
     {
         var response = await client.GetFromJsonAsync<ListProjectsResponse>(
-            "/api/v1/me/projects", TestContext.Current.CancellationToken);
+            "/api/v1/projects", TestContext.Current.CancellationToken);
         return response!.Projects.Single(project => project.IsDefault);
     }
 }

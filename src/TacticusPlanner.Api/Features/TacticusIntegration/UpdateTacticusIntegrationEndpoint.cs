@@ -15,7 +15,7 @@ public sealed class UpdateTacticusIntegrationEndpoint
 {
     public override void Configure()
     {
-        Put("me/tacticus-integration");
+        Put("account/tacticus-integration");
         Options(builder => builder.WithMetadata(UpstreamRateLimit.Fast));
         Summary(summary =>
         {

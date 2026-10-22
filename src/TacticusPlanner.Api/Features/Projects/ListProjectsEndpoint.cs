@@ -11,11 +11,18 @@ namespace TacticusPlanner.Api.Features.Projects;
 /// first access — every profile always has at least one project. Each carries its member <c>goalIds</c> in global
 /// order, filtered by the same archived selector as the goals list (<c>goal-collection-read</c>), so membership and
 /// counts never need a per-project read.</summary>
-public sealed class ListProjectsEndpoint : EndpointWithoutRequest<ListProjectsResponse, ProjectMapper>
+public sealed class ListProjectsRequest
+{
+    /// <summary>True lists only archived member goals in each project's goalIds; projects are never filtered.</summary>
+    [QueryParam]
+    public bool? Archived { get; init; }
+}
+
+public sealed class ListProjectsEndpoint : Endpoint<ListProjectsRequest, ListProjectsResponse, ProjectMapper>
 {
     public override void Configure()
     {
-        Get("me/projects");
+        Get("projects");
         Summary(summary =>
         {
             summary.Summary = "Lists the authenticated user's projects.";
@@ -29,7 +36,7 @@ public sealed class ListProjectsEndpoint : EndpointWithoutRequest<ListProjectsRe
         });
     }
 
-    public override async Task HandleAsync(CancellationToken ct)
+    public override async Task HandleAsync(ListProjectsRequest req, CancellationToken ct)
     {
         var state = ProcessorState<CurrentUserState>();
         if (state.ProfileId is not { } profileId)
@@ -48,7 +55,7 @@ public sealed class ListProjectsEndpoint : EndpointWithoutRequest<ListProjectsRe
             .OrderByDescending(entity => entity.Type == ProjectType.Default)
             .ThenBy(entity => entity.CreatedAt)
             .ToListAsync(ct);
-        var archived = Query<bool?>("archived", isRequired: false) ?? false;
+        var archived = req.Archived ?? false;
         var goalIds = await db.GoalIdsByProjectAsync(archived, projectIds: null, ct);
 
         await Send.OkAsync(

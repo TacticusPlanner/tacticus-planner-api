@@ -19,7 +19,7 @@ public sealed class GetPlayerDataChunkEndpoint : Endpoint<GetPlayerDataChunkRequ
 {
     public override void Configure()
     {
-        Get("me/player-data/{chunk}");
+        Get("player-data/{chunk}");
         Summary(summary =>
         {
             summary.Summary = "Gets one player-data chunk for the authenticated user.";

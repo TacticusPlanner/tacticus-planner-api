@@ -12,7 +12,7 @@ public sealed record LegendaryEventTeamFields(
     IReadOnlyList<int>? ObjectiveIndexes,
     int Run,
     int? ExpectedBattleClears,
-    string? ExpectedBattleClearsSource
+    LegendaryEventDepthSource? ExpectedBattleClearsSource
 );
 
 /// <param name="Field">The request property (camelCase) the failure is reported against.</param>
@@ -34,21 +34,8 @@ public sealed class LegendaryEventCatalogValidator(IGameCatalogProvider catalog)
 
     public static GameCatalogLreTrackView? FindLane(GameCatalogLreView lre, string? laneId) => lre.Lane(laneId);
 
-    public static bool TryParseSource(string? value, out LegendaryEventDepthSource source)
-    {
-        switch (value)
-        {
-            case "estimate":
-                source = LegendaryEventDepthSource.Estimate;
-                return true;
-            case "manual":
-                source = LegendaryEventDepthSource.Manual;
-                return true;
-            default:
-                source = default;
-                return false;
-        }
-    }
+    public static GameCatalogLreTrackView? FindLane(GameCatalogLreView lre, LegendaryEventLaneId lane) =>
+        lre.Lane(LegendaryEventValidation.LaneKey(lane));
 
     public static IReadOnlyList<LegendaryEventFieldFailure> ValidatePlan(string? notes) =>
         notes is { Length: > LegendaryEventValidation.MaxNotesLength }
@@ -81,9 +68,7 @@ public sealed class LegendaryEventCatalogValidator(IGameCatalogProvider catalog)
             failures.Add(new("expectedBattleClears", $"expectedBattleClears must be 1–{battles} for this lane."));
 
         var hasSource = fields.ExpectedBattleClearsSource is not null;
-        if (hasSource && !TryParseSource(fields.ExpectedBattleClearsSource, out _))
-            failures.Add(new("expectedBattleClearsSource", "expectedBattleClearsSource must be estimate or manual."));
-        else if (fields.ExpectedBattleClears is not null && !hasSource)
+        if (fields.ExpectedBattleClears is not null && !hasSource)
             failures.Add(new("expectedBattleClearsSource", "A clear depth needs its source (estimate or manual)."));
         else if (fields.ExpectedBattleClears is null && hasSource)
             failures.Add(new("expectedBattleClearsSource", "expectedBattleClearsSource must be null when there is no clear depth."));
@@ -168,30 +153,10 @@ public sealed class LegendaryEventCatalogValidator(IGameCatalogProvider catalog)
                 failures.Add(new("objectiveIds", "An objective id can be listed only once."));
         }
 
-        if (request.Status is not null && !TryParseStatus(request.Status, out _))
-        {
-            failures.Add(new("status",
-                $"status must be {LegendaryEventValidation.MaybeClearStatus}, {LegendaryEventValidation.StopHereStatus} or null."));
-        }
-
         return failures;
     }
 
-    public static bool TryParseStatus(string? value, out LegendaryEventAnnotationStatus status)
-    {
-        switch (value)
-        {
-            case LegendaryEventValidation.MaybeClearStatus:
-                status = LegendaryEventAnnotationStatus.MaybeClear;
-                return true;
-            case LegendaryEventValidation.StopHereStatus:
-                status = LegendaryEventAnnotationStatus.StopHere;
-                return true;
-            default:
-                status = default;
-                return false;
-        }
-    }
+
 
     private static void ValidateUnits(
         GameCatalogLreTrackView lane, LegendaryEventTeamFields fields, List<LegendaryEventFieldFailure> failures)

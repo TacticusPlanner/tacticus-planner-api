@@ -89,7 +89,7 @@ public sealed class V1GoalImportOrderingPostgresTests
         };
 
         var result = await importService.ImportAsync(profileId, goals, synthesizePrerequisites: false, TestContext.Current.CancellationToken);
-        Assert.All(result.Outcomes, outcome => Assert.Equal("Created", outcome.Status));
+        Assert.All(result.Outcomes, outcome => Assert.Equal(V1GoalOutcomeStatus.Created, outcome.Status));
 
         await using (var connection = new NpgsqlConnection(connectionString))
         {

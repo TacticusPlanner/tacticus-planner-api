@@ -1,5 +1,4 @@
 using System.Net;
-using System.Net.Http.Json;
 using TacticusPlanner.Api.Features.PlayerDataOverrides;
 using TacticusPlanner.Api.Features.V1Import;
 
@@ -13,7 +12,7 @@ public sealed class V1ImportEndpointTests(PlannerApiFactory factory) : IClassFix
         var client = await CreateProvisionedClientAsync();
 
         var response = await client.PostAsJsonAsync(
-            "/api/v1/me/v1-import",
+            "/api/v1/account/v1-import",
             OnboardingRequest(FakeTacticusV1Client.ValidUsername, FakeTacticusV1Client.ValidPassword),
             TestContext.Current.CancellationToken
         );
@@ -35,7 +34,7 @@ public sealed class V1ImportEndpointTests(PlannerApiFactory factory) : IClassFix
         var client = await CreateProvisionedClientAsync();
 
         var response = await client.PostAsJsonAsync(
-            "/api/v1/me/v1-import",
+            "/api/v1/account/v1-import",
             OnboardingRequest(FakeTacticusV1Client.ValidUsername, "wrong-password"),
             TestContext.Current.CancellationToken
         );
@@ -49,7 +48,7 @@ public sealed class V1ImportEndpointTests(PlannerApiFactory factory) : IClassFix
         var client = await CreateProvisionedClientAsync();
 
         var response = await client.PostAsJsonAsync(
-            "/api/v1/me/v1-import",
+            "/api/v1/account/v1-import",
             OnboardingRequest(FakeTacticusV1Client.UsernameWithoutTacticusKey, FakeTacticusV1Client.ValidPassword),
             TestContext.Current.CancellationToken
         );
@@ -57,9 +56,9 @@ public sealed class V1ImportEndpointTests(PlannerApiFactory factory) : IClassFix
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var body = await response.Content.ReadFromJsonAsync<ImportV1ProfileResponse>(TestContext.Current.CancellationToken);
         Assert.NotNull(body);
-        Assert.Equal("Skipped", body.PersonalTacticusApiKey.Status);
+        Assert.Equal(ImportPartStatus.Skipped, body.PersonalTacticusApiKey.Status);
         Assert.Equal("missing_personal_api_key", body.PersonalTacticusApiKey.Code);
-        Assert.Equal("Skipped", body.TacticusUserId.Status);
+        Assert.Equal(ImportPartStatus.Skipped, body.TacticusUserId.Status);
         Assert.Equal("missing_tacticus_user_id", body.TacticusUserId.Code);
     }
 
@@ -69,7 +68,7 @@ public sealed class V1ImportEndpointTests(PlannerApiFactory factory) : IClassFix
         var client = await CreateProvisionedClientAsync();
 
         var response = await client.PostAsJsonAsync(
-            "/api/v1/me/v1-import",
+            "/api/v1/account/v1-import",
             OnboardingRequest(null, null),
             TestContext.Current.CancellationToken
         );
@@ -85,34 +84,34 @@ public sealed class V1ImportEndpointTests(PlannerApiFactory factory) : IClassFix
     {
         var client = await CreateProvisionedClientAsync();
         var current = await client.GetFromJsonAsync<OnslaughtProgressResponse>(
-            "/api/v1/me/player-data-overrides/onslaught-progress",
+            "/api/v1/player-data-overrides/onslaught-progress",
             TestContext.Current.CancellationToken);
         var initialWrite = await client.PutAsJsonAsync(
-            "/api/v1/me/player-data-overrides/onslaught-progress",
+            "/api/v1/player-data-overrides/onslaught-progress",
             new UpdateOnslaughtProgressRequest(
-                new("Bronze", 1),
-                new("Bronze", 1),
-                new("Bronze", 1),
+                new(OnslaughtSector.Bronze, 1),
+                new(OnslaughtSector.Bronze, 1),
+                new(OnslaughtSector.Bronze, 1),
                 current!.Revision),
             TestContext.Current.CancellationToken);
         initialWrite.EnsureSuccessStatusCode();
 
         var response = await client.PostAsJsonAsync(
-            "/api/v1/me/v1-import",
+            "/api/v1/account/v1-import",
             OnslaughtRequest(FakeTacticusV1Client.UsernameWithOnslaught),
             TestContext.Current.CancellationToken);
 
         response.EnsureSuccessStatusCode();
         var body = await response.Content.ReadFromJsonAsync<ImportV1ProfileResponse>(TestContext.Current.CancellationToken);
         Assert.NotNull(body);
-        Assert.Equal("Imported", body.OnslaughtProgress.Status);
+        Assert.Equal(ImportPartStatus.Imported, body.OnslaughtProgress.Status);
 
         var progress = await client.GetFromJsonAsync<OnslaughtProgressResponse>(
-            "/api/v1/me/player-data-overrides/onslaught-progress",
+            "/api/v1/player-data-overrides/onslaught-progress",
             TestContext.Current.CancellationToken);
-        Assert.Equal(new("Gold", 2, true), progress!.Imperial);
-        Assert.Equal(new("Diamond", 4, true), progress.Xenos);
-        Assert.Equal(new("Silver", 3, true), progress.Chaos);
+        Assert.Equal(new(OnslaughtSector.Gold, 2, true), progress!.Imperial);
+        Assert.Equal(new(OnslaughtSector.Diamond, 4, true), progress.Xenos);
+        Assert.Equal(new(OnslaughtSector.Silver, 3, true), progress.Chaos);
     }
 
     [Fact]
@@ -121,14 +120,14 @@ public sealed class V1ImportEndpointTests(PlannerApiFactory factory) : IClassFix
         var client = await CreateProvisionedClientAsync();
 
         var response = await client.PostAsJsonAsync(
-            "/api/v1/me/v1-import",
+            "/api/v1/account/v1-import",
             OnslaughtRequest(FakeTacticusV1Client.UsernameWithoutTacticusKey),
             TestContext.Current.CancellationToken);
 
         response.EnsureSuccessStatusCode();
         var body = await response.Content.ReadFromJsonAsync<ImportV1ProfileResponse>(TestContext.Current.CancellationToken);
         Assert.NotNull(body);
-        Assert.Equal("Skipped", body.OnslaughtProgress.Status);
+        Assert.Equal(ImportPartStatus.Skipped, body.OnslaughtProgress.Status);
         Assert.Equal("missing_onslaught_progress", body.OnslaughtProgress.Code);
     }
 
@@ -137,35 +136,35 @@ public sealed class V1ImportEndpointTests(PlannerApiFactory factory) : IClassFix
     {
         var client = await CreateProvisionedClientAsync();
         var current = await client.GetFromJsonAsync<OnslaughtProgressResponse>(
-            "/api/v1/me/player-data-overrides/onslaught-progress",
+            "/api/v1/player-data-overrides/onslaught-progress",
             TestContext.Current.CancellationToken);
         var initialWrite = await client.PutAsJsonAsync(
-            "/api/v1/me/player-data-overrides/onslaught-progress",
+            "/api/v1/player-data-overrides/onslaught-progress",
             new UpdateOnslaughtProgressRequest(
-                new("Iron", 2),
-                new("Gold", 3),
-                new("Stone", 4),
+                new(OnslaughtSector.Iron, 2),
+                new(OnslaughtSector.Gold, 3),
+                new(OnslaughtSector.Stone, 4),
                 current!.Revision),
             TestContext.Current.CancellationToken);
         initialWrite.EnsureSuccessStatusCode();
 
         var response = await client.PostAsJsonAsync(
-            "/api/v1/me/v1-import",
+            "/api/v1/account/v1-import",
             OnslaughtRequest(FakeTacticusV1Client.UsernameWithInvalidOnslaught),
             TestContext.Current.CancellationToken);
 
         response.EnsureSuccessStatusCode();
         var body = await response.Content.ReadFromJsonAsync<ImportV1ProfileResponse>(TestContext.Current.CancellationToken);
         Assert.NotNull(body);
-        Assert.Equal("Failed", body.OnslaughtProgress.Status);
+        Assert.Equal(ImportPartStatus.Failed, body.OnslaughtProgress.Status);
         Assert.Equal("invalid_onslaught_progress", body.OnslaughtProgress.Code);
 
         var progress = await client.GetFromJsonAsync<OnslaughtProgressResponse>(
-            "/api/v1/me/player-data-overrides/onslaught-progress",
+            "/api/v1/player-data-overrides/onslaught-progress",
             TestContext.Current.CancellationToken);
-        Assert.Equal(new("Iron", 2, true), progress!.Imperial);
-        Assert.Equal(new("Gold", 3, true), progress.Xenos);
-        Assert.Equal(new("Stone", 4, true), progress.Chaos);
+        Assert.Equal(new(OnslaughtSector.Iron, 2, true), progress!.Imperial);
+        Assert.Equal(new(OnslaughtSector.Gold, 3, true), progress.Xenos);
+        Assert.Equal(new(OnslaughtSector.Stone, 4, true), progress.Chaos);
     }
 
     [Fact]
@@ -174,9 +173,9 @@ public sealed class V1ImportEndpointTests(PlannerApiFactory factory) : IClassFix
         var client = await CreateProvisionedClientAsync();
         var ct = TestContext.Current.CancellationToken;
         var current = await client.GetFromJsonAsync<CampaignEventProgressOverridesResponse>(
-            "/api/v1/me/player-data-overrides/campaign-events-progress", ct);
+            "/api/v1/player-data-overrides/campaign-events-progress", ct);
         var initialWrite = await client.PutAsJsonAsync(
-            "/api/v1/me/player-data-overrides/campaign-events-progress",
+            "/api/v1/player-data-overrides/campaign-events-progress",
             new UpdateCampaignEventProgressRequest(
             [
                 new("eventCampaign1", "Standard", 1, ["AMSC25B"]),
@@ -185,15 +184,15 @@ public sealed class V1ImportEndpointTests(PlannerApiFactory factory) : IClassFix
         initialWrite.EnsureSuccessStatusCode();
 
         var response = await client.PostAsJsonAsync(
-            "/api/v1/me/v1-import",
+            "/api/v1/account/v1-import",
             CampaignEventRequest(FakeTacticusV1Client.UsernameWithCampaignEvents), ct);
         response.EnsureSuccessStatusCode();
         var body = await response.Content.ReadFromJsonAsync<ImportV1ProfileResponse>(ct);
-        Assert.Equal("Imported", body!.CampaignEventProgress.Status);
+        Assert.Equal(ImportPartStatus.Imported, body!.CampaignEventProgress.Status);
         Assert.Equal("challenge_progress_not_imported", body.CampaignEventProgress.Code);
 
         var saved = await client.GetFromJsonAsync<CampaignEventProgressOverridesResponse>(
-            "/api/v1/me/player-data-overrides/campaign-events-progress", ct);
+            "/api/v1/player-data-overrides/campaign-events-progress", ct);
         Assert.Contains(saved!.Progress, item => item.CampaignGroupId == "eventCampaign1"
             && item.Type == "Standard"
             && item.CompletedBattleCount == 12
@@ -209,12 +208,12 @@ public sealed class V1ImportEndpointTests(PlannerApiFactory factory) : IClassFix
         var client = await CreateProvisionedClientAsync();
         var ct = TestContext.Current.CancellationToken;
         var response = await client.PostAsJsonAsync(
-            "/api/v1/me/v1-import",
+            "/api/v1/account/v1-import",
             CampaignEventRequest(FakeTacticusV1Client.UsernameWithInvalidCampaignEvents), ct);
 
         response.EnsureSuccessStatusCode();
         var body = await response.Content.ReadFromJsonAsync<ImportV1ProfileResponse>(ct);
-        Assert.Equal("Failed", body!.CampaignEventProgress.Status);
+        Assert.Equal(ImportPartStatus.Failed, body!.CampaignEventProgress.Status);
         Assert.Equal("invalid_campaign_event_progress", body.CampaignEventProgress.Code);
     }
 
@@ -223,7 +222,7 @@ public sealed class V1ImportEndpointTests(PlannerApiFactory factory) : IClassFix
         var client = factory.CreateClient();
         client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.SubjectHeader, NewSubject());
 
-        await client.GetAsync("/api/v1/me", TestContext.Current.CancellationToken);
+        await client.GetAsync("/api/v1/account", TestContext.Current.CancellationToken);
 
         return client;
     }

@@ -1,8 +1,10 @@
+using System.Text.Json.Serialization;
 using FastEndpoints;
 using FluentValidation;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Api.Http;
 using TacticusPlanner.Domain.Goals;
+using TacticusPlanner.GameDomain;
 
 namespace TacticusPlanner.Api.Features.Goals;
 
@@ -16,7 +18,7 @@ public sealed class EditGoalEndpoint : Endpoint<EditGoalRequest, EditGoalRespons
 {
     public override void Configure()
     {
-        Put("me/goals/{goalId}");
+        Put("goals/{goalId}");
         Summary(summary =>
         {
             summary.Summary = "Edits a goal's target, details, project memberships and priority in one atomic request.";
@@ -128,7 +130,7 @@ public sealed record GoalTargetEditRequest(
 
 public sealed record RankEndTargetRequest(int End, bool EndPointFive, int EndAppliedUpgrades);
 
-public sealed record ProgressionEndTargetRequest(string End);
+public sealed record ProgressionEndTargetRequest([property: JsonRequired] UnitProgression End);
 
 public sealed record AbilityEndTargetRequest(int ActiveEnd, int PassiveEnd);
 
@@ -154,18 +156,13 @@ public sealed class UpdateGoalTargetValidator : AbstractValidator<UpdateGoalTarg
                 .Must(UpgradeRangeRules.HasWholeRanges)
                 .WithMessage(UpgradeRangeRules.ShapeMessage);
         });
-
-        When(request => request.Target?.Progression is not null, () =>
-            RuleFor(request => request.Target.Progression!.End)
-                .NotEmpty()
-                .WithMessage("An Ascension target needs a progression step."));
     }
 }
 
 public sealed record UpdateGoalRequest(
     string? Notes,
     List<CampaignBattleId>? FarmingLocationIds,
-    string? FarmingStrategy = null,
+    FarmingStrategy? FarmingStrategy = null,
     List<AcquisitionSourceRequest>? AcquisitionSources = null
 );
 
@@ -175,13 +172,6 @@ public sealed class UpdateGoalValidator : AbstractValidator<UpdateGoalRequest>
     {
         RuleFor(request => request.Notes)
             .MaximumLength(GoalValidation.MaxNotesLength);
-
-        RuleFor(request => request.FarmingStrategy)
-            .Must(value => value is null
-                || (Enum.TryParse<FarmingStrategy>(value, ignoreCase: true, out var parsed)
-                    && Enum.IsDefined(parsed)
-                    && !int.TryParse(value, out _)))
-            .WithMessage("Unknown farming strategy.");
 
         RuleFor(request => request.AcquisitionSources)
             .Must(sources => AcquisitionSourceRules.ShapeError(sources) is null)

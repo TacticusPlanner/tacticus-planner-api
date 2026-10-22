@@ -8,27 +8,34 @@ using TacticusPlanner.Persistence;
 namespace TacticusPlanner.Api.Features.Goals;
 
 /// <summary>Lists the authenticated user's goals in full detail (<c>goal-collection-read</c>): each entry is
-/// exactly what <c>GET me/goals/{goalId}</c> returns, so a client never reads per goal. By default returns
+/// exactly what <c>GET goals/{goalId}</c> returns, so a client never reads per goal. By default returns
 /// everything except archived goals; <c>?archived=true</c> lists only the archived ones — the same selector the
 /// projects list applies to its <c>goalIds</c>.</summary>
-public sealed class ListGoalsEndpoint : EndpointWithoutRequest<ListGoalsResponse, GoalMapper>
+public sealed class ListGoalsRequest
+{
+    /// <summary>True lists only archived goals; omitted or false lists every other goal.</summary>
+    [QueryParam]
+    public bool? Archived { get; init; }
+}
+
+public sealed class ListGoalsEndpoint : Endpoint<ListGoalsRequest, ListGoalsResponse, GoalMapper>
 {
     public override void Configure()
     {
-        Get("me/goals");
+        Get("goals");
         Summary(summary =>
         {
             summary.Summary = "Lists the authenticated user's goals.";
             summary.Description = "Excludes archived goals by default; pass ?archived=true to list only "
                 + "archived goals. Each entry is the full goal detail (config, snapshot, projectIds, revision, "
-                + "globalPriority), identical to GET me/goals/{goalId}.";
+                + "globalPriority), identical to GET goals/{goalId}.";
             summary.Response<ListGoalsResponse>(StatusCodes.Status200OK, "The caller's goals.");
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
             summary.Response(StatusCodes.Status404NotFound, "The authenticated account/profile has not been provisioned.");
         });
     }
 
-    public override async Task HandleAsync(CancellationToken ct)
+    public override async Task HandleAsync(ListGoalsRequest req, CancellationToken ct)
     {
         var state = ProcessorState<CurrentUserState>();
         if (state.ProfileId is null)
@@ -37,7 +44,7 @@ public sealed class ListGoalsEndpoint : EndpointWithoutRequest<ListGoalsResponse
             return;
         }
 
-        var archived = Query<bool?>("archived", isRequired: false) ?? false;
+        var archived = req.Archived ?? false;
         var db = Resolve<PlannerDbContext>();
 
         // Scoped to the caller's profile by PlannerDbContext's global query filter.

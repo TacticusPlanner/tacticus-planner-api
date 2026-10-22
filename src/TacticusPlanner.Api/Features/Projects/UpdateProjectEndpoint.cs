@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using FastEndpoints;
 using FluentValidation;
 using FluentValidation.Results;
@@ -13,7 +14,7 @@ public sealed class UpdateProjectEndpoint : Endpoint<UpdateProjectRequest, Proje
 {
     public override void Configure()
     {
-        Put("me/projects/{projectId}");
+        Put("projects/{projectId}");
         Summary(summary =>
         {
             summary.Summary = "Updates or archives a project.";
@@ -49,7 +50,7 @@ public sealed class UpdateProjectEndpoint : Endpoint<UpdateProjectRequest, Proje
             return;
         }
 
-        var status = Enum.Parse<ProjectStatus>(req.Status, ignoreCase: true);
+        var status = req.Status;
         if (status == ProjectStatus.Archived && project.Type == ProjectType.Default)
         {
             await this.SendConflictAsync(
@@ -100,7 +101,7 @@ public sealed record UpdateProjectRequest(
     string Name,
     string? Description,
     string? Color,
-    string Status,
+    [property: JsonRequired] ProjectStatus Status,
     long Revision,
     ProjectTargetDto? Target = null
 );
@@ -110,10 +111,6 @@ public sealed class UpdateProjectValidator : Validator<UpdateProjectRequest>
     public UpdateProjectValidator()
     {
         RuleFor(request => request.Name).NotEmpty();
-        RuleFor(request => request.Status)
-            .Must(value => Enum.TryParse<ProjectStatus>(value, ignoreCase: true, out var status)
-                && Enum.IsDefined(status))
-            .WithMessage("Status must be Active, Paused, or Archived.");
         RuleFor(request => request.Revision).GreaterThanOrEqualTo(0);
         RuleFor(request => request.Target!.EventId)
             .MaximumLength(ProjectValidation.MaxTargetEventIdLength)

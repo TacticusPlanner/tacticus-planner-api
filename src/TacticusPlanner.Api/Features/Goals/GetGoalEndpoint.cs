@@ -11,7 +11,7 @@ public sealed class GetGoalEndpoint : EndpointWithoutRequest<GoalDetailResponse,
 {
     public override void Configure()
     {
-        Get("me/goals/{goalId}");
+        Get("goals/{goalId}");
         Summary(summary =>
         {
             summary.Summary = "Gets a single goal's full detail (the same shape the goals list serves).";

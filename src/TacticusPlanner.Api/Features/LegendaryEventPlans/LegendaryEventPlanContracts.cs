@@ -1,4 +1,6 @@
+using System.Text.Json.Serialization;
 using FastEndpoints;
+using TacticusPlanner.Domain.LegendaryEvents;
 
 namespace TacticusPlanner.Api.Features.LegendaryEventPlans;
 
@@ -44,10 +46,10 @@ public sealed record LegendaryEventRunProgressResponse(
 /// <param name="Status"><c>maybeClear</c> or <c>stopHere</c>.</param>
 /// <param name="UpdatedAt">When this cell's mark was last written (UTC).</param>
 public sealed record LegendaryEventObjectiveAnnotationResponse(
-    string LaneId,
+    LegendaryEventLaneId LaneId,
     int BattleIndex,
     int ObjectiveId,
-    string Status,
+    LegendaryEventAnnotationStatus Status,
     DateTimeOffset UpdatedAt
 );
 
@@ -56,7 +58,7 @@ public sealed record LegendaryEventObjectiveAnnotationResponse(
 /// <param name="RunDepths">One entry per stored run, ascending by run; empty when no depth is set.</param>
 public sealed record LegendaryEventTeamResponse(
     Guid Id,
-    string LaneId,
+    LegendaryEventLaneId LaneId,
     string Name,
     int SortOrder,
     IReadOnlyList<string> MemberUnitIds,
@@ -71,7 +73,7 @@ public sealed record LegendaryEventTeamResponse(
 public sealed record LegendaryEventTeamRunDepthResponse(
     int Run,
     int ExpectedBattleClears,
-    string ExpectedBattleClearsSource,
+    LegendaryEventDepthSource ExpectedBattleClearsSource,
     DateTimeOffset RecordedAt
 );
 
@@ -90,14 +92,14 @@ public sealed record UpdateLegendaryEventPlanRequest(long ExpectedRevision, stri
 /// <param name="ExpectedBattleClearsSource"><c>estimate</c> or <c>manual</c>; null exactly when the depth is null.</param>
 public sealed record CreateLegendaryEventTeamRequest(
     long ExpectedRevision,
-    string LaneId,
+    [property: JsonRequired] LegendaryEventLaneId LaneId,
     string Name,
     IReadOnlyList<string> MemberUnitIds,
     string? ReserveUnitId,
     IReadOnlyList<int> ObjectiveIndexes,
     int Run,
     int? ExpectedBattleClears,
-    string? ExpectedBattleClearsSource
+    LegendaryEventDepthSource? ExpectedBattleClearsSource
 );
 
 /// <summary>Same fields as a create minus the lane: a team never changes lane, so a body carrying
@@ -111,8 +113,8 @@ public sealed record UpdateLegendaryEventTeamRequest(
     IReadOnlyList<int> ObjectiveIndexes,
     int Run,
     int? ExpectedBattleClears,
-    string? ExpectedBattleClearsSource,
-    string? LaneId = null
+    LegendaryEventDepthSource? ExpectedBattleClearsSource,
+    LegendaryEventLaneId? LaneId = null
 );
 
 public sealed class DeleteLegendaryEventTeamRequest
@@ -123,7 +125,7 @@ public sealed class DeleteLegendaryEventTeamRequest
 }
 
 /// <param name="TeamIds">The complete set of the lane's team ids, in the desired order.</param>
-public sealed record UpdateLegendaryEventTeamOrderRequest(long ExpectedRevision, string LaneId, IReadOnlyList<Guid> TeamIds);
+public sealed record UpdateLegendaryEventTeamOrderRequest(long ExpectedRevision, [property: JsonRequired] LegendaryEventLaneId LaneId, IReadOnlyList<Guid> TeamIds);
 
 /// <param name="ExpectedRevision">The plan revision the caller last read (0 for a plan that does not exist).</param>
 /// <param name="RegularMissions">0..the event's catalog <c>regularMissions</c> count.</param>
@@ -150,8 +152,8 @@ public sealed record UpdateLegendaryEventRunInputsRequest(
 /// <param name="Status"><c>maybeClear</c>, <c>stopHere</c>, or null to remove the listed cells' marks.</param>
 public sealed record UpdateLegendaryEventAnnotationsRequest(
     long ExpectedRevision,
-    string LaneId,
+    [property: JsonRequired] LegendaryEventLaneId LaneId,
     int BattleIndex,
     IReadOnlyList<int> ObjectiveIds,
-    string? Status
+    LegendaryEventAnnotationStatus? Status
 );

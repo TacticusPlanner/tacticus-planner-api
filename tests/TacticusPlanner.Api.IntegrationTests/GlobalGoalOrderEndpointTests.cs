@@ -1,23 +1,23 @@
 using System.Net;
-using System.Net.Http.Json;
 using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Api.Features.Projects;
+using TacticusPlanner.Domain.Goals;
 
 namespace TacticusPlanner.Api.IntegrationTests;
 
 public sealed class GlobalGoalOrderEndpointTests(PlannerApiFactory factory) : IClassFixture<PlannerApiFactory>
 {
     private static CreateGoalRequest RankMilestone(int end, params Guid[] projectIds) => new(
-        "character",
+        GoalEntityType.Character,
         "blackTerminator",
-        "rank",
+        GoalType.Rank,
         new CreateGoalConfigRequest(Rank: new RankTargetRequest(1, false, 0, end, false, 0)),
         projectIds.Length == 0 ? null : projectIds.Select(id => new ProjectPriorityRequest(id)).ToList());
 
     private static readonly CreateGoalRequest MowAbility = new(
-        "mow",
+        GoalEntityType.Mow,
         "astraOrdnanceBattery",
-        "ability",
+        GoalType.Ability,
         new CreateGoalConfigRequest(Ability: new AbilityTargetRequest(0, 3, 0, 3)),
         null);
 
@@ -150,14 +150,14 @@ public sealed class GlobalGoalOrderEndpointTests(PlannerApiFactory factory) : IC
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var combinedResponse = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
+            "/api/v1/goals",
             new CreateCombinedGoalsRequest(
-                "character",
+                GoalEntityType.Character,
                 "blackTerminator",
                 null,
                 [
-                    new CombinedGoalSpec("unlock", new CreateGoalConfigRequest(), []),
-                    new CombinedGoalSpec("rank",
+                    new CombinedGoalSpec(GoalType.Unlock, new CreateGoalConfigRequest(), []),
+                    new CombinedGoalSpec(GoalType.Rank,
                         new CreateGoalConfigRequest(Rank: new RankTargetRequest(0, false, 0, 15, false, 0)), [0]),
                 ]),
             TestContext.Current.CancellationToken);
@@ -172,7 +172,7 @@ public sealed class GlobalGoalOrderEndpointTests(PlannerApiFactory factory) : IC
 
         response.EnsureSuccessStatusCode();
         var rankDetail = await client.GetFromJsonAsync<GoalDetailResponse>(
-            $"/api/v1/me/goals/{rank.GoalId}", TestContext.Current.CancellationToken);
+            $"/api/v1/goals/{rank.GoalId}", TestContext.Current.CancellationToken);
         Assert.Equal([unlock.GoalId], rankDetail!.DependsOn);
     }
 
@@ -186,28 +186,28 @@ public sealed class GlobalGoalOrderEndpointTests(PlannerApiFactory factory) : IC
         var start = await ListGoalsAsync(client);
 
         // Pause and resume keep the position and the revision.
-        await SetStatusAsync(client, b.GoalId, "paused");
-        await SetStatusAsync(client, b.GoalId, "active");
+        await SetStatusAsync(client, b.GoalId, GoalStatus.Paused);
+        await SetStatusAsync(client, b.GoalId, GoalStatus.Active);
         var afterPause = await ListGoalsAsync(client);
         Assert.Equal(start.OrderRevision, afterPause.OrderRevision);
         Assert.Equal([a.GoalId, b.GoalId, c.GoalId], afterPause.Goals.Select(goal => goal.GoalId));
 
         // Completing removes the goal from the order and compacts the rest.
-        await SetStatusAsync(client, a.GoalId, "completed");
+        await SetStatusAsync(client, a.GoalId, GoalStatus.Completed);
         var afterComplete = await ListGoalsAsync(client);
         Assert.Equal(start.OrderRevision + 1, afterComplete.OrderRevision);
         Assert.Equal([b.GoalId, c.GoalId, a.GoalId], afterComplete.Goals.Select(goal => goal.GoalId));
         Assert.Equal([1, 2, null], afterComplete.Goals.Select(goal => goal.GlobalPriority));
 
         // Reopening appends after the current in-flight goals.
-        await SetStatusAsync(client, a.GoalId, "active");
+        await SetStatusAsync(client, a.GoalId, GoalStatus.Active);
         var afterReopen = await ListGoalsAsync(client);
         Assert.Equal(start.OrderRevision + 2, afterReopen.OrderRevision);
         Assert.Equal([b.GoalId, c.GoalId, a.GoalId], afterReopen.Goals.Select(goal => goal.GoalId));
         Assert.Equal([1, 2, 3], afterReopen.Goals.Select(goal => goal.GlobalPriority));
 
         // Deleting an in-flight goal compacts the order.
-        var delete = await client.DeleteAsync($"/api/v1/me/goals/{b.GoalId}", TestContext.Current.CancellationToken);
+        var delete = await client.DeleteAsync($"/api/v1/goals/{b.GoalId}", TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NoContent, delete.StatusCode);
         var afterDelete = await ListGoalsAsync(client);
         Assert.Equal([c.GoalId, a.GoalId], afterDelete.Goals.Select(goal => goal.GoalId));
@@ -228,7 +228,7 @@ public sealed class GlobalGoalOrderEndpointTests(PlannerApiFactory factory) : IC
         var response = await client.PutProjectsAsync(a.GoalId, [defaultProject.ProjectId, extra.ProjectId]);
         response.EnsureSuccessStatusCode();
         var members = await client.PutAsJsonAsync(
-            $"/api/v1/me/projects/{extra.ProjectId}/goals",
+            $"/api/v1/projects/{extra.ProjectId}/goals",
             new UpdateProjectGoalsRequest(
                 [new ProjectGoalEntryRequest(a.GoalId), new ProjectGoalEntryRequest(b.GoalId)], [a.GoalId]),
             TestContext.Current.CancellationToken);
@@ -320,12 +320,12 @@ public sealed class GlobalGoalOrderEndpointTests(PlannerApiFactory factory) : IC
 
     private static Task<HttpResponseMessage> ReorderAsync(HttpClient client, List<Guid> goalIds, long revision) =>
         client.PutAsJsonAsync(
-            "/api/v1/me/goals/order", new UpdateGoalOrderRequest(goalIds, revision), TestContext.Current.CancellationToken);
+            "/api/v1/goals/order", new UpdateGoalOrderRequest(goalIds, revision), TestContext.Current.CancellationToken);
 
     private static Task<HttpResponseMessage> MoveAsync(
         HttpClient client, Guid projectId, Guid goalId, Guid displacedGoalId, long revision) =>
         client.PutAsJsonAsync(
-            $"/api/v1/me/projects/{projectId}/goal-order",
+            $"/api/v1/projects/{projectId}/goal-order",
             new UpdateProjectGoalOrderRequest(goalId, displacedGoalId, revision),
             TestContext.Current.CancellationToken);
 
@@ -338,7 +338,7 @@ public sealed class GlobalGoalOrderEndpointTests(PlannerApiFactory factory) : IC
         Assert.Equal(current.Goals.Select(goal => goal.GoalId), order.GoalIds);
     }
 
-    private static async Task SetStatusAsync(HttpClient client, Guid goalId, string status)
+    private static async Task SetStatusAsync(HttpClient client, Guid goalId, GoalStatus status)
     {
         var response = await client.PostStatusAsync(goalId, status);
         response.EnsureSuccessStatusCode();
@@ -352,14 +352,14 @@ public sealed class GlobalGoalOrderEndpointTests(PlannerApiFactory factory) : IC
     private static async Task<ProjectSummaryResponse> DefaultProjectAsync(HttpClient client)
     {
         var response = await client.GetFromJsonAsync<ListProjectsResponse>(
-            "/api/v1/me/projects", TestContext.Current.CancellationToken);
+            "/api/v1/projects", TestContext.Current.CancellationToken);
         return response!.Projects.Single(project => project.IsDefault);
     }
 
     private static async Task<ProjectSummaryResponse> CreateProjectAsync(HttpClient client, string name)
     {
         var response = await client.PostAsJsonAsync(
-            "/api/v1/me/projects", new CreateProjectRequest(name, null, null), TestContext.Current.CancellationToken);
+            "/api/v1/projects", new CreateProjectRequest(name, null, null), TestContext.Current.CancellationToken);
         response.EnsureSuccessStatusCode();
         return (await response.Content.ReadFromJsonAsync<ProjectSummaryResponse>(TestContext.Current.CancellationToken))!;
     }

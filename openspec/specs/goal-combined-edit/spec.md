@@ -7,7 +7,7 @@ Lets an owner change several aspects of one goal (target, details, project membe
 
 ### Requirement: An owner can edit a goal through one atomic request
 
-`PUT /me/goals/{goalId}/edit` SHALL accept a request with these optional sections: `target` (the same target payload as `PUT /me/goals/{goalId}/target`), `details` (`notes`, `farmingLocationIds`, `farmingStrategy`, `acquisitionSources`, with the same field semantics as `PUT /me/goals/{goalId}`), `projectIds` (the same replacement list as `PUT /me/goals/{goalId}/projects`), and `priority` (`position`, a 1-based position, and `expectedOrderRevision`). A section that is absent SHALL leave that aspect unchanged. A request with no section SHALL succeed as a no-op. On success the response SHALL be 200 with the updated goal detail, plus the new order (`revision` and `goalIds`) when `priority` was supplied. Every applied section SHALL be committed together or none of them SHALL be, and the goal SHALL show a single revision increase for the request.
+`PUT /goals/{goalId}/edit` SHALL accept a request with these optional sections: `target` (the same target payload as `PUT /goals/{goalId}/target`), `details` (`notes`, `farmingLocationIds`, `farmingStrategy`, `acquisitionSources`, with the same field semantics as `PUT /goals/{goalId}`), `projectIds` (the same replacement list as `PUT /goals/{goalId}/projects`), and `priority` (`position`, a 1-based position, and `expectedOrderRevision`). A section that is absent SHALL leave that aspect unchanged. A request with no section SHALL succeed as a no-op. On success the response SHALL be 200 with the updated goal detail, plus the new order (`revision` and `goalIds`) when `priority` was supplied. Every applied section SHALL be committed together or none of them SHALL be, and the goal SHALL show a single revision increase for the request.
 
 #### Scenario: Several sections at once
 
@@ -32,7 +32,7 @@ Lets an owner change several aspects of one goal (target, details, project membe
 
 ### Requirement: Each section is validated exactly as its own endpoint validates it
 
-The target section SHALL be validated and applied as `PUT /me/goals/{goalId}/target` does (only Active or Paused Rank, Ascension, Ability and Upgrade goals; the payload shape of the goal's own kind; the goal's stored baseline; an unchanged target is a no-op; `expectedRevision` is required with a target and a stale one is a 409 `goalRevisionStale` carrying the current goal). The details section SHALL be validated as `PUT /me/goals/{goalId}` does (notes length, farming strategy support per goal kind, farming-location and acquisition-source rules; a null `notes` or `farmingLocationIds` clears the field and a null `farmingStrategy` leaves it). The projects section SHALL be validated as `PUT /me/goals/{goalId}/projects` does (at least one project, all owned, no project slot conflict, evaluated against the target this same request sets). The priority section SHALL be valid only for an Active or Paused goal; `position` SHALL be between 1 and the number of in-flight goals; the goal takes that position and every goal between its old and new positions shifts one place toward the vacated one; a `position` equal to the current one is a no-op. A validation failure in any section SHALL be a 400 that names the offending section and changes nothing.
+The target section SHALL be validated and applied as `PUT /goals/{goalId}/target` does (only Active or Paused Rank, Ascension, Ability and Upgrade goals; the payload shape of the goal's own kind; the goal's stored baseline; an unchanged target is a no-op; `expectedRevision` is required with a target and a stale one is a 409 `goalRevisionStale` carrying the current goal). The details section SHALL be validated as `PUT /goals/{goalId}` does (notes length, farming strategy support per goal kind, farming-location and acquisition-source rules; a null `notes` or `farmingLocationIds` clears the field and a null `farmingStrategy` leaves it). The projects section SHALL be validated as `PUT /goals/{goalId}/projects` does (at least one project, all owned, no project slot conflict, evaluated against the target this same request sets). The priority section SHALL be valid only for an Active or Paused goal; `position` SHALL be between 1 and the number of in-flight goals; the goal takes that position and every goal between its old and new positions shifts one place toward the vacated one; a `position` equal to the current one is a no-op. A validation failure in any section SHALL be a 400 that names the offending section and changes nothing.
 
 #### Scenario: Invalid target rejects the whole request
 
@@ -92,7 +92,7 @@ The edit SHALL hold the same project locks as the existing target, projects and 
 
 ### Requirement: Existing endpoints keep their behavior
 
-`PUT /me/goals/{goalId}/target`, `PUT /me/goals/{goalId}`, `PUT /me/goals/{goalId}/projects`, and `PUT /me/goals/order` SHALL keep their request shapes, responses, and error bodies.
+`PUT /goals/{goalId}/target`, `PUT /goals/{goalId}`, `PUT /goals/{goalId}/projects`, and `PUT /goals/order` SHALL keep their request shapes, responses, and error bodies.
 
 #### Scenario: Existing endpoint regression
 
