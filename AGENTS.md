@@ -109,9 +109,8 @@ This repository currently tracks work on the `svehera/goals-phase-9` branch,
 not `main` — open PRs against that branch unless told otherwise. Any new
 endpoint or protocol change to an existing endpoint must be reflected in the
 generated OpenAPI artifact (produced automatically on build) and, if the
-frontend consumes it, coordinated with `tacticus-planner-apps`. A breaking
-contract ships with automatic staging promotion off (`STAGE_AUTO_DEPLOY`) and is
-promoted together with its client — see README "Coordinated cutover".
+frontend consumes it, coordinated with `tacticus-planner-apps`: merge a breaking contract and its
+client back to back — see README "Breaking contracts".
 
 Validation before opening a PR:
 

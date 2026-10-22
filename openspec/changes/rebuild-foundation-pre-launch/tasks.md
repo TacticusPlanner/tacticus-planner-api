@@ -35,7 +35,7 @@ Assumptions recorded from design.md Open Questions: `user_settings` stays its ow
 ## 5. Docs and environments
 
 - [x] 5.1 In `tacticus-planner-docs`: mark ADR 0001 Superseded (single `public` schema with table prefixes), rewrite `architecture/data.md` "Relational and JSONB Boundary" + "Current State and Domain History" to match ADR 0002/0007 and this change, add ADR 0011 "Aggregate-as-jsonb with validator-enforced invariants"; verify the docs repo's own lint/link check passes
-- [ ] 5.2 Update `README.md` (routes table, migration reset procedure) and `AGENTS.md` migration section (single `InitialCreate`, the raw constraint rule); document and establish the coordinated cutover gate before API merge: pause/approval-gate automatic staging promotion; publish API/OpenAPI artifacts first, then regenerate and test the companion client (errors/current, `{ goal, order }`, archive selectors, paged records and roster fetches); keep the environment inaccessible during any sequential deployment until both artifacts and joint smoke tests pass. Verify the gate blocks an unmatched client and `aspire run` + `api-migrations` Reset Database brings up a fresh database and `GET me` provisions a profile
+- [x] 5.2 Update `README.md` (routes table, migration reset procedure, "Breaking contracts": merge API and client back to back) and `AGENTS.md` migration section (single `InitialCreate`, the raw constraint rule). The staging promotion gate was dropped in review; staging promotes every push. Verified 2026-10-22: Aspire `api-migrations` drop + Update Database brings up a fresh database (no `rank_target_key`, no slot indexes), and the first authenticated account read answers 200 and provisions one profile (exercised through the stacked route rename, `GET /api/v1/account`, same handler as `GET me`).
 
 ## 6. Verification
 
@@ -48,5 +48,5 @@ Assumptions recorded from design.md Open Questions: `user_settings` stays its ow
 
 ## Workflow follow-up
 
-- Apply/merge order: this change, then `rebuild-foundation-pre-launch` in `tacticus-planner-apps`; gate automatic promotion before API merge, and expose the breaking contracts only in the coordinated cutover after both halves pass CI/review and client contract tests.
+- Apply/merge order: this change, then `rebuild-foundation-pre-launch` in `tacticus-planner-apps`; merge both back to back once both halves pass CI/review and client contract tests (staging promotes every push; no promotion gate).
 - Both PRs green and review threads resolved before sync/archive of either half.

@@ -84,13 +84,3 @@ A run record SHALL store: `run` (1–3); `startedAt` and `progressAt` (UTC); the
 
 - **WHEN** the caller requests the roster of another profile's record
 - **THEN** the response is 404
-
-### Requirement: Paging and roster changes share the client cutover
-
-The new paged response and on-demand roster endpoint SHALL be exposed only after the companion client consumes every page, follows compound cursors, and fetches rosters separately. Artifact publication may precede client readiness, but promotion SHALL use the coordinated API/client cutover defined in `api-error-contract`, with no old client exposed to the new response.
-
-#### Scenario: Companion client is not ready
-
-- **GIVEN** an API image supports paged run records without inline rosters but the current client expects the old response
-- **WHEN** promotion is requested
-- **THEN** the new response stays unexposed until the matched client passes contract tests and both versions complete the coordinated deployment
