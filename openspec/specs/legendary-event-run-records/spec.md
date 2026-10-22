@@ -85,12 +85,12 @@ A run record SHALL store: `run` (1–3); `startedAt` and `progressAt` (UTC); the
 
 ### Requirement: Run records are readable per event
 
-`GET /me/legendary-event-plans/{eventId}/run-records` SHALL return `LegendaryEventRunRecordsResponse { eventId, records }`, where `records` lists the caller's records for that event, newest `startedAt` first, each `{ id, run, startedAt, progressAt, catalogVersion, points, lanes, teams, rosterSnapshot }` in the stored shapes, where `rosterSnapshot` is the record's roster snapshot as `{ id, takenAt, catalogVersion, characters, mows }`, or null when it has been removed. A current catalog event with no records SHALL answer 200 with `records` `[]`. An id that is neither a current catalog `lres` id nor has any record for the caller SHALL answer 404. An event that left the catalog SHALL keep answering with its records.
+`GET /legendary-event-plans/{eventId}/run-records` SHALL return `LegendaryEventRunRecordsResponse { eventId, records }`, where `records` lists the caller's records for that event, newest `startedAt` first, each `{ id, run, startedAt, progressAt, catalogVersion, points, lanes, teams, rosterSnapshot }` in the stored shapes, where `rosterSnapshot` is the record's roster snapshot as `{ id, takenAt, catalogVersion, characters, mows }`, or null when it has been removed. A current catalog event with no records SHALL answer 200 with `records` `[]`. An id that is neither a current catalog `lres` id nor has any record for the caller SHALL answer 404. An event that left the catalog SHALL keep answering with its records.
 
 #### Scenario: Records newest first
 
 - **GIVEN** Uthar records for run 1 (started 2026-10-04) and run 2 (started 2026-10-11)
-- **WHEN** the caller requests `GET /me/legendary-event-plans/votanUthar/run-records`
+- **WHEN** the caller requests `GET /legendary-event-plans/votanUthar/run-records`
 - **THEN** the response is 200 with the run 2 record first, then run 1
 
 #### Scenario: No records yet

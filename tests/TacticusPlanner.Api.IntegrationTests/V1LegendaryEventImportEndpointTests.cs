@@ -1,9 +1,9 @@
-using System.Net.Http.Json;
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TacticusPlanner.Api.Features.LegendaryEventPlans;
 using TacticusPlanner.Api.Features.V1Import;
+using TacticusPlanner.Domain.LegendaryEvents;
 using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.PlayerData.Chunks;
 using TacticusPlanner.GameCatalog;
@@ -15,7 +15,7 @@ namespace TacticusPlanner.Api.IntegrationTests;
 
 /// <summary>
 /// Covers <c>add-legendary-event-teams</c>'s <c>v1-legendary-event-import</c> capability: the
-/// <c>legendaryEventPlans</c> part of <c>POST /me/v1-import</c>, its event/lane/unit/objective resolution, the
+/// <c>legendaryEventPlans</c> part of <c>POST /account/v1-import</c>, its event/lane/unit/objective resolution, the
 /// per-event outcomes and issues, and the part summary. V1 blobs are written as JSON and read through the same
 /// reader the live client uses.
 /// </summary>
@@ -45,7 +45,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
 
         var body = await ImportAsync(client, username, selected: false, onslaught: true);
 
-        Assert.Equal(("Skipped", "not_selected"), (body.LegendaryEventPlans.Status, body.LegendaryEventPlans.Code));
+        Assert.Equal((ImportPartStatus.Skipped, "not_selected"), (body.LegendaryEventPlans.Status, body.LegendaryEventPlans.Code));
         Assert.Empty(body.LegendaryEventOutcomes);
         Assert.Equal(0, (await ReadPlanAsync(client)).Revision);
     }
@@ -57,7 +57,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
 
         var body = await ImportAsync(client, Configure("{}"));
 
-        Assert.Equal(("Skipped", "missing_legendary_event_plans"), (body.LegendaryEventPlans.Status, body.LegendaryEventPlans.Code));
+        Assert.Equal((ImportPartStatus.Skipped, "missing_legendary_event_plans"), (body.LegendaryEventPlans.Status, body.LegendaryEventPlans.Code));
     }
 
     [Fact]
@@ -67,7 +67,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
 
         var body = await ImportAsync(client, Configure("""{"leTeams": {"15": {"teams": "not a list"}}}"""));
 
-        Assert.Equal(("Failed", "invalid_legendary_event_plans"), (body.LegendaryEventPlans.Status, body.LegendaryEventPlans.Code));
+        Assert.Equal((ImportPartStatus.Failed, "invalid_legendary_event_plans"), (body.LegendaryEventPlans.Status, body.LegendaryEventPlans.Code));
         Assert.Equal(0, (await ReadPlanAsync(client)).Revision);
     }
 
@@ -84,7 +84,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
 
         var body = await ImportAsync(client, Configure(json));
 
-        Assert.Equal("Imported", body.LegendaryEventPlans.Status);
+        Assert.Equal(ImportPartStatus.Imported, body.LegendaryEventPlans.Status);
         var plan = await ReadPlanAsync(client);
         Assert.Equal("Legacy", Assert.Single(plan.Teams).Name);
         Assert.Equal("Old notes", plan.Notes);
@@ -128,13 +128,13 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
 
         var body = await ImportAsync(client, Configure(json));
 
-        Assert.Equal("Imported", body.LegendaryEventPlans.Status);
+        Assert.Equal(ImportPartStatus.Imported, body.LegendaryEventPlans.Status);
         Assert.Equal(
-            [(DanteV1Id, (string?)null, "Skipped", "event_not_in_catalog"), (LysanderV1Id, LysanderId, "Imported", "imported")],
+            [(DanteV1Id, (string?)null, ImportPartStatus.Skipped, "event_not_in_catalog"), (LysanderV1Id, LysanderId, ImportPartStatus.Imported, "imported")],
             body.LegendaryEventOutcomes.Select(outcome => (outcome.V1EventId, outcome.EventId, outcome.Status, outcome.Code)));
         Assert.Equal(1, body.LegendaryEventOutcomes[1].TeamsImported);
         var team = Assert.Single((await ReadPlanAsync(client)).Teams);
-        Assert.Equal(("alpha", "Melee", 0), (team.LaneId, team.Name, team.SortOrder));
+        Assert.Equal((LegendaryEventLaneId.Alpha, "Melee", 0), (team.LaneId, team.Name, team.SortOrder));
         Assert.Equal([Alpha[0], Alpha[1], Alpha[2]], team.MemberUnitIds);
     }
 
@@ -247,7 +247,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
         await ImportAsync(client, Configure(TeamsJson(LysanderV1Id, team)));
 
         var depth = Assert.Single((await ReadPlanAsync(client)).Teams[0].RunDepths);
-        Assert.Equal((2, Lysander.Alpha.BattleIds.Count, "manual"), (depth.Run, depth.ExpectedBattleClears, depth.ExpectedBattleClearsSource));
+        Assert.Equal((2, Lysander.Alpha.BattleIds.Count, LegendaryEventDepthSource.Manual), (depth.Run, depth.ExpectedBattleClears, depth.ExpectedBattleClearsSource));
     }
 
     [Fact]
@@ -298,8 +298,8 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
         var body = await ImportAsync(client, username);
 
         var outcome = Assert.Single(body.LegendaryEventOutcomes);
-        Assert.Equal(("Skipped", "plan_already_exists"), (outcome.Status, outcome.Code));
-        Assert.Equal(("Skipped", "legendary_events_skipped"), (body.LegendaryEventPlans.Status, body.LegendaryEventPlans.Code));
+        Assert.Equal((ImportPartStatus.Skipped, "plan_already_exists"), (outcome.Status, outcome.Code));
+        Assert.Equal((ImportPartStatus.Skipped, "legendary_events_skipped"), (body.LegendaryEventPlans.Status, body.LegendaryEventPlans.Code));
         var after = await ReadPlanAsync(client);
         Assert.Equal((before.Revision, 1), (after.Revision, after.Teams.Count));
     }
@@ -309,7 +309,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
     {
         var (client, _) = await ClientAsync();
         var created = await client.PutAsJsonAsync(
-            $"/api/v1/me/legendary-event-plans/{LysanderId}", new UpdateLegendaryEventPlanRequest(0, null, true), Ct);
+            $"/api/v1/legendary-event-plans/{LysanderId}", new UpdateLegendaryEventPlanRequest(0, null, true), Ct);
         created.EnsureSuccessStatusCode();
         var json = $$"""
             {
@@ -331,8 +331,8 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
         var (client, _) = await ClientAsync();
         var uthar = catalog.LreViews.Single(view => view.Id == "votanUthar");
         var utharV1Id = catalog.Lres.Single(lre => lre.UnitSnowprintId == uthar.Id).Id;
-        await client.PostAsJsonAsync($"/api/v1/me/legendary-event-plans/{uthar.Id}/teams",
-            new CreateLegendaryEventTeamRequest(0, "alpha", "Mine", [.. uthar.Alpha.AvailableUnitIds.Take(3)], null, [], 1, null, null), Ct);
+        await client.PostAsJsonAsync($"/api/v1/legendary-event-plans/{uthar.Id}/teams",
+            new CreateLegendaryEventTeamRequest(0, LegendaryEventLaneId.Alpha, "Mine", [.. uthar.Alpha.AvailableUnitIds.Take(3)], null, [], 1, null, null), Ct);
         var json = $$"""
             {"leTeams": {
               "{{DanteV1Id}}": {{TeamsObject(DanteV1Id, Team("Old", "alpha", "bloodDante"))}},
@@ -343,7 +343,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
 
         var body = await ImportAsync(client, Configure(json));
 
-        Assert.Equal("Imported", body.LegendaryEventPlans.Status);
+        Assert.Equal(ImportPartStatus.Imported, body.LegendaryEventPlans.Status);
         // Outcomes come back in ascending V1 id order: Dante (10), Uthar (14), Lysander (15).
         Assert.Equal(
             ["event_not_in_catalog", "plan_already_exists", "imported"],
@@ -358,7 +358,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
 
         var body = await ImportAsync(client, Configure(TeamsJson(DanteV1Id, Team("Old", "alpha", "bloodDante"))));
 
-        Assert.Equal(("Skipped", "legendary_events_skipped"), (body.LegendaryEventPlans.Status, body.LegendaryEventPlans.Code));
+        Assert.Equal((ImportPartStatus.Skipped, "legendary_events_skipped"), (body.LegendaryEventPlans.Status, body.LegendaryEventPlans.Code));
     }
 
     [Fact]
@@ -368,7 +368,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
 
         var body = await ImportAsync(client, Configure(TeamsJson(LysanderV1Id, Team("Ghosts", "alpha", "unknownX"))));
 
-        Assert.Equal(("Skipped", "no_legendary_event_imported"), (body.LegendaryEventPlans.Status, body.LegendaryEventPlans.Code));
+        Assert.Equal((ImportPartStatus.Skipped, "no_legendary_event_imported"), (body.LegendaryEventPlans.Status, body.LegendaryEventPlans.Code));
         Assert.Equal("No V1 Legendary Event had teams to import.", body.LegendaryEventPlans.Message);
     }
 
@@ -387,7 +387,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
 
         var body = await ImportAsync(client, Configure(json));
 
-        Assert.Equal("Imported", body.LegendaryEventPlans.Status);
+        Assert.Equal(ImportPartStatus.Imported, body.LegendaryEventPlans.Status);
         var plan = await ReadPlanAsync(client);
         Assert.Equal([AlphaTeam(), AlphaTeam(3)], plan.Teams.Select(team => team.MemberUnitIds));
         Assert.Equal(
@@ -411,7 +411,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
 
         var body = await ImportAsync(client, Configure(json));
 
-        Assert.Equal("Imported", body.LegendaryEventPlans.Status);
+        Assert.Equal(ImportPartStatus.Imported, body.LegendaryEventPlans.Status);
         var team = Assert.Single((await ReadPlanAsync(client)).Teams);
         Assert.Equal(AlphaTeam(), team.MemberUnitIds);
         Assert.Equal([objectives[0].Index], team.ObjectiveIndexes);
@@ -422,7 +422,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
     {
         var (client, _) = await ClientAsync();
         var created = await client.PutAsJsonAsync(
-            $"/api/v1/me/legendary-event-plans/{LysanderId}", new UpdateLegendaryEventPlanRequest(0, "My V2 notes", false), Ct);
+            $"/api/v1/legendary-event-plans/{LysanderId}", new UpdateLegendaryEventPlanRequest(0, "My V2 notes", false), Ct);
         created.EnsureSuccessStatusCode();
         var json = $$"""
             {
@@ -478,7 +478,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
         });
 
         var response = await client.PostAsJsonAsync(
-            "/api/v1/me/v1-import",
+            "/api/v1/account/v1-import",
             new ImportV1ProfileRequest(
                 username, FakeTacticusV1Client.ValidPassword,
                 new ImportV1Selection(true, false, false, false, false, false, LegendaryEventPlans: true)),
@@ -517,7 +517,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
         var body = await ImportAsync(client, Configure(json));
 
         var outcome = Assert.Single(body.LegendaryEventOutcomes);
-        Assert.Equal((UtharId, "Imported", "inputs_imported", 0, 2), (outcome.EventId, outcome.Status, outcome.Code,
+        Assert.Equal((UtharId, ImportPartStatus.Imported, "inputs_imported", 0, 2), (outcome.EventId, outcome.Status, outcome.Code,
             outcome.TeamsImported, outcome.RunInputsImported));
         Assert.Equal([("run_input_clamped", null, "2:regularMissions:12"), ("unknown_run", null, "4")], Issues(body));
         Assert.Equal(
@@ -541,8 +541,8 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
         var body = await ImportAsync(client, Configure(json));
 
         var outcome = Assert.Single(body.LegendaryEventOutcomes);
-        Assert.Equal(("Imported", "inputs_imported", 0, 1), (outcome.Status, outcome.Code, outcome.TeamsImported, outcome.RunInputsImported));
-        Assert.Equal("Imported", body.LegendaryEventPlans.Status);
+        Assert.Equal((ImportPartStatus.Imported, "inputs_imported", 0, 1), (outcome.Status, outcome.Code, outcome.TeamsImported, outcome.RunInputsImported));
+        Assert.Equal(ImportPartStatus.Imported, body.LegendaryEventPlans.Status);
         var plan = await ReadPlanAsync(client);
         Assert.Single(plan.Teams);
         Assert.Equal(7, Assert.Single(plan.Runs).RegularMissions);
@@ -552,7 +552,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
     public async Task ExistingV2RunInputsAreKept()
     {
         var (client, _) = await ClientAsync();
-        await client.PutAsJsonAsync($"/api/v1/me/legendary-event-plans/{LysanderId}/runs/1",
+        await client.PutAsJsonAsync($"/api/v1/legendary-event-plans/{LysanderId}/runs/1",
             new UpdateLegendaryEventRunInputsRequest(0, 3, 0, false, 0), Ct);
         var json = """
             {"leProgress": {"15": {"overview": {
@@ -572,7 +572,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
     public async Task PaidOptionsAreCarriedOnANewPlanOnly()
     {
         var (client, _) = await ClientAsync();
-        await client.PutAsJsonAsync($"/api/v1/me/legendary-event-plans/{LysanderId}",
+        await client.PutAsJsonAsync($"/api/v1/legendary-event-plans/{LysanderId}",
             new UpdateLegendaryEventPlanRequest(0, null, false), Ct);
         var json = $$"""
             {
@@ -617,9 +617,9 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
         var body = await ImportAsync(client, Configure(json));
 
         var outcome = Assert.Single(body.LegendaryEventOutcomes);
-        Assert.Equal(("Imported", "inputs_imported", 3), (outcome.Status, outcome.Code, outcome.AnnotationsImported));
+        Assert.Equal((ImportPartStatus.Imported, "inputs_imported", 3), (outcome.Status, outcome.Code, outcome.AnnotationsImported));
         Assert.Equal(
-            [("alpha", 1, 0, "maybeClear"), ("alpha", 6, flying.Index + 1, "stopHere"), ("alpha", 8, 0, "stopHere")],
+            [(LegendaryEventLaneId.Alpha, 1, 0, LegendaryEventAnnotationStatus.MaybeClear), (LegendaryEventLaneId.Alpha, 6, flying.Index + 1, LegendaryEventAnnotationStatus.StopHere), (LegendaryEventLaneId.Alpha, 8, 0, LegendaryEventAnnotationStatus.StopHere)],
             (await ReadPlanAsync(client)).Annotations.Select(annotation =>
                 (annotation.LaneId, annotation.BattleIndex, annotation.ObjectiveId, annotation.Status)));
     }
@@ -639,7 +639,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
         await ImportAsync(client, Configure(json));
 
         Assert.Equal(
-            [("alpha", 1, 0, "stopHere"), ("alpha", 3, flying.Index + 1, "stopHere")],
+            [(LegendaryEventLaneId.Alpha, 1, 0, LegendaryEventAnnotationStatus.StopHere), (LegendaryEventLaneId.Alpha, 3, flying.Index + 1, LegendaryEventAnnotationStatus.StopHere)],
             (await ReadPlanAsync(client)).Annotations.Select(annotation =>
                 (annotation.LaneId, annotation.BattleIndex, annotation.ObjectiveId, annotation.Status)));
     }
@@ -661,7 +661,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
         await ImportAsync(client, Configure(json));
 
         Assert.Equal(
-            [("beta", 2, 0, "stopHere"), ("gamma", 4, 0, "maybeClear")],
+            [(LegendaryEventLaneId.Beta, 2, 0, LegendaryEventAnnotationStatus.StopHere), (LegendaryEventLaneId.Gamma, 4, 0, LegendaryEventAnnotationStatus.MaybeClear)],
             (await ReadPlanAsync(client)).Annotations.Select(annotation =>
                 (annotation.LaneId, annotation.BattleIndex, annotation.ObjectiveId, annotation.Status)));
     }
@@ -693,8 +693,8 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
     {
         var (client, _) = await ClientAsync();
         var flying = Lysander.Alpha.UnitsRestrictions.Single(restriction => restriction.Name == "Flying");
-        await client.PutAsJsonAsync($"/api/v1/me/legendary-event-plans/{LysanderId}/annotations",
-            new UpdateLegendaryEventAnnotationsRequest(0, "alpha", 6, [flying.Index + 1], "maybeClear"), Ct);
+        await client.PutAsJsonAsync($"/api/v1/legendary-event-plans/{LysanderId}/annotations",
+            new UpdateLegendaryEventAnnotationsRequest(0, LegendaryEventLaneId.Alpha, 6, [flying.Index + 1], LegendaryEventAnnotationStatus.MaybeClear), Ct);
         var json = """
             {"leProgress": {"15": {"compactProgress": {"alpha": { "Flying": { "statuses": { "6": 3 } } } } } } }
             """;
@@ -702,8 +702,8 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
         var body = await ImportAsync(client, Configure(json));
 
         Assert.Equal([("existing_annotations_kept", null, "1")], Issues(body));
-        Assert.Equal(("Skipped", "no_legendary_event_imported"), (body.LegendaryEventOutcomes[0].Status, body.LegendaryEventOutcomes[0].Code));
-        Assert.Equal("maybeClear", Assert.Single((await ReadPlanAsync(client)).Annotations).Status);
+        Assert.Equal((ImportPartStatus.Skipped, "no_legendary_event_imported"), (body.LegendaryEventOutcomes[0].Status, body.LegendaryEventOutcomes[0].Code));
+        Assert.Equal(LegendaryEventAnnotationStatus.MaybeClear, Assert.Single((await ReadPlanAsync(client)).Annotations).Status);
     }
 
     [Fact]
@@ -716,7 +716,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
 
         var body = await ImportAsync(client, Configure(json));
 
-        Assert.Equal("Imported", body.LegendaryEventPlans.Status);
+        Assert.Equal(ImportPartStatus.Imported, body.LegendaryEventPlans.Status);
         var outcome = Assert.Single(body.LegendaryEventOutcomes);
         Assert.Equal((13, "tauFarsight", "inputs_imported", 0), (outcome.V1EventId, outcome.EventId, outcome.Code, outcome.TeamsImported));
     }
@@ -763,7 +763,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
         var body = await ImportAsync(client, username);
 
         var outcome = Assert.Single(body.LegendaryEventOutcomes);
-        Assert.Equal(("Skipped", "plan_already_exists"), (outcome.Status, outcome.Code));
+        Assert.Equal((ImportPartStatus.Skipped, "plan_already_exists"), (outcome.Status, outcome.Code));
         var after = await ReadPlanAsync(client);
         Assert.Equal((before.Revision, 1, 1, 1), (after.Revision, after.Teams.Count, after.Runs.Count, after.Annotations.Count));
     }
@@ -782,7 +782,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
 
         var body = await ImportAsync(client, Configure(json));
 
-        Assert.Equal(("Imported", "inputs_imported"), (body.LegendaryEventOutcomes[0].Status, body.LegendaryEventOutcomes[0].Code));
+        Assert.Equal((ImportPartStatus.Imported, "inputs_imported"), (body.LegendaryEventOutcomes[0].Status, body.LegendaryEventOutcomes[0].Code));
         var plan = await ReadPlanAsync(client);
         Assert.Equal(("Save tokens for beta", 1), (plan.Notes, plan.Teams.Count));
     }
@@ -845,7 +845,7 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
         HttpClient client, string username, bool selected = true, bool onslaught = false)
     {
         var response = await client.PostAsJsonAsync(
-            "/api/v1/me/v1-import",
+            "/api/v1/account/v1-import",
             new ImportV1ProfileRequest(
                 username, FakeTacticusV1Client.ValidPassword,
                 new ImportV1Selection(false, false, false, false, onslaught, false, LegendaryEventPlans: selected)),
@@ -855,17 +855,17 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
     }
 
     private static async Task<LegendaryEventPlanResponse> ReadPlanAsync(HttpClient client, string eventId = LysanderId) =>
-        (await client.GetFromJsonAsync<LegendaryEventPlanResponse>($"/api/v1/me/legendary-event-plans/{eventId}", Ct))!;
+        (await client.GetFromJsonAsync<LegendaryEventPlanResponse>($"/api/v1/legendary-event-plans/{eventId}", Ct))!;
 
     private async Task SeedSyncedRunAsync(string subject, string eventId, int run)
     {
         using var scope = factory.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
-        var account = await db.Accounts.IgnoreQueryFilters().Include(entity => entity.Profile)
+        var profile = await db.Profiles.IgnoreQueryFilters()
             .FirstAsync(entity => entity.Subject == subject, Ct);
         db.PlayerDataSnapshots.Add(new PlayerDataSnapshot
         {
-            Id = account.Profile!.Id,
+            Id = profile.Id,
             LreProgress = [new LreProgressRecord { Id = UnitId.From(eventId), CurrentEventRun = run }],
         });
         await db.SaveChangesAsync(Ct);

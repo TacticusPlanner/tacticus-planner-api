@@ -6,7 +6,7 @@ namespace TacticusPlanner.Domain.Goals;
 /// The canonical identity of a Rank goal's <em>end</em> target: end rank plus the normalized applied-slot
 /// count (<c>"&lt;rank&gt;:&lt;slots&gt;"</c>). Start/baseline and farming strategy are deliberately not part of
 /// it, so two goals reaching the same end state conflict however they got there. Shared by request
-/// validation, project membership (<c>ProjectGoal.RankTargetKey</c>) and V1 import so they can't drift.
+/// validation, the in-flight slot check and V1 import so they can't drift.
 /// </summary>
 public static class RankTargetKey
 {
@@ -23,7 +23,7 @@ public static class RankTargetKey
 
     public static string From(RankTarget target) => From(target.End, target.EndPointFive, target.EndAppliedUpgrades);
 
-    /// <summary>The key a goal's membership carries: non-null only for a Rank goal with a target.</summary>
+    /// <summary>The key a goal carries: non-null only for a Rank goal with a target.</summary>
     public static string? For(GoalType goalType, GoalConfig config) =>
         goalType == GoalType.Rank && config.Rank is { } rank ? From(rank) : null;
 }

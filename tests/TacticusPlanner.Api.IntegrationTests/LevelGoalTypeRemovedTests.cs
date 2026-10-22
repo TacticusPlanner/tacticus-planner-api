@@ -1,6 +1,5 @@
-using System.Net;
-using System.Net.Http.Json;
 using TacticusPlanner.Api.Features.Goals;
+using TacticusPlanner.Domain.Goals;
 
 namespace TacticusPlanner.Api.IntegrationTests;
 
@@ -18,13 +17,12 @@ public sealed class LevelGoalTypeRemovedTests(PlannerApiFactory factory) : IClas
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            new CreateGoalRequest("character", CharacterId, goalType, new CreateGoalConfigRequest(), null),
-            TestContext.Current.CancellationToken);
+        var response = await client.PostMutatedGoalAsync(
+            new CreateGoalRequest(GoalEntityType.Character, CharacterId, GoalType.Unlock, new CreateGoalConfigRequest(), null),
+            request => request["goals"]![0]!["goalType"] = goalType);
 
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var goals = await client.GetFromJsonAsync<ListGoalsResponse>("/api/v1/me/goals", TestContext.Current.CancellationToken);
+        await response.AssertFieldRejectedAsync("goalType");
+        var goals = await client.GetFromJsonAsync<ListGoalsResponse>("/api/v1/goals", TestContext.Current.CancellationToken);
         Assert.Empty(goals!.Goals);
     }
 
@@ -33,17 +31,18 @@ public sealed class LevelGoalTypeRemovedTests(PlannerApiFactory factory) : IClas
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals/combined",
+        var response = await client.SendMutatedJsonAsync(
+            HttpMethod.Post,
+            "/api/v1/goals",
             new CreateCombinedGoalsRequest(
-                "character",
+                GoalEntityType.Character,
                 CharacterId,
                 null,
-                [new CombinedGoalSpec("level", new CreateGoalConfigRequest(), [])]),
-            TestContext.Current.CancellationToken);
+                [new CombinedGoalSpec(GoalType.Unlock, new CreateGoalConfigRequest(), [])]),
+            request => request["goals"]![0]!["goalType"] = "level");
 
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-        var goals = await client.GetFromJsonAsync<ListGoalsResponse>("/api/v1/me/goals", TestContext.Current.CancellationToken);
+        await response.AssertFieldRejectedAsync("goalType");
+        var goals = await client.GetFromJsonAsync<ListGoalsResponse>("/api/v1/goals", TestContext.Current.CancellationToken);
         Assert.Empty(goals!.Goals);
     }
 }

@@ -1,8 +1,10 @@
+using System.Text.Json.Serialization;
 using FastEndpoints;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Api.Http;
 using TacticusPlanner.Domain.Projects;
 using TacticusPlanner.Persistence;
 
@@ -12,13 +14,14 @@ public sealed class UpdateProjectEndpoint : Endpoint<UpdateProjectRequest, Proje
 {
     public override void Configure()
     {
-        Put("me/projects/{projectId}");
+        Put("projects/{projectId}");
         Summary(summary =>
         {
             summary.Summary = "Updates or archives a project.";
             summary.Description = "An absent or null target clears it; archiving keeps it.";
             summary.Response<ProjectSummaryResponse>(StatusCodes.Status200OK);
-            summary.Response<ProjectConflictResponse>(StatusCodes.Status409Conflict);
+            summary.Response(StatusCodes.Status409Conflict,
+                "projectRevisionStale or defaultProjectCannotBeArchived; current is the project as it stands.");
         });
     }
 
@@ -26,7 +29,7 @@ public sealed class UpdateProjectEndpoint : Endpoint<UpdateProjectRequest, Proje
     {
         if (ProcessorState<CurrentUserState>().ProfileId is null)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 
@@ -37,20 +40,22 @@ public sealed class UpdateProjectEndpoint : Endpoint<UpdateProjectRequest, Proje
             .FirstOrDefaultAsync(entity => entity.Id == projectId, ct);
         if (project is null)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 
         if (project.Revision != req.Revision)
         {
-            await SendConflictAsync("staleRevision", "The project changed on another device. Refresh and try again.", ct);
+            await SendStaleAsync(db, project, ct);
             return;
         }
 
-        var status = Enum.Parse<ProjectStatus>(req.Status, ignoreCase: true);
+        var status = req.Status;
         if (status == ProjectStatus.Archived && project.Type == ProjectType.Default)
         {
-            await SendConflictAsync("defaultProjectCannotBeArchived", "The default project cannot be archived.", ct);
+            await this.SendConflictAsync(
+                "defaultProjectCannotBeArchived", "The default project cannot be archived.",
+                Map.ToSummary(project, await db.GoalIdsAsync(project.Id, ct)), ct);
             return;
         }
 
@@ -73,40 +78,39 @@ public sealed class UpdateProjectEndpoint : Endpoint<UpdateProjectRequest, Proje
         }
         catch (DbUpdateConcurrencyException)
         {
-            await SendConflictAsync("staleRevision", "The project changed on another device. Refresh and try again.", ct);
+            db.ChangeTracker.Clear();
+            var current = await db.Projects.AsNoTracking().FirstOrDefaultAsync(entity => entity.Id == projectId, ct);
+            if (current is null)
+                await this.SendNotFoundProblemAsync(ct);
+            else
+                await SendStaleAsync(db, current, ct);
             return;
         }
 
-        await Send.OkAsync(Map.ToSummary(project), ct);
+        await Send.OkAsync(Map.ToSummary(project, await db.GoalIdsAsync(project.Id, ct)), ct);
     }
 
-    private async Task SendConflictAsync(string issueCode, string message, CancellationToken ct)
-    {
-        HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
-        await HttpContext.Response.WriteAsJsonAsync(new ProjectConflictResponse(issueCode, message), ct);
-    }
+    /// <summary>409 <c>projectRevisionStale</c> with the project in its list shape under <c>current</c>.</summary>
+    private async Task SendStaleAsync(PlannerDbContext db, Project current, CancellationToken ct) =>
+        await this.SendConflictAsync(
+            "projectRevisionStale", "The project changed on another device. Refresh and try again.",
+            Map.ToSummary(current, await db.GoalIdsAsync(current.Id, ct)), ct);
 }
 
 public sealed record UpdateProjectRequest(
     string Name,
     string? Description,
     string? Color,
-    string Status,
+    [property: JsonRequired] ProjectStatus Status,
     long Revision,
     ProjectTargetDto? Target = null
 );
-
-public sealed record ProjectConflictResponse(string IssueCode, string Message);
 
 public sealed class UpdateProjectValidator : Validator<UpdateProjectRequest>
 {
     public UpdateProjectValidator()
     {
         RuleFor(request => request.Name).NotEmpty();
-        RuleFor(request => request.Status)
-            .Must(value => Enum.TryParse<ProjectStatus>(value, ignoreCase: true, out var status)
-                && Enum.IsDefined(status))
-            .WithMessage("Status must be Active, Paused, or Archived.");
         RuleFor(request => request.Revision).GreaterThanOrEqualTo(0);
         RuleFor(request => request.Target!.EventId)
             .MaximumLength(ProjectValidation.MaxTargetEventIdLength)

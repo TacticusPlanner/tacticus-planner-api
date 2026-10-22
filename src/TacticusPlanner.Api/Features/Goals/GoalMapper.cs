@@ -1,4 +1,3 @@
-using System.Reflection;
 using System.Text.Json.Serialization;
 using FastEndpoints;
 using TacticusPlanner.Domain.Goals;
@@ -7,79 +6,38 @@ using TacticusPlanner.GameDomain;
 namespace TacticusPlanner.Api.Features.Goals;
 
 /// <summary>
-/// Maps between <see cref="Goal"/> and its API request/response shapes. <see cref="ToEntity"/> is used
-/// only by <see cref="CreateGoalEndpoint"/> (the sole place a goal is constructed from a request);
-/// <see cref="FromEntity"/> and <see cref="ToSummary"/> are used by every Goals endpoint that returns a
-/// goal, via the shared <c>Map</c> property (FastEndpoints only requires <c>TMapper : IMapper</c> /
-/// <c>IResponseMapper</c> — it does not require the endpoint's own request/response types to match this
-/// mapper's, so one instance safely serves Create/Get/List/Update/UpdateStatus).
+/// Maps <see cref="Goal"/> to its single served shape (<see cref="GoalDetailResponse"/>: the goals list, the goal
+/// read and every mutation answer with it) and the creation request to the domain config. Used through the shared
+/// <c>Map</c> property (FastEndpoints only requires <c>TMapper : IResponseMapper</c>, so one instance serves every
+/// goal endpoint).
 /// </summary>
-public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, Goal>
+public sealed class GoalMapper : ResponseMapper<GoalDetailResponse, Goal>
 {
-    /// <summary>Wire-format lookup for <see cref="UnitProgression"/>, built from each member's
-    /// <see cref="JsonStringEnumMemberNameAttribute"/> — the client sends the same "{Rarity}:{Stars}"
-    /// strings the frontend's <c>Progression</c> union uses (e.g. "Common:TwoStars"), which
-    /// <c>Enum.TryParse</c> can't match against the C# member names directly.</summary>
-    private static readonly Dictionary<string, UnitProgression> ProgressionByWireValue =
-        typeof(UnitProgression).GetFields(BindingFlags.Public | BindingFlags.Static)
-            .Select(field => (
-                Name: field.GetCustomAttribute<JsonStringEnumMemberNameAttribute>()?.Name,
-                Value: (UnitProgression)field.GetValue(null)!))
-            .Where(entry => entry.Name is not null)
-            .GroupBy(entry => entry.Name!, StringComparer.Ordinal)
-            .ToDictionary(group => group.Key, group => group.First().Value, StringComparer.Ordinal);
-
-    public override Goal ToEntity(CreateGoalRequest r) => new(
-        Enum.Parse<GoalEntityType>(r.EntityType, ignoreCase: true),
-        r.EntityId.Trim(),
-        Enum.Parse<GoalType>(r.GoalType, ignoreCase: true))
-    {
-        Config = MapConfig(r.Config),
-    };
-
-    /// <summary>Satisfies the base <c>Mapper</c> contract only — every real call site knows the goal's
-    /// current project membership and should call <see cref="ToDetail"/> instead, which is why this
-    /// override delegates with an empty <c>ProjectIds</c> rather than being used directly.</summary>
+    /// <summary>Satisfies the base <c>ResponseMapper</c> contract only — every real call site knows the goal's
+    /// current project membership and calls <see cref="ToDetail"/> instead.</summary>
     public override GoalDetailResponse FromEntity(Goal goal) => ToDetail(goal, []);
 
-    /// <summary>The actual goal->response mapping. Takes <paramref name="projectIds"/> as a parameter —
-    /// like <see cref="Projects.ProjectMapper.ToSummary"/> takes the active-project id — because
-    /// <see cref="Goal"/> itself has no navigation to its <c>ProjectGoal</c> memberships (plan §5: that
-    /// join lives entirely on the project side).</summary>
+    /// <summary>The goal->response mapping. Takes <paramref name="projectIds"/> because <see cref="Goal"/> has no
+    /// navigation to its <c>ProjectGoal</c> memberships (that join lives on the project side); they are served
+    /// sorted, so every response carrying a goal agrees on them.</summary>
     public GoalDetailResponse ToDetail(Goal goal, List<Guid> projectIds) => new(
         goal.Id.Value,
-        goal.EntityType.ToString(),
+        goal.EntityType,
         goal.EntityId,
-        goal.GoalType.ToString(),
-        goal.Status.ToString(),
+        goal.GoalType,
+        goal.Status,
         goal.Notes,
         BuildConfig(goal.Config),
         goal.Snapshot is null ? null : BuildSnapshot(goal.Snapshot),
-        goal.Events.Select(BuildEvent).ToList(),
         goal.DependsOn.ToList(),
-        projectIds,
+        projectIds.Order().ToList(),
         goal.CreatedAt,
         goal.UpdatedAt,
         goal.Revision,
         goal.GlobalPriority
     );
 
-    public GoalSummaryResponse ToSummary(Goal goal) => new(
-        goal.Id.Value,
-        goal.EntityType.ToString(),
-        goal.EntityId,
-        goal.GoalType.ToString(),
-        goal.Status.ToString(),
-        goal.Notes,
-        goal.DependsOn.ToList(),
-        goal.CreatedAt,
-        goal.UpdatedAt,
-        goal.GlobalPriority
-    );
-
-    /// <summary>Also used directly by <see cref="CreateCombinedGoalsEndpoint"/>, which builds its own
-    /// <see cref="Goal"/> instances (a combined request creates several goals per call, not one, so it
-    /// doesn't go through <see cref="ToEntity"/>).</summary>
+    /// <summary>The request config of a goal being created, in its domain form.</summary>
     internal static GoalConfig MapConfig(CreateGoalConfigRequest config) => new()
     {
         Rank = config.Rank is null ? null : new RankTarget
@@ -93,8 +51,8 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
         },
         Progression = config.Progression is null ? null : new ProgressionTarget
         {
-            Start = config.Progression.Start,
-            End = config.Progression.End,
+            Start = ProgressionRules.WireName(config.Progression.Start),
+            End = ProgressionRules.WireName(config.Progression.End),
         },
         Ability = config.Ability is null ? null : new AbilityTarget
         {
@@ -104,9 +62,7 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
             PassiveEnd = config.Ability.PassiveEnd,
         },
         FarmingLocationIds = config.FarmingLocationIds?.Select(id => id.Value).ToList(),
-        FarmingStrategy = Enum.TryParse<FarmingStrategy>(config.FarmingStrategy, ignoreCase: true, out var strategy)
-            ? strategy
-            : FarmingStrategy.TotalUpgrades,
+        FarmingStrategy = config.FarmingStrategy ?? FarmingStrategy.TotalUpgrades,
         AcquisitionSources = MapAcquisitionSources(config.AcquisitionSources),
         Upgrade = config.Upgrade is null ? null : new UpgradeTarget
         {
@@ -129,33 +85,25 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
 
     /// <summary>Maps the wire acquisition-source list to its domain form. Null / empty stays null —
     /// "unrestricted campaign farming", the pre-picker default. Shared by <see cref="MapConfig"/> and
-    /// <see cref="UpdateGoalEndpoint"/>.</summary>
+    /// <see cref="GoalDetailsEditor"/>.</summary>
     internal static List<AcquisitionSource>? MapAcquisitionSources(List<AcquisitionSourceRequest>? sources) =>
         sources is not { Count: > 0 }
             ? null
             : sources.Select(source => new AcquisitionSource
             {
-                Kind = source.Kind,
+                Kind = source.Kind.ToString(),
                 Ids = (source.Ids ?? []).Select(id => id.Trim()).ToList(),
             }).ToList();
 
     internal static GoalSnapshot MapSnapshot(CreateGoalSnapshotRequest? snapshot) => new()
     {
-        InitialRank = ParseRank(snapshot?.InitialRank),
-        InitialProgression = ParseProgression(snapshot?.InitialProgression),
+        InitialRank = snapshot?.InitialRank,
+        InitialProgression = snapshot?.InitialProgression,
         InitialActiveAbilityLevel = snapshot?.InitialActiveAbilityLevel,
         InitialPassiveAbilityLevel = snapshot?.InitialPassiveAbilityLevel,
         InitialRequirement = MapResources(snapshot?.InitialRequirement),
         InitialInventoryContribution = MapResources(snapshot?.InitialInventoryContribution),
     };
-
-    /// <summary>Best-effort — an unparseable client-supplied value becomes null rather than a 400; the
-    /// snapshot is a display baseline, not authoritative game state.</summary>
-    private static UnitRank? ParseRank(string? value) =>
-        value is not null && Enum.TryParse<UnitRank>(value, ignoreCase: true, out var rank) ? rank : null;
-
-    private static UnitProgression? ParseProgression(string? value) =>
-        value is not null && ProgressionByWireValue.TryGetValue(value, out var progression) ? progression : null;
 
     private static List<GoalSnapshotResource> MapResources(List<GoalSnapshotResourceRequest>? resources) =>
         resources?.Select(resource => new GoalSnapshotResource
@@ -173,7 +121,8 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
             config.Rank.EndPointFive,
             config.Rank.EndAppliedUpgrades
         ),
-        config.Progression is null ? null : new ProgressionTargetResponse(config.Progression.Start, config.Progression.End),
+        config.Progression is null ? null : new ProgressionTargetResponse(
+            ProgressionRules.FromWireName(config.Progression.Start), ProgressionRules.FromWireName(config.Progression.End)),
         config.Ability is null ? null : new AbilityTargetResponse(
             config.Ability.ActiveStart,
             config.Ability.ActiveEnd,
@@ -181,13 +130,13 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
             config.Ability.PassiveEnd
         ),
         config.FarmingLocationIds,
-        config.FarmingStrategy.ToString(),
+        config.FarmingStrategy,
         // Normalize empty-or-null to null (like MapAcquisitionSources does on the way in) — EF's
         // change-tracking snapshot can coerce a never-set owned collection navigation from null to an
         // empty list once the entity is tracked, and both mean the same "unrestricted campaign" here.
         config.AcquisitionSources is not { Count: > 0 }
             ? null
-            : config.AcquisitionSources.Select(source => new AcquisitionSourceResponse(source.Kind, source.Ids)).ToList(),
+            : config.AcquisitionSources.Select(source => new AcquisitionSourceResponse(Enum.Parse<AcquisitionSourceKind>(source.Kind), source.Ids)).ToList(),
         config.Upgrade is null ? null : new UpgradeTargetResponse(
             config.Upgrade.Targets.Select(target => new UpgradeMaterialTargetResponse(target.UpgradeId, target.Quantity)).ToList(),
             ToResponse(config.Upgrade.RankRange),
@@ -207,59 +156,25 @@ public sealed class GoalMapper : Mapper<CreateGoalRequest, GoalDetailResponse, G
     private static GoalSnapshotResourceResponse BuildSnapshotResource(GoalSnapshotResource resource) =>
         new(resource.ResourceId, resource.Count);
 
-    private static GoalEventResponse BuildEvent(GoalEvent goalEvent) => new(
-        goalEvent.At,
-        goalEvent.Type,
-        goalEvent.PreviousTarget is null ? null : BuildTarget(goalEvent.PreviousTarget),
-        goalEvent.NewTarget is null ? null : BuildTarget(goalEvent.NewTarget));
-
-    private static GoalTargetSnapshotResponse BuildTarget(GoalTargetSnapshot target) => new(
-        target.RankEnd,
-        target.RankEndPointFive,
-        target.RankEndAppliedUpgrades,
-        target.ProgressionEnd,
-        target.ActiveAbilityEnd,
-        target.PassiveAbilityEnd,
-        target.UpgradeTargets?.Select(value => new UpgradeMaterialTargetResponse(value.UpgradeId, value.Quantity)).ToList(),
-        ToResponse(target.UpgradeRankRange),
-        ToResponse(target.UpgradeActiveRange),
-        ToResponse(target.UpgradePassiveRange));
 }
-
-public sealed record GoalSummaryResponse(
-    Guid GoalId,
-    string EntityType,
-    string EntityId,
-    string GoalType,
-    string Status,
-    string? Notes,
-    List<Guid> DependsOn,
-    DateTimeOffset CreatedAt,
-    DateTimeOffset UpdatedAt,
-    // Position in the account-wide in-flight order (1 = first); null for Completed/Archived goals.
-    int? GlobalPriority = null
-);
 
 public sealed record GoalDetailResponse(
     Guid GoalId,
-    string EntityType,
+    GoalEntityType EntityType,
     string EntityId,
-    string GoalType,
-    string Status,
+    GoalType GoalType,
+    GoalStatus Status,
     string? Notes,
     GoalConfigResponse Config,
     GoalSnapshotResponse? Snapshot,
-    List<GoalEventResponse> Events,
     List<Guid> DependsOn,
-    // The ids of every project this goal currently belongs to (plan: a goal may belong to several
-    // projects at once). Populated by the caller via GoalMapper.ToDetail — Goal itself has no navigation
-    // to ProjectGoal, so this can't be filled in by FromEntity(Goal) alone.
+    // The ids of every project this goal currently belongs to (a goal may belong to several projects).
     List<Guid> ProjectIds,
     DateTimeOffset CreatedAt,
     DateTimeOffset UpdatedAt,
     // Monotonically increasing; a target edit must echo it as expectedRevision (optimistic concurrency).
-    long Revision = 0,
-    int? GlobalPriority = null
+    [property: JsonRequired] long Revision = 0,
+    [property: JsonRequired] int? GlobalPriority = null
 );
 
 public sealed record GoalConfigResponse(
@@ -267,18 +182,18 @@ public sealed record GoalConfigResponse(
     ProgressionTargetResponse? Progression,
     AbilityTargetResponse? Ability,
     List<string>? FarmingLocationIds,
-    string FarmingStrategy,
+    FarmingStrategy FarmingStrategy,
     List<AcquisitionSourceResponse>? AcquisitionSources,
     UpgradeTargetResponse? Upgrade
 );
 
-public sealed record AcquisitionSourceResponse(string Kind, List<string> Ids);
+public sealed record AcquisitionSourceResponse(AcquisitionSourceKind Kind, List<string> Ids);
 
 public sealed record UpgradeTargetResponse(
     List<UpgradeMaterialTargetResponse> Targets,
-    UpgradeRangeResponse? RankRange = null,
-    UpgradeRangeResponse? ActiveRange = null,
-    UpgradeRangeResponse? PassiveRange = null);
+    [property: JsonRequired] UpgradeRangeResponse? RankRange = null,
+    [property: JsonRequired] UpgradeRangeResponse? ActiveRange = null,
+    [property: JsonRequired] UpgradeRangeResponse? PassiveRange = null);
 
 public sealed record UpgradeRangeResponse(int Start, int End);
 
@@ -293,7 +208,7 @@ public sealed record RankTargetResponse(
     int EndAppliedUpgrades
 );
 
-public sealed record ProgressionTargetResponse(string Start, string End);
+public sealed record ProgressionTargetResponse(UnitProgression Start, UnitProgression End);
 
 public sealed record AbilityTargetResponse(int ActiveStart, int ActiveEnd, int PassiveStart, int PassiveEnd);
 
@@ -308,23 +223,3 @@ public sealed record GoalSnapshotResponse(
 
 public sealed record GoalSnapshotResourceResponse(string ResourceId, int Count);
 
-/// <summary><see cref="PreviousTarget"/>/<see cref="NewTarget"/> are set only on a
-/// <see cref="GoalEventType.TargetChanged"/> event.</summary>
-public sealed record GoalEventResponse(
-    DateTimeOffset At,
-    GoalEventType Type,
-    GoalTargetSnapshotResponse? PreviousTarget = null,
-    GoalTargetSnapshotResponse? NewTarget = null);
-
-/// <summary>A goal's end target at one moment; only the fields of the goal's own kind are non-null.</summary>
-public sealed record GoalTargetSnapshotResponse(
-    int? RankEnd,
-    bool? RankEndPointFive,
-    int? RankEndAppliedUpgrades,
-    string? ProgressionEnd,
-    int? ActiveAbilityEnd,
-    int? PassiveAbilityEnd,
-    List<UpgradeMaterialTargetResponse>? UpgradeTargets,
-    UpgradeRangeResponse? UpgradeRankRange = null,
-    UpgradeRangeResponse? UpgradeActiveRange = null,
-    UpgradeRangeResponse? UpgradePassiveRange = null);

@@ -10,7 +10,7 @@ public sealed class AcquisitionSourceRulesTests
         new(StringComparer.Ordinal) { "guild", "crusade", "rogue-trader", "war" };
 
     private static List<AcquisitionSourceRequest> Shop(params string[] ids) =>
-        [new(AcquisitionSourceKinds.Shop, [.. ids])];
+        [new(AcquisitionSourceKind.Shop, [.. ids])];
 
     private static string? Semantic(List<AcquisitionSourceRequest> sources, GoalType goalType, GoalEntityType entityType) =>
         AcquisitionSourceRules.SemanticError(sources, goalType, entityType, NoBattles, NoBattles, KnownShops);
@@ -54,9 +54,9 @@ public sealed class AcquisitionSourceRulesTests
         Assert.NotNull(Semantic(Shop("auction:upgHpM004"), GoalType.Rank, GoalEntityType.Character));
 
     [Theory]
-    [InlineData(AcquisitionSourceKinds.Campaign)]
-    [InlineData(AcquisitionSourceKinds.Onslaught)]
-    public void NonShopKindsAreRejectedOnRankGoal(string kind) =>
+    [InlineData(AcquisitionSourceKind.Campaign)]
+    [InlineData(AcquisitionSourceKind.Onslaught)]
+    public void NonShopKindsAreRejectedOnRankGoal(AcquisitionSourceKind kind) =>
         Assert.NotNull(Semantic([new(kind, [])], GoalType.Rank, GoalEntityType.Character));
 
     [Fact]

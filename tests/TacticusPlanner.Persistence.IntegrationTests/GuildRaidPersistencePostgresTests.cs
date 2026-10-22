@@ -103,8 +103,8 @@ public sealed class GuildRaidPersistencePostgresTests
         var otherHash = TacticusUserIdHash.From(Enumerable.Repeat((byte)3, 32).ToArray());
         var current = Attack(season.Id, currentHash, "current", DateTimeOffset.UtcNow.AddMinutes(-2));
         var other = Attack(season.Id, otherHash, "other", DateTimeOffset.UtcNow.AddMinutes(-1));
-        current.Units.Add(Unit(current.Id, "current-unit"));
-        other.Units.Add(Unit(other.Id, "other-unit"));
+        current.Units.Add(Unit("current-unit"));
+        other.Units.Add(Unit("other-unit"));
         season.Attacks.Add(current);
         season.Attacks.Add(other);
         db.AddRange(guild, season, new GuildRaidSyncState
@@ -116,6 +116,16 @@ public sealed class GuildRaidPersistencePostgresTests
             ActiveSeasonId = season.Id,
         });
         await db.SaveChangesAsync(TestContext.Current.CancellationToken);
+
+        // Units are inline jsonb on their attack.
+        await using (var read = new PlannerDbContext(options, new PassthroughEncryption(), new NoProfile()))
+        {
+            var units = await read.GuildRaidAttacks.AsNoTracking()
+                .Where(attack => attack.Id == current.Id)
+                .Select(attack => attack.Units)
+                .SingleAsync(TestContext.Current.CancellationToken);
+            Assert.Equal("current-unit", Assert.Single(units).UnitId);
+        }
 
         var duplicate = Attack(season.Id, currentHash, "duplicate", DateTimeOffset.UtcNow);
         duplicate.ContentHash = current.ContentHash;
@@ -142,10 +152,8 @@ public sealed class GuildRaidPersistencePostgresTests
             CompletedAt = completedAt,
         };
 
-    private static GuildRaidAttackUnit Unit(GuildRaidAttackId attackId, string unitId) => new()
+    private static GuildRaidAttackUnit Unit(string unitId) => new()
     {
-        Id = GuildRaidAttackUnitId.From(Guid.NewGuid()),
-        GuildRaidAttackId = attackId,
         UnitId = unitId,
         Kind = GuildRaidAttackUnitKind.Hero,
     };

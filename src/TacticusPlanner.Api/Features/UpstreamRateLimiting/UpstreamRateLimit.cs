@@ -3,6 +3,7 @@ using System.Globalization;
 using FastEndpoints;
 using Microsoft.Extensions.Options;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Api.Http;
 
 namespace TacticusPlanner.Api.Features.UpstreamRateLimiting;
 
@@ -78,9 +79,7 @@ public sealed class UpstreamRateLimitPreProcessor : IGlobalPreProcessor
         }
 
         http.Response.Headers.RetryAfter = seconds.ToString(CultureInfo.InvariantCulture);
-        await Results.Problem(
-            statusCode: StatusCodes.Status429TooManyRequests,
-            title: "Too many requests.",
-            detail: $"Retry after {seconds} seconds.").ExecuteAsync(http);
+        await ApiProblems.WriteAsync(
+            http, StatusCodes.Status429TooManyRequests, detail: $"Too many requests. Try again in {seconds} seconds.");
     }
 }

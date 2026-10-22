@@ -1,7 +1,9 @@
+using System.Text.Json.Serialization;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Api.Features.Projects;
+using TacticusPlanner.Api.Http;
 using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.Projects;
 using TacticusPlanner.GameDomain;
@@ -10,37 +12,31 @@ using TacticusPlanner.Persistence;
 namespace TacticusPlanner.Api.Features.Goals;
 
 /// <summary>
-/// Creates several goals for one entity in a single call, linked together — the combined-creation flow
-/// (plan §6/§8): pick a character, compose any combination of Unlock/Ascension/Rank/Ability targets, the
-/// client detects unmet prerequisites (a locked entity needs Unlock; an unreachable target Rank needs
-/// Ascension) and orders the request accordingly, then this endpoint persists the whole set atomically —
-/// each spec's <see cref="CombinedGoalSpec.DependsOnIndex"/> resolved into real <see cref="Goal.DependsOn"/>
-/// edges. Detection/ordering itself stays client-side (it needs live player-data the server doesn't hold);
-/// this endpoint only persists what it's given. Every goal lands in the same project(s) as
-/// <see cref="CreateGoalEndpoint"/> uses (the given <see cref="CreateCombinedGoalsRequest.Projects"/>, or
-/// the caller's default project) — a given per-project <see cref="ProjectPriorityRequest.Priority"/>
-/// becomes that project's base priority for the whole set, with each subsequent goal in the set placed
-/// immediately after (same "+i" spacing used when no priority is given).
+/// Creates one goal, or several linked goals for one entity, in a single call (the only creation route). For the
+/// combined flow the client composes any combination of Unlock/Ascension/Rank/Ability/Upgrade targets, detects
+/// unmet prerequisites (it holds the live player data) and orders the request accordingly; this endpoint persists
+/// the whole set atomically, each spec's <see cref="CombinedGoalSpec.DependsOnIndex"/> resolved into real
+/// <see cref="Goal.DependsOn"/> edges. Every goal lands in the given projects, or the caller's default project.
 /// </summary>
 public sealed class CreateCombinedGoalsEndpoint
     : Endpoint<CreateCombinedGoalsRequest, CreateCombinedGoalsResponse, GoalMapper>
 {
     public override void Configure()
     {
-        Post("me/goals/combined");
+        Post("goals");
         Summary(summary =>
         {
-            summary.Summary = "Creates several linked goals for one entity in one call (combined creation).";
-            summary.Description = "Each spec's DependsOnIndex (indices into this same request's Goals list, "
-                + "referencing only earlier entries) is resolved into real DependsOn edges. Assigns the "
-                + "whole set to the given project(s), or the caller's default project (created on first use) "
-                + "when none is given, same as POST me/goals. Every goal in the set starts Active regardless "
-                + "of which projects it is filed into; startPaused creates the whole set Paused instead and "
-                + "cannot be set per goal.";
+            summary.Summary = "Creates one goal, or several linked goals for one entity, in one call.";
+            summary.Description = "A single goal is a one-spec request. Each spec's DependsOnIndex (indices into "
+                + "this same request's Goals list, referencing only earlier entries) is resolved into real DependsOn "
+                + "edges. Assigns the whole set to the given project(s), or the caller's default project (created on "
+                + "first use) when none is given. Every goal starts Active; startPaused (request-level boolean, "
+                + "default false) creates the whole set Paused instead and cannot be set per goal.";
             summary.Response<CreateCombinedGoalsResponse>(StatusCodes.Status200OK, "The newly created goals, in request order.");
-            summary.Response(StatusCodes.Status400BadRequest, "Invalid entity/goal type, a bad DependsOnIndex, or an unknown project.");
-            summary.Response<ProjectGoalSlotConflictResponse>(StatusCodes.Status409Conflict,
-                "A target project already contains an active or paused goal in one of the requested slots.");
+            summary.Response(StatusCodes.Status400BadRequest,
+                "Invalid entity/goal type, a bad DependsOnIndex, an unknown project, or a null/per-goal startPaused.");
+            summary.Response(StatusCodes.Status409Conflict,
+                "slotOccupied: an active or paused goal already holds one of the requested slots (current: that goal).");
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
             summary.Response(StatusCodes.Status404NotFound, "The authenticated account/profile has not been provisioned.");
         });
@@ -51,19 +47,14 @@ public sealed class CreateCombinedGoalsEndpoint
         var state = ProcessorState<CurrentUserState>();
         if (state.ProfileId is not { } profileId)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 
         var db = Resolve<PlannerDbContext>();
         var projects = Resolve<ProjectsService>();
         var targetValidation = Resolve<GoalTargetValidationService>();
-        if (!Enum.TryParse<GoalEntityType>(req.EntityType, ignoreCase: true, out var entityType))
-        {
-            AddError(request => request.EntityType, "Unknown entity type.");
-            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
-            return;
-        }
+        var entityType = req.EntityType;
 
         // One roster read for every spec in the request.
         var units = await targetValidation.LoadUnitsAsync(profileId, req.EntityId.Trim(), ct);
@@ -76,13 +67,7 @@ public sealed class CreateCombinedGoalsEndpoint
         for (var i = 0; i < req.Goals.Count; i++)
         {
             var spec = req.Goals[i];
-            if (!Enum.TryParse<GoalType>(spec.GoalType, ignoreCase: true, out var goalType))
-            {
-                AddError(request => request.Goals, "Unknown or not-yet-supported goal type.");
-                await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
-                return;
-            }
-
+            var goalType = spec.GoalType;
             parsedGoalTypes.Add(goalType);
 
             var directDeps = spec.DependsOnIndex ?? [];
@@ -97,8 +82,7 @@ public sealed class CreateCombinedGoalsEndpoint
                 .Where(dependencyIndex => parsedGoalTypes[dependencyIndex] == GoalType.Ascension)
                 .Select(dependencyIndex => req.Goals[dependencyIndex].Config.Progression)
                 .OfType<ProgressionTargetRequest>()
-                .Select(progression => ProgressionRules.ProgressionIndex(progression.End))
-                .Where(endIndex => endIndex >= 0)
+                .Select(progression => (int)progression.End)
                 .ToList();
             UnitProgression? effectiveProgressionFloor =
                 ascensionEndIndices.Count > 0 ? (UnitProgression)ascensionEndIndices.Max() : null;
@@ -144,59 +128,42 @@ public sealed class CreateCombinedGoalsEndpoint
         }
 
         // Request-wide, not per spec: the set is one dependency chain, so a Paused prerequisite under an
-        // Active dependent is a state nothing needs (design: "The flag is request-wide for combined creation").
+        // Active dependent is a state nothing needs.
         var status = req.StartPaused ? GoalStatus.Paused : GoalStatus.Active;
-        var now = DateTimeOffset.UtcNow;
-        var planning = Resolve<ProjectGoalPlanningService>();
-        await planning.ExecuteLockedMutationAsync(
-            targetProjects.Select(project => project.Id),
-            async transaction =>
+
+        // DependsOn references another spec's GoalId, only resolvable once every goal in the set has one.
+        // CreateCombinedGoalsValidator guarantees strictly-earlier indices; re-checked here rather than trusting an
+        // invariant enforced elsewhere.
+        var goals = req.Goals.Select((spec, i) => new Goal(entityType, req.EntityId.Trim(), parsedGoalTypes[i])
         {
-            // At most one Active/Paused goal per (entity, goal type) (for Rank: per normalized end target) —
-            // mirrors CreateGoalEndpoint's check. A combined request has at most one goal per type, so the
-            // (type, target key) pairs below are one per spec.
-            var slotKeys = parsedGoalTypes
-                .Select((goalType, i) => (goalType, key: RankTargetKey.For(goalType, GoalMapper.MapConfig(req.Goals[i].Config))))
-                .ToList();
-            if (await planning.FindFirstConflictAsync(
-                targetProjects.Select(project => project.Id), entityType, req.EntityId.Trim(),
-                slotKeys.Select(slot => (slot.goalType, slot.key)).ToList(), ct) is { } existingConflict)
+            Id = GoalId.From(Guid.CreateVersion7()),
+            ProfileId = profileId,
+            Status = status,
+            Config = GoalMapper.MapConfig(spec.Config),
+            Snapshot = GoalMapper.MapSnapshot(spec.Snapshot),
+        }).ToList();
+        for (var i = 0; i < req.Goals.Count; i++)
+        {
+            var indices = req.Goals[i].DependsOnIndex ?? [];
+            if (indices.Any(index => index < 0 || index >= i))
             {
-                HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
-                await HttpContext.Response.WriteAsJsonAsync(existingConflict, ct);
+                AddError(request => request.Goals, "DependsOnIndex must reference an earlier goal in this request.");
+                await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
                 return;
             }
 
-            // Built as a materialized, indexable List (not a lazy .Select) so each spec's index has a real
-            // GoalId to resolve dependencies against in the second pass below.
-            var goals = req.Goals.Select((spec, i) => new Goal(
-                entityType,
-                req.EntityId.Trim(),
-                parsedGoalTypes[i])
-            {
-                Id = GoalId.From(Guid.CreateVersion7()),
-                ProfileId = profileId,
-                Status = status,
-                Config = GoalMapper.MapConfig(spec.Config),
-                Snapshot = GoalMapper.MapSnapshot(spec.Snapshot),
-                Events = [new GoalEvent { At = now, Type = GoalEventType.Created }],
-            }).ToList();
+            goals[i].DependsOn = indices.Select(index => goals[index].Id.Value).ToList();
+        }
 
-            // Second pass: DependsOn references another spec's GoalId, only resolvable once every goal in
-            // the set already has one (see the first pass above). CreateCombinedGoalsValidator guarantees
-            // strictly-earlier indices, but that's a separate class — re-check here defensively rather than
-            // trust an invariant enforced elsewhere.
-            for (var i = 0; i < req.Goals.Count; i++)
+        var now = Resolve<TimeProvider>().GetUtcNow();
+        var planning = Resolve<ProjectGoalPlanningService>();
+        await planning.ExecuteLockedMutationAsync(async transaction =>
+        {
+            // At most one Active/Paused goal per slot of the profile (Rank: per normalized end target).
+            if (await planning.FindConflictAsync(goals, ct) is { } existingConflict)
             {
-                var indices = req.Goals[i].DependsOnIndex ?? [];
-                if (indices.Any(index => index < 0 || index >= i))
-                {
-                    AddError(request => request.Goals, "DependsOnIndex must reference an earlier goal in this request.");
-                    await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
-                    return;
-                }
-
-                goals[i].DependsOn = indices.Select(index => goals[index].Id.Value).ToList();
+                await GoalProblems.SendSlotConflictAsync(this, existingConflict, ct);
+                return;
             }
 
             db.Goals.AddRange(goals);
@@ -205,29 +172,7 @@ public sealed class CreateCombinedGoalsEndpoint
             foreach (var goal in goals)
                 await order.AppendAsync(goal, ct);
             foreach (var project in targetProjects)
-                db.ProjectGoals.AddRange(goals.Select(goal => ProjectGoalPlanningService.CreateMembership(project, goal, now)));
-
-            try
-            {
-                await db.SaveChangesAsync(ct);
-            }
-            catch (DbUpdateException ex) when (GoalConflictDetection.IsProjectSlotConflict(ex))
-            {
-                var slotProjectIds = targetProjects.Select(project => project.Id).ToList();
-                var conflict = await planning.FindConflictAfterFailedSaveAsync(
-                    transaction,
-                    slotKeys.Select(slot => new ProjectGoalSlotLookup(
-                        slotProjectIds,
-                        entityType,
-                        req.EntityId.Trim(),
-                        slot.goalType,
-                        slot.key)),
-                    ct) ?? throw new InvalidOperationException(
-                        "The project slot constraint failed but no conflicting membership was found.", ex);
-                HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
-                await HttpContext.Response.WriteAsJsonAsync(conflict, ct);
-                return;
-            }
+                db.ProjectGoals.AddRange(goals.Select(goal => ProjectGoalPlanningService.CreateMembership(project.Id, goal.Id, now)));
 
             await order.CompleteAsync(ct);
             await transaction.CommitAsync(ct);
@@ -240,22 +185,90 @@ public sealed class CreateCombinedGoalsEndpoint
 }
 
 public sealed record CreateCombinedGoalsRequest(
-    string EntityType,
+    [property: JsonRequired] GoalEntityType EntityType,
     string EntityId,
     List<ProjectPriorityRequest>? Projects,
     List<CombinedGoalSpec> Goals,
+    // Non-nullable: an explicit null fails binding with a 400 naming startPaused.
     bool StartPaused = false
 );
 
-/// <summary>One goal within a combined-creation request. <see cref="DependsOnIndex"/> holds indices into
+/// <summary>One goal within a creation request. Unknown members (notably a per-goal <c>startPaused</c>) are
+/// rejected, not ignored. <see cref="DependsOnIndex"/> holds indices into
 /// the parent request's <see cref="CreateCombinedGoalsRequest.Goals"/> list — each must reference a
 /// strictly earlier position (validated by <see cref="CreateCombinedGoalsValidator"/>), resolved into real
 /// <see cref="Goal.DependsOn"/> ids by the endpoint.</summary>
+[JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
 public sealed record CombinedGoalSpec(
-    string GoalType,
+    [property: JsonRequired] GoalType GoalType,
     CreateGoalConfigRequest Config,
     List<int> DependsOnIndex,
     CreateGoalSnapshotRequest? Snapshot = null
 );
 
 public sealed record CreateCombinedGoalsResponse(List<GoalDetailResponse> Goals);
+
+/// <summary>One target project a newly created goal is filed into. A goal takes no caller-chosen
+/// priority: it appends once to the account-wide in-flight order however many projects it joins.</summary>
+public sealed record ProjectPriorityRequest(Guid ProjectId);
+
+public sealed record CreateGoalConfigRequest(
+    RankTargetRequest? Rank = null,
+    ProgressionTargetRequest? Progression = null,
+    AbilityTargetRequest? Ability = null,
+    List<CampaignBattleId>? FarmingLocationIds = null,
+    FarmingStrategy? FarmingStrategy = null,
+    List<AcquisitionSourceRequest>? AcquisitionSources = null,
+    UpgradeTargetRequest? Upgrade = null
+);
+
+/// <summary>One selected shard acquisition source (plan: multi-select Campaigns/Onslaught/Shops picker).
+/// <see cref="Kind"/> must be one of <see cref="Domain.Goals.AcquisitionSourceKinds"/>; <see cref="Ids"/>
+/// carries campaign battle ids for <c>Campaign</c>, shop-offer ids
+/// (<c>&lt;shopId&gt;:&lt;rewardType&gt;</c>) for <c>Shop</c>, and must be empty for <c>Onslaught</c>.
+/// Kept as plain strings (not <see cref="CampaignBattleId"/>) because the id type varies by kind; the
+/// campaign ids are validated against the character's shard nodes in
+/// <see cref="GoalTargetValidationService"/>.</summary>
+public sealed record AcquisitionSourceRequest([property: JsonRequired] AcquisitionSourceKind Kind, List<string> Ids);
+
+public sealed record RankTargetRequest(
+    int Start,
+    bool StartPointFive,
+    int StartAppliedUpgrades,
+    int End,
+    bool EndPointFive,
+    int EndAppliedUpgrades
+);
+
+public sealed record ProgressionTargetRequest(
+    [property: JsonRequired] UnitProgression Start,
+    [property: JsonRequired] UnitProgression End);
+
+public sealed record AbilityTargetRequest(int ActiveStart, int ActiveEnd, int PassiveStart, int PassiveEnd);
+
+/// <summary>Optional progression ranges the goal was created against: <c>RankRange</c> (Character only) is a
+/// rank-ladder index pair (<c>UnitRank</c> ordinal, e.g. Stone2 = 1); <c>ActiveRange</c>/<c>PassiveRange</c>
+/// (Mow only) are ability-level pairs. Omitted groups stay null — no overlap de-duplication.</summary>
+public sealed record UpgradeTargetRequest(
+    List<UpgradeMaterialTargetRequest> Targets,
+    UpgradeRangeRequest? RankRange = null,
+    UpgradeRangeRequest? ActiveRange = null,
+    UpgradeRangeRequest? PassiveRange = null
+);
+
+/// <summary>Nullable members so a half-present group is detectable (and rejected with a 400) rather than
+/// silently defaulting to 0.</summary>
+public sealed record UpgradeRangeRequest(int? Start, int? End);
+
+public sealed record UpgradeMaterialTargetRequest(string UpgradeId, int Quantity);
+
+public sealed record CreateGoalSnapshotRequest(
+    UnitRank? InitialRank = null,
+    UnitProgression? InitialProgression = null,
+    int? InitialActiveAbilityLevel = null,
+    int? InitialPassiveAbilityLevel = null,
+    List<GoalSnapshotResourceRequest>? InitialRequirement = null,
+    List<GoalSnapshotResourceRequest>? InitialInventoryContribution = null
+);
+
+public sealed record GoalSnapshotResourceRequest(string ResourceId, int Count);

@@ -141,8 +141,8 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
         if (goalType == GoalType.Ascension)
         {
             if (config.Progression is null) return "Ascension requires a progression target.";
-            var start = ProgressionRules.ProgressionIndex(config.Progression.Start);
-            var end = ProgressionRules.ProgressionIndex(config.Progression.End);
+            var start = (int)config.Progression.Start;
+            var end = (int)config.Progression.End;
             var current = againstBaseline ? start : (int?)playerUnit?.ProgressionIndex ?? start;
             if (start < current) return "The starting progression cannot be lower than current progression.";
             if (end <= Math.Max(start, current)) return "The target progression must be above the effective start.";
@@ -203,9 +203,7 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
             return acquisitionError;
         }
 
-        var strategy = Enum.TryParse<FarmingStrategy>(config.FarmingStrategy, true, out var parsed)
-            ? parsed
-            : FarmingStrategy.TotalUpgrades;
+        var strategy = config.FarmingStrategy ?? FarmingStrategy.TotalUpgrades;
         if (strategy != FarmingStrategy.TotalUpgrades
             && goalType != GoalType.Rank
             && !(goalType == GoalType.Ability && entityType == GoalEntityType.Mow))

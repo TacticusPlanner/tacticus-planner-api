@@ -1,8 +1,11 @@
+using System.Text.Json.Serialization;
 using FastEndpoints;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Api.Http;
 using TacticusPlanner.Domain.PlayerData;
+using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.PlayerDataOverrides;
@@ -11,7 +14,7 @@ public sealed class GetOnslaughtProgressEndpoint : EndpointWithoutRequest<Onslau
 {
     public override void Configure()
     {
-        Get("me/player-data-overrides/onslaught-progress");
+        Get("player-data-overrides/onslaught-progress");
         Summary(summary => summary.Summary = "Gets the current profile's manual Onslaught progress.");
     }
 
@@ -20,7 +23,7 @@ public sealed class GetOnslaughtProgressEndpoint : EndpointWithoutRequest<Onslau
         var profileId = ProcessorState<CurrentUserState>().ProfileId;
         if (profileId is null)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 
@@ -38,7 +41,7 @@ public sealed class UpdateOnslaughtProgressEndpoint
 {
     public override void Configure()
     {
-        Put("me/player-data-overrides/onslaught-progress");
+        Put("player-data-overrides/onslaught-progress");
         Summary(summary => summary.Summary = "Updates the current profile's manual Onslaught progress.");
     }
 
@@ -47,7 +50,7 @@ public sealed class UpdateOnslaughtProgressEndpoint
         var profileId = ProcessorState<CurrentUserState>().ProfileId;
         if (profileId is null)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 
@@ -58,8 +61,7 @@ public sealed class UpdateOnslaughtProgressEndpoint
         {
             if (req.Revision != 0)
             {
-                AddError("Player data overrides changed on another device. Refresh and try again.");
-                await Send.ErrorsAsync(StatusCodes.Status409Conflict, ct);
+                await SendConflictAsync(db, profileIdValue, ct);
                 return;
             }
 
@@ -68,8 +70,7 @@ public sealed class UpdateOnslaughtProgressEndpoint
         }
         else if (overrides.Revision != req.Revision)
         {
-            AddError("Player data overrides changed on another device. Refresh and try again.");
-            await Send.ErrorsAsync(StatusCodes.Status409Conflict, ct);
+            await SendConflictAsync(db, profileIdValue, ct);
             return;
         }
 
@@ -96,12 +97,22 @@ public sealed class UpdateOnslaughtProgressEndpoint
         }
         catch (DbUpdateConcurrencyException)
         {
-            AddError("Player data overrides changed on another device. Refresh and try again.");
-            await Send.ErrorsAsync(StatusCodes.Status409Conflict, ct);
+            await SendConflictAsync(db, profileIdValue, ct);
             return;
         }
 
         await Send.OkAsync(OnslaughtProgressResponse.From(overrides), ct);
+    }
+
+    /// <summary>409 <c>concurrency</c> with the overrides re-read after the failed write, in the read shape.</summary>
+    private async Task SendConflictAsync(PlannerDbContext db, ProfileId profileId, CancellationToken ct)
+    {
+        db.ChangeTracker.Clear();
+        var current = await db.PlayerDataOverrides.AsNoTracking().FirstOrDefaultAsync(entity => entity.Id == profileId, ct)
+            ?? new PlayerDataOverride { Id = profileId };
+        await this.SendConflictAsync(
+            ApiProblems.Concurrency, "Player data overrides changed on another device. Refresh and try again.",
+            OnslaughtProgressResponse.From(current), ct);
     }
 }
 
@@ -110,7 +121,19 @@ public sealed class UpdateOnslaughtProgressEndpoint
 /// saved a position for the alliance; Sector/Tier then carry the Stone 1 placeholder and must not be
 /// treated as the player's real progress.
 /// </summary>
-public sealed record OnslaughtAllianceProgressResponse(string Sector, int Tier, bool IsSet)
+/// <summary>An Onslaught sector, stored by name.</summary>
+public enum OnslaughtSector
+{
+    Stone,
+    Iron,
+    Bronze,
+    Silver,
+    Gold,
+    Diamond,
+    Adamantine,
+}
+
+public sealed record OnslaughtAllianceProgressResponse(OnslaughtSector Sector, int Tier, bool IsSet)
 {
     internal static OnslaughtAllianceProgressResponse From(
         IReadOnlyCollection<OnslaughtProgressOverrideRecord> records,
@@ -118,7 +141,10 @@ public sealed record OnslaughtAllianceProgressResponse(string Sector, int Tier, 
     {
         var progress = records.FirstOrDefault(record =>
             string.Equals(record.Alliance, alliance, StringComparison.OrdinalIgnoreCase));
-        return progress is null ? new("Stone", 1, false) : new(progress.Sector, progress.Tier, true);
+        // Sectors were once accepted in any case; an unreadable stored value reads as the placeholder.
+        return progress is not null && Enum.TryParse<OnslaughtSector>(progress.Sector, ignoreCase: true, out var sector)
+            ? new(sector, progress.Tier, true)
+            : new(OnslaughtSector.Stone, 1, false);
     }
 }
 
@@ -135,12 +161,12 @@ public sealed record OnslaughtProgressResponse(
         overrides.Revision);
 }
 
-public sealed record OnslaughtAllianceProgressRequest(string Sector, int Tier)
+public sealed record OnslaughtAllianceProgressRequest([property: JsonRequired] OnslaughtSector Sector, int Tier)
 {
     internal OnslaughtProgressOverrideRecord ToRecord(string alliance) => new()
     {
         Alliance = alliance,
-        Sector = Sector,
+        Sector = Sector.ToString(),
         Tier = Tier,
     };
 }
@@ -156,9 +182,6 @@ public sealed record UpdateOnslaughtProgressRequest(
 
 public sealed class UpdateOnslaughtProgressValidator : Validator<UpdateOnslaughtProgressRequest>
 {
-    private static readonly string[] SupportedSectors =
-        ["Stone", "Iron", "Bronze", "Silver", "Gold", "Diamond", "Adamantine"];
-
     public UpdateOnslaughtProgressValidator()
     {
         RuleFor(request => request.Imperial!).SetValidator(new AllianceProgressValidator()).When(request => request.Imperial is not null);
@@ -171,7 +194,6 @@ public sealed class UpdateOnslaughtProgressValidator : Validator<UpdateOnslaught
     {
         public AllianceProgressValidator()
         {
-            RuleFor(request => request.Sector).Must(sector => SupportedSectors.Contains(sector, StringComparer.OrdinalIgnoreCase));
             RuleFor(request => request.Tier).InclusiveBetween(1, 4);
         }
     }

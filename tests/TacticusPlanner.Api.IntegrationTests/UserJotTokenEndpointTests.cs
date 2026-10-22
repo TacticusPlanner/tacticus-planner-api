@@ -1,6 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
-using System.Net.Http.Json;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
@@ -21,7 +20,7 @@ public sealed class UserJotTokenEndpointTests(PlannerApiFactory factory) : IClas
         var client = CreateAuthenticatedClient(subject);
         var applicationUserId = await ProvisionAccountAsync(client);
 
-        var response = await client.GetAsync("/api/v1/me/userjot-token", TestContext.Current.CancellationToken);
+        var response = await client.GetAsync("/api/v1/userjot-token", TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         Assert.Equal("no-store", response.Headers.CacheControl?.ToString());
 
@@ -43,9 +42,9 @@ public sealed class UserJotTokenEndpointTests(PlannerApiFactory factory) : IClas
         var client = CreateAuthenticatedClient(NewSubject(), name: "Ada Lovelace");
         await ProvisionAccountAsync(client);
 
-        await client.PutAsJsonAsync("/api/v1/me/display-name", new { displayName = "Ada" }, TestContext.Current.CancellationToken);
+        await client.PutAsJsonAsync("/api/v1/account/display-name", new { displayName = "Ada" }, TestContext.Current.CancellationToken);
         var first = ValidateAndReadToken(await GetTokenAsync(client));
-        await client.PutAsJsonAsync("/api/v1/me/display-name", new { displayName = "Countess" }, TestContext.Current.CancellationToken);
+        await client.PutAsJsonAsync("/api/v1/account/display-name", new { displayName = "Countess" }, TestContext.Current.CancellationToken);
         var second = ValidateAndReadToken(await GetTokenAsync(client));
 
         Assert.Equal("Ada", first.Claims.Single(claim => claim.Type == "firstName").Value);
@@ -83,7 +82,7 @@ public sealed class UserJotTokenEndpointTests(PlannerApiFactory factory) : IClas
     {
         var client = factory.CreateClient();
 
-        using var request = new HttpRequestMessage(HttpMethod.Get, "/api/v1/me/userjot-token");
+        using var request = new HttpRequestMessage(HttpMethod.Get, "/api/v1/userjot-token");
         request.Headers.Add(PlannerTestAuthenticationHandler.NoAuthHeader, "1");
         var response = await client.SendAsync(request, TestContext.Current.CancellationToken);
 
@@ -115,7 +114,7 @@ public sealed class UserJotTokenEndpointTests(PlannerApiFactory factory) : IClas
         var client = CreateAuthenticatedClient(NewSubject());
         await ProvisionAccountAsync(client);
 
-        var response = await client.GetAsync("/api/v1/me/userjot-token", TestContext.Current.CancellationToken);
+        var response = await client.GetAsync("/api/v1/userjot-token", TestContext.Current.CancellationToken);
         var raw = await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
 
         Assert.DoesNotContain(ProjectSecret, raw, StringComparison.Ordinal);
@@ -123,14 +122,14 @@ public sealed class UserJotTokenEndpointTests(PlannerApiFactory factory) : IClas
 
     private static async Task<string> GetTokenAsync(HttpClient client)
     {
-        var response = await client.GetAsync("/api/v1/me/userjot-token", TestContext.Current.CancellationToken);
+        var response = await client.GetAsync("/api/v1/userjot-token", TestContext.Current.CancellationToken);
         var body = await response.Content.ReadFromJsonAsync<UserJotTokenResponse>(TestContext.Current.CancellationToken);
         return body!.Token;
     }
 
     private static async Task<Guid> ProvisionAccountAsync(HttpClient client)
     {
-        var response = await client.GetAsync("/api/v1/me", TestContext.Current.CancellationToken);
+        var response = await client.GetAsync("/api/v1/account", TestContext.Current.CancellationToken);
         var body = await response.Content.ReadFromJsonAsync<Features.CurrentUser.CurrentUserResponse>(
             TestContext.Current.CancellationToken
         );

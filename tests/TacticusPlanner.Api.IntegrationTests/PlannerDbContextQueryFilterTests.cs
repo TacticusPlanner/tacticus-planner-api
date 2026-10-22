@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using TacticusPlanner.Domain.Accounts;
 using TacticusPlanner.Domain.Common;
 using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.Profiles;
@@ -54,7 +53,7 @@ public sealed class PlannerDbContextQueryFilterTests(PlannerApiFactory factory) 
             seedDb.Goals.Add(goalA);
             seedDb.Projects.Add(projectA);
             seedDb.UserSettings.Add(settingsA);
-            seedDb.ProjectGoals.Add(new ProjectGoal { ProjectId = projectA.Id, GoalId = goalA.Id, EntityType = goalA.EntityType, EntityId = goalA.EntityId, GoalType = goalA.GoalType, OccupiesInFlightSlot = true });
+            seedDb.ProjectGoals.Add(new ProjectGoal { ProjectId = projectA.Id, GoalId = goalA.Id });
             await seedDb.SaveChangesAsync(ct);
         }
 
@@ -130,17 +129,11 @@ public sealed class PlannerDbContextQueryFilterTests(PlannerApiFactory factory) 
     private static async Task SeedProfileAsync(IServiceScope scope, ProfileId profileId, CancellationToken ct)
     {
         using var db = CreateContext(scope, currentProfileId: null);
-        var accountId = AccountId.From(Guid.CreateVersion7());
-        db.Accounts.Add(new Account
-        {
-            Id = accountId,
-            Issuer = "https://example.ciamlogin.com/example.onmicrosoft.com/v2.0",
-            Subject = $"filter-test-{profileId.Value}",
-        });
         db.Profiles.Add(new Profile
         {
             Id = profileId,
-            AccountId = accountId,
+            Issuer = "https://example.ciamlogin.com/example.onmicrosoft.com/v2.0",
+            Subject = $"filter-test-{profileId.Value}",
             DisplayName = "Filter Test User",
         });
         await db.SaveChangesAsync(ct);

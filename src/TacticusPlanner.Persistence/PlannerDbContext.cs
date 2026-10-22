@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using TacticusPlanner.Domain.Accounts;
 using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.GuildRaids;
 using TacticusPlanner.Domain.Guilds;
@@ -8,7 +7,6 @@ using TacticusPlanner.Domain.LegendaryEvents;
 using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Domain.Projects;
-using TacticusPlanner.Domain.RosterSnapshots;
 using TacticusPlanner.Persistence.Encryption;
 using UserSettingsEntity = TacticusPlanner.Domain.UserSettings.UserSettings;
 
@@ -32,8 +30,6 @@ public sealed class PlannerDbContext(
         Profiles.FromSqlRaw("SELECT * FROM profiles WHERE id = {0} FOR NO KEY UPDATE", CurrentProfileId!.Value.Value)
             .SingleAsync(ct);
 
-    public DbSet<Account> Accounts => Set<Account>();
-
     public DbSet<Profile> Profiles => Set<Profile>();
 
     public DbSet<TacticusIntegration> TacticusIntegrations => Set<TacticusIntegration>();
@@ -54,8 +50,6 @@ public sealed class PlannerDbContext(
 
     public DbSet<GuildRaidAttack> GuildRaidAttacks => Set<GuildRaidAttack>();
 
-    public DbSet<GuildRaidAttackUnit> GuildRaidAttackUnits => Set<GuildRaidAttackUnit>();
-
     public DbSet<Goal> Goals => Set<Goal>();
 
     public DbSet<Project> Projects => Set<Project>();
@@ -64,22 +58,8 @@ public sealed class PlannerDbContext(
 
     public DbSet<LegendaryEventPlan> LegendaryEventPlans => Set<LegendaryEventPlan>();
 
-    public DbSet<LegendaryEventTeam> LegendaryEventTeams => Set<LegendaryEventTeam>();
-
-    public DbSet<LegendaryEventTeamMember> LegendaryEventTeamMembers => Set<LegendaryEventTeamMember>();
-
-    public DbSet<LegendaryEventTeamObjective> LegendaryEventTeamObjectives => Set<LegendaryEventTeamObjective>();
-
-    public DbSet<LegendaryEventTeamRunDepth> LegendaryEventTeamRunDepths => Set<LegendaryEventTeamRunDepth>();
-
-    public DbSet<LegendaryEventRunProgress> LegendaryEventRunProgress => Set<LegendaryEventRunProgress>();
-
     public DbSet<LegendaryEventRunRecord> LegendaryEventRunRecords => Set<LegendaryEventRunRecord>();
 
-    public DbSet<RosterSnapshot> RosterSnapshots => Set<RosterSnapshot>();
-
-    public DbSet<LegendaryEventObjectiveAnnotation> LegendaryEventObjectiveAnnotations =>
-        Set<LegendaryEventObjectiveAnnotation>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -126,9 +106,9 @@ public sealed class PlannerDbContext(
     /// profile before it is known (first-access provisioning) use <c>IgnoreQueryFilters()</c> explicitly —
     /// see <c>CurrentUserPreProcessor</c> and <c>GetCurrentUserEndpoint</c>.
     ///
-    /// <c>Account</c> and the guild entities (<c>Guild</c>, <c>GuildMember</c>) are intentionally excluded:
-    /// <c>Account</c> is the identity lookup the current profile is resolved *from*, and guild data is
-    /// scoped by guild membership/authorization, not by profile ownership.
+    /// The guild entities (<c>Guild</c>, <c>GuildMember</c>) are intentionally excluded: guild data is
+    /// scoped by guild membership/authorization, not by profile ownership. The identity lookup that resolves
+    /// the current profile (by issuer/subject) runs with <c>IgnoreQueryFilters()</c>.
     /// </summary>
     private void ApplyProfileQueryFilters(ModelBuilder modelBuilder)
     {
@@ -144,22 +124,8 @@ public sealed class PlannerDbContext(
         modelBuilder.Entity<Project>().HasQueryFilter(entity => entity.ProfileId == CurrentProfileId);
         modelBuilder.Entity<LegendaryEventPlan>().HasQueryFilter(entity => entity.ProfileId == CurrentProfileId);
         modelBuilder.Entity<LegendaryEventRunRecord>().HasQueryFilter(entity => entity.ProfileId == CurrentProfileId);
-        modelBuilder.Entity<RosterSnapshot>().HasQueryFilter(entity => entity.ProfileId == CurrentProfileId);
 
         // Join table with no ProfileId of its own: scoped through its parent Project.
         modelBuilder.Entity<ProjectGoal>().HasQueryFilter(entity => entity.Project!.ProfileId == CurrentProfileId);
-
-        // Legendary Event plan children: scoped through their plan.
-        modelBuilder.Entity<LegendaryEventTeam>().HasQueryFilter(entity => entity.Plan!.ProfileId == CurrentProfileId);
-        modelBuilder.Entity<LegendaryEventTeamMember>()
-            .HasQueryFilter(entity => entity.Team!.Plan!.ProfileId == CurrentProfileId);
-        modelBuilder.Entity<LegendaryEventTeamObjective>()
-            .HasQueryFilter(entity => entity.Team!.Plan!.ProfileId == CurrentProfileId);
-        modelBuilder.Entity<LegendaryEventTeamRunDepth>()
-            .HasQueryFilter(entity => entity.Team!.Plan!.ProfileId == CurrentProfileId);
-        modelBuilder.Entity<LegendaryEventRunProgress>()
-            .HasQueryFilter(entity => entity.Plan!.ProfileId == CurrentProfileId);
-        modelBuilder.Entity<LegendaryEventObjectiveAnnotation>()
-            .HasQueryFilter(entity => entity.Plan!.ProfileId == CurrentProfileId);
     }
 }

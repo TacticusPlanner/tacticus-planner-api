@@ -12,19 +12,6 @@ public class ProjectGoal
 
     public GoalId GoalId { get; set; }
 
-    public GoalEntityType EntityType { get; set; }
-
-    public string EntityId { get; set; } = string.Empty;
-
-    public GoalType GoalType { get; set; }
-
-    public bool OccupiesInFlightSlot { get; set; }
-
-    /// <summary>Normalized end target (<see cref="Goals.RankTargetKey"/>) for a Rank goal, null for every other
-    /// type. Denormalized from the goal's config so a partial unique index can enforce Rank target
-    /// occupancy; kept in sync by every target mutation.</summary>
-    public string? RankTargetKey { get; set; }
-
     public DateTimeOffset CreatedAt { get; set; }
 
     public virtual Project? Project { get; set; }

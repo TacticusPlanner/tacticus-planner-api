@@ -2,7 +2,9 @@ using FastEndpoints;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Api.Http;
 using TacticusPlanner.Domain.PlayerData;
+using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.GameCatalog;
 using TacticusPlanner.GameCatalog.Models;
 using TacticusPlanner.Persistence;
@@ -14,7 +16,7 @@ public sealed class GetCampaignEventProgressEndpoint
 {
     public override void Configure()
     {
-        Get("me/player-data-overrides/campaign-events-progress");
+        Get("player-data-overrides/campaign-events-progress");
         Summary(summary => summary.Summary = "Gets manual campaign-event progress overrides.");
     }
 
@@ -23,7 +25,7 @@ public sealed class GetCampaignEventProgressEndpoint
         var profileId = ProcessorState<CurrentUserState>().ProfileId;
         if (profileId is null)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 
@@ -41,7 +43,7 @@ public sealed class UpdateCampaignEventProgressEndpoint
 {
     public override void Configure()
     {
-        Put("me/player-data-overrides/campaign-events-progress");
+        Put("player-data-overrides/campaign-events-progress");
         Summary(summary => summary.Summary = "Replaces manual campaign-event progress overrides.");
     }
 
@@ -57,7 +59,7 @@ public sealed class UpdateCampaignEventProgressEndpoint
         var profileId = ProcessorState<CurrentUserState>().ProfileId;
         if (profileId is null)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 
@@ -68,7 +70,7 @@ public sealed class UpdateCampaignEventProgressEndpoint
         {
             if (req.Revision != 0)
             {
-                await SendConflictAsync(ct);
+                await SendConflictAsync(db, profileIdValue, ct);
                 return;
             }
 
@@ -77,7 +79,7 @@ public sealed class UpdateCampaignEventProgressEndpoint
         }
         else if (overrides.Revision != req.Revision)
         {
-            await SendConflictAsync(ct);
+            await SendConflictAsync(db, profileIdValue, ct);
             return;
         }
 
@@ -93,17 +95,22 @@ public sealed class UpdateCampaignEventProgressEndpoint
         }
         catch (DbUpdateConcurrencyException)
         {
-            await SendConflictAsync(ct);
+            await SendConflictAsync(db, profileIdValue, ct);
             return;
         }
 
         await Send.OkAsync(CampaignEventProgressOverridesResponse.From(overrides), ct);
     }
 
-    private async Task SendConflictAsync(CancellationToken ct)
+    /// <summary>409 <c>concurrency</c> with the overrides re-read after the failed write, in the read shape.</summary>
+    private async Task SendConflictAsync(PlannerDbContext db, ProfileId profileId, CancellationToken ct)
     {
-        AddError("Player data overrides changed on another device. Refresh and try again.");
-        await Send.ErrorsAsync(StatusCodes.Status409Conflict, ct);
+        db.ChangeTracker.Clear();
+        var current = await db.PlayerDataOverrides.AsNoTracking().FirstOrDefaultAsync(entity => entity.Id == profileId, ct)
+            ?? new PlayerDataOverride { Id = profileId };
+        await this.SendConflictAsync(
+            ApiProblems.Concurrency, "Player data overrides changed on another device. Refresh and try again.",
+            CampaignEventProgressOverridesResponse.From(current), ct);
     }
 
     internal static bool ValidateAgainstCatalog(

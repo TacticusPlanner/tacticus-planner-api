@@ -19,7 +19,7 @@ public sealed class GetPlayerDataChunkEndpoint : Endpoint<GetPlayerDataChunkRequ
 {
     public override void Configure()
     {
-        Get("me/player-data/{chunk}");
+        Get("player-data/{chunk}");
         Summary(summary =>
         {
             summary.Summary = "Gets one player-data chunk for the authenticated user.";
@@ -37,7 +37,7 @@ public sealed class GetPlayerDataChunkEndpoint : Endpoint<GetPlayerDataChunkRequ
         var state = ProcessorState<CurrentUserState>();
         if (state.ProfileId is not { } profileId)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 
@@ -45,7 +45,7 @@ public sealed class GetPlayerDataChunkEndpoint : Endpoint<GetPlayerDataChunkRequ
 
         // Step 1: project only the hash/metadata columns (AsNoTracking) — never touch any of the ten
         // jsonb chunk payload columns yet. Keyed directly by the profile id already resolved by
-        // CurrentUserPreProcessor, so this is a primary-key lookup rather than a Profile/Account join.
+        // CurrentUserPreProcessor, so this is a primary-key lookup rather than a profile join.
         var metadata = await db.PlayerDataSnapshots
             .AsNoTracking()
             .Where(entity => entity.Id == profileId)
@@ -61,7 +61,7 @@ public sealed class GetPlayerDataChunkEndpoint : Endpoint<GetPlayerDataChunkRequ
 
         if (metadata is null)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 

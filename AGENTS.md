@@ -91,7 +91,14 @@ dotnet ef migrations add <MigrationName> --project src/TacticusPlanner.Persisten
 ```
 
 The API always applies pending migrations on startup (Development, Staging,
-and Production alike). Through Aspire, use the `api-migrations` resource's
+and Production alike). The history is a single `InitialCreate` (pre-launch reset)
+plus whatever follows it; its `Up` ends with the one raw statement the EF model
+cannot express — the deferrable `ix_goals_profile_global_priority` unique
+constraint — and any squash must keep it (`SchemaPostgresTests` guards it). Keep
+database constraints to keys, foreign keys, uniqueness and nullability (plus
+`ck_goals_global_priority_in_flight`); put range/enum invariants in validators.
+Mark nothing under `Migrations/` by hand: it is generated code (see its
+`.editorconfig`). Through Aspire, use the `api-migrations` resource's
 `Update Database`/`Reset Database`/`Drop Database` commands (dashboard or
 `aspire resource api-migrations <command> --apphost ...`) instead of manual
 SQL against the local database.
@@ -102,7 +109,8 @@ This repository currently tracks work on the `svehera/goals-phase-9` branch,
 not `main` — open PRs against that branch unless told otherwise. Any new
 endpoint or protocol change to an existing endpoint must be reflected in the
 generated OpenAPI artifact (produced automatically on build) and, if the
-frontend consumes it, coordinated with `tacticus-planner-apps`.
+frontend consumes it, coordinated with `tacticus-planner-apps`: merge a breaking contract and its
+client back to back — see README "Breaking contracts".
 
 Validation before opening a PR:
 

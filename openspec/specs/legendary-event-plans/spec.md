@@ -13,31 +13,31 @@ The system SHALL persist at most one plan per profile and catalog Legendary Even
 #### Scenario: A missing plan reads as an empty plan
 
 - **GIVEN** a profile with no plan for event `astarLysander`
-- **WHEN** the caller requests `GET /me/legendary-event-plans/astarLysander`
+- **WHEN** the caller requests `GET /legendary-event-plans/astarLysander`
 - **THEN** the response is 200 with `eventId` `astarLysander`, `revision` 0, `notes` null, `showPaidOptions` false, an empty `teams` list and the current `catalogVersion`, and no row is created
 
 #### Scenario: Unknown event id
 
 - **GIVEN** the profile has no stored plan for `notAnEvent`, which is not a current catalog `lres` id
-- **WHEN** the caller requests or writes `/me/legendary-event-plans/notAnEvent`
+- **WHEN** the caller requests or writes `/legendary-event-plans/notAnEvent`
 - **THEN** the response is 404
 
 #### Scenario: A stored plan outlives its catalog event
 
 - **GIVEN** the profile has a plan at revision 4 for event `x`, and a later catalog no longer serves `x`
-- **WHEN** the caller requests `GET /me/legendary-event-plans/x`
+- **WHEN** the caller requests `GET /legendary-event-plans/x`
 - **THEN** the response is 200 with the stored plan at revision 4 and its stored `catalogVersion`
 
 #### Scenario: Writes to a plan outside the catalog are rejected
 
 - **GIVEN** the same plan for `x`, no longer in the catalog
-- **WHEN** the caller sends any `PUT`, `POST` or `DELETE` under `/me/legendary-event-plans/x`
+- **WHEN** the caller sends any `PUT`, `POST` or `DELETE` under `/legendary-event-plans/x`
 - **THEN** the response is 404 and the plan is unchanged
 
 #### Scenario: Plan-level write creates the plan
 
 - **GIVEN** no plan exists for the event
-- **WHEN** the caller sends `PUT /me/legendary-event-plans/{eventId}` with `expectedRevision` 0, `notes` "Alpha first" and `showPaidOptions` true
+- **WHEN** the caller sends `PUT /legendary-event-plans/{eventId}` with `expectedRevision` 0, `notes` "Alpha first" and `showPaidOptions` true
 - **THEN** the plan is created, the response is 200 with `revision` 1, the given fields and the current `catalogVersion`
 
 #### Scenario: Account purge cascades
@@ -260,7 +260,7 @@ Every plan endpoint SHALL respond with the same `LegendaryEventPlanResponse`: `e
 
 ### Requirement: Run inputs are stored per run
 
-A plan SHALL store, per run 1–3, at most one set of run inputs: `regularMissions`, `premiumMissions`, `completedRegularMissions`, `completedPremiumMissions`, `bundlePurchased` and `closeShards`, with the time it was last written (`updatedAt`). `PUT /me/legendary-event-plans/{eventId}/runs/{run}` with `{ expectedRevision, regularMissions, premiumMissions, completedRegularMissions, completedPremiumMissions, bundlePurchased, closeShards }` SHALL create or replace that run's inputs and SHALL leave the other runs untouched; absent completed arrays mean empty. The system SHALL reject with 400, naming the field, a `run` outside 1..3, a `regularMissions` outside 0..(the event's catalog `regularMissions` count), a `premiumMissions` outside 0..(the event's catalog `premiumMissions` count), a completed array with a duplicate or an index outside its catalog list, a count below its completed array's length, and a `closeShards` outside 0..75. Completed arrays SHALL be stored sorted ascending. Paid inputs SHALL be stored regardless of `showPaidOptions`. Deleting the plan or the account SHALL remove its run inputs.
+A plan SHALL store, per run 1–3, at most one set of run inputs: `regularMissions`, `premiumMissions`, `completedRegularMissions`, `completedPremiumMissions`, `bundlePurchased` and `closeShards`, with the time it was last written (`updatedAt`). `PUT /legendary-event-plans/{eventId}/runs/{run}` with `{ expectedRevision, regularMissions, premiumMissions, completedRegularMissions, completedPremiumMissions, bundlePurchased, closeShards }` SHALL create or replace that run's inputs and SHALL leave the other runs untouched; absent completed arrays mean empty. The system SHALL reject with 400, naming the field, a `run` outside 1..3, a `regularMissions` outside 0..(the event's catalog `regularMissions` count), a `premiumMissions` outside 0..(the event's catalog `premiumMissions` count), a completed array with a duplicate or an index outside its catalog list, a count below its completed array's length, and a `closeShards` outside 0..75. Completed arrays SHALL be stored sorted ascending. Paid inputs SHALL be stored regardless of `showPaidOptions`. Deleting the plan or the account SHALL remove its run inputs.
 
 Assumptions:
 
@@ -271,7 +271,7 @@ Assumptions:
 #### Scenario: Write run inputs on a new plan
 
 - **GIVEN** no plan exists for `votanUthar`
-- **WHEN** the caller sends `PUT /me/legendary-event-plans/votanUthar/runs/2` with `expectedRevision` 0, `regularMissions` 6, `premiumMissions` 0, `completedRegularMissions` [3, 1], `bundlePurchased` false, `closeShards` 0
+- **WHEN** the caller sends `PUT /legendary-event-plans/votanUthar/runs/2` with `expectedRevision` 0, `regularMissions` 6, `premiumMissions` 0, `completedRegularMissions` [3, 1], `bundlePurchased` false, `closeShards` 0
 - **THEN** the plan is created, the response is 200 with `revision` 1 and `runs` `[{run 2, 6, 0, [1, 3], [], false, 0, updatedAt}]`
 
 #### Scenario: A run write touches only its run
@@ -309,7 +309,7 @@ Assumptions:
 
 ### Requirement: Maybe clear and Stop here annotations are stored per objective cell
 
-A plan SHALL store, per lane, battle and objective cell, at most one annotation with status `maybeClear` or `stopHere` and the time it was last written (`updatedAt`). A cell SHALL be identified as the synced progress identifies it: `laneId`, `battleIndex` (0-based) and `objectiveId` (0 for defeat-all, 1–5 for the lane objective whose catalog `index` is `objectiveId − 1`). `PUT /me/legendary-event-plans/{eventId}/annotations` with `{ expectedRevision, laneId, battleIndex, objectiveIds, status }` SHALL set `status` on each listed cell of that battle, or remove their annotations when `status` is null, and SHALL leave every other cell untouched. The system SHALL reject with 400, naming the field, a `laneId` outside `alpha|beta|gamma`, a `battleIndex` outside 0..(lane battle count − 1), an empty `objectiveIds`, more than six or a repeated entry, an entry outside 0..(the lane's objective count), and a `status` other than `maybeClear`, `stopHere` or null. Annotations SHALL be stored whatever the synced progress says; whether one applies is decided by the client (an annotation applies only to a cell the synced progress shows not cleared). A sync SHALL never create, change or remove annotations. Deleting the plan or the account SHALL remove its annotations.
+A plan SHALL store, per lane, battle and objective cell, at most one annotation with status `maybeClear` or `stopHere` and the time it was last written (`updatedAt`). A cell SHALL be identified as the synced progress identifies it: `laneId`, `battleIndex` (0-based) and `objectiveId` (0 for defeat-all, 1–5 for the lane objective whose catalog `index` is `objectiveId − 1`). `PUT /legendary-event-plans/{eventId}/annotations` with `{ expectedRevision, laneId, battleIndex, objectiveIds, status }` SHALL set `status` on each listed cell of that battle, or remove their annotations when `status` is null, and SHALL leave every other cell untouched. The system SHALL reject with 400, naming the field, a `laneId` outside `alpha|beta|gamma`, a `battleIndex` outside 0..(lane battle count − 1), an empty `objectiveIds`, more than six or a repeated entry, an entry outside 0..(the lane's objective count), and a `status` other than `maybeClear`, `stopHere` or null. Annotations SHALL be stored whatever the synced progress says; whether one applies is decided by the client (an annotation applies only to a cell the synced progress shows not cleared). A sync SHALL never create, change or remove annotations. Deleting the plan or the account SHALL remove its annotations.
 
 #### Scenario: Mark one cell on a new plan
 
@@ -342,12 +342,12 @@ A plan SHALL store, per lane, battle and objective cell, at most one annotation 
 
 ### Requirement: Every stored plan is listed in one read
 
-`GET /me/legendary-event-plans` SHALL return `LegendaryEventPlanListResponse { plans: LegendaryEventPlanResponse[] }` with every plan stored for the caller's profile, in the served plan shape, ordered by `eventId` (ordinal). Only stored plans SHALL be listed: a catalog event the caller never wrote a plan for SHALL NOT appear as an empty plan. Plans whose event is no longer in the catalog SHALL be listed with their stored `catalogVersion`. The read SHALL create nothing and SHALL NOT change any revision.
+`GET /legendary-event-plans` SHALL return `LegendaryEventPlanListResponse { plans: LegendaryEventPlanResponse[] }` with every plan stored for the caller's profile, in the served plan shape, ordered by `eventId` (ordinal). Only stored plans SHALL be listed: a catalog event the caller never wrote a plan for SHALL NOT appear as an empty plan. Plans whose event is no longer in the catalog SHALL be listed with their stored `catalogVersion`. The read SHALL create nothing and SHALL NOT change any revision.
 
 #### Scenario: Two stored plans
 
 - **GIVEN** the caller has plans for `votanUthar` (revision 6, two Alpha teams) and `astarLysander` (revision 2, no teams, notes "Alpha first")
-- **WHEN** the caller requests `GET /me/legendary-event-plans`
+- **WHEN** the caller requests `GET /legendary-event-plans`
 - **THEN** the response is 200 with `plans` `[astarLysander, votanUthar]`, each exactly as its single `GET` returns it
 
 #### Scenario: No plans

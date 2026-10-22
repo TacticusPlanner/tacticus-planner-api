@@ -20,8 +20,8 @@ See proposal.md — Why. Current schema: 24 tables in `public`, UUIDv7 keys, glo
 
 ### Schema
 
-1. **Slot indexes on `goals`, scoped by profile.**
-   `UNIQUE (profile_id, entity_type, entity_id, goal_type) WHERE status IN ('Active','Paused') AND goal_type <> 'Rank'` and `UNIQUE (profile_id, entity_type, entity_id, rank_target_key) WHERE status IN ('Active','Paused') AND goal_type = 'Rank'`. `rank_target_key` is a real column written by the mapper on every config write (today it is derived into `project_goals`). `GoalConflictDetection` becomes a single query on `goals`; `SyncOccupancyAsync`, `OccupiesInFlightSlot` and the per-project `FOR UPDATE` chain in `ProjectGoalPlanningService` are deleted; the profile `FOR NO KEY UPDATE` lock stays (it serializes the global order). Alternative: keep per-project slots with the denormalization — rejected by the owner (slot is a per-unit planning rule, projects are grouping).
+1. **Slots scoped by profile, enforced in the app only.**
+   No slot index and no `rank_target_key` column: `FindConflictAsync` checks the profile's in-flight goals (Rank by `RankTargetKey.For(config)`) under the profile `FOR NO KEY UPDATE` lock, which every goal write already takes, so racing writers are serialized without a constraint. Dropped in review (#112): the derived column needed a refresh after every config write, and the rule (Rank milestones, possibly Ascension milestones later) should change without a migration. Cost: a future write path that skips the lock or the check can create duplicates; the lock's doc comment and the spec say so. `GoalConflictDetection` becomes a single query on `goals`; `SyncOccupancyAsync`, `OccupiesInFlightSlot` and the per-project `FOR UPDATE` chain in `ProjectGoalPlanningService` are deleted; the profile `FOR NO KEY UPDATE` lock stays (it serializes the global order). Alternative: keep per-project slots with the denormalization — rejected by the owner (slot is a per-unit planning rule, projects are grouping).
 2. **`profiles` absorbs `accounts`.** Pre-processor query becomes `SELECT id FROM profiles WHERE issuer=@i AND subject=@s`. `AccountId` type removed; `AnalyticsIdentityDeriver` keys on `ProfileId`. Reversal path documented in the proposal.
 3. **LE plan as one row:** `teams jsonb` (`[{id, laneId, name, sortOrder, members:[{unitId, reserve, position}], objectiveIndexes:[…], runDepths:[{run, expectedBattleClears, source, recordedAt}]}]`), `runs jsonb` (keyed by run), `annotations jsonb` (`[{laneId, battleIndex, objectiveId, status, updatedAt}]`), all `OwnsMany().ToJson()`. Mutations become in-memory edits of the loaded aggregate followed by one `SaveChanges` guarded by `Revision`; `LegendaryEventTeamMutations`' intermediate save disappears. Invariants (lane ∈ {alpha,beta,gamma}, 0 ≤ position < 5, run range, depth ≥ 1, unique unit per team, unique `(lane, sortOrder)`) move into `LegendaryEventValidation` and are asserted by the writer before save. The run-record `teams` jsonb already uses this shape — one canonical record type (`LegendaryEventTeamRecord`) serves both.
 4. **Roster inline on run records** (`roster jsonb` = `{characters, mows}`); `RosterSnapshot` entity, table, `ix_…_roster_snapshot_id` and `RosterSnapshotId` removed. The recorder rewrites the column in place as today.
@@ -42,7 +42,7 @@ See proposal.md — Why. Current schema: 24 tables in `public`, UUIDv7 keys, glo
 
 The apps half (`rebuild-foundation-pre-launch` in `tacticus-planner-apps`) deletes the goal-detail fan-outs and per-project goal fetches, adopts the new routes/error shape, and switches bulk status to one request. The regenerated OpenAPI artifact is the shared contract; the apps change regenerates its client from it, including `{ goal, order }`, matched archive selectors, compound run-record cursors/on-demand rosters, and writable-response Problem Details.
 
-Merge/apply order is API then apps, but deployment is a coordinated cutover. Before merging the API half, pause or approval-gate its automatic staging promotion so an API merge can publish the image/OpenAPI artifact without exposing the new contract. Both paired PRs must pass CI/review and client contract tests before either version is promoted for use. Deploy the matched API and web artifacts together, or keep the environment inaccessible during the sequential rollout until both versions and a joint smoke test succeed. Do not expose the new error/run-record shapes to the old client. This pre-launch gate requires no legacy-contract shim.
+Merge/apply order is API then apps. Both paired PRs must pass CI/review and client contract tests first; then they are merged back to back. Staging promotes every push, so it serves a mismatched pair for the few minutes between the two deploys; pre-launch that is accepted (review of #112 removed the promotion gate), and no legacy-contract shim is added.
 
 ## Risks / Trade-offs
 
@@ -54,9 +54,9 @@ Merge/apply order is API then apps, but deployment is a coordinated cutover. Bef
 
 ## Migration Plan
 
-1. Pause or approval-gate automatic API staging promotion, then merge the API half to publish the new model, `InitialCreate`, routes, tests, image, and OpenAPI artifact. Keep the current contract serving until the paired client is ready; both halves require green CI and resolved review threads.
+1. With both halves green in CI and their review threads resolved, merge the API half (new model, `InitialCreate`, routes, tests, image, OpenAPI artifact).
 2. Local: Aspire `api-migrations` → **Drop Database** then start (auto-migrate). Staging/production: `tacticus-planner-infra` drop + recreate the PostgreSQL database (no data migration).
-3. Merge the apps half with the regenerated client and verify the shared contracts. Promote matched API/web artifacts as one cutover, or keep the environment inaccessible until both deployments and joint smoke tests pass; only then reopen access and restore automatic promotion.
+3. Merge the apps half with the regenerated client and verify the shared contracts. Merge it right after the API half and smoke-test staging once both deploys finish.
 4. Docs: ADR 0001 → Superseded; `data.md` JSONB section rewritten; new ADR for jsonb aggregates with validator invariants.
 Rollback: previous API image + previous database (snapshot taken before drop); acceptable because there are no users yet.
 

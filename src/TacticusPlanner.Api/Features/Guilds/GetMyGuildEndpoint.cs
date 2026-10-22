@@ -1,6 +1,8 @@
+using System.Text.Json.Serialization;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Api.Http;
 using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.Guilds;
@@ -13,7 +15,7 @@ public sealed class GetMyGuildEndpoint : EndpointWithoutRequest<MyGuildResponse>
 {
     public override void Configure()
     {
-        Get("guilds/me");
+        Get("guild");
         Summary(summary =>
         {
             summary.Summary = "Gets the authenticated user's guild registration and membership state.";
@@ -31,7 +33,7 @@ public sealed class GetMyGuildEndpoint : EndpointWithoutRequest<MyGuildResponse>
         var state = ProcessorState<CurrentUserState>();
         if (state.ProfileId is not { } profileId)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 
@@ -45,13 +47,13 @@ public sealed class GetMyGuildEndpoint : EndpointWithoutRequest<MyGuildResponse>
 
         if (profile is null)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 
         if (profile.TacticusUserIdHash is null)
         {
-            await Send.OkAsync(new MyGuildResponse(GuildStateValues.TacticusUserIdRequired, null), ct);
+            await Send.OkAsync(new MyGuildResponse(MyGuildState.TacticusUserIdRequired, null), ct);
             return;
         }
 
@@ -63,7 +65,7 @@ public sealed class GetMyGuildEndpoint : EndpointWithoutRequest<MyGuildResponse>
 
         if (membership is null)
         {
-            await Send.OkAsync(new MyGuildResponse(GuildStateValues.Unregistered, null), ct);
+            await Send.OkAsync(new MyGuildResponse(MyGuildState.Unregistered, null), ct);
             return;
         }
 
@@ -76,24 +78,25 @@ public sealed class GetMyGuildEndpoint : EndpointWithoutRequest<MyGuildResponse>
 
         if (guild is null)
         {
-            await Send.OkAsync(new MyGuildResponse(GuildStateValues.Unregistered, null), ct);
+            await Send.OkAsync(new MyGuildResponse(MyGuildState.Unregistered, null), ct);
             return;
         }
 
         var callerMember = guild.Members.First(entity => entity.Id == membership.Id);
 
         await Send.OkAsync(
-            new MyGuildResponse(GuildStateValues.Registered, GuildProjection.Build(guild, callerMember)),
+            new MyGuildResponse(MyGuildState.Registered, GuildProjection.Build(guild, callerMember)),
             ct
         );
     }
 }
 
-public static class GuildStateValues
+/// <summary>Where the caller stands with guild access; the client switches its guild page on it.</summary>
+public enum MyGuildState
 {
-    public const string TacticusUserIdRequired = "tacticusUserIdRequired";
-    public const string Unregistered = "unregistered";
-    public const string Registered = "registered";
+    [JsonStringEnumMemberName("tacticusUserIdRequired")] TacticusUserIdRequired,
+    [JsonStringEnumMemberName("unregistered")] Unregistered,
+    [JsonStringEnumMemberName("registered")] Registered,
 }
 
-public sealed record MyGuildResponse(string State, RegisteredGuildResponse? Guild);
+public sealed record MyGuildResponse(MyGuildState State, RegisteredGuildResponse? Guild);

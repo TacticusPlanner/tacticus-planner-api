@@ -1,7 +1,3 @@
-using System.Collections.Concurrent;
-using System.Runtime.CompilerServices;
-using System.Security.Cryptography;
-using System.Text.Json;
 using FastEndpoints;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Net.Http.Headers;
@@ -13,41 +9,34 @@ namespace TacticusPlanner.Api.Features.GameCatalog;
 
 /// <summary>
 /// Serves one whole denormalized dataset (no route parameter). The payload is already self-contained
-/// (reference tables inlined), so the client consumes it without any cross-dataset joins. The strong
-/// <c>ETag</c> covers the complete envelope (release metadata and data) and the negotiated content
-/// encoding, so a metadata-only release or a different encoding never revalidates against a stale copy.
+/// (reference tables inlined), so the client consumes it without any cross-dataset joins. Two routes: the
+/// manifest's content address <c>{dataset}/{envelopeHash}</c> is immutable (a hash that is not the current
+/// envelope's is a 404), and the bare <c>{dataset}</c> route revalidates. The strong <c>ETag</c> covers the
+/// complete envelope (release metadata and data) and the negotiated content encoding.
 /// </summary>
 public abstract class ServedDatasetEndpoint<TPayload>(IGameCatalogProvider catalog, string datasetKey)
     : EndpointWithoutRequest<GameCatalogDatasetEnvelope<TPayload>>
 {
-    private static readonly ConditionalWeakTable<GameCatalogSnapshot, ConcurrentDictionary<string, string>> Digests = new();
-
-    protected abstract TPayload PayloadOf(GameCatalogSnapshot snapshot);
-
     public override async Task HandleAsync(CancellationToken ct)
     {
         var snapshot = catalog.Current;
-        var envelope = new GameCatalogDatasetEnvelope<TPayload>(
-            snapshot.Version,
-            snapshot.SchemaVersion,
-            snapshot.GameVersion,
-            snapshot.SourceHash,
-            datasetKey,
-            snapshot.DatasetHashes[datasetKey],
-            PayloadOf(snapshot)
-        );
+        var envelopeHash = ServedDatasets.EnvelopeHash(snapshot, datasetKey);
+        var requestedHash = Route<string>("envelopeHash", isRequired: false);
+        if (requestedHash is not null && requestedHash != envelopeHash)
+        {
+            await this.SendNotFoundProblemAsync(ct);
+            return;
+        }
 
-        // ponytail: the digest is of the identity JSON plus an encoding token, not of the compressed bytes
-        // (the compression middleware runs after the endpoint); distinct per encoding, stable per content.
+        // ponytail: the ETag is the identity-JSON digest plus an encoding token, not a digest of the compressed
+        // bytes (the compression middleware runs after the endpoint); distinct per encoding, stable per content.
         var encoding = HttpContext.RequestServices.GetRequiredService<IResponseCompressionProvider>()
             .GetCompressionProvider(HttpContext)?.EncodingName;
-        var digest = Digests.GetValue(snapshot, _ => new()).GetOrAdd(
-            datasetKey,
-            _ => Convert.ToHexStringLower(SHA256.HashData(JsonSerializer.SerializeToUtf8Bytes(envelope, JsonSerializerOptions.Web)))
-        );
-        var etag = ETagHelper.CreateEtag(encoding is null ? digest : $"{digest}-{encoding}");
+        var etag = ETagHelper.CreateEtag(encoding is null ? envelopeHash : $"{envelopeHash}-{encoding}");
 
-        HttpContext.Response.Headers.CacheControl = "public, max-age=0, must-revalidate";
+        HttpContext.Response.Headers.CacheControl = requestedHash is null
+            ? "public, max-age=0, must-revalidate"
+            : "public, max-age=31536000, immutable";
         HttpContext.Response.Headers.Vary = HeaderNames.AcceptEncoding;
 
         if (ETagHelper.TryApplyNotModified(HttpContext, etag))
@@ -57,7 +46,7 @@ public abstract class ServedDatasetEndpoint<TPayload>(IGameCatalogProvider catal
         }
 
         HttpContext.Response.Headers.ETag = etag;
-        await Send.OkAsync(envelope, ct);
+        await Send.OkAsync(ServedDatasets.Envelope<TPayload>(snapshot, datasetKey), ct);
     }
 
     protected void ConfigureServed(string summary, string okDescription)
@@ -68,6 +57,7 @@ public abstract class ServedDatasetEndpoint<TPayload>(IGameCatalogProvider catal
             endpointSummary.Summary = summary;
             endpointSummary.Response<GameCatalogDatasetEnvelope<TPayload>>(StatusCodes.Status200OK, okDescription);
             endpointSummary.Response(StatusCodes.Status304NotModified, "The dataset has not changed.");
+            endpointSummary.Response(StatusCodes.Status404NotFound, "The envelope hash is not the current release's.");
         });
     }
 }
@@ -75,11 +65,9 @@ public abstract class ServedDatasetEndpoint<TPayload>(IGameCatalogProvider catal
 public sealed class GetGameCatalogCharactersEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogCharacterView>>(catalog, GameCatalogDatasets.Characters)
 {
-    protected override IReadOnlyList<GameCatalogCharacterView> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.CharacterViews;
-
     public override void Configure()
     {
-        Get("game-catalog/characters");
+        Get("game-catalog/characters", "game-catalog/characters/{envelopeHash}");
         ConfigureServed("Gets game catalog characters.", "All characters with shard farm locations and eligible equipment.");
     }
 }
@@ -87,11 +75,9 @@ public sealed class GetGameCatalogCharactersEndpoint(IGameCatalogProvider catalo
 public sealed class GetGameCatalogNpcsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogNpc>>(catalog, GameCatalogDatasets.Npcs)
 {
-    protected override IReadOnlyList<GameCatalogNpc> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.NpcList;
-
     public override void Configure()
     {
-        Get("game-catalog/npcs");
+        Get("game-catalog/npcs", "game-catalog/npcs/{envelopeHash}");
         ConfigureServed("Gets game catalog NPCs.", "All non-playable units.");
     }
 }
@@ -99,11 +85,9 @@ public sealed class GetGameCatalogNpcsEndpoint(IGameCatalogProvider catalog)
 public sealed class GetGameCatalogMowsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogMow>>(catalog, GameCatalogDatasets.Mows)
 {
-    protected override IReadOnlyList<GameCatalogMow> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.MowList;
-
     public override void Configure()
     {
-        Get("game-catalog/mows");
+        Get("game-catalog/mows", "game-catalog/mows/{envelopeHash}");
         ConfigureServed("Gets game catalog machines of war.", "All machines of war.");
     }
 }
@@ -111,11 +95,9 @@ public sealed class GetGameCatalogMowsEndpoint(IGameCatalogProvider catalog)
 public sealed class GetGameCatalogMowUpgradeCostsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogMowUpgradeCostView>>(catalog, GameCatalogDatasets.MowUpgradeCostsServed)
 {
-    protected override IReadOnlyList<GameCatalogMowUpgradeCostView> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.MowUpgradeCostViews;
-
     public override void Configure()
     {
-        Get("game-catalog/mow-upgrade-costs");
+        Get("game-catalog/mow-upgrade-costs", "game-catalog/mow-upgrade-costs/{envelopeHash}");
         ConfigureServed("Gets the machine-of-war upgrade-cost ladder.", "The shared per-level upgrade-cost ladder for all machines of war.");
     }
 }
@@ -123,11 +105,9 @@ public sealed class GetGameCatalogMowUpgradeCostsEndpoint(IGameCatalogProvider c
 public sealed class GetGameCatalogCharacterAbilityCostsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogCharacterAbilityCostView>>(catalog, GameCatalogDatasets.CharacterAbilityCostsServed)
 {
-    protected override IReadOnlyList<GameCatalogCharacterAbilityCostView> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.CharacterAbilityCostViews;
-
     public override void Configure()
     {
-        Get("game-catalog/character-ability-costs");
+        Get("game-catalog/character-ability-costs", "game-catalog/character-ability-costs/{envelopeHash}");
         ConfigureServed("Gets the character ability cost ladder.", "The shared per-level gold and ability-badge cost ladder for all character abilities.");
     }
 }
@@ -135,11 +115,9 @@ public sealed class GetGameCatalogCharacterAbilityCostsEndpoint(IGameCatalogProv
 public sealed class GetGameCatalogMythicQuestsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogMythicQuestsView>>(catalog, GameCatalogDatasets.MythicQuestsServed)
 {
-    protected override IReadOnlyList<GameCatalogMythicQuestsView> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.MythicQuestViews;
-
     public override void Configure()
     {
-        Get("game-catalog/mythic-quests");
+        Get("game-catalog/mythic-quests", "game-catalog/mythic-quests/{envelopeHash}");
         ConfigureServed("Gets game catalog mythic quests.", "Each character's mythic quests with tasks and structured rewards.");
     }
 }
@@ -147,11 +125,9 @@ public sealed class GetGameCatalogMythicQuestsEndpoint(IGameCatalogProvider cata
 public sealed class GetGameCatalogAscensionCostsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogAscensionCostView>>(catalog, GameCatalogDatasets.AscensionCostsServed)
 {
-    protected override IReadOnlyList<GameCatalogAscensionCostView> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.AscensionCostViews;
-
     public override void Configure()
     {
-        Get("game-catalog/ascension-costs");
+        Get("game-catalog/ascension-costs", "game-catalog/ascension-costs/{envelopeHash}");
         ConfigureServed("Gets the ascension-orb/shard cost ladder.", "The shared per-progression-step ascension cost ladder (shards, mythic shards, orbs) for all characters.");
     }
 }
@@ -159,11 +135,9 @@ public sealed class GetGameCatalogAscensionCostsEndpoint(IGameCatalogProvider ca
 public sealed class GetGameCatalogUnlockShardCostsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogUnlockShardCostView>>(catalog, GameCatalogDatasets.UnlockShardCostsServed)
 {
-    protected override IReadOnlyList<GameCatalogUnlockShardCostView> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.UnlockShardCostViews;
-
     public override void Configure()
     {
-        Get("game-catalog/unlock-shard-costs");
+        Get("game-catalog/unlock-shard-costs", "game-catalog/unlock-shard-costs/{envelopeHash}");
         ConfigureServed("Gets the per-rarity character unlock shard cost table.", "The shard count required to unlock a character of each rarity.");
     }
 }
@@ -171,11 +145,9 @@ public sealed class GetGameCatalogUnlockShardCostsEndpoint(IGameCatalogProvider 
 public sealed class GetGameCatalogOnslaughtRewardsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogOnslaughtReward>>(catalog, GameCatalogDatasets.OnslaughtRewards)
 {
-    protected override IReadOnlyList<GameCatalogOnslaughtReward> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.OnslaughtRewards;
-
     public override void Configure()
     {
-        Get("game-catalog/onslaught-rewards");
+        Get("game-catalog/onslaught-rewards", "game-catalog/onslaught-rewards/{envelopeHash}");
         ConfigureServed("Gets the Onslaught reward table.", "Reward ranges by sector, tier, and rarity.");
     }
 }
@@ -183,11 +155,9 @@ public sealed class GetGameCatalogOnslaughtRewardsEndpoint(IGameCatalogProvider 
 public sealed class GetGameCatalogUpgradesEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogUpgradeView>>(catalog, GameCatalogDatasets.Upgrades)
 {
-    protected override IReadOnlyList<GameCatalogUpgradeView> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.UpgradeViews;
-
     public override void Configure()
     {
-        Get("game-catalog/upgrades");
+        Get("game-catalog/upgrades", "game-catalog/upgrades/{envelopeHash}");
         ConfigureServed("Gets game catalog upgrade materials.", "All upgrades with farm locations and expanded recipes.");
     }
 }
@@ -195,11 +165,9 @@ public sealed class GetGameCatalogUpgradesEndpoint(IGameCatalogProvider catalog)
 public sealed class GetGameCatalogEquipmentEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogEquipmentView>>(catalog, GameCatalogDatasets.Equipment)
 {
-    protected override IReadOnlyList<GameCatalogEquipmentView> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.EquipmentViews;
-
     public override void Configure()
     {
-        Get("game-catalog/equipment");
+        Get("game-catalog/equipment", "game-catalog/equipment/{envelopeHash}");
         ConfigureServed("Gets game catalog equipment.", "All equipment with the matched per-rarity upgrade-cost ladder inlined.");
     }
 }
@@ -207,11 +175,9 @@ public sealed class GetGameCatalogEquipmentEndpoint(IGameCatalogProvider catalog
 public sealed class GetGameCatalogCampaignBattlesEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogCampaignBattleView>>(catalog, GameCatalogDatasets.CampaignBattles)
 {
-    protected override IReadOnlyList<GameCatalogCampaignBattleView> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.CampaignBattleViews;
-
     public override void Configure()
     {
-        Get("game-catalog/campaign-battles");
+        Get("game-catalog/campaign-battles", "game-catalog/campaign-battles/{envelopeHash}");
         ConfigureServed("Gets game catalog campaign battles.", "All campaign battles (keyed by battle id, each with its campaignGroupId) with inlined reward drop chances.");
     }
 }
@@ -219,11 +185,9 @@ public sealed class GetGameCatalogCampaignBattlesEndpoint(IGameCatalogProvider c
 public sealed class GetGameCatalogCampaignDefinitionsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogCampaignDefinitionView>>(catalog, GameCatalogDatasets.CampaignDefinitions)
 {
-    protected override IReadOnlyList<GameCatalogCampaignDefinitionView> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.CampaignDefinitionViews;
-
     public override void Configure()
     {
-        Get("game-catalog/campaign-definitions");
+        Get("game-catalog/campaign-definitions", "game-catalog/campaign-definitions/{envelopeHash}");
         ConfigureServed("Gets game catalog campaign definitions.", "All campaign groups (keyed by groupId) with metadata and the ids of their battles.");
     }
 }
@@ -231,11 +195,9 @@ public sealed class GetGameCatalogCampaignDefinitionsEndpoint(IGameCatalogProvid
 public sealed class GetGameCatalogLresEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogLreView>>(catalog, GameCatalogDatasets.Lres)
 {
-    protected override IReadOnlyList<GameCatalogLreView> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.LreViews;
-
     public override void Configure()
     {
-        Get("game-catalog/lres");
+        Get("game-catalog/lres", "game-catalog/lres/{envelopeHash}");
         ConfigureServed("Gets game catalog legendary release events.", "All legendary release events (keyed by id) with per-track metadata and the ids of their battles.");
     }
 }
@@ -243,11 +205,9 @@ public sealed class GetGameCatalogLresEndpoint(IGameCatalogProvider catalog)
 public sealed class GetGameCatalogLreBattlesEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogLreBattleView>>(catalog, GameCatalogDatasets.LreBattles)
 {
-    protected override IReadOnlyList<GameCatalogLreBattleView> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.LreBattleViews;
-
     public override void Configure()
     {
-        Get("game-catalog/lre-battles");
+        Get("game-catalog/lre-battles", "game-catalog/lre-battles/{envelopeHash}");
         ConfigureServed("Gets game catalog LRE battles.", "All LRE battles (keyed \"{lreId}-{track}-{number}\", each tagged with its lreId and track) with their waves.");
     }
 }
@@ -255,11 +215,9 @@ public sealed class GetGameCatalogLreBattlesEndpoint(IGameCatalogProvider catalo
 public sealed class GetGameCatalogHordeModeTiersEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogHordeModeTiers>>(catalog, GameCatalogDatasets.HordeModeTiers)
 {
-    protected override IReadOnlyList<GameCatalogHordeModeTiers> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.HordeModeTiersViews;
-
     public override void Configure()
     {
-        Get("game-catalog/horde-mode-tiers");
+        Get("game-catalog/horde-mode-tiers", "game-catalog/horde-mode-tiers/{envelopeHash}");
         ConfigureServed(
             "Gets the horde-mode character tier list.",
             "The single S/A/B/C/D tier list of characters for horde modes, with each tier's power multiplier ; a character may override its tier's multiplier, and one not listed is unrated, multiplier 1.0).");
@@ -269,11 +227,9 @@ public sealed class GetGameCatalogHordeModeTiersEndpoint(IGameCatalogProvider ca
 public sealed class GetGameCatalogUnitPowerEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogUnitPower>>(catalog, GameCatalogDatasets.UnitPower)
 {
-    protected override IReadOnlyList<GameCatalogUnitPower> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.UnitPowerViews;
-
     public override void Configure()
     {
-        Get("game-catalog/unit-power");
+        Get("game-catalog/unit-power", "game-catalog/unit-power/{envelopeHash}");
         ConfigureServed(
             "Gets the unit power tables.",
             "The single record of power tables the in-game power formula reads: hero and MoW progression multipliers, damage profile, trait and ability power modifiers (percent; a trait or ability not listed is 100), ability power curves, and each character's and MoW's power multiplier and per-rank upgrade stat increases.");
@@ -283,11 +239,9 @@ public sealed class GetGameCatalogUnitPowerEndpoint(IGameCatalogProvider catalog
 public sealed class GetGameCatalogEventDefinitionsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogEventDefinition>>(catalog, GameCatalogDatasets.EventDefinitionsServed)
 {
-    protected override IReadOnlyList<GameCatalogEventDefinition> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.EventDefinitionViews;
-
     public override void Configure()
     {
-        Get("game-catalog/event-definitions");
+        Get("game-catalog/event-definitions", "game-catalog/event-definitions/{envelopeHash}");
         ConfigureServed("Gets game catalog event definitions.", "Reusable event mechanics (scoring, applicable game modes, recurrence, required parameters) — no display text or icon; clients resolve those from each definition's id.");
     }
 }
@@ -295,11 +249,9 @@ public sealed class GetGameCatalogEventDefinitionsEndpoint(IGameCatalogProvider 
 public sealed class GetGameCatalogEventsCalendarEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyDictionary<string, IReadOnlyList<GameCatalogEventsCalendarEntry>>>(catalog, GameCatalogDatasets.EventsCalendar)
 {
-    protected override IReadOnlyDictionary<string, IReadOnlyList<GameCatalogEventsCalendarEntry>> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.EventsCalendar;
-
     public override void Configure()
     {
-        Get("game-catalog/events-calendar");
+        Get("game-catalog/events-calendar", "game-catalog/events-calendar/{envelopeHash}");
         ConfigureServed(
             "Gets the game events calendar.",
             "Date-indexed (ISO date key) event occurrences and projected placeholders; an entry spanning multiple dates is repeated under every date it spans.");
@@ -309,11 +261,9 @@ public sealed class GetGameCatalogEventsCalendarEndpoint(IGameCatalogProvider ca
 public sealed class GetGameCatalogShopsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogShopView>>(catalog, GameCatalogDatasets.Shops)
 {
-    protected override IReadOnlyList<GameCatalogShopView> PayloadOf(GameCatalogSnapshot snapshot) => snapshot.ShopViews;
-
     public override void Configure()
     {
-        Get("game-catalog/shops");
+        Get("game-catalog/shops", "game-catalog/shops/{envelopeHash}");
         ConfigureServed(
             "Gets the always-on daily shops.",
             "One record per daily shop (guild, war, rogue-trader, crusade) with its rotating slots, structured rewards/costs, explicit day-of-week availability, and opaque lock ids — no display text or icons.");
@@ -323,11 +273,9 @@ public sealed class GetGameCatalogShopsEndpoint(IGameCatalogProvider catalog)
 public sealed class GetGameCatalogRaidBossesEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<GameCatalogRaidBossesView>(catalog, GameCatalogDatasets.RaidBosses)
 {
-    protected override GameCatalogRaidBossesView PayloadOf(GameCatalogSnapshot snapshot) => snapshot.RaidBossesView;
-
     public override void Configure()
     {
-        Get("game-catalog/raid-bosses");
+        Get("game-catalog/raid-bosses", "game-catalog/raid-bosses/{envelopeHash}");
         ConfigureServed(
             "Gets the raid bosses and raid-boss primes.",
             "The season-config rotation, every raid boss and raid-boss prime (progression ladder, weapons, ability/trait ids), and the season configs whose encounters carry their referenced unit-set id, field-npc ids, and modifier definitions inlined — no display text or icons.");
@@ -337,11 +285,9 @@ public sealed class GetGameCatalogRaidBossesEndpoint(IGameCatalogProvider catalo
 public sealed class GetGameCatalogGuildRaidMetaEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<GameCatalogGuildRaidMetaView>(catalog, GameCatalogDatasets.GuildRaidMeta)
 {
-    protected override GameCatalogGuildRaidMetaView PayloadOf(GameCatalogSnapshot snapshot) => snapshot.GuildRaidMetaView;
-
     public override void Configure()
     {
-        Get("game-catalog/guild-raid-meta");
+        Get("game-catalog/guild-raid-meta", "game-catalog/guild-raid-meta/{envelopeHash}");
         ConfigureServed(
             "Gets curated Guild Raid Meta recommendations.",
             "Curated exact Guild Raid Boss teams, Comp guidance, and source/update ids — no display names, icons, or source URLs.");

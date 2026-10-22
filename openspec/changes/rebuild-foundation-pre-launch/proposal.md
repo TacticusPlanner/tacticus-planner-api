@@ -10,7 +10,7 @@ Decisions already taken with the owner: in-flight goal slots become **per profil
 
 **Schema (all BREAKING; database recreated from a new single `InitialCreate` migration, existing migrations and their migration-specific integration tests deleted):**
 - `accounts` merged into `profiles` (`issuer`, `subject`, `last_seen_at`; unique `(issuer, subject)`). `tacticus_integrations`, `user_settings`, `player_data_overrides`, `player_data_snapshots` keep their 1:1 rows keyed by profile id.
-- `goals`: drop `events`; add `rank_target_key` (derived from config on every write); move the two in-flight slot partial unique indexes here, scoped by `profile_id`. `project_goals` becomes `(project_id, goal_id, created_at)`.
+- `goals`: drop `events`. The in-flight slot rule moves to the profile (not the project) and is enforced only in the app, under the profile lock: no slot indexes and no derived `rank_target_key` column. `project_goals` becomes `(project_id, goal_id, created_at)`.
 - `legendary_event_plans` absorbs `teams` (with members, objectives, run depths), `run_progress` and `objective_annotations` as three jsonb columns; the six child tables are dropped. Served plan shape is unchanged.
 - `legendary_event_run_records` absorbs `roster_snapshots` as a `roster` jsonb column; the table is dropped.
 - `guild_raid_attacks` absorbs `guild_raid_attack_units` as a `units` jsonb column; the table is dropped.

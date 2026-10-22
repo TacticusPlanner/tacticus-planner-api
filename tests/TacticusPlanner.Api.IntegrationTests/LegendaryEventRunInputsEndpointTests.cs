@@ -1,7 +1,7 @@
 using System.Net;
-using System.Net.Http.Json;
 using System.Text.Json;
 using TacticusPlanner.Api.Features.LegendaryEventPlans;
+using TacticusPlanner.Domain.LegendaryEvents;
 
 namespace TacticusPlanner.Api.IntegrationTests;
 
@@ -14,7 +14,7 @@ namespace TacticusPlanner.Api.IntegrationTests;
 public sealed class LegendaryEventRunInputsEndpointTests(PlannerApiFactory factory) : IClassFixture<PlannerApiFactory>
 {
     private const string EventId = "votanUthar";
-    private const string PlanUrl = $"/api/v1/me/legendary-event-plans/{EventId}";
+    private const string PlanUrl = $"/api/v1/legendary-event-plans/{EventId}";
 
     private static CancellationToken Ct => TestContext.Current.CancellationToken;
 
@@ -267,11 +267,11 @@ public sealed class LegendaryEventRunInputsEndpointTests(PlannerApiFactory facto
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var plan = await ReadPlanAsync(await MarkAsync(client, new(0, "alpha", 6, [3], "stopHere")));
+        var plan = await ReadPlanAsync(await MarkAsync(client, new(0, LegendaryEventLaneId.Alpha, 6, [3], LegendaryEventAnnotationStatus.StopHere)));
 
         Assert.Equal(1, plan.Revision);
         var annotation = Assert.Single(plan.Annotations);
-        Assert.Equal(("alpha", 6, 3, "stopHere"), (annotation.LaneId, annotation.BattleIndex, annotation.ObjectiveId, annotation.Status));
+        Assert.Equal((LegendaryEventLaneId.Alpha, 6, 3, LegendaryEventAnnotationStatus.StopHere), (annotation.LaneId, annotation.BattleIndex, annotation.ObjectiveId, annotation.Status));
         Assert.NotEqual(default, annotation.UpdatedAt);
     }
 
@@ -282,12 +282,12 @@ public sealed class LegendaryEventRunInputsEndpointTests(PlannerApiFactory facto
         var plan = await ReadPlanAsync(await client.PutAsJsonAsync(PlanUrl, new UpdateLegendaryEventPlanRequest(0, null, false), Ct));
         plan = await ReadPlanAsync(await client.PutAsJsonAsync(PlanUrl, new UpdateLegendaryEventPlanRequest(1, "n", false), Ct));
 
-        plan = await ReadPlanAsync(await MarkAsync(client, new(plan.Revision, "alpha", 7, [0, 1, 2, 4], "maybeClear")));
-        plan = await ReadPlanAsync(await MarkAsync(client, new(plan.Revision, "alpha", 7, [2], null)));
+        plan = await ReadPlanAsync(await MarkAsync(client, new(plan.Revision, LegendaryEventLaneId.Alpha, 7, [0, 1, 2, 4], LegendaryEventAnnotationStatus.MaybeClear)));
+        plan = await ReadPlanAsync(await MarkAsync(client, new(plan.Revision, LegendaryEventLaneId.Alpha, 7, [2], null)));
 
         Assert.Equal(4, plan.Revision);
         Assert.Equal([0, 1, 4], plan.Annotations.Select(annotation => annotation.ObjectiveId));
-        Assert.All(plan.Annotations, annotation => Assert.Equal(("alpha", 7, "maybeClear"),
+        Assert.All(plan.Annotations, annotation => Assert.Equal((LegendaryEventLaneId.Alpha, 7, LegendaryEventAnnotationStatus.MaybeClear),
             (annotation.LaneId, annotation.BattleIndex, annotation.Status)));
     }
 
@@ -295,25 +295,25 @@ public sealed class LegendaryEventRunInputsEndpointTests(PlannerApiFactory facto
     public async Task ChangingAMarkReplacesItsStatus()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
-        var plan = await ReadPlanAsync(await MarkAsync(client, new(0, "beta", 2, [1], "maybeClear")));
+        var plan = await ReadPlanAsync(await MarkAsync(client, new(0, LegendaryEventLaneId.Beta, 2, [1], LegendaryEventAnnotationStatus.MaybeClear)));
 
-        plan = await ReadPlanAsync(await MarkAsync(client, new(plan.Revision, "beta", 2, [1], "stopHere")));
+        plan = await ReadPlanAsync(await MarkAsync(client, new(plan.Revision, LegendaryEventLaneId.Beta, 2, [1], LegendaryEventAnnotationStatus.StopHere)));
 
-        Assert.Equal((2L, "stopHere"), (plan.Revision, Assert.Single(plan.Annotations).Status));
+        Assert.Equal((2L, LegendaryEventAnnotationStatus.StopHere), (plan.Revision, Assert.Single(plan.Annotations).Status));
     }
 
     [Fact]
     public async Task AnnotationsAreOrderedByLaneBattleAndObjective()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
-        var plan = await ReadPlanAsync(await MarkAsync(client, new(0, "beta", 2, [1], "stopHere")));
-        plan = await ReadPlanAsync(await MarkAsync(client, new(plan.Revision, "alpha", 9, [0], "maybeClear")));
-        await MarkAsync(client, new(plan.Revision, "alpha", 3, [5], "maybeClear"));
+        var plan = await ReadPlanAsync(await MarkAsync(client, new(0, LegendaryEventLaneId.Beta, 2, [1], LegendaryEventAnnotationStatus.StopHere)));
+        plan = await ReadPlanAsync(await MarkAsync(client, new(plan.Revision, LegendaryEventLaneId.Alpha, 9, [0], LegendaryEventAnnotationStatus.MaybeClear)));
+        await MarkAsync(client, new(plan.Revision, LegendaryEventLaneId.Alpha, 3, [5], LegendaryEventAnnotationStatus.MaybeClear));
 
         plan = await ReadPlanAsync(await client.GetAsync(PlanUrl, Ct));
 
         Assert.Equal(
-            [("alpha", 3, 5), ("alpha", 9, 0), ("beta", 2, 1)],
+            [(LegendaryEventLaneId.Alpha, 3, 5), (LegendaryEventLaneId.Alpha, 9, 0), (LegendaryEventLaneId.Beta, 2, 1)],
             plan.Annotations.Select(annotation => (annotation.LaneId, annotation.BattleIndex, annotation.ObjectiveId)));
     }
 
@@ -332,9 +332,26 @@ public sealed class LegendaryEventRunInputsEndpointTests(PlannerApiFactory facto
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await MarkAsync(client, new(0, laneId, battleIndex, objectiveIds, status));
+        // Sent as wire JSON so unknown lane/status values (which the typed request can't hold) reach the API.
+        var response = await client.SendMutatedJsonAsync(
+            HttpMethod.Put,
+            $"{PlanUrl}/annotations",
+            new UpdateLegendaryEventAnnotationsRequest(
+                0, LegendaryEventLaneId.Alpha, battleIndex, objectiveIds, LegendaryEventAnnotationStatus.StopHere),
+            body =>
+            {
+                body["laneId"] = laneId;
+                body["status"] = status;
+            });
 
-        await AssertBadRequestAsync(response, field);
+        if (field is "laneId" or "status")
+        {
+            await response.AssertFieldRejectedAsync(field); // an unknown enum value fails binding
+        }
+        else
+        {
+            await AssertBadRequestAsync(response, field);
+        }
         Assert.Equal(0, (await ReadPlanAsync(await client.GetAsync(PlanUrl, Ct))).Revision);
     }
 
@@ -342,10 +359,10 @@ public sealed class LegendaryEventRunInputsEndpointTests(PlannerApiFactory facto
     public async Task UnchangedAnnotationsKeepTheRevision()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
-        var plan = await ReadPlanAsync(await MarkAsync(client, new(0, "alpha", 6, [3], "stopHere")));
+        var plan = await ReadPlanAsync(await MarkAsync(client, new(0, LegendaryEventLaneId.Alpha, 6, [3], LegendaryEventAnnotationStatus.StopHere)));
 
-        var same = await ReadPlanAsync(await MarkAsync(client, new(plan.Revision, "alpha", 6, [3], "stopHere")));
-        var clearUnmarked = await ReadPlanAsync(await MarkAsync(client, new(plan.Revision, "alpha", 6, [4], null)));
+        var same = await ReadPlanAsync(await MarkAsync(client, new(plan.Revision, LegendaryEventLaneId.Alpha, 6, [3], LegendaryEventAnnotationStatus.StopHere)));
+        var clearUnmarked = await ReadPlanAsync(await MarkAsync(client, new(plan.Revision, LegendaryEventLaneId.Alpha, 6, [4], null)));
 
         Assert.Equal((1L, 1L), (same.Revision, clearUnmarked.Revision));
         Assert.Single(clearUnmarked.Annotations);
@@ -356,7 +373,7 @@ public sealed class LegendaryEventRunInputsEndpointTests(PlannerApiFactory facto
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var plan = await ReadPlanAsync(await MarkAsync(client, new(0, "alpha", 6, [3], null)));
+        var plan = await ReadPlanAsync(await MarkAsync(client, new(0, LegendaryEventLaneId.Alpha, 6, [3], null)));
 
         Assert.Equal(0, plan.Revision);
         Assert.Empty(plan.Annotations);
@@ -366,9 +383,9 @@ public sealed class LegendaryEventRunInputsEndpointTests(PlannerApiFactory facto
     public async Task AStaleAnnotationWriteIsAConflict()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
-        var plan = await ReadPlanAsync(await MarkAsync(client, new(0, "alpha", 6, [3], "stopHere")));
+        var plan = await ReadPlanAsync(await MarkAsync(client, new(0, LegendaryEventLaneId.Alpha, 6, [3], LegendaryEventAnnotationStatus.StopHere)));
 
-        var conflict = await ReadConflictAsync(await MarkAsync(client, new(plan.Revision + 1, "alpha", 6, [3], null)));
+        var conflict = await ReadConflictAsync(await MarkAsync(client, new(plan.Revision + 1, LegendaryEventLaneId.Alpha, 6, [3], null)));
 
         Assert.Equal(LegendaryEventPlanIssueCodes.Stale, conflict.IssueCode);
         Assert.Single(conflict.Plan.Annotations);
@@ -390,7 +407,7 @@ public sealed class LegendaryEventRunInputsEndpointTests(PlannerApiFactory facto
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var plan = await ReadPlanAsync(await WriteRunAsync(client, 1, new(0, 1, 0, false, 0)));
-        await MarkAsync(client, new(plan.Revision, "alpha", 0, [0], "maybeClear"));
+        await MarkAsync(client, new(plan.Revision, LegendaryEventLaneId.Alpha, 0, [0], LegendaryEventAnnotationStatus.MaybeClear));
 
         using var document = JsonDocument.Parse(await client.GetStringAsync(PlanUrl, Ct));
         var root = document.RootElement;
@@ -417,12 +434,11 @@ public sealed class LegendaryEventRunInputsEndpointTests(PlannerApiFactory facto
         return plan;
     }
 
-    private static async Task<LegendaryEventPlanConflictResponse> ReadConflictAsync(HttpResponseMessage response)
+    /// <summary>A plan conflict: the problem's issue code and the plan under <c>current</c>.</summary>
+    private static async Task<(string IssueCode, LegendaryEventPlanResponse Plan)> ReadConflictAsync(HttpResponseMessage response)
     {
         Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
-        var conflict = await response.Content.ReadFromJsonAsync<LegendaryEventPlanConflictResponse>(Ct);
-        Assert.NotNull(conflict);
-        return conflict;
+        return ((await response.ReadIssueCodeAsync())!, await response.ReadCurrentAsync<LegendaryEventPlanResponse>());
     }
 
     private static async Task AssertBadRequestAsync(HttpResponseMessage response, string field)

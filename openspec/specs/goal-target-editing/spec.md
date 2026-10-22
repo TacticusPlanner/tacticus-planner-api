@@ -8,7 +8,7 @@ Allows a user to revise an in-flight goal's progression target without losing it
 
 ### Requirement: In-flight adjustable targets can be replaced in place
 
-`PUT /me/goals/{goalId}/target` SHALL accept `{ expectedRevision, target }` for an owned Active or Paused goal. Supported target groups are Rank (`end`, `endPointFive`, `endAppliedUpgrades`), Ascension (`end` progression), Ability (`activeEnd`, `passiveEnd`), and Upgrade (`targets` material-id/quantity list). Unlock has no adjustable target and SHALL be rejected,, and Level is no longer a supported target group (the Level goal type no longer exists), so a request carrying only a Level group is rejected as having no supported group. The existing start/baseline, entity, goal type, id, status, notes, strategy, sources, project memberships, project priorities, creation timestamp, and creation snapshot SHALL remain unchanged. A successful response SHALL include the updated goal detail and incremented `revision`.
+`PUT /goals/{goalId}/target` SHALL accept `{ expectedRevision, target }` for an owned Active or Paused goal. Supported target groups are Rank (`end`, `endPointFive`, `endAppliedUpgrades`), Ascension (`end` progression), Ability (`activeEnd`, `passiveEnd`), and Upgrade (`targets` material-id/quantity list). Unlock has no adjustable target and SHALL be rejected,, and Level is no longer a supported target group (the Level goal type no longer exists), so a request carrying only a Level group is rejected as having no supported group. The existing start/baseline, entity, goal type, id, status, notes, strategy, sources, project memberships, project priorities, creation timestamp, and creation snapshot SHALL remain unchanged. A successful response SHALL include the updated goal detail and incremented `revision`.
 
 #### Scenario: Rank target advances in place
 
@@ -59,7 +59,7 @@ Goal detail SHALL expose a monotonically increasing `revision`. A target update 
 
 ### Requirement: Editing an Upgrade target can replace its ranges
 
-`PUT /me/goals/{goalId}/target` for an Upgrade goal SHALL accept optional `rankRange`,
+`PUT /goals/{goalId}/target` for an Upgrade goal SHALL accept optional `rankRange`,
 `activeRange` and `passiveRange` groups inside `target.upgrade`, validated exactly as at creation.
 The Upgrade group SHALL be replaced as a whole: a request that omits a range group clears it. The
 `TargetChanged` event SHALL record the previous and new ranges together with the previous and new

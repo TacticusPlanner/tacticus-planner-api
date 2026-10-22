@@ -5,8 +5,7 @@ using TacticusPlanner.Domain.Goals;
 namespace TacticusPlanner.Api.Features.Goals;
 
 /// <summary>
-/// Request-shape rules only — entity type must parse to a supported value (mirrors
-/// <see cref="CreateGoalValidator"/>), each spec's goal type must parse to a supported value, the list
+/// Request-shape rules only (entity and goal types are enums, rejected at binding when unknown) — the list
 /// must be non-empty and reasonably small (Unlock + Ascension + Rank + Ability is the largest realistic
 /// combined request), every <see cref="CombinedGoalSpec.DependsOnIndex"/> must reference a strictly
 /// earlier spec in the same request (no forward or self references), and a Machine of War request may
@@ -19,10 +18,6 @@ public sealed class CreateCombinedGoalsValidator : Validator<CreateCombinedGoals
 
     public CreateCombinedGoalsValidator()
     {
-        RuleFor(request => request.EntityType)
-            .Must(value => Enum.TryParse<GoalEntityType>(value, ignoreCase: true, out _))
-            .WithMessage("Unknown entity type.");
-
         RuleFor(request => request.EntityId)
             .NotEmpty()
             .WithMessage("An entity id is required.")
@@ -36,26 +31,20 @@ public sealed class CreateCombinedGoalsValidator : Validator<CreateCombinedGoals
             .WithMessage($"A combined request can create at most {MaxGoals} goals.");
 
         RuleForEach(request => request.Goals)
-            .ChildRules(goal => goal.RuleFor(spec => spec.GoalType)
-                .Must(value => Enum.TryParse<GoalType>(value, ignoreCase: true, out var parsed)
-                    && Enum.IsDefined(parsed)
-                    && !int.TryParse(value, out _))
-                .WithMessage("Unknown or unsupported goal type (the Level goal type no longer exists)."));
-
-        RuleForEach(request => request.Goals)
             .ChildRules(goal => goal.RuleFor(spec => spec.Snapshot)
-                .Must(CreateGoalValidator.IsValidSnapshot)
+                .Must(IsValidSnapshot)
                 .WithMessage("Snapshot resource ids are required and counts cannot be negative."));
-
-        RuleForEach(request => request.Goals)
-            .ChildRules(goal => goal.RuleFor(spec => spec.Config)
-                .Must(CreateGoalValidator.IsValidConfig)
-                .WithMessage("The farming strategy or ascension farming configuration is invalid."));
 
         RuleForEach(request => request.Goals)
             .ChildRules(goal => goal.RuleFor(spec => spec.Config)
                 .Must(config => UpgradeRangeRules.HasWholeRanges(config?.Upgrade))
                 .WithMessage(UpgradeRangeRules.ShapeMessage));
+
+        RuleForEach(request => request.Goals)
+            .ChildRules(goal => goal.RuleFor(spec => spec.Config)
+                .Must(config => AcquisitionSourceRules.ShapeError(config?.AcquisitionSources) is null)
+                .WithMessage(spec => AcquisitionSourceRules.ShapeError(spec.Config?.AcquisitionSources)
+                    ?? "The acquisition sources configuration is invalid."));
 
         RuleFor(request => request.Goals)
             .Custom((goals, context) =>
@@ -75,17 +64,20 @@ public sealed class CreateCombinedGoalsValidator : Validator<CreateCombinedGoals
             });
 
         RuleFor(request => request)
-            .Must(request => !IsMow(request.EntityType)
+            .Must(request => request.EntityType != GoalEntityType.Mow
                 || request.Goals is null
-                || request.Goals.TrueForAll(spec => !IsRank(spec.GoalType)))
+                || request.Goals.TrueForAll(spec => spec.GoalType != GoalType.Rank))
             .WithMessage("Machines of War have no rank — use an Ability goal instead.");
 
     }
 
-    private static bool IsMow(string entityType) =>
-        Enum.TryParse<GoalEntityType>(entityType, ignoreCase: true, out var value)
-            && value == GoalEntityType.Mow;
+    internal static bool IsValidSnapshot(CreateGoalSnapshotRequest? snapshot)
+    {
+        if (snapshot is null) return true;
+        return snapshot.InitialRequirement?.All(IsValidResource) != false
+            && snapshot.InitialInventoryContribution?.All(IsValidResource) != false;
+    }
 
-    private static bool IsRank(string goalType) =>
-        Enum.TryParse<GoalType>(goalType, ignoreCase: true, out var value) && value == GoalType.Rank;
+    private static bool IsValidResource(GoalSnapshotResourceRequest resource) =>
+        !string.IsNullOrWhiteSpace(resource.ResourceId) && resource.Count >= 0;
 }

@@ -8,7 +8,7 @@ Endpoints that call the upstream Tacticus or V1 APIs on the caller's behalf are 
 
 ### Requirement: Upstream-calling endpoints are limited per profile
 
-The system SHALL limit `POST tacticus-api-key/validate` and `PUT me/tacticus-integration` to 10 requests/minute by default (`upstream-fast`). `POST tacticus-integration/player-sync`, `POST guilds/register`, `POST guilds/me/sync`, and `POST me/v1-import` SHALL default to 6 requests/hour (`upstream-slow`). Limits SHALL be configurable and per profile. Other endpoints SHALL NOT be limited.
+The system SHALL limit `POST tacticus-api-key/validate` and `PUT account/tacticus-integration` to 10 requests/minute by default (`upstream-fast`). `POST tacticus-integration/player-sync`, `POST guild/register`, `POST guild/sync`, and `POST account/v1-import` SHALL default to 6 requests/hour (`upstream-slow`). Limits SHALL be configurable and per profile. Other endpoints SHALL NOT be limited.
 
 #### Scenario: Within the limit
 
@@ -17,7 +17,7 @@ The system SHALL limit `POST tacticus-api-key/validate` and `PUT me/tacticus-int
 
 #### Scenario: Limit exceeded
 
-- **GIVEN** a profile has issued 6 `POST guilds/me/sync` requests within the current hour window
+- **GIVEN** a profile has issued 6 `POST guild/sync` requests within the current hour window
 - **WHEN** it issues a seventh
 - **THEN** the response is `429 Too Many Requests` with a `Retry-After` header and no upstream call is made
 
@@ -29,7 +29,7 @@ The system SHALL limit `POST tacticus-api-key/validate` and `PUT me/tacticus-int
 
 #### Scenario: Unlimited endpoint
 
-- **WHEN** a profile issues 100 `GET me/goals` requests in a minute
+- **WHEN** a profile issues 100 `GET goals` requests in a minute
 - **THEN** every request is processed normally
 
 ### Requirement: Each endpoint has its own fixed-window bucket

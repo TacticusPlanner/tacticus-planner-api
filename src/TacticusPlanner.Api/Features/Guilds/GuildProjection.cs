@@ -25,7 +25,7 @@ public static class GuildProjection
             guild.Name,
             guild.Level,
             guild.LastSyncSucceededAt,
-            callerMember.Role.ToString(),
+            callerMember.Role,
             callerMember.Role is GuildRole.Leader or GuildRole.CoLeader,
             members
         );
@@ -40,7 +40,7 @@ public static class GuildProjection
             maskedUserId,
             member.LinkedPlayerName,
             member.ProfileId is not null,
-            member.Role.ToString(),
+            member.Role,
             member.Level,
             member.LastActiveInGameOn,
             member.LastActiveInPlannerOn,
@@ -74,7 +74,7 @@ public sealed record RegisteredGuildResponse(
     string Name,
     int Level,
     DateTimeOffset? LastSyncSucceededAt,
-    string CallerRole,
+    GuildRole CallerRole,
     bool CanSynchronize,
     IReadOnlyList<GuildMemberSummary> Members
 );
@@ -84,7 +84,7 @@ public sealed record GuildMemberSummary(
     string MaskedTacticusUserId,
     string? LinkedPlayerName,
     bool IsLinked,
-    string Role,
+    GuildRole Role,
     int Level,
     long? LastActiveInGameOn,
     DateTimeOffset? LastActiveInPlannerOn,

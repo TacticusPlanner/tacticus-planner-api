@@ -2,6 +2,7 @@ using FastEndpoints;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Api.Http;
 using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.CurrentUser;
@@ -12,7 +13,7 @@ public sealed class UpdateDisplayNameEndpoint : Endpoint<UpdateDisplayNameReques
 
     public override void Configure()
     {
-        Put("me/display-name");
+        Put("account/display-name");
         Summary(summary =>
         {
             summary.Summary = "Confirms or edits the current profile's app-owned display name.";
@@ -29,7 +30,7 @@ public sealed class UpdateDisplayNameEndpoint : Endpoint<UpdateDisplayNameReques
         var profileId = ProcessorState<CurrentUserState>().ProfileId;
         if (profileId is null)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 

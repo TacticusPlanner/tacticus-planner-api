@@ -1,8 +1,8 @@
 using System.Net;
-using System.Net.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TacticusPlanner.Api.Features.Goals;
+using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.PlayerData.Chunks;
 using TacticusPlanner.Domain.Profiles;
@@ -27,7 +27,7 @@ public sealed class GoalAbilityCapEffectiveProgressionTests(PlannerApiFactory fa
         var (client, _) = await ProvisionWithLiveProgressionAsync(UnitProgression.CommonNone);
 
         var response = await PostCombinedAsync(client, AscensionThenAbility(
-            ascensionEnd: "Uncommon:TwoStars", // rarity Uncommon, cap 17
+            ascensionEnd: UnitProgression.UncommonTwoStars, // rarity Uncommon, cap 17
             abilityActiveEnd: 12, // above the live Common cap (8), at or below the raised cap (17)
             abilityDependsOnAscension: true));
 
@@ -42,15 +42,12 @@ public sealed class GoalAbilityCapEffectiveProgressionTests(PlannerApiFactory fa
     {
         var (client, _) = await ProvisionWithLiveProgressionAsync(UnitProgression.CommonNone);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            new CreateGoalRequest(
-                "character",
+        var response = await client.PostGoalAsync(new CreateGoalRequest(
+                GoalEntityType.Character,
                 CharacterId,
-                "ability",
+                GoalType.Ability,
                 new CreateGoalConfigRequest(Ability: new AbilityTargetRequest(0, 12, 0, 0)),
-                null),
-            TestContext.Current.CancellationToken);
+                null));
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
@@ -61,7 +58,7 @@ public sealed class GoalAbilityCapEffectiveProgressionTests(PlannerApiFactory fa
         var (client, _) = await ProvisionWithLiveProgressionAsync(UnitProgression.CommonNone);
 
         var response = await PostCombinedAsync(client, AscensionThenAbility(
-            ascensionEnd: "Uncommon:TwoStars", // raises the cap to 17
+            ascensionEnd: UnitProgression.UncommonTwoStars, // raises the cap to 17
             abilityActiveEnd: 20, // still above the raised cap
             abilityDependsOnAscension: true));
 
@@ -75,7 +72,7 @@ public sealed class GoalAbilityCapEffectiveProgressionTests(PlannerApiFactory fa
 
         // A qualifying Ascension spec is present, but the Ability spec declares no dependency on it.
         var response = await PostCombinedAsync(client, AscensionThenAbility(
-            ascensionEnd: "Uncommon:TwoStars",
+            ascensionEnd: UnitProgression.UncommonTwoStars,
             abilityActiveEnd: 12,
             abilityDependsOnAscension: false));
 
@@ -88,13 +85,13 @@ public sealed class GoalAbilityCapEffectiveProgressionTests(PlannerApiFactory fa
         var (client, _) = await ProvisionWithLiveProgressionAsync(UnitProgression.CommonNone);
 
         var request = new CreateCombinedGoalsRequest(
-            "character",
+            GoalEntityType.Character,
             CharacterId,
             null,
             [
-                new CombinedGoalSpec("unlock", new CreateGoalConfigRequest(), []),
+                new CombinedGoalSpec(GoalType.Unlock, new CreateGoalConfigRequest(), []),
                 new CombinedGoalSpec(
-                    "ability",
+                    GoalType.Ability,
                     new CreateGoalConfigRequest(Ability: new AbilityTargetRequest(0, 12, 0, 0)),
                     [0]),
             ]);
@@ -113,7 +110,7 @@ public sealed class GoalAbilityCapEffectiveProgressionTests(PlannerApiFactory fa
         // would have been accepted regardless of target; it must now be rejected because the effective
         // progression comes solely from the depended-upon Ascension target (cap 17), not Mythic (cap 60).
         var response = await PostCombinedAsync(client, AscensionThenAbility(
-            ascensionEnd: "Uncommon:TwoStars",
+            ascensionEnd: UnitProgression.UncommonTwoStars,
             abilityActiveEnd: 25,
             abilityDependsOnAscension: true));
 
@@ -126,37 +123,34 @@ public sealed class GoalAbilityCapEffectiveProgressionTests(PlannerApiFactory fa
         // No player data at all -> falls back to the live progression default (top of the ladder), unchanged.
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var response = await client.PostAsJsonAsync(
-            "/api/v1/me/goals",
-            new CreateGoalRequest(
-                "character",
+        var response = await client.PostGoalAsync(new CreateGoalRequest(
+                GoalEntityType.Character,
                 CharacterId,
-                "ability",
+                GoalType.Ability,
                 new CreateGoalConfigRequest(Ability: new AbilityTargetRequest(0, 12, 0, 0)),
-                null),
-            TestContext.Current.CancellationToken);
+                null));
 
         response.EnsureSuccessStatusCode();
     }
 
     private static CreateCombinedGoalsRequest AscensionThenAbility(
-        string ascensionEnd, int abilityActiveEnd, bool abilityDependsOnAscension) => new(
-        "character",
+        UnitProgression ascensionEnd, int abilityActiveEnd, bool abilityDependsOnAscension) => new(
+        GoalEntityType.Character,
         CharacterId,
         null,
         [
             new CombinedGoalSpec(
-                "ascension",
-                new CreateGoalConfigRequest(Progression: new ProgressionTargetRequest("Common:None", ascensionEnd)),
+                GoalType.Ascension,
+                new CreateGoalConfigRequest(Progression: new ProgressionTargetRequest(UnitProgression.CommonNone, ascensionEnd)),
                 []),
             new CombinedGoalSpec(
-                "ability",
+                GoalType.Ability,
                 new CreateGoalConfigRequest(Ability: new AbilityTargetRequest(0, abilityActiveEnd, 0, 0)),
                 abilityDependsOnAscension ? [0] : []),
         ]);
 
     private static Task<HttpResponseMessage> PostCombinedAsync(HttpClient client, CreateCombinedGoalsRequest request) =>
-        client.PostAsJsonAsync("/api/v1/me/goals/combined", request, TestContext.Current.CancellationToken);
+        client.PostGoalAsync(request);
 
     /// <summary>Provisions a client and seeds a minimal <see cref="PlayerDataSnapshot"/> recording
     /// <see cref="CharacterId"/> at the given live progression — directly through the DI container rather
@@ -169,10 +163,8 @@ public sealed class GoalAbilityCapEffectiveProgressionTests(PlannerApiFactory fa
 
         using var scope = factory.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
-        var account = await db.Accounts.IgnoreQueryFilters()
-            .Include(entity => entity.Profile)
-            .FirstAsync(entity => entity.Subject == subject, TestContext.Current.CancellationToken);
-        var profileId = account.Profile!.Id;
+        var profileId = (await db.Profiles.IgnoreQueryFilters()
+            .FirstAsync(entity => entity.Subject == subject, TestContext.Current.CancellationToken)).Id;
 
         db.PlayerDataSnapshots.Add(new PlayerDataSnapshot
         {

@@ -1,5 +1,6 @@
 using FastEndpoints;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Api.Http;
 using TacticusPlanner.Domain.Guilds;
 using TacticusPlanner.Persistence;
 
@@ -9,12 +10,12 @@ public sealed class GetMyGuildRaidStatusEndpoint : EndpointWithoutRequest<GuildR
 {
     public override void Configure()
     {
-        Get("guilds/me/raid-status");
+        Get("guild/raid-status");
         Summary(summary =>
         {
             summary.Summary = "Gets the caller's guild's current Guild Raid status.";
             summary.Description = "Returns an id-only normalized status from the latest persisted observation. This "
-                + "endpoint never calls the upstream Guild Raid API; use POST guilds/me/raid-status/refresh to force a sync.";
+                + "endpoint never calls the upstream Guild Raid API; use POST guild/raid-status/refresh to force a sync.";
             summary.Response<GuildRaidStatusResponse>(StatusCodes.Status200OK, "Current Guild Raid status.");
             summary.Response(StatusCodes.Status404NotFound, "The authenticated profile has not been provisioned.");
             summary.Response(StatusCodes.Status409Conflict, "Guild access, synchronization, token, or a prior observation is not ready.");
@@ -26,7 +27,7 @@ public sealed class GetMyGuildRaidStatusEndpoint : EndpointWithoutRequest<GuildR
     {
         if (ProcessorState<CurrentUserState>().ProfileId is not { } profileId)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 
@@ -62,7 +63,7 @@ public sealed class GetMyGuildRaidStatusEndpoint : EndpointWithoutRequest<GuildR
 
     private async Task ConflictAsync(string message, CancellationToken ct)
     {
-        AddError(message);
+        AddError(message, "guildRaidNotReady");
         await Send.ErrorsAsync(StatusCodes.Status409Conflict, ct);
     }
 }

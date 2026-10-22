@@ -83,7 +83,7 @@ public sealed class CreateLegendaryEventTeamEndpoint : LegendaryEventPlanEndpoin
             req.Name, req.MemberUnitIds, req.ReserveUnitId, req.ObjectiveIndexes, req.Run,
             req.ExpectedBattleClears, req.ExpectedBattleClearsSource);
         if (await ResolveAsync(ct) is not { } resolved
-            || await RejectAsync(LegendaryEventCatalogValidator.ValidateTeam(resolved.Event, req.LaneId, fields), ct))
+            || await RejectAsync(LegendaryEventCatalogValidator.ValidateTeam(resolved.Event, LegendaryEventValidation.LaneKey(req.LaneId), fields), ct))
         {
             return;
         }
@@ -92,7 +92,7 @@ public sealed class CreateLegendaryEventTeamEndpoint : LegendaryEventPlanEndpoin
             resolved.ProfileId, resolved.Event.Id, req.ExpectedRevision,
             (context, _) =>
             {
-                LegendaryEventTeamMutations.CreateTeam(context, req.LaneId, fields);
+                LegendaryEventTeamMutations.CreateTeam(context, LegendaryEventValidation.LaneKey(req.LaneId), fields);
                 return Task.FromResult(LegendaryEventPlanMutation.Applied);
             },
             ct);
@@ -129,16 +129,16 @@ public sealed class UpdateLegendaryEventTeamEndpoint : LegendaryEventPlanEndpoin
         IReadOnlyList<LegendaryEventFieldFailure> failures = [];
         var result = await Resolve<LegendaryEventPlanWriter>().WriteAsync(
             resolved.ProfileId, resolved.Event.Id, req.ExpectedRevision,
-            (context, token) =>
+            (context, _) =>
             {
                 var team = context.Plan.Teams.FirstOrDefault(entry => entry.Id == teamId);
                 if (team is null)
                     return Task.FromResult(LegendaryEventPlanMutation.TeamNotFound);
 
                 failures = LegendaryEventCatalogValidator.ValidateTeam(resolved.Event, team.LaneId, fields);
-                return failures.Count > 0
-                    ? Task.FromResult(LegendaryEventPlanMutation.Rejected)
-                    : LegendaryEventTeamMutations.UpdateTeamAsync(context, teamId, fields, token);
+                return Task.FromResult(failures.Count > 0
+                    ? LegendaryEventPlanMutation.Rejected
+                    : LegendaryEventTeamMutations.UpdateTeam(context, teamId, fields));
             },
             ct);
         if (result is LegendaryEventPlanWriteResult.Rejected)
@@ -210,7 +210,7 @@ public sealed class UpdateLegendaryEventTeamOrderEndpoint
 
         var result = await Resolve<LegendaryEventPlanWriter>().WriteAsync(
             resolved.ProfileId, resolved.Event.Id, req.ExpectedRevision,
-            (context, _) => Task.FromResult(LegendaryEventTeamMutations.ReorderLane(context.Plan, req.LaneId, req.TeamIds ?? [])),
+            (context, _) => Task.FromResult(LegendaryEventTeamMutations.ReorderLane(context.Plan, LegendaryEventValidation.LaneKey(req.LaneId), req.TeamIds ?? [])),
             ct);
         await SendResultAsync(result, ct);
     }
@@ -227,7 +227,6 @@ public sealed class CreateLegendaryEventTeamValidator : Validator<CreateLegendar
     public CreateLegendaryEventTeamValidator()
     {
         RuleFor(request => request.ExpectedRevision).GreaterThanOrEqualTo(0);
-        RuleFor(request => request.LaneId).NotEmpty();
         RuleFor(request => request.MemberUnitIds).NotNull();
         RuleFor(request => request.ObjectiveIndexes).NotNull();
     }
@@ -250,7 +249,6 @@ public sealed class UpdateLegendaryEventTeamOrderValidator : Validator<UpdateLeg
     public UpdateLegendaryEventTeamOrderValidator()
     {
         RuleFor(request => request.ExpectedRevision).GreaterThanOrEqualTo(0);
-        RuleFor(request => request.LaneId).NotEmpty();
         RuleFor(request => request.TeamIds).NotNull();
     }
 }
@@ -314,13 +312,10 @@ public sealed class UpdateLegendaryEventAnnotationsEndpoint
             return;
         }
 
-        LegendaryEventAnnotationStatus? status = LegendaryEventCatalogValidator.TryParseStatus(req.Status, out var parsed)
-            ? parsed
-            : null;
         var result = await Resolve<LegendaryEventPlanWriter>().WriteAsync(
             resolved.ProfileId, resolved.Event.Id, req.ExpectedRevision,
             (context, _) => Task.FromResult(LegendaryEventPlanInputMutations.SetAnnotations(
-                context, req.LaneId, req.BattleIndex, req.ObjectiveIds, status)),
+                context, LegendaryEventValidation.LaneKey(req.LaneId), req.BattleIndex, req.ObjectiveIds, req.Status)),
             ct);
         await SendResultAsync(result, ct);
     }
@@ -337,7 +332,6 @@ public sealed class UpdateLegendaryEventAnnotationsValidator : Validator<UpdateL
     public UpdateLegendaryEventAnnotationsValidator()
     {
         RuleFor(request => request.ExpectedRevision).GreaterThanOrEqualTo(0);
-        RuleFor(request => request.LaneId).NotEmpty();
         RuleFor(request => request.ObjectiveIds).NotNull();
     }
 }

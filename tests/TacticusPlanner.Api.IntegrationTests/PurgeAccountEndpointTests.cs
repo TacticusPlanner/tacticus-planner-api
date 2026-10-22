@@ -1,5 +1,4 @@
 using System.Net;
-using System.Net.Http.Json;
 using TacticusPlanner.Api.Features.CurrentUser;
 
 namespace TacticusPlanner.Api.IntegrationTests;
@@ -12,13 +11,13 @@ public sealed class PurgeAccountEndpointTests(PlannerApiFactory factory) : IClas
         var client = factory.CreateClient();
         client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.SubjectHeader, NewSubject());
 
-        var before = await (await client.GetAsync("/api/v1/me", TestContext.Current.CancellationToken))
+        var before = await (await client.GetAsync("/api/v1/account", TestContext.Current.CancellationToken))
             .Content.ReadFromJsonAsync<CurrentUserResponse>(TestContext.Current.CancellationToken);
 
-        var purgeResponse = await client.DeleteAsync("/api/v1/me", TestContext.Current.CancellationToken);
+        var purgeResponse = await client.DeleteAsync("/api/v1/account", TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.NoContent, purgeResponse.StatusCode);
 
-        var after = await (await client.GetAsync("/api/v1/me", TestContext.Current.CancellationToken))
+        var after = await (await client.GetAsync("/api/v1/account", TestContext.Current.CancellationToken))
             .Content.ReadFromJsonAsync<CurrentUserResponse>(TestContext.Current.CancellationToken);
 
         Assert.NotEqual(before!.ApplicationUserId, after!.ApplicationUserId);
@@ -31,7 +30,7 @@ public sealed class PurgeAccountEndpointTests(PlannerApiFactory factory) : IClas
         var client = factory.CreateClient();
         client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.SubjectHeader, NewSubject());
 
-        var response = await client.DeleteAsync("/api/v1/me", TestContext.Current.CancellationToken);
+        var response = await client.DeleteAsync("/api/v1/account", TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }

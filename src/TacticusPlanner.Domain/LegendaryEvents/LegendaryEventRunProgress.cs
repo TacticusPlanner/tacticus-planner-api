@@ -1,11 +1,9 @@
 namespace TacticusPlanner.Domain.LegendaryEvents;
 
 /// <summary>The manual economy inputs of one run (1–3) of a <see cref="LegendaryEventPlan"/> (LRE Stage 3): what
-/// the Tacticus API cannot see. A run with no row reads as all zeros.</summary>
-public class LegendaryEventRunProgress
+/// the Tacticus API cannot see. A run with no entry reads as all zeros.</summary>
+public sealed class LegendaryEventRunProgress
 {
-    public LegendaryEventPlanId PlanId { get; set; }
-
     public int Run { get; set; }
 
     /// <summary>Regular missions the run will complete (forecast count), 0..the event's catalog <c>regularMissions</c> count.</summary>
@@ -31,6 +29,4 @@ public class LegendaryEventRunProgress
 
     /// <summary>When this run's inputs were last written.</summary>
     public DateTimeOffset UpdatedAt { get; set; }
-
-    public virtual LegendaryEventPlan? Plan { get; set; }
 }

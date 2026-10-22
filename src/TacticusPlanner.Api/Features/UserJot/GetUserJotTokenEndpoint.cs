@@ -2,6 +2,7 @@ using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Api.Features.CurrentUser;
+using TacticusPlanner.Api.Http;
 using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.UserJot;
@@ -12,7 +13,7 @@ public sealed class GetUserJotTokenEndpoint : EndpointWithoutRequest<UserJotToke
 
     public override void Configure()
     {
-        Get("me/userjot-token");
+        Get("userjot-token");
         Summary(summary =>
         {
             summary.Summary = "Issues a short-lived signed identity token for the UserJot feedback widget.";
@@ -31,9 +32,9 @@ public sealed class GetUserJotTokenEndpoint : EndpointWithoutRequest<UserJotToke
     public override async Task HandleAsync(CancellationToken ct)
     {
         var state = ProcessorState<CurrentUserState>();
-        if (state.AccountId is not { } accountId || state.ProfileId is not { } profileId)
+        if (state.ProfileId is not { } profileId)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 
@@ -48,7 +49,7 @@ public sealed class GetUserJotTokenEndpoint : EndpointWithoutRequest<UserJotToke
             displayName = FallbackName;
         }
 
-        var token = Resolve<UserJotTokenSigner>().CreateToken(accountId.Value, displayName);
+        var token = Resolve<UserJotTokenSigner>().CreateToken(profileId.Value, displayName);
 
         HttpContext.Response.Headers.CacheControl = "no-store";
         await Send.OkAsync(new UserJotTokenResponse(token), ct);

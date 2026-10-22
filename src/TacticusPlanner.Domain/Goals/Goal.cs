@@ -47,8 +47,6 @@ public class Goal : BaseEntity<GoalId>, IRevisionedEntity
     /// <summary>Null until the estimation engine populates it at creation time (a later phase).</summary>
     public GoalSnapshot? Snapshot { get; set; }
 
-    public List<GoalEvent> Events { get; set; } = [];
-
     /// <summary>Prerequisite edges from combined creation (unlock -> ascend -> rank). Empty until the
     /// combined-creation flow (a later phase) links goals together.</summary>
     public List<Guid> DependsOn { get; set; } = [];

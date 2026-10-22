@@ -1,5 +1,4 @@
 using System.Net;
-using System.Net.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TacticusPlanner.Api.Features.Guilds;
@@ -17,8 +16,8 @@ namespace TacticusPlanner.Api.IntegrationTests;
 
 public sealed class GetMyGuildRaidStatusEndpointTests(PlannerApiFactory factory) : IClassFixture<PlannerApiFactory>
 {
-    private const string StatusPath = "/api/v1/guilds/me/raid-status";
-    private const string RefreshPath = "/api/v1/guilds/me/raid-status/refresh";
+    private const string StatusPath = "/api/v1/guild/raid-status";
+    private const string RefreshPath = "/api/v1/guild/raid-status/refresh";
 
     [Fact]
     public async Task GuildPersistenceRollsBackAfterSqlWasWritten()
@@ -527,7 +526,7 @@ public sealed class GetMyGuildRaidStatusEndpointTests(PlannerApiFactory factory)
                 Guid.NewGuid(), tag, "Raid Guild", 10,
                 (tacticusUserId, GuildRole.LEADER, 50, null)));
         var response = await client.PostAsJsonAsync(
-            "/api/v1/guilds/register",
+            "/api/v1/guild/register",
             new RegisterGuildRequest(token),
             TestContext.Current.CancellationToken);
         response.EnsureSuccessStatusCode();

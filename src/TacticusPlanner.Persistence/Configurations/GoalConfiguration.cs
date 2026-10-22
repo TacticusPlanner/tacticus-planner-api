@@ -10,7 +10,7 @@ public sealed class GoalConfiguration : IEntityTypeConfiguration<Goal>
     {
         // The order invariant, enforced in the database as a backstop to GoalOrderService: exactly the
         // in-flight (Active/Paused) goals hold a positive position. Uniqueness per profile is the
-        // deferrable constraint ix_goals_profile_global_priority (see the AddGlobalGoalPriority migration).
+        // deferrable constraint ix_goals_profile_global_priority (raw SQL in the InitialCreate migration).
         builder.ToTable("goals", table => table.HasCheckConstraint(
             "ck_goals_global_priority_in_flight",
             "(status IN ('Active', 'Paused') AND global_priority IS NOT NULL AND global_priority > 0) "
@@ -39,9 +39,11 @@ public sealed class GoalConfiguration : IEntityTypeConfiguration<Goal>
         builder.Property(entity => entity.DependsOn);
 
         // Each jsonb payload below is EF Core's JSON owned-entity mapping (OwnsOne/OwnsMany + ToJson()),
-        // per ADR 0002/0007 — config/snapshot/events are kept as separate columns, not merged into one
-        // blob, so each concern (target, baseline, history) can evolve independently. Staying on
-        // OwnsOne/OwnsMany rather than ComplexProperty/ComplexCollection — see the Events comment below.
+        // per ADR 0002/0007 — config/snapshot are kept as separate columns, not merged into one blob, so
+        // each concern (target, baseline) can evolve independently. Tried ComplexCollection(...).ToJson()
+        // (EF Core 10's OwnsMany replacement) — it compiles but throws at model-build/query time against
+        // this stack (every endpoint touching a Goal 500s). Staying on OwnsOne/OwnsMany().ToJson() until
+        // that's fixed upstream.
         builder.OwnsOne(entity => entity.Config, config =>
         {
             config.ToJson("config");
@@ -63,42 +65,20 @@ public sealed class GoalConfiguration : IEntityTypeConfiguration<Goal>
             snapshot.OwnsMany(value => value.InitialRequirement);
             snapshot.OwnsMany(value => value.InitialInventoryContribution);
         });
-        // Tried ComplexCollection(...).ToJson() (EF Core 10's OwnsMany replacement) here — it compiles but
-        // throws at model-build/query time against this stack (confirmed empirically: every endpoint
-        // touching a Goal 500s). Staying on OwnsMany().ToJson() until that's fixed upstream.
-        builder.OwnsMany(entity => entity.Events, events =>
-        {
-            events.ToJson("events");
-            events.OwnsOne(goalEvent => goalEvent.PreviousTarget, target =>
-            {
-                target.OwnsMany(value => value.UpgradeTargets);
-                target.OwnsOne(value => value.UpgradeRankRange);
-                target.OwnsOne(value => value.UpgradeActiveRange);
-                target.OwnsOne(value => value.UpgradePassiveRange);
-            });
-            events.OwnsOne(goalEvent => goalEvent.NewTarget, target =>
-            {
-                target.OwnsMany(value => value.UpgradeTargets);
-                target.OwnsOne(value => value.UpgradeRankRange);
-                target.OwnsOne(value => value.UpgradeActiveRange);
-                target.OwnsOne(value => value.UpgradePassiveRange);
-            });
-        });
-
         builder.HasIndex(entity => entity.ProfileId);
 
         // Uniqueness of (profile_id, global_priority) is the DEFERRABLE INITIALLY DEFERRED constraint
-        // ix_goals_profile_global_priority, created by the AddGlobalGoalPriority migration. It is kept out of
+        // ix_goals_profile_global_priority, appended as raw SQL to the InitialCreate migration and guarded by
+        // a Persistence integration test so a future squash cannot lose it. It is kept out of
         // the EF model on purpose: a unique index there makes SaveChanges order updates by value and throw a
         // circular-dependency error when a reorder permutes positions. Deferred, the database checks it at
         // commit, so one transaction can permute or compact positions freely (NULLs are distinct, so
         // historical goals never collide).
 
-        // At most one Active/Paused goal per (profile, entity, goal type) — the app-level checks in
-        // CreateGoalEndpoint/CreateCombinedGoalsEndpoint/UpdateGoalStatusEndpoint give the friendly 400,
-        // this index is the concurrency backstop that guarantees the invariant even under a race.
-        // Completed/Archived goals are excluded from the filter, so a unit can freely accumulate
-        // finished goals of the same type.
+        // The in-flight slot rule (one Active/Paused goal per unit and type; per normalized end target for
+        // Rank) has no index: ProjectGoalPlanningService.FindConflictAsync enforces it under the profile lock
+        // that every goal write takes, so the rule can change without a schema change.
+
         builder
             .HasOne(entity => entity.Profile)
             .WithMany()

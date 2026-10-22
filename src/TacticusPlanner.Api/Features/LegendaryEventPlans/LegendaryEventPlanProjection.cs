@@ -5,24 +5,16 @@ using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.LegendaryEventPlans;
 
-/// <summary>Loads a plan with everything beneath it and maps it to the single served shape (design D8).</summary>
+/// <summary>Loads a plan (one row: its teams, runs and annotations are jsonb) and maps it to the single served
+/// shape (design D8).</summary>
 public static class LegendaryEventPlanProjection
 {
-    public static IQueryable<LegendaryEventPlan> WithTeams(this IQueryable<LegendaryEventPlan> plans) =>
-        plans
-            .Include(plan => plan.Teams).ThenInclude(team => team.Members)
-            .Include(plan => plan.Teams).ThenInclude(team => team.Objectives)
-            .Include(plan => plan.Teams).ThenInclude(team => team.RunDepths)
-            .Include(plan => plan.Runs)
-            .Include(plan => plan.Annotations)
-            .AsSplitQuery();
-
     /// <summary>Scoped to the caller's profile by <see cref="PlannerDbContext"/>'s global query filter.</summary>
     public static Task<LegendaryEventPlan?> LoadPlanAsync(
         this PlannerDbContext db, string eventId, bool tracked, CancellationToken ct)
     {
         var plans = tracked ? db.LegendaryEventPlans : db.LegendaryEventPlans.AsNoTracking();
-        return plans.WithTeams().FirstOrDefaultAsync(plan => plan.EventId == eventId, ct);
+        return plans.FirstOrDefaultAsync(plan => plan.EventId == eventId, ct);
     }
 
     public static LegendaryEventPlanResponse Empty(string eventId) =>
@@ -56,38 +48,25 @@ public static class LegendaryEventPlanProjection
                 .ThenBy(annotation => annotation.BattleIndex)
                 .ThenBy(annotation => annotation.ObjectiveId)
                 .Select(annotation => new LegendaryEventObjectiveAnnotationResponse(
-                    annotation.LaneId, annotation.BattleIndex, annotation.ObjectiveId,
-                    StatusName(annotation.Status), annotation.UpdatedAt))
+                    LegendaryEventValidation.Lane(annotation.LaneId), annotation.BattleIndex, annotation.ObjectiveId,
+                    annotation.Status, annotation.UpdatedAt))
                 .ToList());
 
     private static List<int> InCatalog(IEnumerable<int> indices, int? catalogCount) =>
         indices.Where(index => catalogCount is null || index < catalogCount).Order().ToList();
 
-    public static string StatusName(LegendaryEventAnnotationStatus status) => status switch
-    {
-        LegendaryEventAnnotationStatus.StopHere => LegendaryEventValidation.StopHereStatus,
-        _ => LegendaryEventValidation.MaybeClearStatus,
-    };
-
-    public static string SourceName(LegendaryEventDepthSource source) => source switch
-    {
-        LegendaryEventDepthSource.Estimate => "estimate",
-        _ => "manual",
-    };
-
-    private static LegendaryEventTeamResponse MapTeam(LegendaryEventTeam team) =>
+    private static LegendaryEventTeamResponse MapTeam(LegendaryEventTeamRecord team) =>
         new(
             team.Id.Value,
-            team.LaneId,
+            LegendaryEventValidation.Lane(team.LaneId),
             team.Name,
             team.SortOrder,
-            team.Members.Where(member => !member.Reserve).OrderBy(member => member.Position)
-                .Select(member => member.UnitId).ToList(),
-            team.Members.FirstOrDefault(member => member.Reserve)?.UnitId,
-            team.Objectives.Select(objective => objective.ObjectiveIndex).Order().ToList(),
+            [.. team.MemberUnitIds],
+            team.ReserveUnitId,
+            team.ObjectiveIndexes.Order().ToList(),
             team.RunDepths.OrderBy(depth => depth.Run)
                 .Select(depth => new LegendaryEventTeamRunDepthResponse(
-                    depth.Run, depth.ExpectedBattleClears, SourceName(depth.Source), depth.RecordedAt))
+                    depth.Run, depth.ExpectedBattleClears, depth.Source, depth.RecordedAt))
                 .ToList());
 
     public static int LaneOrder(string laneId)

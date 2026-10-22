@@ -17,10 +17,9 @@ using Xunit;
 namespace TacticusPlanner.Persistence.IntegrationTests;
 
 /// <summary>
-/// Real-lock coverage for <c>goal-combined-edit</c> (openspec change goals-edit-dialog): the combined edit's
-/// project locks, restart-on-membership-drift loop and single transaction only exist on the relational
-/// provider (<c>ExecuteLockedMutationAsync</c> is a no-op on InMemory), so they are exercised here with the
-/// real <see cref="GoalCombinedEditor"/> resolved from DI, one scope per simulated request.
+/// Real-lock coverage for <c>goal-combined-edit</c>: the edit's profile lock, its re-read under that lock and its
+/// single transaction, exercised with the real <see cref="GoalCombinedEditor"/> resolved from DI, one scope per
+/// simulated request.
 /// </summary>
 public sealed class GoalCombinedEditPostgresTests
 {
@@ -36,8 +35,7 @@ public sealed class GoalCombinedEditPostgresTests
         var order = await ReadOrderRevisionAsync(services, profileId);
         var revision1 = await RevisionAsync(services, g1);
 
-        // Opposite project orders and overlapping lock sets; the shared edit-order (profile row, then
-        // projects ascending) must keep them from deadlocking.
+        // Opposite project orders and overlapping memberships; the one profile lock serializes them.
         using var start = new ManualResetEventSlim(false);
         var first = Task.Run(() => EditAsync(services, profileId, g1, start, new EditGoalRequest(
             Target: new UpdateGoalTargetRequest(revision1, new GoalTargetEditRequest(Rank: new RankEndTargetRequest(8, false, 0))),
@@ -62,53 +60,50 @@ public sealed class GoalCombinedEditPostgresTests
             goals.Values.Select(goal => goal.GlobalPriority!.Value).Order());
         Assert.Equal(3, goals[g1].GlobalPriority);
         Assert.Equal(order + 1, await ReadOrderRevisionAsync(services, profileId));
-        var keys = await db.ProjectGoals.Where(entry => entry.GoalId == g1).Select(entry => entry.RankTargetKey)
-            .ToListAsync(TestContext.Current.CancellationToken);
-        Assert.Equal(2, keys.Count);
-        Assert.All(keys, key => Assert.Equal(RankTargetKey.For(GoalType.Rank, goals[g1].Config), key));
+        Assert.Equal(2, await db.ProjectGoals.CountAsync(entry => entry.GoalId == g1, TestContext.Current.CancellationToken));
         _ = g3;
     }
 
     [Fact]
-    public async Task AMembershipAddedWhileTheEditWaitsForItsLocksIsValidatedAfterARestart()
+    public async Task AnOccupantCommittedWhileTheEditWaitsForTheLockIsSeen()
     {
         await using var postgres = await StartPostgresAsync();
         var connectionString = postgres.GetConnectionString();
         var (services, profileId) = await SeedAsync(connectionString);
         var (p1, p2) = await CreateProjectsAsync(services, profileId);
         var goal = await CreateGoalAsync(services, profileId, "blackTerminator", [p1]);
-        // Another Rank goal for the same unit already holds target 8 in P2.
-        var occupant = await CreateGoalAsync(services, profileId, "blackTerminator", [p2], rankEnd: 8);
+        var revision = await RevisionAsync(services, goal);
 
-        // The "other request": holds the profile lock and, once the edit is blocked behind it, adds the goal
-        // to P2 and commits.
+        // The "other request": holds the profile lock and, once the edit is blocked behind it, creates another
+        // in-flight Rank goal for the same unit at target 8 (in another project) and commits.
         await using var blocker = new NpgsqlConnection(connectionString);
         await blocker.OpenAsync(TestContext.Current.CancellationToken);
         await using var blockerTransaction = await blocker.BeginTransactionAsync(TestContext.Current.CancellationToken);
         await ExecuteAsync(blocker, "SELECT id FROM profiles WHERE id = @profile FOR NO KEY UPDATE",
             ("profile", profileId.Value));
 
-        var revision = await RevisionAsync(services, goal);
-
-        // Target only: the edit pre-reads memberships {P1}, so it locks {P1} and then waits on the profile row.
         var edit = Task.Run(() => EditAsync(services, profileId, goal, null, new EditGoalRequest(
             Target: new UpdateGoalTargetRequest(revision, new GoalTargetEditRequest(Rank: new RankEndTargetRequest(8, false, 0))))));
         await WaitForABlockedBackendAsync(connectionString);
 
+        var occupant = Guid.CreateVersion7();
         await ExecuteAsync(blocker, """
-            INSERT INTO project_goals (project_id, goal_id, entity_type, entity_id, goal_type,
-                                       occupies_in_flight_slot, rank_target_key, created_at)
-            SELECT @project, id, 'Character', 'ragnar', 'Rank', true, @key, now() FROM goals WHERE id = @goal
+            INSERT INTO goals (id, revision, profile_id, entity_type, entity_id, goal_type, status, depends_on,
+                               global_priority, config, created_at, updated_at)
+            VALUES (@goal, 1, @profile, 'Character', 'blackTerminator', 'Rank', 'Active', ARRAY[]::uuid[],
+                    (SELECT max(global_priority) + 1 FROM goals WHERE profile_id = @profile),
+                    '{"Rank":{"Start":1,"End":8,"EndPointFive":false,"EndAppliedUpgrades":0}}', now(), now());
+            INSERT INTO project_goals (project_id, goal_id, created_at) VALUES (@project, @goal, now());
             """,
-            ("project", p2.Value), ("goal", goal.Value), ("key", RankTargetKey.For(GoalType.Rank, RankConfig(5))!));
+            ("goal", occupant), ("profile", profileId.Value), ("project", p2.Value));
         await blockerTransaction.CommitAsync(TestContext.Current.CancellationToken);
 
         var outcome = await edit.WaitAsync(TimeSpan.FromSeconds(60), TestContext.Current.CancellationToken);
 
-        // Only the reloaded membership (P1 and P2) sees P2's occupant of target 8.
+        // Slots are per profile: the occupant in another project still holds target 8.
         var conflict = Assert.IsType<GoalEditResult.SlotConflict>(outcome.Result);
-        Assert.Equal(p2.Value, conflict.Body.ProjectId);
-        Assert.Equal(occupant.Value, conflict.Body.ExistingGoalId);
+        Assert.Equal(occupant, conflict.Conflict.Existing.Id.Value);
+        Assert.Equal(goal, conflict.Conflict.Candidate.Id);
         await using var scope = services.CreateAsyncScope();
         var stored = await scope.ServiceProvider.GetRequiredService<PlannerDbContext>().Goals
             .SingleAsync(entity => entity.Id == goal, TestContext.Current.CancellationToken);
@@ -184,20 +179,15 @@ public sealed class GoalCombinedEditPostgresTests
             ProfileId = profileId,
             Status = GoalStatus.Active,
             Config = RankConfig(rankEnd),
-            Events = [new GoalEvent { At = now, Type = GoalEventType.Created }],
         };
         var order = scope.ServiceProvider.GetRequiredService<GoalOrderService>();
         await scope.ServiceProvider.GetRequiredService<ProjectGoalPlanningService>().ExecuteLockedMutationAsync(
-            projectIds,
             async transaction =>
             {
                 db.Goals.Add(goal);
                 await order.AppendAsync(goal, ct);
                 foreach (var projectId in projectIds)
-                {
-                    var project = await db.Projects.SingleAsync(entity => entity.Id == projectId, ct);
-                    db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(project, goal, now));
-                }
+                    db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(projectId, goal.Id, now));
 
                 await order.CompleteAsync(ct);
                 await transaction.CommitAsync(ct);
@@ -236,6 +226,7 @@ public sealed class GoalCombinedEditPostgresTests
         var profileId = ProfileId.From(Guid.NewGuid());
         var services = new ServiceCollection()
             .AddGameCatalog()
+            .AddSingleton(TimeProvider.System)
             .AddSingleton<IColumnEncryptionService, PassthroughEncryption>()
             .AddSingleton<ICurrentProfileProvider>(new StaticProfile(profileId))
             .AddScoped<ProjectGoalPlanningService>()
@@ -257,10 +248,8 @@ public sealed class GoalCombinedEditPostgresTests
         await using var connection = new NpgsqlConnection(connectionString);
         await connection.OpenAsync(ct);
         await ExecuteAsync(connection, """
-            INSERT INTO accounts (id, issuer, subject, created_at, updated_at)
-            VALUES (gen_random_uuid(), 'test', 'combined-edit', now(), now());
-            INSERT INTO profiles (id, account_id, display_name, created_at, updated_at)
-            SELECT @profile, id, 'Combined edit', now(), now() FROM accounts LIMIT 1;
+            INSERT INTO profiles (id, issuer, subject, display_name, goal_order_revision, created_at, updated_at)
+            VALUES (@profile, 'test', 'combined-edit', 'Combined edit', 0, now(), now());
             """, ("profile", profileId.Value));
         return (services, profileId);
     }

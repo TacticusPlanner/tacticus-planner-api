@@ -17,7 +17,8 @@ public sealed class GetGameCatalogManifestEndpoint(IGameCatalogProvider catalog)
         {
             summary.Summary = "Gets the active game catalog manifest.";
             summary.Description = "Returns game catalog release metadata (version, schema version, game version), "
-                + "source hash, and the denormalized dataset hashes + download urls.";
+                + "source hash, and per dataset its payload hash and immutable download url "
+                + "({prefix}/{dataset}/{envelopeHash}, cacheable forever).";
             summary.Response<GameCatalogManifest>(
                 StatusCodes.Status200OK,
                 "The active game catalog manifest."
@@ -28,8 +29,9 @@ public sealed class GetGameCatalogManifestEndpoint(IGameCatalogProvider catalog)
 
     public override async Task HandleAsync(CancellationToken ct)
     {
-        var snapshot = catalog.Current;
-        var etag = ETagHelper.CreateEtag(snapshot.SourceHash);
+        // The validator covers the served URLs, so a metadata-only release (new envelope hashes) is seen.
+        var served = ServedDatasets.Manifest(catalog.Current);
+        var etag = ETagHelper.CreateEtag(served.Hash);
 
         if (ETagHelper.TryApplyNotModified(HttpContext, etag))
         {
@@ -41,6 +43,6 @@ public sealed class GetGameCatalogManifestEndpoint(IGameCatalogProvider catalog)
         HttpContext.Response.Headers.CacheControl = "private, must-revalidate";
         HttpContext.Response.Headers.Vary = HeaderNames.Authorization;
 
-        await Send.OkAsync(snapshot.Manifest, ct);
+        await Send.OkAsync(served.Manifest, ct);
     }
 }

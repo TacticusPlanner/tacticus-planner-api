@@ -1,6 +1,7 @@
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Api.Http;
 using TacticusPlanner.Persistence;
 using UserSettingsData = TacticusPlanner.Domain.UserSettings.UserSettingsData;
 using UserSettingsEntity = TacticusPlanner.Domain.UserSettings.UserSettings;
@@ -11,7 +12,7 @@ public sealed class GetUserSettingsEndpoint : EndpointWithoutRequest<UserSetting
 {
     public override void Configure()
     {
-        Get("me/user-settings");
+        Get("settings");
         Summary(summary => summary.Summary = "Gets the current profile's user settings.");
     }
 
@@ -20,7 +21,7 @@ public sealed class GetUserSettingsEndpoint : EndpointWithoutRequest<UserSetting
         var profileId = ProcessorState<CurrentUserState>().ProfileId;
         if (profileId is null)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 
@@ -38,15 +39,27 @@ public sealed class GetUserSettingsEndpoint : EndpointWithoutRequest<UserSetting
     }
 }
 
-public sealed record UserSettingsResponse(int DailyEnergy, string XpBookRarity, long Revision)
+/// <summary>The rarity of XP book the planner spends; stored by name.</summary>
+public enum XpBookRarity
+{
+    Common,
+    Uncommon,
+    Rare,
+    Epic,
+    Legendary,
+    Mythic,
+}
+
+public sealed record UserSettingsResponse(int DailyEnergy, XpBookRarity XpBookRarity, long Revision)
 {
     public static UserSettingsResponse From(UserSettingsEntity settings) =>
         new(settings.Settings.DailyEnergy, NormalizeXpBookRarity(settings.Settings.XpBookRarity), settings.Revision);
 
     // A row saved before this field existed (or any other missing/null/unsupported stored value) reads
     // as the default rather than leaking an invalid value to the client.
-    private static string NormalizeXpBookRarity(string? xpBookRarity) =>
-        xpBookRarity is not null && UserSettingsData.SupportedXpBookRarity.Contains(xpBookRarity)
-            ? xpBookRarity
-            : UserSettingsData.DefaultXpBookRarity;
+    private static XpBookRarity NormalizeXpBookRarity(string? xpBookRarity) =>
+        Enum.TryParse<XpBookRarity>(xpBookRarity ?? UserSettingsData.DefaultXpBookRarity, out var rarity)
+            && Enum.IsDefined(rarity)
+            ? rarity
+            : Enum.Parse<XpBookRarity>(UserSettingsData.DefaultXpBookRarity);
 }

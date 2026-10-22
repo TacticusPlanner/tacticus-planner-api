@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.Projects;
 
 namespace TacticusPlanner.Persistence.Configurations;
@@ -14,28 +13,7 @@ public sealed class ProjectGoalConfiguration : IEntityTypeConfiguration<ProjectG
 
         builder.Property(entity => entity.ProjectId).HasVogenConversion();
         builder.Property(entity => entity.GoalId).HasVogenConversion();
-        builder.Property(entity => entity.EntityType).HasConversion<string>().IsRequired();
-        builder.Property(entity => entity.EntityId).HasMaxLength(GoalValidation.MaxEntityIdLength).IsRequired();
-        builder.Property(entity => entity.GoalType).HasConversion<string>().IsRequired();
-        builder.Property(entity => entity.OccupiesInFlightSlot).IsRequired();
         builder.Property(entity => entity.CreatedAt).IsRequired();
-
-        builder.Property(entity => entity.RankTargetKey).HasMaxLength(GoalValidation.MaxRankTargetKeyLength);
-
-        // Two partial unique indexes back the in-flight slot rule: a non-Rank goal occupies
-        // (project, unit, type); a Rank goal occupies (project, unit, normalized end target), so distinct
-        // Rank milestones coexist while an exact duplicate cannot.
-        var occupies = PostgresNaming.SnakeCase(nameof(ProjectGoal.OccupiesInFlightSlot));
-        var goalType = PostgresNaming.SnakeCase(nameof(ProjectGoal.GoalType));
-        builder.HasIndex(entity => new { entity.ProjectId, entity.EntityType, entity.EntityId, entity.GoalType })
-            .IsUnique()
-            .HasFilter($"{occupies} = TRUE AND {goalType} <> 'Rank'")
-            .HasDatabaseName("ix_project_goals_one_in_flight_slot");
-
-        builder.HasIndex(entity => new { entity.ProjectId, entity.EntityType, entity.EntityId, entity.RankTargetKey })
-            .IsUnique()
-            .HasFilter($"{occupies} = TRUE AND {goalType} = 'Rank'")
-            .HasDatabaseName("ix_project_goals_one_in_flight_rank_target");
 
         builder
             .HasOne(entity => entity.Project)

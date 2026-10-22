@@ -3,6 +3,7 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Api.Features.Goals;
+using TacticusPlanner.Api.Http;
 using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.Projects;
 using TacticusPlanner.Persistence;
@@ -20,7 +21,7 @@ public sealed class UpdateProjectGoalOrderEndpoint : Endpoint<UpdateProjectGoalO
 {
     public override void Configure()
     {
-        Put("me/projects/{projectId}/goal-order");
+        Put("projects/{projectId}/goal-order");
         Summary(summary =>
         {
             summary.Summary = "Moves a project goal onto the global position of another project goal.";
@@ -28,8 +29,9 @@ public sealed class UpdateProjectGoalOrderEndpoint : Endpoint<UpdateProjectGoalO
                 + "through to the account-wide order; it never changes membership, status or dependencies. "
                 + "ExpectedRevision is the order revision last read.";
             summary.Response<GoalOrderResponse>(StatusCodes.Status200OK, "The new revision and canonical order.");
-            summary.Response<GoalOrderConflictResponse>(StatusCodes.Status409Conflict,
-                "The revision is stale, a goal is not an in-flight member of the project, or both goals are the same.");
+            summary.Response(StatusCodes.Status409Conflict,
+                "goalOrderStale, goalOrderSetMismatch (a goal is not an in-flight member of the project) or "
+                + "goalOrderSameGoal; current is the order as it stands ({ revision, goalIds }).");
             summary.Response(StatusCodes.Status404NotFound);
         });
     }
@@ -38,7 +40,7 @@ public sealed class UpdateProjectGoalOrderEndpoint : Endpoint<UpdateProjectGoalO
     {
         if (ProcessorState<CurrentUserState>().ProfileId is null)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 
@@ -46,7 +48,7 @@ public sealed class UpdateProjectGoalOrderEndpoint : Endpoint<UpdateProjectGoalO
         var projectId = ProjectId.From(Route<Guid>("projectId"));
         if (!await db.Projects.AnyAsync(project => project.Id == projectId, ct))
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 
@@ -54,7 +56,7 @@ public sealed class UpdateProjectGoalOrderEndpoint : Endpoint<UpdateProjectGoalO
         var displacedGoalId = GoalId.From(req.DisplacedGoalId);
         var planning = Resolve<ProjectGoalPlanningService>();
         var order = Resolve<GoalOrderService>();
-        await planning.ExecuteLockedMutationAsync([projectId], async transaction =>
+        await planning.ExecuteLockedMutationAsync(async transaction =>
         {
             // Revision first: a stale client is told so whatever else changed (a goal leaving the project
             // would otherwise read as a set mismatch).
@@ -67,8 +69,9 @@ public sealed class UpdateProjectGoalOrderEndpoint : Endpoint<UpdateProjectGoalO
             }
 
             var inFlightMembers = await db.ProjectGoals.AsNoTracking()
-                .Where(entry => entry.ProjectId == projectId && entry.OccupiesInFlightSlot
-                    && (entry.GoalId == goalId || entry.GoalId == displacedGoalId))
+                .Where(entry => entry.ProjectId == projectId
+                    && (entry.GoalId == goalId || entry.GoalId == displacedGoalId)
+                    && entry.Goal!.GlobalPriority != null)
                 .Select(entry => entry.GoalId)
                 .ToListAsync(ct);
             var result = inFlightMembers.Distinct().Count() == (goalId == displacedGoalId ? 1 : 2)

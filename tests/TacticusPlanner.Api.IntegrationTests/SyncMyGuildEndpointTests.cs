@@ -1,7 +1,7 @@
 using System.Net;
-using System.Net.Http.Json;
 using TacticusPlanner.Api.Features.Guilds;
 using TacticusPlanner.TacticusApi.Models.Guild;
+using DomainGuildRole = TacticusPlanner.Domain.Guilds.GuildRole;
 
 namespace TacticusPlanner.Api.IntegrationTests;
 
@@ -19,7 +19,7 @@ public sealed class SyncMyGuildEndpointTests : IAsyncLifetime
         var client = factory.CreateClient();
         client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.NoAuthHeader, "1");
 
-        var response = await client.PostAsync("/api/v1/guilds/me/sync", null, TestContext.Current.CancellationToken);
+        var response = await client.PostAsync("/api/v1/guild/sync", null, TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
@@ -30,7 +30,7 @@ public sealed class SyncMyGuildEndpointTests : IAsyncLifetime
         var client = factory.CreateClient();
         client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.SubjectHeader, $"guild-sync-{Guid.NewGuid()}");
 
-        var response = await client.PostAsync("/api/v1/guilds/me/sync", null, TestContext.Current.CancellationToken);
+        var response = await client.PostAsync("/api/v1/guild/sync", null, TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
@@ -40,7 +40,7 @@ public sealed class SyncMyGuildEndpointTests : IAsyncLifetime
     {
         var (client, _) = await GuildTestHelpers.CreateGuildReadyClientAsync(factory);
 
-        var response = await client.PostAsync("/api/v1/guilds/me/sync", null, TestContext.Current.CancellationToken);
+        var response = await client.PostAsync("/api/v1/guild/sync", null, TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
     }
@@ -56,7 +56,7 @@ public sealed class SyncMyGuildEndpointTests : IAsyncLifetime
             token,
             FakeTacticusApi.BuildGuildResponse(guildId, "TAG", "Original", 1, (tacticusUserId, GuildRole.LEADER, 10, null))
         );
-        await client.PostAsJsonAsync("/api/v1/guilds/register", new RegisterGuildRequest(token), TestContext.Current.CancellationToken);
+        await client.PostAsJsonAsync("/api/v1/guild/register", new RegisterGuildRequest(token), TestContext.Current.CancellationToken);
 
         // Caller is demoted below Co-Leader in the fresh roster — sync must reject and persist nothing.
         factory.TacticusApi.ConfigureGuildResponse(
@@ -64,17 +64,17 @@ public sealed class SyncMyGuildEndpointTests : IAsyncLifetime
             FakeTacticusApi.BuildGuildResponse(guildId, "TAG", "ShouldNotApply", 99, (tacticusUserId, GuildRole.MEMBER, 10, null))
         );
 
-        var syncResponse = await client.PostAsync("/api/v1/guilds/me/sync", null, TestContext.Current.CancellationToken);
+        var syncResponse = await client.PostAsync("/api/v1/guild/sync", null, TestContext.Current.CancellationToken);
         Assert.Equal(HttpStatusCode.Forbidden, syncResponse.StatusCode);
 
-        var afterResponse = await client.GetAsync("/api/v1/guilds/me", TestContext.Current.CancellationToken);
+        var afterResponse = await client.GetAsync("/api/v1/guild", TestContext.Current.CancellationToken);
         var after = await afterResponse.Content.ReadFromJsonAsync<MyGuildResponse>(TestContext.Current.CancellationToken);
 
         Assert.NotNull(after);
         Assert.NotNull(after.Guild);
         Assert.Equal("Original", after.Guild.Name);
         Assert.Equal(1, after.Guild.Level);
-        Assert.Equal("Leader", after.Guild.CallerRole);
+        Assert.Equal(DomainGuildRole.Leader, after.Guild.CallerRole);
     }
 
     [Fact]
@@ -88,7 +88,7 @@ public sealed class SyncMyGuildEndpointTests : IAsyncLifetime
             token,
             FakeTacticusApi.BuildGuildResponse(guildId, "TAG", "Original", 1, (tacticusUserId, GuildRole.LEADER, 10, null))
         );
-        await client.PostAsJsonAsync("/api/v1/guilds/register", new RegisterGuildRequest(token), TestContext.Current.CancellationToken);
+        await client.PostAsJsonAsync("/api/v1/guild/register", new RegisterGuildRequest(token), TestContext.Current.CancellationToken);
 
         // The sync endpoint takes no request body/token — it can only succeed if it reads back the token
         // persisted at registration, since FakeTacticusApi only answers for tokens explicitly configured.
@@ -97,7 +97,7 @@ public sealed class SyncMyGuildEndpointTests : IAsyncLifetime
             FakeTacticusApi.BuildGuildResponse(guildId, "TAG", "Updated Name", 5, (tacticusUserId, GuildRole.LEADER, 20, null))
         );
 
-        var response = await client.PostAsync("/api/v1/guilds/me/sync", null, TestContext.Current.CancellationToken);
+        var response = await client.PostAsync("/api/v1/guild/sync", null, TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var body = await response.Content.ReadFromJsonAsync<RegisteredGuildResponse>(TestContext.Current.CancellationToken);
@@ -127,7 +127,7 @@ public sealed class SyncMyGuildEndpointTests : IAsyncLifetime
             )
         );
         var registerResponse = await client.PostAsJsonAsync(
-            "/api/v1/guilds/register",
+            "/api/v1/guild/register",
             new RegisterGuildRequest(token),
             TestContext.Current.CancellationToken
         );
@@ -141,20 +141,20 @@ public sealed class SyncMyGuildEndpointTests : IAsyncLifetime
             FakeTacticusApi.BuildGuildResponse(guildId, "TAG", "Guild", 1, (tacticusUserId, GuildRole.LEADER, 10, null))
         );
 
-        var syncResponse = await client.PostAsync("/api/v1/guilds/me/sync", null, TestContext.Current.CancellationToken);
+        var syncResponse = await client.PostAsync("/api/v1/guild/sync", null, TestContext.Current.CancellationToken);
         var syncBody = await syncResponse.Content.ReadFromJsonAsync<RegisteredGuildResponse>(TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.OK, syncResponse.StatusCode);
         Assert.NotNull(syncBody);
         Assert.Single(syncBody.Members);
-        Assert.Equal("Leader", syncBody.Members[0].Role);
+        Assert.Equal(DomainGuildRole.Leader, syncBody.Members[0].Role);
     }
 
     [Fact]
     public async Task LinkedMembersLastActiveInPlannerReflectsTheirAccountLastSeenAt()
     {
         var (leaderClient, leaderTacticusUserId) = await GuildTestHelpers.CreateGuildReadyClientAsync(factory, "guild-sync-leader");
-        // Calling /me during setup (inside CreateGuildReadyClientAsync) already stamps this profile's
+        // Calling GET /account during setup (inside CreateGuildReadyClientAsync) already stamps this profile's
         // Account.LastSeenAt, so once linked it should carry a non-null last-active-in-Planner value.
         var (_, memberTacticusUserId) = await GuildTestHelpers.CreateGuildReadyClientAsync(factory, "guild-sync-member");
 
@@ -172,14 +172,14 @@ public sealed class SyncMyGuildEndpointTests : IAsyncLifetime
         );
 
         var response = await leaderClient.PostAsJsonAsync(
-            "/api/v1/guilds/register",
+            "/api/v1/guild/register",
             new RegisterGuildRequest(token),
             TestContext.Current.CancellationToken
         );
         var body = await response.Content.ReadFromJsonAsync<RegisteredGuildResponse>(TestContext.Current.CancellationToken);
 
         Assert.NotNull(body);
-        var memberEntry = body.Members.Single(member => member.Role == "Member");
+        var memberEntry = body.Members.Single(member => member.Role == DomainGuildRole.Member);
         Assert.True(memberEntry.IsLinked);
         Assert.NotNull(memberEntry.LastActiveInPlannerOn);
     }
@@ -198,9 +198,9 @@ public sealed class SyncMyGuildEndpointTests : IAsyncLifetime
                 Guid.NewGuid(), $"H{Guid.NewGuid():N}"[..10], "Guild", 1,
                 (leaderTacticusUserId, GuildRole.LEADER, 10, null),
                 (memberTacticusUserId, GuildRole.MEMBER, 5, null)));
-        (await leaderClient.PostAsJsonAsync("/api/v1/guilds/register", new RegisterGuildRequest(token), ct)).EnsureSuccessStatusCode();
+        (await leaderClient.PostAsJsonAsync("/api/v1/guild/register", new RegisterGuildRequest(token), ct)).EnsureSuccessStatusCode();
 
-        var response = await leaderClient.PostAsync("/api/v1/guilds/me/sync", null, ct);
+        var response = await leaderClient.PostAsync("/api/v1/guild/sync", null, ct);
 
         response.EnsureSuccessStatusCode();
         var body = await response.Content.ReadFromJsonAsync<RegisteredGuildResponse>(ct);

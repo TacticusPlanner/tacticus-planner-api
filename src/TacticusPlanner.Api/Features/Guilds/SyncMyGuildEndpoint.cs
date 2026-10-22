@@ -2,6 +2,7 @@ using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Api.Features.UpstreamRateLimiting;
+using TacticusPlanner.Api.Http;
 using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.Guilds;
@@ -16,7 +17,7 @@ public sealed class SyncMyGuildEndpoint : EndpointWithoutRequest<RegisteredGuild
 {
     public override void Configure()
     {
-        Post("guilds/me/sync");
+        Post("guild/sync");
         Options(builder => builder.WithMetadata(UpstreamRateLimit.Slow));
         Summary(summary =>
         {
@@ -49,7 +50,7 @@ public sealed class SyncMyGuildEndpoint : EndpointWithoutRequest<RegisteredGuild
         var state = ProcessorState<CurrentUserState>();
         if (state.ProfileId is not { } profileId)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 
@@ -63,7 +64,7 @@ public sealed class SyncMyGuildEndpoint : EndpointWithoutRequest<RegisteredGuild
 
         if (profile is null)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 

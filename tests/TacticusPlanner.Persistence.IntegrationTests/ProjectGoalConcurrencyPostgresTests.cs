@@ -15,12 +15,10 @@ using Xunit;
 namespace TacticusPlanner.Persistence.IntegrationTests;
 
 /// <summary>
-/// Covers the `project-goal-slots` "Concurrent mutations in one project serialize without failing"
-/// requirement added by the `fix-goal-mutation-isolation-level` change: concurrent goal mutations
-/// against one project must all commit (distinct slots) or fail with the documented structured
-/// conflict (same slot) rather than an unhandled `40001` / tracked-entity error. This exercises the
-/// real `ExecuteLockedMutationAsync` lock/transaction path, which is a deliberate no-op on the
-/// InMemory provider used by the API test suite — hence a Postgres-backed test.
+/// Covers the `project-goal-slots` "Concurrent mutations serialize without failing" requirement: concurrent
+/// goal mutations of one profile wait on the one profile lock and must all commit (distinct slots) or fail with
+/// the documented structured conflict (same slot) rather than an unhandled error. Exercises the real
+/// `ExecuteLockedMutationAsync` lock/transaction path against PostgreSQL.
 /// </summary>
 public sealed class ProjectGoalConcurrencyPostgresTests
 {
@@ -52,15 +50,18 @@ public sealed class ProjectGoalConcurrencyPostgresTests
         await AssertContiguousOrderAsync(connectionString, profileId, 2);
     }
 
-    [Fact]
-    public async Task ConcurrentSameSlotCreatesProduceExactlyOneWinnerAndNoUnhandledError()
+    /// <summary>No index backs the slot rule: the profile lock alone must serialize the two checks.</summary>
+    [Theory]
+    [InlineData(GoalType.Rank)]
+    [InlineData(GoalType.Ascension)]
+    public async Task ConcurrentSameSlotCreatesProduceExactlyOneWinnerAndNoUnhandledError(GoalType goalType)
     {
         await using var postgres = await StartPostgresAsync();
         var (connectionString, profileId, projectId) = await SeedEmptyProjectAsync(postgres);
 
         var results = await Task.WhenAll(
-            CreateGoalAsync(connectionString, profileId, projectId, "ragnar", GoalType.Rank),
-            CreateGoalAsync(connectionString, profileId, projectId, "ragnar", GoalType.Rank));
+            CreateGoalAsync(connectionString, profileId, projectId, "ragnar", goalType),
+            CreateGoalAsync(connectionString, profileId, projectId, "ragnar", goalType));
 
         Assert.Equal(1, results.Count(result => result.Succeeded));
         Assert.Equal(1, results.Count(result => !result.Succeeded));
@@ -187,13 +188,13 @@ public sealed class ProjectGoalConcurrencyPostgresTests
     {
         await using var db = new PlannerDbContext(
             BuildOptions(connectionString), new PassthroughEncryption(), new StaticProfile(ProfileId.From(profileId)));
-        var planning = new ProjectGoalPlanningService(db);
+        var order = new GoalOrderService(db);
+        var planning = new ProjectGoalPlanningService(db, order);
         var ct = TestContext.Current.CancellationToken;
 
-        await planning.ExecuteLockedMutationAsync([], async transaction =>
+        await planning.ExecuteLockedMutationAsync(async transaction =>
         {
             var goal = await db.Goals.FirstAsync(entity => entity.Id == GoalId.From(goalId), ct);
-            var order = new GoalOrderService(db);
             goal.Status = GoalStatus.Completed;
             order.Release(goal);
             await order.CompleteAsync(ct);
@@ -221,9 +222,10 @@ public sealed class ProjectGoalConcurrencyPostgresTests
         await CreateGoalAsync(connectionString, profileId, projectId, "aunshi", GoalType.Rank);
         Assert.Equal(2, await ReadOrderRevisionAsync(connectionString, profileId));
 
-        var planning = new ProjectGoalPlanningService(db);
+        var order = new GoalOrderService(db);
+        var planning = new ProjectGoalPlanningService(db, order);
         var ct = TestContext.Current.CancellationToken;
-        await planning.ExecuteLockedMutationAsync([], async transaction =>
+        await planning.ExecuteLockedMutationAsync(async transaction =>
         {
             var goal = new Goal(GoalEntityType.Character, "certus", GoalType.Rank)
             {
@@ -231,10 +233,8 @@ public sealed class ProjectGoalConcurrencyPostgresTests
                 ProfileId = ProfileId.From(profileId),
                 Status = GoalStatus.Active,
                 Config = new GoalConfig { Rank = new RankTarget { Start = 1, End = 12 } },
-                Events = [new GoalEvent { At = DateTimeOffset.UtcNow, Type = GoalEventType.Created }],
             };
             db.Goals.Add(goal);
-            var order = new GoalOrderService(db);
             await order.AppendAsync(goal, ct);
             await order.CompleteAsync(ct);
             await transaction!.CommitAsync(ct);
@@ -334,21 +334,17 @@ public sealed class ProjectGoalConcurrencyPostgresTests
         var migrator = db.Database.GetService<IMigrator>();
         await migrator.MigrateAsync(cancellationToken: TestContext.Current.CancellationToken);
 
-        var accountId = Guid.NewGuid();
         var profileId = Guid.NewGuid();
         var projectId = Guid.NewGuid();
         await using var connection = new NpgsqlConnection(connectionString);
         await connection.OpenAsync(TestContext.Current.CancellationToken);
         await using var command = connection.CreateCommand();
         command.CommandText = """
-            INSERT INTO accounts (id, issuer, subject, created_at, updated_at)
-            VALUES (@account, 'test', 'concurrency', now(), now());
-            INSERT INTO profiles (id, account_id, display_name, created_at, updated_at)
-            VALUES (@profile, @account, 'Concurrency test', now(), now());
+            INSERT INTO profiles (id, issuer, subject, display_name, created_at, updated_at)
+            VALUES (@profile, 'test', 'concurrency', 'Concurrency test', now(), now());
             INSERT INTO projects (id, revision, profile_id, name, status, type, created_at, updated_at)
             VALUES (@project, 0, @profile, 'Concurrency', 'Active', 'Custom', now(), now());
             """;
-        command.Parameters.AddWithValue("account", accountId);
         command.Parameters.AddWithValue("profile", profileId);
         command.Parameters.AddWithValue("project", projectId);
         await command.ExecuteNonQueryAsync(TestContext.Current.CancellationToken);
@@ -356,7 +352,7 @@ public sealed class ProjectGoalConcurrencyPostgresTests
         return (connectionString, profileId, projectId);
     }
 
-    /// <summary>Mirrors the create-goal path in <c>CreateGoalEndpoint</c>: check the slot inside the lock,
+    /// <summary>Mirrors the create path of <c>CreateCombinedGoalsEndpoint</c>: check the slot inside the lock,
     /// insert the goal + membership, normalize, commit. Returns <c>(false, default)</c> (not an exception)
     /// on a detected slot conflict, matching the endpoint's structured-409 handling.</summary>
     private static async Task<(bool Succeeded, Guid GoalId)> CreateGoalAsync(
@@ -365,7 +361,8 @@ public sealed class ProjectGoalConcurrencyPostgresTests
     {
         var options = BuildOptions(connectionString);
         await using var db = new PlannerDbContext(options, new PassthroughEncryption(), new StaticProfile(ProfileId.From(profileId)));
-        var planning = new ProjectGoalPlanningService(db);
+        var order = new GoalOrderService(db);
+        var planning = new ProjectGoalPlanningService(db, order);
         var ct = TestContext.Current.CancellationToken;
         var succeeded = false;
         var createdGoalId = Guid.Empty;
@@ -374,33 +371,26 @@ public sealed class ProjectGoalConcurrencyPostgresTests
         var config = goalType == GoalType.Rank
             ? new GoalConfig { Rank = new RankTarget { Start = 1, End = rankEnd } }
             : new GoalConfig();
-        var rankTargetKey = RankTargetKey.For(goalType, config);
-
-        await planning.ExecuteLockedMutationAsync([ProjectId.From(projectId)], async transaction =>
+        var goal = new Goal(GoalEntityType.Character, entityId, goalType)
         {
-            if (await planning.FindConflictAsync(
-                [ProjectId.From(projectId)], GoalEntityType.Character, entityId, goalType, rankTargetKey, null, ct) is not null)
+            Id = GoalId.From(Guid.CreateVersion7()),
+            ProfileId = ProfileId.From(profileId),
+            Status = GoalStatus.Active,
+            Config = config,
+        };
+
+        await planning.ExecuteLockedMutationAsync(async transaction =>
+        {
+            if (await planning.FindConflictAsync([goal], ct) is not null)
             {
                 if (transaction is not null)
                     await transaction.RollbackAsync(ct);
                 return;
             }
 
-            var now = DateTimeOffset.UtcNow;
-            var goal = new Goal(GoalEntityType.Character, entityId, goalType)
-            {
-                Id = GoalId.From(Guid.CreateVersion7()),
-                ProfileId = ProfileId.From(profileId),
-                Status = GoalStatus.Active,
-                Config = config,
-                Events = [new GoalEvent { At = now, Type = GoalEventType.Created }],
-            };
             db.Goals.Add(goal);
-
-            var project = await db.Projects.FirstAsync(entity => entity.Id == ProjectId.From(projectId), ct);
-            var order = new GoalOrderService(db);
             await order.AppendAsync(goal, ct);
-            db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(project, goal, now));
+            db.ProjectGoals.Add(ProjectGoalPlanningService.CreateMembership(ProjectId.From(projectId), goal.Id, DateTimeOffset.UtcNow));
 
             await order.CompleteAsync(ct);
             if (transaction is not null)
@@ -417,13 +407,14 @@ public sealed class ProjectGoalConcurrencyPostgresTests
     {
         var options = BuildOptions(connectionString);
         await using var db = new PlannerDbContext(options, new PassthroughEncryption(), new StaticProfile(ProfileId.From(profileId)));
-        var planning = new ProjectGoalPlanningService(db);
+        var order = new GoalOrderService(db);
+        var planning = new ProjectGoalPlanningService(db, order);
         var ct = TestContext.Current.CancellationToken;
         var applied = false;
 
-        await planning.ExecuteLockedMutationAsync([ProjectId.From(projectId)], async transaction =>
+        await planning.ExecuteLockedMutationAsync(async transaction =>
         {
-            var result = await new GoalOrderService(db).ReorderAsync(
+            var result = await order.ReorderAsync(
                 goalIds.Select(GoalId.From).ToList(), expectedRevision, ct);
             applied = result.Outcome == GoalOrderOutcome.Ok;
             if (!applied)

@@ -7,112 +7,112 @@
     {
       key: ascension-costs,
       hash: c94bf0b8e415a5a5632ddcfe709301add1684e1bfadfdd378a8f3479583c6ca1,
-      url: /api/v1/game-catalog/ascension-costs
+      url: /api/v1/game-catalog/ascension-costs/{envelopeHash}
     },
     {
       key: campaign-battles,
       hash: f9ca80971caf60a484c2b2013d6aa7ef6c65a08902a18b4650f860736263ecd1,
-      url: /api/v1/game-catalog/campaign-battles
+      url: /api/v1/game-catalog/campaign-battles/{envelopeHash}
     },
     {
       key: campaign-definitions,
       hash: 7e52df5f9537053cd6ca8b177cc7cf98fefbc5197d9408794304f1f17d8b5a41,
-      url: /api/v1/game-catalog/campaign-definitions
+      url: /api/v1/game-catalog/campaign-definitions/{envelopeHash}
     },
     {
       key: character-ability-costs,
       hash: c0be0512a67c8ebb28445c9628e433a32b052bd5bba6629665d6be8991a74382,
-      url: /api/v1/game-catalog/character-ability-costs
+      url: /api/v1/game-catalog/character-ability-costs/{envelopeHash}
     },
     {
       key: characters,
       hash: 41f6f09bb5ed47365e4c91ba613744ad64a4adbbca03d044cbbb4f3f93e1245d,
-      url: /api/v1/game-catalog/characters
+      url: /api/v1/game-catalog/characters/{envelopeHash}
     },
     {
       key: equipment,
       hash: aae72f1520a88e7ed66af5ed549edc533d8eefc8e212f471c8ff439ed5508cf1,
-      url: /api/v1/game-catalog/equipment
+      url: /api/v1/game-catalog/equipment/{envelopeHash}
     },
     {
       key: event-definitions,
       hash: f0feca13d2145eb391b9e6bbe7e48c2cbf1c8bfabbed30519e74db9279aabf3a,
-      url: /api/v1/game-catalog/event-definitions
+      url: /api/v1/game-catalog/event-definitions/{envelopeHash}
     },
     {
       key: events-calendar,
       hash: {time-dependent},
-      url: /api/v1/game-catalog/events-calendar
+      url: /api/v1/game-catalog/events-calendar/{envelopeHash}
     },
     {
       key: guild-raid-meta,
       hash: 624de84a3265d6c701eba416483749cfb34f49a04e6381f00ca4ed71991ec80e,
-      url: /api/v1/game-catalog/guild-raid-meta
+      url: /api/v1/game-catalog/guild-raid-meta/{envelopeHash}
     },
     {
       key: horde-mode-tiers,
       hash: 8236b3174931945989a02787a5d3a45d8f9f565450feafc8d1beaeab693b850e,
-      url: /api/v1/game-catalog/horde-mode-tiers
+      url: /api/v1/game-catalog/horde-mode-tiers/{envelopeHash}
     },
     {
       key: lre-battles,
       hash: 7eff4417c7a928fb9ab871424c76115ccffc661acf8a869b983d90afa7951879,
-      url: /api/v1/game-catalog/lre-battles
+      url: /api/v1/game-catalog/lre-battles/{envelopeHash}
     },
     {
       key: lres,
       hash: ef14f5e7ff929e0d8242582b1875af7edda6232a0bbe45599f29dbccb9e7cee5,
-      url: /api/v1/game-catalog/lres
+      url: /api/v1/game-catalog/lres/{envelopeHash}
     },
     {
       key: mow-upgrade-costs,
       hash: 5898bc72fd3555d361903509c96b3a37f16c41af66c4b4e18cd8c1b008cf2b89,
-      url: /api/v1/game-catalog/mow-upgrade-costs
+      url: /api/v1/game-catalog/mow-upgrade-costs/{envelopeHash}
     },
     {
       key: mows,
       hash: 62fd5b8072cbe1565e9c691f1926e2ef04052f93e3bf0f31712e3991fd2e4e8d,
-      url: /api/v1/game-catalog/mows
+      url: /api/v1/game-catalog/mows/{envelopeHash}
     },
     {
       key: mythic-quests,
       hash: b3805fdf320472631197db3c5059b6897d95bbf899377365bdb9112f371eb1ad,
-      url: /api/v1/game-catalog/mythic-quests
+      url: /api/v1/game-catalog/mythic-quests/{envelopeHash}
     },
     {
       key: npcs,
       hash: d90d5ac15f112e024ab9b9710641c59b7bf235692ef2de0c3cef1feb1b15b978,
-      url: /api/v1/game-catalog/npcs
+      url: /api/v1/game-catalog/npcs/{envelopeHash}
     },
     {
       key: onslaught-rewards,
       hash: ff136f21e52e557188b7b6c594901db3e809be287c8b61f902966e13d2ad87da,
-      url: /api/v1/game-catalog/onslaught-rewards
+      url: /api/v1/game-catalog/onslaught-rewards/{envelopeHash}
     },
     {
       key: raid-bosses,
       hash: 6fb75188fa5ded0f8b40df2f0762bd204b032b26d86d5bdbb987c552e6df4f53,
-      url: /api/v1/game-catalog/raid-bosses
+      url: /api/v1/game-catalog/raid-bosses/{envelopeHash}
     },
     {
       key: shops,
       hash: 247051ce08560fd23565b0e411964d11fdc476059a4f8f161a35835c1323932f,
-      url: /api/v1/game-catalog/shops
+      url: /api/v1/game-catalog/shops/{envelopeHash}
     },
     {
       key: unit-power,
       hash: 57679ffb62bba11a21e538761b546fb16acb7544b93e3be6cc02e5df30242854,
-      url: /api/v1/game-catalog/unit-power
+      url: /api/v1/game-catalog/unit-power/{envelopeHash}
     },
     {
       key: unlock-shard-costs,
       hash: a5d83f0f0fc9cab6c1e4d64380b5ca3598818724696b197d0e544003fdcc45fb,
-      url: /api/v1/game-catalog/unlock-shard-costs
+      url: /api/v1/game-catalog/unlock-shard-costs/{envelopeHash}
     },
     {
       key: upgrades,
       hash: a6f9bf63451737521c255af8c30612844b3451fc0f78bfe5bac34e0dad41b34b,
-      url: /api/v1/game-catalog/upgrades
+      url: /api/v1/game-catalog/upgrades/{envelopeHash}
     }
   ]
 }

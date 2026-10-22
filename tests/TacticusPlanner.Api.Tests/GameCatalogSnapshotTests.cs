@@ -236,6 +236,14 @@ public sealed class GameCatalogSnapshotTests(GameCatalogApiFactory factory)
             dataset!["hash"] = "{time-dependent}";
         }
 
+        // Every envelope hash covers the (time-dependent) source hash; the url's shape is what is pinned here.
+        foreach (var dataset in manifest["datasets"]!.AsArray())
+        {
+            var url = dataset!["url"]!.GetValue<string>();
+            Assert.Matches("^/api/v1/game-catalog/[a-z-]+/[0-9a-f]{64}$", url);
+            dataset["url"] = url[..url.LastIndexOf('/')] + "/{envelopeHash}";
+        }
+
         return manifest.ToJsonString();
     }
 }

@@ -15,14 +15,6 @@ public class PlayerDataOverride : BaseEntity<ProfileId>, IRevisionedEntity
     public long Revision { get; set; }
 
     /// <summary>
-    /// Per-battle result overrides. Absence of an entry for a battle means the effective result
-    /// assumes the maximum possible outcome for a completed battle (max medals, and — for
-    /// campaign-event battles — all applicable completion flags). Only overrides that lower a
-    /// result below that maximum need to be stored.
-    /// </summary>
-    public List<BattleResultOverrideRecord> BattleResultOverrides { get; set; } = [];
-
-    /// <summary>
     /// Manual campaign-event progress layered over the currently synchronized event. Regular and
     /// challenge portions are independently nullable so either can fall back to the synchronized value.
     /// </summary>
@@ -38,27 +30,6 @@ public class PlayerDataOverride : BaseEntity<ProfileId>, IRevisionedEntity
     // (e.g. "maybe"/"stop" per encounter) isn't settled yet; add them back once it is.
 
     public virtual Profile? Profile { get; set; }
-}
-
-public sealed class BattleResultOverrideRecord
-{
-    /// <summary>The Tacticus API's campaign id (matches <c>CampaignProgressRecord.TacticusCampaignId</c>),
-    /// e.g. <c>campaign1</c>, <c>eventCampaign6</c>.</summary>
-    public CampaignId TacticusCampaignId { get; set; } = CampaignId.From(string.Empty);
-
-    /// <summary>The battle's <c>battleIndex</c> within that campaign, matching the synced progress data —
-    /// not the catalog's <c>nodeNumber</c> (see the alignment caveat on
-    /// <c>GameCatalogDatasets.CampaignBattleGroups</c>).</summary>
-    public int BattleIndex { get; set; }
-
-    /// <summary>Medal result: 1, 2, or 3.</summary>
-    public int Medal { get; set; }
-
-    public bool LightningVictory { get; set; }
-
-    /// <summary>Victory without using a borrowed character. Only meaningful for campaign-event battles;
-    /// null when not applicable.</summary>
-    public bool? VictoryWithoutBorrowed { get; set; }
 }
 
 public sealed class CampaignEventProgressOverrideRecord

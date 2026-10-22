@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -19,6 +20,7 @@ public sealed class PlannerTestAuthenticationHandler : AuthenticationHandler<Aut
     public const string SubjectHeader = "X-Test-Subject";
     public const string NameHeader = "X-Test-Name";
     public const string OmitNameHeader = "X-Test-OmitName";
+    public const string OmitScopeHeader = "X-Test-OmitScope";
     public const string DefaultIssuer = "https://example.ciamlogin.com/example.onmicrosoft.com/v2.0";
     public const string DefaultSubject = "test-user";
     public const string DefaultName = "Test User";
@@ -43,8 +45,12 @@ public sealed class PlannerTestAuthenticationHandler : AuthenticationHandler<Aut
         {
             new("iss", GetHeaderOrDefault(IssuerHeader, DefaultIssuer)),
             new("sub", GetHeaderOrDefault(SubjectHeader, DefaultSubject)),
-            new("scp", "access_as_user"),
         };
+        if (!Request.Headers.ContainsKey(OmitScopeHeader))
+        {
+            claims.Add(new("scp", "access_as_user"));
+        }
+
         if (!Request.Headers.ContainsKey(OmitNameHeader))
         {
             claims.Add(new("name", GetHeaderOrDefault(NameHeader, DefaultName)));
@@ -55,6 +61,14 @@ public sealed class PlannerTestAuthenticationHandler : AuthenticationHandler<Aut
         var ticket = new AuthenticationTicket(principal, SchemeName);
 
         return Task.FromResult(AuthenticateResult.Success(ticket));
+    }
+
+    /// <summary>Challenges like JwtBearer does: 401 with a <c>WWW-Authenticate</c> header and no body.</summary>
+    protected override Task HandleChallengeAsync(AuthenticationProperties properties)
+    {
+        Response.StatusCode = StatusCodes.Status401Unauthorized;
+        Response.Headers.WWWAuthenticate = SchemeName;
+        return Task.CompletedTask;
     }
 
     private string GetHeaderOrDefault(string headerName, string defaultValue)

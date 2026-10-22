@@ -1,8 +1,8 @@
 using System.Net;
-using System.Net.Http.Json;
 using TacticusPlanner.Api.Features.CurrentUser;
 using TacticusPlanner.Api.Features.Guilds;
 using TacticusPlanner.TacticusApi.Models.Guild;
+using DomainGuildRole = TacticusPlanner.Domain.Guilds.GuildRole;
 
 namespace TacticusPlanner.Api.IntegrationTests;
 
@@ -21,7 +21,7 @@ public sealed class RegisterGuildEndpointTests : IAsyncLifetime
         client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.NoAuthHeader, "1");
 
         var response = await client.PostAsJsonAsync(
-            "/api/v1/guilds/register",
+            "/api/v1/guild/register",
             new RegisterGuildRequest("token"),
             TestContext.Current.CancellationToken
         );
@@ -36,7 +36,7 @@ public sealed class RegisterGuildEndpointTests : IAsyncLifetime
         client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.SubjectHeader, $"guild-register-{Guid.NewGuid()}");
 
         var response = await client.PostAsJsonAsync(
-            "/api/v1/guilds/register",
+            "/api/v1/guild/register",
             new RegisterGuildRequest("token"),
             TestContext.Current.CancellationToken
         );
@@ -50,7 +50,7 @@ public sealed class RegisterGuildEndpointTests : IAsyncLifetime
         var (client, _) = await GuildTestHelpers.CreateGuildReadyClientAsync(factory);
 
         var response = await client.PostAsJsonAsync(
-            "/api/v1/guilds/register",
+            "/api/v1/guild/register",
             new RegisterGuildRequest("   "),
             TestContext.Current.CancellationToken
         );
@@ -63,10 +63,10 @@ public sealed class RegisterGuildEndpointTests : IAsyncLifetime
     {
         var client = factory.CreateClient();
         client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.SubjectHeader, $"guild-register-{Guid.NewGuid()}");
-        await client.GetAsync("/api/v1/me", TestContext.Current.CancellationToken);
+        await client.GetAsync("/api/v1/account", TestContext.Current.CancellationToken);
 
         var response = await client.PostAsJsonAsync(
-            "/api/v1/guilds/register",
+            "/api/v1/guild/register",
             new RegisterGuildRequest("some-token"),
             TestContext.Current.CancellationToken
         );
@@ -92,7 +92,7 @@ public sealed class RegisterGuildEndpointTests : IAsyncLifetime
         );
 
         var response = await client.PostAsJsonAsync(
-            "/api/v1/guilds/register",
+            "/api/v1/guild/register",
             new RegisterGuildRequest(token),
             TestContext.Current.CancellationToken
         );
@@ -118,7 +118,7 @@ public sealed class RegisterGuildEndpointTests : IAsyncLifetime
         );
 
         var response = await client.PostAsJsonAsync(
-            "/api/v1/guilds/register",
+            "/api/v1/guild/register",
             new RegisterGuildRequest(token),
             TestContext.Current.CancellationToken
         );
@@ -146,7 +146,7 @@ public sealed class RegisterGuildEndpointTests : IAsyncLifetime
         );
 
         var response = await client.PostAsJsonAsync(
-            "/api/v1/guilds/register",
+            "/api/v1/guild/register",
             new RegisterGuildRequest(token),
             TestContext.Current.CancellationToken
         );
@@ -162,7 +162,7 @@ public sealed class RegisterGuildEndpointTests : IAsyncLifetime
         factory.TacticusApi.ConfigureGuildRejection(token, HttpStatusCode.Unauthorized);
 
         var response = await client.PostAsJsonAsync(
-            "/api/v1/guilds/register",
+            "/api/v1/guild/register",
             new RegisterGuildRequest(token),
             TestContext.Current.CancellationToken
         );
@@ -178,7 +178,7 @@ public sealed class RegisterGuildEndpointTests : IAsyncLifetime
         factory.TacticusApi.ConfigureGuildUnavailable(token);
 
         var response = await client.PostAsJsonAsync(
-            "/api/v1/guilds/register",
+            "/api/v1/guild/register",
             new RegisterGuildRequest(token),
             TestContext.Current.CancellationToken
         );
@@ -205,7 +205,7 @@ public sealed class RegisterGuildEndpointTests : IAsyncLifetime
         );
 
         var response = await client.PostAsJsonAsync(
-            "/api/v1/guilds/register",
+            "/api/v1/guild/register",
             new RegisterGuildRequest(token),
             TestContext.Current.CancellationToken
         );
@@ -217,7 +217,7 @@ public sealed class RegisterGuildEndpointTests : IAsyncLifetime
         Assert.Equal("My Guild", body.Name);
         Assert.Equal(7, body.Level);
         Assert.Equal(guildId, body.TacticusGuildId);
-        Assert.Equal("Leader", body.CallerRole);
+        Assert.Equal(DomainGuildRole.Leader, body.CallerRole);
         Assert.True(body.CanSynchronize);
         Assert.Single(body.Members);
     }
@@ -234,7 +234,7 @@ public sealed class RegisterGuildEndpointTests : IAsyncLifetime
             FakeTacticusApi.BuildGuildResponse(guildId, "TAG", "Original Name", 1, (tacticusUserId, GuildRole.LEADER, 10, null))
         );
         var first = await client.PostAsJsonAsync(
-            "/api/v1/guilds/register",
+            "/api/v1/guild/register",
             new RegisterGuildRequest(token),
             TestContext.Current.CancellationToken
         );
@@ -245,7 +245,7 @@ public sealed class RegisterGuildEndpointTests : IAsyncLifetime
             FakeTacticusApi.BuildGuildResponse(guildId, "TAG", "Renamed", 2, (tacticusUserId, GuildRole.LEADER, 10, null))
         );
         var second = await client.PostAsJsonAsync(
-            "/api/v1/guilds/register",
+            "/api/v1/guild/register",
             new RegisterGuildRequest(token),
             TestContext.Current.CancellationToken
         );
@@ -278,7 +278,7 @@ public sealed class RegisterGuildEndpointTests : IAsyncLifetime
         );
 
         var response = await client.PostAsJsonAsync(
-            "/api/v1/guilds/register",
+            "/api/v1/guild/register",
             new RegisterGuildRequest(token),
             TestContext.Current.CancellationToken
         );
@@ -299,14 +299,14 @@ public sealed class RegisterGuildEndpointTests : IAsyncLifetime
             token,
             FakeTacticusApi.BuildGuildResponse(guildId, "TAG", "Some Guild", 1, (tacticusUserId, GuildRole.LEADER, 10, null))
         );
-        await client.PostAsJsonAsync("/api/v1/guilds/register", new RegisterGuildRequest(token), TestContext.Current.CancellationToken);
+        await client.PostAsJsonAsync("/api/v1/guild/register", new RegisterGuildRequest(token), TestContext.Current.CancellationToken);
 
         factory.TacticusApi.ConfigureGuildResponse(
             token,
             FakeTacticusApi.BuildGuildResponse(guildId, "TAG", "Renamed", 2, (tacticusUserId, GuildRole.LEADER, 10, null))
         );
         var second = await client.PostAsJsonAsync(
-            "/api/v1/guilds/register",
+            "/api/v1/guild/register",
             new RegisterGuildRequest(token),
             TestContext.Current.CancellationToken
         );
@@ -323,7 +323,7 @@ public sealed class RegisterGuildEndpointTests : IAsyncLifetime
         var token = $"guild-token-{Guid.NewGuid()}";
         factory.TacticusApi.ConfigureGuildRejection(token, HttpStatusCode.Unauthorized);
 
-        await client.PostAsJsonAsync("/api/v1/guilds/register", new RegisterGuildRequest(token), TestContext.Current.CancellationToken);
+        await client.PostAsJsonAsync("/api/v1/guild/register", new RegisterGuildRequest(token), TestContext.Current.CancellationToken);
 
         Assert.DoesNotContain("guild_registered", factory.Analytics.GetEvents(analyticsId));
     }
@@ -345,7 +345,7 @@ public sealed class RegisterGuildEndpointTests : IAsyncLifetime
                 (tacticusUserId, GuildRole.LEADER, 10, null)
             )
         );
-        await client.PostAsJsonAsync("/api/v1/guilds/register", new RegisterGuildRequest(token), TestContext.Current.CancellationToken);
+        await client.PostAsJsonAsync("/api/v1/guild/register", new RegisterGuildRequest(token), TestContext.Current.CancellationToken);
 
         // IProductAnalytics.GuildRegistered(string analyticsId) has no properties parameter at all - there
         // is no channel for the guild name, tacticus user id, or account id to travel through. This asserts
@@ -359,7 +359,7 @@ public sealed class RegisterGuildEndpointTests : IAsyncLifetime
 
     private static async Task<string> GetAnalyticsIdAsync(HttpClient client)
     {
-        var body = await (await client.GetAsync("/api/v1/me", TestContext.Current.CancellationToken))
+        var body = await (await client.GetAsync("/api/v1/account", TestContext.Current.CancellationToken))
             .Content.ReadFromJsonAsync<CurrentUserResponse>(TestContext.Current.CancellationToken);
         return body!.AnalyticsId;
     }
@@ -384,14 +384,14 @@ public sealed class RegisterGuildEndpointTests : IAsyncLifetime
         );
 
         var response = await leaderClient.PostAsJsonAsync(
-            "/api/v1/guilds/register",
+            "/api/v1/guild/register",
             new RegisterGuildRequest(token),
             TestContext.Current.CancellationToken
         );
         var body = await response.Content.ReadFromJsonAsync<RegisteredGuildResponse>(TestContext.Current.CancellationToken);
 
         Assert.NotNull(body);
-        var memberEntry = body.Members.Single(member => member.Role == "Member");
+        var memberEntry = body.Members.Single(member => member.Role == DomainGuildRole.Member);
         Assert.True(memberEntry.IsLinked);
     }
 }

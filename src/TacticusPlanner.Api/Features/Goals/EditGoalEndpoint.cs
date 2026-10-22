@@ -1,40 +1,39 @@
+using System.Text.Json.Serialization;
 using FastEndpoints;
 using FluentValidation;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Api.Http;
 using TacticusPlanner.Domain.Goals;
+using TacticusPlanner.GameDomain;
 
 namespace TacticusPlanner.Api.Features.Goals;
 
 /// <summary>
-/// All-or-nothing edit of one goal (<c>goal-combined-edit</c>): any combination of the target, details,
-/// project-membership and priority sections, applied in that order inside one locked transaction with one
-/// <c>SaveChangesAsync</c>. Each section runs the same core as its own endpoint
-/// (<see cref="GoalTargetEditor"/>, <see cref="GoalDetailsEditor"/>, <see cref="GoalMembershipEditor"/>,
-/// <see cref="GoalOrderService.MoveToPositionAsync"/>), so validation and 400/409 bodies are identical.
-/// Any non-applied result rolls everything back. The response is written once, after the locked delegate
-/// returns (the execution strategy may not replay a delegate that already wrote one).
+/// The only goal edit route (<c>goal-combined-edit</c>): any combination of the target, details,
+/// project-membership and priority sections, applied in that order inside one profile-locked transaction with
+/// one <c>SaveChangesAsync</c>. Any non-applied section rolls everything back. The response is written once,
+/// after the locked delegate returns (the execution strategy may not replay a delegate that already wrote one).
 /// </summary>
 public sealed class EditGoalEndpoint : Endpoint<EditGoalRequest, EditGoalResponse, GoalMapper>
 {
     public override void Configure()
     {
-        Put("me/goals/{goalId}/edit");
+        Put("goals/{goalId}");
         Summary(summary =>
         {
             summary.Summary = "Edits a goal's target, details, project memberships and priority in one atomic request.";
-            summary.Description = "Every section is optional and an absent section leaves that aspect unchanged. "
-                + "Sections apply in the order target, details, projectIds, priority; if any fails nothing is "
-                + "saved. target carries its own expectedRevision (the goal revision); priority.position is the "
-                + "1-based position among the account's Active/Paused goals and priority.expectedOrderRevision "
-                + "the order revision the client computed it from. The response carries the updated goal and, "
-                + "when priority was supplied, the new order.";
-            summary.Response<EditGoalResponse>(StatusCodes.Status200OK, "The updated (or unchanged) goal, plus the new order when priority was supplied.");
+            summary.Description = "Every section is optional and an absent section leaves that aspect unchanged; "
+                + "a request with no section is a no-op. Sections apply in the order target, details, projectIds, "
+                + "priority; if any fails nothing is saved. target carries its own expectedRevision (the goal "
+                + "revision); priority.position is the 1-based position among the account's Active/Paused goals and "
+                + "priority.expectedOrderRevision the order revision the client computed it from. The response "
+                + "carries the updated goal and the new order (null unless priority was supplied).";
+            summary.Response<EditGoalResponse>(StatusCodes.Status200OK, "The updated (or unchanged) goal and, when priority was supplied, the new order.");
             summary.Response(StatusCodes.Status400BadRequest,
-                "A section is invalid (the error names it), e.g. a bad target, unknown project, or a position out of range.");
-            summary.Response<GoalRevisionConflictResponse>(StatusCodes.Status409Conflict,
-                "target.expectedRevision is stale (goalRevisionStale, carrying the current goal), the order "
-                + "revision is stale (a GoalOrderConflictResponse), or a project slot is occupied "
-                + "(a ProjectGoalSlotConflictResponse); nothing changed.");
+                "A section is invalid (the errors name it), e.g. a bad target, unknown project, or a position out of range.");
+            summary.Response(StatusCodes.Status409Conflict,
+                "goalRevisionStale (current: the goal), goalOrderStale (current: { revision, goalIds }) or "
+                + "slotOccupied (current: the goal holding the slot); nothing changed.");
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
             summary.Response(StatusCodes.Status404NotFound, "No matching goal owned by the caller.");
         });
@@ -45,62 +44,45 @@ public sealed class EditGoalEndpoint : Endpoint<EditGoalRequest, EditGoalRespons
         var state = ProcessorState<CurrentUserState>();
         if (state.ProfileId is not { } profileId)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 
-        var outcome = await Resolve<GoalCombinedEditor>().ApplyAsync(
+        var (result, goal, projectIds, order) = await Resolve<GoalCombinedEditor>().ApplyAsync(
             profileId, GoalId.From(Route<Guid>("goalId")), req, ct);
-        await SendResultAsync(outcome, ct);
-    }
-
-    private async Task SendInvalidAsync(string field, string message, CancellationToken ct)
-    {
-        ValidationFailures.Add(new(field, message));
-        await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
-    }
-
-    private async Task SendResultAsync(GoalEditOutcome outcome, CancellationToken ct)
-    {
-        var (result, goal, projectIds, order) = outcome;
         switch (result)
         {
             case GoalEditResult.Applied:
                 await Send.OkAsync(
                     new EditGoalResponse(
-                        Map.ToDetail(goal!, projectIds.Select(id => id.Value).ToList()),
+                        Map.ToDetail(goal!, projectIds),
                         order is null ? null : new GoalOrderResponse(order.Revision, order.GoalIds.Select(id => id.Value).ToList())),
                     ct);
                 break;
             case GoalEditResult.Invalid invalid:
-                await SendInvalidAsync(invalid.Field, invalid.Message, ct);
+                ValidationFailures.Add(new(invalid.Field, invalid.Message));
+                await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
                 break;
             case GoalEditResult.StaleRevision stale:
-                HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
-                await HttpContext.Response.WriteAsJsonAsync(
-                    new GoalRevisionConflictResponse(
-                        "goalRevisionStale",
-                        "The goal changed since it was loaded. Review the current goal and try again.",
-                        Map.ToDetail(stale.Current, stale.ProjectIds.Select(id => id.Value).ToList())),
-                    ct);
+                await GoalProblems.SendStaleRevisionAsync(this, Map.ToDetail(stale.Current, stale.ProjectIds), ct);
                 break;
             case GoalEditResult.SlotConflict slotConflict:
-                HttpContext.Response.StatusCode = StatusCodes.Status409Conflict;
-                await HttpContext.Response.WriteAsJsonAsync(slotConflict.Body, ct);
+                await GoalProblems.SendSlotConflictAsync(this, slotConflict.Conflict, ct);
                 break;
             case GoalEditResult.OrderConflict orderConflict:
                 await GoalOrderResponses.SendAsync(this, orderConflict.Order, transaction: null, ct);
                 break;
             default:
-                await Send.NotFoundAsync(ct);
+                await this.SendNotFoundProblemAsync(ct);
                 break;
         }
     }
 }
 
-/// <param name="Target">Same payload as <c>PUT me/goals/{goalId}/target</c>: the goal <c>expectedRevision</c> and the end target.</param>
-/// <param name="Details">Same payload and null semantics as <c>PUT me/goals/{goalId}</c>.</param>
-/// <param name="ProjectIds">Same replacement list as <c>PUT me/goals/{goalId}/projects</c> (non-empty when present).</param>
+/// <param name="Target">The goal <c>expectedRevision</c> and the end target.</param>
+/// <param name="Details">Notes, farming locations/strategy and acquisition sources (null notes or farming
+/// locations clear them; a null strategy leaves it).</param>
+/// <param name="ProjectIds">The complete replacement membership (non-empty when present).</param>
 /// <param name="Priority">Move the goal to a position in the account-wide order.</param>
 public sealed record EditGoalRequest(
     UpdateGoalTargetRequest? Target = null,
@@ -113,8 +95,10 @@ public sealed record EditGoalRequest(
 /// <param name="ExpectedOrderRevision">The order revision the position was computed from.</param>
 public sealed record EditGoalPriorityRequest(int Position, long ExpectedOrderRevision);
 
-/// <param name="Order">Present only when the request carried <c>priority</c>.</param>
-public sealed record EditGoalResponse(GoalDetailResponse Goal, GoalOrderResponse? Order = null);
+/// <param name="Goal">The goal after the edit, with its own <c>revision</c>.</param>
+/// <param name="Order">The order after the move (its own <c>revision</c>); null unless the request carried
+/// <c>priority</c>.</param>
+public sealed record EditGoalResponse(GoalDetailResponse Goal, GoalOrderResponse? Order);
 
 public sealed class EditGoalValidator : Validator<EditGoalRequest>
 {
@@ -129,5 +113,70 @@ public sealed class EditGoalValidator : Validator<EditGoalRequest>
         RuleFor(request => request.Priority!.ExpectedOrderRevision)
             .GreaterThanOrEqualTo(0)
             .When(request => request.Priority is not null);
+    }
+}
+
+/// <param name="ExpectedRevision">The <c>revision</c> of the goal detail the editor started from.</param>
+public sealed record UpdateGoalTargetRequest(long ExpectedRevision, GoalTargetEditRequest Target);
+
+/// <summary>Exactly the group matching the goal's kind must be set; every other group must be null.
+/// Only end values are editable — the start/baseline stays as stored.</summary>
+public sealed record GoalTargetEditRequest(
+    RankEndTargetRequest? Rank = null,
+    ProgressionEndTargetRequest? Progression = null,
+    AbilityEndTargetRequest? Ability = null,
+    UpgradeTargetRequest? Upgrade = null
+);
+
+public sealed record RankEndTargetRequest(int End, bool EndPointFive, int EndAppliedUpgrades);
+
+public sealed record ProgressionEndTargetRequest([property: JsonRequired] UnitProgression End);
+
+public sealed record AbilityEndTargetRequest(int ActiveEnd, int PassiveEnd);
+
+public sealed class UpdateGoalTargetValidator : AbstractValidator<UpdateGoalTargetRequest>
+{
+    public UpdateGoalTargetValidator()
+    {
+        RuleFor(request => request.ExpectedRevision).GreaterThanOrEqualTo(0);
+        RuleFor(request => request.Target).NotNull();
+
+        // Creation returns a 400 for a missing upgrade list / blank ids; the edit must too, before the
+        // handler dereferences them.
+        When(request => request.Target?.Upgrade is not null, () =>
+        {
+            RuleFor(request => request.Target.Upgrade!.Targets)
+                .NotNull()
+                .WithMessage("An upgrade target needs a list of materials.");
+            RuleForEach(request => request.Target.Upgrade!.Targets)
+                .Must(target => target is not null && !string.IsNullOrWhiteSpace(target.UpgradeId))
+                .When(request => request.Target.Upgrade!.Targets is not null)
+                .WithMessage("Every upgrade target needs an upgrade id.");
+            RuleFor(request => request.Target.Upgrade!)
+                .Must(UpgradeRangeRules.HasWholeRanges)
+                .WithMessage(UpgradeRangeRules.ShapeMessage);
+        });
+    }
+}
+
+public sealed record UpdateGoalRequest(
+    string? Notes,
+    List<CampaignBattleId>? FarmingLocationIds,
+    FarmingStrategy? FarmingStrategy = null,
+    List<AcquisitionSourceRequest>? AcquisitionSources = null
+);
+
+public sealed class UpdateGoalValidator : AbstractValidator<UpdateGoalRequest>
+{
+    public UpdateGoalValidator()
+    {
+        RuleFor(request => request.Notes)
+            .MaximumLength(GoalValidation.MaxNotesLength);
+
+        RuleFor(request => request.AcquisitionSources)
+            .Must(sources => AcquisitionSourceRules.ShapeError(sources) is null)
+            .WithMessage(request =>
+                AcquisitionSourceRules.ShapeError(request.AcquisitionSources)
+                ?? "The acquisition sources configuration is invalid.");
     }
 }

@@ -227,8 +227,17 @@ internal sealed class FakeTacticusApi : ITacticusApi
         return hold;
     }
 
+    private readonly ConcurrentDictionary<string, bool> timingOutPlayers = new();
+
+    /// <summary>Makes every later <see cref="GetPlayerAsync"/> call for the token time out, as an HttpClient
+    /// timeout surfaces.</summary>
+    public void ConfigurePlayerTimeout(string personalApiToken) => timingOutPlayers[personalApiToken] = true;
+
     public async Task<PlayerResponse> GetPlayerAsync(string personalApiToken, CancellationToken cancellationToken = default)
     {
+        if (timingOutPlayers.ContainsKey(personalApiToken))
+            throw new TaskCanceledException("Simulated Tacticus API timeout.");
+
         var response = ResolvePlayerResponse(personalApiToken);
         if (playerHolds.TryRemove(personalApiToken, out var hold))
         {

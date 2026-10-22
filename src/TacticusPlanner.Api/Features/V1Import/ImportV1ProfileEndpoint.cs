@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using Refit;
@@ -19,7 +20,7 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
 {
     public override void Configure()
     {
-        Post("me/v1-import");
+        Post("account/v1-import");
         Options(builder => builder.WithMetadata(UpstreamRateLimit.Slow));
         Summary(summary =>
         {
@@ -41,7 +42,7 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
         var profileId = ProcessorState<CurrentUserState>().ProfileId;
         if (profileId is null)
         {
-            await Send.NotFoundAsync(ct);
+            await this.SendNotFoundProblemAsync(ct);
             return;
         }
 
@@ -103,8 +104,8 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
             goalResult = await Resolve<V1GoalImportService>().ImportAsync(
                 profileId.Value, v1.Goals, selection.AutomaticPrerequisites, ct);
             goals = goalResult.Refused
-                ? new ImportPartResult("Failed", "player_data_required", "Player data must be synced before goals can be imported.")
-                : new ImportPartResult("Imported", null, null);
+                ? new ImportPartResult(ImportPartStatus.Failed, "player_data_required", "Player data must be synced before goals can be imported.")
+                : new ImportPartResult(ImportPartStatus.Imported, null, null);
         }
 
         await Send.OkAsync(new ImportV1ProfileResponse(
@@ -122,10 +123,10 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
             ProfileId = profileId.Value.Value,
             PlayerName = personalKey.PlayerName,
             PowerLevel = personalKey.PowerLevel,
-            TacticusApiKeyMasked = personalKey.Part.Status == "Imported"
+            TacticusApiKeyMasked = personalKey.Part.Status == ImportPartStatus.Imported
                 ? SecretMasker.Mask(v1.TacticusApiKey)
                 : null,
-            TacticusUserIdMasked = userId.Status == "Imported"
+            TacticusUserIdMasked = userId.Status == ImportPartStatus.Imported
                 ? SecretMasker.Mask(v1.TacticusUserId)
                 : null,
             SuggestedDisplayName = await GetDisplayNameSuggestionAsync(profileId.Value, req.Username!.Trim(), ct),
@@ -179,7 +180,7 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            return new ImportPartResult("Skipped", "missing_tacticus_user_id", "The V1 profile has no Tacticus User ID.");
+            return new ImportPartResult(ImportPartStatus.Skipped, "missing_tacticus_user_id", "The V1 profile has no Tacticus User ID.");
         }
 
         var db = Resolve<PlannerDbContext>();
@@ -189,12 +190,12 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
         try
         {
             await db.SaveChangesAsync(ct);
-            return new ImportPartResult("Imported", null, null);
+            return new ImportPartResult(ImportPartStatus.Imported, null, null);
         }
         catch (DbUpdateException)
         {
             db.ChangeTracker.Clear();
-            return new ImportPartResult("Failed", "tacticus_user_id_conflict", "The imported Tacticus User ID is already linked to another profile.");
+            return new ImportPartResult(ImportPartStatus.Failed, "tacticus_user_id_conflict", "The imported Tacticus User ID is already linked to another profile.");
         }
     }
 
@@ -207,7 +208,7 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
         if (string.IsNullOrWhiteSpace(value))
         {
             return new PersonalKeyImportResult(
-                new ImportPartResult("Skipped", "missing_personal_api_key", "The V1 profile has no personal Tacticus API key."),
+                new ImportPartResult(ImportPartStatus.Skipped, "missing_personal_api_key", "The V1 profile has no personal Tacticus API key."),
                 null,
                 0
             );
@@ -217,7 +218,7 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
         if (validation is null)
         {
             return new PersonalKeyImportResult(
-                new ImportPartResult("Failed", "personal_api_key_invalid", "The imported personal API key could not be validated."),
+                new ImportPartResult(ImportPartStatus.Failed, "personal_api_key_invalid", "The imported personal API key could not be validated."),
                 null,
                 0
             );
@@ -242,14 +243,14 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
         {
             db.ChangeTracker.Clear();
             return new PersonalKeyImportResult(
-                new ImportPartResult("Failed", "personal_api_key_not_saved", "The personal API key could not be saved."),
+                new ImportPartResult(ImportPartStatus.Failed, "personal_api_key_not_saved", "The personal API key could not be saved."),
                 null,
                 0
             );
         }
 
         return new PersonalKeyImportResult(
-            new ImportPartResult("Imported", null, null),
+            new ImportPartResult(ImportPartStatus.Imported, null, null),
             validation.PlayerName,
             validation.PowerLevel
         );
@@ -259,14 +260,14 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
     {
         if (string.IsNullOrWhiteSpace(token))
         {
-            return new ImportPartResult("Skipped", "missing_guild_api_token", "The V1 profile has no guild API token.");
+            return new ImportPartResult(ImportPartStatus.Skipped, "missing_guild_api_token", "The V1 profile has no guild API token.");
         }
 
         var db = Resolve<PlannerDbContext>();
         var userId = await db.Profiles.Where(entity => entity.Id == profileId).Select(entity => entity.TacticusUserId).FirstAsync(ct);
         if (userId is null)
         {
-            return new ImportPartResult("Failed", "missing_tacticus_user_id", "A Tacticus User ID is required before guild registration.");
+            return new ImportPartResult(ImportPartStatus.Failed, "missing_tacticus_user_id", "A Tacticus User ID is required before guild registration.");
         }
 
         var result = await Resolve<GuildSyncService>()
@@ -274,12 +275,12 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
         if (result is GuildSyncResult.Success success)
         {
             return success.WasCreated
-                ? new ImportPartResult("Imported", null, null)
-                : new ImportPartResult("Skipped", "guild_already_registered", "The guild is already registered.");
+                ? new ImportPartResult(ImportPartStatus.Imported, null, null)
+                : new ImportPartResult(ImportPartStatus.Skipped, "guild_already_registered", "The guild is already registered.");
         }
 
         var failure = GetGuildFailure(result);
-        return new ImportPartResult("Failed", failure.Code, failure.Message);
+        return new ImportPartResult(ImportPartStatus.Failed, failure.Code, failure.Message);
     }
 
     private async Task<ImportPartResult> ImportOnslaughtProgressAsync(
@@ -290,7 +291,7 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
         if (!source.IsPresent)
         {
             return new ImportPartResult(
-                "Skipped",
+                ImportPartStatus.Skipped,
                 "missing_onslaught_progress",
                 "The V1 profile has no Onslaught progress."
             );
@@ -299,7 +300,7 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
         if (source.Progress is null)
         {
             return new ImportPartResult(
-                "Failed",
+                ImportPartStatus.Failed,
                 "invalid_onslaught_progress",
                 "The V1 Onslaught progress is incomplete or invalid."
             );
@@ -328,13 +329,13 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
         try
         {
             await db.SaveChangesAsync(ct);
-            return new ImportPartResult("Imported", null, null);
+            return new ImportPartResult(ImportPartStatus.Imported, null, null);
         }
         catch (DbUpdateConcurrencyException)
         {
             db.ChangeTracker.Clear();
             return new ImportPartResult(
-                "Failed",
+                ImportPartStatus.Failed,
                 "onslaught_progress_conflict",
                 "Onslaught progress changed during import. Try again."
             );
@@ -358,7 +359,7 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
         if (!source.IsPresent)
         {
             return new ImportPartResult(
-                "Skipped",
+                ImportPartStatus.Skipped,
                 "missing_campaign_event_progress",
                 "The V1 profile has no regular campaign-event progress to import.");
         }
@@ -366,7 +367,7 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
         if (source.Progress is null)
         {
             return new ImportPartResult(
-                "Failed",
+                ImportPartStatus.Failed,
                 "invalid_campaign_event_progress",
                 "The V1 campaign-event progress is invalid.");
         }
@@ -408,7 +409,7 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
         {
             await db.SaveChangesAsync(ct);
             return new ImportPartResult(
-                "Imported",
+                ImportPartStatus.Imported,
                 "challenge_progress_not_imported",
                 "Regular event progress was imported. V1 challenge counts were not imported because exact battles are unknown.");
         }
@@ -416,7 +417,7 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
         {
             db.ChangeTracker.Clear();
             return new ImportPartResult(
-                "Failed",
+                ImportPartStatus.Failed,
                 "campaign_event_progress_conflict",
                 "Campaign-event progress changed during import. Try again.");
         }
@@ -459,9 +460,9 @@ public sealed record ImportV1Selection(
 
 public sealed record ImportV1ProfileRequest(string? Username, string? Password, ImportV1Selection? Import);
 
-public sealed record ImportPartResult(string Status, string? Code, string? Message)
+public sealed record ImportPartResult(ImportPartStatus Status, string? Code, string? Message)
 {
-    public static ImportPartResult NotSelected() => new("Skipped", "not_selected", null);
+    public static ImportPartResult NotSelected() => new(ImportPartStatus.Skipped, "not_selected", null);
 }
 
 public sealed record ImportV1ProfileResponse(
@@ -477,17 +478,25 @@ public sealed record ImportV1ProfileResponse(
     IReadOnlyList<V1GoalOutcome> Outcomes
 )
 {
+    [JsonRequired]
     public ImportPartResult LegendaryEventPlans { get; init; } = ImportPartResult.NotSelected();
 
     /// <summary>One outcome per V1 event (ascending V1 id) when <c>legendaryEventPlans</c> was selected.</summary>
+    [JsonRequired]
     public IReadOnlyList<V1LegendaryEventOutcome> LegendaryEventOutcomes { get; init; } = [];
 
+    [JsonRequired]
     public Guid ProfileId { get; init; }
+    [JsonRequired]
     public string? PlayerName { get; init; }
+    [JsonRequired]
     public int PowerLevel { get; init; }
+    [JsonRequired]
     public string? TacticusApiKeyMasked { get; init; }
+    [JsonRequired]
     public string? TacticusUserIdMasked { get; init; }
 
     // Private prefill for the name step; see GetDisplayNameSuggestionAsync.
+    [JsonRequired]
     public string? SuggestedDisplayName { get; init; }
 }

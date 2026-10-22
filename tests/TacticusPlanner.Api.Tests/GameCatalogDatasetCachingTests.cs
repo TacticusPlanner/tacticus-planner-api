@@ -117,4 +117,63 @@ public sealed class GameCatalogDatasetCachingTests(GameCatalogApiFactory factory
         Assert.NotEqual(before, changed.Headers.ETag!.ToString());
         Assert.NotEqual(metadataOnly.Headers.ETag.ToString(), changed.Headers.ETag.ToString());
     }
+
+    private static async Task<string> ManifestUrlAsync(HttpClient client, string dataset)
+    {
+        var manifest = JsonNode.Parse(await (await GetAsync(client, "/api/v1/game-catalog/manifest")).Content.ReadAsStringAsync(TestContext.Current.CancellationToken))!;
+        return manifest["datasets"]!.AsArray().Single(entry => (string?)entry!["key"] == dataset)!["url"]!.ToString();
+    }
+
+    [Fact]
+    public async Task TheManifestUrlIsAnImmutableContentAddress()
+    {
+        var client = factory.CreateClient();
+        var url = await ManifestUrlAsync(client, "upgrades");
+
+        var hashed = await GetAsync(client, url);
+        var bare = await GetAsync(client, "/api/v1/game-catalog/upgrades");
+
+        Assert.Equal(HttpStatusCode.OK, hashed.StatusCode);
+        var cacheControl = hashed.Headers.CacheControl!;
+        Assert.True(cacheControl.Public);
+        Assert.Equal(TimeSpan.FromSeconds(31536000), cacheControl.MaxAge);
+        Assert.Contains("immutable", cacheControl.Extensions.Select(extension => extension.Name));
+        Assert.False(cacheControl.MustRevalidate);
+        Assert.Contains("Accept-Encoding", hashed.Headers.Vary);
+        // Same representation, same strong validator, whichever route served it.
+        Assert.Equal(bare.Headers.ETag, hashed.Headers.ETag);
+        Assert.False(hashed.Headers.ETag!.IsWeak);
+        Assert.StartsWith($"\"{url[(url.LastIndexOf('/') + 1)..]}", hashed.Headers.ETag.Tag);
+    }
+
+    [Fact]
+    public async Task AHashThatIsNotTheCurrentEnvelopesIsNotFound()
+    {
+        var response = await GetAsync(factory.CreateClient(), $"/api/v1/game-catalog/upgrades/{new string('0', 64)}");
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        Assert.Equal("application/problem+json", response.Content.Headers.ContentType?.MediaType);
+    }
+
+    [Fact]
+    public async Task AMetadataOnlyReleaseMovesTheUrlAndTheManifestValidator()
+    {
+        var real = factory.Services.GetRequiredService<IGameCatalogProvider>().Current;
+        var catalog = new SwappableCatalog(real);
+        using var swapped = factory.WithWebHostBuilder(builder => builder.ConfigureTestServices(services =>
+            services.AddSingleton<IGameCatalogProvider>(catalog)));
+        var client = swapped.CreateClient();
+        var before = await ManifestUrlAsync(client, "upgrades");
+        var manifestEtag = (await GetAsync(client, "/api/v1/game-catalog/manifest")).Headers.ETag!.ToString();
+
+        // Same payload hash, new release metadata.
+        catalog.Current = real with { Version = real.Version + "x" };
+        var after = await ManifestUrlAsync(client, "upgrades");
+        var manifest = await GetAsync(client, "/api/v1/game-catalog/manifest", ifNoneMatch: manifestEtag);
+
+        Assert.NotEqual(before, after);
+        Assert.Equal(HttpStatusCode.OK, manifest.StatusCode);
+        Assert.Equal(HttpStatusCode.OK, (await GetAsync(client, after)).StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, (await GetAsync(client, before)).StatusCode);
+    }
 }
