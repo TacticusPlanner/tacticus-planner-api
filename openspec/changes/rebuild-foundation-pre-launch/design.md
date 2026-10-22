@@ -42,7 +42,7 @@ See proposal.md — Why. Current schema: 24 tables in `public`, UUIDv7 keys, glo
 
 The apps half (`rebuild-foundation-pre-launch` in `tacticus-planner-apps`) deletes the goal-detail fan-outs and per-project goal fetches, adopts the new routes/error shape, and switches bulk status to one request. The regenerated OpenAPI artifact is the shared contract; the apps change regenerates its client from it, including `{ goal, order }`, matched archive selectors, compound run-record cursors/on-demand rosters, and writable-response Problem Details.
 
-Merge/apply order is API then apps, but deployment is a coordinated cutover. Before merging the API half, pause or approval-gate its automatic staging promotion so an API merge can publish the image/OpenAPI artifact without exposing the new contract. Both paired PRs must pass CI/review and client contract tests before either version is promoted for use. Deploy the matched API and web artifacts together, or keep the environment inaccessible during the sequential rollout until both versions and a joint smoke test succeed. Do not expose the new error/run-record shapes to the old client. This pre-launch gate requires no legacy-contract shim.
+Merge/apply order is API then apps. Both paired PRs must pass CI/review and client contract tests first; then they are merged back to back. Staging promotes every push, so it serves a mismatched pair for the few minutes between the two deploys; pre-launch that is accepted (review of #112 removed the promotion gate), and no legacy-contract shim is added.
 
 ## Risks / Trade-offs
 
@@ -54,9 +54,9 @@ Merge/apply order is API then apps, but deployment is a coordinated cutover. Bef
 
 ## Migration Plan
 
-1. Pause or approval-gate automatic API staging promotion, then merge the API half to publish the new model, `InitialCreate`, routes, tests, image, and OpenAPI artifact. Keep the current contract serving until the paired client is ready; both halves require green CI and resolved review threads.
+1. With both halves green in CI and their review threads resolved, merge the API half (new model, `InitialCreate`, routes, tests, image, OpenAPI artifact).
 2. Local: Aspire `api-migrations` → **Drop Database** then start (auto-migrate). Staging/production: `tacticus-planner-infra` drop + recreate the PostgreSQL database (no data migration).
-3. Merge the apps half with the regenerated client and verify the shared contracts. Promote matched API/web artifacts as one cutover, or keep the environment inaccessible until both deployments and joint smoke tests pass; only then reopen access and restore automatic promotion.
+3. Merge the apps half with the regenerated client and verify the shared contracts. Merge it right after the API half and smoke-test staging once both deploys finish.
 4. Docs: ADR 0001 → Superseded; `data.md` JSONB section rewritten; new ADR for jsonb aggregates with validator invariants.
 Rollback: previous API image + previous database (snapshot taken before drop); acceptable because there are no users yet.
 

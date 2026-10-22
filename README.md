@@ -392,25 +392,9 @@ that case it publishes the image, reports the immutable digest in the workflow
 summary, and skips deployment successfully. Supply that digest to the initial
 local infrastructure deployment.
 
-### Coordinated cutover
+### Breaking contracts
 
-A push to `main` always publishes the image (and the OpenAPI artifact is in the
-merged source), but it promotes the image to staging only when the repository
-variable `STAGE_AUTO_DEPLOY` is `true`. Leave it unset or `false` while a
-breaking contract (for example the problem-details errors, the goal routes or
-the paged run records) is merged ahead of its web client, so an old client is
-never served the new contract:
-
-1. Before merging the API change, confirm `STAGE_AUTO_DEPLOY` is not `true`.
-2. Merge the API change; the image is published, staging keeps the previous API.
-3. Regenerate and test the companion client against the merged
-   `artifacts/openapi/TacticusPlanner.Api.json` (errors and `current`,
-   `{ goal, order }`, archive selectors, paged run records and roster reads),
-   and get both changes green in CI and review.
-4. Deploy the matched API (`CD Stage` → Run workflow) and web artifacts together.
-   If they must go one after the other, keep staging inaccessible until both are
-   deployed and the joint smoke test (sign in, goals list, edit, bulk status,
-   Legendary Event overview) passes. A replaced migration history also needs the
-   staging database dropped and recreated (`tacticus-planner-infra`) first.
-5. Reopen access, then set `STAGE_AUTO_DEPLOY=true` to restore automatic
-   promotion.
+Staging promotes every push to `main`. Merge a breaking API change and its web
+client back to back; staging serves a mismatched pair until both deploys finish.
+A replaced migration history also needs the staging database dropped and
+recreated (`tacticus-planner-infra`) before the API deploys.

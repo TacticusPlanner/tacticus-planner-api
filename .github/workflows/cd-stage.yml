@@ -82,10 +82,6 @@ jobs:
   deploy:
     name: Deploy Stage
     needs: publish
-    # Cutover gate: a push to main publishes the image but promotes it only when the repository variable
-    # STAGE_AUTO_DEPLOY is 'true'. A breaking API contract ships with STAGE_AUTO_DEPLOY unset or 'false' and is
-    # promoted together with its matched web client by a manual run (see README "Coordinated cutover").
-    if: github.event_name == 'workflow_dispatch' || vars.STAGE_AUTO_DEPLOY == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     environment: stage

@@ -69,13 +69,3 @@ Every 409 SHALL carry `issueCode` naming the conflict (`goalRevisionStale`, `goa
 
 - **WHEN** the Tacticus API times out during a player sync
 - **THEN** the response is 503 `application/problem+json` with `issueCode` `upstreamUnavailable`
-
-### Requirement: Breaking error contracts are exposed with the matching client
-
-The new problem-details contract SHALL become available only in a coordinated API/client release after both paired changes pass CI/review and client contract tests. Automatic API promotion SHALL be gated before the API merge; artifact publication may precede the client merge. A sequential deployment SHALL keep the environment inaccessible until both versions are installed and joint smoke tests pass. A legacy error-shape shim is not required for this pre-launch cutover.
-
-#### Scenario: API artifact is ready before the client
-
-- **GIVEN** the new API image and OpenAPI artifact are published but the companion client is not ready
-- **WHEN** deployment readiness is evaluated
-- **THEN** promotion of the new contract remains blocked and the old client is never served the new errors
