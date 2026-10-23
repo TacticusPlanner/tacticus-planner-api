@@ -8,7 +8,7 @@ Serves the battle data of every Quest Event (one record per featured hero, 17 ba
 
 ### Requirement: The catalog serves a `quest-events` dataset with a fixed shape
 
-The game catalog SHALL serve a dataset keyed `quest-events` as a plain array at `GET /api/v1/game-catalog/quest-events`, without authentication, in the shared dataset envelope and with a manifest hash entry. It SHALL be built from the raw `quest-events.json` (a copy of V1's `hero-quests.json`), which SHALL NOT be served directly. Each record SHALL have exactly these fields. The server sends ids and numbers only; the client resolves names, portraits, board images and objective wording.
+The game catalog SHALL serve a dataset keyed `quest-events` as a plain array at `GET /api/v1/game-catalog/quest-events`, without authentication, in the shared dataset envelope and with a manifest hash entry. It SHALL be built from the raw `quest-events.json` (V1's `hero-quests.json` records for the last 3 quests, unchanged), which SHALL NOT be served directly. Each record SHALL have exactly these fields. The server sends ids and numbers only; the client resolves names, portraits, board images and objective wording.
 
 ```
 {
@@ -45,7 +45,7 @@ Records SHALL be ordered by `featuredCharacterId` (ordinal). `tier` SHALL be the
 #### Scenario: Coverage
 
 - **WHEN** the dataset is served from the shipped raw file
-- **THEN** it has records for `astarCyrus`, `astarEradicator`, `darkaSternguard`, `thousSekhetar` and `votanChampion`, each with 17 battles
+- **THEN** it has records for `astarCyrus`, `astarEradicator` and `votanChampion` only, each with 17 battles
 
 ### Requirement: Deploy slots follow the tier position rule
 
@@ -88,8 +88,8 @@ A battle's `enemies` SHALL be built from the raw `enemies` list by merging entri
 
 #### Scenario: Power-up without an index
 
-- **GIVEN** Sekhetar Robot battle 4's raw `{ name: "powupHealing", progressionIndex: null }`
-- **THEN** it is served as `{ id: "powupHealing", ladderIndex: 1, count: 1 }`
+- **GIVEN** Nubari battle 9's raw `{ name: "powupArmor", progressionIndex: null }`
+- **THEN** it is served as `{ id: "powupArmor", ladderIndex: 1, count: 1 }`
 
 ### Requirement: Objectives are served as typed records
 

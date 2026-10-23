@@ -4,13 +4,13 @@ Companion apps change: `add-quest-event-tracker` in `tacticus-planner-apps`. Thi
 
 ## 1. Raw data
 
-- [ ] 1.1 Copy V1 `hero-quests.json` to `Data/quests/quest-events.json` unchanged, and port the wiki QuestCrates table into `Data/quests/quest-crates.json`
+- [ ] 1.1 Copy the Cyrus, Nubari and Kîmm records of V1 `hero-quests.json` to `Data/quests/quest-events.json` unchanged, and port the wiki QuestCrates table into `Data/quests/quest-crates.json`
 - [ ] 1.2 Register the raw and served keys in `GameCatalogDatasets`
 
 ## 2. Models and denormalization
 
 - [ ] 2.1 Add `Models/QuestEvents.cs` (raw and served records per the spec shapes)
-- [ ] 2.2 Implement `QuestEventsDenormalizer`: tier from index, tier position, deploy slots by the rule, enemy grouping with the null-index default, typed objectives, loot, ordering; verify with unit tests for Cyrus battles 1, 3 and 17, the Rare tier slots and Sekhetar Robot battle 4's power-up
+- [ ] 2.2 Implement `QuestEventsDenormalizer`: tier from index, tier position, deploy slots by the rule, enemy grouping with the null-index default, typed objectives, loot, ordering; verify with unit tests for Cyrus battles 1, 3 and 17, the Rare tier slots and Nubari battle 9's power-up
 - [ ] 2.3 Serve `quest-crates` and verify crate 17
 
 ## 3. Validation

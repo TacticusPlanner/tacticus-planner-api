@@ -2,17 +2,17 @@
 
 ## Why
 
-Quest Events (the catalog's `quest` definition) run four times this autumn alone (Cyrus, Nubari, Kîmm, and Cezare in August), and the calendar already lists them. But the catalog has no battle data for them, so the client cannot show a quest's 17 battles, score them, or build teams for them. V1 ships five quests as a static `hero-quests.json` (Cyrus, Sekhetar Robot, Ramus, Nubari, Kîmm), and V2 has no copy. The 17-crate reward track is not in the catalog either. The companion apps change `add-quest-event-tracker` is the first client: the Dailies > Quest tab reads both datasets.
+Quest Events (the catalog's `quest` definition) run every few weeks (Cyrus in August, Nubari now, Kîmm on 11-11), and the calendar already lists them. But the catalog has no battle data for them, so the client cannot show a quest's 17 battles, score them, or build teams for them. V1 ships five quests as a static `hero-quests.json`, and V2 has no copy. The 17-crate reward track is not in the catalog either. The companion apps change `add-quest-event-tracker` is the first client: the Dailies > Quest tab reads both datasets.
 
 ## What Changes
 
-- New raw source `Data/quests/quest-events.json`, a copy of V1's `4-entities/quests/data/hero-quests.json` (5 quests, 85 battles).
+- New raw source `Data/quests/quest-events.json`, the last 3 quests (Cyrus, Nubari, Kîmm; 51 battles) of V1's `4-entities/quests/data/hero-quests.json`, copied unchanged. The older Sekhetar Robot and Ramus quests are dropped, as Severyn decided.
 - New served dataset **`quest-events`**: one record per featured hero, with its allowed and enemy factions and its 17 battles. Each battle has its tier, its position in that tier, board id, spawn set, **deploy slots**, Lightning Victory turns, enemies (grouped into `{ id, ladderIndex, count }` like `lre-battles`), objectives with scores, and its upgrade drop with odds. Deploy slots follow Severyn's fixed rule per tier position (Common, Uncommon and Epic 3, 4, 5; Rare 3, 3, 3, 4, 5; Legendary 4, 5; Mythic 5).
 - New raw and served dataset **`quest-crates`**: the 17-crate point track (wiki QuestCrates) with structured rewards. It is shared by every quest.
 - Load-time validation: 17 battles split 3/3/5/3/2/1, ids resolve (character, factions, NPCs, upgrades), objective types are known, and every quest totals exactly 8,800 points, which is crate 17's threshold.
 - No `SchemaVersion` bump: two new datasets, no existing shape changes.
 
-Out of scope: Cezare (`bloodTerminator`), which is not in V1's data. It is added when its battles are sourced (see design Open Questions). Until then the client shows "No battle data for this quest yet" for that occurrence. Quest tokens and progress are not in the game API (confirmed), so nothing is synced.
+Out of scope: older quests (Sekhetar Robot, Ramus, and Cezare, which V1 never had). A quest occurrence without a record shows "No battle data for this quest yet" in the client. Quest tokens and progress are not in the game API (confirmed), so nothing is synced.
 
 ## Capabilities
 

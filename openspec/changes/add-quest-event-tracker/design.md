@@ -3,7 +3,7 @@
 ## Context
 
 - `event-definitions.json` has `quest` (`type: Quest`, 72 h, 24 h lead, 24 h claim window, `featuredCharacterId` required). `event-occurrences.json` has four quests: Cezare (`bloodTerminator`), Cyrus (`astarCyrus`), Nubari (`astarEradicator`, running 2026-10-21 to 10-24) and Kîmm (`votanChampion`).
-- V1 `hero-quests.json` has 5 quests and 85 battles. Every enemy id, power-ups included, is in the served `npcs` dataset (checked). Every quest totals 8,800 points.
+- V1 `hero-quests.json` has 5 quests. Only the last 3 are ported (Cyrus, Nubari, Kîmm; Severyn decided to drop older quests), 51 battles. Every enemy id, power-ups included, is in the served `npcs` dataset (checked). Every quest totals 8,800 points.
 - The companion apps change `add-quest-event-tracker` reads both new datasets. The later apps changes (rewards, teams, clear estimates) read them too, without new fields.
 
 ## Goals / Non-Goals
@@ -25,7 +25,7 @@
 
 `quest-events` inlines its battles because a quest is small (17 battles of about 10 enemies) and the client always reads a quest whole. This is unlike `lre-battles`, which is split out because it has 3 lanes and waves. `quest-crates` is shared because the crate track does not change between quests. That mirrors `lre-common`.
 
-- _Alternative:_ add the crates to each quest record. That was rejected because it duplicates one table five times, and a wiki update would touch every record.
+- _Alternative:_ add the crates to each quest record. That was rejected because it duplicates one table per quest, and a wiki update would touch every record.
 
 ### D2. Deploy slots come from the rule, not from `spawnPointsSet`
 
@@ -55,5 +55,4 @@ Additive. Clients that do not know the datasets ignore them in the manifest. Thi
 
 ## Open Questions
 
-- **Cezare's battles.** V1 has no data for `bloodTerminator`. Add it when a source (datamine or wiki) is available; the validator then covers it.
-- **Occurrence windows.** Cezare and Cyrus are authored as 7-day windows (08-09 to 08-16, 08-30 to 09-06), and Nubari and Kîmm as 72 h. The definition says 72 h. The two older ones look wrong, but they are in the past and do not affect this change.
+- **Occurrence windows.** Cyrus is authored as a 7-day window (08-30 to 09-06), and Nubari and Kîmm as 72 h. The definition says 72 h. Cyrus's looks wrong, but it is in the past and does not affect this change.
