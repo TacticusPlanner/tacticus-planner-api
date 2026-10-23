@@ -6,134 +6,102 @@ Allows separate projects to carry separate in-flight targets while preventing du
 
 ### Requirement: In-flight uniqueness is scoped to project
 
-For each project, at most one Active/Paused non-Rank goal SHALL occupy `(entityType, entityId, goalType)`. For Rank, at most one Active/Paused goal SHALL occupy `(entityType, entityId, Rank, normalizedEndTarget)`; distinct Rank end targets MAY coexist. Completed/Archived goals SHALL not occupy slots. Different projects MAY carry different in-flight instances for the same tuple/target.
+For each profile, at most one Active/Paused non-Rank goal SHALL occupy `(entityType, entityId, goalType)`. For Rank, at most one Active/Paused goal SHALL occupy `(entityType, entityId, Rank, normalizedEndTarget)`; distinct Rank end targets MAY coexist. Completed/Archived goals SHALL not occupy slots. Project membership SHALL NOT affect slot occupancy: one in-flight goal MAY belong to any number of projects, and two projects SHALL NOT carry separate in-flight instances of the same tuple/target.
 
 #### Scenario: Different projects accept different instances
 
-- **GIVEN** A has an Active Ragnar Rank goal
-- **WHEN** another Ragnar Rank goal is created only in B
-- **THEN** creation succeeds
+- **GIVEN** an Active Ragnar Rank goal targeting Gold1 belongs to project A
+- **WHEN** the owner wants Ragnar Gold1 in project B
+- **THEN** the existing goal is added to B; creating a second Ragnar Rank Gold1 goal is rejected and identifies the existing goal
 
 #### Scenario: Same project rejects duplicate
 
-- **GIVEN** A has an Active or Paused Ragnar Rank goal targeting Gold1
-- **WHEN** another in-flight Ragnar Rank goal with the same normalized Gold1 target is created in or added to A
+- **GIVEN** an Active or Paused Ragnar Rank goal targeting Gold1 in any project
+- **WHEN** another in-flight Ragnar Rank goal with the same normalized Gold1 target is created, in any project set
 - **THEN** the operation is rejected and identifies the existing goal
 
 #### Scenario: Historical goal frees slot
 
-- **GIVEN** A contains only Completed/Archived Ragnar Rank goals targeting Gold1
-- **WHEN** a new Ragnar Rank Gold1 goal is created in A
+- **GIVEN** the profile has only Completed/Archived Ragnar Rank goals targeting Gold1
+- **WHEN** a new Ragnar Rank Gold1 goal is created
 - **THEN** creation succeeds
 
 #### Scenario: Same project permits different Rank targets
 
-- **GIVEN** A has an active Ragnar Rank goal targeting Silver3
-- **WHEN** another targeting Gold1 is created in A
-- **THEN** both memberships are accepted
+- **GIVEN** an Active Ragnar Rank goal targeting Silver3
+- **WHEN** another targeting Gold1 is created
+- **THEN** both are accepted
 
 ### Requirement: Every membership and lifecycle path enforces slots
 
-The invariant SHALL apply atomically to single creation, combined creation, goal-side membership replacement, project-side membership replacement, and transitions into Active/Paused. Removing membership or transitioning to Completed/Archived SHALL free affected slots.
+The invariant SHALL apply atomically to single creation, combined creation, target edits, and transitions into Active/Paused (single or bulk). Transitioning to Completed/Archived SHALL free the slot. Membership changes (goal-side or project-side) SHALL NOT be slot-checked, because membership cannot create a duplicate.
 
 #### Scenario: Resume conflicts in one membership
 
-- **GIVEN** a Paused/Completed goal belongs to A and B and another in-flight matching goal occupies B
-- **WHEN** the goal is transitioned into an in-flight status
-- **THEN** the entire transition is rejected and no membership changes occupancy
+- **GIVEN** a Completed goal A followed by creation of another Active/Paused goal B occupying the same slot
+- **WHEN** the caller attempts to transition A to Paused
+- **THEN** the transition is rejected with 409 `slotOccupied` identifying B, and A remains Completed
 
 #### Scenario: Shared goal occupies each project once
 
-- **WHEN** one canonical in-flight goal belongs to A and B
-- **THEN** it occupies the matching slot once in each without conflicting with itself
+- **GIVEN** an in-flight goal in project A
+- **WHEN** it is added to project B or removed from A
+- **THEN** the operation is not slot-checked and succeeds (subject to the last-project rule)
 
 ### Requirement: Conflicts identify affected projects and goals
 
-A friendly pre-check or database constraint conflict SHALL produce the same structured HTTP 409 response containing each conflicting project id/name, entity type/id, goal type, and existing goal id.
+A slot conflict SHALL produce the same 409 in the unified error shape with `issueCode` `slotOccupied`, naming the entity type/id, goal type, normalized end target (Rank only) and the existing goal id, and carrying the existing goal under `current`.
 
 #### Scenario: Multi-project create partially conflicts
 
-- **GIVEN** A is occupied and B is available
-- **WHEN** one request targets A and B
-- **THEN** the request is rejected atomically and identifies A and its existing goal
+- **GIVEN** the profile already has an in-flight Ragnar Rank Gold1 goal
+- **WHEN** one combined request creates Ragnar Unlock, Ascension and Rank Gold1
+- **THEN** the request is rejected atomically with `slotOccupied` identifying the existing Rank goal, and no goal is created
 
-### Requirement: Database enforces concurrent slot occupancy
+### Requirement: The profile lock serializes slot checks
 
-Persistence SHALL include project-membership-level partial unique constraints that prevent two concurrent transactions from occupying the same non-Rank project/unit/type slot or the same Rank project/unit/normalized-end-target slot.
+Every goal write SHALL take the profile lock before checking slots, so two concurrent transactions cannot both occupy the same non-Rank profile/unit/type slot or the same Rank profile/unit/normalized-end-target slot. The rule SHALL NOT be enforced by a database constraint, so it can change without a schema change; a write that bypasses the lock or the check is a defect. V1 import SHALL re-check its new goals under the lock because it reads existing goals before taking it.
 
 #### Scenario: Racing creates target one slot
 
-- **WHEN** two requests concurrently create Ragnar Rank goals with the same normalized end target in one project
-- **THEN** at most one commits and the other returns the documented structured conflict
+- **WHEN** two requests concurrently create Ragnar Rank goals with the same normalized end target
+- **THEN** at most one commits and the other returns the documented `slotOccupied` conflict
 
 #### Scenario: Racing distinct Rank targets succeed
 
-- **WHEN** two requests concurrently create Ragnar Rank goals with distinct targets in one project
+- **WHEN** two requests concurrently create Ragnar Rank goals with distinct targets
 - **THEN** both can commit with distinct valid priorities
 
 ### Requirement: Concurrent mutations in one project serialize without failing
 
-Goal mutations that target one project SHALL be serialized against each
-other, and each SHALL observe the state committed by those that preceded it.
-Serialization SHALL be achieved by waiting, not by aborting: when two or more
-slot-scoped mutations (below) target distinct slots and are submitted
-concurrently to one project, every one of them SHALL commit. A slot-scoped
-mutation SHALL NOT fail merely because another mutation for the same project
-committed while it was waiting.
-
-A goal-order change is not slot-scoped — it validates against the project's
-complete in-flight goal set, not a single slot — so it is exempt from the
-"every one commits" guarantee above: when a goal-order change races a
-mutation that changes which goals are in-flight (a create, or a transition
-into or out of an in-flight status), whichever commits second observes a
-membership the earlier one already changed, and a goal-order change whose
-submitted set no longer matches SHALL be rejected with the documented
-stale-set response, not committed and not an unhandled server error. This is
-the existing "stale set is rejected atomically" contract, not a new failure
-mode — concurrency only decides which of the two racing mutations, if
-either, is the one that ends up stale.
-
-Mutations covered are single goal creation, combined goal creation,
-transitions into or out of an in-flight status, goal-side membership
-replacement, and project-side membership replacement (all slot-scoped), plus
-goal-order changes (not slot-scoped, see above).
+Goal mutations of one profile SHALL be serialized against each other by waiting on one profile-level lock, and each SHALL observe the state committed by those that preceded it. When two or more slot-scoped mutations target distinct slots and are submitted concurrently, every one of them SHALL commit; a slot-scoped mutation SHALL NOT fail merely because another mutation for the same profile committed while it was waiting. A goal-order change is not slot-scoped: when it races a mutation that changes the in-flight set, whichever commits second observes the earlier change, and an order change whose submitted set no longer matches SHALL be rejected with the documented stale-set response. Covered mutations: single and combined creation, status transitions, target edits, membership replacement (goal- or project-side), and goal-order changes.
 
 #### Scenario: Concurrent creates for distinct units all commit
 
-- **GIVEN** an owned project containing no goals
-- **WHEN** creation requests for Ragnar, Aun'shi, and Certus are submitted concurrently to that project
-- **THEN** all three requests succeed
-- **AND** the project's listed goal order contains all three goals, each with a distinct, valid priority
+- **WHEN** creation requests for Ragnar, Aun'shi, and Certus are submitted concurrently
+- **THEN** all three succeed and the in-flight order contains all three with distinct, valid priorities
 
 #### Scenario: Concurrent creates for distinct goal types on one unit all commit
 
-- **GIVEN** an owned project containing no goals
-- **WHEN** an Ascension and a Rank creation request for the same unit are submitted concurrently to that project
-- **THEN** both requests succeed
-- **AND** both goals appear in the project's in-flight goal order
+- **WHEN** an Ascension and a Rank creation request for the same unit are submitted concurrently
+- **THEN** both succeed and both goals appear in the in-flight order
 
 #### Scenario: Racing same-slot creates produce a conflict, not a server error
 
-- **GIVEN** an owned project containing no goals
-- **WHEN** two creation requests for the same unit and the same goal type are submitted concurrently to that project
-- **THEN** exactly one succeeds
-- **AND** the other is rejected with the documented structured slot-conflict response identifying the project and the existing goal
-- **AND** neither request produces an unhandled server error
+- **WHEN** two creation requests for the same unit and goal type are submitted concurrently
+- **THEN** exactly one succeeds, the other is rejected with `slotOccupied` identifying the existing goal, and neither produces an unhandled server error
 
 #### Scenario: Ordering stays contiguous under concurrency
 
-- **GIVEN** an owned project containing goals for two units
-- **WHEN** a create and a goal-order change (submitted for the pre-create goal set) race concurrently to that project
-- **THEN** the create always succeeds
-- **AND** the goal-order change either succeeds (if it wins the lock and commits before the create) or is rejected with the documented stale-set response (if the create commits first) — never an unhandled server error
-- **AND** in both outcomes, the resulting in-flight priorities form a contiguous sequence starting at 1 with no duplicates and no gaps
+- **WHEN** a create and a goal-order change (submitted for the pre-create goal set) race
+- **THEN** the create succeeds, the order change either succeeds or is rejected with the stale-set response, and in both outcomes the in-flight priorities form a contiguous sequence from 1 with no gaps or duplicates
 
 ### Requirement: Rank conflicts name the occupied target
 
-For a Rank slot conflict, the structured response SHALL include the existing goal id, project id/name, entity id/type, goal type, and normalized end target; a stale membership or status transition SHALL fail atomically across all affected projects.
+For a Rank slot conflict, the `slotOccupied` response SHALL include the existing goal id, entity id/type, goal type and normalized end target; a conflicting target edit or status transition SHALL fail atomically.
 
 #### Scenario: Multi-project membership conflicts in one project
 
-- **GIVEN** a requested Rank goal belongs to A and B, and B already contains its normalized target
-- **WHEN** the request is submitted
-- **THEN** neither membership is changed and the response identifies B, the target, and B's existing goal
+- **GIVEN** an in-flight Ragnar Rank goal targeting Silver3 and another targeting Gold1
+- **WHEN** the Silver3 goal's target is edited to Gold1
+- **THEN** nothing changes and the response identifies the Gold1 goal and the target

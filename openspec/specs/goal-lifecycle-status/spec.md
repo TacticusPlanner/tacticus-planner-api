@@ -10,36 +10,33 @@ from changing a goal's status.
 
 ### Requirement: A caller can deliberately create a paused goal
 
-Single and combined goal creation SHALL accept an optional request flag that
-creates the goal in the `Paused` status instead of `Active`. The flag SHALL
-default to not paused when it is absent, so a request that omits it creates an
-`Active` goal. For combined creation the flag SHALL apply uniformly to every goal
-in the request; the flag SHALL NOT be settable per goal within one combined
-request.
+Goal creation (`POST /me/goals`, single or combined) SHALL accept an optional request-level JSON boolean `startPaused` that creates the goals in the `Paused` status instead of `Active`. Absent or false SHALL create Active goals. Explicit null or a non-boolean value SHALL return 400 naming `startPaused` without creating any goal. The flag SHALL apply uniformly to every goal in the request; it SHALL NOT be settable per goal, and a per-spec `startPaused` field SHALL be rejected.
 
 #### Scenario: Paused creation is honored
 
-- **WHEN** the caller creates a goal with the paused flag set
+- **WHEN** the caller creates a goal with `startPaused: true`
 - **THEN** the created goal has the `Paused` status
 
 #### Scenario: Omitting the flag creates an active goal
 
-- **WHEN** the caller creates a goal without the paused flag
+- **WHEN** the caller creates a goal without `startPaused`
 - **THEN** the created goal has the `Active` status
 
 #### Scenario: Combined creation pauses the whole set
 
-- **WHEN** the caller creates a combined set of goals with the paused flag set
-- **THEN** every goal created by that request, including the prerequisite goals
-  of its dependency chain, has the `Paused` status
+- **WHEN** the caller creates a combined set of goals with `startPaused: true`
+- **THEN** every goal created by that request, including the prerequisite goals of its dependency chain, has the `Paused` status
 
 #### Scenario: A paused new goal still occupies its project slot
 
-- **GIVEN** project A contains an `Active` goal for a unit and goal type
-- **WHEN** the caller creates another goal for the same unit and goal type in
-  project A with the paused flag set
-- **THEN** the request is rejected as a project goal-slot conflict, because
-  `Paused` occupies the slot exactly as `Active` does
+- **GIVEN** the profile has an `Active` goal for a unit and goal type
+- **WHEN** the caller creates another goal for the same unit and goal type with `startPaused: true`
+- **THEN** the request is rejected as a slot conflict, because `Paused` occupies the slot exactly as `Active` does
+
+#### Scenario: Invalid paused-creation field is rejected atomically
+
+- **WHEN** a caller sends `startPaused: null`, a non-boolean value, or a per-goal `startPaused` field
+- **THEN** the response is 400 naming the field and no goal is created
 
 ### Requirement: Imported V1 goals preserve the source goal's planning choice
 
@@ -80,21 +77,6 @@ A prerequisite the import synthesizes SHALL be `Active` if any imported goal of 
 - **WHEN** the import creates the merged goal
 - **THEN** the merged goal has the `Active` status
 
-### Requirement: Existing goal statuses are not rewritten
-
-Adopting membership-independent creation SHALL NOT alter any already-persisted
-goal's status. A goal that is `Paused` when this behavior takes effect SHALL
-remain `Paused` until a user acts on it, because a status recorded under the
-previous rule is indistinguishable from one a user chose deliberately.
-
-#### Scenario: Previously paused goals stay paused
-
-- **GIVEN** goals persisted with the `Paused` status before this behavior took
-  effect
-- **WHEN** the system starts with the new creation behavior in place
-- **THEN** those goals still have the `Paused` status and no bulk status change
-  has been applied
-
 ### Requirement: Creation status does not depend on project membership
 
 A newly created goal SHALL be given the `Active` status by default, whatever projects it is filed into. Where a creation path has its own explicit source for the status — the caller's paused flag, or an imported goal's own planning choice — that source SHALL decide it; project membership never does.
@@ -117,7 +99,7 @@ A newly created goal SHALL be given the `Active` status by default, whatever pro
 
 ### Requirement: Project membership operations do not change a goal's status
 
-Changing a goal's project memberships and replacing a project's goal membership SHALL leave every affected goal's lifecycle status unchanged. A goal's status SHALL change only through an operation that explicitly targets that goal's status.
+Changing a goal's project memberships and replacing a project's goal membership SHALL leave every affected goal's lifecycle status unchanged. A goal's status SHALL change only through `POST /me/goals/status` (see `goal-bulk-status`), which explicitly names the goals it transitions.
 
 #### Scenario: Adding a membership does not change status
 

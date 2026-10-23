@@ -79,16 +79,3 @@ New Active or Paused goals SHALL append once to the global in-flight order, rega
 #### Scenario: Membership change
 - **WHEN** a goal is added to or removed from a non-last project
 - **THEN** its global position and order revision do not change
-
-### Requirement: Existing orders migrate deterministically
-
-For an existing account, migration SHALL start with the in-flight goals of the former Current plan in their stored project order. It SHALL then append previously unseen in-flight goals from other projects ordered by project creation time and project ID, using each project's stored goal order and goal ID as tie-breakers. Remaining in-flight goals without a project SHALL append by goal creation time and goal ID. A goal shared across projects SHALL appear at its first encounter only. Historical goals SHALL preserve status and history without entering the order. Migration SHALL not use `updatedAt` as a priority source.
-
-#### Scenario: Shared goal and outside-project goal
-- **GIVEN** Current plan A orders X then Y, and older project B orders Y then Z
-- **WHEN** the account migrates
-- **THEN** the global order is X, Y, Z
-
-#### Scenario: No Current plan
-- **WHEN** an account has projects but no Current plan
-- **THEN** all projects contribute in creation-time and ID order with goal-order tie-breaks
