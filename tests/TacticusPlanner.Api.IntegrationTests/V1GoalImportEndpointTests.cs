@@ -654,6 +654,25 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
     }
 
     [Fact]
+    public async Task UpgradeMaterialGoalIsNotImportedWhenEveryUnitNeedingItHasAnotherUpgradeGoal()
+    {
+        var (client, subject) = await CreateProvisionedClientAsync();
+        await SeedPlayerDataSnapshotAsync(subject, [Character(CharacterId)]);
+        var first = await ImportGoalsAsync(client, [UpgradeMaterialGoal("m1", 1, UltraStoneUpgradeId, 10)]);
+
+        var second = await ImportGoalsAsync(client, [UpgradeMaterialGoal("m2", 1, UltraOtherStoneUpgradeId, 3)]);
+
+        var outcome = Assert.Single(second.Outcomes);
+        Assert.Equal(V1GoalOutcomeStatus.Failed, outcome.Status);
+        Assert.Equal("upgrade_goal_occupied", outcome.Code);
+        Assert.Equal(CharacterId, outcome.EntityId);
+        Assert.Equal(UltraOtherStoneUpgradeId, outcome.UpgradeId);
+        Assert.Null(outcome.GoalId);
+        var existing = await GetGoalAsync(client, first.Outcomes[0].GoalId!.Value);
+        Assert.Equal(UltraStoneUpgradeId, Assert.Single(existing.Config.Upgrade!.Targets).UpgradeId);
+    }
+
+    [Fact]
     public async Task UpgradeMaterialGoalWithAnUnknownMaterialIsNotImported()
     {
         var (client, subject) = await CreateProvisionedClientAsync();

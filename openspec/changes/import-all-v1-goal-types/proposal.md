@@ -9,7 +9,7 @@ Companion apps change: `import-all-v1-goal-types` in `tacticus-planner-apps` (ou
 - Type 2 (Ascend) whose `character` is a Machine of War resolves to a Mow Ascension goal.
 - Type 6 (Upgrade Material) imports as an Upgrade goal. V1's goal has no unit, so the import picks an owner: the first unit (V1 priority order) among the profile's own imported unit goals that needs the material, else the first roster unit that does. Material goals given the same owner fold into that unit's one Upgrade goal, one target per material with quantities summed.
 - Type 7 (Pre-farm) has no V2 goal type. It reports a new `manual_step_required` skip carrying the material and the V1 ids of the goals it was linked to, so the client can prompt the user to re-create it.
-- New outcome codes: `unknown_upgrade`, `no_upgrade_owner`, `manual_step_required`. `unsupported_goal_type` now only covers type values V1 never had.
+- New outcome codes: `unknown_upgrade`, `no_upgrade_owner`, `upgrade_goal_occupied`, `manual_step_required`. `unsupported_goal_type` now only covers type values V1 never had.
 - `V1GoalOutcome` gains optional `upgradeId` and `linkedSourceGoalIds`.
 
 ## Capabilities

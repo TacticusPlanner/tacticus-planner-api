@@ -95,7 +95,9 @@ targeting that material and quantity, owned by a unit on the account's roster th
 The owner SHALL be, in order of preference: the first unit, by V1 priority, among the profile's own
 imported unit goals; then the roster's characters; then its Machines of War. Among those using the
 material, a unit whose existing Upgrade goal already targets it SHALL be chosen first, then a unit with
-no Upgrade goal. The outcome SHALL carry the material id.
+no Upgrade goal. When every unit using the material already has an Upgrade goal for other materials,
+the goal SHALL NOT be imported and SHALL report a code identifying the occupied Upgrade goal, naming the
+first such unit; it SHALL NOT report as already existing. The outcome SHALL carry the material id.
 
 #### Scenario: Material goal lands on the unit of an imported goal that needs it
 
@@ -114,6 +116,13 @@ no Upgrade goal. The outcome SHALL carry the material id.
 - **GIVEN** a V1 upgrade-material goal whose material no roster unit uses
 - **WHEN** the goals part is imported
 - **THEN** that goal reports as not imported with a code identifying that no unit uses the material
+
+#### Scenario: Every unit using the material already has another Upgrade goal
+
+- **GIVEN** the only roster unit using a material already has an Upgrade goal for a different material
+- **WHEN** a V1 upgrade-material goal for the first material is imported
+- **THEN** that goal reports as not imported with a code identifying the occupied Upgrade goal, naming that unit and the material
+- **AND** the existing Upgrade goal is unchanged
 
 ### Requirement: V1 pre-farm goals report a manual step
 

@@ -332,7 +332,14 @@ public sealed class V1GoalImportService(
                 "The goal's upgrade material is not in the V2 Game Catalog.", upgradeId));
         }
 
-        if (owners.Resolve(upgradeId) is not { } owner)
+        var (owner, occupied) = owners.Resolve(upgradeId);
+        if (occupied is not null)
+        {
+            return (null, NotImported(sourceGoal, occupied.EntityType, occupied.EntityId, "upgrade_goal_occupied",
+                "Every unit that uses this material already has an Upgrade goal for other materials.", upgradeId));
+        }
+
+        if (owner is null)
         {
             return (null, NotImported(sourceGoal, null, null, "no_upgrade_owner",
                 "No character or Machine of War on the account uses this upgrade material.", upgradeId));
@@ -955,8 +962,10 @@ public sealed class V1GoalImportService(
     /// Unlock) and only if the material is relevant to it (the same rule manual Upgrade-goal creation
     /// validates). Among those, a unit whose existing Upgrade goal already targets the material wins (so a
     /// re-import matches what an earlier one created), then a unit with no Upgrade goal yet (a unit holds one
-    /// in-flight Upgrade goal); failing both, the first relevant candidate, which then reports as already
-    /// existing. Deterministic for the same V1 profile and roster.</summary>
+    /// in-flight Upgrade goal). When every relevant unit already holds an Upgrade goal for other materials,
+    /// there is no owner and the first of them is returned as Occupied, so the material is reported as not
+    /// imported rather than as the unrelated existing goal. Deterministic for the same V1 profile and
+    /// roster.</summary>
     private sealed class UpgradeOwnerResolver(
         GameCatalogSnapshot catalog,
         PlayerDataSnapshot playerSnapshot,
@@ -966,7 +975,7 @@ public sealed class V1GoalImportService(
         private readonly Dictionary<UnitKey, IReadOnlySet<string>> relevantByUnit = new();
         private List<UnitKey>? candidates;
 
-        public UnitKey? Resolve(string upgradeId)
+        public (UnitKey? Owner, UnitKey? Occupied) Resolve(string upgradeId)
         {
             candidates ??= BuildCandidates();
             var relevant = candidates.Where(unit => Relevant(unit).Contains(upgradeId)).ToList();
@@ -979,11 +988,11 @@ public sealed class V1GoalImportService(
                 }
                 else if (existing.Config.Upgrade?.Targets.Any(target => target.UpgradeId == upgradeId) == true)
                 {
-                    return unit;
+                    return (unit, null);
                 }
             }
 
-            return free ?? relevant.FirstOrDefault();
+            return free is not null ? (free, null) : (null, relevant.FirstOrDefault());
         }
 
         private List<UnitKey> BuildCandidates()
