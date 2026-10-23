@@ -198,7 +198,12 @@ public sealed record V1Goal(
     // all" (non-zero) matters here, not which strategy.
     string? ShardFarmType = null,
     int? CampaignsUsage = null,
-    int? MythicCampaignsUsage = null
+    int? MythicCampaignsUsage = null,
+    // V1's material goals: type 6 ("farm N of one upgrade material", no unit) carries the material and
+    // quantity; type 7 (pre-farm) carries the material and the V1 ids of the goals it pre-farms for.
+    string? UpgradeMaterialId = null,
+    int? UpgradeMaterialQuantity = null,
+    IReadOnlyList<string>? PreFarmGoalIds = null
 );
 
 public sealed class TacticusV1Client(IHttpClientFactory httpClientFactory) : ITacticusV1Client

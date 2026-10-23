@@ -6,6 +6,7 @@ using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.PlayerData.Chunks;
 using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.GameCatalog;
+using TacticusPlanner.GameCatalog.Models;
 using TacticusPlanner.GameDomain;
 using TacticusPlanner.Persistence;
 
@@ -29,6 +30,10 @@ public sealed class V1GoalImportService(
     GoalOrderService order,
     TimeProvider timeProvider)
 {
+    // V1's PersonalGoalType values for its two unit-less material goal types.
+    private const int V1UpgradeMaterialType = 6;
+    private const int V1PreFarmType = 7;
+
     private static readonly string[] Rarities = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic"];
     private static readonly string[] Stars =
     [
@@ -55,9 +60,47 @@ public sealed class V1GoalImportService(
         var outcomeBySourceIndex = new V1GoalOutcome?[ordered.Count];
         var translated = new List<TranslatedGoal>();
 
+        // Loaded as full tracked-then-detached entities, not an anonymous projection of individual
+        // columns: Config is a JSON-owned navigation (OwnsOne().ToJson()), and selecting it directly
+        // inside a `new { ... }` projection isn't materialized the same way by every provider. Loaded
+        // before translation because choosing an Upgrade Material goal's owner consults existing goals.
+        var existingRows = await db.Goals
+            .AsNoTracking()
+            .Where(goal => goal.ProfileId == profileId)
+            .ToListAsync(ct);
+        var existingByKey = ExistingGoalsByKey(existingRows);
+
+        // Unit goals first: their units, in V1 priority order, are the preferred owners for V1's unit-less
+        // material goals (types 6 and 7), which are translated in a second pass below.
+        var materialGoalIndexes = new List<int>();
+        var preferredOwners = new List<UnitKey>();
         for (var i = 0; i < ordered.Count; i++)
         {
+            if (ordered[i].Type is V1UpgradeMaterialType or V1PreFarmType)
+            {
+                materialGoalIndexes.Add(i);
+                continue;
+            }
+
             var (goal, outcome) = Translate(ordered[i], i, playerSnapshot);
+            if (goal is null)
+            {
+                outcomeBySourceIndex[i] = outcome;
+            }
+            else
+            {
+                translated.Add(goal);
+                preferredOwners.Add(new UnitKey(goal.Key.EntityType, goal.Key.EntityId));
+            }
+        }
+
+        var owners = new UpgradeOwnerResolver(catalog.Current, playerSnapshot, preferredOwners, existingByKey);
+        var sourceIds = sourceIdByIndex.OfType<string>().ToHashSet(StringComparer.Ordinal);
+        foreach (var i in materialGoalIndexes)
+        {
+            var (goal, outcome) = ordered[i].Type == V1UpgradeMaterialType
+                ? TranslateUpgradeMaterial(ordered[i], i, owners)
+                : (null, TranslatePreFarm(ordered[i], sourceIds));
             if (goal is null)
             {
                 outcomeBySourceIndex[i] = outcome;
@@ -69,15 +112,6 @@ public sealed class V1GoalImportService(
         }
 
         var (collapsedSurvivors, mergedInto) = CollapseDuplicates(translated);
-
-        // Loaded as full tracked-then-detached entities, not an anonymous projection of individual
-        // columns: Config is a JSON-owned navigation (OwnsOne().ToJson()), and selecting it directly
-        // inside a `new { ... }` projection isn't materialized the same way by every provider.
-        var existingRows = await db.Goals
-            .AsNoTracking()
-            .Where(goal => goal.ProfileId == profileId)
-            .ToListAsync(ct);
-        var existingByKey = ExistingGoalsByKey(existingRows);
 
         var creatable = new List<TranslatedGoal>();
         foreach (var candidate in collapsedSurvivors)
@@ -137,7 +171,7 @@ public sealed class V1GoalImportService(
     private (TranslatedGoal? Goal, V1GoalOutcome? Outcome) Translate(
         V1Goal sourceGoal, int originalIndex, PlayerDataSnapshot playerSnapshot)
     {
-        if (sourceGoal.Type is 6 or 7)
+        if (sourceGoal.Type is < 1 or > 5)
         {
             return (null, NotImported(sourceGoal, null, null, "unsupported_goal_type",
                 $"V1 goal type {sourceGoal.Type} is not supported."));
@@ -145,13 +179,19 @@ public sealed class V1GoalImportService(
 
         // Type 4 is always a Mow ability goal. Ascension (type 2) is the one other type a Mow can carry
         // (V2 allows Ascension/Ability/Upgrade for either entity type) — V1 has no separate wire type for
-        // it, so a Mow Ascension goal is distinguished by carrying UnitId instead of Character, the same
-        // convention V1 uses for its "upgrade mow" fields.
-        var isMow = sourceGoal.Type == 4 || (sourceGoal.Type == 2 && sourceGoal.UnitId is not null);
+        // it. V1's own goal dialog stores every unit, Mow or Character, under Character, so a type-2 goal
+        // whose Character is not a catalog character is looked up among the Mows; a record carrying
+        // UnitId instead (the "upgrade mow" field convention) is a Mow outright.
         var rawUnitId = sourceGoal.UnitId ?? sourceGoal.Character;
+        var isMow = sourceGoal.Type == 4 || (sourceGoal.Type == 2 && sourceGoal.UnitId is not null);
         var entityId = isMow
             ? catalog.Current.Mows.FirstOrDefault(item => Matches(item.Id, item.Name, rawUnitId))?.Id
             : catalog.Current.Characters.FirstOrDefault(item => Matches(item.Id, item.Name, sourceGoal.Character))?.Id;
+        if (entityId is null && sourceGoal.Type == 2 && !isMow)
+        {
+            entityId = catalog.Current.Mows.FirstOrDefault(item => Matches(item.Id, item.Name, sourceGoal.Character))?.Id;
+            isMow = entityId is not null;
+        }
         var entityType = isMow ? GoalEntityType.Mow : GoalEntityType.Character;
 
         if (entityId is null)
@@ -269,6 +309,70 @@ public sealed class V1GoalImportService(
         return sources.Count == 0 ? null : sources;
     }
 
+    /// <summary>V1 type 6 ("farm N of one upgrade material") has no unit, while every V2 goal belongs to a
+    /// Character or Mow — so it becomes an Upgrade goal on an owner the import picks: the first unit, by V1
+    /// priority, among the profile's own imported unit goals that needs the material, else the first roster
+    /// unit that does (see <see cref="UpgradeOwnerResolver"/>). The owner is only an anchor: an Upgrade goal
+    /// farms its targets the same whichever unit holds it.</summary>
+    private (TranslatedGoal? Goal, V1GoalOutcome? Outcome) TranslateUpgradeMaterial(
+        V1Goal sourceGoal, int originalIndex, UpgradeOwnerResolver owners)
+    {
+        var upgradeId = sourceGoal.UpgradeMaterialId?.Trim();
+        var quantity = sourceGoal.UpgradeMaterialQuantity ?? 0;
+        if (string.IsNullOrEmpty(upgradeId) || quantity <= 0)
+        {
+            return (null, NotImported(sourceGoal, null, null, "missing_target",
+                "The goal is missing a required target.", upgradeId));
+        }
+
+        if (catalog.Current.UpgradeViews.All(item => item.Id != upgradeId))
+        {
+            return (null, NotImported(sourceGoal, null, null, "unknown_upgrade",
+                "The goal's upgrade material is not in the V2 Game Catalog.", upgradeId));
+        }
+
+        if (owners.Resolve(upgradeId) is not { } owner)
+        {
+            return (null, NotImported(sourceGoal, null, null, "no_upgrade_owner",
+                "No character or Machine of War on the account uses this upgrade material.", upgradeId));
+        }
+
+        var config = new CreateGoalConfigRequest(Upgrade: new UpgradeTargetRequest(
+            [new UpgradeMaterialTargetRequest(upgradeId, quantity)]));
+        return (new TranslatedGoal(
+            new GoalKey(owner.EntityType, owner.EntityId, GoalType.Upgrade), config, originalIndex, sourceGoal.Notes,
+            InDailyPlanning: sourceGoal.DailyRaids is not false), null);
+    }
+
+    /// <summary>V1 type 7 (pre-farm a material for chosen goals) has no V2 goal type: its reservation of
+    /// material away from the linked goals can't be expressed. It reports a "manual step" outcome naming
+    /// the material and the V1 goals it was linked to, so the client can walk the user through re-creating
+    /// it (typically as an Upgrade goal on the linked unit, ordered ahead of the linked goal).</summary>
+    private V1GoalOutcome TranslatePreFarm(V1Goal sourceGoal, IReadOnlySet<string> sourceIds)
+    {
+        var upgradeId = sourceGoal.UpgradeMaterialId?.Trim();
+        if (string.IsNullOrEmpty(upgradeId))
+        {
+            return NotImported(sourceGoal, null, null, "missing_target", "The goal is missing a required target.", null);
+        }
+
+        if (catalog.Current.UpgradeViews.All(item => item.Id != upgradeId))
+        {
+            return NotImported(sourceGoal, null, null, "unknown_upgrade",
+                "The goal's upgrade material is not in the V2 Game Catalog.", upgradeId);
+        }
+
+        var linked = (sourceGoal.PreFarmGoalIds ?? [])
+            .Where(sourceIds.Contains)
+            .Distinct(StringComparer.Ordinal)
+            .ToList();
+        return new V1GoalOutcome(
+            V1GoalOutcomeStatus.Skipped,
+            "manual_step_required",
+            "V2 has no pre-farm goal type. Create an Upgrade goal for this material on the unit you were pre-farming for.",
+            null, null, null, null, sourceGoal.Id, upgradeId, linked);
+    }
+
     /// <summary>
     /// Indexes the account's existing goals for the "already imported" check, by slot: a Rank goal under its
     /// current normalized end target (no target history is kept, so a goal edited in place matches only its
@@ -342,6 +446,24 @@ public sealed class V1GoalImportService(
                     Config = new CreateGoalConfigRequest(
                         Progression: new ProgressionTargetRequest(first.Config.Progression!.Start, last.Config.Progression!.End),
                         AcquisitionSources: acquisitionSources.Count == 0 ? null : acquisitionSources),
+                    Notes = JoinNotes(ordered),
+                    InDailyPlanning = inDailyPlanning,
+                };
+            }
+            else if (group.Key.GoalType == GoalType.Upgrade)
+            {
+                // A unit holds one in-flight Upgrade goal, so every V1 material goal given the same owner
+                // folds into it: one target per material (first-seen V1 order), duplicate quantities summed.
+                var targets = ordered
+                    .SelectMany(goal => goal.Config.Upgrade!.Targets)
+                    .GroupBy(target => target.UpgradeId, StringComparer.Ordinal)
+                    .Select(targetGroup => new UpgradeMaterialTargetRequest(
+                        targetGroup.Key,
+                        (int)Math.Min(int.MaxValue, targetGroup.Sum(target => (long)target.Quantity))))
+                    .ToList();
+                survivor = ordered[0] with
+                {
+                    Config = new CreateGoalConfigRequest(Upgrade: new UpgradeTargetRequest(targets)),
                     Notes = JoinNotes(ordered),
                     InDailyPlanning = inDailyPlanning,
                 };
@@ -758,8 +880,9 @@ public sealed class V1GoalImportService(
         null,
         sourceIdByIndex[candidate.OriginalIndex]);
 
-    private static V1GoalOutcome NotImported(V1Goal sourceGoal, GoalEntityType? entityType, string? entityId, string code, string message) =>
-        new(V1GoalOutcomeStatus.Failed, code, message, entityType, entityId, null, null, sourceGoal.Id);
+    private static V1GoalOutcome NotImported(
+        V1Goal sourceGoal, GoalEntityType? entityType, string? entityId, string code, string message, string? upgradeId = null) =>
+        new(V1GoalOutcomeStatus.Failed, code, message, entityType, entityId, null, null, sourceGoal.Id, upgradeId);
 
     private static V1GoalOutcome Skipped(
         V1Goal sourceGoal, GoalEntityType entityType, string entityId, GoalType goalType, string code, string message) =>
@@ -825,6 +948,66 @@ public sealed class V1GoalImportService(
     private sealed record TranslatedGoal(
         GoalKey Key, CreateGoalConfigRequest Config, int OriginalIndex, string? Notes, bool InDailyPlanning);
 
+    /// <summary>Picks the owner of an imported V1 Upgrade Material goal (type 6). Candidates, in order: the
+    /// units of the profile's own imported unit goals (V1 priority order), then the account's roster
+    /// characters, then its roster Mows — each only if on the roster (so an owner never needs a synthesized
+    /// Unlock) and only if the material is relevant to it (the same rule manual Upgrade-goal creation
+    /// validates). Among those, a unit whose existing Upgrade goal already targets the material wins (so a
+    /// re-import matches what an earlier one created), then a unit with no Upgrade goal yet (a unit holds one
+    /// in-flight Upgrade goal); failing both, the first relevant candidate, which then reports as already
+    /// existing. Deterministic for the same V1 profile and roster.</summary>
+    private sealed class UpgradeOwnerResolver(
+        GameCatalogSnapshot catalog,
+        PlayerDataSnapshot playerSnapshot,
+        IReadOnlyList<UnitKey> preferred,
+        Dictionary<GoalKey, ExistingGoalRef> existingByKey)
+    {
+        private readonly Dictionary<UnitKey, IReadOnlySet<string>> relevantByUnit = new();
+        private List<UnitKey>? candidates;
+
+        public UnitKey? Resolve(string upgradeId)
+        {
+            candidates ??= BuildCandidates();
+            var relevant = candidates.Where(unit => Relevant(unit).Contains(upgradeId)).ToList();
+            UnitKey? free = null;
+            foreach (var unit in relevant)
+            {
+                if (!existingByKey.TryGetValue(new GoalKey(unit.EntityType, unit.EntityId, GoalType.Upgrade), out var existing))
+                {
+                    free ??= unit;
+                }
+                else if (existing.Config.Upgrade?.Targets.Any(target => target.UpgradeId == upgradeId) == true)
+                {
+                    return unit;
+                }
+            }
+
+            return free ?? relevant.FirstOrDefault();
+        }
+
+        private List<UnitKey> BuildCandidates()
+        {
+            var roster = playerSnapshot.Characters.Select(item => new UnitKey(GoalEntityType.Character, item.UnitId.Value))
+                .Concat(playerSnapshot.Mows.Select(item => new UnitKey(GoalEntityType.Mow, item.UnitId.Value)))
+                .ToList();
+            var onRoster = roster.ToHashSet();
+            return preferred.Where(onRoster.Contains).Concat(roster).Distinct().ToList();
+        }
+
+        private IReadOnlySet<string> Relevant(UnitKey unit)
+        {
+            if (!relevantByUnit.TryGetValue(unit, out var relevant))
+            {
+                relevant = unit.EntityType == GoalEntityType.Character
+                    ? catalog.CharacterRelevantUpgradeIds(unit.EntityId)
+                    : catalog.MowRelevantUpgradeIds(unit.EntityId);
+                relevantByUnit[unit] = relevant;
+            }
+
+            return relevant;
+        }
+    }
+
     private sealed record UnitPrerequisites(
         bool NeedsUnlock, UnitProgression? AscensionTarget, V1GoalOutcome? AscensionShortfall)
     {
@@ -838,7 +1021,10 @@ public sealed class V1GoalImportService(
 /// (e.g. "goal_already_exists", "duplicate_goal_merged", "unsupported_goal_type", "prerequisite_added").
 /// <see cref="GoalId"/> is the V2 goal this outcome created or matched, when one applies.
 /// <see cref="SourceGoalId"/> is the originating V1 goal's id, when this outcome corresponds to one (null
-/// for a synthesized prerequisite, which has no single V1 source).</summary>
+/// for a synthesized prerequisite, which has no single V1 source). <see cref="UpgradeId"/> is the upgrade
+/// material a V1 material goal (type 6 or 7) named, and <see cref="LinkedSourceGoalIds"/> the V1 ids of the
+/// goals a pre-farm goal was linked to (only those present in the imported profile) — both set only on
+/// those outcomes, so the client can describe a pre-farm goal's manual step.</summary>
 public sealed record V1GoalOutcome(
     V1GoalOutcomeStatus Status,
     string Code,
@@ -847,7 +1033,9 @@ public sealed record V1GoalOutcome(
     string? EntityId,
     GoalType? GoalType,
     Guid? GoalId,
-    string? SourceGoalId
+    string? SourceGoalId,
+    string? UpgradeId = null,
+    IReadOnlyList<string>? LinkedSourceGoalIds = null
 );
 
 public sealed record V1GoalImportResult(IReadOnlyList<V1GoalOutcome> Outcomes, bool Refused)

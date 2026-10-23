@@ -13267,6 +13267,22 @@
               "null",
               "string"
             ]
+          },
+          "upgradeId": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "linkedSourceGoalIds": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/IReadOnlyListOfString"
+              }
+            ]
           }
         }
       },
