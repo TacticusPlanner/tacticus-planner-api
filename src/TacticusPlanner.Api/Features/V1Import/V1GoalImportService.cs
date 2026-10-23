@@ -154,9 +154,10 @@ public sealed class V1GoalImportService(
         }
 
         var extraOutcomes = new List<V1GoalOutcome>();
+        Guid? projectId = null;
         if (creatable.Count > 0)
         {
-            await CreateGoalsAsync(
+            projectId = await CreateGoalsAsync(
                 profileId, playerSnapshot, creatable, existingByKey, synthesizePrerequisites,
                 sourceIdBySlot, outcomeBySourceIndex, extraOutcomes, ct);
         }
@@ -190,7 +191,7 @@ public sealed class V1GoalImportService(
         }
         outcomes.AddRange(extraOutcomes);
 
-        return new V1GoalImportResult(outcomes, Refused: false);
+        return new V1GoalImportResult(outcomes, Refused: false) { ProjectId = projectId };
     }
 
     private (TranslatedGoal? Goal, V1GoalOutcome? Outcome) Translate(
@@ -629,7 +630,8 @@ public sealed class V1GoalImportService(
         return (survivors, mergedInto);
     }
 
-    private async Task CreateGoalsAsync(
+    /// <returns>The import's project, or null when nothing was committed.</returns>
+    private async Task<Guid?> CreateGoalsAsync(
         ProfileId profileId,
         PlayerDataSnapshot playerSnapshot,
         List<TranslatedGoal> creatable,
@@ -658,6 +660,7 @@ public sealed class V1GoalImportService(
             list.Add(candidate);
         }
 
+        Guid? createdProjectId = null;
         await planning.ExecuteLockedMutationAsync(async transaction =>
         {
             var now = timeProvider.GetUtcNow();
@@ -864,6 +867,10 @@ public sealed class V1GoalImportService(
             await db.SaveChangesAsync(ct);
             await order.CompleteAsync(ct);
             await transaction.CommitAsync(ct);
+            if (pending.Count > 0)
+            {
+                createdProjectId = project.Id.Value;
+            }
 
             foreach (var (index, (goal, candidate)) in staged)
             {
@@ -887,6 +894,7 @@ public sealed class V1GoalImportService(
                 extraOutcomes.Add(PrerequisiteOutcome(goal, candidateCount));
             }
         }, ct);
+        return createdProjectId;
     }
 
     /// <summary>Computes what, if anything, needs synthesizing for one unit — Unlock and/or Ascension
@@ -1102,10 +1110,10 @@ public sealed class V1GoalImportService(
     /// <summary><paramref name="RankTargetKey"/> is set only for a Rank goal, so distinct Rank end targets
     /// for one unit are distinct keys (imported as separate milestones) while an exact duplicate shares a
     /// key (merged) — every other goal type keeps the one-per-unit/type key.</summary>
-    /// <summary>"Import 23 Oct 2026, 12:00 UTC": the server has no user locale or time zone, so the name
-    /// uses an invariant format and says it is UTC.</summary>
+    /// <summary>"V1 import · 23 Oct": short enough to fit a Goals row. The server has no user locale or time
+    /// zone, so the date is invariant and UTC; two imports on one day share the name but not the project.</summary>
     internal static string ImportProjectName(DateTimeOffset now) =>
-        string.Create(CultureInfo.InvariantCulture, $"Import {now.UtcDateTime:d MMM yyyy, HH:mm} UTC");
+        string.Create(CultureInfo.InvariantCulture, $"V1 import · {now.UtcDateTime:d MMM}");
 
     private sealed record GoalKey(GoalEntityType EntityType, string EntityId, GoalType GoalType, string? RankTargetKey = null);
 
@@ -1226,6 +1234,9 @@ public sealed record V1GoalOutcome(
 
 public sealed record V1GoalImportResult(IReadOnlyList<V1GoalOutcome> Outcomes, bool Refused)
 {
+    /// <summary>The project this run created its goals in; null when it created none.</summary>
+    public Guid? ProjectId { get; init; }
+
     public static V1GoalImportResult CreateRefused() => new(
         [
             new V1GoalOutcome(

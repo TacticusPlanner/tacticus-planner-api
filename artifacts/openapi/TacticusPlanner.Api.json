@@ -10469,6 +10469,7 @@
           "outcomes",
           "legendaryEventPlans",
           "legendaryEventOutcomes",
+          "importProjectId",
           "profileId",
           "playerName",
           "powerLevel",
@@ -10504,6 +10505,13 @@
           },
           "legendaryEventOutcomes": {
             "$ref": "#/components/schemas/IReadOnlyListOfV1LegendaryEventOutcome"
+          },
+          "importProjectId": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "format": "uuid"
           },
           "profileId": {
             "type": "string",

@@ -2,7 +2,7 @@
 
 ### Requirement: Imported goals are created by the import operation
 
-The import operation SHALL create the imported goals itself. It SHALL NOT return goal-creation requests for the caller to submit. Each import run that creates at least one goal SHALL create a new project of its own, named "Import" followed by the run's date and time in UTC (for example "Import 23 Oct 2026, 12:00 UTC"), and SHALL place every goal it creates in that project, each in the status its own V1 daily-planning choice implies (see `goal-lifecycle-status`). A run that creates no goals SHALL NOT create a project.
+The import operation SHALL create the imported goals itself. It SHALL NOT return goal-creation requests for the caller to submit. Each import run that creates at least one goal SHALL create a new project of its own, named "V1 import · " followed by the run's UTC date (for example "V1 import · 23 Oct"), SHALL place every goal it creates in that project, each in the status its own V1 daily-planning choice implies (see `goal-lifecycle-status`), and SHALL return that project's id in the response. A run that creates no goals SHALL NOT create a project, and returns no project id.
 
 The import SHALL NOT require the caller to supply, or re-supply, anything derived from the V1 profile: V1 credentials are used once, within the same operation, and are not retained.
 
@@ -16,7 +16,7 @@ The import SHALL NOT require the caller to supply, or re-supply, anything derive
 
 - **GIVEN** an account with player data and a V1 profile containing supported goals
 - **WHEN** the goals part is imported
-- **THEN** a new project named after the import's date and time holds every goal the import created, and the default project gains none
+- **THEN** a new project named after the import's date holds every goal the import created, the response names that project, and the default project gains none
 
 #### Scenario: Import is repeatable without duplicating goals
 

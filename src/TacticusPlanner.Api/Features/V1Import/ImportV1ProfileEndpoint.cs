@@ -120,6 +120,7 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
         {
             LegendaryEventPlans = legendaryEvents.Part,
             LegendaryEventOutcomes = legendaryEvents.Outcomes,
+            ImportProjectId = goalResult.ProjectId,
             ProfileId = profileId.Value.Value,
             PlayerName = personalKey.PlayerName,
             PowerLevel = personalKey.PowerLevel,
@@ -484,6 +485,10 @@ public sealed record ImportV1ProfileResponse(
     /// <summary>One outcome per V1 event (ascending V1 id) when <c>legendaryEventPlans</c> was selected.</summary>
     [JsonRequired]
     public IReadOnlyList<V1LegendaryEventOutcome> LegendaryEventOutcomes { get; init; } = [];
+
+    /// <summary>The project this run's imported goals went into; null when it created no goals.</summary>
+    [JsonRequired]
+    public Guid? ImportProjectId { get; init; }
 
     [JsonRequired]
     public Guid ProfileId { get; init; }
