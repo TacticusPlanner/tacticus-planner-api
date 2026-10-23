@@ -4,7 +4,7 @@ Companion apps change: `add-quest-event-tracker` in `tacticus-planner-apps`. Thi
 
 ## 1. Raw data
 
-- [ ] 1.1 Copy the Cyrus, Nubari and Kîmm records of V1 `hero-quests.json` to `Data/quests/quest-events.json` unchanged, and port the wiki QuestCrates table into `Data/quests/quest-crates.json`
+- [ ] 1.1 Copy the Cyrus, Nubari and Kîmm records of V1 `hero-quests.json` to `Data/quests/quest-events.json` unchanged, add Nubari's 17 in-game battle powers as `power`, and port the wiki QuestCrates table into `Data/quests/quest-crates.json`
 - [ ] 1.2 Register the raw and served keys in `GameCatalogDatasets`
 
 ## 2. Models and denormalization

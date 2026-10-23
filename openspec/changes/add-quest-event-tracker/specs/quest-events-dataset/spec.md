@@ -23,6 +23,7 @@ The game catalog SHALL serve a dataset keyed `quest-events` as a plain array at 
     boardId: string,                  // board image id, e.g. "C3_70"
     spawnPointsSet: int,              // V1 spawnPointsSet, unchanged
     lightningVictoryTurns: int,       // V1 lightningVictory
+    power: int | null,                // the game's enemy power for the battle, null when not recorded
     enemies: { id: string, ladderIndex: int, count: int }[],
     objectives: { type: string, target: string | null, score: int }[],
     loot: { upgradeId: string, chanceNumerator: int, chanceDenominator: int }
@@ -30,7 +31,7 @@ The game catalog SHALL serve a dataset keyed `quest-events` as a plain array at 
 }
 ```
 
-Records SHALL be ordered by `featuredCharacterId` (ordinal). `tier` SHALL be the rarity at the raw tier `index` (0 is Common, 5 is Mythic).
+Records SHALL be ordered by `featuredCharacterId` (ordinal). `tier` SHALL be the rarity at the raw tier `index` (0 is Common, 5 is Mythic). `power` SHALL be the raw battle's optional `power` (an addition to the V1 shape, taken from the in-game battle screen), and null when the raw battle has none.
 
 #### Scenario: Cyrus battle 1
 
@@ -41,6 +42,11 @@ Records SHALL be ordered by `featuredCharacterId` (ordinal). `tier` SHALL be the
 
 - **WHEN** the same record's battle 17 is read
 - **THEN** it has `tier` `Mythic`, `tierPosition` 1, `deploySlots` 5, `boardId` `LE3_24`, `lightningVictoryTurns` 4 and `loot` `{ upgradeId: "upgHpM001", chanceNumerator: 1, chanceDenominator: 6 }`
+
+#### Scenario: Recorded battle power
+
+- **GIVEN** Nubari's raw battles carry the in-game powers 260, 447, 757, 1,183, 2,336, 3,540, 7,003, 8,379, 10,020, 15,822, 22,214, 33,847, 57,252, 98,715, 455,880, 1,459,769, 4,703,789
+- **THEN** the `astarEradicator` battles serve those values as `power` in battle order, and Cyrus's and Kîmm's battles serve `power: null`
 
 #### Scenario: Coverage
 
@@ -57,14 +63,14 @@ Records SHALL be ordered by `featuredCharacterId` (ordinal). `tier` SHALL be the
 | Uncommon | 3, 4, 5 |
 | Rare | 3, 3, 3, 4, 5 |
 | Epic | 3, 4, 5 |
-| Legendary | 4, 5 |
+| Legendary | 5, 5 |
 | Mythic | 5 |
 
 `spawnPointsSet` SHALL still be served unchanged; it is not used to derive slots.
 
 Assumptions:
 
-- The rule is the same for every quest (confirmed by Severyn).
+- The rule is the same for every quest (confirmed by Severyn). Legendary position 1 is 5, as Nubari's in-game screen shows, not the 4 first given.
 - The featured hero takes one of the slots.
 
 #### Scenario: Rare tier
@@ -129,7 +135,7 @@ The loader SHALL fail startup, naming the dataset and the quest, when:
 - a quest does not have exactly 17 battles numbered 1 to 17, split 3, 3, 5, 3, 2, 1 across tier indexes 0 to 5 in order;
 - an enemy id is not in `npcs`, or an `upgradeId` is not in `upgrades`;
 - an objective `type` is not listed, a required `target` is missing, or a `MaxHits`/`MinHits` target is not a whole number of at least 1;
-- a loot chance is not `0 < numerator ≤ denominator`;
+- a loot chance is not `0 < numerator ≤ denominator`, or a `power` is present and below 1;
 - a quest's maximum score, 17 × (300 medals + 100 Lightning Victory) plus the sum of its objective scores, is not equal to the `points` of the last `quest-crates` record;
 - `quest-crates` is not 17 records with ascending `points`, or a reward has an unknown `type`.
 

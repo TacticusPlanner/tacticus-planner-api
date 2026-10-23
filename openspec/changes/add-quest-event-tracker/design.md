@@ -39,7 +39,11 @@ V1 lists one entry per unit. Grouping by `(id, index)` into `count` gives the cl
 
 The validator compares each quest's maximum with crate 17's `points`. A data entry error in either file then fails at load, not in a player's crate projection.
 
-### D5. Raw files live under `Data/quests/`
+### D5. Battle power is recorded where known
+
+The game shows each battle's enemy power. V1 has no such field, so `power` is an optional addition to the raw battle, filled for Nubari from Severyn's screenshots and null elsewhere. The client prefers it to its NPC sum, as LE uses catalog power.
+
+### D6. Raw files live under `Data/quests/`
 
 The loader matches by leaf file name, so the folder only groups the two files.
 
