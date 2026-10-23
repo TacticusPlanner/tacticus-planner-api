@@ -29,6 +29,27 @@ public sealed class ProductAnalyticsTests
         analytics.GuildRegistered("some-analytics-id");
     }
 
+    [Theory]
+    [InlineData(null)]
+    [InlineData("false")]
+    public void NotEnabledSelectsTheInertImplementationEvenWithAProjectToken(string? enabled)
+    {
+        var configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                ["Analytics:Enabled"] = enabled,
+                ["Analytics:ProjectToken"] = "phc_test",
+                ["Analytics:IdentityKey"] = Convert.ToBase64String(new byte[32]),
+            })
+            .Build();
+
+        var services = new ServiceCollection();
+        services.AddAnalyticsFeature(configuration, validateOnStart: false);
+        using var provider = services.BuildServiceProvider();
+
+        Assert.IsType<NullProductAnalytics>(provider.GetRequiredService<IProductAnalytics>());
+    }
+
     [Fact]
     public void EveryDeclaredEventMethodTakesOnlyTheAnalyticsId()
     {
