@@ -402,15 +402,14 @@ public sealed class V1GoalImportService(
                 upgradeId, linkedIds, null));
         }
 
-        var candidates = new List<TranslatedGoal>();
-        foreach (var unitGoals in linkedGoals.GroupBy(goal => new UnitKey(goal.Key.EntityType, goal.Key.EntityId)))
-        {
-            if (!owners.Uses(unitGoals.Key, upgradeId)) continue;
-            var need = MaterialNeed(unitGoals.Key, upgradeId, unitGoals.ToList(), playerSnapshot);
-            if (need <= 0) continue;
-            candidates.Add(UpgradeCandidate(unitGoals.Key, upgradeId, need, originalIndex, sourceGoal.Notes, inDailyPlanning,
-                null, linkedIds));
-        }
+        var candidates = linkedGoals
+            .GroupBy(goal => new UnitKey(goal.Key.EntityType, goal.Key.EntityId))
+            .Where(unitGoals => owners.Uses(unitGoals.Key, upgradeId))
+            .Select(unitGoals => (Unit: unitGoals.Key, Need: MaterialNeed(unitGoals.Key, upgradeId, unitGoals.ToList(), playerSnapshot)))
+            .Where(entry => entry.Need > 0)
+            .Select(entry => UpgradeCandidate(entry.Unit, upgradeId, entry.Need, originalIndex, sourceGoal.Notes, inDailyPlanning,
+                null, linkedIds))
+            .ToList();
 
         if (candidates.Count == 0)
         {
