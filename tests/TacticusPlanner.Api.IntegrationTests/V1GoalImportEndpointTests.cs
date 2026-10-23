@@ -694,7 +694,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         Assert.Equal(V1GoalOutcomeStatus.Skipped, outcome.Status);
         Assert.Equal("manual_step_required", outcome.Code);
         Assert.Equal(UltraStoneUpgradeId, outcome.UpgradeId);
-        Assert.Equal(new[] { "r1" }, outcome.LinkedSourceGoalIds!);
+        Assert.Equal("r1", Assert.Single(outcome.LinkedSourceGoalIds!));
         Assert.Null(outcome.GoalId);
     }
 
