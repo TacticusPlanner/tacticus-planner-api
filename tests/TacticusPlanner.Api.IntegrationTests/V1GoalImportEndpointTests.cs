@@ -884,8 +884,8 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
             ],
             automaticPrerequisites: false);
 
-        var defaultProject = await GetDefaultProjectAsync(client);
-        var members = await client.GetProjectGoalsAsync(defaultProject.ProjectId);
+        var importProject = Assert.Single(await GetImportProjectsAsync(client));
+        var members = await client.GetProjectGoalsAsync(importProject.ProjectId);
         var byGoalId = members!.Goals.ToDictionary(entry => entry.Goal.GoalId, entry => entry.Goal.GlobalPriority);
 
         var bt1GoalId = body.Outcomes.Single(o => o.SourceGoalId == "bt-1").GoalId!.Value;
@@ -905,11 +905,41 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         var unlockGoalId = Assert.Single(body.Outcomes, o => o.GoalType == GoalType.Unlock).GoalId!.Value;
         var rankGoalId = Assert.Single(body.Outcomes, o => o.SourceGoalId == "r1").GoalId!.Value;
 
-        var defaultProject = await GetDefaultProjectAsync(client);
-        var members = await client.GetProjectGoalsAsync(defaultProject.ProjectId);
+        var importProject = Assert.Single(await GetImportProjectsAsync(client));
+        var members = await client.GetProjectGoalsAsync(importProject.ProjectId);
         var byGoalId = members!.Goals.ToDictionary(entry => entry.Goal.GoalId, entry => entry.Goal.GlobalPriority);
 
         Assert.True(byGoalId[unlockGoalId] < byGoalId[rankGoalId]);
+    }
+
+    // ----- Each import gets its own project -----
+
+    [Fact]
+    public async Task ImportedGoalsGoIntoAProjectNamedAfterTheImport()
+    {
+        var (client, subject) = await CreateProvisionedClientAsync();
+        await SeedPlayerDataSnapshotAsync(subject, [Character(CharacterId, xpLevel: 60)]);
+
+        var body = await ImportGoalsAsync(client, [RankGoal("r1", CharacterId, 1, UnitRank.Iron1)]);
+
+        var project = Assert.Single(await GetImportProjectsAsync(client));
+        Assert.Matches(@"^Import \d{1,2} [A-Z][a-z]{2} \d{4}, \d{2}:\d{2} UTC$", project.Name);
+        Assert.Equal(
+            body.Outcomes.Where(o => o.GoalId is not null).Select(o => o.GoalId!.Value).Order(),
+            project.GoalIds.Order());
+    }
+
+    [Fact]
+    public async Task AnImportThatCreatesNoGoalsCreatesNoProject()
+    {
+        var (client, subject) = await CreateProvisionedClientAsync();
+        await SeedPlayerDataSnapshotAsync(subject, [Character(CharacterId, xpLevel: 60)]);
+        var goals = new[] { RankGoal("r1", CharacterId, 1, UnitRank.Iron1) };
+
+        await ImportGoalsAsync(client, goals);
+        await ImportGoalsAsync(client, goals);
+
+        Assert.Single(await GetImportProjectsAsync(client));
     }
 
     // ----- Imported status follows V1's own dailyRaids choice -----
@@ -1102,11 +1132,11 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
     private static async Task<GoalDetailResponse> GetGoalAsync(HttpClient client, Guid goalId) =>
         (await client.GetFromJsonAsync<GoalDetailResponse>($"/api/v1/goals/{goalId}", TestContext.Current.CancellationToken))!;
 
-    private static async Task<ProjectSummaryResponse> GetDefaultProjectAsync(HttpClient client)
+    private static async Task<List<ProjectSummaryResponse>> GetImportProjectsAsync(HttpClient client)
     {
         var response = await client.GetFromJsonAsync<ListProjectsResponse>(
             "/api/v1/projects", TestContext.Current.CancellationToken);
-        return response!.Projects.Single(project => project.IsDefault);
+        return response!.Projects.Where(project => !project.IsDefault).ToList();
     }
 
     private static V1Goal RankGoal(

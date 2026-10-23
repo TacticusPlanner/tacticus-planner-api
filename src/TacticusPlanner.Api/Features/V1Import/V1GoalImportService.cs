@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Goals;
@@ -6,6 +7,7 @@ using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.PlayerData.Chunks;
 using TacticusPlanner.Domain.Profiles;
+using TacticusPlanner.Domain.Projects;
 using TacticusPlanner.GameCatalog;
 using TacticusPlanner.GameCatalog.Models;
 using TacticusPlanner.GameDomain;
@@ -19,7 +21,7 @@ namespace TacticusPlanner.Api.Features.V1Import;
 /// needs (starting point, whether a target is already reached, the initial-state snapshot) is read
 /// from the account's live <see cref="PlayerDataSnapshot"/> here, once, rather than round-tripped
 /// through the client. Reuses the same collaborators <c>CreateCombinedGoalsEndpoint</c> uses (target
-/// validation, the locked-mutation/normalize helpers, the default-project service, the config mapper) —
+/// validation, the locked-mutation/normalize helpers, the config mapper) —
 /// see design.md's "Do not extract a shared creation service".
 /// </summary>
 public sealed class V1GoalImportService(
@@ -27,7 +29,6 @@ public sealed class V1GoalImportService(
     IGameCatalogProvider catalog,
     GoalTargetValidationService targetValidation,
     ProjectGoalPlanningService planning,
-    ProjectsService projects,
     GoalOrderService order,
     TimeProvider timeProvider)
 {
@@ -530,11 +531,21 @@ public sealed class V1GoalImportService(
             list.Add(candidate);
         }
 
-        var project = await projects.EnsureDefaultProjectAsync(profileId, ct);
-
         await planning.ExecuteLockedMutationAsync(async transaction =>
         {
             var now = timeProvider.GetUtcNow();
+            // Each import that creates goals gets its own project, named after when it ran, so imported goals
+            // stay together and apart from the user's own. Added inside the transaction, so a rollback below
+            // leaves no empty project behind.
+            var project = new Project
+            {
+                Id = ProjectId.From(Guid.CreateVersion7()),
+                ProfileId = profileId,
+                Name = ImportProjectName(now),
+                Status = ProjectStatus.Active,
+                Type = ProjectType.Custom,
+            };
+            db.Projects.Add(project);
             var staged = new Dictionary<int, Goal>();
             // Synthesized-prerequisite "Created" outcomes (Unlock/Ascension), like the `staged`
             // source-goal ones above, can't be finalized until the transaction actually commits — a
@@ -952,6 +963,11 @@ public sealed class V1GoalImportService(
     /// <summary><paramref name="RankTargetKey"/> is set only for a Rank goal, so distinct Rank end targets
     /// for one unit are distinct keys (imported as separate milestones) while an exact duplicate shares a
     /// key (merged) — every other goal type keeps the one-per-unit/type key.</summary>
+    /// <summary>"Import 23 Oct 2026, 12:00 UTC": the server has no user locale or time zone, so the name
+    /// uses an invariant format and says it is UTC.</summary>
+    internal static string ImportProjectName(DateTimeOffset now) =>
+        string.Create(CultureInfo.InvariantCulture, $"Import {now.UtcDateTime:d MMM yyyy, HH:mm} UTC");
+
     private sealed record GoalKey(GoalEntityType EntityType, string EntityId, GoalType GoalType, string? RankTargetKey = null);
 
     private sealed record ExistingGoalRef(Guid Id, GoalConfig Config);

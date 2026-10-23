@@ -1,5 +1,29 @@
 ## MODIFIED Requirements
 
+### Requirement: Imported goals are created by the import operation
+
+The import operation SHALL create the imported goals itself. It SHALL NOT return goal-creation requests for the caller to submit. Each import run that creates at least one goal SHALL create a new project of its own, named "Import" followed by the run's date and time in UTC (for example "Import 23 Oct 2026, 12:00 UTC"), and SHALL place every goal it creates in that project, each in the status its own V1 daily-planning choice implies (see `goal-lifecycle-status`). A run that creates no goals SHALL NOT create a project.
+
+The import SHALL NOT require the caller to supply, or re-supply, anything derived from the V1 profile: V1 credentials are used once, within the same operation, and are not retained.
+
+#### Scenario: Import creates goals in one operation
+
+- **GIVEN** an account with player data and a V1 profile containing supported goals
+- **WHEN** the goals part is imported
+- **THEN** the goals exist on the account when the operation returns, and the response contains no goal-creation request for the caller to submit
+
+#### Scenario: Imported goals land in a project of their own
+
+- **GIVEN** an account with player data and a V1 profile containing supported goals
+- **WHEN** the goals part is imported
+- **THEN** a new project named after the import's date and time holds every goal the import created, and the default project gains none
+
+#### Scenario: Import is repeatable without duplicating goals
+
+- **GIVEN** an import has already created goals for an account
+- **WHEN** the same V1 profile is imported again
+- **THEN** no duplicate goals are created, each already-present goal reports as skipped because it already exists, and no new project is created
+
 ### Requirement: Skipped and not-imported outcomes are distinguishable
 
 An outcome SHALL distinguish a goal that needed no import from a goal whose

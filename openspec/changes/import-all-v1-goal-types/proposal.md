@@ -11,12 +11,13 @@ Companion apps change: `import-all-v1-goal-types` in `tacticus-planner-apps` (ou
 - Type 7 (Pre-farm) has no V2 goal type. It reports a new `manual_step_required` skip carrying the material and the V1 ids of the goals it was linked to, so the client can prompt the user to re-create it.
 - New outcome codes: `unknown_upgrade`, `no_upgrade_owner`, `upgrade_goal_occupied`, `manual_step_required`. `unsupported_goal_type` now only covers type values V1 never had.
 - `V1GoalOutcome` gains optional `upgradeId` and `linkedSourceGoalIds`.
+- Each import run that creates goals puts them in a new project of its own, named "Import <date, time> UTC", instead of the default project.
 
 ## Capabilities
 
 ### Modified Capabilities
 
-- `v1-goal-import`: material goal translation, Mow Ascension resolution, Upgrade merge rule, new outcome codes.
+- `v1-goal-import`: material goal translation, Mow Ascension resolution, Upgrade merge rule, new outcome codes, a per-import project.
 
 ## Impact
 

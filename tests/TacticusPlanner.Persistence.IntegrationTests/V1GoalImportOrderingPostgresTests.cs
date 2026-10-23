@@ -72,9 +72,8 @@ public sealed class V1GoalImportOrderingPostgresTests
         var targetValidation = new GoalTargetValidationService(db, catalog);
         var order = new GoalOrderService(db);
         var planning = new ProjectGoalPlanningService(db, order);
-        var projectsService = new ProjectsService(db);
         var importService = new V1GoalImportService(
-            db, catalog, targetValidation, planning, projectsService, order, TimeProvider.System);
+            db, catalog, targetValidation, planning, order, TimeProvider.System);
 
         // Interleaved in V1 priority: blackTerminator (1, 3), ultraInceptorSgt (2) — the import must
         // preserve this exact interleaving, not collapse blackTerminator's two goals into one block.
