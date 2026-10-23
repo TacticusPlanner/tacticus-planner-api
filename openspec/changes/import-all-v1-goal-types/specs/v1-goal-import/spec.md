@@ -34,8 +34,8 @@ A goal SHALL report as skipped, with a code identifying which case applies,
 when: its target is already reached according to the account's player data; the
 account already has a goal of that type for that unit; it was merged into
 another source goal's target for the same unit and type; or it is a V1
-pre-farm goal, which needs a manual step (see "V1 pre-farm goals report a manual
-step").
+upgrade-material or pre-farm goal, which needs a manual step (see "V1 material
+goals report a manual step").
 
 A goal SHALL report as not imported, with a code identifying which case
 applies, when: its V1 goal type is not one V1 defines; its unit is not present in
@@ -72,7 +72,7 @@ V2 progression ladder; or it carries no usable target.
 
 ### Requirement: Duplicate V1 goals for one unit and type are merged and reported
 
-When V1 contains multiple Rank goals for one unit, the import SHALL preserve goals with distinct normalized end targets as separate V2 milestones in their V1 priority order. Exact Rank end-target duplicates SHALL merge into the highest-priority survivor and report the survivor id. For non-Rank goals, the existing one-per-unit/type merge remains: Ascension spans lowest start to highest end; Upgrade keeps one target per upgrade material, in first-seen V1 order, with duplicate quantities summed; other types retain the highest-priority source. Every merged-away source SHALL report a skip with merge code and survivor id.
+When V1 contains multiple Rank goals for one unit, the import SHALL preserve goals with distinct normalized end targets as separate V2 milestones in their V1 priority order. Exact Rank end-target duplicates SHALL merge into the highest-priority survivor and report the survivor id. For non-Rank goals, the existing one-per-unit/type merge remains: Ascension spans lowest start to highest end; other types retain the highest-priority source. Every merged-away source SHALL report a skip with merge code and survivor id.
 
 #### Scenario: Two rank goals merge into one spanning goal
 
@@ -92,12 +92,6 @@ When V1 contains multiple Rank goals for one unit, the import SHALL preserve goa
 - **WHEN** goals are imported
 - **THEN** two V2 goals are created with distinct ids and preserved V1 order
 
-#### Scenario: Upgrade material goals for one owner fold into one Upgrade goal
-
-- **GIVEN** three V1 upgrade-material goals given the same owner: 10 and 5 of one material, 3 of another
-- **WHEN** goals are imported
-- **THEN** one Upgrade goal is created with targets of 15 and 3, and the other two sources report a merge skip naming it
-
 ## ADDED Requirements
 
 ### Requirement: A V1 Machine of War Ascension goal stored under its character field imports as a Mow goal
@@ -112,50 +106,32 @@ Machine of War Ascension goal.
 - **WHEN** the goals part is imported
 - **THEN** a Machine of War Ascension goal is created for that unit
 
-### Requirement: V1 upgrade-material goals import as Upgrade goals on an owning unit
+### Requirement: V1 material goals report a manual step
 
-A V1 upgrade-material goal (one material, one quantity, no unit) SHALL import as a V2 Upgrade goal
-targeting that material and quantity, owned by a unit on the account's roster that uses the material.
-The owner SHALL be, in order of preference: the first unit, by V1 priority, among the profile's own
-imported unit goals; then the roster's characters; then its Machines of War. Among those using the
-material, a unit whose existing Upgrade goal already targets it SHALL be chosen first, then a unit with
-no Upgrade goal. When every unit using the material already has an Upgrade goal for other materials,
-the goal SHALL NOT be imported and SHALL report a code identifying the occupied Upgrade goal, naming the
-first such unit; it SHALL NOT report as already existing. The outcome SHALL carry the material id.
+V1's upgrade-material goals (one material, one quantity) and pre-farm goals (one material, reserved for
+chosen goals) have no unit, while every V2 goal belongs to one; which unit should hold the material is the
+user's call. Neither SHALL create a goal. Each SHALL report as skipped with a code identifying a required
+manual step, carrying the material id, an upgrade-material goal's quantity, a pre-farm goal's linked V1
+goal ids that are present in the imported profile, and a suggested unit that uses the material: in order
+of preference, the first unit by V1 priority among the profile's own imported unit goals, then the
+roster's characters, then its Machines of War; among those, a unit whose existing Upgrade goal already
+targets the material first, then a unit with no Upgrade goal. A material no roster unit uses SHALL report
+as not imported with a code identifying that no unit uses it.
 
-#### Scenario: Material goal lands on the unit of an imported goal that needs it
+#### Scenario: Upgrade-material goal suggests the unit of an imported goal that needs it
 
 - **GIVEN** a V1 Rank goal for a character and a V1 upgrade-material goal for a material on that character's rank ladder
 - **WHEN** the goals part is imported
-- **THEN** an Upgrade goal for that character is created targeting the material and quantity
-
-#### Scenario: Re-import matches the Upgrade goal an earlier import created
-
-- **GIVEN** an earlier import created an Upgrade goal from a V1 upgrade-material goal
-- **WHEN** the same profile is imported again
-- **THEN** that source reports as already existing and names the earlier goal
-
-#### Scenario: Material nobody uses is not imported
-
-- **GIVEN** a V1 upgrade-material goal whose material no roster unit uses
-- **WHEN** the goals part is imported
-- **THEN** that goal reports as not imported with a code identifying that no unit uses the material
-
-#### Scenario: Every unit using the material already has another Upgrade goal
-
-- **GIVEN** the only roster unit using a material already has an Upgrade goal for a different material
-- **WHEN** a V1 upgrade-material goal for the first material is imported
-- **THEN** that goal reports as not imported with a code identifying the occupied Upgrade goal, naming that unit and the material
-- **AND** the existing Upgrade goal is unchanged
-
-### Requirement: V1 pre-farm goals report a manual step
-
-V2 has no pre-farm goal type. A V1 pre-farm goal SHALL NOT create a goal; it SHALL report as skipped with
-a code identifying a required manual step, carrying the material id and the ids of the V1 goals it was
-linked to that are present in the imported profile, so the client can guide the user to re-create it.
+- **THEN** no Upgrade goal is created, and the material goal reports a manual-step skip carrying the material, its quantity and that character as the suggested unit
 
 #### Scenario: Pre-farm goal names its material and linked goals
 
 - **GIVEN** a V1 pre-farm goal for a material, linked to a V1 Rank goal in the profile and to an id no longer present
 - **WHEN** the goals part is imported
 - **THEN** it reports a manual-step skip carrying the material id and only the present Rank goal's V1 id
+
+#### Scenario: Material nobody uses is not imported
+
+- **GIVEN** a V1 upgrade-material goal whose material no roster unit uses
+- **WHEN** the goals part is imported
+- **THEN** that goal reports as not imported with a code identifying that no unit uses the material

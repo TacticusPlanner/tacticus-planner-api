@@ -25,7 +25,6 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
     private const string OtherCharacterId = "blackTerminator";
     private const string MowId = "astraOrdnanceBattery";
     private const string UltraStoneUpgradeId = "upgHpC001"; // on ultraInceptorSgt's Stone1 rank-up row
-    private const string UltraOtherStoneUpgradeId = "upgDmgC001"; // same row
 
     private static readonly string[] RarityNames = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic"];
     private static readonly string[] StarNames =
@@ -592,86 +591,24 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
     // ----- V1 material goals (types 6 and 7) -----
 
     [Fact]
-    public async Task UpgradeMaterialGoalImportsOntoTheUnitOfAnImportedGoalThatNeedsIt()
+    public async Task UpgradeMaterialGoalReportsAManualStepSuggestingTheUnitOfAnImportedGoal()
     {
         var (client, subject) = await CreateProvisionedClientAsync();
         await SeedPlayerDataSnapshotAsync(subject, [Character(OtherCharacterId), Character(CharacterId, xpLevel: 60)]);
 
         var body = await ImportGoalsAsync(
             client,
-            [RankGoal("r1", CharacterId, 1, UnitRank.Iron1), UpgradeMaterialGoal("m1", 2, UltraStoneUpgradeId, 10, "farm hp")]);
+            [RankGoal("r1", CharacterId, 1, UnitRank.Iron1), UpgradeMaterialGoal("m1", 2, UltraStoneUpgradeId, 10)]);
 
         var outcome = Assert.Single(body.Outcomes, o => o.SourceGoalId == "m1");
-        Assert.Equal(V1GoalOutcomeStatus.Created, outcome.Status);
+        Assert.Equal(V1GoalOutcomeStatus.Skipped, outcome.Status);
+        Assert.Equal("manual_step_required", outcome.Code);
         Assert.Equal(GoalType.Upgrade, outcome.GoalType);
         Assert.Equal(CharacterId, outcome.EntityId);
         Assert.Equal(UltraStoneUpgradeId, outcome.UpgradeId);
-        var goal = await GetGoalAsync(client, outcome.GoalId!.Value);
-        var target = Assert.Single(goal.Config.Upgrade!.Targets);
-        Assert.Equal((UltraStoneUpgradeId, 10), (target.UpgradeId, target.Quantity));
-        Assert.Equal("farm hp", goal.Notes);
-    }
-
-    [Fact]
-    public async Task UpgradeMaterialGoalsForOneOwnerMergeIntoOneUpgradeGoal()
-    {
-        var (client, subject) = await CreateProvisionedClientAsync();
-        await SeedPlayerDataSnapshotAsync(subject, [Character(CharacterId)]);
-
-        var body = await ImportGoalsAsync(client,
-        [
-            UpgradeMaterialGoal("m1", 1, UltraStoneUpgradeId, 10),
-            UpgradeMaterialGoal("m2", 2, UltraStoneUpgradeId, 5),
-            UpgradeMaterialGoal("m3", 3, UltraOtherStoneUpgradeId, 3),
-        ]);
-
-        var created = Assert.Single(body.Outcomes, o => o.Status == V1GoalOutcomeStatus.Created);
-        Assert.Equal("m1", created.SourceGoalId);
-        Assert.All(body.Outcomes.Where(o => o.SourceGoalId is "m2" or "m3"), o =>
-        {
-            Assert.Equal("duplicate_goal_merged", o.Code);
-            Assert.Equal(created.GoalId, o.GoalId);
-            Assert.NotNull(o.UpgradeId);
-        });
-        var goal = await GetGoalAsync(client, created.GoalId!.Value);
-        Assert.Equal(
-            new[] { (UltraStoneUpgradeId, 15), (UltraOtherStoneUpgradeId, 3) },
-            goal.Config.Upgrade!.Targets.Select(target => (target.UpgradeId, target.Quantity)));
-    }
-
-    [Fact]
-    public async Task ReimportingAnUpgradeMaterialGoalReportsTheGoalItCreated()
-    {
-        var (client, subject) = await CreateProvisionedClientAsync();
-        await SeedPlayerDataSnapshotAsync(subject, [Character(CharacterId)]);
-        var goals = new[] { UpgradeMaterialGoal("m1", 1, UltraStoneUpgradeId, 10) };
-
-        var first = await ImportGoalsAsync(client, goals);
-        var second = await ImportGoalsAsync(client, goals);
-
-        Assert.Equal(V1GoalOutcomeStatus.Created, first.Outcomes[0].Status);
-        Assert.Equal("goal_already_exists", second.Outcomes[0].Code);
-        Assert.Equal(first.Outcomes[0].GoalId, second.Outcomes[0].GoalId);
-        Assert.Equal(UltraStoneUpgradeId, second.Outcomes[0].UpgradeId);
-    }
-
-    [Fact]
-    public async Task UpgradeMaterialGoalIsNotImportedWhenEveryUnitNeedingItHasAnotherUpgradeGoal()
-    {
-        var (client, subject) = await CreateProvisionedClientAsync();
-        await SeedPlayerDataSnapshotAsync(subject, [Character(CharacterId)]);
-        var first = await ImportGoalsAsync(client, [UpgradeMaterialGoal("m1", 1, UltraStoneUpgradeId, 10)]);
-
-        var second = await ImportGoalsAsync(client, [UpgradeMaterialGoal("m2", 1, UltraOtherStoneUpgradeId, 3)]);
-
-        var outcome = Assert.Single(second.Outcomes);
-        Assert.Equal(V1GoalOutcomeStatus.Failed, outcome.Status);
-        Assert.Equal("upgrade_goal_occupied", outcome.Code);
-        Assert.Equal(CharacterId, outcome.EntityId);
-        Assert.Equal(UltraOtherStoneUpgradeId, outcome.UpgradeId);
+        Assert.Equal(10, outcome.UpgradeQuantity);
         Assert.Null(outcome.GoalId);
-        var existing = await GetGoalAsync(client, first.Outcomes[0].GoalId!.Value);
-        Assert.Equal(UltraStoneUpgradeId, Assert.Single(existing.Config.Upgrade!.Targets).UpgradeId);
+        Assert.DoesNotContain(body.Outcomes, o => o.Status == V1GoalOutcomeStatus.Created && o.GoalType == GoalType.Upgrade);
     }
 
     [Fact]
@@ -716,6 +653,8 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         Assert.Equal("manual_step_required", outcome.Code);
         Assert.Equal(UltraStoneUpgradeId, outcome.UpgradeId);
         Assert.Equal("r1", Assert.Single(outcome.LinkedSourceGoalIds!));
+        Assert.Equal(CharacterId, outcome.EntityId);
+        Assert.Null(outcome.UpgradeQuantity);
         Assert.Null(outcome.GoalId);
     }
 
@@ -1172,9 +1111,8 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         new(id, "irrelevant", type, priority, false, null, null, null, null, null, null, null,
             null, null, null, null, null, null, null);
 
-    private static V1Goal UpgradeMaterialGoal(
-        string id, int priority, string upgradeMaterialId, int quantity, string? notes = null) =>
-        new(id, "", 6, priority, true, notes, null, null, null, null, null, null,
+    private static V1Goal UpgradeMaterialGoal(string id, int priority, string upgradeMaterialId, int quantity) =>
+        new(id, "", 6, priority, true, null, null, null, null, null, null, null,
             null, null, null, null, null, null, null,
             UpgradeMaterialId: upgradeMaterialId, UpgradeMaterialQuantity: quantity);
 
