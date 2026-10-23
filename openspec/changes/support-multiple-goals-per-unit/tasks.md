@@ -6,7 +6,7 @@
 ## 2. Creation
 
 - [ ] 2.1 Remove the "each goal type at most once" guard in `CreateCombinedGoalsEndpoint`; add endpoint tests: two Ascension specs with distinct ends succeed in one request, two with the same end return `slotOccupied`, a four-step Rank ladder with chained `DependsOnIndex` succeeds with contiguous priorities.
-- [ ] 2.2 Add `CombinedGoalSpec.DependsOnGoalIds` (validator: distinct GUIDs; endpoint: in-flight, same profile, same entity, read under the lock); merge into `Goal.DependsOn`; lift `effectiveProgressionFloor` from existing Ascension dependencies; tests for an Ability 50 goal accepted when it depends on an existing Ascension→Legendary goal and rejected without it, and 400 for a foreign/completed/other-unit id.
+- [ ] 2.2 Add `CombinedGoalSpec.DependsOnGoalIds` (validator: distinct GUIDs; endpoint: in-flight, same profile, same entity, read under the lock); merge into `Goal.DependsOn`; lift `effectiveProgressionFloor` from existing Ascension goals reachable through the full existing `DependsOn` closure (visited-set walk); tests for an Ability 50 goal accepted when it depends on an existing Ascension→Legendary goal and rejected without it, and 400 for a foreign/completed/other-unit id.
 - [ ] 2.3 Verify Unlock is still one per unit (single and combined creation).
 
 ## 3. Edits, status, import

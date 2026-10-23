@@ -45,7 +45,9 @@ The character level a Rank or Ability target needs is intrinsic to that target
 
 An Ascension requirement SHALL first be satisfied by a covering Ascension goal:
 an imported or already-existing in-flight Ascension goal for that unit whose end
-reaches the required progression (the lowest such end when several do). The
+reaches the required progression (the lowest such end when several do). An
+imported Ascension goal is considered after duplicate merging, so the dependency
+SHALL reference the surviving persisted goal, never a merged-away source. The
 dependent goal SHALL declare a dependency on it and no goal is created. Only
 when no Ascension goal covers the requirement SHALL a new one be created, and
 then only if no in-flight Ascension goal for the unit already has that exact
@@ -56,8 +58,9 @@ already include an Unlock goal, or when the account already has one for that
 unit; in those cases the requirement SHALL be reported rather than satisfied.
 
 Each created prerequisite SHALL be declared as a dependency of every imported
-goal that required it, and SHALL be placed immediately before them in the
-constructed import sequence. There is no automatic within-unit reordering to
+goal that required it, and SHALL be placed immediately before the first of
+them in the constructed import sequence, so it precedes every goal that
+requires it. There is no automatic within-unit reordering to
 fall back on for this placement — the import process itself is responsible
 for the prerequisite's position, not a downstream ordering step.
 
@@ -156,8 +159,8 @@ Material goals landing on the same unit with the same material SHALL merge into 
 earliest one's priority, keeping the larger quantity. Material goals with different materials SHALL stay
 separate Upgrade goals at their own V1 priorities (`goal-target-milestones`), and a unit's existing Upgrade
 goal for other materials SHALL NOT block one. A pre-farm goal none of whose linked goals was imported SHALL
-report as skipped with a code identifying a required manual step, carrying the material, the quantity and a
-unit. A material no roster unit uses SHALL report as not imported with a code identifying that no unit uses
+report as skipped with a code identifying a required manual step, carrying the material, the unit chosen by
+the suggested-unit rule above and a null quantity (a V1 pre-farm goal has no fixed quantity). A material no roster unit uses SHALL report as not imported with a code identifying that no unit uses
 it.
 
 #### Scenario: Pre-farm goal becomes an Upgrade goal per linked unit
