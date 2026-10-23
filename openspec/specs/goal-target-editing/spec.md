@@ -8,13 +8,13 @@ Allows a user to revise an in-flight goal's progression target without losing it
 
 ### Requirement: In-flight adjustable targets can be replaced in place
 
-`PUT /goals/{goalId}/target` SHALL accept `{ expectedRevision, target }` for an owned Active or Paused goal. Supported target groups are Rank (`end`, `endPointFive`, `endAppliedUpgrades`), Ascension (`end` progression), Ability (`activeEnd`, `passiveEnd`), and Upgrade (`targets` material-id/quantity list). Unlock has no adjustable target and SHALL be rejected,, and Level is no longer a supported target group (the Level goal type no longer exists), so a request carrying only a Level group is rejected as having no supported group. The existing start/baseline, entity, goal type, id, status, notes, strategy, sources, project memberships, project priorities, creation timestamp, and creation snapshot SHALL remain unchanged. A successful response SHALL include the updated goal detail and incremented `revision`.
+The `target` section of `PUT /me/goals/{goalId}` SHALL accept `{ expectedRevision, target }` for an owned Active or Paused goal. Supported target groups are Rank (`end`, `endPointFive`, `endAppliedUpgrades`), Ascension (`end` progression), Ability (`activeEnd`, `passiveEnd`), and Upgrade (`targets` material-id/quantity list). Unlock has no adjustable target and SHALL be rejected. The existing start/baseline, entity, goal type, id, status, notes, strategy, sources, project memberships, global position, creation timestamp, and creation snapshot SHALL remain unchanged. A successful response SHALL include the updated goal detail and incremented `revision`.
 
 #### Scenario: Rank target advances in place
 
 - **GIVEN** an Active Bellator Rank goal targets Silver3 in projects A and B
 - **WHEN** its owner submits a valid Gold1 end target with the current revision
-- **THEN** the same goal id, memberships, order positions, status, and creation snapshot remain, and a fresh read returns Gold1 and a higher revision
+- **THEN** the same goal id, memberships, order position, status, and creation snapshot remain, and a fresh read returns Gold1 and a higher revision
 
 #### Scenario: All adjustable kinds are supported
 
@@ -28,7 +28,7 @@ Allows a user to revise an in-flight goal's progression target without losing it
 
 ### Requirement: Edited targets receive creation-equivalent validation and slot checks
 
-The new end target SHALL pass the same catalog range, entity/type, target-shape, and dependency-cap rules as creation, evaluated against the goal's persisted baseline and current catalog. A target that is already reached in synced player data MAY be saved if valid relative to that baseline; it SHALL have zero remaining need but SHALL not silently change stored lifecycle status. Rank target identity SHALL be checked in every membership under `support-multiple-rank-milestones`; an occupied target SHALL return structured 409 naming every conflicting project and existing goal. Validation or conflict failure SHALL be atomic.
+The new end target SHALL pass the same catalog range, entity/type, target-shape, and dependency-cap rules as creation, evaluated against the goal's persisted baseline and current catalog. A target that is already reached in synced player data SHALL be saved when valid relative to that baseline and current catalog, subject to the same explicit revision and slot-conflict rules as any other valid target; it SHALL have zero remaining need but SHALL not silently change stored lifecycle status. A Rank target SHALL be checked against the profile's other in-flight Rank goals for the unit; an occupied target SHALL return 409 `slotOccupied` naming the existing goal. Validation or conflict failure SHALL be atomic.
 
 #### Scenario: Edit to an already reached target
 
@@ -38,13 +38,13 @@ The new end target SHALL pass the same catalog range, entity/type, target-shape,
 
 #### Scenario: Rank target conflicts in one project
 
-- **GIVEN** the edited goal belongs to A and B and B already contains another in-flight goal at its proposed Rank target
+- **GIVEN** the profile has another in-flight Bellator Rank goal at the proposed target
 - **WHEN** the target edit is submitted
-- **THEN** no config, membership key, or event changes and the 409 identifies B and the existing goal
+- **THEN** no config changes and the 409 identifies the existing goal and the target
 
 ### Requirement: Concurrent edits and target history are explicit
 
-Goal detail SHALL expose a monotonically increasing `revision`. A target update with a stale `expectedRevision` SHALL return 409 with the current goal detail and SHALL not overwrite it. Every successful target change SHALL append an event with timestamp, previous target, and new target; it SHALL not rewrite the immutable creation snapshot. Retrying an identical target without a change SHALL leave revision and history unchanged.
+Goal detail SHALL expose a monotonically increasing `revision`. A target update with a stale `expectedRevision` SHALL return 409 `goalRevisionStale` with the current goal detail and SHALL not overwrite it. A successful target change SHALL increment `revision` and SHALL not rewrite the immutable creation snapshot. Retrying an identical target without a change SHALL leave the revision unchanged. No per-change history is stored or served.
 
 #### Scenario: Stale editor cannot overwrite a newer target
 
@@ -55,23 +55,17 @@ Goal detail SHALL expose a monotonically increasing `revision`. A target update 
 #### Scenario: Target history survives edit
 
 - **WHEN** a valid Rank target is changed from Silver3 to Gold1
-- **THEN** goal detail contains a TargetChanged event recording both end targets and time, while the original snapshot is preserved
+- **THEN** the goal detail returns Gold1, a higher revision, and the original creation snapshot unchanged
 
 ### Requirement: Editing an Upgrade target can replace its ranges
 
-`PUT /goals/{goalId}/target` for an Upgrade goal SHALL accept optional `rankRange`,
-`activeRange` and `passiveRange` groups inside `target.upgrade`, validated exactly as at creation.
-The Upgrade group SHALL be replaced as a whole: a request that omits a range group clears it. The
-`TargetChanged` event SHALL record the previous and new ranges together with the previous and new
-`targets`, and an edit that changes only a range SHALL count as a change.
+The `target` section for an Upgrade goal SHALL accept optional `rankRange`, `activeRange` and `passiveRange` groups inside `target.upgrade`, validated exactly as at creation. The Upgrade group SHALL be replaced as a whole: a request that omits a range group clears it. An edit that changes only a range SHALL count as a change and increment `revision`.
 
 #### Scenario: Range edited, targets unchanged
 
 - **GIVEN** an Active Upgrade goal with `rankRange { Stone2, Stone4 }`
-- **WHEN** its owner submits the same `targets` with `rankRange { Stone2, Stone5 }` and the
-  current revision
-- **THEN** the goal returns the new range, `revision` increments and a `TargetChanged` event
-  records the old and new range
+- **WHEN** its owner submits the same `targets` with `rankRange { Stone2, Stone5 }` and the current revision
+- **THEN** the goal returns the new range and `revision` increments
 
 #### Scenario: Omitting a range clears it
 

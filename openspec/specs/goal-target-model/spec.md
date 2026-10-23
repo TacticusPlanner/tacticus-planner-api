@@ -214,50 +214,6 @@ upgrade-node farming override. Only its Unlock/Ascension shard-node role is repl
 - **THEN** the goal round-trips with the same `farmingLocationIds` and no `acquisitionSources`
   is required
 
-### Requirement: Existing goals migrate to an equivalent acquisition-source set
-
-A migration SHALL rewrite each persisted goal's `config` so that its shard-source choice is
-expressed as `acquisitionSources`: a `Campaign` entry SHALL carry the union of the old
-`ascensionFarming.shardBattleIds` and `mythicShardBattleIds`, or an Unlock goal's old
-`farmingLocationIds`; an `Onslaught` entry SHALL be added when the old
-`ascensionFarming.source` was `Onslaught` or `Both`. The old `ascensionFarming` object SHALL
-be removed and an Unlock goal's shard `farmingLocationIds` SHALL be cleared. A goal with
-neither old field SHALL become `[{ kind: "Campaign", ids: [] }]`.
-
-#### Scenario: Both maps to campaign plus onslaught
-
-- **GIVEN** an Ascension goal stored with `ascensionFarming.source = "Both"` and two
-  `shardBattleIds`
-- **WHEN** the migration applies
-- **THEN** its `acquisitionSources` is `[{ kind: "Campaign", ids: [those two ids] },
-  { kind: "Onslaught", ids: [] }]` and `ascensionFarming` is gone
-
-#### Scenario: Campaign-only Ascension goal keeps its battle ids
-
-- **GIVEN** an Ascension goal stored with `ascensionFarming.source = "Campaign"` and one
-  regular and one mythic battle id
-- **WHEN** the migration applies
-- **THEN** its `acquisitionSources` is `[{ kind: "Campaign", ids: [both ids] }]`
-
-#### Scenario: Unlock goal shard locations move into a campaign entry
-
-- **GIVEN** an Unlock goal stored with `farmingLocationIds` of two shard battle ids
-- **WHEN** the migration applies
-- **THEN** its `acquisitionSources` is `[{ kind: "Campaign", ids: [those two ids] }]` and its
-  `farmingLocationIds` is cleared
-
-#### Scenario: Goal with no prior source becomes unrestricted campaign
-
-- **GIVEN** an Ascension goal stored with no `ascensionFarming` and no `farmingLocationIds`
-- **WHEN** the migration applies
-- **THEN** its `acquisitionSources` is `[{ kind: "Campaign", ids: [] }]`
-
-#### Scenario: Rank/Ability farming override is untouched by the migration
-
-- **GIVEN** a Rank goal stored with `farmingLocationIds`
-- **WHEN** the migration applies
-- **THEN** its `farmingLocationIds` is unchanged and it gains no `acquisitionSources`
-
 ### Requirement: Acquisition sources can be edited on an existing goal
 
 `UpdateGoalRequest` SHALL allow replacing an Unlock or Ascension goal's `acquisitionSources`,
@@ -455,4 +411,3 @@ materials").
 - **GIVEN** an Upgrade goal created before this change, or created without any range group
 - **WHEN** its detail is read
 - **THEN** all three range groups are null and the goal remains editable
-

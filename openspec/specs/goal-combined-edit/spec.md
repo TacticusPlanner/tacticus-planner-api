@@ -7,13 +7,13 @@ Lets an owner change several aspects of one goal (target, details, project membe
 
 ### Requirement: An owner can edit a goal through one atomic request
 
-`PUT /goals/{goalId}/edit` SHALL accept a request with these optional sections: `target` (the same target payload as `PUT /goals/{goalId}/target`), `details` (`notes`, `farmingLocationIds`, `farmingStrategy`, `acquisitionSources`, with the same field semantics as `PUT /goals/{goalId}`), `projectIds` (the same replacement list as `PUT /goals/{goalId}/projects`), and `priority` (`position`, a 1-based position, and `expectedOrderRevision`). A section that is absent SHALL leave that aspect unchanged. A request with no section SHALL succeed as a no-op. On success the response SHALL be 200 with the updated goal detail, plus the new order (`revision` and `goalIds`) when `priority` was supplied. Every applied section SHALL be committed together or none of them SHALL be, and the goal SHALL show a single revision increase for the request.
+`PUT /me/goals/{goalId}` SHALL accept a request with these optional sections: `target` (`expectedRevision` plus the goal kind's end-target payload), `details` (`notes`, `farmingLocationIds`, `farmingStrategy`, `acquisitionSources`), `projectIds` (the complete replacement membership list), and `priority` (`position`, 1-based, and `expectedOrderRevision`). A section that is absent SHALL leave that aspect unchanged. A request with no section SHALL succeed as a no-op. On success the response SHALL be 200 with `{ goal, order }`: `goal` SHALL contain the updated goal detail (including its own `revision`); `order` SHALL contain `{ revision, goalIds }` when `priority` was supplied, and SHALL be null otherwise. The order uses the existing `PUT /me/goals/order` field names. Every applied section SHALL be committed together or none SHALL be, with a single revision increase. This is the only goal edit route.
 
 #### Scenario: Several sections at once
 
 - **GIVEN** an Active goal
 - **WHEN** the owner submits a new target, new notes, and a new position in one request
-- **THEN** all three are saved and the response carries the updated goal and the new order
+- **THEN** all three are saved and the response carries `{ goal, order }` with the goal revision under `goal.revision` and the order revision under `order.revision`
 
 #### Scenario: Absent sections are untouched
 
@@ -23,7 +23,7 @@ Lets an owner change several aspects of one goal (target, details, project membe
 #### Scenario: Empty request
 
 - **WHEN** the owner submits no section
-- **THEN** the response is 200 with the unchanged goal and no revision change
+- **THEN** the response is 200 with the unchanged goal under `goal`, `order: null`, and no revision change
 
 #### Scenario: Unknown or foreign goal
 
@@ -32,7 +32,7 @@ Lets an owner change several aspects of one goal (target, details, project membe
 
 ### Requirement: Each section is validated exactly as its own endpoint validates it
 
-The target section SHALL be validated and applied as `PUT /goals/{goalId}/target` does (only Active or Paused Rank, Ascension, Ability and Upgrade goals; the payload shape of the goal's own kind; the goal's stored baseline; an unchanged target is a no-op; `expectedRevision` is required with a target and a stale one is a 409 `goalRevisionStale` carrying the current goal). The details section SHALL be validated as `PUT /goals/{goalId}` does (notes length, farming strategy support per goal kind, farming-location and acquisition-source rules; a null `notes` or `farmingLocationIds` clears the field and a null `farmingStrategy` leaves it). The projects section SHALL be validated as `PUT /goals/{goalId}/projects` does (at least one project, all owned, no project slot conflict, evaluated against the target this same request sets). The priority section SHALL be valid only for an Active or Paused goal; `position` SHALL be between 1 and the number of in-flight goals; the goal takes that position and every goal between its old and new positions shifts one place toward the vacated one; a `position` equal to the current one is a no-op. A validation failure in any section SHALL be a 400 that names the offending section and changes nothing.
+The target section SHALL be validated as a target edit (see `goal-target-editing`: only Active or Paused Rank, Ascension, Ability and Upgrade goals; the payload shape of the goal's own kind; the goal's stored baseline; an unchanged target is a no-op; `expectedRevision` is required with a target and a stale one is a 409 `goalRevisionStale` carrying the current goal). The details section SHALL be validated as goal details (notes length, farming strategy support per goal kind, farming-location and acquisition-source rules; a null `notes` or `farmingLocationIds` clears the field and a null `farmingStrategy` leaves it). The projects section SHALL require at least one owned project; it is not slot-checked. The priority section SHALL be valid only for an Active or Paused goal; `position` SHALL be between 1 and the number of in-flight goals; the goal takes that position and every goal between its old and new positions shifts one place toward the vacated one; a `position` equal to the current one is a no-op. A validation failure in any section SHALL be a 400 that names the offending section and changes nothing.
 
 #### Scenario: Invalid target rejects the whole request
 
@@ -41,9 +41,9 @@ The target section SHALL be validated and applied as `PUT /goals/{goalId}/target
 
 #### Scenario: Project slot check sees the new target
 
-- **GIVEN** a Rank goal whose new target is already held by another goal of the same unit in project P
-- **WHEN** the request changes the goal's target and adds project P
-- **THEN** the response is 409 with the project slot conflict and nothing is saved
+- **GIVEN** a Rank goal whose new target is already held by another in-flight goal of the same unit
+- **WHEN** the request changes the goal's target
+- **THEN** the response is 409 `slotOccupied` naming the existing goal, and nothing is saved
 
 #### Scenario: Position out of range
 
@@ -64,7 +64,7 @@ The target section SHALL be validated and applied as `PUT /goals/{goalId}/target
 
 ### Requirement: Conflicts leave the goal unchanged and carry the current state
 
-A stale `expectedRevision` SHALL return 409 `goalRevisionStale` with the current goal (the existing `GoalRevisionConflictResponse`). A stale or mismatched `expectedOrderRevision` SHALL return 409 with the existing order conflict body (issue code, message, current revision and goal ids). A project slot conflict SHALL return the existing project-slot conflict body. In every 409 no section SHALL have been applied, including sections that would have been valid alone.
+A stale `expectedRevision` SHALL return 409 `goalRevisionStale` with the current goal under `current`. A stale `expectedOrderRevision` SHALL return 409 `goalOrderStale` with the current order revision and goal ids under `current`. A slot conflict SHALL return 409 `slotOccupied` as defined in `project-goal-slots`. All three use the unified error shape (`api-error-contract`). In every 409 no section SHALL have been applied, including sections that would have been valid alone.
 
 #### Scenario: Stale goal revision with valid other sections
 
@@ -74,27 +74,18 @@ A stale `expectedRevision` SHALL return 409 `goalRevisionStale` with the current
 #### Scenario: Stale order revision
 
 - **WHEN** the account's order changed since the client loaded it and the request carries `priority` plus a valid target change
-- **THEN** the response is 409 with the current order, and the target change is not saved
+- **THEN** the response is 409 `goalOrderStale` with the current order, and the target change is not saved
 
 ### Requirement: The edit is safe under concurrent goal, project and order changes
 
-The edit SHALL hold the same project locks as the existing target, projects and order mutations for every project the goal belongs to before the edit and every project it belongs to after, taken in the existing deterministic order, and SHALL re-read the goal and its memberships under those locks, restarting with the widened lock set when membership drifted. Nothing SHALL be written to project or order state outside that transaction.
+The edit SHALL run under the profile-level lock shared by every goal mutation, SHALL re-read the goal and its memberships under that lock, and SHALL write nothing to goal, membership or order state outside that transaction.
 
 #### Scenario: Concurrent membership change
 
-- **WHEN** another request adds the goal to a project while this edit waits for its locks
-- **THEN** the edit restarts with the widened lock set and validates against the reloaded memberships
+- **WHEN** another request adds the goal to a project while this edit waits for the lock
+- **THEN** the edit validates against the reloaded memberships and both requests complete
 
 #### Scenario: Concurrent edits do not deadlock
 
 - **WHEN** two edits of goals sharing two projects run at the same time
 - **THEN** both complete, one after the other, without a deadlock
-
-### Requirement: Existing endpoints keep their behavior
-
-`PUT /goals/{goalId}/target`, `PUT /goals/{goalId}`, `PUT /goals/{goalId}/projects`, and `PUT /goals/order` SHALL keep their request shapes, responses, and error bodies.
-
-#### Scenario: Existing endpoint regression
-
-- **WHEN** an existing client calls any of the four endpoints
-- **THEN** its request and response are unchanged from before this change
