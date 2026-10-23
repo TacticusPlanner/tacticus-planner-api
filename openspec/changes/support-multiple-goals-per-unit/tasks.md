@@ -15,7 +15,8 @@
 - [ ] 3.2 Status transitions into Active/Paused use the new key; test resuming a Completed Ascension goal while a distinct-end one is in flight (succeeds) and a same-end one (409).
 - [ ] 3.3 V1 import: group by `GoalTargetKey`; keep distinct Ascension/Ability/Upgrade goals and notes in V1 order; merge only exact duplicates; prerequisite synthesis reuses a covering existing/imported Ascension goal; update `v1-goal-import` tests (the "Duplicate ability goals keep the higher-priority one" scenario now applies only to equal targets).
 - [ ] 3.4 V1 material goals: group by (unit, material) instead of one Upgrade goal per unit; remove `OccupiedUpgradeOutcome` and the "unit with no Upgrade goal yet" tie-break in suggested-unit selection; tests for different materials on one unit (separate goals, no manual step) and the same material (merged, larger quantity).
-- [ ] 3.5 Archive `import-all-v1-goal-types` before archiving this change (this change modifies its material-goal requirement).
+- [ ] 3.5 Material owner set: drop the roster-only filter on imported unit-goal units in `UpgradeOwnerResolver.BuildCandidates`, so selection and `no_upgrade_owner` use the same set (imported unit goals, roster characters, roster Mows); test an imported Unlock goal for an off-roster character owning a material only it uses.
+- [ ] 3.6 Archive `import-all-v1-goal-types` before archiving this change (this change modifies its material-goal requirement).
 
 ## 4. Contract and gates
 

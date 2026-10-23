@@ -152,16 +152,17 @@ goal's own priority:
   material SHALL be left out; when none does, the goal SHALL report as skipped as already reached.
 - An upgrade-material goal SHALL become an Upgrade goal for its quantity on a suggested unit that uses the
   material — in order of preference, the first unit by V1 priority among the profile's own imported unit
-  goals, then the roster's characters, then its Machines of War — reported with a code that says the unit
-  was suggested.
+  goals (whether or not the unit is on the roster), then the roster's characters, then its Machines of
+  War — reported with a code that says the unit was suggested.
 
 Material goals landing on the same unit with the same material SHALL merge into one Upgrade goal at the
 earliest one's priority, keeping the larger quantity. Material goals with different materials SHALL stay
 separate Upgrade goals at their own V1 priorities (`goal-target-milestones`), and a unit's existing Upgrade
 goal for other materials SHALL NOT block one. A pre-farm goal none of whose linked goals was imported SHALL
 report as skipped with a code identifying a required manual step, carrying the material, the unit chosen by
-the suggested-unit rule above and a null quantity (a V1 pre-farm goal has no fixed quantity). A material no roster unit uses SHALL report as not imported with a code identifying that no unit uses
-it.
+the suggested-unit rule above and a null quantity (a V1 pre-farm goal has no fixed quantity). A material that no unit in that same
+owner set (imported unit goals, roster characters, roster Machines of War) uses SHALL report as not imported
+with a code identifying that no unit uses it.
 
 #### Scenario: Pre-farm goal becomes an Upgrade goal per linked unit
 
@@ -189,6 +190,12 @@ it.
 
 #### Scenario: Material nobody uses is not imported
 
-- **GIVEN** a V1 upgrade-material goal whose material no roster unit uses
+- **GIVEN** a V1 upgrade-material goal whose material no imported unit goal's unit and no roster unit uses
 - **WHEN** the goals part is imported
 - **THEN** that goal reports as not imported with a code identifying that no unit uses the material
+
+#### Scenario: An imported goal's unit off the roster can own a material
+
+- **GIVEN** a V1 Unlock goal for a character not on the roster, and a V1 upgrade-material goal for a material only that character uses
+- **WHEN** the goals part is imported
+- **THEN** the Upgrade goal is created on that character with the suggested-unit code, and no "no unit uses" outcome is reported
