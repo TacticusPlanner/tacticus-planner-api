@@ -9,7 +9,7 @@ UserJot "Support Multiple Rank Goals per Unit" asks for V1 parity. In V1 a unit 
 - A combined spec MAY declare dependencies on the unit's existing in-flight goals (`dependsOnGoalIds`), not only on earlier specs in the same request. An Ascension goal reached this way lifts the progression floor for cap validation exactly as an in-request Ascension does.
 - Target edits re-check the slot for every keyed type, not only Rank.
 - `slotOccupied` carries `normalizedTarget` for every keyed type.
-- V1 import preserves distinct targets of every keyed type as separate goals in V1 priority order. Only exact target duplicates merge. Prerequisite synthesis reuses an existing or imported Ascension goal that already covers the need.
+- V1 import preserves distinct targets of every keyed type as separate goals in V1 priority order. Only exact target duplicates merge. Prerequisite synthesis reuses an existing or imported Ascension goal that already covers the need. V1 material goals (from `import-all-v1-goal-types`) merge only when they share a unit and a material. Different materials become separate Upgrade goals at their own V1 priorities, and an existing Upgrade goal no longer forces `manual_step_required`.
 - **BREAKING:** slot identity changes for Ascension/Ability/Upgrade; the combined-request rule "each goal type at most once" is removed; V1 import merge semantics change.
 
 ## Capabilities
@@ -29,4 +29,4 @@ UserJot "Support Multiple Rank Goals per Unit" asks for V1 parity. In V1 a unit 
 
 `GoalTargetKey` (replaces/extends `RankTargetKey`), `ProjectGoalPlanningService.SameSlot`, `CreateCombinedGoalsEndpoint` (+ validator, `CombinedGoalSpec.DependsOnGoalIds`), `GoalEditing`, `GoalProblems`, `V1GoalImportService`, endpoint/integration tests, regenerated `artifacts/openapi`. No EF migration: the slot rule is enforced in code under the profile lock and `dependsOn` is an existing `uuid[]` column.
 
-Companion apps change: `support-multiple-goals-per-unit` (same name in `tacticus-planner-apps`): allocation of overlapping Ascension progression, milestone-aware prerequisite suggestions, ladder creation and display. The API half applies first. Builds on the archived `rebuild-foundation-pre-launch` (account-scoped slots, profile lock).
+Companion apps change: `support-multiple-goals-per-unit` (same name in `tacticus-planner-apps`): allocation of overlapping Ascension progression, milestone-aware prerequisite suggestions, ladder creation and display. The API half applies first. Builds on the archived `rebuild-foundation-pre-launch` (account-scoped slots, profile lock). **Ordering:** `import-all-v1-goal-types` (merged, not yet archived) must be archived before this change, because this change modifies its `V1 material goals become Upgrade goals at their V1 priority` requirement.

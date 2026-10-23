@@ -134,3 +134,58 @@ identified as automatically added and naming the source goal it unblocks.
 - **GIVEN** imported Rank and Ability targets that need a higher character level
 - **WHEN** the goals part is imported with automatic prerequisites selected
 - **THEN** no Level goal is created, and each target still carries its own level requirement
+
+### Requirement: V1 material goals become Upgrade goals at their V1 priority
+
+V1's pre-farm goals (one material, reserved for chosen goals) and upgrade-material goals (one material, one
+quantity) have no unit, while every V2 goal belongs to one. Each SHALL become Upgrade goals placed at the V1
+goal's own priority:
+
+- A pre-farm goal SHALL become one Upgrade goal per distinct unit of its linked goals that were imported,
+  in link order and consecutively from its priority, each targeting as much of the material as that unit
+  still needs for its linked goals (a Character from its live rank to its highest linked Rank target, else
+  its whole remaining ladder; a Machine of War from its live ability levels to its linked Ability targets,
+  else both whole tracks; crafted upgrades counted through their recipes). A unit that no longer needs the
+  material SHALL be left out; when none does, the goal SHALL report as skipped as already reached.
+- An upgrade-material goal SHALL become an Upgrade goal for its quantity on a suggested unit that uses the
+  material — in order of preference, the first unit by V1 priority among the profile's own imported unit
+  goals, then the roster's characters, then its Machines of War — reported with a code that says the unit
+  was suggested.
+
+Material goals landing on the same unit with the same material SHALL merge into one Upgrade goal at the
+earliest one's priority, keeping the larger quantity. Material goals with different materials SHALL stay
+separate Upgrade goals at their own V1 priorities (`goal-target-milestones`), and a unit's existing Upgrade
+goal for other materials SHALL NOT block one. A pre-farm goal none of whose linked goals was imported SHALL
+report as skipped with a code identifying a required manual step, carrying the material, the quantity and a
+unit. A material no roster unit uses SHALL report as not imported with a code identifying that no unit uses
+it.
+
+#### Scenario: Pre-farm goal becomes an Upgrade goal per linked unit
+
+- **GIVEN** a V1 pre-farm goal at priority 1 linked to Rank goals for two characters at priorities 2 and 3, and to an id no longer present
+- **WHEN** the goals part is imported
+- **THEN** an Upgrade goal for the material is created on each character, in link order, both ahead of the Rank goals, each for what that character's Rank goal needs
+
+#### Scenario: Upgrade-material goal goes on a suggested unit at its priority
+
+- **GIVEN** a V1 Rank goal for a character and a V1 upgrade-material goal for a material on that character's rank ladder, followed by another unit's goal
+- **WHEN** the goals part is imported
+- **THEN** an Upgrade goal for the material and quantity is created on that character between the two other goals, reported as placed on a suggested unit
+
+#### Scenario: Material goals on one unit merge
+
+- **GIVEN** a V1 pre-farm goal and a V1 upgrade-material goal for the same material that both land on the same character
+- **WHEN** the goals part is imported
+- **THEN** one Upgrade goal targets the material at the larger quantity, and the later goal reports as merged into it
+
+#### Scenario: Different materials on one unit stay separate
+
+- **GIVEN** two V1 upgrade-material goals for different materials at priorities 2 and 7 that land on the same character, which already has an in-flight Upgrade goal for a third material
+- **WHEN** the goals part is imported
+- **THEN** two new Upgrade goals are created at those priorities, the existing goal is unchanged, and no manual-step outcome is reported
+
+#### Scenario: Material nobody uses is not imported
+
+- **GIVEN** a V1 upgrade-material goal whose material no roster unit uses
+- **WHEN** the goals part is imported
+- **THEN** that goal reports as not imported with a code identifying that no unit uses the material
