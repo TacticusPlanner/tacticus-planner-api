@@ -328,6 +328,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         Assert.Equal(V1GoalOutcomeStatus.Created, first.Outcomes[0].Status);
         Assert.Equal("goal_already_exists", second.Outcomes[0].Code);
         Assert.Equal(first.Outcomes[0].GoalId, second.Outcomes[0].GoalId);
+        Assert.Equal(UltraStoneUpgradeId, second.Outcomes[0].UpgradeId);
         Assert.Equal(V1GoalOutcomeStatus.Created, second.Outcomes[1].Status);
         Assert.NotEqual(first.Outcomes[0].GoalId, second.Outcomes[1].GoalId);
     }
@@ -631,6 +632,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         {
             Assert.Equal("duplicate_goal_merged", o.Code);
             Assert.Equal(created.GoalId, o.GoalId);
+            Assert.NotNull(o.UpgradeId);
         });
         var goal = await GetGoalAsync(client, created.GoalId!.Value);
         Assert.Equal(
@@ -651,6 +653,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         Assert.Equal(V1GoalOutcomeStatus.Created, first.Outcomes[0].Status);
         Assert.Equal("goal_already_exists", second.Outcomes[0].Code);
         Assert.Equal(first.Outcomes[0].GoalId, second.Outcomes[0].GoalId);
+        Assert.Equal(UltraStoneUpgradeId, second.Outcomes[0].UpgradeId);
     }
 
     [Fact]
@@ -1009,6 +1012,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         Assert.Equal(V1GoalOutcomeStatus.Skipped, second.Outcomes[0].Status);
         Assert.Equal("goal_already_exists", second.Outcomes[0].Code);
         Assert.Equal(first.Outcomes[0].GoalId, second.Outcomes[0].GoalId);
+        Assert.Equal(UltraStoneUpgradeId, second.Outcomes[0].UpgradeId);
 
         var allGoals = await client.GetFromJsonAsync<ListGoalsResponse>("/api/v1/goals", TestContext.Current.CancellationToken);
         Assert.Single(allGoals!.Goals);

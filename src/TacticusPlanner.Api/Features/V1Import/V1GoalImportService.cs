@@ -161,8 +161,16 @@ public sealed class V1GoalImportService(
         var outcomes = new List<V1GoalOutcome>(ordered.Count + extraOutcomes.Count);
         for (var i = 0; i < ordered.Count; i++)
         {
-            outcomes.Add(outcomeBySourceIndex[i]
-                ?? throw new InvalidOperationException($"V1 goal at index {i} produced no outcome."));
+            var outcome = outcomeBySourceIndex[i]
+                ?? throw new InvalidOperationException($"V1 goal at index {i} produced no outcome.");
+            // A material goal's outcome names its material on every path (created, already existing,
+            // merged, conflict), not just the ones built in TranslateUpgradeMaterial.
+            if (outcome.UpgradeId is null && ordered[i].Type == V1UpgradeMaterialType)
+            {
+                outcome = outcome with { UpgradeId = ordered[i].UpgradeMaterialId?.Trim() };
+            }
+
+            outcomes.Add(outcome);
         }
         outcomes.AddRange(extraOutcomes);
 
