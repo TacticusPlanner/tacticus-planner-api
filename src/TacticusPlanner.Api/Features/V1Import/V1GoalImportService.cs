@@ -1110,10 +1110,10 @@ public sealed class V1GoalImportService(
     /// <summary><paramref name="RankTargetKey"/> is set only for a Rank goal, so distinct Rank end targets
     /// for one unit are distinct keys (imported as separate milestones) while an exact duplicate shares a
     /// key (merged) — every other goal type keeps the one-per-unit/type key.</summary>
-    /// <summary>"V1 import · 23 Oct": short enough to fit a Goals row. The server has no user locale or time
-    /// zone, so the date is invariant and UTC; two imports on one day share the name but not the project.</summary>
+    /// <summary>"V1 import · 23 Oct, 13:45 UTC": the time tells two imports on one day apart. The server has
+    /// no user locale or time zone, so the stamp is invariant and UTC.</summary>
     internal static string ImportProjectName(DateTimeOffset now) =>
-        string.Create(CultureInfo.InvariantCulture, $"V1 import · {now.UtcDateTime:d MMM}");
+        string.Create(CultureInfo.InvariantCulture, $"V1 import · {now.UtcDateTime:d MMM, HH:mm} UTC");
 
     private sealed record GoalKey(GoalEntityType EntityType, string EntityId, GoalType GoalType, string? RankTargetKey = null);
 

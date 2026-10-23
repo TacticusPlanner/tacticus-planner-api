@@ -947,7 +947,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         var body = await ImportGoalsAsync(client, [RankGoal("r1", CharacterId, 1, UnitRank.Iron1)]);
 
         var project = Assert.Single(await GetImportProjectsAsync(client));
-        Assert.Matches(@"^V1 import · \d{1,2} [A-Z][a-z]{2}$", project.Name);
+        Assert.Matches(@"^V1 import · \d{1,2} [A-Z][a-z]{2}, \d{2}:\d{2} UTC$", project.Name);
         Assert.Equal((Guid?)project.ProjectId, body.ImportProjectId);
         Assert.Equal(
             body.Outcomes.Where(o => o.GoalId is not null).Select(o => o.GoalId!.Value).Order(),

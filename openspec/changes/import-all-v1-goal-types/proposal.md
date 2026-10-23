@@ -12,7 +12,7 @@ Companion apps change: `import-all-v1-goal-types` in `tacticus-planner-apps` (ou
 - Material goals landing on one unit merge into its one Upgrade goal. A material for a unit whose existing Upgrade goal targets other materials, or a pre-farm goal with no imported linked goal, reports a `manual_step_required` skip carrying the material, quantity and a unit.
 - New outcome codes: `unknown_upgrade`, `no_upgrade_owner`, `upgrade_goal_assigned`, `manual_step_required`. `unsupported_goal_type` now only covers type values V1 never had.
 - `V1GoalOutcome` gains optional `upgradeId`, `linkedSourceGoalIds` and `upgradeQuantity`.
-- Each import run that creates goals puts them in a new project of its own, named "V1 import · <date>" (UTC), instead of the default project. The response carries that project's id so the client can open it.
+- Each import run that creates goals puts them in a new project of its own, named "V1 import · <date, time> UTC", instead of the default project. The response carries that project's id so the client can open it.
 
 ## Capabilities
 
