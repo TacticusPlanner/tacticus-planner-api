@@ -34,8 +34,8 @@ A goal SHALL report as skipped, with a code identifying which case applies,
 when: its target is already reached according to the account's player data; the
 account already has a goal of that type for that unit; it was merged into
 another source goal's target for the same unit and type; or it is a V1
-upgrade-material or pre-farm goal, which needs a manual step (see "V1 material
-goals report a manual step").
+material goal that needs a manual step (see "V1 material goals become Upgrade
+goals at their V1 priority").
 
 A goal SHALL report as not imported, with a code identifying which case
 applies, when: its V1 goal type is not one V1 defines; its unit is not present in
@@ -106,29 +106,48 @@ Machine of War Ascension goal.
 - **WHEN** the goals part is imported
 - **THEN** a Machine of War Ascension goal is created for that unit
 
-### Requirement: V1 material goals report a manual step
+### Requirement: V1 material goals become Upgrade goals at their V1 priority
 
-V1's upgrade-material goals (one material, one quantity) and pre-farm goals (one material, reserved for
-chosen goals) have no unit, while every V2 goal belongs to one; which unit should hold the material is the
-user's call. Neither SHALL create a goal. Each SHALL report as skipped with a code identifying a required
-manual step, carrying the material id, an upgrade-material goal's quantity, a pre-farm goal's linked V1
-goal ids that are present in the imported profile, and a suggested unit that uses the material: in order
-of preference, the first unit by V1 priority among the profile's own imported unit goals, then the
-roster's characters, then its Machines of War; among those, a unit whose existing Upgrade goal already
-targets the material first, then a unit with no Upgrade goal. A material no roster unit uses SHALL report
-as not imported with a code identifying that no unit uses it.
+V1's pre-farm goals (one material, reserved for chosen goals) and upgrade-material goals (one material, one
+quantity) have no unit, while every V2 goal belongs to one. Each SHALL become Upgrade goals placed at the V1
+goal's own priority:
 
-#### Scenario: Upgrade-material goal suggests the unit of an imported goal that needs it
+- A pre-farm goal SHALL become one Upgrade goal per distinct unit of its linked goals that were imported,
+  in link order and consecutively from its priority, each targeting as much of the material as that unit
+  still needs for its linked goals (a Character from its live rank to its highest linked Rank target, else
+  its whole remaining ladder; a Machine of War from its live ability levels to its linked Ability targets,
+  else both whole tracks; crafted upgrades counted through their recipes). A unit that no longer needs the
+  material SHALL be left out; when none does, the goal SHALL report as skipped as already reached.
+- An upgrade-material goal SHALL become an Upgrade goal for its quantity on a suggested unit that uses the
+  material — in order of preference, the first unit by V1 priority among the profile's own imported unit
+  goals, then the roster's characters, then its Machines of War; among those, a unit whose existing Upgrade
+  goal already targets the material first, then a unit with no Upgrade goal — reported with a code that
+  says the unit was suggested.
 
-- **GIVEN** a V1 Rank goal for a character and a V1 upgrade-material goal for a material on that character's rank ladder
+A unit holds one in-flight Upgrade goal, so material goals landing on the same unit SHALL merge into one
+Upgrade goal at the earliest one's priority (a repeated material keeps the larger quantity). A material for a
+unit whose existing Upgrade goal targets other materials, and a pre-farm goal none of whose linked goals was
+imported, SHALL report as skipped with a code identifying a required manual step, carrying the material, the
+quantity and a unit. A material no roster unit uses SHALL report as not imported with a code identifying that
+no unit uses it.
+
+#### Scenario: Pre-farm goal becomes an Upgrade goal per linked unit
+
+- **GIVEN** a V1 pre-farm goal at priority 1 linked to Rank goals for two characters at priorities 2 and 3, and to an id no longer present
 - **WHEN** the goals part is imported
-- **THEN** no Upgrade goal is created, and the material goal reports a manual-step skip carrying the material, its quantity and that character as the suggested unit
+- **THEN** an Upgrade goal for the material is created on each character, in link order, both ahead of the Rank goals, each for what that character's Rank goal needs
 
-#### Scenario: Pre-farm goal names its material and linked goals
+#### Scenario: Upgrade-material goal goes on a suggested unit at its priority
 
-- **GIVEN** a V1 pre-farm goal for a material, linked to a V1 Rank goal in the profile and to an id no longer present
+- **GIVEN** a V1 Rank goal for a character and a V1 upgrade-material goal for a material on that character's rank ladder, followed by another unit's goal
 - **WHEN** the goals part is imported
-- **THEN** it reports a manual-step skip carrying the material id and only the present Rank goal's V1 id
+- **THEN** an Upgrade goal for the material and quantity is created on that character between the two other goals, reported as placed on a suggested unit
+
+#### Scenario: Material goals on one unit merge
+
+- **GIVEN** a V1 pre-farm goal and a V1 upgrade-material goal that both land on the same character
+- **WHEN** the goals part is imported
+- **THEN** one Upgrade goal targets both materials, and the later goal reports as merged into it
 
 #### Scenario: Material nobody uses is not imported
 
