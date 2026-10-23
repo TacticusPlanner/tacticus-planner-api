@@ -13216,7 +13216,9 @@
           "entityId",
           "goalType",
           "goalId",
-          "sourceGoalId"
+          "sourceGoalId",
+          "upgradeId",
+          "linkedSourceGoalIds"
         ],
         "type": "object",
         "properties": {

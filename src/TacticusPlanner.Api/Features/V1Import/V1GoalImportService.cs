@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Api.Features.Projects;
@@ -1034,8 +1035,8 @@ public sealed record V1GoalOutcome(
     GoalType? GoalType,
     Guid? GoalId,
     string? SourceGoalId,
-    string? UpgradeId = null,
-    IReadOnlyList<string>? LinkedSourceGoalIds = null
+    [property: JsonRequired] string? UpgradeId = null,
+    [property: JsonRequired] IReadOnlyList<string>? LinkedSourceGoalIds = null
 );
 
 public sealed record V1GoalImportResult(IReadOnlyList<V1GoalOutcome> Outcomes, bool Refused)
