@@ -28,7 +28,8 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
             summary.Description = "V1 credentials are used once and never persisted. After profile retrieval, "
                 + "each selected part is applied independently and reports Imported, Skipped, or Failed. "
                 + "Goals are created directly by this operation, in V1 priority order — the response carries "
-                + "one outcome per source V1 goal (created, skipped, or failed), plus one per automatically "
+                + "one outcome per source V1 goal (created, skipped, or failed), one per linked unit when a "
+                + "pre-farm goal fans out, plus one per automatically "
                 + "added prerequisite. The goals part is refused (no goals created) when the account has no "
                 + "player data snapshot. The legendaryEventPlans part creates one Legendary Event plan per V1 event "
                 + "(never touching a plan that already has teams) and reports one outcome per V1 event in "
@@ -120,6 +121,7 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
         {
             LegendaryEventPlans = legendaryEvents.Part,
             LegendaryEventOutcomes = legendaryEvents.Outcomes,
+            ImportProjectId = goalResult.ProjectId,
             ProfileId = profileId.Value.Value,
             PlayerName = personalKey.PlayerName,
             PowerLevel = personalKey.PowerLevel,
@@ -472,7 +474,8 @@ public sealed record ImportV1ProfileResponse(
     ImportPartResult OnslaughtProgress,
     ImportPartResult CampaignEventProgress,
     ImportPartResult Goals,
-    // One outcome per source V1 goal (created/skipped/failed), plus one per automatically added
+    // One outcome per source V1 goal (created/skipped/failed), one per linked unit when a pre-farm goal
+    // fans out, plus one per automatically added
     // prerequisite — goals are created by this operation itself; nothing is returned for the caller to
     // submit elsewhere (rewrite-v1-goal-import).
     IReadOnlyList<V1GoalOutcome> Outcomes
@@ -484,6 +487,10 @@ public sealed record ImportV1ProfileResponse(
     /// <summary>One outcome per V1 event (ascending V1 id) when <c>legendaryEventPlans</c> was selected.</summary>
     [JsonRequired]
     public IReadOnlyList<V1LegendaryEventOutcome> LegendaryEventOutcomes { get; init; } = [];
+
+    /// <summary>The project this run's imported goals went into; null when it created no goals.</summary>
+    [JsonRequired]
+    public Guid? ImportProjectId { get; init; }
 
     [JsonRequired]
     public Guid ProfileId { get; init; }
