@@ -472,8 +472,8 @@ public sealed class V1GoalImportService(
         {
             var now = timeProvider.GetUtcNow();
             // Each import that creates goals gets its own project, named after when it ran, so imported goals
-            // stay together and apart from the user's own. Added inside the transaction, so a rollback below
-            // leaves no empty project behind.
+            // stay together and apart from the user's own. It is only tracked once goals are staged (below), so
+            // an import that creates nothing leaves no empty project behind.
             var project = new Project
             {
                 Id = ProjectId.From(Guid.CreateVersion7()),
@@ -482,7 +482,6 @@ public sealed class V1GoalImportService(
                 Status = ProjectStatus.Active,
                 Type = ProjectType.Custom,
             };
-            db.Projects.Add(project);
             var staged = new Dictionary<int, Goal>();
             // Synthesized-prerequisite "Created" outcomes (Unlock/Ascension), like the `staged`
             // source-goal ones above, can't be finalized until the transaction actually commits — a
@@ -632,6 +631,11 @@ public sealed class V1GoalImportService(
                     pending.Add((goal, candidate.OriginalIndex, 3));
                     staged[candidate.OriginalIndex] = goal;
                 }
+            }
+
+            if (pending.Count > 0)
+            {
+                db.Projects.Add(project);
             }
 
             // Flat pass: assign priorities in (AnchorIndex, SubOrder) order — this is where V1's priority
