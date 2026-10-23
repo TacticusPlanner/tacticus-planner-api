@@ -6,8 +6,8 @@ public sealed class AnalyticsOptions
 
     private const int IdentityKeySize = 32;
 
-    /// <summary>Capture is off unless this is <c>true</c> - only production sets it, so local development and
-    /// staging never report into the production project even though they carry its token.</summary>
+    /// <summary>Capture is off unless this is <c>true</c> - only appsettings.Production.json sets it, so local
+    /// development and staging never report into the production project even though they carry its token.</summary>
     public bool Enabled { get; set; }
 
     /// <summary>PostHog project token. Absent is the supported way to run with capture switched off —
