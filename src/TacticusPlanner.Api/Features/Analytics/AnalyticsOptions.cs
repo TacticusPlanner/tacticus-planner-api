@@ -6,6 +6,10 @@ public sealed class AnalyticsOptions
 
     private const int IdentityKeySize = 32;
 
+    /// <summary>Capture is off unless this is <c>true</c> - only production sets it, so local development and
+    /// staging never report into the production project even though they carry its token.</summary>
+    public bool Enabled { get; set; }
+
     /// <summary>PostHog project token. Absent is the supported way to run with capture switched off —
     /// unlike <see cref="IdentityKey"/>, this is not validated on start.</summary>
     public string? ProjectToken { get; set; }

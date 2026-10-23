@@ -175,6 +175,7 @@ do not commit secrets.
 | `RateLimiting__UpstreamSlowPerHour` | Optional, default `6`. Per-profile, per-endpoint requests/hour for `POST tacticus-integration/player-sync`, `POST guilds/register`, `POST guilds/me/sync` and `POST me/v1-import` |
 | `ColumnEncryption__CurrentKeyVersion` | Logical key version used to encrypt new/updated sensitive columns |
 | `ColumnEncryption__Keys__<version>` | Base64/base64url 32-byte AES-256 key for the matching key version |
+| `Analytics__Enabled` | Optional, default `false`. Capture runs only when `true` (production only); otherwise analytics is inert |
 | `Analytics__ProjectToken` | PostHog project token (public — identifies the project, not a secret) |
 | `Analytics__HostUrl` | PostHog ingestion host (public); must be `https://us.i.posthog.com` in every environment |
 | `Analytics__IdentityKey` | **Secret.** Base64 32-byte HMAC key deriving each account's pseudonymous analytics id. Never rotate — rotating it re-keys every analytics identity |

@@ -30,8 +30,10 @@ public static class DependencyInjection
         // run with capture switched off (design.md's "identity key is required; the project token is
         // optional" decision). Read directly from configuration rather than IOptions<AnalyticsOptions>: this
         // choice is made once at startup, not per-request.
+        // Analytics:Enabled must also be true - only production sets it (see AnalyticsOptions.Enabled).
+        var enabled = configuration.GetValue<bool>($"{AnalyticsOptions.SectionName}:Enabled");
         var projectToken = configuration[$"{AnalyticsOptions.SectionName}:ProjectToken"];
-        if (!string.IsNullOrWhiteSpace(projectToken))
+        if (enabled && !string.IsNullOrWhiteSpace(projectToken))
         {
             services.AddPostHogProductAnalytics(configuration);
         }
