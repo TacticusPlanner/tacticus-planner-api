@@ -161,7 +161,7 @@ V2 progression ladder; or it carries no usable target.
 
 ### Requirement: Duplicate V1 goals for one unit and type are merged and reported
 
-When V1 contains multiple Rank goals for one unit, the import SHALL preserve goals with distinct normalized end targets as separate V2 milestones in their V1 priority order. Exact Rank end-target duplicates SHALL merge into the highest-priority survivor and report the survivor id. For non-Rank goals, the existing one-per-unit/type merge remains: Ascension spans lowest start to highest end; other types retain the highest-priority source. Every merged-away source SHALL report a skip with merge code and survivor id.
+When V1 contains multiple goals of one type for one unit, the import SHALL preserve goals with distinct target keys (`goal-target-milestones`) as separate V2 goals in their V1 priority order. This applies to Rank, Ascension, Ability and Upgrade. Only exact target-key duplicates SHALL merge into the highest-priority survivor: Rank and Ascension duplicates span the lowest start to the shared end (Ascension also unions acquisition sources); other types retain the highest-priority source. Unlock goals for one unit always merge. Every merged-away source SHALL report a skip with merge code and survivor id.
 
 #### Scenario: Two rank goals merge into one spanning goal
 
@@ -171,7 +171,7 @@ When V1 contains multiple Rank goals for one unit, the import SHALL preserve goa
 
 #### Scenario: Duplicate ability goals keep the higher-priority one
 
-- **GIVEN** two V1 Ability goals for one unit
+- **GIVEN** two V1 Ability goals for one unit with the same active and passive end
 - **WHEN** goals are imported
 - **THEN** the higher-priority one reports created and the other reports skipped with a merge code
 
@@ -180,6 +180,12 @@ When V1 contains multiple Rank goals for one unit, the import SHALL preserve goa
 - **GIVEN** V1 has Rank goals for Bellator targeting Silver3 and Gold1
 - **WHEN** goals are imported
 - **THEN** two V2 goals are created with distinct ids and preserved V1 order
+
+#### Scenario: Distinct Ascension and Ability targets import separately
+
+- **GIVEN** V1 has Ascension goals for Ragnar ending at Legendary and Mythic, and Ability goals ending at 40/40 and 50/50
+- **WHEN** goals are imported
+- **THEN** four V2 goals are created, each with its own notes, in V1 priority order
 
 ### Requirement: V1 shard-source choices are carried into acquisition sources
 
@@ -263,21 +269,31 @@ the same rules and the same minimum targets:
   imported goal requires the unit to exist;
 - an **Ascension** goal when an imported target is above the unit's
   progression-derived cap, targeting the lowest progression that satisfies
-  every such target for that unit.
+  every such target for that unit that no covering Ascension goal satisfies.
 
 The character level a Rank or Ability target needs is intrinsic to that target
 (see `rank-level-progression`) and SHALL NOT synthesize any goal.
 
+An Ascension requirement SHALL first be satisfied by a covering Ascension goal:
+an imported or already-existing in-flight Ascension goal for that unit whose end
+reaches the required progression (the lowest such end when several do). An
+imported Ascension goal is considered after duplicate merging, so the dependency
+SHALL reference the surviving persisted goal, never a merged-away source. The
+dependent goal SHALL declare a dependency on it and no goal is created. Only
+when no Ascension goal covers the requirement SHALL a new one be created, and
+then only if no in-flight Ascension goal for the unit already has that exact
+end. Existing Ascension targets SHALL NOT be altered.
+
+An Unlock prerequisite SHALL NOT be created when the unit's imported goals
+already include an Unlock goal, or when the account already has one for that
+unit; in those cases the requirement SHALL be reported rather than satisfied.
+
 Each created prerequisite SHALL be declared as a dependency of every imported
-goal that required it, and SHALL be placed immediately before them in the
-constructed import sequence. There is no automatic within-unit reordering to
+goal that required it, and SHALL be placed immediately before the first of
+them in the constructed import sequence, so it precedes every goal that
+requires it. There is no automatic within-unit reordering to
 fall back on for this placement — the import process itself is responsible
 for the prerequisite's position, not a downstream ordering step.
-
-A prerequisite SHALL NOT be created when the unit's imported goals already
-include one of that type, or when the account already has one of that type for
-that unit. In those cases the requirement SHALL be reported rather than
-satisfied, and the existing goal's target SHALL NOT be altered.
 
 A synthesized Unlock goal SHALL be validated by the same rules a manual
 creation of that goal would be before it is persisted (Unlock is valid only for
@@ -313,12 +329,20 @@ identified as automatically added and naming the source goal it unblocks.
 
 #### Scenario: An imported Ascension goal suppresses synthesis and is not raised
 
-- **GIVEN** a V1 profile containing both a Rank goal needing a higher progression and an
-  Ascension goal for the same character whose target is below what the Rank goal needs
+- **GIVEN** a V1 profile with a Rank goal needing Legendary and an Ascension goal for the same
+  character ending at Legendary
 - **WHEN** the goals part is imported with automatic prerequisites selected
-- **THEN** no additional Ascension goal is created, the imported Ascension goal's target is
-  unchanged, and an outcome reports that the existing target does not reach what the Rank goal
-  requires
+- **THEN** no Ascension goal is synthesized and the Rank goal declares a dependency on the
+  imported Ascension goal
+
+#### Scenario: A too-low Ascension goal is kept and a covering one is added
+
+- **GIVEN** a V1 profile with a Rank goal needing Legendary and an Ascension goal for the same
+  character ending at Epic
+- **WHEN** the goals part is imported with automatic prerequisites selected
+- **THEN** the Epic Ascension goal is imported unchanged, a separate Ascension goal ending at
+  the lowest Legendary progression is created ahead of the Rank goal, and the Rank goal depends
+  on it
 
 #### Scenario: Prerequisites are not created when not selected
 
@@ -391,16 +415,17 @@ goal's own priority:
   material SHALL be left out; when none does, the goal SHALL report as skipped as already reached.
 - An upgrade-material goal SHALL become an Upgrade goal for its quantity on a suggested unit that uses the
   material — in order of preference, the first unit by V1 priority among the profile's own imported unit
-  goals, then the roster's characters, then its Machines of War; among those, a unit whose existing Upgrade
-  goal already targets the material first, then a unit with no Upgrade goal — reported with a code that
-  says the unit was suggested.
+  goals (whether or not the unit is on the roster), then the roster's characters, then its Machines of
+  War — reported with a code that says the unit was suggested.
 
-A unit holds one in-flight Upgrade goal, so material goals landing on the same unit SHALL merge into one
-Upgrade goal at the earliest one's priority (a repeated material keeps the larger quantity). A material for a
-unit whose existing Upgrade goal targets other materials, and a pre-farm goal none of whose linked goals was
-imported, SHALL report as skipped with a code identifying a required manual step, carrying the material, the
-quantity and a unit. A material no roster unit uses SHALL report as not imported with a code identifying that
-no unit uses it.
+Material goals landing on the same unit with the same material SHALL merge into one Upgrade goal at the
+earliest one's priority, keeping the larger quantity. Material goals with different materials SHALL stay
+separate Upgrade goals at their own V1 priorities (`goal-target-milestones`), and a unit's existing Upgrade
+goal for other materials SHALL NOT block one. A pre-farm goal none of whose linked goals was imported SHALL
+report as skipped with a code identifying a required manual step, carrying the material, the unit chosen by
+the suggested-unit rule above and a null quantity (a V1 pre-farm goal has no fixed quantity). A material that no unit in that same
+owner set (imported unit goals, roster characters, roster Machines of War) uses SHALL report as not imported
+with a code identifying that no unit uses it.
 
 #### Scenario: Pre-farm goal becomes an Upgrade goal per linked unit
 
@@ -416,12 +441,25 @@ no unit uses it.
 
 #### Scenario: Material goals on one unit merge
 
-- **GIVEN** a V1 pre-farm goal and a V1 upgrade-material goal that both land on the same character
+- **GIVEN** a V1 pre-farm goal and a V1 upgrade-material goal for the same material that both land on the same character
 - **WHEN** the goals part is imported
-- **THEN** one Upgrade goal targets both materials, and the later goal reports as merged into it
+- **THEN** one Upgrade goal targets the material at the larger quantity, and the later goal reports as merged into it
+
+#### Scenario: Different materials on one unit stay separate
+
+- **GIVEN** two V1 upgrade-material goals for different materials at priorities 2 and 7 that land on the same character, which already has an in-flight Upgrade goal for a third material
+- **WHEN** the goals part is imported
+- **THEN** two new Upgrade goals are created at those priorities, the existing goal is unchanged, and no manual-step outcome is reported
 
 #### Scenario: Material nobody uses is not imported
 
-- **GIVEN** a V1 upgrade-material goal whose material no roster unit uses
+- **GIVEN** a V1 upgrade-material goal whose material no imported unit goal's unit and no roster unit uses
 - **WHEN** the goals part is imported
 - **THEN** that goal reports as not imported with a code identifying that no unit uses the material
+
+#### Scenario: An imported goal's unit off the roster can own a material
+
+- **GIVEN** a V1 Unlock goal for a character not on the roster, and a V1 upgrade-material goal for a material only that character uses
+- **WHEN** the goals part is imported
+- **THEN** the Upgrade goal is created on that character with the suggested-unit code, and no "no unit uses" outcome is reported
+

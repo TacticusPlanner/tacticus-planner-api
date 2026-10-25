@@ -6,7 +6,7 @@ Allows separate projects to carry separate in-flight targets while preventing du
 
 ### Requirement: In-flight uniqueness is scoped to project
 
-For each profile, at most one Active/Paused non-Rank goal SHALL occupy `(entityType, entityId, goalType)`. For Rank, at most one Active/Paused goal SHALL occupy `(entityType, entityId, Rank, normalizedEndTarget)`; distinct Rank end targets MAY coexist. Completed/Archived goals SHALL not occupy slots. Project membership SHALL NOT affect slot occupancy: one in-flight goal MAY belong to any number of projects, and two projects SHALL NOT carry separate in-flight instances of the same tuple/target.
+For each profile, at most one Active/Paused goal SHALL occupy `(entityType, entityId, goalType, targetKey)`, where `targetKey` is the goal's canonical end-target key defined by `goal-target-milestones` (Rank: `rank-milestones`' normalized end target). Distinct target keys for one unit and goal type MAY coexist. Unlock has no target key: at most one Active/Paused Unlock goal SHALL occupy `(entityType, entityId, Unlock)`. Completed/Archived goals SHALL not occupy slots. Project membership SHALL NOT affect slot occupancy: one in-flight goal MAY belong to any number of projects, and two projects SHALL NOT carry separate in-flight instances of the same tuple/target.
 
 #### Scenario: Different projects accept different instances
 
@@ -32,6 +32,24 @@ For each profile, at most one Active/Paused non-Rank goal SHALL occupy `(entityT
 - **WHEN** another targeting Gold1 is created
 - **THEN** both are accepted
 
+#### Scenario: Distinct Ascension targets coexist
+
+- **GIVEN** an Active Ragnar Ascension goal ending at `Legendary:RedFiveStars`
+- **WHEN** another Ragnar Ascension goal ending at `Mythic:OneBlueStar` is created
+- **THEN** both are accepted
+
+#### Scenario: Equal Ascension target is a duplicate
+
+- **GIVEN** an Active Ragnar Ascension goal ending at `Legendary:RedFiveStars` that started at `Epic:RedThreeStars`
+- **WHEN** another Ragnar Ascension goal ending at `Legendary:RedFiveStars` is created, whatever its start
+- **THEN** it is rejected with `slotOccupied` identifying the existing goal
+
+#### Scenario: Unlock stays one per unit
+
+- **GIVEN** an Active Unlock goal for a character
+- **WHEN** another Unlock goal for that character is created
+- **THEN** it is rejected with `slotOccupied`
+
 ### Requirement: Every membership and lifecycle path enforces slots
 
 The invariant SHALL apply atomically to single creation, combined creation, target edits, and transitions into Active/Paused (single or bulk). Transitioning to Completed/Archived SHALL free the slot. Membership changes (goal-side or project-side) SHALL NOT be slot-checked, because membership cannot create a duplicate.
@@ -50,13 +68,19 @@ The invariant SHALL apply atomically to single creation, combined creation, targ
 
 ### Requirement: Conflicts identify affected projects and goals
 
-A slot conflict SHALL produce the same 409 in the unified error shape with `issueCode` `slotOccupied`, naming the entity type/id, goal type, normalized end target (Rank only) and the existing goal id, and carrying the existing goal under `current`.
+A slot conflict SHALL produce the same 409 in the unified error shape with `issueCode` `slotOccupied`, naming the entity type/id, goal type, normalized end target (`normalizedTarget`, the existing goal's target key; null only for Unlock) and the existing goal id, and carrying the existing goal under `current`.
 
 #### Scenario: Multi-project create partially conflicts
 
 - **GIVEN** the profile already has an in-flight Ragnar Rank Gold1 goal
 - **WHEN** one combined request creates Ragnar Unlock, Ascension and Rank Gold1
 - **THEN** the request is rejected atomically with `slotOccupied` identifying the existing Rank goal, and no goal is created
+
+#### Scenario: Ability conflict names the target
+
+- **GIVEN** an in-flight Calgar Ability goal targeting active 50 and passive 50
+- **WHEN** another Calgar Ability goal targeting active 50 and passive 50 is created
+- **THEN** the 409 carries `normalizedTarget` `"50:50"` and the existing goal id
 
 ### Requirement: The profile lock serializes slot checks
 
@@ -105,3 +129,4 @@ For a Rank slot conflict, the `slotOccupied` response SHALL include the existing
 - **GIVEN** an in-flight Ragnar Rank goal targeting Silver3 and another targeting Gold1
 - **WHEN** the Silver3 goal's target is edited to Gold1
 - **THEN** nothing changes and the response identifies the Gold1 goal and the target
+
