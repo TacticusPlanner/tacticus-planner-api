@@ -90,11 +90,11 @@ public sealed class GoalTargetEditor(
         if (await ValidateAsync(profileId, goal, target, ct) is { } validationError)
             return new GoalEditResult.Invalid("Target", validationError);
 
-        var previousKey = RankTargetKey.For(goal.GoalType, goal.Config);
+        var previousKey = GoalTargetKey.For(goal);
         ApplyTarget(goal, target);
 
-        // Rank occupancy: the new target must be free among the profile's in-flight goals.
-        if (RankTargetKey.For(goal.GoalType, goal.Config) != previousKey
+        // Slot occupancy: a new end target must be free among the profile's in-flight goals.
+        if (GoalTargetKey.For(goal) != previousKey
             && await planning.FindConflictAsync([goal], ct) is { } conflict)
             return new GoalEditResult.SlotConflict(conflict);
 
@@ -219,21 +219,13 @@ public sealed class GoalTargetEditor(
         };
 
         // The rarity cap on Ability targets honors the unit's own Ascension prerequisites, like combined
-        // creation does: a stored Ascension dependency's target counts as reachable progression.
+        // creation does: an Ascension reachable through the stored dependency closure counts as reachable
+        // progression.
         UnitProgression? floor = null;
         if (goal.DependsOn.Count > 0)
         {
-            var dependencyIds = goal.DependsOn.Select(GoalId.From).ToList();
-            var ends = (await db.Goals.AsNoTracking()
-                    .Where(entity => dependencyIds.Contains(entity.Id) && entity.GoalType == GoalType.Ascension)
-                    .ToListAsync(ct))
-                .Select(entity => entity.Config.Progression)
-                .OfType<ProgressionTarget>()
-                .Select(progression => ProgressionRules.ProgressionIndex(progression.End))
-                .Where(index => index >= 0)
-                .ToList();
-            if (ends.Count > 0)
-                floor = (UnitProgression)ends.Max();
+            var unitGoals = await AscensionFloor.LoadUnitGoalsAsync(db, goal.EntityType, goal.EntityId, ct);
+            floor = AscensionFloor.Reachable(goal.DependsOn, unitGoals);
         }
 
         return await validation.ValidateAsync(

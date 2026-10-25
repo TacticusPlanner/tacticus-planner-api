@@ -321,7 +321,7 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
     }
 
     [Fact]
-    public async Task DuplicateGoalTypeWithinTheSameRequestIsRejected()
+    public async Task ARepeatedGoalTypeWithADistinctTargetIsAccepted()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
@@ -333,14 +333,26 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
                 new CombinedGoalSpec(
                     GoalType.Rank,
                     new CreateGoalConfigRequest(Rank: new RankTargetRequest(0, false, 0, 10, false, 0)),
-                    []
+                    [0]
                 ),
             ],
         };
 
         var response = await client.PostGoalAsync(request);
 
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        response.EnsureSuccessStatusCode();
+    }
+
+    [Fact]
+    public async Task ARepeatedGoalTypeWithTheSameTargetIsASlotConflict()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var request = UnlockThenRank with { Goals = [.. UnlockThenRank.Goals, UnlockThenRank.Goals[1]] };
+
+        var response = await client.PostGoalAsync(request);
+
+        Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
     }
 
     [Fact]

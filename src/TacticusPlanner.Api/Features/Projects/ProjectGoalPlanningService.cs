@@ -78,7 +78,7 @@ public sealed class ProjectGoalPlanningService(PlannerDbContext db, GoalOrderSer
         a.EntityType == b.EntityType
         && a.EntityId == b.EntityId
         && a.GoalType == b.GoalType
-        && RankTargetKey.For(a.GoalType, a.Config) == RankTargetKey.For(b.GoalType, b.Config);
+        && GoalTargetKey.For(a) == GoalTargetKey.For(b);
 }
 
 /// <param name="Candidate">The goal that wanted the slot.</param>

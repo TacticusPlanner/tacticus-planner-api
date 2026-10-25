@@ -74,6 +74,8 @@ public sealed class V1GoalImportService(
             .Where(goal => goal.ProfileId == profileId)
             .ToListAsync(ct);
         var existingByKey = ExistingGoalsByKey(existingRows);
+        var existingMaterials = ExistingUpgradeMaterials(existingRows);
+        var existingAscensions = ExistingAscensionsByUnit(existingRows);
 
         // Unit goals first: a pre-farm goal (type 7) becomes Upgrade goals on its linked goals' units, and their
         // units, in V1 priority order, are the preferred owners for a material goal (type 6). Both are
@@ -100,7 +102,7 @@ public sealed class V1GoalImportService(
             }
         }
 
-        var owners = new UpgradeOwnerResolver(catalog.Current, playerSnapshot, preferredOwners, existingByKey);
+        var owners = new UpgradeOwnerResolver(catalog.Current, playerSnapshot, preferredOwners, existingMaterials);
         var unitGoalsBySourceId = translated
             .Where(goal => sourceIdByIndex[goal.OriginalIndex] is not null)
             .GroupBy(goal => sourceIdByIndex[goal.OriginalIndex]!, StringComparer.Ordinal)
@@ -129,23 +131,31 @@ public sealed class V1GoalImportService(
         var creatable = new List<TranslatedGoal>();
         foreach (var candidate in collapsedSurvivors)
         {
-            if (existingByKey.TryGetValue(candidate.Key, out var existingGoal))
+            // A material goal is already there when one of the unit's Upgrade goals targets its material; every
+            // other goal when the unit has a goal of its type with the same end target (goal-target-milestones).
+            var existingGoalId = candidate.MaterialId is { } materialId
+                ? existingMaterials.TryGetValue((new UnitKey(candidate.Key.EntityType, candidate.Key.EntityId), materialId), out var materialGoalId)
+                    ? materialGoalId
+                    : (Guid?)null
+                : existingByKey.GetValueOrDefault(candidate.Key)?.Id;
+            if (existingGoalId is { } existingId)
             {
-                outcomeBySourceIndex[candidate.Slot] = candidate.Key.GoalType == GoalType.Upgrade
-                    && !CoversTargets(existingGoal.Config, candidate.Config)
-                    ? OccupiedUpgradeOutcome(candidate, sourceIdBySlot)
-                    : new V1GoalOutcome(
-                        V1GoalOutcomeStatus.Skipped,
-                        "goal_already_exists",
-                        "The account already has a goal of this type for this unit.",
-                        candidate.Key.EntityType,
-                        candidate.Key.EntityId,
-                        candidate.Key.GoalType,
-                        existingGoal.Id,
-                        sourceIdBySlot[candidate.Slot],
-                        candidate.MaterialId,
-                        candidate.LinkedSourceGoalIds,
-                        candidate.MaterialQuantity);
+                outcomeBySourceIndex[candidate.Slot] = new V1GoalOutcome(
+                    V1GoalOutcomeStatus.Skipped,
+                    "goal_already_exists",
+                    candidate.MaterialId is not null
+                        ? "The account already has an Upgrade goal for this material on this unit."
+                        : candidate.Key.TargetKey is null
+                            ? "The account already has a goal of this type for this unit."
+                            : "The account already has a goal of this type with this target for this unit.",
+                    candidate.Key.EntityType,
+                    candidate.Key.EntityId,
+                    candidate.Key.GoalType,
+                    existingId,
+                    sourceIdBySlot[candidate.Slot],
+                    candidate.MaterialId,
+                    candidate.LinkedSourceGoalIds,
+                    candidate.MaterialQuantity);
             }
             else
             {
@@ -158,7 +168,7 @@ public sealed class V1GoalImportService(
         if (creatable.Count > 0)
         {
             projectId = await CreateGoalsAsync(
-                profileId, playerSnapshot, creatable, existingByKey, synthesizePrerequisites,
+                profileId, playerSnapshot, creatable, existingByKey, existingAscensions, synthesizePrerequisites,
                 sourceIdBySlot, outcomeBySourceIndex, extraOutcomes, ct);
         }
 
@@ -170,8 +180,8 @@ public sealed class V1GoalImportService(
                 V1GoalOutcomeStatus.Skipped,
                 "duplicate_goal_merged",
                 duplicate.Key.GoalType == GoalType.Upgrade
-                    ? "Merged into this unit's Upgrade goal, which a unit holds only one of."
-                    : "Another V1 goal of this type for this unit was imported in its place.",
+                    ? "Merged into this unit's Upgrade goal for the same material."
+                    : "Another V1 goal of this type with the same target for this unit was imported in its place.",
                 survivorOutcome.EntityType,
                 survivorOutcome.EntityId,
                 survivorOutcome.GoalType,
@@ -301,9 +311,7 @@ public sealed class V1GoalImportService(
         // An absent dailyRaids field (a V1 record predating it) reads as in-planning, so a missing flag
         // never silently pauses an imported goal.
         return (new TranslatedGoal(
-            new GoalKey(entityType, entityId, goalType, config.Rank is { } rank
-                ? RankTargetKey.From(rank.End, rank.EndPointFive, rank.EndAppliedUpgrades)
-                : null),
+            new GoalKey(entityType, entityId, goalType, GoalTargetKey.For(goalType, GoalMapper.MapConfig(config))),
             config, originalIndex, sourceGoal.Notes,
             InDailyPlanning: sourceGoal.DailyRaids is not false), null);
     }
@@ -345,7 +353,7 @@ public sealed class V1GoalImportService(
     /// can move it.</item>
     /// </list>
     /// A pre-farm goal whose linked goals weren't imported falls back to a manual step naming the material
-    /// and a suggested unit. A material no roster unit uses could never become an Upgrade goal, so it
+    /// and a suggested unit. A material no candidate unit uses could never become an Upgrade goal, so it
     /// reports as not imported.</summary>
     private (List<TranslatedGoal> Candidates, V1GoalOutcome? Outcome) TranslateMaterialGoal(
         V1Goal sourceGoal,
@@ -429,7 +437,9 @@ public sealed class V1GoalImportService(
         UnitKey unit, string upgradeId, int quantity, int originalIndex, string? notes, bool inDailyPlanning,
         string? createdCode, IReadOnlyList<string>? linkedIds) =>
         new(
-            new GoalKey(unit.EntityType, unit.EntityId, GoalType.Upgrade),
+            // Grouped per (unit, material) so the same material merges while different materials stay
+            // separate Upgrade goals; the persisted goal's own target key is checked under the lock.
+            new GoalKey(unit.EntityType, unit.EntityId, GoalType.Upgrade, "material:" + upgradeId),
             new CreateGoalConfigRequest(Upgrade: new UpgradeTargetRequest([new UpgradeMaterialTargetRequest(upgradeId, quantity)])),
             originalIndex, notes, inDailyPlanning)
         {
@@ -498,30 +508,10 @@ public sealed class V1GoalImportService(
         return upgrade.Recipe.Sum(ingredient => ingredient.Count * CountWithin(ingredient.Material, target, upgrades, depth + 1));
     }
 
-    /// <summary>Whether an existing Upgrade goal already targets every material of a candidate.</summary>
-    private static bool CoversTargets(GoalConfig existing, CreateGoalConfigRequest candidate) =>
-        candidate.Upgrade?.Targets.All(target =>
-            existing.Upgrade?.Targets.Any(have => have.UpgradeId == target.UpgradeId) == true) ?? true;
-
-    /// <summary>A unit holds one in-flight Upgrade goal, so a material for a unit whose existing Upgrade goal
-    /// targets other materials is left to the user to add to that goal.</summary>
-    private static V1GoalOutcome OccupiedUpgradeOutcome(TranslatedGoal candidate, string?[] sourceIdBySlot) => new(
-        V1GoalOutcomeStatus.Skipped,
-        "manual_step_required",
-        "This unit already has an Upgrade goal for other materials. Add this material to it.",
-        candidate.Key.EntityType,
-        candidate.Key.EntityId,
-        GoalType.Upgrade,
-        null,
-        sourceIdBySlot[candidate.Slot],
-        candidate.MaterialId,
-        candidate.LinkedSourceGoalIds,
-        candidate.MaterialQuantity);
-
     /// <summary>
-    /// Indexes the account's existing goals for the "already imported" check, by slot: a Rank goal under its
-    /// current normalized end target (no target history is kept, so a goal edited in place matches only its
-    /// current target). The first goal seen for a key wins.
+    /// Indexes the account's existing goals for the "already imported" check, by slot: unit, type and current
+    /// end target (<see cref="GoalTargetKey"/>; no target history is kept, so a goal edited in place matches
+    /// only its current target). The first goal seen for a key wins.
     /// </summary>
     private static Dictionary<GoalKey, ExistingGoalRef> ExistingGoalsByKey(IEnumerable<Goal> existingRows)
     {
@@ -530,12 +520,38 @@ public sealed class V1GoalImportService(
         {
             var reference = new ExistingGoalRef(row.Id.Value, row.Config);
             byKey.TryAdd(
-                new GoalKey(row.EntityType, row.EntityId, row.GoalType, RankTargetKey.For(row.GoalType, row.Config)),
+                new GoalKey(row.EntityType, row.EntityId, row.GoalType, GoalTargetKey.For(row)),
                 reference);
         }
 
         return byKey;
     }
+
+    /// <summary>Every material the account's Upgrade goals target, per unit, with the first such goal: a V1
+    /// material goal for one of them is already imported.</summary>
+    private static Dictionary<(UnitKey Unit, string UpgradeId), Guid> ExistingUpgradeMaterials(IEnumerable<Goal> existingRows)
+    {
+        var byMaterial = new Dictionary<(UnitKey, string), Guid>();
+        foreach (var row in existingRows.Where(row => row.GoalType == GoalType.Upgrade))
+        {
+            foreach (var target in row.Config.Upgrade?.Targets ?? [])
+                byMaterial.TryAdd((new UnitKey(row.EntityType, row.EntityId), target.UpgradeId), row.Id.Value);
+        }
+
+        return byMaterial;
+    }
+
+    /// <summary>The account's in-flight Ascension goals per unit: each can cover an imported goal's
+    /// above-cap requirement instead of a synthesized one.</summary>
+    private static Dictionary<UnitKey, List<AscensionCover>> ExistingAscensionsByUnit(IEnumerable<Goal> existingRows) =>
+        existingRows
+            .Where(row => row.GoalType == GoalType.Ascension
+                && ProjectGoalPlanningService.IsInFlight(row.Status)
+                && row.Config.Progression is not null)
+            .GroupBy(row => new UnitKey(row.EntityType, row.EntityId))
+            .ToDictionary(
+                group => group.Key,
+                group => group.Select(row => new AscensionCover(row.Id.Value, ProgressionRules.FromWireName(row.Config.Progression!.End))).ToList());
 
     private static (List<TranslatedGoal> Survivors, List<(TranslatedGoal Duplicate, TranslatedGoal Survivor)> MergedInto)
         CollapseDuplicates(List<TranslatedGoal> translated)
@@ -597,9 +613,9 @@ public sealed class V1GoalImportService(
             }
             else if (group.Key.GoalType == GoalType.Upgrade)
             {
-                // A unit holds one in-flight Upgrade goal, so every material goal landing on the same unit
-                // merges into one, at the earliest one's priority. Each target was sized for the unit's own
-                // ladder, so a repeated material keeps the larger quantity rather than the sum.
+                // Material goals landing on the same unit with the same material merge into one, at the
+                // earliest one's priority. Each target was sized for the unit's own ladder, so the repeated
+                // material keeps the larger quantity rather than the sum.
                 var targets = ordered
                     .SelectMany(goal => goal.Config.Upgrade!.Targets)
                     .GroupBy(target => target.UpgradeId, StringComparer.Ordinal)
@@ -636,6 +652,7 @@ public sealed class V1GoalImportService(
         PlayerDataSnapshot playerSnapshot,
         List<TranslatedGoal> creatable,
         Dictionary<GoalKey, ExistingGoalRef> existingByKey,
+        Dictionary<UnitKey, List<AscensionCover>> existingAscensions,
         bool synthesizePrerequisites,
         string?[] sourceIdBySlot,
         V1GoalOutcome?[] outcomeBySourceIndex,
@@ -702,22 +719,15 @@ public sealed class V1GoalImportService(
                 var prerequisiteStatus = unitCandidates.Any(candidate => candidate.InDailyPlanning)
                     ? GoalStatus.Active
                     : GoalStatus.Paused;
-                var prerequisites = synthesizePrerequisites
-                    ? ComputePrerequisites(unitKey, unitCandidates, playerUnit, existingByKey, sourceIdBySlot)
-                    : UnitPrerequisites.None;
-
-                if (prerequisites.AscensionShortfall is { } shortfall)
-                {
-                    extraOutcomes.Add(shortfall);
-                }
+                var needsUnlock = synthesizePrerequisites && NeedsUnlock(unitKey, unitCandidates, playerUnit, existingByKey);
 
                 Guid? unlockGoalId = null;
-                if (prerequisites.NeedsUnlock)
+                if (needsUnlock)
                 {
                     // Validated like every other synthesized/candidate goal before persisting (unlike the
                     // synthesized Ascension path below, this one isn't structurally guaranteed valid: Unlock
                     // is Character-only and further requires catalog shard-upgrade data — see
-                    // GoalTargetValidationService — neither of which ComputePrerequisites checks).
+                    // GoalTargetValidationService — neither of which NeedsUnlock checks).
                     var unlockConfig = new CreateGoalConfigRequest();
                     var unlockError = await targetValidation.ValidateAsync(
                         profileId, unitKey.EntityType, unitKey.EntityId, GoalType.Unlock, unlockConfig, ct);
@@ -738,17 +748,50 @@ public sealed class V1GoalImportService(
                     }
                 }
 
-                Guid? ascensionGoalId = null;
-                UnitProgression? ascensionFloor = null;
-                var ownAscension = unitCandidates.FirstOrDefault(candidate => candidate.Key.GoalType == GoalType.Ascension);
-                if (prerequisites.AscensionTarget is { } targetProgression)
+                // The unit's own imported Ascension goals (several when V1 had distinct ends) are not synthesized,
+                // so each keeps its own natural V1 position. They are staged first so Rank/Ability siblings below
+                // can depend on one, wherever they end up in the order; with the unit's existing in-flight
+                // Ascension goals they are the covers an above-cap requirement is satisfied by.
+                var covers = new List<AscensionCover>(existingAscensions.GetValueOrDefault(unitKey) ?? []);
+                var ownAscensions = unitCandidates.Where(candidate => candidate.Key.GoalType == GoalType.Ascension).ToList();
+                foreach (var ownAscension in ownAscensions)
                 {
-                    // Only Rank/Ability candidates of this unit get a DependsOn edge to a synthesized
-                    // Ascension (below) — ComputePrerequisites guarantees at least one exists whenever
-                    // AscensionTarget is set.
-                    var anchorIndex = unitCandidates
-                        .Where(candidate => candidate.Key.GoalType is GoalType.Rank or GoalType.Ability)
-                        .Min(candidate => candidate.OriginalIndex);
+                    var error = await targetValidation.ValidateAsync(
+                        profileId, unitKey.EntityType, unitKey.EntityId, GoalType.Ascension, ownAscension.Config, ct);
+                    if (error is not null)
+                    {
+                        outcomeBySourceIndex[ownAscension.Slot] = FailedOutcome(ownAscension, error, sourceIdBySlot);
+                        continue;
+                    }
+
+                    var goal = BuildGoal(profileId, unitKey, GoalType.Ascension, ownAscension.Config, ownAscension.Notes, StatusOf(ownAscension), playerUnit);
+                    if (unlockGoalId is { } unlockId) goal.DependsOn.Add(unlockId);
+                    db.Goals.Add(goal);
+                    pending.Add((goal, ownAscension.OriginalIndex, 3, ownAscension.Sequence));
+                    staged[ownAscension.Slot] = (goal, ownAscension);
+                    covers.Add(new AscensionCover(goal.Id.Value, ownAscension.Config.Progression!.End));
+                }
+
+                // Each Rank/Ability sibling above the unit's live progression depends on the covering Ascension goal
+                // with the lowest end that reaches what it needs. Those no goal covers share one synthesized
+                // Ascension at the lowest progression satisfying all of them, placed before the first of them.
+                var coverByCandidate = new Dictionary<int, AscensionCover>();
+                var uncovered = new List<(TranslatedGoal Candidate, int Need)>();
+                var liveProgressionIndex = playerUnit is not null ? (int)playerUnit.ProgressionIndex : 0;
+                foreach (var candidate in unitCandidates.Where(candidate => candidate.Key.GoalType is GoalType.Rank or GoalType.Ability))
+                {
+                    var need = NeededProgressionIndex(candidate);
+                    if (need <= liveProgressionIndex)
+                        continue;
+                    if (covers.Where(cover => (int)cover.End >= need).OrderBy(cover => cover.End).FirstOrDefault() is { } cover)
+                        coverByCandidate[candidate.Slot] = cover;
+                    else
+                        uncovered.Add((candidate, need));
+                }
+
+                if (synthesizePrerequisites && uncovered.Count > 0)
+                {
+                    var targetProgression = (UnitProgression)uncovered.Max(entry => entry.Need);
                     var startWire = CurrentProgressionWire(playerUnit);
                     var ascensionGoal = BuildGoal(
                         profileId, unitKey, GoalType.Ascension,
@@ -757,49 +800,22 @@ public sealed class V1GoalImportService(
                         null, prerequisiteStatus, playerUnit);
                     if (unlockGoalId is { } unlockId) ascensionGoal.DependsOn.Add(unlockId);
                     db.Goals.Add(ascensionGoal);
-                    pending.Add((ascensionGoal, anchorIndex, 1, 0));
-                    ascensionGoalId = ascensionGoal.Id.Value;
-                    ascensionFloor = targetProgression;
-                    stagedPrerequisites.Add((ascensionGoal, unitCandidates.Count));
-                }
-                else if (ownAscension is not null)
-                {
-                    // Not synthesized — this is the unit's own imported Ascension goal, so it keeps its
-                    // own natural V1 position (AnchorIndex = its own OriginalIndex) rather than being
-                    // pulled early. Its dependency edges and target are still computed and staged here so
-                    // Rank/Ability siblings below can depend on it and use its target as their cap floor,
-                    // regardless of which of them ends up positioned before or after it.
-                    var dependsOn = new List<Guid>();
-                    if (unlockGoalId is { } unlockId) dependsOn.Add(unlockId);
-                    var error = await targetValidation.ValidateAsync(
-                        profileId, unitKey.EntityType, unitKey.EntityId, GoalType.Ascension, ownAscension.Config, ct);
-                    if (error is not null)
-                    {
-                        outcomeBySourceIndex[ownAscension.Slot] = FailedOutcome(ownAscension, error, sourceIdBySlot);
-                    }
-                    else
-                    {
-                        var goal = BuildGoal(profileId, unitKey, GoalType.Ascension, ownAscension.Config, ownAscension.Notes, StatusOf(ownAscension), playerUnit);
-                        goal.DependsOn = dependsOn;
-                        db.Goals.Add(goal);
-                        pending.Add((goal, ownAscension.OriginalIndex, 3, 0));
-                        staged[ownAscension.Slot] = (goal, ownAscension);
-                        ascensionGoalId = goal.Id.Value;
-                        ascensionFloor = ownAscension.Config.Progression!.End;
-                    }
+                    pending.Add((ascensionGoal, uncovered.Min(entry => entry.Candidate.OriginalIndex), 1, 0));
+                    stagedPrerequisites.Add((ascensionGoal, uncovered.Count));
+                    foreach (var (candidate, _) in uncovered)
+                        coverByCandidate[candidate.Slot] = new AscensionCover(ascensionGoal.Id.Value, targetProgression);
                 }
 
-                // ownAscension (if any) was already staged above, at its own natural V1 position.
-                foreach (var candidate in unitCandidates.Where(candidate => candidate != ownAscension))
+                foreach (var candidate in unitCandidates.Except(ownAscensions))
                 {
                     var dependsOn = new List<Guid>();
                     if (unlockGoalId is { } unlockId) dependsOn.Add(unlockId);
 
                     UnitProgression? effectiveFloor = null;
-                    if (candidate.Key.GoalType is GoalType.Rank or GoalType.Ability && ascensionGoalId is { } ascId)
+                    if (coverByCandidate.TryGetValue(candidate.Slot, out var cover))
                     {
-                        dependsOn.Add(ascId);
-                        effectiveFloor = ascensionFloor;
+                        dependsOn.Add(cover.GoalId);
+                        effectiveFloor = cover.End;
                     }
 
                     // ponytail: ValidateAsync re-reads the account's PlayerDataSnapshot from the database
@@ -897,96 +913,25 @@ public sealed class V1GoalImportService(
         return createdProjectId;
     }
 
-    /// <summary>Computes what, if anything, needs synthesizing for one unit — Unlock and/or Ascension
-    /// (never Level: the level a Rank/Ability target needs is intrinsic to it), at the minimum target that satisfies every requirement among that unit's own creatable
-    /// goals (v1-goal-import: "Missing prerequisites are created automatically by the same rules as
-    /// manual creation"). Live player state is checked before consulting existing goals, so a completed
-    /// (but historically present) prerequisite goal doesn't block synthesis for an already-met
-    /// requirement (design.md: "Check live state before consulting existing goals").</summary>
-    private static UnitPrerequisites ComputePrerequisites(
-        UnitKey unitKey,
-        List<TranslatedGoal> unitCandidates,
-        PlayerBaseUnitRecord? playerUnit,
-        Dictionary<GoalKey, ExistingGoalRef> existingByKey,
-        string?[] sourceIdBySlot)
-    {
-        // Unlock is only ever a valid goal type for a Character (GoalTargetValidationService) — a Mow
-        // missing from the roster (e.g. a type-4 Mow Ability goal) never gets a synthesized Unlock; there
-        // is no such prerequisite for a Mow in this domain.
-        var needsUnlock = unitKey.EntityType == GoalEntityType.Character
+    /// <summary>Whether a Character absent from the roster needs a synthesized Unlock: not when the unit's
+    /// imported goals include one, or the account already has one (v1-goal-import: "Missing prerequisites are
+    /// created automatically by the same rules as manual creation"). Unlock is only ever valid for a Character
+    /// (GoalTargetValidationService), so a Mow missing from the roster never gets one.</summary>
+    private static bool NeedsUnlock(
+        UnitKey unitKey, List<TranslatedGoal> unitCandidates, PlayerBaseUnitRecord? playerUnit,
+        Dictionary<GoalKey, ExistingGoalRef> existingByKey) =>
+        unitKey.EntityType == GoalEntityType.Character
             && playerUnit is null
-            && !HasOwnOrExistingGoal(unitKey, GoalType.Unlock, unitCandidates, existingByKey);
+            && unitCandidates.All(candidate => candidate.Key.GoalType != GoalType.Unlock)
+            && !existingByKey.ContainsKey(new GoalKey(unitKey.EntityType, unitKey.EntityId, GoalType.Unlock));
 
-        var neededProgressionIndex = -1;
-        foreach (var candidate in unitCandidates)
-        {
-            if (candidate.Key.GoalType == GoalType.Rank)
-            {
-                var rank = (UnitRank)candidate.Config.Rank!.End;
-                neededProgressionIndex = Math.Max(neededProgressionIndex, (int)ProgressionRules.MinimumProgressionForRank(rank));
-            }
-            else if (candidate.Key.GoalType == GoalType.Ability)
-            {
-                var abilityTarget = Math.Max(candidate.Config.Ability!.ActiveEnd, candidate.Config.Ability.PassiveEnd);
-                neededProgressionIndex = Math.Max(
-                    neededProgressionIndex, (int)ProgressionRules.MinimumProgressionForAbilityLevel(abilityTarget));
-            }
-        }
-
-        UnitProgression? ascensionTarget = null;
-        V1GoalOutcome? ascensionShortfall = null;
-        if (neededProgressionIndex >= 0)
-        {
-            // A unit absent from the roster starts at the bottom of the ladder once unlocked (matches
-            // CurrentProgressionWire's default) — 0, not a "below everything" sentinel, so a target
-            // whose own minimum requirement is the ladder's first step is not spuriously treated as
-            // needing a synthesized Ascension.
-            var liveProgressionIndex = playerUnit is not null ? (int)playerUnit.ProgressionIndex : 0;
-            if (neededProgressionIndex > liveProgressionIndex)
-            {
-                var ownAscension = unitCandidates.FirstOrDefault(candidate => candidate.Key.GoalType == GoalType.Ascension);
-                if (ownAscension is not null)
-                {
-                    var ownEnd = (int)ownAscension.Config.Progression!.End;
-                    if (ownEnd < neededProgressionIndex)
-                    {
-                        ascensionShortfall = new V1GoalOutcome(
-                            V1GoalOutcomeStatus.Skipped,
-                            "prerequisite_target_insufficient",
-                            "The imported Ascension goal's target does not reach what another imported goal for this unit requires.",
-                            unitKey.EntityType, unitKey.EntityId, GoalType.Ascension, null,
-                            sourceIdBySlot[ownAscension.Slot]);
-                    }
-                }
-                else if (existingByKey.TryGetValue(new GoalKey(unitKey.EntityType, unitKey.EntityId, GoalType.Ascension), out var existingGoal))
-                {
-                    // The existing goal's own target may already reach (or exceed) what's needed — only
-                    // report a shortfall when it genuinely falls short, rather than assuming every existing
-                    // Ascension goal is insufficient.
-                    var existingProgressionIndex = ProgressionRules.ProgressionIndex(existingGoal.Config.Progression!.End);
-                    if (existingProgressionIndex < neededProgressionIndex)
-                    {
-                        ascensionShortfall = new V1GoalOutcome(
-                            V1GoalOutcomeStatus.Skipped,
-                            "prerequisite_target_insufficient",
-                            "An existing Ascension goal for this unit does not reach what an imported goal requires.",
-                            unitKey.EntityType, unitKey.EntityId, GoalType.Ascension, existingGoal.Id, null);
-                    }
-                }
-                else
-                {
-                    ascensionTarget = (UnitProgression)neededProgressionIndex;
-                }
-            }
-        }
-
-        return new UnitPrerequisites(needsUnlock, ascensionTarget, ascensionShortfall);
-    }
-
-    private static bool HasOwnOrExistingGoal(
-        UnitKey unitKey, GoalType goalType, List<TranslatedGoal> unitCandidates, Dictionary<GoalKey, ExistingGoalRef> existingByKey) =>
-        unitCandidates.Any(candidate => candidate.Key.GoalType == goalType)
-            || existingByKey.ContainsKey(new GoalKey(unitKey.EntityType, unitKey.EntityId, goalType));
+    /// <summary>The lowest progression index a Rank or Ability target is reachable at (never Level: the level a
+    /// target needs is intrinsic to it).</summary>
+    private static int NeededProgressionIndex(TranslatedGoal candidate) =>
+        candidate.Key.GoalType == GoalType.Rank
+            ? (int)ProgressionRules.MinimumProgressionForRank((UnitRank)candidate.Config.Rank!.End)
+            : (int)ProgressionRules.MinimumProgressionForAbilityLevel(
+                Math.Max(candidate.Config.Ability!.ActiveEnd, candidate.Config.Ability.PassiveEnd));
 
     private static Goal BuildGoal(
         ProfileId profileId, UnitKey unitKey, GoalType goalType, CreateGoalConfigRequest config, string? notes,
@@ -1029,8 +974,7 @@ public sealed class V1GoalImportService(
 
     /// <summary>Reports a synthesized Unlock/Ascension prerequisite that <see cref="GoalTargetValidationService"/>
     /// rejected (e.g. Unlock for a Mow) — the prerequisite
-    /// is not persisted, and dependents proceed without a dependency edge to it, same as an
-    /// <see cref="UnitPrerequisites.AscensionShortfall"/> report.</summary>
+    /// is not persisted, and dependents proceed without a dependency edge to it.</summary>
     private static V1GoalOutcome FailedPrerequisiteOutcome(UnitKey unitKey, GoalType goalType, string message) => new(
         V1GoalOutcomeStatus.Failed,
         "prerequisite_rejected",
@@ -1107,15 +1051,17 @@ public sealed class V1GoalImportService(
     private static GoalStatus StatusOf(TranslatedGoal goal) =>
         goal.InDailyPlanning ? GoalStatus.Active : GoalStatus.Paused;
 
-    /// <summary><paramref name="RankTargetKey"/> is set only for a Rank goal, so distinct Rank end targets
-    /// for one unit are distinct keys (imported as separate milestones) while an exact duplicate shares a
-    /// key (merged) — every other goal type keeps the one-per-unit/type key.</summary>
     /// <summary>"V1 import · 23 Oct, 13:45 UTC": the time tells two imports on one day apart. The server has
     /// no user locale or time zone, so the stamp is invariant and UTC.</summary>
     internal static string ImportProjectName(DateTimeOffset now) =>
         string.Create(CultureInfo.InvariantCulture, $"V1 import · {now.UtcDateTime:d MMM, HH:mm} UTC");
 
-    private sealed record GoalKey(GoalEntityType EntityType, string EntityId, GoalType GoalType, string? RankTargetKey = null);
+    /// <summary><paramref name="TargetKey"/> is the <see cref="GoalTargetKey"/> (null for Unlock), so distinct end
+    /// targets for one unit and type are distinct keys (imported as separate milestones) while an exact duplicate
+    /// shares a key (merged). A V1 material goal's Upgrade candidate is keyed by its material instead.</summary>
+    private sealed record GoalKey(GoalEntityType EntityType, string EntityId, GoalType GoalType, string? TargetKey = null);
+
+    private sealed record AscensionCover(Guid GoalId, UnitProgression End);
 
     private sealed record ExistingGoalRef(Guid Id, GoalConfig Config);
 
@@ -1141,16 +1087,16 @@ public sealed class V1GoalImportService(
     }
 
     /// <summary>Suggests the unit to hold a V1 material goal's Upgrade goal. Candidates, in order: the units of
-    /// the profile's own imported unit goals (V1 priority order), then the account's roster characters, then
-    /// its roster Mows — each only if on the roster and only if the material is relevant to it (the same rule
-    /// manual Upgrade-goal creation validates). Among those, a unit whose existing Upgrade goal already
-    /// targets the material wins, then a unit with no Upgrade goal yet (a unit holds one in-flight Upgrade
-    /// goal), else the first relevant candidate. Null when no roster unit uses the material.</summary>
+    /// the profile's own imported unit goals (V1 priority order, on the roster or not — an imported Unlock goal's
+    /// unit counts), then the account's roster characters, then its roster Mows — each only if the material is
+    /// relevant to it (the same rule manual Upgrade-goal creation validates). Among those, a unit whose existing
+    /// Upgrade goal already targets the material wins, else the first relevant candidate. Null when no
+    /// candidate uses the material, which is also the <c>no_upgrade_owner</c> condition.</summary>
     private sealed class UpgradeOwnerResolver(
         GameCatalogSnapshot catalog,
         PlayerDataSnapshot playerSnapshot,
         IReadOnlyList<UnitKey> preferred,
-        Dictionary<GoalKey, ExistingGoalRef> existingByKey)
+        Dictionary<(UnitKey Unit, string UpgradeId), Guid> existingMaterials)
     {
         private readonly Dictionary<UnitKey, IReadOnlySet<string>> relevantByUnit = new();
         private List<UnitKey>? candidates;
@@ -1159,32 +1105,17 @@ public sealed class V1GoalImportService(
         {
             candidates ??= BuildCandidates();
             var relevant = candidates.Where(unit => Relevant(unit).Contains(upgradeId)).ToList();
-            UnitKey? free = null;
-            foreach (var unit in relevant)
-            {
-                if (!existingByKey.TryGetValue(new GoalKey(unit.EntityType, unit.EntityId, GoalType.Upgrade), out var existing))
-                {
-                    free ??= unit;
-                }
-                else if (existing.Config.Upgrade?.Targets.Any(target => target.UpgradeId == upgradeId) == true)
-                {
-                    return unit;
-                }
-            }
-
-            return free ?? relevant.FirstOrDefault();
+            return relevant.FirstOrDefault(unit => existingMaterials.ContainsKey((unit, upgradeId))) ?? relevant.FirstOrDefault();
         }
 
         public bool Uses(UnitKey unit, string upgradeId) => Relevant(unit).Contains(upgradeId);
 
-        private List<UnitKey> BuildCandidates()
-        {
-            var roster = playerSnapshot.Characters.Select(item => new UnitKey(GoalEntityType.Character, item.UnitId.Value))
+        private List<UnitKey> BuildCandidates() =>
+            preferred
+                .Concat(playerSnapshot.Characters.Select(item => new UnitKey(GoalEntityType.Character, item.UnitId.Value)))
                 .Concat(playerSnapshot.Mows.Select(item => new UnitKey(GoalEntityType.Mow, item.UnitId.Value)))
+                .Distinct()
                 .ToList();
-            var onRoster = roster.ToHashSet();
-            return preferred.Where(onRoster.Contains).Concat(roster).Distinct().ToList();
-        }
 
         private IReadOnlySet<string> Relevant(UnitKey unit)
         {
@@ -1200,15 +1131,9 @@ public sealed class V1GoalImportService(
         }
     }
 
-    private sealed record UnitPrerequisites(
-        bool NeedsUnlock, UnitProgression? AscensionTarget, V1GoalOutcome? AscensionShortfall)
-    {
-        public static readonly UnitPrerequisites None = new(false, null, null);
-    }
 }
 
-/// <summary>One outcome per source V1 goal (v1-goal-import spec), plus one per synthesized prerequisite
-/// and one per Ascension-target shortfall report. <see cref="Status"/> is one of "Created", "Skipped", or
+/// <summary>One outcome per source V1 goal (v1-goal-import spec), plus one per synthesized prerequisite. <see cref="Status"/> is one of "Created", "Skipped", or
 /// "Failed"; <see cref="Code"/> is a stable machine-readable discriminator finer than <see cref="Status"/>
 /// (e.g. "goal_already_exists", "duplicate_goal_merged", "unsupported_goal_type", "prerequisite_added").
 /// <see cref="GoalId"/> is the V2 goal this outcome created or matched, when one applies.

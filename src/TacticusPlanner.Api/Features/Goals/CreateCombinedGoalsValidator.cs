@@ -6,15 +6,15 @@ namespace TacticusPlanner.Api.Features.Goals;
 
 /// <summary>
 /// Request-shape rules only (entity and goal types are enums, rejected at binding when unknown) — the list
-/// must be non-empty and reasonably small (Unlock + Ascension + Rank + Ability is the largest realistic
-/// combined request), every <see cref="CombinedGoalSpec.DependsOnIndex"/> must reference a strictly
+/// must be non-empty and reasonably small (Unlock + Ascension + a milestone ladder of a few Rank or Ability
+/// steps is the largest realistic combined request), every <see cref="CombinedGoalSpec.DependsOnIndex"/> must reference a strictly
 /// earlier spec in the same request (no forward or self references), and a Machine of War request may
 /// not include a Rank goal (MoWs have no rank ladder — plan §16 phase 6). Project ownership stays a
 /// handler-level check.
 /// </summary>
 public sealed class CreateCombinedGoalsValidator : Validator<CreateCombinedGoalsRequest>
 {
-    private const int MaxGoals = 4;
+    private const int MaxGoals = 10;
 
     public CreateCombinedGoalsValidator()
     {
@@ -62,6 +62,11 @@ public sealed class CreateCombinedGoalsValidator : Validator<CreateCombinedGoals
                     }
                 }
             });
+
+        RuleForEach(request => request.Goals)
+            .ChildRules(goal => goal.RuleFor(spec => spec.DependsOnGoalIds)
+                .Must(ids => ids is null || (ids.TrueForAll(id => id != Guid.Empty) && ids.Distinct().Count() == ids.Count))
+                .WithMessage("DependsOnGoalIds must be distinct, non-empty goal ids."));
 
         RuleFor(request => request)
             .Must(request => request.EntityType != GoalEntityType.Mow

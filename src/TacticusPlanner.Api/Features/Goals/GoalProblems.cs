@@ -15,14 +15,14 @@ public static class GoalProblems
     public const string GoalOrderStale = "goalOrderStale";
 
     /// <summary>409 <c>slotOccupied</c>: names the goal that wanted the slot (<c>goalId</c>), the slot (entity, goal
-    /// type, Rank's normalized end target) and the goal holding it (<c>existingGoalId</c>, detail under
+    /// type, the normalized end target from <see cref="GoalTargetKey"/>, null only for Unlock) and the goal holding it (<c>existingGoalId</c>, detail under
     /// <c>current</c>).</summary>
     public static async Task SendSlotConflictAsync(
         IEndpoint endpoint, GoalSlotConflict conflict, CancellationToken ct)
     {
         var (candidate, existing) = conflict;
         var db = endpoint.HttpContext.Resolve<PlannerDbContext>();
-        var target = RankTargetKey.For(existing.GoalType, existing.Config);
+        var target = GoalTargetKey.For(existing);
         await endpoint.SendConflictAsync(
             SlotOccupied,
             target is null
