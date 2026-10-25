@@ -9,6 +9,7 @@ public static partial class GameCatalogValidator
     private static readonly int[] QuestTierBattleCounts = [3, 3, 5, 3, 2, 1];
     private const int QuestBattleCount = 17;
     private const int QuestCrateCount = 17;
+    private const int QuestMaxScore = 8800;
     private const int QuestMedalsAndLightningScore = 300 + 100;
 
     private static readonly HashSet<string> QuestObjectiveTypesWithoutTarget = new(StringComparer.Ordinal)
@@ -74,7 +75,7 @@ public static partial class GameCatalogValidator
             RequireReference(dataset, id, "unitId", id, characterIds, errors);
             foreach (var faction in quest.AllowedFactions.Concat(quest.EnemyFactions))
             {
-                RequireReference(dataset, id, "faction", faction, factionIds, errors);
+                RequireQuestReference(dataset, id, "faction", faction, factionIds, errors);
             }
 
             var tiers = quest.Tiers.OrderBy(tier => tier.Index).ToArray();
@@ -96,10 +97,10 @@ public static partial class GameCatalogValidator
 
                 foreach (var enemy in battle.Enemies)
                 {
-                    RequireReference(dataset, owner, "enemy", enemy.Name, npcIds, errors);
+                    RequireQuestReference(dataset, owner, "enemy", enemy.Name, npcIds, errors);
                 }
 
-                RequireReference(dataset, owner, "loot upgradeId", battle.Loot.Reward.UpgradeId, upgradeIds, errors);
+                RequireQuestReference(dataset, owner, "loot upgradeId", battle.Loot.Reward.UpgradeId, upgradeIds, errors);
                 if (battle.Loot.Reward.Num <= 0 || battle.Loot.Reward.Num > battle.Loot.Reward.Denom)
                 {
                     errors.Add(new GameCatalogValidationError(dataset, "InvalidLootChance", $"Battle '{owner}' has an invalid loot chance."));
@@ -112,7 +113,7 @@ public static partial class GameCatalogValidator
 
                 foreach (var objective in battle.Objectives)
                 {
-                    ValidateQuestObjective(dataset, owner, objective, errors);
+                    ValidateQuestObjective(dataset, owner, objective, factionIds, errors);
                 }
             }
 
@@ -124,8 +125,16 @@ public static partial class GameCatalogValidator
         }
     }
 
+    // RequireReference passes a blank reference; every quest reference must be set.
+    private static void RequireQuestReference(
+        string dataset, string owner, string field, string? reference, HashSet<string> validReferences, List<GameCatalogValidationError> errors)
+    {
+        Require(dataset, owner, reference, field, errors);
+        RequireReference(dataset, owner, field, reference ?? string.Empty, validReferences, errors);
+    }
+
     private static void ValidateQuestObjective(
-        string dataset, string owner, GameCatalogRawQuestObjective objective, List<GameCatalogValidationError> errors)
+        string dataset, string owner, GameCatalogRawQuestObjective objective, HashSet<string> factionIds, List<GameCatalogValidationError> errors)
     {
         var type = objective.ObjectiveType;
         var target = GameCatalogDenormalizer.QuestObjectiveTarget(objective.ObjectiveTarget);
@@ -150,6 +159,10 @@ public static partial class GameCatalogValidator
             errors.Add(new GameCatalogValidationError(
                 dataset, "InvalidObjectiveTarget", $"Battle '{owner}' objective '{type}' needs a whole number of at least 1, not '{target}'."));
         }
+        else if (type == "NotFaction")
+        {
+            RequireReference(dataset, owner, "NotFaction target", target, factionIds, errors);
+        }
     }
 
     private static void ValidateQuestCrates(IReadOnlyList<GameCatalogQuestCrate> crates, List<GameCatalogValidationError> errors)
@@ -163,15 +176,26 @@ public static partial class GameCatalogValidator
                 dataset, "InvalidCrates", $"'{dataset}' must be {QuestCrateCount} crates numbered 1 to {QuestCrateCount} with ascending points."));
         }
 
-        foreach (var crate in ordered)
+        if (ordered.Length > 0 && ordered[^1].Points != QuestMaxScore)
         {
-            foreach (var reward in crate.Rewards)
+            errors.Add(new GameCatalogValidationError(
+                dataset, "InvalidCrates", $"Crate {ordered[^1].Number} needs {QuestMaxScore} points, not {ordered[^1].Points}."));
+        }
+
+        foreach (var (crate, reward) in ordered.SelectMany(crate => crate.Rewards.Select(reward => (crate, reward))))
+        {
+            if (!QuestCrateRewardTypes.Contains(reward.Type) || reward.Min < 1 || reward.Max < reward.Min)
             {
-                if (!QuestCrateRewardTypes.Contains(reward.Type) || reward.Min < 1 || reward.Max < reward.Min)
-                {
-                    errors.Add(new GameCatalogValidationError(
-                        dataset, "InvalidCrateReward", $"Crate {crate.Number} has an invalid reward '{reward.Type}' ({reward.Min}-{reward.Max})."));
-                }
+                errors.Add(new GameCatalogValidationError(
+                    dataset, "InvalidCrateReward", $"Crate {crate.Number} has an invalid reward '{reward.Type}' ({reward.Min}-{reward.Max})."));
+            }
+
+            var rarity = Array.IndexOf(GameCatalogDenormalizer.QuestTierRarities, reward.Rarity);
+            var maxRarity = Array.IndexOf(GameCatalogDenormalizer.QuestTierRarities, reward.MaxRarity);
+            if ((reward.Rarity is not null && rarity < 0) || (reward.MaxRarity is not null && (rarity < 0 || maxRarity < rarity)))
+            {
+                errors.Add(new GameCatalogValidationError(
+                    dataset, "InvalidCrateReward", $"Crate {crate.Number} has an invalid rarity range '{reward.Rarity}'..'{reward.MaxRarity}'."));
             }
         }
     }

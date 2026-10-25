@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text.Json;
+using TacticusPlanner.GameCatalog.Denormalization;
 using TacticusPlanner.GameCatalog.Models;
 using TacticusPlanner.GameCatalog.Validation;
 using Xunit;
@@ -118,6 +119,69 @@ public sealed class QuestEventsValidationTests
     {
         var crates = Snapshot.QuestCrates
             .Select(crate => crate.Number == 1 ? crate with { Rewards = [new GameCatalogQuestCrateReward("Shards", 1, 1, null, null)] } : crate)
+            .ToArray();
+
+        AssertSingleError(Validate(Nubari, crates), "InvalidCrateReward");
+    }
+    [Fact]
+    public void ABlankFactionFails() =>
+        AssertSingleError(Validate(Nubari with { AllowedFactions = [.. Nubari.AllowedFactions, " "] }), "RequiredField");
+
+    [Fact]
+    public void ABlankEnemyFails() =>
+        AssertSingleError(Validate(WithBattle(1, battle => battle with { Enemies = [.. battle.Enemies, new GameCatalogRawQuestEnemy("", 1)] })), "RequiredField");
+
+    [Fact]
+    public void ABlankLootUpgradeFails() =>
+        AssertSingleError(Validate(WithBattle(1, battle => battle with { Loot = new(new("", 3, 4)) })), "RequiredField");
+
+    [Fact]
+    public void AnUnknownNotFactionTargetFails() =>
+        AssertSingleError(
+            Validate(WithBattle(2, battle => battle with
+            {
+                Objectives = [.. battle.Objectives.Select(objective => objective with
+                {
+                    ObjectiveType = "NotFaction",
+                    ObjectiveTarget = JsonDocument.Parse("\"Nobody\"").RootElement,
+                })],
+            })),
+            "MissingReference");
+
+    [Fact]
+    public void ADecimalHitTargetFailsValidationWithoutThrowing()
+    {
+        var target = JsonDocument.Parse("2.5").RootElement;
+
+        Assert.Equal("2.5", GameCatalogDenormalizer.QuestObjectiveTarget(target));
+        AssertSingleError(
+            Validate(WithBattle(2, battle => battle with
+            {
+                Objectives = [.. battle.Objectives.Select(objective => objective with { ObjectiveType = "MaxHits", ObjectiveTarget = target })],
+            })),
+            "InvalidObjectiveTarget");
+    }
+
+    [Fact]
+    public void ALastCrateOtherThan8800Fails()
+    {
+        // Crate 17 and the quest's objectives both drop by 200, so the per-quest score check still passes.
+        var crates = Snapshot.QuestCrates.Select(crate => crate.Number == 17 ? crate with { Points = 8600 } : crate).ToArray();
+        var quest = WithBattle(1, battle => battle with { Objectives = [] });
+
+        var error = Assert.Single(Validate(quest, crates));
+        Assert.Equal("InvalidCrates", error.Code);
+        Assert.Contains("8800", error.Message, StringComparison.Ordinal);
+    }
+
+    [Theory]
+    [InlineData("Shiny", null)]
+    [InlineData("Rare", "Uncommon")]
+    [InlineData(null, "Rare")]
+    public void AnInvalidCrateRarityRangeFails(string? rarity, string? maxRarity)
+    {
+        var crates = Snapshot.QuestCrates
+            .Select(crate => crate.Number == 1 ? crate with { Rewards = [new GameCatalogQuestCrateReward("AbilityBadge", 1, 1, rarity, maxRarity)] } : crate)
             .ToArray();
 
         AssertSingleError(Validate(Nubari, crates), "InvalidCrateReward");

@@ -43,7 +43,8 @@ internal static partial class GameCatalogDenormalizer
     internal static string? QuestObjectiveTarget(JsonElement? target) => target switch
     {
         { ValueKind: JsonValueKind.String } value => value.GetString(),
-        { ValueKind: JsonValueKind.Number } value => value.GetInt32().ToString(CultureInfo.InvariantCulture),
+        // The raw text, so a decimal or out-of-range number reaches validation instead of throwing here.
+        { ValueKind: JsonValueKind.Number } value => value.GetRawText(),
         _ => null,
     };
 
