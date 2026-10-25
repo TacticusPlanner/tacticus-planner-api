@@ -180,10 +180,11 @@ public sealed class CreateCombinedGoalsEndpoint
                     return;
                 }
 
+                var unitGoals = await AscensionFloor.LoadUnitGoalsAsync(db, entityType, req.EntityId.Trim(), ct);
                 foreach (var (i, inRequestFloor) in deferredFloors.OrderBy(entry => entry.Key))
                 {
                     var roots = closures[i].Append(i).SelectMany(index => req.Goals[index].DependsOnGoalIds ?? []);
-                    var floor = MaxProgression(inRequestFloor, ExistingAscensionFloor(roots, inFlight));
+                    var floor = AscensionFloor.Max(inRequestFloor, AscensionFloor.Reachable(roots, unitGoals));
                     if (targetValidation.Validate(
                         units, entityType, req.EntityId.Trim(), parsedGoalTypes[i], req.Goals[i].Config, floor)
                         is { } targetError)
@@ -217,32 +218,6 @@ public sealed class CreateCombinedGoalsEndpoint
                 new CreateCombinedGoalsResponse(goals.Select(goal => Map.ToDetail(goal, projectIds)).ToList()), ct);
         }, ct);
     }
-
-    /// <summary>The highest end of the existing in-flight Ascension goals reachable from <paramref name="roots"/>
-    /// through stored <see cref="Goal.DependsOn"/> edges, at any depth. Each goal is visited once, so a cycle in
-    /// stored data terminates; edges to goals no longer in flight are not followed (their progress is already
-    /// on the roster).</summary>
-    private static UnitProgression? ExistingAscensionFloor(
-        IEnumerable<Guid> roots, Dictionary<Guid, Goal> inFlight)
-    {
-        UnitProgression? floor = null;
-        var visited = new HashSet<Guid>();
-        var pending = new Stack<Guid>(roots);
-        while (pending.TryPop(out var id))
-        {
-            if (!visited.Add(id) || !inFlight.TryGetValue(id, out var goal))
-                continue;
-            if (goal.GoalType == GoalType.Ascension && goal.Config.Progression is { } progression)
-                floor = MaxProgression(floor, ProgressionRules.FromWireName(progression.End));
-            foreach (var dependency in goal.DependsOn)
-                pending.Push(dependency);
-        }
-
-        return floor;
-    }
-
-    private static UnitProgression? MaxProgression(UnitProgression? a, UnitProgression? b) =>
-        a is null ? b : b is null ? a : (UnitProgression)Math.Max((int)a, (int)b);
 }
 
 public sealed record CreateCombinedGoalsRequest(

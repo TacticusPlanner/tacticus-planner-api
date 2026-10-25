@@ -160,6 +160,34 @@ public sealed class GoalAbilityCapEffectiveProgressionTests(PlannerApiFactory fa
     }
 
     [Fact]
+    public async Task AnExistingAscensionGoalBehindACompletedGoalStillLiftsTheCap()
+    {
+        var (client, _) = await ProvisionWithLiveProgressionAsync(UnitProgression.CommonNone);
+        var ascension = await CreateExistingAscensionAsync(client, UnitProgression.UncommonTwoStars);
+        var rank2 = await CreateExistingRankAsync(client, (int)UnitRank.Stone2, ascension.GoalId);
+        var rank3 = await CreateExistingRankAsync(client, (int)UnitRank.Stone3, rank2.GoalId);
+        (await client.PostStatusAsync(rank2.GoalId, GoalStatus.Completed)).EnsureSuccessStatusCode();
+
+        var response = await PostCombinedAsync(client, AbilityDependingOn(12, rank3.GoalId));
+
+        response.EnsureSuccessStatusCode();
+    }
+
+    [Fact]
+    public async Task EditingAnAbilityTargetHonorsATransitiveAscensionDependency()
+    {
+        var (client, _) = await ProvisionWithLiveProgressionAsync(UnitProgression.CommonNone);
+        var ascension = await CreateExistingAscensionAsync(client, UnitProgression.UncommonTwoStars);
+        var rank = await CreateExistingRankAsync(client, (int)UnitRank.Stone2, ascension.GoalId);
+        var ability = await (await PostCombinedAsync(client, AbilityDependingOn(12, rank.GoalId))).ReadCreatedGoalAsync();
+
+        var response = await client.PutTargetAsync(ability.GoalId, new UpdateGoalTargetRequest(
+            ability.Revision, new GoalTargetEditRequest(Ability: new AbilityEndTargetRequest(11, 0))));
+
+        response.EnsureSuccessStatusCode();
+    }
+
+    [Fact]
     public async Task AnExistingAscensionGoalTheAbilityDoesNotDependOnLeavesTheCap()
     {
         var (client, _) = await ProvisionWithLiveProgressionAsync(UnitProgression.CommonNone);
