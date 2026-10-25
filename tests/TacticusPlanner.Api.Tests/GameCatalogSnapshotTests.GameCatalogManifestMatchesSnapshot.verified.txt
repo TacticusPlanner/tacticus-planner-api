@@ -90,6 +90,16 @@
       url: /api/v1/game-catalog/onslaught-rewards/{envelopeHash}
     },
     {
+      key: quest-crates,
+      hash: c687fe964075f87309decc5b95db7fb965fe3f41ef19e261ecc3f7abad828447,
+      url: /api/v1/game-catalog/quest-crates/{envelopeHash}
+    },
+    {
+      key: quest-events,
+      hash: f7f8a6c1fdbce0ba3d76d5eac046888e1aa2a3136a8adc42645b1154e7ed0300,
+      url: /api/v1/game-catalog/quest-events/{envelopeHash}
+    },
+    {
       key: raid-bosses,
       hash: 6fb75188fa5ded0f8b40df2f0762bd204b032b26d86d5bdbb987c552e6df4f53,
       url: /api/v1/game-catalog/raid-bosses/{envelopeHash}

@@ -23,6 +23,8 @@ public static class ServedDatasets
             [GameCatalogDatasets.MowUpgradeCostsServed] = snapshot => snapshot.MowUpgradeCostViews,
             [GameCatalogDatasets.CharacterAbilityCostsServed] = snapshot => snapshot.CharacterAbilityCostViews,
             [GameCatalogDatasets.MythicQuestsServed] = snapshot => snapshot.MythicQuestViews,
+            [GameCatalogDatasets.QuestEvents] = snapshot => snapshot.QuestEventViews,
+            [GameCatalogDatasets.QuestCrates] = snapshot => snapshot.QuestCrateViews,
             [GameCatalogDatasets.AscensionCostsServed] = snapshot => snapshot.AscensionCostViews,
             [GameCatalogDatasets.UnlockShardCostsServed] = snapshot => snapshot.UnlockShardCostViews,
             [GameCatalogDatasets.OnslaughtRewards] = snapshot => snapshot.OnslaughtRewards,

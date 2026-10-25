@@ -108,22 +108,23 @@ Each raw objective SHALL be served as `{ type, target, score }` from `ObjectiveT
 
 ### Requirement: The catalog serves a shared `quest-crates` dataset
 
-The catalog SHALL serve `quest-crates` at `GET /api/v1/game-catalog/quest-crates` as a plain array of exactly 17 records, built from the raw `quest-crates.json` (ported from the wiki's QuestCrates table) and shared by every quest:
+The catalog SHALL serve `quest-crates` at `GET /api/v1/game-catalog/quest-crates` as a plain array of exactly 17 records, built from the raw `quest-crates.json` (ported from the crate table on the wiki's Quest page, which reflects the August 2025 17-crate track) and shared by every quest:
 
 ```
 {
   number: int,                         // 1..17
   points: int,                         // points needed to open the crate
-  rewards: { type: string, amount: int, rarity: string | null, alliance: string | null }[]
+  rewards: { type: string, min: int, max: int, rarity: string | null, maxRarity: string | null }[]
 }
 ```
 
-Records SHALL be ordered by `number`, with `points` strictly ascending, and crate 17 SHALL need 8,800. `type` SHALL be one of `Gold`, `RaidTicket`, `XpBook`, `AbilityBadge` and `AscensionOrb`. `rarity` SHALL be set for `XpBook`, `AbilityBadge` and `AscensionOrb` and null otherwise. `alliance` SHALL be `Imperial`, `Chaos` or `Xenos` when the reward names one, and null when it is "the featured hero's alliance", which the client resolves. No reward carries a display name or icon.
+Records SHALL be ordered by `number`, with `points` strictly ascending, and crate 17 SHALL need 8,800. `type` SHALL be one of `Coins`, `RaidTicket`, `XpBook`, `AbilityBadge` and `AscensionOrb`. `min` and `max` are the amount range (equal when the amount is fixed, `1 <= min <= max`). `rarity` SHALL be set for `XpBook`, `AbilityBadge` and `AscensionOrb` and null otherwise; `maxRarity` SHALL be set only when the reward is a random badge across a rarity range (for example Common to Uncommon), and SHALL NOT be below `rarity`. Badges and orbs are for the featured hero's alliance, which the client resolves. No reward carries a display name or icon.
 
 #### Scenario: Last crate
 
 - **WHEN** a client fetches `quest-crates`
 - **THEN** it has 17 records and record 17 has `points` 8800
+- **AND** record 17 includes `{ type: "Coins", min: 8000, max: 9000, rarity: null, maxRarity: null }` and `{ type: "AbilityBadge", min: 2, max: 2, rarity: "Common", maxRarity: "Uncommon" }`
 
 ### Requirement: The raw quest data is validated at load
 
@@ -137,7 +138,7 @@ The loader SHALL fail startup, naming the dataset and the quest, when:
 - an objective `type` is not listed, a required `target` is missing, or a `MaxHits`/`MinHits` target is not a whole number of at least 1;
 - a loot chance is not `0 < numerator ≤ denominator`, or a `power` is present and below 1;
 - a quest's maximum score, 17 × (300 medals + 100 Lightning Victory) plus the sum of its objective scores, is not equal to the `points` of the last `quest-crates` record;
-- `quest-crates` is not 17 records with ascending `points`, or a reward has an unknown `type`.
+- `quest-crates` is not 17 records with ascending `points`, or a reward has an unknown `type`, an invalid amount range or an invalid rarity range.
 
 It SHALL NOT check `ladderIndex` against the NPC's ladder, as for `lre-battles`.
 
