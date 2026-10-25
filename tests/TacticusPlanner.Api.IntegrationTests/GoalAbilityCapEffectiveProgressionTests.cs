@@ -133,6 +133,69 @@ public sealed class GoalAbilityCapEffectiveProgressionTests(PlannerApiFactory fa
         response.EnsureSuccessStatusCode();
     }
 
+    [Fact]
+    public async Task AbilityAboveLiveCapIsAcceptedWhenItDependsOnAnExistingAscensionGoal()
+    {
+        var (client, _) = await ProvisionWithLiveProgressionAsync(UnitProgression.CommonNone);
+        var ascension = await CreateExistingAscensionAsync(client, UnitProgression.UncommonTwoStars);
+
+        var response = await PostCombinedAsync(client, AbilityDependingOn(12, ascension.GoalId));
+
+        response.EnsureSuccessStatusCode();
+        var created = (await response.Content.ReadFromJsonAsync<CreateCombinedGoalsResponse>(TestContext.Current.CancellationToken))!;
+        Assert.Equal([ascension.GoalId], Assert.Single(created.Goals).DependsOn);
+    }
+
+    [Fact]
+    public async Task AnExistingAscensionGoalReachedThroughAChainOfExistingGoalsLiftsTheCap()
+    {
+        var (client, _) = await ProvisionWithLiveProgressionAsync(UnitProgression.CommonNone);
+        var ascension = await CreateExistingAscensionAsync(client, UnitProgression.UncommonTwoStars);
+        var rank2 = await CreateExistingRankAsync(client, (int)UnitRank.Stone2, ascension.GoalId);
+        var rank3 = await CreateExistingRankAsync(client, (int)UnitRank.Stone3, rank2.GoalId);
+
+        var response = await PostCombinedAsync(client, AbilityDependingOn(12, rank3.GoalId));
+
+        response.EnsureSuccessStatusCode();
+    }
+
+    [Fact]
+    public async Task AnExistingAscensionGoalTheAbilityDoesNotDependOnLeavesTheCap()
+    {
+        var (client, _) = await ProvisionWithLiveProgressionAsync(UnitProgression.CommonNone);
+        await CreateExistingAscensionAsync(client, UnitProgression.UncommonTwoStars);
+
+        var response = await PostCombinedAsync(client, AbilityDependingOn(12));
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task ACompletedOrUnknownExistingDependencyIsRejected()
+    {
+        var (client, _) = await ProvisionWithLiveProgressionAsync(UnitProgression.CommonNone);
+        var ascension = await CreateExistingAscensionAsync(client, UnitProgression.UncommonTwoStars);
+        (await client.PostStatusAsync(ascension.GoalId, GoalStatus.Completed)).EnsureSuccessStatusCode();
+
+        Assert.Equal(HttpStatusCode.BadRequest, (await PostCombinedAsync(client, AbilityDependingOn(5, ascension.GoalId))).StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, (await PostCombinedAsync(client, AbilityDependingOn(5, Guid.NewGuid()))).StatusCode);
+        Assert.DoesNotContain((await client.ListGoalsAsync()).Goals, goal => goal.GoalType == GoalType.Ability);
+    }
+
+    [Fact]
+    public async Task AnotherUnitsGoalIsRejectedAsAnExistingDependency()
+    {
+        var (client, _) = await ProvisionWithLiveProgressionAsync(UnitProgression.CommonNone);
+        var other = await client.CreateGoalAsync(new CreateGoalRequest(
+            GoalEntityType.Character, "ultraInceptorSgt", GoalType.Ascension,
+            new CreateGoalConfigRequest(Progression: new ProgressionTargetRequest(UnitProgression.CommonNone, UnitProgression.UncommonTwoStars)),
+            null));
+
+        var response = await PostCombinedAsync(client, AbilityDependingOn(5, other.GoalId));
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
     private static CreateCombinedGoalsRequest AscensionThenAbility(
         UnitProgression ascensionEnd, int abilityActiveEnd, bool abilityDependsOnAscension) => new(
         GoalEntityType.Character,
@@ -148,6 +211,40 @@ public sealed class GoalAbilityCapEffectiveProgressionTests(PlannerApiFactory fa
                 new CreateGoalConfigRequest(Ability: new AbilityTargetRequest(0, abilityActiveEnd, 0, 0)),
                 abilityDependsOnAscension ? [0] : []),
         ]);
+
+    private static CreateCombinedGoalsRequest AbilityDependingOn(int activeEnd, params Guid[] existingGoalIds) => new(
+        GoalEntityType.Character,
+        CharacterId,
+        null,
+        [
+            new CombinedGoalSpec(
+                GoalType.Ability,
+                new CreateGoalConfigRequest(Ability: new AbilityTargetRequest(0, activeEnd, 0, 0)),
+                [],
+                DependsOnGoalIds: [.. existingGoalIds]),
+        ]);
+
+    private static Task<GoalDetailResponse> CreateExistingAscensionAsync(HttpClient client, UnitProgression end) =>
+        client.CreateGoalAsync(new CreateGoalRequest(
+            GoalEntityType.Character, CharacterId, GoalType.Ascension,
+            new CreateGoalConfigRequest(Progression: new ProgressionTargetRequest(UnitProgression.CommonNone, end)),
+            null));
+
+    private static async Task<GoalDetailResponse> CreateExistingRankAsync(HttpClient client, int end, Guid dependsOn)
+    {
+        var response = await PostCombinedAsync(client, new CreateCombinedGoalsRequest(
+            GoalEntityType.Character,
+            CharacterId,
+            null,
+            [
+                new CombinedGoalSpec(
+                    GoalType.Rank,
+                    new CreateGoalConfigRequest(Rank: new RankTargetRequest(0, false, 0, end, false, 0)),
+                    [],
+                    DependsOnGoalIds: [dependsOn]),
+            ]));
+        return await response.ReadCreatedGoalAsync();
+    }
 
     private static Task<HttpResponseMessage> PostCombinedAsync(HttpClient client, CreateCombinedGoalsRequest request) =>
         client.PostGoalAsync(request);

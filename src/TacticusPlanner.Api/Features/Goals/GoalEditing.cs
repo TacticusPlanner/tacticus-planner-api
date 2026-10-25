@@ -90,11 +90,11 @@ public sealed class GoalTargetEditor(
         if (await ValidateAsync(profileId, goal, target, ct) is { } validationError)
             return new GoalEditResult.Invalid("Target", validationError);
 
-        var previousKey = RankTargetKey.For(goal.GoalType, goal.Config);
+        var previousKey = GoalTargetKey.For(goal);
         ApplyTarget(goal, target);
 
-        // Rank occupancy: the new target must be free among the profile's in-flight goals.
-        if (RankTargetKey.For(goal.GoalType, goal.Config) != previousKey
+        // Slot occupancy: a new end target must be free among the profile's in-flight goals.
+        if (GoalTargetKey.For(goal) != previousKey
             && await planning.FindConflictAsync([goal], ct) is { } conflict)
             return new GoalEditResult.SlotConflict(conflict);
 

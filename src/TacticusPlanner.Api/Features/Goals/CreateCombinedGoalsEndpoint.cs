@@ -16,7 +16,9 @@ namespace TacticusPlanner.Api.Features.Goals;
 /// combined flow the client composes any combination of Unlock/Ascension/Rank/Ability/Upgrade targets, detects
 /// unmet prerequisites (it holds the live player data) and orders the request accordingly; this endpoint persists
 /// the whole set atomically, each spec's <see cref="CombinedGoalSpec.DependsOnIndex"/> resolved into real
-/// <see cref="Goal.DependsOn"/> edges. Every goal lands in the given projects, or the caller's default project.
+/// <see cref="Goal.DependsOn"/> edges, plus any <see cref="CombinedGoalSpec.DependsOnGoalIds"/> naming the unit's
+/// existing in-flight goals. A goal type may repeat (a milestone ladder) as long as the end targets differ
+/// (<c>goal-target-milestones</c>). Every goal lands in the given projects, or the caller's default project.
 /// </summary>
 public sealed class CreateCombinedGoalsEndpoint
     : Endpoint<CreateCombinedGoalsRequest, CreateCombinedGoalsResponse, GoalMapper>
@@ -29,12 +31,14 @@ public sealed class CreateCombinedGoalsEndpoint
             summary.Summary = "Creates one goal, or several linked goals for one entity, in one call.";
             summary.Description = "A single goal is a one-spec request. Each spec's DependsOnIndex (indices into "
                 + "this same request's Goals list, referencing only earlier entries) is resolved into real DependsOn "
-                + "edges. Assigns the whole set to the given project(s), or the caller's default project (created on "
+                + "edges; DependsOnGoalIds adds edges to the same unit's existing Active/Paused goals, and an existing "
+                + "Ascension goal reachable through them lifts the rarity cap the targets are validated against. A goal "
+                + "type may appear more than once when the end targets differ. Assigns the whole set to the given project(s), or the caller's default project (created on "
                 + "first use) when none is given. Every goal starts Active; startPaused (request-level boolean, "
                 + "default false) creates the whole set Paused instead and cannot be set per goal.";
             summary.Response<CreateCombinedGoalsResponse>(StatusCodes.Status200OK, "The newly created goals, in request order.");
             summary.Response(StatusCodes.Status400BadRequest,
-                "Invalid entity/goal type, a bad DependsOnIndex, an unknown project, or a null/per-goal startPaused.");
+                "Invalid entity/goal type, a bad DependsOnIndex or DependsOnGoalIds, an unknown project, or a null/per-goal startPaused.");
             summary.Response(StatusCodes.Status409Conflict,
                 "slotOccupied: an active or paused goal already holds one of the requested slots (current: that goal).");
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
@@ -58,12 +62,14 @@ public sealed class CreateCombinedGoalsEndpoint
 
         // One roster read for every spec in the request.
         var units = await targetValidation.LoadUnitsAsync(profileId, req.EntityId.Trim(), ct);
-        var requestGoalTypes = new HashSet<GoalType>();
         var parsedGoalTypes = new List<GoalType>(req.Goals.Count);
         // Each spec's transitive dependency closure, computed in one forward pass — DependsOnIndex is
         // guaranteed (by CreateCombinedGoalsValidator) to reference only strictly earlier indices, so
         // closures[d] for every d in a spec's direct deps is already complete by the time we reach it.
         var closures = new List<HashSet<int>>(req.Goals.Count);
+        // Floors of the specs that depend (directly or through an earlier spec) on existing goals: their caps
+        // can only be checked once those goals are read under the profile lock.
+        var deferredFloors = new Dictionary<int, UnitProgression?>();
         for (var i = 0; i < req.Goals.Count; i++)
         {
             var spec = req.Goals[i];
@@ -87,20 +93,17 @@ public sealed class CreateCombinedGoalsEndpoint
             UnitProgression? effectiveProgressionFloor =
                 ascensionEndIndices.Count > 0 ? (UnitProgression)ascensionEndIndices.Max() : null;
 
+            if (closure.Append(i).Any(index => req.Goals[index].DependsOnGoalIds is { Count: > 0 }))
+            {
+                deferredFloors[i] = effectiveProgressionFloor;
+                continue;
+            }
+
             if (targetValidation.Validate(
                 units, entityType, req.EntityId.Trim(), goalType, spec.Config, effectiveProgressionFloor)
                 is { } targetError)
             {
                 AddError(targetError);
-                await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
-                return;
-            }
-
-            // A combined request can't ask for two goals of the same type for the same entity either —
-            // same "at most one in flight" invariant as a single goal type would need against itself.
-            if (!requestGoalTypes.Add(goalType))
-            {
-                AddError(request => request.Goals, "Each goal type may appear at most once in a combined request.");
                 await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
                 return;
             }
@@ -152,14 +155,47 @@ public sealed class CreateCombinedGoalsEndpoint
                 return;
             }
 
-            goals[i].DependsOn = indices.Select(index => goals[index].Id.Value).ToList();
+            goals[i].DependsOn = indices.Select(index => goals[index].Id.Value)
+                .Concat(req.Goals[i].DependsOnGoalIds ?? [])
+                .Distinct()
+                .ToList();
         }
 
         var now = Resolve<TimeProvider>().GetUtcNow();
         var planning = Resolve<ProjectGoalPlanningService>();
         await planning.ExecuteLockedMutationAsync(async transaction =>
         {
-            // At most one Active/Paused goal per slot of the profile (Rank: per normalized end target).
+            var order = Resolve<GoalOrderService>();
+            if (deferredFloors.Count > 0)
+            {
+                var inFlight = (await order.InFlightAsync(ct)).ToDictionary(goal => goal.Id.Value);
+                var existingIds = req.Goals.SelectMany(spec => spec.DependsOnGoalIds ?? []).Distinct().ToList();
+                if (existingIds.Any(id => !inFlight.TryGetValue(id, out var existing)
+                    || existing.EntityType != entityType
+                    || existing.EntityId != req.EntityId.Trim()))
+                {
+                    AddError(request => request.Goals,
+                        "DependsOnGoalIds must reference active or paused goals of the same unit.");
+                    await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+                    return;
+                }
+
+                foreach (var (i, inRequestFloor) in deferredFloors.OrderBy(entry => entry.Key))
+                {
+                    var roots = closures[i].Append(i).SelectMany(index => req.Goals[index].DependsOnGoalIds ?? []);
+                    var floor = MaxProgression(inRequestFloor, ExistingAscensionFloor(roots, inFlight));
+                    if (targetValidation.Validate(
+                        units, entityType, req.EntityId.Trim(), parsedGoalTypes[i], req.Goals[i].Config, floor)
+                        is { } targetError)
+                    {
+                        AddError(targetError);
+                        await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+                        return;
+                    }
+                }
+            }
+
+            // At most one Active/Paused goal per slot of the profile (per GoalTargetKey; Unlock: per unit).
             if (await planning.FindConflictAsync(goals, ct) is { } existingConflict)
             {
                 await GoalProblems.SendSlotConflictAsync(this, existingConflict, ct);
@@ -168,7 +204,6 @@ public sealed class CreateCombinedGoalsEndpoint
 
             db.Goals.AddRange(goals);
             // Once each, in request order, however many projects they are filed into.
-            var order = Resolve<GoalOrderService>();
             foreach (var goal in goals)
                 await order.AppendAsync(goal, ct);
             foreach (var project in targetProjects)
@@ -182,6 +217,32 @@ public sealed class CreateCombinedGoalsEndpoint
                 new CreateCombinedGoalsResponse(goals.Select(goal => Map.ToDetail(goal, projectIds)).ToList()), ct);
         }, ct);
     }
+
+    /// <summary>The highest end of the existing in-flight Ascension goals reachable from <paramref name="roots"/>
+    /// through stored <see cref="Goal.DependsOn"/> edges, at any depth. Each goal is visited once, so a cycle in
+    /// stored data terminates; edges to goals no longer in flight are not followed (their progress is already
+    /// on the roster).</summary>
+    private static UnitProgression? ExistingAscensionFloor(
+        IEnumerable<Guid> roots, Dictionary<Guid, Goal> inFlight)
+    {
+        UnitProgression? floor = null;
+        var visited = new HashSet<Guid>();
+        var pending = new Stack<Guid>(roots);
+        while (pending.TryPop(out var id))
+        {
+            if (!visited.Add(id) || !inFlight.TryGetValue(id, out var goal))
+                continue;
+            if (goal.GoalType == GoalType.Ascension && goal.Config.Progression is { } progression)
+                floor = MaxProgression(floor, ProgressionRules.FromWireName(progression.End));
+            foreach (var dependency in goal.DependsOn)
+                pending.Push(dependency);
+        }
+
+        return floor;
+    }
+
+    private static UnitProgression? MaxProgression(UnitProgression? a, UnitProgression? b) =>
+        a is null ? b : b is null ? a : (UnitProgression)Math.Max((int)a, (int)b);
 }
 
 public sealed record CreateCombinedGoalsRequest(
@@ -197,13 +258,15 @@ public sealed record CreateCombinedGoalsRequest(
 /// rejected, not ignored. <see cref="DependsOnIndex"/> holds indices into
 /// the parent request's <see cref="CreateCombinedGoalsRequest.Goals"/> list — each must reference a
 /// strictly earlier position (validated by <see cref="CreateCombinedGoalsValidator"/>), resolved into real
-/// <see cref="Goal.DependsOn"/> ids by the endpoint.</summary>
+/// <see cref="Goal.DependsOn"/> ids by the endpoint. <see cref="DependsOnGoalIds"/> names existing Active/Paused
+/// goals of the same unit (checked under the profile lock) and is merged into the same edges.</summary>
 [JsonUnmappedMemberHandling(JsonUnmappedMemberHandling.Disallow)]
 public sealed record CombinedGoalSpec(
     [property: JsonRequired] GoalType GoalType,
     CreateGoalConfigRequest Config,
     List<int> DependsOnIndex,
-    CreateGoalSnapshotRequest? Snapshot = null
+    CreateGoalSnapshotRequest? Snapshot = null,
+    List<Guid>? DependsOnGoalIds = null
 );
 
 public sealed record CreateCombinedGoalsResponse(List<GoalDetailResponse> Goals);
