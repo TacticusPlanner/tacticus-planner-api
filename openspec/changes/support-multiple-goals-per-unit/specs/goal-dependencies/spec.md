@@ -17,7 +17,7 @@ Each combined-creation spec SHALL accept an optional `dependsOnGoalIds` list of 
 
 ### Requirement: An existing Ascension dependency lifts the cap floor
 
-Target cap validation (rarity-derived Rank and Ability caps) SHALL evaluate against the highest of: the unit's live progression, the end of every Ascension spec in the spec's in-request dependency closure, and the end of every existing Ascension goal reachable from `dependsOnGoalIds` through existing `dependsOn` edges, at any depth. The traversal SHALL visit each goal at most once.
+Target cap validation (rarity-derived Rank and Ability caps) SHALL evaluate against the highest of: the unit's live progression, the end of every Ascension spec in the spec's in-request dependency closure, and the end of every existing Ascension goal reachable from `dependsOnGoalIds` through existing `dependsOn` edges, at any depth. The traversal SHALL pass through completed goals (only the `dependsOnGoalIds` roots must be in flight), SHALL visit each goal at most once, and SHALL be used the same way when a goal's target is edited, starting from its stored `dependsOn`.
 
 #### Scenario: Ability target reachable through an existing Ascension goal
 
