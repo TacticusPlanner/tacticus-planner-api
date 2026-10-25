@@ -122,6 +122,26 @@ public sealed class GetGameCatalogMythicQuestsEndpoint(IGameCatalogProvider cata
     }
 }
 
+public sealed class GetGameCatalogQuestEventsEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogQuestEventView>>(catalog, GameCatalogDatasets.QuestEvents)
+{
+    public override void Configure()
+    {
+        Get("game-catalog/quest-events", "game-catalog/quest-events/{envelopeHash}");
+        ConfigureServed("Gets game catalog quest events.", "Each Quest Event's featured hero, factions and 17 battles with enemies, objectives and drops.");
+    }
+}
+
+public sealed class GetGameCatalogQuestCratesEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogQuestCrate>>(catalog, GameCatalogDatasets.QuestCrates)
+{
+    public override void Configure()
+    {
+        Get("game-catalog/quest-crates", "game-catalog/quest-crates/{envelopeHash}");
+        ConfigureServed("Gets the Quest Event crate track.", "The shared 17-crate point track with each crate's points and rewards.");
+    }
+}
+
 public sealed class GetGameCatalogAscensionCostsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogAscensionCostView>>(catalog, GameCatalogDatasets.AscensionCostsServed)
 {

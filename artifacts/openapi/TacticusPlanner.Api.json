@@ -2032,6 +2032,202 @@
         }
       }
     },
+    "/api/v1/game-catalog/quest-crates": {
+      "get": {
+        "tags": [
+          "Game-Catalog"
+        ],
+        "summary": "Gets the Quest Event crate track.",
+        "operationId": "TacticusPlannerApiFeaturesGameCatalogGetGameCatalogQuestCratesEndpoint1",
+        "responses": {
+          "200": {
+            "description": "The shared 17-crate point track with each crate's points and rewards.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogQuestCrate"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "The dataset has not changed."
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The envelope hash is not the current release's.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/game-catalog/quest-crates/{envelopeHash}": {
+      "get": {
+        "tags": [
+          "Game-Catalog"
+        ],
+        "summary": "Gets the Quest Event crate track.",
+        "operationId": "TacticusPlannerApiFeaturesGameCatalogGetGameCatalogQuestCratesEndpoint2",
+        "parameters": [
+          {
+            "name": "envelopeHash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The shared 17-crate point track with each crate's points and rewards.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogQuestCrate"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "The dataset has not changed."
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The envelope hash is not the current release's.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/game-catalog/quest-events": {
+      "get": {
+        "tags": [
+          "Game-Catalog"
+        ],
+        "summary": "Gets game catalog quest events.",
+        "operationId": "TacticusPlannerApiFeaturesGameCatalogGetGameCatalogQuestEventsEndpoint1",
+        "responses": {
+          "200": {
+            "description": "Each Quest Event's featured hero, factions and 17 battles with enemies, objectives and drops.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogQuestEventView"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "The dataset has not changed."
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The envelope hash is not the current release's.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/game-catalog/quest-events/{envelopeHash}": {
+      "get": {
+        "tags": [
+          "Game-Catalog"
+        ],
+        "summary": "Gets game catalog quest events.",
+        "operationId": "TacticusPlannerApiFeaturesGameCatalogGetGameCatalogQuestEventsEndpoint2",
+        "parameters": [
+          {
+            "name": "envelopeHash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Each Quest Event's featured hero, factions and 17 battles with enemies, objectives and drops.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogQuestEventView"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "The dataset has not changed."
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The envelope hash is not the current release's.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/game-catalog/raid-bosses": {
       "get": {
         "tags": [
@@ -7501,6 +7697,92 @@
           }
         }
       },
+      "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogQuestCrate": {
+        "required": [
+          "version",
+          "schemaVersion",
+          "gameVersion",
+          "sourceHash",
+          "datasetKey",
+          "datasetHash",
+          "data"
+        ],
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "schemaVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gameVersion": {
+            "type": "string"
+          },
+          "sourceHash": {
+            "type": "string"
+          },
+          "datasetKey": {
+            "type": "string"
+          },
+          "datasetHash": {
+            "type": "string"
+          },
+          "data": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogQuestCrate"
+              }
+            ]
+          }
+        }
+      },
+      "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogQuestEventView": {
+        "required": [
+          "version",
+          "schemaVersion",
+          "gameVersion",
+          "sourceHash",
+          "datasetKey",
+          "datasetHash",
+          "data"
+        ],
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "schemaVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gameVersion": {
+            "type": "string"
+          },
+          "sourceHash": {
+            "type": "string"
+          },
+          "datasetKey": {
+            "type": "string"
+          },
+          "datasetHash": {
+            "type": "string"
+          },
+          "data": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogQuestEventView"
+              }
+            ]
+          }
+        }
+      },
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogShopView": {
         "required": [
           "version",
@@ -9045,6 +9327,210 @@
           },
           "badges": {
             "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogAmountByRarity"
+          }
+        }
+      },
+      "GameCatalogQuestBattleView": {
+        "required": [
+          "number",
+          "tier",
+          "tierPosition",
+          "deploySlots",
+          "boardId",
+          "spawnPointsSet",
+          "lightningVictoryTurns",
+          "power",
+          "enemies",
+          "objectives",
+          "loot"
+        ],
+        "type": "object",
+        "properties": {
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tier": {
+            "type": "string"
+          },
+          "tierPosition": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "deploySlots": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "boardId": {
+            "type": "string"
+          },
+          "spawnPointsSet": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lightningVictoryTurns": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "power": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "enemies": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogQuestEnemyView"
+          },
+          "objectives": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogQuestObjectiveView"
+          },
+          "loot": {
+            "$ref": "#/components/schemas/GameCatalogQuestLootView"
+          }
+        }
+      },
+      "GameCatalogQuestCrate": {
+        "required": [
+          "number",
+          "points",
+          "rewards"
+        ],
+        "type": "object",
+        "properties": {
+          "number": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "points": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rewards": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogQuestCrateReward"
+          }
+        }
+      },
+      "GameCatalogQuestCrateReward": {
+        "required": [
+          "type",
+          "min",
+          "max",
+          "rarity",
+          "maxRarity"
+        ],
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "min": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "max": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rarity": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "maxRarity": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "GameCatalogQuestEnemyView": {
+        "required": [
+          "id",
+          "ladderIndex",
+          "count"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "ladderIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GameCatalogQuestEventView": {
+        "required": [
+          "featuredCharacterId",
+          "allowedFactionIds",
+          "enemyFactionIds",
+          "battles"
+        ],
+        "type": "object",
+        "properties": {
+          "featuredCharacterId": {
+            "type": "string"
+          },
+          "allowedFactionIds": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "enemyFactionIds": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "battles": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogQuestBattleView"
+          }
+        }
+      },
+      "GameCatalogQuestLootView": {
+        "required": [
+          "upgradeId",
+          "chanceNumerator",
+          "chanceDenominator"
+        ],
+        "type": "object",
+        "properties": {
+          "upgradeId": {
+            "type": "string"
+          },
+          "chanceNumerator": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "chanceDenominator": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GameCatalogQuestObjectiveView": {
+        "required": [
+          "type",
+          "target",
+          "score"
+        ],
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "target": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "score": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -10918,6 +11404,42 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/GameCatalogOnslaughtReward"
+        }
+      },
+      "IReadOnlyListOfGameCatalogQuestBattleView": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogQuestBattleView"
+        }
+      },
+      "IReadOnlyListOfGameCatalogQuestCrate": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogQuestCrate"
+        }
+      },
+      "IReadOnlyListOfGameCatalogQuestCrateReward": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogQuestCrateReward"
+        }
+      },
+      "IReadOnlyListOfGameCatalogQuestEnemyView": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogQuestEnemyView"
+        }
+      },
+      "IReadOnlyListOfGameCatalogQuestEventView": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogQuestEventView"
+        }
+      },
+      "IReadOnlyListOfGameCatalogQuestObjectiveView": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogQuestObjectiveView"
         }
       },
       "IReadOnlyListOfGameCatalogRaidBossEncounterModifierView": {

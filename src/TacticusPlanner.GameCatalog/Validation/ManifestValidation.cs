@@ -22,6 +22,8 @@ public static partial class GameCatalogValidator
         RequireNonEmpty(GameCatalogDatasets.Mows, snapshot.MowList.Count, errors);
         RequireNonEmpty(GameCatalogDatasets.MowUpgradeCostsServed, snapshot.MowUpgradeCostViews.Count, errors);
         RequireNonEmpty(GameCatalogDatasets.MythicQuestsServed, snapshot.MythicQuestViews.Count, errors);
+        RequireNonEmpty(GameCatalogDatasets.QuestEvents, snapshot.QuestEventViews.Count, errors);
+        RequireNonEmpty(GameCatalogDatasets.QuestCrates, snapshot.QuestCrateViews.Count, errors);
         RequireNonEmpty(GameCatalogDatasets.UnitPower, snapshot.UnitPowerViews.Count, errors);
         RequireNonEmpty(GameCatalogDatasets.CharacterAbilityCostsServed, snapshot.CharacterAbilityCostViews.Count, errors);
         RequireNonEmpty(GameCatalogDatasets.AscensionCostsServed, snapshot.AscensionCostViews.Count, errors);

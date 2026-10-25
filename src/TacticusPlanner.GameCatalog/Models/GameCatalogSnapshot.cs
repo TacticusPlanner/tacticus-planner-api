@@ -36,6 +36,10 @@ public sealed record GameCatalogSnapshot(
     // Raw unit-power file. Kept for validation — the lineup / damage-type / upgrade-stat checks run over
     // the raw maps against the raw unit, npc and upgrade collections.
     GameCatalogRawUnitPower UnitPower,
+    // Raw quest events (V1 shape) and crates. Kept for validation — the tier split, references and the 8,800-point
+    // check run over the raw battles.
+    IReadOnlyList<GameCatalogRawQuestEvent> QuestEvents,
+    IReadOnlyList<GameCatalogQuestCrate> QuestCrates,
     // Served (denormalized) payloads — the public catalog surface.
     IReadOnlyList<GameCatalogCharacterView> CharacterViews,
     IReadOnlyList<GameCatalogNpc> NpcList,
@@ -57,7 +61,9 @@ public sealed record GameCatalogSnapshot(
     GameCatalogRaidBossesView RaidBossesView,
     GameCatalogGuildRaidMetaView GuildRaidMetaView,
     IReadOnlyList<GameCatalogMythicQuestsView> MythicQuestViews,
-    IReadOnlyList<GameCatalogUnitPower> UnitPowerViews
+    IReadOnlyList<GameCatalogUnitPower> UnitPowerViews,
+    IReadOnlyList<GameCatalogQuestEventView> QuestEventViews,
+    IReadOnlyList<GameCatalogQuestCrate> QuestCrateViews
 )
 {
     // The manifest served to clients: release metadata + per-dataset hash and download url. Built from the
