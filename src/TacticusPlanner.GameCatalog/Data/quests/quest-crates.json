@@ -1,0 +1,713 @@
+[
+  {
+    "number": 1,
+    "points": 1000,
+    "rewards": [
+      {
+        "type": "Coins",
+        "min": 250,
+        "max": 275,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "RaidTicket",
+        "min": 2,
+        "max": 3,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "XpBook",
+        "min": 1,
+        "max": 1,
+        "rarity": "Uncommon",
+        "maxRarity": null
+      },
+      {
+        "type": "AbilityBadge",
+        "min": 1,
+        "max": 1,
+        "rarity": "Common",
+        "maxRarity": "Uncommon"
+      }
+    ]
+  },
+  {
+    "number": 2,
+    "points": 1800,
+    "rewards": [
+      {
+        "type": "Coins",
+        "min": 250,
+        "max": 275,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "RaidTicket",
+        "min": 2,
+        "max": 3,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "XpBook",
+        "min": 1,
+        "max": 1,
+        "rarity": "Uncommon",
+        "maxRarity": null
+      },
+      {
+        "type": "AbilityBadge",
+        "min": 1,
+        "max": 1,
+        "rarity": "Common",
+        "maxRarity": "Uncommon"
+      }
+    ]
+  },
+  {
+    "number": 3,
+    "points": 2500,
+    "rewards": [
+      {
+        "type": "Coins",
+        "min": 250,
+        "max": 275,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "RaidTicket",
+        "min": 2,
+        "max": 3,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "XpBook",
+        "min": 1,
+        "max": 1,
+        "rarity": "Uncommon",
+        "maxRarity": null
+      },
+      {
+        "type": "AbilityBadge",
+        "min": 1,
+        "max": 1,
+        "rarity": "Common",
+        "maxRarity": "Uncommon"
+      }
+    ]
+  },
+  {
+    "number": 4,
+    "points": 3100,
+    "rewards": [
+      {
+        "type": "Coins",
+        "min": 250,
+        "max": 275,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "RaidTicket",
+        "min": 2,
+        "max": 3,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "XpBook",
+        "min": 1,
+        "max": 1,
+        "rarity": "Uncommon",
+        "maxRarity": null
+      },
+      {
+        "type": "AbilityBadge",
+        "min": 1,
+        "max": 1,
+        "rarity": "Common",
+        "maxRarity": "Uncommon"
+      }
+    ]
+  },
+  {
+    "number": 5,
+    "points": 3600,
+    "rewards": [
+      {
+        "type": "Coins",
+        "min": 250,
+        "max": 275,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "RaidTicket",
+        "min": 2,
+        "max": 3,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "XpBook",
+        "min": 1,
+        "max": 1,
+        "rarity": "Uncommon",
+        "maxRarity": null
+      },
+      {
+        "type": "AbilityBadge",
+        "min": 1,
+        "max": 1,
+        "rarity": "Common",
+        "maxRarity": "Uncommon"
+      }
+    ]
+  },
+  {
+    "number": 6,
+    "points": 4100,
+    "rewards": [
+      {
+        "type": "Coins",
+        "min": 250,
+        "max": 275,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "RaidTicket",
+        "min": 2,
+        "max": 3,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "XpBook",
+        "min": 1,
+        "max": 1,
+        "rarity": "Uncommon",
+        "maxRarity": null
+      },
+      {
+        "type": "AbilityBadge",
+        "min": 1,
+        "max": 1,
+        "rarity": "Common",
+        "maxRarity": "Uncommon"
+      },
+      {
+        "type": "AscensionOrb",
+        "min": 1,
+        "max": 1,
+        "rarity": "Uncommon",
+        "maxRarity": null
+      }
+    ]
+  },
+  {
+    "number": 7,
+    "points": 4700,
+    "rewards": [
+      {
+        "type": "Coins",
+        "min": 250,
+        "max": 275,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "RaidTicket",
+        "min": 2,
+        "max": 3,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "XpBook",
+        "min": 1,
+        "max": 1,
+        "rarity": "Uncommon",
+        "maxRarity": null
+      },
+      {
+        "type": "AbilityBadge",
+        "min": 1,
+        "max": 1,
+        "rarity": "Common",
+        "maxRarity": "Uncommon"
+      },
+      {
+        "type": "AscensionOrb",
+        "min": 1,
+        "max": 1,
+        "rarity": "Uncommon",
+        "maxRarity": null
+      }
+    ]
+  },
+  {
+    "number": 8,
+    "points": 5300,
+    "rewards": [
+      {
+        "type": "Coins",
+        "min": 250,
+        "max": 275,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "RaidTicket",
+        "min": 2,
+        "max": 3,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "XpBook",
+        "min": 1,
+        "max": 1,
+        "rarity": "Uncommon",
+        "maxRarity": null
+      },
+      {
+        "type": "AbilityBadge",
+        "min": 1,
+        "max": 1,
+        "rarity": "Common",
+        "maxRarity": "Uncommon"
+      },
+      {
+        "type": "AscensionOrb",
+        "min": 1,
+        "max": 1,
+        "rarity": "Uncommon",
+        "maxRarity": null
+      }
+    ]
+  },
+  {
+    "number": 9,
+    "points": 5700,
+    "rewards": [
+      {
+        "type": "Coins",
+        "min": 500,
+        "max": 550,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "RaidTicket",
+        "min": 4,
+        "max": 5,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "XpBook",
+        "min": 1,
+        "max": 1,
+        "rarity": "Rare",
+        "maxRarity": null
+      },
+      {
+        "type": "AbilityBadge",
+        "min": 1,
+        "max": 1,
+        "rarity": "Common",
+        "maxRarity": "Uncommon"
+      },
+      {
+        "type": "AscensionOrb",
+        "min": 1,
+        "max": 1,
+        "rarity": "Rare",
+        "maxRarity": null
+      }
+    ]
+  },
+  {
+    "number": 10,
+    "points": 6220,
+    "rewards": [
+      {
+        "type": "Coins",
+        "min": 500,
+        "max": 550,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "RaidTicket",
+        "min": 4,
+        "max": 5,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "XpBook",
+        "min": 1,
+        "max": 1,
+        "rarity": "Rare",
+        "maxRarity": null
+      },
+      {
+        "type": "AbilityBadge",
+        "min": 1,
+        "max": 1,
+        "rarity": "Common",
+        "maxRarity": "Uncommon"
+      },
+      {
+        "type": "AscensionOrb",
+        "min": 1,
+        "max": 1,
+        "rarity": "Rare",
+        "maxRarity": null
+      }
+    ]
+  },
+  {
+    "number": 11,
+    "points": 6600,
+    "rewards": [
+      {
+        "type": "Coins",
+        "min": 500,
+        "max": 550,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "RaidTicket",
+        "min": 4,
+        "max": 5,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "XpBook",
+        "min": 1,
+        "max": 1,
+        "rarity": "Rare",
+        "maxRarity": null
+      },
+      {
+        "type": "AbilityBadge",
+        "min": 1,
+        "max": 1,
+        "rarity": "Common",
+        "maxRarity": "Uncommon"
+      },
+      {
+        "type": "AscensionOrb",
+        "min": 1,
+        "max": 1,
+        "rarity": "Rare",
+        "maxRarity": null
+      }
+    ]
+  },
+  {
+    "number": 12,
+    "points": 7000,
+    "rewards": [
+      {
+        "type": "Coins",
+        "min": 1000,
+        "max": 1100,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "RaidTicket",
+        "min": 6,
+        "max": 8,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "XpBook",
+        "min": 1,
+        "max": 1,
+        "rarity": "Epic",
+        "maxRarity": null
+      },
+      {
+        "type": "AbilityBadge",
+        "min": 1,
+        "max": 1,
+        "rarity": "Common",
+        "maxRarity": "Uncommon"
+      },
+      {
+        "type": "AbilityBadge",
+        "min": 1,
+        "max": 1,
+        "rarity": "Rare",
+        "maxRarity": "Epic"
+      },
+      {
+        "type": "AscensionOrb",
+        "min": 4,
+        "max": 4,
+        "rarity": "Epic",
+        "maxRarity": null
+      }
+    ]
+  },
+  {
+    "number": 13,
+    "points": 7300,
+    "rewards": [
+      {
+        "type": "Coins",
+        "min": 1000,
+        "max": 1100,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "RaidTicket",
+        "min": 6,
+        "max": 8,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "XpBook",
+        "min": 1,
+        "max": 1,
+        "rarity": "Epic",
+        "maxRarity": null
+      },
+      {
+        "type": "AbilityBadge",
+        "min": 1,
+        "max": 1,
+        "rarity": "Common",
+        "maxRarity": "Uncommon"
+      },
+      {
+        "type": "AbilityBadge",
+        "min": 1,
+        "max": 1,
+        "rarity": "Rare",
+        "maxRarity": "Epic"
+      },
+      {
+        "type": "AscensionOrb",
+        "min": 4,
+        "max": 4,
+        "rarity": "Epic",
+        "maxRarity": null
+      }
+    ]
+  },
+  {
+    "number": 14,
+    "points": 7700,
+    "rewards": [
+      {
+        "type": "Coins",
+        "min": 4000,
+        "max": 4500,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "RaidTicket",
+        "min": 20,
+        "max": 30,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "XpBook",
+        "min": 2,
+        "max": 2,
+        "rarity": "Legendary",
+        "maxRarity": null
+      },
+      {
+        "type": "AbilityBadge",
+        "min": 2,
+        "max": 2,
+        "rarity": "Common",
+        "maxRarity": "Uncommon"
+      },
+      {
+        "type": "AbilityBadge",
+        "min": 2,
+        "max": 2,
+        "rarity": "Epic",
+        "maxRarity": "Legendary"
+      },
+      {
+        "type": "AscensionOrb",
+        "min": 2,
+        "max": 2,
+        "rarity": "Epic",
+        "maxRarity": null
+      }
+    ]
+  },
+  {
+    "number": 15,
+    "points": 8200,
+    "rewards": [
+      {
+        "type": "Coins",
+        "min": 4000,
+        "max": 4500,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "RaidTicket",
+        "min": 20,
+        "max": 30,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "XpBook",
+        "min": 2,
+        "max": 2,
+        "rarity": "Legendary",
+        "maxRarity": null
+      },
+      {
+        "type": "AbilityBadge",
+        "min": 2,
+        "max": 2,
+        "rarity": "Common",
+        "maxRarity": "Uncommon"
+      },
+      {
+        "type": "AbilityBadge",
+        "min": 2,
+        "max": 2,
+        "rarity": "Epic",
+        "maxRarity": "Legendary"
+      },
+      {
+        "type": "AscensionOrb",
+        "min": 2,
+        "max": 2,
+        "rarity": "Epic",
+        "maxRarity": null
+      }
+    ]
+  },
+  {
+    "number": 16,
+    "points": 8500,
+    "rewards": [
+      {
+        "type": "Coins",
+        "min": 4000,
+        "max": 4500,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "RaidTicket",
+        "min": 20,
+        "max": 30,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "XpBook",
+        "min": 2,
+        "max": 2,
+        "rarity": "Legendary",
+        "maxRarity": null
+      },
+      {
+        "type": "AbilityBadge",
+        "min": 2,
+        "max": 2,
+        "rarity": "Common",
+        "maxRarity": "Uncommon"
+      },
+      {
+        "type": "AbilityBadge",
+        "min": 2,
+        "max": 2,
+        "rarity": "Epic",
+        "maxRarity": "Legendary"
+      },
+      {
+        "type": "AscensionOrb",
+        "min": 1,
+        "max": 1,
+        "rarity": "Legendary",
+        "maxRarity": null
+      }
+    ]
+  },
+  {
+    "number": 17,
+    "points": 8800,
+    "rewards": [
+      {
+        "type": "Coins",
+        "min": 8000,
+        "max": 9000,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "RaidTicket",
+        "min": 20,
+        "max": 30,
+        "rarity": null,
+        "maxRarity": null
+      },
+      {
+        "type": "XpBook",
+        "min": 1,
+        "max": 1,
+        "rarity": "Mythic",
+        "maxRarity": null
+      },
+      {
+        "type": "AbilityBadge",
+        "min": 2,
+        "max": 2,
+        "rarity": "Common",
+        "maxRarity": "Uncommon"
+      },
+      {
+        "type": "AbilityBadge",
+        "min": 1,
+        "max": 1,
+        "rarity": "Epic",
+        "maxRarity": "Legendary"
+      },
+      {
+        "type": "AbilityBadge",
+        "min": 1,
+        "max": 1,
+        "rarity": "Mythic",
+        "maxRarity": "Mythic"
+      },
+      {
+        "type": "AscensionOrb",
+        "min": 1,
+        "max": 1,
+        "rarity": "Mythic",
+        "maxRarity": null
+      }
+    ]
+  }
+]

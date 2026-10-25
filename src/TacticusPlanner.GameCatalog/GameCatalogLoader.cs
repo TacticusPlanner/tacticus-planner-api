@@ -42,6 +42,8 @@ public static class GameCatalogLoader
         var hordeModeTiersRaw = LoadDataset<IReadOnlyList<GameCatalogHordeModeTiers>>(GameCatalogDatasets.HordeModeTiers);
         var mythicQuests = LoadDataset<IReadOnlyList<GameCatalogRawMythicQuests>>(GameCatalogDatasets.MythicQuests);
         var unitPower = LoadDataset<GameCatalogRawUnitPower>(GameCatalogDatasets.UnitPower);
+        var questEvents = LoadDataset<IReadOnlyList<GameCatalogRawQuestEvent>>(GameCatalogDatasets.QuestEvents);
+        var questCrates = LoadDataset<IReadOnlyList<GameCatalogQuestCrate>>(GameCatalogDatasets.QuestCrates);
 
         var npcsByFaction = new Dictionary<string, GameCatalogFactionNpcs>(StringComparer.Ordinal);
         foreach (var key in GameCatalogDatasets.NpcFactions)
@@ -108,6 +110,8 @@ public static class GameCatalogLoader
             unitPower,
             unitsByFaction.Values.SelectMany(faction => faction.Characters).ToArray(),
             unitsByFaction.Values.SelectMany(faction => faction.Mows).ToArray());
+        var questEventViews = GameCatalogDenormalizer.BuildQuestEvents(questEvents);
+        var questCrateViews = GameCatalogDenormalizer.BuildQuestCrates(questCrates);
 
         // Served dataset hashes are computed over the canonical JSON of each denormalized payload.
         var datasetHashes = new Dictionary<string, string>(StringComparer.Ordinal)
@@ -134,6 +138,8 @@ public static class GameCatalogLoader
             [GameCatalogDatasets.GuildRaidMeta] = GameCatalogHashing.ComputeCanonicalJsonHash(guildRaidMetaView, JsonOptions),
             [GameCatalogDatasets.MythicQuestsServed] = GameCatalogHashing.ComputeCanonicalJsonHash(mythicQuestViews, JsonOptions),
             [GameCatalogDatasets.UnitPower] = GameCatalogHashing.ComputeCanonicalJsonHash(unitPowerViews, JsonOptions),
+            [GameCatalogDatasets.QuestEvents] = GameCatalogHashing.ComputeCanonicalJsonHash(questEventViews, JsonOptions),
+            [GameCatalogDatasets.QuestCrates] = GameCatalogHashing.ComputeCanonicalJsonHash(questCrateViews, JsonOptions),
         };
 
         var snapshot = new GameCatalogSnapshot(
@@ -164,6 +170,8 @@ public static class GameCatalogLoader
             guildRaidMetaRawData,
             new ReadOnlyCollection<GameCatalogRawMythicQuests>(mythicQuests.ToArray()),
             unitPower,
+            new ReadOnlyCollection<GameCatalogRawQuestEvent>(questEvents.ToArray()),
+            new ReadOnlyCollection<GameCatalogQuestCrate>(questCrates.ToArray()),
             characterViews,
             npcList,
             mowList,
@@ -184,7 +192,9 @@ public static class GameCatalogLoader
             raidBossesView,
             guildRaidMetaView,
             mythicQuestViews,
-            unitPowerViews);
+            unitPowerViews,
+            questEventViews,
+            questCrateViews);
 
         var errors = GameCatalogValidator.Validate(snapshot);
         if (errors.Count > 0)

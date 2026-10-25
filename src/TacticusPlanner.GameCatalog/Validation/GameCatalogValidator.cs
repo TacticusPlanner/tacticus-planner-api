@@ -38,6 +38,7 @@ public static partial class GameCatalogValidator
         ValidateLreMissions(lres, errors);
         ValidateMowMythicAbilities(snapshot.Mows, errors);
         ValidateMythicQuests(snapshot, errors);
+        ValidateQuestEvents(snapshot, errors);
         ValidateRequiredFields(snapshot, errors);
         ValidateReferences(snapshot, errors);
         ValidateEvents(snapshot, errors);

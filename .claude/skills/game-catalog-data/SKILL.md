@@ -182,6 +182,26 @@ id; a trait or ability not listed is 100 (the catalog lacks V1's `Hero`/`Machine
   values, every rank-up upgrade raises Health/Damage/Armour, curves reach the highest ability level of
   `character-ability-costs` and the longest relic. A value change only moves this dataset's hash.
 
+## Quest events
+
+`Data/quests/quest-events.json` holds V1's hero quests (`hero-quests.json`, raw keys kept), kept to the last
+three: Cyrus, Nubari (`astarEradicator`), Kîmm (`votanChampion`). Served as `quest-events`, one record per
+quest keyed by `featuredCharacterId`, with the tiers flattened into 17 `battles` carrying `tier`
+(Common..Mythic), `tierPosition`, `deploySlots` (from `QuestDeploySlots` in
+`Denormalization/QuestEventsDenormalizer.cs`, not raw data), `lightningVictoryTurns`, optional `power`
+(the in-game battle power, only where known), enemies grouped by `(id, ladderIndex)` with a `count`, and
+objectives with `target` always a string (`MaxHits` 3 → `"3"`).
+`Data/quests/quest-crates.json` is the 17-crate track shared by every quest, from the crate table on the wiki
+**Quest** page (the separate QuestCrates page is pre-August-2025 and stale). Rewards are
+`{type, min, max, rarity, maxRarity}`; `maxRarity` marks a random badge across a rarity range.
+
+- **To add a quest:** paste V1's record into `quest-events.json` (drop the oldest if keeping three); add
+  `Power` per battle when screenshots show it.
+- Enforced at load (`Validation/QuestEventsValidation.cs`): 17 battles split 3/3/5/3/2/1 over tiers 0..5,
+  catalog character/faction/NPC/upgrade references, known objective types and targets, and
+  17 × 400 + objective scores must equal the last crate's points (`InvalidQuestScore`), so a crate-track
+  change and a quest change must land together.
+
 ## Cross-cutting data conventions
 
 - **drop-chances** (`drop-chances.json`): potential campaign rewards reference `chanceId` =

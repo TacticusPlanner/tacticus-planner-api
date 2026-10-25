@@ -22,6 +22,11 @@ public static class GameCatalogDatasets
     // See Models/HordeModeTiers.cs.
     public const string HordeModeTiers = "horde-mode-tiers";
     public const string MythicQuests = "mythic-quests";
+    // quest-events: V1's hero-quests.json for the latest quests (one record per featured hero, 17 battles each),
+    // plus an optional per-battle power. quest-crates: the shared 17-crate point track. Both are served under the
+    // same key. See Denormalization/QuestEventsDenormalizer.cs.
+    public const string QuestEvents = "quest-events";
+    public const string QuestCrates = "quest-crates";
     // unit-power is the single record of power tables, progression multipliers and per-unit power fields
     // the client's in-game power formula reads (raw file: V1's game-config slice). See Models/UnitPower.cs.
     public const string UnitPower = "unit-power";
@@ -282,6 +287,8 @@ public static class GameCatalogDatasets
         HomeScreenEventScoring,
         HordeModeTiers,
         MythicQuests,
+        QuestEvents,
+        QuestCrates,
         UnitPower,
         .. NpcFactions,
         .. EquipmentTypes,
@@ -374,6 +381,8 @@ public static class GameCatalogDatasets
         RaidBosses,
         GuildRaidMeta,
         MythicQuestsServed,
+        QuestEvents,
+        QuestCrates,
         UnitPower,
     ];
 }
