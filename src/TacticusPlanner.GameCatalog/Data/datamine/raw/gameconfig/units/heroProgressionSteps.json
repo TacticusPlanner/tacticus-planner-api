@@ -1,0 +1,301 @@
+[
+  {
+    "stars": 0,
+    "rarity": "Common",
+    "maxXpLevel": 8,
+    "maxRank": 3,
+    "unitStatMultiplierPct": 100,
+    "abilityStatMultiplierPct": 100,
+    "abilityPowerMultiplier": 2,
+    "costs": {
+      "shards": 40
+    },
+    "ascensionCosts": {
+      "hreShards": 25
+    }
+  },
+  {
+    "stars": 1,
+    "rarity": "Common",
+    "maxXpLevel": 8,
+    "maxRank": 3,
+    "unitStatMultiplierPct": 110,
+    "abilityStatMultiplierPct": 100,
+    "abilityPowerMultiplier": 2,
+    "costs": {
+      "shards": 10
+    },
+    "ascensionCosts": {
+      "hreShards": 25
+    }
+  },
+  {
+    "stars": 2,
+    "rarity": "Common",
+    "maxXpLevel": 8,
+    "maxRank": 3,
+    "unitStatMultiplierPct": 120,
+    "abilityStatMultiplierPct": 100,
+    "abilityPowerMultiplier": 2,
+    "costs": {
+      "shards": 15
+    },
+    "ascensionCosts": {
+      "hreShards": 25
+    }
+  },
+  {
+    "stars": 2,
+    "rarity": "Uncommon",
+    "maxXpLevel": 17,
+    "maxRank": 6,
+    "unitStatMultiplierPct": 120,
+    "abilityStatMultiplierPct": 120,
+    "abilityPowerMultiplier": 3,
+    "costs": {
+      "shards": 15,
+      "heroAscensionOrbUncommon": 10
+    },
+    "ascensionCosts": {
+      "hreShards": 25
+    }
+  },
+  {
+    "stars": 3,
+    "rarity": "Uncommon",
+    "maxXpLevel": 17,
+    "maxRank": 6,
+    "unitStatMultiplierPct": 130,
+    "abilityStatMultiplierPct": 120,
+    "abilityPowerMultiplier": 3,
+    "costs": {
+      "shards": 15
+    },
+    "ascensionCosts": {
+      "hreShards": 50
+    }
+  },
+  {
+    "stars": 4,
+    "rarity": "Uncommon",
+    "maxXpLevel": 17,
+    "maxRank": 6,
+    "unitStatMultiplierPct": 140,
+    "abilityStatMultiplierPct": 120,
+    "abilityPowerMultiplier": 3,
+    "costs": {
+      "shards": 15
+    },
+    "ascensionCosts": {
+      "hreShards": 60
+    }
+  },
+  {
+    "stars": 4,
+    "rarity": "Rare",
+    "maxXpLevel": 26,
+    "maxRank": 9,
+    "unitStatMultiplierPct": 140,
+    "abilityStatMultiplierPct": 140,
+    "abilityPowerMultiplier": 4,
+    "costs": {
+      "shards": 20,
+      "heroAscensionOrbRare": 10
+    },
+    "ascensionCosts": {
+      "hreShards": 70
+    }
+  },
+  {
+    "stars": 5,
+    "rarity": "Rare",
+    "maxXpLevel": 26,
+    "maxRank": 9,
+    "unitStatMultiplierPct": 150,
+    "abilityStatMultiplierPct": 140,
+    "abilityPowerMultiplier": 4,
+    "costs": {
+      "shards": 30
+    },
+    "ascensionCosts": {
+      "hreShards": 50
+    }
+  },
+  {
+    "stars": 6,
+    "rarity": "Rare",
+    "maxXpLevel": 26,
+    "maxRank": 9,
+    "unitStatMultiplierPct": 160,
+    "abilityStatMultiplierPct": 140,
+    "abilityPowerMultiplier": 4,
+    "costs": {
+      "shards": 40
+    },
+    "ascensionCosts": {
+      "hreShards": 60
+    }
+  },
+  {
+    "stars": 6,
+    "rarity": "Epic",
+    "maxXpLevel": 35,
+    "maxRank": 12,
+    "unitStatMultiplierPct": 160,
+    "abilityStatMultiplierPct": 160,
+    "abilityPowerMultiplier": 5,
+    "costs": {
+      "shards": 50,
+      "heroAscensionOrbEpic": 10
+    },
+    "ascensionCosts": {
+      "hreShards": 70
+    }
+  },
+  {
+    "stars": 7,
+    "rarity": "Epic",
+    "maxXpLevel": 35,
+    "maxRank": 12,
+    "unitStatMultiplierPct": 170,
+    "abilityStatMultiplierPct": 160,
+    "abilityPowerMultiplier": 5,
+    "costs": {
+      "shards": 65
+    },
+    "ascensionCosts": {
+      "hreShards": 50
+    }
+  },
+  {
+    "stars": 8,
+    "rarity": "Epic",
+    "maxXpLevel": 35,
+    "maxRank": 12,
+    "unitStatMultiplierPct": 180,
+    "abilityStatMultiplierPct": 160,
+    "abilityPowerMultiplier": 5,
+    "costs": {
+      "shards": 85
+    },
+    "ascensionCosts": {
+      "hreShards": 60
+    }
+  },
+  {
+    "stars": 8,
+    "rarity": "Legendary",
+    "maxXpLevel": 50,
+    "maxRank": 17,
+    "unitStatMultiplierPct": 180,
+    "abilityStatMultiplierPct": 180,
+    "abilityPowerMultiplier": 7,
+    "costs": {
+      "shards": 100,
+      "heroAscensionOrbLegendary": 10
+    },
+    "ascensionCosts": {
+      "hreShards": 100
+    }
+  },
+  {
+    "stars": 9,
+    "rarity": "Legendary",
+    "maxXpLevel": 50,
+    "maxRank": 17,
+    "unitStatMultiplierPct": 190,
+    "abilityStatMultiplierPct": 180,
+    "abilityPowerMultiplier": 7,
+    "costs": {
+      "shards": 150,
+      "heroAscensionOrbLegendary": 10
+    },
+    "ascensionCosts": {
+      "hreShards": 100
+    }
+  },
+  {
+    "stars": 10,
+    "rarity": "Legendary",
+    "maxXpLevel": 50,
+    "maxRank": 17,
+    "unitStatMultiplierPct": 200,
+    "abilityStatMultiplierPct": 180,
+    "abilityPowerMultiplier": 7,
+    "costs": {
+      "shards": 250,
+      "heroAscensionOrbLegendary": 15
+    },
+    "ascensionCosts": {
+      "hreShards": 200
+    }
+  },
+  {
+    "stars": 11,
+    "rarity": "Legendary",
+    "maxXpLevel": 50,
+    "maxRank": 17,
+    "unitStatMultiplierPct": 210,
+    "abilityStatMultiplierPct": 180,
+    "abilityPowerMultiplier": 7,
+    "costs": {
+      "shards": 500,
+      "heroAscensionOrbLegendary": 20
+    },
+    "ascensionCosts": {
+      "hreShards": 400
+    }
+  },
+  {
+    "stars": 11,
+    "rarity": "Mythic",
+    "maxXpLevel": 60,
+    "maxRank": 20,
+    "unitStatMultiplierPct": 210,
+    "abilityStatMultiplierPct": 200,
+    "abilityPowerMultiplier": 9,
+    "costs": {
+      "mythicShards": 20,
+      "heroAscensionOrbMythic": 10
+    }
+  },
+  {
+    "stars": 12,
+    "rarity": "Mythic",
+    "maxXpLevel": 60,
+    "maxRank": 20,
+    "unitStatMultiplierPct": 220,
+    "abilityStatMultiplierPct": 200,
+    "abilityPowerMultiplier": 9,
+    "costs": {
+      "mythicShards": 30,
+      "heroAscensionOrbMythic": 10
+    }
+  },
+  {
+    "stars": 13,
+    "rarity": "Mythic",
+    "maxXpLevel": 60,
+    "maxRank": 20,
+    "unitStatMultiplierPct": 230,
+    "abilityStatMultiplierPct": 200,
+    "abilityPowerMultiplier": 9,
+    "costs": {
+      "mythicShards": 50,
+      "heroAscensionOrbMythic": 15
+    }
+  },
+  {
+    "stars": 14,
+    "rarity": "Mythic",
+    "maxXpLevel": 60,
+    "maxRank": 20,
+    "unitStatMultiplierPct": 240,
+    "abilityStatMultiplierPct": 200,
+    "abilityPowerMultiplier": 9,
+    "costs": {
+      "mythicShards": 100,
+      "heroAscensionOrbMythic": 25
+    }
+  }
+]

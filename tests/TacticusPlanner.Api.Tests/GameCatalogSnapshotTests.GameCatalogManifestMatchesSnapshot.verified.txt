@@ -116,12 +116,12 @@
     },
     {
       key: unlock-shard-costs,
-      hash: a5d83f0f0fc9cab6c1e4d64380b5ca3598818724696b197d0e544003fdcc45fb,
+      hash: d5eee0b86809a52b3cda96c701dc3979262fae25449f09efe757185c8774ebd5,
       url: /api/v1/game-catalog/unlock-shard-costs/{envelopeHash}
     },
     {
       key: upgrades,
-      hash: a6f9bf63451737521c255af8c30612844b3451fc0f78bfe5bac34e0dad41b34b,
+      hash: 61de18a76cd6e71d2c819eab83ef8e734884020e470a084cd2773c491f993082,
       url: /api/v1/game-catalog/upgrades/{envelopeHash}
     }
   ]

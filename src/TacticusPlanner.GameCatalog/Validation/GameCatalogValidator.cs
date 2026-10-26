@@ -32,6 +32,7 @@ public static partial class GameCatalogValidator
         ValidateUniqueIds(GameCatalogDatasets.EventOccurrences, snapshot.EventOccurrences, occurrence => occurrence.Id, errors);
         ValidateUniqueIds(GameCatalogDatasets.Shops, snapshot.ShopViews, shop => shop.Id, errors);
         ValidateCharacterAbilityCosts(snapshot.CharacterAbilityCosts, errors);
+        ValidateAscensionCosts(snapshot.AscensionCosts, errors);
         ValidateLreRewards(lres, errors);
         ValidateLreLanePoints(lres, errors);
         ValidateLreRunStarts(lres, errors);

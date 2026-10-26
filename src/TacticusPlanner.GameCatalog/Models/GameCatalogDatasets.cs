@@ -146,25 +146,6 @@ public static class GameCatalogDatasets
         "campaign-battles-necrons-vs-dark-angels",
     ];
 
-    /// <summary>
-    /// Raw upgrade-material source datasets: one base (non-craftable) file per rarity plus a
-    /// per-rarity crafted file for the rarities that have craftable items (Common has none).
-    /// </summary>
-    public static readonly IReadOnlyList<string> UpgradeRarities =
-    [
-        "upgrades-common",
-        "upgrades-uncommon",
-        "upgrades-uncommon-crafted",
-        "upgrades-rare",
-        "upgrades-rare-crafted",
-        "upgrades-epic",
-        "upgrades-epic-crafted",
-        "upgrades-legendary",
-        "upgrades-legendary-crafted",
-        "upgrades-mythic",
-        "upgrades-mythic-crafted",
-    ];
-
     /// <summary>Legendary release event datasets, one per active event (keyed by unit snowprintId).</summary>
     public static readonly IReadOnlyList<string> LreEvents =
     [
@@ -265,8 +246,6 @@ public static class GameCatalogDatasets
     [
         .. UnitFactions,
         DropChances,
-        AscensionCosts,
-        UnlockShardCosts,
         OnslaughtRewards,
         EventDefinitions,
         EventOccurrences,
@@ -277,7 +256,6 @@ public static class GameCatalogDatasets
         QuestCrates,
         UnitPower,
         .. NpcFactions,
-        .. UpgradeRarities,
         .. CampaignBattleGroups,
         .. LreEvents,
         .. ShopSources,

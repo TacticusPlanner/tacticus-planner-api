@@ -35,7 +35,7 @@ public sealed class GameCatalogLoaderTests
     }
 
     [Fact]
-    public void UnlockShardCostsCoverEveryRarity()
+    public void UnlockShardCostsCoverEveryStartingRarity()
     {
         var snapshot = GameCatalogLoader.Load();
 
@@ -49,7 +49,6 @@ public sealed class GameCatalogLoaderTests
                 ["Rare"] = 130,
                 ["Epic"] = 250,
                 ["Legendary"] = 500,
-                ["Mythic"] = 1400,
             },
             byRarity);
     }

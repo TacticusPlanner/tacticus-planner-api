@@ -82,4 +82,58 @@ public sealed class UpgradeDenormalizerTests
         Assert.Equal(65, expectedGoldA);
         Assert.Equal(expectedGoldA, expectedGoldB);
     }
+
+    [Fact]
+    public void DatamineUpgradesAreGroupedBySourceKeyAndNamedFromEnglish()
+    {
+        var byKey = GameCatalogDenormalizer.ReadDatamineUpgrades(
+            new Dictionary<string, DatamineUpgrade>
+            {
+                ["upgHpU005C"] = new("dev", "Uncommon", "hp", [new DatamineUpgradeIngredient("upgHpC007", 6)]),
+                ["upgHpU004C"] = new("dev", "Uncommon", "hp", [new DatamineUpgradeIngredient("upgHpC002", 6)]),
+                ["upgArmU001"] = new("dev", "Uncommon", "fixedArmor", null),
+            },
+            new Dictionary<string, string>
+            {
+                ["Upgrades/upgHpU005C_name"] = "First Aid Kit",
+                ["Upgrades/upgHpU004C_name"] = "Bionic Enhancement",
+                ["Upgrades/upgArmU001_name"] = "Oath Seal",
+            });
+
+        Assert.Equal(["upgrades-uncommon", "upgrades-uncommon-crafted"], byKey.Keys.Order(StringComparer.Ordinal));
+        var oathSeal = Assert.Single(byKey["upgrades-uncommon"]);
+        Assert.Equal(("upgArmU001", "Oath Seal", "Oath Seal", "Armour"), (oathSeal.SnowprintId, oathSeal.Label, oathSeal.Material, oathSeal.Stat));
+        Assert.False(oathSeal.Craftable);
+        Assert.Empty(oathSeal.Recipe);
+        var crafted = byKey["upgrades-uncommon-crafted"];
+        Assert.Equal(["upgHpU004C", "upgHpU005C"], crafted.Select(upgrade => upgrade.Id));
+        Assert.Equal("Health", crafted[0].Stat);
+        Assert.True(crafted[0].Craftable);
+        Assert.Equal(new GameCatalogUpgradeRecipeIngredient("upgHpC002", 6), Assert.Single(crafted[0].Recipe));
+    }
+
+    [Theory]
+    [InlineData("hp", false)]
+    [InlineData("speed", true)]
+    public void AMissingEnglishNameOrUnknownStatFailsTheLoad(string statType, bool hasName)
+    {
+        var english = hasName
+            ? new Dictionary<string, string> { ["Upgrades/upgX_name"] = "X" }
+            : [];
+
+        var exception = Assert.Throws<InvalidOperationException>(() => GameCatalogDenormalizer.ReadDatamineUpgrades(
+            new Dictionary<string, DatamineUpgrade> { ["upgX"] = new("dev", "Common", statType, null) },
+            english));
+
+        Assert.Contains("upgrade 'upgX'", exception.Message, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void TheShippedUpgradesUseTheGamesAccentedNames()
+    {
+        var snapshot = GameCatalogLoader.Load();
+
+        Assert.Equal("Mjød", snapshot.Upgrades.Single(upgrade => upgrade.Id == "upgHpL111").Label);
+        Assert.Equal(560, snapshot.Upgrades.Count);
+    }
 }

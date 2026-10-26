@@ -1,0 +1,17 @@
+{
+  "Common": {
+    "shards": 40
+  },
+  "Uncommon": {
+    "shards": 80
+  },
+  "Rare": {
+    "shards": 130
+  },
+  "Epic": {
+    "shards": 250
+  },
+  "Legendary": {
+    "shards": 500
+  }
+}
