@@ -141,7 +141,8 @@ public sealed class LreDenormalizerTests
             .SelectMany(wave => wave.Enemies)
             .Single(enemy => enemy.Id == "templBossHelbrecht");
 
+        // Index 3 is one past the game's three-row ladder (0-2).
         Assert.Equal(3, helbrecht.LadderIndex);
-        Assert.Equal(2, Snapshot.Npcs.Single(npc => npc.Id == "templBossHelbrecht").Stats.Count);
+        Assert.Equal(3, Snapshot.Npcs.Single(npc => npc.Id == "templBossHelbrecht").Stats.Count);
     }
 }

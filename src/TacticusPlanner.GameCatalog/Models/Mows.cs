@@ -10,7 +10,7 @@ public sealed record GameCatalogMow(
     string Alliance,
     GameCatalogMowAbility PrimaryAbility,
     GameCatalogMowAbility SecondaryAbility,
-    // The ability unlocked at Mythic rarity, ported from V1's new-mows-data2.json mythicAbilities[0]. It
+    // The ability unlocked at Mythic rarity, the datamine lineup.json mythicAbilities[0]. It
     // levels with the MoW's blue stars, not upgrade materials, so it carries no recipes. Omitted (not null)
     // when unknown.
     [property: JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

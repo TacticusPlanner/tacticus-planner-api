@@ -1,8 +1,9 @@
 namespace TacticusPlanner.GameCatalog.Models;
 
 /// <summary>
-/// One raw <c>npcs-{faction}.json</c> source file: the faction it describes plus its NPC variations.
-/// <c>npcs-objects.json</c> is the faction-less bucket (<c>FactionId</c> = <c>Objects</c>).
+/// One faction's NPCs as read from the datamine <c>npc.json</c> (source key <c>npcs-{faction}</c>; see
+/// Denormalization/UnitDatamineReader.cs). <c>npcs-objects</c> is the faction-less bucket (<c>FactionId</c> =
+/// <c>Objects</c>). <c>Name</c> holds the faction id: display names are not catalog data.
 /// </summary>
 public sealed record GameCatalogFactionNpcs(
     string Alliance,
@@ -12,8 +13,7 @@ public sealed record GameCatalogFactionNpcs(
 );
 
 /// <summary>
-/// One NPC variation as authored in the raw per-faction file. Raw records may also carry an
-/// <c>icon</c> path; it is deliberately not bound (id-only display contract) and is dropped on deserialize.
+/// One NPC variation as read from the datamine. Presentational fields (visual ids) are not read.
 /// </summary>
 public sealed record GameCatalogRawNpc(
     string Id,

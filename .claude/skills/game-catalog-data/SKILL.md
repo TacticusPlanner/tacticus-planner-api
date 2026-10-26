@@ -51,8 +51,17 @@ restrictions); these are silently ignored on deserialize.
 (`GameCatalogDatasets.Served` is the source of truth for the list. Each is served at
 `/api/v1/game-catalog/{key}` in a `GameCatalogDatasetEnvelope<T>`.)
 
-- **mows** is a plain array and lives **inside `units-{faction}.json`** (`mows[]`), not a separate file;
-  the shared upgrade-cost ladder is its own dataset `mow-upgrade-costs`, keyed by the ability **level** it
+- **characters**, **mows** and **npcs** are built from the datamine `gameconfig/units/lineup.json` (characters
+  and MoWs: a unit with the `MachineOfWar` trait is a MoW) and `gameconfig/units/npc.json`, with
+  `gameconfig/units/abilities.json` for damage profiles and MoW recipes (`UnitDatamineReader.cs`). Grouped
+  internally as `units-{faction}` / `npcs-{faction}` (lowercased `FactionId`; faction-less loot objects →
+  `npcs-objects`, `Objects`/`Neutral`), ordered by id. Weapons: `weapons[0]` melee, `weapons[1]` ranged
+  (`Range`); absent ⇒ `""`/0 melee, null ranged. Traits drop the game's `Hero`. Damage lists = distinct
+  `damageProfile`/`damageProfile_N` constants of the abilities, sorted; ability ids keep game order. Character
+  `rankUpUpgrades` = `upgrades` rows ranked Stone1…; MoW primary/secondary = its two actives with the
+  abilities' `upgrades` recipes, `mythicAbility` = `mythicAbilities[0]`. NPC stats map `FixedArmor`→`armour`,
+  `StarLevel`→`stars` (absent ⇒ 0). No faction display names (the record's `Name` holds the faction id).
+- **mows** is a plain array; the shared upgrade-cost ladder is its own dataset `mow-upgrade-costs`, keyed by the ability **level** it
   raises a MoW to (`level = rawIndex + 2`; level 1 is free).
 - **ascension-costs** is the shared `(rarity, stars)` orb/shard ladder — one shared progression, served as
   its own dataset, built from the datamine `gameconfig/units/heroProgressionSteps.json`. `stars` 0-14 map to
@@ -181,7 +190,7 @@ the apps code (not in the catalog), so ratio changes ship as a web release.
 ## Unit power
 
 `Data/unit-power.json` is V1's slice of Snowprint's client game config that the in-game power formula
-reads (the apps compute character, MoW and NPC power from it plus `units-*`, `npcs-*`, `equipment` and
+reads (the apps compute character, MoW and NPC power from it plus `characters`/`mows`, `npcs`, `equipment` and
 `upgrades`), served as the single `unit-power` record. Raw keys keep V1's names so a patch can be
 reconciled field by field: `heroProgressionSteps` / `heroProgressionStepsMoW` (20 steps each; served as
 `heroProgressionSteps` / `mowProgressionSteps` with a `step` index), `damageProfileModifiers`,
@@ -264,7 +273,7 @@ datamine source; its `docs/roadmap.md` orders the migration. Datasets move onto 
   in the PR) or rename to the game's terms (`SchemaVersion` bump plus the apps companion), never both in one
   change. Renamed ids that user data stores (battle ids, LRE ids, mission indices) need a data migration.
   Migrated: `equipment`, `character-ability-costs`, `mow-upgrade-costs`, `ascension-costs`, `unlock-shard-costs`,
-  `upgrades`. Next, in order: `npcs`, characters/MoWs, `unit-power`,
+  `upgrades`, `characters`, `mows`, `npcs`. Next, in order: `unit-power`,
   `raid-bosses`, `shops`, `mythic-quests`, HSE, `onslaught-rewards`, quest events/crates, LRE,
   `campaign-battles` last. A migrated dataset is refreshed by bumping `REF`, not by the V1 steps below.
 
@@ -288,27 +297,14 @@ genuine game changes.
 
 **V1 → catalog field mapping (the non-obvious parts):**
 
-- **characters** (`units-{faction}.json` `characters[]`): from V1 `character/data/new-character-data.json`
-  (`Name`→`name`, `Health`→`health`, `Melee Damage`→`meleeDamage`, `Distance`→`rangeDistance`,
-  `Equipment1..3`→`equipmentSlots`, `Active Ability`/`Passive Ability` arrays → `activeAbilityDamage`/
-  `passiveAbilityDamage` — absent ⇒ `[]`) joined with `new-rank-up-data.json` (Roman rank keys
-  `"Stone I"` → `Stone1`). `new-character-data2.json` is **not** used by the catalog.
-- **mows** (`units-{faction}.json` `mows[]`): from V1 `mow/data/new-mow-data.json` `mows[]`
-  (`snowprintId`→`id`; `primaryAbility`/`secondaryAbility` each `{name, recipes[][]}`; the shared cost
-  ladder now comes from the datamine, see **mow-upgrade-costs**). `mythicAbility` (`{name}`, no recipes) comes from a
-  **different** V1 file, `mow/data/new-mows-data2.json` `mythicAbilities[0]`, matched by `id` — a new MoW
-  needs it from there.
+- **characters**, **mows**: now from the datamine (see **characters**, **mows** and **npcs** above); refresh by bumping `REF`.
 - **mythic-quests** (`mythic-quests.json`): from V1 `mythic_quests/data/mythic-quests.json` `quests[]`
   (keep `characterId`, `quests[].number`, `quests[].rewards` as V1's `"type[:amount]"` strings,
   `quests[].tasks[]` `locaKey`/`target`/`taskParameters`; drop `characterName` and quest/task `name`). The
   server parses rewards with a closed pattern set — a new reward kind fails startup until
   `MythicQuestRewardParser` learns it. V1's `terms[]` (task text templates, English only) are **not**
   catalog data: they go to the apps `mythicQuestTasks` namespace (`apps/web/public/locales/en/`).
-- **npcs** (`npcs-{faction}.json` `npcs[]`, faction-less ones in `npcs-objects.json`): from V1
-  `npc/data/new-npc-data.json` (`Name`→`name`, `Stats[]`→`stats[]` with camelCase keys and
-  `Armor`→`armour`; **missing numeric stat fields ⇒ `0`**). Ability-damage keys are the newer
-  `Active Ability Damage`/`Passive Ability Damage`, falling back to the older `Active Ability`/
-  `Passive Ability`.
+- **npcs**: now from the datamine (see above); refresh by bumping `REF`.
 - **upgrades**: now from the datamine (see **upgrades** above); refresh by bumping `REF`.
 - **unit-power**: from V1 `unit/character-power/data/character-power-units.json`; reconcile the global
   tables and each catalog unit's `lineup` `powerMultiplier` / `upgradesStatIncrease` (see **Unit power**).

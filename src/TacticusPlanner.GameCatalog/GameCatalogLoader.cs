@@ -23,11 +23,9 @@ public static class GameCatalogLoader
     public static GameCatalogSnapshot Load()
     {
         // ---- load raw source collections (by convention: key -> {key}.json) --------------------
-        var unitsByFaction = new Dictionary<string, GameCatalogFactionUnits>(StringComparer.Ordinal);
-        foreach (var key in GameCatalogDatasets.UnitFactions)
-        {
-            unitsByFaction[key] = LoadDataset<GameCatalogFactionUnits>(key);
-        }
+        var abilities = LoadDatamine<Dictionary<string, DatamineAbility?>>(GameCatalogDenormalizer.DatamineAbilitiesPath);
+        var unitsByFaction = GameCatalogDenormalizer.ReadDatamineUnits(
+            LoadDatamine<Dictionary<string, DatamineLineupUnit>>(GameCatalogDenormalizer.DatamineLineupPath), abilities);
 
         var mowUpgradeCosts = GameCatalogDenormalizer.ReadDatamineMowUpgradeCosts(
             LoadDatamine<List<Dictionary<string, int>>>(GameCatalogDenormalizer.DatamineAbilityUpgradeCostsMoWPath));
@@ -48,11 +46,8 @@ public static class GameCatalogLoader
         var questEvents = LoadDataset<IReadOnlyList<GameCatalogRawQuestEvent>>(GameCatalogDatasets.QuestEvents);
         var questCrates = LoadDataset<IReadOnlyList<GameCatalogQuestCrate>>(GameCatalogDatasets.QuestCrates);
 
-        var npcsByFaction = new Dictionary<string, GameCatalogFactionNpcs>(StringComparer.Ordinal);
-        foreach (var key in GameCatalogDatasets.NpcFactions)
-        {
-            npcsByFaction[key] = LoadDataset<GameCatalogFactionNpcs>(key);
-        }
+        var npcsByFaction = GameCatalogDenormalizer.ReadDatamineNpcs(
+            LoadDatamine<Dictionary<string, DatamineNpc>>(GameCatalogDenormalizer.DatamineNpcPath), abilities);
 
         var equipmentByType = GameCatalogDenormalizer.ReadDatamineEquipment(
             LoadDatamine<Dictionary<string, DatamineItem>>(GameCatalogDenormalizer.DatamineItemsPath));
@@ -146,7 +141,7 @@ public static class GameCatalogLoader
             GameCatalogHashing.ComputeSnapshotHash(
                 GameCatalogRelease.Version, GameCatalogRelease.SchemaVersion, GameCatalogRelease.GameVersion, datasetHashes),
             new ReadOnlyDictionary<string, string>(datasetHashes),
-            new ReadOnlyDictionary<string, GameCatalogFactionUnits>(unitsByFaction),
+            unitsByFaction,
             new ReadOnlyCollection<GameCatalogMowUpgradeCost>(mowUpgradeCosts.ToArray()),
             new ReadOnlyCollection<GameCatalogCharacterAbilityCost>(characterAbilityCosts.ToArray()),
             new ReadOnlyCollection<GameCatalogAscensionCost>(ascensionCosts.ToArray()),
@@ -155,7 +150,7 @@ public static class GameCatalogLoader
             eventDefinitions,
             eventOccurrences,
             new ReadOnlyCollection<GameCatalogHseScoring>(hseScoring.ToArray()),
-            new ReadOnlyDictionary<string, GameCatalogFactionNpcs>(npcsByFaction),
+            npcsByFaction,
             equipmentByType,
             upgradesByRarity,
             new ReadOnlyDictionary<string, GameCatalogCampaignGroup>(campaignGroups),
