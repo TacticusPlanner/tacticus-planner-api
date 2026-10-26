@@ -8,19 +8,27 @@ namespace TacticusPlanner.GameCatalog.Tests;
 public sealed class CharacterAbilityCostTests
 {
     private static GameCatalogCharacterAbilityCost[] Ladder(int count) =>
-        Enumerable.Range(1, count).Select(lvl => new GameCatalogCharacterAbilityCost(lvl, 10, 1)).ToArray();
+        Enumerable.Range(1, count)
+            .Select(lvl => new GameCatalogCharacterAbilityCost(lvl, 10, new GameCatalogAmountByRarity("Common", 1)))
+            .ToArray();
+
+    private static GameCatalogCharacterAbilityCost ReadRow(Dictionary<string, int> row) =>
+        Assert.Single(GameCatalogDenormalizer.ReadDatamineCharacterAbilityCosts([row]));
 
     [Fact]
-    public void ShippedLadderMatchesV1RowCountAndSampledRows()
+    public void ShippedLadderMatchesTheDatamineRowCountAndSampledRows()
     {
         var snapshot = GameCatalogLoader.Load();
 
         Assert.Equal(59, snapshot.CharacterAbilityCosts.Count);
-        // Sampled from V1's characters-lvl-up-abilities.json.
-        Assert.Equal(new GameCatalogCharacterAbilityCost(1, 25, 1), snapshot.CharacterAbilityCosts[0]);
-        Assert.Equal(new GameCatalogCharacterAbilityCost(4, 150, 2), snapshot.CharacterAbilityCosts[3]);
-        Assert.Equal(new GameCatalogCharacterAbilityCost(9, 600, 1), snapshot.CharacterAbilityCosts[8]);
-        Assert.Equal(new GameCatalogCharacterAbilityCost(59, 150000, 5), snapshot.CharacterAbilityCosts[58]);
+        // Sampled from the datamine units/abilityUpgradeCosts.json.
+        Assert.Equal(new GameCatalogCharacterAbilityCost(1, 25, new("Common", 1)), snapshot.CharacterAbilityCosts[0]);
+        Assert.Equal(new GameCatalogCharacterAbilityCost(4, 150, new("Common", 2)), snapshot.CharacterAbilityCosts[3]);
+        Assert.Equal(new GameCatalogCharacterAbilityCost(9, 600, new("Uncommon", 1)), snapshot.CharacterAbilityCosts[8]);
+        // V1 had 127500 at both lvl 50 and 51; the game steps by 2500.
+        Assert.Equal(new GameCatalogCharacterAbilityCost(51, 130000, new("Mythic", 1)), snapshot.CharacterAbilityCosts[50]);
+        Assert.Equal(new GameCatalogCharacterAbilityCost(52, 132500, new("Mythic", 1)), snapshot.CharacterAbilityCosts[51]);
+        Assert.Equal(new GameCatalogCharacterAbilityCost(59, 150000, new("Mythic", 5)), snapshot.CharacterAbilityCosts[58]);
         Assert.Contains(GameCatalogDatasets.CharacterAbilityCostsServed, snapshot.DatasetHashes.Keys);
     }
 
@@ -34,6 +42,7 @@ public sealed class CharacterAbilityCostTests
         Assert.Equal(new GameCatalogCharacterAbilityCostView(60, 150000, new GameCatalogAmountByRarity("Mythic", 5)), views[^1]);
     }
 
+    // The game's token rarities land on the bands V1 hard-coded.
     [Theory]
     [InlineData(2, "Common")]
     [InlineData(8, "Common")]
@@ -47,11 +56,50 @@ public sealed class CharacterAbilityCostTests
     [InlineData(50, "Legendary")]
     [InlineData(51, "Mythic")]
     [InlineData(60, "Mythic")]
-    public void RarityBandsFollowV1Boundaries(int level, string rarity)
+    public void ShippedRaritiesFollowV1Bands(int level, string rarity)
     {
-        var view = GameCatalogDenormalizer.BuildCharacterAbilityCosts(Ladder(59)).Single(view => view.Level == level);
+        var view = GameCatalogLoader.Load().CharacterAbilityCostViews.Single(view => view.Level == level);
 
         Assert.Equal(rarity, view.Badges.Rarity);
+    }
+
+    [Fact]
+    public void BadgeRarityComesFromTheTokenKey()
+    {
+        var cost = ReadRow(new() { ["gold"] = 25, ["abilityTokenEpic"] = 3 });
+
+        Assert.Equal(new GameCatalogCharacterAbilityCost(1, 25, new("Epic", 3)), cost);
+    }
+
+    [Theory]
+    [InlineData("abilityTokenCommon", "abilityTokenRare")]
+    [InlineData("abilityTokenCommon", "dust")]
+    [InlineData("dust", null)]
+    public void RowWithoutExactlyOneTokenHasNoBadgesAndFailsValidation(string first, string? second)
+    {
+        var row = new Dictionary<string, int> { ["gold"] = 25, [first] = 1 };
+        if (second is not null)
+        {
+            row[second] = 1;
+        }
+
+        var cost = ReadRow(row);
+        var errors = new List<GameCatalogValidationError>();
+        GameCatalogValidator.ValidateCharacterAbilityCosts([cost], errors);
+
+        Assert.Null(cost.Badges);
+        Assert.Contains(errors, error => error.Code == "InvalidCost");
+    }
+
+    [Fact]
+    public void RowWithoutGoldHasNoBadgesAndFailsValidation()
+    {
+        var cost = ReadRow(new() { ["abilityTokenCommon"] = 1 });
+        var errors = new List<GameCatalogValidationError>();
+        GameCatalogValidator.ValidateCharacterAbilityCosts([cost], errors);
+
+        Assert.Null(cost.Badges);
+        Assert.Contains(errors, error => error.Code == "InvalidCost");
     }
 
     [Fact]
@@ -84,12 +132,14 @@ public sealed class CharacterAbilityCostTests
     }
 
     [Theory]
-    [InlineData(-1, 1)]
-    [InlineData(10, 0)]
-    public void NegativeGoldOrNonPositiveBadgesFail(int gold, int badges)
+    [InlineData(-1, 1, "Common")]
+    [InlineData(10, 0, "Common")]
+    [InlineData(10, 1, "Shiny")]
+    public void NegativeGoldNonPositiveBadgesOrUnknownRarityFail(int gold, int badges, string rarity)
     {
         var errors = new List<GameCatalogValidationError>();
-        GameCatalogValidator.ValidateCharacterAbilityCosts([new GameCatalogCharacterAbilityCost(1, gold, badges)], errors);
+        GameCatalogValidator.ValidateCharacterAbilityCosts(
+            [new GameCatalogCharacterAbilityCost(1, gold, new GameCatalogAmountByRarity(rarity, badges))], errors);
 
         Assert.Contains(errors, error => error.Code == "InvalidCost");
     }

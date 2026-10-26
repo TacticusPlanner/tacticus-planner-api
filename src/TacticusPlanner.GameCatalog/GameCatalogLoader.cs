@@ -30,7 +30,8 @@ public static class GameCatalogLoader
         }
 
         var mowUpgradeCosts = LoadDataset<IReadOnlyList<GameCatalogMowUpgradeCost>>(GameCatalogDatasets.MowUpgradeCosts);
-        var characterAbilityCosts = LoadDataset<IReadOnlyList<GameCatalogCharacterAbilityCost>>(GameCatalogDatasets.CharacterAbilityCosts);
+        var characterAbilityCosts = GameCatalogDenormalizer.ReadDatamineCharacterAbilityCosts(
+            LoadDatamine<List<Dictionary<string, int>>>(GameCatalogDenormalizer.DatamineAbilityUpgradeCostsPath));
         var dropChances = LoadDataset<IReadOnlyList<GameCatalogDropChance>>(GameCatalogDatasets.DropChances);
         var ascensionCosts = LoadDataset<IReadOnlyList<GameCatalogAscensionCost>>(GameCatalogDatasets.AscensionCosts);
         var unlockShardCosts = LoadDataset<IReadOnlyList<GameCatalogUnlockShardCost>>(GameCatalogDatasets.UnlockShardCosts);

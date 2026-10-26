@@ -69,6 +69,9 @@ restrictions); these are silently ignored on deserialize.
   `goldCost`/`dustCost`/`mythicDustCost` (served as `goldCost`/`salvageCost`/`mythicSalvageCost`, absent ⇒ 0).
   In 1.43 every item of a rarity has the same ladder; `EquipmentDenormalizerTests` flags a bump that breaks
   that. Absent `abilityId` ⇒ `""`, `isRelic`/`isUniqueRelic` ⇒ false, `allowedUnits`/`allowedFactions` ⇒ `[]`.
+- **character-ability-costs** is built from the datamine `gameconfig/units/abilityUpgradeCosts.json` (row N is the
+  cost from ability level N to N + 1, served as `level: N + 1`). Each row is `gold` plus exactly one
+  `abilityToken{Rarity}`; the key's suffix is the served `badges.rarity`. Any other row shape fails startup.
 - **campaign-battles** is flat, keyed by globally-unique battle id, each carrying its `campaignGroupId`;
   **campaign-definitions** is keyed by `groupId` (metadata + `battleIds[]` only). Battle ids are also
   referenced from API test fixtures and the player-data transformer, so renaming a battle id is not a
@@ -247,7 +250,7 @@ datamine source; its `docs/roadmap.md` orders the migration. Datasets move onto 
   and either keep the served shape (the manifest snapshot shows only real game-data hash moves, each explained
   in the PR) or rename to the game's terms (`SchemaVersion` bump plus the apps companion), never both in one
   change. Renamed ids that user data stores (battle ids, LRE ids, mission indices) need a data migration.
-  Migrated: `equipment`. Next, in order: cost/progression tables, `upgrades`, `npcs`, characters/MoWs, `unit-power`,
+  Migrated: `equipment`, `character-ability-costs`. Next, in order: the other cost/progression tables, `upgrades`, `npcs`, characters/MoWs, `unit-power`,
   `raid-bosses`, `shops`, `mythic-quests`, HSE, `onslaught-rewards`, quest events/crates, LRE,
   `campaign-battles` last. A migrated dataset is refreshed by bumping `REF`, not by the V1 steps below.
 

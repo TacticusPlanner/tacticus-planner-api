@@ -21,7 +21,7 @@
     },
     {
       key: character-ability-costs,
-      hash: c0be0512a67c8ebb28445c9628e433a32b052bd5bba6629665d6be8991a74382,
+      hash: 126a27426a88c938a1c10f6721267e7637dd949886b0d0f4304b40a0b2aff06b,
       url: /api/v1/game-catalog/character-ability-costs/{envelopeHash}
     },
     {

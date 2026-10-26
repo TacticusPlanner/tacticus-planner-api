@@ -24,10 +24,15 @@ public static partial class GameCatalogValidator
                     dataset, "NonConsecutiveLevel", $"Entry {index} has lvl {cost.Lvl}; expected {index + 1}."));
             }
 
-            if (cost.Gold < 0 || cost.Badges <= 0)
+            if (cost.Badges is null)
             {
                 errors.Add(new GameCatalogValidationError(
-                    dataset, "InvalidCost", $"Entry lvl {cost.Lvl} has negative gold or a non-positive badge amount."));
+                    dataset, "InvalidCost", $"Entry lvl {cost.Lvl} must have gold and exactly one abilityToken{{Rarity}} cost."));
+            }
+            else if (cost.Gold < 0 || cost.Badges.Amount <= 0 || !ValidRarities.Contains(cost.Badges.Rarity))
+            {
+                errors.Add(new GameCatalogValidationError(
+                    dataset, "InvalidCost", $"Entry lvl {cost.Lvl} has negative gold, a non-positive badge amount or an unknown badge rarity."));
             }
         }
     }
