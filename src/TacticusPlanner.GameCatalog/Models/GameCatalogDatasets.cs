@@ -7,7 +7,6 @@ public static class GameCatalogDatasets
 
     public const string MowUpgradeCosts = "mow-upgrade-costs";
     public const string CharacterAbilityCosts = "character-ability-costs";
-    public const string EquipmentUpgradeCosts = "equipment-upgrade-costs";
     public const string DropChances = "drop-chances";
     public const string AscensionCosts = "ascension-costs";
     public const string UnlockShardCosts = "unlock-shard-costs";
@@ -147,16 +146,6 @@ public static class GameCatalogDatasets
         "campaign-battles-necrons-vs-dark-angels",
     ];
 
-    /// <summary>Equipment datasets, one per item type.</summary>
-    public static readonly IReadOnlyList<string> EquipmentTypes =
-    [
-        "equipment-crit",
-        "equipment-booster-crit",
-        "equipment-defensive",
-        "equipment-block",
-        "equipment-booster-block",
-    ];
-
     /// <summary>
     /// Raw upgrade-material source datasets: one base (non-craftable) file per rarity plus a
     /// per-rarity crafted file for the rarities that have craftable items (Common has none).
@@ -277,7 +266,6 @@ public static class GameCatalogDatasets
         .. UnitFactions,
         MowUpgradeCosts,
         CharacterAbilityCosts,
-        EquipmentUpgradeCosts,
         DropChances,
         AscensionCosts,
         UnlockShardCosts,
@@ -291,7 +279,6 @@ public static class GameCatalogDatasets
         QuestCrates,
         UnitPower,
         .. NpcFactions,
-        .. EquipmentTypes,
         .. UpgradeRarities,
         .. CampaignBattleGroups,
         .. LreEvents,

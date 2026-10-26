@@ -31,7 +31,7 @@
     },
     {
       key: equipment,
-      hash: aae72f1520a88e7ed66af5ed549edc533d8eefc8e212f471c8ff439ed5508cf1,
+      hash: b18ee01b5214e19b24f22b6877923e490ff9fb8712d7368385f3aa57019a5f2f,
       url: /api/v1/game-catalog/equipment/{envelopeHash}
     },
     {

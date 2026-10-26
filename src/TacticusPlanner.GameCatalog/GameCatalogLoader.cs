@@ -31,7 +31,6 @@ public static class GameCatalogLoader
 
         var mowUpgradeCosts = LoadDataset<IReadOnlyList<GameCatalogMowUpgradeCost>>(GameCatalogDatasets.MowUpgradeCosts);
         var characterAbilityCosts = LoadDataset<IReadOnlyList<GameCatalogCharacterAbilityCost>>(GameCatalogDatasets.CharacterAbilityCosts);
-        var equipmentUpgradeCosts = LoadDataset<IReadOnlyList<GameCatalogEquipmentUpgradeCost>>(GameCatalogDatasets.EquipmentUpgradeCosts);
         var dropChances = LoadDataset<IReadOnlyList<GameCatalogDropChance>>(GameCatalogDatasets.DropChances);
         var ascensionCosts = LoadDataset<IReadOnlyList<GameCatalogAscensionCost>>(GameCatalogDatasets.AscensionCosts);
         var unlockShardCosts = LoadDataset<IReadOnlyList<GameCatalogUnlockShardCost>>(GameCatalogDatasets.UnlockShardCosts);
@@ -51,11 +50,8 @@ public static class GameCatalogLoader
             npcsByFaction[key] = LoadDataset<GameCatalogFactionNpcs>(key);
         }
 
-        var equipmentByType = new Dictionary<string, IReadOnlyList<GameCatalogEquipment>>(StringComparer.Ordinal);
-        foreach (var key in GameCatalogDatasets.EquipmentTypes)
-        {
-            equipmentByType[key] = LoadDataset<IReadOnlyList<GameCatalogEquipment>>(key);
-        }
+        var equipmentByType = GameCatalogDenormalizer.ReadDatamineEquipment(
+            LoadDatamine<Dictionary<string, DatamineItem>>(GameCatalogDenormalizer.DatamineItemsPath));
 
         var upgradesByRarity = new Dictionary<string, IReadOnlyList<GameCatalogUpgrade>>(StringComparer.Ordinal);
         foreach (var key in GameCatalogDatasets.UpgradeRarities)
@@ -93,7 +89,7 @@ public static class GameCatalogLoader
         var ascensionCostViews = GameCatalogDenormalizer.BuildAscensionCosts(ascensionCosts);
         var unlockShardCostViews = GameCatalogDenormalizer.BuildUnlockShardCosts(unlockShardCosts);
         var upgradeViews = GameCatalogDenormalizer.BuildUpgrades(upgradesByRarity, campaignGroups, dropChances);
-        var equipmentViews = GameCatalogDenormalizer.BuildEquipment(equipmentByType, equipmentUpgradeCosts);
+        var equipmentViews = GameCatalogDenormalizer.BuildEquipment(equipmentByType);
         var campaignBattleViews = GameCatalogDenormalizer.BuildCampaignBattles(campaignGroups, dropChances);
         var campaignDefinitionViews = GameCatalogDenormalizer.BuildCampaignDefinitions(campaignGroups);
         var lreViews = GameCatalogDenormalizer.BuildLres(lresByEvent, unitsByFaction);
@@ -152,7 +148,6 @@ public static class GameCatalogLoader
             new ReadOnlyDictionary<string, GameCatalogFactionUnits>(unitsByFaction),
             new ReadOnlyCollection<GameCatalogMowUpgradeCost>(mowUpgradeCosts.ToArray()),
             new ReadOnlyCollection<GameCatalogCharacterAbilityCost>(characterAbilityCosts.ToArray()),
-            new ReadOnlyCollection<GameCatalogEquipmentUpgradeCost>(equipmentUpgradeCosts.ToArray()),
             new ReadOnlyCollection<GameCatalogAscensionCost>(ascensionCosts.ToArray()),
             new ReadOnlyCollection<GameCatalogUnlockShardCost>(unlockShardCosts.ToArray()),
             new ReadOnlyCollection<GameCatalogOnslaughtReward>(onslaughtRewards.ToArray()),
@@ -160,7 +155,7 @@ public static class GameCatalogLoader
             eventOccurrences,
             new ReadOnlyCollection<GameCatalogHseScoring>(hseScoring.ToArray()),
             new ReadOnlyDictionary<string, GameCatalogFactionNpcs>(npcsByFaction),
-            new ReadOnlyDictionary<string, IReadOnlyList<GameCatalogEquipment>>(equipmentByType),
+            equipmentByType,
             new ReadOnlyDictionary<string, IReadOnlyList<GameCatalogUpgrade>>(upgradesByRarity),
             new ReadOnlyDictionary<string, GameCatalogCampaignGroup>(campaignGroups),
             new ReadOnlyCollection<GameCatalogDropChance>(dropChances.ToArray()),
@@ -287,6 +282,14 @@ public static class GameCatalogLoader
 
         return JsonSerializer.Deserialize<T>(stream, JsonOptions)
             ?? throw new InvalidOperationException($"GameCatalog dataset '{key}' is empty.");
+    }
+
+    private static T LoadDatamine<T>(string rawPath)
+    {
+        using var stream = DatamineFiles.Open(rawPath);
+
+        return JsonSerializer.Deserialize<T>(stream, JsonOptions)
+            ?? throw new InvalidOperationException($"Datamine file 'raw/{rawPath}' is empty.");
     }
 
     private static GameCatalogCampaignGroup AssignCampaignBattleIndices(GameCatalogCampaignGroup group)

@@ -63,7 +63,12 @@ The SHA is authoritative. The tag is a label recorded when the pin was made, and
 #### Scenario: Bump to a new release
 
 - **WHEN** a maintainer runs `dotnet run scripts/pull-datamine.cs -- v1.44.0.3000` and `items.json` changed upstream
-- **THEN** `REF` holds `v1.44.0.3000` and that tag's SHA, the `items.json` copy and its checksum line are updated, `globalValues.json` is reported unchanged, and `DatamineSourceTests` passes
+- **THEN** `REF` holds `v1.44.0.3000` and that tag's SHA, the `items.json` copy and its checksum line are updated, unchanged copies are reported unchanged, and `DatamineSourceTests` passes
+
+#### Scenario: A path leaves the allowlist
+
+- **WHEN** a path is removed from `files.txt` and the script is re-run at the same pin
+- **THEN** its copy and checksum line are deleted, it is reported removed, and `REF` is unchanged
 
 ### Requirement: `pull-datamine` changes nothing when a listed file is missing upstream
 
