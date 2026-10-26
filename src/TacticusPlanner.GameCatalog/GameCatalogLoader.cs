@@ -29,7 +29,8 @@ public static class GameCatalogLoader
             unitsByFaction[key] = LoadDataset<GameCatalogFactionUnits>(key);
         }
 
-        var mowUpgradeCosts = LoadDataset<IReadOnlyList<GameCatalogMowUpgradeCost>>(GameCatalogDatasets.MowUpgradeCosts);
+        var mowUpgradeCosts = GameCatalogDenormalizer.ReadDatamineMowUpgradeCosts(
+            LoadDatamine<List<Dictionary<string, int>>>(GameCatalogDenormalizer.DatamineAbilityUpgradeCostsMoWPath));
         var characterAbilityCosts = GameCatalogDenormalizer.ReadDatamineCharacterAbilityCosts(
             LoadDatamine<List<Dictionary<string, int>>>(GameCatalogDenormalizer.DatamineAbilityUpgradeCostsPath));
         var dropChances = LoadDataset<IReadOnlyList<GameCatalogDropChance>>(GameCatalogDatasets.DropChances);

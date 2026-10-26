@@ -24,6 +24,8 @@ public sealed record GameCatalogMowAbility(
 
 public sealed record GameCatalogMowMythicAbility(string Name);
 
+// MoW ability cost rung, read from the datamine units/abilityUpgradeCostsMoW.json (dust → Salvage,
+// abilityToken{Rarity} → Badges, itemAscensionResource_{Rarity} → ForgeBadges, machinesOfWarToken → Components).
 public sealed record GameCatalogMowUpgradeCost(
     int Gold,
     int Salvage,
