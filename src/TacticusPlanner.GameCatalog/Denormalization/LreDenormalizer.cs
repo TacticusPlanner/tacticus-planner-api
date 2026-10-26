@@ -281,7 +281,7 @@ internal static partial class GameCatalogDenormalizer
         };
 
     /// <summary>Trait labels (V1's <c>Trait</c> enum labels) -> the catalog trait ids (units/npcs <c>traits</c>,
-    /// <c>Data/enums.json</c>). Note the renamed ones: "Final Vengeance" is <c>FinalJustice</c>, "Deep Strike"
+    /// <c>Data/curated/enums.json</c>). Note the renamed ones: "Final Vengeance" is <c>FinalJustice</c>, "Deep Strike"
     /// is <c>TeleportStrike</c>. "Daemon" also backs the "Defeat N Daemon enemies" missions. "Beast Slayer" is
     /// deliberately absent: V1 labels <c>BeastSnagga</c> that way while <c>enums.json</c> also has a
     /// <c>BeastSlayer</c>, so such a line fails the load rather than map to a guessed trait.</summary>

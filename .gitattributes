@@ -1,4 +1,6 @@
 * text=auto eol=lf
+# Datamine copies must stay byte-identical to upstream (files.sha256 checks them).
+src/TacticusPlanner.GameCatalog/Data/datamine/raw/** -text
 
 *.bat text eol=crlf
 *.cmd text eol=crlf

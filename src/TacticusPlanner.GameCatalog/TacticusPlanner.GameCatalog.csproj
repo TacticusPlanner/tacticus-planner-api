@@ -6,6 +6,10 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Data\**\*.json" />
+    <EmbeddedResource Include="Data\**\*.json" Exclude="Data\datamine\**" />
+    <!-- Datamine copies keep their upstream raw/ path as the resource name (opened by DatamineFiles, never by
+         the leaf-name convention, since game leaf names like units.json or items.json repeat). -->
+    <EmbeddedResource Include="Data\datamine\raw\**\*.json"
+      LogicalName="datamine/$([System.String]::Copy('%(RecursiveDir)').Replace('\', '/'))%(Filename)%(Extension)" />
   </ItemGroup>
 </Project>

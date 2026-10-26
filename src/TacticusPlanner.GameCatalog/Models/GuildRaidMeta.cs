@@ -13,7 +13,7 @@ public sealed record GameCatalogGuildRaidMetaRawData(
     IReadOnlyList<GameCatalogGuildRaidMetaRawBoss> Bosses,
     IReadOnlyList<GameCatalogGuildRaidMetaRawPrime> Primes);
 
-/// <summary>The raw <c>Data/guild-raid-meta/guild-raid-comps.json</c> shape: Comp guidance only.</summary>
+/// <summary>The raw <c>Data/curated/guild-raid-meta/guild-raid-comps.json</c> shape: Comp guidance only.</summary>
 public sealed record GameCatalogGuildRaidMetaRawCompsFile(
     string SourceId,
     string UpdatedOn,
@@ -27,7 +27,7 @@ public sealed record GameCatalogGuildRaidMetaRawComp(
     IReadOnlyList<string> MowIds);
 
 /// <summary>
-/// The raw per-boss <c>Data/guild-raid-meta/guild-raid-meta-boss-{n}-{Slug}.json</c> shape: that boss's
+/// The raw per-boss <c>Data/curated/guild-raid-meta/guild-raid-meta-boss-{n}-{Slug}.json</c> shape: that boss's
 /// own recommendations plus the recommendations for any prime fought alongside it. The loader splits this
 /// into one <see cref="GameCatalogGuildRaidMetaRawBoss"/> and zero or more flattened
 /// <see cref="GameCatalogGuildRaidMetaRawPrime"/> entries.
