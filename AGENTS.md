@@ -15,6 +15,9 @@ and .NET Aspire for local orchestration.
 - `src/TacticusPlanner.GameCatalog`: server-side game catalog — embedded raw
   datasets, runtime denormalization into served datasets, hashing/manifest.
   See the `game-catalog-data` skill before adding/changing catalog data.
+- `scripts/pull-datamine.cs`: copies the allowlisted raw files of the private
+  `tacticus-planner-data-mines` repo into `GameCatalog/Data/datamine/` and pins
+  the commit (`dotnet run scripts/pull-datamine.cs -- v<version>`).
 - `src/TacticusPlanner.TacticusApi`: client for the upstream Tacticus game API
   (used to validate personal API keys).
 - `tests/TacticusPlanner.Api.Tests`: Docker-free pure tests and database-independent catalog HTTP tests.

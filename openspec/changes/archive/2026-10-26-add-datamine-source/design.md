@@ -32,7 +32,7 @@ The copies are committed under `Data/datamine/raw/` and embedded like the rest o
 
 - _Alternative: git submodule._ Rejected. Cloning, CI and the Docker build would all need a token for a private repo, and the API would carry about 800 MB (mostly sprites) it does not read.
 - _Alternative: fetch at build time._ Rejected for the same token problem, and because the build would stop being reproducible from the repo alone.
-- **Visibility (needs the owner's confirmation):** committing copies publishes the allowlisted files. They are game config the public V1 repo already published in its own form, and the served catalog already derives from them. One real difference: raw `units/lineup.json` lists units the game has not released yet (the catalog skips them when it serves). Stripping them on copy would break the "unchanged copy" rule, so the recommended answer is to accept it. If the owner disagrees, the fallback is a build-time fetch (D1's second alternative) with a token in CI and Docker.
+- **Visibility (confirmed by Severyn, 2026-10-26: commit the copies):** committing copies publishes the allowlisted files. They are game config the public V1 repo already published in its own form, and the served catalog already derives from them. One real difference: raw `units/lineup.json` lists units the game has not released yet (the catalog skips them when it serves). Stripping them on copy would break the "unchanged copy" rule, so the recommended answer is to accept it. If the owner disagrees, the fallback is a build-time fetch (D1's second alternative) with a token in CI and Docker.
 
 ### D2. `REF` pins tag and SHA, and the SHA wins
 
@@ -49,7 +49,7 @@ gameconfig/items.json          # equipment
 
 ### D4. A C# file-based app for the copy
 
-`scripts/pull-datamine.cs` runs with `dotnet run scripts/pull-datamine.cs -- <tag|sha>` (the repo's only required toolchain is the .NET SDK; `global.json` pins 10.0.402, which runs file-based apps). It uses `git` with the caller's own credentials: `git clone --filter=blob:none --no-checkout` into a temp directory, a sparse checkout of the allowlisted paths at the SHA, then a byte copy. With `--source <path>` it reads a local data-mines checkout (the workspace's sibling folder) and writes a `local` pin. It then deletes copies that are no longer listed, writes `files.sha256` (`<sha256>  <path>`, sorted, LF), and prints the upstream `raw/VERSION` and a per-file added/changed/removed summary for the PR description.
+`scripts/pull-datamine.cs` runs with `dotnet run scripts/pull-datamine.cs -- <tag|sha>` (the repo's only required toolchain is the .NET SDK; `global.json` pins 10.0.402, which runs file-based apps). It uses `git` with the caller's own credentials: `git clone --filter=blob:none --no-checkout` into a temp directory, then `git show <sha>:raw/<path>` for each allowlisted file, so only those blobs are downloaded. With `--source <path>` it reads a local data-mines checkout (the workspace's sibling folder) and writes a `local` pin. It then deletes copies that are no longer listed, writes `files.sha256` (`<sha256>  <path>`, sorted, LF), and prints the upstream `raw/VERSION` and a per-file added/changed/removed summary for the PR description.
 
 - _Alternative: a `gh api` shell script._ Rejected because it needs `gh`, bash and jq on Windows dev machines, and the contents API caps file size at 100 MB.
 
@@ -77,7 +77,7 @@ The loader matches by leaf name, so moving the curated files changes no resource
 
 - [The datamine renames or moves a file] → its `AGENTS.md` forbids that. If it happens anyway, `pull-datamine` fails on the missing allowlisted path, and the bump PR shows it.
 - [The tag moves after a forced re-run] → `REF` keeps the old SHA until someone bumps it on purpose (D2).
-- [Unreleased content becomes public] → see D1. The owner decides before apply.
+- [Unreleased content becomes public] → accepted (D1).
 - [Leaf collision regressions] → `DatamineFilesTests` asserts that the convention loader opens no `datamine/` resource.
 - [Repo growth] → only allowlisted files are copied, and git stores each bump as a delta. The full migration needs about 15 MB of JSON.
 
@@ -87,5 +87,5 @@ Additive. No served data changes, so nothing is deployed differently. Apply orde
 
 ## Open Questions
 
-- **Visibility (D1).** Is committing allowlisted raw files to this public repo acceptable? Recommended: yes.
+- ~~**Visibility (D1).**~~ Resolved: commit the copies to this public repo.
 - **Datamine stability.** The data-mines README notes that its download client uses an undocumented launcher API. If it breaks, `REF` simply stays pinned, so the API is unaffected.

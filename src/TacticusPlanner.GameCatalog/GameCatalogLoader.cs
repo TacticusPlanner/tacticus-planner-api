@@ -309,10 +309,12 @@ public static class GameCatalogLoader
         // MSBuild rewrites hyphenated folder names in the resource name (campaign-battles ->
         // campaign_battles) but keeps file names verbatim. Leaf file names are unique across the
         // catalog and are always preceded by a '.' segment separator, so match on the leaf.
+        // Datamine copies are never matched here (see DatamineFiles).
         var leafName = fileName.Replace('\\', '/').Split('/')[^1];
         var resourceSuffix = $".{leafName}";
         var resourceName = assembly
             .GetManifestResourceNames()
+            .Where(name => !name.StartsWith(DatamineFiles.ResourcePrefix, StringComparison.Ordinal))
             .SingleOrDefault(name => name.EndsWith(resourceSuffix, StringComparison.Ordinal));
 
         if (resourceName is null)

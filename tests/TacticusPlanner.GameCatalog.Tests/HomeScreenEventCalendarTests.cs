@@ -13,7 +13,7 @@ public sealed class HomeScreenEventCalendarTests
     ];
 
     // Stale-calendar guard: fails once no HSE run ends after "today" (UTC). Fix by authoring the next
-    // announced runs in Data/events/event-occurrences.json.
+    // announced runs in Data/curated/event-occurrences.json.
     [Fact]
     public void HseCalendarIsNotStale()
     {

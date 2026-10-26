@@ -1,6 +1,6 @@
 ---
 name: game-catalog-data
-description: How the server-side Game Catalog (TacticusPlanner.GameCatalog) is structured — embedded raw datasets, runtime denormalization into served datasets, hashing/manifest, the non-obvious data conventions (drop-chances, difficulty enums, LRE filters and the LRE split, equipment cost ladders), AND how to refresh it to a new in-game version from the V1 datamine. Use when adding/changing catalog data, the served projections, or bumping the game version.
+description: How the server-side Game Catalog (TacticusPlanner.GameCatalog) is structured — embedded raw datasets, runtime denormalization into served datasets, hashing/manifest, the non-obvious data conventions (drop-chances, difficulty enums, LRE filters and the LRE split, equipment cost ladders), AND how to refresh it to a new in-game version (bump the pinned tacticus-planner-data-mines REF; V1 datamine for datasets not yet migrated). Use when adding/changing catalog data, the served projections, or bumping the game version.
 ---
 
 # Game Catalog data
@@ -26,6 +26,11 @@ restrictions); these are silently ignored on deserialize.
   fast). Source files are discovered **by convention**: dataset key `foo-bar` → embedded `foo-bar.json`
   (matched by leaf filename, so subfolders don't matter). The csproj embeds `Data/**/*.json` by glob, so a
   new `{key}.json` only needs its key registered in `GameCatalogDatasets`. There is **no manifest file**.
+  `Data/curated/` holds hand-kept data with no game source (event definitions/occurrences, horde-mode tiers,
+  guild-raid meta, `enums.json`); it is only a folder, so the leaf-name lookup is unchanged.
+- **Datamine source** — `Data/datamine/` holds byte-identical copies of `tacticus-planner-data-mines` `raw/`
+  files (see **Datamine source** below). They are embedded as `datamine/<raw path>` and opened with
+  `DatamineFiles.Open("gameconfig/items.json")`, never by the leaf-name convention.
 - **Denormalization** — `Denormalization/*Denormalizer.cs` (`partial class GameCatalogDenormalizer`, one
   file per entity) builds the served views from the raw collections.
 - **Validation** — `Validation/*.cs` (`partial class GameCatalogValidator`) runs at load; throws on any
@@ -95,7 +100,7 @@ restrictions); these are silently ignored on deserialize.
     (first match wins; the bare `"Defeat N <faction>"` fallback is last) and maps the captured label through an
     explicit alias table to the catalog id: factions → units/npcs `factionId` (`"AdMechs"` → `AdeptusMechanicus`,
     `"T'au"` → `Tau`, `"Death Guard"` → `DeathGuard`), alliances → `Imperial`/`Chaos`/`Xenos`, damage types →
-    the units/npcs damage strings (`Bolter`, `Piercing`…), traits → `Data/enums.json` trait ids (V1's labels:
+    the units/npcs damage strings (`Bolter`, `Piercing`…), traits → `Data/curated/enums.json` trait ids (V1's labels:
     `"Big Target"` → `BigTarget`, `"Final Vengeance"` → `FinalJustice`, `"Deep Strike"` → `TeleportStrike`).
     `"Defeat N Daemon enemies"` (V1's `SlayEnemiesOfTrait`) is kind `defeatFaction` with `trait` `Daemon` and
     `faction` null. `Validation/LreMissionsValidation.cs` (`UnparsedMission`) fails the load on a line no
@@ -123,7 +128,7 @@ restrictions); these are silently ignored on deserialize.
 
 ## Horde-mode tiers
 
-`Data/horde-mode-tiers.json` is a single hand-curated tier list (a one-element array) of how well a
+`Data/curated/horde-mode-tiers.json` is a single hand-curated tier list (a one-element array) of how well a
 character does in horde-style modes (many waves of weak enemies: Legendary Events today), served as
 `horde-mode-tiers` with `characters` sorted by `unitId`. It is mode-agnostic on purpose; a consumer
 decides how to use it. The apps' Legendary Event clear estimate multiplies combat power by each
@@ -216,14 +221,38 @@ objectives with `target` always a string (`MaxHits` 3 → `"3"`).
   `MinHits`/`MaxHits`/`AttackType`; `exclude` flips the match. The runtime roster filter only executes
   `Alliance`/`Faction` kinds and ANDs all track filters.
 - **rank** values are space-free `{Tier}{arabic}` (e.g. `Stone1`, `Iron2`, `Adamantine2`); the in-game
-  Roman label lives only in `Data/enums.json` (a reference file — not served, not in the registry).
+  Roman label lives only in `Data/curated/enums.json` (a reference file — not served, not in the registry).
 - Most nullable fields are genuinely conditional. Fields always present in the static data are required.
   Numeric stat fields on npcs are **non-nullable** — a missing value in the source must be written as `0`.
 
+## Datamine source
+
+`TacticusPlanner/tacticus-planner-data-mines` (private) extracts the game's config from every PC build into
+`raw/` and tags each merged datamine `v<version>`. Its `docs/catalog-audit.md` maps each dataset here to its
+datamine source; its `docs/roadmap.md` orders the migration. Datasets move onto it one change at a time.
+
+- **`Data/datamine/REF`** — one line, `<tag> <40-hex sha>` (e.g. `v1.43.157.2989 e5c8…`). The SHA wins: a forced
+  datamine re-run moves the tag. `local <path>` marks a copy from a working tree; tests reject it.
+- **`Data/datamine/files.txt`** — the allowlist of `raw/`-relative paths (sorted, `#` comments). List a file
+  only in the change whose denormalizer reads it. Copies are public (this repo is public); that was accepted.
+- **Refresh** — `dotnet run scripts/pull-datamine.cs -- v<version>` (uses your git credentials), or
+  `-- --source ../tacticus-planner-data-mines` while developing. It copies byte for byte, prunes unlisted
+  copies, and rewrites `files.sha256` and `REF`. Never edit `Data/datamine/raw/**` by hand.
+- **Gate** — `DatamineSourceTests` fails on a `local` or malformed pin, a missing or unlisted copy, and any
+  checksum mismatch.
+- **Migrating a dataset** — bind its denormalizer to `DatamineFiles.Open(...)`, delete the hand-kept raw file,
+  and either keep the served shape (the manifest snapshot shows only real game-data hash moves, each explained
+  in the PR) or rename to the game's terms (`SchemaVersion` bump plus the apps companion), never both in one
+  change. Renamed ids that user data stores (battle ids, LRE ids, mission indices) need a data migration.
+  Order: `equipment` (pilot), cost/progression tables, `upgrades`, `npcs`, characters/MoWs, `unit-power`,
+  `raid-bosses`, `shops`, `mythic-quests`, HSE, `onslaught-rewards`, quest events/crates, LRE,
+  `campaign-battles` last. A migrated dataset is refreshed by bumping `REF`, not by the V1 steps below.
+
 ## Updating to a new in-game version
 
-**There is no re-runnable pipeline.** The original raw data came from one-off Python transforms that were
-removed; `Data/**` is now the committed source of truth, refreshed by hand against the V1 datamine.
+**For datasets not yet migrated to the datamine there is no re-runnable pipeline.** The original raw data came
+from one-off Python transforms that were removed; their `Data/**` files are the committed source of truth,
+refreshed by hand against the V1 datamine. Bump `REF` (above) in the same refresh.
 
 **Source of truth for what changed:** the V1 frontend repo (`tacticusplanner`), `develop` branch,
 `src/fsd/4-entities/*/data/*.json`. Find the datamine commits (messages like `"1.41 from the apk"`,
