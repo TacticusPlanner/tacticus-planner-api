@@ -10,7 +10,6 @@ public sealed record GameCatalogSnapshot(
     IReadOnlyDictionary<string, GameCatalogFactionUnits> UnitsByFaction,
     IReadOnlyList<GameCatalogMowUpgradeCost> MowUpgradeCosts,
     IReadOnlyList<GameCatalogCharacterAbilityCost> CharacterAbilityCosts,
-    IReadOnlyList<GameCatalogEquipmentUpgradeCost> EquipmentUpgradeCosts,
     IReadOnlyList<GameCatalogAscensionCost> AscensionCosts,
     IReadOnlyList<GameCatalogUnlockShardCost> UnlockShardCosts,
     IReadOnlyList<GameCatalogOnslaughtReward> OnslaughtRewards,
@@ -18,6 +17,7 @@ public sealed record GameCatalogSnapshot(
     IReadOnlyList<GameCatalogEventOccurrence> EventOccurrences,
     IReadOnlyList<GameCatalogHseScoring> HseScoring,
     IReadOnlyDictionary<string, GameCatalogFactionNpcs> NpcsByFaction,
+    // Equipment from the datamine items.json, keyed by item type (I_Crit, ...).
     IReadOnlyDictionary<string, IReadOnlyList<GameCatalogEquipment>> EquipmentByType,
     IReadOnlyDictionary<string, IReadOnlyList<GameCatalogUpgrade>> UpgradesByRarity,
     IReadOnlyDictionary<string, GameCatalogCampaignGroup> CampaignGroups,

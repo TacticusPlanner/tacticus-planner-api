@@ -20,7 +20,7 @@ restrictions); these are silently ignored on deserialize.
   contract version — bump **only on a breaking shape change** to a served dataset; a content-only change
   rides the per-dataset hash), `GameVersion` (the in-game version the embedded data was extracted from).
 - **Dataset registry** — `Models/GameCatalogDatasets.cs`: the raw source keys (per-faction unit/npc lists,
-  equipment types, upgrade rarities, campaign-battle groups, LRE events, plus single-file keys) and the
+  upgrade rarities, campaign-battle groups, LRE events, plus single-file keys) and the
   `Served` list. Enumerate `GameCatalogDatasets.Served` for the authoritative set of served datasets.
 - **Loading** — `GameCatalogLoader.Load()` (public; called eagerly at app startup in `Program.cs` to fail
   fast). Source files are discovered **by convention**: dataset key `foo-bar` → embedded `foo-bar.json`
@@ -61,11 +61,14 @@ restrictions); these are silently ignored on deserialize.
   one `mythic` range (`{min, max}`, with a computed `midpoint`).
 - **upgrades** carry a **nested recipe** tree: each craftable ingredient embeds its own `recipe`
   (recursively; cycle-guarded); base materials have `recipe: null`. No separate "expanded totals" table.
-- **equipment** is a plain array (raw files split by item type), each item carrying its per-rarity cost
-  ladder inlined as `upgradeLevels` in the served view. The ladder is fully determined by rarity (exactly
-  one per rarity; level counts fixed per rarity), sourced from `equipment-upgrade-costs.json`. Raw
-  `levels[].stats` is the per-level stat block (stat-name→number map; keys vary by equipment type).
-  `abilityId` is required.
+- **equipment** is built from the datamine `gameconfig/items.json` (keyed by item id; see **Datamine
+  source**) and served as a plain array ordered by item type, then id. Each served level's `stats` is the
+  game's stat block with five keys renamed to the names the dataset has always served (`critDmg`→`critDamage`,
+  `critDmgBonus`→`critDamageBonus`, `blockDmg`→`blockDamage`, `blockDmgBonus`→`blockDamageBonus`,
+  `fixedArmor`→`armor`); keys vary by equipment type. `upgradeLevels` is each level's own
+  `goldCost`/`dustCost`/`mythicDustCost` (served as `goldCost`/`salvageCost`/`mythicSalvageCost`, absent ⇒ 0).
+  In 1.43 every item of a rarity has the same ladder; `EquipmentDenormalizerTests` flags a bump that breaks
+  that. Absent `abilityId` ⇒ `""`, `isRelic`/`isUniqueRelic` ⇒ false, `allowedUnits`/`allowedFactions` ⇒ `[]`.
 - **campaign-battles** is flat, keyed by globally-unique battle id, each carrying its `campaignGroupId`;
   **campaign-definitions** is keyed by `groupId` (metadata + `battleIds[]` only). Battle ids are also
   referenced from API test fixtures and the player-data transformer, so renaming a battle id is not a
@@ -162,7 +165,7 @@ the apps code (not in the catalog), so ratio changes ship as a web release.
 ## Unit power
 
 `Data/unit-power.json` is V1's slice of Snowprint's client game config that the in-game power formula
-reads (the apps compute character, MoW and NPC power from it plus `units-*`, `npcs-*`, `equipment-*` and
+reads (the apps compute character, MoW and NPC power from it plus `units-*`, `npcs-*`, `equipment` and
 `upgrades-*`), served as the single `unit-power` record. Raw keys keep V1's names so a patch can be
 reconciled field by field: `heroProgressionSteps` / `heroProgressionStepsMoW` (20 steps each; served as
 `heroProgressionSteps` / `mowProgressionSteps` with a `step` index), `damageProfileModifiers`,
@@ -176,7 +179,7 @@ id; a trait or ability not listed is 100 (the catalog lacks V1's `Hero`/`Machine
 
 - **Source:** V1 `src/fsd/4-entities/unit/character-power/data/character-power-units.json` (same keys).
   `character-power-items.json` and `character-power-upgrades.json` are **not** ported: they match
-  `equipment-*` and `upgrades-*` (`stat`). V1's `heroProgressionStepsPerUnit` overrides change only costs,
+  `equipment` and `upgrades-*` (`stat`). V1's `heroProgressionStepsPerUnit` overrides change only costs,
   so they are not served. **On every refresh, diff each override against `default`**: if one changes
   `unitStatMultiplierPct` or `abilityPowerMultiplier`, nothing fails, so the served steps silently become
   wrong for that unit; add per-unit steps to the served record (and the apps formula) before importing it.
@@ -244,7 +247,7 @@ datamine source; its `docs/roadmap.md` orders the migration. Datasets move onto 
   and either keep the served shape (the manifest snapshot shows only real game-data hash moves, each explained
   in the PR) or rename to the game's terms (`SchemaVersion` bump plus the apps companion), never both in one
   change. Renamed ids that user data stores (battle ids, LRE ids, mission indices) need a data migration.
-  Order: `equipment` (pilot), cost/progression tables, `upgrades`, `npcs`, characters/MoWs, `unit-power`,
+  Migrated: `equipment`. Next, in order: cost/progression tables, `upgrades`, `npcs`, characters/MoWs, `unit-power`,
   `raid-bosses`, `shops`, `mythic-quests`, HSE, `onslaught-rewards`, quest events/crates, LRE,
   `campaign-battles` last. A migrated dataset is refreshed by bumping `REF`, not by the V1 steps below.
 
@@ -289,9 +292,6 @@ genuine game changes.
   `Armor`→`armour`; **missing numeric stat fields ⇒ `0`**). Ability-damage keys are the newer
   `Active Ability Damage`/`Passive Ability Damage`, falling back to the older `Active Ability`/
   `Passive Ability`.
-- **equipment** (`equipment/equipment-{type}.json`): from V1 `equipment/data/new-equipment-data.json`
-  (keyed by id in a dict; the catalog record adds `id` and keeps only `levels[].stats`, dropping V1's
-  per-level cost fields — cost comes from `equipment-upgrade-costs.json`).
 - **upgrades**: from V1 `upgrade/data/new-recipe-data.json`.
 - **unit-power**: from V1 `unit/character-power/data/character-power-units.json`; reconcile the global
   tables and each catalog unit's `lineup` `powerMultiplier` / `upgradesStatIncrease` (see **Unit power**).

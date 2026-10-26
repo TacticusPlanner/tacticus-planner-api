@@ -1,4 +1,3 @@
 # raw/-relative paths copied from tacticus-planner-data-mines by scripts/pull-datamine.cs.
 # List a file only when a denormalizer reads it. Sorted, one per line, no globs.
-gameconfig/globalValues.json   # itemAscensionCosts (equipment upgrade ladder)
 gameconfig/items.json          # equipment
