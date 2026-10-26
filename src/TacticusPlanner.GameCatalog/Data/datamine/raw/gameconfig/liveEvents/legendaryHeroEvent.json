@@ -1,0 +1,1030 @@
+[
+  {
+    "eventType": "legendaryHeroEvent",
+    "eventName": "legendary_hero_event_3",
+    "subtitleLocaKey": "",
+    "titleLocaKey": "LiveEvents/LegendaryEvent_Title",
+    "trackingEventNumber": 3,
+    "trackingFeaturedFaction": "Tau",
+    "previewTitleLocaKey": "LiveEvents/LegendaryEvent_preview_title",
+    "visualId": "herorelease_tau_aunshi",
+    "trackingFeaturedHero": "tauAunShi",
+    "offerId": "",
+    "shortDescriptionLocaKey": "",
+    "longDescriptionLocaKey": "LiveEvents/LegendaryEvent_desc_long",
+    "removalDelayAfterPurchase": "",
+    "previewSubtitleLocaKey": "LiveEvents/LegendaryEvent_preview_subtitle",
+    "maxStamina": 12,
+    "staminaRegenerationTime": 10800,
+    "staminaRegenerationAmount": 1,
+    "staminaGrantTokensOnStartPolicy": "None",
+    "startStamina": 6,
+    "maxDailyStaminaRefreshAttempts": 1,
+    "rewardProgressId": "leg_hero_event_03",
+    "legendaryPassOfferId": "offer_legendary_event_pass_3",
+    "legendaryBundleOfferId": "offer_leg_bundle_001",
+    "shopSegmentId": "legendaryHeroEvent3",
+    "resourceId": "legendaryEventCurrency",
+    "heroEventOrdinal": 3,
+    "heroEventMaxRuns": 3,
+    "finalEventShardsPerLegShard": 1,
+    "finalEventGoldPerLegCurrency": 25,
+    "questId": "leg_aun_shi_01",
+    "questGroups": [
+      "leg_aun_shi",
+      "leg_aun_shi_premium"
+    ],
+    "lanes": [
+      {
+        "laneIndex": 1,
+        "battleSetId": "legendary_event_3_lane_1",
+        "factionId": "Orks"
+      },
+      {
+        "laneIndex": 2,
+        "battleSetId": "legendary_event_3_lane_2",
+        "factionId": "BlackTemplars"
+      },
+      {
+        "laneIndex": 3,
+        "battleSetId": "legendary_event_3_lane_3",
+        "factionId": "DeathGuard"
+      }
+    ],
+    "unlockableHero": {
+      "heroId": "tauAunShi",
+      "baseRarity": "Legendary",
+      "maxRarity": "Mythic",
+      "visualId": "herorelease_tau_aunshi"
+    },
+    "ohSoCloseOffer": {
+      "unlock": {
+        "base": 1000,
+        "multiplier": 200
+      },
+      "ascension": {
+        "base": 1000,
+        "multiplier": 100
+      },
+      "rewardCurrency": "legendaryEventShards",
+      "lockType": "legendary"
+    }
+  },
+  {
+    "eventType": "legendaryHeroEvent",
+    "eventName": "legendary_hero_event_4",
+    "subtitleLocaKey": "",
+    "titleLocaKey": "LiveEvents/LegendaryEvent_Title",
+    "trackingEventNumber": 3,
+    "trackingFeaturedFaction": "Tau",
+    "previewTitleLocaKey": "LiveEvents/LegendaryEvent_preview_title",
+    "visualId": "herorelease_tau_shadowsun",
+    "trackingFeaturedHero": "tauShadowsun",
+    "offerId": "",
+    "shortDescriptionLocaKey": "",
+    "longDescriptionLocaKey": "LiveEvents/LegendaryEvent_desc_long",
+    "removalDelayAfterPurchase": "",
+    "previewSubtitleLocaKey": "LiveEvents/LegendaryEvent_preview_subtitle",
+    "maxStamina": 12,
+    "staminaRegenerationTime": 10800,
+    "staminaRegenerationAmount": 1,
+    "staminaGrantTokensOnStartPolicy": "None",
+    "startStamina": 6,
+    "maxDailyStaminaRefreshAttempts": 1,
+    "rewardProgressId": "leg_hero_event_04",
+    "legendaryPassOfferId": "offer_legendary_event_pass_4",
+    "legendaryBundleOfferId": "offer_leg_bundle_001",
+    "shopSegmentId": "legendaryHeroEvent4",
+    "resourceId": "legendaryEventCurrency",
+    "heroEventOrdinal": 3,
+    "heroEventMaxRuns": 3,
+    "finalEventShardsPerLegShard": 1,
+    "finalEventGoldPerLegCurrency": 25,
+    "questId": "leg_shadowsun_01",
+    "questGroups": [
+      "leg_shadowsun",
+      "leg_shadowsun_premium"
+    ],
+    "lanes": [
+      {
+        "laneIndex": 1,
+        "battleSetId": "legendary_event_4_lane_1",
+        "factionId": "Necrons"
+      },
+      {
+        "laneIndex": 2,
+        "battleSetId": "legendary_event_4_lane_2",
+        "factionId": "Tyranids"
+      },
+      {
+        "laneIndex": 3,
+        "battleSetId": "legendary_event_4_lane_3",
+        "factionId": "Ultramarines"
+      }
+    ],
+    "unlockableHero": {
+      "heroId": "tauShadowsun",
+      "baseRarity": "Legendary",
+      "maxRarity": "Mythic",
+      "visualId": "herorelease_tau_shadowsun"
+    },
+    "ohSoCloseOffer": {
+      "unlock": {
+        "base": 1000,
+        "multiplier": 200
+      },
+      "ascension": {
+        "base": 1000,
+        "multiplier": 100
+      },
+      "rewardCurrency": "legendaryEventShards",
+      "lockType": "legendary"
+    }
+  },
+  {
+    "eventType": "legendaryHeroEvent",
+    "eventName": "legendary_hero_event_5",
+    "subtitleLocaKey": "",
+    "titleLocaKey": "LiveEvents/LegendaryEvent_Title",
+    "trackingEventNumber": 3,
+    "trackingFeaturedFaction": "SpaceWolves",
+    "previewTitleLocaKey": "LiveEvents/LegendaryEvent_preview_title",
+    "visualId": "herorelease_space_blackmane",
+    "trackingFeaturedHero": "spaceBlackmane",
+    "offerId": "",
+    "shortDescriptionLocaKey": "",
+    "longDescriptionLocaKey": "LiveEvents/LegendaryEvent_desc_long",
+    "removalDelayAfterPurchase": "",
+    "previewSubtitleLocaKey": "LiveEvents/LegendaryEvent_preview_subtitle",
+    "maxStamina": 12,
+    "staminaRegenerationTime": 10800,
+    "staminaRegenerationAmount": 1,
+    "staminaGrantTokensOnStartPolicy": "None",
+    "startStamina": 6,
+    "maxDailyStaminaRefreshAttempts": 1,
+    "rewardProgressId": "leg_hero_event_05",
+    "legendaryPassOfferId": "offer_legendary_event_pass_5",
+    "legendaryBundleOfferId": "offer_leg_bundle_001",
+    "shopSegmentId": "legendaryHeroEvent5",
+    "resourceId": "legendaryEventCurrency",
+    "heroEventOrdinal": 3,
+    "heroEventMaxRuns": 3,
+    "finalEventShardsPerLegShard": 1,
+    "finalEventGoldPerLegCurrency": 25,
+    "questId": "leg_blackmane_01",
+    "questGroups": [
+      "leg_blackmane",
+      "leg_blackmane_premium"
+    ],
+    "lanes": [
+      {
+        "laneIndex": 1,
+        "battleSetId": "legendary_event_5_lane_1",
+        "factionId": "Orks"
+      },
+      {
+        "laneIndex": 2,
+        "battleSetId": "legendary_event_5_lane_2",
+        "factionId": "ThousandSons"
+      },
+      {
+        "laneIndex": 3,
+        "battleSetId": "legendary_event_5_lane_3",
+        "factionId": "BlackTemplars"
+      }
+    ],
+    "unlockableHero": {
+      "heroId": "spaceBlackmane",
+      "baseRarity": "Legendary",
+      "maxRarity": "Mythic",
+      "visualId": "herorelease_space_blackmane"
+    },
+    "ohSoCloseOffer": {
+      "unlock": {
+        "base": 500,
+        "multiplier": 100
+      },
+      "ascension": {
+        "base": 500,
+        "multiplier": 50
+      },
+      "rewardCurrency": "legendaryEventShards",
+      "lockType": "legendary"
+    }
+  },
+  {
+    "eventType": "legendaryHeroEvent",
+    "eventName": "legendary_hero_event_6",
+    "subtitleLocaKey": "",
+    "titleLocaKey": "LiveEvents/LegendaryEvent_Title",
+    "trackingEventNumber": 3,
+    "trackingFeaturedFaction": "AdeptusMechanicus",
+    "previewTitleLocaKey": "LiveEvents/LegendaryEvent_preview_title",
+    "visualId": "herorelease_admec_dominus",
+    "trackingFeaturedHero": "admecDominus",
+    "offerId": "",
+    "shortDescriptionLocaKey": "",
+    "longDescriptionLocaKey": "LiveEvents/LegendaryEvent_desc_long",
+    "removalDelayAfterPurchase": "",
+    "previewSubtitleLocaKey": "LiveEvents/LegendaryEvent_preview_subtitle",
+    "maxStamina": 12,
+    "staminaRegenerationTime": 10800,
+    "staminaRegenerationAmount": 1,
+    "staminaGrantTokensOnStartPolicy": "None",
+    "startStamina": 6,
+    "maxDailyStaminaRefreshAttempts": 1,
+    "rewardProgressId": "leg_hero_event_06",
+    "legendaryPassOfferId": "offer_legendary_event_pass_6",
+    "legendaryBundleOfferId": "offer_leg_bundle_001",
+    "shopSegmentId": "legendaryHeroEvent6",
+    "resourceId": "legendaryEventCurrency",
+    "heroEventOrdinal": 3,
+    "heroEventMaxRuns": 3,
+    "finalEventShardsPerLegShard": 1,
+    "finalEventGoldPerLegCurrency": 25,
+    "questId": "leg_dominus_01",
+    "questGroups": [
+      "leg_dominus",
+      "leg_dominus_premium"
+    ],
+    "lanes": [
+      {
+        "laneIndex": 1,
+        "battleSetId": "legendary_event_6_lane_1",
+        "factionId": "Necrons"
+      },
+      {
+        "laneIndex": 2,
+        "battleSetId": "legendary_event_6_lane_2",
+        "factionId": "BlackLegion"
+      },
+      {
+        "laneIndex": 3,
+        "battleSetId": "legendary_event_6_lane_3",
+        "factionId": "AstraMilitarum"
+      }
+    ],
+    "unlockableHero": {
+      "heroId": "admecDominus",
+      "baseRarity": "Legendary",
+      "maxRarity": "Mythic",
+      "visualId": "herorelease_admec_dominus"
+    },
+    "ohSoCloseOffer": {
+      "unlock": {
+        "base": 500,
+        "multiplier": 100
+      },
+      "ascension": {
+        "base": 500,
+        "multiplier": 50
+      },
+      "rewardCurrency": "legendaryEventShards",
+      "lockType": "legendary"
+    }
+  },
+  {
+    "eventType": "legendaryHeroEvent",
+    "eventName": "legendary_hero_event_7",
+    "subtitleLocaKey": "",
+    "titleLocaKey": "LiveEvents/LegendaryEvent_Title",
+    "trackingEventNumber": 3,
+    "trackingFeaturedFaction": "WorldEaters",
+    "previewTitleLocaKey": "LiveEvents/LegendaryEvent_preview_title",
+    "visualId": "herorelease_world_kharn",
+    "trackingFeaturedHero": "worldKharn",
+    "offerId": "",
+    "shortDescriptionLocaKey": "",
+    "longDescriptionLocaKey": "LiveEvents/LegendaryEvent_desc_long",
+    "removalDelayAfterPurchase": "",
+    "previewSubtitleLocaKey": "LiveEvents/LegendaryEvent_preview_subtitle",
+    "maxStamina": 12,
+    "staminaRegenerationTime": 10800,
+    "staminaRegenerationAmount": 1,
+    "staminaGrantTokensOnStartPolicy": "None",
+    "startStamina": 6,
+    "maxDailyStaminaRefreshAttempts": 1,
+    "rewardProgressId": "leg_hero_event_07",
+    "legendaryPassOfferId": "offer_legendary_event_pass_7",
+    "legendaryBundleOfferId": "offer_leg_bundle_001",
+    "shopSegmentId": "legendaryHeroEvent7",
+    "resourceId": "legendaryEventCurrency",
+    "heroEventOrdinal": 3,
+    "heroEventMaxRuns": 3,
+    "finalEventShardsPerLegShard": 1,
+    "finalEventGoldPerLegCurrency": 25,
+    "questId": "leg_kharn_01",
+    "questGroups": [
+      "leg_kharn",
+      "leg_kharn_premium"
+    ],
+    "lanes": [
+      {
+        "laneIndex": 1,
+        "battleSetId": "legendary_event_7_lane_1",
+        "factionId": "Ultramarines"
+      },
+      {
+        "laneIndex": 2,
+        "battleSetId": "legendary_event_7_lane_2",
+        "factionId": "Tyranids"
+      },
+      {
+        "laneIndex": 3,
+        "battleSetId": "legendary_event_7_lane_3",
+        "factionId": "ThousandSons"
+      }
+    ],
+    "unlockableHero": {
+      "heroId": "worldKharn",
+      "baseRarity": "Legendary",
+      "maxRarity": "Mythic",
+      "visualId": "herorelease_world_kharn"
+    },
+    "ohSoCloseOffer": {
+      "unlock": {
+        "base": 500,
+        "multiplier": 100
+      },
+      "ascension": {
+        "base": 500,
+        "multiplier": 50
+      },
+      "rewardCurrency": "legendaryEventShards",
+      "lockType": "legendary"
+    }
+  },
+  {
+    "eventType": "legendaryHeroEvent",
+    "eventName": "legendary_hero_event_8",
+    "subtitleLocaKey": "",
+    "titleLocaKey": "LiveEvents/LegendaryEvent_Title",
+    "trackingEventNumber": 3,
+    "trackingFeaturedFaction": "BloodAngels",
+    "previewTitleLocaKey": "LiveEvents/LegendaryEvent_preview_title",
+    "visualId": "herorelease_blood_mephiston",
+    "trackingFeaturedHero": "bloodMephiston",
+    "offerId": "",
+    "shortDescriptionLocaKey": "",
+    "longDescriptionLocaKey": "LiveEvents/LegendaryEvent_desc_long",
+    "removalDelayAfterPurchase": "",
+    "previewSubtitleLocaKey": "LiveEvents/LegendaryEvent_preview_subtitle",
+    "maxStamina": 12,
+    "staminaRegenerationTime": 10800,
+    "staminaRegenerationAmount": 1,
+    "staminaGrantTokensOnStartPolicy": "None",
+    "startStamina": 6,
+    "maxDailyStaminaRefreshAttempts": 1,
+    "rewardProgressId": "leg_hero_event_08",
+    "legendaryPassOfferId": "offer_legendary_event_pass_8",
+    "legendaryBundleOfferId": "offer_leg_bundle_001",
+    "shopSegmentId": "legendaryHeroEvent8",
+    "resourceId": "legendaryEventCurrency",
+    "heroEventOrdinal": 3,
+    "heroEventMaxRuns": 3,
+    "finalEventShardsPerLegShard": 1,
+    "finalEventGoldPerLegCurrency": 25,
+    "questId": "leg_mephiston_01",
+    "questGroups": [
+      "leg_mephiston",
+      "leg_mephiston_premium"
+    ],
+    "lanes": [
+      {
+        "laneIndex": 1,
+        "battleSetId": "legendary_event_8_lane_1",
+        "factionId": "AstraMilitarum"
+      },
+      {
+        "laneIndex": 2,
+        "battleSetId": "legendary_event_8_lane_2",
+        "factionId": "DeathGuard"
+      },
+      {
+        "laneIndex": 3,
+        "battleSetId": "legendary_event_8_lane_3",
+        "factionId": "Aeldari"
+      }
+    ],
+    "unlockableHero": {
+      "heroId": "bloodMephiston",
+      "baseRarity": "Legendary",
+      "maxRarity": "Mythic",
+      "visualId": "herorelease_blood_mephiston"
+    },
+    "ohSoCloseOffer": {
+      "unlock": {
+        "base": 500,
+        "multiplier": 100
+      },
+      "ascension": {
+        "base": 500,
+        "multiplier": 50
+      },
+      "rewardCurrency": "legendaryEventShards",
+      "lockType": "legendary"
+    }
+  },
+  {
+    "eventType": "legendaryHeroEvent",
+    "eventName": "legendary_hero_event_9",
+    "subtitleLocaKey": "",
+    "titleLocaKey": "LiveEvents/LegendaryEvent_Title",
+    "trackingEventNumber": 3,
+    "trackingFeaturedFaction": "Genestealers",
+    "previewTitleLocaKey": "LiveEvents/LegendaryEvent_preview_title",
+    "visualId": "herorelease_genes_patriarch",
+    "trackingFeaturedHero": "genesPatriarch",
+    "offerId": "",
+    "shortDescriptionLocaKey": "",
+    "longDescriptionLocaKey": "LiveEvents/LegendaryEvent_desc_long",
+    "removalDelayAfterPurchase": "",
+    "previewSubtitleLocaKey": "LiveEvents/LegendaryEvent_preview_subtitle",
+    "maxStamina": 12,
+    "staminaRegenerationTime": 10800,
+    "staminaRegenerationAmount": 1,
+    "staminaGrantTokensOnStartPolicy": "None",
+    "startStamina": 6,
+    "maxDailyStaminaRefreshAttempts": 1,
+    "rewardProgressId": "leg_hero_event_09",
+    "legendaryPassOfferId": "offer_legendary_event_pass_9",
+    "legendaryBundleOfferId": "offer_leg_bundle_009",
+    "shopSegmentId": "legendaryHeroEvent9",
+    "resourceId": "legendaryEventCurrency",
+    "heroEventOrdinal": 3,
+    "heroEventMaxRuns": 3,
+    "finalEventShardsPerLegShard": 1,
+    "finalEventGoldPerLegCurrency": 25,
+    "finalEventLegShardsPerMythicShard": 25,
+    "minProgressionIndexToUseMythicConversion": 15,
+    "questId": "leg_patriarch_01",
+    "questGroups": [
+      "leg_patriarch",
+      "leg_patriarch_premium"
+    ],
+    "lanes": [
+      {
+        "laneIndex": 1,
+        "battleSetId": "legendary_event_9_lane_1",
+        "factionId": "Orks"
+      },
+      {
+        "laneIndex": 2,
+        "battleSetId": "legendary_event_9_lane_2",
+        "factionId": "BlackTemplars"
+      },
+      {
+        "laneIndex": 3,
+        "battleSetId": "legendary_event_9_lane_3",
+        "factionId": "BlackLegion"
+      }
+    ],
+    "unlockableHero": {
+      "heroId": "genesPatriarch",
+      "baseRarity": "Legendary",
+      "maxRarity": "Mythic",
+      "visualId": "herorelease_genes_patriarch"
+    },
+    "ohSoCloseOffer": {
+      "unlock": {
+        "base": 500,
+        "multiplier": 100
+      },
+      "ascension": {
+        "base": 500,
+        "multiplier": 50
+      },
+      "rewardCurrency": "legendaryEventShards",
+      "lockType": "legendary"
+    }
+  },
+  {
+    "eventType": "legendaryHeroEvent",
+    "eventName": "legendary_hero_event_10",
+    "subtitleLocaKey": "",
+    "titleLocaKey": "LiveEvents/LegendaryEvent_Title",
+    "trackingEventNumber": 3,
+    "trackingFeaturedFaction": "BloodAngels",
+    "previewTitleLocaKey": "LiveEvents/LegendaryEvent_preview_title",
+    "visualId": "herorelease_blood_dante",
+    "trackingFeaturedHero": "bloodDante",
+    "offerId": "",
+    "shortDescriptionLocaKey": "",
+    "longDescriptionLocaKey": "LiveEvents/LegendaryEvent_desc_long",
+    "removalDelayAfterPurchase": "",
+    "previewSubtitleLocaKey": "LiveEvents/LegendaryEvent_preview_subtitle",
+    "maxStamina": 12,
+    "staminaRegenerationTime": 10800,
+    "staminaRegenerationAmount": 1,
+    "staminaGrantTokensOnStartPolicy": "None",
+    "startStamina": 6,
+    "maxDailyStaminaRefreshAttempts": 1,
+    "rewardProgressId": "leg_hero_event_10",
+    "legendaryPassOfferId": "offer_legendary_event_pass_10",
+    "legendaryBundleOfferId": "offer_leg_bundle_MD",
+    "shopSegmentId": "legendaryHeroEvent10",
+    "resourceId": "legendaryEventCurrency",
+    "heroEventOrdinal": 3,
+    "heroEventMaxRuns": 3,
+    "finalEventShardsPerLegShard": 1,
+    "finalEventGoldPerLegCurrency": 25,
+    "finalEventLegShardsPerMythicShard": 25,
+    "minProgressionIndexToUseMythicConversion": 15,
+    "questId": "leg_dante_01",
+    "questGroups": [
+      "leg_dante",
+      "leg_dante_premium"
+    ],
+    "lanes": [
+      {
+        "laneIndex": 1,
+        "battleSetId": "legendary_event_10_lane_1",
+        "factionId": "Necrons"
+      },
+      {
+        "laneIndex": 2,
+        "battleSetId": "legendary_event_10_lane_2",
+        "factionId": "BlackLegion"
+      },
+      {
+        "laneIndex": 3,
+        "battleSetId": "legendary_event_10_lane_3",
+        "factionId": "AstraMilitarum"
+      }
+    ],
+    "unlockableHero": {
+      "heroId": "bloodDante",
+      "baseRarity": "Legendary",
+      "maxRarity": "Mythic",
+      "visualId": "herorelease_blood_dante"
+    },
+    "ohSoCloseOffer": {
+      "unlock": {
+        "base": 500,
+        "multiplier": 100
+      },
+      "ascension": {
+        "base": 500,
+        "multiplier": 50
+      },
+      "rewardCurrency": "legendaryEventShards",
+      "lockType": "legendary"
+    }
+  },
+  {
+    "eventType": "legendaryHeroEvent",
+    "eventName": "legendary_hero_event_11",
+    "subtitleLocaKey": "",
+    "titleLocaKey": "LiveEvents/LegendaryEvent_Title",
+    "trackingEventNumber": 3,
+    "trackingFeaturedFaction": "Custodes",
+    "previewTitleLocaKey": "LiveEvents/LegendaryEvent_preview_title",
+    "visualId": "herorelease_custo_trajan",
+    "trackingFeaturedHero": "custoTrajann",
+    "offerId": "",
+    "shortDescriptionLocaKey": "",
+    "longDescriptionLocaKey": "LiveEvents/LegendaryEvent_desc_long",
+    "removalDelayAfterPurchase": "",
+    "previewSubtitleLocaKey": "LiveEvents/LegendaryEvent_preview_subtitle",
+    "maxStamina": 12,
+    "staminaRegenerationTime": 10800,
+    "staminaRegenerationAmount": 1,
+    "staminaGrantTokensOnStartPolicy": "None",
+    "startStamina": 6,
+    "maxDailyStaminaRefreshAttempts": 1,
+    "rewardProgressId": "leg_hero_event_11",
+    "initialOfferIds": [
+      "offer_legendary_event_pass_11",
+      "group_offer_leg_bundle",
+      "group_offer_leg_daily_delivery"
+    ],
+    "shopSegmentId": "legendaryHeroEvent11",
+    "resourceId": "legendaryEventCurrency",
+    "heroEventOrdinal": 3,
+    "heroEventMaxRuns": 3,
+    "finalEventShardsPerLegShard": 1,
+    "finalEventGoldPerLegCurrency": 25,
+    "finalEventLegShardsPerMythicShard": 25,
+    "minProgressionIndexToUseMythicConversion": 15,
+    "questId": "leg_trajann_01",
+    "questGroups": [
+      "leg_trajann",
+      "leg_trajann_premium"
+    ],
+    "lanes": [
+      {
+        "laneIndex": 1,
+        "battleSetId": "legendary_event_11_lane_1",
+        "factionId": "ThousandSons"
+      },
+      {
+        "laneIndex": 2,
+        "battleSetId": "legendary_event_11_lane_2",
+        "factionId": "Ultramarines"
+      },
+      {
+        "laneIndex": 3,
+        "battleSetId": "legendary_event_11_lane_3",
+        "factionId": "Genestealers"
+      }
+    ],
+    "unlockableHero": {
+      "heroId": "custoTrajann",
+      "baseRarity": "Legendary",
+      "maxRarity": "Mythic",
+      "visualId": "herorelease_custo_trajan"
+    },
+    "ohSoCloseOffer": {
+      "unlock": {
+        "base": 500,
+        "multiplier": 100
+      },
+      "ascension": {
+        "base": 500,
+        "multiplier": 50
+      },
+      "rewardCurrency": "legendaryEventShards",
+      "lockType": "legendary"
+    }
+  },
+  {
+    "eventType": "legendaryHeroEvent",
+    "eventName": "legendary_hero_event_12",
+    "subtitleLocaKey": "",
+    "titleLocaKey": "LiveEvents/LegendaryEvent_Title",
+    "trackingEventNumber": 3,
+    "trackingFeaturedFaction": "EmperorsChildren",
+    "previewTitleLocaKey": "LiveEvents/LegendaryEvent_preview_title",
+    "visualId": "herorelease_emper_lucius",
+    "trackingFeaturedHero": "emperLucius",
+    "offerId": "",
+    "shortDescriptionLocaKey": "",
+    "longDescriptionLocaKey": "LiveEvents/LegendaryEvent_desc_long",
+    "removalDelayAfterPurchase": "",
+    "previewSubtitleLocaKey": "LiveEvents/LegendaryEvent_preview_subtitle",
+    "maxStamina": 12,
+    "staminaRegenerationTime": 10800,
+    "staminaRegenerationAmount": 1,
+    "staminaGrantTokensOnStartPolicy": "None",
+    "startStamina": 6,
+    "maxDailyStaminaRefreshAttempts": 1,
+    "rewardProgressId": "leg_hero_event_12",
+    "initialOfferIds": [
+      "offer_legendary_event_pass_12",
+      "group_offer_leg_bundle",
+      "group_offer_leg_daily_delivery"
+    ],
+    "shopSegmentId": "legendaryHeroEvent12",
+    "resourceId": "legendaryEventCurrency",
+    "heroEventOrdinal": 3,
+    "heroEventMaxRuns": 3,
+    "finalEventShardsPerLegShard": 1,
+    "finalEventGoldPerLegCurrency": 25,
+    "finalEventLegShardsPerMythicShard": 25,
+    "minProgressionIndexToUseMythicConversion": 15,
+    "questId": "leg_lucius_01",
+    "questGroups": [
+      "leg_lucius",
+      "leg_lucius_premium"
+    ],
+    "lanes": [
+      {
+        "laneIndex": 1,
+        "battleSetId": "legendary_event_12_lane_1",
+        "factionId": "Aeldari"
+      },
+      {
+        "laneIndex": 2,
+        "battleSetId": "legendary_event_12_lane_2",
+        "factionId": "Tyranids"
+      },
+      {
+        "laneIndex": 3,
+        "battleSetId": "legendary_event_12_lane_3",
+        "factionId": "Ultramarines"
+      }
+    ],
+    "unlockableHero": {
+      "heroId": "emperLucius",
+      "baseRarity": "Legendary",
+      "maxRarity": "Mythic",
+      "visualId": "herorelease_emper_lucius"
+    },
+    "ohSoCloseOffer": {
+      "unlock": {
+        "base": 500,
+        "multiplier": 100
+      },
+      "ascension": {
+        "base": 500,
+        "multiplier": 50
+      },
+      "rewardCurrency": "legendaryEventShards",
+      "lockType": "legendary"
+    }
+  },
+  {
+    "eventType": "legendaryHeroEvent",
+    "eventName": "legendary_hero_event_13",
+    "subtitleLocaKey": "",
+    "titleLocaKey": "LiveEvents/LegendaryEvent_Title",
+    "trackingEventNumber": 2,
+    "trackingFeaturedFaction": "Tau",
+    "previewTitleLocaKey": "LiveEvents/LegendaryEvent_preview_title",
+    "visualId": "herorelease_tau_farsight",
+    "trackingFeaturedHero": "tauFarsight",
+    "offerId": "",
+    "shortDescriptionLocaKey": "",
+    "longDescriptionLocaKey": "LiveEvents/LegendaryEvent_desc_long",
+    "removalDelayAfterPurchase": "",
+    "previewSubtitleLocaKey": "LiveEvents/LegendaryEvent_preview_subtitle",
+    "maxStamina": 12,
+    "staminaRegenerationTime": 10800,
+    "staminaRegenerationAmount": 1,
+    "staminaGrantTokensOnStartPolicy": "None",
+    "startStamina": 6,
+    "maxDailyStaminaRefreshAttempts": 1,
+    "rewardProgressId": "leg_hero_event_13",
+    "initialOfferIds": [
+      "offer_legendary_event_pass_13",
+      "group_offer_leg_bundle",
+      "group_offer_leg_daily_delivery"
+    ],
+    "shopSegmentId": "legendaryHeroEvent13",
+    "resourceId": "legendaryEventCurrency",
+    "heroEventOrdinal": 2,
+    "heroEventMaxRuns": 3,
+    "finalEventShardsPerLegShard": 1,
+    "finalEventGoldPerLegCurrency": 25,
+    "finalEventLegShardsPerMythicShard": 25,
+    "minProgressionIndexToUseMythicConversion": 15,
+    "questId": "leg_farsight_01",
+    "questGroups": [
+      "leg_farsight",
+      "leg_farsight_premium"
+    ],
+    "lanes": [
+      {
+        "laneIndex": 1,
+        "battleSetId": "legendary_event_13_lane_1",
+        "factionId": "AdeptusMechanicus"
+      },
+      {
+        "laneIndex": 2,
+        "battleSetId": "legendary_event_13_lane_2",
+        "factionId": "Tau"
+      },
+      {
+        "laneIndex": 3,
+        "battleSetId": "legendary_event_13_lane_3",
+        "factionId": "Orks"
+      }
+    ],
+    "unlockableHero": {
+      "heroId": "tauFarsight",
+      "baseRarity": "Legendary",
+      "maxRarity": "Mythic",
+      "visualId": "herorelease_tau_farsight"
+    },
+    "ohSoCloseOffer": {
+      "unlock": {
+        "base": 500,
+        "multiplier": 100
+      },
+      "ascension": {
+        "base": 500,
+        "multiplier": 50
+      },
+      "rewardCurrency": "legendaryEventShards",
+      "lockType": "legendary"
+    }
+  },
+  {
+    "eventType": "legendaryHeroEvent",
+    "eventName": "legendary_hero_event_14",
+    "subtitleLocaKey": "",
+    "titleLocaKey": "LiveEvents/LegendaryEvent_Title",
+    "trackingEventNumber": 2,
+    "trackingFeaturedFaction": "LeaguesOfVotann",
+    "previewTitleLocaKey": "LiveEvents/LegendaryEvent_preview_title",
+    "visualId": "herorelease_votan_uthar",
+    "trackingFeaturedHero": "votanUthar",
+    "offerId": "",
+    "shortDescriptionLocaKey": "",
+    "longDescriptionLocaKey": "LiveEvents/LegendaryEvent_desc_long",
+    "removalDelayAfterPurchase": "",
+    "previewSubtitleLocaKey": "LiveEvents/LegendaryEvent_preview_subtitle",
+    "maxStamina": 12,
+    "staminaRegenerationTime": 10800,
+    "staminaRegenerationAmount": 1,
+    "staminaGrantTokensOnStartPolicy": "None",
+    "startStamina": 6,
+    "maxDailyStaminaRefreshAttempts": 1,
+    "rewardProgressId": "leg_hero_event_14",
+    "initialOfferIds": [
+      "offer_legendary_event_pass_14",
+      "group_offer_leg_bundle",
+      "group_offer_leg_daily_delivery"
+    ],
+    "shopSegmentId": "legendaryHeroEvent14",
+    "resourceId": "legendaryEventCurrency",
+    "heroEventOrdinal": 2,
+    "heroEventMaxRuns": 3,
+    "finalEventShardsPerLegShard": 1,
+    "finalEventGoldPerLegCurrency": 25,
+    "finalEventLegShardsPerMythicShard": 25,
+    "minProgressionIndexToUseMythicConversion": 15,
+    "questId": "leg_uthar_01",
+    "questGroups": [
+      "leg_uthar",
+      "leg_uthar_premium"
+    ],
+    "lanes": [
+      {
+        "laneIndex": 1,
+        "battleSetId": "legendary_event_14_lane_1",
+        "factionId": "Necrons"
+      },
+      {
+        "laneIndex": 2,
+        "battleSetId": "legendary_event_14_lane_2",
+        "factionId": "AdeptusMechanicus"
+      },
+      {
+        "laneIndex": 3,
+        "battleSetId": "legendary_event_14_lane_3",
+        "factionId": "DeathGuard"
+      }
+    ],
+    "unlockableHero": {
+      "heroId": "votanUthar",
+      "baseRarity": "Legendary",
+      "maxRarity": "Mythic",
+      "visualId": "herorelease_votan_uthar"
+    },
+    "ohSoCloseOffer": {
+      "unlock": {
+        "base": 500,
+        "multiplier": 100
+      },
+      "ascension": {
+        "base": 500,
+        "multiplier": 50
+      },
+      "rewardCurrency": "legendaryEventShards",
+      "lockType": "legendary"
+    }
+  },
+  {
+    "eventType": "legendaryHeroEvent",
+    "eventName": "legendary_hero_event_15",
+    "subtitleLocaKey": "",
+    "titleLocaKey": "LiveEvents/LegendaryEvent_Title",
+    "trackingEventNumber": 1,
+    "trackingFeaturedFaction": "AdeptusAstartes",
+    "previewTitleLocaKey": "LiveEvents/LegendaryEvent_preview_title",
+    "visualId": "herorelease_astar_lysander",
+    "trackingFeaturedHero": "astarLysander",
+    "offerId": "",
+    "shortDescriptionLocaKey": "",
+    "longDescriptionLocaKey": "LiveEvents/LegendaryEvent_desc_long",
+    "removalDelayAfterPurchase": "",
+    "previewSubtitleLocaKey": "LiveEvents/LegendaryEvent_preview_subtitle",
+    "maxStamina": 12,
+    "staminaRegenerationTime": 10800,
+    "staminaRegenerationAmount": 1,
+    "staminaGrantTokensOnStartPolicy": "None",
+    "startStamina": 6,
+    "maxDailyStaminaRefreshAttempts": 1,
+    "rewardProgressId": "leg_hero_event_15",
+    "initialOfferIds": [
+      "offer_legendary_event_pass_15",
+      "group_offer_leg_bundle",
+      "group_offer_leg_daily_delivery"
+    ],
+    "shopSegmentId": "legendaryHeroEvent15",
+    "resourceId": "legendaryEventCurrency",
+    "heroEventOrdinal": 1,
+    "heroEventMaxRuns": 3,
+    "finalEventShardsPerLegShard": 1,
+    "finalEventGoldPerLegCurrency": 25,
+    "finalEventLegShardsPerMythicShard": 25,
+    "minProgressionIndexToUseMythicConversion": 15,
+    "questId": "leg_lysander_01",
+    "questGroups": [
+      "leg_lysander",
+      "leg_lysander_premium"
+    ],
+    "lanes": [
+      {
+        "laneIndex": 1,
+        "battleSetId": "legendary_event_15_lane_1",
+        "factionId": "Orks"
+      },
+      {
+        "laneIndex": 2,
+        "battleSetId": "legendary_event_15_lane_2",
+        "factionId": "BlackTemplars"
+      },
+      {
+        "laneIndex": 3,
+        "battleSetId": "legendary_event_15_lane_3",
+        "factionId": "BlackLegion"
+      }
+    ],
+    "unlockableHero": {
+      "heroId": "astarLysander",
+      "baseRarity": "Legendary",
+      "maxRarity": "Mythic",
+      "visualId": "herorelease_astar_lysander"
+    },
+    "ohSoCloseOffer": {
+      "unlock": {
+        "base": 500,
+        "multiplier": 100
+      },
+      "ascension": {
+        "base": 500,
+        "multiplier": 50
+      },
+      "rewardCurrency": "legendaryEventShards",
+      "lockType": "legendary"
+    }
+  },
+  {
+    "eventType": "legendaryHeroEvent",
+    "eventName": "legendary_hero_event_16",
+    "subtitleLocaKey": "",
+    "titleLocaKey": "LiveEvents/LegendaryEvent_Title",
+    "trackingEventNumber": 1,
+    "trackingFeaturedFaction": "TheLostAndTheDamned",
+    "previewTitleLocaKey": "LiveEvents/LegendaryEvent_preview_title",
+    "visualId": "herorelease_losta_bile",
+    "trackingFeaturedHero": "lostaBile",
+    "offerId": "",
+    "shortDescriptionLocaKey": "",
+    "longDescriptionLocaKey": "LiveEvents/LegendaryEvent_desc_long",
+    "removalDelayAfterPurchase": "",
+    "previewSubtitleLocaKey": "LiveEvents/LegendaryEvent_preview_subtitle",
+    "maxStamina": 12,
+    "staminaRegenerationTime": 10800,
+    "staminaRegenerationAmount": 1,
+    "staminaGrantTokensOnStartPolicy": "None",
+    "startStamina": 6,
+    "maxDailyStaminaRefreshAttempts": 1,
+    "rewardProgressId": "leg_hero_event_16",
+    "initialOfferIds": [
+      "offer_legendary_event_pass_16",
+      "group_offer_leg_bundle",
+      "group_offer_leg_daily_delivery"
+    ],
+    "shopSegmentId": "legendaryHeroEvent16",
+    "resourceId": "legendaryEventCurrency",
+    "heroEventOrdinal": 1,
+    "heroEventMaxRuns": 3,
+    "finalEventShardsPerLegShard": 1,
+    "finalEventGoldPerLegCurrency": 25,
+    "finalEventLegShardsPerMythicShard": 25,
+    "minProgressionIndexToUseMythicConversion": 15,
+    "questId": "leg_bile_01",
+    "questGroups": [
+      "leg_bile",
+      "leg_bile_premium"
+    ],
+    "lanes": [
+      {
+        "laneIndex": 1,
+        "battleSetId": "legendary_event_16_lane_1",
+        "factionId": "BlackLegion"
+      },
+      {
+        "laneIndex": 2,
+        "battleSetId": "legendary_event_16_lane_2",
+        "factionId": "Aeldari"
+      },
+      {
+        "laneIndex": 3,
+        "battleSetId": "legendary_event_16_lane_3",
+        "factionId": "DarkAngels"
+      }
+    ],
+    "unlockableHero": {
+      "heroId": "lostaBile",
+      "baseRarity": "Legendary",
+      "maxRarity": "Mythic",
+      "visualId": "herorelease_losta_bile"
+    },
+    "ohSoCloseOffer": {
+      "unlock": {
+        "base": 500,
+        "multiplier": 100
+      },
+      "ascension": {
+        "base": 500,
+        "multiplier": 50
+      },
+      "rewardCurrency": "legendaryEventShards",
+      "lockType": "legendary"
+    }
+  }
+]

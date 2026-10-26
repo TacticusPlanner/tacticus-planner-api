@@ -94,14 +94,12 @@ public static class GameCatalogDatasets
         "campaign-battles-necrons-vs-dark-angels",
     ];
 
-    /// <summary>Legendary release event datasets, one per active event (keyed by unit snowprintId).</summary>
-    public static readonly IReadOnlyList<string> LreEvents =
-    [
-        "lres-astarlysander",
-        "lres-taufarsight",
-        "lres-votanuthar",
-        "lres-lostabile",
-    ];
+    /// <summary>
+    /// Curated Legendary Release Event data the game has no source for (display names, run starts, battle
+    /// completion points, allowed-units filters, restriction names), keyed by event unit. Its keys pick the served
+    /// events; everything else is read from the datamine (see Denormalization/LreDatamineReader.cs).
+    /// </summary>
+    public const string LreCuration = "lre-curation";
 
     /// <summary>
     /// Source keys of the always-on daily shops, each read from its merchant in the datamine <c>merchants.json</c>.
@@ -156,7 +154,7 @@ public static class GameCatalogDatasets
         QuestEventPower,
         QuestCrates,
         .. CampaignBattleGroups,
-        .. LreEvents,
+        LreCuration,
         GuildRaidMetaComps,
         .. GuildRaidMetaBossGroups,
     ];

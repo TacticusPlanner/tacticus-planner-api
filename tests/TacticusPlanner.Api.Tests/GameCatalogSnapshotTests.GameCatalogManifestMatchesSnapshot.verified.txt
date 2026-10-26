@@ -56,12 +56,12 @@
     },
     {
       key: lre-battles,
-      hash: 7eff4417c7a928fb9ab871424c76115ccffc661acf8a869b983d90afa7951879,
+      hash: e1de4842c36e546785e8ec3577a1ce31ee28f0570847148acf633c53ae725e6a,
       url: /api/v1/game-catalog/lre-battles/{envelopeHash}
     },
     {
       key: lres,
-      hash: ef14f5e7ff929e0d8242582b1875af7edda6232a0bbe45599f29dbccb9e7cee5,
+      hash: ee38ce250802d3bb9a51cdf0c70133ecf37e3923c223b2fff0f4531151077b64,
       url: /api/v1/game-catalog/lres/{envelopeHash}
     },
     {
