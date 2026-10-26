@@ -34,11 +34,11 @@ public sealed class CreateCombinedGoalsEndpoint
                 + "edges; DependsOnGoalIds adds edges to the same unit's existing Active/Paused goals, and an existing "
                 + "Ascension goal reachable through them lifts the rarity cap the targets are validated against. A goal "
                 + "type may appear more than once when the end targets differ. Assigns the whole set to the given project(s), or the caller's default project (created on "
-                + "first use) when none is given. Every goal starts Active; startPaused (request-level boolean, "
+                + "first use) when none is given. Each spec may carry notes. position (request-level, 1 to in-flight count + 1) inserts the set there in request order, shifting later goals down; null appends at the end. Every goal starts Active; startPaused (request-level boolean, "
                 + "default false) creates the whole set Paused instead and cannot be set per goal.";
             summary.Response<CreateCombinedGoalsResponse>(StatusCodes.Status200OK, "The newly created goals, in request order.");
             summary.Response(StatusCodes.Status400BadRequest,
-                "Invalid entity/goal type, a bad DependsOnIndex or DependsOnGoalIds, an unknown project, or a null/per-goal startPaused.");
+                "Invalid entity/goal type, a bad DependsOnIndex or DependsOnGoalIds, an unknown project, a null/per-goal startPaused, notes over the limit, or a position out of range.");
             summary.Response(StatusCodes.Status409Conflict,
                 "slotOccupied: an active or paused goal already holds one of the requested slots (current: that goal).");
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
@@ -144,6 +144,7 @@ public sealed class CreateCombinedGoalsEndpoint
             Status = status,
             Config = GoalMapper.MapConfig(spec.Config),
             Snapshot = GoalMapper.MapSnapshot(spec.Snapshot),
+            Notes = spec.Notes,
         }).ToList();
         for (var i = 0; i < req.Goals.Count; i++)
         {
@@ -196,6 +197,14 @@ public sealed class CreateCombinedGoalsEndpoint
                 }
             }
 
+            // The upper bound needs the in-flight count, only consistent under the profile lock.
+            if (req.Position is { } position && (position < 1 || position > (await order.InFlightAsync(ct)).Count + 1))
+            {
+                AddError(request => request.Position!, "The position must be between 1 and the number of in-flight goals + 1.");
+                await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+                return;
+            }
+
             // At most one Active/Paused goal per slot of the profile (per GoalTargetKey; Unlock: per unit).
             if (await planning.FindConflictAsync(goals, ct) is { } existingConflict)
             {
@@ -207,6 +216,8 @@ public sealed class CreateCombinedGoalsEndpoint
             // Once each, in request order, however many projects they are filed into.
             foreach (var goal in goals)
                 await order.AppendAsync(goal, ct);
+            if (req.Position is { } insertAt)
+                await order.MoveAppendedToAsync(insertAt, ct);
             foreach (var project in targetProjects)
                 db.ProjectGoals.AddRange(goals.Select(goal => ProjectGoalPlanningService.CreateMembership(project.Id, goal.Id, now)));
 
@@ -226,7 +237,10 @@ public sealed record CreateCombinedGoalsRequest(
     List<ProjectPriorityRequest>? Projects,
     List<CombinedGoalSpec> Goals,
     // Non-nullable: an explicit null fails binding with a 400 naming startPaused.
-    bool StartPaused = false
+    bool StartPaused = false,
+    // 1-based position in the account-wide order for the first goal (the rest follow in request order);
+    // null appends at the end.
+    int? Position = null
 );
 
 /// <summary>One goal within a creation request. Unknown members (notably a per-goal <c>startPaused</c>) are
@@ -241,7 +255,8 @@ public sealed record CombinedGoalSpec(
     CreateGoalConfigRequest Config,
     List<int> DependsOnIndex,
     CreateGoalSnapshotRequest? Snapshot = null,
-    List<Guid>? DependsOnGoalIds = null
+    List<Guid>? DependsOnGoalIds = null,
+    string? Notes = null
 );
 
 public sealed record CreateCombinedGoalsResponse(List<GoalDetailResponse> Goals);
