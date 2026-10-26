@@ -264,7 +264,6 @@ public static class GameCatalogDatasets
     public static readonly IReadOnlyList<string> Required =
     [
         .. UnitFactions,
-        MowUpgradeCosts,
         DropChances,
         AscensionCosts,
         UnlockShardCosts,

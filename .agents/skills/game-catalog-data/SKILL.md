@@ -72,6 +72,10 @@ restrictions); these are silently ignored on deserialize.
 - **character-ability-costs** is built from the datamine `gameconfig/units/abilityUpgradeCosts.json` (row N is the
   cost from ability level N to N + 1, served as `level: N + 1`). Each row is `gold` plus exactly one
   `abilityToken{Rarity}`; the key's suffix is the served `badges.rarity`. Any other row shape fails startup.
+- **mow-upgrade-costs** is built from the datamine `gameconfig/units/abilityUpgradeCostsMoW.json` (row N, 0-based,
+  serves `level: N + 2`): `dust` → `salvage` (absent ⇒ 0), `abilityToken{Rarity}` → `badges`,
+  `itemAscensionResource_{Rarity}` → `forgeBadges` (absent ⇒ null), `machinesOfWarToken` → `components`. Any
+  other key fails startup.
 - **campaign-battles** is flat, keyed by globally-unique battle id, each carrying its `campaignGroupId`;
   **campaign-definitions** is keyed by `groupId` (metadata + `battleIds[]` only). Battle ids are also
   referenced from API test fixtures and the player-data transformer, so renaming a battle id is not a
@@ -250,7 +254,7 @@ datamine source; its `docs/roadmap.md` orders the migration. Datasets move onto 
   and either keep the served shape (the manifest snapshot shows only real game-data hash moves, each explained
   in the PR) or rename to the game's terms (`SchemaVersion` bump plus the apps companion), never both in one
   change. Renamed ids that user data stores (battle ids, LRE ids, mission indices) need a data migration.
-  Migrated: `equipment`, `character-ability-costs`. Next, in order: the other cost/progression tables, `upgrades`, `npcs`, characters/MoWs, `unit-power`,
+  Migrated: `equipment`, `character-ability-costs`, `mow-upgrade-costs`. Next, in order: the other cost/progression tables, `upgrades`, `npcs`, characters/MoWs, `unit-power`,
   `raid-bosses`, `shops`, `mythic-quests`, HSE, `onslaught-rewards`, quest events/crates, LRE,
   `campaign-battles` last. A migrated dataset is refreshed by bumping `REF`, not by the V1 steps below.
 
@@ -280,8 +284,8 @@ genuine game changes.
   `passiveAbilityDamage` — absent ⇒ `[]`) joined with `new-rank-up-data.json` (Roman rank keys
   `"Stone I"` → `Stone1`). `new-character-data2.json` is **not** used by the catalog.
 - **mows** (`units-{faction}.json` `mows[]`): from V1 `mow/data/new-mow-data.json` `mows[]`
-  (`snowprintId`→`id`; `primaryAbility`/`secondaryAbility` each `{name, recipes[][]}`); shared
-  `upgradeCosts` → `mow-upgrade-costs.json`. `mythicAbility` (`{name}`, no recipes) comes from a
+  (`snowprintId`→`id`; `primaryAbility`/`secondaryAbility` each `{name, recipes[][]}`; the shared cost
+  ladder now comes from the datamine, see **mow-upgrade-costs**). `mythicAbility` (`{name}`, no recipes) comes from a
   **different** V1 file, `mow/data/new-mows-data2.json` `mythicAbilities[0]`, matched by `id` — a new MoW
   needs it from there.
 - **mythic-quests** (`mythic-quests.json`): from V1 `mythic_quests/data/mythic-quests.json` `quests[]`

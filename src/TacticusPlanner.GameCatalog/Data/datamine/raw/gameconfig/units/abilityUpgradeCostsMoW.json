@@ -1,0 +1,356 @@
+[
+  {
+    "gold": 15,
+    "abilityTokenCommon": 1,
+    "machinesOfWarToken": 1,
+    "dust": 5
+  },
+  {
+    "gold": 30,
+    "abilityTokenCommon": 1,
+    "machinesOfWarToken": 1,
+    "dust": 5
+  },
+  {
+    "gold": 60,
+    "abilityTokenCommon": 1,
+    "machinesOfWarToken": 1,
+    "dust": 5
+  },
+  {
+    "gold": 90,
+    "abilityTokenCommon": 1,
+    "machinesOfWarToken": 1,
+    "dust": 5
+  },
+  {
+    "gold": 120,
+    "abilityTokenCommon": 1,
+    "machinesOfWarToken": 2,
+    "dust": 5
+  },
+  {
+    "gold": 180,
+    "abilityTokenCommon": 1,
+    "machinesOfWarToken": 2,
+    "dust": 5
+  },
+  {
+    "gold": 240,
+    "abilityTokenCommon": 1,
+    "machinesOfWarToken": 3,
+    "dust": 5
+  },
+  {
+    "gold": 300,
+    "abilityTokenUncommon": 1,
+    "machinesOfWarToken": 3,
+    "itemAscensionResource_Uncommon": 1
+  },
+  {
+    "gold": 360,
+    "abilityTokenUncommon": 1,
+    "machinesOfWarToken": 3,
+    "itemAscensionResource_Uncommon": 1
+  },
+  {
+    "gold": 420,
+    "abilityTokenUncommon": 1,
+    "machinesOfWarToken": 3,
+    "itemAscensionResource_Uncommon": 1
+  },
+  {
+    "gold": 480,
+    "abilityTokenUncommon": 1,
+    "machinesOfWarToken": 4,
+    "itemAscensionResource_Uncommon": 1
+  },
+  {
+    "gold": 540,
+    "abilityTokenUncommon": 1,
+    "machinesOfWarToken": 4,
+    "itemAscensionResource_Uncommon": 1
+  },
+  {
+    "gold": 600,
+    "abilityTokenUncommon": 1,
+    "machinesOfWarToken": 5,
+    "itemAscensionResource_Uncommon": 1
+  },
+  {
+    "gold": 750,
+    "abilityTokenUncommon": 1,
+    "machinesOfWarToken": 5,
+    "itemAscensionResource_Uncommon": 1
+  },
+  {
+    "gold": 900,
+    "abilityTokenUncommon": 1,
+    "machinesOfWarToken": 5,
+    "itemAscensionResource_Uncommon": 1
+  },
+  {
+    "gold": 1050,
+    "abilityTokenUncommon": 1,
+    "machinesOfWarToken": 5,
+    "itemAscensionResource_Uncommon": 1
+  },
+  {
+    "gold": 1200,
+    "abilityTokenRare": 1,
+    "machinesOfWarToken": 6,
+    "itemAscensionResource_Rare": 1
+  },
+  {
+    "gold": 1500,
+    "abilityTokenRare": 1,
+    "machinesOfWarToken": 6,
+    "itemAscensionResource_Rare": 1
+  },
+  {
+    "gold": 1800,
+    "abilityTokenRare": 1,
+    "machinesOfWarToken": 6,
+    "itemAscensionResource_Rare": 1
+  },
+  {
+    "gold": 2100,
+    "abilityTokenRare": 1,
+    "machinesOfWarToken": 7,
+    "itemAscensionResource_Rare": 1
+  },
+  {
+    "gold": 2400,
+    "abilityTokenRare": 1,
+    "machinesOfWarToken": 7,
+    "itemAscensionResource_Rare": 1
+  },
+  {
+    "gold": 2700,
+    "abilityTokenRare": 1,
+    "machinesOfWarToken": 8,
+    "itemAscensionResource_Rare": 1
+  },
+  {
+    "gold": 3000,
+    "abilityTokenRare": 1,
+    "machinesOfWarToken": 8,
+    "itemAscensionResource_Rare": 1
+  },
+  {
+    "gold": 3300,
+    "abilityTokenRare": 1,
+    "machinesOfWarToken": 9,
+    "itemAscensionResource_Rare": 1
+  },
+  {
+    "gold": 3600,
+    "abilityTokenRare": 1,
+    "machinesOfWarToken": 10,
+    "itemAscensionResource_Rare": 1
+  },
+  {
+    "gold": 3900,
+    "abilityTokenEpic": 1,
+    "machinesOfWarToken": 11,
+    "itemAscensionResource_Epic": 1
+  },
+  {
+    "gold": 4200,
+    "abilityTokenEpic": 1,
+    "machinesOfWarToken": 12,
+    "itemAscensionResource_Epic": 1
+  },
+  {
+    "gold": 4500,
+    "abilityTokenEpic": 1,
+    "machinesOfWarToken": 13,
+    "itemAscensionResource_Epic": 1
+  },
+  {
+    "gold": 4800,
+    "abilityTokenEpic": 1,
+    "machinesOfWarToken": 14,
+    "itemAscensionResource_Epic": 1
+  },
+  {
+    "gold": 5100,
+    "abilityTokenEpic": 1,
+    "machinesOfWarToken": 15,
+    "itemAscensionResource_Epic": 1
+  },
+  {
+    "gold": 5400,
+    "abilityTokenEpic": 1,
+    "machinesOfWarToken": 16,
+    "itemAscensionResource_Epic": 1
+  },
+  {
+    "gold": 5700,
+    "abilityTokenEpic": 1,
+    "machinesOfWarToken": 17,
+    "itemAscensionResource_Epic": 1
+  },
+  {
+    "gold": 6000,
+    "abilityTokenEpic": 1,
+    "machinesOfWarToken": 18,
+    "itemAscensionResource_Epic": 1
+  },
+  {
+    "gold": 6600,
+    "abilityTokenEpic": 1,
+    "machinesOfWarToken": 19,
+    "itemAscensionResource_Epic": 1
+  },
+  {
+    "gold": 7200,
+    "abilityTokenLegendary": 1,
+    "machinesOfWarToken": 20,
+    "itemAscensionResource_Legendary": 1
+  },
+  {
+    "gold": 7800,
+    "abilityTokenLegendary": 1,
+    "machinesOfWarToken": 21,
+    "itemAscensionResource_Legendary": 1
+  },
+  {
+    "gold": 8400,
+    "abilityTokenLegendary": 1,
+    "machinesOfWarToken": 22,
+    "itemAscensionResource_Legendary": 1
+  },
+  {
+    "gold": 9000,
+    "abilityTokenLegendary": 1,
+    "machinesOfWarToken": 23,
+    "itemAscensionResource_Legendary": 1
+  },
+  {
+    "gold": 9600,
+    "abilityTokenLegendary": 1,
+    "machinesOfWarToken": 24,
+    "itemAscensionResource_Legendary": 1
+  },
+  {
+    "gold": 10800,
+    "abilityTokenLegendary": 1,
+    "machinesOfWarToken": 26,
+    "itemAscensionResource_Legendary": 1
+  },
+  {
+    "gold": 12000,
+    "abilityTokenLegendary": 2,
+    "machinesOfWarToken": 28,
+    "itemAscensionResource_Legendary": 2
+  },
+  {
+    "gold": 13500,
+    "abilityTokenLegendary": 3,
+    "machinesOfWarToken": 30,
+    "itemAscensionResource_Legendary": 3
+  },
+  {
+    "gold": 15000,
+    "abilityTokenLegendary": 4,
+    "machinesOfWarToken": 32,
+    "itemAscensionResource_Legendary": 4
+  },
+  {
+    "gold": 18000,
+    "abilityTokenLegendary": 5,
+    "machinesOfWarToken": 34,
+    "itemAscensionResource_Legendary": 5
+  },
+  {
+    "gold": 24000,
+    "abilityTokenLegendary": 6,
+    "machinesOfWarToken": 36,
+    "itemAscensionResource_Legendary": 6
+  },
+  {
+    "gold": 30000,
+    "abilityTokenLegendary": 7,
+    "machinesOfWarToken": 39,
+    "itemAscensionResource_Legendary": 7
+  },
+  {
+    "gold": 45000,
+    "abilityTokenLegendary": 8,
+    "machinesOfWarToken": 42,
+    "itemAscensionResource_Legendary": 8
+  },
+  {
+    "gold": 60000,
+    "abilityTokenLegendary": 9,
+    "machinesOfWarToken": 46,
+    "itemAscensionResource_Legendary": 9
+  },
+  {
+    "gold": 75000,
+    "abilityTokenLegendary": 10,
+    "machinesOfWarToken": 50,
+    "itemAscensionResource_Legendary": 10
+  },
+  {
+    "gold": 80000,
+    "abilityTokenMythic": 1,
+    "machinesOfWarToken": 50,
+    "itemAscensionResource_Mythic": 1
+  },
+  {
+    "gold": 85000,
+    "abilityTokenMythic": 1,
+    "machinesOfWarToken": 50,
+    "itemAscensionResource_Mythic": 1
+  },
+  {
+    "gold": 90000,
+    "abilityTokenMythic": 1,
+    "machinesOfWarToken": 50,
+    "itemAscensionResource_Mythic": 1
+  },
+  {
+    "gold": 95000,
+    "abilityTokenMythic": 1,
+    "machinesOfWarToken": 50,
+    "itemAscensionResource_Mythic": 1
+  },
+  {
+    "gold": 100000,
+    "abilityTokenMythic": 1,
+    "machinesOfWarToken": 50,
+    "itemAscensionResource_Mythic": 1
+  },
+  {
+    "gold": 105000,
+    "abilityTokenMythic": 1,
+    "machinesOfWarToken": 50,
+    "itemAscensionResource_Mythic": 1
+  },
+  {
+    "gold": 110000,
+    "abilityTokenMythic": 2,
+    "machinesOfWarToken": 50,
+    "itemAscensionResource_Mythic": 2
+  },
+  {
+    "gold": 115000,
+    "abilityTokenMythic": 3,
+    "machinesOfWarToken": 50,
+    "itemAscensionResource_Mythic": 3
+  },
+  {
+    "gold": 120000,
+    "abilityTokenMythic": 4,
+    "machinesOfWarToken": 50,
+    "itemAscensionResource_Mythic": 4
+  },
+  {
+    "gold": 125000,
+    "abilityTokenMythic": 5,
+    "machinesOfWarToken": 50,
+    "itemAscensionResource_Mythic": 5
+  }
+]
