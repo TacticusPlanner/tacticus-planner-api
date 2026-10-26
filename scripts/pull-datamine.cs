@@ -1,3 +1,5 @@
+#:property RestorePackagesWithLockFile=false
+
 // Copies the allowlisted raw files of TacticusPlanner/tacticus-planner-data-mines into the game catalog
 // and pins the commit they came from. See openspec/specs/game-catalog-datamine-source.
 //
