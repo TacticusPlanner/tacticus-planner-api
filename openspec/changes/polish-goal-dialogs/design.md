@@ -11,7 +11,7 @@
 ## Decisions
 
 - **Notes rule reused, not re-stated:** each spec's notes get `MaximumLength(GoalValidation.MaxNotesLength)`, the same rule as `UpdateGoalValidator`. No trimming, because edit does not trim either.
-- **Position range checked under the lock:** the validator only rejects `position < 1`; the upper bound needs the in-flight count, so the handler checks it after reading `InFlightAsync` under the profile lock and sends a 400 validation failure on `position`, mirroring the edit route's `Priority.Position` failure. Both bounds use the same message.
+- **Position range checked under the lock:** the upper bound needs the in-flight count, so the handler checks both bounds after reading `InFlightAsync` under the profile lock (as the edit route does inside `GoalOrderService`) and sends a 400 validation failure on `position`, mirroring the edit route's `Priority.Position` failure. One check, one message, nothing in the validator.
 - **Insert = append, then move:** the goals append as today, then `GoalOrderService.MoveAppendedToAsync` moves the appended block to `position` in the in-memory order and renumbers. The order stays dense, with the single revision bump in `CompleteAsync`. The positions' unique constraint is deferred, so the permutation is safe in one transaction.
 
 ## Risks / Trade-offs
