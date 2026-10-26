@@ -78,7 +78,7 @@ public sealed class GameCatalogSnapshotTests(GameCatalogApiFactory factory)
         Assert.Equal("mythic-quests", payload["datasetKey"]!.GetValue<string>());
 
         var data = payload["data"]!.AsArray();
-        Assert.Equal(117, data.Count);
+        Assert.Equal(119, data.Count);
         var abaddon = data.Single(row => row!["unitId"]!.GetValue<string>() == "blackAbaddon")!.AsObject();
         Assert.Equal(["unitId", "quests"], abaddon.Select(property => property.Key));
 

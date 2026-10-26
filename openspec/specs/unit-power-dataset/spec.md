@@ -44,7 +44,7 @@ Each modifier is a percentage. The server sends ids and numbers only: no display
 
 What the client derives, not the server: a unit's stats at a rank, progression and set of applied upgrades and items; the progression index from rarity and stars; the power of a character, MoW or NPC.
 
-Derivation from the raw `unit-power.json` (V1's GameConfig slice shape):
+Derivation from the pinned datamine copies under `gameconfig/units/` (`heroProgressionSteps.json`, `heroProgressionStepsMoW.json`, `damageProfileModifiers.json`, `traitPowerModifiers.json`, `abilityPowerModifiers.json`, `abilityPowerCurve.json`, and the power fields of `lineup.json`). The catalog SHALL keep no hand-kept unit-power file.
 
 - `heroProgressionSteps[i]` = raw `heroProgressionSteps[i]`, keeping only `unitStatMultiplierPct` and `abilityPowerMultiplier`. Per-unit progression overrides are not served, because every current override changes only costs.
 - `mowProgressionSteps[i]` = raw `heroProgressionStepsMoW[i]`, keeping `abilityPowerMultiplier`, with `mythicAbilityPower` set to 0 when it is absent.
@@ -54,8 +54,8 @@ Derivation from the raw `unit-power.json` (V1's GameConfig slice shape):
 
 Assumptions:
 
-- The raw file is V1's bundled slice of Snowprint's `clientGameConfig`, refreshed each game patch. Its values were confirmed in-game by V1 for worldKharn (936,827) and orksWarboss (1,037,811).
-- Base Health, Damage and Armour, weapons, movement, traits, ability ids and rank-up upgrade ids are served on `units-*`. Equipment level stats are served on `equipment-*`. Each upgrade's stat type is served on `upgrades-*`. As of the 1.43 data these match the V1 slice exactly, except that the V1 slice also carries traits `Hero` and `MachineOfWar`, which both have modifier 100.
+- The datamine files are the game's own config; V1's slice of the same config was confirmed in-game for worldKharn (936,827) and orksWarboss (1,037,811), and at `v1.43.157.2989` the datamine values equal it field for field.
+- Base Health, Damage and Armour, weapons, movement, traits, ability ids and rank-up upgrade ids are served on `characters` and `mows`. Equipment level stats are served on `equipment-*`. Each upgrade's stat type is served on `upgrades-*`. These come from the same `lineup.json`. `traitPowerModifiers` also carries traits `Hero` and `MachineOfWar`, which both have modifier 100.
 
 #### Scenario: Shape for a character
 
@@ -97,7 +97,7 @@ Raw `lineup` entries that are not catalog characters or MoWs (unreleased units) 
 
 #### Scenario: New character without power data
 
-- **GIVEN** a catalog character `newHero` with no `lineup` entry in `unit-power.json`
+- **GIVEN** a catalog character `newHero` with no entry in `lineup.json`
 - **WHEN** the catalog loads
 - **THEN** loading fails with an error naming `unit-power` and `newHero`
 

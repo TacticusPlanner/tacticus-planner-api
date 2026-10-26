@@ -2,11 +2,11 @@ using System.Text.Json.Serialization;
 
 namespace TacticusPlanner.GameCatalog.Models;
 
-// ---- raw authored shape (internal to denormalization; bound from Data/shops/shops-*.json) ---------
+// ---- raw datamine shape (internal to denormalization; bound from gameconfig/shop/merchants.json) ---
 
 /// <summary>
-/// One authored daily-shop source file (V1 <c>ShopData</c> shape). Consolidated into the served
-/// <see cref="GameCatalogShopView"/> by <c>Denormalization/ShopsDenormalizer.cs</c>. Authored fields the
+/// One always-on merchant of the datamine <c>merchants.json</c>. Consolidated into the served
+/// <see cref="GameCatalogShopView"/> by <c>Denormalization/ShopsDenormalizer.cs</c>. Fields the
 /// served view has no use for (per-variant <c>bannerTextKey</c> display strings) are intentionally left
 /// unbound and dropped on deserialize.
 /// </summary>

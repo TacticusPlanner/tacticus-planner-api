@@ -1,11 +1,41 @@
+using System.Text.Json;
 using TacticusPlanner.GameCatalog.Models;
 
 namespace TacticusPlanner.GameCatalog.Denormalization;
 
 internal static partial class GameCatalogDenormalizer
 {
+    /// <summary>Raw path of the datamine file the shops dataset is built from.</summary>
+    public const string DatamineMerchantsPath = "gameconfig/shop/merchants.json";
+
+    // Shop source key -> the merchants.json key of that always-on shop.
+    private static readonly Dictionary<string, string> ShopMerchants = new(StringComparer.Ordinal)
+    {
+        ["shops-guild"] = "guild",
+        ["shops-war"] = "guildWars",
+        ["shops-rogue-trader"] = "elderShop",
+        ["shops-crusade"] = "crusadeShop",
+    };
+
     /// <summary>
-    /// Consolidates the four authored raw shop files into the served <c>shops</c> array — one record per
+    /// Binds the four always-on shops out of the datamine <c>merchants.json</c>, keyed by shop source key. The other
+    /// merchants (the <c>default</c> template, limited-time event shops) are not bound.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">An always-on merchant is missing.</exception>
+    public static IReadOnlyDictionary<string, GameCatalogRawShop> ReadDatamineShops(
+        IReadOnlyDictionary<string, JsonElement> merchants,
+        JsonSerializerOptions options) =>
+        GameCatalogDatasets.ShopSources.ToDictionary(
+            sourceKey => sourceKey,
+            sourceKey => merchants.TryGetValue(ShopMerchants[sourceKey], out var merchant)
+                ? merchant.Deserialize<GameCatalogRawShop>(options)!
+                : throw new InvalidOperationException(
+                    $"Dataset '{GameCatalogDatasets.Shops}' shop '{ShopId(sourceKey)}' needs merchant " +
+                    $"'{ShopMerchants[sourceKey]}' in merchants.json."),
+            StringComparer.Ordinal);
+
+    /// <summary>
+    /// Consolidates the four always-on merchants into the served <c>shops</c> array — one record per
     /// shop, keyed by the id after the <c>shops-</c> source-key prefix (<c>guild</c> / <c>war</c> /
     /// <c>rogue-trader</c> / <c>crusade</c>). The slot/variant tree is preserved in source order; each
     /// variant's <c>reward</c>/<c>freeOffer</c> <c>"type:qty"</c> string is parsed to <c>{ type, qty }</c>,

@@ -2,13 +2,25 @@ using System.Text.Json.Serialization;
 
 namespace TacticusPlanner.GameCatalog.Models;
 
-// ---- raw authored shape (bound from Data/mythic-quests.json) --------------------------------------
+// ---- raw datamine shape (bound from gameconfig/quests/groups.json) ---------------------------------
+
+// The `hero` quest group of groups.json; the other groups are not bound.
+public sealed record DatamineQuestGroups(DatamineQuestGroup Hero);
+
+public sealed record DatamineQuestGroup(IReadOnlyList<DatamineQuest> Quests);
+
+// One chain quest. A mythic quest is named `mythic_{characterId}_{number}`; quest XP, icons and successor links
+// are not bound.
+public sealed record DatamineQuest(
+    string Name,
+    IReadOnlyList<string> Rewards,
+    IReadOnlyList<GameCatalogRawMythicQuestTask> Tasks
+);
 
 /// <summary>
-/// One character's mythic quests, ported from V1's <c>mythic_quests/data/mythic-quests.json</c> <c>quests[]</c>
-/// with V1's display-only fields (<c>characterName</c>, quest and task <c>name</c>) dropped. Reward entries stay
-/// V1's <c>"type[:amount]"</c> strings so a refresh diffs cleanly against V1; they are parsed into structured
-/// records by <c>Denormalization/MythicQuestDenormalizer.cs</c>.
+/// One character's mythic quests, read from the <c>mythic_{characterId}_{number}</c> quests of the datamine
+/// <c>hero</c> quest group. Reward entries stay the game's <c>"type[:amount]"</c> strings; they are parsed into
+/// structured records by <c>Denormalization/MythicQuestDenormalizer.cs</c>.
 /// </summary>
 public sealed record GameCatalogRawMythicQuests(
     string CharacterId,
@@ -40,7 +52,7 @@ public sealed record GameCatalogMythicQuestView(
     IReadOnlyList<GameCatalogMythicQuestRewardView> Rewards
 );
 
-// Parameters are V1's taskParameters unchanged (string values, e.g. killAmount "8"); the client fills the
+// Parameters are the game's taskParameters unchanged (string values, e.g. killAmount "8"); the client fills the
 // task-text template keyed by LocaKey from them.
 public sealed record GameCatalogMythicQuestTaskView(
     string LocaKey,

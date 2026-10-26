@@ -27,7 +27,7 @@ public static class GameCatalogDatasets
     public const string QuestEvents = "quest-events";
     public const string QuestCrates = "quest-crates";
     // unit-power is the single record of power tables, progression multipliers and per-unit power fields
-    // the client's in-game power formula reads (raw file: V1's game-config slice). See Models/UnitPower.cs.
+    // the client's in-game power formula reads (read from the datamine power tables). See Models/UnitPower.cs.
     public const string UnitPower = "unit-power";
 
     // Route/key prefixes for the split dataset families.
@@ -102,9 +102,9 @@ public static class GameCatalogDatasets
     ];
 
     /// <summary>
-    /// Daily-shop raw source datasets, one authored file per always-on shop. Consolidated into the single
-    /// served <see cref="Shops"/> array (one record per shop, keyed by the id after the <c>shops-</c>
-    /// prefix). Limited-time event shops (Armageddon / seasonal) are deliberately excluded.
+    /// Source keys of the always-on daily shops, each read from its merchant in the datamine <c>merchants.json</c>.
+    /// Consolidated into the single served <see cref="Shops"/> array (one record per shop, keyed by the id after
+    /// the <c>shops-</c> prefix). Limited-time event shops are deliberately excluded.
     /// </summary>
     public static readonly IReadOnlyList<string> ShopSources =
     [
@@ -114,12 +114,6 @@ public static class GameCatalogDatasets
         "shops-crusade",
     ];
 
-    /// <summary>
-    /// Shared raid-boss raw source (<c>raid-boss-common.json</c>): the season-config rotation, the
-    /// primarch prime ids, and the modifier definitions. Merged with the per-boss and per-season files
-    /// into the single served <see cref="RaidBosses"/> dataset; no raw raid-boss file is served directly.
-    /// </summary>
-    public const string RaidBossCommon = "raid-boss-common";
     public const string GuildRaidMeta = "guild-raid-meta";
 
     /// <summary>
@@ -130,45 +124,8 @@ public static class GameCatalogDatasets
     public const string GuildRaidMetaComps = "guild-raid-comps";
 
     /// <summary>
-    /// Per-boss raw unit-set source files, one per raid boss. Key = <c>raid-boss-{n}-{Type}</c> where
-    /// <c>n</c> is the <c>GuildBoss&lt;n&gt;</c> number and <c>{Type}</c> is that boss's primary
-    /// <c>Boss1</c> unit-set key with the <c>GuildBoss{n}Boss1</c> prefix stripped (e.g. <c>TauRiptide</c>),
-    /// kept verbatim for traceability. Each file's unit sets are merged into the assembled raw data.
-    /// Ported from V1's datamined guild_boss.json — see scripts/port-raid-boss-data.mjs.
-    /// </summary>
-    public static readonly IReadOnlyList<string> RaidBossGroups =
-    [
-        "raid-boss-1-TyranTervigonLeviathan",
-        "raid-boss-2-TyranHiveTyrantLeviathan",
-        "raid-boss-3-NecroSilentKing",
-        "raid-boss-4-OrksGhazghkull",
-        "raid-boss-5-DeathMortarion",
-        "raid-boss-6-TyranScreamerKiller",
-        "raid-boss-7-AstraRogaldorn",
-        "raid-boss-8-EldarAvatar",
-        "raid-boss-9-ThousMagnus",
-        "raid-boss-10-AdmecBelisarius",
-        "raid-boss-11-TauRiptide",
-        "raid-boss-12-DarkaLion",
-    ];
-
-    /// <summary>
-    /// Per-season raid-boss config source files, one per guild-raid season config. Key =
-    /// <c>raid-boss-season-{n}</c>; each file binds to one season config keyed in the assembled data by
-    /// its own <c>GuildBossSeasonConfigId</c>.
-    /// </summary>
-    public static readonly IReadOnlyList<string> RaidBossSeasons =
-    [
-        "raid-boss-season-1",
-        "raid-boss-season-2",
-        "raid-boss-season-3",
-        "raid-boss-season-4",
-        "raid-boss-season-5",
-    ];
-
-    /// <summary>
-    /// Per-boss raw Guild Raid Meta source files, one per raid boss, mirroring <see cref="RaidBossGroups"/>'
-    /// naming. Key = <c>guild-raid-meta-boss-{n}-{Slug}</c>. Each file's <c>bosses[]</c> entry and any
+    /// Per-boss raw Guild Raid Meta source files, one per raid boss, named after the boss's
+    /// <c>GuildBoss{n}Boss1</c> unit-set key. Key = <c>guild-raid-meta-boss-{n}-{Slug}</c>. Each file's <c>bosses[]</c> entry and any
     /// <c>primes[]</c> entries are merged into the assembled raw data.
     /// </summary>
     public static readonly IReadOnlyList<string> GuildRaidMetaBossGroups =
@@ -196,17 +153,11 @@ public static class GameCatalogDatasets
         EventOccurrences,
         HomeScreenEventScoring,
         HordeModeTiers,
-        MythicQuests,
         QuestEvents,
         QuestCrates,
-        UnitPower,
         .. CampaignBattleGroups,
         .. LreEvents,
-        .. ShopSources,
-        RaidBossCommon,
         GuildRaidMetaComps,
-        .. RaidBossGroups,
-        .. RaidBossSeasons,
         .. GuildRaidMetaBossGroups,
     ];
 
@@ -246,20 +197,18 @@ public static class GameCatalogDatasets
     public const string EventDefinitionsServed = EventDefinitions;
     public const string EventsCalendar = "events-calendar";
     // shops is a plain array, one record per always-on daily shop (id = guild / war / rogue-trader /
-    // crusade), consolidated from the four ShopSources raw files. The raw per-shop files are never served
+    // crusade), consolidated from the four ShopSources merchants. The raw per-shop files are never served
     // directly. Reward/free-offer "type:qty" strings and the Quartz cronSchedule are normalized to
     // structured values + an explicit day-of-week list at build time (see Denormalization/ShopsDenormalizer.cs).
     public const string Shops = "shops";
-    // raid-bosses is one consolidated, self-contained dataset assembled from the RaidBossCommon,
-    // RaidBossGroups (per boss), and RaidBossSeasons (per season config) raw files: the season-config
-    // rotation, the raid bosses and raid-boss primes (identity + progression ladder + weapons +
-    // ability/trait ids), and the season configs whose encounters carry their referenced unit-set id +
-    // progression index, field-npc ids, and resolved modifier definitions inlined. Ported from V1's
-    // guild_boss.json; no raw file is served directly. See Denormalization/RaidBossDenormalizer.cs and
-    // specs/raid-bosses-dataset in raid-bosses-library.
+    // raid-bosses is one consolidated, self-contained dataset assembled from the datamine guildBoss files:
+    // the season-config rotation, the raid bosses and raid-boss primes (identity + progression ladder +
+    // weapons + ability/trait ids), and the season configs whose encounters carry their referenced unit-set
+    // id + progression index, field-npc ids, and resolved modifier definitions inlined. No raw file is
+    // served directly. See Denormalization/RaidBossDenormalizer.cs and specs/raid-bosses-dataset.
     public const string RaidBosses = "raid-bosses";
     // mythic-quests is a plain array, one record per character with quests (ordered by unitId), built from the
-    // same-named raw file ported from V1's mythic_quests data. Reward "type[:amount]" strings are parsed into
+    // mythic_ quests of the datamine hero quest group. Reward "type[:amount]" strings are parsed into
     // structured records; task text templates are not served (they are client game text keyed by locaKey).
     // See Denormalization/MythicQuestDenormalizer.cs.
     public const string MythicQuestsServed = MythicQuests;

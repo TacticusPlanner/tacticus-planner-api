@@ -16,11 +16,11 @@ public sealed class MythicQuestDenormalizerTests
             .ToArray());
 
     [Fact]
-    public void ShippedDatasetCovers117CharactersWithFiveQuestsEach()
+    public void ShippedDatasetCovers119CharactersWithFiveQuestsEach()
     {
         var views = GameCatalogLoader.Load().MythicQuestViews;
 
-        Assert.Equal(117, views.Count);
+        Assert.Equal(119, views.Count);
         Assert.All(views, view => Assert.Equal([1, 2, 3, 4, 5], view.Quests.Select(quest => quest.Number)));
         Assert.Equal(views.Select(view => view.UnitId).Order(StringComparer.Ordinal), views.Select(view => view.UnitId));
     }
@@ -84,7 +84,7 @@ public sealed class MythicQuestDenormalizerTests
         var raw = GameCatalogLoader.Load().MythicQuests;
         var rewards = raw.SelectMany(character => character.Quests).SelectMany(quest => quest.Rewards).ToArray();
 
-        Assert.Equal(1755, rewards.Length);
+        Assert.Equal(1785, rewards.Length);
         Assert.All(rewards, reward => Assert.True(MythicQuestRewardParser.TryParse(reward, out _), reward));
     }
 

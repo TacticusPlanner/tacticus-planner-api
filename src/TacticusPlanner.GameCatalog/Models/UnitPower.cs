@@ -1,11 +1,11 @@
 namespace TacticusPlanner.GameCatalog.Models;
 
 /// <summary>
-/// The raw <c>unit-power.json</c>: V1's slice of Snowprint's client game config that the in-game power
-/// formula reads in addition to the unit, equipment and upgrade datasets. Keys keep V1's names
-/// (<c>heroProgressionStepsMoW</c>, <c>abilityPowerCurve</c>, <c>lineup</c>) so a game patch can be
-/// reconciled field by field. <see cref="Lineup"/> may list units the catalog does not have yet
-/// (unreleased); denormalization skips them.
+/// The power tables the in-game power formula reads in addition to the unit, equipment and upgrade datasets,
+/// each bound from its datamine file under <c>gameconfig/units/</c> (<c>heroProgressionSteps</c>,
+/// <c>heroProgressionStepsMoW</c>, <c>damageProfileModifiers</c>, <c>traitPowerModifiers</c>,
+/// <c>abilityPowerModifiers</c>, <c>abilityPowerCurve</c>, and the power fields of <c>lineup</c>).
+/// <see cref="Lineup"/> may list units the catalog does not have yet (unreleased); denormalization skips them.
 /// </summary>
 public sealed record GameCatalogRawUnitPower(
     IReadOnlyList<GameCatalogRawHeroPowerStep> HeroProgressionSteps,
@@ -18,8 +18,7 @@ public sealed record GameCatalogRawUnitPower(
 );
 
 /// <summary>
-/// One hero progression step (rarity + stars). <c>rarity</c>/<c>stars</c> are kept in the raw file for
-/// readability only; the step is its index.
+/// One hero progression step (rarity + stars). Only the power fields are bound; the step is its index.
 /// </summary>
 public sealed record GameCatalogRawHeroPowerStep(
     int UnitStatMultiplierPct,
@@ -37,7 +36,7 @@ public sealed record GameCatalogRawAbilityPowerModifier(int BaseMultiplier);
 /// <summary>
 /// A unit's own power fields. <see cref="PowerMultiplier"/> is a percentage, absent meaning 100.
 /// <see cref="UpgradesStatIncrease"/> is one row per rank, each value the stat increase of the upgrade id
-/// at the same position in <see cref="Upgrades"/> (V1's slot order); validation requires
+/// at the same position in <see cref="Upgrades"/> (the game's slot order); validation requires
 /// <see cref="Upgrades"/> to equal the character's catalog <c>rankUpUpgrades</c> ids, so a reordered or
 /// changed rank-up cannot silently pair an increase with the wrong upgrade. Both are absent for MoWs.
 /// </summary>

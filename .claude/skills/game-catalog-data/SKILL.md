@@ -189,69 +189,14 @@ the apps code (not in the catalog), so ratio changes ship as a web release.
 
 ## Unit power
 
-`Data/unit-power.json` is V1's slice of Snowprint's client game config that the in-game power formula
-reads (the apps compute character, MoW and NPC power from it plus `characters`/`mows`, `npcs`, `equipment` and
-`upgrades`), served as the single `unit-power` record. Raw keys keep V1's names so a patch can be
-reconciled field by field: `heroProgressionSteps` / `heroProgressionStepsMoW` (20 steps each; served as
-`heroProgressionSteps` / `mowProgressionSteps` with a `step` index), `damageProfileModifiers`,
+`unit-power` is the single record of the power tables the in-game power formula reads (the apps compute
+character, MoW and NPC power from it plus `characters`/`mows`, `npcs`, `equipment` and `upgrades`). It is
+bound from the datamine `gameconfig/units/` files: `heroProgressionSteps` / `heroProgressionStepsMoW` (20 steps
+each; served as `heroProgressionSteps` / `mowProgressionSteps` with a `step` index), `damageProfileModifiers`,
 `traitPowerModifiers`, `abilityPowerModifiers` (`{baseMultiplier}`, served as `modifier`), and
-`abilityPowerCurve` (`active`/`passive` by ability level − 1, `relic` by relic level − 1). `lineup.{unitId}`
-carries only `powerMultiplier` (percent, absent ⇒ 100) and, for characters, V1's `upgrades` plus
+`abilityPowerCurve` (`active`/`passive` by ability level − 1, `relic` by relic level − 1), plus each
+`lineup.json` unit's `powerMultiplier` (percent, absent ⇒ 100) and, for characters, `upgrades` plus
 `upgradesStatIncrease` (one row per rank, each value the increase of the upgrade id at the same position).
-`upgrades` must equal the character's `rankUpUpgrades` ids in order, so a rank-up refresh that reorders or
-changes ids fails startup until the power rows are reconciled with it. Modifier maps are served as lists sorted by
-id; a trait or ability not listed is 100 (the catalog lacks V1's `Hero`/`MachineOfWar` traits, both 100).
-
-- **Source:** V1 `src/fsd/4-entities/unit/character-power/data/character-power-units.json` (same keys).
-  `character-power-items.json` and `character-power-upgrades.json` are **not** ported: they match
-  `equipment` and `upgrades` (`stat`). V1's `heroProgressionStepsPerUnit` overrides change only costs,
-  so they are not served. **On every refresh, diff each override against `default`**: if one changes
-  `unitStatMultiplierPct` or `abilityPowerMultiplier`, nothing fails, so the served steps silently become
-  wrong for that unit; add per-unit steps to the served record (and the apps formula) before importing it.
-- **A new character or MoW needs a `lineup` entry** (and a damage type needs a `damageProfileModifiers`
-  entry); otherwise startup fails. Unreleased lineup units are skipped.
-- Enforced at load (`Validation/UnitPowerValidation.cs`, `InvalidUnitPower`): 20 steps with positive
-  multipliers, a lineup entry per catalog unit, `upgrades` / stat rows aligned with `rankUpUpgrades`, no negative
-  values, every rank-up upgrade raises Health/Damage/Armour, curves reach the highest ability level of
-  `character-ability-costs` and the longest relic. A value change only moves this dataset's hash.
-
-## Quest events
-
-`Data/quests/quest-events.json` holds V1's hero quests (`hero-quests.json`, raw keys kept), kept to the last
-three: Cyrus, Nubari (`astarEradicator`), Kîmm (`votanChampion`). Served as `quest-events`, one record per
-quest keyed by `featuredCharacterId`, with the tiers flattened into 17 `battles` carrying `tier`
-(Common..Mythic), `tierPosition`, `deploySlots` (from `QuestDeploySlots` in
-`Denormalization/QuestEventsDenormalizer.cs`, not raw data), `lightningVictoryTurns`, optional `power`
-(the in-game battle power, only where known), enemies grouped by `(id, ladderIndex)` with a `count`, and
-objectives with `target` always a string (`MaxHits` 3 → `"3"`).
-`Data/quests/quest-crates.json` is the 17-crate track shared by every quest, from the crate table on the wiki
-**Quest** page (the separate QuestCrates page is pre-August-2025 and stale). Rewards are
-`{type, min, max, rarity, maxRarity}`; `maxRarity` marks a random badge across a rarity range.
-
-- **To add a quest:** paste V1's record into `quest-events.json` (drop the oldest if keeping three); add
-  `Power` per battle when screenshots show it.
-- Enforced at load (`Validation/QuestEventsValidation.cs`): 17 battles split 3/3/5/3/2/1 over tiers 0..5,
-  catalog character/faction/NPC/upgrade references, known objective types and targets, and
-  17 × 400 + objective scores must equal the last crate's points (`InvalidQuestScore`), so a crate-track
-  change and a quest change must land together.
-
-## Cross-cutting data conventions
-
-- **drop-chances** (`drop-chances.json`): potential campaign rewards reference `chanceId` =
-  `{rewardKind}_{difficulty}` (rates not baked into the id, so they can be rebalanced). Rows carry
-  `numerator`/`denominator`/`effectiveRate`. Denormalization inlines these onto potential rewards and onto
-  character shard / upgrade farm locations. **Guaranteed** locations/rewards (and unmatched chanceIds)
-  carry `null` chance fields by design.
-- **difficulty enum**: standard campaigns use `standard`/`elite`/`mirror`; event campaigns carry a
-  battle-level `type` (`Standard`/`Extremis`) plus a `challenge` flag.
-- **LRE filters** use one shape `{ kind, target, exclude }`, reused for per-objective (`unitsRestrictions`)
-  and track-level (`allowedUnitsFilter`) filters. `kind` ∈ `Alliance`/`Faction`/`DamageType`/`Trait`/
-  `MinHits`/`MaxHits`/`AttackType`; `exclude` flips the match. The runtime roster filter only executes
-  `Alliance`/`Faction` kinds and ANDs all track filters.
-- **rank** values are space-free `{Tier}{arabic}` (e.g. `Stone1`, `Iron2`, `Adamantine2`); the in-game
-  Roman label lives only in `Data/curated/enums.json` (a reference file — not served, not in the registry).
-- Most nullable fields are genuinely conditional. Fields always present in the static data are required.
-  Numeric stat fields on npcs are **non-nullable** — a missing value in the source must be written as `0`.
 
 ## Datamine source
 
@@ -273,9 +218,10 @@ datamine source; its `docs/roadmap.md` orders the migration. Datasets move onto 
   in the PR) or rename to the game's terms (`SchemaVersion` bump plus the apps companion), never both in one
   change. Renamed ids that user data stores (battle ids, LRE ids, mission indices) need a data migration.
   Migrated: `equipment`, `character-ability-costs`, `mow-upgrade-costs`, `ascension-costs`, `unlock-shard-costs`,
-  `upgrades`, `characters`, `mows`, `npcs`. Next, in order: `unit-power`,
-  `raid-bosses`, `shops`, `mythic-quests`, HSE, `onslaught-rewards`, quest events/crates, LRE,
-  `campaign-battles` last. A migrated dataset is refreshed by bumping `REF`, not by the V1 steps below.
+  `upgrades`, `characters`, `mows`, `npcs`, `unit-power`, `raid-bosses` (`globalconfig/guildBoss/`; the
+  game's unit sets are merged and must agree), `shops` (four merchants of `merchants.json`), `mythic-quests`
+  (`mythic_{characterId}_{number}` quests of the `hero` group in `quests/groups.json`). Next, in order: HSE,
+  `onslaught-rewards`, quest events/crates, LRE, `campaign-battles` last. A migrated dataset is refreshed by bumping `REF`, not by the V1 steps below.
 
 ## Updating to a new in-game version
 
@@ -298,16 +244,13 @@ genuine game changes.
 **V1 → catalog field mapping (the non-obvious parts):**
 
 - **characters**, **mows**: now from the datamine (see **characters**, **mows** and **npcs** above); refresh by bumping `REF`.
-- **mythic-quests** (`mythic-quests.json`): from V1 `mythic_quests/data/mythic-quests.json` `quests[]`
-  (keep `characterId`, `quests[].number`, `quests[].rewards` as V1's `"type[:amount]"` strings,
-  `quests[].tasks[]` `locaKey`/`target`/`taskParameters`; drop `characterName` and quest/task `name`). The
-  server parses rewards with a closed pattern set — a new reward kind fails startup until
-  `MythicQuestRewardParser` learns it. V1's `terms[]` (task text templates, English only) are **not**
-  catalog data: they go to the apps `mythicQuestTasks` namespace (`apps/web/public/locales/en/`).
+- **mythic-quests**: now from the datamine (see above); refresh by bumping `REF`. Rewards stay the game's
+  `"type[:amount]"` strings, parsed with a closed pattern set — a new reward kind fails startup until
+  `MythicQuestRewardParser` learns it. Task text templates are **not** catalog data: they go to the apps
+  `mythicQuestTasks` namespace (`apps/web/public/locales/en/`).
 - **npcs**: now from the datamine (see above); refresh by bumping `REF`.
 - **upgrades**: now from the datamine (see **upgrades** above); refresh by bumping `REF`.
-- **unit-power**: from V1 `unit/character-power/data/character-power-units.json`; reconcile the global
-  tables and each catalog unit's `lineup` `powerMultiplier` / `upgradesStatIncrease` (see **Unit power**).
+- **unit-power**, **raid-bosses**, **shops**: now from the datamine (see above); refresh by bumping `REF`.
 - **campaign-battles**: from V1 `campaign/data/new-battle-data.json`. The catalog shape is heavily
   denormalized (resolved enemy tables, rank labels) with no surviving transform — a full re-derivation is
   impractical; scope changes to id adds/removes and reward changes, and be wary that battle-id renames
