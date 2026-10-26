@@ -13,9 +13,9 @@ public sealed class QuestEventsDenormalizerTests
         Snapshot.QuestEventViews.Single(quest => quest.FeaturedCharacterId == id);
 
     [Fact]
-    public void ShippedDatasetKeepsTheLastThreeQuestsWithSeventeenBattlesEach()
+    public void ShippedDatasetServesTheGamesFiveQuestsWithSeventeenBattlesEach()
     {
-        Assert.Equal(["astarCyrus", "astarEradicator", "votanChampion"], Snapshot.QuestEventViews.Select(quest => quest.FeaturedCharacterId));
+        Assert.Equal(["astarCyrus", "astarEradicator", "darkaSternguard", "thousSekhetar", "votanChampion"], Snapshot.QuestEventViews.Select(quest => quest.FeaturedCharacterId));
         Assert.All(Snapshot.QuestEventViews, quest => Assert.Equal(Enumerable.Range(1, 17), quest.Battles.Select(battle => battle.Number)));
     }
 

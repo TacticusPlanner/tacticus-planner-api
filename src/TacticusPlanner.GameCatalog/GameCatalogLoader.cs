@@ -36,15 +36,21 @@ public static class GameCatalogLoader
             LoadDatamine<List<DatamineHeroProgressionStep>>(GameCatalogDenormalizer.DatamineHeroProgressionStepsPath));
         var unlockShardCosts = GameCatalogDenormalizer.ReadDatamineUnlockShardCosts(
             LoadDatamine<Dictionary<string, DatamineHeroConversion>>(GameCatalogDenormalizer.DatamineHeroConversionPath));
-        var onslaughtRewards = LoadDataset<IReadOnlyList<GameCatalogOnslaughtReward>>(GameCatalogDatasets.OnslaughtRewards);
+        var onslaughtRewards = GameCatalogDenormalizer.ReadDatamineOnslaughtRewards(
+            LoadDatamine<DatamineOnslaught>(GameCatalogDenormalizer.DatamineOnslaughtPath));
         var eventDefinitions = LoadDataset<IReadOnlyList<GameCatalogEventDefinition>>(GameCatalogDatasets.EventDefinitions);
         var eventOccurrences = LoadDataset<IReadOnlyList<GameCatalogEventOccurrence>>(GameCatalogDatasets.EventOccurrences);
-        var hseScoring = LoadDataset<IReadOnlyList<GameCatalogHseScoring>>(GameCatalogDatasets.HomeScreenEventScoring);
+        var hseScoring = GameCatalogDenormalizer.ReadDatamineHseScoring(
+            LoadDatamine<List<DatamineHomeScreenEvent>>(GameCatalogDenormalizer.DatamineHomeScreenEventsPath),
+            LoadDatamine<Dictionary<string, List<DatamineTieredProgressReward>>>(GameCatalogDenormalizer.DatamineTieredProgressRewardsPath),
+            abilities);
         var hordeModeTiersRaw = LoadDataset<IReadOnlyList<GameCatalogHordeModeTiers>>(GameCatalogDatasets.HordeModeTiers);
         var mythicQuests = GameCatalogDenormalizer.ReadDatamineMythicQuests(
             LoadDatamine<DatamineQuestGroups>(GameCatalogDenormalizer.DatamineQuestGroupsPath).Hero);
         var unitPower = LoadUnitPower();
-        var questEvents = LoadDataset<IReadOnlyList<GameCatalogRawQuestEvent>>(GameCatalogDatasets.QuestEvents);
+        var questEvents = GameCatalogDenormalizer.ReadDatamineQuestEvents(
+            LoadDatamine<List<DatamineLinearHeroEvent>>(GameCatalogDenormalizer.DatamineLinearHeroEventsPath),
+            LoadDataset<Dictionary<string, Dictionary<string, int>>>(GameCatalogDatasets.QuestEventPower));
         var questCrates = LoadDataset<IReadOnlyList<GameCatalogQuestCrate>>(GameCatalogDatasets.QuestCrates);
 
         var npcsByFaction = GameCatalogDenormalizer.ReadDatamineNpcs(
