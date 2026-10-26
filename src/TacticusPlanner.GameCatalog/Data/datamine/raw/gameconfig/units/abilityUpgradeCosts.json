@@ -1,0 +1,238 @@
+[
+  {
+    "gold": 25,
+    "abilityTokenCommon": 1
+  },
+  {
+    "gold": 50,
+    "abilityTokenCommon": 1
+  },
+  {
+    "gold": 100,
+    "abilityTokenCommon": 1
+  },
+  {
+    "gold": 150,
+    "abilityTokenCommon": 2
+  },
+  {
+    "gold": 200,
+    "abilityTokenCommon": 2
+  },
+  {
+    "gold": 300,
+    "abilityTokenCommon": 2
+  },
+  {
+    "gold": 400,
+    "abilityTokenCommon": 3
+  },
+  {
+    "gold": 500,
+    "abilityTokenUncommon": 1
+  },
+  {
+    "gold": 600,
+    "abilityTokenUncommon": 1
+  },
+  {
+    "gold": 700,
+    "abilityTokenUncommon": 1
+  },
+  {
+    "gold": 800,
+    "abilityTokenUncommon": 2
+  },
+  {
+    "gold": 900,
+    "abilityTokenUncommon": 2
+  },
+  {
+    "gold": 1000,
+    "abilityTokenUncommon": 2
+  },
+  {
+    "gold": 1250,
+    "abilityTokenUncommon": 3
+  },
+  {
+    "gold": 1500,
+    "abilityTokenUncommon": 4
+  },
+  {
+    "gold": 1750,
+    "abilityTokenUncommon": 5
+  },
+  {
+    "gold": 2000,
+    "abilityTokenRare": 1
+  },
+  {
+    "gold": 2500,
+    "abilityTokenRare": 1
+  },
+  {
+    "gold": 3000,
+    "abilityTokenRare": 1
+  },
+  {
+    "gold": 3500,
+    "abilityTokenRare": 2
+  },
+  {
+    "gold": 4000,
+    "abilityTokenRare": 2
+  },
+  {
+    "gold": 4500,
+    "abilityTokenRare": 2
+  },
+  {
+    "gold": 5000,
+    "abilityTokenRare": 3
+  },
+  {
+    "gold": 5500,
+    "abilityTokenRare": 4
+  },
+  {
+    "gold": 6000,
+    "abilityTokenRare": 5
+  },
+  {
+    "gold": 6500,
+    "abilityTokenEpic": 1
+  },
+  {
+    "gold": 7000,
+    "abilityTokenEpic": 1
+  },
+  {
+    "gold": 7500,
+    "abilityTokenEpic": 1
+  },
+  {
+    "gold": 8000,
+    "abilityTokenEpic": 2
+  },
+  {
+    "gold": 8500,
+    "abilityTokenEpic": 2
+  },
+  {
+    "gold": 9000,
+    "abilityTokenEpic": 2
+  },
+  {
+    "gold": 9500,
+    "abilityTokenEpic": 3
+  },
+  {
+    "gold": 10000,
+    "abilityTokenEpic": 4
+  },
+  {
+    "gold": 11000,
+    "abilityTokenEpic": 5
+  },
+  {
+    "gold": 12000,
+    "abilityTokenLegendary": 1
+  },
+  {
+    "gold": 13000,
+    "abilityTokenLegendary": 1
+  },
+  {
+    "gold": 14000,
+    "abilityTokenLegendary": 1
+  },
+  {
+    "gold": 15000,
+    "abilityTokenLegendary": 2
+  },
+  {
+    "gold": 16000,
+    "abilityTokenLegendary": 2
+  },
+  {
+    "gold": 18000,
+    "abilityTokenLegendary": 2
+  },
+  {
+    "gold": 20000,
+    "abilityTokenLegendary": 3
+  },
+  {
+    "gold": 22500,
+    "abilityTokenLegendary": 3
+  },
+  {
+    "gold": 25000,
+    "abilityTokenLegendary": 4
+  },
+  {
+    "gold": 30000,
+    "abilityTokenLegendary": 5
+  },
+  {
+    "gold": 40000,
+    "abilityTokenLegendary": 6
+  },
+  {
+    "gold": 50000,
+    "abilityTokenLegendary": 7
+  },
+  {
+    "gold": 75000,
+    "abilityTokenLegendary": 8
+  },
+  {
+    "gold": 100000,
+    "abilityTokenLegendary": 9
+  },
+  {
+    "gold": 125000,
+    "abilityTokenLegendary": 10
+  },
+  {
+    "gold": 127500,
+    "abilityTokenMythic": 1
+  },
+  {
+    "gold": 130000,
+    "abilityTokenMythic": 1
+  },
+  {
+    "gold": 132500,
+    "abilityTokenMythic": 1
+  },
+  {
+    "gold": 135000,
+    "abilityTokenMythic": 2
+  },
+  {
+    "gold": 137500,
+    "abilityTokenMythic": 2
+  },
+  {
+    "gold": 140000,
+    "abilityTokenMythic": 2
+  },
+  {
+    "gold": 142500,
+    "abilityTokenMythic": 3
+  },
+  {
+    "gold": 145000,
+    "abilityTokenMythic": 3
+  },
+  {
+    "gold": 147500,
+    "abilityTokenMythic": 4
+  },
+  {
+    "gold": 150000,
+    "abilityTokenMythic": 5
+  }
+]

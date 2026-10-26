@@ -265,7 +265,6 @@ public static class GameCatalogDatasets
     [
         .. UnitFactions,
         MowUpgradeCosts,
-        CharacterAbilityCosts,
         DropChances,
         AscensionCosts,
         UnlockShardCosts,
