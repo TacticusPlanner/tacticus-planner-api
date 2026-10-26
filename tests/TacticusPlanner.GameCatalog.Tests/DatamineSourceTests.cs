@@ -11,7 +11,7 @@ namespace TacticusPlanner.GameCatalog.Tests;
 /// </summary>
 public sealed partial class DatamineSourceTests : IDisposable
 {
-    private readonly string _scratch = Path.Combine(Path.GetTempPath(), $"datamine-tests-{Guid.NewGuid():N}");
+    private readonly string _scratch = Path.Join(Path.GetTempPath(), $"datamine-tests-{Guid.NewGuid():N}");
 
     public void Dispose()
     {
@@ -30,7 +30,7 @@ public sealed partial class DatamineSourceTests : IDisposable
     [Fact]
     public void ShippedAllowlistIsSortedWithoutDuplicates()
     {
-        var paths = ReadAllowlist(Path.Combine(ShippedDatamineDir(), "files.txt"));
+        var paths = ReadAllowlist(Path.Join(ShippedDatamineDir(), "files.txt"));
 
         Assert.Equal(paths.Distinct(StringComparer.Ordinal).Order(StringComparer.Ordinal), paths);
     }
@@ -38,7 +38,7 @@ public sealed partial class DatamineSourceTests : IDisposable
     [Fact]
     public void EmbeddedCopiesAreExactlyTheAllowlist()
     {
-        var paths = ReadAllowlist(Path.Combine(ShippedDatamineDir(), "files.txt"));
+        var paths = ReadAllowlist(Path.Join(ShippedDatamineDir(), "files.txt"));
 
         Assert.Equal(paths, DatamineFiles.RawPaths);
     }
@@ -76,7 +76,7 @@ public sealed partial class DatamineSourceTests : IDisposable
     public void HandEditedCopyIsRejected()
     {
         var dir = WriteTree();
-        File.AppendAllText(Path.Combine(dir, "raw", "gameconfig", "items.json"), " ");
+        File.AppendAllText(Path.Join(dir, "raw", "gameconfig", "items.json"), " ");
 
         var error = Assert.Single(Check(dir));
         Assert.Contains("gameconfig/items.json", error, StringComparison.Ordinal);
@@ -86,7 +86,7 @@ public sealed partial class DatamineSourceTests : IDisposable
     public void MissingCopyIsRejected()
     {
         var dir = WriteTree();
-        File.Delete(Path.Combine(dir, "raw", "gameconfig", "items.json"));
+        File.Delete(Path.Join(dir, "raw", "gameconfig", "items.json"));
 
         Assert.Contains(Check(dir), error => error.Contains("gameconfig/items.json", StringComparison.Ordinal));
     }
@@ -95,8 +95,8 @@ public sealed partial class DatamineSourceTests : IDisposable
     public void UnlistedCopyIsRejected()
     {
         var dir = WriteTree();
-        Directory.CreateDirectory(Path.Combine(dir, "raw", "gameconfig", "units"));
-        File.WriteAllText(Path.Combine(dir, "raw", "gameconfig", "units", "lineup.json"), "{}");
+        Directory.CreateDirectory(Path.Join(dir, "raw", "gameconfig", "units"));
+        File.WriteAllText(Path.Join(dir, "raw", "gameconfig", "units", "lineup.json"), "{}");
 
         var error = Assert.Single(Check(dir));
         Assert.Contains("gameconfig/units/lineup.json", error, StringComparison.Ordinal);
@@ -106,8 +106,8 @@ public sealed partial class DatamineSourceTests : IDisposable
     public void ChecksumListOutOfStepWithAllowlistIsRejected()
     {
         var dir = WriteTree();
-        File.WriteAllText(Path.Combine(dir, "files.txt"), "gameconfig/globalValues.json\n");
-        File.Delete(Path.Combine(dir, "raw", "gameconfig", "items.json"));
+        File.WriteAllText(Path.Join(dir, "files.txt"), "gameconfig/globalValues.json\n");
+        File.Delete(Path.Join(dir, "raw", "gameconfig", "items.json"));
 
         Assert.Contains(Check(dir), error => error.Contains("files.sha256", StringComparison.Ordinal));
     }
@@ -117,7 +117,7 @@ public sealed partial class DatamineSourceTests : IDisposable
     {
         var errors = new List<string>();
 
-        var refLines = File.ReadAllText(Path.Combine(dir, "REF")).Split('\n');
+        var refLines = File.ReadAllText(Path.Join(dir, "REF")).Split('\n');
         var pin = refLines[0];
         if (pin.StartsWith("local", StringComparison.Ordinal))
         {
@@ -128,8 +128,8 @@ public sealed partial class DatamineSourceTests : IDisposable
             errors.Add("REF must be one LF-terminated line '<v-tag or untagged> <40 lowercase hex sha>'.");
         }
 
-        var listed = ReadAllowlist(Path.Combine(dir, "files.txt"));
-        var rawDir = Path.Combine(dir, "raw");
+        var listed = ReadAllowlist(Path.Join(dir, "files.txt"));
+        var rawDir = Path.Join(dir, "raw");
         var copies = Directory.Exists(rawDir)
             ? Directory.EnumerateFiles(rawDir, "*", SearchOption.AllDirectories)
                 .Select(file => Path.GetRelativePath(rawDir, file).Replace('\\', '/'))
@@ -141,7 +141,7 @@ public sealed partial class DatamineSourceTests : IDisposable
         errors.AddRange(copies.Where(path => !listed.Contains(path)).Order(StringComparer.Ordinal)
             .Select(path => $"raw/{path} is not listed in files.txt."));
 
-        var recorded = File.ReadAllLines(Path.Combine(dir, "files.sha256"))
+        var recorded = File.ReadAllLines(Path.Join(dir, "files.sha256"))
             .Select(line => line.Split("  ", 2))
             .ToList();
         if (!recorded.Select(parts => parts[^1]).SequenceEqual(listed))
@@ -151,7 +151,7 @@ public sealed partial class DatamineSourceTests : IDisposable
 
         foreach (var parts in recorded.Where(parts => parts.Length == 2 && copies.Contains(parts[1])))
         {
-            var actual = Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(Path.Combine(rawDir, parts[1]))));
+            var actual = Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(Path.Join(rawDir, parts[1]))));
             if (actual != parts[0])
             {
                 errors.Add($"raw/{parts[1]} differs from the pinned copy (checksum mismatch). Datamine copies are never edited by hand.");
@@ -165,9 +165,9 @@ public sealed partial class DatamineSourceTests : IDisposable
     {
         for (var dir = new DirectoryInfo(AppContext.BaseDirectory); dir is not null; dir = dir.Parent)
         {
-            if (File.Exists(Path.Combine(dir.FullName, "TacticusPlanner.slnx")))
+            if (File.Exists(Path.Join(dir.FullName, "TacticusPlanner.slnx")))
             {
-                return Path.Combine(dir.FullName, "src", "TacticusPlanner.GameCatalog", "Data", "datamine");
+                return Path.Join(dir.FullName, "src", "TacticusPlanner.GameCatalog", "Data", "datamine");
             }
         }
 
@@ -186,14 +186,14 @@ public sealed partial class DatamineSourceTests : IDisposable
         var source = ShippedDatamineDir();
         foreach (var file in Directory.EnumerateFiles(source, "*", SearchOption.AllDirectories))
         {
-            var target = Path.Combine(_scratch, Path.GetRelativePath(source, file));
+            var target = Path.Join(_scratch, Path.GetRelativePath(source, file));
             Directory.CreateDirectory(Path.GetDirectoryName(target)!);
             File.Copy(file, target);
         }
 
         if (pin is not null)
         {
-            File.WriteAllText(Path.Combine(_scratch, "REF"), pin);
+            File.WriteAllText(Path.Join(_scratch, "REF"), pin);
         }
 
         return _scratch;
