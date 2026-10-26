@@ -12,18 +12,20 @@ internal static partial class GameCatalogDenormalizer
     /// <summary>
     /// Reads the datamine <c>abilityUpgradeCosts.json</c> (one row per ability level, each <c>gold</c> plus one
     /// <c>abilityToken{Rarity}</c> count) into cost rungs. Row N (1-based) is the cost from level N to N + 1.
-    /// A row with any key other than <c>gold</c> and exactly one <c>abilityToken*</c> gets null badges.
+    /// A row without <c>gold</c>, or with any key besides <c>gold</c> and exactly one <c>abilityToken*</c>, gets null
+    /// badges, which validation rejects.
     /// </summary>
     public static IReadOnlyList<GameCatalogCharacterAbilityCost> ReadDatamineCharacterAbilityCosts(
         IReadOnlyList<IReadOnlyDictionary<string, int>> rows) =>
         rows
             .Select((row, index) =>
             {
+                var hasGold = row.TryGetValue("gold", out var gold);
                 var badgeKeys = row.Keys.Where(key => key != "gold").ToList();
-                var badges = badgeKeys is [var key] && key.StartsWith(AbilityTokenPrefix, StringComparison.Ordinal)
+                var badges = hasGold && badgeKeys is [var key] && key.StartsWith(AbilityTokenPrefix, StringComparison.Ordinal)
                     ? new GameCatalogAmountByRarity(key[AbilityTokenPrefix.Length..], row[key])
                     : null;
-                return new GameCatalogCharacterAbilityCost(index + 1, row.GetValueOrDefault("gold"), badges);
+                return new GameCatalogCharacterAbilityCost(index + 1, gold, badges);
             })
             .ToArray();
 

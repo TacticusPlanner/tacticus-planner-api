@@ -92,6 +92,17 @@ public sealed class CharacterAbilityCostTests
     }
 
     [Fact]
+    public void RowWithoutGoldHasNoBadgesAndFailsValidation()
+    {
+        var cost = ReadRow(new() { ["abilityTokenCommon"] = 1 });
+        var errors = new List<GameCatalogValidationError>();
+        GameCatalogValidator.ValidateCharacterAbilityCosts([cost], errors);
+
+        Assert.Null(cost.Badges);
+        Assert.Contains(errors, error => error.Code == "InvalidCost");
+    }
+
+    [Fact]
     public void ValidLadderHasNoErrors()
     {
         var errors = new List<GameCatalogValidationError>();

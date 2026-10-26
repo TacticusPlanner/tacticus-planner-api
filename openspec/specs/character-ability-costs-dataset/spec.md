@@ -55,7 +55,7 @@ Consistent with every served catalog dataset, a `character-ability-costs` record
 
 ### Requirement: The raw ladder is validated at load
 
-The catalog loader SHALL fail startup, as it does for other datasets, when the datamine ladder is missing or empty, a row has negative gold, a row does not have exactly one `abilityToken{Rarity}` key besides `gold`, the rarity is not a known rarity, or the badge amount is not positive. A missing, empty or invalid dataset SHALL be distinguishable from a valid dataset by startup failing rather than serving a partial ladder.
+The catalog loader SHALL fail startup, as it does for other datasets, when the datamine ladder is missing or empty, a row has no `gold` or negative gold, a row does not have exactly one `abilityToken{Rarity}` key besides `gold`, the rarity is not a known rarity, or the badge amount is not positive. A missing, empty or invalid dataset SHALL be distinguishable from a valid dataset by startup failing rather than serving a partial ladder.
 
 #### Scenario: A gap in the raw levels
 
