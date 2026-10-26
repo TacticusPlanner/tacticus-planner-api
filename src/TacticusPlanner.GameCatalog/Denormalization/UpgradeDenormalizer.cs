@@ -7,9 +7,6 @@ internal static partial class GameCatalogDenormalizer
     /// <summary>Raw path of the datamine file the upgrades dataset is built from.</summary>
     public const string DatamineUpgradesPath = "gameconfig/upgrades.json";
 
-    /// <summary>Raw path of the datamine English strings, which carry the upgrades' display names.</summary>
-    public const string DatamineEnglishPath = "languages/en.json";
-
     // The game's upgrade statType -> the served stat name.
     private static readonly Dictionary<string, string> UpgradeStatNames = new(StringComparer.Ordinal)
     {
@@ -21,30 +18,27 @@ internal static partial class GameCatalogDenormalizer
     /// <summary>
     /// Reads the datamine <c>upgrades.json</c> into upgrades grouped by source key
     /// (<c>upgrades-{rarity}</c> for base materials, <c>upgrades-{rarity}-crafted</c> for craftable ones), each
-    /// group ordered by id. The label and material name are the English string <c>Upgrades/{id}_name</c>; the
-    /// recipe is the <c>crafting</c> list (ingredient id and amount).
+    /// group ordered by id. The label and material name are the game's <c>name</c> (localized display names are the
+    /// apps' concern); the recipe is the <c>crafting</c> list (ingredient id and amount).
     /// </summary>
-    /// <exception cref="InvalidOperationException">An upgrade has no English name or an unknown statType.</exception>
+    /// <exception cref="InvalidOperationException">An upgrade has no name or an unknown statType.</exception>
     public static IReadOnlyDictionary<string, IReadOnlyList<GameCatalogUpgrade>> ReadDatamineUpgrades(
-        IReadOnlyDictionary<string, DatamineUpgrade> upgrades,
-        IReadOnlyDictionary<string, string> english) =>
+        IReadOnlyDictionary<string, DatamineUpgrade> upgrades) =>
         upgrades
             .Select(pair =>
             {
                 var (id, upgrade) = pair;
-                if (!english.TryGetValue($"Upgrades/{id}_name", out var name)
-                    || !UpgradeStatNames.TryGetValue(upgrade.StatType, out var stat))
+                if (string.IsNullOrWhiteSpace(upgrade.Name) || !UpgradeStatNames.TryGetValue(upgrade.StatType, out var stat))
                 {
                     throw new InvalidOperationException(
-                        $"Dataset '{GameCatalogDatasets.Upgrades}' upgrade '{id}' must have an English name " +
-                        $"'Upgrades/{id}_name' and a statType of [{string.Join(", ", UpgradeStatNames.Keys)}]; " +
-                        $"found statType '{upgrade.StatType}'.");
+                        $"Dataset '{GameCatalogDatasets.Upgrades}' upgrade '{id}' must have a name and a statType of " +
+                        $"[{string.Join(", ", UpgradeStatNames.Keys)}]; found name '{upgrade.Name}', statType '{upgrade.StatType}'.");
                 }
 
                 var recipe = (upgrade.Crafting ?? [])
                     .Select(ingredient => new GameCatalogUpgradeRecipeIngredient(ingredient.Id, ingredient.Amount))
                     .ToArray();
-                return new GameCatalogUpgrade(id, name, id, name, upgrade.Rarity, stat, upgrade.Crafting is not null, recipe);
+                return new GameCatalogUpgrade(id, upgrade.Name, id, upgrade.Name, upgrade.Rarity, stat, upgrade.Crafting is not null, recipe);
             })
             .GroupBy(upgrade => $"{GameCatalogDatasets.UpgradesPrefix}-{upgrade.Rarity.ToLowerInvariant()}{(upgrade.Craftable ? "-crafted" : "")}")
             .ToDictionary(

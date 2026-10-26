@@ -66,10 +66,10 @@ restrictions); these are silently ignored on deserialize.
   one `mythic` range (`{min, max}`, with a computed `midpoint`).
 - **upgrades** carry a **nested recipe** tree: each craftable ingredient embeds its own `recipe`
   (recursively; cycle-guarded); base materials have `recipe: null`. No separate "expanded totals" table.
-  Built from the datamine `gameconfig/upgrades.json`: `label`/`material` = `languages/en.json`
-  `Upgrades/{id}_name` (the game's `name` drops accents), `statType` `hp`/`dmg`/`fixedArmor` →
+  Built from the datamine `gameconfig/upgrades.json`: `label`/`material` = the game's untranslated `name`
+  (no `languages/*.json` in the catalog; localization is the apps' build step), `statType` `hp`/`dmg`/`fixedArmor` →
   `Health`/`Damage`/`Armour`, `crafting` → `craftable` + recipe. Grouped internally as
-  `upgrades-{rarity}[-crafted]`, ordered by id. A missing English name or unknown `statType` fails startup.
+  `upgrades-{rarity}[-crafted]`, ordered by id. An empty name or unknown `statType` fails startup.
 - **equipment** is built from the datamine `gameconfig/items.json` (keyed by item id; see **Datamine
   source**) and served as a plain array ordered by item type, then id. Each served level's `stats` is the
   game's stat block with five keys renamed to the names the dataset has always served (`critDmg`→`critDamage`,

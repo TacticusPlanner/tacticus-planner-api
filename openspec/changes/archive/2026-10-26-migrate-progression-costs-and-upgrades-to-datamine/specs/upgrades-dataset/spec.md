@@ -2,27 +2,27 @@
 
 ### Requirement: Upgrade materials are built from the pinned datamine files
 
-The served `upgrades` dataset SHALL be built from the datamine copies `gameconfig/upgrades.json` (keyed by upgrade id) and `languages/en.json`. The catalog SHALL keep no hand-kept upgrade files.
+The served `upgrades` dataset SHALL be built from the datamine copies `gameconfig/upgrades.json` (keyed by upgrade id). The catalog SHALL keep no hand-kept upgrade files.
 
 #### Scenario: Same materials plus the game's new one
 
 - **WHEN** the dataset is served at datamine `v1.43.157.2989`
-- **THEN** it holds 560 records: the 559 the retired `Data/upgrades/*` files served, unchanged, plus `upgArmL008` (Transdimensional Sanctum, Legendary, Armour, not craftable)
+- **THEN** it holds 560 records: the 559 the retired `Data/upgrades/*` files served, unchanged except two labels that lose their accents, plus `upgArmL008` (Transdimensional Sanctum, Legendary, Armour, not craftable)
 
 ### Requirement: Upgrade fields map from the game's
 
 For each upgrade:
 
 - `id` and `snowprintId` SHALL be the key.
-- `label` and `material` SHALL be the English string `Upgrades/{id}_name`.
+- `label` and `material` SHALL be the game's untranslated `name`. Localized display names are not catalog data.
 - `rarity` SHALL be the game's rarity.
 - `stat` SHALL map `hp` to `Health`, `dmg` to `Damage` and `fixedArmor` to `Armour`.
 - `craftable` SHALL be whether `crafting` is present, and `recipe` SHALL be its entries (`id` as `material`, `amount` as `count`).
 
-#### Scenario: Accented names come from the English strings
+#### Scenario: Names are the game's untranslated names
 
 - **WHEN** the dataset is served at datamine `v1.43.157.2989`
-- **THEN** `upgHpL111` has label `Mjød`, not the developer name `Mjod`
+- **THEN** `upgHpL111` has label `Mjod` (V1 served `Mjød`), and `upgHpL121C` has `Tannhauser's Bones` (V1 `Tännhauser's Bones`)
 
 #### Scenario: A craftable upgrade
 
@@ -42,7 +42,7 @@ Upgrades SHALL be grouped as `upgrades-{rarity}` (base) and `upgrades-{rarity}-c
 
 ### Requirement: An unnamed or unknown upgrade fails startup
 
-Loading SHALL fail, naming the dataset and the upgrade, when an upgrade has no English name or a `statType` outside the mapping.
+Loading SHALL fail, naming the dataset and the upgrade, when an upgrade has an empty name or a `statType` outside the mapping.
 
 #### Scenario: Unknown stat
 

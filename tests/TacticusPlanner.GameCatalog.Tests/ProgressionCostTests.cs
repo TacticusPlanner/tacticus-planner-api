@@ -36,6 +36,7 @@ public sealed class ProgressionCostTests
     [Theory]
     [InlineData(15, "shards")]
     [InlineData(1, "hreShards")]
+    [InlineData(1, "heroAscensionOrbRelic")]
     public void AnUnknownStarCountOrCostKeyFailsTheLoad(int stars, string key)
     {
         var exception = Assert.Throws<InvalidOperationException>(() =>

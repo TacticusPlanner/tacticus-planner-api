@@ -121,7 +121,7 @@
     },
     {
       key: upgrades,
-      hash: 61de18a76cd6e71d2c819eab83ef8e734884020e470a084cd2773c491f993082,
+      hash: 75bce5c5e7e33dbe8e2dde011c89703a9cac92ae6bba3ecda744807cb7a7ff2e,
       url: /api/v1/game-catalog/upgrades/{envelopeHash}
     }
   ]

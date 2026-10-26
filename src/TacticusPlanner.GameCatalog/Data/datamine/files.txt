@@ -6,4 +6,3 @@ gameconfig/units/abilityUpgradeCostsMoW.json  # mow-upgrade-costs
 gameconfig/units/heroConversion.json          # unlock-shard-costs
 gameconfig/units/heroProgressionSteps.json    # ascension-costs
 gameconfig/upgrades.json                      # upgrades
-languages/en.json                             # upgrades (display names)

@@ -34,7 +34,10 @@ internal static partial class GameCatalogDenormalizer
         rows
             .Select((row, index) =>
             {
-                var orbs = row.Costs.Keys.Where(key => key.StartsWith(AscensionOrbPrefix, StringComparison.Ordinal)).ToList();
+                var orbs = row.Costs.Keys
+                    .Where(key => key.StartsWith(AscensionOrbPrefix, StringComparison.Ordinal)
+                        && RarityOrder.Contains(key[AscensionOrbPrefix.Length..]))
+                    .ToList();
                 var unknown = row.Costs.Keys.Except(["shards", "mythicShards", .. orbs]).ToList();
                 if (row.Stars < 0 || row.Stars >= StarLabels.Length || orbs.Count > 1 || unknown.Count > 0)
                 {

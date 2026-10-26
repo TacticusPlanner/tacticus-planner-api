@@ -58,8 +58,7 @@ public static class GameCatalogLoader
             LoadDatamine<Dictionary<string, DatamineItem>>(GameCatalogDenormalizer.DatamineItemsPath));
 
         var upgradesByRarity = GameCatalogDenormalizer.ReadDatamineUpgrades(
-            LoadDatamine<Dictionary<string, DatamineUpgrade>>(GameCatalogDenormalizer.DatamineUpgradesPath),
-            LoadDatamine<Dictionary<string, string>>(GameCatalogDenormalizer.DatamineEnglishPath));
+            LoadDatamine<Dictionary<string, DatamineUpgrade>>(GameCatalogDenormalizer.DatamineUpgradesPath));
 
         var campaignGroups = new Dictionary<string, GameCatalogCampaignGroup>(StringComparer.Ordinal);
         foreach (var key in GameCatalogDatasets.CampaignBattleGroups)
