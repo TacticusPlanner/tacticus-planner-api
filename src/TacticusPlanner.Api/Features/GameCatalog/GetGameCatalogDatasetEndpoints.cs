@@ -1,5 +1,7 @@
 using FastEndpoints;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.Extensions.Options;
 using Microsoft.Net.Http.Headers;
 using TacticusPlanner.Api.Http;
 using TacticusPlanner.GameCatalog;
@@ -29,9 +31,10 @@ public abstract class ServedDatasetEndpoint<TPayload>(IGameCatalogProvider catal
         }
 
         // ponytail: the ETag is the identity-JSON digest plus an encoding token, not a digest of the compressed
-        // bytes (the compression middleware runs after the endpoint); distinct per encoding, stable per content.
-        var encoding = HttpContext.RequestServices.GetRequiredService<IResponseCompressionProvider>()
-            .GetCompressionProvider(HttpContext)?.EncodingName;
+        // bytes; distinct per encoding, stable per content.
+        var compression = HttpContext.RequestServices.GetRequiredService<IResponseCompressionProvider>()
+            .GetCompressionProvider(HttpContext);
+        var encoding = compression?.EncodingName;
         var etag = ETagHelper.CreateEtag(encoding is null ? envelopeHash : $"{envelopeHash}-{encoding}");
 
         HttpContext.Response.Headers.CacheControl = requestedHash is null
@@ -46,7 +49,18 @@ public abstract class ServedDatasetEndpoint<TPayload>(IGameCatalogProvider catal
         }
 
         HttpContext.Response.Headers.ETag = etag;
-        await Send.OkAsync(ServedDatasets.Envelope<TPayload>(snapshot, datasetKey), ct);
+        // The body is pre-serialized (and pre-compressed) per snapshot. Setting Content-Encoding makes the
+        // response compression middleware pass it through instead of compressing it again.
+        var options = HttpContext.RequestServices.GetRequiredService<IOptions<JsonOptions>>().Value.SerializerOptions;
+        var body = ServedDatasets.Body<TPayload>(snapshot, datasetKey, compression, options);
+        if (encoding is not null)
+        {
+            HttpContext.Response.Headers.ContentEncoding = encoding;
+        }
+
+        HttpContext.Response.ContentType = "application/json; charset=utf-8";
+        HttpContext.Response.ContentLength = body.Length;
+        await HttpContext.Response.Body.WriteAsync(body, ct);
     }
 
     protected void ConfigureServed(string summary, string okDescription)

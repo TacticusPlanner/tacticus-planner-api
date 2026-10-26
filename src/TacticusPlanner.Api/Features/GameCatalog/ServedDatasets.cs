@@ -2,6 +2,7 @@ using System.Collections.Concurrent;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography;
 using System.Text.Json;
+using Microsoft.AspNetCore.ResponseCompression;
 using TacticusPlanner.GameCatalog.Models;
 
 namespace TacticusPlanner.Api.Features.GameCatalog;
@@ -45,6 +46,33 @@ public static class ServedDatasets
 
     private static readonly ConditionalWeakTable<GameCatalogSnapshot, ConcurrentDictionary<string, string>> Hashes = new();
     private static readonly ConditionalWeakTable<GameCatalogSnapshot, ServedManifest> Manifests = new();
+    private static readonly ConditionalWeakTable<GameCatalogSnapshot, ConcurrentDictionary<(string Key, string? Encoding), byte[]>> Bodies = new();
+
+    /// <summary>The envelope's response body: serialized once per snapshot with the API's JSON options, and
+    /// compressed once per content encoding (<paramref name="compression"/> is the negotiated provider, null for
+    /// identity). The snapshot is immutable, so every 200 for a dataset is the same bytes.</summary>
+    // ponytail: caches the whole served catalog per encoding (~5 MB identity + ~0.5 MB each compressed); fine
+    // for one live snapshot.
+    public static byte[] Body<TPayload>(GameCatalogSnapshot snapshot, string key, ICompressionProvider? compression, JsonSerializerOptions options)
+    {
+        var bodies = Bodies.GetValue(snapshot, _ => new());
+        var identity = bodies.GetOrAdd((key, null), _ => JsonSerializer.SerializeToUtf8Bytes(Envelope<TPayload>(snapshot, key), options));
+        if (compression is null)
+        {
+            return identity;
+        }
+
+        return bodies.GetOrAdd((key, compression.EncodingName), _ =>
+        {
+            using var buffer = new MemoryStream();
+            using (var stream = compression.CreateStream(buffer))
+            {
+                stream.Write(identity);
+            }
+
+            return buffer.ToArray();
+        });
+    }
 
     public static GameCatalogDatasetEnvelope<TPayload> Envelope<TPayload>(GameCatalogSnapshot snapshot, string key) =>
         new(
