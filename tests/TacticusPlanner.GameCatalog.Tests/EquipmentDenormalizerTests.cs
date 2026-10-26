@@ -75,9 +75,11 @@ public sealed class EquipmentDenormalizerTests
     {
         // The game prices levels per item, but every item of a rarity shares one ladder (as the retired
         // equipment-upgrade-costs.json had it). A datamine bump that breaks this is worth a look.
-        foreach (var rarity in GameCatalogLoader.Load().EquipmentViews.GroupBy(item => item.Rarity, StringComparer.Ordinal))
+        var laddersByRarity = GameCatalogLoader.Load().EquipmentViews
+            .GroupBy(item => item.Rarity, StringComparer.Ordinal)
+            .Select(rarity => rarity.Select(item => item.UpgradeLevels).ToList());
+        foreach (var ladders in laddersByRarity)
         {
-            var ladders = rarity.Select(item => item.UpgradeLevels).ToList();
             Assert.All(ladders, ladder => Assert.Equal(ladders[0], ladder));
         }
     }
