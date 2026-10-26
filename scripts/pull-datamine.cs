@@ -203,6 +203,12 @@ static (int ExitCode, byte[] Stdout, string Stderr) RunGit(string? workingDirect
         RedirectStandardError = true,
         WorkingDirectory = workingDirectory ?? Directory.GetCurrentDirectory(),
     };
+
+    // Run from a git hook, these would point git at this repository instead of the temp clone.
+    foreach (var variable in new[] { "GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_OBJECT_DIRECTORY", "GIT_COMMON_DIR", "GIT_ALTERNATE_OBJECT_DIRECTORIES", "GIT_PREFIX" })
+    {
+        startInfo.Environment.Remove(variable);
+    }
     foreach (var argument in arguments)
     {
         startInfo.ArgumentList.Add(argument);
