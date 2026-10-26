@@ -282,9 +282,10 @@ public static class GameCatalogLoader
 
     private static T LoadDataset<T>(string key)
     {
-        using var document = ReadEmbeddedJsonDocument($"{key}.json");
+        // Straight from the resource stream: no intermediate JsonDocument.
+        using var stream = OpenEmbeddedJson($"{key}.json");
 
-        return document.RootElement.Deserialize<T>(JsonOptions)
+        return JsonSerializer.Deserialize<T>(stream, JsonOptions)
             ?? throw new InvalidOperationException($"GameCatalog dataset '{key}' is empty.");
     }
 
@@ -301,7 +302,7 @@ public static class GameCatalogLoader
         return group with { Battles = battles };
     }
 
-    private static JsonDocument ReadEmbeddedJsonDocument(string fileName)
+    private static Stream OpenEmbeddedJson(string fileName)
     {
         var assembly = Assembly.GetExecutingAssembly();
 
@@ -319,9 +320,7 @@ public static class GameCatalogLoader
             throw new InvalidOperationException($"Embedded game catalog data file '{fileName}' was not found.");
         }
 
-        using var stream = assembly.GetManifestResourceStream(resourceName)
+        return assembly.GetManifestResourceStream(resourceName)
             ?? throw new InvalidOperationException($"Embedded game catalog data file '{fileName}' could not be opened.");
-
-        return JsonDocument.Parse(stream);
     }
 }
