@@ -64,6 +64,9 @@ public sealed class CreateCombinedGoalsValidator : Validator<CreateCombinedGoals
             });
 
         RuleForEach(request => request.Goals)
+            .ChildRules(goal => goal.RuleFor(spec => spec.Notes).MaximumLength(GoalValidation.MaxNotesLength));
+
+        RuleForEach(request => request.Goals)
             .ChildRules(goal => goal.RuleFor(spec => spec.DependsOnGoalIds)
                 .Must(ids => ids is null || (ids.TrueForAll(id => id != Guid.Empty) && ids.Distinct().Count() == ids.Count))
                 .WithMessage("DependsOnGoalIds must be distinct, non-empty goal ids."));

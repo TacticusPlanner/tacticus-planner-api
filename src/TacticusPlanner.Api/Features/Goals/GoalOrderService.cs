@@ -47,6 +47,16 @@ public sealed class GoalOrderService(PlannerDbContext db)
         changed = true;
     }
 
+    /// <summary>Moves this request's appended goals, in append order, to start at the 1-based
+    /// <paramref name="position"/>; every other goal keeps its relative order and those at or after it shift
+    /// down. The caller checks the range; <see cref="CompleteAsync"/> persists.</summary>
+    public async Task MoveAppendedToAsync(int position, CancellationToken ct)
+    {
+        var ordered = (await OrderedAsync(ct)).Except(appended).ToList();
+        ordered.InsertRange(position - 1, appended);
+        Renumber(ordered);
+    }
+
     /// <summary>Takes a goal out of the order (completed/archived/deleted); positions compact in
     /// <see cref="CompleteAsync"/>.</summary>
     public void Release(Goal goal)
