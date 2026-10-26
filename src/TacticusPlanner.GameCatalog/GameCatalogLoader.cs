@@ -34,8 +34,10 @@ public static class GameCatalogLoader
         var characterAbilityCosts = GameCatalogDenormalizer.ReadDatamineCharacterAbilityCosts(
             LoadDatamine<List<Dictionary<string, int>>>(GameCatalogDenormalizer.DatamineAbilityUpgradeCostsPath));
         var dropChances = LoadDataset<IReadOnlyList<GameCatalogDropChance>>(GameCatalogDatasets.DropChances);
-        var ascensionCosts = LoadDataset<IReadOnlyList<GameCatalogAscensionCost>>(GameCatalogDatasets.AscensionCosts);
-        var unlockShardCosts = LoadDataset<IReadOnlyList<GameCatalogUnlockShardCost>>(GameCatalogDatasets.UnlockShardCosts);
+        var ascensionCosts = GameCatalogDenormalizer.ReadDatamineAscensionCosts(
+            LoadDatamine<List<DatamineHeroProgressionStep>>(GameCatalogDenormalizer.DatamineHeroProgressionStepsPath));
+        var unlockShardCosts = GameCatalogDenormalizer.ReadDatamineUnlockShardCosts(
+            LoadDatamine<Dictionary<string, DatamineHeroConversion>>(GameCatalogDenormalizer.DatamineHeroConversionPath));
         var onslaughtRewards = LoadDataset<IReadOnlyList<GameCatalogOnslaughtReward>>(GameCatalogDatasets.OnslaughtRewards);
         var eventDefinitions = LoadDataset<IReadOnlyList<GameCatalogEventDefinition>>(GameCatalogDatasets.EventDefinitions);
         var eventOccurrences = LoadDataset<IReadOnlyList<GameCatalogEventOccurrence>>(GameCatalogDatasets.EventOccurrences);
@@ -55,11 +57,8 @@ public static class GameCatalogLoader
         var equipmentByType = GameCatalogDenormalizer.ReadDatamineEquipment(
             LoadDatamine<Dictionary<string, DatamineItem>>(GameCatalogDenormalizer.DatamineItemsPath));
 
-        var upgradesByRarity = new Dictionary<string, IReadOnlyList<GameCatalogUpgrade>>(StringComparer.Ordinal);
-        foreach (var key in GameCatalogDatasets.UpgradeRarities)
-        {
-            upgradesByRarity[key] = LoadDataset<IReadOnlyList<GameCatalogUpgrade>>(key);
-        }
+        var upgradesByRarity = GameCatalogDenormalizer.ReadDatamineUpgrades(
+            LoadDatamine<Dictionary<string, DatamineUpgrade>>(GameCatalogDenormalizer.DatamineUpgradesPath));
 
         var campaignGroups = new Dictionary<string, GameCatalogCampaignGroup>(StringComparer.Ordinal);
         foreach (var key in GameCatalogDatasets.CampaignBattleGroups)
@@ -158,7 +157,7 @@ public static class GameCatalogLoader
             new ReadOnlyCollection<GameCatalogHseScoring>(hseScoring.ToArray()),
             new ReadOnlyDictionary<string, GameCatalogFactionNpcs>(npcsByFaction),
             equipmentByType,
-            new ReadOnlyDictionary<string, IReadOnlyList<GameCatalogUpgrade>>(upgradesByRarity),
+            upgradesByRarity,
             new ReadOnlyDictionary<string, GameCatalogCampaignGroup>(campaignGroups),
             new ReadOnlyCollection<GameCatalogDropChance>(dropChances.ToArray()),
             new ReadOnlyDictionary<string, GameCatalogLre>(lresByEvent),

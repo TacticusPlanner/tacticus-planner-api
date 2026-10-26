@@ -32,3 +32,16 @@ public sealed record GameCatalogUpgradeView(
     IReadOnlyList<GameCatalogUpgradeRecipeIngredient> Recipe,
     IReadOnlyList<GameCatalogFarmLocation> FarmLocations
 );
+
+// ---- datamine shape (bound from Data/datamine/raw/gameconfig/upgrades.json, keyed by upgrade id) ----------
+
+// `name` is the game's untranslated name (served as label and material). A craftable upgrade has a
+// `crafting` list; a base material has none.
+public sealed record DatamineUpgrade(
+    string Name,
+    string Rarity,
+    string StatType,
+    IReadOnlyList<DatamineUpgradeIngredient>? Crafting
+);
+
+public sealed record DatamineUpgradeIngredient(string Id, int Amount);

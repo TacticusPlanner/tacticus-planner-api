@@ -82,4 +82,46 @@ public sealed class UpgradeDenormalizerTests
         Assert.Equal(65, expectedGoldA);
         Assert.Equal(expectedGoldA, expectedGoldB);
     }
+
+    [Fact]
+    public void DatamineUpgradesAreGroupedBySourceKeyAndNamedFromTheGame()
+    {
+        var byKey = GameCatalogDenormalizer.ReadDatamineUpgrades(new Dictionary<string, DatamineUpgrade>
+        {
+            ["upgHpU005C"] = new("First Aid Kit", "Uncommon", "hp", [new DatamineUpgradeIngredient("upgHpC007", 6)]),
+            ["upgHpU004C"] = new("Bionic Enhancement", "Uncommon", "hp", [new DatamineUpgradeIngredient("upgHpC002", 6)]),
+            ["upgArmU001"] = new("Oath Seal", "Uncommon", "fixedArmor", null),
+        });
+
+        Assert.Equal(["upgrades-uncommon", "upgrades-uncommon-crafted"], byKey.Keys.Order(StringComparer.Ordinal));
+        var oathSeal = Assert.Single(byKey["upgrades-uncommon"]);
+        Assert.Equal(("upgArmU001", "Oath Seal", "Oath Seal", "Armour"), (oathSeal.SnowprintId, oathSeal.Label, oathSeal.Material, oathSeal.Stat));
+        Assert.False(oathSeal.Craftable);
+        Assert.Empty(oathSeal.Recipe);
+        var crafted = byKey["upgrades-uncommon-crafted"];
+        Assert.Equal(["upgHpU004C", "upgHpU005C"], crafted.Select(upgrade => upgrade.Id));
+        Assert.Equal("Health", crafted[0].Stat);
+        Assert.True(crafted[0].Craftable);
+        Assert.Equal(new GameCatalogUpgradeRecipeIngredient("upgHpC002", 6), Assert.Single(crafted[0].Recipe));
+    }
+
+    [Theory]
+    [InlineData("Field Ration", "speed")]
+    [InlineData("", "hp")]
+    public void AMissingNameOrUnknownStatFailsTheLoad(string name, string statType)
+    {
+        var exception = Assert.Throws<InvalidOperationException>(() => GameCatalogDenormalizer.ReadDatamineUpgrades(
+            new Dictionary<string, DatamineUpgrade> { ["upgX"] = new(name, "Common", statType, null) }));
+
+        Assert.Contains("upgrade 'upgX'", exception.Message, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void TheShippedUpgradesUseTheGamesUntranslatedNames()
+    {
+        var snapshot = GameCatalogLoader.Load();
+
+        Assert.Equal("Mjod", snapshot.Upgrades.Single(upgrade => upgrade.Id == "upgHpL111").Label);
+        Assert.Equal(560, snapshot.Upgrades.Count);
+    }
 }

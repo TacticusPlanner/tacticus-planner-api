@@ -3,3 +3,6 @@
 gameconfig/items.json                         # equipment
 gameconfig/units/abilityUpgradeCosts.json     # character-ability-costs
 gameconfig/units/abilityUpgradeCostsMoW.json  # mow-upgrade-costs
+gameconfig/units/heroConversion.json          # unlock-shard-costs
+gameconfig/units/heroProgressionSteps.json    # ascension-costs
+gameconfig/upgrades.json                      # upgrades
