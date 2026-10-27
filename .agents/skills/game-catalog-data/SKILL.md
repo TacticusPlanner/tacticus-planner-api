@@ -116,6 +116,16 @@ restrictions); these are silently ignored on deserialize.
   missing or non-positive stamina or team value, a fatigue chance outside 0-100, or a tier that is not a gem-priced
   `stamina:N` (+ optional `raidTicket:N`) product fails the load. Add a field by binding it in `DatamineGlobalValues`
   (a new served field bumps `SchemaVersion`).
+- **progression-rules** (roadmap step 7) is a one-element list (`Denormalization/ProgressionRulesDenormalizer.cs`):
+  `xpLevels` (the game's `units/xpLevels.json`; element i is the total XP to reach level i + 2), `xpBooks`
+  (`consumables.json`, one per rarity in rarity order: `id`, `rarity`, `xpIncrease`, `gold`), `upgradeSlots`
+  (`units/upgradeSlots.json` `xpLevelRequirements`, one row of six slot levels per rank from Stone1 to Adamantine2,
+  served with its `rank`), and `heroProgressionSteps` / `mowProgressionSteps` (`units/heroProgressionSteps.json` /
+  `heroProgressionStepsMoW.json`: `step`, `progression`, `rarity`, `stars`, the caps `maxXpLevel` + `maxRank` (the
+  game's rank index as a `UnitRank` name; Mythic is Adamantine3) or `maxAbilityLevel`, the stat multipliers, and
+  `hreShards` from `ascensionCosts` (null when absent)). Costs stay in `ascension-costs` and power multipliers in
+  `unit-power`. A non-increasing XP curve, a missing book, a rank row count or width other than 20 × 6, or a ladder
+  that doesn't walk `ProgressionRules.ProgressionOrder` fails the load.
 - **campaign-battles** is flat, keyed by globally-unique battle id, each carrying its `campaignGroupId`;
   **campaign-definitions** is keyed by `groupId` (metadata + `battleIds[]` only). Battle ids are also
   referenced from API test fixtures and the player-data transformer, so renaming a battle id is not a

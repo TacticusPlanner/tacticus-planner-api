@@ -40,6 +40,7 @@ public static class ServedDatasets
             [GameCatalogDatasets.Factions] = snapshot => snapshot.FactionViews,
             [GameCatalogDatasets.DamageTypes] = snapshot => snapshot.DamageTypeViews,
             [GameCatalogDatasets.GlobalValues] = snapshot => snapshot.GlobalValuesViews,
+            [GameCatalogDatasets.ProgressionRules] = snapshot => snapshot.ProgressionRulesViews,
             [GameCatalogDatasets.EventDefinitionsServed] = snapshot => snapshot.EventDefinitionViews,
             [GameCatalogDatasets.EventsCalendar] = snapshot => snapshot.EventsCalendar,
             [GameCatalogDatasets.Shops] = snapshot => snapshot.ShopViews,

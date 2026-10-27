@@ -18,9 +18,9 @@ public sealed class DatamineFilesTests
     [Fact]
     public void UnlistedPathThrowsNamingTheAllowlist()
     {
-        var error = Assert.Throws<InvalidOperationException>(() => DatamineFiles.Open("gameconfig/units/xpLevels.json"));
+        var error = Assert.Throws<InvalidOperationException>(() => DatamineFiles.Open("gameconfig/achievements.json"));
 
-        Assert.Contains("raw/gameconfig/units/xpLevels.json", error.Message, StringComparison.Ordinal);
+        Assert.Contains("raw/gameconfig/achievements.json", error.Message, StringComparison.Ordinal);
         Assert.Contains("files.txt", error.Message, StringComparison.Ordinal);
     }
 

@@ -38,6 +38,10 @@ public static class GameCatalogDatasets
     // trait variables, the energy shop ladder) from the datamine globalValues.json. See
     // Denormalization/GlobalValuesDenormalizer.cs.
     public const string GlobalValues = "global-values";
+    // progression-rules: the single record of the XP curve, XP books, rank-up slot XP levels and the hero / MoW
+    // ascension ladders' caps and multipliers, from the datamine units/ files and consumables.json. See
+    // Denormalization/ProgressionRulesDenormalizer.cs.
+    public const string ProgressionRules = "progression-rules";
 
     // Route/key prefixes for the split dataset families.
     public const string UnitsPrefix = "units";
@@ -254,5 +258,6 @@ public static class GameCatalogDatasets
         Factions,
         DamageTypes,
         GlobalValues,
+        ProgressionRules,
     ];
 }

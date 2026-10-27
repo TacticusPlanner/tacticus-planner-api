@@ -2326,6 +2326,104 @@
         }
       }
     },
+    "/api/v1/game-catalog/progression-rules": {
+      "get": {
+        "tags": [
+          "Game-Catalog"
+        ],
+        "summary": "Gets the unit progression rules.",
+        "operationId": "TacticusPlannerApiFeaturesGameCatalogGetGameCatalogProgressionRulesEndpoint1",
+        "responses": {
+          "200": {
+            "description": "The single record of progression rules, named as the game names them: the XP curve (element i is the total XP to reach level i + 2), XP books, the XP level each rank-up upgrade slot needs per rank, and each hero and MoW ascension step's caps (max XP level, max rank, max ability level), stat multipliers and Hero Release Event shard cost.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogProgressionRules"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "The dataset has not changed."
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The envelope hash is not the current release's.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/game-catalog/progression-rules/{envelopeHash}": {
+      "get": {
+        "tags": [
+          "Game-Catalog"
+        ],
+        "summary": "Gets the unit progression rules.",
+        "operationId": "TacticusPlannerApiFeaturesGameCatalogGetGameCatalogProgressionRulesEndpoint2",
+        "parameters": [
+          {
+            "name": "envelopeHash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The single record of progression rules, named as the game names them: the XP curve (element i is the total XP to reach level i + 2), XP books, the XP level each rank-up upgrade slot needs per rank, and each hero and MoW ascension step's caps (max XP level, max rank, max ability level), stat multipliers and Hero Release Event shard cost.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogProgressionRules"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "The dataset has not changed."
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The envelope hash is not the current release's.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/game-catalog/quest-crates": {
       "get": {
         "tags": [
@@ -8163,6 +8261,49 @@
           }
         }
       },
+      "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogProgressionRules": {
+        "required": [
+          "version",
+          "schemaVersion",
+          "gameVersion",
+          "sourceHash",
+          "datasetKey",
+          "datasetHash",
+          "data"
+        ],
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "schemaVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gameVersion": {
+            "type": "string"
+          },
+          "sourceHash": {
+            "type": "string"
+          },
+          "datasetKey": {
+            "type": "string"
+          },
+          "datasetHash": {
+            "type": "string"
+          },
+          "data": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogProgressionRules"
+              }
+            ]
+          }
+        }
+      },
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogQuestCrate": {
         "required": [
           "version",
@@ -8975,6 +9116,58 @@
           }
         }
       },
+      "GameCatalogHeroProgressionRule": {
+        "required": [
+          "step",
+          "progression",
+          "rarity",
+          "stars",
+          "maxXpLevel",
+          "maxRank",
+          "unitStatMultiplierPct",
+          "abilityStatMultiplierPct",
+          "hreShards"
+        ],
+        "type": "object",
+        "properties": {
+          "step": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "progression": {
+            "type": "string"
+          },
+          "rarity": {
+            "type": "string"
+          },
+          "stars": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maxXpLevel": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maxRank": {
+            "type": "string"
+          },
+          "unitStatMultiplierPct": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "abilityStatMultiplierPct": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "hreShards": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          }
+        }
+      },
       "GameCatalogHordeModeCharacter": {
         "required": [
           "unitId",
@@ -9605,6 +9798,49 @@
           }
         }
       },
+      "GameCatalogMowProgressionRule": {
+        "required": [
+          "step",
+          "progression",
+          "rarity",
+          "stars",
+          "maxAbilityLevel",
+          "abilityStatMultiplierPct",
+          "mythicAbilityStatMultiplierPct"
+        ],
+        "type": "object",
+        "properties": {
+          "step": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "progression": {
+            "type": "string"
+          },
+          "rarity": {
+            "type": "string"
+          },
+          "stars": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maxAbilityLevel": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "abilityStatMultiplierPct": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "mythicAbilityStatMultiplierPct": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          }
+        }
+      },
       "GameCatalogMowUpgradeCostView": {
         "required": [
           "level",
@@ -9901,6 +10137,33 @@
           },
           "badges": {
             "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogAmountByRarity"
+          }
+        }
+      },
+      "GameCatalogProgressionRules": {
+        "required": [
+          "xpLevels",
+          "xpBooks",
+          "upgradeSlots",
+          "heroProgressionSteps",
+          "mowProgressionSteps"
+        ],
+        "type": "object",
+        "properties": {
+          "xpLevels": {
+            "$ref": "#/components/schemas/IReadOnlyListOfInt32"
+          },
+          "xpBooks": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogXpBook"
+          },
+          "upgradeSlots": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogUpgradeSlotRank"
+          },
+          "heroProgressionSteps": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogHeroProgressionRule"
+          },
+          "mowProgressionSteps": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogMowProgressionRule"
           }
         }
       },
@@ -10807,6 +11070,21 @@
           }
         }
       },
+      "GameCatalogUpgradeSlotRank": {
+        "required": [
+          "rank",
+          "xpLevelRequirements"
+        ],
+        "type": "object",
+        "properties": {
+          "rank": {
+            "type": "string"
+          },
+          "xpLevelRequirements": {
+            "$ref": "#/components/schemas/IReadOnlyListOfInt32"
+          }
+        }
+      },
       "GameCatalogUpgradeView": {
         "required": [
           "id",
@@ -10847,6 +11125,31 @@
           },
           "farmLocations": {
             "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogFarmLocation"
+          }
+        }
+      },
+      "GameCatalogXpBook": {
+        "required": [
+          "id",
+          "rarity",
+          "xpIncrease",
+          "gold"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "rarity": {
+            "type": "string"
+          },
+          "xpIncrease": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gold": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -11872,6 +12175,12 @@
           "$ref": "#/components/schemas/GameCatalogHeroPowerStep"
         }
       },
+      "IReadOnlyListOfGameCatalogHeroProgressionRule": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogHeroProgressionRule"
+        }
+      },
       "IReadOnlyListOfGameCatalogHordeModeCharacter": {
         "type": "array",
         "items": {
@@ -11968,6 +12277,12 @@
           "$ref": "#/components/schemas/GameCatalogMowPowerStep"
         }
       },
+      "IReadOnlyListOfGameCatalogMowProgressionRule": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogMowProgressionRule"
+        }
+      },
       "IReadOnlyListOfGameCatalogMowUpgradeCostView": {
         "type": "array",
         "items": {
@@ -12014,6 +12329,12 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/GameCatalogOnslaughtReward"
+        }
+      },
+      "IReadOnlyListOfGameCatalogProgressionRules": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogProgressionRules"
         }
       },
       "IReadOnlyListOfGameCatalogQuestBattleView": {
@@ -12154,10 +12475,22 @@
           "$ref": "#/components/schemas/GameCatalogUpgradeRecipeIngredient"
         }
       },
+      "IReadOnlyListOfGameCatalogUpgradeSlotRank": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogUpgradeSlotRank"
+        }
+      },
       "IReadOnlyListOfGameCatalogUpgradeView": {
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/GameCatalogUpgradeView"
+        }
+      },
+      "IReadOnlyListOfGameCatalogXpBook": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogXpBook"
         }
       },
       "IReadOnlyListOfGuid": {

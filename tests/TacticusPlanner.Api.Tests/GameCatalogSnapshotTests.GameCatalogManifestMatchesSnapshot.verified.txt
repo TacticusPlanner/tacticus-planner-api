@@ -1,6 +1,6 @@
 ﻿{
   version: dev-2026-10-19.1,
-  schemaVersion: 12,
+  schemaVersion: 13,
   gameVersion: 1.43,
   sourceHash: {time-dependent},
   datasets: [
@@ -103,6 +103,11 @@
       key: onslaught-rewards,
       hash: 7a5c5579c97dd61b095063bad7fb273940c6a79ca3a1aa7bed34071956a5bbac,
       url: /api/v1/game-catalog/onslaught-rewards/{envelopeHash}
+    },
+    {
+      key: progression-rules,
+      hash: fc7a90bc50694a04c70e2936548e492f53690fb8a6203415ef48dca8aa4b7f63,
+      url: /api/v1/game-catalog/progression-rules/{envelopeHash}
     },
     {
       key: quest-crates,
