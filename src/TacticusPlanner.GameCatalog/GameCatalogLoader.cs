@@ -201,12 +201,13 @@ public static class GameCatalogLoader
         };
 
         var schemaHash = GameCatalogContractHashing.ComputeContractHash(payloadTypes, JsonOptions);
+        var gameVersion = LoadDatamineVersion();
         var snapshot = new GameCatalogSnapshot(
             GameCatalogRelease.Version,
             schemaHash,
-            GameCatalogRelease.GameVersion,
+            gameVersion,
             GameCatalogHashing.ComputeSnapshotHash(
-                GameCatalogRelease.Version, schemaHash, GameCatalogRelease.GameVersion, datasetHashes),
+                GameCatalogRelease.Version, schemaHash, gameVersion, datasetHashes),
             new ReadOnlyDictionary<string, string>(datasetHashes),
             unitsByFaction,
             new ReadOnlyCollection<GameCatalogMowUpgradeCost>(mowUpgradeCosts.ToArray()),
@@ -338,6 +339,17 @@ public static class GameCatalogLoader
 
         return JsonSerializer.Deserialize<T>(stream, JsonOptions)
             ?? throw new InvalidOperationException($"GameCatalog dataset '{key}' is empty.");
+    }
+
+    /// <summary>The game build the pinned datamine was extracted from (its <c>raw/VERSION</c>).</summary>
+    private static string LoadDatamineVersion()
+    {
+        using var reader = new StreamReader(DatamineFiles.Open("VERSION"));
+        var version = reader.ReadToEnd().Trim();
+
+        return version.Length > 0
+            ? version
+            : throw new InvalidOperationException("Datamine file 'raw/VERSION' is empty.");
     }
 
     private static T LoadDatamine<T>(string rawPath)

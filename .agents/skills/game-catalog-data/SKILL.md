@@ -16,7 +16,8 @@ restrictions); these are silently ignored on deserialize.
 
 ## Pipeline (where things live — read the code for current values, not this file)
 
-- **Release metadata** — `Models/GameCatalogRelease.cs`: `Version` (human tag), `GameVersion` (the in-game version the embedded data was extracted from). The manifest's `schemaHash` is **derived**, never
+- **Release metadata** — `Models/GameCatalogRelease.cs`: `Version` (human tag). The manifest's `gameVersion` is the pinned datamine's `raw/VERSION` (e.g.
+  `1.43.157.2989`, refreshed by `scripts/pull-datamine.cs`), and its `schemaHash` is **derived**, never
   bumped: `Utils/GameCatalogContractHashing.cs` hashes the JSON contract of every served payload type (field
   names, types, nullability, enum members), so any shape change moves it on its own. A new value in a string
   field (e.g. a new mission `kind`) is not a shape change: only the dataset hash moves.
@@ -354,7 +355,7 @@ genuine game changes.
   one's modes are covered by a `killUnits` tracker with equal points. The reader fails on shapes it can't represent
   (empty allow lists, per-tier tracker differences, unknown tracker or modifier types).
 
-**Finish:** bump `GameVersion` (and usually `Version`) in `GameCatalogRelease.cs` (`schemaHash` is derived).
+**Finish:** usually bump `Version` in `GameCatalogRelease.cs` (`gameVersion` and `schemaHash` are derived).
 Then run the checklist below and promote the manifest snapshot.
 
 ## Editing checklist
