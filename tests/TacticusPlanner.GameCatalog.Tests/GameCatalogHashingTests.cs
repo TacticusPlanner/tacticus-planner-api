@@ -46,11 +46,11 @@ public sealed class GameCatalogHashingTests
         var baseHashes = new Dictionary<string, string> { ["characters"] = "h1", ["mows"] = "h2" };
         var changedHashes = new Dictionary<string, string> { ["characters"] = "h1", ["mows"] = "h2-changed" };
 
-        var baseHash = GameCatalogHashing.ComputeSnapshotHash("dev-1", 11, "1.40", baseHashes);
+        var baseHash = GameCatalogHashing.ComputeSnapshotHash("dev-1", "s1", "1.40", baseHashes);
 
-        Assert.Equal(baseHash, GameCatalogHashing.ComputeSnapshotHash("dev-1", 11, "1.40", baseHashes));
-        Assert.NotEqual(baseHash, GameCatalogHashing.ComputeSnapshotHash("dev-1", 11, "1.40", changedHashes));
-        Assert.NotEqual(baseHash, GameCatalogHashing.ComputeSnapshotHash("dev-2", 11, "1.40", baseHashes));
-        Assert.NotEqual(baseHash, GameCatalogHashing.ComputeSnapshotHash("dev-1", 12, "1.40", baseHashes));
+        Assert.Equal(baseHash, GameCatalogHashing.ComputeSnapshotHash("dev-1", "s1", "1.40", baseHashes));
+        Assert.NotEqual(baseHash, GameCatalogHashing.ComputeSnapshotHash("dev-1", "s1", "1.40", changedHashes));
+        Assert.NotEqual(baseHash, GameCatalogHashing.ComputeSnapshotHash("dev-2", "s1", "1.40", baseHashes));
+        Assert.NotEqual(baseHash, GameCatalogHashing.ComputeSnapshotHash("dev-1", "s2", "1.40", baseHashes));
     }
 }

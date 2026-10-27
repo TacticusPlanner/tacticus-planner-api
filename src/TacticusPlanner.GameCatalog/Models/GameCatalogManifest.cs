@@ -7,7 +7,7 @@ namespace TacticusPlanner.GameCatalog.Models;
 /// </summary>
 public sealed record GameCatalogManifest(
     string Version,
-    int SchemaVersion,
+    string SchemaHash,
     string GameVersion,
     string SourceHash,
     IReadOnlyList<GameCatalogManifestDataset> Datasets

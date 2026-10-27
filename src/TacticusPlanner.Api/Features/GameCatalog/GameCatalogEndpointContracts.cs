@@ -7,7 +7,7 @@ namespace TacticusPlanner.Api.Features.GameCatalog;
 /// </summary>
 public sealed record GameCatalogDatasetEnvelope<TPayload>(
     string Version,
-    int SchemaVersion,
+    string SchemaHash,
     string GameVersion,
     string SourceHash,
     string DatasetKey,

@@ -16,9 +16,12 @@ restrictions); these are silently ignored on deserialize.
 
 ## Pipeline (where things live — read the code for current values, not this file)
 
-- **Release metadata** — `Models/GameCatalogRelease.cs`: `Version` (human tag), `SchemaVersion` (served-payload
-  contract version — bump **only on a breaking shape change** to a served dataset; a content-only change
-  rides the per-dataset hash), `GameVersion` (the in-game version the embedded data was extracted from).
+- **Release metadata** — `Models/GameCatalogRelease.cs`, all derived, nothing to bump: `Version` is `gameVersion` plus a
+  short digest of every embedded data file (e.g. `1.43.157.2989+cd03e6b758ce`). The manifest's `gameVersion` is the pinned datamine's `raw/VERSION` (e.g.
+  `1.43.157.2989`, refreshed by `scripts/pull-datamine.cs`), and its `schemaHash` is **derived**, never
+  bumped: `Utils/GameCatalogContractHashing.cs` hashes the JSON contract of every served payload type (field
+  names, types, nullability, enum members), so any shape change moves it on its own. A new value in a string
+  field (e.g. a new mission `kind`) is not a shape change: only the dataset hash moves.
 - **Dataset registry** — `Models/GameCatalogDatasets.cs`: the raw source keys (per-faction unit/npc lists,
   upgrade rarities, campaign-battle groups, plus single-file keys) and the
   `Served` list. Enumerate `GameCatalogDatasets.Served` for the authoritative set of served datasets.
@@ -42,7 +45,7 @@ restrictions); these are silently ignored on deserialize.
   **and every LRE `battles.waves.enemies` id against the npc set**.
 - **Hashing** — `Utils/GameCatalogHashing.cs`: per-dataset hash = canonical JSON (key-order-independent,
   array-order-sensitive) of the denormalized payload; `SourceHash` = hash of
-  (version, schemaVersion, gameVersion, all dataset hashes).
+  (version, schemaHash, gameVersion, all dataset hashes).
 - **Endpoints** — `src/TacticusPlanner.Api/Features/GameCatalog/`. `ServedDatasetEndpoint<TPayload>` base
   → one endpoint per served entity; manifest in `GetGameCatalogManifestEndpoint`. All `AllowAnonymous()`.
 
@@ -115,7 +118,7 @@ restrictions); these are silently ignored on deserialize.
   `{ productId, stamina, raidTickets, gems }`, in game order (`Denormalization/GlobalValuesDenormalizer.cs`). A
   missing or non-positive stamina or team value, a fatigue chance outside 0-100, or a tier that is not a gem-priced
   `stamina:N` (+ optional `raidTicket:N`) product fails the load. Add a field by binding it in `DatamineGlobalValues`
-  (a new served field bumps `SchemaVersion`).
+  (a new served field moves the derived `schemaHash`).
 - **progression-rules** (roadmap step 7) is a one-element list (`Denormalization/ProgressionRulesDenormalizer.cs`):
   `xpLevels` (the game's `units/xpLevels.json`; element i is the total XP to reach level i + 2), `xpBooks`
   (`consumables.json`, one per rarity in rarity order: `id`, `rarity`, `xpIncrease`, `gold`), `upgradeSlots`
@@ -186,7 +189,7 @@ restrictions); these are silently ignored on deserialize.
     (`Validation/LreRunStartsValidation.cs`, `InvalidRunStartDates`): at most 3 entries, each parseable,
     strictly ascending, consecutive starts **at least 7 days apart** (closer would overlap). **To add the
     next run** when it is announced, append its start (`"Sun, 21 March 2027 00:00:00 GMT"`) to the event's
-    `runStartDatesUtc` in `lre-curation.json`; it is a content-only change (the `lres` hash moves, no `SchemaVersion` bump).
+    `runStartDatesUtc` in `lre-curation.json`; it is a content-only change (only the `lres` hash moves).
     A track's `killPoints` is its **defeat-all base** (clients use it as the per-battle defeat-all points
     in per-unit points), not a kill score: it **must equal `defeatAll[0]`** (later `defeatAll` values may
     grow), and `defeatAll` must not be empty — enforced at load (`Validation/LreLanePointsValidation.cs`,
@@ -207,8 +210,8 @@ restrictions); these are silently ignored on deserialize.
     template matches or a label with no alias, naming the event, file, list, index and line. **To add a mission
     template** (a new game quest task): add a `LreTaskText` case, then a `[GeneratedRegex]` with `count` (and at most one `label`) groups, a
     `LreMissionKinds` constant if the kind is new, and a `LreMissionTemplates` entry ahead of any broader
-    pattern; then extend `LreMissionsTests` and bump `SchemaVersion` (a new `kind` is a contract change for the
-    client, which must map it). A new label for an existing kind is just an alias-table row (content-only). A refresh must not reorder or shrink a live
+    pattern; then extend `LreMissionsTests` and land the apps companion (a new `kind` is a contract change for the
+    client, which must map it; the derived `schemaHash` does not see string values). A new label for an existing kind is just an alias-table row (content-only). A refresh must not reorder or shrink a live
     event's mission lists: plans store ticks as positional indices, so a reorder moves ticks onto other
     missions (a shrink only drops the ticks past the end, on read).
   - **`lre-battles`** — the bulky per-battle records (`waves` trees), keyed `"{lreId}-{track}-{number}"`,
@@ -252,7 +255,7 @@ the apps code (not in the catalog), so ratio changes ship as a web release.
   Served sorted by `equipmentId`, omitted when empty. The client applies the highest one whose relic
   the synced roster has equipped (any level) in place of the base; the Tier List still ranks by base.
 - Enforced at load (`Validation/HordeModeTiersValidation.cs`, `InvalidHordeModeTiers`). A value change
-  only moves this dataset's hash; a new field bumps `SchemaVersion`.
+  only moves this dataset's hash; a new field moves the derived `schemaHash`.
 
 ## Unit power
 
@@ -282,7 +285,7 @@ datamine source; its `docs/roadmap.md` orders the migration. Datasets move onto 
   checksum mismatch.
 - **Migrating a dataset** — bind its denormalizer to `DatamineFiles.Open(...)`, delete the hand-kept raw file,
   and either keep the served shape (the manifest snapshot shows only real game-data hash moves, each explained
-  in the PR) or rename to the game's terms (`SchemaVersion` bump plus the apps companion), never both in one
+  in the PR) or rename to the game's terms (the apps companion; `schemaHash` moves by itself), never both in one
   change. Renamed ids that user data stores (battle ids, LRE ids, mission indices) need a data migration.
   Migrated: `equipment`, `character-ability-costs`, `mow-upgrade-costs`, `ascension-costs`, `unlock-shard-costs`,
   `upgrades`, `characters`, `mows`, `npcs`, `unit-power`, `raid-bosses` (`globalconfig/guildBoss/`; the
@@ -353,8 +356,8 @@ genuine game changes.
   one's modes are covered by a `killUnits` tracker with equal points. The reader fails on shapes it can't represent
   (empty allow lists, per-tier tracker differences, unknown tracker or modifier types).
 
-**Finish:** bump `GameVersion` (and usually `Version`) in `GameCatalogRelease.cs`; leave `SchemaVersion`
-unless a served shape changed. Then run the checklist below and promote the manifest snapshot.
+**Finish:** nothing to bump (`version`, `gameVersion` and `schemaHash` are all derived).
+Then run the checklist below and promote the manifest snapshot.
 
 ## Editing checklist
 
@@ -362,8 +365,8 @@ unless a served shape changed. Then run the checklist below and promote the mani
    Keep files LF, 2-space indent, trailing newline (`json.dumps(d, indent=2, ensure_ascii=False) + "\n"`
    round-trips; force `newline="\n"` when scripting on Windows).
 2. If a **served shape** changes: update the relevant `Models/*` view record + the
-   `Denormalization/*Denormalizer` builder + any `Validation/*` cross-ref, and bump
-   `GameCatalogRelease.SchemaVersion`.
+   `Denormalization/*Denormalizer` builder + any `Validation/*` cross-ref (the derived `schemaHash` follows;
+   nothing to bump).
 3. `dotnet build TacticusPlanner.slnx` (startup load + validation fails fast on bad data), then
    `dotnet test tests/TacticusPlanner.GameCatalog.Tests/...` and
    `dotnet test tests/TacticusPlanner.Api.Tests/...`.

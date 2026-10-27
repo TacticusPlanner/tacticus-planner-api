@@ -1,4 +1,3 @@
-using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
@@ -32,7 +31,7 @@ public static class GameCatalogHashing
 
     public static string ComputeSnapshotHash(
         string version,
-        int schemaVersion,
+        string schemaVersion,
         string gameVersion,
         IReadOnlyDictionary<string, string> datasetHashes
     )
@@ -42,7 +41,7 @@ public static class GameCatalogHashing
             .Append(version)
             .Append('\n')
             .Append("schemaVersion:")
-            .Append(schemaVersion.ToString(CultureInfo.InvariantCulture))
+            .Append(schemaVersion)
             .Append('\n')
             .Append("gameVersion:")
             .Append(gameVersion)

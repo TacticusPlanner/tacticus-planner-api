@@ -18,7 +18,7 @@ public class LegendaryEventPlan : BaseEntity<LegendaryEventPlanId>, IRevisionedE
     /// <summary>The catalog <c>lres</c> id (the event unit's snowprint id, e.g. <c>astarLysander</c>).</summary>
     public required string EventId { get; set; }
 
-    /// <summary>The catalog version the plan was last written under (<c>GameCatalogRelease.Version</c>).</summary>
+    /// <summary>The catalog version the plan was last written under (<c>GameCatalogRelease.Version</c>, derived from the embedded data).</summary>
     public required string CatalogVersion { get; set; }
 
     public string? Notes { get; set; }

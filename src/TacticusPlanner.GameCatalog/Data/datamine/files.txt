@@ -1,5 +1,6 @@
 # raw/-relative paths copied from tacticus-planner-data-mines by scripts/pull-datamine.cs.
 # List a file only when a denormalizer reads it. Sorted, one per line, no globs.
+VERSION                                                      # manifest gameVersion
 gameconfig/battles/battleSets.json                           # lres, lre-battles
 gameconfig/battles/campaigns.json                            # campaign-battles, campaign-definitions
 gameconfig/battles/onslaught.json                            # onslaught-rewards

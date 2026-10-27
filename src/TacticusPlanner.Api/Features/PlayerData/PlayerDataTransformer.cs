@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.Json;
 using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.PlayerData.Chunks;
@@ -86,7 +87,7 @@ public sealed partial class PlayerDataTransformer(IGameCatalogProvider catalog)
         // catalog's per-dataset hashes above.
         var sourceHash = GameCatalogHashing.ComputeSnapshotHash(
             version: response.Metadata?.ConfigHash ?? string.Empty,
-            schemaVersion: CurrentSchemaVersion,
+            schemaVersion: CurrentSchemaVersion.ToString(CultureInfo.InvariantCulture),
             gameVersion: string.Empty,
             datasetHashes: chunkHashes);
 

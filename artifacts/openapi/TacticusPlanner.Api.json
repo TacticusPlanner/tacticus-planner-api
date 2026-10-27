@@ -7472,7 +7472,7 @@
       "GameCatalogDatasetEnvelopeOfGameCatalogGuildRaidMetaView": {
         "required": [
           "version",
-          "schemaVersion",
+          "schemaHash",
           "gameVersion",
           "sourceHash",
           "datasetKey",
@@ -7484,9 +7484,8 @@
           "version": {
             "type": "string"
           },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
+          "schemaHash": {
+            "type": "string"
           },
           "gameVersion": {
             "type": "string"
@@ -7515,7 +7514,7 @@
       "GameCatalogDatasetEnvelopeOfGameCatalogRaidBossesView": {
         "required": [
           "version",
-          "schemaVersion",
+          "schemaHash",
           "gameVersion",
           "sourceHash",
           "datasetKey",
@@ -7527,9 +7526,8 @@
           "version": {
             "type": "string"
           },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
+          "schemaHash": {
+            "type": "string"
           },
           "gameVersion": {
             "type": "string"
@@ -7558,7 +7556,7 @@
       "GameCatalogDatasetEnvelopeOfIReadOnlyDictionaryOfStringAndIReadOnlyListOfGameCatalogEventsCalendarEntry": {
         "required": [
           "version",
-          "schemaVersion",
+          "schemaHash",
           "gameVersion",
           "sourceHash",
           "datasetKey",
@@ -7570,9 +7568,8 @@
           "version": {
             "type": "string"
           },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
+          "schemaHash": {
+            "type": "string"
           },
           "gameVersion": {
             "type": "string"
@@ -7601,7 +7598,7 @@
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogAscensionCostView": {
         "required": [
           "version",
-          "schemaVersion",
+          "schemaHash",
           "gameVersion",
           "sourceHash",
           "datasetKey",
@@ -7613,9 +7610,8 @@
           "version": {
             "type": "string"
           },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
+          "schemaHash": {
+            "type": "string"
           },
           "gameVersion": {
             "type": "string"
@@ -7644,7 +7640,7 @@
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogCampaignBattleView": {
         "required": [
           "version",
-          "schemaVersion",
+          "schemaHash",
           "gameVersion",
           "sourceHash",
           "datasetKey",
@@ -7656,9 +7652,8 @@
           "version": {
             "type": "string"
           },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
+          "schemaHash": {
+            "type": "string"
           },
           "gameVersion": {
             "type": "string"
@@ -7687,7 +7682,7 @@
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogCampaignDefinitionView": {
         "required": [
           "version",
-          "schemaVersion",
+          "schemaHash",
           "gameVersion",
           "sourceHash",
           "datasetKey",
@@ -7699,9 +7694,8 @@
           "version": {
             "type": "string"
           },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
+          "schemaHash": {
+            "type": "string"
           },
           "gameVersion": {
             "type": "string"
@@ -7730,7 +7724,7 @@
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogCharacterAbilityCostView": {
         "required": [
           "version",
-          "schemaVersion",
+          "schemaHash",
           "gameVersion",
           "sourceHash",
           "datasetKey",
@@ -7742,9 +7736,8 @@
           "version": {
             "type": "string"
           },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
+          "schemaHash": {
+            "type": "string"
           },
           "gameVersion": {
             "type": "string"
@@ -7773,7 +7766,7 @@
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogCharacterView": {
         "required": [
           "version",
-          "schemaVersion",
+          "schemaHash",
           "gameVersion",
           "sourceHash",
           "datasetKey",
@@ -7785,9 +7778,8 @@
           "version": {
             "type": "string"
           },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
+          "schemaHash": {
+            "type": "string"
           },
           "gameVersion": {
             "type": "string"
@@ -7816,7 +7808,7 @@
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogDamageType": {
         "required": [
           "version",
-          "schemaVersion",
+          "schemaHash",
           "gameVersion",
           "sourceHash",
           "datasetKey",
@@ -7828,9 +7820,8 @@
           "version": {
             "type": "string"
           },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
+          "schemaHash": {
+            "type": "string"
           },
           "gameVersion": {
             "type": "string"
@@ -7859,7 +7850,7 @@
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogEquipmentView": {
         "required": [
           "version",
-          "schemaVersion",
+          "schemaHash",
           "gameVersion",
           "sourceHash",
           "datasetKey",
@@ -7871,9 +7862,8 @@
           "version": {
             "type": "string"
           },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
+          "schemaHash": {
+            "type": "string"
           },
           "gameVersion": {
             "type": "string"
@@ -7902,7 +7892,7 @@
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogEventDefinition": {
         "required": [
           "version",
-          "schemaVersion",
+          "schemaHash",
           "gameVersion",
           "sourceHash",
           "datasetKey",
@@ -7914,9 +7904,8 @@
           "version": {
             "type": "string"
           },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
+          "schemaHash": {
+            "type": "string"
           },
           "gameVersion": {
             "type": "string"
@@ -7945,7 +7934,7 @@
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogFaction": {
         "required": [
           "version",
-          "schemaVersion",
+          "schemaHash",
           "gameVersion",
           "sourceHash",
           "datasetKey",
@@ -7957,9 +7946,8 @@
           "version": {
             "type": "string"
           },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
+          "schemaHash": {
+            "type": "string"
           },
           "gameVersion": {
             "type": "string"
@@ -7988,7 +7976,7 @@
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogGlobalValues": {
         "required": [
           "version",
-          "schemaVersion",
+          "schemaHash",
           "gameVersion",
           "sourceHash",
           "datasetKey",
@@ -8000,9 +7988,8 @@
           "version": {
             "type": "string"
           },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
+          "schemaHash": {
+            "type": "string"
           },
           "gameVersion": {
             "type": "string"
@@ -8031,7 +8018,7 @@
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogHordeModeTiers": {
         "required": [
           "version",
-          "schemaVersion",
+          "schemaHash",
           "gameVersion",
           "sourceHash",
           "datasetKey",
@@ -8043,9 +8030,8 @@
           "version": {
             "type": "string"
           },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
+          "schemaHash": {
+            "type": "string"
           },
           "gameVersion": {
             "type": "string"
@@ -8074,7 +8060,7 @@
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogHre": {
         "required": [
           "version",
-          "schemaVersion",
+          "schemaHash",
           "gameVersion",
           "sourceHash",
           "datasetKey",
@@ -8086,9 +8072,8 @@
           "version": {
             "type": "string"
           },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
+          "schemaHash": {
+            "type": "string"
           },
           "gameVersion": {
             "type": "string"
@@ -8117,7 +8102,7 @@
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogLreBattleView": {
         "required": [
           "version",
-          "schemaVersion",
+          "schemaHash",
           "gameVersion",
           "sourceHash",
           "datasetKey",
@@ -8129,9 +8114,8 @@
           "version": {
             "type": "string"
           },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
+          "schemaHash": {
+            "type": "string"
           },
           "gameVersion": {
             "type": "string"
@@ -8160,7 +8144,7 @@
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogLreView": {
         "required": [
           "version",
-          "schemaVersion",
+          "schemaHash",
           "gameVersion",
           "sourceHash",
           "datasetKey",
@@ -8172,9 +8156,8 @@
           "version": {
             "type": "string"
           },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
+          "schemaHash": {
+            "type": "string"
           },
           "gameVersion": {
             "type": "string"
@@ -8203,7 +8186,7 @@
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogMow": {
         "required": [
           "version",
-          "schemaVersion",
+          "schemaHash",
           "gameVersion",
           "sourceHash",
           "datasetKey",
@@ -8215,9 +8198,8 @@
           "version": {
             "type": "string"
           },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
+          "schemaHash": {
+            "type": "string"
           },
           "gameVersion": {
             "type": "string"
@@ -8246,7 +8228,7 @@
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogMowUpgradeCostView": {
         "required": [
           "version",
-          "schemaVersion",
+          "schemaHash",
           "gameVersion",
           "sourceHash",
           "datasetKey",
@@ -8258,9 +8240,8 @@
           "version": {
             "type": "string"
           },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
+          "schemaHash": {
+            "type": "string"
           },
           "gameVersion": {
             "type": "string"
@@ -8289,7 +8270,7 @@
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogMythicQuestsView": {
         "required": [
           "version",
-          "schemaVersion",
+          "schemaHash",
           "gameVersion",
           "sourceHash",
           "datasetKey",
@@ -8301,9 +8282,8 @@
           "version": {
             "type": "string"
           },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
+          "schemaHash": {
+            "type": "string"
           },
           "gameVersion": {
             "type": "string"
@@ -8332,7 +8312,7 @@
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogNpc": {
         "required": [
           "version",
-          "schemaVersion",
+          "schemaHash",
           "gameVersion",
           "sourceHash",
           "datasetKey",
@@ -8344,9 +8324,8 @@
           "version": {
             "type": "string"
           },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
+          "schemaHash": {
+            "type": "string"
           },
           "gameVersion": {
             "type": "string"
@@ -8375,7 +8354,7 @@
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogOnslaughtReward": {
         "required": [
           "version",
-          "schemaVersion",
+          "schemaHash",
           "gameVersion",
           "sourceHash",
           "datasetKey",
@@ -8387,9 +8366,8 @@
           "version": {
             "type": "string"
           },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
+          "schemaHash": {
+            "type": "string"
           },
           "gameVersion": {
             "type": "string"
@@ -8418,7 +8396,7 @@
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogProgressionRules": {
         "required": [
           "version",
-          "schemaVersion",
+          "schemaHash",
           "gameVersion",
           "sourceHash",
           "datasetKey",
@@ -8430,9 +8408,8 @@
           "version": {
             "type": "string"
           },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
+          "schemaHash": {
+            "type": "string"
           },
           "gameVersion": {
             "type": "string"
@@ -8461,7 +8438,7 @@
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogQuestCrate": {
         "required": [
           "version",
-          "schemaVersion",
+          "schemaHash",
           "gameVersion",
           "sourceHash",
           "datasetKey",
@@ -8473,9 +8450,8 @@
           "version": {
             "type": "string"
           },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
+          "schemaHash": {
+            "type": "string"
           },
           "gameVersion": {
             "type": "string"
@@ -8504,7 +8480,7 @@
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogQuestEventView": {
         "required": [
           "version",
-          "schemaVersion",
+          "schemaHash",
           "gameVersion",
           "sourceHash",
           "datasetKey",
@@ -8516,9 +8492,8 @@
           "version": {
             "type": "string"
           },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
+          "schemaHash": {
+            "type": "string"
           },
           "gameVersion": {
             "type": "string"
@@ -8547,7 +8522,7 @@
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogShopView": {
         "required": [
           "version",
-          "schemaVersion",
+          "schemaHash",
           "gameVersion",
           "sourceHash",
           "datasetKey",
@@ -8559,9 +8534,8 @@
           "version": {
             "type": "string"
           },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
+          "schemaHash": {
+            "type": "string"
           },
           "gameVersion": {
             "type": "string"
@@ -8590,7 +8564,7 @@
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogUnitPower": {
         "required": [
           "version",
-          "schemaVersion",
+          "schemaHash",
           "gameVersion",
           "sourceHash",
           "datasetKey",
@@ -8602,9 +8576,8 @@
           "version": {
             "type": "string"
           },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
+          "schemaHash": {
+            "type": "string"
           },
           "gameVersion": {
             "type": "string"
@@ -8633,7 +8606,7 @@
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogUnlockShardCostView": {
         "required": [
           "version",
-          "schemaVersion",
+          "schemaHash",
           "gameVersion",
           "sourceHash",
           "datasetKey",
@@ -8645,9 +8618,8 @@
           "version": {
             "type": "string"
           },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
+          "schemaHash": {
+            "type": "string"
           },
           "gameVersion": {
             "type": "string"
@@ -8676,7 +8648,7 @@
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogUpgradeView": {
         "required": [
           "version",
-          "schemaVersion",
+          "schemaHash",
           "gameVersion",
           "sourceHash",
           "datasetKey",
@@ -8688,9 +8660,8 @@
           "version": {
             "type": "string"
           },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
+          "schemaHash": {
+            "type": "string"
           },
           "gameVersion": {
             "type": "string"
@@ -10132,7 +10103,7 @@
       "GameCatalogManifest": {
         "required": [
           "version",
-          "schemaVersion",
+          "schemaHash",
           "gameVersion",
           "sourceHash",
           "datasets"
@@ -10142,9 +10113,8 @@
           "version": {
             "type": "string"
           },
-          "schemaVersion": {
-            "type": "integer",
-            "format": "int32"
+          "schemaHash": {
+            "type": "string"
           },
           "gameVersion": {
             "type": "string"
