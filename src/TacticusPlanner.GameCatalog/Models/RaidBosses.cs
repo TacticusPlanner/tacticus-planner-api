@@ -2,35 +2,16 @@ using System.Text.Json.Serialization;
 
 namespace TacticusPlanner.GameCatalog.Models;
 
-// ---- raw authored shape (internal to denormalization) -------------------------------------------------
+// ---- raw datamine shape (internal to denormalization) -------------------------------------------------
 //
-// Ported from V1's datamined guild_boss.json (see scripts/port-raid-boss-data.mjs) and authored under
-// Data/raid-bosses/ as one file per boss (raid-boss-{n}-{type}.json), one per season config
-// (raid-boss-season-{n}.json), and one shared file (raid-boss-common.json). PascalCase field names are
-// bound case-insensitively by the loader. Numeric stat fields are non-nullable (a missing source value is
-// written as 0 by the port script); genuinely-optional fields stay nullable.
+// Bound from the datamine files under Data/datamine/raw/globalconfig/guildBoss/ (rotation, primarchs, modifiers,
+// unitSets, guildBossSeasonDataConfigsGDTO). Field names are bound case-insensitively by the loader. A missing
+// numeric stat binds as 0; genuinely-optional fields stay nullable.
 
 /// <summary>
-/// One authored per-boss raw source file (<c>Data/raid-bosses/raid-boss-{n}-{type}.json</c>): the unit sets —
-/// boss, primes, field npcs, loot objects — whose keys start <c>GuildBoss{n}</c>. The loader merges the
-/// <see cref="UnitSets"/> of every boss file into <see cref="GameCatalogRaidBossRawData.UnitSets"/>.
-/// </summary>
-public sealed record GameCatalogRaidBossGroupRawData(
-    IReadOnlyDictionary<string, GameCatalogRaidBossRawUnitSet> UnitSets);
-
-/// <summary>
-/// The shared raid-boss raw source (<c>Data/raid-bosses/raid-boss-common.json</c>): the season-config
-/// rotation, the primarch prime ids, and the modifier definitions referenced by every season's encounters.
-/// </summary>
-public sealed record GameCatalogRaidBossCommonRawData(
-    IReadOnlyList<string> Rotation,
-    IReadOnlyList<string> Primarchs,
-    IReadOnlyDictionary<string, GameCatalogRaidBossRawModifier> Modifiers);
-
-/// <summary>
-/// The whole raid-boss raw source, assembled by the loader from the per-boss, per-season, and common
-/// files: the season-config rotation, the primarch prime ids, the keyed unit sets, the keyed season
-/// configs, and the keyed modifier definitions. Consolidated into the served
+/// The whole raid-boss raw source, assembled by the loader from the datamine guildBoss files: the season-config
+/// rotation, the primarch prime ids, the keyed unit sets, the keyed season configs, and the keyed modifier
+/// definitions. Consolidated into the served
 /// <see cref="GameCatalogRaidBossesView"/> by <c>Denormalization/RaidBossDenormalizer.cs</c>.
 /// </summary>
 public sealed record GameCatalogRaidBossRawData(

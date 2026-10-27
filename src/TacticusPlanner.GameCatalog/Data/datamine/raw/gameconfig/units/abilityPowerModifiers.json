@@ -1,0 +1,1778 @@
+{
+  "ComingSoonActive": {
+    "baseMultiplier": 100
+  },
+  "ComingSoonPassive": {
+    "baseMultiplier": 100
+  },
+  "GauntletsOfUltramar": {
+    "baseMultiplier": 80
+  },
+  "RitesOfBattle": {
+    "baseMultiplier": 100
+  },
+  "PsychicFortress": {
+    "baseMultiplier": 80
+  },
+  "CombatRestoratives": {
+    "baseMultiplier": 75
+  },
+  "Narthecium": {
+    "baseMultiplier": 80
+  },
+  "DeathFromAbove": {
+    "baseMultiplier": 140
+  },
+  "ShockAssault": {
+    "baseMultiplier": 85
+  },
+  "MortisRound": {
+    "baseMultiplier": 105
+  },
+  "CamoCloak": {
+    "baseMultiplier": 95
+  },
+  "AdaptiveStrategy": {
+    "baseMultiplier": 85
+  },
+  "RelentlessMarch": {
+    "baseMultiplier": 115
+  },
+  "MultiThreatEliminator": {
+    "baseMultiplier": 90
+  },
+  "InescapableDeath": {
+    "baseMultiplier": 105
+  },
+  "ScarabHive": {
+    "baseMultiplier": 165
+  },
+  "FabricatorClawArray": {
+    "baseMultiplier": 60
+  },
+  "HarbingerOfDestruction": {
+    "baseMultiplier": 85
+  },
+  "LivingLightning": {
+    "baseMultiplier": 90
+  },
+  "ResurrectionOrb": {
+    "baseMultiplier": 135
+  },
+  "MyWillBeDoneOverlord": {
+    "baseMultiplier": 135
+  },
+  "StormOfFlensingBlades": {
+    "baseMultiplier": 70
+  },
+  "ReanimationProtocols": {
+    "baseMultiplier": 110
+  },
+  "TunnelingHorror": {
+    "baseMultiplier": 60
+  },
+  "WhipcoilBody": {
+    "baseMultiplier": 60
+  },
+  "ArmoriumCherub": {
+    "baseMultiplier": 90
+  },
+  "FireOfAbsolution": {
+    "baseMultiplier": 160
+  },
+  "PrecisionShot": {
+    "baseMultiplier": 60
+  },
+  "ScarabSummon": {
+    "baseMultiplier": 180
+  },
+  "StormOfWrath": {
+    "baseMultiplier": 120
+  },
+  "MartialApotheosis": {
+    "baseMultiplier": 140
+  },
+  "Chronometron": {
+    "baseMultiplier": 100
+  },
+  "TimesplinterMantle": {
+    "baseMultiplier": 100
+  },
+  "ReanimationBeam": {
+    "baseMultiplier": 100
+  },
+  "NanoscarabRepairProtocols": {
+    "baseMultiplier": 100
+  },
+  "GuardianConstruct": {
+    "baseMultiplier": 100
+  },
+  "RitesOfRestoration": {
+    "baseMultiplier": 180
+  },
+  "SanctorumMissile": {
+    "baseMultiplier": 120
+  },
+  "BrazierOfHolyFire": {
+    "baseMultiplier": 90
+  },
+  "SkyStrike": {
+    "baseMultiplier": 110
+  },
+  "MultiMelta": {
+    "baseMultiplier": 100
+  },
+  "PsychicMaelstrom": {
+    "baseMultiplier": 80
+  },
+  "SendInTheNextWave": {
+    "baseMultiplier": 145
+  },
+  "FragBomb": {
+    "baseMultiplier": 110
+  },
+  "BasiliskBarrage": {
+    "baseMultiplier": 115
+  },
+  "SupremeCommander": {
+    "baseMultiplier": 165
+  },
+  "ValkyrieStrike": {
+    "baseMultiplier": 70
+  },
+  "BringerOfDespair": {
+    "baseMultiplier": 85
+  },
+  "FrenziedFiring": {
+    "baseMultiplier": 140
+  },
+  "Incursion": {
+    "baseMultiplier": 150
+  },
+  "HeraldOfTheApocalypse": {
+    "baseMultiplier": 90
+  },
+  "Drachnyen": {
+    "baseMultiplier": 100
+  },
+  "PlagueWind": {
+    "baseMultiplier": 120
+  },
+  "FlailSwing": {
+    "baseMultiplier": 80
+  },
+  "RevitalizingMalignancy": {
+    "baseMultiplier": 70
+  },
+  "FoulInfusion": {
+    "baseMultiplier": 85
+  },
+  "Poxwalkers": {
+    "baseMultiplier": 145
+  },
+  "MedicusMinistorum": {
+    "baseMultiplier": 80
+  },
+  "RighteousRepugnance": {
+    "baseMultiplier": 115
+  },
+  "CondemnorStake": {
+    "baseMultiplier": 90
+  },
+  "GeminaeSuperia": {
+    "baseMultiplier": 155
+  },
+  "Lifewards": {
+    "baseMultiplier": 1
+  },
+  "Nightshroud": {
+    "baseMultiplier": 100
+  },
+  "SummaryExecution": {
+    "baseMultiplier": 70
+  },
+  "AvalancheOfMuscle": {
+    "baseMultiplier": 80
+  },
+  "Spotter": {
+    "baseMultiplier": 70
+  },
+  "SpotterReworked": {
+    "baseMultiplier": 70
+  },
+  "SwornProtector": {
+    "baseMultiplier": 145
+  },
+  "SwornProtector_Protect": {
+    "baseMultiplier": 1
+  },
+  "ListenUpMaggots": {
+    "baseMultiplier": 1
+  },
+  "CallInReinforcements": {
+    "baseMultiplier": 130
+  },
+  "Shrapnel": {
+    "baseMultiplier": 110
+  },
+  "HatefulAssault": {
+    "baseMultiplier": 115
+  },
+  "FleshmetalGuns": {
+    "baseMultiplier": 90
+  },
+  "Possession": {
+    "baseMultiplier": 150
+  },
+  "HeadClaimer": {
+    "baseMultiplier": 150
+  },
+  "FirstAmongTraitors": {
+    "baseMultiplier": 100
+  },
+  "UnstoppableFerocity": {
+    "baseMultiplier": 150
+  },
+  "DestroyerHive": {
+    "baseMultiplier": 85
+  },
+  "HazeOfCorruption": {
+    "baseMultiplier": 95
+  },
+  "TaintedNarthecium": {
+    "baseMultiplier": 80
+  },
+  "ExplosiveMaladies": {
+    "baseMultiplier": 100
+  },
+  "CursedPlagueBell": {
+    "baseMultiplier": 120
+  },
+  "CursedOfTheWalkingPox": {
+    "baseMultiplier": 105
+  },
+  "Burrowers": {
+    "baseMultiplier": 110
+  },
+  "AdrenalGlands": {
+    "baseMultiplier": 70
+  },
+  "HungeringSwarm": {
+    "baseMultiplier": 115
+  },
+  "HailOfLivingAmmunition": {
+    "baseMultiplier": 110
+  },
+  "SpawnTermagants": {
+    "baseMultiplier": 200
+  },
+  "SpawnTermagants2": {
+    "baseMultiplier": 200
+  },
+  "SpawnTermagants3": {
+    "baseMultiplier": 200
+  },
+  "Catalyst": {
+    "baseMultiplier": 100
+  },
+  "BroodProgenitor": {
+    "baseMultiplier": 100
+  },
+  "MassiveScythingTalons": {
+    "baseMultiplier": 160
+  },
+  "SynapticBacklash": {
+    "baseMultiplier": 50
+  },
+  "SynapticImperative": {
+    "baseMultiplier": 120
+  },
+  "BioBarrage": {
+    "baseMultiplier": 100
+  },
+  "LethalMiasma": {
+    "baseMultiplier": 100
+  },
+  "GuildBossRunAway": {
+    "baseMultiplier": 0
+  },
+  "CrusadeOfWrath": {
+    "baseMultiplier": 75
+  },
+  "HolyDuel": {
+    "baseMultiplier": 85
+  },
+  "UnbreakableDuty": {
+    "baseMultiplier": 120
+  },
+  "ThunderousAssault": {
+    "baseMultiplier": 100
+  },
+  "FragstormGrenadeLauncher": {
+    "baseMultiplier": 115
+  },
+  "IncendiaryShells": {
+    "baseMultiplier": 50
+  },
+  "DestroyTheWitch": {
+    "baseMultiplier": 95
+  },
+  "MartialSuperiority": {
+    "baseMultiplier": 115
+  },
+  "AstartesBanner": {
+    "baseMultiplier": 110
+  },
+  "ChampionOfTheFeast": {
+    "baseMultiplier": 110
+  },
+  "Boltstorm": {
+    "baseMultiplier": 100
+  },
+  "HeavyBoltPistol": {
+    "baseMultiplier": 65
+  },
+  "Waaagh": {
+    "baseMultiplier": 130
+  },
+  "GrotTank": {
+    "baseMultiplier": 130
+  },
+  "RammingSpeed": {
+    "baseMultiplier": 100
+  },
+  "DakkaDakkaDakka": {
+    "baseMultiplier": 100
+  },
+  "GetEmRuntz": {
+    "baseMultiplier": 165
+  },
+  "UnstoppableMomentumReworked": {
+    "baseMultiplier": 100
+  },
+  "Stikkbomb": {
+    "baseMultiplier": 115
+  },
+  "StormboyzStrike": {
+    "baseMultiplier": 65
+  },
+  "LightImUp": {
+    "baseMultiplier": 100
+  },
+  "KustomForceField": {
+    "baseMultiplier": 85
+  },
+  "KustomForceFieldReworked": {
+    "baseMultiplier": 85
+  },
+  "KanOpener": {
+    "baseMultiplier": 100
+  },
+  "PowerTrip": {
+    "baseMultiplier": 100
+  },
+  "SquigHound": {
+    "baseMultiplier": 90
+  },
+  "SmashaEad": {
+    "baseMultiplier": 85
+  },
+  "PileIn": {
+    "baseMultiplier": 80
+  },
+  "ItsGonnaBlow": {
+    "baseMultiplier": 20
+  },
+  "OiWatchIt": {
+    "baseMultiplier": 0
+  },
+  "Ramshackle": {
+    "baseMultiplier": 50
+  },
+  "FullThrottle": {
+    "baseMultiplier": 0
+  },
+  "Volatile": {
+    "baseMultiplier": 80
+  },
+  "Explosive": {
+    "baseMultiplier": 100
+  },
+  "Detonation": {
+    "baseMultiplier": 80
+  },
+  "RunsAway": {
+    "baseMultiplier": 0
+  },
+  "RunsAround": {
+    "baseMultiplier": 0
+  },
+  "PowerVomit": {
+    "baseMultiplier": 100
+  },
+  "WaaaghEnergy": {
+    "baseMultiplier": 100
+  },
+  "DevoutPush": {
+    "baseMultiplier": 55
+  },
+  "Pyreblaster": {
+    "baseMultiplier": 125
+  },
+  "CallRipperSwarms": {
+    "baseMultiplier": 200
+  },
+  "CallRipperSwarms2": {
+    "baseMultiplier": 200
+  },
+  "CallRipperSwarms3": {
+    "baseMultiplier": 200
+  },
+  "StranglethornCannon": {
+    "baseMultiplier": 105
+  },
+  "PrehensilePincerTail": {
+    "baseMultiplier": 130
+  },
+  "SoulHunger": {
+    "baseMultiplier": 120
+  },
+  "AdaptiveToxins": {
+    "baseMultiplier": 115
+  },
+  "DrawFire": {
+    "baseMultiplier": 100
+  },
+  "CrazedFocus": {
+    "baseMultiplier": 100
+  },
+  "FireAndReposition": {
+    "baseMultiplier": 105
+  },
+  "WireweaveNet": {
+    "baseMultiplier": 110
+  },
+  "Loki_SwoopingHawk": {
+    "baseMultiplier": 110
+  },
+  "PathOfCommand": {
+    "baseMultiplier": 140
+  },
+  "Executioner": {
+    "baseMultiplier": 95
+  },
+  "Doom": {
+    "baseMultiplier": 80
+  },
+  "HarvesterOfSouls": {
+    "baseMultiplier": 135
+  },
+  "InescapableAccuracy": {
+    "baseMultiplier": 75
+  },
+  "SilentDeath": {
+    "baseMultiplier": 120
+  },
+  "TerrorsLament": {
+    "baseMultiplier": 80
+  },
+  "EmpyricAmbush": {
+    "baseMultiplier": 100
+  },
+  "WhisperingWeb": {
+    "baseMultiplier": 100
+  },
+  "ScythingTalons": {
+    "baseMultiplier": 65
+  },
+  "ReinforcedHiveNode": {
+    "baseMultiplier": 85
+  },
+  "BreathOfSilence": {
+    "baseMultiplier": 200
+  },
+  "AnnihilatorBeam": {
+    "baseMultiplier": 200
+  },
+  "MyWillBeDone": {
+    "baseMultiplier": 185
+  },
+  "ScytheOfDust": {
+    "baseMultiplier": 145
+  },
+  "StaffOfStars": {
+    "baseMultiplier": 155
+  },
+  "TargetingProtocols": {
+    "baseMultiplier": 100
+  },
+  "ObeisanceGenerators": {
+    "baseMultiplier": 130
+  },
+  "NoctilithBeacons": {
+    "baseMultiplier": 80
+  },
+  "PhaeronOfTheBlades": {
+    "baseMultiplier": 80
+  },
+  "PhaeronOfTheStars": {
+    "baseMultiplier": 110
+  },
+  "IntegratedCircuits": {
+    "baseMultiplier": 0
+  },
+  "SeekerMissileFrequencyLock": {
+    "baseMultiplier": 160
+  },
+  "MV71SniperDroneSquad": {
+    "baseMultiplier": 160
+  },
+  "SaviorProtocols": {
+    "baseMultiplier": 120
+  },
+  "EarlyWarningOverride": {
+    "baseMultiplier": 105
+  },
+  "CyclicIonBlaster": {
+    "baseMultiplier": 92
+  },
+  "FightingRetreat": {
+    "baseMultiplier": 130
+  },
+  "StructuralAnalyser": {
+    "baseMultiplier": 152
+  },
+  "InspiredToGreatness": {
+    "baseMultiplier": 185
+  },
+  "SereneUnifier": {
+    "baseMultiplier": 120
+  },
+  "ExemplarOfTheKauyon": {
+    "baseMultiplier": 120
+  },
+  "DefenderOfTheGreaterGood": {
+    "baseMultiplier": 108
+  },
+  "Fragstorm": {
+    "baseMultiplier": 130
+  },
+  "RapidFire": {
+    "baseMultiplier": 80
+  },
+  "PowerUp_Armor": {
+    "baseMultiplier": 80
+  },
+  "PowerUp_Damage": {
+    "baseMultiplier": 80
+  },
+  "PowerUp_Health": {
+    "baseMultiplier": 80
+  },
+  "PowerUp_Hits": {
+    "baseMultiplier": 80
+  },
+  "PowerUp_ReactivateAbility": {
+    "baseMultiplier": 80
+  },
+  "PowerUp_Healing": {
+    "baseMultiplier": 80
+  },
+  "PowerUp_MeleeHits": {
+    "baseMultiplier": 80
+  },
+  "PowerUp_Reinforcement": {
+    "baseMultiplier": 80
+  },
+  "PowerUp_ReinforcementShield": {
+    "baseMultiplier": 80
+  },
+  "PowerUp_Resurrect": {
+    "baseMultiplier": 80
+  },
+  "PowerUp_Bomb": {
+    "baseMultiplier": 80
+  },
+  "PowerUp_HeroSpawn_VexilusPraetor": {
+    "baseMultiplier": 80
+  },
+  "PowerUp_HeroSpawn_BladeChampion": {
+    "baseMultiplier": 80
+  },
+  "PowerUp_HeroSpawn_Uthar": {
+    "baseMultiplier": 80
+  },
+  "PowerUp_HeroSpawn:Uthar": {
+    "baseMultiplier": 80
+  },
+  "PowerUp_SummonSpawn_ultraSmnInceptor": {
+    "baseMultiplier": 80
+  },
+  "PowerUp_SummonSpawn_ultraSmnHeavyIntercessor": {
+    "baseMultiplier": 80
+  },
+  "PowerUp_SummonSpawn_templSmnAggressor": {
+    "baseMultiplier": 80
+  },
+  "PowerUp_SummonSpawn_bloodSmnIntercessor": {
+    "baseMultiplier": 80
+  },
+  "PowerUp_SummonSpawn_darkaSmnHellblaster": {
+    "baseMultiplier": 80
+  },
+  "PowerUp_SummonSpawn_darkaSmnTerminator": {
+    "baseMultiplier": 80
+  },
+  "PowerUp_SummonSpawn_necroSmnWarrior": {
+    "baseMultiplier": 80
+  },
+  "PowerUp_SummonSpawn_necroSmnFlayedOne": {
+    "baseMultiplier": 80
+  },
+  "PowerUp_SummonSpawn_necroSmnDeathmark": {
+    "baseMultiplier": 80
+  },
+  "PowerUp_SummonSpawn_necroSmnDestroyer": {
+    "baseMultiplier": 80
+  },
+  "PowerUp_SummonSpawn_necroSmnSwarm": {
+    "baseMultiplier": 80
+  },
+  "Player_SummonSpawn:astraSmnGuardsman": {
+    "baseMultiplier": 80
+  },
+  "EnvCapturePointShield": {
+    "baseMultiplier": 80
+  },
+  "HellfireShells": {
+    "baseMultiplier": 110
+  },
+  "FiringPosition": {
+    "baseMultiplier": 105
+  },
+  "NeedsMoreDakka": {
+    "baseMultiplier": 200
+  },
+  "DaGreatWaaagh": {
+    "baseMultiplier": 200
+  },
+  "EreWeGo": {
+    "baseMultiplier": 200
+  },
+  "ProperKilly": {
+    "baseMultiplier": 200
+  },
+  "ProphetOfGorkAndMork": {
+    "baseMultiplier": 200
+  },
+  "DaBossIsWatchin": {
+    "baseMultiplier": 200
+  },
+  "UnbridledCarnageReworked": {
+    "baseMultiplier": 150
+  },
+  "BigBadaBoomReworked": {
+    "baseMultiplier": 100
+  },
+  "Split": {
+    "baseMultiplier": 300
+  },
+  "FlamesOfMutation": {
+    "baseMultiplier": 100
+  },
+  "TimeFlux": {
+    "baseMultiplier": 90
+  },
+  "AllIsDust": {
+    "baseMultiplier": 100
+  },
+  "HellfyreMissileRack": {
+    "baseMultiplier": 100
+  },
+  "SlashingDive": {
+    "baseMultiplier": 100
+  },
+  "MasterOfTheTutelaries": {
+    "baseMultiplier": 145
+  },
+  "InfernalPacts": {
+    "baseMultiplier": 100
+  },
+  "SorcerousFacade": {
+    "baseMultiplier": 140
+  },
+  "RealityUnbound": {
+    "baseMultiplier": 110
+  },
+  "AttemptedPossession": {
+    "baseMultiplier": 100
+  },
+  "ArcaneShield": {
+    "baseMultiplier": 75
+  },
+  "Doombolt": {
+    "baseMultiplier": 100
+  },
+  "PsychicStalk": {
+    "baseMultiplier": 80
+  },
+  "HeavyWarpFlamer": {
+    "baseMultiplier": 100
+  },
+  "PropheticSentinel": {
+    "baseMultiplier": 100
+  },
+  "TzeentchsFirestorm": {
+    "baseMultiplier": 100
+  },
+  "TreasonOfTzeentch": {
+    "baseMultiplier": 100
+  },
+  "BladeOfMagnus": {
+    "baseMultiplier": 100
+  },
+  "GazeOfMagnus": {
+    "baseMultiplier": 100
+  },
+  "PsychicDominion": {
+    "baseMultiplier": 100
+  },
+  "ImpossibleForm": {
+    "baseMultiplier": 100
+  },
+  "IllusionsOfTzeentch": {
+    "baseMultiplier": 100
+  },
+  "ScreamerInvocation": {
+    "baseMultiplier": 100
+  },
+  "TwistedMirage": {
+    "baseMultiplier": 100
+  },
+  "GreatFrostAxe": {
+    "baseMultiplier": 130
+  },
+  "SavageKiller": {
+    "baseMultiplier": 110
+  },
+  "GrapnelLauncher": {
+    "baseMultiplier": 125
+  },
+  "HuntersBeyondDeath": {
+    "baseMultiplier": 105
+  },
+  "Foehammer": {
+    "baseMultiplier": 100
+  },
+  "AnvilShield": {
+    "baseMultiplier": 100
+  },
+  "WarHowl": {
+    "baseMultiplier": 100
+  },
+  "SagaOfTheWarriorBorn": {
+    "baseMultiplier": 100
+  },
+  "Stormcaller": {
+    "baseMultiplier": 100
+  },
+  "LordOfTempests": {
+    "baseMultiplier": 100
+  },
+  "MortarionsPlagueWind": {
+    "baseMultiplier": 200
+  },
+  "TheLantern": {
+    "baseMultiplier": 200
+  },
+  "ReapingScythe": {
+    "baseMultiplier": 200
+  },
+  "ArchContaminator": {
+    "baseMultiplier": 200
+  },
+  "HostOfPlagues": {
+    "baseMultiplier": 200
+  },
+  "RevoltinglyResilient": {
+    "baseMultiplier": 200
+  },
+  "TheWrathfulDead": {
+    "baseMultiplier": 150
+  },
+  "DarkTalonStrike": {
+    "baseMultiplier": 100
+  },
+  "LionHelm": {
+    "baseMultiplier": 80
+  },
+  "MasterfulTactician": {
+    "baseMultiplier": 100
+  },
+  "Supercharge": {
+    "baseMultiplier": 95
+  },
+  "GrimRetribution": {
+    "baseMultiplier": 85
+  },
+  "ExemplarOfHate": {
+    "baseMultiplier": 100
+  },
+  "FearedInterrogator": {
+    "baseMultiplier": 85
+  },
+  "PlasmaCannon": {
+    "baseMultiplier": 110
+  },
+  "Deathwing": {
+    "baseMultiplier": 100
+  },
+  "DeathwingKnight": {
+    "baseMultiplier": 100
+  },
+  "SternguardFocus": {
+    "baseMultiplier": 100
+  },
+  "SpecialIssueCombiMelta": {
+    "baseMultiplier": 100
+  },
+  "PlasmaGrenade": {
+    "baseMultiplier": 115
+  },
+  "BattleFocus": {
+    "baseMultiplier": 90
+  },
+  "Reveal": {
+    "baseMultiplier": 80
+  },
+  "Conceal": {
+    "baseMultiplier": 100
+  },
+  "KissOfDeath": {
+    "baseMultiplier": 120
+  },
+  "HarlequinsPanoply": {
+    "baseMultiplier": 90
+  },
+  "CrushingClaws": {
+    "baseMultiplier": 100
+  },
+  "GuardianOrganism": {
+    "baseMultiplier": 110
+  },
+  "AlphaWarrior": {
+    "baseMultiplier": 110
+  },
+  "SynapticLinchpin": {
+    "baseMultiplier": 110
+  },
+  "SynapticInsight": {
+    "baseMultiplier": 100
+  },
+  "SpiritLeech": {
+    "baseMultiplier": 100
+  },
+  "Neuroparasite": {
+    "baseMultiplier": 152
+  },
+  "DeathScream": {
+    "baseMultiplier": 100
+  },
+  "UnparalleledFerocity": {
+    "baseMultiplier": 100
+  },
+  "LivingBatteringRam": {
+    "baseMultiplier": 100
+  },
+  "AdrenalSurge": {
+    "baseMultiplier": 100
+  },
+  "BlisteringAssault": {
+    "baseMultiplier": 100
+  },
+  "HyperAggression": {
+    "baseMultiplier": 100
+  },
+  "VulnerableToMelee": {
+    "baseMultiplier": 100
+  },
+  "VulnerableToFlameAndBlast": {
+    "baseMultiplier": 100
+  },
+  "FeederTendrils": {
+    "baseMultiplier": 100
+  },
+  "FearOfTheUnseen": {
+    "baseMultiplier": 125
+  },
+  "ItItches": {
+    "baseMultiplier": 150
+  },
+  "BarbedOvipositor": {
+    "baseMultiplier": 125
+  },
+  "DefendTheDivineWork": {
+    "baseMultiplier": 110
+  },
+  "GalvanicField": {
+    "baseMultiplier": 150
+  },
+  "RadBombardment": {
+    "baseMultiplier": 125
+  },
+  "MasterAnnihilator": {
+    "baseMultiplier": 125
+  },
+  "DoctrinaImperatives": {
+    "baseMultiplier": 140
+  },
+  "ControlEdict": {
+    "baseMultiplier": 144
+  },
+  "RadSaturation": {
+    "baseMultiplier": 80
+  },
+  "CordClaw": {
+    "baseMultiplier": 100
+  },
+  "OptimizedGait": {
+    "baseMultiplier": 180
+  },
+  "SentinelDirectives": {
+    "baseMultiplier": 125
+  },
+  "HeavyGravCannon": {
+    "baseMultiplier": 100
+  },
+  "PoundThemToDust": {
+    "baseMultiplier": 100
+  },
+  "GunnersKillOnSight": {
+    "baseMultiplier": 100
+  },
+  "ArmouredMight": {
+    "baseMultiplier": 100
+  },
+  "WeakerRearArmour": {
+    "baseMultiplier": 100
+  },
+  "AblativePlating": {
+    "baseMultiplier": 100
+  },
+  "Reinforcements": {
+    "baseMultiplier": 100
+  },
+  "FieldsOfFire": {
+    "baseMultiplier": 100
+  },
+  "BloodyFury": {
+    "baseMultiplier": 80
+  },
+  "WrathfulDevotion": {
+    "baseMultiplier": 110
+  },
+  "JakhalStimms": {
+    "baseMultiplier": 125
+  },
+  "Skullsmasher": {
+    "baseMultiplier": 160
+  },
+  "KillMaimBurn": {
+    "baseMultiplier": 100
+  },
+  "TheBetrayer": {
+    "baseMultiplier": 100
+  },
+  "MurderousSwing": {
+    "baseMultiplier": 125
+  },
+  "TrophyTaker": {
+    "baseMultiplier": 90
+  },
+  "OverwhelmingWrath": {
+    "baseMultiplier": 100
+  },
+  "BeaconOfRage": {
+    "baseMultiplier": 100
+  },
+  "BloodSurge": {
+    "baseMultiplier": 100
+  },
+  "EchoesFromTheWarp": {
+    "baseMultiplier": 100
+  },
+  "WarConstruct": {
+    "baseMultiplier": 100
+  },
+  "Wraithcannon": {
+    "baseMultiplier": 150
+  },
+  "TheWailingDoomSweeps": {
+    "baseMultiplier": 100
+  },
+  "TheWailingDoomStrikes": {
+    "baseMultiplier": 100
+  },
+  "TheWrathOfKhaineUnleashed": {
+    "baseMultiplier": 100
+  },
+  "TheWrathOfKhaineUnleashedReworked": {
+    "baseMultiplier": 100
+  },
+  "MoltenForm": {
+    "baseMultiplier": 100
+  },
+  "TheBloodyHanded": {
+    "baseMultiplier": 100
+  },
+  "BloodRunsAngerRisesWarCalls": {
+    "baseMultiplier": 100
+  },
+  "BloodRunsAngerRisesWarCallsReworked": {
+    "baseMultiplier": 100
+  },
+  "TheWildHost": {
+    "baseMultiplier": 100
+  },
+  "Phantasm": {
+    "baseMultiplier": 100
+  },
+  "MalleusRocketLauncher": {
+    "baseMultiplier": 100
+  },
+  "ForwardSpotter": {
+    "baseMultiplier": 100
+  },
+  "HadesAutocannons": {
+    "baseMultiplier": 100
+  },
+  "DaemonicOrdnance": {
+    "baseMultiplier": 100
+  },
+  "BioMinefield": {
+    "baseMultiplier": 100
+  },
+  "SporeMineLauncher": {
+    "baseMultiplier": 100
+  },
+  "BossAdjutant": {
+    "baseMultiplier": 100
+  },
+  "FloatingDeath": {
+    "baseMultiplier": 100
+  },
+  "TheQuickening": {
+    "baseMultiplier": 100
+  },
+  "FuryOfTheAncients": {
+    "baseMultiplier": 100
+  },
+  "HammerOfWrath": {
+    "baseMultiplier": 100
+  },
+  "AggressiveOnslaught": {
+    "baseMultiplier": 140
+  },
+  "BlackRage": {
+    "baseMultiplier": 100
+  },
+  "VisionsOfHeresy": {
+    "baseMultiplier": 100
+  },
+  "RedThirst": {
+    "baseMultiplier": 100
+  },
+  "BloodChalice": {
+    "baseMultiplier": 100
+  },
+  "SanguinaryPriest": {
+    "baseMultiplier": 120
+  },
+  "LightOfSanguinius": {
+    "baseMultiplier": 100
+  },
+  "LordOfTheHost": {
+    "baseMultiplier": 100
+  },
+  "SavageEchoes": {
+    "baseMultiplier": 100
+  },
+  "RedRampage": {
+    "baseMultiplier": 100
+  },
+  "DutyEternal": {
+    "baseMultiplier": 100
+  },
+  "MacroPlasmaIncinerator": {
+    "baseMultiplier": 100
+  },
+  "AncientFury": {
+    "baseMultiplier": 100
+  },
+  "TacticalPrecision": {
+    "baseMultiplier": 100
+  },
+  "FuelledByFury": {
+    "baseMultiplier": 125
+  },
+  "HeavyRailRifle": {
+    "baseMultiplier": 100
+  },
+  "TwinSmartMissileSystem": {
+    "baseMultiplier": 100
+  },
+  "MindControl": {
+    "baseMultiplier": 100
+  },
+  "SpiritualLeader": {
+    "baseMultiplier": 100
+  },
+  "MightFromBelow": {
+    "baseMultiplier": 100
+  },
+  "CosmicHorror": {
+    "baseMultiplier": 100
+  },
+  "Hypermorph": {
+    "baseMultiplier": 100
+  },
+  "AberrantHypermorph": {
+    "baseMultiplier": 130
+  },
+  "TwistedScience": {
+    "baseMultiplier": 100
+  },
+  "CultDemagogue": {
+    "baseMultiplier": 100
+  },
+  "DecoysAndMisdirection": {
+    "baseMultiplier": 100
+  },
+  "HeroicFusillade": {
+    "baseMultiplier": 100
+  },
+  "HypersensoryAbilities": {
+    "baseMultiplier": 100
+  },
+  "EntropyCannons": {
+    "baseMultiplier": 100
+  },
+  "PlagueburstMortar": {
+    "baseMultiplier": 100
+  },
+  "VengeanceForTheOmnissiah": {
+    "baseMultiplier": 100
+  },
+  "OmnissiahsBlessing": {
+    "baseMultiplier": 100
+  },
+  "VoltagheistField": {
+    "baseMultiplier": 100
+  },
+  "ElectroShock": {
+    "baseMultiplier": 100
+  },
+  "ExplosivePresents": {
+    "baseMultiplier": 100
+  },
+  "DaRevolushun": {
+    "baseMultiplier": 100
+  },
+  "Bounce": {
+    "baseMultiplier": 100
+  },
+  "PriorityReclamation": {
+    "baseMultiplier": 100
+  },
+  "RadZoneCorps": {
+    "baseMultiplier": 100
+  },
+  "InvocationOfMachineVengeance": {
+    "baseMultiplier": 100
+  },
+  "ArcScourge": {
+    "baseMultiplier": 100
+  },
+  "SolarAtomizer": {
+    "baseMultiplier": 100
+  },
+  "SelfRepairMechanism": {
+    "baseMultiplier": 100
+  },
+  "SelfRepairMechanismReworked": {
+    "baseMultiplier": 100
+  },
+  "ShroudPsalm": {
+    "baseMultiplier": 100
+  },
+  "PreCalibratedPurgeSolution": {
+    "baseMultiplier": 100
+  },
+  "EnvSquigSmash": {
+    "baseMultiplier": 100
+  },
+  "BlightGrenades": {
+    "baseMultiplier": 100
+  },
+  "CloudOfFlies": {
+    "baseMultiplier": 100
+  },
+  "VexillaMagnifica": {
+    "baseMultiplier": 100
+  },
+  "StandVigil": {
+    "baseMultiplier": 100
+  },
+  "MomentShackle": {
+    "baseMultiplier": 100
+  },
+  "LegendaryCommander": {
+    "baseMultiplier": 105
+  },
+  "EnhancementLifeSteal": {
+    "baseMultiplier": 100
+  },
+  "EnhancementHitBoost": {
+    "baseMultiplier": 100
+  },
+  "EnhancementCritBoost": {
+    "baseMultiplier": 100
+  },
+  "EnhancementDamageBoost": {
+    "baseMultiplier": 100
+  },
+  "EnhancementSummonHarlequin": {
+    "baseMultiplier": 100
+  },
+  "EnhancementSummonHavoc": {
+    "baseMultiplier": 100
+  },
+  "EnhancementSummonWarrior": {
+    "baseMultiplier": 100
+  },
+  "EnhancementRegeneration": {
+    "baseMultiplier": 100
+  },
+  "EnhancementAddTrait:MkXGravis": {
+    "baseMultiplier": 100
+  },
+  "EnhancementAddTrait:RapidAssault": {
+    "baseMultiplier": 100
+  },
+  "EnhancementAddTrait:Resilient": {
+    "baseMultiplier": 100
+  },
+  "EnhancementAddTrait:Infiltrate": {
+    "baseMultiplier": 100
+  },
+  "EnhancementSummon:Harlequin": {
+    "baseMultiplier": 100
+  },
+  "EnhancementSummon:Havoc": {
+    "baseMultiplier": 100
+  },
+  "EnhancementSummon:DeathPlagueMarine": {
+    "baseMultiplier": 100
+  },
+  "EnhancementSummon:Warrior": {
+    "baseMultiplier": 100
+  },
+  "EnhancementSummon:Electropriest": {
+    "baseMultiplier": 100
+  },
+  "EnhancementSummon:Eliminator": {
+    "baseMultiplier": 100
+  },
+  "EnhancementSummon:Inceptor": {
+    "baseMultiplier": 100
+  },
+  "EnhancementPierceBoost": {
+    "baseMultiplier": 100
+  },
+  "ForwardObservers": {
+    "baseMultiplier": 100
+  },
+  "WallOfMirrors": {
+    "baseMultiplier": 100
+  },
+  "EnvFactionSummons:AdeptusMechanicus": {
+    "baseMultiplier": 100
+  },
+  "EnvFactionSummons:Aeldari": {
+    "baseMultiplier": 100
+  },
+  "EnvFactionSummons:AstraMilitarum": {
+    "baseMultiplier": 100
+  },
+  "EnvFactionSummons:BlackLegion": {
+    "baseMultiplier": 100
+  },
+  "EnvFactionSummons:BlackTemplars": {
+    "baseMultiplier": 100
+  },
+  "EnvFactionSummons:Custodes": {
+    "baseMultiplier": 100
+  },
+  "EnvFactionSummons:DarkAngels": {
+    "baseMultiplier": 100
+  },
+  "EnvFactionSummons:DeathGuard": {
+    "baseMultiplier": 100
+  },
+  "EnvFactionSummons:EmperorsChildren": {
+    "baseMultiplier": 100
+  },
+  "EnvFactionSummons:Genestealers": {
+    "baseMultiplier": 100
+  },
+  "EnvFactionSummons:LeaguesOfVotann": {
+    "baseMultiplier": 100
+  },
+  "EnvFactionSummons:Necrons": {
+    "baseMultiplier": 100
+  },
+  "EnvFactionSummons:Sisterhood": {
+    "baseMultiplier": 100
+  },
+  "EnvFactionSummons:SpaceWolves": {
+    "baseMultiplier": 100
+  },
+  "EnvFactionSummons:ThousandSons": {
+    "baseMultiplier": 100
+  },
+  "EnvFactionSummons:Tyranids": {
+    "baseMultiplier": 100
+  },
+  "EnvFactionSummons:Ultramarines": {
+    "baseMultiplier": 100
+  },
+  "EnvFactionSummons:WorldEaters": {
+    "baseMultiplier": 100
+  },
+  "EnvFactionSummons:ArmageddonAstra": {
+    "baseMultiplier": 100
+  },
+  "EnvFactionSummons:ArmageddonBA": {
+    "baseMultiplier": 100
+  },
+  "EnvFactionSummons:ArmageddonBT": {
+    "baseMultiplier": 100
+  },
+  "EnvFactionSummons:ArmageddonOrks": {
+    "baseMultiplier": 100
+  },
+  "EnvFactionSummons:ArmageddonSW": {
+    "baseMultiplier": 100
+  },
+  "EnvFactionSummons:ArmageddonUM": {
+    "baseMultiplier": 100
+  },
+  "EnvFactionSummons:ArmageddonWE": {
+    "baseMultiplier": 100
+  },
+  "ThriceBlessedConflagration": {
+    "baseMultiplier": 100
+  },
+  "DevastatingRefrain": {
+    "baseMultiplier": 100
+  },
+  "CalibaniteGreatsword": {
+    "baseMultiplier": 110
+  },
+  "EnmityForTheUnworthy": {
+    "baseMultiplier": 100
+  },
+  "TalonsOfTheEmperor": {
+    "baseMultiplier": 100
+  },
+  "DaughterOfTheAbyss": {
+    "baseMultiplier": 100
+  },
+  "MartialInspiration": {
+    "baseMultiplier": 100
+  },
+  "LegacyOfCombat": {
+    "baseMultiplier": 105
+  },
+  "EnvAllyAndEnemyNpcs:WarpSurge": {
+    "baseMultiplier": 100
+  },
+  "EnvStatBoost:WarpSurge": {
+    "baseMultiplier": 100
+  },
+  "EnvStatBoost:FactionBoost_SpaceWolves": {
+    "baseMultiplier": 100
+  },
+  "EnvStatBoost:FactionBoost_AdeptusMechanicus": {
+    "baseMultiplier": 100
+  },
+  "EnvStatBoost:FactionBoost_DarkAngels": {
+    "baseMultiplier": 100
+  },
+  "EnvStatBoost:FactionBoost_BloodAngels": {
+    "baseMultiplier": 100
+  },
+  "EnvStatBoost:FactionBoost_Orks": {
+    "baseMultiplier": 100
+  },
+  "EnvStatBoost:TraitBoost_Flying": {
+    "baseMultiplier": 100
+  },
+  "EnvStatBoost:TraitBoost_Psyker": {
+    "baseMultiplier": 100
+  },
+  "EnvStatBoost:TraitBoost_RapidAssault": {
+    "baseMultiplier": 100
+  },
+  "EnvStatBoost:TraitBoost_TerminatorArmour": {
+    "baseMultiplier": 100
+  },
+  "EnvStrategicBuff:Killzone": {
+    "baseMultiplier": 100
+  },
+  "EnvStrategicBuff:PowerMatrix": {
+    "baseMultiplier": 100
+  },
+  "LashOfTorment": {
+    "baseMultiplier": 100
+  },
+  "ArmourOfShriekingSouls": {
+    "baseMultiplier": 100
+  },
+  "ExcruciatingFrequencies": {
+    "baseMultiplier": 100
+  },
+  "TerrifyingCrescendo": {
+    "baseMultiplier": 100
+  },
+  "EuphoricStrikes": {
+    "baseMultiplier": 100
+  },
+  "RefusalToBeOutdone": {
+    "baseMultiplier": 200
+  },
+  "DoomSiren": {
+    "baseMultiplier": 100
+  },
+  "ObsessiveAnnunciation": {
+    "baseMultiplier": 100
+  },
+  "DaemonicPatrons": {
+    "baseMultiplier": 100
+  },
+  "EcstaticSlaughter": {
+    "baseMultiplier": 100
+  },
+  "NovaBoost": {
+    "baseMultiplier": 100
+  },
+  "NovaCharge": {
+    "baseMultiplier": 100
+  },
+  "NovaShield": {
+    "baseMultiplier": 100
+  },
+  "MultiTracker": {
+    "baseMultiplier": 100
+  },
+  "TargetLock": {
+    "baseMultiplier": 100
+  },
+  "ATemptingTrap": {
+    "baseMultiplier": 100
+  },
+  "PinpointCounterOffensive": {
+    "baseMultiplier": 100
+  },
+  "MischiefMakers": {
+    "baseMultiplier": 100
+  },
+  "EmbodiedProphecy": {
+    "baseMultiplier": 100
+  },
+  "HuntersInstincts": {
+    "baseMultiplier": 100
+  },
+  "testRelicAbility": {
+    "baseMultiplier": 100
+  },
+  "KardiocoreGalvanus": {
+    "baseMultiplier": 100
+  },
+  "PhoenixGem": {
+    "baseMultiplier": 100
+  },
+  "RelicOfLostCadia": {
+    "baseMultiplier": 100
+  },
+  "BookOfFate": {
+    "baseMultiplier": 100
+  },
+  "TalismanOfRage": {
+    "baseMultiplier": 100
+  },
+  "NetherRealmCasket": {
+    "baseMultiplier": 100
+  },
+  "IntoxicatingElixir": {
+    "baseMultiplier": 100
+  },
+  "AmuletOfTheVoidwyrm": {
+    "baseMultiplier": 100
+  },
+  "OrbsOfDecay": {
+    "baseMultiplier": 100
+  },
+  "RelicPowerFist": {
+    "baseMultiplier": 100
+  },
+  "RelicBoltPistol": {
+    "baseMultiplier": 100
+  },
+  "SupaCyborkBody": {
+    "baseMultiplier": 100
+  },
+  "MawClawsOfThyrax": {
+    "baseMultiplier": 100
+  },
+  "DaemonfleshPlate": {
+    "baseMultiplier": 100
+  },
+  "SabreOfSacrifice": {
+    "baseMultiplier": 100
+  },
+  "Vitarus": {
+    "baseMultiplier": 100
+  },
+  "TheArdentBlade": {
+    "baseMultiplier": 100
+  },
+  "Dw02AdvancedBurstCannon": {
+    "baseMultiplier": 100
+  },
+  "TalonOfHorus": {
+    "baseMultiplier": 100
+  },
+  "Maugetar": {
+    "baseMultiplier": 100
+  },
+  "ParagonSpear": {
+    "baseMultiplier": 100
+  },
+  "NornCrown": {
+    "baseMultiplier": 100
+  },
+  "DawnBlade": {
+    "baseMultiplier": 100
+  },
+  "WyrdmakersHelm": {
+    "baseMultiplier": 100
+  },
+  "BladeOfTheAncestors": {
+    "baseMultiplier": 100
+  },
+  "VolummsMasterArtifice": {
+    "baseMultiplier": 100
+  },
+  "MonsterSlayerOfCaliban": {
+    "baseMultiplier": 100
+  },
+  "Lakrimae": {
+    "baseMultiplier": 100
+  },
+  "HeadwoppasKillchoppa": {
+    "baseMultiplier": 100
+  },
+  "ChaliceOfBaal": {
+    "baseMultiplier": 100
+  },
+  "PhasalSubjugator": {
+    "baseMultiplier": 100
+  },
+  "Helspear": {
+    "baseMultiplier": 100
+  },
+  "LionHelmRelic": {
+    "baseMultiplier": 100
+  },
+  "Fidelity": {
+    "baseMultiplier": 100
+  },
+  "Thrydderghyre": {
+    "baseMultiplier": 100
+  },
+  "BlightedLand": {
+    "baseMultiplier": 100
+  },
+  "ContemptuousDisregard": {
+    "baseMultiplier": 100
+  },
+  "WisdomOfTheAncients": {
+    "baseMultiplier": 100
+  },
+  "ShieldOfFaith": {
+    "baseMultiplier": 100
+  },
+  "OnMyPosition": {
+    "baseMultiplier": 100
+  },
+  "MoreGitzOverEre": {
+    "baseMultiplier": 100
+  },
+  "ElectrochaffBackups": {
+    "baseMultiplier": 100
+  },
+  "HyperCorrosiveAcid": {
+    "baseMultiplier": 100
+  },
+  "CabalOfSorcerers": {
+    "baseMultiplier": 100
+  },
+  "MastersOfManoeuvre": {
+    "baseMultiplier": 100
+  },
+  "SquigLaunchas": {
+    "baseMultiplier": 100
+  },
+  "SquigMine": {
+    "baseMultiplier": 100
+  },
+  "VigilanceEternal": {
+    "baseMultiplier": 100
+  },
+  "UnwaveringSentinel": {
+    "baseMultiplier": 105
+  },
+  "LeadingTheCharge": {
+    "baseMultiplier": 100
+  },
+  "ToughToKill": {
+    "baseMultiplier": 100
+  },
+  "FragLance": {
+    "baseMultiplier": 100
+  },
+  "BossEndFightUndefeated": {
+    "baseMultiplier": 100
+  },
+  "ExemplarOfTheMontka": {
+    "baseMultiplier": 105
+  },
+  "WayOfTheShortBlade": {
+    "baseMultiplier": 100
+  },
+  "AetherStride": {
+    "baseMultiplier": 100
+  },
+  "InfernalCannon": {
+    "baseMultiplier": 100
+  },
+  "HunterOfSouls": {
+    "baseMultiplier": 100
+  },
+  "RitesOfMorkai": {
+    "baseMultiplier": 100
+  },
+  "HealingBalms": {
+    "baseMultiplier": 100
+  },
+  "AncestralFortune": {
+    "baseMultiplier": 100
+  },
+  "GrimEfficiency": {
+    "baseMultiplier": 100
+  },
+  "GravitonRifle": {
+    "baseMultiplier": 100
+  },
+  "EcogSupport": {
+    "baseMultiplier": 100
+  },
+  "RepairEnthusiast": {
+    "baseMultiplier": 100
+  },
+  "IronkinSteeljack": {
+    "baseMultiplier": 150
+  },
+  "PredictiveGuidance": {
+    "baseMultiplier": 150
+  },
+  "PurgeResponse": {
+    "baseMultiplier": 100
+  },
+  "AugmentedAssault": {
+    "baseMultiplier": 100
+  },
+  "FuryFromTheDelve": {
+    "baseMultiplier": 100
+  },
+  "MassDriverAccelerator": {
+    "baseMultiplier": 100
+  },
+  "ModifiedExoarmour": {
+    "baseMultiplier": 100
+  },
+  "StrikeFromTheShadows": {
+    "baseMultiplier": 100
+  },
+  "HaywireMine": {
+    "baseMultiplier": 100
+  },
+  "HaywireMineSteppable": {
+    "baseMultiplier": 100
+  },
+  "TitanhammerSquad": {
+    "baseMultiplier": 100
+  },
+  "IconOfObstinacy": {
+    "baseMultiplier": 100
+  },
+  "TotalObliteration": {
+    "baseMultiplier": 100
+  },
+  "CrucibleOfBattle": {
+    "baseMultiplier": 100
+  },
+  "PrimeTestSubject": {
+    "baseMultiplier": 100
+  },
+  "DiabolicRegeneration": {
+    "baseMultiplier": 100
+  },
+  "DeathOnTheWind": {
+    "baseMultiplier": 100
+  },
+  "Hailstrike": {
+    "baseMultiplier": 100
+  },
+  "InstrumentsOfVengeance": {
+    "baseMultiplier": 100
+  },
+  "MartialExemplar": {
+    "baseMultiplier": 100
+  },
+  "TheLionsWrath": {
+    "baseMultiplier": 100
+  },
+  "PrimarchOfTheFirstLegion": {
+    "baseMultiplier": 100
+  },
+  "Fealty": {
+    "baseMultiplier": 100
+  },
+  "TheEmperorsShield": {
+    "baseMultiplier": 100
+  },
+  "NoHidingFromTheWatchers": {
+    "baseMultiplier": 100
+  },
+  "WatchedOver": {
+    "baseMultiplier": 100
+  },
+  "RedemptionOfTheRisen": {
+    "baseMultiplier": 100
+  },
+  "HuntTheFallen": {
+    "baseMultiplier": 100
+  }
+}

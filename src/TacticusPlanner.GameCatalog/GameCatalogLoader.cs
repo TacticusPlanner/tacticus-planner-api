@@ -41,8 +41,9 @@ public static class GameCatalogLoader
         var eventOccurrences = LoadDataset<IReadOnlyList<GameCatalogEventOccurrence>>(GameCatalogDatasets.EventOccurrences);
         var hseScoring = LoadDataset<IReadOnlyList<GameCatalogHseScoring>>(GameCatalogDatasets.HomeScreenEventScoring);
         var hordeModeTiersRaw = LoadDataset<IReadOnlyList<GameCatalogHordeModeTiers>>(GameCatalogDatasets.HordeModeTiers);
-        var mythicQuests = LoadDataset<IReadOnlyList<GameCatalogRawMythicQuests>>(GameCatalogDatasets.MythicQuests);
-        var unitPower = LoadDataset<GameCatalogRawUnitPower>(GameCatalogDatasets.UnitPower);
+        var mythicQuests = GameCatalogDenormalizer.ReadDatamineMythicQuests(
+            LoadDatamine<DatamineQuestGroups>(GameCatalogDenormalizer.DatamineQuestGroupsPath).Hero);
+        var unitPower = LoadUnitPower();
         var questEvents = LoadDataset<IReadOnlyList<GameCatalogRawQuestEvent>>(GameCatalogDatasets.QuestEvents);
         var questCrates = LoadDataset<IReadOnlyList<GameCatalogQuestCrate>>(GameCatalogDatasets.QuestCrates);
 
@@ -67,11 +68,8 @@ public static class GameCatalogLoader
             lresByEvent[key] = LoadDataset<GameCatalogLre>(key);
         }
 
-        var rawShopsBySourceKey = new Dictionary<string, GameCatalogRawShop>(StringComparer.Ordinal);
-        foreach (var key in GameCatalogDatasets.ShopSources)
-        {
-            rawShopsBySourceKey[key] = LoadDataset<GameCatalogRawShop>(key);
-        }
+        var rawShopsBySourceKey = GameCatalogDenormalizer.ReadDatamineShops(
+            LoadDatamine<Dictionary<string, JsonElement>>(GameCatalogDenormalizer.DatamineMerchantsPath), JsonOptions);
 
         var raidBossRawData = LoadRaidBossRawData();
         var guildRaidMetaRawData = LoadGuildRaidMetaRawData();
@@ -156,7 +154,7 @@ public static class GameCatalogLoader
             new ReadOnlyDictionary<string, GameCatalogCampaignGroup>(campaignGroups),
             new ReadOnlyCollection<GameCatalogDropChance>(dropChances.ToArray()),
             new ReadOnlyDictionary<string, GameCatalogLre>(lresByEvent),
-            new ReadOnlyDictionary<string, GameCatalogRawShop>(rawShopsBySourceKey),
+            rawShopsBySourceKey,
             raidBossRawData,
             guildRaidMetaRawData,
             new ReadOnlyCollection<GameCatalogRawMythicQuests>(mythicQuests.ToArray()),
@@ -198,41 +196,29 @@ public static class GameCatalogLoader
     }
 
     /// <summary>
-    /// Assembles the raid-boss raw data from its authored source files: <c>raid-boss-common</c> (rotation,
-    /// primarchs, modifier defs), one <c>raid-boss-{n}-{type}</c> file per boss (unit sets, merged), and one
-    /// <c>raid-boss-season-{n}</c> file per season config (keyed by its own <c>GuildBossSeasonConfigId</c>).
-    /// A duplicate unit-set key or season-config id across files throws.
+    /// Assembles the raid-boss raw data from the datamine guildBoss files: the season-config rotation, the primarch
+    /// prime ids, the modifier definitions, the unit sets (merged across sets) and the season configs.
     /// </summary>
-    private static GameCatalogRaidBossRawData LoadRaidBossRawData()
-    {
-        var common = LoadDataset<GameCatalogRaidBossCommonRawData>(GameCatalogDatasets.RaidBossCommon);
+    private static GameCatalogRaidBossRawData LoadRaidBossRawData() =>
+        new(
+            LoadDatamine<List<string>>(GameCatalogDenormalizer.DatamineGuildBossRotationPath),
+            LoadDatamine<List<string>>(GameCatalogDenormalizer.DatamineGuildBossPrimarchsPath),
+            GameCatalogDenormalizer.ReadDatamineRaidBossUnitSets(
+                LoadDatamine<Dictionary<string, Dictionary<string, GameCatalogRaidBossRawUnitSet>>>(
+                    GameCatalogDenormalizer.DatamineGuildBossUnitSetsPath)),
+            LoadDatamine<Dictionary<string, GameCatalogRaidBossRawSeason>>(GameCatalogDenormalizer.DatamineGuildBossSeasonsPath),
+            LoadDatamine<Dictionary<string, GameCatalogRaidBossRawModifier>>(GameCatalogDenormalizer.DatamineGuildBossModifiersPath));
 
-        var unitSets = new Dictionary<string, GameCatalogRaidBossRawUnitSet>(StringComparer.Ordinal);
-        foreach (var key in GameCatalogDatasets.RaidBossGroups)
-        {
-            foreach (var (unitSetId, unitSet) in LoadDataset<GameCatalogRaidBossGroupRawData>(key).UnitSets)
-            {
-                if (!unitSets.TryAdd(unitSetId, unitSet))
-                {
-                    throw new InvalidOperationException(
-                        $"Raid-boss unit-set key '{unitSetId}' is defined in more than one raid-boss-*.json file.");
-                }
-            }
-        }
-
-        var seasons = new Dictionary<string, GameCatalogRaidBossRawSeason>(StringComparer.Ordinal);
-        foreach (var key in GameCatalogDatasets.RaidBossSeasons)
-        {
-            var season = LoadDataset<GameCatalogRaidBossRawSeason>(key);
-            if (!seasons.TryAdd(season.GuildBossSeasonConfigId, season))
-            {
-                throw new InvalidOperationException(
-                    $"Raid-boss season config '{season.GuildBossSeasonConfigId}' is defined in more than one raid-boss-season-*.json file.");
-            }
-        }
-
-        return new GameCatalogRaidBossRawData(common.Rotation, common.Primarchs, unitSets, seasons, common.Modifiers);
-    }
+    /// <summary>Assembles the unit-power tables from their datamine files.</summary>
+    private static GameCatalogRawUnitPower LoadUnitPower() =>
+        new(
+            LoadDatamine<List<GameCatalogRawHeroPowerStep>>(GameCatalogDenormalizer.DatamineHeroProgressionStepsPath),
+            LoadDatamine<List<GameCatalogRawMowPowerStep>>(GameCatalogDenormalizer.DatamineHeroProgressionStepsMoWPath),
+            LoadDatamine<Dictionary<string, int>>(GameCatalogDenormalizer.DatamineDamageProfileModifiersPath),
+            LoadDatamine<Dictionary<string, int>>(GameCatalogDenormalizer.DatamineTraitPowerModifiersPath),
+            LoadDatamine<Dictionary<string, GameCatalogRawAbilityPowerModifier>>(GameCatalogDenormalizer.DatamineAbilityPowerModifiersPath),
+            LoadDatamine<GameCatalogAbilityPowerCurves>(GameCatalogDenormalizer.DatamineAbilityPowerCurvePath),
+            LoadDatamine<Dictionary<string, GameCatalogRawUnitPowerEntry>>(GameCatalogDenormalizer.DatamineLineupPath));
 
     /// <summary>
     /// Assembles the raw Guild Raid Meta data from <c>guild-raid-comps.json</c> (Comp guidance) plus one

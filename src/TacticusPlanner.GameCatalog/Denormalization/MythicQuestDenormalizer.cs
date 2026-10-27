@@ -6,6 +6,38 @@ namespace TacticusPlanner.GameCatalog.Denormalization;
 
 internal static partial class GameCatalogDenormalizer
 {
+    /// <summary>Raw path of the datamine file the mythic-quests dataset is built from.</summary>
+    public const string DatamineQuestGroupsPath = "gameconfig/quests/groups.json";
+
+    private const string MythicQuestPrefix = "mythic_";
+
+    [GeneratedRegex(@"^mythic_(\w+)_(\d+)$", RegexOptions.CultureInvariant)]
+    private static partial Regex MythicQuestNameRegex();
+
+    /// <summary>
+    /// Reads the mythic quests out of the datamine <c>hero</c> quest group: every quest named
+    /// <c>mythic_{characterId}_{number}</c>, grouped by character in game order.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">A <c>mythic_</c> quest name has no character id or number.</exception>
+    public static IReadOnlyList<GameCatalogRawMythicQuests> ReadDatamineMythicQuests(DatamineQuestGroup hero) =>
+        hero.Quests
+            .Where(quest => quest.Name.StartsWith(MythicQuestPrefix, StringComparison.Ordinal))
+            .Select(quest =>
+            {
+                var match = MythicQuestNameRegex().Match(quest.Name);
+                if (!match.Success)
+                {
+                    throw new InvalidOperationException(
+                        $"Dataset '{GameCatalogDatasets.MythicQuests}' quest '{quest.Name}' is not named mythic_{{characterId}}_{{number}}.");
+                }
+
+                var number = int.Parse(match.Groups[2].ValueSpan, CultureInfo.InvariantCulture);
+                return (CharacterId: match.Groups[1].Value, Quest: new GameCatalogRawMythicQuest(number, quest.Rewards, quest.Tasks));
+            })
+            .GroupBy(entry => entry.CharacterId, StringComparer.Ordinal)
+            .Select(group => new GameCatalogRawMythicQuests(group.Key, group.Select(entry => entry.Quest).ToArray()))
+            .ToArray();
+
     public static IReadOnlyList<GameCatalogMythicQuestsView> BuildMythicQuests(
         IReadOnlyList<GameCatalogRawMythicQuests> raw) =>
         raw
@@ -30,7 +62,7 @@ internal static partial class GameCatalogDenormalizer
 }
 
 /// <summary>
-/// Parses V1's mythic-quest reward strings (<c>"type[:amount]"</c>) into structured records. The set of
+/// Parses the game's mythic-quest reward strings (<c>"type[:amount]"</c>) into structured records. The set of
 /// patterns is closed: any other string fails to parse, so a new reward kind in a game refresh surfaces as a
 /// startup validation error rather than an unknown reward.
 /// </summary>

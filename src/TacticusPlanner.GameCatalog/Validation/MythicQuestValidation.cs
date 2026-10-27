@@ -14,7 +14,7 @@ public static partial class GameCatalogValidator
         ValidateMythicQuests(snapshot.MythicQuests, characterIds, equipmentIds, errors);
     }
 
-    // Runs over the raw reward strings. A task's heroId parameter is deliberately not checked: V1 names summons
+    // Runs over the raw reward strings. A task's heroId parameter is deliberately not checked: the game names summons
     // and NPCs there, and one of them (tauSmnDroneSniper) is not a catalog npc.
     internal static void ValidateMythicQuests(
         IReadOnlyList<GameCatalogRawMythicQuests> raw,

@@ -6,8 +6,16 @@ internal static partial class GameCatalogDenormalizer
 {
     private const int DefaultPowerMultiplier = 100;
 
+    // Raw paths of the datamine files the unit-power dataset is built from, besides heroProgressionSteps.json
+    // (DatamineHeroProgressionStepsPath) and lineup.json (DatamineLineupPath).
+    public const string DatamineHeroProgressionStepsMoWPath = "gameconfig/units/heroProgressionStepsMoW.json";
+    public const string DatamineDamageProfileModifiersPath = "gameconfig/units/damageProfileModifiers.json";
+    public const string DatamineTraitPowerModifiersPath = "gameconfig/units/traitPowerModifiers.json";
+    public const string DatamineAbilityPowerModifiersPath = "gameconfig/units/abilityPowerModifiers.json";
+    public const string DatamineAbilityPowerCurvePath = "gameconfig/units/abilityPowerCurve.json";
+
     /// <summary>
-    /// Builds the single served <c>unit-power</c> record from the raw file: progression steps get their
+    /// Builds the single served <c>unit-power</c> record from the datamine power tables: progression steps get their
     /// index, the modifier maps become lists sorted by id (ordinal), and <c>lineup</c> becomes one unit per
     /// catalog character or MoW, sorted by unit id. Lineup entries the catalog does not have (unreleased
     /// units) are skipped; a missing <c>powerMultiplier</c> is served as 100; a character's stat increases

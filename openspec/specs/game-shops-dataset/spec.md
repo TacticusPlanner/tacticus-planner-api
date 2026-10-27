@@ -13,8 +13,10 @@ treat character-shard offers as goal acquisition sources, without parsing Quartz
 
 The game catalog SHALL serve a dataset keyed `shops` as a plain array with one record per daily shop,
 each identified by a stable, human-readable `id` (`guild`, `war`, `rogue-trader`, `crusade`). It SHALL
-be built from four authored raw source files (one per shop) and SHALL be the only shop dataset exposed
-publicly; the raw per-shop source files SHALL NOT be served directly.
+be built from four merchants of the pinned datamine copy `gameconfig/shop/merchants.json` (`guild` →
+`guild`, `guildWars` → `war`, `elderShop` → `rogue-trader`, `crusadeShop` → `crusade`), SHALL fail startup
+naming the shop when one of them is missing, and SHALL be the only shop dataset exposed publicly; the raw
+merchants file SHALL NOT be served directly. The catalog SHALL keep no hand-kept shop files.
 
 #### Scenario: Shops dataset is served without authentication
 

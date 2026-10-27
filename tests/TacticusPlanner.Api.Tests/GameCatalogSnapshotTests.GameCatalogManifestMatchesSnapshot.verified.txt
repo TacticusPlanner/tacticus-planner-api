@@ -76,7 +76,7 @@
     },
     {
       key: mythic-quests,
-      hash: b3805fdf320472631197db3c5059b6897d95bbf899377365bdb9112f371eb1ad,
+      hash: 42a2a9de7e04a7af00610d6cd6edc02a8c47c092bc492f82ede28e476be9b1f6,
       url: /api/v1/game-catalog/mythic-quests/{envelopeHash}
     },
     {

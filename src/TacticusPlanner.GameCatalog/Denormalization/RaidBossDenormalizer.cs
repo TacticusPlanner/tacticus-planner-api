@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 
 using TacticusPlanner.GameCatalog.Models;
@@ -15,6 +16,40 @@ internal static partial class GameCatalogDenormalizer
 
     [GeneratedRegex(@"^GuildBoss(\d+)(?:MiniBoss|Minion)(\d+)", RegexOptions.CultureInvariant)]
     private static partial Regex RaidBossPrimeKeyRegex();
+
+    // Raw paths of the datamine files the raid-bosses dataset is built from.
+    public const string DatamineGuildBossRotationPath = "globalconfig/guildBoss/guildBossSeasonConfigRotation.json";
+    public const string DatamineGuildBossPrimarchsPath = "globalconfig/guildBoss/primarchs.json";
+    public const string DatamineGuildBossModifiersPath = "globalconfig/guildBoss/modifiers.json";
+    public const string DatamineGuildBossUnitSetsPath = "globalconfig/guildBoss/unitSets.json";
+    public const string DatamineGuildBossSeasonsPath = "globalconfig/guildBoss/guildBossSeasonDataConfigsGDTO.json";
+
+    /// <summary>
+    /// Merges the datamine <c>unitSets.json</c> (unit sets keyed by set id, e.g. <c>unit_set_1</c>, each keyed by
+    /// unit-set key) into one map, in game order. The served dataset has one unit-set map shared by every season,
+    /// so a unit-set key the sets define differently throws instead of serving one season's units for another.
+    /// </summary>
+    /// <exception cref="InvalidOperationException">Two sets define the same unit-set key differently.</exception>
+    public static IReadOnlyDictionary<string, GameCatalogRaidBossRawUnitSet> ReadDatamineRaidBossUnitSets(
+        IReadOnlyDictionary<string, Dictionary<string, GameCatalogRaidBossRawUnitSet>> unitSetsBySet)
+    {
+        var merged = new Dictionary<string, GameCatalogRaidBossRawUnitSet>(StringComparer.Ordinal);
+        foreach (var (setId, unitSets) in unitSetsBySet)
+        {
+            foreach (var (unitSetKey, unitSet) in unitSets)
+            {
+                if (!merged.TryAdd(unitSetKey, unitSet)
+                    && JsonSerializer.Serialize(merged[unitSetKey]) != JsonSerializer.Serialize(unitSet))
+                {
+                    throw new InvalidOperationException(
+                        $"Dataset '{GameCatalogDatasets.RaidBosses}' unit set '{unitSetKey}' differs in '{setId}'; " +
+                        "the served dataset holds one unit-set map for every season.");
+                }
+            }
+        }
+
+        return merged;
+    }
 
     public const string RaidBossKindBoss = "boss";
     public const string RaidBossKindPrime = "prime";

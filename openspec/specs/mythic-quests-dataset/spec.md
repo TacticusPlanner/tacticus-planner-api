@@ -11,10 +11,12 @@ catalog, so clients render quests from catalog data instead of shipping their ow
 
 The game catalog SHALL serve a dataset keyed `mythic-quests` as a plain array at
 `GET /api/v1/game-catalog/mythic-quests`, without requiring authentication, in the same dataset envelope as the
-other served datasets. It SHALL be built from one authored raw source file, `mythic-quests.json`, whose content
-is ported from V1's `mythic_quests/data/mythic-quests.json` `quests[]`; the raw file SHALL NOT be served
-directly. V1's `terms[]` (task text templates) SHALL NOT be part of the catalog: task text is display text and
-stays with the client.
+other served datasets. It SHALL be built from the quests named `mythic_{characterId}_{number}` in the `hero` group
+of the pinned datamine copy `gameconfig/quests/groups.json`, keeping each quest's `rewards` and each task's
+`locaKey`, `target` and `taskParameters`; a `mythic_` quest whose name does not fit that pattern SHALL fail
+startup naming `mythic-quests`. The raw file SHALL NOT be served directly, and the catalog SHALL keep no
+hand-kept mythic-quest file. Task text templates SHALL NOT be part of the catalog: task text is display text
+and stays with the client.
 
 #### Scenario: Dataset is served without authentication
 
@@ -30,7 +32,7 @@ stays with the client.
 #### Scenario: The raw source has no direct endpoint
 
 - **WHEN** the set of game catalog endpoints is enumerated
-- **THEN** there is no endpoint serving the raw `mythic-quests.json` directly
+- **THEN** there is no endpoint serving the raw `groups.json` directly
 
 ### Requirement: Served mythic quest shape
 
@@ -41,17 +43,17 @@ Each served record SHALL carry exactly these fields:
   - `number` (integer, 1 to 5).
   - `tasks` (array, 1 to 4 entries, in source order). Each task SHALL carry exactly `locaKey` (string, the
     task-text template key, for example `SlayEnemiesWithHeroToTraitInOneBattle_description`), `target`
-    (integer, at least 1) and `parameters` (object of string to string, copied unchanged from V1's
+    (integer, at least 1) and `parameters` (object of string to string, copied unchanged from the game's
     `taskParameters`, for example `{ "trait": "Emplacement", "heroId": "blackAbaddon", "killAmount": "8" }`).
   - `rewards` (array, in source order) of reward records, defined in the next requirement.
 
-Records SHALL be ordered by `unitId` (ordinal). V1's quest `name` (`mythic_blackAbaddon_01`), task `name` and
-`characterName` SHALL NOT be served. The client derives the task text from `locaKey` and `parameters` using its
+Records SHALL be ordered by `unitId` (ordinal). The game's quest `name` (`mythic_blackAbaddon_01`) and task `name` SHALL NOT be
+served. The client derives the task text from `locaKey` and `parameters` using its
 own templates; the server sends no display text.
 
 #### Scenario: Abaddon's first quest
 
-- **GIVEN** V1's Abaddon quest 1: task `SlayEnemiesWithHeroToTraitInOneBattle_description`, target 1, parameters
+- **GIVEN** the game's Abaddon quest 1 (`mythic_blackAbaddon_01`): task `SlayEnemiesWithHeroToTraitInOneBattle_description`, target 1, parameters
   `trait: Emplacement, heroId: blackAbaddon, killAmount: 8`
 - **WHEN** the dataset is served
 - **THEN** the `blackAbaddon` record's first quest has `number: 1` and one task with that `locaKey`,
@@ -60,7 +62,7 @@ own templates; the server sends no display text.
 #### Scenario: Coverage
 
 - **WHEN** the dataset is served
-- **THEN** it has 117 records, each with exactly 5 quests numbered 1 to 5
+- **THEN** it has 119 records (the datamine adds `lostaBile` and `orksWeirdboy` to V1's 117), each with exactly 5 quests numbered 1 to 5
 
 ### Requirement: Rewards are served as structured records
 
