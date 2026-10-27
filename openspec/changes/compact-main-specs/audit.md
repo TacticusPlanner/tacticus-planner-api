@@ -1,5 +1,7 @@
 # OpenSpec main-spec compaction audit — tacticus-planner-api
 
+> Final dispositions: the delta files and design.md ("Review adjustments") override this audit where they differ (e.g. L11 is a MODIFIED that keeps the `lre-common` exclusion; P7 is dropped).
+
 Scope: `tacticus-planner-api/openspec/specs/*/spec.md` (all 67 read in full). Line numbers are from the current files.
 
 Rules I followed:
@@ -18,12 +20,17 @@ No spec states the rule for all datasets at once ("served anonymously, in the en
 - ADDED to `game-catalog-http-caching` (its Purpose already says "content-addressed and public"):
   ```
   ### Requirement: Every served dataset is public and listed in the manifest
-  Every served game-catalog dataset SHALL be served at its own `GET /api/v1/game-catalog/{dataset}` endpoint without authentication, in the shared dataset envelope, and SHALL have a content-hash entry in the public manifest. Raw source files SHALL NOT be served directly. Served records SHALL carry ids and structured values only, with no display name, icon, icon id or wiki link; the client resolves presentation from ids.
+  Every served game-catalog dataset SHALL be served at its own `GET /api/v1/game-catalog/{dataset}` endpoint without authentication, in the shared dataset envelope, and SHALL have a content-hash entry in the public manifest. Raw source files SHALL NOT be served directly.
 
   #### Scenario: A dataset is public and hashed
   - **WHEN** a client reads the manifest and then any dataset it lists, without credentials
   - **THEN** the dataset is returned in the shared envelope and its hash equals the manifest entry, and no endpoint serves a raw source file
+
+
+  ### Requirement: Served records carry ids, not presentation
+  Served records SHALL carry ids and structured values only, with no display name, icon, icon id or wiki link; the client resolves presentation from ids. The only exception is a field whose own dataset spec requires the game's untranslated text (e.g. `upgrades` `label` and `material`).
   ```
+  (Split after review: the ids-only rule is its own requirement, with the `upgrades` exception. The display-text REMOVED entries point to it.)
 - Then strip the copies:
 
 | Where | Requirement (verbatim) | Action |

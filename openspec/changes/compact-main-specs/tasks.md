@@ -7,7 +7,7 @@
 
 ## 2. Direct edits to main specs
 
-- [ ] 2.1 Apply every entry in `direct-edits.md`. Remove or rename each listed scenario in `openspec/specs/<capability>/spec.md`, and make the same edit in the matching MODIFIED block under `specs/` when one exists. Where the MODIFIED block adds a replacement scenario, copy it into the main spec in the same step. Verify that every listed scenario title is absent (or renamed) in both places, using `grep -rn "#### Scenario: <title>"`.
+- [ ] 2.1 Apply every entry in `direct-edits.md`. Remove or rename each listed scenario in `openspec/specs/<capability>/spec.md`, and make the same edit in the matching MODIFIED block under `specs/` when one exists. Where the MODIFIED block adds a replacement scenario, copy it into the main spec in the same step. Verify that every listed scenario title is absent (or renamed) in both places, using an exact whole-line match (`grep -rnx "#### Scenario: <title>"`) checked within the named requirement.
 - [ ] 2.2 Rewrite the Purpose paragraphs in `openspec/specs/` according to audit P1–P4:
   - P1: `game-catalog-datamine-source`, drop "Datasets move onto it one change at a time."
   - P2: `goal-target-model`, drop "after removal of independent equipment goals".
@@ -19,7 +19,7 @@
 
 ## 3. Archive dry check
 
-- [ ] 3.1 Archive a throwaway copy of the change in a scratch worktree and diff the result against `main` (`git worktree add`, run `openspec archive compact-main-specs -y` there, then `git diff --stat`). Verify all of the following:
+- [ ] 3.1 Commit the section 2 edits first, then archive a throwaway copy of that commit in a scratch worktree and diff the result against `main` (`git worktree add`, run `openspec archive compact-main-specs -y` there, then `git diff --stat`). Verify all of the following:
   - `project-unit-ordering/` is deleted.
   - The only spec files touched are the capabilities listed in proposal.md.
   - There are no stray `## ADDED/MODIFIED` headers in `openspec/specs/`.
