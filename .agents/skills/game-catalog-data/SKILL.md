@@ -126,6 +126,17 @@ restrictions); these are silently ignored on deserialize.
   `hreShards` from `ascensionCosts` (null when absent)). Costs stay in `ascension-costs` and power multipliers in
   `unit-power`. A non-increasing XP curve, a missing book, a rank row count or width other than 20 × 6, or a ladder
   that doesn't walk `ProgressionRules.ProgressionOrder` fails the load.
+- **hre** (roadmap step 7) is one record per Hero Release Event of the datamine `liveEvents/heroReleaseEvent.json`,
+  ordered by id (`Denormalization/HreDenormalizer.cs`): the `unlockableHero` (`heroId`, `baseRarity`, `maxRarity`),
+  `featuredFaction` (`trackingFeaturedFaction`), `gameModes`, `scorePoints` (the game's multipliers and tables), the
+  points `milestones` (`hreCurrency:N` each, not cumulative), the `missions` chain from `questId` along
+  `successorQuests` in `quests/groups.json` (game task names, targets and parameters; the last is the `bonus`), the
+  `leaderboard` (event N reads `heroReleaseLeaderboard` for N = 1, else `heroReleaseLeaderboard_N`: daily
+  `hreCurrency` per 0-based starting position, and per phase the chest with its currency and minimum shards from
+  `loot/chests.json`), the `chestShop` (every `hre_progress_chest_*` product of `shop/products.json` by chest id: cost
+  and shard range) and the `ohSoCloseOffer` pricing. The per-step HRE ascension shards live in `progression-rules`.
+  An unmappable reward, a broken quest chain or a missing leaderboard or chest fails the load;
+  `Validation/HreValidation.cs` (`InvalidHre`) checks the hero, rarities, faction and mission task parameters.
 - **campaign-battles** is flat, keyed by globally-unique battle id, each carrying its `campaignGroupId`;
   **campaign-definitions** is keyed by `groupId` (metadata + `battleIds[]` only). Battle ids are also
   referenced from API test fixtures and the player-data transformer, so renaming a battle id is not a

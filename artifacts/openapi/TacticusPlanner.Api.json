@@ -1605,6 +1605,104 @@
         }
       }
     },
+    "/api/v1/game-catalog/hre": {
+      "get": {
+        "tags": [
+          "Game-Catalog"
+        ],
+        "summary": "Gets the Hero Release Events.",
+        "operationId": "TacticusPlannerApiFeaturesGameCatalogGetGameCatalogHreEndpoint1",
+        "responses": {
+          "200": {
+            "description": "One record per Hero Release Event, named as the game names it: the unlockable hero and featured faction, how battles score points, the points milestones (event currency each), the mission chain (game task names, targets and parameters), the leaderboard's daily currency and phase chests per position bracket, the chest shop (currency cost and shard range per chest) and the Oh So Close offer pricing.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogHre"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "The dataset has not changed."
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The envelope hash is not the current release's.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/game-catalog/hre/{envelopeHash}": {
+      "get": {
+        "tags": [
+          "Game-Catalog"
+        ],
+        "summary": "Gets the Hero Release Events.",
+        "operationId": "TacticusPlannerApiFeaturesGameCatalogGetGameCatalogHreEndpoint2",
+        "parameters": [
+          {
+            "name": "envelopeHash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "One record per Hero Release Event, named as the game names it: the unlockable hero and featured faction, how battles score points, the points milestones (event currency each), the mission chain (game task names, targets and parameters), the leaderboard's daily currency and phase chests per position bracket, the chest shop (currency cost and shard range per chest) and the Oh So Close offer pricing.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogHre"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "The dataset has not changed."
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The envelope hash is not the current release's.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/game-catalog/lre-battles": {
       "get": {
         "tags": [
@@ -7960,6 +8058,49 @@
           }
         }
       },
+      "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogHre": {
+        "required": [
+          "version",
+          "schemaVersion",
+          "gameVersion",
+          "sourceHash",
+          "datasetKey",
+          "datasetHash",
+          "data"
+        ],
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "schemaVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gameVersion": {
+            "type": "string"
+          },
+          "sourceHash": {
+            "type": "string"
+          },
+          "datasetKey": {
+            "type": "string"
+          },
+          "datasetHash": {
+            "type": "string"
+          },
+          "data": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogHre"
+              }
+            ]
+          }
+        }
+      },
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogLreBattleView": {
         "required": [
           "version",
@@ -9258,6 +9399,310 @@
           },
           "characters": {
             "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogHordeModeCharacter"
+          }
+        }
+      },
+      "GameCatalogHre": {
+        "required": [
+          "id",
+          "heroId",
+          "baseRarity",
+          "maxRarity",
+          "featuredFaction",
+          "gameModes",
+          "scorePoints",
+          "milestones",
+          "missions",
+          "leaderboard",
+          "chestShop",
+          "ohSoCloseOffer"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "heroId": {
+            "type": "string"
+          },
+          "baseRarity": {
+            "type": "string"
+          },
+          "maxRarity": {
+            "type": "string"
+          },
+          "featuredFaction": {
+            "type": "string"
+          },
+          "gameModes": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "scorePoints": {
+            "$ref": "#/components/schemas/GameCatalogHreScorePoints"
+          },
+          "milestones": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogHreMilestone"
+          },
+          "missions": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogHreMission"
+          },
+          "leaderboard": {
+            "$ref": "#/components/schemas/GameCatalogHreLeaderboard"
+          },
+          "chestShop": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogHreChest"
+          },
+          "ohSoCloseOffer": {
+            "$ref": "#/components/schemas/GameCatalogHreOhSoCloseOffer"
+          }
+        }
+      },
+      "GameCatalogHreChest": {
+        "required": [
+          "chestId",
+          "cost",
+          "minShards",
+          "maxShards"
+        ],
+        "type": "object",
+        "properties": {
+          "chestId": {
+            "type": "string"
+          },
+          "cost": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "minShards": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maxShards": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GameCatalogHreDailyReward": {
+        "required": [
+          "position",
+          "currency"
+        ],
+        "type": "object",
+        "properties": {
+          "position": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "currency": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GameCatalogHreLeaderboard": {
+        "required": [
+          "id",
+          "dailyRewards",
+          "phases"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "dailyRewards": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogHreDailyReward"
+          },
+          "phases": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogHrePhase"
+          }
+        }
+      },
+      "GameCatalogHreMilestone": {
+        "required": [
+          "scorePoints",
+          "currency"
+        ],
+        "type": "object",
+        "properties": {
+          "scorePoints": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "currency": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GameCatalogHreMission": {
+        "required": [
+          "index",
+          "id",
+          "bonus",
+          "currency",
+          "rewards",
+          "tasks"
+        ],
+        "type": "object",
+        "properties": {
+          "index": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "id": {
+            "type": "string"
+          },
+          "bonus": {
+            "type": "boolean"
+          },
+          "currency": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rewards": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "tasks": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogHreMissionTask"
+          }
+        }
+      },
+      "GameCatalogHreMissionTask": {
+        "required": [
+          "name",
+          "target",
+          "parameters"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "target": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "parameters": {
+            "$ref": "#/components/schemas/IReadOnlyDictionaryOfStringAndString"
+          }
+        }
+      },
+      "GameCatalogHreOfferPrice": {
+        "required": [
+          "base",
+          "multiplier"
+        ],
+        "type": "object",
+        "properties": {
+          "base": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "multiplier": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GameCatalogHreOhSoCloseOffer": {
+        "required": [
+          "unlock",
+          "ascension"
+        ],
+        "type": "object",
+        "properties": {
+          "unlock": {
+            "$ref": "#/components/schemas/GameCatalogHreOfferPrice"
+          },
+          "ascension": {
+            "$ref": "#/components/schemas/GameCatalogHreOfferPrice"
+          }
+        }
+      },
+      "GameCatalogHrePhase": {
+        "required": [
+          "endOffsetDays",
+          "tiers"
+        ],
+        "type": "object",
+        "properties": {
+          "endOffsetDays": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "tiers": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogHrePhaseChest"
+          }
+        }
+      },
+      "GameCatalogHrePhaseChest": {
+        "required": [
+          "position",
+          "chestId",
+          "currency",
+          "shards"
+        ],
+        "type": "object",
+        "properties": {
+          "position": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "chestId": {
+            "type": "string"
+          },
+          "currency": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "shards": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GameCatalogHreScorePoints": {
+        "required": [
+          "campaignScorePointsDifficultyMultiplier",
+          "campaignScorePointsLightningVictoryDifficultyMultiplier",
+          "campaignScorePointsMainUnitsDeadMultiplier",
+          "campaignScorePointsStaminaMultiplier",
+          "pvpScorePointsDifficultyMultiplier",
+          "scorePointsEnemyPowerTable",
+          "guildBossScorePointsDamageTableByRarity"
+        ],
+        "type": "object",
+        "properties": {
+          "campaignScorePointsDifficultyMultiplier": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "campaignScorePointsLightningVictoryDifficultyMultiplier": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "campaignScorePointsMainUnitsDeadMultiplier": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "campaignScorePointsStaminaMultiplier": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "pvpScorePointsDifficultyMultiplier": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "scorePointsEnemyPowerTable": {
+            "$ref": "#/components/schemas/IReadOnlyListOfInt64"
+          },
+          "guildBossScorePointsDamageTableByRarity": {
+            "$ref": "#/components/schemas/IReadOnlyDictionaryOfStringAndIReadOnlyListOfInt32"
           }
         }
       },
@@ -11986,6 +12431,12 @@
           "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogEventsCalendarEntry"
         }
       },
+      "IReadOnlyDictionaryOfStringAndIReadOnlyListOfInt32": {
+        "type": "object",
+        "additionalProperties": {
+          "$ref": "#/components/schemas/IReadOnlyListOfInt32"
+        }
+      },
       "IReadOnlyDictionaryOfStringAndJsonElement": {
         "type": "object"
       },
@@ -12203,6 +12654,54 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/GameCatalogHordeModeTiers"
+        }
+      },
+      "IReadOnlyListOfGameCatalogHre": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogHre"
+        }
+      },
+      "IReadOnlyListOfGameCatalogHreChest": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogHreChest"
+        }
+      },
+      "IReadOnlyListOfGameCatalogHreDailyReward": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogHreDailyReward"
+        }
+      },
+      "IReadOnlyListOfGameCatalogHreMilestone": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogHreMilestone"
+        }
+      },
+      "IReadOnlyListOfGameCatalogHreMission": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogHreMission"
+        }
+      },
+      "IReadOnlyListOfGameCatalogHreMissionTask": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogHreMissionTask"
+        }
+      },
+      "IReadOnlyListOfGameCatalogHrePhase": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogHrePhase"
+        }
+      },
+      "IReadOnlyListOfGameCatalogHrePhaseChest": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogHrePhaseChest"
         }
       },
       "IReadOnlyListOfGameCatalogLreBattleView": {
@@ -12523,6 +13022,13 @@
         "items": {
           "type": "integer",
           "format": "int32"
+        }
+      },
+      "IReadOnlyListOfInt64": {
+        "type": "array",
+        "items": {
+          "type": "integer",
+          "format": "int64"
         }
       },
       "IReadOnlyListOfIReadOnlyListOfInt32": {
