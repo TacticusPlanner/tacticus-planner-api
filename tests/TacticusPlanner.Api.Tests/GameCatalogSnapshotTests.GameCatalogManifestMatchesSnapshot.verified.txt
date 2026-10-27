@@ -11,12 +11,12 @@
     },
     {
       key: campaign-battles,
-      hash: f9ca80971caf60a484c2b2013d6aa7ef6c65a08902a18b4650f860736263ecd1,
+      hash: 8f8e89970de969da9eb52f18703ce6e6bb55ee38ebc8642c9ed14f2962a21f40,
       url: /api/v1/game-catalog/campaign-battles/{envelopeHash}
     },
     {
       key: campaign-definitions,
-      hash: 7e52df5f9537053cd6ca8b177cc7cf98fefbc5197d9408794304f1f17d8b5a41,
+      hash: 0f2bcf0262980ed568f808f6b5d086df511789618e93a9e1697dd7ca60ddfc3f,
       url: /api/v1/game-catalog/campaign-definitions/{envelopeHash}
     },
     {

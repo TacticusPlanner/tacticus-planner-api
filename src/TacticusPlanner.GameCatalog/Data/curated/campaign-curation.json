@@ -1,0 +1,70 @@
+{
+  "campaign-battles-indomitus": {
+    "campaigns": [{ "campaign": "campaign1", "battleIdPrefix": "I" }],
+    "coreCharacters": ["ultraTigurius", "ultraEliminatorSgt", "ultraInceptorSgt"]
+  },
+  "campaign-battles-indomitus-elite": {
+    "campaigns": [{ "campaign": "elite1", "battleIdPrefix": "IE" }],
+    "coreCharacters": ["ultraTigurius", "ultraEliminatorSgt", "ultraInceptorSgt"]
+  },
+  "campaign-battles-indomitus-mirror": {
+    "campaigns": [{ "campaign": "mirror1", "battleIdPrefix": "IM" }]
+  },
+  "campaign-battles-indomitus-mirror-elite": {
+    "campaigns": [{ "campaign": "eliteMirror1", "battleIdPrefix": "IME" }]
+  },
+  "campaign-battles-fall-of-cadia": {
+    "campaigns": [{ "campaign": "campaign2", "battleIdPrefix": "FoC" }]
+  },
+  "campaign-battles-fall-of-cadia-elite": {
+    "campaigns": [{ "campaign": "elite2", "battleIdPrefix": "FoCE" }]
+  },
+  "campaign-battles-fall-of-cadia-mirror": {
+    "campaigns": [{ "campaign": "mirror2", "battleIdPrefix": "FoCM" }]
+  },
+  "campaign-battles-fall-of-cadia-mirror-elite": {
+    "campaigns": [{ "campaign": "eliteMirror2", "battleIdPrefix": "FoCME" }]
+  },
+  "campaign-battles-octarius": {
+    "campaigns": [{ "campaign": "campaign3", "battleIdPrefix": "O" }]
+  },
+  "campaign-battles-octarius-elite": {
+    "campaigns": [{ "campaign": "elite3", "battleIdPrefix": "OE" }]
+  },
+  "campaign-battles-octarius-mirror": {
+    "campaigns": [{ "campaign": "mirror3", "battleIdPrefix": "OM" }]
+  },
+  "campaign-battles-octarius-mirror-elite": {
+    "campaigns": [{ "campaign": "eliteMirror3", "battleIdPrefix": "OME" }]
+  },
+  "campaign-battles-saim-hann": {
+    "campaigns": [{ "campaign": "campaign4", "battleIdPrefix": "SH" }]
+  },
+  "campaign-battles-saim-hann-elite": {
+    "campaigns": [{ "campaign": "elite4", "battleIdPrefix": "SHE" }]
+  },
+  "campaign-battles-saim-hann-mirror": {
+    "campaigns": [{ "campaign": "mirror4", "battleIdPrefix": "SHM" }]
+  },
+  "campaign-battles-saim-hann-mirror-elite": {
+    "campaigns": [{ "campaign": "eliteMirror4", "battleIdPrefix": "SHME" }]
+  },
+  "campaign-battles-death-guard-vs-admech": {
+    "campaigns": [{ "campaign": "eventStandard1", "battleIdPrefix": "AMS" }, { "campaign": "eventExtremis1", "battleIdPrefix": "AME" }]
+  },
+  "campaign-battles-adepta-sororitas-vs-death-guard": {
+    "campaigns": [{ "campaign": "eventStandard4", "battleIdPrefix": "DGS" }, { "campaign": "eventExtremis4", "battleIdPrefix": "DGE" }]
+  },
+  "campaign-battles-ultramarines-vs-tyranids": {
+    "campaigns": [{ "campaign": "eventStandard2", "battleIdPrefix": "TS" }, { "campaign": "eventExtremis2", "battleIdPrefix": "TE" }]
+  },
+  "campaign-battles-genestealers-vs-tau-empire": {
+    "campaigns": [{ "campaign": "eventStandard3", "battleIdPrefix": "TAS" }, { "campaign": "eventExtremis3", "battleIdPrefix": "TAE" }]
+  },
+  "campaign-battles-world-eaters-vs-adepta-sororitas": {
+    "campaigns": [{ "campaign": "eventStandard5", "battleIdPrefix": "ASS" }, { "campaign": "eventExtremis5", "battleIdPrefix": "ASE" }]
+  },
+  "campaign-battles-necrons-vs-dark-angels": {
+    "campaigns": [{ "campaign": "eventStandard6", "battleIdPrefix": "DAS" }, { "campaign": "eventExtremis6", "battleIdPrefix": "DAE" }]
+  }
+}

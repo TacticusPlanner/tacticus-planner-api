@@ -6,9 +6,9 @@ Defines the backend game catalog's served `campaign-battles` dataset fields that
 
 ### Requirement: Campaign battles serve the allies of their campaign group
 
-Every battle in the served `campaign-battles` dataset SHALL carry `alliesAlliance` (string, one `Alliance` value) and `alliesFactions` (string array of faction ids, non-empty). The values are authored once per campaign group in the raw `campaign-battles-*.json` (fields `alliesAlliance`, `alliesFactions`) and copied by denormalization onto every battle of that group, so all battles of a group, regardless of `type` or `challenge`, have identical allies. The server SHALL send ids only; names, icons and labels are client-derived. `campaign-definitions` SHALL NOT change.
+Every battle in the served `campaign-battles` dataset SHALL carry `alliesAlliance` (string, one `Alliance` value) and `alliesFactions` (string array of faction ids, non-empty). The values are read once per campaign group from the game and copied onto every battle of that group, so all battles of a group have identical allies. The server SHALL send ids only.
 
-Authored values per group follow V1's `getEnemiesAndAllies`: storyline Standard/Elite groups of a campaign share their allies; mirror groups ally with the side the standard campaign opposes; each event group carries its own pair of allied factions.
+`alliesFactions` SHALL be the factions the group's campaigns allow (`unlockConditions.requiredUnits.allowedFactions`), in the catalog's faction order; `alliesAlliance` SHALL be the alliance of the group's faction. Storyline Standard/Elite groups of a campaign share their allies; mirror groups ally with the side the standard campaign opposes; each event group carries its own pair of allied factions.
 
 #### Scenario: Storyline battle allies
 
@@ -18,7 +18,7 @@ Authored values per group follow V1's `getEnemiesAndAllies`: storyline Standard/
 #### Scenario: Event battle allies
 
 - **WHEN** `campaign-battles` is served
-- **THEN** every `Standard` and `Extremis` battle (challenge or not) in `eventCampaign4` has `alliesAlliance` `Imperial` and `alliesFactions` `["Sisterhood", "BlackTemplars"]`
+- **THEN** every `Standard` and `Extremis` battle (challenge or not) in `eventCampaign4` has `alliesAlliance` `Imperial` and `alliesFactions` `["BlackTemplars", "Sisterhood"]`
 
 ### Requirement: Allies are validated at catalog load
 

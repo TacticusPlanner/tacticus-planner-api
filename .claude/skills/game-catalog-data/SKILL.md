@@ -101,7 +101,20 @@ restrictions); these are silently ignored on deserialize.
 - **campaign-battles** is flat, keyed by globally-unique battle id, each carrying its `campaignGroupId`;
   **campaign-definitions** is keyed by `groupId` (metadata + `battleIds[]` only). Battle ids are also
   referenced from API test fixtures and the player-data transformer, so renaming a battle id is not a
-  local change.
+  local change. Both are built from the datamine `battles/campaigns.json` (`Denormalization/CampaignDatamineReader.cs`).
+  `Data/curated/campaign-curation.json` holds, per `GameCatalogDatasets.CampaignBattleGroups` key, only the
+  datamine `campaign`s in order with V1's `battleIdPrefix`, plus `coreCharacters` for Indomitus (the tutorial
+  names no units to unlock; curating them where the game has some fails). The rest follows the game: type is the
+  campaign kind (an event campaign following another is `Extremis`), `groupId` the first campaign id
+  (`eventStandardN` → `eventCampaignN`), `releaseType` `event` for event campaigns, core characters the
+  `unlockedUnitIds` (or those of the campaign it follows), `faction` theirs, allies the `allowedFactions` in
+  catalog faction order. Battle ids are
+  `{prefix}{battleId}` (`I07`), or `{prefix}C{node}B` for an event challenge battle (game `13B` → `AMSC13B`).
+  Enemies are the indexed units of every team that is not `playerTeams` 1 (allies) — board power-ups have no
+  index — counted per `npcId:index` and sorted by npc id, then index. Their `stars`/`rank` read the npc stat row
+  V1's way: a boss index (`Boss` in the id) is 1-based, any other npc's 0-based and capped at the last row. The
+  `chanceId` is `{shard|mythicShard|upgrade<Rarity>}_{difficulty}` (`standard`, `mirror`, `elite` for both Elite
+  kinds, `eventStandard`/`eventExtremis`, plus `Challenge`), resolved against the curated `drop-chances`.
 - **LRE is split in two** (mirroring campaign-battles / campaign-definitions). Both are built from the datamine
   (`Denormalization/LreDatamineReader.cs`): `liveEvents/legendaryHeroEvent.json` names each event's lanes
   (lane 1 = alpha), quest groups, points ladder (`loot/tieredProgressRewards.json`) and chest shop
@@ -233,8 +246,8 @@ datamine source; its `docs/roadmap.md` orders the migration. Datasets move onto 
   (`mythic_{characterId}_{number}` quests of the `hero` group in `quests/groups.json`), `onslaught-rewards`,
   HSE scoring, `quest-events` (`liveEvents/linearHeroEvent.json`; no battle `power`,
   which the game config does not hold). `quest-crates` stays hand-kept: the game gives each Quest Event its own
-  crate track, so serving it needs a shape change. `lres` and `lre-battles` (see **LRE** above). Next:
-  `campaign-battles`. A migrated dataset is refreshed by bumping `REF`, not by the V1 steps below.
+  crate track, so serving it needs a shape change. `lres` and `lre-battles` (see **LRE** above),
+  `campaign-battles` and `campaign-definitions` (see **campaign-battles** above). Step 6 is done. A migrated dataset is refreshed by bumping `REF`, not by the V1 steps below.
 
 ## Updating to a new in-game version
 
@@ -264,10 +277,9 @@ genuine game changes.
 - **npcs**: now from the datamine (see above); refresh by bumping `REF`.
 - **upgrades**: now from the datamine (see **upgrades** above); refresh by bumping `REF`.
 - **unit-power**, **raid-bosses**, **shops**: now from the datamine (see above); refresh by bumping `REF`.
-- **campaign-battles**: from V1 `campaign/data/new-battle-data.json`. The catalog shape is heavily
-  denormalized (resolved enemy tables, rank labels) with no surviving transform — a full re-derivation is
-  impractical; scope changes to id adds/removes and reward changes, and be wary that battle-id renames
-  ripple into API tests + the player-data transformer.
+- **campaign-battles**: now from the datamine (see **campaign-battles** above); refresh by bumping `REF`. A new
+  campaign or event needs a `campaign-curation.json` entry and a `CampaignBattleGroups` key (startup fails when
+  the two disagree).
 - **LRE**: now from the datamine (see **LRE** above); refresh by bumping `REF`. Only run dates
   (`lre-curation.json`) are maintained by hand: take confirmed run dates from the maintainers.
 - **client-side companion** (`tacticus-planner-apps`): new characters/equipment/traits need assets under

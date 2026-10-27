@@ -93,6 +93,13 @@ public static class GameCatalogDatasets
     ];
 
     /// <summary>
+    /// Curated campaign group metadata (faction, release type, allies, core characters) and, per campaign type, the
+    /// datamine campaign and battle-id prefix of each <see cref="CampaignBattleGroups"/> key; the battles themselves
+    /// are read from the datamine (see Denormalization/CampaignDatamineReader.cs).
+    /// </summary>
+    public const string CampaignCuration = "campaign-curation";
+
+    /// <summary>
     /// Curated Legendary Release Event data the game has no source for (display names, run starts, battle
     /// completion points, allowed-units filters, restriction names), keyed by event unit. Its keys pick the served
     /// events; everything else is read from the datamine (see Denormalization/LreDatamineReader.cs).
@@ -150,7 +157,7 @@ public static class GameCatalogDatasets
         EventOccurrences,
         HordeModeTiers,
         QuestCrates,
-        .. CampaignBattleGroups,
+        CampaignCuration,
         LreCuration,
         GuildRaidMetaComps,
         .. GuildRaidMetaBossGroups,

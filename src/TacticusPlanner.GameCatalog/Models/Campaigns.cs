@@ -6,7 +6,7 @@ public sealed record GameCatalogCampaignGroup(
     string GroupId,
     string Faction,
     string ReleaseType,
-    // Allied side usable in this campaign group (V1 getEnemiesAndAllies); copied onto every served battle.
+    // Allied side usable in this campaign group (the factions its campaigns allow); copied onto every served battle.
     string AlliesAlliance,
     IReadOnlyList<string> AlliesFactions,
     IReadOnlyList<string> CoreCharacters,
@@ -133,3 +133,54 @@ public sealed record GameCatalogCampaignDefinitionView(
     IReadOnlyList<string> Types,
     IReadOnlyList<string> BattleIds
 );
+
+// ---- datamine shape (bound from Data/datamine/raw/gameconfig/battles/campaigns.json) ----------------------------
+// campaigns.json is keyed by campaign kind (Standard, Mirror, Elite, EliteMirror, Event), each a list of campaigns.
+// Only the fields the catalog reads are bound; boards, xp, tutorials, star chests and variations are dropped.
+
+public sealed record DatamineCampaign(
+    string Id,
+    IReadOnlyList<DatamineCampaignBattle> Battles,
+    DatamineCampaignUnlockConditions? UnlockConditions = null
+);
+
+// What a campaign needs before it opens: units from the allowed factions (some campaigns name the exact units to
+// unlock) and, for an elite or extremis campaign, the campaign it follows.
+public sealed record DatamineCampaignUnlockConditions(
+    DatamineCampaignRequiredUnits? RequiredUnits,
+    IReadOnlyList<DatamineCompletedCampaign>? CompletedCampaigns
+);
+
+public sealed record DatamineCampaignRequiredUnits(
+    IReadOnlyList<string>? AllowedFactions,
+    IReadOnlyList<string>? UnlockedUnitIds
+);
+
+public sealed record DatamineCompletedCampaign(string CampaignType, string CampaignId);
+
+// `battleId` is the node number ("07"), with a "B" suffix for an event challenge battle ("13B"). `units` holds one
+// list of "npcId:index" entries per team, `playerTeams` the matching team ids (1 fights with the player). A unit
+// entry without an index is a board power-up, not an enemy.
+public sealed record DatamineCampaignBattle(
+    string BattleId,
+    int? StaminaCost,
+    int Spawnpoints,
+    int Power,
+    IReadOnlyList<IReadOnlyList<string>> Units,
+    IReadOnlyList<int> PlayerTeams,
+    DatamineCampaignLoot Loot
+);
+
+// `base` are "id[:min[-max]]" guaranteed rewards; `chanceOf` is "id%num/denom".
+public sealed record DatamineCampaignLoot(IReadOnlyList<string>? Base, string? ChanceOf);
+
+// ---- curated (Data/curated/campaign-curation.json) -----------------------------------------------------------------
+// One entry per campaign-battles dataset key: the game campaigns the group reads, in order, with the prefix of their
+// battle ids (V1's ids, which the game does not have). Everything else comes from the game's unlock conditions; core
+// characters are curated only for a group whose campaigns name no units to unlock (Indomitus, the tutorial).
+public sealed record GameCatalogCampaignCuration(
+    IReadOnlyList<GameCatalogCampaignSourceCuration> Campaigns,
+    IReadOnlyList<string>? CoreCharacters = null
+);
+
+public sealed record GameCatalogCampaignSourceCuration(string Campaign, string BattleIdPrefix);

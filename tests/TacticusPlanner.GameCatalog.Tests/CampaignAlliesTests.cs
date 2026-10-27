@@ -12,7 +12,7 @@ public sealed class CampaignAlliesTests
     ];
 
     private static readonly string[] Chaos =
-        ["BlackLegion", "DeathGuard", "EmperorsChildren", "ThousandSons", "WorldEaters"];
+        ["BlackLegion", "DeathGuard", "EmperorsChildren", "TheLostAndTheDamned", "ThousandSons", "WorldEaters"];
 
     public static TheoryData<string, string, string[]> Expected => new()
     {
@@ -33,10 +33,10 @@ public sealed class CampaignAlliesTests
         { "mirror4", "Chaos", Chaos },
         { "eliteMirror4", "Chaos", Chaos },
         { "eventCampaign1", "Chaos", ["DeathGuard", "WorldEaters"] },
-        { "eventCampaign2", "Imperial", ["Ultramarines", "BloodAngels"] },
+        { "eventCampaign2", "Imperial", ["BloodAngels", "Ultramarines"] },
         { "eventCampaign3", "Xenos", ["Genestealers", "Tyranids"] },
-        { "eventCampaign4", "Imperial", ["Sisterhood", "BlackTemplars"] },
-        { "eventCampaign5", "Chaos", ["WorldEaters", "BlackLegion"] },
+        { "eventCampaign4", "Imperial", ["BlackTemplars", "Sisterhood"] },
+        { "eventCampaign5", "Chaos", ["BlackLegion", "WorldEaters"] },
         { "eventCampaign6", "Xenos", ["Necrons"] },
     };
 
