@@ -1,6 +1,6 @@
 ﻿{
   version: dev-2026-10-19.1,
-  schemaVersion: 13,
+  schemaVersion: 14,
   gameVersion: 1.43,
   sourceHash: {time-dependent},
   datasets: [
@@ -68,6 +68,11 @@
       key: horde-mode-tiers,
       hash: 8236b3174931945989a02787a5d3a45d8f9f565450feafc8d1beaeab693b850e,
       url: /api/v1/game-catalog/horde-mode-tiers/{envelopeHash}
+    },
+    {
+      key: hre,
+      hash: d878e6d929b36fabf07e3e891f744a494bd8638117d9741aac6f277946242cb7,
+      url: /api/v1/game-catalog/hre/{envelopeHash}
     },
     {
       key: lre-battles,

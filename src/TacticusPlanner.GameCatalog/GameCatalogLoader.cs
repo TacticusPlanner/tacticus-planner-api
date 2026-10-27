@@ -63,6 +63,7 @@ public static class GameCatalogLoader
         var damageTypeViews = GameCatalogDenormalizer.ReadDatamineDamageTypes(
             LoadDatamine<Dictionary<string, DatamineDamageProfile>>(GameCatalogDenormalizer.DatamineDamageProfilesPath));
         var shopProducts = LoadDatamine<Dictionary<string, JsonElement>>(GameCatalogDenormalizer.DatamineShopProductsPath);
+        var chests = LoadDatamine<Dictionary<string, JsonElement>>(GameCatalogDenormalizer.DatamineChestsPath);
         var globalValuesViews = GameCatalogDenormalizer.ReadDatamineGlobalValues(
             LoadDatamine<DatamineGlobalValues>(GameCatalogDenormalizer.DatamineGlobalValuesPath),
             LoadDatamine<List<string>>(GameCatalogDenormalizer.DatamineStaminaShopTiersPath),
@@ -73,6 +74,14 @@ public static class GameCatalogLoader
             LoadDatamine<DatamineUpgradeSlots>(GameCatalogDenormalizer.DatamineUpgradeSlotsPath),
             LoadDatamine<List<DatamineHeroProgressionRule>>(GameCatalogDenormalizer.DatamineHeroProgressionStepsPath),
             LoadDatamine<List<DatamineMowProgressionRule>>(GameCatalogDenormalizer.DatamineHeroProgressionStepsMoWPath));
+        var hreViews = GameCatalogDenormalizer.ReadDatamineHres(
+            new DatamineHreSources(
+                LoadDatamine<List<DatamineHeroReleaseEvent>>(GameCatalogDenormalizer.DatamineHeroReleaseEventsPath),
+                questGroups,
+                LoadDatamine<DatamineLeaderboards>(GameCatalogDenormalizer.DatamineLeaderboardsPath),
+                chests,
+                shopProducts),
+            JsonOptions);
 
         var datamineNpcs = LoadDatamine<Dictionary<string, DatamineNpc>>(GameCatalogDenormalizer.DatamineNpcPath);
         var npcsByFaction = GameCatalogDenormalizer.ReadDatamineNpcs(datamineNpcs, abilities);
@@ -108,7 +117,7 @@ public static class GameCatalogLoader
                 tieredProgressRewards,
                 LoadDatamine<List<DatamineShopSegment>>(GameCatalogDenormalizer.DatamineShopSegmentsPath),
                 shopProducts,
-                LoadDatamine<Dictionary<string, JsonElement>>(GameCatalogDenormalizer.DatamineChestsPath),
+                chests,
                 LoadDatamine<Dictionary<string, List<DatamineUnitProgressionStep>>>(
                     GameCatalogDenormalizer.DatamineHeroProgressionStepsPerUnitPath)),
             unitsByFaction,
@@ -180,6 +189,7 @@ public static class GameCatalogLoader
             [GameCatalogDatasets.DamageTypes] = GameCatalogHashing.ComputeCanonicalJsonHash(damageTypeViews, JsonOptions),
             [GameCatalogDatasets.GlobalValues] = GameCatalogHashing.ComputeCanonicalJsonHash(globalValuesViews, JsonOptions),
             [GameCatalogDatasets.ProgressionRules] = GameCatalogHashing.ComputeCanonicalJsonHash(progressionRulesViews, JsonOptions),
+            [GameCatalogDatasets.Hre] = GameCatalogHashing.ComputeCanonicalJsonHash(hreViews, JsonOptions),
         };
 
         var snapshot = new GameCatalogSnapshot(
@@ -237,7 +247,8 @@ public static class GameCatalogLoader
             factionViews,
             damageTypeViews,
             globalValuesViews,
-            progressionRulesViews);
+            progressionRulesViews,
+            hreViews);
 
         var errors = GameCatalogValidator.Validate(snapshot);
         if (errors.Count > 0)

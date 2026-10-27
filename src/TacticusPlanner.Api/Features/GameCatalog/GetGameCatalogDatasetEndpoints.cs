@@ -318,6 +318,18 @@ public sealed class GetGameCatalogProgressionRulesEndpoint(IGameCatalogProvider 
     }
 }
 
+public sealed class GetGameCatalogHreEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogHre>>(catalog, GameCatalogDatasets.Hre)
+{
+    public override void Configure()
+    {
+        Get("game-catalog/hre", "game-catalog/hre/{envelopeHash}");
+        ConfigureServed(
+            "Gets the Hero Release Events.",
+            "One record per Hero Release Event, named as the game names it: the unlockable hero and featured faction, how battles score points, the points milestones (event currency each), the mission chain (game task names, targets and parameters), the leaderboard's daily currency and phase chests per position bracket, the chest shop (currency cost and shard range per chest) and the Oh So Close offer pricing.");
+    }
+}
+
 public sealed class GetGameCatalogEventDefinitionsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogEventDefinition>>(catalog, GameCatalogDatasets.EventDefinitionsServed)
 {

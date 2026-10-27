@@ -42,6 +42,9 @@ public static class GameCatalogDatasets
     // ascension ladders' caps and multipliers, from the datamine units/ files and consumables.json. See
     // Denormalization/ProgressionRulesDenormalizer.cs.
     public const string ProgressionRules = "progression-rules";
+    // hre: one record per Hero Release Event (hero, scoring, milestones, missions, leaderboard, chest shop, Oh So Close
+    // offer) from the datamine liveEvents/heroReleaseEvent.json. See Denormalization/HreDenormalizer.cs.
+    public const string Hre = "hre";
 
     // Route/key prefixes for the split dataset families.
     public const string UnitsPrefix = "units";
@@ -259,5 +262,6 @@ public static class GameCatalogDatasets
         DamageTypes,
         GlobalValues,
         ProgressionRules,
+        Hre,
     ];
 }

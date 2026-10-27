@@ -1,0 +1,520 @@
+[
+  {
+    "eventType": "heroReleaseEvent",
+    "eventName": "hero_release_event_1",
+    "subtitleLocaKey": "",
+    "titleLocaKey": "LiveEvents/herorelease_title",
+    "trackingEventNumber": 45,
+    "trackingFeaturedFaction": "Orks",
+    "previewTitleLocaKey": "LiveEvents/herorelease_preview_title",
+    "visualId": "herorelease_orks_weirdboy",
+    "trackingFeaturedHero": "orksWeirdboy",
+    "offerId": "",
+    "shortDescriptionLocaKey": "LiveEvents/herorelease_desc_short",
+    "longDescriptionLocaKey": "LiveEvents/herorelease_desc_long",
+    "removalDelayAfterPurchase": "",
+    "previewSubtitleLocaKey": "LiveEvents/herorelease_preview_subtitle",
+    "gameModes": [
+      "Campaign",
+      "EliteCampaign",
+      "PvP",
+      "GuildBoss",
+      "MirrorCampaign",
+      "MirrorEliteCampaign",
+      "CampaignEvent"
+    ],
+    "unlockableHero": {
+      "heroId": "orksWeirdboy",
+      "baseRarity": "Rare",
+      "maxRarity": "Legendary"
+    },
+    "scorePoints": {
+      "campaignScorePointsDifficultyMultiplier": 1,
+      "campaignScorePointsLightningVictoryDifficultyMultiplier": 1,
+      "campaignScorePointsMainUnitsDeadMultiplier": 1,
+      "campaignScorePointsStaminaMultiplier": 3,
+      "pvpScorePointsDifficultyMultiplier": 11,
+      "scorePointsEnemyPowerTable": [
+        5000,
+        25000,
+        50000,
+        100000,
+        250000,
+        500000,
+        1000000,
+        2000000,
+        5000000,
+        100000000
+      ],
+      "guildBossScorePointsDamageTableByRarity": {
+        "Common": [
+          1,
+          4,
+          7,
+          11,
+          15,
+          20
+        ],
+        "Uncommon": [
+          2,
+          6,
+          11,
+          17,
+          23,
+          30
+        ],
+        "Rare": [
+          2,
+          8,
+          14,
+          22,
+          30,
+          40
+        ],
+        "Epic": [
+          3,
+          10,
+          18,
+          28,
+          38,
+          50
+        ],
+        "Legendary": [
+          3,
+          12,
+          21,
+          33,
+          45,
+          60
+        ],
+        "Mythic": [
+          5,
+          15,
+          25,
+          40,
+          55,
+          70
+        ]
+      },
+      "rewards": [
+        {
+          "scorePoints": 100,
+          "reward": "hreCurrency:55"
+        },
+        {
+          "scorePoints": 250,
+          "reward": "hreCurrency:60"
+        },
+        {
+          "scorePoints": 500,
+          "reward": "hreCurrency:65"
+        },
+        {
+          "scorePoints": 850,
+          "reward": "hreCurrency:70"
+        },
+        {
+          "scorePoints": 1350,
+          "reward": "hreCurrency:80"
+        },
+        {
+          "scorePoints": 2000,
+          "reward": "hreCurrency:85"
+        },
+        {
+          "scorePoints": 3000,
+          "reward": "hreCurrency:95"
+        },
+        {
+          "scorePoints": 4000,
+          "reward": "hreCurrency:100"
+        },
+        {
+          "scorePoints": 5000,
+          "reward": "hreCurrency:110"
+        },
+        {
+          "scorePoints": 6000,
+          "reward": "hreCurrency:120"
+        },
+        {
+          "scorePoints": 7000,
+          "reward": "hreCurrency:130"
+        },
+        {
+          "scorePoints": 8000,
+          "reward": "hreCurrency:140"
+        },
+        {
+          "scorePoints": 9000,
+          "reward": "hreCurrency:150"
+        },
+        {
+          "scorePoints": 10000,
+          "reward": "hreCurrency:155"
+        },
+        {
+          "scorePoints": 11000,
+          "reward": "hreCurrency:160"
+        },
+        {
+          "scorePoints": 12000,
+          "reward": "hreCurrency:165"
+        },
+        {
+          "scorePoints": 14000,
+          "reward": "hreCurrency:170"
+        },
+        {
+          "scorePoints": 16000,
+          "reward": "hreCurrency:175"
+        },
+        {
+          "scorePoints": 18000,
+          "reward": "hreCurrency:180"
+        },
+        {
+          "scorePoints": 20000,
+          "reward": "hreCurrency:185"
+        },
+        {
+          "scorePoints": 22000,
+          "reward": "hreCurrency:190"
+        },
+        {
+          "scorePoints": 24000,
+          "reward": "hreCurrency:195"
+        },
+        {
+          "scorePoints": 26000,
+          "reward": "hreCurrency:200"
+        },
+        {
+          "scorePoints": 28000,
+          "reward": "hreCurrency:205"
+        },
+        {
+          "scorePoints": 30000,
+          "reward": "hreCurrency:210"
+        },
+        {
+          "scorePoints": 33000,
+          "reward": "hreCurrency:215"
+        },
+        {
+          "scorePoints": 36000,
+          "reward": "hreCurrency:220"
+        },
+        {
+          "scorePoints": 40000,
+          "reward": "hreCurrency:225"
+        },
+        {
+          "scorePoints": 45000,
+          "reward": "hreCurrency:230"
+        },
+        {
+          "scorePoints": 50000,
+          "reward": "hreCurrency:235"
+        },
+        {
+          "scorePoints": 60000,
+          "reward": "hreCurrency:240"
+        },
+        {
+          "scorePoints": 75000,
+          "reward": "hreCurrency:245"
+        },
+        {
+          "scorePoints": 100000,
+          "reward": "hreCurrency:250"
+        },
+        {
+          "scorePoints": 250000,
+          "reward": "hreCurrency:255"
+        },
+        {
+          "scorePoints": 500000,
+          "reward": "hreCurrency:260"
+        },
+        {
+          "scorePoints": 1000000,
+          "reward": "hreCurrency:265"
+        }
+      ]
+    },
+    "questId": "hre1_q1",
+    "ohSoCloseOffer": {
+      "unlock": {
+        "base": 450,
+        "multiplier": 100
+      },
+      "ascension": {
+        "base": 100,
+        "multiplier": 100
+      },
+      "rewardCurrency": "hreShards",
+      "lockType": "hre"
+    },
+    "ecBonusRetroactive": true
+  },
+  {
+    "eventType": "heroReleaseEvent",
+    "eventName": "hero_release_event_2",
+    "subtitleLocaKey": "",
+    "titleLocaKey": "LiveEvents/herorelease_title",
+    "trackingEventNumber": 44,
+    "trackingFeaturedFaction": "AdeptusAstartes",
+    "previewTitleLocaKey": "LiveEvents/herorelease_preview_title",
+    "visualId": "herorelease_astar_eradicator",
+    "trackingFeaturedHero": "astarEradicator",
+    "offerId": "",
+    "shortDescriptionLocaKey": "LiveEvents/herorelease_desc_short",
+    "longDescriptionLocaKey": "LiveEvents/herorelease_desc_long",
+    "removalDelayAfterPurchase": "",
+    "previewSubtitleLocaKey": "LiveEvents/herorelease_preview_subtitle",
+    "gameModes": [
+      "Campaign",
+      "EliteCampaign",
+      "PvP",
+      "GuildBoss",
+      "MirrorCampaign",
+      "MirrorEliteCampaign",
+      "CampaignEvent"
+    ],
+    "unlockableHero": {
+      "heroId": "astarEradicator",
+      "baseRarity": "Uncommon",
+      "maxRarity": "Legendary"
+    },
+    "scorePoints": {
+      "campaignScorePointsDifficultyMultiplier": 1,
+      "campaignScorePointsLightningVictoryDifficultyMultiplier": 1,
+      "campaignScorePointsMainUnitsDeadMultiplier": 1,
+      "campaignScorePointsStaminaMultiplier": 3,
+      "pvpScorePointsDifficultyMultiplier": 11,
+      "scorePointsEnemyPowerTable": [
+        5000,
+        25000,
+        50000,
+        100000,
+        250000,
+        500000,
+        1000000,
+        2000000,
+        5000000,
+        100000000
+      ],
+      "guildBossScorePointsDamageTableByRarity": {
+        "Common": [
+          1,
+          4,
+          7,
+          11,
+          15,
+          20
+        ],
+        "Uncommon": [
+          2,
+          6,
+          11,
+          17,
+          23,
+          30
+        ],
+        "Rare": [
+          2,
+          8,
+          14,
+          22,
+          30,
+          40
+        ],
+        "Epic": [
+          3,
+          10,
+          18,
+          28,
+          38,
+          50
+        ],
+        "Legendary": [
+          3,
+          12,
+          21,
+          33,
+          45,
+          60
+        ],
+        "Mythic": [
+          5,
+          15,
+          25,
+          40,
+          55,
+          70
+        ]
+      },
+      "rewards": [
+        {
+          "scorePoints": 100,
+          "reward": "hreCurrency:55"
+        },
+        {
+          "scorePoints": 250,
+          "reward": "hreCurrency:60"
+        },
+        {
+          "scorePoints": 500,
+          "reward": "hreCurrency:65"
+        },
+        {
+          "scorePoints": 850,
+          "reward": "hreCurrency:70"
+        },
+        {
+          "scorePoints": 1350,
+          "reward": "hreCurrency:80"
+        },
+        {
+          "scorePoints": 2000,
+          "reward": "hreCurrency:85"
+        },
+        {
+          "scorePoints": 3000,
+          "reward": "hreCurrency:95"
+        },
+        {
+          "scorePoints": 4000,
+          "reward": "hreCurrency:100"
+        },
+        {
+          "scorePoints": 5000,
+          "reward": "hreCurrency:110"
+        },
+        {
+          "scorePoints": 6000,
+          "reward": "hreCurrency:120"
+        },
+        {
+          "scorePoints": 7000,
+          "reward": "hreCurrency:130"
+        },
+        {
+          "scorePoints": 8000,
+          "reward": "hreCurrency:140"
+        },
+        {
+          "scorePoints": 9000,
+          "reward": "hreCurrency:150"
+        },
+        {
+          "scorePoints": 10000,
+          "reward": "hreCurrency:155"
+        },
+        {
+          "scorePoints": 11000,
+          "reward": "hreCurrency:160"
+        },
+        {
+          "scorePoints": 12000,
+          "reward": "hreCurrency:165"
+        },
+        {
+          "scorePoints": 14000,
+          "reward": "hreCurrency:170"
+        },
+        {
+          "scorePoints": 16000,
+          "reward": "hreCurrency:175"
+        },
+        {
+          "scorePoints": 18000,
+          "reward": "hreCurrency:180"
+        },
+        {
+          "scorePoints": 20000,
+          "reward": "hreCurrency:185"
+        },
+        {
+          "scorePoints": 22000,
+          "reward": "hreCurrency:190"
+        },
+        {
+          "scorePoints": 24000,
+          "reward": "hreCurrency:195"
+        },
+        {
+          "scorePoints": 26000,
+          "reward": "hreCurrency:200"
+        },
+        {
+          "scorePoints": 28000,
+          "reward": "hreCurrency:205"
+        },
+        {
+          "scorePoints": 30000,
+          "reward": "hreCurrency:210"
+        },
+        {
+          "scorePoints": 33000,
+          "reward": "hreCurrency:215"
+        },
+        {
+          "scorePoints": 36000,
+          "reward": "hreCurrency:220"
+        },
+        {
+          "scorePoints": 40000,
+          "reward": "hreCurrency:225"
+        },
+        {
+          "scorePoints": 45000,
+          "reward": "hreCurrency:230"
+        },
+        {
+          "scorePoints": 50000,
+          "reward": "hreCurrency:235"
+        },
+        {
+          "scorePoints": 60000,
+          "reward": "hreCurrency:240"
+        },
+        {
+          "scorePoints": 75000,
+          "reward": "hreCurrency:245"
+        },
+        {
+          "scorePoints": 100000,
+          "reward": "hreCurrency:250"
+        },
+        {
+          "scorePoints": 250000,
+          "reward": "hreCurrency:255"
+        },
+        {
+          "scorePoints": 500000,
+          "reward": "hreCurrency:260"
+        },
+        {
+          "scorePoints": 1000000,
+          "reward": "hreCurrency:265"
+        }
+      ]
+    },
+    "questId": "hre2_q1",
+    "ohSoCloseOffer": {
+      "unlock": {
+        "base": 450,
+        "multiplier": 100
+      },
+      "ascension": {
+        "base": 100,
+        "multiplier": 100
+      },
+      "rewardCurrency": "hreShards",
+      "lockType": "hre"
+    },
+    "ecBonusRetroactive": true
+  }
+]
