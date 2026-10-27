@@ -6,7 +6,7 @@ Companion apps change: none (shapes unchanged). Source plan: `tacticus-planner-d
 
 - [x] 1.1 Add `battles/onslaught.json`, `liveEvents/homeScreenEvent.json`, `liveEvents/linearHeroEvent.json` and `loot/tieredProgressRewards.json` to `files.txt` and run `pull-datamine.cs -- v1.43.157.2989`
 - [x] 1.2 Add `ReadDatamineOnslaughtRewards`, `ReadDatamineHseScoring` (porting `import-hse-scoring.py`) and `ReadDatamineQuestEvents`
-- [x] 1.3 Move quest battle power to `Data/curated/quest-event-power.json`
+- [x] 1.3 Drop the hand-entered quest battle power (the game config has none)
 - [x] 1.4 Delete the V1 files and the import script
 
 ## 2. Verification

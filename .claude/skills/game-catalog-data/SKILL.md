@@ -230,8 +230,8 @@ datamine source; its `docs/roadmap.md` orders the migration. Datasets move onto 
   `upgrades`, `characters`, `mows`, `npcs`, `unit-power`, `raid-bosses` (`globalconfig/guildBoss/`; the
   game's unit sets are merged and must agree), `shops` (four merchants of `merchants.json`), `mythic-quests`
   (`mythic_{characterId}_{number}` quests of the `hero` group in `quests/groups.json`), `onslaught-rewards`,
-  HSE scoring, `quest-events` (`liveEvents/linearHeroEvent.json`; battle `power` stays curated in
-  `Data/curated/quest-event-power.json`). `quest-crates` stays hand-kept: the game gives each Quest Event its own
+  HSE scoring, `quest-events` (`liveEvents/linearHeroEvent.json`; no battle `power`,
+  which the game config does not hold). `quest-crates` stays hand-kept: the game gives each Quest Event its own
   crate track, so serving it needs a shape change. `lres` and `lre-battles` (see **LRE** above). Next:
   `campaign-battles`. A migrated dataset is refreshed by bumping `REF`, not by the V1 steps below.
 

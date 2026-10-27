@@ -78,10 +78,6 @@ public sealed class QuestEventsValidationTests
         AssertSingleError(Validate(WithBattle(1, battle => battle with { Loot = new(new(battle.Loot.Reward.UpgradeId, 5, 4)) })), "InvalidLootChance");
 
     [Fact]
-    public void APowerBelowOneFails() =>
-        AssertSingleError(Validate(WithBattle(1, battle => battle with { Power = 0 })), "InvalidPower");
-
-    [Fact]
     public void AnUnknownObjectiveFails() =>
         AssertSingleError(
             Validate(WithBattle(2, battle => battle with { Objectives = [new GameCatalogRawQuestObjective("WinFast", null, 100)] })),

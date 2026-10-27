@@ -6,9 +6,7 @@ namespace TacticusPlanner.GameCatalog.Models;
 
 /// <summary>
 /// One Quest Event, read from the datamine <c>linearHeroEvent.json</c> by
-/// <c>Denormalization/EventDatamineReader.cs</c>, plus an optional per-battle <c>power</c> (the game's enemy power,
-/// recorded from the in-game battle screen into <c>Data/curated/quest-event-power.json</c>). Denormalized by
-/// <c>Denormalization/QuestEventsDenormalizer.cs</c>.
+/// <c>Denormalization/EventDatamineReader.cs</c>. Denormalized by <c>Denormalization/QuestEventsDenormalizer.cs</c>.
 /// </summary>
 public sealed record GameCatalogRawQuestEvent(
     string UnitId,
@@ -27,7 +25,6 @@ public sealed record GameCatalogRawQuestBattle(
     string BoardId,
     int SpawnPointsSet,
     int LightningVictory,
-    int? Power,
     GameCatalogRawQuestLoot Loot,
     IReadOnlyList<GameCatalogRawQuestEnemy> Enemies,
     IReadOnlyList<GameCatalogRawQuestObjective> Objectives
@@ -64,7 +61,6 @@ public sealed record GameCatalogQuestBattleView(
     string BoardId,
     int SpawnPointsSet,
     int LightningVictoryTurns,
-    int? Power,
     IReadOnlyList<GameCatalogQuestEnemyView> Enemies,
     IReadOnlyList<GameCatalogQuestObjectiveView> Objectives,
     GameCatalogQuestLootView Loot
