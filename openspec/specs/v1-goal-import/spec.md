@@ -121,7 +121,9 @@ manual step from the user.
 
 A goal SHALL report as skipped, with a code identifying which case applies,
 when: its target is already reached according to the account's player data; the
-account already has a goal of that type for that unit; it was merged into
+account already has a goal, in any status, of that type for that unit with the same
+target key (see `goal-target-milestones`), or for a V1 material goal an Upgrade goal
+on that unit that targets its material; it was merged into
 another source goal's target for the same unit and type; or it is a V1
 material goal that needs a manual step (see "V1 material goals become Upgrade
 goals at their V1 priority").
@@ -155,7 +157,7 @@ V2 progression ladder; or it carries no usable target.
 #### Scenario: Already-existing goal is a skip that identifies the existing goal
 
 - **GIVEN** the account already has an Ascension goal for a character
-- **WHEN** a V1 Ascension goal for that character is imported
+- **WHEN** a V1 Ascension goal for that character with the same end target is imported
 - **THEN** that goal reports as skipped because it already exists, and the outcome carries the
   existing goal's id
 

@@ -10,7 +10,7 @@ from changing a goal's status.
 
 ### Requirement: A caller can deliberately create a paused goal
 
-Goal creation (`POST /me/goals`, single or combined) SHALL accept an optional request-level JSON boolean `startPaused` that creates the goals in the `Paused` status instead of `Active`. Absent or false SHALL create Active goals. Explicit null or a non-boolean value SHALL return 400 naming `startPaused` without creating any goal. The flag SHALL apply uniformly to every goal in the request; it SHALL NOT be settable per goal, and a per-spec `startPaused` field SHALL be rejected.
+Goal creation (`POST /goals`, single or combined) SHALL accept an optional request-level JSON boolean `startPaused` that creates the goals in the `Paused` status instead of `Active`. Absent or false SHALL create Active goals. Explicit null or a non-boolean value SHALL return 400 naming `startPaused` without creating any goal. The flag SHALL apply uniformly to every goal in the request; it SHALL NOT be settable per goal, and a per-spec `startPaused` field SHALL be rejected.
 
 #### Scenario: Paused creation is honored
 
@@ -99,7 +99,7 @@ A newly created goal SHALL be given the `Active` status by default, whatever pro
 
 ### Requirement: Project membership operations do not change a goal's status
 
-Changing a goal's project memberships and replacing a project's goal membership SHALL leave every affected goal's lifecycle status unchanged. A goal's status SHALL change only through `POST /me/goals/status` (see `goal-bulk-status`), which explicitly names the goals it transitions.
+Changing a goal's project memberships and replacing a project's goal membership SHALL leave every affected goal's lifecycle status unchanged. A goal's status SHALL change only through `POST /goals/status` (see `goal-bulk-status`), which explicitly names the goals it transitions.
 
 #### Scenario: Adding a membership does not change status
 

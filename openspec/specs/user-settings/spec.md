@@ -22,7 +22,7 @@ The user-settings resource SHALL include an `xpBookRarity` value that is exactly
 
 ### Requirement: XP-book rarity is saved with user settings
 
-A user-settings update SHALL require `xpBookRarity` together with `dailyEnergy` and `revision`, and SHALL persist all supported values under the existing revision check. An update whose `xpBookRarity` is missing, empty, or not one of the six supported values SHALL be rejected as a validation error and SHALL NOT change stored settings or the revision. Values are case-sensitive exactly as listed.
+A user-settings update SHALL require `xpBookRarity` together with `dailyEnergy` and `revision`, and SHALL persist all supported values under the existing revision check. An update whose `xpBookRarity` is missing, empty, or not one of the six supported values SHALL be rejected as a validation error and SHALL NOT change stored settings or the revision. Values are read case-insensitively and returned in PascalCase, like every enum (see `openapi-contract`).
 
 #### Scenario: Saving a supported rarity
 

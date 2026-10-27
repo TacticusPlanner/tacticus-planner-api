@@ -189,7 +189,7 @@ farming override. Unlock and Ascension shard sources SHALL be expressed only thr
 
 ### Requirement: Acquisition sources can be edited on an existing goal
 
-`UpdateGoalRequest` SHALL allow replacing an Unlock or Ascension goal's `acquisitionSources`,
+`UpdateGoalRequest` SHALL allow replacing a goal's `acquisitionSources`,
 subject to the same per-kind and entity/goal-type validation as creation. Clearing the field
 SHALL reset the goal to unrestricted campaign farming.
 
@@ -254,15 +254,16 @@ progression ladder, of:
 - the highest Ascension target present in the same creation request among the
   specs in the goal being validated's full transitive dependency closure (its
   direct dependencies, and their dependencies, and so on) — not only specs it
-  directly depends on.
+  directly depends on, and
+- the end of every existing Ascension goal reachable from the `dependsOnGoalIds` of
+  that closure (see `goal-dependencies`).
 
-For a request containing a single goal, or a goal that declares no dependency
-on an Ascension spec, the effective progression SHALL equal the live
-progression.
+For a goal that depends on no Ascension spec in the request and on no existing
+Ascension goal, the effective progression SHALL equal the live progression.
 
 A unit with no player data recorded SHALL be treated as having no live
 progression contribution; the effective progression is then determined solely
-by any depended-upon Ascension target in the request.
+by the depended-upon Ascension targets above.
 
 #### Scenario: Ability target above the live cap is accepted with a depended-upon Ascension
 
@@ -294,7 +295,9 @@ by any depended-upon Ascension target in the request.
 ### Requirement: The raised cap requires a declared dependency
 
 A goal SHALL obtain a progression-derived cap above its live one only from
-Ascension specs it declares a dependency on within the same request. An
+Ascension specs it declares a dependency on within the same request, or from
+existing Ascension goals reachable from its `dependsOnGoalIds` (see
+`goal-dependencies`). An
 Ascension spec present in the request but not depended upon SHALL NOT raise
 another spec's cap.
 

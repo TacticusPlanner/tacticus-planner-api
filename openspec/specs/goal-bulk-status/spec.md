@@ -7,7 +7,7 @@ One request transitions one or many of the caller's goals to a lifecycle status 
 
 ### Requirement: One request transitions many goals
 
-`POST /me/goals/status` SHALL accept `{ goalIds, status, expectedOrderRevision }` (`goalIds` non-empty and distinct, `status` one of `Active`, `Paused`, `Completed`, `Archived`) and transition every named goal under the single-transition lifecycle rules, leaving goals already in that status unchanged. On success it SHALL return `{ goals, orderRevision }` with every named goal's updated detail.
+`POST /goals/status` SHALL accept `{ goalIds, status, expectedOrderRevision }` (`goalIds` non-empty and distinct, `status` one of `Active`, `Paused`, `Completed`, `Archived`) and transition every named goal under the single-transition lifecycle rules, leaving goals already in that status unchanged. On success it SHALL return `{ goals, orderRevision }` with every named goal's updated detail.
 
 #### Scenario: Pause three goals
 

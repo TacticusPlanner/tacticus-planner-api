@@ -47,3 +47,25 @@ Every record of the served `campaign-definitions` dataset SHALL carry `number` (
 
 - **WHEN** `campaign-definitions` is served
 - **THEN** `campaign1` has `number` 1, `mirror2` 2, `elite4` and `eliteMirror4` 4, and `eventCampaign6` 6
+
+### Requirement: Served campaign battles carry their Tacticus battle index
+
+Every battle in the served campaign-battles dataset SHALL carry `battleIndex`: the zero-based index Tacticus's own campaign-progress payloads use to identify that battle, assigned independently within each `{campaignGroupId, type}` track in that track's canonical order. This lets a consumer resolve a synced battle-attempt record (`campaignId`, `type`, `battleIndex`) to a specific served battle for any campaign, including an event campaign whose challenge nodes share their preceding node's `nodeNumber` and so cannot be distinguished by `nodeNumber` alone.
+
+#### Scenario: A standing campaign's battles index sequentially
+
+- **GIVEN** a standing campaign group's battles, ordered by node number, with no challenge nodes
+- **WHEN** the campaign-battles dataset is served
+- **THEN** each battle's `battleIndex` equals its position in that order, starting at 0
+
+#### Scenario: An event campaign's challenge node has its own battle index despite sharing a node number
+
+- **GIVEN** an event campaign's Standard track where node 3's challenge battle is interleaved after node 3's regular battle, both carrying `nodeNumber` 3
+- **WHEN** the campaign-battles dataset is served
+- **THEN** the regular node-3 battle and its challenge battle carry two different, sequential `battleIndex` values within that track — not the same value and not derived from `nodeNumber`
+
+#### Scenario: Each event tier indexes independently
+
+- **GIVEN** an event campaign group with a Standard track and an Extremis track sharing one campaign group id
+- **WHEN** the campaign-battles dataset is served
+- **THEN** the Standard track's battles and the Extremis track's battles are each indexed starting at 0 within their own `type`, independently of the other track
