@@ -49,8 +49,7 @@ public static class GameCatalogLoader
             LoadDatamine<DatamineQuestGroups>(GameCatalogDenormalizer.DatamineQuestGroupsPath).Hero);
         var unitPower = LoadUnitPower();
         var questEvents = GameCatalogDenormalizer.ReadDatamineQuestEvents(
-            LoadDatamine<List<DatamineLinearHeroEvent>>(GameCatalogDenormalizer.DatamineLinearHeroEventsPath),
-            LoadDataset<Dictionary<string, Dictionary<string, int>>>(GameCatalogDatasets.QuestEventPower));
+            LoadDatamine<List<DatamineLinearHeroEvent>>(GameCatalogDenormalizer.DatamineLinearHeroEventsPath));
         var questCrates = LoadDataset<IReadOnlyList<GameCatalogQuestCrate>>(GameCatalogDatasets.QuestCrates);
 
         var npcsByFaction = GameCatalogDenormalizer.ReadDatamineNpcs(

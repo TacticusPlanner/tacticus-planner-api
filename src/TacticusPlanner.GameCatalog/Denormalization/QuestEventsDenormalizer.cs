@@ -69,7 +69,6 @@ internal static partial class GameCatalogDenormalizer
             battle.BoardId,
             battle.SpawnPointsSet,
             battle.LightningVictory,
-            battle.Power,
             enemies,
             battle.Objectives
                 .Select(objective => new GameCatalogQuestObjectiveView(

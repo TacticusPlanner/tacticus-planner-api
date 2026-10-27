@@ -56,32 +56,18 @@ public sealed class EventDatamineReaderTests
     }
 
     [Fact]
-    public void QuestEventsReadTheEnemyFactionDropsEnemiesAndCuratedPower()
+    public void QuestEventsReadTheEnemyFactionDropsAndEnemies()
     {
         var battle = new DatamineLinearHeroBattle(
             "1", "C3_70", 6, 3, new DatamineLinearHeroLoot("upgDmgC001%3/4"), ["necroNpc1Warrior:2", "PowerUp"], []);
         var quests = GameCatalogDenormalizer.ReadDatamineQuestEvents(
-            [new DatamineLinearHeroEvent("astarCyrus", """{"enemyFaction":"Necrons"}""", ["Ultramarines"], [new DatamineLinearHeroTier(0, [battle])])],
-            new Dictionary<string, Dictionary<string, int>> { ["astarCyrus"] = new() { ["1"] = 260 } });
+            [new DatamineLinearHeroEvent("astarCyrus", """{"enemyFaction":"Necrons"}""", ["Ultramarines"], [new DatamineLinearHeroTier(0, [battle])])]);
 
         var quest = Assert.Single(quests);
         Assert.Equal(["Necrons"], quest.EnemyFactions);
         var served = Assert.Single(Assert.Single(quest.Tiers).Battles);
-        Assert.Equal(("upgDmgC001", 3, 4, (int?)260), (served.Loot.Reward.UpgradeId, served.Loot.Reward.Num, served.Loot.Reward.Denom, served.Power));
+        Assert.Equal(("upgDmgC001", 3, 4), (served.Loot.Reward.UpgradeId, served.Loot.Reward.Num, served.Loot.Reward.Denom));
         Assert.Equal([("necroNpc1Warrior", (int?)2), ("PowerUp", null)], served.Enemies.Select(enemy => (enemy.Name, enemy.ProgressionIndex)));
-    }
-
-    [Fact]
-    public void ACuratedPowerForAnUnknownBattleFails()
-    {
-        var battle = new DatamineLinearHeroBattle("1", "C3_70", 6, 3, new DatamineLinearHeroLoot("upgDmgC001%3/4"), [], []);
-
-        var error = Assert.Throws<InvalidOperationException>(() => GameCatalogDenormalizer.ReadDatamineQuestEvents(
-            [new DatamineLinearHeroEvent("astarCyrus", """{"enemyFaction":"Necrons"}""", [], [new DatamineLinearHeroTier(0, [battle])])],
-            new Dictionary<string, Dictionary<string, int>> { ["astarCyrus"] = new() { ["18"] = 1 } }));
-
-        Assert.Contains("quest-events", error.Message, StringComparison.Ordinal);
-        Assert.Contains("'18'", error.Message, StringComparison.Ordinal);
     }
 
     [Fact]

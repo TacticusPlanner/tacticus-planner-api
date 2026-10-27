@@ -106,11 +106,6 @@ public static partial class GameCatalogValidator
                     errors.Add(new GameCatalogValidationError(dataset, "InvalidLootChance", $"Battle '{owner}' has an invalid loot chance."));
                 }
 
-                if (battle.Power is < 1)
-                {
-                    errors.Add(new GameCatalogValidationError(dataset, "InvalidPower", $"Battle '{owner}' has a power below 1."));
-                }
-
                 foreach (var objective in battle.Objectives)
                 {
                     ValidateQuestObjective(dataset, owner, objective, factionIds, errors);

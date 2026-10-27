@@ -404,41 +404,19 @@ internal static partial class GameCatalogDenormalizer
     /// <summary>
     /// Reads the datamine <c>linearHeroEvent.json</c> into one Quest Event per featured hero, with the enemy faction
     /// from <c>trackingAdditionalData</c>, each battle's upgrade drop from <c>loot.chanceOf</c>, and its enemies from
-    /// the <c>"npcId:progressionIndex"</c> strings. <paramref name="power"/> (unit id -> battle number -> enemy power) is
-    /// the curated per-battle power, which the game config does not hold.
+    /// the <c>"npcId:progressionIndex"</c> strings.
     /// </summary>
-    /// <exception cref="InvalidOperationException">A battle cannot be read, or a power entry matches no battle.</exception>
-    public static IReadOnlyList<GameCatalogRawQuestEvent> ReadDatamineQuestEvents(
-        IReadOnlyList<DatamineLinearHeroEvent> events,
-        IReadOnlyDictionary<string, Dictionary<string, int>> power)
-    {
-        var quests = events.Select(quest =>
-        {
-            var powerByBattle = power.GetValueOrDefault(quest.UnitId);
-            return new GameCatalogRawQuestEvent(
-                quest.UnitId,
-                quest.AllowedFactions,
-                [QuestEnemyFaction(quest)],
-                quest.Tiers
-                    .Select(tier => new GameCatalogRawQuestTier(
-                        tier.Index,
-                        tier.Battles.Select(battle => ReadQuestBattle(quest.UnitId, battle, powerByBattle)).ToArray()))
-                    .ToArray());
-        }).ToArray();
-
-        foreach (var (unitId, byBattle) in power)
-        {
-            var quest = quests.FirstOrDefault(quest => quest.UnitId == unitId)
-                ?? throw QuestError(unitId, "has a curated power but the game has no such quest");
-            var battles = quest.Tiers.SelectMany(tier => tier.Battles).Select(battle => battle.BattleNr).ToHashSet(StringComparer.Ordinal);
-            if (byBattle.Keys.FirstOrDefault(battleNr => !battles.Contains(battleNr)) is { } unknown)
-            {
-                throw QuestError(unitId, $"has a curated power for unknown battle '{unknown}'");
-            }
-        }
-
-        return quests;
-    }
+    /// <exception cref="InvalidOperationException">A battle cannot be read.</exception>
+    public static IReadOnlyList<GameCatalogRawQuestEvent> ReadDatamineQuestEvents(IReadOnlyList<DatamineLinearHeroEvent> events) =>
+        events.Select(quest => new GameCatalogRawQuestEvent(
+            quest.UnitId,
+            quest.AllowedFactions,
+            [QuestEnemyFaction(quest)],
+            quest.Tiers
+                .Select(tier => new GameCatalogRawQuestTier(
+                    tier.Index,
+                    tier.Battles.Select(battle => ReadQuestBattle(quest.UnitId, battle)).ToArray()))
+                .ToArray())).ToArray();
 
     private static string QuestEnemyFaction(DatamineLinearHeroEvent quest)
     {
@@ -449,7 +427,7 @@ internal static partial class GameCatalogDenormalizer
     }
 
     private static GameCatalogRawQuestBattle ReadQuestBattle(
-        string unitId, DatamineLinearHeroBattle battle, Dictionary<string, int>? powerByBattle)
+        string unitId, DatamineLinearHeroBattle battle)
     {
         var drop = QuestChanceOfRegex().Match(battle.Loot.ChanceOf ?? string.Empty);
         if (!drop.Success)
@@ -462,7 +440,6 @@ internal static partial class GameCatalogDenormalizer
             battle.BoardId,
             battle.SpawnPointsSet,
             battle.LightningVictory,
-            powerByBattle is not null && powerByBattle.TryGetValue(battle.BattleNr, out var power) ? power : null,
             new GameCatalogRawQuestLoot(new GameCatalogRawQuestLootReward(
                 drop.Groups[1].Value,
                 int.Parse(drop.Groups[2].ValueSpan, CultureInfo.InvariantCulture),

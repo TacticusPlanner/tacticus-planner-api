@@ -96,7 +96,7 @@
     },
     {
       key: quest-events,
-      hash: 9f1e57dddcb4ae293ff00f7770283cdacdb4a600b6819da7c34939313d0f206c,
+      hash: 6664540000281005561b78f7ba1e5a983ed66d93891126cdefb6fca064b35753,
       url: /api/v1/game-catalog/quest-events/{envelopeHash}
     },
     {

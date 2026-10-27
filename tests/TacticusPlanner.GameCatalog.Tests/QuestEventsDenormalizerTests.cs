@@ -27,7 +27,7 @@ public sealed class QuestEventsDenormalizerTests
         Assert.Equal(["AdeptusAstartes", "Ultramarines", "SpaceWolves", "BlackTemplars"], cyrus.AllowedFactionIds);
         Assert.Equal(["Necrons"], cyrus.EnemyFactionIds);
         var battle = cyrus.Battles[0];
-        Assert.Equal(("Common", 1, 3, "C3_70", 6, 3, (int?)null), (battle.Tier, battle.TierPosition, battle.DeploySlots, battle.BoardId, battle.SpawnPointsSet, battle.LightningVictoryTurns, battle.Power));
+        Assert.Equal(("Common", 1, 3, "C3_70", 6, 3), (battle.Tier, battle.TierPosition, battle.DeploySlots, battle.BoardId, battle.SpawnPointsSet, battle.LightningVictoryTurns));
         Assert.Equal(
             [new GameCatalogQuestEnemyView("necroNpc2FlayedOne", 1, 3), new GameCatalogQuestEnemyView("necroNpc1Warrior", 1, 4)],
             battle.Enemies);
@@ -65,15 +65,6 @@ public sealed class QuestEventsDenormalizerTests
 
         Assert.Equal([3, 4, 5, 3, 4, 5, 3, 3, 3, 4, 5, 3, 4, 5, 5, 5, 5], battles.Select(battle => battle.DeploySlots));
         Assert.Equal([1, 2, 3, 4, 5], battles.Where(battle => battle.Tier == "Rare").Select(battle => battle.TierPosition));
-    }
-
-    [Fact]
-    public void NubariCarriesTheInGameBattlePowers()
-    {
-        Assert.Equal(
-            [260, 447, 757, 1183, 2336, 3540, 7003, 8379, 10020, 15822, 22214, 33847, 57252, 98715, 455880, 1459769, 4703789],
-            Quest("astarEradicator").Battles.Select(battle => battle.Power));
-        Assert.All(Quest("votanChampion").Battles, battle => Assert.Null(battle.Power));
     }
 
     [Fact]

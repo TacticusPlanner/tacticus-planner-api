@@ -6,7 +6,7 @@ At `v1.43.157.2989`, compared against the retired files:
 
 - `onslaught.json` `honorYourHeroesRewards` has rows for progression indexes 1, 2, 4, 5, 7, 8, 10, 11, 14, 15, 18, 19 in each of the 21 tiers. V1's `regular` ranges are the shard ranges at 2, 5, 8, 11 and 14 and its `mythic` range is the one at 19, for all 21 tiers. V1's `badges` are the per-round `tierWaves` badge rewards summed per rarity, for 20 tiers; Bronze-1 differs by one Common badge.
 - Running the retired `import-hse-scoring.py` mapping over the datamine (instead of V1's per-event files) reproduces `home-screen-event-scoring.json` except `hse-defeat-waves` `default`, whose ladders the game has since replaced; its `hse_defeat_waves_tier_low` ladder is gone from `tieredProgressRewards.json`.
-- `linearHeroEvent.json` holds five Quest Events; the three in `quest-events.json` convert to it exactly (power aside). Their crate tracks differ per event.
+- `linearHeroEvent.json` holds five Quest Events; the three in `quest-events.json` convert to it exactly. Their crate tracks differ per event.
 
 ## Decisions
 
@@ -22,9 +22,9 @@ The import's mapping table and normalization rules move into `EventDatamineReade
 
 The Defeat Waves Low tier's event entry still exists but points at a ladder the game removed. Serving V1's old Low ladder next to the game's new High and Mid ones would mix two runs, and failing startup would block every refresh, so the tier is skipped.
 
-### D4. Curated power stays beside the game data
+### D4. No battle power
 
-The game config has no enemy power. It stays hand-entered, keyed by unit id and battle number, and a power for a battle the game does not have fails startup so it cannot go stale silently.
+The game config has no enemy power, so the dataset serves none. Clients estimate a battle's power from its enemies and the npc power ladders.
 
 ### D5. Crates wait for a shape change
 
