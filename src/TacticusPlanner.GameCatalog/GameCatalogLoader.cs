@@ -158,46 +158,55 @@ public static class GameCatalogLoader
         var questEventViews = GameCatalogDenormalizer.BuildQuestEvents(questEvents);
         var questCrateViews = GameCatalogDenormalizer.BuildQuestCrates(questCrates);
 
-        // Served dataset hashes are computed over the canonical JSON of each denormalized payload.
+        // Served dataset hashes are computed over the canonical JSON of each denormalized payload; the payload
+        // types are recorded on the way for the schema hash.
+        var payloadTypes = new Dictionary<string, Type>(StringComparer.Ordinal);
+        string HashServed<T>(string key, T payload)
+        {
+            payloadTypes[key] = typeof(T);
+            return GameCatalogHashing.ComputeCanonicalJsonHash(payload, JsonOptions);
+        }
+
         var datasetHashes = new Dictionary<string, string>(StringComparer.Ordinal)
         {
-            [GameCatalogDatasets.Characters] = GameCatalogHashing.ComputeCanonicalJsonHash(characterViews, JsonOptions),
-            [GameCatalogDatasets.Npcs] = GameCatalogHashing.ComputeCanonicalJsonHash(npcList, JsonOptions),
-            [GameCatalogDatasets.Mows] = GameCatalogHashing.ComputeCanonicalJsonHash(mowList, JsonOptions),
-            [GameCatalogDatasets.MowUpgradeCostsServed] = GameCatalogHashing.ComputeCanonicalJsonHash(mowUpgradeCostViews, JsonOptions),
-            [GameCatalogDatasets.CharacterAbilityCostsServed] = GameCatalogHashing.ComputeCanonicalJsonHash(characterAbilityCostViews, JsonOptions),
-            [GameCatalogDatasets.AscensionCostsServed] = GameCatalogHashing.ComputeCanonicalJsonHash(ascensionCostViews, JsonOptions),
-            [GameCatalogDatasets.UnlockShardCostsServed] = GameCatalogHashing.ComputeCanonicalJsonHash(unlockShardCostViews, JsonOptions),
-            [GameCatalogDatasets.OnslaughtRewards] = GameCatalogHashing.ComputeCanonicalJsonHash(onslaughtRewards, JsonOptions),
-            [GameCatalogDatasets.Upgrades] = GameCatalogHashing.ComputeCanonicalJsonHash(upgradeViews, JsonOptions),
-            [GameCatalogDatasets.Equipment] = GameCatalogHashing.ComputeCanonicalJsonHash(equipmentViews, JsonOptions),
-            [GameCatalogDatasets.CampaignBattles] = GameCatalogHashing.ComputeCanonicalJsonHash(campaignBattleViews, JsonOptions),
-            [GameCatalogDatasets.CampaignDefinitions] = GameCatalogHashing.ComputeCanonicalJsonHash(campaignDefinitionViews, JsonOptions),
-            [GameCatalogDatasets.Lres] = GameCatalogHashing.ComputeCanonicalJsonHash(lreViews, JsonOptions),
-            [GameCatalogDatasets.LreBattles] = GameCatalogHashing.ComputeCanonicalJsonHash(lreBattleViews, JsonOptions),
-            [GameCatalogDatasets.HordeModeTiers] = GameCatalogHashing.ComputeCanonicalJsonHash(hordeModeTiersViews, JsonOptions),
-            [GameCatalogDatasets.EventDefinitionsServed] = GameCatalogHashing.ComputeCanonicalJsonHash(eventDefinitionViews, JsonOptions),
-            [GameCatalogDatasets.EventsCalendar] = GameCatalogHashing.ComputeCanonicalJsonHash(eventsCalendar, JsonOptions),
-            [GameCatalogDatasets.Shops] = GameCatalogHashing.ComputeCanonicalJsonHash(shopViews, JsonOptions),
-            [GameCatalogDatasets.RaidBosses] = GameCatalogHashing.ComputeCanonicalJsonHash(raidBossesView, JsonOptions),
-            [GameCatalogDatasets.GuildRaidMeta] = GameCatalogHashing.ComputeCanonicalJsonHash(guildRaidMetaView, JsonOptions),
-            [GameCatalogDatasets.MythicQuestsServed] = GameCatalogHashing.ComputeCanonicalJsonHash(mythicQuestViews, JsonOptions),
-            [GameCatalogDatasets.UnitPower] = GameCatalogHashing.ComputeCanonicalJsonHash(unitPowerViews, JsonOptions),
-            [GameCatalogDatasets.QuestEvents] = GameCatalogHashing.ComputeCanonicalJsonHash(questEventViews, JsonOptions),
-            [GameCatalogDatasets.QuestCrates] = GameCatalogHashing.ComputeCanonicalJsonHash(questCrateViews, JsonOptions),
-            [GameCatalogDatasets.Factions] = GameCatalogHashing.ComputeCanonicalJsonHash(factionViews, JsonOptions),
-            [GameCatalogDatasets.DamageTypes] = GameCatalogHashing.ComputeCanonicalJsonHash(damageTypeViews, JsonOptions),
-            [GameCatalogDatasets.GlobalValues] = GameCatalogHashing.ComputeCanonicalJsonHash(globalValuesViews, JsonOptions),
-            [GameCatalogDatasets.ProgressionRules] = GameCatalogHashing.ComputeCanonicalJsonHash(progressionRulesViews, JsonOptions),
-            [GameCatalogDatasets.Hre] = GameCatalogHashing.ComputeCanonicalJsonHash(hreViews, JsonOptions),
+            [GameCatalogDatasets.Characters] = HashServed(GameCatalogDatasets.Characters, characterViews),
+            [GameCatalogDatasets.Npcs] = HashServed(GameCatalogDatasets.Npcs, npcList),
+            [GameCatalogDatasets.Mows] = HashServed(GameCatalogDatasets.Mows, mowList),
+            [GameCatalogDatasets.MowUpgradeCostsServed] = HashServed(GameCatalogDatasets.MowUpgradeCostsServed, mowUpgradeCostViews),
+            [GameCatalogDatasets.CharacterAbilityCostsServed] = HashServed(GameCatalogDatasets.CharacterAbilityCostsServed, characterAbilityCostViews),
+            [GameCatalogDatasets.AscensionCostsServed] = HashServed(GameCatalogDatasets.AscensionCostsServed, ascensionCostViews),
+            [GameCatalogDatasets.UnlockShardCostsServed] = HashServed(GameCatalogDatasets.UnlockShardCostsServed, unlockShardCostViews),
+            [GameCatalogDatasets.OnslaughtRewards] = HashServed(GameCatalogDatasets.OnslaughtRewards, onslaughtRewards),
+            [GameCatalogDatasets.Upgrades] = HashServed(GameCatalogDatasets.Upgrades, upgradeViews),
+            [GameCatalogDatasets.Equipment] = HashServed(GameCatalogDatasets.Equipment, equipmentViews),
+            [GameCatalogDatasets.CampaignBattles] = HashServed(GameCatalogDatasets.CampaignBattles, campaignBattleViews),
+            [GameCatalogDatasets.CampaignDefinitions] = HashServed(GameCatalogDatasets.CampaignDefinitions, campaignDefinitionViews),
+            [GameCatalogDatasets.Lres] = HashServed(GameCatalogDatasets.Lres, lreViews),
+            [GameCatalogDatasets.LreBattles] = HashServed(GameCatalogDatasets.LreBattles, lreBattleViews),
+            [GameCatalogDatasets.HordeModeTiers] = HashServed(GameCatalogDatasets.HordeModeTiers, hordeModeTiersViews),
+            [GameCatalogDatasets.EventDefinitionsServed] = HashServed(GameCatalogDatasets.EventDefinitionsServed, eventDefinitionViews),
+            [GameCatalogDatasets.EventsCalendar] = HashServed(GameCatalogDatasets.EventsCalendar, eventsCalendar),
+            [GameCatalogDatasets.Shops] = HashServed(GameCatalogDatasets.Shops, shopViews),
+            [GameCatalogDatasets.RaidBosses] = HashServed(GameCatalogDatasets.RaidBosses, raidBossesView),
+            [GameCatalogDatasets.GuildRaidMeta] = HashServed(GameCatalogDatasets.GuildRaidMeta, guildRaidMetaView),
+            [GameCatalogDatasets.MythicQuestsServed] = HashServed(GameCatalogDatasets.MythicQuestsServed, mythicQuestViews),
+            [GameCatalogDatasets.UnitPower] = HashServed(GameCatalogDatasets.UnitPower, unitPowerViews),
+            [GameCatalogDatasets.QuestEvents] = HashServed(GameCatalogDatasets.QuestEvents, questEventViews),
+            [GameCatalogDatasets.QuestCrates] = HashServed(GameCatalogDatasets.QuestCrates, questCrateViews),
+            [GameCatalogDatasets.Factions] = HashServed(GameCatalogDatasets.Factions, factionViews),
+            [GameCatalogDatasets.DamageTypes] = HashServed(GameCatalogDatasets.DamageTypes, damageTypeViews),
+            [GameCatalogDatasets.GlobalValues] = HashServed(GameCatalogDatasets.GlobalValues, globalValuesViews),
+            [GameCatalogDatasets.ProgressionRules] = HashServed(GameCatalogDatasets.ProgressionRules, progressionRulesViews),
+            [GameCatalogDatasets.Hre] = HashServed(GameCatalogDatasets.Hre, hreViews),
         };
 
+        var schemaHash = GameCatalogContractHashing.ComputeContractHash(payloadTypes, JsonOptions);
         var snapshot = new GameCatalogSnapshot(
             GameCatalogRelease.Version,
-            GameCatalogRelease.SchemaVersion,
+            schemaHash,
             GameCatalogRelease.GameVersion,
             GameCatalogHashing.ComputeSnapshotHash(
-                GameCatalogRelease.Version, GameCatalogRelease.SchemaVersion, GameCatalogRelease.GameVersion, datasetHashes),
+                GameCatalogRelease.Version, schemaHash, GameCatalogRelease.GameVersion, datasetHashes),
             new ReadOnlyDictionary<string, string>(datasetHashes),
             unitsByFaction,
             new ReadOnlyCollection<GameCatalogMowUpgradeCost>(mowUpgradeCosts.ToArray()),

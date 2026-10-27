@@ -8,7 +8,7 @@ Served game-catalog datasets are content-addressed and public, so clients and in
 
 ### Requirement: Dataset responses carry a content ETag
 
-Every dataset response SHALL carry a strong `ETag` covering the complete served envelope (`Version`, `SchemaVersion`, `GameVersion`, `SourceHash`, `DatasetKey`, `DatasetHash`, `Data`). The manifest payload hash alone SHALL NOT determine this validator. Equal complete representations SHALL have equal validators; changes to data or release metadata SHALL change it.
+Every dataset response SHALL carry a strong `ETag` covering the complete served envelope (`Version`, `SchemaHash`, `GameVersion`, `SourceHash`, `DatasetKey`, `DatasetHash`, `Data`). The manifest payload hash alone SHALL NOT determine this validator. Equal complete representations SHALL have equal validators; changes to data or release metadata SHALL change it.
 
 #### Scenario: Envelope and manifest describe the same snapshot
 

@@ -2,7 +2,7 @@ namespace TacticusPlanner.GameCatalog.Models;
 
 public sealed record GameCatalogSnapshot(
     string Version,
-    int SchemaVersion,
+    string SchemaHash,
     string GameVersion,
     string SourceHash,
     IReadOnlyDictionary<string, string> DatasetHashes,
@@ -75,7 +75,7 @@ public sealed record GameCatalogSnapshot(
     // constructor parameters only (a field initializer may not reference another computed property).
     public GameCatalogManifest Manifest { get; } = new(
         Version,
-        SchemaVersion,
+        SchemaHash,
         GameVersion,
         SourceHash,
         DatasetHashes

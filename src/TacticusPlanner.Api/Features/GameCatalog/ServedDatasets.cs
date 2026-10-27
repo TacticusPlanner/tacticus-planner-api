@@ -82,7 +82,7 @@ public static class ServedDatasets
     public static GameCatalogDatasetEnvelope<TPayload> Envelope<TPayload>(GameCatalogSnapshot snapshot, string key) =>
         new(
             snapshot.Version,
-            snapshot.SchemaVersion,
+            snapshot.SchemaHash,
             snapshot.GameVersion,
             snapshot.SourceHash,
             key,
