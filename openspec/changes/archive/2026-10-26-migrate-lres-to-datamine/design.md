@@ -6,12 +6,15 @@ source changes: `LreDatamineReader.ReadDatamineLres` builds it from datamine fil
 ## Decisions
 
 1. **Curated keys pick the events.** The game lists 14 legendary events, including finished ones. The
-   catalog serves the four it served before; `lre-curation.json` names each by its datamine `event`, and the
-   reader checks that the event unlocks that unit. Dataset keys stay `lres-{unit in lower case}`.
-2. **What stays curated.** Battle completion points (`battlesPoints`) are not in the datamine. Track names,
-   enemy labels and links and restriction names are hand-written display text with irregular wording
-   ("No Terminator", "Orks "). `allowedUnitsFilter` is curated too, since V1's filters are hand-picked
-   (Farsight's gamma also excludes Orks). Run starts are announced, not configured.
+   catalog serves the four it served before; each is the one event that unlocks its curated unit. Dataset
+   keys stay `lres-{unit in lower case}`.
+2. **Only run starts stay curated.** V1's datamine pipeline derives the rest, and so does the reader:
+   `battlesPoints` is the number of enemies a battle spawns (it matches all 216 hand-kept values), the
+   `allowedUnitsFilter` and track name come from the disallowed factions (one whole alliance roster plus any
+   extras, as Farsight's gamma adds Orks), and enemy labels and restriction names use V1's faction and trait
+   labels and `objectiveDisplayName`. Hand-typed drift goes away ("Min 5 Hits" becomes V1's "Min 5 hits",
+   "AdMech" becomes "Adeptus Mechanicus"), so V1 plan imports match restriction names exactly. Run starts are
+   announced, not configured.
 3. **Missions keep V1's English lines.** `LreTaskText` ports V1's `questsToMissionText`, with faction and
    trait labels from the reversed parser alias tables, and the parser reads them back. A task kind or label
    the reader does not know fails the load, as an unknown line did before.

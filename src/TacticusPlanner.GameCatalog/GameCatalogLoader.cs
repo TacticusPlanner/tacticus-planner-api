@@ -86,6 +86,7 @@ public static class GameCatalogLoader
                 LoadDatamine<Dictionary<string, JsonElement>>(GameCatalogDenormalizer.DatamineChestsPath),
                 LoadDatamine<Dictionary<string, List<DatamineUnitProgressionStep>>>(
                     GameCatalogDenormalizer.DatamineHeroProgressionStepsPerUnitPath)),
+            unitsByFaction,
             JsonOptions);
 
         var rawShopsBySourceKey = GameCatalogDenormalizer.ReadDatamineShops(

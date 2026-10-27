@@ -6,7 +6,7 @@ Companion apps change: none (shapes unchanged). Source plan: `tacticus-planner-d
 
 - [x] 1.1 Add the eight LRE datamine files to `files.txt` and run `pull-datamine.cs -- v1.43.157.2989`
 - [x] 1.2 Add `ReadDatamineLres` and the datamine and curation models
-- [x] 1.3 Move display names, run starts, battle points, filters and restriction names to `Data/curated/lre-curation.json`
+- [x] 1.3 Derive names, battle points, filters and restriction names as V1 does; keep only run starts in `Data/curated/lre-curation.json`
 - [x] 1.4 Delete `Data/lres/*.json` and `GameCatalogDatasets.LreEvents`; load `groups.json` once
 
 ## 2. Verification
