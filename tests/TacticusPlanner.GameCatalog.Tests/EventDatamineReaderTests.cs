@@ -1,3 +1,4 @@
+using System.Text.Json;
 using TacticusPlanner.GameCatalog.Denormalization;
 using TacticusPlanner.GameCatalog.Models;
 using Xunit;
@@ -68,6 +69,29 @@ public sealed class EventDatamineReaderTests
         var served = Assert.Single(Assert.Single(quest.Tiers).Battles);
         Assert.Equal(("upgDmgC001", 3, 4), (served.Loot.Reward.UpgradeId, served.Loot.Reward.Num, served.Loot.Reward.Denom));
         Assert.Equal([("necroNpc1Warrior", (int?)2), ("PowerUp", null)], served.Enemies.Select(enemy => (enemy.Name, enemy.ProgressionIndex)));
+    }
+
+    [Fact]
+    public void HseTiersWithDifferentTrackersFail()
+    {
+        static T Datamine<T>(string path)
+        {
+            using var stream = DatamineFiles.Open(path);
+            return JsonSerializer.Deserialize<T>(stream, JsonSerializerOptions.Web)!;
+        }
+
+        var events = Datamine<List<DatamineHomeScreenEvent>>(GameCatalogDenormalizer.DatamineHomeScreenEventsPath);
+        var mid = events.FindIndex(hse => hse.EventName == "kill_tyranids_tier_mid");
+        var tracker = events[mid].Trackers![0];
+        events[mid] = events[mid] with { Trackers = [tracker with { Points = tracker.Points + 1 }, .. events[mid].Trackers!.Skip(1)] };
+
+        var error = Assert.Throws<InvalidOperationException>(() => GameCatalogDenormalizer.ReadDatamineHseScoring(
+            events,
+            Datamine<Dictionary<string, List<DatamineTieredProgressReward>>>(GameCatalogDenormalizer.DatamineTieredProgressRewardsPath),
+            Datamine<Dictionary<string, DatamineAbility?>>(GameCatalogDenormalizer.DatamineAbilitiesPath)));
+
+        Assert.Contains("'kill_tyranids'", error.Message, StringComparison.Ordinal);
+        Assert.Contains("tier 'mid' trackers or modifiers differ", error.Message, StringComparison.Ordinal);
     }
 
     [Fact]

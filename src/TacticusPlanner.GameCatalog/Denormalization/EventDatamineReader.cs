@@ -237,8 +237,10 @@ internal static partial class GameCatalogDenormalizer
     {
         var keys = HseTierOrder.Where(tiers.ContainsKey).ToArray();
         var first = tiers[keys[0]];
-        var firstShared = JsonSerializer.Serialize((first.Trackers, first.Modifiers));
-        if (keys.Skip(1).FirstOrDefault(key => JsonSerializer.Serialize((tiers[key].Trackers, tiers[key].Modifiers)) != firstShared) is { } differing)
+        // An anonymous object, not a tuple: System.Text.Json skips tuple fields, so every tuple serializes to "{}".
+        static string Shared(DatamineHomeScreenEvent hse) => JsonSerializer.Serialize(new { hse.Trackers, hse.Modifiers });
+        var firstShared = Shared(first);
+        if (keys.Skip(1).FirstOrDefault(key => Shared(tiers[key]) != firstShared) is { } differing)
         {
             throw HseError(name, $"tier '{differing}' trackers or modifiers differ from tier '{keys[0]}'");
         }
