@@ -17,7 +17,7 @@ public sealed record DatamineLegendaryHeroEvent(
     DatamineLegendaryHeroUnlock UnlockableHero
 );
 
-public sealed record DatamineLegendaryHeroLane(int LaneIndex, string BattleSetId);
+public sealed record DatamineLegendaryHeroLane(int LaneIndex, string BattleSetId, string FactionId);
 
 public sealed record DatamineLegendaryHeroUnlock(string HeroId);
 
@@ -79,22 +79,6 @@ public sealed record DatamineLreSources(
 );
 
 // ---- curated (Data/curated/lre-curation.json) --------------------------------------------------------------------
-// What the game has no source for, keyed by the event unit: which datamine event to serve, the display name, the
-// announced run starts, and per track the display name, enemy label and wiki link, the battle completion points,
-// the allowed-units filter and the restriction display names (in objective order).
-public sealed record GameCatalogLreCuration(
-    string Event,
-    string Name,
-    IReadOnlyList<string>? RunStartDatesUtc,
-    GameCatalogLreTrackCuration Alpha,
-    GameCatalogLreTrackCuration Beta,
-    GameCatalogLreTrackCuration Gamma
-);
-
-public sealed record GameCatalogLreTrackCuration(
-    string Name,
-    GameCatalogLreTrackEnemies Enemies,
-    IReadOnlyList<int> BattlesPoints,
-    IReadOnlyList<GameCatalogLreFilter> AllowedUnitsFilter,
-    IReadOnlyList<string> RestrictionNames
-);
+// The one thing the game has no source for, keyed by the event unit: the announced run starts. Which units have an
+// entry decides which events are served.
+public sealed record GameCatalogLreCuration(IReadOnlyList<string>? RunStartDatesUtc);

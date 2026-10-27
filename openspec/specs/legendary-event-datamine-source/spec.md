@@ -1,28 +1,56 @@
 # legendary-event-datamine-source Specification
 
 ## Purpose
-Defines how the backend game catalog builds its Legendary Release Event datasets from the pinned datamine, which events it serves, and the few display and planning fields kept by hand because the game has no source for them.
+Defines how the backend game catalog builds its Legendary Release Event datasets from the pinned datamine, which events it serves, and the run starts kept by hand because the game has no source for them.
 
 ## Requirements
 
 ### Requirement: Served events are picked by the curated file
 
-The `lres` and `lre-battles` datasets SHALL serve one event per entry of `Data/curated/lre-curation.json`, keyed by the event unit id. Each entry SHALL name its datamine `liveEvents/legendaryHeroEvent.json` event, and loading SHALL fail, naming `lres` and the unit, when the event is missing or unlocks another unit.
+The `lres` and `lre-battles` datasets SHALL serve one event per entry of `Data/curated/lre-curation.json`, keyed by the event unit id. The event served SHALL be the one `liveEvents/legendaryHeroEvent.json` event whose `unlockableHero` is that unit, and its `name` the unit's name from the datamine lineup. Loading SHALL fail, naming `lres` and the unit, when no event or more than one unlocks the unit.
 
 #### Scenario: Four events
 
 - **WHEN** the catalog loads from datamine `v1.43.157.2989`
 - **THEN** it serves `astarLysander`, `lostaBile`, `tauFarsight` and `votanUthar`, read from `legendary_hero_event_15`, `_16`, `_13` and `_14`
 
-### Requirement: Only fields the game has no source for are curated
+### Requirement: Only run starts are curated
 
-The curated entry SHALL hold the display `name`, `runStartDatesUtc`, and per track the display `name`, `enemies` label and link, `battlesPoints`, `allowedUnitsFilter` and `restrictionNames`. Everything else SHALL come from the datamine. Loading SHALL fail when a track's curated battle points or restriction names do not match its battle or restriction count.
+The curated entry SHALL hold only `runStartDatesUtc`, which the game config does not carry. Everything else SHALL come from the datamine.
 
-#### Scenario: Restriction names line up with the game
+#### Scenario: Curated entry
 
-- **GIVEN** a track whose battles carry three restrictions and whose curated entry lists two names
+- **WHEN** the catalog loads `lre-curation.json`
+- **THEN** each entry holds nothing but `runStartDatesUtc`
+
+### Requirement: Battle points are one per spawned enemy
+
+A battle's `battlesPoints` value SHALL be the number of enemies across its waves (the length of every wave's `army` summed).
+
+#### Scenario: Lysander's first battle
+
+- **WHEN** the catalog loads from datamine `v1.43.157.2989`
+- **THEN** `astarLysander` alpha battle 1, with 32 enemies across its waves, has 32 battle points
+
+### Requirement: Track names and filters follow the disallowed factions
+
+Every battle of a track SHALL disallow the same factions, and they SHALL include exactly one alliance's whole roster (alliances from the datamine lineup). The track SHALL serve `allowedUnitsFilter` as that alliance excluded, then each extra faction excluded in game order, and V1's `name`: the lane label then `(No {alliance} or {faction}…)`. Loading SHALL fail when no single alliance is barred.
+
+#### Scenario: Extra faction
+
+- **GIVEN** a gamma track that disallows the Chaos roster and `Orks`
 - **WHEN** the catalog loads
-- **THEN** loading fails naming `lres`, the unit and the track
+- **THEN** it is named `Gamma (No Chaos or Orks)` with filters `Alliance Chaos` and `Faction Orks`, both excluding
+
+### Requirement: Display names use V1's labels
+
+The `enemies` label SHALL be the name of the lane's `factionId` and its link `https://tacticus.wiki.gg/wiki/{label with spaces as _}#NPC_Units`. Restriction names SHALL follow V1's `objectiveDisplayName` (for example `No Bolter`, `Min 5 hits`, `Terminator`). Faction names SHALL be V1's (`Adeptus Mechanicus`, `T'au Empire`) and trait names V1's labels. A faction or trait with no label SHALL fail the load.
+
+#### Scenario: Restriction names
+
+- **GIVEN** objectives `MinHits 5`, `NotTrait TerminatorArmour` and `HasNoRangedAttack`
+- **WHEN** the catalog loads
+- **THEN** they are named `Min 5 hits`, `No Terminator` and `Melee`
 
 ### Requirement: Lane points come from the Acing objective
 

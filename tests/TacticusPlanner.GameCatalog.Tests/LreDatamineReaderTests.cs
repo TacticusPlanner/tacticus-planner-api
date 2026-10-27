@@ -9,14 +9,10 @@ public sealed class LreDatamineReaderTests
 {
     private const string Unit = "lostaBile";
 
-    private static readonly GameCatalogLreTrackCuration CuratedTrack = new(
-        "Alpha (No Chaos)",
-        new GameCatalogLreTrackEnemies("Black Legion", "https://tacticus.wiki.gg/wiki/Black_Legion#NPC_Units"),
-        [31],
-        [new GameCatalogLreFilter("Alliance", "Chaos", true)],
-        ["Black Templars", "No Bolter", "Ranged"]);
+    private static readonly string[] Chaos =
+        ["BlackLegion", "DeathGuard", "EmperorsChildren", "TheLostAndTheDamned", "ThousandSons", "WorldEaters"];
 
-    private static object Battle(params object[] objectives) => new
+    private static object Battle(string[] disallowed, params object[] objectives) => new
     {
         tier = 1,
         battleNr = 1,
@@ -24,7 +20,7 @@ public sealed class LreDatamineReaderTests
         power = 1184,
         waves = new[] { new { round = 1, power = 272, army = new[] { "thousNpc1PinkHorror:1", "blackNpc1Bloodletter:2", "thousNpc1PinkHorror:1" } } },
         objectives,
-        disallowedFactions = new[] { "BlackLegion" },
+        disallowedFactions = disallowed,
     };
 
     private static readonly object[] Objectives =
@@ -41,18 +37,18 @@ public sealed class LreDatamineReaderTests
     private static object Task(string name, int target, object? parameters = null) =>
         new { name, target, taskParameters = parameters };
 
-    private static DatamineLreSources Sources(object[]? objectives = null, object? regularTask = null)
+    private static DatamineLreSources Sources(object[]? objectives = null, object? regularTask = null, string[]? disallowed = null)
     {
         static JsonElement Json(object value) => JsonSerializer.SerializeToElement(value, JsonSerializerOptions.Web);
 
-        var battleSet = Json(new[] { Battle(objectives ?? Objectives) });
+        var battleSet = Json(new[] { Battle(disallowed ?? Chaos, objectives ?? Objectives) });
         return new DatamineLreSources(
             [new DatamineLegendaryHeroEvent(
                 "legendary_hero_event_16",
                 "leg_hero_event_16",
                 "legendaryHeroEvent16",
                 ["leg_bile", "leg_bile_premium"],
-                [new(1, "lane_1"), new(2, "lane_2"), new(3, "lane_3")],
+                [new(1, "lane_1", "BlackLegion"), new(2, "lane_2", "AdeptusMechanicus"), new(3, "lane_3", "Tau")],
                 new DatamineLegendaryHeroUnlock(Unit))],
             new Dictionary<string, JsonElement> { ["lane_1"] = battleSet, ["lane_2"] = battleSet, ["lane_3"] = battleSet },
             new Dictionary<string, JsonElement>
@@ -105,9 +101,10 @@ public sealed class LreDatamineReaderTests
         Assert.Single(GameCatalogDenormalizer.ReadDatamineLres(
             new Dictionary<string, GameCatalogLreCuration>
             {
-                [Unit] = new("legendary_hero_event_16", "Fabius Bile", null, CuratedTrack, CuratedTrack, CuratedTrack),
+                [Unit] = new(null),
             },
             sources,
+            GameCatalogLoader.Load().UnitsByFaction,
             JsonSerializerOptions.Web)).Value;
 
     [Fact]
@@ -116,6 +113,7 @@ public sealed class LreDatamineReaderTests
         var lre = Read(Sources());
 
         Assert.Equal((16, 1, 3), (lre.Id, lre.BattlesCount, lre.ConstraintsCount));
+        Assert.Equal("Fabius Bile", lre.Name);
         Assert.Equal(37, lre.Alpha.KillPoints);
         Assert.Equal([37], lre.Alpha.DefeatAll);
         Assert.Equal(
@@ -128,10 +126,43 @@ public sealed class LreDatamineReaderTests
         Assert.Equal(
             [("thousNpc1PinkHorror", 1, 2), ("blackNpc1Bloodletter", 2, 1)],
             Assert.Single(Assert.Single(lre.Alpha.Battles).Waves).Enemies.Select(enemy => (enemy.Id, enemy.LadderIndex, enemy.Count)));
+        Assert.Equal([3], lre.Alpha.BattlesPoints);
         Assert.Equal([new GameCatalogLrePointsMilestone(1, 100, 25), new GameCatalogLrePointsMilestone(2, 250, 30)], lre.PointsMilestones);
         Assert.Equal([new GameCatalogLreChestsMilestone(1, 60), new GameCatalogLreChestsMilestone(2, 80)], lre.ChestsMilestones);
         Assert.Equal(25, lre.ShardsPerChest);
         Assert.Equal(new GameCatalogLreProgression(400, 120, 180, 200, 250, 150), lre.Progression);
+    }
+
+    [Fact]
+    public void TrackNamesEnemiesAndFiltersFollowV1sRules()
+    {
+        var lre = Read(Sources());
+
+        Assert.Equal(("Alpha (No Chaos)", "Beta (No Chaos)", "Gamma (No Chaos)"), (lre.Alpha.Name, lre.Beta.Name, lre.Gamma.Name));
+        Assert.Equal(
+            new GameCatalogLreTrackEnemies("Black Legion", "https://tacticus.wiki.gg/wiki/Black_Legion#NPC_Units"),
+            lre.Alpha.Enemies);
+        Assert.Equal(("Adeptus Mechanicus", "T'au Empire"), (lre.Beta.Enemies.Label, lre.Gamma.Enemies.Label));
+        Assert.Equal([new GameCatalogLreFilter("Alliance", "Chaos", true)], lre.Alpha.AllowedUnitsFilter);
+    }
+
+    [Fact]
+    public void AnExtraDisallowedFactionJoinsTheTrackName()
+    {
+        var lre = Read(Sources(disallowed: [.. Chaos, "Orks"]));
+
+        Assert.Equal("Alpha (No Chaos or Orks)", lre.Alpha.Name);
+        Assert.Equal(
+            [new GameCatalogLreFilter("Alliance", "Chaos", true), new GameCatalogLreFilter("Faction", "Orks", true)],
+            lre.Alpha.AllowedUnitsFilter);
+    }
+
+    [Fact]
+    public void ATrackThatBarsNoWholeAllianceFails()
+    {
+        var error = Assert.Throws<InvalidOperationException>(() => Read(Sources(disallowed: ["BlackLegion"])));
+
+        Assert.Contains("disallows 0 whole alliances", error.Message, StringComparison.Ordinal);
     }
 
     [Fact]

@@ -10,9 +10,10 @@ battle powers are stale.
 - Build the `lres` and `lre-battles` datasets from the pinned datamine (`liveEvents/legendaryHeroEvent.json`,
   `battles/battleSets.json`, `quests/groups.json`, `loot/tieredProgressRewards.json`, `shop/segments.json`,
   `shop/products.json`, `loot/chests.json`, `units/heroProgressionStepsPerUnit.json`).
-- Keep what the game has no source for in `Data/curated/lre-curation.json`: which event to serve, display
-  names, run starts, enemy labels and links, battle completion points, allowed-units filters and restriction
-  names. Its keys pick the served events.
+- Derive what V1's datamine pipeline derives: the event that unlocks the unit, its name, battle completion
+  points (one per spawned enemy), track names, enemy labels and links, allowed-units filters and restriction
+  names (V1's `buildTrackName` and `objectiveDisplayName`). Keep only run starts in
+  `Data/curated/lre-curation.json`; its keys pick the served events.
 - Generate mission lines from the game's quest tasks with V1's wording, so the existing parser and validation
   keep working.
 - Delete `Data/lres/*.json` and `GameCatalogDatasets.LreEvents`.
