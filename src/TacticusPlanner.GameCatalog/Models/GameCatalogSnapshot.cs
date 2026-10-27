@@ -65,7 +65,8 @@ public sealed record GameCatalogSnapshot(
     IReadOnlyList<GameCatalogQuestEventView> QuestEventViews,
     IReadOnlyList<GameCatalogQuestCrate> QuestCrateViews,
     IReadOnlyList<GameCatalogFaction> FactionViews,
-    IReadOnlyList<GameCatalogDamageType> DamageTypeViews
+    IReadOnlyList<GameCatalogDamageType> DamageTypeViews,
+    IReadOnlyList<GameCatalogGlobalValues> GlobalValuesViews
 )
 {
     // The manifest served to clients: release metadata + per-dataset hash and download url. Built from the

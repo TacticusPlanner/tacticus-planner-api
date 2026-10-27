@@ -34,6 +34,10 @@ public static class GameCatalogDatasets
     // See Denormalization/FactionDenormalizer.cs.
     public const string Factions = "factions";
     public const string DamageTypes = "damage-types";
+    // global-values: the single record of game-wide constants (energy, Onslaught and limited-battle stamina, team size,
+    // trait variables, the energy shop ladder) from the datamine globalValues.json. See
+    // Denormalization/GlobalValuesDenormalizer.cs.
+    public const string GlobalValues = "global-values";
 
     // Route/key prefixes for the split dataset families.
     public const string UnitsPrefix = "units";
@@ -249,5 +253,6 @@ public static class GameCatalogDatasets
         UnitPower,
         Factions,
         DamageTypes,
+        GlobalValues,
     ];
 }

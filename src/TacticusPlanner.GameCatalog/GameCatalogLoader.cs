@@ -62,6 +62,11 @@ public static class GameCatalogLoader
             LoadDatamine<Dictionary<string, DatamineFaction>>(GameCatalogDenormalizer.DatamineFactionsPath));
         var damageTypeViews = GameCatalogDenormalizer.ReadDatamineDamageTypes(
             LoadDatamine<Dictionary<string, DatamineDamageProfile>>(GameCatalogDenormalizer.DatamineDamageProfilesPath));
+        var shopProducts = LoadDatamine<Dictionary<string, JsonElement>>(GameCatalogDenormalizer.DatamineShopProductsPath);
+        var globalValuesViews = GameCatalogDenormalizer.ReadDatamineGlobalValues(
+            LoadDatamine<DatamineGlobalValues>(GameCatalogDenormalizer.DatamineGlobalValuesPath),
+            LoadDatamine<List<string>>(GameCatalogDenormalizer.DatamineStaminaShopTiersPath),
+            shopProducts);
 
         var datamineNpcs = LoadDatamine<Dictionary<string, DatamineNpc>>(GameCatalogDenormalizer.DatamineNpcPath);
         var npcsByFaction = GameCatalogDenormalizer.ReadDatamineNpcs(datamineNpcs, abilities);
@@ -96,7 +101,7 @@ public static class GameCatalogLoader
                 questGroups,
                 tieredProgressRewards,
                 LoadDatamine<List<DatamineShopSegment>>(GameCatalogDenormalizer.DatamineShopSegmentsPath),
-                LoadDatamine<Dictionary<string, JsonElement>>(GameCatalogDenormalizer.DatamineShopProductsPath),
+                shopProducts,
                 LoadDatamine<Dictionary<string, JsonElement>>(GameCatalogDenormalizer.DatamineChestsPath),
                 LoadDatamine<Dictionary<string, List<DatamineUnitProgressionStep>>>(
                     GameCatalogDenormalizer.DatamineHeroProgressionStepsPerUnitPath)),
@@ -167,6 +172,7 @@ public static class GameCatalogLoader
             [GameCatalogDatasets.QuestCrates] = GameCatalogHashing.ComputeCanonicalJsonHash(questCrateViews, JsonOptions),
             [GameCatalogDatasets.Factions] = GameCatalogHashing.ComputeCanonicalJsonHash(factionViews, JsonOptions),
             [GameCatalogDatasets.DamageTypes] = GameCatalogHashing.ComputeCanonicalJsonHash(damageTypeViews, JsonOptions),
+            [GameCatalogDatasets.GlobalValues] = GameCatalogHashing.ComputeCanonicalJsonHash(globalValuesViews, JsonOptions),
         };
 
         var snapshot = new GameCatalogSnapshot(
@@ -222,7 +228,8 @@ public static class GameCatalogLoader
             questEventViews,
             questCrateViews,
             factionViews,
-            damageTypeViews);
+            damageTypeViews,
+            globalValuesViews);
 
         var errors = GameCatalogValidator.Validate(snapshot);
         if (errors.Count > 0)
