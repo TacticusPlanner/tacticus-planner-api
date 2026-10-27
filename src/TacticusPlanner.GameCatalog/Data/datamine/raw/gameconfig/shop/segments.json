@@ -1,0 +1,1028 @@
+[
+  {
+    "segmentId": "chests",
+    "productSets": [
+      {
+        "conditions": {
+          "needsAssetBundlesDownloaded": true,
+          "maxPowerLevel": 19
+        },
+        "products": [
+          "product_chest_wood",
+          "product_chest_bronze",
+          "product_chest_silver"
+        ]
+      },
+      {
+        "conditions": {
+          "needsAssetBundlesDownloaded": true,
+          "minPowerLevel": 20,
+          "maxPowerLevel": 29
+        },
+        "products": [
+          "product_chest_bronze",
+          "product_chest_silver",
+          "product_chest_gold"
+        ]
+      },
+      {
+        "conditions": {
+          "needsAssetBundlesDownloaded": true,
+          "minPowerLevel": 30
+        },
+        "products": [
+          "product_chest_silver",
+          "product_chest_gold",
+          "product_chest_diamond"
+        ]
+      }
+    ]
+  },
+  {
+    "segmentId": "gems",
+    "productSets": [
+      {
+        "conditions": {
+          "needsAssetBundlesDownloaded": false
+        },
+        "realMoneyProducts": [
+          "realMoneyProduct_gems_001",
+          "realMoneyProduct_gems_002",
+          "realMoneyProduct_gems_003",
+          "realMoneyProduct_gems_004",
+          "realMoneyProduct_gems_005",
+          "realMoneyProduct_gems_006"
+        ]
+      }
+    ]
+  },
+  {
+    "segmentId": "gold",
+    "productSets": [
+      {
+        "conditions": {
+          "needsAssetBundlesDownloaded": false,
+          "maxPowerLevel": 10
+        },
+        "products": [
+          "product_gold_001_step1_v2",
+          "product_gold_002_step1",
+          "product_gold_003_step1"
+        ]
+      },
+      {
+        "conditions": {
+          "needsAssetBundlesDownloaded": false,
+          "minPowerLevel": 11,
+          "maxPowerLevel": 20
+        },
+        "products": [
+          "product_gold_001_step2_v2",
+          "product_gold_002_step2_v2",
+          "product_gold_003_step2_v2"
+        ]
+      },
+      {
+        "conditions": {
+          "needsAssetBundlesDownloaded": false,
+          "minPowerLevel": 21,
+          "maxPowerLevel": 30
+        },
+        "products": [
+          "product_gold_001_step3_v2",
+          "product_gold_002_step3_v2",
+          "product_gold_003_step3_v2"
+        ]
+      },
+      {
+        "conditions": {
+          "needsAssetBundlesDownloaded": false,
+          "minPowerLevel": 31,
+          "maxPowerLevel": 40
+        },
+        "products": [
+          "product_gold_001_step4_v2",
+          "product_gold_002_step4_v2",
+          "product_gold_003_step4_v2"
+        ]
+      },
+      {
+        "conditions": {
+          "needsAssetBundlesDownloaded": false,
+          "minPowerLevel": 41,
+          "maxPowerLevel": 50
+        },
+        "products": [
+          "product_gold_001_step5_v2",
+          "product_gold_002_step5_v2",
+          "product_gold_003_step5_v2"
+        ]
+      },
+      {
+        "conditions": {
+          "needsAssetBundlesDownloaded": false,
+          "minPowerLevel": 51,
+          "maxPowerLevel": 60
+        },
+        "products": [
+          "product_gold_001_step6",
+          "product_gold_002_step6",
+          "product_gold_003_step6"
+        ]
+      },
+      {
+        "conditions": {
+          "needsAssetBundlesDownloaded": false,
+          "minPowerLevel": 61,
+          "maxPowerLevel": 70
+        },
+        "products": [
+          "product_gold_001_step7",
+          "product_gold_002_step7",
+          "product_gold_003_step7"
+        ]
+      },
+      {
+        "conditions": {
+          "needsAssetBundlesDownloaded": false,
+          "minPowerLevel": 71
+        },
+        "products": [
+          "product_gold_001_step8",
+          "product_gold_002_step8",
+          "product_gold_003_step8"
+        ]
+      }
+    ]
+  },
+  {
+    "segmentId": "heroReleaseEvent",
+    "productSets": [
+      {
+        "conditions": {
+          "needsAssetBundlesDownloaded": true,
+          "minPowerLevel": 6
+        },
+        "products": [
+          "product_hre_progress_chest_01",
+          "product_hre_progress_chest_02",
+          "product_hre_progress_chest_03",
+          "product_hre_progress_chest_04",
+          "product_hre_progress_chest_05",
+          "product_hre_progress_chest_06",
+          "product_hre_progress_chest_07",
+          "product_hre_progress_chest_08",
+          "product_hre_progress_chest_09",
+          "product_hre_progress_chest_10",
+          "product_hre_progress_chest_11",
+          "product_hre_progress_chest_12",
+          "product_hre_progress_chest_13",
+          "product_hre_progress_chest_14",
+          "product_hre_progress_chest_15",
+          "product_hre_progress_chest_16",
+          "product_hre_progress_chest_17",
+          "product_hre_progress_chest_18",
+          "product_hre_progress_chest_19",
+          "product_hre_progress_chest_20",
+          "product_hre_progress_chest_21",
+          "product_hre_progress_chest_22",
+          "product_hre_progress_chest_23",
+          "product_hre_progress_chest_24",
+          "product_hre_progress_chest_25",
+          "product_hre_progress_chest_26",
+          "product_hre_progress_chest_27",
+          "product_hre_progress_chest_28"
+        ]
+      }
+    ]
+  },
+  {
+    "segmentId": "hreSpecialOffer",
+    "productSets": null
+  },
+  {
+    "segmentId": "legendaryHeroEvent7",
+    "productSets": [
+      {
+        "conditions": {
+          "needsAssetBundlesDownloaded": true,
+          "minPowerLevel": 6
+        },
+        "products": [
+          "product_leg_event_7_progress_chest_01",
+          "product_leg_event_7_progress_chest_02",
+          "product_leg_event_7_progress_chest_03",
+          "product_leg_event_7_progress_chest_04",
+          "product_leg_event_7_progress_chest_05",
+          "product_leg_event_7_progress_chest_06",
+          "product_leg_event_7_progress_chest_07",
+          "product_leg_event_7_progress_chest_08",
+          "product_leg_event_7_progress_chest_09",
+          "product_leg_event_7_progress_chest_10",
+          "product_leg_event_7_progress_chest_11",
+          "product_leg_event_7_progress_chest_12",
+          "product_leg_event_7_progress_chest_13",
+          "product_leg_event_7_progress_chest_14",
+          "product_leg_event_7_progress_chest_15",
+          "product_leg_event_7_progress_chest_16",
+          "product_leg_event_7_progress_chest_17",
+          "product_leg_event_7_progress_chest_18",
+          "product_leg_event_7_progress_chest_19",
+          "product_leg_event_7_progress_chest_20",
+          "product_leg_event_7_progress_chest_21",
+          "product_leg_event_7_progress_chest_22",
+          "product_leg_event_7_progress_chest_23",
+          "product_leg_event_7_progress_chest_24",
+          "product_leg_event_7_progress_chest_25",
+          "product_leg_event_7_progress_chest_26",
+          "product_leg_event_7_progress_chest_27",
+          "product_leg_event_7_progress_chest_28",
+          "product_leg_event_7_progress_chest_29",
+          "product_leg_event_7_progress_chest_30",
+          "product_leg_event_7_progress_chest_31",
+          "product_leg_event_7_progress_chest_32",
+          "product_leg_event_7_progress_chest_33",
+          "product_leg_event_7_progress_chest_34",
+          "product_leg_event_7_progress_chest_35",
+          "product_leg_event_7_progress_chest_36",
+          "product_leg_event_7_progress_chest_37",
+          "product_leg_event_7_progress_chest_38",
+          "product_leg_event_7_progress_chest_39",
+          "product_leg_event_7_progress_chest_40",
+          "product_leg_event_7_progress_chest_41",
+          "product_leg_event_7_progress_chest_42",
+          "product_leg_event_7_progress_chest_43",
+          "product_leg_event_7_progress_chest_44"
+        ]
+      }
+    ]
+  },
+  {
+    "segmentId": "legendaryHeroEvent8",
+    "productSets": [
+      {
+        "conditions": {
+          "needsAssetBundlesDownloaded": true,
+          "minPowerLevel": 6
+        },
+        "products": [
+          "product_leg_event_8_progress_chest_01",
+          "product_leg_event_8_progress_chest_02",
+          "product_leg_event_8_progress_chest_03",
+          "product_leg_event_8_progress_chest_04",
+          "product_leg_event_8_progress_chest_05",
+          "product_leg_event_8_progress_chest_06",
+          "product_leg_event_8_progress_chest_07",
+          "product_leg_event_8_progress_chest_08",
+          "product_leg_event_8_progress_chest_09",
+          "product_leg_event_8_progress_chest_10",
+          "product_leg_event_8_progress_chest_11",
+          "product_leg_event_8_progress_chest_12",
+          "product_leg_event_8_progress_chest_13",
+          "product_leg_event_8_progress_chest_14",
+          "product_leg_event_8_progress_chest_15",
+          "product_leg_event_8_progress_chest_16",
+          "product_leg_event_8_progress_chest_17",
+          "product_leg_event_8_progress_chest_18",
+          "product_leg_event_8_progress_chest_19",
+          "product_leg_event_8_progress_chest_20",
+          "product_leg_event_8_progress_chest_21",
+          "product_leg_event_8_progress_chest_22",
+          "product_leg_event_8_progress_chest_23",
+          "product_leg_event_8_progress_chest_24",
+          "product_leg_event_8_progress_chest_25",
+          "product_leg_event_8_progress_chest_26",
+          "product_leg_event_8_progress_chest_27",
+          "product_leg_event_8_progress_chest_28",
+          "product_leg_event_8_progress_chest_29",
+          "product_leg_event_8_progress_chest_30",
+          "product_leg_event_8_progress_chest_31",
+          "product_leg_event_8_progress_chest_32",
+          "product_leg_event_8_progress_chest_33",
+          "product_leg_event_8_progress_chest_34",
+          "product_leg_event_8_progress_chest_35",
+          "product_leg_event_8_progress_chest_36",
+          "product_leg_event_8_progress_chest_37",
+          "product_leg_event_8_progress_chest_38",
+          "product_leg_event_8_progress_chest_39",
+          "product_leg_event_8_progress_chest_40",
+          "product_leg_event_8_progress_chest_41",
+          "product_leg_event_8_progress_chest_42",
+          "product_leg_event_8_progress_chest_43",
+          "product_leg_event_8_progress_chest_44"
+        ]
+      }
+    ]
+  },
+  {
+    "segmentId": "legendaryHeroEvent9",
+    "productSets": [
+      {
+        "conditions": {
+          "needsAssetBundlesDownloaded": true,
+          "minPowerLevel": 6
+        },
+        "products": [
+          "product_leg_event_9_progress_chest_01",
+          "product_leg_event_9_progress_chest_02",
+          "product_leg_event_9_progress_chest_03",
+          "product_leg_event_9_progress_chest_04",
+          "product_leg_event_9_progress_chest_05",
+          "product_leg_event_9_progress_chest_06",
+          "product_leg_event_9_progress_chest_07",
+          "product_leg_event_9_progress_chest_08",
+          "product_leg_event_9_progress_chest_09",
+          "product_leg_event_9_progress_chest_10",
+          "product_leg_event_9_progress_chest_11",
+          "product_leg_event_9_progress_chest_12",
+          "product_leg_event_9_progress_chest_13",
+          "product_leg_event_9_progress_chest_14",
+          "product_leg_event_9_progress_chest_15",
+          "product_leg_event_9_progress_chest_16",
+          "product_leg_event_9_progress_chest_17",
+          "product_leg_event_9_progress_chest_18",
+          "product_leg_event_9_progress_chest_19",
+          "product_leg_event_9_progress_chest_20",
+          "product_leg_event_9_progress_chest_21",
+          "product_leg_event_9_progress_chest_22",
+          "product_leg_event_9_progress_chest_23",
+          "product_leg_event_9_progress_chest_24",
+          "product_leg_event_9_progress_chest_25",
+          "product_leg_event_9_progress_chest_26",
+          "product_leg_event_9_progress_chest_27",
+          "product_leg_event_9_progress_chest_28",
+          "product_leg_event_9_progress_chest_29",
+          "product_leg_event_9_progress_chest_30",
+          "product_leg_event_9_progress_chest_31",
+          "product_leg_event_9_progress_chest_32",
+          "product_leg_event_9_progress_chest_33",
+          "product_leg_event_9_progress_chest_34",
+          "product_leg_event_9_progress_chest_35",
+          "product_leg_event_9_progress_chest_36",
+          "product_leg_event_9_progress_chest_37",
+          "product_leg_event_9_progress_chest_38",
+          "product_leg_event_9_progress_chest_39",
+          "product_leg_event_9_progress_chest_40",
+          "product_leg_event_9_progress_chest_41",
+          "product_leg_event_9_progress_chest_42",
+          "product_leg_event_9_progress_chest_43",
+          "product_leg_event_9_progress_chest_44",
+          "product_leg_event_9_progress_chest_45",
+          "product_leg_event_9_progress_chest_46",
+          "product_leg_event_9_progress_chest_47",
+          "product_leg_event_9_progress_chest_48",
+          "product_leg_event_9_progress_chest_49",
+          "product_leg_event_9_progress_chest_50",
+          "product_leg_event_9_progress_chest_51",
+          "product_leg_event_9_progress_chest_52",
+          "product_leg_event_9_progress_chest_53",
+          "product_leg_event_9_progress_chest_54"
+        ]
+      }
+    ]
+  },
+  {
+    "segmentId": "legendaryHeroEvent10",
+    "productSets": [
+      {
+        "conditions": {
+          "needsAssetBundlesDownloaded": true,
+          "minPowerLevel": 6
+        },
+        "products": [
+          "product_leg_event_10_progress_chest_01",
+          "product_leg_event_10_progress_chest_02",
+          "product_leg_event_10_progress_chest_03",
+          "product_leg_event_10_progress_chest_04",
+          "product_leg_event_10_progress_chest_05",
+          "product_leg_event_10_progress_chest_06",
+          "product_leg_event_10_progress_chest_07",
+          "product_leg_event_10_progress_chest_08",
+          "product_leg_event_10_progress_chest_09",
+          "product_leg_event_10_progress_chest_10",
+          "product_leg_event_10_progress_chest_11",
+          "product_leg_event_10_progress_chest_12",
+          "product_leg_event_10_progress_chest_13",
+          "product_leg_event_10_progress_chest_14",
+          "product_leg_event_10_progress_chest_15",
+          "product_leg_event_10_progress_chest_16",
+          "product_leg_event_10_progress_chest_17",
+          "product_leg_event_10_progress_chest_18",
+          "product_leg_event_10_progress_chest_19",
+          "product_leg_event_10_progress_chest_20",
+          "product_leg_event_10_progress_chest_21",
+          "product_leg_event_10_progress_chest_22",
+          "product_leg_event_10_progress_chest_23",
+          "product_leg_event_10_progress_chest_24",
+          "product_leg_event_10_progress_chest_25",
+          "product_leg_event_10_progress_chest_26",
+          "product_leg_event_10_progress_chest_27",
+          "product_leg_event_10_progress_chest_28",
+          "product_leg_event_10_progress_chest_29",
+          "product_leg_event_10_progress_chest_30",
+          "product_leg_event_10_progress_chest_31",
+          "product_leg_event_10_progress_chest_32",
+          "product_leg_event_10_progress_chest_33",
+          "product_leg_event_10_progress_chest_34",
+          "product_leg_event_10_progress_chest_35",
+          "product_leg_event_10_progress_chest_36",
+          "product_leg_event_10_progress_chest_37",
+          "product_leg_event_10_progress_chest_38",
+          "product_leg_event_10_progress_chest_39",
+          "product_leg_event_10_progress_chest_40",
+          "product_leg_event_10_progress_chest_41",
+          "product_leg_event_10_progress_chest_42",
+          "product_leg_event_10_progress_chest_43",
+          "product_leg_event_10_progress_chest_44",
+          "product_leg_event_10_progress_chest_45",
+          "product_leg_event_10_progress_chest_46",
+          "product_leg_event_10_progress_chest_47",
+          "product_leg_event_10_progress_chest_48",
+          "product_leg_event_10_progress_chest_49",
+          "product_leg_event_10_progress_chest_50",
+          "product_leg_event_10_progress_chest_51",
+          "product_leg_event_10_progress_chest_52",
+          "product_leg_event_10_progress_chest_53",
+          "product_leg_event_10_progress_chest_54"
+        ]
+      }
+    ]
+  },
+  {
+    "segmentId": "legendaryHeroEvent11",
+    "productSets": [
+      {
+        "conditions": {
+          "needsAssetBundlesDownloaded": true,
+          "minPowerLevel": 6
+        },
+        "products": [
+          "product_leg_event_11_progress_chest_01",
+          "product_leg_event_11_progress_chest_02",
+          "product_leg_event_11_progress_chest_03",
+          "product_leg_event_11_progress_chest_04",
+          "product_leg_event_11_progress_chest_05",
+          "product_leg_event_11_progress_chest_06",
+          "product_leg_event_11_progress_chest_07",
+          "product_leg_event_11_progress_chest_08",
+          "product_leg_event_11_progress_chest_09",
+          "product_leg_event_11_progress_chest_10",
+          "product_leg_event_11_progress_chest_11",
+          "product_leg_event_11_progress_chest_12",
+          "product_leg_event_11_progress_chest_13",
+          "product_leg_event_11_progress_chest_14",
+          "product_leg_event_11_progress_chest_15",
+          "product_leg_event_11_progress_chest_16",
+          "product_leg_event_11_progress_chest_17",
+          "product_leg_event_11_progress_chest_18",
+          "product_leg_event_11_progress_chest_19",
+          "product_leg_event_11_progress_chest_20",
+          "product_leg_event_11_progress_chest_21",
+          "product_leg_event_11_progress_chest_22",
+          "product_leg_event_11_progress_chest_23",
+          "product_leg_event_11_progress_chest_24",
+          "product_leg_event_11_progress_chest_25",
+          "product_leg_event_11_progress_chest_26",
+          "product_leg_event_11_progress_chest_27",
+          "product_leg_event_11_progress_chest_28",
+          "product_leg_event_11_progress_chest_29",
+          "product_leg_event_11_progress_chest_30",
+          "product_leg_event_11_progress_chest_31",
+          "product_leg_event_11_progress_chest_32",
+          "product_leg_event_11_progress_chest_33",
+          "product_leg_event_11_progress_chest_34",
+          "product_leg_event_11_progress_chest_35",
+          "product_leg_event_11_progress_chest_36",
+          "product_leg_event_11_progress_chest_37",
+          "product_leg_event_11_progress_chest_38",
+          "product_leg_event_11_progress_chest_39",
+          "product_leg_event_11_progress_chest_40",
+          "product_leg_event_11_progress_chest_41",
+          "product_leg_event_11_progress_chest_42",
+          "product_leg_event_11_progress_chest_43",
+          "product_leg_event_11_progress_chest_44",
+          "product_leg_event_11_progress_chest_45",
+          "product_leg_event_11_progress_chest_46",
+          "product_leg_event_11_progress_chest_47",
+          "product_leg_event_11_progress_chest_48",
+          "product_leg_event_11_progress_chest_49",
+          "product_leg_event_11_progress_chest_50",
+          "product_leg_event_11_progress_chest_51",
+          "product_leg_event_11_progress_chest_52",
+          "product_leg_event_11_progress_chest_53",
+          "product_leg_event_11_progress_chest_54",
+          "product_leg_event_11_progress_chest_55",
+          "product_leg_event_11_progress_chest_56",
+          "product_leg_event_11_progress_chest_57",
+          "product_leg_event_11_progress_chest_58",
+          "product_leg_event_11_progress_chest_59",
+          "product_leg_event_11_progress_chest_60"
+        ]
+      }
+    ]
+  },
+  {
+    "segmentId": "legendaryHeroEvent12",
+    "productSets": [
+      {
+        "conditions": {
+          "needsAssetBundlesDownloaded": true,
+          "minPowerLevel": 6
+        },
+        "products": [
+          "product_leg_event_12_progress_chest_01",
+          "product_leg_event_12_progress_chest_02",
+          "product_leg_event_12_progress_chest_03",
+          "product_leg_event_12_progress_chest_04",
+          "product_leg_event_12_progress_chest_05",
+          "product_leg_event_12_progress_chest_06",
+          "product_leg_event_12_progress_chest_07",
+          "product_leg_event_12_progress_chest_08",
+          "product_leg_event_12_progress_chest_09",
+          "product_leg_event_12_progress_chest_10",
+          "product_leg_event_12_progress_chest_11",
+          "product_leg_event_12_progress_chest_12",
+          "product_leg_event_12_progress_chest_13",
+          "product_leg_event_12_progress_chest_14",
+          "product_leg_event_12_progress_chest_15",
+          "product_leg_event_12_progress_chest_16",
+          "product_leg_event_12_progress_chest_17",
+          "product_leg_event_12_progress_chest_18",
+          "product_leg_event_12_progress_chest_19",
+          "product_leg_event_12_progress_chest_20",
+          "product_leg_event_12_progress_chest_21",
+          "product_leg_event_12_progress_chest_22",
+          "product_leg_event_12_progress_chest_23",
+          "product_leg_event_12_progress_chest_24",
+          "product_leg_event_12_progress_chest_25",
+          "product_leg_event_12_progress_chest_26",
+          "product_leg_event_12_progress_chest_27",
+          "product_leg_event_12_progress_chest_28",
+          "product_leg_event_12_progress_chest_29",
+          "product_leg_event_12_progress_chest_30",
+          "product_leg_event_12_progress_chest_31",
+          "product_leg_event_12_progress_chest_32",
+          "product_leg_event_12_progress_chest_33",
+          "product_leg_event_12_progress_chest_34",
+          "product_leg_event_12_progress_chest_35",
+          "product_leg_event_12_progress_chest_36",
+          "product_leg_event_12_progress_chest_37",
+          "product_leg_event_12_progress_chest_38",
+          "product_leg_event_12_progress_chest_39",
+          "product_leg_event_12_progress_chest_40",
+          "product_leg_event_12_progress_chest_41",
+          "product_leg_event_12_progress_chest_42",
+          "product_leg_event_12_progress_chest_43",
+          "product_leg_event_12_progress_chest_44",
+          "product_leg_event_12_progress_chest_45",
+          "product_leg_event_12_progress_chest_46",
+          "product_leg_event_12_progress_chest_47",
+          "product_leg_event_12_progress_chest_48",
+          "product_leg_event_12_progress_chest_49",
+          "product_leg_event_12_progress_chest_50",
+          "product_leg_event_12_progress_chest_51",
+          "product_leg_event_12_progress_chest_52",
+          "product_leg_event_12_progress_chest_53",
+          "product_leg_event_12_progress_chest_54",
+          "product_leg_event_12_progress_chest_55",
+          "product_leg_event_12_progress_chest_56",
+          "product_leg_event_12_progress_chest_57",
+          "product_leg_event_12_progress_chest_58",
+          "product_leg_event_12_progress_chest_59",
+          "product_leg_event_12_progress_chest_60"
+        ]
+      }
+    ]
+  },
+  {
+    "segmentId": "legendaryHeroEvent13",
+    "productSets": [
+      {
+        "conditions": {
+          "needsAssetBundlesDownloaded": true,
+          "minPowerLevel": 6
+        },
+        "products": [
+          "product_leg_event_13_progress_chest_01",
+          "product_leg_event_13_progress_chest_02",
+          "product_leg_event_13_progress_chest_03",
+          "product_leg_event_13_progress_chest_04",
+          "product_leg_event_13_progress_chest_05",
+          "product_leg_event_13_progress_chest_06",
+          "product_leg_event_13_progress_chest_07",
+          "product_leg_event_13_progress_chest_08",
+          "product_leg_event_13_progress_chest_09",
+          "product_leg_event_13_progress_chest_10",
+          "product_leg_event_13_progress_chest_11",
+          "product_leg_event_13_progress_chest_12",
+          "product_leg_event_13_progress_chest_13",
+          "product_leg_event_13_progress_chest_14",
+          "product_leg_event_13_progress_chest_15",
+          "product_leg_event_13_progress_chest_16",
+          "product_leg_event_13_progress_chest_17",
+          "product_leg_event_13_progress_chest_18",
+          "product_leg_event_13_progress_chest_19",
+          "product_leg_event_13_progress_chest_20",
+          "product_leg_event_13_progress_chest_21",
+          "product_leg_event_13_progress_chest_22",
+          "product_leg_event_13_progress_chest_23",
+          "product_leg_event_13_progress_chest_24",
+          "product_leg_event_13_progress_chest_25",
+          "product_leg_event_13_progress_chest_26",
+          "product_leg_event_13_progress_chest_27",
+          "product_leg_event_13_progress_chest_28",
+          "product_leg_event_13_progress_chest_29",
+          "product_leg_event_13_progress_chest_30",
+          "product_leg_event_13_progress_chest_31",
+          "product_leg_event_13_progress_chest_32",
+          "product_leg_event_13_progress_chest_33",
+          "product_leg_event_13_progress_chest_34",
+          "product_leg_event_13_progress_chest_35",
+          "product_leg_event_13_progress_chest_36",
+          "product_leg_event_13_progress_chest_37",
+          "product_leg_event_13_progress_chest_38",
+          "product_leg_event_13_progress_chest_39",
+          "product_leg_event_13_progress_chest_40",
+          "product_leg_event_13_progress_chest_41",
+          "product_leg_event_13_progress_chest_42",
+          "product_leg_event_13_progress_chest_43",
+          "product_leg_event_13_progress_chest_44",
+          "product_leg_event_13_progress_chest_45",
+          "product_leg_event_13_progress_chest_46",
+          "product_leg_event_13_progress_chest_47",
+          "product_leg_event_13_progress_chest_48",
+          "product_leg_event_13_progress_chest_49",
+          "product_leg_event_13_progress_chest_50",
+          "product_leg_event_13_progress_chest_51",
+          "product_leg_event_13_progress_chest_52",
+          "product_leg_event_13_progress_chest_53",
+          "product_leg_event_13_progress_chest_54",
+          "product_leg_event_13_progress_chest_55",
+          "product_leg_event_13_progress_chest_56",
+          "product_leg_event_13_progress_chest_57",
+          "product_leg_event_13_progress_chest_58",
+          "product_leg_event_13_progress_chest_59",
+          "product_leg_event_13_progress_chest_60"
+        ]
+      }
+    ]
+  },
+  {
+    "segmentId": "legendaryHeroEvent14",
+    "productSets": [
+      {
+        "conditions": {
+          "needsAssetBundlesDownloaded": true,
+          "minPowerLevel": 6
+        },
+        "products": [
+          "product_leg_event_14_progress_chest_01",
+          "product_leg_event_14_progress_chest_02",
+          "product_leg_event_14_progress_chest_03",
+          "product_leg_event_14_progress_chest_04",
+          "product_leg_event_14_progress_chest_05",
+          "product_leg_event_14_progress_chest_06",
+          "product_leg_event_14_progress_chest_07",
+          "product_leg_event_14_progress_chest_08",
+          "product_leg_event_14_progress_chest_09",
+          "product_leg_event_14_progress_chest_10",
+          "product_leg_event_14_progress_chest_11",
+          "product_leg_event_14_progress_chest_12",
+          "product_leg_event_14_progress_chest_13",
+          "product_leg_event_14_progress_chest_14",
+          "product_leg_event_14_progress_chest_15",
+          "product_leg_event_14_progress_chest_16",
+          "product_leg_event_14_progress_chest_17",
+          "product_leg_event_14_progress_chest_18",
+          "product_leg_event_14_progress_chest_19",
+          "product_leg_event_14_progress_chest_20",
+          "product_leg_event_14_progress_chest_21",
+          "product_leg_event_14_progress_chest_22",
+          "product_leg_event_14_progress_chest_23",
+          "product_leg_event_14_progress_chest_24",
+          "product_leg_event_14_progress_chest_25",
+          "product_leg_event_14_progress_chest_26",
+          "product_leg_event_14_progress_chest_27",
+          "product_leg_event_14_progress_chest_28",
+          "product_leg_event_14_progress_chest_29",
+          "product_leg_event_14_progress_chest_30",
+          "product_leg_event_14_progress_chest_31",
+          "product_leg_event_14_progress_chest_32",
+          "product_leg_event_14_progress_chest_33",
+          "product_leg_event_14_progress_chest_34",
+          "product_leg_event_14_progress_chest_35",
+          "product_leg_event_14_progress_chest_36",
+          "product_leg_event_14_progress_chest_37",
+          "product_leg_event_14_progress_chest_38",
+          "product_leg_event_14_progress_chest_39",
+          "product_leg_event_14_progress_chest_40",
+          "product_leg_event_14_progress_chest_41",
+          "product_leg_event_14_progress_chest_42",
+          "product_leg_event_14_progress_chest_43",
+          "product_leg_event_14_progress_chest_44",
+          "product_leg_event_14_progress_chest_45",
+          "product_leg_event_14_progress_chest_46",
+          "product_leg_event_14_progress_chest_47",
+          "product_leg_event_14_progress_chest_48",
+          "product_leg_event_14_progress_chest_49",
+          "product_leg_event_14_progress_chest_50",
+          "product_leg_event_14_progress_chest_51",
+          "product_leg_event_14_progress_chest_52",
+          "product_leg_event_14_progress_chest_53",
+          "product_leg_event_14_progress_chest_54",
+          "product_leg_event_14_progress_chest_55",
+          "product_leg_event_14_progress_chest_56",
+          "product_leg_event_14_progress_chest_57",
+          "product_leg_event_14_progress_chest_58",
+          "product_leg_event_14_progress_chest_59",
+          "product_leg_event_14_progress_chest_60"
+        ]
+      }
+    ]
+  },
+  {
+    "segmentId": "legendaryHeroEvent15",
+    "productSets": [
+      {
+        "conditions": {
+          "needsAssetBundlesDownloaded": true,
+          "minPowerLevel": 6
+        },
+        "products": [
+          "product_leg_event_15_progress_chest_01",
+          "product_leg_event_15_progress_chest_02",
+          "product_leg_event_15_progress_chest_03",
+          "product_leg_event_15_progress_chest_04",
+          "product_leg_event_15_progress_chest_05",
+          "product_leg_event_15_progress_chest_06",
+          "product_leg_event_15_progress_chest_07",
+          "product_leg_event_15_progress_chest_08",
+          "product_leg_event_15_progress_chest_09",
+          "product_leg_event_15_progress_chest_10",
+          "product_leg_event_15_progress_chest_11",
+          "product_leg_event_15_progress_chest_12",
+          "product_leg_event_15_progress_chest_13",
+          "product_leg_event_15_progress_chest_14",
+          "product_leg_event_15_progress_chest_15",
+          "product_leg_event_15_progress_chest_16",
+          "product_leg_event_15_progress_chest_17",
+          "product_leg_event_15_progress_chest_18",
+          "product_leg_event_15_progress_chest_19",
+          "product_leg_event_15_progress_chest_20",
+          "product_leg_event_15_progress_chest_21",
+          "product_leg_event_15_progress_chest_22",
+          "product_leg_event_15_progress_chest_23",
+          "product_leg_event_15_progress_chest_24",
+          "product_leg_event_15_progress_chest_25",
+          "product_leg_event_15_progress_chest_26",
+          "product_leg_event_15_progress_chest_27",
+          "product_leg_event_15_progress_chest_28",
+          "product_leg_event_15_progress_chest_29",
+          "product_leg_event_15_progress_chest_30",
+          "product_leg_event_15_progress_chest_31",
+          "product_leg_event_15_progress_chest_32",
+          "product_leg_event_15_progress_chest_33",
+          "product_leg_event_15_progress_chest_34",
+          "product_leg_event_15_progress_chest_35",
+          "product_leg_event_15_progress_chest_36",
+          "product_leg_event_15_progress_chest_37",
+          "product_leg_event_15_progress_chest_38",
+          "product_leg_event_15_progress_chest_39",
+          "product_leg_event_15_progress_chest_40",
+          "product_leg_event_15_progress_chest_41",
+          "product_leg_event_15_progress_chest_42",
+          "product_leg_event_15_progress_chest_43",
+          "product_leg_event_15_progress_chest_44",
+          "product_leg_event_15_progress_chest_45",
+          "product_leg_event_15_progress_chest_46",
+          "product_leg_event_15_progress_chest_47",
+          "product_leg_event_15_progress_chest_48",
+          "product_leg_event_15_progress_chest_49",
+          "product_leg_event_15_progress_chest_50",
+          "product_leg_event_15_progress_chest_51",
+          "product_leg_event_15_progress_chest_52",
+          "product_leg_event_15_progress_chest_53",
+          "product_leg_event_15_progress_chest_54",
+          "product_leg_event_15_progress_chest_55",
+          "product_leg_event_15_progress_chest_56",
+          "product_leg_event_15_progress_chest_57",
+          "product_leg_event_15_progress_chest_58",
+          "product_leg_event_15_progress_chest_59",
+          "product_leg_event_15_progress_chest_60"
+        ]
+      }
+    ]
+  },
+  {
+    "segmentId": "legendaryHeroEvent16",
+    "productSets": [
+      {
+        "conditions": {
+          "needsAssetBundlesDownloaded": true,
+          "minPowerLevel": 6
+        },
+        "products": [
+          "product_leg_event_16_progress_chest_01",
+          "product_leg_event_16_progress_chest_02",
+          "product_leg_event_16_progress_chest_03",
+          "product_leg_event_16_progress_chest_04",
+          "product_leg_event_16_progress_chest_05",
+          "product_leg_event_16_progress_chest_06",
+          "product_leg_event_16_progress_chest_07",
+          "product_leg_event_16_progress_chest_08",
+          "product_leg_event_16_progress_chest_09",
+          "product_leg_event_16_progress_chest_10",
+          "product_leg_event_16_progress_chest_11",
+          "product_leg_event_16_progress_chest_12",
+          "product_leg_event_16_progress_chest_13",
+          "product_leg_event_16_progress_chest_14",
+          "product_leg_event_16_progress_chest_15",
+          "product_leg_event_16_progress_chest_16",
+          "product_leg_event_16_progress_chest_17",
+          "product_leg_event_16_progress_chest_18",
+          "product_leg_event_16_progress_chest_19",
+          "product_leg_event_16_progress_chest_20",
+          "product_leg_event_16_progress_chest_21",
+          "product_leg_event_16_progress_chest_22",
+          "product_leg_event_16_progress_chest_23",
+          "product_leg_event_16_progress_chest_24",
+          "product_leg_event_16_progress_chest_25",
+          "product_leg_event_16_progress_chest_26",
+          "product_leg_event_16_progress_chest_27",
+          "product_leg_event_16_progress_chest_28",
+          "product_leg_event_16_progress_chest_29",
+          "product_leg_event_16_progress_chest_30",
+          "product_leg_event_16_progress_chest_31",
+          "product_leg_event_16_progress_chest_32",
+          "product_leg_event_16_progress_chest_33",
+          "product_leg_event_16_progress_chest_34",
+          "product_leg_event_16_progress_chest_35",
+          "product_leg_event_16_progress_chest_36",
+          "product_leg_event_16_progress_chest_37",
+          "product_leg_event_16_progress_chest_38",
+          "product_leg_event_16_progress_chest_39",
+          "product_leg_event_16_progress_chest_40",
+          "product_leg_event_16_progress_chest_41",
+          "product_leg_event_16_progress_chest_42",
+          "product_leg_event_16_progress_chest_43",
+          "product_leg_event_16_progress_chest_44",
+          "product_leg_event_16_progress_chest_45",
+          "product_leg_event_16_progress_chest_46",
+          "product_leg_event_16_progress_chest_47",
+          "product_leg_event_16_progress_chest_48",
+          "product_leg_event_16_progress_chest_49",
+          "product_leg_event_16_progress_chest_50",
+          "product_leg_event_16_progress_chest_51",
+          "product_leg_event_16_progress_chest_52",
+          "product_leg_event_16_progress_chest_53",
+          "product_leg_event_16_progress_chest_54",
+          "product_leg_event_16_progress_chest_55",
+          "product_leg_event_16_progress_chest_56",
+          "product_leg_event_16_progress_chest_57",
+          "product_leg_event_16_progress_chest_58",
+          "product_leg_event_16_progress_chest_59",
+          "product_leg_event_16_progress_chest_60"
+        ]
+      }
+    ]
+  },
+  {
+    "segmentId": "seasonalEventMay2026",
+    "productSets": [
+      {
+        "conditions": {
+          "needsAssetBundlesDownloaded": true,
+          "minPowerLevel": 6
+        },
+        "products": [
+          "product_seasonal_event_may_2026_progress_chest_01",
+          "product_seasonal_event_may_2026_progress_chest_02",
+          "product_seasonal_event_may_2026_progress_chest_03",
+          "product_seasonal_event_may_2026_progress_chest_04",
+          "product_seasonal_event_may_2026_progress_chest_05",
+          "product_seasonal_event_may_2026_progress_chest_06",
+          "product_seasonal_event_may_2026_progress_chest_07",
+          "product_seasonal_event_may_2026_progress_chest_08",
+          "product_seasonal_event_may_2026_progress_chest_09",
+          "product_seasonal_event_may_2026_progress_chest_10",
+          "product_seasonal_event_may_2026_progress_chest_11",
+          "product_seasonal_event_may_2026_progress_chest_12",
+          "product_seasonal_event_may_2026_progress_chest_13",
+          "product_seasonal_event_may_2026_progress_chest_14",
+          "product_seasonal_event_may_2026_progress_chest_15",
+          "product_seasonal_event_may_2026_progress_chest_16",
+          "product_seasonal_event_may_2026_progress_chest_17",
+          "product_seasonal_event_may_2026_progress_chest_18",
+          "product_seasonal_event_may_2026_progress_chest_19",
+          "product_seasonal_event_may_2026_progress_chest_20",
+          "product_seasonal_event_may_2026_progress_chest_21",
+          "product_seasonal_event_may_2026_progress_chest_22",
+          "product_seasonal_event_may_2026_progress_chest_23",
+          "product_seasonal_event_may_2026_progress_chest_24",
+          "product_seasonal_event_may_2026_progress_chest_25",
+          "product_seasonal_event_may_2026_progress_chest_26",
+          "product_seasonal_event_may_2026_progress_chest_27",
+          "product_seasonal_event_may_2026_progress_chest_28",
+          "product_seasonal_event_may_2026_progress_chest_29",
+          "product_seasonal_event_may_2026_progress_chest_30"
+        ]
+      }
+    ]
+  },
+  {
+    "segmentId": "seasonalEventSeptember2026",
+    "productSets": [
+      {
+        "conditions": {
+          "needsAssetBundlesDownloaded": true,
+          "minPowerLevel": 6
+        },
+        "products": [
+          "product_seasonal_event_september_2026_progress_chest_01",
+          "product_seasonal_event_september_2026_progress_chest_02",
+          "product_seasonal_event_september_2026_progress_chest_03",
+          "product_seasonal_event_september_2026_progress_chest_04",
+          "product_seasonal_event_september_2026_progress_chest_05",
+          "product_seasonal_event_september_2026_progress_chest_06",
+          "product_seasonal_event_september_2026_progress_chest_07",
+          "product_seasonal_event_september_2026_progress_chest_08",
+          "product_seasonal_event_september_2026_progress_chest_09",
+          "product_seasonal_event_september_2026_progress_chest_10",
+          "product_seasonal_event_september_2026_progress_chest_11",
+          "product_seasonal_event_september_2026_progress_chest_12",
+          "product_seasonal_event_september_2026_progress_chest_13",
+          "product_seasonal_event_september_2026_progress_chest_14",
+          "product_seasonal_event_september_2026_progress_chest_15",
+          "product_seasonal_event_september_2026_progress_chest_16",
+          "product_seasonal_event_september_2026_progress_chest_17",
+          "product_seasonal_event_september_2026_progress_chest_18",
+          "product_seasonal_event_september_2026_progress_chest_19",
+          "product_seasonal_event_september_2026_progress_chest_20",
+          "product_seasonal_event_september_2026_progress_chest_21",
+          "product_seasonal_event_september_2026_progress_chest_22",
+          "product_seasonal_event_september_2026_progress_chest_23",
+          "product_seasonal_event_september_2026_progress_chest_24",
+          "product_seasonal_event_september_2026_progress_chest_25",
+          "product_seasonal_event_september_2026_progress_chest_26",
+          "product_seasonal_event_september_2026_progress_chest_27",
+          "product_seasonal_event_september_2026_progress_chest_28",
+          "product_seasonal_event_september_2026_progress_chest_29",
+          "product_seasonal_event_september_2026_progress_chest_30",
+          "product_seasonal_event_september_2026_progress_chest_31",
+          "product_seasonal_event_september_2026_progress_chest_32",
+          "product_seasonal_event_september_2026_progress_chest_33",
+          "product_seasonal_event_september_2026_progress_chest_34",
+          "product_seasonal_event_september_2026_progress_chest_35"
+        ]
+      }
+    ]
+  },
+  {
+    "segmentId": "seasonalEventCrescendo01",
+    "productSets": [
+      {
+        "conditions": {
+          "needsAssetBundlesDownloaded": true,
+          "minPowerLevel": 6
+        },
+        "products": [
+          "product_crescendo_event_01_progress_chest_01",
+          "product_crescendo_event_01_progress_chest_02",
+          "product_crescendo_event_01_progress_chest_03",
+          "product_crescendo_event_01_progress_chest_04",
+          "product_crescendo_event_01_progress_chest_05",
+          "product_crescendo_event_01_progress_chest_06",
+          "product_crescendo_event_01_progress_chest_07",
+          "product_crescendo_event_01_progress_chest_08",
+          "product_crescendo_event_01_progress_chest_09",
+          "product_crescendo_event_01_progress_chest_10",
+          "product_crescendo_event_01_progress_chest_11",
+          "product_crescendo_event_01_progress_chest_12",
+          "product_crescendo_event_01_progress_chest_13",
+          "product_crescendo_event_01_progress_chest_14",
+          "product_crescendo_event_01_progress_chest_15",
+          "product_crescendo_event_01_progress_chest_16",
+          "product_crescendo_event_01_progress_chest_17",
+          "product_crescendo_event_01_progress_chest_18",
+          "product_crescendo_event_01_progress_chest_19",
+          "product_crescendo_event_01_progress_chest_20",
+          "product_crescendo_event_01_progress_chest_21",
+          "product_crescendo_event_01_progress_chest_22",
+          "product_crescendo_event_01_progress_chest_23",
+          "product_crescendo_event_01_progress_chest_24",
+          "product_crescendo_event_01_progress_chest_25",
+          "product_crescendo_event_01_progress_chest_26",
+          "product_crescendo_event_01_progress_chest_27",
+          "product_crescendo_event_01_progress_chest_28",
+          "product_crescendo_event_01_progress_chest_29",
+          "product_crescendo_event_01_progress_chest_30",
+          "product_crescendo_event_01_progress_chest_31",
+          "product_crescendo_event_01_progress_chest_32",
+          "product_crescendo_event_01_progress_chest_33",
+          "product_crescendo_event_01_progress_chest_34",
+          "product_crescendo_event_01_progress_chest_35"
+        ]
+      }
+    ]
+  }
+]

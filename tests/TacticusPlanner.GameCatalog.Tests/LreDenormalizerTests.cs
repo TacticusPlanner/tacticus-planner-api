@@ -30,14 +30,11 @@ public sealed class LreDenormalizerTests
     }
 
     [Fact]
-    public void EventsCarryTheirOwnChestLadders()
+    public void EveryEventCarriesItsChestLadderFromTheGame()
     {
-        var lysander = View("astarLysander").Rewards.ChestsMilestones;
-        var uthar = View("votanUthar").Rewards.ChestsMilestones;
-
-        Assert.Equal((60, 44_450), (lysander.Count, lysander.Sum(chest => chest.EngramCost)));
-        Assert.Equal((54, 35_450), (uthar.Count, uthar.Sum(chest => chest.EngramCost)));
-        Assert.Equal(uthar, lysander.Take(54));
+        // The game's shop segments give all four events the same 60 chests (V1 had cut Farsight's and Uthar's at 54).
+        Assert.All(Snapshot.LreViews, view => Assert.Equal(
+            (60, 44_450), (view.Rewards.ChestsMilestones.Count, view.Rewards.ChestsMilestones.Sum(chest => chest.EngramCost))));
     }
 
     [Fact]

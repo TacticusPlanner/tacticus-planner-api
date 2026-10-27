@@ -1,27 +1,33 @@
 # raw/-relative paths copied from tacticus-planner-data-mines by scripts/pull-datamine.cs.
 # List a file only when a denormalizer reads it. Sorted, one per line, no globs.
-gameconfig/battles/onslaught.json                           # onslaught-rewards
-gameconfig/items.json                                       # equipment
-gameconfig/liveEvents/homeScreenEvent.json                  # event-definitions (config.hse)
-gameconfig/liveEvents/linearHeroEvent.json                  # quest-events
-gameconfig/loot/tieredProgressRewards.json                  # event-definitions (config.hse ladders)
-gameconfig/quests/groups.json                               # mythic-quests
-gameconfig/shop/merchants.json                              # shops
-gameconfig/units/abilities.json                             # characters, mows, npcs (damage profiles, MoW recipes), HSE stat boosts
-gameconfig/units/abilityPowerCurve.json                     # unit-power
-gameconfig/units/abilityPowerModifiers.json                 # unit-power
-gameconfig/units/abilityUpgradeCosts.json                   # character-ability-costs
-gameconfig/units/abilityUpgradeCostsMoW.json                # mow-upgrade-costs
-gameconfig/units/damageProfileModifiers.json                # unit-power
-gameconfig/units/heroConversion.json                        # unlock-shard-costs
-gameconfig/units/heroProgressionSteps.json                  # ascension-costs, unit-power
-gameconfig/units/heroProgressionStepsMoW.json               # unit-power
-gameconfig/units/lineup.json                                # characters, mows, unit-power
-gameconfig/units/npc.json                                   # npcs
-gameconfig/units/traitPowerModifiers.json                   # unit-power
-gameconfig/upgrades.json                                    # upgrades
-globalconfig/guildBoss/guildBossSeasonConfigRotation.json   # raid-bosses
-globalconfig/guildBoss/guildBossSeasonDataConfigsGDTO.json  # raid-bosses
-globalconfig/guildBoss/modifiers.json                       # raid-bosses
-globalconfig/guildBoss/primarchs.json                       # raid-bosses
-globalconfig/guildBoss/unitSets.json                        # raid-bosses
+gameconfig/battles/battleSets.json                           # lres, lre-battles
+gameconfig/battles/onslaught.json                            # onslaught-rewards
+gameconfig/items.json                                        # equipment
+gameconfig/liveEvents/homeScreenEvent.json                   # event-definitions (config.hse)
+gameconfig/liveEvents/legendaryHeroEvent.json                # lres, lre-battles
+gameconfig/liveEvents/linearHeroEvent.json                   # quest-events
+gameconfig/loot/chests.json                                  # lres (shards per chest)
+gameconfig/loot/tieredProgressRewards.json                   # event-definitions (config.hse ladders), lres (points ladder)
+gameconfig/quests/groups.json                                # mythic-quests, lres (missions)
+gameconfig/shop/merchants.json                               # shops
+gameconfig/shop/products.json                                # lres (chest costs)
+gameconfig/shop/segments.json                                # lres (chest ladder)
+gameconfig/units/abilities.json                              # characters, mows, npcs (damage profiles, MoW recipes), HSE stat boosts
+gameconfig/units/abilityPowerCurve.json                      # unit-power
+gameconfig/units/abilityPowerModifiers.json                  # unit-power
+gameconfig/units/abilityUpgradeCosts.json                    # character-ability-costs
+gameconfig/units/abilityUpgradeCostsMoW.json                 # mow-upgrade-costs
+gameconfig/units/damageProfileModifiers.json                 # unit-power
+gameconfig/units/heroConversion.json                         # unlock-shard-costs
+gameconfig/units/heroProgressionSteps.json                   # ascension-costs, unit-power
+gameconfig/units/heroProgressionStepsMoW.json                # unit-power
+gameconfig/units/heroProgressionStepsPerUnit.json            # lres (progression shard costs)
+gameconfig/units/lineup.json                                 # characters, mows, unit-power
+gameconfig/units/npc.json                                    # npcs
+gameconfig/units/traitPowerModifiers.json                    # unit-power
+gameconfig/upgrades.json                                     # upgrades
+globalconfig/guildBoss/guildBossSeasonConfigRotation.json    # raid-bosses
+globalconfig/guildBoss/guildBossSeasonDataConfigsGDTO.json   # raid-bosses
+globalconfig/guildBoss/modifiers.json                        # raid-bosses
+globalconfig/guildBoss/primarchs.json                        # raid-bosses
+globalconfig/guildBoss/unitSets.json                         # raid-bosses

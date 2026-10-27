@@ -4,9 +4,7 @@ namespace TacticusPlanner.GameCatalog.Models;
 
 // ---- raw datamine shape (bound from gameconfig/quests/groups.json) ---------------------------------
 
-// The `hero` quest group of groups.json; the other groups are not bound.
-public sealed record DatamineQuestGroups(DatamineQuestGroup Hero);
-
+// The `hero` quest group of groups.json (the loader deserializes only that group).
 public sealed record DatamineQuestGroup(IReadOnlyList<DatamineQuest> Quests);
 
 // One chain quest. A mythic quest is named `mythic_{characterId}_{number}`; quest XP, icons and successor links

@@ -9,6 +9,9 @@ internal static partial class GameCatalogDenormalizer
     /// <summary>Raw path of the datamine file the mythic-quests dataset is built from.</summary>
     public const string DatamineQuestGroupsPath = "gameconfig/quests/groups.json";
 
+    /// <summary>The groups.json quest group that holds the mythic quests.</summary>
+    public const string DatamineHeroQuestGroup = "hero";
+
     private const string MythicQuestPrefix = "mythic_";
 
     [GeneratedRegex(@"^mythic_(\w+)_(\d+)$", RegexOptions.CultureInvariant)]

@@ -40,13 +40,20 @@ public static class GameCatalogLoader
             LoadDatamine<DatamineOnslaught>(GameCatalogDenormalizer.DatamineOnslaughtPath));
         var eventDefinitions = LoadDataset<IReadOnlyList<GameCatalogEventDefinition>>(GameCatalogDatasets.EventDefinitions);
         var eventOccurrences = LoadDataset<IReadOnlyList<GameCatalogEventOccurrence>>(GameCatalogDatasets.EventOccurrences);
+        var tieredProgressRewards = LoadDatamine<Dictionary<string, List<DatamineTieredProgressReward>>>(
+            GameCatalogDenormalizer.DatamineTieredProgressRewardsPath);
         var hseScoring = GameCatalogDenormalizer.ReadDatamineHseScoring(
             LoadDatamine<List<DatamineHomeScreenEvent>>(GameCatalogDenormalizer.DatamineHomeScreenEventsPath),
-            LoadDatamine<Dictionary<string, List<DatamineTieredProgressReward>>>(GameCatalogDenormalizer.DatamineTieredProgressRewardsPath),
+            tieredProgressRewards,
             abilities);
         var hordeModeTiersRaw = LoadDataset<IReadOnlyList<GameCatalogHordeModeTiers>>(GameCatalogDatasets.HordeModeTiers);
+        // groups.json holds chains of several shapes; each reader deserializes only the groups it names.
+        var questGroups = LoadDatamine<Dictionary<string, JsonElement>>(GameCatalogDenormalizer.DatamineQuestGroupsPath);
         var mythicQuests = GameCatalogDenormalizer.ReadDatamineMythicQuests(
-            LoadDatamine<DatamineQuestGroups>(GameCatalogDenormalizer.DatamineQuestGroupsPath).Hero);
+            questGroups.TryGetValue(GameCatalogDenormalizer.DatamineHeroQuestGroup, out var heroQuests)
+                ? heroQuests.Deserialize<DatamineQuestGroup>(JsonOptions)
+                    ?? throw new InvalidOperationException($"GameCatalog dataset '{GameCatalogDatasets.MythicQuests}': the hero quest group is empty.")
+                : throw new InvalidOperationException($"GameCatalog dataset '{GameCatalogDatasets.MythicQuests}': groups.json has no hero quest group."));
         var unitPower = LoadUnitPower();
         var questEvents = GameCatalogDenormalizer.ReadDatamineQuestEvents(
             LoadDatamine<List<DatamineLinearHeroEvent>>(GameCatalogDenormalizer.DatamineLinearHeroEventsPath));
@@ -67,11 +74,20 @@ public static class GameCatalogLoader
             campaignGroups[key] = AssignCampaignBattleIndices(LoadDataset<GameCatalogCampaignGroup>(key));
         }
 
-        var lresByEvent = new Dictionary<string, GameCatalogLre>(StringComparer.Ordinal);
-        foreach (var key in GameCatalogDatasets.LreEvents)
-        {
-            lresByEvent[key] = LoadDataset<GameCatalogLre>(key);
-        }
+        var lresByEvent = GameCatalogDenormalizer.ReadDatamineLres(
+            LoadDataset<Dictionary<string, GameCatalogLreCuration>>(GameCatalogDatasets.LreCuration),
+            new DatamineLreSources(
+                LoadDatamine<List<DatamineLegendaryHeroEvent>>(GameCatalogDenormalizer.DatamineLegendaryHeroEventsPath),
+                LoadDatamine<Dictionary<string, JsonElement>>(GameCatalogDenormalizer.DatamineBattleSetsPath),
+                questGroups,
+                tieredProgressRewards,
+                LoadDatamine<List<DatamineShopSegment>>(GameCatalogDenormalizer.DatamineShopSegmentsPath),
+                LoadDatamine<Dictionary<string, JsonElement>>(GameCatalogDenormalizer.DatamineShopProductsPath),
+                LoadDatamine<Dictionary<string, JsonElement>>(GameCatalogDenormalizer.DatamineChestsPath),
+                LoadDatamine<Dictionary<string, List<DatamineUnitProgressionStep>>>(
+                    GameCatalogDenormalizer.DatamineHeroProgressionStepsPerUnitPath)),
+            unitsByFaction,
+            JsonOptions);
 
         var rawShopsBySourceKey = GameCatalogDenormalizer.ReadDatamineShops(
             LoadDatamine<Dictionary<string, JsonElement>>(GameCatalogDenormalizer.DatamineMerchantsPath), JsonOptions);

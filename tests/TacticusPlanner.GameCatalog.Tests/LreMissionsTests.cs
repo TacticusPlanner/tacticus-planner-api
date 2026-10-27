@@ -41,7 +41,7 @@ public sealed class LreMissionsTests
             new GameCatalogLreMission(1, "defeatFaction", 30, "Necrons", null, null, null, "Defeat 30 Necrons"),
             uthar.RegularMissions[1]);
         Assert.Equal(("damageType", 15, "Bolter"), (uthar.RegularMissions[9].Kind, uthar.RegularMissions[9].Count, uthar.RegularMissions[9].DamageType));
-        Assert.Equal(("winWithoutTrait", 5, "BigTarget"), (uthar.PremiumMissions[4].Kind, uthar.PremiumMissions[4].Count, uthar.PremiumMissions[4].Trait));
+        Assert.Equal(("winWithoutTrait", 5, "Resilient"), (uthar.PremiumMissions[4].Kind, uthar.PremiumMissions[4].Count, uthar.PremiumMissions[4].Trait));
     }
 
     [Fact]
@@ -65,15 +65,15 @@ public sealed class LreMissionsTests
         MissionTuple[] premium =
             [
                 (0, "winWithoutSummon", 1, null, null, null, null),
-                (1, "defeatWithAlliance", 30, null, "Chaos", null, null),
-                (2, "defeatWithAlliance", 75, null, "Imperial", null, null),
+                (1, "defeatWithAlliance", 30, null, "Imperial", null, null),
+                (2, "defeatWithAlliance", 75, null, "Chaos", null, null),
                 (3, "defeatWithAlliance", 100, null, "Xenos", null, null),
-                (4, "winWithoutTrait", 5, null, null, null, "BigTarget"),
-                (5, "winWithoutTrait", 5, null, null, null, "Resilient"),
-                (6, "winWithoutTrait", 5, null, null, null, "Ambush"),
-                (7, "defeatWithDamageType", 75, null, null, "Bolter", null),
-                (8, "defeatWithDamageType", 75, null, null, "Power", null),
-                (9, "defeatWithDamageType", 75, null, null, "Piercing", null),
+                (4, "winWithoutTrait", 5, null, null, null, "Resilient"),
+                (5, "winWithoutTrait", 5, null, null, null, "TerminatorArmour"),
+                (6, "winWithoutTrait", 5, null, null, null, "Mechanical"),
+                (7, "defeatWithDamageType", 75, null, null, "Piercing", null),
+                (8, "defeatWithDamageType", 75, null, null, "Psychic", null),
+                (9, "defeatWithDamageType", 75, null, null, "Bolter", null),
             ];
 
         Assert.Equal(regular, uthar.RegularMissions.Select(Tuple));

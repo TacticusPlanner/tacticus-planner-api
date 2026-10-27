@@ -7,7 +7,7 @@ Defines the reward ladder served for each Legendary Event (points milestones wit
 
 ### Requirement: Each served Legendary Event carries its own reward ladder
 
-Every record of the served `lres` dataset SHALL carry a `rewards` object with exactly these fields, copied from that event's raw `lres-*.json` file without transformation:
+Every record of the served `lres` dataset SHALL carry a `rewards` object with exactly these fields, read from the event's datamine sources:
 
 ```
 rewards: {
@@ -18,27 +18,27 @@ rewards: {
 }
 ```
 
-The client SHALL derive all reward arithmetic (currency totals, chests affordable, shard thresholds) from this object; the server sends no derived totals. `progression` values are the incremental shards for each step, not cumulative. The catalog loader SHALL reject a raw file whose `pointsMilestones` are not strictly ascending by `cumulativePoints` with `milestone` numbered 1..n, whose `chestsMilestones` are not numbered 1..n, or that has a non-positive payout, cost, progression step or `shardsPerChest`.
+The client SHALL derive all reward arithmetic (currency totals, chests affordable, shard thresholds) from this object; the server sends no derived totals. `progression` values are the incremental shards for each step, not cumulative. The catalog loader SHALL reject an event whose `pointsMilestones` are not strictly ascending by `cumulativePoints` with `milestone` numbered 1..n, whose `chestsMilestones` are not numbered 1..n, or that has a non-positive payout, cost, progression step or `shardsPerChest`.
 
 Assumptions:
 
-- Ladders are a property of the event and may differ between events (today the chest ladder does: 60 rungs for `astarLysander` and `lostAbile`, 54 for `tauFarsight` and `votanUthar`).
+- Ladders are a property of the event and may differ between events (today all four served events have the game's 60-chest ladder).
 - The ladder is the same for all three runs of an event.
 
 #### Scenario: Events with different chest ladders
 
 - **WHEN** the client reads the `lres` dataset
-- **THEN** `astarLysander.rewards.chestsMilestones` has 60 entries summing to 44,450 currency and `votanUthar.rewards.chestsMilestones` has 54 entries summing to 35,450, with identical first 54 costs
+- **THEN** each event's `rewards.chestsMilestones` is its own shop segment's ladder; today every served event has 60 entries summing to 44,450 currency
 
 #### Scenario: Served values equal the raw file
 
-- **GIVEN** `lres-votanuthar.json` has `shardsPerChest` 25 and `progression` `{ unlock 400, fourStars 120, fiveStars 180, blueStar 200, mythic 250, twoBlueStars 150 }`
+- **GIVEN** the game gives `votanUthar` 25 event shards per chest and event-shard ascension costs 400, 120, 180, 200, 250 and 150
 - **WHEN** the catalog is built
-- **THEN** `votanUthar.rewards` carries those values unchanged
+- **THEN** `votanUthar.rewards` has `shardsPerChest` 25 and `progression` `{ unlock 400, fourStars 120, fiveStars 180, blueStar 200, mythic 250, twoBlueStars 150 }`
 
 #### Scenario: Malformed ladder
 
-- **GIVEN** a raw event file whose `chestsMilestones` skip from level 3 to level 5
+- **GIVEN** an event whose `chestsMilestones` skip from level 3 to level 5
 - **WHEN** the catalog loads
 - **THEN** loading fails with a validation error naming the event and the dataset
 

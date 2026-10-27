@@ -84,19 +84,20 @@ public sealed class LreRunScheduleTests
     }
 
     [Fact]
-    public void TheRawFilesCarryNoDerivableScheduleFields()
+    public void TheCuratedEventsCarryNoDerivableScheduleFields()
     {
         var assembly = typeof(GameCatalogLoader).Assembly;
-        var resources = assembly.GetManifestResourceNames()
-            .Where(name => name.Contains(".lres-", StringComparison.Ordinal) && name.EndsWith(".json", StringComparison.Ordinal))
-            .ToArray();
+        var resource = assembly.GetManifestResourceNames()
+            .Single(name => name.EndsWith($".{GameCatalogDatasets.LreCuration}.json", StringComparison.Ordinal));
 
-        Assert.Equal(Snapshot.Lres.Count, resources.Length);
-        foreach (var resource in resources)
+        using var stream = assembly.GetManifestResourceStream(resource)!;
+        using var document = System.Text.Json.JsonDocument.Parse(stream);
+        var events = document.RootElement.EnumerateObject().ToArray();
+
+        Assert.Equal(Snapshot.Lres.Count, events.Length);
+        foreach (var lre in events)
         {
-            using var stream = assembly.GetManifestResourceStream(resource)!;
-            using var document = System.Text.Json.JsonDocument.Parse(stream);
-            var keys = document.RootElement.EnumerateObject().Select(property => property.Name).ToArray();
+            var keys = lre.Value.EnumerateObject().Select(property => property.Name).ToArray();
 
             Assert.DoesNotContain(keys, key => key is "eventStage" or "nextEventDate" or "nextEventDateUtc" or "finished");
         }
