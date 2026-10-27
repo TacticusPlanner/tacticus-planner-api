@@ -27,7 +27,7 @@ public sealed class HreDenormalizerTests
             new DatamineHreUnlockableHero("orksWeirdboy", "Rare", "Legendary"),
             new DatamineHreScorePoints(1, 1, 1, 3, 11, [5000], null, [new DatamineHreMilestone(100, "hreCurrency:55")]),
             questId,
-            new GameCatalogHreOhSoCloseOffer(new GameCatalogHreOfferPrice(450, 100), new GameCatalogHreOfferPrice(100, 100)));
+            new GameCatalogOhSoCloseOffer(new GameCatalogOhSoCloseOfferPrice(450, 100), new GameCatalogOhSoCloseOfferPrice(100, 100)));
 
     private static DatamineHreSources Sources(
         DatamineHeroReleaseEvent? hre = null,
@@ -53,7 +53,7 @@ public sealed class HreDenormalizerTests
         Assert.Equal(("orksWeirdboy", "Rare", "Legendary", "Orks"), (Weirdboy.HeroId, Weirdboy.BaseRarity, Weirdboy.MaxRarity, Weirdboy.FeaturedFaction));
         Assert.Equal(3, Weirdboy.ScorePoints.CampaignScorePointsStaminaMultiplier);
         Assert.Equal([1, 4, 7, 11, 15, 20], Weirdboy.ScorePoints.GuildBossScorePointsDamageTableByRarity["Common"]);
-        Assert.Equal(new GameCatalogHreOhSoCloseOffer(new(450, 100), new(100, 100)), Weirdboy.OhSoCloseOffer);
+        Assert.Equal(new GameCatalogOhSoCloseOffer(new(450, 100), new(100, 100)), Weirdboy.OhSoCloseOffer);
     }
 
     [Fact]

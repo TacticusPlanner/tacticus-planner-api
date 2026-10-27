@@ -13,10 +13,10 @@ public sealed class UpgradeDenormalizerTests
         int nodeNumber = 1,
         string type = "Standard") =>
         new(id, type, false, energyCost, nodeNumber, 5, new GameCatalogCampaignRewards(guaranteed, []),
-            0, [], [], 0, [], [], []);
+            0, [], [], 0, [], [], [], 3);
 
     private static GameCatalogCampaignGroup Group(string groupId, params GameCatalogCampaignBattle[] battles) =>
-        new(groupId, "AdeptusMechanicus", "standard", "Imperial", ["AdeptusMechanicus"], [], ["Standard"], battles);
+        new(groupId, "AdeptusMechanicus", "standard", "Imperial", ["AdeptusMechanicus"], [], ["Standard"], battles, 1);
 
     private static GameCatalogUpgrade Upgrade(string id) =>
         new(id, id, id, id, "Common", "Armour", false, []);

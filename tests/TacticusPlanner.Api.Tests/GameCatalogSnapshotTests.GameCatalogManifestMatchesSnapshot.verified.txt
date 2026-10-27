@@ -1,6 +1,6 @@
 ﻿{
   version: dev-2026-10-19.1,
-  schemaVersion: 14,
+  schemaVersion: 15,
   gameVersion: 1.43,
   sourceHash: {time-dependent},
   datasets: [
@@ -11,12 +11,12 @@
     },
     {
       key: campaign-battles,
-      hash: 8f8e89970de969da9eb52f18703ce6e6bb55ee38ebc8642c9ed14f2962a21f40,
+      hash: f08678b79b79ebf21bd87db3b9bfcec42f9a791dddcdedcdca01751c608e759f,
       url: /api/v1/game-catalog/campaign-battles/{envelopeHash}
     },
     {
       key: campaign-definitions,
-      hash: 0f2bcf0262980ed568f808f6b5d086df511789618e93a9e1697dd7ca60ddfc3f,
+      hash: da47cca25517ac1afe11544848f9e4df927fbcbc02920534ade2f3156eb1e9a6,
       url: /api/v1/game-catalog/campaign-definitions/{envelopeHash}
     },
     {
@@ -81,7 +81,7 @@
     },
     {
       key: lres,
-      hash: 77979ee1ab806d0d98741df2b4f0d4f885ef2762581edf3250b080e6dda6f489,
+      hash: e7a46bc5508957dd98009b92a75244a055a61f20dcf22cbaead313c7cc3f6f4f,
       url: /api/v1/game-catalog/lres/{envelopeHash}
     },
     {
@@ -121,7 +121,7 @@
     },
     {
       key: quest-events,
-      hash: 6664540000281005561b78f7ba1e5a983ed66d93891126cdefb6fca064b35753,
+      hash: bf032ef94205eac156746cce4f523b05be6d113f0c24f1c99fec0bf05d7fb82d,
       url: /api/v1/game-catalog/quest-events/{envelopeHash}
     },
     {

@@ -31,7 +31,9 @@ internal static partial class GameCatalogDenormalizer
                     .OrderBy(tier => tier.Index)
                     .SelectMany(tier => tier.Battles.Select((battle, position) => BuildQuestBattle(tier.Index, position + 1, battle)))
                     .OrderBy(battle => battle.Number)
-                    .ToArray()))
+                    .ToArray(),
+                quest.Tokens,
+                quest.ScorePoints))
             .ToArray();
 
     public static IReadOnlyList<GameCatalogQuestCrate> BuildQuestCrates(IReadOnlyList<GameCatalogQuestCrate> raw) =>

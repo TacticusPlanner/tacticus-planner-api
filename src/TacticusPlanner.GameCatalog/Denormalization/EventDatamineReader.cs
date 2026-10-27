@@ -405,10 +405,10 @@ internal static partial class GameCatalogDenormalizer
 
     /// <summary>
     /// Reads the datamine <c>linearHeroEvent.json</c> into one Quest Event per featured hero, with the enemy faction
-    /// from <c>trackingAdditionalData</c>, each battle's upgrade drop from <c>loot.chanceOf</c>, and its enemies from
-    /// the <c>"npcId:progressionIndex"</c> strings.
+    /// from <c>trackingAdditionalData</c>, each battle's upgrade drop from <c>loot.chanceOf</c>, its enemies from
+    /// the <c>"npcId:progressionIndex"</c> strings, and the token bank and score points of the event.
     /// </summary>
-    /// <exception cref="InvalidOperationException">A battle cannot be read.</exception>
+    /// <exception cref="InvalidOperationException">A battle, the token bank or the score points cannot be read.</exception>
     public static IReadOnlyList<GameCatalogRawQuestEvent> ReadDatamineQuestEvents(IReadOnlyList<DatamineLinearHeroEvent> events) =>
         events.Select(quest => new GameCatalogRawQuestEvent(
             quest.UnitId,
@@ -418,7 +418,23 @@ internal static partial class GameCatalogDenormalizer
                 .Select(tier => new GameCatalogRawQuestTier(
                     tier.Index,
                     tier.Battles.Select(battle => ReadQuestBattle(quest.UnitId, battle)).ToArray()))
-                .ToArray())).ToArray();
+                .ToArray(),
+            ReadQuestTokens(quest),
+            quest.ScorePoints is { PointsPerStar: > 0, MaxPointsForLightningVictory: >= 0 } scorePoints
+                ? scorePoints
+                : throw QuestError(quest.UnitId, "has no scorePoints with a positive pointsPerStar"))).ToArray();
+
+    // The token bank: a positive cap regenerating a positive amount on a positive timer, refilled for gems.
+    private static GameCatalogQuestTokens ReadQuestTokens(DatamineLinearHeroEvent quest) =>
+        quest is
+        {
+            MaxStamina: int max and > 0,
+            StaminaRegenerationTime: int regenSeconds and > 0,
+            StaminaRegenerationAmount: int regenAmount and > 0,
+            StaminaRefillGemsCost: int refillGemsCost and >= 0,
+        }
+            ? new GameCatalogQuestTokens(max, regenSeconds, regenAmount, refillGemsCost)
+            : throw QuestError(quest.UnitId, "needs a positive maxStamina, staminaRegenerationTime and staminaRegenerationAmount, and a staminaRefillGemsCost");
 
     private static string QuestEnemyFaction(DatamineLinearHeroEvent quest)
     {

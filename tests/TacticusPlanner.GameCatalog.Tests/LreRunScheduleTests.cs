@@ -109,8 +109,10 @@ public sealed class LreRunScheduleTests
         var properties = typeof(GameCatalogLreView).GetProperties().Select(property => property.Name).ToArray();
 
         Assert.Contains(nameof(GameCatalogLreView.EventStageStartDatesUtc), properties);
+        // MaxRuns is the game's run count (heroEventMaxRuns), not state derived from the schedule.
         Assert.DoesNotContain(properties, name =>
             name != nameof(GameCatalogLreView.EventStageStartDatesUtc)
+            && name != nameof(GameCatalogLreView.MaxRuns)
             && (name.Contains("Run", StringComparison.Ordinal)
                 || name.Contains("Stage", StringComparison.Ordinal)
                 || name.Contains("Lifecycle", StringComparison.Ordinal)

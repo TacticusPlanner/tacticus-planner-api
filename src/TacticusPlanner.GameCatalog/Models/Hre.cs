@@ -16,7 +16,7 @@ public sealed record GameCatalogHre(
     IReadOnlyList<GameCatalogHreMission> Missions,
     GameCatalogHreLeaderboard Leaderboard,
     IReadOnlyList<GameCatalogHreChest> ChestShop,
-    GameCatalogHreOhSoCloseOffer OhSoCloseOffer
+    GameCatalogOhSoCloseOffer OhSoCloseOffer
 );
 
 // How battles score event points, as the game ships it.
@@ -70,13 +70,6 @@ public sealed record GameCatalogHrePhaseChest(int Position, string ChestId, int 
 // One chest of the event chest shop, in purchase order: its currency cost and shard range.
 public sealed record GameCatalogHreChest(string ChestId, int Cost, int MinShards, int MaxShards);
 
-// The game's "Oh So Close" offer pricing for the hero's unlock and ascension shards.
-public sealed record GameCatalogHreOhSoCloseOffer(
-    GameCatalogHreOfferPrice Unlock,
-    GameCatalogHreOfferPrice Ascension
-);
-
-public sealed record GameCatalogHreOfferPrice(int Base, int Multiplier);
 
 // ---- datamine shapes -------------------------------------------------------------------------------------
 
@@ -88,7 +81,7 @@ public sealed record DatamineHeroReleaseEvent(
     DatamineHreUnlockableHero? UnlockableHero,
     DatamineHreScorePoints? ScorePoints,
     string? QuestId,
-    GameCatalogHreOhSoCloseOffer? OhSoCloseOffer
+    GameCatalogOhSoCloseOffer? OhSoCloseOffer
 );
 
 public sealed record DatamineHreUnlockableHero(string? HeroId, string? BaseRarity, string? MaxRarity);

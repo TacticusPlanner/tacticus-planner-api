@@ -24,6 +24,9 @@ internal static partial class GameCatalogDenormalizer
     [GeneratedRegex(@"^eventStandard(\d+)$", RegexOptions.CultureInvariant)]
     private static partial Regex CampaignEventIdRegex();
 
+    [GeneratedRegex(@"^(?:campaign|mirror|elite|eliteMirror)(\d+)$", RegexOptions.CultureInvariant)]
+    private static partial Regex CampaignStorylineIdRegex();
+
     [GeneratedRegex(@"^([^:]+)(?::(\d+)(?:-(\d+))?)?$", RegexOptions.CultureInvariant)]
     private static partial Regex CampaignGuaranteedRewardRegex();
 
@@ -78,7 +81,16 @@ internal static partial class GameCatalogDenormalizer
                 throw CampaignError(key, "names no campaigns");
             }
 
-            var (groupId, releaseType) = CampaignGroupId(key, sources[0].Kind, sources[0].Campaign.Id);
+            var (groupId, releaseType, number) = CampaignGroupId(key, sources[0].Kind, sources[0].Campaign.Id);
+            var mismatched = sources
+                .Where(source => source.Kind != CampaignEventKind)
+                .SelectMany(source => source.Campaign.Battles)
+                .FirstOrDefault(battle => battle.CampaignId is { } campaignId && campaignId != number);
+            if (mismatched is not null)
+            {
+                throw CampaignError(key, $"has battle '{mismatched.BattleId}' of campaign {mismatched.CampaignId}, not campaign {number}");
+            }
+
             var gameCoreCharacters = CampaignSingle(key, "core characters", sources.Select(source => CampaignUnlockUnits(source.Campaign, byId)));
             if (gameCoreCharacters is not null && group.CoreCharacters is not null)
             {
@@ -119,7 +131,8 @@ internal static partial class GameCatalogDenormalizer
                 allies.Select(units => units.FactionId).ToArray(),
                 coreCharacters,
                 sources.Select(source => source.Type).ToArray(),
-                battles);
+                battles,
+                number);
         }
 
         return groups;
@@ -140,17 +153,21 @@ internal static partial class GameCatalogDenormalizer
     }
 
     // The progress id Tacticus reports for the group: the first campaign's id, or eventCampaign{n} for event
-    // eventStandard{n}; an event group is an "event" release, anything else "standard".
-    private static (string GroupId, string ReleaseType) CampaignGroupId(string key, string kind, string campaignId)
+    // eventStandard{n}; an event group is an "event" release, anything else "standard". The number is the campaign
+    // id's trailing n (campaign{n}, mirror{n}, elite{n}, eliteMirror{n} or eventStandard{n}).
+    private static (string GroupId, string ReleaseType, int Number) CampaignGroupId(string key, string kind, string campaignId)
     {
         if (kind != CampaignEventKind)
         {
-            return (campaignId, "standard");
+            var storyline = CampaignStorylineIdRegex().Match(campaignId);
+            return storyline.Success
+                ? (campaignId, "standard", int.Parse(storyline.Groups[1].ValueSpan, CultureInfo.InvariantCulture))
+                : throw CampaignError(key, $"starts with campaign '{campaignId}', which has no campaign number");
         }
 
         var number = CampaignEventIdRegex().Match(campaignId);
         return number.Success
-            ? ("eventCampaign" + number.Groups[1].Value, "event")
+            ? ("eventCampaign" + number.Groups[1].Value, "event", int.Parse(number.Groups[1].ValueSpan, CultureInfo.InvariantCulture))
             : throw CampaignError(key, $"starts with event campaign '{campaignId}', which is not an eventStandard campaign");
     }
 
@@ -261,7 +278,8 @@ internal static partial class GameCatalogDenormalizer
             enemyNpcs.Select(npc => npc.Name).Distinct(StringComparer.Ordinal).Order(StringComparer.Ordinal).ToArray(),
             enemies.Select(enemy => JsonSerializer.SerializeToElement(
                 new { id = $"{enemy.NpcId}:{enemy.Index.ToString(CultureInfo.InvariantCulture)}", count = enemy.Count })).ToArray(),
-            detailed);
+            detailed,
+            battle.LightningVictory);
     }
 
     // The stat row an enemy's index points at, as V1 read it: a boss index is 1-based, any other npc's is 0-based
