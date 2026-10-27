@@ -36,7 +36,7 @@
     },
     {
       key: event-definitions,
-      hash: f0feca13d2145eb391b9e6bbe7e48c2cbf1c8bfabbed30519e74db9279aabf3a,
+      hash: cc9058cfaf9b97fcd94c7913e07078b364e5e1c7555ef38353510bd2b908d6fa,
       url: /api/v1/game-catalog/event-definitions/{envelopeHash}
     },
     {
@@ -86,7 +86,7 @@
     },
     {
       key: onslaught-rewards,
-      hash: ff136f21e52e557188b7b6c594901db3e809be287c8b61f902966e13d2ad87da,
+      hash: 7a5c5579c97dd61b095063bad7fb273940c6a79ca3a1aa7bed34071956a5bbac,
       url: /api/v1/game-catalog/onslaught-rewards/{envelopeHash}
     },
     {
@@ -96,7 +96,7 @@
     },
     {
       key: quest-events,
-      hash: f7f8a6c1fdbce0ba3d76d5eac046888e1aa2a3136a8adc42645b1154e7ed0300,
+      hash: 6664540000281005561b78f7ba1e5a983ed66d93891126cdefb6fca064b35753,
       url: /api/v1/game-catalog/quest-events/{envelopeHash}
     },
     {

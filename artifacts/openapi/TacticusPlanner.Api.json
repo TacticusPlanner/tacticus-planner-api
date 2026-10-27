@@ -9362,7 +9362,6 @@
           "boardId",
           "spawnPointsSet",
           "lightningVictoryTurns",
-          "power",
           "enemies",
           "objectives",
           "loot"
@@ -9393,13 +9392,6 @@
           },
           "lightningVictoryTurns": {
             "type": "integer",
-            "format": "int32"
-          },
-          "power": {
-            "type": [
-              "null",
-              "integer"
-            ],
             "format": "int32"
           },
           "enemies": {

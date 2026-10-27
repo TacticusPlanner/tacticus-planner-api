@@ -72,7 +72,11 @@ restrictions); these are silently ignored on deserialize.
   character, built from the datamine `gameconfig/units/heroConversion.json` in rarity order (no Mythic: the game
   has none and no character starts there).
 - **onslaught-rewards** is keyed by sector+tier id; each entry carries a `regular` reward-range list plus
-  one `mythic` range (`{min, max}`, with a computed `midpoint`).
+  one `mythic` range (`{min, max}`, with a computed `midpoint`) and the tier's `badges`. Built from the datamine
+  `gameconfig/battles/onslaught.json`: `regular` is the `shards_[heroId]` range of the `honorYourHeroesRewards`
+  row for progression index 2, 5, 8, 11 and 14 (the top Common .. Legendary step before blue stars), `mythic`
+  the `mythicShards_[heroId]` range for index 19, and `badges` the `tierWaves` round rewards summed per rarity
+  (every wave of a round must give the same badge).
 - **upgrades** carry a **nested recipe** tree: each craftable ingredient embeds its own `recipe`
   (recursively; cycle-guarded); base materials have `recipe: null`. No separate "expanded totals" table.
   Built from the datamine `gameconfig/upgrades.json`: `label`/`material` = the game's untranslated `name`
@@ -149,8 +153,8 @@ restrictions); these are silently ignored on deserialize.
 - **events** — `event-definitions` is served roughly as-is (structural rules); `events-calendar` is a
   date-indexed projection built from `event-definitions` + `event-occurrences` relative to load-time
   "now", so its hash (and `sourceHash`) legitimately changes every process start.
-  A Home Screen Event definition with an entry in the raw `home-screen-event-scoring.json` gets it merged
-  into its served `config` as `config.hse` (variants → tiers/milestones/repeat, trackers, modifiers; see
+  A Home Screen Event definition scored by a datamine `liveEvents/homeScreenEvent.json` event gets that
+  scoring merged into its served `config` as `config.hse` (variants → tiers/milestones/repeat, trackers, modifiers; see
   `EventsDenormalizer.BuildEventDefinitions`). An occurrence resolves its variant by `hseVariant`, else
   `targetFactionId`, else `default`; validation fails the load when one resolves to nothing.
 
@@ -220,8 +224,10 @@ datamine source; its `docs/roadmap.md` orders the migration. Datasets move onto 
   Migrated: `equipment`, `character-ability-costs`, `mow-upgrade-costs`, `ascension-costs`, `unlock-shard-costs`,
   `upgrades`, `characters`, `mows`, `npcs`, `unit-power`, `raid-bosses` (`globalconfig/guildBoss/`; the
   game's unit sets are merged and must agree), `shops` (four merchants of `merchants.json`), `mythic-quests`
-  (`mythic_{characterId}_{number}` quests of the `hero` group in `quests/groups.json`). Next, in order: HSE,
-  `onslaught-rewards`, quest events/crates, LRE, `campaign-battles` last. A migrated dataset is refreshed by bumping `REF`, not by the V1 steps below.
+  (`mythic_{characterId}_{number}` quests of the `hero` group in `quests/groups.json`), `onslaught-rewards`,
+  HSE scoring, `quest-events` (`liveEvents/linearHeroEvent.json`; no battle `power`,
+  which the game config does not hold). `quest-crates` stays hand-kept: the game gives each Quest Event its own
+  crate track, so serving it needs a shape change. Next, in order: LRE, `campaign-battles` last. A migrated dataset is refreshed by bumping `REF`, not by the V1 steps below.
 
 ## Updating to a new in-game version
 
@@ -290,14 +296,14 @@ genuine game changes.
   and V1 from the sibling checkouts); it fails when the uncovered-id set or a relic ability icon drifts
   from its known gaps. Commit the regenerated locale files with the refresh.
 
-- **HSE scoring** (`Data/events/home-screen-event-scoring.json`): regenerate from V1's
-  `src/fsd/4-entities/homescreen_events/data/*.json` with
-  `python3 .agents/skills/game-catalog-data/scripts/import-hse-scoring.py ../tacticusplanner` (run from
-  this repo's root). Its `SOURCES` table maps each V1 file to a definition id and variant key; add a row
-  for a new V1 file (and the definition in `event-definitions.json` first), and give a new occurrence an
-  `hseVariant` parameter when its ladder isn't the definition's `default`. `raidBattles` (campaign sweep)
-  trackers are dropped; each one's modes are covered by a `killUnits` tracker with equal points. The script
-  raises on V1 shapes it can't represent (empty allow lists, unknown tiers, per-tier tracker differences).
+- **HSE scoring**: now from the datamine `liveEvents/homeScreenEvent.json` (ladders from
+  `loot/tieredProgressRewards.json`, stat boosts from `units/abilities.json`); refresh by bumping `REF`.
+  `EventDatamineReader.HseSources` maps each game event name (without `_tier_high`/`_mid`/`_low`) to a
+  definition id, variant key and scope; add a row for a new event (and the definition in `event-definitions.json`
+  first), and give a new occurrence an `hseVariant` parameter when its ladder isn't the definition's `default`. A
+  tier whose ladder the game no longer has is skipped. `raidBattles` (campaign sweep) trackers are dropped; each
+  one's modes are covered by a `killUnits` tracker with equal points. The reader fails on shapes it can't represent
+  (empty allow lists, per-tier tracker differences, unknown tracker or modifier types).
 
 **Finish:** bump `GameVersion` (and usually `Version`) in `GameCatalogRelease.cs`; leave `SchemaVersion`
 unless a served shape changed. Then run the checklist below and promote the manifest snapshot.

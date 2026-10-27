@@ -2,12 +2,11 @@ using System.Text.Json;
 
 namespace TacticusPlanner.GameCatalog.Models;
 
-// ---- raw authored shape (bound from Data/quests/quest-events.json) --------------------------------
+// ---- raw shape (read from the datamine linearHeroEvent.json) ---------------------------------------
 
 /// <summary>
-/// One Quest Event as copied from V1's <c>4-entities/quests/data/hero-quests.json</c> (only the latest quests
-/// are kept). The shape is V1's, plus an optional per-battle <c>power</c> (the game's enemy power, recorded
-/// from the in-game battle screen). Denormalized by <c>Denormalization/QuestEventsDenormalizer.cs</c>.
+/// One Quest Event, read from the datamine <c>linearHeroEvent.json</c> by
+/// <c>Denormalization/EventDatamineReader.cs</c>. Denormalized by <c>Denormalization/QuestEventsDenormalizer.cs</c>.
 /// </summary>
 public sealed record GameCatalogRawQuestEvent(
     string UnitId,
@@ -26,7 +25,6 @@ public sealed record GameCatalogRawQuestBattle(
     string BoardId,
     int SpawnPointsSet,
     int LightningVictory,
-    int? Power,
     GameCatalogRawQuestLoot Loot,
     IReadOnlyList<GameCatalogRawQuestEnemy> Enemies,
     IReadOnlyList<GameCatalogRawQuestObjective> Objectives
@@ -36,7 +34,7 @@ public sealed record GameCatalogRawQuestLoot(GameCatalogRawQuestLootReward Rewar
 
 public sealed record GameCatalogRawQuestLootReward(string UpgradeId, int Num, int Denom);
 
-// A null progressionIndex is a board power-up; V1 read it as 1.
+// A null progressionIndex is a board power-up, read as 1.
 public sealed record GameCatalogRawQuestEnemy(string Name, int? ProgressionIndex);
 
 // ObjectiveTarget is a string (trait, faction, damage type) or a number (hit counts) in the raw file.
@@ -63,7 +61,6 @@ public sealed record GameCatalogQuestBattleView(
     string BoardId,
     int SpawnPointsSet,
     int LightningVictoryTurns,
-    int? Power,
     IReadOnlyList<GameCatalogQuestEnemyView> Enemies,
     IReadOnlyList<GameCatalogQuestObjectiveView> Objectives,
     GameCatalogQuestLootView Loot

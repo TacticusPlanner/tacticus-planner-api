@@ -3,8 +3,8 @@ using System.Text.Json.Serialization;
 namespace TacticusPlanner.GameCatalog.Models;
 
 /// <summary>
-/// Raw <c>home-screen-event-scoring</c> record: the scoring of one Home Screen Event definition, imported
-/// from V1's home-screen-event datamine (see the game-catalog-data skill). Never served on its own — the
+/// The scoring of one Home Screen Event definition, read from the datamine <c>homeScreenEvent.json</c> (see
+/// <c>Denormalization/EventDatamineReader.cs</c>). Never served on its own — the
 /// denormalizer merges it into the definition's served <c>config.hse</c> (see
 /// <c>Denormalization/EventsDenormalizer.cs</c> and specs/home-screen-event-scoring).
 /// </summary>

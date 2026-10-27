@@ -13,17 +13,17 @@ public static class GameCatalogDatasets
     public const string OnslaughtRewards = "onslaught-rewards";
     public const string EventDefinitions = "event-definitions";
     public const string EventOccurrences = "event-occurrences";
-    // Raw per-definition HSE scoring (ladders, trackers, modifiers) imported from V1's datamine; merged into
-    // the served event-definitions as config.hse, never served on its own.
+    // Per-definition HSE scoring (ladders, trackers, modifiers), read from the datamine homeScreenEvent.json and
+    // merged into the served event-definitions as config.hse; never served on its own. Names its validation errors.
     public const string HomeScreenEventScoring = "home-screen-event-scoring";
     // horde-mode-tiers is a single curated S/A/B/C/D tier list of characters for horde modes, with each
     // tier's power multiplier; denormalization only sorts the characters by unit id.
     // See Models/HordeModeTiers.cs.
     public const string HordeModeTiers = "horde-mode-tiers";
     public const string MythicQuests = "mythic-quests";
-    // quest-events: V1's hero-quests.json for the latest quests (one record per featured hero, 17 battles each),
-    // plus an optional per-battle power. quest-crates: the shared 17-crate point track. Both are served under the
-    // same key. See Denormalization/QuestEventsDenormalizer.cs.
+    // quest-events: the datamine's Quest Events (linearHeroEvent.json; one record per featured hero, 17 battles
+    // each). quest-crates: the shared 17-crate point track. Both are served under the same key.
+    // See Denormalization/QuestEventsDenormalizer.cs.
     public const string QuestEvents = "quest-events";
     public const string QuestCrates = "quest-crates";
     // unit-power is the single record of power tables, progression multipliers and per-unit power fields
@@ -148,12 +148,9 @@ public static class GameCatalogDatasets
     public static readonly IReadOnlyList<string> Required =
     [
         DropChances,
-        OnslaughtRewards,
         EventDefinitions,
         EventOccurrences,
-        HomeScreenEventScoring,
         HordeModeTiers,
-        QuestEvents,
         QuestCrates,
         .. CampaignBattleGroups,
         .. LreEvents,
