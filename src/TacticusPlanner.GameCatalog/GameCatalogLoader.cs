@@ -67,6 +67,12 @@ public static class GameCatalogLoader
             LoadDatamine<DatamineGlobalValues>(GameCatalogDenormalizer.DatamineGlobalValuesPath),
             LoadDatamine<List<string>>(GameCatalogDenormalizer.DatamineStaminaShopTiersPath),
             shopProducts);
+        var progressionRulesViews = GameCatalogDenormalizer.ReadDatamineProgressionRules(
+            LoadDatamine<List<int>>(GameCatalogDenormalizer.DatamineXpLevelsPath),
+            LoadDatamine<DatamineConsumables>(GameCatalogDenormalizer.DatamineConsumablesPath),
+            LoadDatamine<DatamineUpgradeSlots>(GameCatalogDenormalizer.DatamineUpgradeSlotsPath),
+            LoadDatamine<List<DatamineHeroProgressionRule>>(GameCatalogDenormalizer.DatamineHeroProgressionStepsPath),
+            LoadDatamine<List<DatamineMowProgressionRule>>(GameCatalogDenormalizer.DatamineHeroProgressionStepsMoWPath));
 
         var datamineNpcs = LoadDatamine<Dictionary<string, DatamineNpc>>(GameCatalogDenormalizer.DatamineNpcPath);
         var npcsByFaction = GameCatalogDenormalizer.ReadDatamineNpcs(datamineNpcs, abilities);
@@ -173,6 +179,7 @@ public static class GameCatalogLoader
             [GameCatalogDatasets.Factions] = GameCatalogHashing.ComputeCanonicalJsonHash(factionViews, JsonOptions),
             [GameCatalogDatasets.DamageTypes] = GameCatalogHashing.ComputeCanonicalJsonHash(damageTypeViews, JsonOptions),
             [GameCatalogDatasets.GlobalValues] = GameCatalogHashing.ComputeCanonicalJsonHash(globalValuesViews, JsonOptions),
+            [GameCatalogDatasets.ProgressionRules] = GameCatalogHashing.ComputeCanonicalJsonHash(progressionRulesViews, JsonOptions),
         };
 
         var snapshot = new GameCatalogSnapshot(
@@ -229,7 +236,8 @@ public static class GameCatalogLoader
             questCrateViews,
             factionViews,
             damageTypeViews,
-            globalValuesViews);
+            globalValuesViews,
+            progressionRulesViews);
 
         var errors = GameCatalogValidator.Validate(snapshot);
         if (errors.Count > 0)

@@ -1,0 +1,40 @@
+{
+  "xpBooks": [
+    {
+      "id": "xpCommon",
+      "xpIncrease": 20,
+      "gold": 5,
+      "rarity": "Common"
+    },
+    {
+      "id": "xpUncommon",
+      "xpIncrease": 100,
+      "gold": 15,
+      "rarity": "Uncommon"
+    },
+    {
+      "id": "xpRare",
+      "xpIncrease": 500,
+      "gold": 50,
+      "rarity": "Rare"
+    },
+    {
+      "id": "xpEpic",
+      "xpIncrease": 2500,
+      "gold": 150,
+      "rarity": "Epic"
+    },
+    {
+      "id": "xpLegendary",
+      "xpIncrease": 12500,
+      "gold": 500,
+      "rarity": "Legendary"
+    },
+    {
+      "id": "xpMythic",
+      "xpIncrease": 62500,
+      "gold": 2000,
+      "rarity": "Mythic"
+    }
+  ]
+}

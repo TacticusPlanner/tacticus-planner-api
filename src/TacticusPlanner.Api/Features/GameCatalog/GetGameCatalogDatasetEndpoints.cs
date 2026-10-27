@@ -306,6 +306,18 @@ public sealed class GetGameCatalogGlobalValuesEndpoint(IGameCatalogProvider cata
     }
 }
 
+public sealed class GetGameCatalogProgressionRulesEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogProgressionRules>>(catalog, GameCatalogDatasets.ProgressionRules)
+{
+    public override void Configure()
+    {
+        Get("game-catalog/progression-rules", "game-catalog/progression-rules/{envelopeHash}");
+        ConfigureServed(
+            "Gets the unit progression rules.",
+            "The single record of progression rules, named as the game names them: the XP curve (element i is the total XP to reach level i + 2), XP books, the XP level each rank-up upgrade slot needs per rank, and each hero and MoW ascension step's caps (max XP level, max rank, max ability level), stat multipliers and Hero Release Event shard cost.");
+    }
+}
+
 public sealed class GetGameCatalogEventDefinitionsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogEventDefinition>>(catalog, GameCatalogDatasets.EventDefinitionsServed)
 {

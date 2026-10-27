@@ -3,6 +3,7 @@
 gameconfig/battles/battleSets.json                           # lres, lre-battles
 gameconfig/battles/campaigns.json                            # campaign-battles, campaign-definitions
 gameconfig/battles/onslaught.json                            # onslaught-rewards
+gameconfig/consumables.json                                  # progression-rules
 gameconfig/globalValues.json                                 # global-values
 gameconfig/items.json                                        # equipment
 gameconfig/liveEvents/homeScreenEvent.json                   # event-definitions (config.hse)
@@ -24,12 +25,14 @@ gameconfig/units/damageProfileModifiers.json                 # unit-power
 gameconfig/units/damageProfiles.json                         # damage-types
 gameconfig/units/factions.json                               # factions
 gameconfig/units/heroConversion.json                         # unlock-shard-costs
-gameconfig/units/heroProgressionSteps.json                   # ascension-costs, unit-power
-gameconfig/units/heroProgressionStepsMoW.json                # unit-power
+gameconfig/units/heroProgressionSteps.json                   # ascension-costs, unit-power, progression-rules
+gameconfig/units/heroProgressionStepsMoW.json                # unit-power, progression-rules
 gameconfig/units/heroProgressionStepsPerUnit.json            # lres (progression shard costs)
 gameconfig/units/lineup.json                                 # characters, mows, unit-power
 gameconfig/units/npc.json                                    # npcs, campaign-battles (enemies)
 gameconfig/units/traitPowerModifiers.json                    # unit-power
+gameconfig/units/upgradeSlots.json                           # progression-rules
+gameconfig/units/xpLevels.json                               # progression-rules
 gameconfig/upgrades.json                                     # upgrades, campaign-battles (drop kinds)
 globalconfig/guildBoss/guildBossSeasonConfigRotation.json    # raid-bosses
 globalconfig/guildBoss/guildBossSeasonDataConfigsGDTO.json   # raid-bosses
