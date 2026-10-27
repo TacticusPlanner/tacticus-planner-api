@@ -7057,7 +7057,8 @@
           "enemiesFactions",
           "enemiesTotal",
           "enemiesTypes",
-          "detailedEnemyTypes"
+          "detailedEnemyTypes",
+          "lightningVictoryTurns"
         ],
         "type": "object",
         "properties": {
@@ -7121,6 +7122,13 @@
           },
           "detailedEnemyTypes": {
             "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogCampaignDetailedEnemy"
+          },
+          "lightningVictoryTurns": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
           }
         }
       },
@@ -7131,7 +7139,8 @@
           "releaseType",
           "coreCharacters",
           "types",
-          "battleIds"
+          "battleIds",
+          "number"
         ],
         "type": "object",
         "properties": {
@@ -7152,6 +7161,10 @@
           },
           "battleIds": {
             "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "number": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -9453,7 +9466,7 @@
             "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogHreChest"
           },
           "ohSoCloseOffer": {
-            "$ref": "#/components/schemas/GameCatalogHreOhSoCloseOffer"
+            "$ref": "#/components/schemas/GameCatalogOhSoCloseOffer"
           }
         }
       },
@@ -9586,38 +9599,6 @@
           },
           "parameters": {
             "$ref": "#/components/schemas/IReadOnlyDictionaryOfStringAndString"
-          }
-        }
-      },
-      "GameCatalogHreOfferPrice": {
-        "required": [
-          "base",
-          "multiplier"
-        ],
-        "type": "object",
-        "properties": {
-          "base": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "multiplier": {
-            "type": "integer",
-            "format": "int32"
-          }
-        }
-      },
-      "GameCatalogHreOhSoCloseOffer": {
-        "required": [
-          "unlock",
-          "ascension"
-        ],
-        "type": "object",
-        "properties": {
-          "unlock": {
-            "$ref": "#/components/schemas/GameCatalogHreOfferPrice"
-          },
-          "ascension": {
-            "$ref": "#/components/schemas/GameCatalogHreOfferPrice"
           }
         }
       },
@@ -9970,6 +9951,38 @@
           }
         }
       },
+      "GameCatalogLreTokens": {
+        "required": [
+          "start",
+          "max",
+          "regenSeconds",
+          "regenAmount",
+          "dailyRefreshes"
+        ],
+        "type": "object",
+        "properties": {
+          "start": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "max": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "regenSeconds": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "regenAmount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dailyRefreshes": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "GameCatalogLreTrackEnemies": {
         "required": [
           "label",
@@ -10041,7 +10054,10 @@
           "alpha",
           "beta",
           "gamma",
-          "rewards"
+          "rewards",
+          "tokens",
+          "maxRuns",
+          "ohSoCloseOffer"
         ],
         "type": "object",
         "properties": {
@@ -10079,6 +10095,16 @@
           },
           "rewards": {
             "$ref": "#/components/schemas/GameCatalogLreRewards"
+          },
+          "tokens": {
+            "$ref": "#/components/schemas/GameCatalogLreTokens"
+          },
+          "maxRuns": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ohSoCloseOffer": {
+            "$ref": "#/components/schemas/GameCatalogOhSoCloseOffer"
           }
         }
       },
@@ -10553,6 +10579,38 @@
           }
         }
       },
+      "GameCatalogOhSoCloseOffer": {
+        "required": [
+          "unlock",
+          "ascension"
+        ],
+        "type": "object",
+        "properties": {
+          "unlock": {
+            "$ref": "#/components/schemas/GameCatalogOhSoCloseOfferPrice"
+          },
+          "ascension": {
+            "$ref": "#/components/schemas/GameCatalogOhSoCloseOfferPrice"
+          }
+        }
+      },
+      "GameCatalogOhSoCloseOfferPrice": {
+        "required": [
+          "base",
+          "multiplier"
+        ],
+        "type": "object",
+        "properties": {
+          "base": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "multiplier": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "GameCatalogOnslaughtReward": {
         "required": [
           "id",
@@ -10746,7 +10804,9 @@
           "featuredCharacterId",
           "allowedFactionIds",
           "enemyFactionIds",
-          "battles"
+          "battles",
+          "tokens",
+          "scorePoints"
         ],
         "type": "object",
         "properties": {
@@ -10761,6 +10821,12 @@
           },
           "battles": {
             "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogQuestBattleView"
+          },
+          "tokens": {
+            "$ref": "#/components/schemas/GameCatalogQuestTokens"
+          },
+          "scorePoints": {
+            "$ref": "#/components/schemas/GameCatalogQuestScorePoints"
           }
         }
       },
@@ -10803,6 +10869,50 @@
             ]
           },
           "score": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GameCatalogQuestScorePoints": {
+        "required": [
+          "pointsPerStar",
+          "maxPointsForLightningVictory"
+        ],
+        "type": "object",
+        "properties": {
+          "pointsPerStar": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maxPointsForLightningVictory": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GameCatalogQuestTokens": {
+        "required": [
+          "max",
+          "regenSeconds",
+          "regenAmount",
+          "refillGemsCost"
+        ],
+        "type": "object",
+        "properties": {
+          "max": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "regenSeconds": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "regenAmount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "refillGemsCost": {
             "type": "integer",
             "format": "int32"
           }

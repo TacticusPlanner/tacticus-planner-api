@@ -41,7 +41,10 @@ public sealed record GameCatalogLre(
     IReadOnlyList<GameCatalogLrePointsMilestone> PointsMilestones,
     IReadOnlyList<GameCatalogLreChestsMilestone> ChestsMilestones,
     int ShardsPerChest,
-    GameCatalogLreProgression Progression
+    GameCatalogLreProgression Progression,
+    GameCatalogLreTokens Tokens,
+    int MaxRuns,
+    GameCatalogOhSoCloseOffer OhSoCloseOffer
 )
 {
     // System.Text.Json passes null for a missing constructor parameter; normalise it to an empty schedule.
@@ -130,7 +133,21 @@ public sealed record GameCatalogLreView(
     GameCatalogLreTrackView Beta,
     GameCatalogLreTrackView Gamma,
     // The event's own reward ladder, copied from its raw file (ladders differ between events).
-    GameCatalogLreRewards Rewards
+    GameCatalogLreRewards Rewards,
+    GameCatalogLreTokens Tokens,
+    // How many runs the event has (the game's heroEventMaxRuns).
+    int MaxRuns,
+    GameCatalogOhSoCloseOffer OhSoCloseOffer
+);
+
+// The event's token bank (the game's stamina): it starts at Start, holds at most Max and regains RegenAmount every
+// RegenSeconds while below Max; DailyRefreshes is how many paid refills a day allows.
+public sealed record GameCatalogLreTokens(
+    int Start,
+    int Max,
+    int RegenSeconds,
+    int RegenAmount,
+    int DailyRefreshes
 );
 
 // One served event mission, parsed from its raw English line by LreDenormalizer's ordered templates. Index is its

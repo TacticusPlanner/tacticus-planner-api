@@ -3,18 +3,26 @@ using System.Text.Json;
 namespace TacticusPlanner.GameCatalog.Models;
 
 // ---- datamine shapes for Legendary Release Events (bound from Data/datamine/raw/gameconfig/) --------------------
-// Only the fields the catalog reads are bound; loca keys, visuals, offers, stamina and conversion fields are dropped.
+// Only the fields the catalog reads are bound; loca keys, visuals, pass and bundle offers and conversion fields are
+// dropped.
 
 // liveEvents/legendaryHeroEvent.json: one entry per event. `lanes` name the battle set of each track (lane 1 is
 // alpha), `questGroups` the regular and premium mission chains, `rewardProgressId` the points ladder and
-// `shopSegmentId` the chest shop.
+// `shopSegmentId` the chest shop. The stamina fields are the token bank (regeneration time in seconds).
 public sealed record DatamineLegendaryHeroEvent(
     string EventName,
     string RewardProgressId,
     string ShopSegmentId,
     IReadOnlyList<string> QuestGroups,
     IReadOnlyList<DatamineLegendaryHeroLane> Lanes,
-    DatamineLegendaryHeroUnlock UnlockableHero
+    DatamineLegendaryHeroUnlock UnlockableHero,
+    int? StartStamina = null,
+    int? MaxStamina = null,
+    int? StaminaRegenerationTime = null,
+    int? StaminaRegenerationAmount = null,
+    int? MaxDailyStaminaRefreshAttempts = null,
+    int? HeroEventMaxRuns = null,
+    GameCatalogOhSoCloseOffer? OhSoCloseOffer = null
 );
 
 public sealed record DatamineLegendaryHeroLane(int LaneIndex, string BattleSetId, string FactionId);

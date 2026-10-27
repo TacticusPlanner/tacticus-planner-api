@@ -32,7 +32,8 @@ internal static partial class GameCatalogDenormalizer
                 group.ReleaseType,
                 group.CoreCharacters,
                 group.Types,
-                group.Battles.Select(battle => battle.Id).ToArray()))
+                group.Battles.Select(battle => battle.Id).ToArray(),
+                group.Number))
             .ToArray();
 
     private static GameCatalogCampaignBattleView BuildBattleView(
@@ -69,7 +70,8 @@ internal static partial class GameCatalogDenormalizer
             battle.EnemiesFactions,
             battle.EnemiesTotal,
             battle.EnemiesTypes,
-            battle.DetailedEnemyTypes);
+            battle.DetailedEnemyTypes,
+            battle.LightningVictoryTurns);
     }
 
     // The early Indomitus nodes I06-I14 (the 3-energy ones) cap at 3 attempts/day (confirmed by the product owner).

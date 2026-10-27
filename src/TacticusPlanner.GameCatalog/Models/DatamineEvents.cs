@@ -58,12 +58,17 @@ public sealed record DatamineHseModifier(
 public sealed record DatamineTieredProgressReward(int RequiredProgress, string ChestRewardId, bool? Endless, int? EndlessCap);
 
 // liveEvents/linearHeroEvent.json: one Quest Event per featured hero. `trackingAdditionalData` is a JSON string
-// holding the enemy faction.
+// holding the enemy faction. The stamina fields are the token bank (regeneration time in seconds).
 public sealed record DatamineLinearHeroEvent(
     string UnitId,
     string TrackingAdditionalData,
     IReadOnlyList<string> AllowedFactions,
-    IReadOnlyList<DatamineLinearHeroTier> Tiers
+    IReadOnlyList<DatamineLinearHeroTier> Tiers,
+    int? MaxStamina = null,
+    int? StaminaRegenerationTime = null,
+    int? StaminaRegenerationAmount = null,
+    int? StaminaRefillGemsCost = null,
+    GameCatalogQuestScorePoints? ScorePoints = null
 );
 
 public sealed record DatamineLinearHeroTier(int Index, IReadOnlyList<DatamineLinearHeroBattle> Battles);

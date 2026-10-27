@@ -31,7 +31,10 @@ internal static partial class GameCatalogDenormalizer
                 BuildTrackView(lre.UnitSnowprintId, "alpha", lre.Alpha, roster),
                 BuildTrackView(lre.UnitSnowprintId, "beta", lre.Beta, roster),
                 BuildTrackView(lre.UnitSnowprintId, "gamma", lre.Gamma, roster),
-                new GameCatalogLreRewards(lre.PointsMilestones, lre.ChestsMilestones, lre.Progression, lre.ShardsPerChest)))
+                new GameCatalogLreRewards(lre.PointsMilestones, lre.ChestsMilestones, lre.Progression, lre.ShardsPerChest),
+                lre.Tokens,
+                lre.MaxRuns,
+                lre.OhSoCloseOffer))
             .ToArray();
     }
 

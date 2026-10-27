@@ -155,8 +155,26 @@ internal static partial class GameCatalogDenormalizer
             ReadLrePointsMilestones(unitId, lre, sources.Ladders),
             chests,
             shardsPerChest,
-            ReadLreProgression(unitId, sources.ProgressionSteps));
+            ReadLreProgression(unitId, sources.ProgressionSteps),
+            ReadLreTokens(unitId, lre),
+            lre.HeroEventMaxRuns is int runs and > 0 ? runs : throw LreError(unitId, "has no positive heroEventMaxRuns"),
+            lre.OhSoCloseOffer is { Unlock: not null, Ascension: not null } ohSoClose
+                ? ohSoClose
+                : throw LreError(unitId, "has no ohSoCloseOffer with unlock and ascension pricing"));
     }
+
+    // The token bank: a start no larger than a positive cap, regenerating a positive amount on a positive timer.
+    private static GameCatalogLreTokens ReadLreTokens(string unitId, DatamineLegendaryHeroEvent lre) =>
+        lre is
+        {
+            StartStamina: int start and >= 0,
+            MaxStamina: int max and > 0,
+            StaminaRegenerationTime: int regenSeconds and > 0,
+            StaminaRegenerationAmount: int regenAmount and > 0,
+            MaxDailyStaminaRefreshAttempts: int refreshes and >= 0,
+        } && start <= max
+            ? new GameCatalogLreTokens(start, max, regenSeconds, regenAmount, refreshes)
+            : throw LreError(unitId, "needs startStamina within a positive maxStamina, a positive staminaRegenerationTime and staminaRegenerationAmount, and maxDailyStaminaRefreshAttempts");
 
     private static GameCatalogLreTrack ReadLreTrack(
         string unitId,

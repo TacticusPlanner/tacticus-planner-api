@@ -12,7 +12,9 @@ public sealed record GameCatalogRawQuestEvent(
     string UnitId,
     IReadOnlyList<string> AllowedFactions,
     IReadOnlyList<string> EnemyFactions,
-    IReadOnlyList<GameCatalogRawQuestTier> Tiers
+    IReadOnlyList<GameCatalogRawQuestTier> Tiers,
+    GameCatalogQuestTokens Tokens,
+    GameCatalogQuestScorePoints ScorePoints
 );
 
 public sealed record GameCatalogRawQuestTier(
@@ -50,7 +52,25 @@ public sealed record GameCatalogQuestEventView(
     string FeaturedCharacterId,
     IReadOnlyList<string> AllowedFactionIds,
     IReadOnlyList<string> EnemyFactionIds,
-    IReadOnlyList<GameCatalogQuestBattleView> Battles
+    IReadOnlyList<GameCatalogQuestBattleView> Battles,
+    GameCatalogQuestTokens Tokens,
+    GameCatalogQuestScorePoints ScorePoints
+);
+
+// The quest's token bank (the game's stamina): at most Max, regaining RegenAmount every RegenSeconds while below
+// Max; RefillGemsCost is the gem price of a refill.
+public sealed record GameCatalogQuestTokens(
+    int Max,
+    int RegenSeconds,
+    int RegenAmount,
+    int RefillGemsCost
+);
+
+// How a battle scores quest points, as the game ships it: PointsPerStar for each star (medal) won and at most
+// MaxPointsForLightningVictory for a lightning victory.
+public sealed record GameCatalogQuestScorePoints(
+    int PointsPerStar,
+    int MaxPointsForLightningVictory
 );
 
 public sealed record GameCatalogQuestBattleView(

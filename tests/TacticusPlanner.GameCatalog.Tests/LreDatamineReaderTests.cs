@@ -49,7 +49,14 @@ public sealed class LreDatamineReaderTests
                 "legendaryHeroEvent16",
                 ["leg_bile", "leg_bile_premium"],
                 [new(1, "lane_1", "BlackLegion"), new(2, "lane_2", "AdeptusMechanicus"), new(3, "lane_3", "Tau")],
-                new DatamineLegendaryHeroUnlock(Unit))],
+                new DatamineLegendaryHeroUnlock(Unit),
+                StartStamina: 6,
+                MaxStamina: 12,
+                StaminaRegenerationTime: 10800,
+                StaminaRegenerationAmount: 1,
+                MaxDailyStaminaRefreshAttempts: 1,
+                HeroEventMaxRuns: 3,
+                OhSoCloseOffer: new GameCatalogOhSoCloseOffer(new(500, 100), new(500, 50)))],
             new Dictionary<string, JsonElement> { ["lane_1"] = battleSet, ["lane_2"] = battleSet, ["lane_3"] = battleSet },
             new Dictionary<string, JsonElement>
             {
@@ -199,5 +206,42 @@ public sealed class LreDatamineReaderTests
         var gamma = GameCatalogLoader.Load().LresByEvent["lres-votanuthar"].Gamma;
 
         Assert.All(gamma.Battles, battle => Assert.Contains("TheLostAndTheDamned", battle.DisallowedFactions));
+    }
+
+    [Fact]
+    public void AnEventReadsItsTokenBankRunsAndOhSoCloseOffer()
+    {
+        var lre = Read(Sources());
+
+        Assert.Equal(new GameCatalogLreTokens(6, 12, 10800, 1, 1), lre.Tokens);
+        Assert.Equal(3, lre.MaxRuns);
+        Assert.Equal(new GameCatalogOhSoCloseOffer(new(500, 100), new(500, 50)), lre.OhSoCloseOffer);
+    }
+
+    [Fact]
+    public void AnEventWithoutAWholeTokenBankRunsOrOffersFails()
+    {
+        GameCatalogLre ReadEvent(Func<DatamineLegendaryHeroEvent, DatamineLegendaryHeroEvent> change)
+        {
+            var sources = Sources();
+            return Read(sources with { Events = [change(sources.Events[0])] });
+        }
+
+        Assert.Contains("maxStamina", Assert.Throws<InvalidOperationException>(() => ReadEvent(lre => lre with { MaxStamina = null })).Message, StringComparison.Ordinal);
+        Assert.Contains("maxStamina", Assert.Throws<InvalidOperationException>(() => ReadEvent(lre => lre with { StartStamina = 13 })).Message, StringComparison.Ordinal);
+        Assert.Contains("heroEventMaxRuns", Assert.Throws<InvalidOperationException>(() => ReadEvent(lre => lre with { HeroEventMaxRuns = 0 })).Message, StringComparison.Ordinal);
+        Assert.Contains("ohSoCloseOffer", Assert.Throws<InvalidOperationException>(() => ReadEvent(lre => lre with { OhSoCloseOffer = null })).Message, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void ShippedEventsServeTheGamesTokenBankAndThreeRuns()
+    {
+        var served = GameCatalogDenormalizer.BuildLres(GameCatalogLoader.Load().LresByEvent, GameCatalogLoader.Load().UnitsByFaction);
+
+        Assert.All(served, lre =>
+        {
+            Assert.Equal(new GameCatalogLreTokens(6, 12, 10800, 1, 1), lre.Tokens);
+            Assert.Equal(3, lre.MaxRuns);
+        });
     }
 }

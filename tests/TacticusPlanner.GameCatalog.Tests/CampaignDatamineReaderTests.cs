@@ -175,4 +175,40 @@ public sealed class CampaignDatamineReaderTests
             Assert.Equal((33, 3), (battles.Length, battles.Count(battle => battle.Challenge)));
         });
     }
+
+    [Fact]
+    public void GroupsCarryTheirCampaignNumberAndBattlesTheirLightningVictory()
+    {
+        var group = Read(Curation(), Battle("01") with { LightningVictory = 4 }, Battle("02"));
+
+        Assert.Equal(1, group.Number);
+        Assert.Equal([4, null], group.Battles.Select(battle => battle.LightningVictoryTurns));
+    }
+
+    [Fact]
+    public void AStorylineBattleOfAnotherCampaignFails()
+    {
+        var campaigns = new Dictionary<string, List<DatamineCampaign>>
+        {
+            ["Standard"] = [new DatamineCampaign("campaign2", [Battle("01") with { CampaignId = 3 }], Unlock(["BlackLegion"], ["blackHaarken", "blackTerminator", "blackPossession"]))],
+        };
+
+        var error = Assert.Throws<InvalidOperationException>(() => Read(new([new("campaign2", "FoC")]), campaigns));
+
+        Assert.Contains("not campaign 2", error.Message, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void ShippedGroupsNumberTheirCampaignsAndEarlyIndomitusHasNoLightningVictory()
+    {
+        var snapshot = GameCatalogLoader.Load();
+        var definitions = GameCatalogDenormalizer.BuildCampaignDefinitions(snapshot.CampaignGroups).ToDictionary(definition => definition.GroupId);
+
+        Assert.Equal((1, 2, 4, 4, 6), (definitions["campaign1"].Number, definitions["mirror2"].Number, definitions["elite4"].Number, definitions["eliteMirror4"].Number, definitions["eventCampaign6"].Number));
+        var indomitus = GameCatalogDenormalizer.BuildCampaignBattles(snapshot.CampaignGroups, [])
+            .Where(battle => battle.CampaignGroupId == "campaign1")
+            .ToDictionary(battle => battle.NodeNumber, battle => battle.LightningVictoryTurns);
+        Assert.Null(indomitus[18]);
+        Assert.NotNull(indomitus[19]);
+    }
 }

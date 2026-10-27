@@ -62,7 +62,7 @@ public sealed class EventDatamineReaderTests
         var battle = new DatamineLinearHeroBattle(
             "1", "C3_70", 6, 3, new DatamineLinearHeroLoot("upgDmgC001%3/4"), ["necroNpc1Warrior:2", "PowerUp"], []);
         var quests = GameCatalogDenormalizer.ReadDatamineQuestEvents(
-            [new DatamineLinearHeroEvent("astarCyrus", """{"enemyFaction":"Necrons"}""", ["Ultramarines"], [new DatamineLinearHeroTier(0, [battle])])]);
+            [new DatamineLinearHeroEvent("astarCyrus", """{"enemyFaction":"Necrons"}""", ["Ultramarines"], [new DatamineLinearHeroTier(0, [battle])], 6, 7200, 1, 50, new GameCatalogQuestScorePoints(100, 100))]);
 
         var quest = Assert.Single(quests);
         Assert.Equal(["Necrons"], quest.EnemyFactions);
@@ -101,5 +101,32 @@ public sealed class EventDatamineReaderTests
 
         Assert.Equal(["High", "Mid"], scoring.Variants.Single(variant => variant.VariantKey == "default").Tiers.Select(tier => tier.Tier));
         Assert.Equal(["High", "Mid", "Low"], scoring.Variants.Single(variant => variant.VariantKey == "run-2").Tiers.Select(tier => tier.Tier));
+    }
+
+    [Fact]
+    public void QuestEventsReadTheTokenBankAndScorePoints()
+    {
+        var quests = GameCatalogLoader.Load().QuestEvents;
+
+        Assert.All(quests, quest =>
+        {
+            Assert.Equal(new GameCatalogQuestTokens(6, 7200, 1, 50), quest.Tokens);
+            Assert.Equal(new GameCatalogQuestScorePoints(100, 100), quest.ScorePoints);
+        });
+    }
+
+    [Fact]
+    public void AQuestEventWithoutTokensOrScorePointsFails()
+    {
+        var battle = new DatamineLinearHeroBattle(
+            "1", "C3_70", 6, 3, new DatamineLinearHeroLoot("upgDmgC001%3/4"), ["necroNpc1Warrior:2"], []);
+        var quest = new DatamineLinearHeroEvent(
+            "astarCyrus", """{"enemyFaction":"Necrons"}""", ["Ultramarines"], [new DatamineLinearHeroTier(0, [battle])], 6, 7200, 1, 50, new GameCatalogQuestScorePoints(100, 100));
+
+        var noBank = Assert.Throws<InvalidOperationException>(() => GameCatalogDenormalizer.ReadDatamineQuestEvents([quest with { StaminaRegenerationTime = null }]));
+        var noScore = Assert.Throws<InvalidOperationException>(() => GameCatalogDenormalizer.ReadDatamineQuestEvents([quest with { ScorePoints = null }]));
+
+        Assert.Contains("staminaRegenerationTime", noBank.Message, StringComparison.Ordinal);
+        Assert.Contains("scorePoints", noScore.Message, StringComparison.Ordinal);
     }
 }

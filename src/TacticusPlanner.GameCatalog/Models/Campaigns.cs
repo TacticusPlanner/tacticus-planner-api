@@ -15,7 +15,10 @@ public sealed record GameCatalogCampaignGroup(
     // ["Standard", "Extremis"] for a campaign-event group (Tacticus reports event progress as one id
     // with multiple types, not separate ids — see GameCatalogDatasets.CampaignBattleGroups remarks).
     IReadOnlyList<string> Types,
-    IReadOnlyList<GameCatalogCampaignBattle> Battles
+    IReadOnlyList<GameCatalogCampaignBattle> Battles,
+    // The campaign's number: 1-4 for a storyline (shared by its Standard, Mirror, Elite and EliteMirror groups), the
+    // event's n for eventCampaign{n}.
+    int Number
 );
 
 public sealed record GameCatalogCampaignBattle(
@@ -36,7 +39,9 @@ public sealed record GameCatalogCampaignBattle(
     int EnemiesTotal,
     IReadOnlyList<string> EnemiesTypes,
     IReadOnlyList<JsonElement> RawEnemyTypes,
-    IReadOnlyList<GameCatalogCampaignDetailedEnemy> DetailedEnemyTypes
+    IReadOnlyList<GameCatalogCampaignDetailedEnemy> DetailedEnemyTypes,
+    // The turn limit of the battle's lightning victory, or null when the battle has none (early Indomitus nodes).
+    int? LightningVictoryTurns
 )
 {
     // Zero-based index used by Tacticus campaign-progress payloads. Event groups contain multiple
@@ -120,7 +125,9 @@ public sealed record GameCatalogCampaignBattleView(
     IReadOnlyList<string> EnemiesFactions,
     int EnemiesTotal,
     IReadOnlyList<string> EnemiesTypes,
-    IReadOnlyList<GameCatalogCampaignDetailedEnemy> DetailedEnemyTypes
+    IReadOnlyList<GameCatalogCampaignDetailedEnemy> DetailedEnemyTypes,
+    // The turn limit of a lightning victory (the game's lightningVictory), or null when the battle has none.
+    int? LightningVictoryTurns
 );
 
 // One campaign group's definition: its metadata plus the ids of the battles that belong to it (the
@@ -131,7 +138,9 @@ public sealed record GameCatalogCampaignDefinitionView(
     string ReleaseType,
     IReadOnlyList<string> CoreCharacters,
     IReadOnlyList<string> Types,
-    IReadOnlyList<string> BattleIds
+    IReadOnlyList<string> BattleIds,
+    // 1-4 for a storyline group (campaign1, mirror1, elite1 and eliteMirror1 are all 1), n for eventCampaign{n}.
+    int Number
 );
 
 // ---- datamine shape (bound from Data/datamine/raw/gameconfig/battles/campaigns.json) ----------------------------
@@ -160,7 +169,8 @@ public sealed record DatamineCompletedCampaign(string CampaignType, string Campa
 
 // `battleId` is the node number ("07"), with a "B" suffix for an event challenge battle ("13B"). `units` holds one
 // list of "npcId:index" entries per team, `playerTeams` the matching team ids (1 fights with the player). A unit
-// entry without an index is a board power-up, not an enemy.
+// entry without an index is a board power-up, not an enemy. `lightningVictory` is the turn limit of a lightning
+// victory (absent when the battle has none); `campaignId` is the storyline number (event campaigns share ids).
 public sealed record DatamineCampaignBattle(
     string BattleId,
     int? StaminaCost,
@@ -168,7 +178,9 @@ public sealed record DatamineCampaignBattle(
     int Power,
     IReadOnlyList<IReadOnlyList<string>> Units,
     IReadOnlyList<int> PlayerTeams,
-    DatamineCampaignLoot Loot
+    DatamineCampaignLoot Loot,
+    int? LightningVictory = null,
+    int? CampaignId = null
 );
 
 // `base` are "id[:min[-max]]" guaranteed rewards; `chanceOf` is "id%num/denom".
