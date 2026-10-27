@@ -35,13 +35,6 @@ The system SHALL treat the upstream game-configuration hash as configuration met
 - **WHEN** the upstream player freshness timestamp and player content advance without a game-configuration change
 - **THEN** the stored freshness timestamp and affected player-data chunks advance without requiring a new game-configuration hash
 
-### Requirement: Existing stale snapshots recover through normal synchronization
-The system SHALL repair a previously stale stored snapshot during the next successful synchronization without requiring a database migration or client cache reset.
-
-#### Scenario: Corrected server synchronizes a stale shard snapshot
-- **WHEN** a stored snapshot contains old shard counts and a normal synchronization receives newer counts under the same game-configuration hash
-- **THEN** the server updates the snapshot and returns a manifest whose changed chunk hash causes existing delta-sync clients to download the corrected shard data
-
 ### Requirement: Simultaneous farm rewards have one combined expected yield
 The game catalog SHALL represent rewards for the same resource and battle as one farm location. When a battle awards one or more guaranteed or probabilistic copies of that resource simultaneously, the location's effective rate SHALL equal the number of guaranteed occurrences plus every probabilistic expected rate. A single probabilistic occurrence SHALL retain its chance ID, numerator, and denominator. Any consolidated location SHALL set all three fields to null because they cannot describe the combined yield. Every farm location SHALL additionally carry `expectedGold`: the average of its battle's guaranteed gold reward (`(min + max) / 2`), or null when that battle awards no guaranteed gold. `expectedGold` is a property of the battle, so every location sharing that battle (including two consolidated locations for two different resources dropped by the same battle) SHALL report the same value.
 
@@ -53,7 +46,7 @@ The game catalog SHALL represent rewards for the same resource and battle as one
 #### Scenario: A reward occurs only once in a battle
 - **GIVEN** a battle has only one guaranteed or probabilistic occurrence of a resource
 - **WHEN** farm locations are denormalized
-- **THEN** its existing guaranteed and drop-chance semantics remain unchanged
+- **THEN** its location is that single occurrence, with its own guaranteed flag and, when probabilistic, its own chance ID, numerator and denominator
 
 #### Scenario: Two probabilistic occurrences use different chance definitions
 - **GIVEN** a battle awards the same resource through two probabilistic occurrences with different chance IDs

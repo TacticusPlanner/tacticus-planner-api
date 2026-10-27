@@ -54,7 +54,7 @@ The `enemies` label SHALL be the name of the lane's `factionId` and its link `ht
 
 ### Requirement: Lane points come from the Acing objective
 
-Each battle's first objective SHALL be `Acing`; its score is that battle's `defeatAll` value and the first battle's is the track's `killPoints`. A battle without a leading `Acing` objective SHALL fail the load.
+Each battle's first objective SHALL be `Acing`; its score is that battle's `defeatAll` value (the track's `killPoints` follows `legendary-event-lane-points`). A battle without a leading `Acing` objective SHALL fail the load.
 
 #### Scenario: Defeat-all points
 

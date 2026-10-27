@@ -34,19 +34,3 @@ The goal API SHALL NOT expose a Level goal type or a Level target group on creat
 
 - **WHEN** any goal is read or listed
 - **THEN** its response contains no Level goal type and no Level target group
-
-### Requirement: Existing Level goals are removed by migration
-
-Applying the migration SHALL delete every existing Level goal, including its project memberships, and SHALL remove each deleted goal's id from every other goal's dependency list. Goals that depended on a Level goal SHALL otherwise be unchanged and remain valid. No Level goal SHALL be preserved, hidden, or reinterpreted as part of a Rank or Ability goal.
-
-#### Scenario: Rank and Ability dependents survive
-
-- **GIVEN** a Level goal that Rank and Ability goals depend on
-- **WHEN** the migration runs
-- **THEN** the Level goal and its memberships are gone, and the Rank and Ability goals remain with the Level id removed from their dependencies
-
-#### Scenario: Standalone Level goal is deleted
-
-- **GIVEN** a Level goal with no dependents
-- **WHEN** the migration runs
-- **THEN** it is deleted and no other goal changes

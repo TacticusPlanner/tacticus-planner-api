@@ -37,7 +37,7 @@ For each upgrade:
 
 ### Requirement: The served order is stable
 
-Upgrades SHALL be grouped as `upgrades-{rarity}` (base) and `upgrades-{rarity}-crafted` (craftable), keys in ordinal order, each group ordered by id, matching the order the retired files gave.
+Upgrades SHALL be grouped as `upgrades-{rarity}` (base) and `upgrades-{rarity}-crafted` (craftable), keys in ordinal order, each group ordered by id.
 
 #### Scenario: Grouping
 

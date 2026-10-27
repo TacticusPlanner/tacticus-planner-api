@@ -27,16 +27,6 @@ The goal API and generated OpenAPI SHALL not expose UpgradeItem or its equipment
 - **WHEN** a valid Character/MoW Upgrade request contains valid upgrade-material targets
 - **THEN** creation succeeds
 
-### Requirement: Persisted independent equipment goals are removed
-
-The migration SHALL delete existing goals whose entity type is Item or goal type is UpgradeItem and SHALL cascade their project memberships without deleting other goals.
-
-#### Scenario: Migration preserves ordinary goals
-
-- **GIVEN** the database contains equipment and Character/MoW goals
-- **WHEN** the migration applies
-- **THEN** only independent equipment goals and their memberships are deleted
-
 ### Requirement: Material target terminology is unambiguous
 
 Domain/API symbols for ordinary Upgrade goal targets SHALL use UpgradeMaterial terminology while preserving the wire element fields `upgradeId` and `quantity`.
@@ -185,27 +175,10 @@ combined goal creation, and goal update.
 - **WHEN** a MoW Unlock goal request includes a `{ kind: "Shop" }` entry
 - **THEN** validation rejects the request
 
-### Requirement: The single-select ascension farming source model is removed
-
-The goal API and generated OpenAPI SHALL NOT expose `ascensionFarming`, the
-`AscensionFarmingSource` enum, or its `shardBattleIds` / `mythicShardBattleIds` fields. The
-source choice SHALL be expressed only through `acquisitionSources`.
-
-#### Scenario: OpenAPI no longer describes the old model
-
-- **WHEN** OpenAPI is generated
-- **THEN** no schema references `AscensionFarmingSource` or an `ascensionFarming` config
-  property
-
-#### Scenario: A request using the old field does not set a source
-
-- **WHEN** a goal request carries a legacy `ascensionFarming` object
-- **THEN** it does not influence the persisted config; only `acquisitionSources` is honoured
-
 ### Requirement: FarmingLocationIds retains its upgrade-node role
 
-`GoalConfig.farmingLocationIds` SHALL continue to be accepted and returned as the Rank/Ability
-upgrade-node farming override. Only its Unlock/Ascension shard-node role is replaced by
+`GoalConfig.farmingLocationIds` SHALL be accepted and returned as the Rank/Ability upgrade-node
+farming override. Unlock and Ascension shard sources SHALL be expressed only through
 `acquisitionSources`.
 
 #### Scenario: Rank goal farming override round-trips
@@ -243,8 +216,7 @@ unit, where relevance is the union of:
   visited upgrade ids and SHALL NOT revisit one already expanded, so a recipe cycle
   terminates instead of recursing indefinitely.
 
-Targets outside that union SHALL be rejected. Widening relevance SHALL NOT invalidate any
-previously accepted target.
+Targets outside that union SHALL be rejected.
 
 #### Scenario: A crafted upgrade's base ingredient is accepted
 
@@ -263,7 +235,7 @@ previously accepted target.
 #### Scenario: A literal ladder upgrade remains accepted
 
 - **WHEN** a caller targets a crafted upgrade named directly by the unit's own progression
-- **THEN** the request is accepted, as before this change
+- **THEN** the request is accepted
 
 #### Scenario: An unrelated upgrade is still rejected
 
@@ -317,7 +289,7 @@ by any depended-upon Ascension target in the request.
 
 - **WHEN** an Ability goal is created on its own with a target at or below the cap implied by
   the unit's live progression
-- **THEN** creation succeeds, unchanged from prior behavior
+- **THEN** creation succeeds
 
 ### Requirement: The raised cap requires a declared dependency
 
@@ -346,7 +318,7 @@ campaign shard-farm node OR at least one regular shard offer in any catalog shop
 whose `unitId` is the character and whose reward type is `shards_<unitId>`). A mythic-only shop
 offer (`mythicShards_<unitId>`) SHALL NOT make a character eligible, since unlocking consumes
 regular shards. A character that is already owned SHALL still be rejected. A character with
-neither source SHALL be rejected as before.
+neither source SHALL be rejected.
 
 #### Scenario: Shop-only character is accepted
 
@@ -408,6 +380,6 @@ materials").
 
 #### Scenario: Range-less goal
 
-- **GIVEN** an Upgrade goal created before this change, or created without any range group
+- **GIVEN** an Upgrade goal created without any range group
 - **WHEN** its detail is read
 - **THEN** all three range groups are null and the goal remains editable

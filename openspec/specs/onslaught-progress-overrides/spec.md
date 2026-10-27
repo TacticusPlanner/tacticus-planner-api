@@ -31,7 +31,7 @@ The onslaught-progress response (`GET` and `PUT player-data-overrides/onslaught-
 
 ### Requirement: Saving can leave an alliance unset
 
-The PUT request SHALL accept `imperial`, `xenos` and `chaos` each as either `{ sector, tier }` (validated: sector one of Stone, Iron, Bronze, Silver, Gold, Diamond, Adamantine; tier 1–4) or `null`. A `null` alliance SHALL be stored as "not set" (no override record), replacing any previously saved position for it. Revision and conflict handling SHALL be unchanged.
+The PUT request SHALL accept `imperial`, `xenos` and `chaos` each as either `{ sector, tier }` (validated: sector one of Stone, Iron, Bronze, Silver, Gold, Diamond, Adamantine; tier 1–4) or `null`. A `null` alliance SHALL be stored as "not set" (no override record), replacing any previously saved position for it.
 
 #### Scenario: One alliance left unset
 

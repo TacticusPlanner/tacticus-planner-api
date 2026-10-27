@@ -6,7 +6,7 @@ Provides the backend game catalog's consolidated non-playable-unit reference dat
 
 ### Requirement: The catalog serves one flat `npcs` dataset built from the per-faction raw sources
 
-The game catalog SHALL serve a dataset keyed `npcs` built from the pinned datamine copy `gameconfig/units/npc.json` (keyed by NPC id), with damage profiles from `gameconfig/units/abilities.json`. The catalog SHALL keep no hand-kept NPC files. NPCs SHALL be grouped per faction under the source key `npcs-<faction>` (lowercased `FactionId`); records without a `FactionId` (loot objects) form the `npcs-objects` bucket. The served dataset SHALL be a single flat list of NPC records ordered by source key (ordinal) and then by id (ordinal). The raw file SHALL NOT be served directly. The dataset SHALL be served without authentication and SHALL appear in the catalog manifest with its own content hash.
+The game catalog SHALL serve a dataset keyed `npcs` built from the pinned datamine copy `gameconfig/units/npc.json` (keyed by NPC id), with damage profiles from `gameconfig/units/abilities.json`. The catalog SHALL keep no hand-kept NPC files. NPCs SHALL be grouped per faction under the source key `npcs-<faction>` (lowercased `FactionId`); records without a `FactionId` (loot objects) form the `npcs-objects` bucket. The served dataset SHALL be a single flat list of NPC records ordered by source key (ordinal) and then by id (ordinal).
 
 #### Scenario: Records from every raw source are present
 
@@ -86,20 +86,6 @@ The classification SHALL NOT depend on the spelling of the record's `id`. The ca
 
 - **WHEN** a raw record such as `genesDecoy` is loaded from a faction file, lacks the `MachineOfWar` trait, and every stat row is all zeros
 - **THEN** it is served with `kind` `unit` and its zero stat rows unchanged; hiding it is a client presentation decision
-
-### Requirement: Adding the classification and faction fields does not change the dataset's identity or schema version
-
-The change SHALL keep the dataset key `npcs`, its endpoint, and its envelope unchanged, and SHALL NOT bump the catalog `schemaVersion`, because every existing field keeps its name, type, and order semantics and the new fields are additive. The `npcs` dataset content hash SHALL change, and the manifest SHALL reflect the new hash.
-
-#### Scenario: Existing consumers keep working
-
-- **WHEN** a client built against the previous `npcs` shape reads the new payload
-- **THEN** every field it previously read is present with the same type and meaning
-
-#### Scenario: Manifest hash reflects the new shape
-
-- **WHEN** the game catalog manifest is requested after this change
-- **THEN** the `npcs` entry's hash differs from the pre-change hash while `schemaVersion` is unchanged
 
 ### Requirement: An unreadable NPC fails startup
 

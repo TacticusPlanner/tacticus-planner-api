@@ -7,7 +7,7 @@ Provides the game catalog's character ability cost ladder, the gold and ability 
 
 ### Requirement: The catalog serves a `character-ability-costs` dataset
 
-The game catalog SHALL serve a dataset keyed `character-ability-costs` as a plain array, one record per ability level a character ability can be raised to, ordered by ascending `level`, at `GET /api/v1/game-catalog/character-ability-costs` without requiring authentication, consistent with the rest of the catalog. It SHALL be built from the pinned datamine copy `gameconfig/units/abilityUpgradeCosts.json`; the catalog SHALL keep no hand-kept copy, and the raw file SHALL NOT be served directly. The dataset is shared by every character and every ability track, not per character.
+The game catalog SHALL serve a dataset keyed `character-ability-costs` as a plain array, one record per ability level a character ability can be raised to, ordered by ascending `level`. It SHALL be built from the pinned datamine copy `gameconfig/units/abilityUpgradeCosts.json`; the catalog SHALL keep no hand-kept copy. The dataset is shared by every character and every ability track, not per character.
 
 #### Scenario: One record per datamine row
 
@@ -34,15 +34,6 @@ Each served record SHALL carry exactly these fields and no others: `level` (inte
 
 - **WHEN** the dataset is served at `v1.43.157.2989`
 - **THEN** levels 52 and 53 cost 130000 and 132500 gold (V1 had 127500 and 130000), and every other record equals V1's
-
-### Requirement: Records carry no display text or icon
-
-Consistent with every served catalog dataset, a `character-ability-costs` record SHALL NOT include a badge display name, icon, icon id, or any presentational string. Only the structured fields above are served; the client resolves display from the rarity id.
-
-#### Scenario: Served payload shape
-
-- **WHEN** a record is served
-- **THEN** it contains only `level`, `gold` and `badges` (`rarity`, `amount`), and no display-text or icon field
 
 ### Requirement: The raw ladder is validated at load
 

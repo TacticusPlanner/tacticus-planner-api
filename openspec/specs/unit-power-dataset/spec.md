@@ -40,7 +40,7 @@ The catalog SHALL serve a dataset `unit-power` containing exactly one record wit
 }
 ```
 
-Each modifier is a percentage. The server sends ids and numbers only: no display strings, names or icons. The dataset SHALL be listed in the public manifest with its content hash.
+Each modifier is a percentage. The server sends ids and numbers only: no display strings, names or icons.
 
 What the client derives, not the server: a unit's stats at a rank, progression and set of applied upgrades and items; the progression index from rarity and stars; the power of a character, MoW or NPC.
 

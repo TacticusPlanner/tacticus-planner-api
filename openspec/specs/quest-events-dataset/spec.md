@@ -8,7 +8,7 @@ Serves the battle data of every Quest Event (one record per featured hero, 17 ba
 
 ### Requirement: The catalog serves a `quest-events` dataset with a fixed shape
 
-The game catalog SHALL serve a dataset keyed `quest-events` as a plain array at `GET /api/v1/game-catalog/quest-events`, without authentication, in the shared dataset envelope and with a manifest hash entry. It SHALL be built from the pinned datamine copy `gameconfig/liveEvents/linearHeroEvent.json` (one Quest Event per featured hero: `unitId`, `allowedFactions`, the `enemyFaction` of `trackingAdditionalData`, and per battle `BoardId`, `SpawnPointsSet`, `lightningVictory`, `Objectives`, the `loot.chanceOf` drop `upgradeId%num/denom`, and `enemies` as `npcId:progressionIndex`, and per event `maxStamina`, `staminaRegenerationTime`, `staminaRegenerationAmount`, `staminaRefillGemsCost` and `scorePoints`). It is not served directly. A battle without a readable drop or enemy, an event without a positive `maxStamina`, `staminaRegenerationTime` and `staminaRegenerationAmount` and a non-negative `staminaRefillGemsCost`, or an event without `scorePoints` with a positive `pointsPerStar` SHALL fail startup naming `quest-events` and the quest. Each record SHALL have exactly these fields. The server sends ids and numbers only; the client resolves names, portraits, board images and objective wording.
+The game catalog SHALL serve a dataset keyed `quest-events` as a plain array at `GET /api/v1/game-catalog/quest-events`, without authentication, in the shared dataset envelope and with a manifest hash entry. It SHALL be built from the pinned datamine copy `gameconfig/liveEvents/linearHeroEvent.json` (one Quest Event per featured hero: `unitId`, `allowedFactions`, the `enemyFaction` of `trackingAdditionalData`, and per battle `BoardId`, `SpawnPointsSet`, `lightningVictory`, `Objectives`, the `loot.chanceOf` drop `upgradeId%num/denom`, and `enemies` as `npcId:progressionIndex`, and per event `maxStamina`, `staminaRegenerationTime`, `staminaRegenerationAmount`, `staminaRefillGemsCost` and `scorePoints`). The raw `linearHeroEvent.json` copy SHALL NOT be served directly. A battle without a readable drop or enemy, an event without a positive `maxStamina`, `staminaRegenerationTime` and `staminaRegenerationAmount` and a non-negative `staminaRefillGemsCost`, or an event without `scorePoints` with a positive `pointsPerStar` SHALL fail startup naming `quest-events` and the quest. Each record SHALL have exactly these fields. The server sends ids and numbers only; the client resolves names, portraits, board images and objective wording.
 
 ```
 {
@@ -60,7 +60,7 @@ Records SHALL be ordered by `featuredCharacterId` (ordinal). `tier` SHALL be the
 #### Scenario: Coverage
 
 - **WHEN** the dataset is served from datamine `v1.43.157.2989`
-- **THEN** it has records for `astarCyrus`, `astarEradicator`, `darkaSternguard`, `thousSekhetar` and `votanChampion` only, each with 17 battles; the three V1 quests are unchanged
+- **THEN** it has records for `astarCyrus`, `astarEradicator`, `darkaSternguard`, `thousSekhetar` and `votanChampion` only, each with 17 battles
 
 ### Requirement: Deploy slots follow the tier position rule
 

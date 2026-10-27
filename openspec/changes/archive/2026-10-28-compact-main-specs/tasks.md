@@ -19,13 +19,13 @@
 
 ## 3. Archive dry check
 
-- [ ] 3.1 Commit the section 2 edits first, then archive a throwaway copy of that commit in a scratch worktree and diff the result against `main` (`git worktree add`, run `openspec archive compact-main-specs -y` there, then `git diff --stat`). Verify all of the following:
+- [x] 3.1 Commit the section 2 edits first, then archive a throwaway copy of that commit in a scratch worktree and diff the result against `main` (`git worktree add`, run `openspec archive compact-main-specs -y` there, then `git diff --stat`). Verify all of the following:
   - `project-unit-ordering/` is deleted.
   - The only spec files touched are the capabilities listed in proposal.md.
   - There are no stray `## ADDED/MODIFIED` headers in `openspec/specs/`.
   - Requirement count drops from 330 to the expected value (`grep -rh '^### Requirement:' openspec/specs | wc -l`).
 
-  Then discard the worktree.
+  Then discard the worktree. (Result: `project-unit-ordering/` retired, no stray delta headers, 330 → 313 requirements, 41 spec files touched, all listed in proposal.md; `openspec validate --specs` 66/66.)
 
 ## Workflow follow-up
 

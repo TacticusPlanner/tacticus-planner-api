@@ -179,8 +179,7 @@ order. Comp core/flex/Machine-of-War lists remain broad advisory guidance and
 SHALL NOT be treated as implicit replacements. No investment target, damage
 estimate, strategy text, display name, icon path, or localized role label
 SHALL be present in the served projection; the recommendation-level
-`efficiency` figure defined above is the one deliberate exception to this
-dataset's prior no-effectiveness-weight constraint.
+`efficiency` figure defined above is the only effectiveness value served.
 
 #### Scenario: Recommendation supplies deterministic slot rules
 

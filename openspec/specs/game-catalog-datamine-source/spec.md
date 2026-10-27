@@ -93,11 +93,12 @@ Files under `Data/datamine/raw/` SHALL be embedded with the logical name `datami
 - **WHEN** the catalog loads its raw keys by leaf name with datamine copies embedded
 - **THEN** no key resolves to a `datamine/` resource and the load succeeds as before
 
-### Requirement: Adding the datamine source changes no served data
+### Requirement: The catalog game version is the pinned datamine's build
 
-Applying this change SHALL NOT change any served dataset, its hash, the manifest shape, `SchemaVersion` or `GameVersion`. Moving hand-kept files to `Data/curated/` SHALL keep their leaf names and contents.
+The catalog `GameVersion` SHALL be the trimmed contents of the pinned datamine copy `raw/VERSION` (the game build the datamine was extracted from). Loading SHALL fail when that file is empty.
 
-#### Scenario: Snapshot unchanged
+#### Scenario: Game version follows the pin
 
-- **WHEN** `GameCatalogSnapshotTests` runs after this change
-- **THEN** the received manifest equals the current `*.verified.txt` with no edits
+- **GIVEN** the pinned `raw/VERSION` holds `1.43.157.2989`
+- **WHEN** the game catalog manifest is requested
+- **THEN** its `GameVersion` is `1.43.157.2989`

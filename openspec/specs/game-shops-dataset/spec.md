@@ -15,25 +15,12 @@ The game catalog SHALL serve a dataset keyed `shops` as a plain array with one r
 each identified by a stable, human-readable `id` (`guild`, `war`, `rogue-trader`, `crusade`). It SHALL
 be built from four merchants of the pinned datamine copy `gameconfig/shop/merchants.json` (`guild` →
 `guild`, `guildWars` → `war`, `elderShop` → `rogue-trader`, `crusadeShop` → `crusade`), SHALL fail startup
-naming the shop when one of them is missing, and SHALL be the only shop dataset exposed publicly; the raw
-merchants file SHALL NOT be served directly. The catalog SHALL keep no hand-kept shop files.
+naming the shop when one of them is missing, and SHALL be the only shop dataset exposed publicly. The catalog SHALL keep no hand-kept shop files.
 
 #### Scenario: All four daily shops are present
 
 - **WHEN** the `shops` dataset is served
 - **THEN** it contains exactly the records with ids `guild`, `war`, `rogue-trader`, and `crusade`
-
-### Requirement: Shop records carry no display text or icon
-
-Consistent with every other served catalog dataset, a `shops` record SHALL NOT include a shop display
-name, currency label, reward label, icon, icon id, or wiki link. Only structural/identity fields exist
-(shop `id`, the game's own `displayLocation` string, refresh metadata, slots, and per-variant reward /
-cost / condition data referenced by id).
-
-#### Scenario: Served shop payload shape
-
-- **WHEN** a `shops` record is served
-- **THEN** it contains only structural/identity fields and no display-text or icon field
 
 ### Requirement: Shop slots preserve the game's slot-and-variant structure
 
@@ -177,23 +164,3 @@ refreshed by watching an ad, the number of free refreshes allowed per day, and t
 
 - **WHEN** a source shop allows one free refresh per day, permits ad-watch refresh, and charges 50 gems per further refresh
 - **THEN** the served shop record reflects all three of those values
-
-### Requirement: Shop events are out of scope
-
-The `shops` dataset SHALL cover only the four always-on daily shops. Limited-time event shops
-(Armageddon shop, seasonal event shops) SHALL NOT be included in this dataset.
-
-#### Scenario: No event-shop records
-
-- **WHEN** the `shops` dataset is served
-- **THEN** it contains no record for a limited-time or seasonal event shop
-
-### Requirement: Adding the shops dataset does not bump the schema version
-
-Introducing `shops` SHALL be purely additive: no existing served dataset's shape changes and the
-catalog `SchemaVersion` is not incremented. A client unaware of `shops` SHALL be unaffected.
-
-#### Scenario: Existing datasets and schema version unchanged
-
-- **WHEN** the `shops` dataset is added to the catalog
-- **THEN** the catalog `SchemaVersion` is unchanged and every previously served dataset's payload shape is unchanged

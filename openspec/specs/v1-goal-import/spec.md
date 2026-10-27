@@ -291,9 +291,7 @@ unit; in those cases the requirement SHALL be reported rather than satisfied.
 Each created prerequisite SHALL be declared as a dependency of every imported
 goal that required it, and SHALL be placed immediately before the first of
 them in the constructed import sequence, so it precedes every goal that
-requires it. There is no automatic within-unit reordering to
-fall back on for this placement — the import process itself is responsible
-for the prerequisite's position, not a downstream ordering step.
+requires it.
 
 A synthesized Unlock goal SHALL be validated by the same rules a manual
 creation of that goal would be before it is persisted (Unlock is valid only for
@@ -450,4 +448,3 @@ with a code identifying that no unit uses it.
 - **GIVEN** a V1 Unlock goal for a character not on the roster, and a V1 upgrade-material goal for a material only that character uses
 - **WHEN** the goals part is imported
 - **THEN** the Upgrade goal is created on that character with the suggested-unit code, and no "no unit uses" outcome is reported
-

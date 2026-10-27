@@ -7,7 +7,7 @@ Guarantees each profile has exactly one Default project that acts as the goal fi
 
 ### Requirement: Every profile has exactly one Default project
 
-Each profile SHALL have exactly one project of type Default, provisioned when the account is created and, for any profile that lacks one, created by migration or on first need. The system SHALL NOT allow two Default projects for one profile, including under concurrent requests. Custom projects SHALL be unaffected by this rule.
+Each profile SHALL have exactly one project of type Default, provisioned when the account is created and, for any profile that lacks one, created on first need. The system SHALL NOT allow two Default projects for one profile, including under concurrent requests. Custom projects SHALL be unaffected by this rule.
 
 #### Scenario: New account gets a Default project
 
@@ -17,7 +17,7 @@ Each profile SHALL have exactly one project of type Default, provisioned when th
 #### Scenario: Existing profile without a Default project
 
 - **GIVEN** a profile that has no Default project
-- **WHEN** the migration has run or the profile's projects are first needed
+- **WHEN** the profile's projects are first needed
 - **THEN** exactly one Default project exists for that profile, with its existing goals and memberships unchanged
 
 #### Scenario: Concurrent creation cannot produce two Defaults
@@ -27,7 +27,7 @@ Each profile SHALL have exactly one project of type Default, provisioned when th
 
 ### Requirement: The Default project cannot be archived or removed
 
-The Default project SHALL NOT be archivable, and no operation SHALL delete it. An attempt to archive it SHALL be rejected with a conflict identified as `defaultProjectCannotBeArchived`. No other project SHALL be blocked from archiving because of any selection or plan standing, since the system SHALL NOT record any project as the profile's active plan.
+The Default project SHALL NOT be archivable, and no operation SHALL delete it. An attempt to archive it SHALL be rejected with a conflict identified as `defaultProjectCannotBeArchived`.
 
 #### Scenario: Archiving the Default project is rejected
 

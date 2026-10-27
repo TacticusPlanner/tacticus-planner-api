@@ -30,15 +30,6 @@ Catalog load SHALL fail when a campaign group has no `alliesAlliance`, an unknow
 - **WHEN** the catalog loads
 - **THEN** validation throws naming the group and the unknown id
 
-### Requirement: Adding allies does not break the served contract
-
-The change SHALL NOT bump `SchemaVersion`. Among datasets, the manifest SHALL show a changed hash for `campaign-battles` only (plus `sourceHash`), and `campaign-definitions` SHALL be unchanged.
-
-#### Scenario: Manifest after the change
-
-- **WHEN** the manifest snapshot is compared to the previous release
-- **THEN** only the `campaign-battles` hash and `sourceHash` differ
-
 ### Requirement: Campaign battles serve their lightning victory
 
 Every battle of the served `campaign-battles` dataset SHALL carry `lightningVictoryTurns` (int or null): the battle's `lightningVictory` in `battles/campaigns.json`, null when the battle has none. Its `energyCost` remains the game's `staminaCost`.

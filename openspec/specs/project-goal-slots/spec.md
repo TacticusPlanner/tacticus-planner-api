@@ -4,7 +4,7 @@ Prevents two in-flight goals of one unit, type and target key in a profile, what
 
 ## Requirements
 
-### Requirement: In-flight uniqueness is scoped to project
+### Requirement: In-flight uniqueness is scoped to the profile
 
 For each profile, at most one Active/Paused goal SHALL occupy `(entityType, entityId, goalType, targetKey)`, where `targetKey` is the goal's canonical end-target key defined by `goal-target-milestones` (Rank: `rank-milestones`' normalized end target). Distinct target keys for one unit and goal type MAY coexist. Unlock has no target key: at most one Active/Paused Unlock goal SHALL occupy `(entityType, entityId, Unlock)`. Completed/Archived goals SHALL not occupy slots. Project membership SHALL NOT affect slot occupancy: one in-flight goal MAY belong to any number of projects, and two projects SHALL NOT carry separate in-flight instances of the same tuple/target.
 
@@ -72,14 +72,14 @@ A slot conflict SHALL produce the same 409 in the unified error shape with `issu
 
 ### Requirement: The profile lock serializes slot checks
 
-Every goal write SHALL take the profile lock before checking slots, so two concurrent transactions cannot both occupy the same non-Rank profile/unit/type slot or the same Rank profile/unit/normalized-end-target slot. The rule SHALL NOT be enforced by a database constraint, so it can change without a schema change; a write that bypasses the lock or the check is a defect. V1 import SHALL re-check its new goals under the lock because it reads existing goals before taking it.
+Every goal write SHALL take the profile lock before checking slots, so two concurrent transactions cannot both occupy the same slot. The rule SHALL NOT be enforced by a database constraint, so it can change without a schema change; a write that bypasses the lock or the check is a defect. V1 import SHALL re-check its new goals under the lock because it reads existing goals before taking it.
 
 #### Scenario: Racing distinct Rank targets succeed
 
 - **WHEN** two requests concurrently create Ragnar Rank goals with distinct targets
 - **THEN** both can commit with distinct valid priorities
 
-### Requirement: Concurrent mutations in one project serialize without failing
+### Requirement: Concurrent goal mutations of one profile serialize without failing
 
 Goal mutations of one profile SHALL be serialized against each other by waiting on one profile-level lock, and each SHALL observe the state committed by those that preceded it. When two or more slot-scoped mutations target distinct slots and are submitted concurrently, every one of them SHALL commit; a slot-scoped mutation SHALL NOT fail merely because another mutation for the same profile committed while it was waiting. A goal-order change is not slot-scoped: when it races a mutation that changes the in-flight set, whichever commits second observes the earlier change, and an order change whose submitted set no longer matches SHALL be rejected with the documented stale-set response. Covered mutations: single and combined creation, status transitions, target edits, membership replacement (goal- or project-side), and goal-order changes.
 
@@ -102,14 +102,3 @@ Goal mutations of one profile SHALL be serialized against each other by waiting 
 
 - **WHEN** a create and a goal-order change (submitted for the pre-create goal set) race
 - **THEN** the create succeeds, the order change either succeeds or is rejected with the stale-set response, and in both outcomes the in-flight priorities form a contiguous sequence from 1 with no gaps or duplicates
-
-### Requirement: Rank conflicts name the occupied target
-
-For a Rank slot conflict, the `slotOccupied` response SHALL include the existing goal id, entity id/type, goal type and normalized end target; a conflicting target edit or status transition SHALL fail atomically.
-
-#### Scenario: Multi-project membership conflicts in one project
-
-- **GIVEN** an in-flight Ragnar Rank goal targeting Silver3 and another targeting Gold1
-- **WHEN** the Silver3 goal's target is edited to Gold1
-- **THEN** nothing changes and the response identifies the Gold1 goal and the target
-
