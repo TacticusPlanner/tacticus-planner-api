@@ -39,60 +39,6 @@ public static class GameCatalogDatasets
     public const string UpgradesPrefix = "upgrades";
     public const string LresPrefix = "lres";
 
-    /// <summary>Unit (characters + MoWs) datasets, one per faction. Key = <c>units-{factionSlug}</c>.</summary>
-    public static readonly IReadOnlyList<string> UnitFactions =
-    [
-        "units-adeptusastartes",
-        "units-adeptusmechanicus",
-        "units-aeldari",
-        "units-astramilitarum",
-        "units-blacklegion",
-        "units-blacktemplars",
-        "units-bloodangels",
-        "units-custodes",
-        "units-darkangels",
-        "units-deathguard",
-        "units-emperorschildren",
-        "units-genestealers",
-        "units-leaguesofvotann",
-        "units-necrons",
-        "units-orks",
-        "units-sisterhood",
-        "units-spacewolves",
-        "units-tau",
-        "units-thelostandthedamned",
-        "units-thousandsons",
-        "units-tyranids",
-        "units-ultramarines",
-        "units-worldeaters",
-    ];
-
-    /// <summary>NPC datasets, one per faction plus the faction-less <c>npcs-objects</c> bucket.</summary>
-    public static readonly IReadOnlyList<string> NpcFactions =
-    [
-        "npcs-adeptusastartes",
-        "npcs-adeptusmechanicus",
-        "npcs-aeldari",
-        "npcs-astramilitarum",
-        "npcs-blacklegion",
-        "npcs-blacktemplars",
-        "npcs-bloodangels",
-        "npcs-darkangels",
-        "npcs-deathguard",
-        "npcs-genestealers",
-        "npcs-leaguesofvotann",
-        "npcs-necrons",
-        "npcs-orks",
-        "npcs-sisterhood",
-        "npcs-spacewolves",
-        "npcs-tau",
-        "npcs-thousandsons",
-        "npcs-tyranids",
-        "npcs-ultramarines",
-        "npcs-worldeaters",
-        "npcs-objects",
-    ];
-
     /// <summary>
     /// Campaign-battle datasets grouped by core characters (storyline x side). These are source-file bucket
     /// names (dataset keys) and are decoupled from each group's <c>groupId</c> content field.
@@ -244,7 +190,6 @@ public static class GameCatalogDatasets
     /// <summary>Raw embedded source datasets (one per file) used to build the served catalog.</summary>
     public static readonly IReadOnlyList<string> Required =
     [
-        .. UnitFactions,
         DropChances,
         OnslaughtRewards,
         EventDefinitions,
@@ -255,7 +200,6 @@ public static class GameCatalogDatasets
         QuestEvents,
         QuestCrates,
         UnitPower,
-        .. NpcFactions,
         .. CampaignBattleGroups,
         .. LreEvents,
         .. ShopSources,

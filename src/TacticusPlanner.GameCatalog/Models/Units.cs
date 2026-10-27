@@ -1,5 +1,7 @@
 namespace TacticusPlanner.GameCatalog.Models;
 
+// One faction's characters and MoWs as read from the datamine lineup.json (source key units-{faction}; see
+// Denormalization/UnitDatamineReader.cs). Name holds the faction id: display names are not catalog data.
 public sealed record GameCatalogFactionUnits(
     string Alliance,
     string FactionId,

@@ -11,12 +11,11 @@ ability, so the MoW unit page can show the ability unlocked at Mythic rarity.
 
 Each served `mows` record SHALL carry, in addition to its existing fields, `mythicAbility`: an object with
 exactly `name` (string, the ability id, the same id space as `primaryAbility.name` and
-`secondaryAbility.name`). It SHALL be authored on the raw `mows[]` record in `units-{faction}.json` and served
-unchanged. It is optional in the shape: a MoW whose mythic ability is unknown SHALL omit the field, not send
-`null` or an empty name. Unlike `primaryAbility` and `secondaryAbility`, it SHALL carry no `recipes`: the
-mythic ability levels with the MoW's blue stars, not with upgrade materials. All 11 current MoWs SHALL carry
-it, ported from V1's `mow/data/new-mows-data2.json` (`mythicAbilities[0]`). The record SHALL carry no display
-name or icon for it; the client resolves both from the id.
+`secondaryAbility.name`). It SHALL be read from the first entry of the MoW's `mythicAbilities` in the datamine
+`gameconfig/units/lineup.json`. It is optional in the shape: a MoW without a mythic ability SHALL omit the field,
+not send `null` or an empty name. Unlike `primaryAbility` and `secondaryAbility`, it SHALL carry no `recipes`:
+the mythic ability levels with the MoW's blue stars, not with upgrade materials. All 11 current MoWs SHALL carry
+it. The record SHALL carry no display name or icon for it; the client resolves both from the id.
 
 #### Scenario: Galatian's mythic ability
 
@@ -30,8 +29,8 @@ name or icon for it; the client resolves both from the id.
 
 #### Scenario: The manifest hash changes
 
-- **WHEN** the game catalog manifest is requested after this change
-- **THEN** the `mows` entry's hash differs from the previous release, and the snapshot test is promoted
+- **WHEN** the game catalog manifest is requested after the mythic ability was added
+- **THEN** the `mows` entry's hash differs from the release before it, and the snapshot test is promoted
 
 ### Requirement: The mythic ability is validated at load
 
@@ -43,3 +42,22 @@ whose `name` is empty or equals that MoW's `primaryAbility.name` or `secondaryAb
 - **GIVEN** a raw MoW with `mythicAbility: { name: "" }`
 - **WHEN** the catalog loads
 - **THEN** loading fails with a validation error naming the MoW
+
+### Requirement: MoWs are read from the pinned datamine
+
+A `lineup.json` unit whose `traits` contain `MachineOfWar` SHALL be served as a MoW, grouped by lowercased `FactionId` and ordered by id, with `name`, faction and alliance from `name`, `FactionId` and `GrandAllianceId`.
+
+#### Scenario: Same MoWs as before
+
+- **WHEN** the dataset is served at datamine `v1.43.157.2989`
+- **THEN** the 11 MoWs equal the ones the retired `units-*.json` files served, and the `mows` hash is unchanged
+
+### Requirement: MoW abilities and recipes come from the ability table
+
+A MoW's two `activeAbilities` SHALL be its `primaryAbility` and `secondaryAbility`, each with `recipes` from that ability's `upgrades` in `gameconfig/units/abilities.json`. A MoW without exactly two active abilities, or whose ability has no recipes, SHALL fail startup naming the MoW.
+
+#### Scenario: One active ability
+
+- **GIVEN** a MoW with a single active ability
+- **WHEN** the catalog loads
+- **THEN** loading fails naming the MoW

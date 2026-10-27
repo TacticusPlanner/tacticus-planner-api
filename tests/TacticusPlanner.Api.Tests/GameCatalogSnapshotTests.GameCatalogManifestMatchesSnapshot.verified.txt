@@ -81,7 +81,7 @@
     },
     {
       key: npcs,
-      hash: d90d5ac15f112e024ab9b9710641c59b7bf235692ef2de0c3cef1feb1b15b978,
+      hash: 44c90192c75e1bd4dc3209987c0b97d86725f1603a8a9414c6add81bf79c3d94,
       url: /api/v1/game-catalog/npcs/{envelopeHash}
     },
     {
