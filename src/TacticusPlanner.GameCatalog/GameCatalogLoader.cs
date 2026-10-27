@@ -56,8 +56,7 @@ public static class GameCatalogLoader
                 : throw new InvalidOperationException($"GameCatalog dataset '{GameCatalogDatasets.MythicQuests}': groups.json has no hero quest group."));
         var unitPower = LoadUnitPower();
         var questEvents = GameCatalogDenormalizer.ReadDatamineQuestEvents(
-            LoadDatamine<List<DatamineLinearHeroEvent>>(GameCatalogDenormalizer.DatamineLinearHeroEventsPath),
-            LoadDataset<Dictionary<string, Dictionary<string, int>>>(GameCatalogDatasets.QuestEventPower));
+            LoadDatamine<List<DatamineLinearHeroEvent>>(GameCatalogDenormalizer.DatamineLinearHeroEventsPath));
         var questCrates = LoadDataset<IReadOnlyList<GameCatalogQuestCrate>>(GameCatalogDatasets.QuestCrates);
 
         var datamineNpcs = LoadDatamine<Dictionary<string, DatamineNpc>>(GameCatalogDenormalizer.DatamineNpcPath);

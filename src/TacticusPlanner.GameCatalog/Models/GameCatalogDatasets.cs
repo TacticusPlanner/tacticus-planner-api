@@ -22,11 +22,9 @@ public static class GameCatalogDatasets
     public const string HordeModeTiers = "horde-mode-tiers";
     public const string MythicQuests = "mythic-quests";
     // quest-events: the datamine's Quest Events (linearHeroEvent.json; one record per featured hero, 17 battles
-    // each), plus the curated per-battle power (quest-event-power.json, unit id -> battle number -> power), which the
-    // game config does not hold. quest-crates: the shared 17-crate point track. Both are served under the same key.
+    // each). quest-crates: the shared 17-crate point track. Both are served under the same key.
     // See Denormalization/QuestEventsDenormalizer.cs.
     public const string QuestEvents = "quest-events";
-    public const string QuestEventPower = "quest-event-power";
     public const string QuestCrates = "quest-crates";
     // unit-power is the single record of power tables, progression multipliers and per-unit power fields
     // the client's in-game power formula reads (read from the datamine power tables). See Models/UnitPower.cs.
@@ -158,7 +156,6 @@ public static class GameCatalogDatasets
         EventDefinitions,
         EventOccurrences,
         HordeModeTiers,
-        QuestEventPower,
         QuestCrates,
         CampaignCuration,
         LreCuration,
