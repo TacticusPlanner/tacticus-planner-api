@@ -270,6 +270,30 @@ public sealed class GetGameCatalogUnitPowerEndpoint(IGameCatalogProvider catalog
     }
 }
 
+public sealed class GetGameCatalogFactionsEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogFaction>>(catalog, GameCatalogDatasets.Factions)
+{
+    public override void Configure()
+    {
+        Get("game-catalog/factions", "game-catalog/factions/{envelopeHash}");
+        ConfigureServed(
+            "Gets the game factions.",
+            "One record per faction, in unlock order: its alliance (Imperial, Chaos or Xenos), unlock date (UTC) and whether it is a collection faction grouping units of other factions.");
+    }
+}
+
+public sealed class GetGameCatalogDamageTypesEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogDamageType>>(catalog, GameCatalogDatasets.DamageTypes)
+{
+    public override void Configure()
+    {
+        Get("game-catalog/damage-types", "game-catalog/damage-types/{envelopeHash}");
+        ConfigureServed(
+            "Gets the damage types.",
+            "One record per damage type, ordered by id: its piercing ratio (the percentage of a hit that ignores armour) and the traits its hits carry.");
+    }
+}
+
 public sealed class GetGameCatalogEventDefinitionsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogEventDefinition>>(catalog, GameCatalogDatasets.EventDefinitionsServed)
 {

@@ -19,6 +19,8 @@ gameconfig/units/abilityPowerModifiers.json                  # unit-power
 gameconfig/units/abilityUpgradeCosts.json                    # character-ability-costs
 gameconfig/units/abilityUpgradeCostsMoW.json                 # mow-upgrade-costs
 gameconfig/units/damageProfileModifiers.json                 # unit-power
+gameconfig/units/damageProfiles.json                         # damage-types
+gameconfig/units/factions.json                               # factions
 gameconfig/units/heroConversion.json                         # unlock-shard-costs
 gameconfig/units/heroProgressionSteps.json                   # ascension-costs, unit-power
 gameconfig/units/heroProgressionStepsMoW.json                # unit-power

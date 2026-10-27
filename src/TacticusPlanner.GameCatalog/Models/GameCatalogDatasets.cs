@@ -29,6 +29,11 @@ public static class GameCatalogDatasets
     // unit-power is the single record of power tables, progression multipliers and per-unit power fields
     // the client's in-game power formula reads (read from the datamine power tables). See Models/UnitPower.cs.
     public const string UnitPower = "unit-power";
+    // factions: one record per game faction (alliance, unlock date, collection flag) from the datamine units/factions.json.
+    // damage-types: one record per damage type (piercing ratio, traits) from units/damageProfiles.json.
+    // See Denormalization/FactionDenormalizer.cs.
+    public const string Factions = "factions";
+    public const string DamageTypes = "damage-types";
 
     // Route/key prefixes for the split dataset families.
     public const string UnitsPrefix = "units";
@@ -242,5 +247,7 @@ public static class GameCatalogDatasets
         QuestEvents,
         QuestCrates,
         UnitPower,
+        Factions,
+        DamageTypes,
     ];
 }

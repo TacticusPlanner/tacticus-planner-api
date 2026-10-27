@@ -1,6 +1,6 @@
 ﻿{
   version: dev-2026-10-19.1,
-  schemaVersion: 10,
+  schemaVersion: 11,
   gameVersion: 1.43,
   sourceHash: {time-dependent},
   datasets: [
@@ -30,6 +30,11 @@
       url: /api/v1/game-catalog/characters/{envelopeHash}
     },
     {
+      key: damage-types,
+      hash: b3c2a8bcc5408b273e2a42018451cf1dad1a2c5e382f165d833f55030e560ad3,
+      url: /api/v1/game-catalog/damage-types/{envelopeHash}
+    },
+    {
       key: equipment,
       hash: b18ee01b5214e19b24f22b6877923e490ff9fb8712d7368385f3aa57019a5f2f,
       url: /api/v1/game-catalog/equipment/{envelopeHash}
@@ -43,6 +48,11 @@
       key: events-calendar,
       hash: {time-dependent},
       url: /api/v1/game-catalog/events-calendar/{envelopeHash}
+    },
+    {
+      key: factions,
+      hash: 2956238bf341e23b8c7e0cdf3ad7b9373c98b88c8eeac5e33d69e14fcf639cb9,
+      url: /api/v1/game-catalog/factions/{envelopeHash}
     },
     {
       key: guild-raid-meta,
