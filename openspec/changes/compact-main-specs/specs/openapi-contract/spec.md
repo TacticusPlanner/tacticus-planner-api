@@ -1,7 +1,7 @@
 ## MODIFIED Requirements
 
 ### Requirement: Enum wire values are stable
-Enum fields SHALL serialize to PascalCase strings (e.g. `Active`, `Rank`, `Character`). Requests SHALL accept those values case-insensitively. A request with a value outside the set SHALL be rejected with a 400 `validation` problem whose `errors` names the field, and SHALL change nothing.
+Enum fields SHALL serialize to their established PascalCase wire strings (e.g. `Active`, `Rank`, `Character`); renaming or removing a wire value is a breaking contract change. Requests SHALL accept those values case-insensitively. A request with a value outside the set SHALL be rejected with a 400 `validation` problem whose `errors` names the field, and SHALL change nothing.
 
 #### Scenario: Response values are unchanged
 - **WHEN** a client reads a goal

@@ -7,13 +7,12 @@
 
 ## 2. Direct edits to main specs
 
-- [ ] 2.1 Apply every entry in `direct-edits.md`. Remove or rename each listed scenario in `openspec/specs/<capability>/spec.md`, and make the same edit in the matching MODIFIED block under `specs/` when one exists. Verify that every listed scenario title is absent (or renamed) in both places, using `grep -rn "#### Scenario: <title>"`.
-- [ ] 2.2 Rewrite the Purpose paragraphs in `openspec/specs/` according to audit P1–P4 and P7:
+- [ ] 2.1 Apply every entry in `direct-edits.md`. Remove or rename each listed scenario in `openspec/specs/<capability>/spec.md`, and make the same edit in the matching MODIFIED block under `specs/` when one exists. Where the MODIFIED block adds a replacement scenario, copy it into the main spec in the same step. Verify that every listed scenario title is absent (or renamed) in both places, using `grep -rn "#### Scenario: <title>"`.
+- [ ] 2.2 Rewrite the Purpose paragraphs in `openspec/specs/` according to audit P1–P4:
   - P1: `game-catalog-datamine-source`, drop "Datasets move onto it one change at a time."
   - P2: `goal-target-model`, drop "after removal of independent equipment goals".
   - P3: `goal-bulk-status`, drop ", replacing the per-goal and per-project status routes".
   - P4: `project-goal-slots`, replace with the per-profile, per-target-key wording.
-  - P7: `legendary-event-reward-ladder`, drop the "no shared cross-event ladder" clause.
 
   Verify that a grep for each removed phrase returns nothing.
 - [ ] 2.3 Run `openspec validate compact-main-specs --strict` and `openspec validate --specs --strict` from `tacticus-planner-api`. Verify that both pass. Report any description-length warnings on untouched requirement text without fixing them in this change.

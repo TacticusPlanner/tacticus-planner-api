@@ -21,7 +21,7 @@
 
 **Reason**: D1 — restates the catalog-wide ids-only rule.
 
-**Migration**: `game-catalog-http-caching` — "Every served dataset is public and listed in the manifest".
+**Migration**: `game-catalog-http-caching` — "Served records carry ids, not presentation".
 
 ### Requirement: Adding the raid-bosses dataset does not bump the schema version
 

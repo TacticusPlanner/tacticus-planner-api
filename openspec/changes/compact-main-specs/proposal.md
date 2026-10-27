@@ -16,7 +16,7 @@ This is spec text only. No served dataset, endpoint, contract or schema changes.
   - REMOVED: one-off migration or transition requirements ("Adding X does not bump the schema version", "Existing Level goals are removed by migration", and so on).
   - Replaced: scenarios that compare against retired raw files get steady-state scenarios.
   - Reworded: "before/after this change" and "unchanged from prior behavior" phrasing.
-- **Rewrite transition-flavoured Purpose paragraphs (P1–P4, P7)** by direct edit, because deltas cannot change Purpose.
+- **Rewrite transition-flavoured Purpose paragraphs (P1–P4)** by direct edit, because deltas cannot change Purpose.
 
 Not in scope: audit findings where the two copies **differ in substance** (D9 acquisition-source update scope, D10 cap from existing Ascension dependencies), stale raw-file names (L26, L27), and the four inconsistencies listed in `design.md`. Fixing those changes meaning, not just duplication, so each needs its own change.
 
@@ -39,5 +39,5 @@ None.
 ## Impact
 
 - Only `openspec/specs/**` changes, applied through archive plus a few direct Purpose edits. Code, migrations, OpenAPI and the manifest snapshot are untouched.
-- 21 requirements are REMOVED and 2 are ADDED, so the count goes from 330 to 309. 41 are trimmed through MODIFIED and 2 are RENAMED. 46 scenario drops and renames are listed in `direct-edits.md`.
+- 20 requirements are REMOVED and 3 are ADDED, so the count goes from 330 to 313. 42 are trimmed through MODIFIED and 2 are RENAMED. 46 scenario drops and renames are listed in `direct-edits.md`.
 - Specs that cite a removed requirement by name are re-pointed in the same change. `project-unit-ordering` has no inbound references.

@@ -31,4 +31,4 @@ The game catalog SHALL serve a dataset keyed `character-ability-costs` as a plai
 
 **Reason**: D2 — restates this spec's "Each record is keyed by the level it raises an ability to" (exactly these fields and no others) and the catalog-wide ids-only rule.
 
-**Migration**: See `character-ability-costs-dataset` — "Each record is keyed by the level it raises an ability to" and `game-catalog-http-caching` — "Every served dataset is public and listed in the manifest".
+**Migration**: See `character-ability-costs-dataset` — "Each record is keyed by the level it raises an ability to" and `game-catalog-http-caching` — "Served records carry ids, not presentation".

@@ -2,7 +2,7 @@
 
 ### Requirement: Rank target identity is the normalized end state
 
-For duplicate detection, a Rank target SHALL be identified by end rank, end point-five state, and end applied-upgrade count after normalization.
+For duplicate detection, a Rank target SHALL be identified by end rank, end point-five state, and end applied-upgrade count after normalization. A goal created for a target whose earlier goal was deleted SHALL get a new goal id and SHALL NOT restore the deleted goal's status or project memberships.
 
 #### Scenario: Different targets are distinct
 

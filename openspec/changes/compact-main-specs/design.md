@@ -34,10 +34,21 @@ There is no raw dataset, served projection, manifest, EF Core migration or endpo
 
 **Moving the orphan rule out of L5.** The removed "Adding the raid-bosses dataset does not bump the schema version" requirement held the only statement that `GameVersion` is the in-game build. That rule moves into `game-catalog-datamine-source` as an ADDED requirement matching current code (the trimmed `raw/VERSION`; loading fails when it is empty). This is the one ADDED requirement besides D1. Both record existing behavior.
 
-**Purpose edits are direct.** Deltas ignore `## Purpose`, so P1–P4 and P7 are edited directly in `openspec/specs/` as a task in this change, applied in the same PR as the archive.
+**Purpose edits are direct.** Deltas ignore `## Purpose`, so P1–P4 are edited directly in `openspec/specs/` as a task in this change, applied in the same PR as the archive.
 
 ## Risks / Trade-offs
 
 - [A MODIFIED block copied from a spec that changes before this lands silently reverts that change at archive] → Apply and archive soon after approval. A task re-diffs every MODIFIED block against the current main spec just before archive.
 - [Removing a "duplicate" that actually carried a unique clause] → Each REMOVED entry names its canonical copy. Before archiving, the apply step greps for every behavior keyword of a removed requirement and checks the canonical copy still states it.
 - [Replacement scenarios for retired-file comparisons pin counts (e.g. 119 characters) that change on the next datamine bump] → They are pinned to the named datamine version, as other dataset scenarios already are, so a bump changes that scenario together with the data.
+
+## Review adjustments
+
+Changes made after the CodeRabbit review on PR #140:
+- The catalog-wide ids-only rule (D1) now makes an explicit exception for fields that a dataset's own spec requires to carry the game's untranslated text (the `upgrades` `label` and `material`).
+- `lre-common` stays excluded. L11 is now a MODIFIED that drops only the transition sentence, not a REMOVED, because the catalog-wide rule describes only the datasets that are served. P7 is dropped.
+- `rank-milestones` keeps the recreated-goal guarantee (new id, no restored status or memberships) inside its surviving requirement, because D11 removed the only other place it was stated.
+- During apply, replacement scenarios are copied into the main spec in the same step as the scenario they replace, so the pre-archive `openspec validate --specs --strict` never sees a requirement with no scenario.
+- `openapi-contract` keeps the stronger wire-value guarantee: established strings, and renaming one is breaking.
+- `mows-dataset` makes `mythicAbility` explicitly conditional.
+- `quest-events-dataset` names the raw file it says is not served.

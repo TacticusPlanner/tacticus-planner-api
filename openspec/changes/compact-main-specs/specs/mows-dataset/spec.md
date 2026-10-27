@@ -2,7 +2,7 @@
 
 ### Requirement: Each MoW carries its mythic ability
 
-Each served `mows` record SHALL carry `mythicAbility`: an object with
+Each served `mows` record whose MoW has a mythic ability SHALL carry `mythicAbility`: an object with
 exactly `name` (string, the ability id, the same id space as `primaryAbility.name` and
 `secondaryAbility.name`). It SHALL be read from the first entry of the MoW's `mythicAbilities` in the datamine
 `gameconfig/units/lineup.json`. It is optional in the shape: a MoW without a mythic ability SHALL omit the field,
