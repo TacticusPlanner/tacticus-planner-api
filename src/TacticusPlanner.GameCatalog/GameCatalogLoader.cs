@@ -79,6 +79,7 @@ public static class GameCatalogLoader
         var campaignGroups = GameCatalogDenormalizer.ReadDatamineCampaigns(
                 campaignCuration,
                 LoadDatamine<Dictionary<string, List<DatamineCampaign>>>(GameCatalogDenormalizer.DatamineCampaignsPath),
+                unitsByFaction,
                 datamineNpcs,
                 datamineUpgrades)
             .ToDictionary(pair => pair.Key, pair => AssignCampaignBattleIndices(pair.Value), StringComparer.Ordinal);

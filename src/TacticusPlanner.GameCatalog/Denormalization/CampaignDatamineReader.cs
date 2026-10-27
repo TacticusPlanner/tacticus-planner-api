@@ -12,6 +12,7 @@ internal static partial class GameCatalogDenormalizer
 
     private const string CampaignEventKind = "Event";
     private const string CampaignChallengeSuffix = "B";
+    private const string CampaignExtremisType = "Extremis";
     private const int CampaignPlayerTeam = 1;
 
     private static readonly string[] CampaignRankMetals = ["Stone", "Iron", "Bronze", "Silver", "Gold", "Diamond", "Adamantine"];
@@ -19,6 +20,9 @@ internal static partial class GameCatalogDenormalizer
 
     [GeneratedRegex(@"^(\d+)(B?)$", RegexOptions.CultureInvariant)]
     private static partial Regex CampaignBattleIdRegex();
+
+    [GeneratedRegex(@"^eventStandard(\d+)$", RegexOptions.CultureInvariant)]
+    private static partial Regex CampaignEventIdRegex();
 
     [GeneratedRegex(@"^([^:]+)(?::(\d+)(?:-(\d+))?)?$", RegexOptions.CultureInvariant)]
     private static partial Regex CampaignGuaranteedRewardRegex();
@@ -38,48 +42,153 @@ internal static partial class GameCatalogDenormalizer
 
     /// <summary>
     /// Reads every curated campaign group from the datamine <c>campaigns.json</c>, keyed by its campaign-battles
-    /// dataset key. Group metadata is curated; each battle (id, energy, node, slots, rewards, power and enemies) is
-    /// read from the game, in game order, campaign by campaign in the curated type order.
+    /// dataset key. Only the group's campaigns and their battle-id prefixes are curated. The group id, type and
+    /// release type follow the campaign ids and kinds; core characters are the units the campaign (or the one it
+    /// follows) asks to unlock; the faction is theirs; allies are the playable factions the campaign allows. Each
+    /// battle (id, energy, node, slots, rewards, power and enemies) is read in game order, campaign by campaign in
+    /// the curated order.
     /// </summary>
     /// <exception cref="InvalidOperationException">A curated campaign, battle, reward or enemy cannot be read.</exception>
     public static Dictionary<string, GameCatalogCampaignGroup> ReadDatamineCampaigns(
         IReadOnlyDictionary<string, GameCatalogCampaignCuration> curation,
         IReadOnlyDictionary<string, List<DatamineCampaign>> campaigns,
+        IReadOnlyDictionary<string, GameCatalogFactionUnits> unitsByFaction,
         IReadOnlyDictionary<string, DatamineNpc> npcs,
         IReadOnlyDictionary<string, DatamineUpgrade> upgrades)
     {
         var byId = campaigns
             .SelectMany(kind => kind.Value.Select(campaign => (Kind: kind.Key, Campaign: campaign)))
             .ToDictionary(entry => entry.Campaign.Id, StringComparer.Ordinal);
+        var factionOfUnit = unitsByFaction.Values
+            .SelectMany(faction => faction.Characters.Select(character => (character.Id, faction.FactionId)))
+            .ToDictionary(unit => unit.Id, unit => unit.FactionId, StringComparer.Ordinal);
 
         var groups = new Dictionary<string, GameCatalogCampaignGroup>(StringComparer.Ordinal);
         foreach (var (key, group) in curation)
         {
-            var battles = group.Campaigns.SelectMany(source =>
+            var sources = group.Campaigns.Select(source =>
             {
                 var (kind, campaign) = byId.TryGetValue(source.Campaign, out var found)
                     ? found
                     : throw CampaignError(key, $"names campaign '{source.Campaign}' the game does not have");
-                return campaign.Battles.Select(battle => ReadCampaignBattle(key, kind, source, battle, npcs, upgrades));
+                return (Source: source, Kind: kind, Campaign: campaign, Type: CampaignType(key, kind, campaign));
             }).ToArray();
+            if (sources.Length == 0)
+            {
+                throw CampaignError(key, "names no campaigns");
+            }
+
+            var (groupId, releaseType) = CampaignGroupId(key, sources[0].Kind, sources[0].Campaign.Id);
+            var gameCoreCharacters = CampaignSingle(key, "core characters", sources.Select(source => CampaignUnlockUnits(source.Campaign, byId)));
+            if (gameCoreCharacters is not null && group.CoreCharacters is not null)
+            {
+                throw CampaignError(key, "curates core characters the game already names");
+            }
+
+            var coreCharacters = gameCoreCharacters
+                ?? group.CoreCharacters
+                ?? throw CampaignError(key, "has no units to unlock in the game, so its core characters must be curated");
+            var factions = coreCharacters
+                .Select(unit => factionOfUnit.TryGetValue(unit, out var found)
+                    ? found
+                    : throw CampaignError(key, $"has core character '{unit}' the game does not have"))
+                .Distinct(StringComparer.Ordinal)
+                .ToArray();
+            var faction = factions is [var only] ? only : throw CampaignError(key, "has core characters from more than one faction");
+            var allowed = CampaignSingle(key, "allowed factions", sources.Select(source => source.Campaign.UnlockConditions?.RequiredUnits?.AllowedFactions))
+                ?? throw CampaignError(key, "allows no factions");
+            var unknown = allowed.FirstOrDefault(id => unitsByFaction.Values.All(units => units.FactionId != id));
+            if (unknown is not null)
+            {
+                throw CampaignError(key, $"allows faction '{unknown}' the game has no units for");
+            }
+
+            // Allies keep the catalog's faction order, not the order the campaign lists them in.
+            var allies = unitsByFaction.Values.Where(units => allowed.Contains(units.FactionId, StringComparer.Ordinal)).ToArray();
+
+            var battles = sources
+                .SelectMany(source => source.Campaign.Battles.Select(battle =>
+                    ReadCampaignBattle(key, source.Kind, source.Type, source.Source, battle, npcs, upgrades)))
+                .ToArray();
 
             groups[key] = new GameCatalogCampaignGroup(
-                group.GroupId,
-                group.Faction,
-                group.ReleaseType,
-                group.AlliesAlliance,
-                group.AlliesFactions,
-                group.CoreCharacters,
-                group.Campaigns.Select(source => source.Type).ToArray(),
+                groupId,
+                faction,
+                releaseType,
+                unitsByFaction.Values.Single(units => units.FactionId == faction).Alliance,
+                allies.Select(units => units.FactionId).ToArray(),
+                coreCharacters,
+                sources.Select(source => source.Type).ToArray(),
                 battles);
         }
 
         return groups;
     }
 
+    // A campaign's Tacticus type: its kind, except an event campaign, which is Extremis when it follows another
+    // event campaign and Standard otherwise.
+    private static string CampaignType(string key, string kind, DatamineCampaign campaign)
+    {
+        if (kind != CampaignEventKind)
+        {
+            return CampaignDropDifficulties.ContainsKey(kind) ? kind : throw CampaignError(key, $"reads campaign kind '{kind}' the catalog does not know");
+        }
+
+        return campaign.UnlockConditions?.CompletedCampaigns?.Any(done => done.CampaignType == CampaignEventKind) == true
+            ? CampaignExtremisType
+            : "Standard";
+    }
+
+    // The progress id Tacticus reports for the group: the first campaign's id, or eventCampaign{n} for event
+    // eventStandard{n}; an event group is an "event" release, anything else "standard".
+    private static (string GroupId, string ReleaseType) CampaignGroupId(string key, string kind, string campaignId)
+    {
+        if (kind != CampaignEventKind)
+        {
+            return (campaignId, "standard");
+        }
+
+        var number = CampaignEventIdRegex().Match(campaignId);
+        return number.Success
+            ? ("eventCampaign" + number.Groups[1].Value, "event")
+            : throw CampaignError(key, $"starts with event campaign '{campaignId}', which is not an eventStandard campaign");
+    }
+
+    // The units a campaign asks to unlock, or those of the campaign it follows when it names none.
+    private static IReadOnlyList<string>? CampaignUnlockUnits(
+        DatamineCampaign campaign,
+        IReadOnlyDictionary<string, (string Kind, DatamineCampaign Campaign)> byId)
+    {
+        var conditions = campaign.UnlockConditions;
+        if (conditions?.RequiredUnits?.UnlockedUnitIds is { Count: > 0 } units)
+        {
+            return units;
+        }
+
+        return conditions?.CompletedCampaigns is [var previous, ..] && byId.TryGetValue(previous.CampaignId, out var found)
+            ? CampaignUnlockUnits(found.Campaign, byId)
+            : null;
+    }
+
+    // The one value all the group's campaigns agree on (null when none has one).
+    private static IReadOnlyList<string>? CampaignSingle(string key, string what, IEnumerable<IReadOnlyList<string>?> values)
+    {
+        var distinct = values
+            .OfType<IReadOnlyList<string>>()
+            .DistinctBy(value => string.Join(',', value), StringComparer.Ordinal)
+            .ToArray();
+        return distinct.Length switch
+        {
+            0 => null,
+            1 => distinct[0],
+            _ => throw CampaignError(key, $"reads campaigns whose {what} differ"),
+        };
+    }
+
     private static GameCatalogCampaignBattle ReadCampaignBattle(
         string key,
         string kind,
+        string type,
         GameCatalogCampaignSourceCuration source,
         DatamineCampaignBattle battle,
         IReadOnlyDictionary<string, DatamineNpc> npcs,
@@ -135,7 +244,7 @@ internal static partial class GameCatalogDenormalizer
 
         return new GameCatalogCampaignBattle(
             id,
-            source.Type,
+            type,
             challenge,
             battle.StaminaCost ?? 0,
             node,
@@ -143,7 +252,7 @@ internal static partial class GameCatalogDenormalizer
             new GameCatalogCampaignRewards(
                 (battle.Loot.Base ?? []).Select(reward => ReadCampaignGuaranteedReward(key, id, reward)).ToArray(),
                 battle.Loot.ChanceOf is { } chanceOf
-                    ? [ReadCampaignPotentialReward(key, id, kind, source.Type, challenge, chanceOf, upgrades)]
+                    ? [ReadCampaignPotentialReward(key, id, kind, type, challenge, chanceOf, upgrades)]
                     : []),
             battle.Power,
             enemyNpcs.Select(npc => npc.GrandAllianceId ?? "Neutral").Distinct(StringComparer.Ordinal).Order(StringComparer.Ordinal).ToArray(),

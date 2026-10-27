@@ -1,362 +1,70 @@
 {
   "campaign-battles-indomitus": {
-    "groupId": "campaign1",
-    "faction": "Ultramarines",
-    "releaseType": "standard",
-    "alliesAlliance": "Imperial",
-    "alliesFactions": ["AdeptusAstartes", "AdeptusMechanicus", "AstraMilitarum", "BlackTemplars", "BloodAngels", "Custodes", "DarkAngels", "Sisterhood", "SpaceWolves", "Ultramarines"],
-    "coreCharacters": ["ultraTigurius", "ultraEliminatorSgt", "ultraInceptorSgt"],
-    "campaigns": [
-      {
-        "type": "Standard",
-        "campaign": "campaign1",
-        "battleIdPrefix": "I"
-      }
-    ]
+    "campaigns": [{ "campaign": "campaign1", "battleIdPrefix": "I" }],
+    "coreCharacters": ["ultraTigurius", "ultraEliminatorSgt", "ultraInceptorSgt"]
   },
   "campaign-battles-indomitus-elite": {
-    "groupId": "elite1",
-    "faction": "Ultramarines",
-    "releaseType": "standard",
-    "alliesAlliance": "Imperial",
-    "alliesFactions": ["AdeptusAstartes", "AdeptusMechanicus", "AstraMilitarum", "BlackTemplars", "BloodAngels", "Custodes", "DarkAngels", "Sisterhood", "SpaceWolves", "Ultramarines"],
-    "coreCharacters": ["ultraTigurius", "ultraEliminatorSgt", "ultraInceptorSgt"],
-    "campaigns": [
-      {
-        "type": "Elite",
-        "campaign": "elite1",
-        "battleIdPrefix": "IE"
-      }
-    ]
+    "campaigns": [{ "campaign": "elite1", "battleIdPrefix": "IE" }],
+    "coreCharacters": ["ultraTigurius", "ultraEliminatorSgt", "ultraInceptorSgt"]
   },
   "campaign-battles-indomitus-mirror": {
-    "groupId": "mirror1",
-    "faction": "Necrons",
-    "releaseType": "standard",
-    "alliesAlliance": "Xenos",
-    "alliesFactions": ["Necrons"],
-    "coreCharacters": ["necroWarden", "necroDestroyer", "necroSpyder"],
-    "campaigns": [
-      {
-        "type": "Mirror",
-        "campaign": "mirror1",
-        "battleIdPrefix": "IM"
-      }
-    ]
+    "campaigns": [{ "campaign": "mirror1", "battleIdPrefix": "IM" }]
   },
   "campaign-battles-indomitus-mirror-elite": {
-    "groupId": "eliteMirror1",
-    "faction": "Necrons",
-    "releaseType": "standard",
-    "alliesAlliance": "Xenos",
-    "alliesFactions": ["Necrons"],
-    "coreCharacters": ["necroWarden", "necroDestroyer", "necroSpyder"],
-    "campaigns": [
-      {
-        "type": "EliteMirror",
-        "campaign": "eliteMirror1",
-        "battleIdPrefix": "IME"
-      }
-    ]
+    "campaigns": [{ "campaign": "eliteMirror1", "battleIdPrefix": "IME" }]
   },
   "campaign-battles-fall-of-cadia": {
-    "groupId": "campaign2",
-    "faction": "BlackLegion",
-    "releaseType": "standard",
-    "alliesAlliance": "Chaos",
-    "alliesFactions": ["BlackLegion", "DeathGuard", "EmperorsChildren", "ThousandSons", "WorldEaters"],
-    "coreCharacters": ["blackTerminator", "blackPossession", "blackHaarken"],
-    "campaigns": [
-      {
-        "type": "Standard",
-        "campaign": "campaign2",
-        "battleIdPrefix": "FoC"
-      }
-    ]
+    "campaigns": [{ "campaign": "campaign2", "battleIdPrefix": "FoC" }]
   },
   "campaign-battles-fall-of-cadia-elite": {
-    "groupId": "elite2",
-    "faction": "BlackLegion",
-    "releaseType": "standard",
-    "alliesAlliance": "Chaos",
-    "alliesFactions": ["BlackLegion", "DeathGuard", "EmperorsChildren", "ThousandSons", "WorldEaters"],
-    "coreCharacters": ["blackTerminator", "blackPossession", "blackHaarken"],
-    "campaigns": [
-      {
-        "type": "Elite",
-        "campaign": "elite2",
-        "battleIdPrefix": "FoCE"
-      }
-    ]
+    "campaigns": [{ "campaign": "elite2", "battleIdPrefix": "FoCE" }]
   },
   "campaign-battles-fall-of-cadia-mirror": {
-    "groupId": "mirror2",
-    "faction": "AstraMilitarum",
-    "releaseType": "standard",
-    "alliesAlliance": "Imperial",
-    "alliesFactions": ["AdeptusAstartes", "AdeptusMechanicus", "AstraMilitarum", "BlackTemplars", "BloodAngels", "Custodes", "DarkAngels", "Sisterhood", "SpaceWolves", "Ultramarines"],
-    "coreCharacters": ["astraPrimarisPsy", "astraBullgryn", "astraOrdnance"],
-    "campaigns": [
-      {
-        "type": "Mirror",
-        "campaign": "mirror2",
-        "battleIdPrefix": "FoCM"
-      }
-    ]
+    "campaigns": [{ "campaign": "mirror2", "battleIdPrefix": "FoCM" }]
   },
   "campaign-battles-fall-of-cadia-mirror-elite": {
-    "groupId": "eliteMirror2",
-    "faction": "AstraMilitarum",
-    "releaseType": "standard",
-    "alliesAlliance": "Imperial",
-    "alliesFactions": ["AdeptusAstartes", "AdeptusMechanicus", "AstraMilitarum", "BlackTemplars", "BloodAngels", "Custodes", "DarkAngels", "Sisterhood", "SpaceWolves", "Ultramarines"],
-    "coreCharacters": ["astraPrimarisPsy", "astraBullgryn", "astraOrdnance"],
-    "campaigns": [
-      {
-        "type": "EliteMirror",
-        "campaign": "eliteMirror2",
-        "battleIdPrefix": "FoCME"
-      }
-    ]
+    "campaigns": [{ "campaign": "eliteMirror2", "battleIdPrefix": "FoCME" }]
   },
   "campaign-battles-octarius": {
-    "groupId": "campaign3",
-    "faction": "Orks",
-    "releaseType": "standard",
-    "alliesAlliance": "Xenos",
-    "alliesFactions": ["Orks"],
-    "coreCharacters": ["orksBigMek", "orksKillaKan", "orksWarboss"],
-    "campaigns": [
-      {
-        "type": "Standard",
-        "campaign": "campaign3",
-        "battleIdPrefix": "O"
-      }
-    ]
+    "campaigns": [{ "campaign": "campaign3", "battleIdPrefix": "O" }]
   },
   "campaign-battles-octarius-elite": {
-    "groupId": "elite3",
-    "faction": "Orks",
-    "releaseType": "standard",
-    "alliesAlliance": "Xenos",
-    "alliesFactions": ["Orks"],
-    "coreCharacters": ["orksBigMek", "orksKillaKan", "orksWarboss"],
-    "campaigns": [
-      {
-        "type": "Elite",
-        "campaign": "elite3",
-        "battleIdPrefix": "OE"
-      }
-    ]
+    "campaigns": [{ "campaign": "elite3", "battleIdPrefix": "OE" }]
   },
   "campaign-battles-octarius-mirror": {
-    "groupId": "mirror3",
-    "faction": "BlackTemplars",
-    "releaseType": "standard",
-    "alliesAlliance": "Imperial",
-    "alliesFactions": ["AdeptusAstartes", "AdeptusMechanicus", "AstraMilitarum", "BlackTemplars", "BloodAngels", "Custodes", "DarkAngels", "Sisterhood", "SpaceWolves", "Ultramarines"],
-    "coreCharacters": ["templSwordBrother", "templAggressor", "templAncient"],
-    "campaigns": [
-      {
-        "type": "Mirror",
-        "campaign": "mirror3",
-        "battleIdPrefix": "OM"
-      }
-    ]
+    "campaigns": [{ "campaign": "mirror3", "battleIdPrefix": "OM" }]
   },
   "campaign-battles-octarius-mirror-elite": {
-    "groupId": "eliteMirror3",
-    "faction": "BlackTemplars",
-    "releaseType": "standard",
-    "alliesAlliance": "Imperial",
-    "alliesFactions": ["AdeptusAstartes", "AdeptusMechanicus", "AstraMilitarum", "BlackTemplars", "BloodAngels", "Custodes", "DarkAngels", "Sisterhood", "SpaceWolves", "Ultramarines"],
-    "coreCharacters": ["templSwordBrother", "templAggressor", "templAncient"],
-    "campaigns": [
-      {
-        "type": "EliteMirror",
-        "campaign": "eliteMirror3",
-        "battleIdPrefix": "OME"
-      }
-    ]
+    "campaigns": [{ "campaign": "eliteMirror3", "battleIdPrefix": "OME" }]
   },
   "campaign-battles-saim-hann": {
-    "groupId": "campaign4",
-    "faction": "Aeldari",
-    "releaseType": "standard",
-    "alliesAlliance": "Xenos",
-    "alliesFactions": ["Aeldari"],
-    "coreCharacters": ["eldarRanger", "eldarAutarch", "eldarFarseer"],
-    "campaigns": [
-      {
-        "type": "Standard",
-        "campaign": "campaign4",
-        "battleIdPrefix": "SH"
-      }
-    ]
+    "campaigns": [{ "campaign": "campaign4", "battleIdPrefix": "SH" }]
   },
   "campaign-battles-saim-hann-elite": {
-    "groupId": "elite4",
-    "faction": "Aeldari",
-    "releaseType": "standard",
-    "alliesAlliance": "Xenos",
-    "alliesFactions": ["Aeldari"],
-    "coreCharacters": ["eldarRanger", "eldarAutarch", "eldarFarseer"],
-    "campaigns": [
-      {
-        "type": "Elite",
-        "campaign": "elite4",
-        "battleIdPrefix": "SHE"
-      }
-    ]
+    "campaigns": [{ "campaign": "elite4", "battleIdPrefix": "SHE" }]
   },
   "campaign-battles-saim-hann-mirror": {
-    "groupId": "mirror4",
-    "faction": "ThousandSons",
-    "releaseType": "standard",
-    "alliesAlliance": "Chaos",
-    "alliesFactions": ["BlackLegion", "DeathGuard", "EmperorsChildren", "ThousandSons", "WorldEaters"],
-    "coreCharacters": ["thousTzaangor", "thousTerminator", "thousInfernalMaster"],
-    "campaigns": [
-      {
-        "type": "Mirror",
-        "campaign": "mirror4",
-        "battleIdPrefix": "SHM"
-      }
-    ]
+    "campaigns": [{ "campaign": "mirror4", "battleIdPrefix": "SHM" }]
   },
   "campaign-battles-saim-hann-mirror-elite": {
-    "groupId": "eliteMirror4",
-    "faction": "ThousandSons",
-    "releaseType": "standard",
-    "alliesAlliance": "Chaos",
-    "alliesFactions": ["BlackLegion", "DeathGuard", "EmperorsChildren", "ThousandSons", "WorldEaters"],
-    "coreCharacters": ["thousTzaangor", "thousTerminator", "thousInfernalMaster"],
-    "campaigns": [
-      {
-        "type": "EliteMirror",
-        "campaign": "eliteMirror4",
-        "battleIdPrefix": "SHME"
-      }
-    ]
+    "campaigns": [{ "campaign": "eliteMirror4", "battleIdPrefix": "SHME" }]
   },
   "campaign-battles-death-guard-vs-admech": {
-    "groupId": "eventCampaign1",
-    "faction": "DeathGuard",
-    "releaseType": "event",
-    "alliesAlliance": "Chaos",
-    "alliesFactions": ["DeathGuard", "WorldEaters"],
-    "coreCharacters": ["deathBlightlord", "deathPutrifier", "deathBlightbringer"],
-    "campaigns": [
-      {
-        "type": "Standard",
-        "campaign": "eventStandard1",
-        "battleIdPrefix": "AMS"
-      },
-      {
-        "type": "Extremis",
-        "campaign": "eventExtremis1",
-        "battleIdPrefix": "AME"
-      }
-    ]
+    "campaigns": [{ "campaign": "eventStandard1", "battleIdPrefix": "AMS" }, { "campaign": "eventExtremis1", "battleIdPrefix": "AME" }]
   },
   "campaign-battles-adepta-sororitas-vs-death-guard": {
-    "groupId": "eventCampaign4",
-    "faction": "Sisterhood",
-    "releaseType": "event",
-    "alliesAlliance": "Imperial",
-    "alliesFactions": ["Sisterhood", "BlackTemplars"],
-    "coreCharacters": ["adeptCanoness", "adeptHospitaller", "adeptRetributor"],
-    "campaigns": [
-      {
-        "type": "Standard",
-        "campaign": "eventStandard4",
-        "battleIdPrefix": "DGS"
-      },
-      {
-        "type": "Extremis",
-        "campaign": "eventExtremis4",
-        "battleIdPrefix": "DGE"
-      }
-    ]
+    "campaigns": [{ "campaign": "eventStandard4", "battleIdPrefix": "DGS" }, { "campaign": "eventExtremis4", "battleIdPrefix": "DGE" }]
   },
   "campaign-battles-ultramarines-vs-tyranids": {
-    "groupId": "eventCampaign2",
-    "faction": "Ultramarines",
-    "releaseType": "event",
-    "alliesAlliance": "Imperial",
-    "alliesFactions": ["Ultramarines", "BloodAngels"],
-    "coreCharacters": ["ultraInceptorSgt", "ultraApothecary", "ultraTitus"],
-    "campaigns": [
-      {
-        "type": "Standard",
-        "campaign": "eventStandard2",
-        "battleIdPrefix": "TS"
-      },
-      {
-        "type": "Extremis",
-        "campaign": "eventExtremis2",
-        "battleIdPrefix": "TE"
-      }
-    ]
+    "campaigns": [{ "campaign": "eventStandard2", "battleIdPrefix": "TS" }, { "campaign": "eventExtremis2", "battleIdPrefix": "TE" }]
   },
   "campaign-battles-genestealers-vs-tau-empire": {
-    "groupId": "eventCampaign3",
-    "faction": "Genestealers",
-    "releaseType": "event",
-    "alliesAlliance": "Xenos",
-    "alliesFactions": ["Genestealers", "Tyranids"],
-    "coreCharacters": ["genesBiophagus", "genesMagus", "genesKelermorph"],
-    "campaigns": [
-      {
-        "type": "Standard",
-        "campaign": "eventStandard3",
-        "battleIdPrefix": "TAS"
-      },
-      {
-        "type": "Extremis",
-        "campaign": "eventExtremis3",
-        "battleIdPrefix": "TAE"
-      }
-    ]
+    "campaigns": [{ "campaign": "eventStandard3", "battleIdPrefix": "TAS" }, { "campaign": "eventExtremis3", "battleIdPrefix": "TAE" }]
   },
   "campaign-battles-world-eaters-vs-adepta-sororitas": {
-    "groupId": "eventCampaign5",
-    "faction": "WorldEaters",
-    "releaseType": "event",
-    "alliesAlliance": "Chaos",
-    "alliesFactions": ["WorldEaters", "BlackLegion"],
-    "coreCharacters": ["worldEightbound", "worldExecutions", "worldTerminator"],
-    "campaigns": [
-      {
-        "type": "Standard",
-        "campaign": "eventStandard5",
-        "battleIdPrefix": "ASS"
-      },
-      {
-        "type": "Extremis",
-        "campaign": "eventExtremis5",
-        "battleIdPrefix": "ASE"
-      }
-    ]
+    "campaigns": [{ "campaign": "eventStandard5", "battleIdPrefix": "ASS" }, { "campaign": "eventExtremis5", "battleIdPrefix": "ASE" }]
   },
   "campaign-battles-necrons-vs-dark-angels": {
-    "groupId": "eventCampaign6",
-    "faction": "Necrons",
-    "releaseType": "event",
-    "alliesAlliance": "Xenos",
-    "alliesFactions": ["Necrons"],
-    "coreCharacters": ["necroSpyder", "necroDestroyer", "necroPlasmancer"],
-    "campaigns": [
-      {
-        "type": "Standard",
-        "campaign": "eventStandard6",
-        "battleIdPrefix": "DAS"
-      },
-      {
-        "type": "Extremis",
-        "campaign": "eventExtremis6",
-        "battleIdPrefix": "DAE"
-      }
-    ]
+    "campaigns": [{ "campaign": "eventStandard6", "battleIdPrefix": "DAS" }, { "campaign": "eventExtremis6", "battleIdPrefix": "DAE" }]
   }
 }

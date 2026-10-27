@@ -102,9 +102,13 @@ restrictions); these are silently ignored on deserialize.
   **campaign-definitions** is keyed by `groupId` (metadata + `battleIds[]` only). Battle ids are also
   referenced from API test fixtures and the player-data transformer, so renaming a battle id is not a
   local change. Both are built from the datamine `battles/campaigns.json` (`Denormalization/CampaignDatamineReader.cs`).
-  `Data/curated/campaign-curation.json` holds, per `GameCatalogDatasets.CampaignBattleGroups` key, the group
-  metadata (`groupId`, `faction`, `releaseType`, allies, `coreCharacters`: the game's unlock lists do not match
-  them) and, per Tacticus type, the datamine `campaign` and V1's `battleIdPrefix`. Battle ids are
+  `Data/curated/campaign-curation.json` holds, per `GameCatalogDatasets.CampaignBattleGroups` key, only the
+  datamine `campaign`s in order with V1's `battleIdPrefix`, plus `coreCharacters` for Indomitus (the tutorial
+  names no units to unlock; curating them where the game has some fails). The rest follows the game: type is the
+  campaign kind (an event campaign following another is `Extremis`), `groupId` the first campaign id
+  (`eventStandardN` → `eventCampaignN`), `releaseType` `event` for event campaigns, core characters the
+  `unlockedUnitIds` (or those of the campaign it follows), `faction` theirs, allies the `allowedFactions` in
+  catalog faction order. Battle ids are
   `{prefix}{battleId}` (`I07`), or `{prefix}C{node}B` for an event challenge battle (game `13B` → `AMSC13B`).
   Enemies are the indexed units of every team that is not `playerTeams` 1 (allies) — board power-ups have no
   index — counted per `npcId:index` and sorted by npc id, then index. Their `stars`/`rank` read the npc stat row

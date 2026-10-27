@@ -2,12 +2,30 @@
 
 ### Requirement: Campaign battles are read from the pinned datamine
 
-Each campaign group SHALL be read from `Data/curated/campaign-curation.json` (its metadata and, per Tacticus type, a datamine campaign and battle-id prefix) and the battles of those campaigns in `battles/campaigns.json`, in game order. Loading SHALL fail when the curated keys differ from `CampaignBattleGroups` or a curated campaign is missing.
+Each campaign group SHALL be read from `Data/curated/campaign-curation.json` (its datamine campaigns, in order, each with V1's battle-id prefix) and the battles of those campaigns in `battles/campaigns.json`, in game order. Loading SHALL fail when the curated keys differ from `CampaignBattleGroups` or a curated campaign is missing.
 
 #### Scenario: Battle ids
 
 - **WHEN** the catalog loads from datamine `v1.43.157.2989`
 - **THEN** `campaign1` battle `07` is served as `I07` and `eventStandard1` battle `13B` as the challenge battle `AMSC13B`
+
+### Requirement: Group ids and types follow the campaign ids
+
+A campaign's type SHALL be its `campaigns.json` kind, except an event campaign, which is `Extremis` when its `completedCampaigns` names an event campaign and `Standard` otherwise. A group's id SHALL be its first campaign's id (`eventCampaign{n}` for `eventStandard{n}`), and its release type `event` for event campaigns and `standard` otherwise.
+
+#### Scenario: Event group
+
+- **WHEN** the catalog loads from datamine `v1.43.157.2989`
+- **THEN** the group reading `eventStandard1` and `eventExtremis1` has id `eventCampaign1`, release type `event` and types `["Standard", "Extremis"]`
+
+### Requirement: Core characters and faction follow the unlock conditions
+
+Core characters SHALL be the `unlockedUnitIds` of the group's campaigns, or of the campaign a campaign follows when it names none. They are curated only when the game names none (Indomitus), and curating them anyway SHALL fail the load. The group's faction SHALL be the one faction of its core characters. An allowed faction with no units SHALL fail the load.
+
+#### Scenario: Elite campaign
+
+- **WHEN** the catalog loads from datamine `v1.43.157.2989`
+- **THEN** `elite2` (which follows `campaign2`) has core characters `["blackHaarken", "blackTerminator", "blackPossession"]`, faction `BlackLegion`, and allies including `TheLostAndTheDamned`
 
 ### Requirement: Battle enemies come from the opposing teams
 

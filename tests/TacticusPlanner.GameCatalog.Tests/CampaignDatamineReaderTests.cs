@@ -24,10 +24,17 @@ public sealed class CampaignDatamineReaderTests
         ["upgHpC015"] = new("Bionic Arm", "Common", "Health", null),
     };
 
-    private static GameCatalogCampaignCuration Curation(string campaign = "eventStandard1") => new(
-        "eventCampaign1", "DeathGuard", "event", "Chaos", ["DeathGuard", "WorldEaters"],
-        ["deathBlightlord", "deathPutrifier", "deathBlightbringer"],
-        [new GameCatalogCampaignSourceCuration("Standard", campaign, "AMS")]);
+    private static GameCatalogCampaignCuration Curation(string campaign = "eventStandard1") =>
+        new([new GameCatalogCampaignSourceCuration(campaign, "AMS")]);
+
+    private static readonly IReadOnlyDictionary<string, GameCatalogFactionUnits> Units = GameCatalogLoader.Load().UnitsByFaction;
+
+    private static DatamineCampaignUnlockConditions Unlock(string[] factions, string[]? units = null, string? follows = null) => new(
+        new DatamineCampaignRequiredUnits(factions, units),
+        follows is null ? null : [new DatamineCompletedCampaign("Event", follows)]);
+
+    private static readonly DatamineCampaignUnlockConditions EventUnlock =
+        Unlock(["DeathGuard", "WorldEaters"], ["deathBlightlord", "deathPutrifier", "deathBlightbringer"]);
 
     private static DatamineCampaignBattle Battle(string battleId, string? chanceOf = "upgHpC015%12/13") => new(
         battleId,
@@ -42,9 +49,13 @@ public sealed class CampaignDatamineReaderTests
         new DatamineCampaignLoot(["gold:40-66", "xpCommon"], chanceOf));
 
     private static GameCatalogCampaignGroup Read(GameCatalogCampaignCuration curation, params DatamineCampaignBattle[] battles) =>
+        Read(curation, new Dictionary<string, List<DatamineCampaign>> { ["Event"] = [new DatamineCampaign("eventStandard1", battles, EventUnlock)] });
+
+    private static GameCatalogCampaignGroup Read(GameCatalogCampaignCuration curation, Dictionary<string, List<DatamineCampaign>> campaigns) =>
         Assert.Single(GameCatalogDenormalizer.ReadDatamineCampaigns(
             new Dictionary<string, GameCatalogCampaignCuration> { [Key] = curation },
-            new Dictionary<string, List<DatamineCampaign>> { ["Event"] = [new DatamineCampaign("eventStandard1", battles)] },
+            campaigns,
+            Units,
             Npcs,
             Upgrades)).Value;
 
@@ -72,6 +83,67 @@ public sealed class CampaignDatamineReaderTests
                 new GameCatalogCampaignDetailedEnemy("admecNpc1Vanguard", "Skitarii Vanguard", 1, 1, "Stone3"),
             ],
             battle.DetailedEnemyTypes);
+    }
+
+    [Fact]
+    public void GroupMetadataFollowsTheGamesUnlockConditions()
+    {
+        var group = Read(
+            new([new("eventStandard1", "AMS"), new("eventExtremis1", "AME")]),
+            new Dictionary<string, List<DatamineCampaign>>
+            {
+                ["Event"] =
+                [
+                    new DatamineCampaign("eventStandard1", [Battle("01")], EventUnlock),
+                    // An extremis campaign names its units again, or leaves them to the campaign it follows.
+                    new DatamineCampaign("eventExtremis1", [Battle("01")], Unlock(["DeathGuard", "WorldEaters"], follows: "eventStandard1")),
+                ],
+            });
+
+        Assert.Equal(("eventCampaign1", "event", "DeathGuard", "Chaos"), (group.GroupId, group.ReleaseType, group.Faction, group.AlliesAlliance));
+        Assert.Equal(["Standard", "Extremis"], group.Types);
+        Assert.Equal(["deathBlightlord", "deathPutrifier", "deathBlightbringer"], group.CoreCharacters);
+        // Allies keep the catalog's faction order.
+        Assert.Equal(["DeathGuard", "WorldEaters"], group.AlliesFactions);
+        Assert.Equal(["AMS01", "AME01"], group.Battles.Select(battle => battle.Id));
+    }
+
+    [Fact]
+    public void AlliesAreEveryFactionTheCampaignAllows()
+    {
+        Dictionary<string, List<DatamineCampaign>> FallOfCadia(params string[] allowed) => new()
+        {
+            ["Standard"] = [new DatamineCampaign("campaign2", [Battle("01")], Unlock(allowed, ["blackHaarken", "blackTerminator", "blackPossession"]))],
+        };
+
+        var group = Read(new([new("campaign2", "FoC")]), FallOfCadia("WorldEaters", "BlackLegion", "DeathGuard", "TheLostAndTheDamned"));
+
+        Assert.Equal(("campaign2", "standard", "BlackLegion"), (group.GroupId, group.ReleaseType, group.Faction));
+        Assert.Equal(["BlackLegion", "DeathGuard", "TheLostAndTheDamned", "WorldEaters"], group.AlliesFactions);
+        var error = Assert.Throws<InvalidOperationException>(() => Read(new([new("campaign2", "FoC")]), FallOfCadia("BlackLegion", "Traitors")));
+        Assert.Contains("'Traitors'", error.Message, StringComparison.Ordinal);
+    }
+
+    [Fact]
+    public void CoreCharactersAreCuratedOnlyWhereTheGameNamesNone()
+    {
+        Dictionary<string, List<DatamineCampaign>> Indomitus() => new()
+        {
+            ["Standard"] = [new DatamineCampaign("campaign1", [Battle("01")], Unlock(["Ultramarines", "Sisterhood"]))],
+            ["Elite"] = [new DatamineCampaign("elite1", [Battle("01")], new(
+                new DatamineCampaignRequiredUnits(["Ultramarines", "Sisterhood"], null), [new DatamineCompletedCampaign("Standard", "campaign1")]))],
+        };
+        string[] core = ["ultraTigurius", "ultraEliminatorSgt", "ultraInceptorSgt"];
+
+        var elite = Read(new([new("elite1", "IE")], core), Indomitus());
+        Assert.Equal(("elite1", "Ultramarines", "Imperial"), (elite.GroupId, elite.Faction, elite.AlliesAlliance));
+        Assert.Equal(core, elite.CoreCharacters);
+        Assert.Equal(["Sisterhood", "Ultramarines"], elite.AlliesFactions);
+
+        var missing = Assert.Throws<InvalidOperationException>(() => Read(new([new("campaign1", "I")]), Indomitus()));
+        Assert.Contains("must be curated", missing.Message, StringComparison.Ordinal);
+        var redundant = Assert.Throws<InvalidOperationException>(() => Read(Curation() with { CoreCharacters = core }, Battle("01")));
+        Assert.Contains("already names", redundant.Message, StringComparison.Ordinal);
     }
 
     [Fact]
