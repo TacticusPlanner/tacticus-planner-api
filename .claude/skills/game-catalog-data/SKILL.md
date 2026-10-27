@@ -101,7 +101,7 @@ restrictions); these are silently ignored on deserialize.
   serves `level: N + 2`): `dust` → `salvage` (absent ⇒ 0), `abilityToken{Rarity}` → `badges`,
   `itemAscensionResource_{Rarity}` → `forgeBadges` (absent ⇒ null), `machinesOfWarToken` → `components`. Any
   other key fails startup.
-- **factions** and **damage-types** are new in roadmap step 7 (game data the apps hardcoded), built from the
+- **factions** and **damage-types** (game data the apps used to hardcode) are built from the
   datamine `gameconfig/units/factions.json` and `gameconfig/units/damageProfiles.json`
   (`Denormalization/FactionDenormalizer.cs`). A faction serves `alliance` (its single `traits` entry: Imperial, Chaos
   or Xenos), `unlockDateUtc` (`unlockTimestamp` as `yyyy-MM-ddTHH:mm:ssZ`) and `collectionFaction` (absent ⇒ false),
@@ -109,7 +109,7 @@ restrictions); these are silently ignored on deserialize.
   `piercingRatio` (a percentage, 0-100) and `traits` (absent ⇒ `[]`), ordered by id. Validation
   (`Validation/FactionValidation.cs`) fails the load when a character, MoW or non-object NPC has an unserved faction
   or a different alliance (`InvalidFaction`), or deals a damage type the dataset lacks (`InvalidDamageType`).
-- **global-values** (roadmap step 7) is a one-element list: the game-wide constants of the datamine
+- **global-values** is a one-element list: the game-wide constants of the datamine
   `gameconfig/globalValues.json` the apps used to hardcode, under the game's names (`maxStamina`,
   `staminaRegenerationTime` in seconds, `wavesMaxStamina`/`wavesStaminaRegenerationTime` for Onslaught tokens,
   `campaignLevel*Stamina*` for limited-battle attempts, `minUnitsNeededForBattle`/`maxUnitsPossibleForBattle`,
@@ -119,7 +119,7 @@ restrictions); these are silently ignored on deserialize.
   missing or non-positive stamina or team value, a fatigue chance outside 0-100, or a tier that is not a gem-priced
   `stamina:N` (+ optional `raidTicket:N`) product fails the load. Add a field by binding it in `DatamineGlobalValues`
   (a new served field moves the derived `schemaHash`).
-- **progression-rules** (roadmap step 7) is a one-element list (`Denormalization/ProgressionRulesDenormalizer.cs`):
+- **progression-rules** is a one-element list (`Denormalization/ProgressionRulesDenormalizer.cs`):
   `xpLevels` (the game's `units/xpLevels.json`; element i is the total XP to reach level i + 2), `xpBooks`
   (`consumables.json`, one per rarity in rarity order: `id`, `rarity`, `xpIncrease`, `gold`), `upgradeSlots`
   (`units/upgradeSlots.json` `xpLevelRequirements`, one row of six slot levels per rank from Stone1 to Adamantine2,
@@ -129,7 +129,7 @@ restrictions); these are silently ignored on deserialize.
   `hreShards` from `ascensionCosts` (null when absent)). Costs stay in `ascension-costs` and power multipliers in
   `unit-power`. A non-increasing XP curve, a missing book, a rank row count or width other than 20 × 6, or a ladder
   that doesn't walk `ProgressionRules.ProgressionOrder` fails the load.
-- **hre** (roadmap step 7) is one record per Hero Release Event of the datamine `liveEvents/heroReleaseEvent.json`,
+- **hre** is one record per Hero Release Event of the datamine `liveEvents/heroReleaseEvent.json`,
   ordered by id (`Denormalization/HreDenormalizer.cs`): the `unlockableHero` (`heroId`, `baseRarity`, `maxRarity`),
   `featuredFaction` (`trackingFeaturedFaction`), `gameModes`, `scorePoints` (the game's multipliers and tables), the
   points `milestones` (`hreCurrency:N` each, not cumulative), the `missions` chain from `questId` along
@@ -271,8 +271,8 @@ each; served as `heroProgressionSteps` / `mowProgressionSteps` with a `step` ind
 ## Datamine source
 
 `TacticusPlanner/tacticus-planner-data-mines` (private) extracts the game's config from every PC build into
-`raw/` and tags each merged datamine `v<version>`. Its `docs/catalog-audit.md` maps each dataset here to its
-datamine source; its `docs/roadmap.md` orders the migration. Datasets move onto it one change at a time.
+`raw/` and tags each merged datamine `v<version>`. The workspace `tp-bump-datamine` skill
+(`tacticus-planner-dev`) runs a release and bumps this repo and the apps to it together.
 
 - **`Data/datamine/REF`** — one line, `<tag> <40-hex sha>` (e.g. `v1.43.157.2989 e5c8…`). The SHA wins: a forced
   datamine re-run moves the tag. `local <path>` marks a copy from a working tree; tests reject it.
