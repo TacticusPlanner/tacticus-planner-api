@@ -1,0 +1,165 @@
+{
+  "Ultramarines": {
+    "unit": "",
+    "traits": [
+      "Imperial"
+    ],
+    "unlockTimestamp": 1660435200000
+  },
+  "Necrons": {
+    "unit": "",
+    "traits": [
+      "Xenos"
+    ],
+    "unlockTimestamp": 1664827200000
+  },
+  "Sisterhood": {
+    "unit": "",
+    "traits": [
+      "Imperial"
+    ],
+    "unlockTimestamp": 1669219200000
+  },
+  "AstraMilitarum": {
+    "unit": "",
+    "traits": [
+      "Imperial"
+    ],
+    "unlockTimestamp": 1673611200000
+  },
+  "BlackLegion": {
+    "unit": "",
+    "traits": [
+      "Chaos"
+    ],
+    "unlockTimestamp": 1678003200000
+  },
+  "DeathGuard": {
+    "unit": "",
+    "traits": [
+      "Chaos"
+    ],
+    "unlockTimestamp": 1682395200000
+  },
+  "Tyranids": {
+    "unit": "",
+    "traits": [
+      "Xenos"
+    ],
+    "unlockTimestamp": 1686787200000
+  },
+  "Orks": {
+    "unit": "",
+    "traits": [
+      "Xenos"
+    ],
+    "unlockTimestamp": 1691179200000
+  },
+  "BlackTemplars": {
+    "unit": "",
+    "traits": [
+      "Imperial"
+    ],
+    "unlockTimestamp": 1695571200000
+  },
+  "Aeldari": {
+    "unit": "",
+    "traits": [
+      "Xenos"
+    ],
+    "unlockTimestamp": 1699963200000
+  },
+  "Tau": {
+    "unit": "",
+    "traits": [
+      "Xenos"
+    ],
+    "unlockTimestamp": 1704355200000
+  },
+  "SpaceWolves": {
+    "unit": "",
+    "traits": [
+      "Imperial"
+    ],
+    "unlockTimestamp": 1708747200000
+  },
+  "ThousandSons": {
+    "unit": "",
+    "traits": [
+      "Chaos"
+    ],
+    "unlockTimestamp": 1713139200000
+  },
+  "DarkAngels": {
+    "unit": "",
+    "traits": [
+      "Imperial"
+    ],
+    "unlockTimestamp": 1717531200000
+  },
+  "AdeptusMechanicus": {
+    "unit": "",
+    "traits": [
+      "Imperial"
+    ],
+    "unlockTimestamp": 1721923200000
+  },
+  "WorldEaters": {
+    "unit": "",
+    "traits": [
+      "Chaos"
+    ],
+    "unlockTimestamp": 1726315200000
+  },
+  "BloodAngels": {
+    "unit": "",
+    "traits": [
+      "Imperial"
+    ],
+    "unlockTimestamp": 1730707200000
+  },
+  "Genestealers": {
+    "unit": "",
+    "traits": [
+      "Xenos"
+    ],
+    "unlockTimestamp": 1735099200000
+  },
+  "Custodes": {
+    "unit": "",
+    "traits": [
+      "Imperial"
+    ],
+    "unlockTimestamp": 1747929600000
+  },
+  "EmperorsChildren": {
+    "unit": "",
+    "traits": [
+      "Chaos"
+    ],
+    "unlockTimestamp": 1753920000000
+  },
+  "LeaguesOfVotann": {
+    "unit": "",
+    "traits": [
+      "Xenos"
+    ],
+    "unlockTimestamp": 1770249600000
+  },
+  "AdeptusAstartes": {
+    "unit": "",
+    "traits": [
+      "Imperial"
+    ],
+    "unlockTimestamp": 1779379200000,
+    "collectionFaction": true
+  },
+  "TheLostAndTheDamned": {
+    "unit": "",
+    "traits": [
+      "Chaos"
+    ],
+    "unlockTimestamp": 1793721600000,
+    "collectionFaction": true
+  }
+}

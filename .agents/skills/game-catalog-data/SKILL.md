@@ -98,6 +98,14 @@ restrictions); these are silently ignored on deserialize.
   serves `level: N + 2`): `dust` → `salvage` (absent ⇒ 0), `abilityToken{Rarity}` → `badges`,
   `itemAscensionResource_{Rarity}` → `forgeBadges` (absent ⇒ null), `machinesOfWarToken` → `components`. Any
   other key fails startup.
+- **factions** and **damage-types** are new in roadmap step 7 (game data the apps hardcoded), built from the
+  datamine `gameconfig/units/factions.json` and `gameconfig/units/damageProfiles.json`
+  (`Denormalization/FactionDenormalizer.cs`). A faction serves `alliance` (its single `traits` entry: Imperial, Chaos
+  or Xenos), `unlockDateUtc` (`unlockTimestamp` as `yyyy-MM-ddTHH:mm:ssZ`) and `collectionFaction` (absent ⇒ false),
+  ordered by unlock time, then id; that is not the apps' display order. A damage type serves the game's
+  `piercingRatio` (a percentage, 0-100) and `traits` (absent ⇒ `[]`), ordered by id. Validation
+  (`Validation/FactionValidation.cs`) fails the load when a character, MoW or non-object NPC has an unserved faction
+  or a different alliance (`InvalidFaction`), or deals a damage type the dataset lacks (`InvalidDamageType`).
 - **campaign-battles** is flat, keyed by globally-unique battle id, each carrying its `campaignGroupId`;
   **campaign-definitions** is keyed by `groupId` (metadata + `battleIds[]` only). Battle ids are also
   referenced from API test fixtures and the player-data transformer, so renaming a battle id is not a

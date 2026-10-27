@@ -821,6 +821,104 @@
         }
       }
     },
+    "/api/v1/game-catalog/damage-types": {
+      "get": {
+        "tags": [
+          "Game-Catalog"
+        ],
+        "summary": "Gets the damage types.",
+        "operationId": "TacticusPlannerApiFeaturesGameCatalogGetGameCatalogDamageTypesEndpoint1",
+        "responses": {
+          "200": {
+            "description": "One record per damage type, ordered by id: its piercing ratio (the percentage of a hit that ignores armour) and the traits its hits carry.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogDamageType"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "The dataset has not changed."
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The envelope hash is not the current release's.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/game-catalog/damage-types/{envelopeHash}": {
+      "get": {
+        "tags": [
+          "Game-Catalog"
+        ],
+        "summary": "Gets the damage types.",
+        "operationId": "TacticusPlannerApiFeaturesGameCatalogGetGameCatalogDamageTypesEndpoint2",
+        "parameters": [
+          {
+            "name": "envelopeHash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "One record per damage type, ordered by id: its piercing ratio (the percentage of a hit that ignores armour) and the traits its hits carry.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogDamageType"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "The dataset has not changed."
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The envelope hash is not the current release's.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/game-catalog/equipment": {
       "get": {
         "tags": [
@@ -1085,6 +1183,104 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/GameCatalogDatasetEnvelopeOfIReadOnlyDictionaryOfStringAndIReadOnlyListOfGameCatalogEventsCalendarEntry"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "The dataset has not changed."
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The envelope hash is not the current release's.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/game-catalog/factions": {
+      "get": {
+        "tags": [
+          "Game-Catalog"
+        ],
+        "summary": "Gets the game factions.",
+        "operationId": "TacticusPlannerApiFeaturesGameCatalogGetGameCatalogFactionsEndpoint1",
+        "responses": {
+          "200": {
+            "description": "One record per faction, in unlock order: its alliance (Imperial, Chaos or Xenos), unlock date (UTC) and whether it is a collection faction grouping units of other factions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogFaction"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "The dataset has not changed."
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The envelope hash is not the current release's.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/game-catalog/factions/{envelopeHash}": {
+      "get": {
+        "tags": [
+          "Game-Catalog"
+        ],
+        "summary": "Gets the game factions.",
+        "operationId": "TacticusPlannerApiFeaturesGameCatalogGetGameCatalogFactionsEndpoint2",
+        "parameters": [
+          {
+            "name": "envelopeHash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "One record per faction, in unlock order: its alliance (Imperial, Chaos or Xenos), unlock date (UTC) and whether it is a collection faction grouping units of other factions.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogFaction"
                 }
               }
             }
@@ -6946,6 +7142,26 @@
           }
         }
       },
+      "GameCatalogDamageType": {
+        "required": [
+          "id",
+          "piercingRatio",
+          "traits"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "piercingRatio": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "traits": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          }
+        }
+      },
       "GameCatalogDatasetEnvelopeOfGameCatalogGuildRaidMetaView": {
         "required": [
           "version",
@@ -7290,6 +7506,49 @@
           }
         }
       },
+      "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogDamageType": {
+        "required": [
+          "version",
+          "schemaVersion",
+          "gameVersion",
+          "sourceHash",
+          "datasetKey",
+          "datasetHash",
+          "data"
+        ],
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "schemaVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gameVersion": {
+            "type": "string"
+          },
+          "sourceHash": {
+            "type": "string"
+          },
+          "datasetKey": {
+            "type": "string"
+          },
+          "datasetHash": {
+            "type": "string"
+          },
+          "data": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogDamageType"
+              }
+            ]
+          }
+        }
+      },
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogEquipmentView": {
         "required": [
           "version",
@@ -7371,6 +7630,49 @@
               },
               {
                 "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogEventDefinition"
+              }
+            ]
+          }
+        }
+      },
+      "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogFaction": {
+        "required": [
+          "version",
+          "schemaVersion",
+          "gameVersion",
+          "sourceHash",
+          "datasetKey",
+          "datasetHash",
+          "data"
+        ],
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "schemaVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gameVersion": {
+            "type": "string"
+          },
+          "sourceHash": {
+            "type": "string"
+          },
+          "datasetKey": {
+            "type": "string"
+          },
+          "datasetHash": {
+            "type": "string"
+          },
+          "data": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogFaction"
               }
             ]
           }
@@ -8186,6 +8488,29 @@
                 "$ref": "#/components/schemas/IReadOnlyDictionaryOfStringAndJsonElement"
               }
             ]
+          }
+        }
+      },
+      "GameCatalogFaction": {
+        "required": [
+          "id",
+          "alliance",
+          "unlockDateUtc",
+          "collectionFaction"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "alliance": {
+            "type": "string"
+          },
+          "unlockDateUtc": {
+            "type": "string"
+          },
+          "collectionFaction": {
+            "type": "boolean"
           }
         }
       },
@@ -11199,6 +11524,12 @@
           "$ref": "#/components/schemas/GameCatalogDamageProfileModifier"
         }
       },
+      "IReadOnlyListOfGameCatalogDamageType": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogDamageType"
+        }
+      },
       "IReadOnlyListOfGameCatalogEquipmentLevel": {
         "type": "array",
         "items": {
@@ -11233,6 +11564,12 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/GameCatalogEventsCalendarEntry"
+        }
+      },
+      "IReadOnlyListOfGameCatalogFaction": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogFaction"
         }
       },
       "IReadOnlyListOfGameCatalogFarmLocation": {

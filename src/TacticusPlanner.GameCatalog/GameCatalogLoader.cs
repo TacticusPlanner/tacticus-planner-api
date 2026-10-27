@@ -58,6 +58,10 @@ public static class GameCatalogLoader
         var questEvents = GameCatalogDenormalizer.ReadDatamineQuestEvents(
             LoadDatamine<List<DatamineLinearHeroEvent>>(GameCatalogDenormalizer.DatamineLinearHeroEventsPath));
         var questCrates = LoadDataset<IReadOnlyList<GameCatalogQuestCrate>>(GameCatalogDatasets.QuestCrates);
+        var factionViews = GameCatalogDenormalizer.ReadDatamineFactions(
+            LoadDatamine<Dictionary<string, DatamineFaction>>(GameCatalogDenormalizer.DatamineFactionsPath));
+        var damageTypeViews = GameCatalogDenormalizer.ReadDatamineDamageTypes(
+            LoadDatamine<Dictionary<string, DatamineDamageProfile>>(GameCatalogDenormalizer.DatamineDamageProfilesPath));
 
         var datamineNpcs = LoadDatamine<Dictionary<string, DatamineNpc>>(GameCatalogDenormalizer.DatamineNpcPath);
         var npcsByFaction = GameCatalogDenormalizer.ReadDatamineNpcs(datamineNpcs, abilities);
@@ -161,6 +165,8 @@ public static class GameCatalogLoader
             [GameCatalogDatasets.UnitPower] = GameCatalogHashing.ComputeCanonicalJsonHash(unitPowerViews, JsonOptions),
             [GameCatalogDatasets.QuestEvents] = GameCatalogHashing.ComputeCanonicalJsonHash(questEventViews, JsonOptions),
             [GameCatalogDatasets.QuestCrates] = GameCatalogHashing.ComputeCanonicalJsonHash(questCrateViews, JsonOptions),
+            [GameCatalogDatasets.Factions] = GameCatalogHashing.ComputeCanonicalJsonHash(factionViews, JsonOptions),
+            [GameCatalogDatasets.DamageTypes] = GameCatalogHashing.ComputeCanonicalJsonHash(damageTypeViews, JsonOptions),
         };
 
         var snapshot = new GameCatalogSnapshot(
@@ -214,7 +220,9 @@ public static class GameCatalogLoader
             mythicQuestViews,
             unitPowerViews,
             questEventViews,
-            questCrateViews);
+            questCrateViews,
+            factionViews,
+            damageTypeViews);
 
         var errors = GameCatalogValidator.Validate(snapshot);
         if (errors.Count > 0)
