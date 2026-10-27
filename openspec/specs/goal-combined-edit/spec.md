@@ -39,12 +39,6 @@ The target section SHALL be validated as a target edit (see `goal-target-editing
 - **WHEN** the request carries valid notes and an invalid target
 - **THEN** the response is 400 naming the target, and the notes are not saved
 
-#### Scenario: Project slot check sees the new target
-
-- **GIVEN** a Rank goal whose new target is already held by another in-flight goal of the same unit
-- **WHEN** the request changes the goal's target
-- **THEN** the response is 409 `slotOccupied` naming the existing goal, and nothing is saved
-
 #### Scenario: Position out of range
 
 - **GIVEN** five in-flight goals

@@ -68,8 +68,3 @@ Project reads SHALL NOT expose an active-plan flag, and the API SHALL NOT offer 
 
 - **WHEN** the caller lists projects
 - **THEN** no project summary contains an active-plan indicator
-
-#### Scenario: The activate operation is gone
-
-- **WHEN** a caller requests the former activate operation for a project
-- **THEN** the API responds as for an unknown route and no project changes

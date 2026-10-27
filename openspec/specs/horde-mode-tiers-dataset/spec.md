@@ -44,11 +44,6 @@ Assumptions:
 - **WHEN** the client reads `horde-mode-tiers`
 - **THEN** `ultraTigurius` carries `multiplier` 1.45, `bloodDante` has no `multiplier` field, and the client uses 1.45 and 1.3 respectively
 
-#### Scenario: Listed in the manifest
-
-- **WHEN** the client reads the public manifest
-- **THEN** it contains a `horde-mode-tiers` entry with a content hash
-
 ### Requirement: The horde-mode tier list is validated on load
 
 The catalog loader SHALL reject the raw file, with a validation error naming the dataset and the offending value, when: it does not contain exactly one record; the id is not `horde-mode-tiers`; `tiers` is not exactly S, A, B, C, D in that order; a multiplier is not in (0, 5]; a `unitId` is not a catalog character id; a `unitId` appears twice; a character's `tier` is not one of the tier names; or a character's `multiplier` is set and not in (0, 5]. Per-tier multiplier ranges SHALL NOT be validated.

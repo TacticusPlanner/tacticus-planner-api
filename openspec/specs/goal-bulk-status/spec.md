@@ -1,7 +1,7 @@
 # goal-bulk-status Specification
 
 ## Purpose
-One request transitions one or many of the caller's goals to a lifecycle status atomically, replacing the per-goal and per-project status routes.
+One request transitions one or many of the caller's goals to a lifecycle status atomically.
 
 ## Requirements
 

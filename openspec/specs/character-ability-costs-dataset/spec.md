@@ -9,20 +9,11 @@ Provides the game catalog's character ability cost ladder, the gold and ability 
 
 The game catalog SHALL serve a dataset keyed `character-ability-costs` as a plain array, one record per ability level a character ability can be raised to, ordered by ascending `level`, at `GET /api/v1/game-catalog/character-ability-costs` without requiring authentication, consistent with the rest of the catalog. It SHALL be built from the pinned datamine copy `gameconfig/units/abilityUpgradeCosts.json`; the catalog SHALL keep no hand-kept copy, and the raw file SHALL NOT be served directly. The dataset is shared by every character and every ability track, not per character.
 
-#### Scenario: Dataset is served without authentication
+#### Scenario: One record per datamine row
 
-- **WHEN** a client requests the `character-ability-costs` endpoint
-- **THEN** the ladder array is returned without requiring authentication, wrapped in the same dataset envelope as the other served datasets
-
-#### Scenario: Dataset appears in the manifest
-
-- **WHEN** the game catalog manifest is requested
-- **THEN** it includes a hash entry for `character-ability-costs`, and the manifest snapshot test covers it
-
-#### Scenario: The raw source has no direct endpoint
-
-- **WHEN** the set of game catalog endpoints is enumerated
-- **THEN** there is no endpoint serving the raw `abilityUpgradeCosts.json` directly
+- **GIVEN** the pinned `abilityUpgradeCosts.json`
+- **WHEN** the catalog loads
+- **THEN** `character-ability-costs` holds one record per row, in ascending `level`
 
 ### Requirement: Each record is keyed by the level it raises an ability to
 

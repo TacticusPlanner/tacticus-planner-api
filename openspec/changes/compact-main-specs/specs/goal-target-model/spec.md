@@ -6,7 +6,7 @@
 farming override. Unlock and Ascension shard sources SHALL be expressed only through
 `acquisitionSources`.
 
-#### Scenario: Rank goal farming override is unchanged
+#### Scenario: Rank goal farming override round-trips
 
 - **WHEN** a Rank goal is created with `farmingLocationIds` set
 - **THEN** the goal round-trips with the same `farmingLocationIds` and no `acquisitionSources`
@@ -166,7 +166,7 @@ materials").
   the track's ladder
 - **THEN** validation rejects the request with a message naming the offending range
 
-#### Scenario: Existing and range-less goals are unchanged
+#### Scenario: Range-less goal
 
 - **GIVEN** an Upgrade goal created without any range group
 - **WHEN** its detail is read

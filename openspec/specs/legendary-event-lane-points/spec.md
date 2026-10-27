@@ -14,7 +14,7 @@ Every served `lres` lane SHALL carry `killPoints` equal to the first element of 
 - **WHEN** the `lres` dataset is served
 - **THEN** `votanUthar` carries `killPoints` 30 on Alpha, 34 on Beta and 43 on Gamma, equal to the first `defeatAll` value of each lane
 
-#### Scenario: Other events are unchanged
+#### Scenario: Other events
 
 - **WHEN** the dataset is served
 - **THEN** `astarLysander` carries 32 / 38 / 31, `lostaBile` 37 / 40 / 46 and `tauFarsight` 34 / 26 / 17, each equal to its lane's first `defeatAll` value

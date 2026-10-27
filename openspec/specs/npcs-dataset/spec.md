@@ -8,16 +8,6 @@ Provides the backend game catalog's consolidated non-playable-unit reference dat
 
 The game catalog SHALL serve a dataset keyed `npcs` built from the pinned datamine copy `gameconfig/units/npc.json` (keyed by NPC id), with damage profiles from `gameconfig/units/abilities.json`. The catalog SHALL keep no hand-kept NPC files. NPCs SHALL be grouped per faction under the source key `npcs-<faction>` (lowercased `FactionId`); records without a `FactionId` (loot objects) form the `npcs-objects` bucket. The served dataset SHALL be a single flat list of NPC records ordered by source key (ordinal) and then by id (ordinal). The raw file SHALL NOT be served directly. The dataset SHALL be served without authentication and SHALL appear in the catalog manifest with its own content hash.
 
-#### Scenario: Npcs dataset is served without authentication
-
-- **WHEN** a client requests the `npcs` endpoint
-- **THEN** the data is returned without requiring authentication, consistent with the rest of the game catalog
-
-#### Scenario: Npcs dataset appears in the manifest
-
-- **WHEN** the game catalog manifest is requested
-- **THEN** it includes a hash entry for `npcs`
-
 #### Scenario: Records from every raw source are present
 
 - **WHEN** the datamine `npc.json` at `v1.43.157.2989` holds 539 NPCs across 20 factions plus loot objects

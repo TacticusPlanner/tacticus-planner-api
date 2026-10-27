@@ -95,13 +95,6 @@ Comp ordering.
 be compared across different bosses or primes to imply one is harder or
 easier than another. It carries no unit and no fixed baseline value.
 
-#### Scenario: A boss has Meta and alternate exact teams
-
-- **WHEN** a boss group contains two recommendations, `kind: "meta"` and
-  `kind: "alternate"`
-- **THEN** each recommendation exposes exactly five ordered hero slots, one
-  Machine of War id, one or more Comp ids, and a positive `efficiency` value
-
 #### Scenario: A boss has several tiered recommendations
 
 - **WHEN** a boss group contains three recommendations with distinct `kind`

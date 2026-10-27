@@ -69,7 +69,7 @@ A request or response field whose values come from a fixed set SHALL be describe
 ### Requirement: Enum wire values are stable
 Enum fields SHALL serialize to the same PascalCase strings the API returned before this change. Requests SHALL accept those values case-insensitively. A request with a value outside the set SHALL be rejected with a 400 `validation` problem whose `errors` names the field, and SHALL change nothing.
 
-#### Scenario: Response values are unchanged
+#### Scenario: Response values are PascalCase
 - **WHEN** a client reads a goal
 - **THEN** `status`, `goalType` and `entityType` carry the same strings as before (e.g. `Active`, `Rank`, `Character`)
 

@@ -357,18 +357,6 @@ identified as automatically added and naming the source goal it unblocks.
 - **WHEN** the goals part is imported with automatic prerequisites selected
 - **THEN** no Ascension goal is created and no other goal is created for that character
 
-#### Scenario: A created prerequisite precedes its dependents in the import sequence
-
-- **GIVEN** an imported Rank goal requires an Ascension prerequisite the account doesn't have
-- **WHEN** the prerequisite is created automatically
-- **THEN** the created Ascension goal's position in the project's priority order precedes the Rank goal's position
-
-#### Scenario: Rank and Ability imports do not synthesize Level
-
-- **GIVEN** imported Rank and Ability targets that need a higher character level
-- **WHEN** the goals part is imported with automatic prerequisites selected
-- **THEN** no Level goal is created, and each target still carries its own level requirement
-
 ### Requirement: A failure for one goal does not discard the others
 
 A source goal that cannot be created SHALL report as failed with a code and

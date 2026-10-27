@@ -8,16 +8,6 @@ Provides the backend game catalog's consolidated raid-boss reference data — th
 
 The game catalog SHALL serve a dataset keyed `raid-bosses` built from the pinned datamine copies under `globalconfig/guildBoss/`: `guildBossSeasonConfigRotation.json`, `primarchs.json`, `modifiers.json`, `unitSets.json` and `guildBossSeasonDataConfigsGDTO.json`. The catalog SHALL keep no hand-kept raid-boss files. It SHALL be the only raid-boss dataset exposed publicly; the raw per-file sources (season rotation, unit sets, season configs, modifier definitions) SHALL NOT be served directly. The served dataset SHALL be self-contained: an encounter's boss/prime stats, weapons, abilities, traits, and scaled modifier definitions are inlined so the client never joins one served collection against another.
 
-#### Scenario: Raid-bosses dataset is served without authentication
-
-- **WHEN** a client requests the `raid-bosses` endpoint
-- **THEN** the data is returned without requiring authentication, consistent with the rest of the game catalog
-
-#### Scenario: Raid-bosses dataset appears in the manifest
-
-- **WHEN** the game catalog manifest is requested
-- **THEN** it includes a hash entry for `raid-bosses`
-
 #### Scenario: Raw sources have no direct endpoint
 
 - **WHEN** the set of game catalog endpoints is enumerated

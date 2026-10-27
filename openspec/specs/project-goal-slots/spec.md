@@ -1,6 +1,6 @@
 ## Purpose
 
-Allows separate projects to carry separate in-flight targets while preventing duplicate Active/Paused goal types for one unit inside a project.
+Prevents two in-flight goals of one unit, type and target key in a profile, whatever projects they belong to.
 
 ## Requirements
 
@@ -13,12 +13,6 @@ For each profile, at most one Active/Paused goal SHALL occupy `(entityType, enti
 - **GIVEN** an Active Ragnar Rank goal targeting Gold1 belongs to project A
 - **WHEN** the owner wants Ragnar Gold1 in project B
 - **THEN** the existing goal is added to B; creating a second Ragnar Rank Gold1 goal is rejected and identifies the existing goal
-
-#### Scenario: Same project rejects duplicate
-
-- **GIVEN** an Active or Paused Ragnar Rank goal targeting Gold1 in any project
-- **WHEN** another in-flight Ragnar Rank goal with the same normalized Gold1 target is created, in any project set
-- **THEN** the operation is rejected and identifies the existing goal
 
 #### Scenario: Historical goal frees slot
 
@@ -54,12 +48,6 @@ For each profile, at most one Active/Paused goal SHALL occupy `(entityType, enti
 
 The invariant SHALL apply atomically to single creation, combined creation, target edits, and transitions into Active/Paused (single or bulk). Transitioning to Completed/Archived SHALL free the slot. Membership changes (goal-side or project-side) SHALL NOT be slot-checked, because membership cannot create a duplicate.
 
-#### Scenario: Resume conflicts in one membership
-
-- **GIVEN** a Completed goal A followed by creation of another Active/Paused goal B occupying the same slot
-- **WHEN** the caller attempts to transition A to Paused
-- **THEN** the transition is rejected with 409 `slotOccupied` identifying B, and A remains Completed
-
 #### Scenario: Shared goal occupies each project once
 
 - **GIVEN** an in-flight goal in project A
@@ -85,11 +73,6 @@ A slot conflict SHALL produce the same 409 in the unified error shape with `issu
 ### Requirement: The profile lock serializes slot checks
 
 Every goal write SHALL take the profile lock before checking slots, so two concurrent transactions cannot both occupy the same non-Rank profile/unit/type slot or the same Rank profile/unit/normalized-end-target slot. The rule SHALL NOT be enforced by a database constraint, so it can change without a schema change; a write that bypasses the lock or the check is a defect. V1 import SHALL re-check its new goals under the lock because it reads existing goals before taking it.
-
-#### Scenario: Racing creates target one slot
-
-- **WHEN** two requests concurrently create Ragnar Rank goals with the same normalized end target
-- **THEN** at most one commits and the other returns the documented `slotOccupied` conflict
 
 #### Scenario: Racing distinct Rank targets succeed
 

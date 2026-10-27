@@ -9,11 +9,6 @@ The scoring SHALL be read at load from the pinned datamine copies `gameconfig/li
 - **GIVEN** a tier whose milestones are 20, 40, 40
 - **THEN** catalog loading fails naming the definition, variant and tier
 
-#### Scenario: Unknown variant on an occurrence fails the build
-
-- **GIVEN** an occurrence of `hse-defeat-waves` with `hseVariant` `run-3`
-- **THEN** catalog loading fails naming the occurrence
-
 #### Scenario: Defeat Waves serves the game's current ladders
 
 - **WHEN** `event-definitions` is served from datamine `v1.43.157.2989`

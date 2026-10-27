@@ -4,11 +4,6 @@
 
 The served `upgrades` dataset SHALL be built from the datamine copies `gameconfig/upgrades.json` (keyed by upgrade id). The catalog SHALL keep no hand-kept upgrade files.
 
-#### Scenario: Same materials plus the game's new one
-
-- **WHEN** the dataset is served at datamine `v1.43.157.2989`
-- **THEN** it holds 560 records: the 559 the retired `Data/upgrades/*` files served, unchanged except two labels that lose their accents, plus `upgArmL008` (Transdimensional Sanctum, Legendary, Armour, not craftable)
-
 #### Scenario: The shipped materials
 
 - **WHEN** the dataset is served at datamine `v1.43.157.2989`

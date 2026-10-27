@@ -69,8 +69,3 @@ Assumptions:
 - **GIVEN** the raw lineup entry for `ultraTigurius` has no `powerMultiplier`
 - **WHEN** the catalog is built
 - **THEN** the served entry has `powerMultiplier` 100
-
-#### Scenario: Listed in the manifest
-
-- **WHEN** the client reads the public manifest
-- **THEN** it contains a `unit-power` entry with a content hash

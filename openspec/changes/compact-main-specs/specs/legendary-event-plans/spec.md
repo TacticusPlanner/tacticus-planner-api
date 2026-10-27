@@ -50,7 +50,7 @@ A team SHALL belong to exactly one lane (`alpha`, `beta` or `gamma`) of its plan
 - **WHEN** `PUT` or `DELETE …/teams/{teamId}` names a team that is not on this plan
 - **THEN** the response is 404
 
-#### Scenario: A short team written earlier stays readable
+#### Scenario: A short stored team stays readable
 
 - **GIVEN** a stored alpha team with members `[u1, u2]`
 - **WHEN** the plan is read, the team is reordered within alpha, or the team is deleted

@@ -11,10 +11,10 @@ raise a Machine of War ability to each level, built from the pinned datamine.
 
 The served `mow-upgrade-costs` dataset SHALL be built from the datamine copy `gameconfig/units/abilityUpgradeCostsMoW.json`, one record per row in file order. The catalog SHALL keep no hand-kept copy.
 
-#### Scenario: Same ladder as before
+#### Scenario: The shipped ladder
 
 - **WHEN** the dataset is served at datamine `v1.43.157.2989`
-- **THEN** it holds 59 records equal to the ones the retired `Data/mow-upgrade-costs.json` served, and its manifest hash is unchanged
+- **THEN** it holds 59 records
 
 ### Requirement: Each record is keyed by the level it raises a MoW ability to
 

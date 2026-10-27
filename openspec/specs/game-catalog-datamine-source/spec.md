@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Lets the game catalog read raw game config from a pinned `tacticus-planner-data-mines` commit: the pin, the allowlist of copied files, the copy script's contract, the checks that keep the copies honest, and how denormalizers open them. Datasets move onto it one change at a time.
+Lets the game catalog read raw game config from a pinned `tacticus-planner-data-mines` commit: the pin, the allowlist of copied files, the copy script's contract, the checks that keep the copies honest, and how denormalizers open them.
 
 ## Requirements
 
@@ -45,11 +45,6 @@ The SHA is authoritative. The tag is a label recorded when the pin was made, and
 
 - **WHEN** a listed path has no copy, or a file under `Data/datamine/raw/` is not listed
 - **THEN** `DatamineSourceTests` fails and names each such path
-
-#### Scenario: The seeded allowlist
-
-- **WHEN** `add-datamine-source` was applied
-- **THEN** `files.txt` listed exactly `gameconfig/globalValues.json` and `gameconfig/items.json`
 
 ### Requirement: `scripts/pull-datamine.cs` refreshes the pin and copies
 

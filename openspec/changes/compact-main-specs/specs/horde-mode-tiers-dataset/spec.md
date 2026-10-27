@@ -38,8 +38,3 @@ Assumptions:
 - **GIVEN** tier S has multiplier 1.3 and the raw file lists `ultraTigurius` in S with `multiplier` 1.45 and `bloodDante` in S without one
 - **WHEN** the client reads `horde-mode-tiers`
 - **THEN** `ultraTigurius` carries `multiplier` 1.45, `bloodDante` has no `multiplier` field, and the client uses 1.45 and 1.3 respectively
-
-#### Scenario: Listed in the manifest
-
-- **WHEN** the client reads the public manifest
-- **THEN** it contains a `horde-mode-tiers` entry with a content hash

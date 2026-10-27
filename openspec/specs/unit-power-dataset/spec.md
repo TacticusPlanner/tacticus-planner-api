@@ -75,11 +75,6 @@ Assumptions:
 - **WHEN** the catalog is built
 - **THEN** the served entry has `powerMultiplier` 100
 
-#### Scenario: Listed in the manifest
-
-- **WHEN** the client reads the public manifest
-- **THEN** it contains a `unit-power` entry with a content hash
-
 ### Requirement: The unit-power record is validated on load
 
 The catalog loader SHALL reject the raw file with a validation error that names `unit-power` and the offending id or value when:

@@ -2,20 +2,20 @@
 
 ## 1. Pre-flight
 
-- [ ] 1.1 Re-diff every MODIFIED block under `specs/` against its current requirement in `openspec/specs/`. The only differences allowed are the ones `audit.md` calls for, plus the added replacement scenarios. Refresh any block whose main requirement changed since this change was written. Verify by listing the differences per block and checking each against an audit id.
-- [ ] 1.2 For each REMOVED requirement, grep the canonical requirement named in its **Migration** for that requirement's key terms (e.g. `AllowAnonymous`/"without authentication", `goalRevisionStale`, slot conflict payload fields), and confirm the behavior is still stated there. Verify with a checklist of removed header → canonical header that has no gaps.
+- [x] 1.1 Re-diff every MODIFIED block under `specs/` against its current requirement in `openspec/specs/`. The only differences allowed are the ones `audit.md` calls for, plus the added replacement scenarios. Refresh any block whose main requirement changed since this change was written. Verify by listing the differences per block and checking each against an audit id.
+- [x] 1.2 For each REMOVED requirement, grep the canonical requirement named in its **Migration** for that requirement's key terms (e.g. `AllowAnonymous`/"without authentication", `goalRevisionStale`, slot conflict payload fields), and confirm the behavior is still stated there. Verify with a checklist of removed header → canonical header that has no gaps.
 
 ## 2. Direct edits to main specs
 
-- [ ] 2.1 Apply every entry in `direct-edits.md`. Remove or rename each listed scenario in `openspec/specs/<capability>/spec.md`, and make the same edit in the matching MODIFIED block under `specs/` when one exists. Where the MODIFIED block adds a replacement scenario, copy it into the main spec in the same step. Verify that every listed scenario title is absent (or renamed) in both places, using an exact whole-line match (`grep -rnx "#### Scenario: <title>"`) checked within the named requirement.
-- [ ] 2.2 Rewrite the Purpose paragraphs in `openspec/specs/` according to audit P1–P4:
+- [x] 2.1 Apply every entry in `direct-edits.md`. Remove or rename each listed scenario in `openspec/specs/<capability>/spec.md`, and make the same edit in the matching MODIFIED block under `specs/` when one exists. Where the MODIFIED block adds a replacement scenario, copy it into the main spec in the same step. Verify that every listed scenario title is absent (or renamed) in both places, using an exact whole-line match (`grep -rnx "#### Scenario: <title>"`) checked within the named requirement.
+- [x] 2.2 Rewrite the Purpose paragraphs in `openspec/specs/` according to audit P1–P4:
   - P1: `game-catalog-datamine-source`, drop "Datasets move onto it one change at a time."
   - P2: `goal-target-model`, drop "after removal of independent equipment goals".
   - P3: `goal-bulk-status`, drop ", replacing the per-goal and per-project status routes".
   - P4: `project-goal-slots`, replace with the per-profile, per-target-key wording.
 
   Verify that a grep for each removed phrase returns nothing.
-- [ ] 2.3 Run `openspec validate compact-main-specs --strict` and `openspec validate --specs --strict` from `tacticus-planner-api`. Verify that both pass. Report any description-length warnings on untouched requirement text without fixing them in this change.
+- [x] 2.3 Run `openspec validate compact-main-specs --strict` and `openspec validate --specs --strict` from `tacticus-planner-api`. Verify that both pass. Report any description-length warnings on untouched requirement text without fixing them in this change. (Result: the change passes strict. `--specs` passes 67/67; `--specs --strict` fails the same 32 specs as unedited `main`, only on the existing >500-character requirement-length warnings plus one existing scenario-wording warning.)
 
 ## 3. Archive dry check
 

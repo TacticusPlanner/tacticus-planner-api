@@ -12,11 +12,6 @@
 
 Every goal write SHALL take the profile lock before checking slots, so two concurrent transactions cannot both occupy the same slot. The rule SHALL NOT be enforced by a database constraint, so it can change without a schema change; a write that bypasses the lock or the check is a defect. V1 import SHALL re-check its new goals under the lock because it reads existing goals before taking it.
 
-#### Scenario: Racing creates target one slot
-
-- **WHEN** two requests concurrently create Ragnar Rank goals with the same normalized end target
-- **THEN** at most one commits and the other returns the documented `slotOccupied` conflict
-
 #### Scenario: Racing distinct Rank targets succeed
 
 - **WHEN** two requests concurrently create Ragnar Rank goals with distinct targets

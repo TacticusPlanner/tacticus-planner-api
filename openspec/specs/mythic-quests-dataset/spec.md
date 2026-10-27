@@ -18,21 +18,11 @@ startup naming `mythic-quests`. The raw file SHALL NOT be served directly, and t
 hand-kept mythic-quest file. Task text templates SHALL NOT be part of the catalog: task text is display text
 and stays with the client.
 
-#### Scenario: Dataset is served without authentication
+#### Scenario: A misnamed mythic quest fails startup
 
-- **WHEN** a client requests the `mythic-quests` endpoint
-- **THEN** the array is returned without requiring authentication, wrapped in the same envelope as the other
-  served datasets
-
-#### Scenario: Dataset appears in the manifest
-
-- **WHEN** the game catalog manifest is requested
-- **THEN** it includes a hash entry for `mythic-quests`, and the manifest snapshot test covers it
-
-#### Scenario: The raw source has no direct endpoint
-
-- **WHEN** the set of game catalog endpoints is enumerated
-- **THEN** there is no endpoint serving the raw `groups.json` directly
+- **GIVEN** a `hero` quest named `mythic_blackAbaddon`
+- **WHEN** the catalog loads
+- **THEN** loading fails naming `mythic-quests`
 
 ### Requirement: Served mythic quest shape
 
