@@ -106,6 +106,16 @@ restrictions); these are silently ignored on deserialize.
   `piercingRatio` (a percentage, 0-100) and `traits` (absent ⇒ `[]`), ordered by id. Validation
   (`Validation/FactionValidation.cs`) fails the load when a character, MoW or non-object NPC has an unserved faction
   or a different alliance (`InvalidFaction`), or deals a damage type the dataset lacks (`InvalidDamageType`).
+- **global-values** (roadmap step 7) is a one-element list: the game-wide constants of the datamine
+  `gameconfig/globalValues.json` the apps used to hardcode, under the game's names (`maxStamina`,
+  `staminaRegenerationTime` in seconds, `wavesMaxStamina`/`wavesStaminaRegenerationTime` for Onslaught tokens,
+  `campaignLevel*Stamina*` for limited-battle attempts, `minUnitsNeededForBattle`/`maxUnitsPossibleForBattle`,
+  `terrifyingBonus`, `battleFatigueFleeChance(Overkill)`, `traitVariables` as shipped, sorted by key) plus
+  `staminaShopTiers`: each `shop/staminaShopTiers.json` product resolved in `shop/products.json` to
+  `{ productId, stamina, raidTickets, gems }`, in game order (`Denormalization/GlobalValuesDenormalizer.cs`). A
+  missing or non-positive stamina or team value, a fatigue chance outside 0-100, or a tier that is not a gem-priced
+  `stamina:N` (+ optional `raidTicket:N`) product fails the load. Add a field by binding it in `DatamineGlobalValues`
+  (a new served field bumps `SchemaVersion`).
 - **campaign-battles** is flat, keyed by globally-unique battle id, each carrying its `campaignGroupId`;
   **campaign-definitions** is keyed by `groupId` (metadata + `battleIds[]` only). Battle ids are also
   referenced from API test fixtures and the player-data transformer, so renaming a battle id is not a

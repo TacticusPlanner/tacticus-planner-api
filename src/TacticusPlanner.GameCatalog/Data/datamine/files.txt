@@ -3,6 +3,7 @@
 gameconfig/battles/battleSets.json                           # lres, lre-battles
 gameconfig/battles/campaigns.json                            # campaign-battles, campaign-definitions
 gameconfig/battles/onslaught.json                            # onslaught-rewards
+gameconfig/globalValues.json                                 # global-values
 gameconfig/items.json                                        # equipment
 gameconfig/liveEvents/homeScreenEvent.json                   # event-definitions (config.hse)
 gameconfig/liveEvents/legendaryHeroEvent.json                # lres, lre-battles
@@ -11,8 +12,9 @@ gameconfig/loot/chests.json                                  # lres (shards per 
 gameconfig/loot/tieredProgressRewards.json                   # event-definitions (config.hse ladders), lres (points ladder)
 gameconfig/quests/groups.json                                # mythic-quests, lres (missions)
 gameconfig/shop/merchants.json                               # shops
-gameconfig/shop/products.json                                # lres (chest costs)
+gameconfig/shop/products.json                                # lres (chest costs), global-values (energy shop)
 gameconfig/shop/segments.json                                # lres (chest ladder)
+gameconfig/shop/staminaShopTiers.json                        # global-values (energy shop)
 gameconfig/units/abilities.json                              # characters, mows, npcs (damage profiles, MoW recipes), HSE stat boosts
 gameconfig/units/abilityPowerCurve.json                      # unit-power
 gameconfig/units/abilityPowerModifiers.json                  # unit-power

@@ -1311,6 +1311,104 @@
         }
       }
     },
+    "/api/v1/game-catalog/global-values": {
+      "get": {
+        "tags": [
+          "Game-Catalog"
+        ],
+        "summary": "Gets the game-wide constants.",
+        "operationId": "TacticusPlannerApiFeaturesGameCatalogGetGameCatalogGlobalValuesEndpoint1",
+        "responses": {
+          "200": {
+            "description": "The single record of game-wide constants, named as the game names them: energy, Onslaught and limited-battle stamina (times in seconds), team size, terrifying and battle-fatigue values, trait variables, and the energy shop ladder (energy, raid tickets and gem cost per purchase).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogGlobalValues"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "The dataset has not changed."
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The envelope hash is not the current release's.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/game-catalog/global-values/{envelopeHash}": {
+      "get": {
+        "tags": [
+          "Game-Catalog"
+        ],
+        "summary": "Gets the game-wide constants.",
+        "operationId": "TacticusPlannerApiFeaturesGameCatalogGetGameCatalogGlobalValuesEndpoint2",
+        "parameters": [
+          {
+            "name": "envelopeHash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The single record of game-wide constants, named as the game names them: energy, Onslaught and limited-battle stamina (times in seconds), team size, terrifying and battle-fatigue values, trait variables, and the energy shop ladder (energy, raid tickets and gem cost per purchase).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogGlobalValues"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "The dataset has not changed."
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The envelope hash is not the current release's.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/game-catalog/guild-raid-meta": {
       "get": {
         "tags": [
@@ -7678,6 +7776,49 @@
           }
         }
       },
+      "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogGlobalValues": {
+        "required": [
+          "version",
+          "schemaVersion",
+          "gameVersion",
+          "sourceHash",
+          "datasetKey",
+          "datasetHash",
+          "data"
+        ],
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "schemaVersion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gameVersion": {
+            "type": "string"
+          },
+          "sourceHash": {
+            "type": "string"
+          },
+          "datasetKey": {
+            "type": "string"
+          },
+          "datasetHash": {
+            "type": "string"
+          },
+          "data": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogGlobalValues"
+              }
+            ]
+          }
+        }
+      },
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogHordeModeTiers": {
         "required": [
           "version",
@@ -8577,6 +8718,91 @@
               "number"
             ],
             "format": "double"
+          }
+        }
+      },
+      "GameCatalogGlobalValues": {
+        "required": [
+          "maxStamina",
+          "staminaRegenerationTime",
+          "staminaRegenerationAmount",
+          "wavesMaxStamina",
+          "wavesStaminaRegenerationTime",
+          "wavesStaminaRegenerationAmount",
+          "campaignLevelMaxStamina",
+          "campaignLevelStaminaRegenerationTime",
+          "campaignLevelStaminaRegenerationAmount",
+          "minUnitsNeededForBattle",
+          "maxUnitsPossibleForBattle",
+          "terrifyingBonus",
+          "battleFatigueFleeChance",
+          "battleFatigueFleeChanceOverkill",
+          "traitVariables",
+          "staminaShopTiers"
+        ],
+        "type": "object",
+        "properties": {
+          "maxStamina": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "staminaRegenerationTime": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "staminaRegenerationAmount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "wavesMaxStamina": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "wavesStaminaRegenerationTime": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "wavesStaminaRegenerationAmount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "campaignLevelMaxStamina": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "campaignLevelStaminaRegenerationTime": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "campaignLevelStaminaRegenerationAmount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "minUnitsNeededForBattle": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "maxUnitsPossibleForBattle": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "terrifyingBonus": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "battleFatigueFleeChance": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "battleFatigueFleeChanceOverkill": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "traitVariables": {
+            "$ref": "#/components/schemas/IReadOnlyDictionaryOfStringAndJsonElement"
+          },
+          "staminaShopTiers": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogStaminaShopTier"
           }
         }
       },
@@ -10438,6 +10664,32 @@
           }
         }
       },
+      "GameCatalogStaminaShopTier": {
+        "required": [
+          "productId",
+          "stamina",
+          "raidTickets",
+          "gems"
+        ],
+        "type": "object",
+        "properties": {
+          "productId": {
+            "type": "string"
+          },
+          "stamina": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "raidTickets": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "gems": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "GameCatalogTraitPowerModifier": {
         "required": [
           "traitId",
@@ -11578,6 +11830,12 @@
           "$ref": "#/components/schemas/GameCatalogFarmLocation"
         }
       },
+      "IReadOnlyListOfGameCatalogGlobalValues": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogGlobalValues"
+        }
+      },
       "IReadOnlyListOfGameCatalogGuildRaidMetaBossView": {
         "type": "array",
         "items": {
@@ -11858,6 +12116,12 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/GameCatalogShopView"
+        }
+      },
+      "IReadOnlyListOfGameCatalogStaminaShopTier": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogStaminaShopTier"
         }
       },
       "IReadOnlyListOfGameCatalogTraitPowerModifier": {

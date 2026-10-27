@@ -294,6 +294,18 @@ public sealed class GetGameCatalogDamageTypesEndpoint(IGameCatalogProvider catal
     }
 }
 
+public sealed class GetGameCatalogGlobalValuesEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogGlobalValues>>(catalog, GameCatalogDatasets.GlobalValues)
+{
+    public override void Configure()
+    {
+        Get("game-catalog/global-values", "game-catalog/global-values/{envelopeHash}");
+        ConfigureServed(
+            "Gets the game-wide constants.",
+            "The single record of game-wide constants, named as the game names them: energy, Onslaught and limited-battle stamina (times in seconds), team size, terrifying and battle-fatigue values, trait variables, and the energy shop ladder (energy, raid tickets and gem cost per purchase).");
+    }
+}
+
 public sealed class GetGameCatalogEventDefinitionsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogEventDefinition>>(catalog, GameCatalogDatasets.EventDefinitionsServed)
 {

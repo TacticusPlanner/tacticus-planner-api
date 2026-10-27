@@ -1,6 +1,6 @@
 ﻿{
   version: dev-2026-10-19.1,
-  schemaVersion: 11,
+  schemaVersion: 12,
   gameVersion: 1.43,
   sourceHash: {time-dependent},
   datasets: [
@@ -53,6 +53,11 @@
       key: factions,
       hash: 2956238bf341e23b8c7e0cdf3ad7b9373c98b88c8eeac5e33d69e14fcf639cb9,
       url: /api/v1/game-catalog/factions/{envelopeHash}
+    },
+    {
+      key: global-values,
+      hash: e57acb83d1980a83fc3b8a85cf904adda736a9a41e7fe9eb69204b6550e90aa2,
+      url: /api/v1/game-catalog/global-values/{envelopeHash}
     },
     {
       key: guild-raid-meta,
