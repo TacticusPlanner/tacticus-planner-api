@@ -133,3 +133,41 @@ public sealed record GameCatalogCampaignDefinitionView(
     IReadOnlyList<string> Types,
     IReadOnlyList<string> BattleIds
 );
+
+// ---- datamine shape (bound from Data/datamine/raw/gameconfig/battles/campaigns.json) ----------------------------
+// campaigns.json is keyed by campaign kind (Standard, Mirror, Elite, EliteMirror, Event), each a list of campaigns.
+// Only the fields the catalog reads are bound; boards, xp, tutorials and variations are dropped.
+
+public sealed record DatamineCampaign(string Id, IReadOnlyList<DatamineCampaignBattle> Battles);
+
+// `battleId` is the node number ("07"), with a "B" suffix for an event challenge battle ("13B"). `units` holds one
+// list of "npcId:index" entries per team, `playerTeams` the matching team ids (1 fights with the player). A unit
+// entry without an index is a board power-up, not an enemy.
+public sealed record DatamineCampaignBattle(
+    string BattleId,
+    int? StaminaCost,
+    int Spawnpoints,
+    int Power,
+    IReadOnlyList<IReadOnlyList<string>> Units,
+    IReadOnlyList<int> PlayerTeams,
+    DatamineCampaignLoot Loot
+);
+
+// `base` are "id[:min[-max]]" guaranteed rewards; `chanceOf` is "id%num/denom".
+public sealed record DatamineCampaignLoot(IReadOnlyList<string>? Base, string? ChanceOf);
+
+// ---- curated (Data/curated/campaign-curation.json) -----------------------------------------------------------------
+// One campaign group per campaign-battles dataset key: its metadata (the game's unlock lists do not match the
+// planner's faction, allies or core-character order) and, per Tacticus campaign type, the datamine campaign it is
+// read from and the prefix of its battle ids.
+public sealed record GameCatalogCampaignCuration(
+    string GroupId,
+    string Faction,
+    string ReleaseType,
+    string AlliesAlliance,
+    IReadOnlyList<string> AlliesFactions,
+    IReadOnlyList<string> CoreCharacters,
+    IReadOnlyList<GameCatalogCampaignSourceCuration> Campaigns
+);
+
+public sealed record GameCatalogCampaignSourceCuration(string Type, string Campaign, string BattleIdPrefix);

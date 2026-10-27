@@ -60,20 +60,29 @@ public static class GameCatalogLoader
             LoadDataset<Dictionary<string, Dictionary<string, int>>>(GameCatalogDatasets.QuestEventPower));
         var questCrates = LoadDataset<IReadOnlyList<GameCatalogQuestCrate>>(GameCatalogDatasets.QuestCrates);
 
-        var npcsByFaction = GameCatalogDenormalizer.ReadDatamineNpcs(
-            LoadDatamine<Dictionary<string, DatamineNpc>>(GameCatalogDenormalizer.DatamineNpcPath), abilities);
+        var datamineNpcs = LoadDatamine<Dictionary<string, DatamineNpc>>(GameCatalogDenormalizer.DatamineNpcPath);
+        var npcsByFaction = GameCatalogDenormalizer.ReadDatamineNpcs(datamineNpcs, abilities);
 
         var equipmentByType = GameCatalogDenormalizer.ReadDatamineEquipment(
             LoadDatamine<Dictionary<string, DatamineItem>>(GameCatalogDenormalizer.DatamineItemsPath));
 
-        var upgradesByRarity = GameCatalogDenormalizer.ReadDatamineUpgrades(
-            LoadDatamine<Dictionary<string, DatamineUpgrade>>(GameCatalogDenormalizer.DatamineUpgradesPath));
+        var datamineUpgrades = LoadDatamine<Dictionary<string, DatamineUpgrade>>(GameCatalogDenormalizer.DatamineUpgradesPath);
+        var upgradesByRarity = GameCatalogDenormalizer.ReadDatamineUpgrades(datamineUpgrades);
 
-        var campaignGroups = new Dictionary<string, GameCatalogCampaignGroup>(StringComparer.Ordinal);
-        foreach (var key in GameCatalogDatasets.CampaignBattleGroups)
+        var campaignCuration = LoadDataset<Dictionary<string, GameCatalogCampaignCuration>>(GameCatalogDatasets.CampaignCuration);
+        if (!campaignCuration.Keys.Order(StringComparer.Ordinal).SequenceEqual(
+                GameCatalogDatasets.CampaignBattleGroups.Order(StringComparer.Ordinal), StringComparer.Ordinal))
         {
-            campaignGroups[key] = AssignCampaignBattleIndices(LoadDataset<GameCatalogCampaignGroup>(key));
+            throw new InvalidOperationException(
+                $"GameCatalog dataset '{GameCatalogDatasets.CampaignCuration}' must curate exactly the CampaignBattleGroups.");
         }
+
+        var campaignGroups = GameCatalogDenormalizer.ReadDatamineCampaigns(
+                campaignCuration,
+                LoadDatamine<Dictionary<string, List<DatamineCampaign>>>(GameCatalogDenormalizer.DatamineCampaignsPath),
+                datamineNpcs,
+                datamineUpgrades)
+            .ToDictionary(pair => pair.Key, pair => AssignCampaignBattleIndices(pair.Value), StringComparer.Ordinal);
 
         var lresByEvent = GameCatalogDenormalizer.ReadDatamineLres(
             LoadDataset<Dictionary<string, GameCatalogLreCuration>>(GameCatalogDatasets.LreCuration),

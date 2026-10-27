@@ -6,9 +6,9 @@ Defines the backend game catalog's served `campaign-battles` dataset fields that
 
 ### Requirement: Campaign battles serve the allies of their campaign group
 
-Every battle in the served `campaign-battles` dataset SHALL carry `alliesAlliance` (string, one `Alliance` value) and `alliesFactions` (string array of faction ids, non-empty). The values are authored once per campaign group in the raw `campaign-battles-*.json` (fields `alliesAlliance`, `alliesFactions`) and copied by denormalization onto every battle of that group, so all battles of a group, regardless of `type` or `challenge`, have identical allies. The server SHALL send ids only; names, icons and labels are client-derived. `campaign-definitions` SHALL NOT change.
+Every battle in the served `campaign-battles` dataset SHALL carry `alliesAlliance` (string, one `Alliance` value) and `alliesFactions` (string array of faction ids, non-empty). The values are curated once per campaign group in `Data/curated/campaign-curation.json` and copied onto every battle of that group, so all battles of a group have identical allies. The server SHALL send ids only. `campaign-definitions` SHALL NOT change.
 
-Authored values per group follow V1's `getEnemiesAndAllies`: storyline Standard/Elite groups of a campaign share their allies; mirror groups ally with the side the standard campaign opposes; each event group carries its own pair of allied factions.
+Curated values follow V1's `getEnemiesAndAllies`: storyline Standard/Elite groups of a campaign share their allies; mirror groups ally with the side the standard campaign opposes; each event group carries its own pair of allied factions.
 
 #### Scenario: Storyline battle allies
 

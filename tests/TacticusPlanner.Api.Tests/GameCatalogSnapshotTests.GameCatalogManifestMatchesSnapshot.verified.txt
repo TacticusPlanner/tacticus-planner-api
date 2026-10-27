@@ -11,7 +11,7 @@
     },
     {
       key: campaign-battles,
-      hash: f9ca80971caf60a484c2b2013d6aa7ef6c65a08902a18b4650f860736263ecd1,
+      hash: 25a2ce6db33597427425d524db85474b7c8e0b967d88cf57c0da0d1d701f8c3f,
       url: /api/v1/game-catalog/campaign-battles/{envelopeHash}
     },
     {

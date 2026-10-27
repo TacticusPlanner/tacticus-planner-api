@@ -1,6 +1,7 @@
 # raw/-relative paths copied from tacticus-planner-data-mines by scripts/pull-datamine.cs.
 # List a file only when a denormalizer reads it. Sorted, one per line, no globs.
 gameconfig/battles/battleSets.json                           # lres, lre-battles
+gameconfig/battles/campaigns.json                            # campaign-battles, campaign-definitions
 gameconfig/battles/onslaught.json                            # onslaught-rewards
 gameconfig/items.json                                        # equipment
 gameconfig/liveEvents/homeScreenEvent.json                   # event-definitions (config.hse)
@@ -23,9 +24,9 @@ gameconfig/units/heroProgressionSteps.json                   # ascension-costs, 
 gameconfig/units/heroProgressionStepsMoW.json                # unit-power
 gameconfig/units/heroProgressionStepsPerUnit.json            # lres (progression shard costs)
 gameconfig/units/lineup.json                                 # characters, mows, unit-power
-gameconfig/units/npc.json                                    # npcs
+gameconfig/units/npc.json                                    # npcs, campaign-battles (enemies)
 gameconfig/units/traitPowerModifiers.json                    # unit-power
-gameconfig/upgrades.json                                     # upgrades
+gameconfig/upgrades.json                                     # upgrades, campaign-battles (drop kinds)
 globalconfig/guildBoss/guildBossSeasonConfigRotation.json    # raid-bosses
 globalconfig/guildBoss/guildBossSeasonDataConfigsGDTO.json   # raid-bosses
 globalconfig/guildBoss/modifiers.json                        # raid-bosses
