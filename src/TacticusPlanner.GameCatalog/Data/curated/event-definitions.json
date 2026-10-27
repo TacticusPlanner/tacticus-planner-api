@@ -35,7 +35,7 @@
   {
     "id": "guild-raid-season",
     "type": "GuildRaidSeason",
-    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "recurrence": { "kind": "Fixed", "intervalDays": 14, "durationDays": 13, "anchorUtc": "2026-10-21T05:00:00Z" },
     "requiredParameters": [],
     "config": { "seasonLengthDays": 13 }
   },
