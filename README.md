@@ -394,17 +394,29 @@ local infrastructure deployment.
 
 ## Azure production deployment
 
-The `CD Prod` workflow is run by hand with a full commit SHA. It does not
-rebuild: it looks up the image `CD Stage` already published for that commit,
-resolves its digest, and updates the production Container App to it, so
-production runs exactly what staging ran. It fails if the image or the
-Container App does not exist.
+Production ships from release tags, using the `Release` workflow (run by hand
+from the Actions tab):
 
-It runs in the protected `production` environment, which holds the same six
-variables as `stage` (set by `pnpm infra -- access pre --env prod` in
-`tacticus-planner-infra`). Add required reviewers to that environment so each
-promotion needs an approval. Infrastructure changes, such as configuration or
-scaling, still go through `tacticus-planner-infra`.
+- From `main` with `minor` (or `major`): creates `release/X.Y` from `main`,
+  tags `vX.Y.0`, creates a GitHub release with generated notes, and deploys
+  the tag. The commit is already on `main`, so production reuses the exact
+  image `CD Stage` built and ran on staging.
+- From `release/X.Y` with `patch`: tags the next `vX.Y.Z` on that branch,
+  creates its release (notes since the previous `vX.Y.*`), builds the image
+  for that commit, and deploys it. Land the fix on `main` first, then
+  cherry-pick it into the release branch with a PR (CI runs on PRs to
+  `release/**`).
+
+`CD Prod` does the deploy. `Release` calls it; run it by hand only to redeploy
+an existing tag. Images are always built and pushed under the `stage`
+environment (its identity holds `AcrPush` on the shared registry), so that
+environment must allow `release/**` branches if it restricts deployment
+branches. The update itself runs in the protected `production` environment,
+which holds the same six variables as `stage` (set by
+`pnpm infra -- access pre --env prod` in `tacticus-planner-infra`). Add
+required reviewers to `production` so each release needs an approval.
+Infrastructure changes, such as configuration or scaling, still go through
+`tacticus-planner-infra`.
 
 ### Breaking contracts
 

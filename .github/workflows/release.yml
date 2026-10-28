@@ -1,0 +1,138 @@
+name: Release
+
+# Cuts and ships a production release. Run from main with minor or major to create a
+# release/X.Y branch and tag vX.Y.0; run from a release/X.Y branch with patch to tag the next
+# vX.Y.Z on it (fixes land on main first, then are cherry-picked into the release branch by PR).
+# Each run creates a GitHub release with generated notes and deploys the tag to production.
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: minor/major (run from main) cuts a new release branch; patch (run from release/X.Y) tags a fix.
+        required: true
+        type: choice
+        options:
+          - minor
+          - major
+          - patch
+        default: minor
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  tag:
+    name: Tag and create release
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    outputs:
+      tag: ${{ steps.version.outputs.tag }}
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Compute version
+        id: version
+        shell: bash
+        env:
+          BUMP: ${{ inputs.bump }}
+          REF_NAME: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          latest_in() { git tag --list "$1" --sort=-v:refname | head -n 1; }
+
+          if git tag --points-at HEAD | grep -qE '^v[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "::error::$REF_NAME is already released as $(git tag --points-at HEAD | head -n 1)."
+            exit 1
+          fi
+
+          if [[ "$BUMP" == "patch" ]]; then
+            if [[ ! "$REF_NAME" =~ ^release/([0-9]+)\.([0-9]+)$ ]]; then
+              echo "::error::Run patch releases from a release/X.Y branch."
+              exit 1
+            fi
+            major="${BASH_REMATCH[1]}"
+            minor="${BASH_REMATCH[2]}"
+            previous="$(latest_in "v$major.$minor.*")"
+            if [[ -z "$previous" ]]; then
+              echo "::error::release/$major.$minor has no v$major.$minor.* tag to patch."
+              exit 1
+            fi
+            patch=$(( ${previous##*.} + 1 ))
+            branch=""
+          else
+            if [[ "$REF_NAME" != "main" ]]; then
+              echo "::error::Run $BUMP releases from main."
+              exit 1
+            fi
+            previous="$(latest_in 'v*.*.*')"
+            if [[ -z "$previous" ]]; then
+              major=0
+              minor=0
+            else
+              IFS=. read -r major minor _ <<< "${previous#v}"
+            fi
+            if [[ "$BUMP" == "major" ]]; then
+              major=$(( major + 1 ))
+              minor=0
+            else
+              minor=$(( minor + 1 ))
+            fi
+            patch=0
+            branch="release/$major.$minor"
+            if git ls-remote --exit-code --heads origin "$branch" > /dev/null; then
+              echo "::error::$branch already exists."
+              exit 1
+            fi
+          fi
+
+          {
+            echo "tag=v$major.$minor.$patch"
+            echo "previous=$previous"
+            echo "branch=$branch"
+            echo "sha=$(git rev-parse HEAD)"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Create release branch
+        if: steps.version.outputs.branch != ''
+        shell: bash
+        env:
+          BRANCH: ${{ steps.version.outputs.branch }}
+        run: git push origin "HEAD:refs/heads/$BRANCH"
+
+      # Creating the release creates the tag on the exact commit. Notes start from the previous
+      # tag on the same line, so a patch lists only what changed since the release it fixes.
+      - name: Create GitHub release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+          PREVIOUS: ${{ steps.version.outputs.previous }}
+          SHA: ${{ steps.version.outputs.sha }}
+        run: |
+          args=(--target "$SHA" --title "$TAG" --generate-notes)
+          if [[ -n "$PREVIOUS" ]]; then
+            args+=(--notes-start-tag "$PREVIOUS")
+          fi
+          gh release create "$TAG" "${args[@]}"
+          echo "Released [$TAG]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/tag/$TAG) from \`$SHA\`." >> "$GITHUB_STEP_SUMMARY"
+
+  # A release created with the workflow token does not trigger other workflows, so deploy here.
+  deploy:
+    name: Deploy
+    needs: tag
+    permissions:
+      contents: read
+      id-token: write
+    uses: ./.github/workflows/cd-prod.yml
+    with:
+      ref: ${{ needs.tag.outputs.tag }}

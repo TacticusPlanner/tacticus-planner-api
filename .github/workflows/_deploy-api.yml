@@ -8,15 +8,9 @@ on:
         required: true
         type: string
       image:
-        description: Immutable image reference (<acr>.azurecr.io/tacticus-planner-api@sha256:...). Give this or commit.
-        required: false
+        description: Immutable image reference (<acr>.azurecr.io/tacticus-planner-api@sha256:...).
+        required: true
         type: string
-        default: ""
-      commit:
-        description: Full commit SHA whose image CD Stage already published; resolved to its digest. Give this or image.
-        required: false
-        type: string
-        default: ""
       allow-missing-app:
         description: Report success without deploying when the Container App does not exist yet (first staging bootstrap).
         required: false
@@ -42,36 +36,18 @@ jobs:
           tenant-id: ${{ vars.AZURE_TENANT_ID }}
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Resolve image
+      - name: Check image reference
         id: image
         shell: bash
         env:
           ACR_NAME: ${{ vars.ACR_NAME }}
-          IMAGE_INPUT: ${{ inputs.image }}
-          COMMIT_INPUT: ${{ inputs.commit }}
+          REFERENCE: ${{ inputs.image }}
         run: |
-          if [[ -n "$IMAGE_INPUT" ]]; then
-            reference="$IMAGE_INPUT"
-          elif [[ "$COMMIT_INPUT" =~ ^[0-9a-f]{40}$ ]]; then
-            if ! digest="$(az acr repository show \
-              --name "$ACR_NAME" \
-              --image "tacticus-planner-api:$COMMIT_INPUT" \
-              --query digest \
-              --output tsv)" || [[ -z "$digest" ]]; then
-              echo "::error::No tacticus-planner-api image is tagged $COMMIT_INPUT. Run CD Stage for that commit first."
-              exit 1
-            fi
-            reference="$ACR_NAME.azurecr.io/tacticus-planner-api@$digest"
-          else
-            echo "::error::Give an immutable image reference or a full 40-character commit SHA."
+          if [[ ! "$REFERENCE" =~ ^$ACR_NAME\.azurecr\.io/tacticus-planner-api@sha256:[0-9a-f]{64}$ ]]; then
+            echo "::error::$REFERENCE is not an immutable $ACR_NAME image reference."
             exit 1
           fi
-
-          if [[ ! "$reference" =~ ^$ACR_NAME\.azurecr\.io/tacticus-planner-api@sha256:[0-9a-f]{64}$ ]]; then
-            echo "::error::$reference is not an immutable $ACR_NAME image reference."
-            exit 1
-          fi
-          echo "reference=$reference" >> "$GITHUB_OUTPUT"
+          echo "reference=$REFERENCE" >> "$GITHUB_OUTPUT"
 
       - name: Install Container Apps CLI extension
         run: az extension add --name containerapp --upgrade

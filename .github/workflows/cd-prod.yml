@@ -1,12 +1,19 @@
 name: CD Prod
 
-# Promotes an image CD Stage already published and ran on staging; nothing is rebuilt, so
-# production runs the exact digest staging verified.
+# Release (release.yml) calls this with the tag it just created. Run it by hand only to redeploy
+# an existing release tag. A tag on a main commit reuses the image CD Stage built; a patch tag on
+# a release branch gets its image built here.
 on:
   workflow_dispatch:
     inputs:
-      commit:
-        description: Full commit SHA to promote (its image must have been published by CD Stage).
+      ref:
+        description: Release tag to deploy, such as v1.4.0.
+        required: true
+        type: string
+  workflow_call:
+    inputs:
+      ref:
+        description: Release tag to deploy.
         required: true
         type: string
 
@@ -19,9 +26,16 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  publish:
+    name: Publish
+    uses: ./.github/workflows/_publish-api.yml
+    with:
+      ref: ${{ inputs.ref }}
+
   deploy:
     name: Deploy Production
+    needs: publish
     uses: ./.github/workflows/_deploy-api.yml
     with:
       environment: production
-      commit: ${{ inputs.commit }}
+      image: ${{ needs.publish.outputs.image }}
