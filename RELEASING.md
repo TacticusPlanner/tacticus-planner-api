@@ -31,7 +31,8 @@ For a new minor or major release:
 2. Run `Release` from `main` with `minor` (or `major`). It creates
    `release/X.Y` from the head of `main`, tags `vX.Y.0`, publishes the
    release, and deploys it. To ship an older commit instead, enter its SHA in
-   `commit`; it must already be on `main`.
+   `commit`; it must be on `main` and come after the last
+   `vX.Y.0` release.
 
 Keep `release/X.Y` only while that release line is supported. Do not merge
 features into a release branch.

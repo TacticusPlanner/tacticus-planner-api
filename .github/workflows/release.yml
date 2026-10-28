@@ -72,6 +72,12 @@ jobs:
               echo "::error::$COMMIT is not on $REF_NAME."
               exit 1
             fi
+            # Every vX.Y.0 is cut from main, so the newest one marks what main has already shipped.
+            last_cut="$(latest_in 'v*.*.0')"
+            if [[ -n "$last_cut" ]] && ! git merge-base --is-ancestor "$last_cut" "$target"; then
+              echo "::error::$COMMIT predates $last_cut; pick a commit after the last release."
+              exit 1
+            fi
           fi
           sha="$(git rev-parse "$target")"
 
