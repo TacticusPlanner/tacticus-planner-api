@@ -49,8 +49,8 @@ public sealed class HomeScreenEventCalendarTests
             ("hse-training-rush", "2026-10-06T08:00:00Z", "2026-10-10T08:00:00Z"),
             ("hse-against-the-tide", "2026-10-10T08:00:00Z", "2026-10-17T08:00:00Z"),
             ("hse-trait-boost-psyker", "2026-10-19T08:00:00Z", "2026-10-23T08:00:00Z"),
-            ("hse-global-operation-imperator", "2026-10-26T08:00:00Z", "2026-11-01T08:00:00Z"),
-            ("hse-faction-focus", "2026-10-26T08:00:00Z", "2026-11-01T08:00:00Z"),
+            ("hse-global-operation-imperator", "2026-10-26T08:00:00Z", "2026-11-01T00:00:00Z"),
+            ("hse-faction-focus", "2026-10-26T08:00:00Z", "2026-11-01T00:00:00Z"),
             ("hse-warp-surge", "2026-11-05T08:00:00Z", "2026-11-08T08:00:00Z"),
             ("hse-training-rush", "2026-11-12T08:00:00Z", "2026-11-14T08:00:00Z"),
         ];

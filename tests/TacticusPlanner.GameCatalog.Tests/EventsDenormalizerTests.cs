@@ -51,7 +51,7 @@ public sealed class EventsDenormalizerTests
     public void GuildRaidSeasonProjectsAsAFourteenDayCycle()
     {
         var definition = GameCatalogLoader.Load().EventDefinitions.Single(item => item.Id == "guild-raid-season");
-        var anchor = new DateTimeOffset(2026, 10, 21, 5, 0, 0, TimeSpan.Zero);
+        var anchor = new DateTimeOffset(2026, 10, 21, 10, 0, 0, TimeSpan.Zero);
         Assert.Equal(new GameCatalogEventRecurrence("Fixed", 14, 13, anchor), definition.Recurrence);
 
         var now = new DateTimeOffset(2026, 10, 27, 12, 0, 0, TimeSpan.Zero);
@@ -62,7 +62,7 @@ public sealed class EventsDenormalizerTests
             .Order()
             .ToArray();
 
-        // The running season (Oct 21 05:00 to Nov 3 05:00 UTC) comes first, then every 14 days.
+        // The running season (Oct 21 10:00 to Nov 3 10:00 UTC) comes first, then every 14 days.
         Assert.Equal(anchor, starts[0]);
         Assert.Equal(anchor.AddDays(14), starts[1]);
         Assert.All(starts.Zip(starts.Skip(1)), pair => Assert.Equal(TimeSpan.FromDays(14), pair.Second - pair.First));
