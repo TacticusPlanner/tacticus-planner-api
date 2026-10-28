@@ -51,11 +51,21 @@ jobs:
         run: |
           sha="$(git rev-parse HEAD)"
           echo "sha=$sha" >> "$GITHUB_OUTPUT"
-          digest="$(az acr repository show \
+          # Only a confirmed missing image means "build it". Any other lookup failure stops the
+          # run, so an existing tag is never rebuilt over the digest staging already verified.
+          errors="$RUNNER_TEMP/acr-lookup.err"
+          if digest="$(az acr repository show \
             --name "$ACR_NAME" \
             --image "tacticus-planner-api:$sha" \
             --query digest \
-            --output tsv 2>/dev/null || true)"
+            --output tsv 2> "$errors")"; then
+            :
+          elif grep -qiE 'MANIFEST_UNKNOWN|NAME_UNKNOWN|not found' "$errors"; then
+            digest=""
+          else
+            cat "$errors" >&2
+            exit 1
+          fi
           echo "digest=$digest" >> "$GITHUB_OUTPUT"
 
       - name: Sign in to Azure Container Registry

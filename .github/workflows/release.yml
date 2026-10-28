@@ -102,24 +102,24 @@ jobs:
             echo "sha=$(git rev-parse HEAD)"
           } >> "$GITHUB_OUTPUT"
 
-      - name: Create release branch
-        if: steps.version.outputs.branch != ''
-        shell: bash
-        env:
-          BRANCH: ${{ steps.version.outputs.branch }}
-        run: git push origin "HEAD:refs/heads/$BRANCH"
-
       # Annotated and immutable, as RELEASING.md requires: a published tag is never moved.
-      - name: Create release tag
+      # The branch and tag go up in one atomic push, so a refused tag never leaves behind a
+      # release branch that blocks the rerun.
+      - name: Create release branch and tag
         shell: bash
         env:
           TAG: ${{ steps.version.outputs.tag }}
           SHA: ${{ steps.version.outputs.sha }}
+          BRANCH: ${{ steps.version.outputs.branch }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git tag -a "$TAG" "$SHA" -m "$TAG"
-          git push origin "refs/tags/$TAG"
+          refs=("refs/tags/$TAG")
+          if [[ -n "$BRANCH" ]]; then
+            refs+=("$SHA:refs/heads/$BRANCH")
+          fi
+          git push --atomic origin "${refs[@]}"
 
       # Notes start from the previous tag on the same line, so a patch lists only what changed
       # since the release it fixes.
