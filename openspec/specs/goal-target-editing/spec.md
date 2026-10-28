@@ -8,7 +8,7 @@ Allows a user to revise an in-flight goal's progression target without losing it
 
 ### Requirement: In-flight adjustable targets can be replaced in place
 
-The `target` section of `PUT /me/goals/{goalId}` SHALL accept `{ expectedRevision, target }` for an owned Active or Paused goal. Supported target groups are Rank (`end`, `endPointFive`, `endAppliedUpgrades`), Ascension (`end` progression), Ability (`activeEnd`, `passiveEnd`), and Upgrade (`targets` material-id/quantity list). Unlock has no adjustable target and SHALL be rejected. The existing start/baseline, entity, goal type, id, status, notes, strategy, sources, project memberships, global position, creation timestamp, and creation snapshot SHALL remain unchanged. A successful response SHALL include the updated goal detail and incremented `revision`.
+The `target` section of `PUT /goals/{goalId}` SHALL accept `{ expectedRevision, target }` for an owned Active or Paused goal. Supported target groups are Rank (`end`, `endPointFive`, `endAppliedUpgrades`), Ascension (`end` progression), Ability (`activeEnd`, `passiveEnd`), and Upgrade (`targets` material-id/quantity list). Unlock has no adjustable target and SHALL be rejected. The existing start/baseline, entity, goal type, id, status, notes, strategy, sources, project memberships, global position, creation timestamp, and creation snapshot SHALL remain unchanged. A successful response SHALL include the updated goal detail and incremented `revision`.
 
 #### Scenario: Rank target advances in place
 

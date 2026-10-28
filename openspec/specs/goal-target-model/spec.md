@@ -1,6 +1,6 @@
 ## Purpose
 
-Defines the supported unit-centered goal target model after removal of independent equipment goals.
+Defines the supported unit-centered goal target model.
 
 ## Requirements
 
@@ -26,16 +26,6 @@ The goal API and generated OpenAPI SHALL not expose UpgradeItem or its equipment
 
 - **WHEN** a valid Character/MoW Upgrade request contains valid upgrade-material targets
 - **THEN** creation succeeds
-
-### Requirement: Persisted independent equipment goals are removed
-
-The migration SHALL delete existing goals whose entity type is Item or goal type is UpgradeItem and SHALL cascade their project memberships without deleting other goals.
-
-#### Scenario: Migration preserves ordinary goals
-
-- **GIVEN** the database contains equipment and Character/MoW goals
-- **WHEN** the migration applies
-- **THEN** only independent equipment goals and their memberships are deleted
 
 ### Requirement: Material target terminology is unambiguous
 
@@ -185,30 +175,13 @@ combined goal creation, and goal update.
 - **WHEN** a MoW Unlock goal request includes a `{ kind: "Shop" }` entry
 - **THEN** validation rejects the request
 
-### Requirement: The single-select ascension farming source model is removed
-
-The goal API and generated OpenAPI SHALL NOT expose `ascensionFarming`, the
-`AscensionFarmingSource` enum, or its `shardBattleIds` / `mythicShardBattleIds` fields. The
-source choice SHALL be expressed only through `acquisitionSources`.
-
-#### Scenario: OpenAPI no longer describes the old model
-
-- **WHEN** OpenAPI is generated
-- **THEN** no schema references `AscensionFarmingSource` or an `ascensionFarming` config
-  property
-
-#### Scenario: A request using the old field does not set a source
-
-- **WHEN** a goal request carries a legacy `ascensionFarming` object
-- **THEN** it does not influence the persisted config; only `acquisitionSources` is honoured
-
 ### Requirement: FarmingLocationIds retains its upgrade-node role
 
-`GoalConfig.farmingLocationIds` SHALL continue to be accepted and returned as the Rank/Ability
-upgrade-node farming override. Only its Unlock/Ascension shard-node role is replaced by
+`GoalConfig.farmingLocationIds` SHALL be accepted and returned as the Rank/Ability upgrade-node
+farming override. Unlock and Ascension shard sources SHALL be expressed only through
 `acquisitionSources`.
 
-#### Scenario: Rank goal farming override is unchanged
+#### Scenario: Rank goal farming override round-trips
 
 - **WHEN** a Rank goal is created with `farmingLocationIds` set
 - **THEN** the goal round-trips with the same `farmingLocationIds` and no `acquisitionSources`
@@ -216,7 +189,7 @@ upgrade-node farming override. Only its Unlock/Ascension shard-node role is repl
 
 ### Requirement: Acquisition sources can be edited on an existing goal
 
-`UpdateGoalRequest` SHALL allow replacing an Unlock or Ascension goal's `acquisitionSources`,
+`UpdateGoalRequest` SHALL allow replacing a goal's `acquisitionSources`,
 subject to the same per-kind and entity/goal-type validation as creation. Clearing the field
 SHALL reset the goal to unrestricted campaign farming.
 
@@ -243,8 +216,7 @@ unit, where relevance is the union of:
   visited upgrade ids and SHALL NOT revisit one already expanded, so a recipe cycle
   terminates instead of recursing indefinitely.
 
-Targets outside that union SHALL be rejected. Widening relevance SHALL NOT invalidate any
-previously accepted target.
+Targets outside that union SHALL be rejected.
 
 #### Scenario: A crafted upgrade's base ingredient is accepted
 
@@ -263,7 +235,7 @@ previously accepted target.
 #### Scenario: A literal ladder upgrade remains accepted
 
 - **WHEN** a caller targets a crafted upgrade named directly by the unit's own progression
-- **THEN** the request is accepted, as before this change
+- **THEN** the request is accepted
 
 #### Scenario: An unrelated upgrade is still rejected
 
@@ -282,15 +254,16 @@ progression ladder, of:
 - the highest Ascension target present in the same creation request among the
   specs in the goal being validated's full transitive dependency closure (its
   direct dependencies, and their dependencies, and so on) — not only specs it
-  directly depends on.
+  directly depends on, and
+- the end of every existing Ascension goal reachable from the `dependsOnGoalIds` of
+  that closure (see `goal-dependencies`).
 
-For a request containing a single goal, or a goal that declares no dependency
-on an Ascension spec, the effective progression SHALL equal the live
-progression.
+For a goal that depends on no Ascension spec in the request and on no existing
+Ascension goal, the effective progression SHALL equal the live progression.
 
 A unit with no player data recorded SHALL be treated as having no live
 progression contribution; the effective progression is then determined solely
-by any depended-upon Ascension target in the request.
+by the depended-upon Ascension targets above.
 
 #### Scenario: Ability target above the live cap is accepted with a depended-upon Ascension
 
@@ -317,12 +290,14 @@ by any depended-upon Ascension target in the request.
 
 - **WHEN** an Ability goal is created on its own with a target at or below the cap implied by
   the unit's live progression
-- **THEN** creation succeeds, unchanged from prior behavior
+- **THEN** creation succeeds
 
 ### Requirement: The raised cap requires a declared dependency
 
 A goal SHALL obtain a progression-derived cap above its live one only from
-Ascension specs it declares a dependency on within the same request. An
+Ascension specs it declares a dependency on within the same request, or from
+existing Ascension goals reachable from the `dependsOnGoalIds` of its
+in-request dependency closure (see `goal-dependencies`). An
 Ascension spec present in the request but not depended upon SHALL NOT raise
 another spec's cap.
 
@@ -346,7 +321,7 @@ campaign shard-farm node OR at least one regular shard offer in any catalog shop
 whose `unitId` is the character and whose reward type is `shards_<unitId>`). A mythic-only shop
 offer (`mythicShards_<unitId>`) SHALL NOT make a character eligible, since unlocking consumes
 regular shards. A character that is already owned SHALL still be rejected. A character with
-neither source SHALL be rejected as before.
+neither source SHALL be rejected.
 
 #### Scenario: Shop-only character is accepted
 
@@ -406,8 +381,8 @@ materials").
   the track's ladder
 - **THEN** validation rejects the request with a message naming the offending range
 
-#### Scenario: Existing and range-less goals are unchanged
+#### Scenario: Range-less goal
 
-- **GIVEN** an Upgrade goal created before this change, or created without any range group
+- **GIVEN** an Upgrade goal created without any range group
 - **WHEN** its detail is read
 - **THEN** all three range groups are null and the goal remains editable

@@ -1,0 +1,33 @@
+# Tasks
+
+## 1. Pre-flight
+
+- [x] 1.1 Re-diff every MODIFIED block under `specs/` against its current requirement in `openspec/specs/`. The only differences allowed are the ones `audit.md` calls for, plus the added replacement scenarios. Refresh any block whose main requirement changed since this change was written. Verify by listing the differences per block and checking each against an audit id.
+- [x] 1.2 For each REMOVED requirement, grep the canonical requirement named in its **Migration** for that requirement's key terms (e.g. `AllowAnonymous`/"without authentication", `goalRevisionStale`, slot conflict payload fields), and confirm the behavior is still stated there. Verify with a checklist of removed header → canonical header that has no gaps.
+
+## 2. Direct edits to main specs
+
+- [x] 2.1 Apply every entry in `direct-edits.md`. Remove or rename each listed scenario in `openspec/specs/<capability>/spec.md`, and make the same edit in the matching MODIFIED block under `specs/` when one exists. Where the MODIFIED block adds a replacement scenario, copy it into the main spec in the same step. Verify that every listed scenario title is absent (or renamed) in both places, using an exact whole-line match (`grep -rnx "#### Scenario: <title>"`) checked within the named requirement.
+- [x] 2.2 Rewrite the Purpose paragraphs in `openspec/specs/` according to audit P1–P4:
+  - P1: `game-catalog-datamine-source`, drop "Datasets move onto it one change at a time."
+  - P2: `goal-target-model`, drop "after removal of independent equipment goals".
+  - P3: `goal-bulk-status`, drop ", replacing the per-goal and per-project status routes".
+  - P4: `project-goal-slots`, replace with the per-profile, per-target-key wording.
+
+  Verify that a grep for each removed phrase returns nothing.
+- [x] 2.3 Run `openspec validate compact-main-specs --strict` and `openspec validate --specs --strict` from `tacticus-planner-api`. Verify that both pass. Report any description-length warnings on untouched requirement text without fixing them in this change. (Result: the change passes strict. `--specs` passes 67/67; `--specs --strict` fails the same 32 specs as unedited `main`, only on the existing >500-character requirement-length warnings plus one existing scenario-wording warning.)
+
+## 3. Archive dry check
+
+- [x] 3.1 Commit the section 2 edits first, then archive a throwaway copy of that commit in a scratch worktree and diff the result against `main` (`git worktree add`, run `openspec archive compact-main-specs -y` there, then `git diff --stat`). Verify all of the following:
+  - `project-unit-ordering/` is deleted.
+  - The only spec files touched are the capabilities listed in proposal.md.
+  - There are no stray `## ADDED/MODIFIED` headers in `openspec/specs/`.
+  - Requirement count drops from 330 to the expected value (`grep -rh '^### Requirement:' openspec/specs | wc -l`).
+
+  Then discard the worktree. (Result: `project-unit-ordering/` retired, no stray delta headers, 330 → 313 requirements, 41 spec files touched, all listed in proposal.md; `openspec validate --specs` 66/66.)
+
+## Workflow follow-up
+
+- Open one PR with the change folder and the direct main-spec edits. Archive in that PR once it is approved, so the copied MODIFIED blocks cannot go stale.
+- Out-of-scope findings to file as separate work items: D9 (acquisition-source update scope), D10 (cap from existing Ascension dependencies), L26/L27 (stale raw-file names), and the four inconsistencies at the end of `audit.md`.

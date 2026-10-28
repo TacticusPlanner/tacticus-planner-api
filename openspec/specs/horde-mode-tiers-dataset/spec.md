@@ -18,7 +18,7 @@ The catalog SHALL serve a dataset `horde-mode-tiers` containing exactly one reco
 }
 ```
 
-The served record SHALL equal the raw `horde-mode-tiers.json` except that `characters` is sorted by `unitId` (ordinal) and a missing list is served empty. The server SHALL NOT expand defaults: a character's effective multiplier is its own `multiplier` when set, else its tier's multiplier; a character absent from `characters` is untiered, with multiplier 1.0. The client applies these rules. The dataset SHALL be listed in the public manifest with its content hash. No display strings are served.
+The served record SHALL equal the raw `horde-mode-tiers.json` except that `characters` is sorted by `unitId` (ordinal) and a missing list is served empty. The server SHALL NOT expand defaults: a character's effective multiplier is its own `multiplier` when set, else its tier's multiplier; a character absent from `characters` is untiered, with multiplier 1.0. The client applies these rules. No display strings are served.
 
 Tier D marks a character evaluated as weak in horde-style modes; untiered marks one not yet evaluated. Both may use 1.0.
 
@@ -43,11 +43,6 @@ Assumptions:
 - **GIVEN** tier S has multiplier 1.3 and the raw file lists `ultraTigurius` in S with `multiplier` 1.45 and `bloodDante` in S without one
 - **WHEN** the client reads `horde-mode-tiers`
 - **THEN** `ultraTigurius` carries `multiplier` 1.45, `bloodDante` has no `multiplier` field, and the client uses 1.45 and 1.3 respectively
-
-#### Scenario: Listed in the manifest
-
-- **WHEN** the client reads the public manifest
-- **THEN** it contains a `horde-mode-tiers` entry with a content hash
 
 ### Requirement: The horde-mode tier list is validated on load
 

@@ -40,7 +40,7 @@ The key SHALL be: for Rank, the `rank-milestones` normalized end target; for Asc
 - **WHEN** a Character Ability goal targets active 50 and passive 45
 - **THEN** its key is `"50:45"`
 
-#### Scenario: Rank key is unchanged
+#### Scenario: Rank key
 
 - **WHEN** a Rank goal targets Silver3 with point-five
 - **THEN** its key equals the `rank-milestones` normalized key for Silver3 with three applied slots

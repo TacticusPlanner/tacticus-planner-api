@@ -11,10 +11,10 @@ mapping, each item's upgrade ladder, and the served order.
 
 The served `equipment` dataset SHALL be built from the datamine copy `gameconfig/items.json` (opened with `DatamineFiles.Open`), one record per entry, with `id` from the entry's key and `type` from `itemType`. The catalog SHALL keep no hand-kept equipment raw file.
 
-#### Scenario: Same items as before
+#### Scenario: The shipped items
 
 - **WHEN** the `equipment` dataset is served at datamine `v1.43.157.2989`
-- **THEN** it holds 217 records, the same objects the retired `Data/equipment/*.json` files served
+- **THEN** it holds 217 records
 
 ### Requirement: Optional item fields have served defaults
 
@@ -52,7 +52,8 @@ Each served record SHALL carry `upgradeLevels`, one entry per level in order, ea
 
 The served array SHALL be ordered by `type`, then `id`, both ordinal.
 
-#### Scenario: The migration moves only the order
+#### Scenario: Type, then id
 
-- **WHEN** the game catalog manifest is requested after `migrate-equipment-to-datamine`
-- **THEN** only the `equipment` hash differs from the previous release, because 18 relics that the retired files listed last now sit in id order
+- **GIVEN** two items of one `type` with ids `x2` and `x1`, and an item whose `type` sorts before theirs
+- **WHEN** the `equipment` dataset is served
+- **THEN** the order is the earlier-typed item, `x1`, `x2`

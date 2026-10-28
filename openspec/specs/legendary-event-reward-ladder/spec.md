@@ -44,7 +44,7 @@ Assumptions:
 
 ### Requirement: No shared reward ladder dataset is served
 
-The catalog SHALL NOT serve an `lre-common` dataset: it SHALL be absent from the public manifest and its route SHALL respond 404. The manifest snapshot SHALL reflect the removal and the `lres` dataset's new content hash.
+The catalog SHALL NOT serve an `lre-common` dataset: it SHALL be absent from the public manifest and its route SHALL respond 404.
 
 #### Scenario: Manifest no longer lists lre-common
 

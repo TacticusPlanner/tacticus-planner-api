@@ -9,7 +9,7 @@ ability, so the MoW unit page can show the ability unlocked at Mythic rarity.
 
 ### Requirement: Each MoW carries its mythic ability
 
-Each served `mows` record SHALL carry, in addition to its existing fields, `mythicAbility`: an object with
+Each served `mows` record whose MoW has a mythic ability SHALL carry `mythicAbility`: an object with
 exactly `name` (string, the ability id, the same id space as `primaryAbility.name` and
 `secondaryAbility.name`). It SHALL be read from the first entry of the MoW's `mythicAbilities` in the datamine
 `gameconfig/units/lineup.json`. It is optional in the shape: a MoW without a mythic ability SHALL omit the field,
@@ -27,11 +27,6 @@ it. The record SHALL carry no display name or icon for it; the client resolves b
 - **WHEN** the `mows` dataset is served
 - **THEN** all 11 records carry a `mythicAbility` with a non-empty `name`, and the 11 names are distinct
 
-#### Scenario: The manifest hash changes
-
-- **WHEN** the game catalog manifest is requested after the mythic ability was added
-- **THEN** the `mows` entry's hash differs from the release before it, and the snapshot test is promoted
-
 ### Requirement: The mythic ability is validated at load
 
 The catalog loader SHALL fail startup, naming the dataset, when a raw `mows[]` record has a `mythicAbility`
@@ -47,10 +42,10 @@ whose `name` is empty or equals that MoW's `primaryAbility.name` or `secondaryAb
 
 A `lineup.json` unit whose `traits` contain `MachineOfWar` SHALL be served as a MoW, grouped by lowercased `FactionId` and ordered by id, with `name`, faction and alliance from `name`, `FactionId` and `GrandAllianceId`.
 
-#### Scenario: Same MoWs as before
+#### Scenario: The shipped MoWs
 
 - **WHEN** the dataset is served at datamine `v1.43.157.2989`
-- **THEN** the 11 MoWs equal the ones the retired `units-*.json` files served, and the `mows` hash is unchanged
+- **THEN** it serves 11 MoWs
 
 ### Requirement: MoW abilities and recipes come from the ability table
 

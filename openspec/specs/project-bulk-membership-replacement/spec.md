@@ -17,16 +17,11 @@ The authenticated project membership replacement operation SHALL accept the comp
 - **THEN** the replacement is rejected as stale with the current IDs and no partial add/remove
 
 ### Requirement: Batch validation is atomic and actionable
-The operation SHALL reject an unknown/unowned goal or a removal that would leave a goal with no project, without applying any part of the desired set. Membership replacement SHALL NOT perform slot checks: in-flight uniqueness is a per-profile property of the goal, so adding an existing goal to a project can never create a duplicate. Last-membership rejection SHALL identify the blocked goal IDs for client review in the unified error shape.
+The operation SHALL reject an unknown/unowned goal or a removal that would leave a goal with no project, without applying any part of the desired set. Last-membership rejection SHALL identify the blocked goal IDs for client review in the unified error shape.
 
 #### Scenario: One blocked removal among valid additions
 - **WHEN** a desired set adds two valid goals but removes a third goal from its only project
 - **THEN** no change commits and the response identifies that blocked goal
-
-#### Scenario: Occupied slot
-- **GIVEN** the profile holds an in-flight Ragnar Rank Silver3 goal and an in-flight Ragnar Rank Gold1 goal
-- **WHEN** a desired set includes both in one project
-- **THEN** the replacement commits; both are members
 
 ### Requirement: Membership save does not reorder global goals
 Replacing a project's membership SHALL leave each goal's canonical account-wide priority unchanged, including goals added or removed from the project. A goal added to a project SHALL keep its existing global position, a removed goal SHALL keep its position in the account-wide order, and the profile's goal-order revision SHALL NOT change. The response SHALL list the project's members in global order with each member's global position (null for a completed or archived goal).

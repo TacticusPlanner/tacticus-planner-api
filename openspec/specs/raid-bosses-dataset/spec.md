@@ -8,29 +8,10 @@ Provides the backend game catalog's consolidated raid-boss reference data — th
 
 The game catalog SHALL serve a dataset keyed `raid-bosses` built from the pinned datamine copies under `globalconfig/guildBoss/`: `guildBossSeasonConfigRotation.json`, `primarchs.json`, `modifiers.json`, `unitSets.json` and `guildBossSeasonDataConfigsGDTO.json`. The catalog SHALL keep no hand-kept raid-boss files. It SHALL be the only raid-boss dataset exposed publicly; the raw per-file sources (season rotation, unit sets, season configs, modifier definitions) SHALL NOT be served directly. The served dataset SHALL be self-contained: an encounter's boss/prime stats, weapons, abilities, traits, and scaled modifier definitions are inlined so the client never joins one served collection against another.
 
-#### Scenario: Raid-bosses dataset is served without authentication
-
-- **WHEN** a client requests the `raid-bosses` endpoint
-- **THEN** the data is returned without requiring authentication, consistent with the rest of the game catalog
-
-#### Scenario: Raid-bosses dataset appears in the manifest
-
-- **WHEN** the game catalog manifest is requested
-- **THEN** it includes a hash entry for `raid-bosses`
-
 #### Scenario: Raw sources have no direct endpoint
 
 - **WHEN** the set of game catalog endpoints is enumerated
 - **THEN** there is no endpoint serving a raw raid-boss source file (season rotation, unit sets, season configs, or modifier definitions) directly
-
-### Requirement: Raid-boss records carry no display text or icon
-
-Consistent with every other served catalog dataset, no record anywhere in the `raid-bosses` payload SHALL include a display name, short name, portrait or icon path, icon id, or wiki link. Only structural/identity fields exist: unit-set ids, faction ids, ability ids, trait ids, npc ids, board ids, numeric stats, tier/set/encounter indices, and modifier `{ type, target, subtarget, amount }` values. The client resolves every boss, prime, ability, trait, faction, and npc name and image from its id.
-
-#### Scenario: Served payload shape
-
-- **WHEN** any record in the `raid-bosses` dataset is served
-- **THEN** it contains only structural/identity fields and no display-text or icon field
 
 ### Requirement: Bosses and raid-boss primes are the two served unit kinds
 
@@ -163,20 +144,6 @@ The served projection SHALL let a client tell three states apart, because they d
 - **WHEN** the client's stored `raid-bosses` payload hash differs from the manifest's `raid-bosses` hash
 - **THEN** the client can detect the difference from the manifest alone and re-download the dataset
 
-### Requirement: Adding the raid-bosses dataset does not bump the schema version
-
-Introducing `raid-bosses` SHALL be purely additive: no existing served dataset's shape changes, the catalog `SchemaVersion` is not incremented, and no database migration is involved. A client unaware of `raid-bosses` SHALL be unaffected. The catalog `GameVersion` SHALL record the in-game version the raid-boss data was extracted from.
-
-#### Scenario: Existing datasets and schema version unchanged
-
-- **WHEN** the `raid-bosses` dataset is added to the catalog
-- **THEN** the catalog `SchemaVersion` is unchanged and every previously served dataset's payload shape is unchanged
-
-#### Scenario: Game version recorded
-
-- **WHEN** the raid-boss raw data is authored or refreshed from the V1 datamine
-- **THEN** the catalog release metadata's `GameVersion` reflects the in-game version it was extracted from
-
 ### Requirement: Raid-boss unit sets are merged across the game's sets
 
 `unitSets.json` holds the unit sets per set id (`unit_set_1`, `unit_set_2`). The served dataset has one unit-set map shared by every season, so the loader SHALL merge the sets in game order and SHALL fail startup, naming `raid-bosses` and the unit-set key, when two sets define the same key differently.
@@ -184,7 +151,7 @@ Introducing `raid-bosses` SHALL be purely additive: no existing served dataset's
 #### Scenario: Identical sets merge
 
 - **WHEN** the datamine at `v1.43.157.2989` has `unit_set_1` and `unit_set_2` with the same 98 unit sets
-- **THEN** the served bosses and primes equal the ones the retired `raid-boss-*.json` files served, and the `raid-bosses` hash is unchanged
+- **THEN** they merge into one map of 98 unit sets and loading succeeds
 
 #### Scenario: Diverging sets fail
 

@@ -121,7 +121,9 @@ manual step from the user.
 
 A goal SHALL report as skipped, with a code identifying which case applies,
 when: its target is already reached according to the account's player data; the
-account already has a goal of that type for that unit; it was merged into
+account already has a goal, in any status, of that type for that unit with the same
+target key (see `goal-target-milestones`), or for a V1 material goal an Upgrade goal
+on that unit that targets its material; it was merged into
 another source goal's target for the same unit and type; or it is a V1
 material goal that needs a manual step (see "V1 material goals become Upgrade
 goals at their V1 priority").
@@ -155,7 +157,7 @@ V2 progression ladder; or it carries no usable target.
 #### Scenario: Already-existing goal is a skip that identifies the existing goal
 
 - **GIVEN** the account already has an Ascension goal for a character
-- **WHEN** a V1 Ascension goal for that character is imported
+- **WHEN** a V1 Ascension goal for that character with the same end target is imported
 - **THEN** that goal reports as skipped because it already exists, and the outcome carries the
   existing goal's id
 
@@ -291,9 +293,7 @@ unit; in those cases the requirement SHALL be reported rather than satisfied.
 Each created prerequisite SHALL be declared as a dependency of every imported
 goal that required it, and SHALL be placed immediately before the first of
 them in the constructed import sequence, so it precedes every goal that
-requires it. There is no automatic within-unit reordering to
-fall back on for this placement — the import process itself is responsible
-for the prerequisite's position, not a downstream ordering step.
+requires it.
 
 A synthesized Unlock goal SHALL be validated by the same rules a manual
 creation of that goal would be before it is persisted (Unlock is valid only for
@@ -356,18 +356,6 @@ identified as automatically added and naming the source goal it unblocks.
   the character below the level the target needs
 - **WHEN** the goals part is imported with automatic prerequisites selected
 - **THEN** no Ascension goal is created and no other goal is created for that character
-
-#### Scenario: A created prerequisite precedes its dependents in the import sequence
-
-- **GIVEN** an imported Rank goal requires an Ascension prerequisite the account doesn't have
-- **WHEN** the prerequisite is created automatically
-- **THEN** the created Ascension goal's position in the project's priority order precedes the Rank goal's position
-
-#### Scenario: Rank and Ability imports do not synthesize Level
-
-- **GIVEN** imported Rank and Ability targets that need a higher character level
-- **WHEN** the goals part is imported with automatic prerequisites selected
-- **THEN** no Level goal is created, and each target still carries its own level requirement
 
 ### Requirement: A failure for one goal does not discard the others
 
@@ -462,4 +450,3 @@ with a code identifying that no unit uses it.
 - **GIVEN** a V1 Unlock goal for a character not on the roster, and a V1 upgrade-material goal for a material only that character uses
 - **WHEN** the goals part is imported
 - **THEN** the Upgrade goal is created on that character with the suggested-unit code, and no "no unit uses" outcome is reported
-

@@ -104,14 +104,6 @@ The served `events-calendar` dataset SHALL be indexed by calendar date. An occur
 ### Requirement: event-definitions and events-calendar are served; event-occurrences is not
 `event-definitions` and `events-calendar` SHALL each be hashed into the catalog manifest and served at their own endpoint, consistent with every other served dataset. `event-occurrences` SHALL remain a raw, authored input consumed only during denormalization — it SHALL NOT be exposed as its own served endpoint.
 
-#### Scenario: Served datasets appear in the manifest
-- **WHEN** the game catalog manifest is requested
-- **THEN** it includes a hash entry for `event-definitions` and for `events-calendar`
-
-#### Scenario: Served dataset is served without authentication
-- **WHEN** a client requests the `event-definitions` or `events-calendar` endpoint
-- **THEN** the data is returned without requiring authentication, consistent with the rest of the game catalog
-
 #### Scenario: event-occurrences has no direct endpoint
 - **WHEN** the set of game catalog endpoints is enumerated
 - **THEN** there is no endpoint serving raw `event-occurrences` records directly

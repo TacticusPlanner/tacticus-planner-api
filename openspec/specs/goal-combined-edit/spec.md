@@ -7,7 +7,7 @@ Lets an owner change several aspects of one goal (target, details, project membe
 
 ### Requirement: An owner can edit a goal through one atomic request
 
-`PUT /me/goals/{goalId}` SHALL accept a request with these optional sections: `target` (`expectedRevision` plus the goal kind's end-target payload), `details` (`notes`, `farmingLocationIds`, `farmingStrategy`, `acquisitionSources`), `projectIds` (the complete replacement membership list), and `priority` (`position`, 1-based, and `expectedOrderRevision`). A section that is absent SHALL leave that aspect unchanged. A request with no section SHALL succeed as a no-op. On success the response SHALL be 200 with `{ goal, order }`: `goal` SHALL contain the updated goal detail (including its own `revision`); `order` SHALL contain `{ revision, goalIds }` when `priority` was supplied, and SHALL be null otherwise. The order uses the existing `PUT /me/goals/order` field names. Every applied section SHALL be committed together or none SHALL be, with a single revision increase. This is the only goal edit route.
+`PUT /goals/{goalId}` SHALL accept a request with these optional sections: `target` (`expectedRevision` plus the goal kind's end-target payload), `details` (`notes`, `farmingLocationIds`, `farmingStrategy`, `acquisitionSources`), `projectIds` (the complete replacement membership list), and `priority` (`position`, 1-based, and `expectedOrderRevision`). A section that is absent SHALL leave that aspect unchanged. A request with no section SHALL succeed as a no-op. On success the response SHALL be 200 with `{ goal, order }`: `goal` SHALL contain the updated goal detail (including its own `revision`); `order` SHALL contain `{ revision, goalIds }` when `priority` was supplied, and SHALL be null otherwise. The order uses the existing `PUT /goals/order` field names. Every applied section SHALL be committed together or none SHALL be. A committed edit SHALL increase `goal.revision` once; when `priority` changes the global order it SHALL also increase `order.revision` once, and a `priority` that leaves the order unchanged SHALL NOT change `order.revision`. This is the only goal edit route.
 
 #### Scenario: Several sections at once
 
@@ -32,18 +32,12 @@ Lets an owner change several aspects of one goal (target, details, project membe
 
 ### Requirement: Each section is validated exactly as its own endpoint validates it
 
-The target section SHALL be validated as a target edit (see `goal-target-editing`: only Active or Paused Rank, Ascension, Ability and Upgrade goals; the payload shape of the goal's own kind; the goal's stored baseline; an unchanged target is a no-op; `expectedRevision` is required with a target and a stale one is a 409 `goalRevisionStale` carrying the current goal). The details section SHALL be validated as goal details (notes length, farming strategy support per goal kind, farming-location and acquisition-source rules; a null `notes` or `farmingLocationIds` clears the field and a null `farmingStrategy` leaves it). The projects section SHALL require at least one owned project; it is not slot-checked. The priority section SHALL be valid only for an Active or Paused goal; `position` SHALL be between 1 and the number of in-flight goals; the goal takes that position and every goal between its old and new positions shifts one place toward the vacated one; a `position` equal to the current one is a no-op. A validation failure in any section SHALL be a 400 that names the offending section and changes nothing.
+The target section SHALL be validated as a target edit (see `goal-target-editing`: only Active or Paused Rank, Ascension, Ability and Upgrade goals; the payload shape of the goal's own kind; the goal's stored baseline; an unchanged target is a no-op; `expectedRevision` is required with a target). The details section SHALL be validated as goal details (notes length, farming strategy support per goal kind, farming-location and acquisition-source rules; a null `notes` or `farmingLocationIds` clears the field and a null `farmingStrategy` leaves it). The projects section SHALL require at least one owned project; it is not slot-checked. The priority section SHALL be valid only for an Active or Paused goal; `position` SHALL be between 1 and the number of in-flight goals; the goal takes that position and every goal between its old and new positions shifts one place toward the vacated one; a `position` equal to the current one is a no-op. A validation failure in any section SHALL be a 400 that names the offending section and changes nothing.
 
 #### Scenario: Invalid target rejects the whole request
 
 - **WHEN** the request carries valid notes and an invalid target
 - **THEN** the response is 400 naming the target, and the notes are not saved
-
-#### Scenario: Project slot check sees the new target
-
-- **GIVEN** a Rank goal whose new target is already held by another in-flight goal of the same unit
-- **WHEN** the request changes the goal's target
-- **THEN** the response is 409 `slotOccupied` naming the existing goal, and nothing is saved
 
 #### Scenario: Position out of range
 

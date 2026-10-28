@@ -1,10 +1,10 @@
 ## Purpose
 
-Allows separate projects to carry separate in-flight targets while preventing duplicate Active/Paused goal types for one unit inside a project.
+Prevents two in-flight goals of one unit, type and target key in a profile, whatever projects they belong to.
 
 ## Requirements
 
-### Requirement: In-flight uniqueness is scoped to project
+### Requirement: In-flight uniqueness is scoped to the profile
 
 For each profile, at most one Active/Paused goal SHALL occupy `(entityType, entityId, goalType, targetKey)`, where `targetKey` is the goal's canonical end-target key defined by `goal-target-milestones` (Rank: `rank-milestones`' normalized end target). Distinct target keys for one unit and goal type MAY coexist. Unlock has no target key: at most one Active/Paused Unlock goal SHALL occupy `(entityType, entityId, Unlock)`. Completed/Archived goals SHALL not occupy slots. Project membership SHALL NOT affect slot occupancy: one in-flight goal MAY belong to any number of projects, and two projects SHALL NOT carry separate in-flight instances of the same tuple/target.
 
@@ -13,12 +13,6 @@ For each profile, at most one Active/Paused goal SHALL occupy `(entityType, enti
 - **GIVEN** an Active Ragnar Rank goal targeting Gold1 belongs to project A
 - **WHEN** the owner wants Ragnar Gold1 in project B
 - **THEN** the existing goal is added to B; creating a second Ragnar Rank Gold1 goal is rejected and identifies the existing goal
-
-#### Scenario: Same project rejects duplicate
-
-- **GIVEN** an Active or Paused Ragnar Rank goal targeting Gold1 in any project
-- **WHEN** another in-flight Ragnar Rank goal with the same normalized Gold1 target is created, in any project set
-- **THEN** the operation is rejected and identifies the existing goal
 
 #### Scenario: Historical goal frees slot
 
@@ -54,12 +48,6 @@ For each profile, at most one Active/Paused goal SHALL occupy `(entityType, enti
 
 The invariant SHALL apply atomically to single creation, combined creation, target edits, and transitions into Active/Paused (single or bulk). Transitioning to Completed/Archived SHALL free the slot. Membership changes (goal-side or project-side) SHALL NOT be slot-checked, because membership cannot create a duplicate.
 
-#### Scenario: Resume conflicts in one membership
-
-- **GIVEN** a Completed goal A followed by creation of another Active/Paused goal B occupying the same slot
-- **WHEN** the caller attempts to transition A to Paused
-- **THEN** the transition is rejected with 409 `slotOccupied` identifying B, and A remains Completed
-
 #### Scenario: Shared goal occupies each project once
 
 - **GIVEN** an in-flight goal in project A
@@ -84,21 +72,16 @@ A slot conflict SHALL produce the same 409 in the unified error shape with `issu
 
 ### Requirement: The profile lock serializes slot checks
 
-Every goal write SHALL take the profile lock before checking slots, so two concurrent transactions cannot both occupy the same non-Rank profile/unit/type slot or the same Rank profile/unit/normalized-end-target slot. The rule SHALL NOT be enforced by a database constraint, so it can change without a schema change; a write that bypasses the lock or the check is a defect. V1 import SHALL re-check its new goals under the lock because it reads existing goals before taking it.
-
-#### Scenario: Racing creates target one slot
-
-- **WHEN** two requests concurrently create Ragnar Rank goals with the same normalized end target
-- **THEN** at most one commits and the other returns the documented `slotOccupied` conflict
+Every goal write SHALL take the profile lock before checking slots, so two concurrent transactions cannot both occupy the same slot. The rule SHALL NOT be enforced by a database constraint, so it can change without a schema change; a write that bypasses the lock or the check is a defect. V1 import SHALL re-check its new goals under the lock because it reads existing goals before taking it.
 
 #### Scenario: Racing distinct Rank targets succeed
 
 - **WHEN** two requests concurrently create Ragnar Rank goals with distinct targets
 - **THEN** both can commit with distinct valid priorities
 
-### Requirement: Concurrent mutations in one project serialize without failing
+### Requirement: Concurrent goal mutations of one profile serialize without failing
 
-Goal mutations of one profile SHALL be serialized against each other by waiting on one profile-level lock, and each SHALL observe the state committed by those that preceded it. When two or more slot-scoped mutations target distinct slots and are submitted concurrently, every one of them SHALL commit; a slot-scoped mutation SHALL NOT fail merely because another mutation for the same profile committed while it was waiting. A goal-order change is not slot-scoped: when it races a mutation that changes the in-flight set, whichever commits second observes the earlier change, and an order change whose submitted set no longer matches SHALL be rejected with the documented stale-set response. Covered mutations: single and combined creation, status transitions, target edits, membership replacement (goal- or project-side), and goal-order changes.
+Goal mutations of one profile SHALL be serialized against each other by waiting on one profile-level lock, and each SHALL observe the state committed by those that preceded it. When two or more slot-scoped mutations target distinct slots and are submitted concurrently, every one of them SHALL commit; a slot-scoped mutation SHALL NOT fail merely because another mutation for the same profile committed while it was waiting. A goal-order change is not slot-scoped: when it races a mutation that changes the in-flight set, whichever commits second observes the earlier change, and an order change whose submitted set no longer matches SHALL be rejected with the documented stale-set response. Likewise, a mutation that carries an `expectedOrderRevision` (a status transition into or out of the in-flight set, see `goal-bulk-status`, or a combined edit's `priority`) is checked under the lock against the order as it then stands, and SHALL be rejected with `goalOrderStale` when a mutation that committed while it waited changed the order. Covered mutations: single and combined creation, status transitions, target edits, membership replacement (goal- or project-side), and goal-order changes.
 
 #### Scenario: Concurrent creates for distinct units all commit
 
@@ -119,14 +102,3 @@ Goal mutations of one profile SHALL be serialized against each other by waiting 
 
 - **WHEN** a create and a goal-order change (submitted for the pre-create goal set) race
 - **THEN** the create succeeds, the order change either succeeds or is rejected with the stale-set response, and in both outcomes the in-flight priorities form a contiguous sequence from 1 with no gaps or duplicates
-
-### Requirement: Rank conflicts name the occupied target
-
-For a Rank slot conflict, the `slotOccupied` response SHALL include the existing goal id, entity id/type, goal type and normalized end target; a conflicting target edit or status transition SHALL fail atomically.
-
-#### Scenario: Multi-project membership conflicts in one project
-
-- **GIVEN** an in-flight Ragnar Rank goal targeting Silver3 and another targeting Gold1
-- **WHEN** the Silver3 goal's target is edited to Gold1
-- **THEN** nothing changes and the response identifies the Gold1 goal and the target
-

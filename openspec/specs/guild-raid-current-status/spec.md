@@ -10,7 +10,7 @@ Provides an authenticated, normalized view of a registered guild's current raid 
 
 The system SHALL expose an authenticated `GET /api/v1/guild/raid-status` endpoint. It SHALL use the caller's linked guild and that guild's stored encrypted API token without returning the token or another member's hit history.
 
-The endpoint SHALL return conflict status when the caller has no linked registered guild, the guild has never completed synchronization, the guild has no usable stored token, or the guild has never had a successful Guild Raid status observation persisted. It SHALL preserve the existing not-found behavior for an unprovisioned profile. `GET` SHALL NOT call the upstream Guild Raid API under any circumstance, including these prerequisite-failure cases and the never-observed case.
+The endpoint SHALL return conflict status when the caller has no linked registered guild, the guild has never completed synchronization, the guild has no usable stored token, or the guild has never had a successful Guild Raid status observation persisted. An unprovisioned profile SHALL receive a not-found response.
 
 #### Scenario: Ready guild requests its status
 
@@ -177,8 +177,6 @@ A server-side current-user hit read SHALL accept one guild raid season and the a
 
 ### Requirement: Refresh failures distinguish transient unavailability from rejected source data
 
-These failure responses SHALL only originate from `POST /refresh`; `GET` never produces them because it never calls upstream.
-
 When `POST /refresh` fails because of transient unavailability or timeout and a retained successful observation exists, the endpoint SHALL return that observation with `freshness: stale` and its original `observedAt`, including after a process restart. Without retained data, transient unavailability or timeout SHALL produce a service-unavailable response.
 
 When the upstream source rejects the guild credential or response data, `POST /refresh` SHALL produce a bad-gateway response even when retained status exists. A failed refresh or a successful no-active observation SHALL NOT delete previously retained active-season facts.
@@ -200,7 +198,7 @@ When the upstream source rejects the guild credential or response data, `POST /r
 
 ### Requirement: A retained observation that cannot be projected is a bad-gateway response
 
-`GET /api/v1/guild/raid-status` never calls upstream, but it still projects the retained observation against the current game-catalog version at read time. If that retained observation can no longer be projected (for example, its season config or a referenced encounter is missing from the current catalog), the endpoint SHALL return a bad-gateway response rather than an empty or malformed body.
+`GET /api/v1/guild/raid-status` projects the retained observation against the current game-catalog version at read time. If that retained observation can no longer be projected (for example, its season config or a referenced encounter is missing from the current catalog), the endpoint SHALL return a bad-gateway response rather than an empty or malformed body.
 
 #### Scenario: Retained observation no longer resolves against the catalog
 

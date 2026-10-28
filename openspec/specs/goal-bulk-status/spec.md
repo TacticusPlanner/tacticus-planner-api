@@ -1,13 +1,13 @@
 # goal-bulk-status Specification
 
 ## Purpose
-One request transitions one or many of the caller's goals to a lifecycle status atomically, replacing the per-goal and per-project status routes.
+One request transitions one or many of the caller's goals to a lifecycle status atomically.
 
 ## Requirements
 
 ### Requirement: One request transitions many goals
 
-`POST /me/goals/status` SHALL accept `{ goalIds, status, expectedOrderRevision }` (`goalIds` non-empty and distinct, `status` one of `Active`, `Paused`, `Completed`, `Archived`) and transition every named goal under the single-transition lifecycle rules, leaving goals already in that status unchanged. On success it SHALL return `{ goals, orderRevision }` with every named goal's updated detail.
+`POST /goals/status` SHALL accept `{ goalIds, status, expectedOrderRevision }` (`goalIds` non-empty and distinct, `status` one of `Active`, `Paused`, `Completed`, `Archived`) and transition every named goal under the single-transition lifecycle rules, leaving goals already in that status unchanged. On success it SHALL return `{ goals, orderRevision }` with every named goal's updated detail.
 
 #### Scenario: Pause three goals
 
@@ -46,12 +46,3 @@ An unknown or foreign id (404), a disallowed transition for any goal (400 naming
 - **GIVEN** the in-flight set changed since the caller read `orderRevision`
 - **WHEN** the caller completes two Active goals with the old revision
 - **THEN** the response is 409 `goalOrderStale` with the current order under `current`, and nothing changes
-
-### Requirement: Bulk transitions serialize with other goal mutations
-
-The request SHALL run under the profile-level goal lock, so a concurrent create, edit or reorder observes either the state before or after the whole transition, never a partial one.
-
-#### Scenario: Reorder races a bulk complete
-
-- **WHEN** a reorder submitted for the pre-transition set races a bulk completion
-- **THEN** the completion commits, and the reorder either commits first or is rejected as stale; positions stay contiguous

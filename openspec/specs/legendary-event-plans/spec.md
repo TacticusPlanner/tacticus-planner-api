@@ -48,7 +48,7 @@ The system SHALL persist at most one plan per profile and catalog Legendary Even
 
 ### Requirement: Teams belong to one lane of the plan
 
-A team SHALL belong to exactly one lane (`alpha`, `beta` or `gamma`) of its plan and SHALL carry a trimmed `name` of 1–60 characters, an ordered list of 3–5 member unit ids, at most one reserve unit id, a set of covered objective indexes, at most one clear depth per run 1–3 (`expectedBattleClears` with its `expectedBattleClearsSource`, `estimate` or `manual`, and the time it was last written), and a `sortOrder` that is dense and 0-based within its lane. No unit SHALL appear twice in one team (members and reserve together). A team MAY cover zero objectives. A team stored with fewer than three members (written before this rule) SHALL stay readable, deletable and in its lane order, but any create or update that leaves a team below three members SHALL be rejected.
+A team SHALL belong to exactly one lane (`alpha`, `beta` or `gamma`) of its plan and SHALL carry a trimmed `name` of 1–60 characters, an ordered list of 3–5 member unit ids, at most one reserve unit id, a set of covered objective indexes, at most one clear depth per run 1–3 (`expectedBattleClears` with its `expectedBattleClearsSource`, `estimate` or `manual`, and the time it was last written), and a `sortOrder` that is dense and 0-based within its lane. No unit SHALL appear twice in one team (members and reserve together). A team MAY cover zero objectives. A stored team with fewer than three members SHALL stay readable, deletable and in its lane order, but any create or update that leaves a team below three members SHALL be rejected.
 
 #### Scenario: Create a team
 
@@ -96,9 +96,9 @@ A team SHALL belong to exactly one lane (`alpha`, `beta` or `gamma`) of its plan
 - **WHEN** `PUT` or `DELETE …/teams/{teamId}` names a team that is not on this plan
 - **THEN** the response is 404
 
-#### Scenario: A short team written earlier stays readable
+#### Scenario: A short stored team stays readable
 
-- **GIVEN** a stored alpha team with members `[u1, u2]` written before the minimum existed
+- **GIVEN** a stored alpha team with members `[u1, u2]`
 - **WHEN** the plan is read, the team is reordered within alpha, or the team is deleted
 - **THEN** each call succeeds and the team is returned, kept in the new order, or removed
 
@@ -200,12 +200,6 @@ Every mutation (`PUT` plan, `POST`/`PUT`/`DELETE` team, `PUT` order, `PUT` run i
 - **GIVEN** a plan at revision 3
 - **WHEN** the caller creates a team with `expectedRevision` 2
 - **THEN** the response is 409 with `issueCode` `legendaryEventPlanStale` and `current` holding the plan at revision 3, and no team is created
-
-#### Scenario: Stale revision on a run write
-
-- **GIVEN** a plan at revision 3
-- **WHEN** the caller writes run 1 inputs with `expectedRevision` 2
-- **THEN** the response is 409 with `issueCode` `legendaryEventPlanStale` and `current` holding the plan at revision 3, and no run input changes
 
 #### Scenario: Lazy creation requires revision 0
 

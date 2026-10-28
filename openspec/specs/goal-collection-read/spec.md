@@ -7,12 +7,12 @@ The goals list and the projects list together are the complete, self-sufficient 
 
 ### Requirement: The goals list returns full goal detail
 
-`GET /me/goals` SHALL return `{ goals, orderRevision }` where each entry is the same goal detail `GET /me/goals/{goalId}` returns: identity, status, notes, `config`, `snapshot`, `dependsOn`, `projectIds`, `revision`, `globalPriority`, `createdAt`, `updatedAt`. In-flight goals come first in global order, then the rest newest first. Absent or `?archived=false` excludes Archived goals; `?archived=true` lists only Archived goals. No summary shape exists.
+`GET /goals` SHALL return `{ goals, orderRevision }` where each entry is the same goal detail `GET /goals/{goalId}` returns: identity, status, notes, `config`, `snapshot`, `dependsOn`, `projectIds`, `revision`, `globalPriority`, `createdAt`, `updatedAt`. In-flight goals come first in global order, then the rest newest first. Absent or `?archived=false` excludes Archived goals; `?archived=true` lists only Archived goals. No summary shape exists.
 
 #### Scenario: List entry equals detail
 
 - **GIVEN** a goal with a Rank target and memberships in projects A and B
-- **WHEN** the caller reads `GET /me/goals` and `GET /me/goals/{goalId}`
+- **WHEN** the caller reads `GET /goals` and `GET /goals/{goalId}`
 - **THEN** the list entry and the detail response are identical, including `config` and `projectIds` `[A, B]`
 
 #### Scenario: Order and revision
@@ -23,12 +23,12 @@ The goals list and the projects list together are the complete, self-sufficient 
 
 ### Requirement: The projects list carries goal ids
 
-Each entry of `GET /me/projects` SHALL carry `goalIds`, the ids of its member goals in global order (in-flight first, then the rest newest first), so membership and counts are derivable without a per-project read. `GET /me/projects/{projectId}/goals` SHALL NOT exist.
+Each entry of `GET /projects` SHALL carry `goalIds`, the ids of its member goals in global order (in-flight first, then the rest newest first), so membership and counts are derivable without a per-project read. `GET /projects/{projectId}/goals` SHALL NOT exist.
 
 #### Scenario: Membership from the projects list
 
 - **GIVEN** project A with members X (position 2) and Y (position 1) and a Completed member Z
-- **WHEN** the caller reads `GET /me/projects`
+- **WHEN** the caller reads `GET /projects`
 - **THEN** A carries `goalIds` `[Y, X, Z]`
 
 #### Scenario: Membership agrees in both directions
