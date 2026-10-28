@@ -20,40 +20,114 @@ flag. A push to `main` publishes and deploys the current API to staging.
 
 ## Release flow
 
-Releases are cut and shipped by the `Release` workflow (Actions tab, run by
-hand). Each run creates an immutable annotated `vX.Y.Z` tag, publishes a
-GitHub Release from it with generated notes, and deploys the commit's immutable container digest (the one staging ran when the commit is on `main`) to production.
-Production never deploys from a moving branch.
+Production only ships published, immutable `vX.Y.Z` tags. Three workflows are
+involved:
 
-For a new minor or major release:
+| Workflow | Trigger | What it does |
+| --- | --- | --- |
+| `CD Stage` | every push to `main` | publishes the API image and deploys it to staging |
+| `Release` | by hand (Actions tab) | cuts or patches a release, tags it, publishes the GitHub Release, then calls `CD Prod` |
+| `CD Prod` | called by `Release`, or by hand | deploys an existing published release tag to production |
 
-1. Check that the commit you want to ship has passed CI and staging validation.
-2. Run `Release` from `main` with `minor` (or `major`). It creates
-   `release/X.Y` from the head of `main`, tags `vX.Y.0`, publishes the
-   release, and deploys it. To ship an older commit instead, enter its SHA in
-   `commit`; it must be on `main` and come after the last
-   `vX.Y.0` release.
+### One-time setup
 
-Keep `release/X.Y` only while that release line is supported. Do not merge
-features into a release branch.
+- **Approval:** Settings → Environments → `production` → add required
+  reviewers. Every production deploy then waits for one of them.
+- **Deployment branches:** limit `production` to `main` and `release/**`.
+- **Staging environment:** if `stage` is branch-restricted, also allow
+  `release/**`, because image publishing runs in that environment.
+- **Rulesets:** let `github-actions[bot]` create `release/**` branches and
+  `v*` tags, otherwise the Release workflow cannot push them.
+- **Secrets:** the Azure OIDC variables (`AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`) on the `production` environment.
 
-## Patch flow
+### What a Release run does
 
-Reproduce and fix production bugs on `main` first:
+1. **Tag:** computes the version, pushes `release/X.Y` (minor/major only) and
+   an annotated `vX.Y.Z` tag in one atomic push, then publishes a GitHub
+   Release with notes generated since the previous tag.
+2. **Check:** confirms the tag is a published, non-draft release.
+3. **Build:** reuses the image staging already published for that commit (`tacticus-planner-api:<sha>`), or builds and pushes it if none exists. Production always deploys the `@sha256:` digest.
+4. **Approve:** the deploy job waits for a `production` reviewer.
+5. **Deploy:** updates the production Container App to that digest and waits for a healthy, running revision.
 
-1. Merge the fix into `main` through the normal pull-request flow.
-2. Create a backport branch from the supported `release/X.Y` branch.
-3. Cherry-pick the squash commit from `main`.
-4. Open a pull request from the backport branch into `release/X.Y`.
-5. After approval and required checks, squash-merge the backport.
-6. Run `Release` from `release/X.Y` with `patch`. It tags the next patch
-   version, such as `v1.4.1`, publishes the release with notes since the
-   previous `vX.Y.*`, and deploys it.
+The tag and the GitHub Release exist before approval. Rejecting leaves the
+release published but not live; ship it later with `CD Prod` (see below).
 
-`CD Prod` redeploys an existing release tag by hand; it refuses anything that
-is not a published `vX.Y.Z` release.
+### Versions
 
-Never move or reuse a published tag.
+| Bump | Run from | Result |
+| --- | --- | --- |
+| `major` | `main` | `v(X+1).0.0` and branch `release/(X+1).0` |
+| `minor` | `main` | `vX.(Y+1).0` and branch `release/X.(Y+1)` |
+| `patch` | `release/X.Y` | next `vX.Y.Z` on that branch, no new branch |
+
+With no tags yet, `major` gives `v1.0.0` and `minor` gives `v0.1.0`. Use
+`major` for the first production launch.
+
+## Example: cutting a release
+
+The latest release is `v1.3.2` and `main` has new, staging-verified work.
+
+1. Actions → **Release** → **Run workflow**.
+2. *Use workflow from:* `main`; *bump:* `minor`; leave *commit* empty.
+3. The run creates `release/1.4` from the head of `main`, tags `v1.4.0`, and
+   publishes the release with notes since `v1.3.2`.
+4. Open the run, click **Review deployments**, tick `production`, then
+   **Approve and deploy**.
+5. `v1.4.0` is live.
+
+**Shipping an older commit.** If the head of `main` is not ready but
+`9f8e7d6` is, run the same thing with *commit* `9f8e7d6`. The commit must be on
+`main`, come after the last `vX.Y.0` cut (here `v1.3.0`), and not already be
+released.
+
+## Example: patching a release
+
+`v1.4.0` is live and has a bug.
+
+1. Fix it on `main` first through a normal pull request, so the next release
+   keeps the fix. Say the squash commit is `5a6b7c8`.
+2. Backport it to the release branch:
+
+   ```bash
+   git fetch origin
+   git switch -c backport/fix-login origin/release/1.4
+   git cherry-pick 5a6b7c8
+   git push -u origin backport/fix-login
+   ```
+
+3. Open a pull request from `backport/fix-login` into `release/1.4`, get it
+   reviewed, and squash-merge it.
+4. Actions → **Release** → *Use workflow from:* `release/1.4`; *bump:*
+   `patch`.
+5. The run tags `v1.4.1` with notes since `v1.4.0`. Approve the deploy.
+
+A second fix on the same line becomes `v1.4.2`. Anything merged to `main`
+after `release/1.4` was cut stays out of the patch.
+
+A patch commit exists only on the release branch, so its image is built fresh and
+never ran on staging. Confirm the fix on staging from `main` before releasing
+the patch.
+
+## Redeploying, rolling back and failed runs
+
+- **Ship a rejected or failed deploy:** Actions → **CD Prod** → *Use workflow
+  from:* `main`; *ref:* `v1.4.1`. It refuses anything that is not a published,
+  non-draft `vX.Y.Z` release.
+- **Roll back:** run **CD Prod** with the previous release tag, for example
+  `v1.4.0`. Check the migration notes below first: rolling back past a destructive migration needs a database restore.
+- **Release run failed after the tag was pushed:** use **Re-run all jobs** on
+  that run. It finds the tag without a GitHub Release and resumes publishing
+  and deploying instead of cutting a new version.
+- **Failed before the tag was pushed:** nothing was created; fix the cause and
+  run Release again.
+
+## Rules
+
+- Never move, delete or reuse a published tag.
+- Never merge features into a release branch; only backports of fixes already
+  on `main`.
+- Keep `release/X.Y` only while that release line is supported.
 
 ## Compatibility and migrations
 
