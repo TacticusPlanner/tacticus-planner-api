@@ -400,7 +400,8 @@ from the Actions tab):
 - From `main` with `minor` (or `major`): creates `release/X.Y` from `main`,
   tags `vX.Y.0`, creates a GitHub release with generated notes, and deploys
   the tag. The commit is already on `main`, so production reuses the exact
-  image `CD Stage` built and ran on staging.
+  image `CD Stage` built for it; check that commit's staging deploy succeeded
+  before releasing.
 - From `release/X.Y` with `patch`: tags the next `vX.Y.Z` on that branch,
   creates its release (notes since the previous `vX.Y.*`), builds the image
   for that commit, and deploys it. Land the fix on `main` first, then
@@ -414,7 +415,9 @@ environment must allow `release/**` branches if it restricts deployment
 branches. The update itself runs in the protected `production` environment,
 which holds the same six variables as `stage` (set by
 `pnpm infra -- access pre --env prod` in `tacticus-planner-infra`). Add
-required reviewers to `production` so each release needs an approval.
+required reviewers to `production` so each release needs an approval, and
+limit its deployment branches to `main` and `release/**`, so a workflow
+changed on any other branch cannot use its Azure credentials.
 Infrastructure changes, such as configuration or scaling, still go through
 `tacticus-planner-infra`.
 

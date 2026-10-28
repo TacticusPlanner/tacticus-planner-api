@@ -60,11 +60,16 @@ jobs:
           RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
           ALLOW_MISSING_APP: ${{ inputs.allow-missing-app }}
         run: |
-          if az containerapp show \
+          if output="$(az containerapp show \
             --name "$CONTAINER_APP_NAME" \
             --resource-group "$RESOURCE_GROUP_NAME" \
-            --output none 2>/dev/null; then
+            --output none 2>&1)"; then
             echo "exists=true" >> "$GITHUB_OUTPUT"
+          elif ! grep -q 'ResourceNotFound' <<< "$output"; then
+            # Permission or transient failures must not look like a missing app.
+            echo "$output"
+            echo "::error::Could not read Container App $CONTAINER_APP_NAME."
+            exit 1
           elif [[ "$ALLOW_MISSING_APP" == "true" ]]; then
             echo "exists=false" >> "$GITHUB_OUTPUT"
           else
