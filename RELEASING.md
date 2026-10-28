@@ -20,16 +20,17 @@ flag. A push to `main` publishes and deploys the current API to staging.
 
 ## Release flow
 
+Releases are cut and shipped by the `Release` workflow (Actions tab, run by
+hand). Each run creates an immutable annotated `vX.Y.Z` tag, publishes a
+GitHub Release from it with generated notes, and deploys the commit's immutable container digest (the one staging ran when the commit is on `main`) to production.
+Production never deploys from a moving branch.
+
 For a new minor or major release:
 
-1. Select a commit on `main` that has passed CI and staging validation.
-2. Create `release/X.Y` from that commit.
-3. Validate the release candidate with its compatible apps release.
-4. Apply stabilization fixes through the patch flow below.
-5. Create an immutable annotated `vX.Y.Z` tag on the accepted commit.
-6. Publish a GitHub Release from that tag.
-7. Deploy production from the container digest built from the tagged commit,
-   never from a moving branch or mutable image tag.
+1. Check that the head of `main` has passed CI and staging validation.
+2. Run `Release` from `main` with `minor` (or `major`). It creates
+   `release/X.Y` from `main`, tags `vX.Y.0`, publishes the release, and
+   deploys it.
 
 Keep `release/X.Y` only while that release line is supported. Do not merge
 features into a release branch.
@@ -43,8 +44,12 @@ Reproduce and fix production bugs on `main` first:
 3. Cherry-pick the squash commit from `main`.
 4. Open a pull request from the backport branch into `release/X.Y`.
 5. After approval and required checks, squash-merge the backport.
-6. Tag the result with the next patch version, such as `v1.4.1`.
-7. Publish the GitHub Release and deploy its immutable container digest.
+6. Run `Release` from `release/X.Y` with `patch`. It tags the next patch
+   version, such as `v1.4.1`, publishes the release with notes since the
+   previous `vX.Y.*`, and deploys it.
+
+`CD Prod` redeploys an existing release tag by hand; it refuses anything that
+is not a published `vX.Y.Z` release.
 
 Never move or reuse a published tag.
 

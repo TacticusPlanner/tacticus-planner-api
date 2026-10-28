@@ -109,8 +109,20 @@ jobs:
           BRANCH: ${{ steps.version.outputs.branch }}
         run: git push origin "HEAD:refs/heads/$BRANCH"
 
-      # Creating the release creates the tag on the exact commit. Notes start from the previous
-      # tag on the same line, so a patch lists only what changed since the release it fixes.
+      # Annotated and immutable, as RELEASING.md requires: a published tag is never moved.
+      - name: Create release tag
+        shell: bash
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+          SHA: ${{ steps.version.outputs.sha }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$TAG" "$SHA" -m "$TAG"
+          git push origin "refs/tags/$TAG"
+
+      # Notes start from the previous tag on the same line, so a patch lists only what changed
+      # since the release it fixes.
       - name: Create GitHub release
         shell: bash
         env:
@@ -119,7 +131,7 @@ jobs:
           PREVIOUS: ${{ steps.version.outputs.previous }}
           SHA: ${{ steps.version.outputs.sha }}
         run: |
-          args=(--target "$SHA" --title "$TAG" --generate-notes)
+          args=(--verify-tag --title "$TAG" --generate-notes)
           if [[ -n "$PREVIOUS" ]]; then
             args+=(--notes-start-tag "$PREVIOUS")
           fi
