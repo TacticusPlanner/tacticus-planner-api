@@ -16,6 +16,11 @@ on:
           - major
           - patch
         default: minor
+      commit:
+        description: Optional commit on main to release (minor/major only). Defaults to the head of main.
+        required: false
+        type: string
+        default: ""
 
 permissions:
   contents: read
@@ -46,12 +51,32 @@ jobs:
         env:
           BUMP: ${{ inputs.bump }}
           REF_NAME: ${{ github.ref_name }}
+          COMMIT: ${{ inputs.commit }}
         run: |
           set -euo pipefail
           latest_in() { git tag --list "$1" --sort=-v:refname | head -n 1; }
 
-          if git tag --points-at HEAD | grep -qE '^v[0-9]+\.[0-9]+\.[0-9]+$'; then
-            echo "::error::$REF_NAME is already released as $(git tag --points-at HEAD | head -n 1)."
+          # An older commit on main can be released instead of its head; patches always ship
+          # the head of their release branch.
+          target="HEAD"
+          if [[ -n "$COMMIT" ]]; then
+            if [[ "$BUMP" == "patch" ]]; then
+              echo "::error::commit applies to minor/major releases only; patch ships the head of the release branch."
+              exit 1
+            fi
+            if ! target="$(git rev-parse --verify --quiet "$COMMIT^{commit}")"; then
+              echo "::error::$COMMIT is not a commit in this repository."
+              exit 1
+            fi
+            if ! git merge-base --is-ancestor "$target" HEAD; then
+              echo "::error::$COMMIT is not on $REF_NAME."
+              exit 1
+            fi
+          fi
+          sha="$(git rev-parse "$target")"
+
+          if git tag --points-at "$sha" | grep -qE '^v[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "::error::$sha is already released as $(git tag --points-at "$sha" | head -n 1)."
             exit 1
           fi
 
@@ -99,7 +124,7 @@ jobs:
             echo "tag=v$major.$minor.$patch"
             echo "previous=$previous"
             echo "branch=$branch"
-            echo "sha=$(git rev-parse HEAD)"
+            echo "sha=$sha"
           } >> "$GITHUB_OUTPUT"
 
       # Annotated and immutable, as RELEASING.md requires: a published tag is never moved.

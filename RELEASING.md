@@ -27,10 +27,11 @@ Production never deploys from a moving branch.
 
 For a new minor or major release:
 
-1. Check that the head of `main` has passed CI and staging validation.
+1. Check that the commit you want to ship has passed CI and staging validation.
 2. Run `Release` from `main` with `minor` (or `major`). It creates
-   `release/X.Y` from `main`, tags `vX.Y.0`, publishes the release, and
-   deploys it.
+   `release/X.Y` from the head of `main`, tags `vX.Y.0`, publishes the
+   release, and deploys it. To ship an older commit instead, enter its SHA in
+   `commit`; it must already be on `main`.
 
 Keep `release/X.Y` only while that release line is supported. Do not merge
 features into a release branch.
