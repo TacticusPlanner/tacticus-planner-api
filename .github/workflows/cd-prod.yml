@@ -26,11 +26,30 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Production only ships released versions, never an arbitrary branch or commit.
+  check-release:
+    name: Check release
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check the ref is a release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REF: ${{ inputs.ref }}
+        run: |
+          if [[ ! "$REF" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] \
+            || ! gh release view "$REF" --repo "$GITHUB_REPOSITORY" --json tagName > /dev/null; then
+            echo "::error::$REF is not a published release tag (vX.Y.Z)."
+            exit 1
+          fi
+
   publish:
     name: Publish
+    needs: check-release
     uses: ./.github/workflows/_publish-api.yml
     with:
-      ref: ${{ inputs.ref }}
+      ref: refs/tags/${{ inputs.ref }}
 
   deploy:
     name: Deploy Production
