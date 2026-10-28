@@ -61,11 +61,11 @@ No record SHALL include an icon path, portrait id, wiki link, or any other prese
 
 The denormalization SHALL derive `kind` for every record as follows, evaluated in this order:
 
-1. `object` — the record was loaded from `npcs-objects.json`.
+1. `object` — the record was in the `npcs-objects` source group.
 2. `machineOfWar` — the record's raw `traits` contains the trait id `MachineOfWar`.
 3. `unit` — every other record.
 
-The classification SHALL NOT depend on the spelling of the record's `id`. The catalog build SHALL fail if a record loaded from `npcs-objects.json` carries the `MachineOfWar` trait, since the two classifications are mutually exclusive by source.
+The classification SHALL NOT depend on the spelling of the record's `id`. The catalog build SHALL fail if a record in the `npcs-objects` source group carries the `MachineOfWar` trait, since the two classifications are mutually exclusive by source.
 
 #### Scenario: Machine of War classified by trait regardless of id casing
 
@@ -74,12 +74,12 @@ The classification SHALL NOT depend on the spelling of the record's `id`. The ca
 
 #### Scenario: Objects classified by source file
 
-- **WHEN** a record is loaded from `npcs-objects.json`
+- **WHEN** a record is in the `npcs-objects` source group
 - **THEN** its served `kind` is `object`, whether or not it carries the `Object` trait
 
 #### Scenario: Regular unit
 
-- **WHEN** the raw record `necroNpc1Warrior` is loaded from `npcs-necrons.json` and its traits do not include `MachineOfWar`
+- **WHEN** the raw record `necroNpc1Warrior` is in the `npcs-necrons` source group and its traits do not include `MachineOfWar`
 - **THEN** its served `kind` is `unit`
 
 #### Scenario: Zero-stat units are still served as units

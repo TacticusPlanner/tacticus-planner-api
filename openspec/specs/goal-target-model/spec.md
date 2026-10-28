@@ -296,8 +296,8 @@ by the depended-upon Ascension targets above.
 
 A goal SHALL obtain a progression-derived cap above its live one only from
 Ascension specs it declares a dependency on within the same request, or from
-existing Ascension goals reachable from its `dependsOnGoalIds` (see
-`goal-dependencies`). An
+existing Ascension goals reachable from the `dependsOnGoalIds` of its
+in-request dependency closure (see `goal-dependencies`). An
 Ascension spec present in the request but not depended upon SHALL NOT raise
 another spec's cap.
 

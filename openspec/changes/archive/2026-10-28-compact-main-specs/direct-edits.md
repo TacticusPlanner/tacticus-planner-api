@@ -4,7 +4,7 @@ OpenSpec rejects a MODIFIED block that drops or renames a scenario the main spec
 (`specs-apply`: "current spec contains scenario(s) not present in the modified block"), and has no
 syntax for removing one scenario. These edits are therefore made by hand during apply, before archive:
 remove or rename each scenario in `openspec/specs/<capability>/spec.md` AND in the matching MODIFIED
-block under `specs/<capability>/spec.md` (when one exists), so archive then applies cleanly. When the matching MODIFIED block adds a replacement scenario (L8, L9, D1), copy that scenario into the main spec in the same step, so no main-spec requirement is ever left without a scenario and `openspec validate --specs --strict` passes before archive.
+block under `specs/<capability>/spec.md` (when one exists), so archive then applies cleanly. When the matching MODIFIED block adds a replacement scenario (L8, L9, D1), copy that scenario into the main spec in the same step, so no main-spec requirement is ever left without a scenario and the edits add no `openspec validate --specs --strict` failure beyond the pre-change baseline (the existing long-requirement warnings).
 Audit ids are in `audit.md`.
 
 ## character-ability-costs-dataset
