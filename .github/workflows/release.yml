@@ -52,6 +52,7 @@ jobs:
           BUMP: ${{ inputs.bump }}
           REF_NAME: ${{ github.ref_name }}
           COMMIT: ${{ inputs.commit }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
           latest_in() { git tag --list "$1" --sort=-v:refname | head -n 1; }
@@ -81,9 +82,24 @@ jobs:
           fi
           sha="$(git rev-parse "$target")"
 
-          if git tag --points-at "$sha" | grep -qE '^v[0-9]+\.[0-9]+\.[0-9]+$'; then
-            echo "::error::$sha is already released as $(git tag --points-at "$sha" | head -n 1)."
-            exit 1
+          existing="$(git tag --points-at "$sha" | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1 || true)"
+          if [[ -n "$existing" ]]; then
+            if gh release view "$existing" --repo "$GITHUB_REPOSITORY" --json tagName > /dev/null 2>&1; then
+              echo "::error::$sha is already released as $existing."
+              exit 1
+            fi
+            # An earlier run pushed the tag but did not publish the release: finish that one
+            # instead of cutting a new version. Its branch, if any, went up with the tag.
+            previous="$(git tag --list 'v*.*.*' --sort=-v:refname | grep -A1 -xF "$existing" | sed -n 2p || true)"
+            echo "::notice::Resuming $existing, which was tagged but never published."
+            {
+              echo "tag=$existing"
+              echo "previous=$previous"
+              echo "branch="
+              echo "sha=$sha"
+              echo "resume=true"
+            } >> "$GITHUB_OUTPUT"
+            exit 0
           fi
 
           if [[ "$BUMP" == "patch" ]]; then
@@ -137,6 +153,7 @@ jobs:
       # The branch and tag go up in one atomic push, so a refused tag never leaves behind a
       # release branch that blocks the rerun.
       - name: Create release branch and tag
+        if: steps.version.outputs.resume != 'true'
         shell: bash
         env:
           TAG: ${{ steps.version.outputs.tag }}
