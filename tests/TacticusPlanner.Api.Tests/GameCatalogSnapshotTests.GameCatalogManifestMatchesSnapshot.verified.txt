@@ -1,5 +1,5 @@
 ﻿{
-  version: 1.43.157.2989+e874ff04ba8e,
+  version: 1.43.157.2989+6c8926e29a75,
   schemaHash: 3da741ef2e6fdd6e7a04f13267a21e796a49af4a672eb741599055bb10c9d8a0,
   gameVersion: 1.43.157.2989,
   sourceHash: {time-dependent},
@@ -41,7 +41,7 @@
     },
     {
       key: event-definitions,
-      hash: c9f6b9647ae847a2ae937fc896f7fe9f64727219748ab8c5182b5af68469693a,
+      hash: 7a7a631047e878d583f3b354ca3e5fe4aae85cd1febbce9bcce6aa63b2bb74d7,
       url: /api/v1/game-catalog/event-definitions/{envelopeHash}
     },
     {
