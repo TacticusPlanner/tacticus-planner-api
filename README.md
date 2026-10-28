@@ -392,6 +392,20 @@ that case it publishes the image, reports the immutable digest in the workflow
 summary, and skips deployment successfully. Supply that digest to the initial
 local infrastructure deployment.
 
+## Azure production deployment
+
+The `CD Prod` workflow is run by hand with a full commit SHA. It does not
+rebuild: it looks up the image `CD Stage` already published for that commit,
+resolves its digest, and updates the production Container App to it, so
+production runs exactly what staging ran. It fails if the image or the
+Container App does not exist.
+
+It runs in the protected `production` environment, which holds the same six
+variables as `stage` (set by `pnpm infra -- access pre --env prod` in
+`tacticus-planner-infra`). Add required reviewers to that environment so each
+promotion needs an approval. Infrastructure changes, such as configuration or
+scaling, still go through `tacticus-planner-infra`.
+
 ### Breaking contracts
 
 Staging promotes every push to `main`. Merge a breaking API change and its web

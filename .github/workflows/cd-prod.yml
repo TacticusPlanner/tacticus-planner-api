@@ -1,0 +1,27 @@
+name: CD Prod
+
+# Promotes an image CD Stage already published and ran on staging; nothing is rebuilt, so
+# production runs the exact digest staging verified.
+on:
+  workflow_dispatch:
+    inputs:
+      commit:
+        description: Full commit SHA to promote (its image must have been published by CD Stage).
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: cd-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy Production
+    uses: ./.github/workflows/_deploy-api.yml
+    with:
+      environment: production
+      commit: ${{ inputs.commit }}
