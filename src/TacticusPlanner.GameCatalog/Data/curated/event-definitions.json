@@ -9,7 +9,7 @@
   {
     "id": "incursion",
     "type": "Incursion",
-    "recurrence": { "kind": "Fixed", "intervalDays": 35, "durationDays": 5, "anchorUtc": "2026-06-15T00:00:00Z" },
+    "recurrence": { "kind": "Fixed", "intervalDays": 35, "durationDays": 5, "anchorUtc": "2026-06-15T08:00:00Z" },
     "requiredParameters": []
   },
   {
@@ -35,16 +35,16 @@
   {
     "id": "guild-raid-season",
     "type": "GuildRaidSeason",
-    "recurrence": { "kind": "Fixed", "intervalDays": 14, "durationDays": 13, "anchorUtc": "2026-10-21T05:00:00Z" },
+    "recurrence": { "kind": "Fixed", "intervalDays": 14, "durationDays": 13, "anchorUtc": "2026-10-21T10:00:00Z" },
     "requiredParameters": [],
     "config": { "seasonLengthDays": 13 }
   },
   {
     "id": "guild-war-season",
     "type": "GuildWarSeason",
-    "recurrence": { "kind": "Fixed", "intervalDays": 35, "durationDays": 15, "anchorUtc": "2026-08-15T00:00:00Z" },
+    "recurrence": { "kind": "Fixed", "intervalDays": 35, "durationDays": 15, "anchorUtc": "2026-10-23T09:00:00Z" },
     "requiredParameters": [],
-    "config": { "seasonLengthDays": 15, "warsPerSeason": 6, "preparationPhaseHours": 24, "activeFightingPhaseHours": 36, "seasonNumberAtAnchor": 26 }
+    "config": { "seasonLengthDays": 15, "warsPerSeason": 6, "preparationPhaseHours": 24, "activeFightingPhaseHours": 36, "seasonNumberAtAnchor": 28 }
   },
   {
     "id": "always-double-xp-sunday",

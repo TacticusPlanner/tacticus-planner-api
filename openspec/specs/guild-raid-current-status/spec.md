@@ -104,7 +104,7 @@ When current prime maximum HP cannot be resolved, its HP and derived modifier ac
 
 ### Requirement: Season timing uses explicit event occurrences only
 
-The `guild-raid-season` catalog definition MAY be a `Fixed` recurrence, projected into the events calendar like any other `Fixed` definition (currently a 14-day interval, 13-day duration, anchored 2026-10-21T05:00:00Z). `endsAt` SHALL still be populated only from an explicitly authored `GuildRaidSeason` occurrence matching the active observation by `season` or `seasonConfigId`; projected placeholders carry no parameters and SHALL NOT be used for `endsAt`. The endpoint considers only the current game-catalog projection window and version. If no matching authored occurrence exists, `endsAt` SHALL be null while all other active status remains available.
+The `guild-raid-season` catalog definition MAY be a `Fixed` recurrence, projected into the events calendar like any other `Fixed` definition (currently a 14-day interval, 13-day duration, anchored 2026-10-21T10:00:00Z). `endsAt` SHALL still be populated only from an explicitly authored `GuildRaidSeason` occurrence matching the active observation by `season` or `seasonConfigId`; projected placeholders carry no parameters and SHALL NOT be used for `endsAt`. The endpoint considers only the current game-catalog projection window and version. If no matching authored occurrence exists, `endsAt` SHALL be null while all other active status remains available.
 
 #### Scenario: Explicit season end is available
 
