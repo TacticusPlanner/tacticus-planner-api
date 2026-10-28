@@ -37,8 +37,8 @@
   {
     "id": "occ-2026-05-28-campaign-event-dark-angels-debut",
     "definitionId": "campaign-event",
-    "startUtc": "2026-05-28T00:00:00Z",
-    "endUtc": "2026-06-11T00:00:00Z",
+    "startUtc": "2026-05-28T09:00:00Z",
+    "endUtc": "2026-06-11T09:00:00Z",
     "parameters": { "newContentDebut": true }
   },
   {
@@ -233,8 +233,8 @@
   {
     "id": "occ-2026-10-15-campaign-event-19",
     "definitionId": "campaign-event",
-    "startUtc": "2026-10-15T00:00:00Z",
-    "endUtc": "2026-10-29T00:00:00Z",
+    "startUtc": "2026-10-15T09:00:00Z",
+    "endUtc": "2026-10-29T09:00:00Z",
     "parameters": { "newContentDebut": false }
   },
   {
