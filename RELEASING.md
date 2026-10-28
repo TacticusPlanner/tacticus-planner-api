@@ -122,6 +122,24 @@ the patch.
 - **Failed before the tag was pushed:** nothing was created; fix the cause and
   run Release again.
 
+## Release scripts
+
+The version logic (bumps, patches, older commits, resuming a failed run) lives in
+`scripts/release/` as plain Node modules with no dependencies:
+
+- `plan-release.mjs`: the rules, as a pure function.
+- `git-repo.mjs`: answers its questions with git and the GitHub CLI.
+- `compute-version.mjs`: the entry point the Release workflow runs.
+
+Run the tests on any OS with Node 22 or newer:
+
+```bash
+node --test "scripts/release/*.test.mjs"
+```
+
+CI runs them on Linux and Windows. The folder is kept identical in
+`tacticus-planner-apps`; change both together.
+
 ## Rules
 
 - Never move, delete or reuse a published tag.

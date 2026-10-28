@@ -45,109 +45,15 @@ jobs:
         with:
           fetch-depth: 0
 
+      # The rules live in scripts/release/plan-release.mjs, which has its own tests.
       - name: Compute version
         id: version
-        shell: bash
         env:
           BUMP: ${{ inputs.bump }}
           REF_NAME: ${{ github.ref_name }}
           COMMIT: ${{ inputs.commit }}
           GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          latest_in() { git tag --list "$1" --sort=-v:refname | head -n 1; }
-
-          # An older commit on main can be released instead of its head; patches always ship
-          # the head of their release branch.
-          target="HEAD"
-          if [[ -n "$COMMIT" ]]; then
-            if [[ "$BUMP" == "patch" ]]; then
-              echo "::error::commit applies to minor/major releases only; patch ships the head of the release branch."
-              exit 1
-            fi
-            if ! target="$(git rev-parse --verify --quiet "$COMMIT^{commit}")"; then
-              echo "::error::$COMMIT is not a commit in this repository."
-              exit 1
-            fi
-            if ! git merge-base --is-ancestor "$target" HEAD; then
-              echo "::error::$COMMIT is not on $REF_NAME."
-              exit 1
-            fi
-            # Every vX.Y.0 is cut from main, so the newest one marks what main has already shipped.
-            last_cut="$(latest_in 'v*.*.0')"
-            if [[ -n "$last_cut" ]] && ! git merge-base --is-ancestor "$last_cut" "$target"; then
-              echo "::error::$COMMIT predates $last_cut; pick a commit after the last release."
-              exit 1
-            fi
-          fi
-          sha="$(git rev-parse "$target")"
-
-          existing="$(git tag --points-at "$sha" | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -n 1 || true)"
-          if [[ -n "$existing" ]]; then
-            if gh release view "$existing" --repo "$GITHUB_REPOSITORY" --json tagName > /dev/null 2>&1; then
-              echo "::error::$sha is already released as $existing."
-              exit 1
-            fi
-            # An earlier run pushed the tag but did not publish the release: finish that one
-            # instead of cutting a new version. Its branch, if any, went up with the tag.
-            previous="$(git tag --list 'v*.*.*' --sort=-v:refname | grep -A1 -xF "$existing" | sed -n 2p || true)"
-            echo "::notice::Resuming $existing, which was tagged but never published."
-            {
-              echo "tag=$existing"
-              echo "previous=$previous"
-              echo "branch="
-              echo "sha=$sha"
-              echo "resume=true"
-            } >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
-          if [[ "$BUMP" == "patch" ]]; then
-            if [[ ! "$REF_NAME" =~ ^release/([0-9]+)\.([0-9]+)$ ]]; then
-              echo "::error::Run patch releases from a release/X.Y branch."
-              exit 1
-            fi
-            major="${BASH_REMATCH[1]}"
-            minor="${BASH_REMATCH[2]}"
-            previous="$(latest_in "v$major.$minor.*")"
-            if [[ -z "$previous" ]]; then
-              echo "::error::release/$major.$minor has no v$major.$minor.* tag to patch."
-              exit 1
-            fi
-            patch=$(( ${previous##*.} + 1 ))
-            branch=""
-          else
-            if [[ "$REF_NAME" != "main" ]]; then
-              echo "::error::Run $BUMP releases from main."
-              exit 1
-            fi
-            previous="$(latest_in 'v*.*.*')"
-            if [[ -z "$previous" ]]; then
-              major=0
-              minor=0
-            else
-              IFS=. read -r major minor _ <<< "${previous#v}"
-            fi
-            if [[ "$BUMP" == "major" ]]; then
-              major=$(( major + 1 ))
-              minor=0
-            else
-              minor=$(( minor + 1 ))
-            fi
-            patch=0
-            branch="release/$major.$minor"
-            if git ls-remote --exit-code --heads origin "$branch" > /dev/null; then
-              echo "::error::$branch already exists."
-              exit 1
-            fi
-          fi
-
-          {
-            echo "tag=v$major.$minor.$patch"
-            echo "previous=$previous"
-            echo "branch=$branch"
-            echo "sha=$sha"
-          } >> "$GITHUB_OUTPUT"
+        run: node scripts/release/compute-version.mjs
 
       # Annotated and immutable, as RELEASING.md requires: a published tag is never moved.
       # The branch and tag go up in one atomic push, so a refused tag never leaves behind a

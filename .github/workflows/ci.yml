@@ -49,3 +49,23 @@ jobs:
     uses: ./.github/workflows/_build-api.yml
     with:
       skip: ${{ needs.changes.outputs.code != 'true' }}
+
+  release-scripts:
+    name: Release scripts (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v6
+
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
+      - name: Test release scripts
+        run: node --test "scripts/release/*.test.mjs"
