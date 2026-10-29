@@ -49,7 +49,12 @@ public sealed class UpdateUserSettingsEndpoint
             return;
         }
 
-        settings.Settings = new UserSettingsData { DailyEnergy = req.DailyEnergy, XpBookRarity = req.XpBookRarity.ToString() };
+        settings.Settings = new UserSettingsData
+        {
+            DailyEnergy = req.DailyEnergy,
+            XpBookRarity = req.XpBookRarity.ToString(),
+            GoalsView = req.GoalsView.ToString(),
+        };
 
         // A nested owned-JSON property mutation isn't always picked up by snapshot change detection on
         // its owning entity — force Modified explicitly so EntityMetadataInterceptor reliably bumps
@@ -88,6 +93,7 @@ public sealed class UpdateUserSettingsEndpoint
 public sealed record UpdateUserSettingsRequest(
     int DailyEnergy,
     [property: JsonRequired] XpBookRarity XpBookRarity,
+    [property: JsonRequired] GoalsView GoalsView,
     long Revision);
 
 public sealed class UpdateUserSettingsValidator : Validator<UpdateUserSettingsRequest>

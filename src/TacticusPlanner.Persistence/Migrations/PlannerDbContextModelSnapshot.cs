@@ -3014,6 +3014,9 @@ namespace TacticusPlanner.Persistence.Migrations
 
                             b1.Property<int>("DailyEnergy");
 
+                            b1.Property<string>("GoalsView")
+                                .IsRequired();
+
                             b1.Property<string>("XpBookRarity")
                                 .IsRequired();
 

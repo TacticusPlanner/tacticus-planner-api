@@ -78,16 +78,19 @@ public sealed class ApiErrorContractTests(PlannerApiFactory factory) : IClassFix
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var read = (await client.GetFromJsonAsync<UserSettingsResponse>("/api/v1/settings", Ct))!;
         (await client.PutAsJsonAsync(
-            "/api/v1/settings", new UpdateUserSettingsRequest(538, read.XpBookRarity, read.Revision), Ct))
+            "/api/v1/settings",
+            new UpdateUserSettingsRequest(538, read.XpBookRarity, GoalsView.Table, read.Revision), Ct))
             .EnsureSuccessStatusCode();
 
         var stale = await client.PutAsJsonAsync(
-            "/api/v1/settings", new UpdateUserSettingsRequest(438, read.XpBookRarity, read.Revision), Ct);
+            "/api/v1/settings",
+            new UpdateUserSettingsRequest(438, read.XpBookRarity, GoalsView.Cards, read.Revision), Ct);
 
         await AssertProblemAsync(stale, HttpStatusCode.Conflict, "concurrency");
         var current = await stale.ReadCurrentAsync<UserSettingsResponse>();
         Assert.Equal(await client.GetFromJsonAsync<UserSettingsResponse>("/api/v1/settings", Ct), current);
         Assert.Equal(538, current.DailyEnergy);
+        Assert.Equal(GoalsView.Table, current.GoalsView);
     }
 
     [Fact]

@@ -20,6 +20,7 @@ public sealed class UserSettingsData
 {
     public const int DefaultDailyEnergy = 288;
     public const string DefaultXpBookRarity = "Legendary";
+    public const string DefaultGoalsView = "Cards";
 
     public static readonly IReadOnlySet<int> SupportedDailyEnergy =
         new HashSet<int> { 288, 378, 438, 538, 638, 738, 838, 938 };
@@ -27,7 +28,11 @@ public sealed class UserSettingsData
     public static readonly IReadOnlySet<string> SupportedXpBookRarity =
         new HashSet<string> { "Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic" };
 
+    public static readonly IReadOnlySet<string> SupportedGoalsView = new HashSet<string> { "Cards", "Table" };
+
     public int DailyEnergy { get; set; } = DefaultDailyEnergy;
 
     public string XpBookRarity { get; set; } = DefaultXpBookRarity;
+
+    public string GoalsView { get; set; } = DefaultGoalsView;
 }

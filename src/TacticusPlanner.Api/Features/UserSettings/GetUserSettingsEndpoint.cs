@@ -50,10 +50,21 @@ public enum XpBookRarity
     Mythic,
 }
 
-public sealed record UserSettingsResponse(int DailyEnergy, XpBookRarity XpBookRarity, long Revision)
+/// <summary>How the Goals list renders on desktop; stored by name.</summary>
+public enum GoalsView
+{
+    Cards,
+    Table,
+}
+
+public sealed record UserSettingsResponse(int DailyEnergy, XpBookRarity XpBookRarity, GoalsView GoalsView, long Revision)
 {
     public static UserSettingsResponse From(UserSettingsEntity settings) =>
-        new(settings.Settings.DailyEnergy, NormalizeXpBookRarity(settings.Settings.XpBookRarity), settings.Revision);
+        new(
+            settings.Settings.DailyEnergy,
+            NormalizeXpBookRarity(settings.Settings.XpBookRarity),
+            NormalizeGoalsView(settings.Settings.GoalsView),
+            settings.Revision);
 
     // A row saved before this field existed (or any other missing/null/unsupported stored value) reads
     // as the default rather than leaking an invalid value to the client.
@@ -62,4 +73,10 @@ public sealed record UserSettingsResponse(int DailyEnergy, XpBookRarity XpBookRa
             && Enum.IsDefined(rarity)
             ? rarity
             : Enum.Parse<XpBookRarity>(UserSettingsData.DefaultXpBookRarity);
+
+    // Same rule as the rarity: a row saved before this field existed, or any unsupported value, reads as Cards.
+    private static GoalsView NormalizeGoalsView(string? goalsView) =>
+        goalsView is not null && UserSettingsData.SupportedGoalsView.Contains(goalsView)
+            ? Enum.Parse<GoalsView>(goalsView)
+            : Enum.Parse<GoalsView>(UserSettingsData.DefaultGoalsView);
 }
