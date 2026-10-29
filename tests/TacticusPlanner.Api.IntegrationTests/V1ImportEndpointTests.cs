@@ -1,5 +1,6 @@
 using System.Net;
 using TacticusPlanner.Api.Features.PlayerDataOverrides;
+using TacticusPlanner.Api.Features.TacticusIntegration;
 using TacticusPlanner.Api.Features.V1Import;
 
 namespace TacticusPlanner.Api.IntegrationTests;
@@ -215,6 +216,52 @@ public sealed class V1ImportEndpointTests(PlannerApiFactory factory) : IClassFix
         var body = await response.Content.ReadFromJsonAsync<ImportV1ProfileResponse>(ct);
         Assert.Equal(ImportPartStatus.Failed, body!.CampaignEventProgress.Status);
         Assert.Equal("invalid_campaign_event_progress", body.CampaignEventProgress.Code);
+    }
+
+    [Fact]
+    public async Task NonGuidV1UserIdFailsOnlyThatPart()
+    {
+        var client = await CreateProvisionedClientAsync();
+        var username = factory.V1Client.ConfigureProfile(new TacticusV1Profile(FakeTacticusApi.ValidKey, "not-a-guid"));
+
+        var body = await ImportAsync(client, username);
+
+        Assert.Equal(ImportPartStatus.Failed, body.TacticusUserId.Status);
+        Assert.Equal("invalid_tacticus_user_id", body.TacticusUserId.Code);
+        Assert.Null(body.TacticusUserIdMasked);
+        Assert.Equal(ImportPartStatus.Imported, body.PersonalTacticusApiKey.Status);
+    }
+
+    [Fact]
+    public async Task V1UserIdIsNormalizedLikeThePutPathAndADuplicateIsAPartConflict()
+    {
+        var userId = Guid.NewGuid();
+        var owner = await CreateProvisionedClientAsync();
+        (await owner.PutAsJsonAsync(
+            "/api/v1/account/tacticus-integration",
+            new UpdateTacticusIntegrationRequest(FakeTacticusApi.ValidKey, userId.ToString()),
+            TestContext.Current.CancellationToken
+        )).EnsureSuccessStatusCode();
+        var client = await CreateProvisionedClientAsync();
+        var username = factory.V1Client.ConfigureProfile(
+            new TacticusV1Profile(FakeTacticusApi.ValidKey, $" {userId.ToString().ToUpperInvariant()} "));
+
+        var body = await ImportAsync(client, username);
+
+        Assert.Equal(ImportPartStatus.Failed, body.TacticusUserId.Status);
+        Assert.Equal("tacticus_user_id_conflict", body.TacticusUserId.Code);
+        Assert.Equal(ImportPartStatus.Imported, body.PersonalTacticusApiKey.Status);
+    }
+
+    private static async Task<ImportV1ProfileResponse> ImportAsync(HttpClient client, string username)
+    {
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/account/v1-import",
+            OnboardingRequest(username, FakeTacticusV1Client.ValidPassword),
+            TestContext.Current.CancellationToken
+        );
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        return (await response.Content.ReadFromJsonAsync<ImportV1ProfileResponse>(TestContext.Current.CancellationToken))!;
     }
 
     private async Task<HttpClient> CreateProvisionedClientAsync()

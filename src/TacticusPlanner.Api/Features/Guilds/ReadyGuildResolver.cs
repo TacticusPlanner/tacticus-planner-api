@@ -16,7 +16,7 @@ internal static class ReadyGuildResolver
         var guild = await db.GuildMembers.AsNoTracking()
             .Where(member => member.ProfileId == profileId)
             .Select(member => member.Guild)
-            .FirstOrDefaultAsync(ct);
+            .SingleOrDefaultAsync(ct); // unique on guild_members.profile_id: at most one guild per profile
         if (guild is null)
         {
             return new ReadyGuildResult.NotReady("No linked registered guild is available.");

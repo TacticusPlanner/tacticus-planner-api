@@ -24,6 +24,7 @@ internal sealed class FakeTacticusApi : ITacticusApi
     private readonly ConcurrentDictionary<string, GuildResponse> GuildResponsesByToken = new();
     private readonly ConcurrentDictionary<string, HttpStatusCode> GuildRejectionsByToken = new();
     private readonly ConcurrentDictionary<string, bool> GuildUnavailableTokens = new();
+    private readonly ConcurrentDictionary<string, int> GuildCallsByToken = new();
     private readonly ConcurrentDictionary<string, PlayerResponse> PlayerResponsesByToken = new();
     private readonly ConcurrentDictionary<string, GuildRaidResponse> GuildRaidResponsesByToken = new();
     private readonly ConcurrentDictionary<string, HttpStatusCode> GuildRaidRejectionsByToken = new();
@@ -46,6 +47,8 @@ internal sealed class FakeTacticusApi : ITacticusApi
     /// <paramref name="guildApiToken"/> — simulates the Tacticus API being unreachable.</summary>
     public void ConfigureGuildUnavailable(string guildApiToken) =>
         GuildUnavailableTokens[guildApiToken] = true;
+
+    public int GuildCallCount(string guildApiToken) => GuildCallsByToken.GetValueOrDefault(guildApiToken);
 
     /// <summary>Builds a <see cref="GuildResponse"/> for <see cref="ConfigureGuildResponse"/> from a
     /// simple member tuple list, so tests don't have to construct the nested Tacticus wire types by hand.</summary>
@@ -274,6 +277,7 @@ internal sealed class FakeTacticusApi : ITacticusApi
 
     public async Task<GuildResponse> GetGuildAsync(string guildApiToken, CancellationToken cancellationToken = default)
     {
+        GuildCallsByToken.AddOrUpdate(guildApiToken, 1, (_, count) => count + 1);
         if (GuildUnavailableTokens.ContainsKey(guildApiToken))
         {
             throw new HttpRequestException("Simulated Tacticus API outage.");
@@ -352,7 +356,7 @@ internal sealed class FakeTacticusV1Client : ITacticusV1Client
     public const string UsernameWithInvalidOnslaught = "v1-user-with-invalid-onslaught";
     public const string UsernameWithCampaignEvents = "v1-user-with-campaign-events";
     public const string UsernameWithInvalidCampaignEvents = "v1-user-with-invalid-campaign-events";
-    public const string TacticusUserId = "v1-tacticus-user-id";
+    public const string TacticusUserId = "0b7e4a52-6f1d-4c3e-9a8b-2d5f7c9e1a34";
 
     private const string AccessToken = "v1-access-token-for-" + ValidUsername;
     private const string AccessTokenNoKey = "v1-access-token-for-" + UsernameWithoutTacticusKey;

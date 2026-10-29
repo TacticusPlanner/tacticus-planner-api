@@ -61,7 +61,7 @@ public sealed class GetMyGuildEndpoint : EndpointWithoutRequest<MyGuildResponse>
             .AsNoTracking()
             .Where(entity => entity.ProfileId == profileId)
             .Select(entity => new { entity.Id, entity.GuildId })
-            .FirstOrDefaultAsync(ct);
+            .SingleOrDefaultAsync(ct); // unique on profile_id: at most one guild per profile
 
         if (membership is null)
         {

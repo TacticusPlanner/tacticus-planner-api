@@ -22,6 +22,11 @@ public sealed class GuildSyncService(
     TimeProvider timeProvider
 )
 {
+    /// <summary>Minimum spacing between upstream roster fetches through <c>POST guild/sync</c> for one guild,
+    /// measured from <see cref="Guild.LastSyncAttemptedAt"/> — the shared guild token's quota is spent once per
+    /// window however many of its Leader/Co-Leaders ask. Mirrors <see cref="GuildRaidStatusService.CooldownWindow"/>.</summary>
+    public static readonly TimeSpan CooldownWindow = TimeSpan.FromMinutes(1);
+
     public async Task<GuildSyncResult> SynchronizeAsync(
         ProfileId callerProfileId,
         TacticusUserId callerTacticusUserId,
