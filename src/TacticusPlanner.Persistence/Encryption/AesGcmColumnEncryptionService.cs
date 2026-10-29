@@ -1,17 +1,29 @@
 using System.Security.Cryptography;
+using System.Text;
 using Microsoft.Extensions.Options;
 
 namespace TacticusPlanner.Persistence.Encryption;
 
+/// <summary>
+/// AES-256-GCM column encryption. Writes the version-2 envelope
+/// <c>tpenc:2:{keyVersion}:{nonce}:{tag}:{ciphertext}</c>, whose associated data is the column name, so a
+/// ciphertext copied into another encrypted column fails to decrypt. Still reads the legacy envelope
+/// <c>tpenc:{keyVersion}:{nonce}:{tag}:{ciphertext}</c> (no associated data) until
+/// <see cref="ColumnEncryptionBackfill"/> has rewritten every row.
+/// </summary>
+/// <remarks>The binding is to the column, not the row: EF value converters never see the row they convert.</remarks>
 public sealed class AesGcmColumnEncryptionService(IOptions<ColumnEncryptionOptions> options)
     : IColumnEncryptionService
 {
+    /// <summary>Every version-2 envelope starts with this; anything else in an encrypted column is legacy.</summary>
+    public const string CurrentEnvelopePrefix = "tpenc:2:";
+
     private const string Prefix = "tpenc";
+    private const string CurrentEnvelopeVersion = "2";
     private const int NonceSize = 12;
     private const int TagSize = 16;
-    private const int KeySize = 32;
 
-    public string? Encrypt(string? plaintext)
+    public string? Encrypt(string? plaintext, string column)
     {
         if (plaintext is null)
         {
@@ -23,24 +35,20 @@ public sealed class AesGcmColumnEncryptionService(IOptions<ColumnEncryptionOptio
             throw new InvalidOperationException("Encrypted column plaintext must not start with the encryption envelope prefix.");
         }
 
-        var keyVersion = options.Value.CurrentKeyVersion;
-        if (string.IsNullOrWhiteSpace(keyVersion))
-        {
-            throw new InvalidOperationException("ColumnEncryption:CurrentKeyVersion is not configured.");
-        }
-
-        var key = GetKey(keyVersion);
+        var keyVersion = options.Value.GetCurrentKeyVersion();
+        var key = options.Value.GetKey(keyVersion);
         var nonce = RandomNumberGenerator.GetBytes(NonceSize);
-        var plaintextBytes = System.Text.Encoding.UTF8.GetBytes(plaintext);
+        var plaintextBytes = Encoding.UTF8.GetBytes(plaintext);
         var ciphertext = new byte[plaintextBytes.Length];
         var tag = new byte[TagSize];
 
         using var aes = new AesGcm(key, TagSize);
-        aes.Encrypt(nonce, plaintextBytes, ciphertext, tag);
+        aes.Encrypt(nonce, plaintextBytes, ciphertext, tag, Encoding.UTF8.GetBytes(column));
 
         return string.Join(
             ':',
             Prefix,
+            CurrentEnvelopeVersion,
             keyVersion,
             EncodeBase64Url(nonce),
             EncodeBase64Url(tag),
@@ -48,7 +56,7 @@ public sealed class AesGcmColumnEncryptionService(IOptions<ColumnEncryptionOptio
         );
     }
 
-    public string? Decrypt(string? envelope)
+    public string? Decrypt(string? envelope, string column)
     {
         if (envelope is null)
         {
@@ -56,50 +64,31 @@ public sealed class AesGcmColumnEncryptionService(IOptions<ColumnEncryptionOptio
         }
 
         var parts = envelope.Split(':');
-        if (parts.Length != 5 || parts[0] != Prefix)
+        byte[]? associatedData;
+        if (parts.Length == 6 && parts[0] == Prefix && parts[1] == CurrentEnvelopeVersion)
+        {
+            associatedData = Encoding.UTF8.GetBytes(column);
+            parts = parts[1..];
+        }
+        else if (parts.Length == 5 && parts[0] == Prefix)
+        {
+            associatedData = null;
+        }
+        else
         {
             throw new InvalidOperationException("Encrypted column value is not a valid encryption envelope.");
         }
 
-        var key = GetKey(parts[1]);
+        var key = options.Value.GetKey(parts[1]);
         var nonce = DecodeBase64Url(parts[2], NonceSize, "nonce");
         var tag = DecodeBase64Url(parts[3], TagSize, "tag");
         var ciphertext = DecodeBase64Url(parts[4], expectedLength: null, "ciphertext");
         var plaintext = new byte[ciphertext.Length];
 
         using var aes = new AesGcm(key, TagSize);
-        aes.Decrypt(nonce, ciphertext, tag, plaintext);
+        aes.Decrypt(nonce, ciphertext, tag, plaintext, associatedData);
 
-        return System.Text.Encoding.UTF8.GetString(plaintext);
-    }
-
-    private byte[] GetKey(string keyVersion)
-    {
-        if (!options.Value.Keys.TryGetValue(keyVersion, out var encodedKey)
-            || string.IsNullOrWhiteSpace(encodedKey))
-        {
-            throw new InvalidOperationException($"ColumnEncryption:Keys:{keyVersion} is not configured.");
-        }
-
-        var key = DecodeConfiguredKey(encodedKey);
-        if (key.Length != KeySize)
-        {
-            throw new InvalidOperationException($"ColumnEncryption:Keys:{keyVersion} must be a 32-byte AES-256 key.");
-        }
-
-        return key;
-    }
-
-    private static byte[] DecodeConfiguredKey(string value)
-    {
-        try
-        {
-            return Convert.FromBase64String(value);
-        }
-        catch (FormatException)
-        {
-            return DecodeBase64Url(value, expectedLength: null, "key");
-        }
+        return Encoding.UTF8.GetString(plaintext);
     }
 
     private static string EncodeBase64Url(byte[] value)
