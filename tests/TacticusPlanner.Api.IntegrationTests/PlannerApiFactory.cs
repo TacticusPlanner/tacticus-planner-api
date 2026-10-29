@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using TacticusPlanner.Api.Features.AccountManagement;
 using TacticusPlanner.Api.Features.Analytics;
 using TacticusPlanner.Api.Features.V1Import;
 using TacticusPlanner.Persistence;
@@ -21,6 +22,7 @@ public sealed class PlannerApiFactory : WebApplicationFactory<Program>
     internal FakeTacticusApi TacticusApi { get; } = new();
     internal FakeTacticusV1Client V1Client { get; } = new();
     internal RecordingProductAnalytics Analytics { get; } = new();
+    internal RecordingExternalIdentityDeleter ExternalIdentityDeleter { get; } = new();
 
     internal Func<PlannerDbContext, bool>? FailAfterSave { get; set; }
     internal bool FailureInjected { get; set; }
@@ -113,6 +115,9 @@ public sealed class PlannerApiFactory : WebApplicationFactory<Program>
 
             services.RemoveAll<IProductAnalytics>();
             services.AddSingleton<IProductAnalytics>(Analytics);
+
+            services.RemoveAll<IExternalIdentityDeleter>();
+            services.AddSingleton<IExternalIdentityDeleter>(ExternalIdentityDeleter);
         });
     }
 }
