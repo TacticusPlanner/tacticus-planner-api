@@ -5,9 +5,11 @@ using TacticusPlanner.Api.Features.AccountManagement;
 
 namespace TacticusPlanner.Api.Tests;
 
-public class GraphExternalIdentityDeleterTests
+public sealed class GraphExternalIdentityDeleterTests : IDisposable
 {
     private static readonly Guid UserId = Guid.Parse("e9118cad-56aa-4117-a734-8bd5778b1d82");
+
+    private readonly List<HttpClient> _clients = [];
 
     [Fact]
     public async Task DeletesTheUserAndThenItsDeletedItemsEntry()
@@ -72,13 +74,21 @@ public class GraphExternalIdentityDeleterTests
         Assert.Empty(handler.Requests);
     }
 
-    private static GraphExternalIdentityDeleter CreateDeleter(RecordingHandler handler, bool permanentlyDelete) =>
-        new(
-            new HttpClient(handler) { BaseAddress = new Uri("https://graph.microsoft.com/") },
-            new StaticTokenCredential(),
-            permanentlyDelete,
-            NullLogger<GraphExternalIdentityDeleter>.Instance
-        );
+    public void Dispose()
+    {
+        foreach (var client in _clients)
+        {
+            client.Dispose();
+        }
+    }
+
+    private GraphExternalIdentityDeleter CreateDeleter(RecordingHandler handler, bool permanentlyDelete)
+    {
+        // The client owns and disposes the handler.
+        var client = new HttpClient(handler) { BaseAddress = new Uri("https://graph.microsoft.com/") };
+        _clients.Add(client);
+        return new(client, new StaticTokenCredential(), permanentlyDelete, NullLogger<GraphExternalIdentityDeleter>.Instance);
+    }
 
     private sealed class StaticTokenCredential : TokenCredential
     {
