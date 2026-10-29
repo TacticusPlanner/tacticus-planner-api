@@ -689,13 +689,13 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var created = await CreateGoalAsync(client);
 
-        var updateResponse = await client.PutDetailsAsync(created.GoalId, new UpdateGoalRequest("remember to farm epic first", [CampaignBattleId.From("node-1")]));
+        var updateResponse = await client.PutDetailsAsync(created.GoalId, new UpdateGoalRequest("remember to farm epic first", [CampaignBattleId.From("DGS01")]));
         updateResponse.EnsureSuccessStatusCode();
         var updated = await updateResponse.ReadEditedGoalAsync();
 
         Assert.NotNull(updated);
         Assert.Equal("remember to farm epic first", updated.Notes);
-        Assert.Equal(["node-1"], updated.Config.FarmingLocationIds);
+        Assert.Equal(["DGS01"], updated.Config.FarmingLocationIds);
         // The immutable target fields must be untouched by an edit.
         Assert.NotNull(created.Config.Rank);
         Assert.NotNull(updated.Config.Rank);
@@ -1191,7 +1191,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         {
             Config = RankGoal.Config with
             {
-                FarmingLocationIds = [CampaignBattleId.From("node-1")],
+                FarmingLocationIds = [CampaignBattleId.From("DGS01")],
                 AcquisitionSources = [new AcquisitionSourceRequest(AcquisitionSourceKind.Shop, ["guild:upgHpM004", "crusade:upgHpM004"])],
             },
         });
@@ -1199,7 +1199,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
         var created = await response.ReadCreatedGoalAsync();
 
         Assert.NotNull(created);
-        Assert.Equal(["node-1"], created.Config.FarmingLocationIds);
+        Assert.Equal(["DGS01"], created.Config.FarmingLocationIds);
         var source = Assert.Single(created.Config.AcquisitionSources!);
         Assert.Equal(AcquisitionSourceKind.Shop, source.Kind);
         Assert.Equal(["guild:upgHpM004", "crusade:upgHpM004"], source.Ids);

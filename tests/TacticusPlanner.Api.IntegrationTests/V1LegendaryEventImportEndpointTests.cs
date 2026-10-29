@@ -806,6 +806,53 @@ public sealed class V1LegendaryEventImportEndpointTests(PlannerApiFactory factor
         Assert.Empty(plan.Runs);
     }
 
+    [Fact]
+    public async Task TeamsPastTheLaneCapAreDroppedWithOneIssueAndReorderedDuplicatesStillMerge()
+    {
+        var (client, _) = await ClientAsync();
+        var max = LegendaryEventValidation.MaxTeamsPerLane;
+        var pool = Alpha.Take(10).ToList();
+        var lineUps = (from a in Enumerable.Range(0, pool.Count)
+                       from b in Enumerable.Range(a + 1, pool.Count - a - 1)
+                       from c in Enumerable.Range(b + 1, pool.Count - b - 1)
+                       select new[] { pool[a], pool[b], pool[c] }).Take(max + 2).ToList();
+        // Every distinct line-up, then each again with its members reversed.
+        var teams = lineUps.Select((units, i) => Team($"T{i}", "alpha", units))
+            .Concat(lineUps.Select((units, i) => Team($"D{i}", "alpha", [.. Enumerable.Reverse(units)])))
+            .ToArray();
+
+        var body = await ImportAsync(client, Configure(TeamsJson(LysanderV1Id, teams)));
+
+        var plan = await ReadPlanAsync(client);
+        Assert.Equal(Enumerable.Range(0, max), plan.Teams.Select(team => team.SortOrder).Order());
+        Assert.Equal(lineUps.Take(max).Select(units => units.ToList()), plan.Teams.OrderBy(team => team.SortOrder).Select(team => team.MemberUnitIds.ToList()));
+        var issues = Issues(body);
+        Assert.Equal([("lane_team_limit_reached", (string?)null, (string?)"alpha")], issues.Where(issue => issue.Code == "lane_team_limit_reached"));
+        Assert.Equal(max, issues.Count(issue => issue.Code == "duplicate_team_merged"));
+
+        var response = await client.PostAsJsonAsync($"/api/v1/legendary-event-plans/{LysanderId}/teams",
+            new CreateLegendaryEventTeamRequest(plan.Revision, LegendaryEventLaneId.Alpha, "One more", AlphaTeam(), null, [], 1, null, null), Ct);
+        Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
+        Assert.Equal(LegendaryEventPlanIssueCodes.TeamLimitReached, await response.ReadIssueCodeAsync());
+
+        var beta = await client.PostAsJsonAsync($"/api/v1/legendary-event-plans/{LysanderId}/teams",
+            new CreateLegendaryEventTeamRequest(plan.Revision, LegendaryEventLaneId.Beta, "Beta", [.. Lysander.Beta.AvailableUnitIds.Take(3)], null, [], 1, null, null), Ct);
+        beta.EnsureSuccessStatusCode();
+    }
+
+    [Fact]
+    public async Task AnEventsIssueListIsCappedWithASummary()
+    {
+        var (client, _) = await ClientAsync();
+        var unknown = Enumerable.Range(0, V1LegendaryEventImportService.MaxIssuesPerEvent + 50).Select(i => $"nobody{i}").ToArray();
+
+        var body = await ImportAsync(client, Configure(TeamsJson(LysanderV1Id, Team("Ghosts", "alpha", unknown))));
+
+        var issues = Assert.Single(body.LegendaryEventOutcomes).Issues;
+        Assert.Equal(V1LegendaryEventImportService.MaxIssuesPerEvent, issues.Count);
+        Assert.Equal(("issues_truncated", "52"), (issues[^1].Code, issues[^1].Value));
+    }
+
     /// <summary>Three consecutive alpha units from <paramref name="start"/>: the smallest team that imports.</summary>
     private string[] AlphaTeam(int start = 0) => [.. Alpha.Skip(start).Take(3)];
 
