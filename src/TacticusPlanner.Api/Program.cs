@@ -114,10 +114,13 @@ builder.Services.AddCors(options =>
     {
         if (allowedOrigins.Length > 0)
         {
+            // ETag is not a CORS-safelisted response header: without exposing it the client cannot read
+            // it back, never sends If-None-Match, and re-reads the full game catalog manifest every launch.
             policy
                 .WithOrigins(allowedOrigins)
                 .AllowAnyHeader()
-                .AllowAnyMethod();
+                .AllowAnyMethod()
+                .WithExposedHeaders("ETag");
         }
     });
 });
