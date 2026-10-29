@@ -178,6 +178,11 @@ do not commit secrets.
 | `Analytics__ProjectToken` | PostHog project token (public — identifies the project, not a secret) |
 | `Analytics__HostUrl` | PostHog ingestion host (public); must be `https://us.i.posthog.com` in every environment |
 | `Analytics__IdentityKey` | **Secret.** Base64 32-byte HMAC key deriving each account's pseudonymous analytics id. Never rotate — rotating it re-keys every analytics identity |
+| `ExternalIdentity__TenantId` | Entra External ID tenant id. With `ClientId`, enables deleting the caller's sign-in account on purge; empty keeps the no-op deleter |
+| `ExternalIdentity__ClientId` | App registration (the Web API one) holding Microsoft Graph `User.DeleteRestore.All` (application, admin-consented) |
+| `ExternalIdentity__ManagedIdentityClientId` | Client id of the user-assigned managed identity the app registration trusts through a federated credential (audience `api://AzureADTokenExchange`) |
+| `ExternalIdentity__ClientSecret` | **Secret.** Fallback to the federated credential, e.g. for local development |
+| `ExternalIdentity__PermanentlyDelete` | Default `true`: also removes the user from deleted items so the email can sign up again at once |
 | `APPLICATIONINSIGHTS_CONNECTION_STRING` | Enables Azure Monitor telemetry |
 | `OTEL_EXPORTER_OTLP_ENDPOINT` | Sends local telemetry to an OTLP collector |
 
@@ -214,7 +219,7 @@ issuer and audience.
 - Liveness: `/health/live`
 - Readiness, including PostgreSQL: `/health/ready`
 - Authenticated user (auto-provisions the profile on first call): `GET /api/v1/me`
-- Purge the authenticated user's account and all related data: `DELETE /api/v1/me`
+- Purge the authenticated user's account and all related data: `DELETE /api/v1/account` (add `?deleteSignInAccount=true` to also delete the Entra External ID user)
 - Save/update the authenticated user's Tacticus integration: `PUT /api/v1/me/tacticus-integration`
 - Sync player data from the Tacticus API: `POST /api/v1/me/player-data/sync`
 - Import a Tacticus API key/user id from a V1 profile: `POST /api/v1/me/v1-import`

@@ -35,5 +35,36 @@ public sealed class PurgeAccountEndpointTests(PlannerApiFactory factory) : IClas
         Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
     }
 
+    [Fact]
+    public async Task PurgeKeepsTheSignInAccountByDefault()
+    {
+        var objectId = Guid.NewGuid().ToString();
+        var client = factory.CreateClient();
+        client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.SubjectHeader, NewSubject());
+        client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.ObjectIdHeader, objectId);
+
+        var response = await client.DeleteAsync("/api/v1/account", TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        Assert.False(factory.ExternalIdentityDeleter.WasRequested(objectId));
+    }
+
+    [Fact]
+    public async Task PurgeAlsoDeletesTheSignInAccountWhenAsked()
+    {
+        var objectId = Guid.NewGuid().ToString();
+        var client = factory.CreateClient();
+        client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.SubjectHeader, NewSubject());
+        client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.ObjectIdHeader, objectId);
+
+        var response = await client.DeleteAsync(
+            "/api/v1/account?deleteSignInAccount=true",
+            TestContext.Current.CancellationToken
+        );
+
+        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        Assert.True(factory.ExternalIdentityDeleter.WasRequested(objectId));
+    }
+
     private static string NewSubject() => $"purge-{Guid.NewGuid()}";
 }

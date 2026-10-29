@@ -62,7 +62,7 @@ builder.Services.AddGameCatalog();
 builder.Services.AddTacticusApi(builder.Configuration["TacticusApi:BaseUrl"]);
 
 // Each feature slice owns the services it needs — see each Features/*/DependencyInjection.cs.
-builder.Services.AddAccountManagementFeature();
+builder.Services.AddAccountManagementFeature(builder.Configuration);
 builder.Services.AddAnalyticsFeature(builder.Configuration, validateOnStart: !isOpenApiDocumentGeneration);
 builder.Services.AddAuthFeature(builder.Configuration);
 builder.Services.AddGoalsFeature();

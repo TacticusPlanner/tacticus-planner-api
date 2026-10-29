@@ -56,8 +56,20 @@
           "Account"
         ],
         "summary": "Permanently deletes the authenticated user's planner account and all related data.",
-        "description": "Deletes the profile and every row it owns for the caller. This cannot be undone. Also makes a best-effort attempt to delete the corresponding Microsoft Entra External ID identity; see IExternalIdentityDeleter for the current limitation. Idempotent: repeating the request after the account is gone still succeeds.",
+        "description": "Deletes the profile and every row it owns for the caller. This cannot be undone. With deleteSignInAccount=true it also makes a best-effort attempt to delete the caller's Microsoft Entra External ID user (see IExternalIdentityDeleter). Idempotent: repeating the request after the account is gone still succeeds.",
         "operationId": "TacticusPlannerApiFeaturesAccountManagementPurgeAccountEndpoint",
+        "parameters": [
+          {
+            "name": "deleteSignInAccount",
+            "in": "query",
+            "schema": {
+              "type": [
+                "null",
+                "boolean"
+              ]
+            }
+          }
+        ],
         "responses": {
           "204": {
             "description": "The account and all related data were deleted."
