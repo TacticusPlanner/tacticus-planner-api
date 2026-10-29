@@ -518,6 +518,10 @@ public static class TacticusV1ClientRegistration
     // x-functions-key header (used here) or a ?code= query string value.
     private const string FunctionsKeyHeaderName = "x-functions-key";
 
+    // The whole V1 planner state comes back from users/me in one JSON document, typically a few hundred KB even
+    // for a large roster with many goals and LE teams; 16 MB leaves ample headroom while bounding the buffer.
+    internal const long MaxResponseContentBufferSize = 16 * 1024 * 1024;
+
     public static IServiceCollection AddTacticusV1Client(
         this IServiceCollection services,
         string? baseUrl,
@@ -537,12 +541,15 @@ public static class TacticusV1ClientRegistration
         services.AddHttpClient(TacticusV1Client.HttpClientName, client =>
         {
             client.BaseAddress = baseUri;
+            client.MaxResponseContentBufferSize = MaxResponseContentBufferSize;
 
             if (!string.IsNullOrWhiteSpace(functionsKey))
             {
                 client.DefaultRequestHeaders.Add(FunctionsKeyHeaderName, functionsKey);
             }
-        });
+        })
+            // A redirect would replay the default x-functions-key header to wherever the Location points.
+            .ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler { AllowAutoRedirect = false });
         services.AddScoped<ITacticusV1Client, TacticusV1Client>();
 
         return services;
