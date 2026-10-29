@@ -58,7 +58,7 @@ public sealed class CreateProjectEndpoint : Endpoint<CreateProjectRequest, Proje
         // Counted under the profile lock so concurrent creates cannot both take the last slot.
         await Resolve<ProjectGoalPlanningService>().ExecuteLockedMutationAsync(async transaction =>
         {
-            if (await db.Projects.CountAsync(ct) >= ProjectValidation.MaxProjects)
+            if (await db.Projects.CountAsync(p => p.Status != ProjectStatus.Archived, ct) >= ProjectValidation.MaxProjects)
             {
                 AddError(ProjectLimitFailure());
                 await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
@@ -75,9 +75,9 @@ public sealed class CreateProjectEndpoint : Endpoint<CreateProjectRequest, Proje
     public const string ProjectLimitReached = "projectLimitReached";
 
     /// <summary>400 <c>projectLimitReached</c>: the profile already holds <see cref="ProjectValidation.MaxProjects"/>
-    /// projects.</summary>
+    /// non-archived projects.</summary>
     internal static ValidationFailure ProjectLimitFailure() =>
-        new("general", $"A profile can have at most {ProjectValidation.MaxProjects} projects.")
+        new("general", $"A profile can have at most {ProjectValidation.MaxProjects} non-archived projects; archive one to make room.")
         {
             ErrorCode = ProjectLimitReached,
         };

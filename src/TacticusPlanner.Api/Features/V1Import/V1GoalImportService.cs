@@ -703,13 +703,13 @@ public sealed class V1GoalImportService(
         await planning.ExecuteLockedMutationAsync(async transaction =>
         {
             // The import's own project counts toward the profile's project cap: at the cap nothing is created.
-            if (await db.Projects.CountAsync(ct) >= ProjectValidation.MaxProjects)
+            if (await db.Projects.CountAsync(p => p.Status != ProjectStatus.Archived, ct) >= ProjectValidation.MaxProjects)
             {
                 foreach (var candidate in creatable)
                 {
                     outcomeBySourceIndex[candidate.Slot] = CandidateOutcome(
                         candidate, V1GoalOutcomeStatus.Failed, "project_limit_reached",
-                        $"The account already has {ProjectValidation.MaxProjects} projects, so the import could not "
+                        $"The account already has {ProjectValidation.MaxProjects} non-archived projects, so the import could not "
                         + "create its own.", sourceIdBySlot);
                 }
                 return;

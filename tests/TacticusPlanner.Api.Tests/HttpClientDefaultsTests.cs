@@ -59,6 +59,27 @@ public sealed class HttpClientDefaultsTests
         Assert.False(primary.AllowAutoRedirect);
     }
 
+    [Fact]
+    public async Task V1ProfileOverTheBufferLimitIsTreatedAsUnreadable()
+    {
+        var oversized = new string(' ', (int)TacticusV1ClientRegistration.MaxResponseContentBufferSize + 1);
+        var services = new ServiceCollection().AddTacticusV1Client("https://v1.example.test", "functions-key");
+        services.AddHttpClient(TacticusV1Client.HttpClientName)
+            .ConfigurePrimaryHttpMessageHandler(() => new StaticBodyHandler(oversized));
+        using var provider = services.BuildServiceProvider();
+
+        var profile = await new TacticusV1Client(provider.GetRequiredService<IHttpClientFactory>())
+            .GetProfileAsync("token", TestContext.Current.CancellationToken);
+
+        Assert.Null(profile);
+    }
+
+    private sealed class StaticBodyHandler(string body) : HttpMessageHandler
+    {
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken) =>
+            Task.FromResult(new HttpResponseMessage(HttpStatusCode.OK) { Content = new StringContent(body) });
+    }
+
     private sealed class CountingHandler(HttpStatusCode status) : HttpMessageHandler
     {
         private int calls;

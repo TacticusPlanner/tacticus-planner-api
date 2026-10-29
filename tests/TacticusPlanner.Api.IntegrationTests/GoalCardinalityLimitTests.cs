@@ -1,4 +1,5 @@
 using System.Net;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Api.Features.Projects;
@@ -7,6 +8,7 @@ using TacticusPlanner.Domain.Projects;
 using TacticusPlanner.GameCatalog;
 using TacticusPlanner.GameCatalog.Models;
 using TacticusPlanner.GameDomain;
+using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.IntegrationTests;
 
@@ -220,5 +222,22 @@ public sealed class GoalCardinalityLimitTests(PlannerApiFactory factory) : IClas
 
         Assert.Equal(HttpStatusCode.BadRequest, rejected.StatusCode);
         Assert.Equal(CreateProjectEndpoint.ProjectLimitReached, await rejected.ReadIssueCodeAsync());
+    }
+
+    [Fact]
+    public async Task ArchivedProjectsDoNotCountTowardTheCap()
+    {
+        var (client, subject) = await ClientAsync();
+        await GoalsTestHelpers.SeedProjectsUpToAsync(factory, subject, ProjectValidation.MaxProjects);
+        using (var scope = factory.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
+            var profileId = (await db.Profiles.IgnoreQueryFilters().FirstAsync(entity => entity.Subject == subject, Ct)).Id;
+            var any = await db.Projects.IgnoreQueryFilters().FirstAsync(project => project.ProfileId == profileId, Ct);
+            any.Status = ProjectStatus.Archived;
+            await db.SaveChangesAsync(Ct);
+        }
+
+        (await client.PostAsJsonAsync("/api/v1/projects", new CreateProjectRequest("Freed slot", null, null), Ct)).EnsureSuccessStatusCode();
     }
 }
