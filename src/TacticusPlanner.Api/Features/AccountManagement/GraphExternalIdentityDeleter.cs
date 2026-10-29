@@ -12,12 +12,24 @@ public sealed partial class GraphExternalIdentityDeleter(
     HttpClient httpClient,
     TokenCredential credential,
     bool permanentlyDelete,
-    ILogger<GraphExternalIdentityDeleter> logger
+    ILogger<GraphExternalIdentityDeleter> logger,
+    IReadOnlyList<TimeSpan>? deletedItemsRetryDelays = null
 ) : IExternalIdentityDeleter
 {
     public const string HttpClientName = "MicrosoftGraph";
 
     private static readonly string[] GraphScopes = ["https://graph.microsoft.com/.default"];
+
+    // A just-deleted user can take a moment to show up in deleted items, so a 404 there is retried a few times.
+    private static readonly TimeSpan[] DefaultDeletedItemsRetryDelays =
+    [
+        TimeSpan.FromSeconds(1),
+        TimeSpan.FromSeconds(2),
+        TimeSpan.FromSeconds(4),
+    ];
+
+    private readonly IReadOnlyList<TimeSpan> _deletedItemsRetryDelays =
+        deletedItemsRetryDelays ?? DefaultDeletedItemsRetryDelays;
 
     public async Task<bool> TryDeleteAsync(string? objectId, CancellationToken cancellationToken)
     {
@@ -31,36 +43,74 @@ public sealed partial class GraphExternalIdentityDeleter(
         {
             var token = await credential.GetTokenAsync(new TokenRequestContext(GraphScopes), cancellationToken);
 
+            var userResult = await SendDeleteAsync($"v1.0/users/{userId}", token.Token, cancellationToken);
+
             // 404 means the user is already gone (a repeated purge), which is the outcome we want.
-            if (!await SendDeleteAsync($"v1.0/users/{userId}", token.Token, cancellationToken))
+            if (userResult == DeleteResult.Failed)
             {
                 return false;
             }
 
+            if (!permanentlyDelete)
+            {
+                return true;
+            }
+
             // Soft-deleted users keep their email reserved for 30 days; removing them from deleted items frees it.
-            return !permanentlyDelete
-                || await SendDeleteAsync($"v1.0/directory/deletedItems/{userId}", token.Token, cancellationToken);
+            var deletedItemsPath = $"v1.0/directory/deletedItems/{userId}";
+            var deletedItemsResult = await SendDeleteAsync(deletedItemsPath, token.Token, cancellationToken);
+
+            // Only a user this call just deleted is expected to appear in deleted items, so only then is a 404 retried.
+            if (userResult == DeleteResult.Deleted)
+            {
+                for (var attempt = 0;
+                    deletedItemsResult == DeleteResult.NotFound && attempt < _deletedItemsRetryDelays.Count;
+                    attempt++)
+                {
+                    await Task.Delay(_deletedItemsRetryDelays[attempt], cancellationToken);
+                    deletedItemsResult = await SendDeleteAsync(deletedItemsPath, token.Token, cancellationToken);
+                }
+            }
+
+            return deletedItemsResult != DeleteResult.Failed;
         }
-        catch (Exception exception) when (exception is not OperationCanceledException)
+        // HttpClient reports its own timeout as a cancellation, which is a Graph failure unless the caller cancelled.
+        catch (Exception exception) when (!cancellationToken.IsCancellationRequested)
         {
             LogDeletionFailed(logger, exception, userId);
             return false;
         }
     }
 
-    private async Task<bool> SendDeleteAsync(string path, string accessToken, CancellationToken cancellationToken)
+    private async Task<DeleteResult> SendDeleteAsync(
+        string path,
+        string accessToken,
+        CancellationToken cancellationToken
+    )
     {
         using var request = new HttpRequestMessage(HttpMethod.Delete, path);
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
         using var response = await httpClient.SendAsync(request, cancellationToken);
 
-        if (response.IsSuccessStatusCode || response.StatusCode == HttpStatusCode.NotFound)
+        if (response.IsSuccessStatusCode)
         {
-            return true;
+            return DeleteResult.Deleted;
+        }
+
+        if (response.StatusCode == HttpStatusCode.NotFound)
+        {
+            return DeleteResult.NotFound;
         }
 
         LogGraphRejected(logger, path, (int)response.StatusCode);
-        return false;
+        return DeleteResult.Failed;
+    }
+
+    private enum DeleteResult
+    {
+        Deleted,
+        NotFound,
+        Failed,
     }
 
     [LoggerMessage(

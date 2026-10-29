@@ -51,6 +51,53 @@ public sealed class GraphExternalIdentityDeleterTests : IDisposable
     }
 
     [Fact]
+    public async Task RetriesDeletedItemsUntilTheJustDeletedUserAppears()
+    {
+        var handler = new RecordingHandler(HttpStatusCode.NoContent, HttpStatusCode.NotFound, HttpStatusCode.NoContent);
+
+        var deleted = await CreateDeleter(handler, permanentlyDelete: true)
+            .TryDeleteAsync(UserId.ToString(), TestContext.Current.CancellationToken);
+
+        Assert.True(deleted);
+        Assert.Equal(
+            [
+                $"DELETE /v1.0/users/{UserId}",
+                $"DELETE /v1.0/directory/deletedItems/{UserId}",
+                $"DELETE /v1.0/directory/deletedItems/{UserId}",
+            ],
+            handler.Requests
+        );
+    }
+
+    [Fact]
+    public async Task StopsRetryingDeletedItemsAfterTheRetryWindow()
+    {
+        var handler = new RecordingHandler(
+            HttpStatusCode.NoContent,
+            HttpStatusCode.NotFound,
+            HttpStatusCode.NotFound,
+            HttpStatusCode.NotFound
+        );
+
+        var deleted = await CreateDeleter(handler, permanentlyDelete: true)
+            .TryDeleteAsync(UserId.ToString(), TestContext.Current.CancellationToken);
+
+        Assert.True(deleted);
+        Assert.Equal(4, handler.Requests.Count);
+    }
+
+    [Fact]
+    public async Task ReportsATimeoutAsFailureWithoutThrowing()
+    {
+        var handler = new RecordingHandler { Exception = new TaskCanceledException("The request timed out.") };
+
+        var deleted = await CreateDeleter(handler, permanentlyDelete: true)
+            .TryDeleteAsync(UserId.ToString(), TestContext.Current.CancellationToken);
+
+        Assert.False(deleted);
+    }
+
+    [Fact]
     public async Task ReportsFailureWithoutThrowingWhenGraphRefuses()
     {
         var handler = new RecordingHandler(HttpStatusCode.Forbidden);
@@ -87,7 +134,13 @@ public sealed class GraphExternalIdentityDeleterTests : IDisposable
         // The client owns and disposes the handler.
         var client = new HttpClient(handler) { BaseAddress = new Uri("https://graph.microsoft.com/") };
         _clients.Add(client);
-        return new(client, new StaticTokenCredential(), permanentlyDelete, NullLogger<GraphExternalIdentityDeleter>.Instance);
+        return new(
+            client,
+            new StaticTokenCredential(),
+            permanentlyDelete,
+            NullLogger<GraphExternalIdentityDeleter>.Instance,
+            [TimeSpan.Zero, TimeSpan.Zero]
+        );
     }
 
     private sealed class StaticTokenCredential : TokenCredential
@@ -109,6 +162,8 @@ public sealed class GraphExternalIdentityDeleterTests : IDisposable
 
         public List<string?> Authorizations { get; } = [];
 
+        public Exception? Exception { get; init; }
+
         protected override Task<HttpResponseMessage> SendAsync(
             HttpRequestMessage request,
             CancellationToken cancellationToken
@@ -116,6 +171,11 @@ public sealed class GraphExternalIdentityDeleterTests : IDisposable
         {
             Requests.Add($"{request.Method} {request.RequestUri!.AbsolutePath}");
             Authorizations.Add(request.Headers.Authorization?.ToString());
+            if (Exception is not null)
+            {
+                throw Exception;
+            }
+
             return Task.FromResult(new HttpResponseMessage(responses[_next++]));
         }
     }
