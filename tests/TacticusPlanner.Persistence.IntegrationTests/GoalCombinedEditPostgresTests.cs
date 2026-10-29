@@ -256,9 +256,9 @@ public sealed class GoalCombinedEditPostgresTests
 
     private sealed class PassthroughEncryption : IColumnEncryptionService
     {
-        public string? Encrypt(string? plaintext) => plaintext;
+        public string? Encrypt(string? plaintext, string column) => plaintext;
 
-        public string? Decrypt(string? envelope) => envelope;
+        public string? Decrypt(string? envelope, string column) => envelope;
     }
 
     private sealed class StaticProfile(ProfileId profileId) : ICurrentProfileProvider

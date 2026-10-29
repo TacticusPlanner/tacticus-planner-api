@@ -53,9 +53,15 @@ if (!isOpenApiDocumentGeneration)
 builder.Services.AddProblemDetails(options =>
     options.CustomizeProblemDetails = context => ApiProblems.Complete(context.ProblemDetails, context.HttpContext));
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-builder.Services.Configure<ColumnEncryptionOptions>(
-    builder.Configuration.GetSection(ColumnEncryptionOptions.SectionName)
-);
+var columnEncryptionOptions = builder.Services
+    .AddOptions<ColumnEncryptionOptions>()
+    .Bind(builder.Configuration.GetSection(ColumnEncryptionOptions.SectionName))
+    .Validate(options => options.IsValid(), ColumnEncryptionOptions.ValidationFailureMessage);
+if (!isOpenApiDocumentGeneration)
+{
+    columnEncryptionOptions.ValidateOnStart();
+}
+
 builder.Services.AddSingleton<IColumnEncryptionService, AesGcmColumnEncryptionService>();
 builder.Services.AddSingleton<IColumnHashService, HmacColumnHashService>();
 builder.Services.AddGameCatalog();
