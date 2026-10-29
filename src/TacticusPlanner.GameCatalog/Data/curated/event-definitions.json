@@ -37,7 +37,7 @@
     "type": "GuildRaidSeason",
     "recurrence": { "kind": "Fixed", "intervalDays": 14, "durationDays": 13, "anchorUtc": "2026-10-21T10:00:00Z" },
     "requiredParameters": [],
-    "config": { "seasonLengthDays": 13 }
+    "config": { "seasonLengthDays": 13, "seasonNumberAtAnchor": 112 }
   },
   {
     "id": "guild-war-season",
