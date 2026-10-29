@@ -1,4 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using TacticusPlanner.Api.Features.Guilds;
 using TacticusPlanner.Api.Features.TacticusIntegration;
+using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.IntegrationTests;
 
@@ -33,5 +37,16 @@ internal static class GuildTestHelpers
         integrationResponse.EnsureSuccessStatusCode();
 
         return (client, tacticusUserId);
+    }
+
+    /// <summary>Backdates every guild's last sync attempt past <see cref="GuildSyncService.CooldownWindow"/>, so a
+    /// test can <c>POST guild/sync</c> right after registering (which counts as an attempt).</summary>
+    public static async Task ExpireSyncCooldownAsync(PlannerApiFactory factory)
+    {
+        using var scope = factory.Services.CreateScope();
+        var expired = DateTimeOffset.UtcNow - GuildSyncService.CooldownWindow - TimeSpan.FromSeconds(1);
+        await scope.ServiceProvider.GetRequiredService<PlannerDbContext>().Guilds
+            .ExecuteUpdateAsync(setters => setters.SetProperty(guild => guild.LastSyncAttemptedAt, expired),
+                TestContext.Current.CancellationToken);
     }
 }

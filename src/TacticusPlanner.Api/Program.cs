@@ -126,7 +126,7 @@ builder.Services.AddCors(options =>
                 .WithOrigins(allowedOrigins)
                 .AllowAnyHeader()
                 .AllowAnyMethod()
-                .WithExposedHeaders("ETag");
+                .WithExposedHeaders("ETag", PurgeAccountEndpoint.SignInAccountDeletedHeader);
         }
     });
 });

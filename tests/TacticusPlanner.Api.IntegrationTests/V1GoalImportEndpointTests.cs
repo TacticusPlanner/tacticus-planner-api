@@ -99,7 +99,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         // available anywhere — this first request no longer needs a second, manually-seeded run.
         var (client, subject) = await CreateProvisionedClientAsync();
         var username = factory.V1Client.ConfigureProfile(new TacticusV1Profile(
-            FakeTacticusApi.ValidKey, $"user-{Guid.NewGuid()}", null, [RankGoal("r1", CharacterId, 1, UnitRank.Iron1)],
+            FakeTacticusApi.ValidKey, Guid.NewGuid().ToString(), null, [RankGoal("r1", CharacterId, 1, UnitRank.Iron1)],
             V1OnslaughtImportData.Missing(), V1CampaignEventProgressImportData.Missing()));
 
         var response = await client.PostAsJsonAsync(
@@ -126,7 +126,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
     {
         var (client, _) = await CreateProvisionedClientAsync();
         var username = factory.V1Client.ConfigureProfile(new TacticusV1Profile(
-            null, $"user-{Guid.NewGuid()}", null, [RankGoal("r1", CharacterId, 1, UnitRank.Iron1)],
+            null, Guid.NewGuid().ToString(), null, [RankGoal("r1", CharacterId, 1, UnitRank.Iron1)],
             V1OnslaughtImportData.Missing(), V1CampaignEventProgressImportData.Missing()));
 
         var response = await client.PostAsJsonAsync(
