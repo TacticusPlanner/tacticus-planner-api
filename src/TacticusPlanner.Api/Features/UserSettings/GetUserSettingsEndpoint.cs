@@ -51,6 +51,13 @@ public enum XpBookRarity
     Mythic,
 }
 
+/// <summary>How the Goals list renders on desktop; stored by name.</summary>
+public enum GoalsView
+{
+    Cards,
+    Table,
+}
+
 /// <summary>One on/off account preference (a <see cref="UserPreferences"/> flag); listed in
 /// <see cref="UserSettingsResponse.Preferences"/> when it is on.</summary>
 public enum UserPreference
@@ -67,13 +74,17 @@ public enum UserPreference
 public sealed record UserSettingsResponse(
     int DailyEnergy,
     XpBookRarity XpBookRarity,
+    GoalsView GoalsView,
     UserPreference[] Preferences,
     long Revision)
 {
+    /// <summary>The read shape of stored settings. Stored values are normalized here, so a legacy or
+    /// unsupported value reads as its default rather than reaching the client.</summary>
     public static UserSettingsResponse From(UserSettingsEntity settings) =>
         new(
             settings.Settings.DailyEnergy,
             NormalizeXpBookRarity(settings.Settings.XpBookRarity),
+            NormalizeGoalsView(settings.Settings.GoalsView),
             ToList(settings.Settings.EffectivePreferences),
             settings.Revision);
 
@@ -100,4 +111,11 @@ public sealed record UserSettingsResponse(
             && Enum.IsDefined(rarity)
             ? rarity
             : Enum.Parse<XpBookRarity>(UserSettingsData.DefaultXpBookRarity);
+
+    /// <summary>The stored view as a supported value. A row saved before this field existed, or any unsupported
+    /// value, reads as <see cref="UserSettingsData.DefaultGoalsView"/>, the same rule as the rarity.</summary>
+    internal static GoalsView NormalizeGoalsView(string? goalsView) =>
+        goalsView is not null && UserSettingsData.SupportedGoalsView.Contains(goalsView)
+            ? Enum.Parse<GoalsView>(goalsView)
+            : Enum.Parse<GoalsView>(UserSettingsData.DefaultGoalsView);
 }

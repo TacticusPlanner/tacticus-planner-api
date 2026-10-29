@@ -13344,6 +13344,13 @@
         ],
         "type": "string"
       },
+      "GoalsView": {
+        "enum": [
+          "Cards",
+          "Table"
+        ],
+        "type": "string"
+      },
       "GoalTargetEditRequest": {
         "type": "object",
         "properties": {
@@ -16709,6 +16716,16 @@
             "type": "integer",
             "format": "int64"
           },
+          "goalsView": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/GoalsView"
+              }
+            ]
+          },
           "preferences": {
             "oneOf": [
               {
@@ -16906,6 +16923,7 @@
         "required": [
           "dailyEnergy",
           "xpBookRarity",
+          "goalsView",
           "preferences",
           "revision"
         ],
@@ -16917,6 +16935,9 @@
           },
           "xpBookRarity": {
             "$ref": "#/components/schemas/XpBookRarity"
+          },
+          "goalsView": {
+            "$ref": "#/components/schemas/GoalsView"
           },
           "preferences": {
             "$ref": "#/components/schemas/UserPreferenceArray"

@@ -20,6 +20,9 @@ public sealed class UpdateUserSettingsEndpoint
         Summary(summary => summary.Summary = "Updates the current profile's user settings.");
     }
 
+    /// <summary>Replaces the profile's settings under the revision check, creating the row on first save. A null
+    /// <see cref="UpdateUserSettingsRequest.GoalsView"/> or <see cref="UpdateUserSettingsRequest.Preferences"/>
+    /// keeps the stored value. A stale revision gets a 409 carrying the current settings.</summary>
     public override async Task HandleAsync(UpdateUserSettingsRequest req, CancellationToken ct)
     {
         var profileId = ProcessorState<CurrentUserState>().ProfileId;
@@ -53,6 +56,7 @@ public sealed class UpdateUserSettingsEndpoint
         {
             DailyEnergy = req.DailyEnergy,
             XpBookRarity = req.XpBookRarity.ToString(),
+            GoalsView = (req.GoalsView ?? UserSettingsResponse.NormalizeGoalsView(settings.Settings.GoalsView)).ToString(),
             // The legacy WatchAds folds into the bitmask on this first write and is cleared.
             Preferences = req.Preferences is null
                 ? settings.Settings.EffectivePreferences
@@ -93,12 +97,15 @@ public sealed class UpdateUserSettingsEndpoint
     }
 }
 
+/// <param name="GoalsView">How the Goals list renders on desktop. Null keeps the stored view, so a client that
+/// predates the field doesn't reset it.</param>
 /// <param name="Preferences">The account preferences that are on (replaces the stored set). Null keeps the
 /// stored preferences, so a client that predates the field doesn't reset them.</param>
 public sealed record UpdateUserSettingsRequest(
     int DailyEnergy,
     [property: JsonRequired] XpBookRarity XpBookRarity,
     long Revision,
+    GoalsView? GoalsView = null,
     UserPreference[]? Preferences = null);
 
 public sealed class UpdateUserSettingsValidator : Validator<UpdateUserSettingsRequest>

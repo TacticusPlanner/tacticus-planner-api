@@ -20,6 +20,8 @@ public sealed class UserSettingsData
 {
     public const int DefaultDailyEnergy = 288;
     public const string DefaultXpBookRarity = "Legendary";
+    /// <summary>The Goals view of a profile that has not chosen one.</summary>
+    public const string DefaultGoalsView = "Cards";
 
     public static readonly IReadOnlySet<int> SupportedDailyEnergy =
         new HashSet<int> { 288, 378, 438, 538, 638, 738, 838, 938 };
@@ -27,9 +29,15 @@ public sealed class UserSettingsData
     public static readonly IReadOnlySet<string> SupportedXpBookRarity =
         new HashSet<string> { "Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic" };
 
+    /// <summary>The values <see cref="GoalsView"/> may hold; anything else reads as the default.</summary>
+    public static readonly IReadOnlySet<string> SupportedGoalsView = new HashSet<string> { "Cards", "Table" };
+
     public int DailyEnergy { get; set; } = DefaultDailyEnergy;
 
     public string XpBookRarity { get; set; } = DefaultXpBookRarity;
+
+    /// <summary>How the Goals list renders on desktop, stored by name.</summary>
+    public string GoalsView { get; set; } = DefaultGoalsView;
 
     /// <summary>Legacy: whether the player watches the daily Legendary Event ad, from before
     /// <see cref="Preferences"/>. Only read (false reads as <see cref="UserPreferences.LegendaryEventSkipDailyAds"/>);

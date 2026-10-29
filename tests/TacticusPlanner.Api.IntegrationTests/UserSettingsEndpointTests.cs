@@ -21,12 +21,13 @@ public sealed class UserSettingsEndpointTests(PlannerApiFactory factory) : IClas
         Assert.NotNull(initial);
         Assert.Equal(288, initial.DailyEnergy);
         Assert.Equal(XpBookRarity.Legendary, initial.XpBookRarity);
+        Assert.Equal(GoalsView.Cards, initial.GoalsView);
         Assert.Empty(initial.Preferences);
         Assert.Equal(1, initial.Revision);
 
         var response = await client.PutAsJsonAsync(
             "/api/v1/settings",
-            new UpdateUserSettingsRequest(538, XpBookRarity.Epic, initial.Revision),
+            new UpdateUserSettingsRequest(538, XpBookRarity.Epic, initial.Revision, GoalsView.Table),
             TestContext.Current.CancellationToken
         );
         response.EnsureSuccessStatusCode();
@@ -35,7 +36,47 @@ public sealed class UserSettingsEndpointTests(PlannerApiFactory factory) : IClas
         Assert.NotNull(updated);
         Assert.Equal(538, updated.DailyEnergy);
         Assert.Equal(XpBookRarity.Epic, updated.XpBookRarity);
+        Assert.Equal(GoalsView.Table, updated.GoalsView);
         Assert.Equal(2, updated.Revision);
+
+        var reread = await client.GetFromJsonAsync<UserSettingsResponse>(
+            "/api/v1/settings",
+            TestContext.Current.CancellationToken
+        );
+        Assert.Equal(updated, reread);
+    }
+
+    [Fact]
+    public async Task PutChangingOnlyTheGoalsViewKeepsTheOtherSettings()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var initial = (await client.GetFromJsonAsync<UserSettingsResponse>(
+            "/api/v1/settings",
+            TestContext.Current.CancellationToken
+        ))!;
+        var seeded = await client.PutAsJsonAsync(
+            "/api/v1/settings",
+            new UpdateUserSettingsRequest(438, XpBookRarity.Epic, initial.Revision, GoalsView.Cards),
+            TestContext.Current.CancellationToken
+        );
+        var stored = (await seeded.Content.ReadFromJsonAsync<UserSettingsResponse>(TestContext.Current.CancellationToken))!;
+
+        var response = await client.PutAsJsonAsync(
+            "/api/v1/settings",
+            new UpdateUserSettingsRequest(438, XpBookRarity.Epic, stored.Revision, GoalsView.Table),
+            TestContext.Current.CancellationToken
+        );
+        response.EnsureSuccessStatusCode();
+
+        var reread = await client.GetFromJsonAsync<UserSettingsResponse>(
+            "/api/v1/settings",
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(reread);
+        Assert.Equal(438, reread.DailyEnergy);
+        Assert.Equal(XpBookRarity.Epic, reread.XpBookRarity);
+        Assert.Equal(GoalsView.Table, reread.GoalsView);
+        Assert.Equal(stored.Revision + 1, reread.Revision);
     }
 
     [Fact]
@@ -47,7 +88,7 @@ public sealed class UserSettingsEndpointTests(PlannerApiFactory factory) : IClas
         Assert.NotNull(initial);
 
         var on = await PutAsync(new UpdateUserSettingsRequest(
-            288, XpBookRarity.Legendary, initial.Revision,
+            288, XpBookRarity.Legendary, initial.Revision, GoalsView.Cards,
             Preferences:
             [
                 UserPreference.LegendaryEventSkipDailyAds,
@@ -59,14 +100,14 @@ public sealed class UserSettingsEndpointTests(PlannerApiFactory factory) : IClas
             on.Preferences);
 
         // A write without the field (an older client) keeps the stored preferences.
-        var kept = await PutAsync(new UpdateUserSettingsRequest(538, XpBookRarity.Legendary, on.Revision));
+        var kept = await PutAsync(new UpdateUserSettingsRequest(538, XpBookRarity.Legendary, on.Revision, GoalsView.Cards));
         Assert.Equal(on.Preferences, kept.Preferences);
         Assert.Equal(538, kept.DailyEnergy);
 
         var read = await client.GetFromJsonAsync<UserSettingsResponse>("/api/v1/settings", ct);
         Assert.Equal(on.Preferences, read!.Preferences);
 
-        var off = await PutAsync(new UpdateUserSettingsRequest(538, XpBookRarity.Legendary, kept.Revision, Preferences: []));
+        var off = await PutAsync(new UpdateUserSettingsRequest(538, XpBookRarity.Legendary, kept.Revision, GoalsView.Cards, Preferences: []));
         Assert.Empty(off.Preferences);
 
         async Task<UserSettingsResponse> PutAsync(UpdateUserSettingsRequest request)
@@ -105,7 +146,7 @@ public sealed class UserSettingsEndpointTests(PlannerApiFactory factory) : IClas
 
         var response = await client.PutAsJsonAsync(
             "/api/v1/settings",
-            new UpdateUserSettingsRequest(300, XpBookRarity.Legendary, 0),
+            new UpdateUserSettingsRequest(300, XpBookRarity.Legendary, 0, GoalsView.Cards),
             TestContext.Current.CancellationToken
         );
 
@@ -122,7 +163,7 @@ public sealed class UserSettingsEndpointTests(PlannerApiFactory factory) : IClas
         var response = await client.SendRawJsonAsync(
             HttpMethod.Put,
             "/api/v1/settings",
-            $$"""{"dailyEnergy":288,"xpBookRarity":"{{xpBookRarity}}","revision":0}""");
+            $$"""{"dailyEnergy":288,"xpBookRarity":"{{xpBookRarity}}","goalsView":"Cards","revision":0}""");
 
         await response.AssertFieldRejectedAsync("xpBookRarity");
 
@@ -140,7 +181,7 @@ public sealed class UserSettingsEndpointTests(PlannerApiFactory factory) : IClas
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        var payload = new { DailyEnergy = 288, Revision = 0 };
+        var payload = new { DailyEnergy = 288, GoalsView = "Cards", Revision = 0 };
         var response = await client.PutAsJsonAsync(
             "/api/v1/settings",
             payload,
@@ -158,6 +199,66 @@ public sealed class UserSettingsEndpointTests(PlannerApiFactory factory) : IClas
         Assert.Equal(1, unchanged.Revision);
     }
 
+    [Theory]
+    [InlineData("Grid")]
+    [InlineData("")]
+    public async Task PutRejectsUnsupportedGoalsView(string goalsView)
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.SendRawJsonAsync(
+            HttpMethod.Put,
+            "/api/v1/settings",
+            $$"""{"dailyEnergy":288,"xpBookRarity":"Legendary","goalsView":"{{goalsView}}","revision":0}""");
+
+        await response.AssertFieldRejectedAsync("goalsView");
+
+        var unchanged = await client.GetFromJsonAsync<UserSettingsResponse>(
+            "/api/v1/settings",
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(unchanged);
+        Assert.Equal(GoalsView.Cards, unchanged.GoalsView);
+        Assert.Equal(1, unchanged.Revision);
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData(""","goalsView":null""")]
+    public async Task PutWithoutGoalsViewKeepsTheStoredOne(string goalsViewJson)
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var initial = await client.GetFromJsonAsync<UserSettingsResponse>(
+            "/api/v1/settings",
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(initial);
+
+        var saved = await client.SendRawJsonAsync(
+            HttpMethod.Put,
+            "/api/v1/settings",
+            $$"""{"dailyEnergy":288,"xpBookRarity":"Legendary","goalsView":"Table","revision":{{initial.Revision}}}""");
+        Assert.Equal(HttpStatusCode.OK, saved.StatusCode);
+        var stored = await saved.Content.ReadFromJsonAsync<UserSettingsResponse>(
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(stored);
+
+        var response = await client.SendRawJsonAsync(
+            HttpMethod.Put,
+            "/api/v1/settings",
+            $$"""{"dailyEnergy":438,"xpBookRarity":"Legendary"{{goalsViewJson}},"revision":{{stored.Revision}}}""");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var reread = await client.GetFromJsonAsync<UserSettingsResponse>(
+            "/api/v1/settings",
+            TestContext.Current.CancellationToken
+        );
+        Assert.NotNull(reread);
+        Assert.Equal(438, reread.DailyEnergy);
+        Assert.Equal(GoalsView.Table, reread.GoalsView);
+    }
+
     [Fact]
     public async Task PutRejectsAStaleRevision()
     {
@@ -169,10 +270,15 @@ public sealed class UserSettingsEndpointTests(PlannerApiFactory factory) : IClas
 
         var response = await client.PutAsJsonAsync(
             "/api/v1/settings",
-            new UpdateUserSettingsRequest(378, XpBookRarity.Legendary, current!.Revision - 1),
+            new UpdateUserSettingsRequest(378, XpBookRarity.Legendary, current!.Revision - 1, GoalsView.Table),
             TestContext.Current.CancellationToken
         );
 
         Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
+        var unchanged = await client.GetFromJsonAsync<UserSettingsResponse>(
+            "/api/v1/settings",
+            TestContext.Current.CancellationToken
+        );
+        Assert.Equal(current, unchanged);
     }
 }
