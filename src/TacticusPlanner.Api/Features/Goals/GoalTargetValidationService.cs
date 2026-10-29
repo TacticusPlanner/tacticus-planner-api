@@ -122,6 +122,15 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
         if (entityTypeMismatch)
             return "This goal type is not valid for the selected entity type.";
 
+        if (config.Upgrade is not null && goalType != GoalType.Upgrade)
+            return "Only an Upgrade goal takes an upgrade target.";
+
+        if (ValidateFarmingLocationOverride(goalType, entityId, config.FarmingLocationIds?.Select(id => id.Value).ToList())
+            is { } farmingError)
+        {
+            return farmingError;
+        }
+
         if (goalType == GoalType.Unlock)
         {
             if (!catalog.Current.IsUnlockEligible(entityId))
@@ -232,20 +241,44 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
             catalog.Current.ShopViews.Select(shop => shop.Id).ToHashSet(StringComparer.Ordinal));
     }
 
-    /// <summary>Re-validates a farming-location override against the same catalog rule
-    /// <see cref="ValidateAsync"/> applies at creation — currently only meaningful for Unlock goals (the
-    /// only goal type whose <c>FarmingLocationIds</c> is create-time validated).</summary>
+    /// <summary>The farming-location override rule, shared by creation (<see cref="Validate"/>) and the details
+    /// edit: an Unlock goal's ids must be the character's regular shard nodes; Rank, Ability and Upgrade ids (the
+    /// upgrade-node override) must be catalog campaign battles; an Ascension goal takes none (its shard sources
+    /// are acquisition sources).</summary>
     public string? ValidateFarmingLocationOverride(GoalType goalType, string entityId, List<string>? farmingLocationIds)
     {
-        if (goalType != GoalType.Unlock || farmingLocationIds is not { Count: > 0 })
-        {
+        if (farmingLocationIds is not { Count: > 0 })
             return null;
-        }
 
-        var character = catalog.Current.CharacterViews.FirstOrDefault(item => item.Id == entityId);
-        var availableRegular = RegularShardBattleIds(character);
-        return farmingLocationIds.Any(id => !availableRegular.Contains(id))
-            ? "An unlock shard location is not available for this character."
+        switch (goalType)
+        {
+            case GoalType.Unlock:
+                var character = catalog.Current.CharacterViews.FirstOrDefault(item => item.Id == entityId);
+                var availableRegular = RegularShardBattleIds(character);
+                return farmingLocationIds.Any(id => !availableRegular.Contains(id))
+                    ? "An unlock shard location is not available for this character."
+                    : null;
+            case GoalType.Rank or GoalType.Ability or GoalType.Upgrade:
+                var battles = catalog.Current.CampaignBattleViews.Select(battle => battle.Id).ToHashSet(StringComparer.Ordinal);
+                return farmingLocationIds.Any(id => !battles.Contains(id))
+                    ? "A farming location is not a Game Catalog campaign battle."
+                    : null;
+            default:
+                return $"A {goalType} goal takes no farming locations; use acquisition sources.";
+        }
+    }
+
+    /// <summary>Every snapshot resource id must name a Game Catalog upgrade material (the snapshot records the
+    /// goal's material requirement); counts, lengths and uniqueness are checked by the request validator.</summary>
+    public string? ValidateSnapshotResources(CreateGoalSnapshotRequest? snapshot)
+    {
+        var resources = (snapshot?.InitialRequirement ?? []).Concat(snapshot?.InitialInventoryContribution ?? []).ToList();
+        if (resources.Count == 0)
+            return null;
+
+        var upgrades = catalog.Current.UpgradeViews.Select(upgrade => upgrade.Id).ToHashSet(StringComparer.Ordinal);
+        return resources.Any(resource => !upgrades.Contains(resource.ResourceId.Trim()))
+            ? "A snapshot resource is not a Game Catalog upgrade material."
             : null;
     }
 

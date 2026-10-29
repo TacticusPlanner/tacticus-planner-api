@@ -29,7 +29,8 @@ public sealed class UpdateGoalsStatusEndpoint : Endpoint<UpdateGoalsStatusReques
             summary.Response<UpdateGoalsStatusResponse>(StatusCodes.Status200OK,
                 "Every named goal's detail, in request order, and the order revision after the transition.");
             summary.Response(StatusCodes.Status400BadRequest,
-                "goalIds empty or repeated, an unknown status, or a missing expectedOrderRevision.");
+                "goalIds empty or repeated, an unknown status, a missing expectedOrderRevision, or goalLimitReached: "
+                + "leaving Archived would put more than 200 non-archived goals of one type on the profile.");
             summary.Response(StatusCodes.Status409Conflict,
                 "slotOccupied (goalId names the goal, current the goal holding its slot) or goalOrderStale "
                 + "(current: { revision, goalIds }).");
@@ -96,6 +97,17 @@ public sealed class UpdateGoalsStatusEndpoint : Endpoint<UpdateGoalsStatusReques
                         this, new GoalOrderResult(GoalOrderOutcome.StaleRevision, await order.ReadAsync(ct)), transaction: null, ct);
                     return;
                 }
+            }
+
+            // Leaving Archived is the one transition that grows the per-type goal count.
+            var unarchiving = status == GoalStatus.Archived
+                ? []
+                : changing.Where(goal => goal.Status == GoalStatus.Archived).ToList();
+            if (await planning.FindGoalLimitExceededAsync(unarchiving, ct) is { } fullType)
+            {
+                AddError(GoalProblems.GoalLimitFailure("goalIds", fullType));
+                await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+                return;
             }
 
             foreach (var goal in changing)

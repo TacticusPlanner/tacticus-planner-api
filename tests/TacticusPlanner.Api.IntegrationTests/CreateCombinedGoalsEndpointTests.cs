@@ -126,8 +126,8 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
             InitialProgression: UnitProgression.RareFourStars,
             InitialActiveAbilityLevel: 20,
             InitialPassiveAbilityLevel: 18,
-            InitialRequirement: [new GoalSnapshotResourceRequest("material-1", 30)],
-            InitialInventoryContribution: [new GoalSnapshotResourceRequest("material-1", 5)]
+            InitialRequirement: [new GoalSnapshotResourceRequest("upgHpC001", 30)],
+            InitialInventoryContribution: [new GoalSnapshotResourceRequest("upgHpC001", 5)]
         );
         var request = UnlockThenRank with
         {

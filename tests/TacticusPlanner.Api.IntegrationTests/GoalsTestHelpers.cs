@@ -2,8 +2,12 @@ using System.Net;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Domain.Goals;
+using TacticusPlanner.Domain.Projects;
+using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.IntegrationTests;
 
@@ -147,6 +151,45 @@ internal static class GoalsTestHelpers
 
     public static async Task<string?> ReadIssueCodeAsync(this HttpResponseMessage response) =>
         (await response.ReadProblemAsync())["issueCode"]?.GetValue<string>();
+
+    /// <summary>Seeds <paramref name="count"/> Rank goals of <paramref name="status"/> (Completed or Archived, so
+    /// outside the in-flight order) straight into the profile of <paramref name="subject"/>: the per-type cap
+    /// without hundreds of requests.</summary>
+    public static async Task<List<Guid>> SeedRankGoalsAsync(
+        PlannerApiFactory factory, string subject, int count, GoalStatus status, string entityId = "blackTerminator")
+    {
+        using var scope = factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
+        var profileId = (await db.Profiles.IgnoreQueryFilters().FirstAsync(entity => entity.Subject == subject, Ct)).Id;
+        var goals = Enumerable.Range(0, count).Select(_ => new Goal(GoalEntityType.Character, entityId, GoalType.Rank)
+        {
+            Id = GoalId.From(Guid.CreateVersion7()),
+            ProfileId = profileId,
+            Status = status,
+            Config = new GoalConfig { Rank = new RankTarget { Start = 0, End = 15 } },
+        }).ToList();
+        db.Goals.AddRange(goals);
+        await db.SaveChangesAsync(Ct);
+        return goals.Select(goal => goal.Id.Value).ToList();
+    }
+
+    /// <summary>Seeds custom projects until the profile of <paramref name="subject"/> holds <paramref name="total"/>.</summary>
+    public static async Task SeedProjectsUpToAsync(PlannerApiFactory factory, string subject, int total)
+    {
+        using var scope = factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
+        var profileId = (await db.Profiles.IgnoreQueryFilters().FirstAsync(entity => entity.Subject == subject, Ct)).Id;
+        var existing = await db.Projects.IgnoreQueryFilters().CountAsync(project => project.ProfileId == profileId, Ct);
+        db.Projects.AddRange(Enumerable.Range(existing, total - existing).Select(i => new Project
+        {
+            Id = ProjectId.From(Guid.CreateVersion7()),
+            ProfileId = profileId,
+            Name = $"Seeded {i}",
+            Status = ProjectStatus.Active,
+            Type = ProjectType.Custom,
+        }));
+        await db.SaveChangesAsync(Ct);
+    }
 
     /// <summary>The problem's <c>current</c> resource, read as <typeparamref name="T"/>.</summary>
     public static async Task<T> ReadCurrentAsync<T>(this HttpResponseMessage response) =>

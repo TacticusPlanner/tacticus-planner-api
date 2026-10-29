@@ -36,6 +36,12 @@ public sealed class V1GoalImportService(
     private const int V1UpgradeMaterialType = 6;
     private const int V1PreFarmType = 7;
 
+    /// <summary>The most V1 goals one import reads (V1 itself holds about 100); the rest are reported once.</summary>
+    internal const int MaxSourceGoals = 500;
+
+    /// <summary>The most outcomes one import returns; any beyond are summarized in the last one.</summary>
+    internal const int MaxOutcomes = 1000;
+
     private static readonly string[] Rarities = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic"];
     private static readonly string[] Stars =
     [
@@ -57,7 +63,7 @@ public sealed class V1GoalImportService(
             return V1GoalImportResult.CreateRefused();
         }
 
-        var ordered = source.OrderBy(goal => goal.Priority).ToList();
+        var ordered = source.OrderBy(goal => goal.Priority).Take(MaxSourceGoals).ToList();
         var sourceIdByIndex = ordered.Select(goal => goal.Id).ToArray();
         // One outcome slot per source goal, plus one more for each further Upgrade goal a pre-farm goal
         // fans out into (one per linked unit) — reported right after their source goal's own slot.
@@ -200,6 +206,22 @@ public sealed class V1GoalImportService(
                 ?? throw new InvalidOperationException($"V1 goal at index {slotSourceIndex[slot]} produced no outcome."));
         }
         outcomes.AddRange(extraOutcomes);
+        if (source.Count > MaxSourceGoals)
+        {
+            outcomes.Add(new V1GoalOutcome(
+                V1GoalOutcomeStatus.Skipped, "too_many_goals",
+                $"Only the first {MaxSourceGoals} V1 goals by priority were imported; {source.Count - MaxSourceGoals} were not.",
+                null, null, null, null, null));
+        }
+
+        if (outcomes.Count > MaxOutcomes)
+        {
+            var omitted = outcomes.Count - (MaxOutcomes - 1);
+            outcomes = outcomes.Take(MaxOutcomes - 1).ToList();
+            outcomes.Add(new V1GoalOutcome(
+                V1GoalOutcomeStatus.Skipped, "outcomes_truncated", $"{omitted} more goal outcomes were not listed.",
+                null, null, null, null, null));
+        }
 
         return new V1GoalImportResult(outcomes, Refused: false) { ProjectId = projectId };
     }
@@ -680,6 +702,31 @@ public sealed class V1GoalImportService(
         Guid? createdProjectId = null;
         await planning.ExecuteLockedMutationAsync(async transaction =>
         {
+            // The import's own project counts toward the profile's project cap: at the cap nothing is created.
+            if (await db.Projects.CountAsync(ct) >= ProjectValidation.MaxProjects)
+            {
+                foreach (var candidate in creatable)
+                {
+                    outcomeBySourceIndex[candidate.Slot] = CandidateOutcome(
+                        candidate, V1GoalOutcomeStatus.Failed, "project_limit_reached",
+                        $"The account already has {ProjectValidation.MaxProjects} projects, so the import could not "
+                        + "create its own.", sourceIdBySlot);
+                }
+                return;
+            }
+
+            // Per-type room under GoalValidation.MaxGoalsPerType, read under the lock and spent as goals are
+            // staged; a goal with no room left is skipped.
+            var cappedCounts = await planning.CappedGoalCountsAsync(ct);
+            bool TakeGoalSlot(GoalType goalType)
+            {
+                var count = cappedCounts.GetValueOrDefault(goalType);
+                if (count >= GoalValidation.MaxGoalsPerType)
+                    return false;
+                cappedCounts[goalType] = count + 1;
+                return true;
+            }
+
             var now = timeProvider.GetUtcNow();
             // Each import that creates goals gets its own project, named after when it ran, so imported goals
             // stay together and apart from the user's own. It is only tracked once goals are staged (below), so
@@ -735,6 +782,10 @@ public sealed class V1GoalImportService(
                     {
                         extraOutcomes.Add(FailedPrerequisiteOutcome(unitKey, GoalType.Unlock, unlockError));
                     }
+                    else if (!TakeGoalSlot(GoalType.Unlock))
+                    {
+                        extraOutcomes.Add(LimitedPrerequisiteOutcome(unitKey, GoalType.Unlock));
+                    }
                     else
                     {
                         // Every candidate of this unit gets a DependsOn edge to Unlock (below), so its
@@ -764,6 +815,12 @@ public sealed class V1GoalImportService(
                         continue;
                     }
 
+                    if (!TakeGoalSlot(GoalType.Ascension))
+                    {
+                        outcomeBySourceIndex[ownAscension.Slot] = LimitedOutcome(ownAscension, sourceIdBySlot);
+                        continue;
+                    }
+
                     var goal = BuildGoal(profileId, unitKey, GoalType.Ascension, ownAscension.Config, ownAscension.Notes, StatusOf(ownAscension), playerUnit);
                     if (unlockGoalId is { } unlockId) goal.DependsOn.Add(unlockId);
                     db.Goals.Add(goal);
@@ -789,7 +846,11 @@ public sealed class V1GoalImportService(
                         uncovered.Add((candidate, need));
                 }
 
-                if (synthesizePrerequisites && uncovered.Count > 0)
+                if (synthesizePrerequisites && uncovered.Count > 0 && !TakeGoalSlot(GoalType.Ascension))
+                {
+                    extraOutcomes.Add(LimitedPrerequisiteOutcome(unitKey, GoalType.Ascension));
+                }
+                else if (synthesizePrerequisites && uncovered.Count > 0)
                 {
                     var targetProgression = (UnitProgression)uncovered.Max(entry => entry.Need);
                     var startWire = CurrentProgressionWire(playerUnit);
@@ -831,6 +892,12 @@ public sealed class V1GoalImportService(
                     if (validationError is not null)
                     {
                         outcomeBySourceIndex[candidate.Slot] = FailedOutcome(candidate, validationError, sourceIdBySlot);
+                        continue;
+                    }
+
+                    if (!TakeGoalSlot(candidate.Key.GoalType))
+                    {
+                        outcomeBySourceIndex[candidate.Slot] = LimitedOutcome(candidate, sourceIdBySlot);
                         continue;
                     }
 
@@ -985,9 +1052,28 @@ public sealed class V1GoalImportService(
         null,
         null);
 
-    private static V1GoalOutcome FailedOutcome(TranslatedGoal candidate, string message, string?[] sourceIdBySlot) => new(
-        V1GoalOutcomeStatus.Failed,
-        "target_rejected",
+    private static V1GoalOutcome FailedOutcome(TranslatedGoal candidate, string message, string?[] sourceIdBySlot) =>
+        CandidateOutcome(candidate, V1GoalOutcomeStatus.Failed, "target_rejected", message, sourceIdBySlot);
+
+    private const string GoalLimitCode = "goal_limit_reached";
+
+    private static string GoalLimitMessage(GoalType goalType) =>
+        $"The account already has {GoalValidation.MaxGoalsPerType} {goalType} goals that are not archived.";
+
+    private static V1GoalOutcome LimitedOutcome(TranslatedGoal candidate, string?[] sourceIdBySlot) =>
+        CandidateOutcome(
+            candidate, V1GoalOutcomeStatus.Skipped, GoalLimitCode, GoalLimitMessage(candidate.Key.GoalType), sourceIdBySlot);
+
+    /// <summary>A synthesized prerequisite left out because its goal type is at the cap; dependents proceed
+    /// without the edge, as for a rejected one.</summary>
+    private static V1GoalOutcome LimitedPrerequisiteOutcome(UnitKey unitKey, GoalType goalType) => new(
+        V1GoalOutcomeStatus.Skipped, GoalLimitCode, GoalLimitMessage(goalType),
+        unitKey.EntityType, unitKey.EntityId, goalType, null, null);
+
+    private static V1GoalOutcome CandidateOutcome(
+        TranslatedGoal candidate, V1GoalOutcomeStatus status, string code, string message, string?[] sourceIdBySlot) => new(
+        status,
+        code,
         message,
         candidate.Key.EntityType,
         candidate.Key.EntityId,

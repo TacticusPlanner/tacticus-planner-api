@@ -13,4 +13,7 @@ public static class ProjectValidation
 
     /// <summary>A catalog event id (for example <c>votanUthar</c>) plus headroom.</summary>
     public const int MaxTargetEventIdLength = 64;
+
+    /// <summary>The most projects (of any type or status) a profile may hold.</summary>
+    public const int MaxProjects = 100;
 }

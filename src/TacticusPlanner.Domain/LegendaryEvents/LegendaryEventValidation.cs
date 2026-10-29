@@ -39,6 +39,10 @@ public static class LegendaryEventValidation
 
     public const int MaxMembers = 5;
 
+    /// <summary>The most teams on one lane: a lane has five objectives, so a plan rarely needs more than a dozen
+    /// line-ups per lane.</summary>
+    public const int MaxTeamsPerLane = 50;
+
     public const int MinRun = 1;
 
     public const int MaxRun = 3;

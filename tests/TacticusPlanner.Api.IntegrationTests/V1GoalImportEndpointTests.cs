@@ -7,6 +7,7 @@ using TacticusPlanner.Api.Features.V1Import;
 using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.PlayerData.Chunks;
+using TacticusPlanner.Domain.Projects;
 using TacticusPlanner.GameDomain;
 using TacticusPlanner.Persistence;
 
@@ -1195,6 +1196,55 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
 
         var allGoals = await client.GetFromJsonAsync<ListGoalsResponse>("/api/v1/goals", TestContext.Current.CancellationToken);
         Assert.Single(allGoals!.Goals);
+    }
+
+    // ----- Caps -----
+
+    [Fact]
+    public async Task GoalsPastThePerTypeCapAreSkippedWithAnOutcome()
+    {
+        var (client, subject) = await CreateProvisionedClientAsync();
+        await SeedPlayerDataSnapshotAsync(subject, [Character(CharacterId, xpLevel: 60)]);
+        await GoalsTestHelpers.SeedRankGoalsAsync(factory, subject, GoalValidation.MaxGoalsPerType - 1, GoalStatus.Completed, OtherCharacterId);
+
+        var body = await ImportGoalsAsync(
+            client, [RankGoal("r1", CharacterId, 1, UnitRank.Iron1), RankGoal("r2", CharacterId, 2, UnitRank.Iron2)],
+            automaticPrerequisites: false);
+
+        var first = Assert.Single(body.Outcomes, outcome => outcome.SourceGoalId == "r1");
+        var second = Assert.Single(body.Outcomes, outcome => outcome.SourceGoalId == "r2");
+        Assert.Equal(V1GoalOutcomeStatus.Created, first.Status);
+        Assert.Equal((V1GoalOutcomeStatus.Skipped, "goal_limit_reached"), (second.Status, second.Code));
+        Assert.Single((await client.ListGoalsAsync()).Goals, goal => goal.Status != GoalStatus.Completed);
+    }
+
+    [Fact]
+    public async Task SourceGoalsPastTheImportCapAreReportedOnce()
+    {
+        var (client, subject) = await CreateProvisionedClientAsync();
+        await SeedPlayerDataSnapshotAsync(subject, [Character(CharacterId, xpLevel: 60)]);
+        var goals = Enumerable.Range(0, V1GoalImportService.MaxSourceGoals + 10)
+            .Select(i => UnsupportedGoal($"u{i}", i)).ToList();
+
+        var body = await ImportGoalsAsync(client, goals);
+
+        Assert.Equal(V1GoalImportService.MaxSourceGoals + 1, body.Outcomes.Count);
+        Assert.Equal("too_many_goals", body.Outcomes[^1].Code);
+    }
+
+    [Fact]
+    public async Task NothingIsImportedWhenTheProfileIsAtTheProjectCap()
+    {
+        var (client, subject) = await CreateProvisionedClientAsync();
+        await SeedPlayerDataSnapshotAsync(subject, [Character(CharacterId, xpLevel: 60)]);
+        await GoalsTestHelpers.SeedProjectsUpToAsync(factory, subject, ProjectValidation.MaxProjects);
+
+        var body = await ImportGoalsAsync(client, [RankGoal("r1", CharacterId, 1, UnitRank.Iron1)], automaticPrerequisites: false);
+
+        var outcome = Assert.Single(body.Outcomes);
+        Assert.Equal((V1GoalOutcomeStatus.Failed, "project_limit_reached"), (outcome.Status, outcome.Code));
+        Assert.Empty((await client.ListGoalsAsync()).Goals);
+        Assert.Equal(ProjectValidation.MaxProjects, (await client.GetFromJsonAsync<ListProjectsResponse>("/api/v1/projects?archived=true", TestContext.Current.CancellationToken))!.Projects.Count);
     }
 
     // ----- Helpers -----

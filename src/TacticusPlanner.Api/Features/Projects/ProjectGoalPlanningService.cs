@@ -60,6 +60,30 @@ public sealed class ProjectGoalPlanningService(PlannerDbContext db, GoalOrderSer
     public async Task<GoalSlotConflict?> FindConflictAsync(IReadOnlyList<Goal> candidates, CancellationToken ct) =>
         candidates.Count == 0 ? null : FindConflict(candidates, await order.InFlightAsync(ct));
 
+    /// <summary>The profile's goals outside Archived, per goal type: what <see cref="GoalValidation.MaxGoalsPerType"/>
+    /// caps. Reads the database, not tracked changes. Must run under the profile lock.</summary>
+    public async Task<Dictionary<GoalType, int>> CappedGoalCountsAsync(CancellationToken ct) =>
+        await db.Goals
+            .Where(goal => goal.Status != GoalStatus.Archived)
+            .GroupBy(goal => goal.GoalType)
+            .Select(group => new { GoalType = group.Key, Count = group.Count() })
+            .ToDictionaryAsync(entry => entry.GoalType, entry => entry.Count, ct);
+
+    /// <summary>The first goal type that would go over <see cref="GoalValidation.MaxGoalsPerType"/> if
+    /// <paramref name="adding"/> (goals entering the non-Archived set) joined the profile; null when all fit. Must
+    /// run under the profile lock.</summary>
+    public async Task<GoalType?> FindGoalLimitExceededAsync(IReadOnlyCollection<Goal> adding, CancellationToken ct)
+    {
+        if (adding.Count == 0)
+            return null;
+
+        var counts = await CappedGoalCountsAsync(ct);
+        return adding.GroupBy(goal => goal.GoalType)
+            .Where(group => counts.GetValueOrDefault(group.Key) + group.Count() > GoalValidation.MaxGoalsPerType)
+            .Select(group => (GoalType?)group.Key)
+            .FirstOrDefault();
+    }
+
     private static GoalSlotConflict? FindConflict(IReadOnlyList<Goal> candidates, IEnumerable<Goal> goals)
     {
         var occupants = goals.Where(goal => IsInFlight(goal.Status) && candidates.All(candidate => candidate.Id != goal.Id)).ToList();
