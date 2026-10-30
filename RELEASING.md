@@ -64,7 +64,8 @@ release published but not live; ship it later with `CD Prod` (see below).
 | `minor` | `main` | `vX.(Y+1).0` and branch `release/X.(Y+1)` |
 | `patch` | `release/X.Y` | next `vX.Y.Z` on that branch, no new branch |
 
-With no tags yet, `major` gives `v1.0.0` and `minor` gives `v0.1.0`. Use
+With no tags yet, versions count from `1.0.0`, because this rewrite ships as V2
+of Tacticus Planner: `major` gives `v2.0.0` and `minor` gives `v1.1.0`. Use
 `major` for the first production launch.
 
 ## Example: cutting a release

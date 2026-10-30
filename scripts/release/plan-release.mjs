@@ -138,9 +138,10 @@ function planCut(bump, refName, tags, sha, repo) {
     throw new ReleaseError(`Run ${bump} releases from main.`)
   }
   const previous = latestTag(tags)
+  // With no tags yet, count from 1.0.0: this rewrite ships as V2 of Tacticus Planner.
   const last = previous
     ? parseVersion(previous)
-    : { major: 0, minor: 0, patch: 0 }
+    : { major: 1, minor: 0, patch: 0 }
   const major = bump === "major" ? last.major + 1 : last.major
   const minor = bump === "major" ? 0 : last.minor + 1
   const branch = `release/${major}.${minor}`
