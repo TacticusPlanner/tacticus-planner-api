@@ -207,14 +207,15 @@ public sealed class UpdateBattleProgressValidator : Validator<UpdateBattleProgre
     {
         RuleFor(request => request.Battles).NotNull();
         RuleFor(request => request.Revision).GreaterThanOrEqualTo(0);
-        RuleForEach(request => request.Battles).ChildRules(entry =>
+        RuleForEach(request => request.Battles).NotNull().ChildRules(entry =>
         {
             entry.RuleFor(value => value.BattleId).NotEmpty();
             entry.RuleFor(value => value.Medals).InclusiveBetween(0, 3);
             entry.RuleFor(value => value.Milestone).IsInEnum().When(value => value.Milestone is not null);
         });
         RuleFor(request => request.Battles)
-            .Must(battles => battles.Select(entry => entry.BattleId).Distinct(StringComparer.Ordinal).Count() == battles.Count)
+            .Must(battles => battles.Where(entry => entry is not null).Select(entry => entry.BattleId)
+                .Distinct(StringComparer.Ordinal).Count() == battles.Count(entry => entry is not null))
             .When(request => request.Battles is not null)
             .WithMessage("Battle ids must be unique.");
     }
