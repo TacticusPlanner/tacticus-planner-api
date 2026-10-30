@@ -1,0 +1,100 @@
+name: Publish API image
+
+# Builds the API image for a commit and pushes it to the shared registry, tagged with the commit
+# SHA. A commit that already has an image (for example a release cut from main, which CD Stage
+# built) is not rebuilt, so production runs the same digest staging ran.
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: Git ref to build.
+        required: true
+        type: string
+    outputs:
+      image:
+        description: Immutable image reference (<acr>.azurecr.io/tacticus-planner-api@sha256:...).
+        value: ${{ jobs.publish.outputs.image }}
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    name: Build and publish
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    # The stage deployment identity holds AcrPush on the shared registry; publishing an image
+    # changes no environment, so production releases use it too.
+    environment: stage
+    outputs:
+      image: ${{ steps.image.outputs.reference }}
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Sign in to Azure
+        uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Resolve source revision
+        id: source
+        shell: bash
+        env:
+          ACR_NAME: ${{ vars.ACR_NAME }}
+        run: |
+          sha="$(git rev-parse HEAD)"
+          echo "sha=$sha" >> "$GITHUB_OUTPUT"
+          # Only a confirmed missing image means "build it". Any other lookup failure stops the
+          # run, so an existing tag is never rebuilt over the digest staging already verified.
+          errors="$RUNNER_TEMP/acr-lookup.err"
+          if digest="$(az acr repository show \
+            --name "$ACR_NAME" \
+            --image "tacticus-planner-api:$sha" \
+            --query digest \
+            --output tsv 2> "$errors")"; then
+            :
+          elif grep -qiE 'MANIFEST_UNKNOWN|NAME_UNKNOWN|not found|does not exist' "$errors"; then
+            digest=""
+          else
+            cat "$errors" >&2
+            exit 1
+          fi
+          echo "digest=$digest" >> "$GITHUB_OUTPUT"
+
+      - name: Sign in to Azure Container Registry
+        if: steps.source.outputs.digest == ''
+        run: az acr login --name "${{ vars.ACR_NAME }}"
+
+      - name: Set up Docker Buildx
+        if: steps.source.outputs.digest == ''
+        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3.12.0
+
+      - name: Build and push image
+        id: build
+        if: steps.source.outputs.digest == ''
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6.19.2
+        with:
+          context: .
+          file: src/TacticusPlanner.Api/Dockerfile
+          push: true
+          tags: ${{ vars.ACR_NAME }}.azurecr.io/tacticus-planner-api:${{ steps.source.outputs.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Set immutable image reference
+        id: image
+        shell: bash
+        env:
+          DIGEST: ${{ steps.source.outputs.digest || steps.build.outputs.digest }}
+        run: |
+          reference="${{ vars.ACR_NAME }}.azurecr.io/tacticus-planner-api@$DIGEST"
+          echo "reference=$reference" >> "$GITHUB_OUTPUT"
+          echo "### Published image" >> "$GITHUB_STEP_SUMMARY"
+          echo "\`$reference\`" >> "$GITHUB_STEP_SUMMARY"

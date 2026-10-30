@@ -1,0 +1,104 @@
+name: Release
+
+# Cuts and ships a production release. Run from main with minor or major to create a
+# release/X.Y branch and tag vX.Y.0; run from a release/X.Y branch with patch to tag the next
+# vX.Y.Z on it (fixes land on main first, then are cherry-picked into the release branch by PR).
+# Each run creates a GitHub release with generated notes and deploys the tag to production.
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: minor/major (run from main) cuts a new release branch; patch (run from release/X.Y) tags a fix.
+        required: true
+        type: choice
+        options:
+          - minor
+          - major
+          - patch
+        default: minor
+      commit:
+        description: Optional commit on main to release (minor/major only). Defaults to the head of main.
+        required: false
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  tag:
+    name: Tag and create release
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    outputs:
+      tag: ${{ steps.version.outputs.tag }}
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        with:
+          fetch-depth: 0
+
+      # The rules live in scripts/release/plan-release.mjs, which has its own tests.
+      - name: Compute version
+        id: version
+        env:
+          BUMP: ${{ inputs.bump }}
+          REF_NAME: ${{ github.ref_name }}
+          COMMIT: ${{ inputs.commit }}
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/release/compute-version.mjs
+
+      # Annotated and immutable, as RELEASING.md requires: a published tag is never moved.
+      # The branch and tag go up in one atomic push, so a refused tag never leaves behind a
+      # release branch that blocks the rerun.
+      - name: Create release branch and tag
+        if: steps.version.outputs.resume != 'true'
+        shell: bash
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+          SHA: ${{ steps.version.outputs.sha }}
+          BRANCH: ${{ steps.version.outputs.branch }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$TAG" "$SHA" -m "$TAG"
+          refs=("refs/tags/$TAG")
+          if [[ -n "$BRANCH" ]]; then
+            refs+=("$SHA:refs/heads/$BRANCH")
+          fi
+          git push --atomic origin "${refs[@]}"
+
+      # Notes start from the previous tag on the same line, so a patch lists only what changed
+      # since the release it fixes.
+      - name: Create GitHub release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+          PREVIOUS: ${{ steps.version.outputs.previous }}
+          SHA: ${{ steps.version.outputs.sha }}
+        run: |
+          args=(--verify-tag --title "$TAG" --generate-notes)
+          if [[ -n "$PREVIOUS" ]]; then
+            args+=(--notes-start-tag "$PREVIOUS")
+          fi
+          gh release create "$TAG" "${args[@]}"
+          echo "Released [$TAG]($GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/tag/$TAG) from \`$SHA\`." >> "$GITHUB_STEP_SUMMARY"
+
+  # A release created with the workflow token does not trigger other workflows, so deploy here.
+  deploy:
+    name: Deploy
+    needs: tag
+    permissions:
+      contents: read
+      id-token: write
+    uses: ./.github/workflows/cd-prod.yml
+    with:
+      ref: ${{ needs.tag.outputs.tag }}

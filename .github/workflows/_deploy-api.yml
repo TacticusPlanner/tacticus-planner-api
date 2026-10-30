@@ -1,0 +1,165 @@
+name: Deploy API
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: GitHub environment holding the Azure deployment variables (stage or production).
+        required: true
+        type: string
+      image:
+        description: Immutable image reference (<acr>.azurecr.io/tacticus-planner-api@sha256:...).
+        required: true
+        type: string
+      allow-missing-app:
+        description: Report success without deploying when the Container App does not exist yet (first staging bootstrap).
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: ${{ inputs.environment }}
+
+    steps:
+      - name: Sign in to Azure
+        uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Check image reference
+        id: image
+        shell: bash
+        env:
+          ACR_NAME: ${{ vars.ACR_NAME }}
+          REFERENCE: ${{ inputs.image }}
+        run: |
+          if [[ ! "$REFERENCE" =~ ^$ACR_NAME\.azurecr\.io/tacticus-planner-api@sha256:[0-9a-f]{64}$ ]]; then
+            echo "::error::$REFERENCE is not an immutable $ACR_NAME image reference."
+            exit 1
+          fi
+          echo "reference=$REFERENCE" >> "$GITHUB_OUTPUT"
+
+      - name: Install Container Apps CLI extension
+        run: az extension add --name containerapp --version 1.3.0b5
+
+      - name: Check Container App exists
+        id: check
+        shell: bash
+        env:
+          CONTAINER_APP_NAME: ${{ vars.CONTAINER_APP_NAME }}
+          RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
+          ALLOW_MISSING_APP: ${{ inputs.allow-missing-app }}
+        run: |
+          if output="$(az containerapp show \
+            --name "$CONTAINER_APP_NAME" \
+            --resource-group "$RESOURCE_GROUP_NAME" \
+            --output none 2>&1)"; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          elif ! grep -q 'ResourceNotFound' <<< "$output"; then
+            # Permission or transient failures must not look like a missing app.
+            echo "$output"
+            echo "::error::Could not read Container App $CONTAINER_APP_NAME."
+            exit 1
+          elif [[ "$ALLOW_MISSING_APP" == "true" ]]; then
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "::error::Container App $CONTAINER_APP_NAME does not exist in $RESOURCE_GROUP_NAME."
+            exit 1
+          fi
+
+      - name: Update Container App image
+        if: steps.check.outputs.exists == 'true'
+        shell: bash
+        env:
+          IMAGE_REFERENCE: ${{ steps.image.outputs.reference }}
+          CONTAINER_APP_NAME: ${{ vars.CONTAINER_APP_NAME }}
+          RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
+        run: |
+          az containerapp update \
+            --name "$CONTAINER_APP_NAME" \
+            --resource-group "$RESOURCE_GROUP_NAME" \
+            --image "$IMAGE_REFERENCE" \
+            --no-wait \
+            --output none
+
+      - name: Wait for revision to become healthy
+        if: steps.check.outputs.exists == 'true'
+        shell: bash
+        env:
+          IMAGE_REFERENCE: ${{ steps.image.outputs.reference }}
+          CONTAINER_APP_NAME: ${{ vars.CONTAINER_APP_NAME }}
+          RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
+        run: |
+          for attempt in {1..30}; do
+            revision=""
+            if app_status="$(az containerapp show \
+              --name "$CONTAINER_APP_NAME" \
+              --resource-group "$RESOURCE_GROUP_NAME" \
+              --query '[properties.latestRevisionName, properties.provisioningState]' \
+              --output tsv)"; then
+              mapfile -t app_fields <<< "$app_status"
+              revision="${app_fields[0]:-}"
+              provisioning_state="${app_fields[1]:-}"
+
+              if [[ "$provisioning_state" == "Failed" ]]; then
+                echo "::error::Container App deployment failed."
+                exit 1
+              fi
+            else
+              echo "::warning::Failed to query Container App deployment status; retrying."
+            fi
+
+            if [[ -n "$revision" ]]; then
+              if revision_status="$(az containerapp revision show \
+                --name "$CONTAINER_APP_NAME" \
+                --resource-group "$RESOURCE_GROUP_NAME" \
+                --revision "$revision" \
+                --query '[properties.healthState, properties.runningState, properties.template.containers[0].image]' \
+                --output tsv)"; then
+                mapfile -t revision_fields <<< "$revision_status"
+                health="${revision_fields[0]:-}"
+                running="${revision_fields[1]:-}"
+                revision_image="${revision_fields[2]:-}"
+
+                if [[ "$revision_image" == "$IMAGE_REFERENCE" && "$health" == "Healthy" && "$running" == "Running" ]]; then
+                  break
+                fi
+
+                if [[ "$revision_image" == "$IMAGE_REFERENCE" && "$running" == "ActivationFailed" ]]; then
+                  echo "::error::Revision $revision failed to activate."
+                  exit 1
+                fi
+              else
+                echo "::warning::Failed to query revision $revision; retrying."
+              fi
+            fi
+
+            if [[ "$attempt" == "30" ]]; then
+              echo "::error::Revision $revision did not become healthy within five minutes."
+              exit 1
+            fi
+
+            sleep 10
+          done
+
+      - name: Record deployment summary
+        if: steps.check.outputs.exists == 'true'
+        shell: bash
+        env:
+          IMAGE_REFERENCE: ${{ steps.image.outputs.reference }}
+        run: echo "Deployed $IMAGE_REFERENCE" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Record skipped deployment
+        if: steps.check.outputs.exists == 'false'
+        shell: bash
+        run: echo "Container App does not exist; image publication completed without deployment." >> "$GITHUB_STEP_SUMMARY"

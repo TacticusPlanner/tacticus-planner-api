@@ -397,6 +397,36 @@ that case it publishes the image, reports the immutable digest in the workflow
 summary, and skips deployment successfully. Supply that digest to the initial
 local infrastructure deployment.
 
+## Azure production deployment
+
+Production ships from release tags, using the `Release` workflow (run by hand
+from the Actions tab):
+
+- From `main` with `minor` (or `major`): creates `release/X.Y` from `main`,
+  tags `vX.Y.0`, creates a GitHub release with generated notes, and deploys
+  the tag. The commit is already on `main`, so production reuses the exact
+  image `CD Stage` built for it; check that commit's staging deploy succeeded
+  before releasing. `CD Stage` skips documentation-only pushes, so for such a
+  commit run `CD Stage` by hand first, or production builds a fresh image.
+- From `release/X.Y` with `patch`: tags the next `vX.Y.Z` on that branch,
+  creates its release (notes since the previous `vX.Y.*`), builds the image
+  for that commit, and deploys it. Land the fix on `main` first, then
+  cherry-pick it into the release branch with a PR (CI runs on PRs to
+  `release/**`).
+
+`CD Prod` does the deploy. `Release` calls it; run it by hand only to redeploy
+an existing tag. Images are always built and pushed under the `stage`
+environment (its identity holds `AcrPush` on the shared registry), so that
+environment must allow `release/**` branches if it restricts deployment
+branches. The update itself runs in the protected `production` environment,
+which holds the same six variables as `stage` (set by
+`pnpm infra -- access pre --env prod` in `tacticus-planner-infra`). Add
+required reviewers to `production` so each release needs an approval, and
+limit its deployment branches to `main` and `release/**`, so a workflow
+changed on any other branch cannot use its Azure credentials.
+Infrastructure changes, such as configuration or scaling, still go through
+`tacticus-planner-infra`.
+
 ### Breaking contracts
 
 Staging promotes every push to `main`. Merge a breaking API change and its web
