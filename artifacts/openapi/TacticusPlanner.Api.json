@@ -5287,6 +5287,116 @@
         ]
       }
     },
+    "/api/v1/player-data-overrides/battle-progress": {
+      "get": {
+        "tags": [
+          "Player-Data-Overrides"
+        ],
+        "summary": "Gets manual per-battle progress overrides (medals, Lightning Victory, milestones).",
+        "operationId": "TacticusPlannerApiFeaturesPlayerDataOverridesGetBattleProgressEndpoint",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BattleProgressOverridesResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Player-Data-Overrides"
+        ],
+        "summary": "Replaces manual per-battle progress overrides.",
+        "operationId": "TacticusPlannerApiFeaturesPlayerDataOverridesUpdateBattleProgressEndpoint",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBattleProgressRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BattleProgressOverridesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
     "/api/v1/player-data-overrides/campaign-events-progress": {
       "get": {
         "tags": [
@@ -6429,6 +6539,98 @@
           }
         },
         "description": "RFC 7807 problem details. issueCode names the failure; errors maps fields to messages on a validation failure; current carries the conflicting resource in its read shape on a 409."
+      },
+      "BattleMilestone": {
+        "enum": [
+          "Bronze",
+          "Silver",
+          "Gold"
+        ],
+        "type": "string"
+      },
+      "BattleProgressOverrideRequest": {
+        "required": [
+          "battleId",
+          "medals",
+          "lightningVictory",
+          "milestone"
+        ],
+        "type": "object",
+        "properties": {
+          "battleId": {
+            "type": "string"
+          },
+          "medals": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lightningVictory": {
+            "type": [
+              "null",
+              "boolean"
+            ]
+          },
+          "milestone": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/BattleMilestone"
+              }
+            ]
+          }
+        }
+      },
+      "BattleProgressOverrideResponse": {
+        "required": [
+          "battleId",
+          "medals",
+          "lightningVictory",
+          "milestone"
+        ],
+        "type": "object",
+        "properties": {
+          "battleId": {
+            "type": "string"
+          },
+          "medals": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lightningVictory": {
+            "type": [
+              "null",
+              "boolean"
+            ]
+          },
+          "milestone": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/BattleMilestone"
+              }
+            ]
+          }
+        }
+      },
+      "BattleProgressOverridesResponse": {
+        "required": [
+          "battles",
+          "revision"
+        ],
+        "type": "object",
+        "properties": {
+          "battles": {
+            "$ref": "#/components/schemas/IReadOnlyListOfBattleProgressOverrideResponse"
+          },
+          "revision": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
       },
       "CampaignEventProgressOverrideRequest": {
         "required": [
@@ -12588,6 +12790,18 @@
           "type": "string"
         }
       },
+      "IReadOnlyListOfBattleProgressOverrideRequest": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/BattleProgressOverrideRequest"
+        }
+      },
+      "IReadOnlyListOfBattleProgressOverrideResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/BattleProgressOverrideResponse"
+        }
+      },
       "IReadOnlyListOfCampaignEventProgressOverrideRequest": {
         "type": "array",
         "items": {
@@ -14557,6 +14771,23 @@
           "Adamantine3"
         ],
         "type": "string"
+      },
+      "UpdateBattleProgressRequest": {
+        "required": [
+          "battles",
+          "revision"
+        ],
+        "type": "object",
+        "properties": {
+          "battles": {
+            "$ref": "#/components/schemas/IReadOnlyListOfBattleProgressOverrideRequest"
+          },
+          "revision": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int64"
+          }
+        }
       },
       "UpdateCampaignEventProgressRequest": {
         "required": [
