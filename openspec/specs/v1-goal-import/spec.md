@@ -68,23 +68,32 @@ player data (see "The goals part is refused when the account has no player
 data" above) — a refused import instead returns the single blocking outcome
 described there, regardless of how many goals the V1 profile contains.
 
-The response SHALL contain exactly one *source* outcome entry per goal present
-in the V1 profile, in V1 priority order, each carrying the id of the V1 goal
-it originated from. When automatic prerequisite creation synthesizes a goal
-(Unlock or Ascension) or reports a prerequisite-target shortfall, that
-SHALL add one further outcome entry with no originating V1 goal id, appended
-after the source outcomes. Every outcome, source or synthesized, SHALL carry a
-status of created, skipped, or failed; a stable machine-readable code; a
-human-readable message; the entity type and entity id it concerned when known;
-the V2 goal type it concerned when one was determined; and the id of the V2
-goal it created or matched when one applies.
+The import SHALL read at most the first 500 V1 goals in V1 priority order;
+these are the *source* goals. When the V1 profile holds more, the import SHALL
+append one skipped outcome with code `too_many_goals`, carrying no originating
+V1 goal id, that states how many were not imported.
+
+The response SHALL contain exactly one *source* outcome entry per source goal,
+in V1 priority order, each carrying the id of the V1 goal it originated from.
+When automatic prerequisite creation synthesizes a goal (Unlock or Ascension),
+reports a prerequisite-target shortfall, or skips a prerequisite at the goal
+cap, that SHALL add one further outcome entry with no originating V1 goal id,
+appended after the source outcomes. Every outcome, source or synthesized, SHALL
+carry a status of created, skipped, or failed; a stable machine-readable code;
+a human-readable message; the entity type and entity id it concerned when
+known; the V2 goal type it concerned when one was determined; and the id of the
+V2 goal it created or matched when one applies.
+
+The response SHALL list at most 1000 outcomes. When there would be more, the
+first 999 SHALL be returned in the order above, followed by one skipped outcome
+with code `outcomes_truncated` that states how many outcomes were not listed.
 
 A client SHALL be able to count source-created goals and automatically
 created prerequisite goals separately, using the presence or absence of an
-originating V1 goal id: exactly one outcome exists per source V1 goal, and the
-number of created *source* outcomes SHALL equal the number of V2 goals the
-import created from source goals. No count in the response SHALL mix source
-goals with any other unit of aggregation.
+originating V1 goal id: within the outcome bound, exactly one outcome exists
+per source goal, and the number of created *source* outcomes SHALL equal the
+number of V2 goals the import created from source goals. No count in the
+response SHALL mix source goals with any other unit of aggregation.
 
 #### Scenario: Outcome count matches the source profile
 
@@ -112,6 +121,13 @@ goals with any other unit of aggregation.
 - **GIVEN** a V1 profile whose goals have distinct priorities
 - **WHEN** the goals part is imported
 - **THEN** the outcome entries appear in ascending V1 priority order
+
+#### Scenario: More V1 goals than the import reads
+
+- **GIVEN** a V1 profile containing 501 goals, and automatic prerequisite creation not selected
+- **WHEN** the goals part is imported
+- **THEN** the 500 highest-priority goals each get a source outcome, and one further skipped
+  outcome with code `too_many_goals` reports that 1 goal was not imported
 
 ### Requirement: Skipped and not-imported outcomes are distinguishable
 
@@ -450,3 +466,23 @@ with a code identifying that no unit uses it.
 - **GIVEN** a V1 Unlock goal for a character not on the roster, and a V1 upgrade-material goal for a material only that character uses
 - **WHEN** the goals part is imported
 - **THEN** the Upgrade goal is created on that character with the suggested-unit code, and no "no unit uses" outcome is reported
+
+### Requirement: The import respects the per-type goal cap
+
+Each goal the import would create, source or synthesized prerequisite, SHALL take a slot under the cap of 200 non-archived goals per type (see `goal-creation`). Slots SHALL be counted under the profile lock and spent as goals are staged. A source goal with no slot left SHALL report skipped `goal_limit_reached`. A prerequisite with no slot left SHALL add a skipped `goal_limit_reached` outcome, and its dependents SHALL proceed without the edge.
+
+#### Scenario: Goal type full during import
+
+- **GIVEN** a profile with 199 non-archived Rank goals and a V1 profile with two importable Rank goals
+- **WHEN** the goals part is imported
+- **THEN** the higher-priority Rank goal is created and the other reports skipped with code `goal_limit_reached`
+
+### Requirement: The import respects the project cap
+
+The import's own project SHALL count toward the profile's cap of 100 non-archived projects (see `project-count-limit`). When the profile is already at the cap, the import SHALL create no project and no goal, and every goal it would have created SHALL report failed with code `project_limit_reached`.
+
+#### Scenario: Project cap reached
+
+- **GIVEN** a profile with 100 non-archived projects
+- **WHEN** the goals part is imported
+- **THEN** no project or goal is created, and every importable goal reports failed with code `project_limit_reached`
