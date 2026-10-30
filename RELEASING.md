@@ -36,8 +36,12 @@ involved:
 - **Deployment branches:** limit `production` to `main` and `release/**`.
 - **Staging environment:** if `stage` is branch-restricted, also allow
   `release/**`, because image publishing runs in that environment.
-- **Rulesets:** let `github-actions[bot]` create `release/**` branches and
-  `v*` tags, otherwise the Release workflow cannot push them.
+- **Rulesets:** the Release workflow pushes with the built-in `GITHUB_TOKEN`,
+  which GitHub does not accept as a ruleset bypass actor. So the `v*` tag
+  ruleset blocks only updates and deletions, not creation, which keeps
+  published tags immutable. The `release/*` branch ruleset must not require
+  linear history: a new release branch contains `main`'s older merge commits,
+  so the push would be rejected.
 - **Variables:** the `production` environment needs the variables (not
   secrets) `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`,
   `ACR_NAME`, `CONTAINER_APP_NAME` and `RESOURCE_GROUP_NAME`. The infra
