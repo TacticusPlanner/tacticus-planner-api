@@ -22,6 +22,10 @@
     <PackageReference Include="Vogen" />
   </ItemGroup>
   <ItemGroup>
+    <!-- Local-only settings (dev keys, localhost URLs) must not ship in the published image. -->
+    <Content Update="appsettings.Development.json" CopyToPublishDirectory="Never" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\orchestration\TacticusPlanner.ServiceDefaults\TacticusPlanner.ServiceDefaults.csproj" />
     <ProjectReference Include="..\TacticusPlanner.Domain\TacticusPlanner.Domain.csproj" />
     <ProjectReference Include="..\TacticusPlanner.GameCatalog\TacticusPlanner.GameCatalog.csproj" />

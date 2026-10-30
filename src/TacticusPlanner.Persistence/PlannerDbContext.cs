@@ -73,30 +73,34 @@ public sealed class PlannerDbContext(
         configurationBuilder.RegisterAllInVogenEfCoreConverters();
     }
 
+    /// <summary>Each encrypted column passes its own <c>table.column</c> name, which the encryption service
+    /// binds into the ciphertext (see <see cref="AesGcmColumnEncryptionService"/>).</summary>
     private void ApplyEncryptedConverters(ModelBuilder modelBuilder)
     {
-        var nullableStringConverter = new ValueConverter<string?, string?>(
-            value => columnEncryption.Encrypt(value),
-            value => columnEncryption.Decrypt(value)
+        ValueConverter<string?, string?> NullableString(string column) => new(
+            value => columnEncryption.Encrypt(value, column),
+            value => columnEncryption.Decrypt(value, column)
+        );
+        ValueConverter<TacticusUserId, string> RequiredUserId(string column) => new(
+            value => columnEncryption.Encrypt(value.Value, column)!,
+            value => TacticusUserId.From(columnEncryption.Decrypt(value, column)!)
         );
         var nullableUserIdConverter = new ValueConverter<TacticusUserId?, string?>(
-            value => columnEncryption.Encrypt(value.HasValue ? value.Value.Value : null),
-            value => value == null ? null : TacticusUserId.From(columnEncryption.Decrypt(value)!)
-        );
-        var requiredUserIdConverter = new ValueConverter<TacticusUserId, string>(
-            value => columnEncryption.Encrypt(value.Value)!,
-            value => TacticusUserId.From(columnEncryption.Decrypt(value)!)
+            value => columnEncryption.Encrypt(value.HasValue ? value.Value.Value : null, "profiles.tacticus_user_id"),
+            value => value == null ? null : TacticusUserId.From(columnEncryption.Decrypt(value, "profiles.tacticus_user_id")!)
         );
         var requiredGuildIdConverter = new ValueConverter<TacticusGuildId, string>(
-            value => columnEncryption.Encrypt(value.Value)!,
-            value => TacticusGuildId.From(columnEncryption.Decrypt(value)!)
+            value => columnEncryption.Encrypt(value.Value, "guilds.tacticus_guild_id")!,
+            value => TacticusGuildId.From(columnEncryption.Decrypt(value, "guilds.tacticus_guild_id")!)
         );
 
         modelBuilder.Entity<Profile>().Property(entity => entity.TacticusUserId).HasConversion(nullableUserIdConverter);
-        modelBuilder.Entity<TacticusIntegration>().Property(entity => entity.TacticusApiKey).HasConversion(nullableStringConverter);
+        modelBuilder.Entity<TacticusIntegration>().Property(entity => entity.TacticusApiKey)
+            .HasConversion(NullableString("tacticus_integrations.tacticus_api_key"));
         modelBuilder.Entity<Guild>().Property(entity => entity.TacticusGuildId).HasConversion(requiredGuildIdConverter);
-        modelBuilder.Entity<Guild>().Property(entity => entity.GuildApiToken).HasConversion(nullableStringConverter);
-        modelBuilder.Entity<GuildMember>().Property(entity => entity.TacticusUserId).HasConversion(requiredUserIdConverter);
+        modelBuilder.Entity<Guild>().Property(entity => entity.GuildApiToken).HasConversion(NullableString("guilds.guild_api_token"));
+        modelBuilder.Entity<GuildMember>().Property(entity => entity.TacticusUserId)
+            .HasConversion(RequiredUserId("guild_members.tacticus_user_id"));
     }
 
     /// <summary>

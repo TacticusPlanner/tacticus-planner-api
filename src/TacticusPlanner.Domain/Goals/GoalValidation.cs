@@ -9,4 +9,15 @@ public static class GoalValidation
     public const int MaxEntityIdLength = 128;
 
     public const int MaxNotesLength = 2000;
+
+    /// <summary>The most goals of one <see cref="GoalType"/> a profile may hold outside Archived (Active, Paused
+    /// and Completed count). Also bounds the unpaginated goal list.</summary>
+    public const int MaxGoalsPerType = 200;
+
+    /// <summary>The most entries in one goal's snapshot resource list or upgrade target list: a whole character
+    /// rank ladder needs about 150 distinct upgrade materials.</summary>
+    public const int MaxResourcesPerGoal = 250;
+
+    /// <summary>The most farming-location overrides on one goal.</summary>
+    public const int MaxFarmingLocations = 100;
 }

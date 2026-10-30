@@ -14,22 +14,30 @@ public static class LegendaryEventTeamMutations
         return LegendaryEventPlanMutation.Applied;
     }
 
-    /// <summary>Appends a team after the lane's existing teams.</summary>
+    /// <summary>Appends a team after the lane's existing teams. A bulk caller that already knows the lane's next
+    /// position passes <paramref name="sortOrder"/> instead of a rescan per team. The caller enforces
+    /// <see cref="LegendaryEventValidation.MaxTeamsPerLane"/> (<see cref="LaneIsFull"/>).</summary>
     public static LegendaryEventTeamRecord CreateTeam(
-        LegendaryEventPlanMutationContext context, string laneId, LegendaryEventTeamFields fields)
+        LegendaryEventPlanMutationContext context, string laneId, LegendaryEventTeamFields fields, int? sortOrder = null)
     {
         var plan = context.Plan;
-        var laneTeams = plan.Teams.Where(team => team.LaneId == laneId).ToList();
         var team = new LegendaryEventTeamRecord
         {
             Id = LegendaryEventTeamId.From(Guid.CreateVersion7()),
             LaneId = laneId,
-            SortOrder = laneTeams.Count == 0 ? 0 : laneTeams.Max(entry => entry.SortOrder) + 1,
+            SortOrder = sortOrder ?? NextSortOrder(plan, laneId),
         };
         ApplyFields(context, team, fields);
         plan.Teams.Add(team);
         return team;
     }
+
+    /// <summary>The lane's next sort order (orders are dense, so also its team count).</summary>
+    public static int NextSortOrder(LegendaryEventPlan plan, string laneId) =>
+        plan.Teams.Where(team => team.LaneId == laneId).Select(team => team.SortOrder + 1).DefaultIfEmpty(0).Max();
+
+    public static bool LaneIsFull(LegendaryEventPlan plan, string laneId) =>
+        plan.Teams.Count(team => team.LaneId == laneId) >= LegendaryEventValidation.MaxTeamsPerLane;
 
     /// <summary>Replaces the team's name, members, objectives and the given run's depth; lane, order and other
     /// runs' depths are kept.</summary>

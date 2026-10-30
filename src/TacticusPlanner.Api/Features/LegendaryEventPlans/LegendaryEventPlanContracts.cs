@@ -82,6 +82,9 @@ public static class LegendaryEventPlanIssueCodes
     public const string Stale = "legendaryEventPlanStale";
 
     public const string OrderSetMismatch = "legendaryEventOrderSetMismatch";
+
+    /// <summary>400: the lane already holds <see cref="LegendaryEventValidation.MaxTeamsPerLane"/> teams.</summary>
+    public const string TeamLimitReached = "legendaryEventTeamLimitReached";
 }
 
 /// <param name="ExpectedRevision">The plan revision the caller last read (0 for a plan that does not exist).</param>

@@ -147,7 +147,9 @@ public sealed class UpdateGoalTargetValidator : AbstractValidator<UpdateGoalTarg
         {
             RuleFor(request => request.Target.Upgrade!.Targets)
                 .NotNull()
-                .WithMessage("An upgrade target needs a list of materials.");
+                .WithMessage("An upgrade target needs a list of materials.")
+                .Must(targets => targets is not { Count: > GoalValidation.MaxResourcesPerGoal })
+                .WithMessage($"An upgrade goal can have at most {GoalValidation.MaxResourcesPerGoal} targets.");
             RuleForEach(request => request.Target.Upgrade!.Targets)
                 .Must(target => target is not null && !string.IsNullOrWhiteSpace(target.UpgradeId))
                 .When(request => request.Target.Upgrade!.Targets is not null)
@@ -172,6 +174,10 @@ public sealed class UpdateGoalValidator : AbstractValidator<UpdateGoalRequest>
     {
         RuleFor(request => request.Notes)
             .MaximumLength(GoalValidation.MaxNotesLength);
+
+        RuleFor(request => request.FarmingLocationIds)
+            .Must(ids => ids is not { Count: > GoalValidation.MaxFarmingLocations })
+            .WithMessage($"A goal can have at most {GoalValidation.MaxFarmingLocations} farming locations.");
 
         RuleFor(request => request.AcquisitionSources)
             .Must(sources => AcquisitionSourceRules.ShapeError(sources) is null)

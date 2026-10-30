@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Api.Features.UpstreamRateLimiting;
 using TacticusPlanner.Api.Http;
-using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Persistence;
 using TacticusPlanner.Persistence.Encryption;
 using TacticusIntegrationEntity = TacticusPlanner.Domain.Profiles.TacticusIntegration;
@@ -27,11 +26,18 @@ public sealed class UpdateTacticusIntegrationEndpoint
                 StatusCodes.Status200OK,
                 "The saved Tacticus integration summary."
             );
-            summary.Response(StatusCodes.Status400BadRequest, "The Tacticus API key is missing or invalid.");
+            summary.Response(
+                StatusCodes.Status400BadRequest,
+                "The Tacticus API key is missing or invalid, or the Tacticus user id is not a GUID."
+            );
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
             summary.Response(StatusCodes.Status429TooManyRequests, UpstreamRateLimit.ResponseDescription);
             summary.Response(StatusCodes.Status403Forbidden, "The authenticated user cannot access the API.");
             summary.Response(StatusCodes.Status404NotFound, "The authenticated user has not signed up yet.");
+            summary.Response(
+                StatusCodes.Status409Conflict,
+                $"{TacticusUserIdAssignment.ConflictIssueCode}: the Tacticus user id is already linked to another profile."
+            );
         });
     }
 
@@ -53,6 +59,18 @@ public sealed class UpdateTacticusIntegrationEndpoint
         {
             await this.SendNotFoundProblemAsync(ct);
             return;
+        }
+
+        string? newTacticusUserId = null;
+        if (!req.ClearTacticusUserId && Normalize(req.TacticusUserId) is { } suppliedUserId)
+        {
+            newTacticusUserId = TacticusUserIdAssignment.Normalize(suppliedUserId);
+            if (newTacticusUserId is null)
+            {
+                AddError(request => request.TacticusUserId!, "The Tacticus user id must be a GUID.");
+                await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+                return;
+            }
         }
 
         var integration = profile.TacticusIntegration;
@@ -92,18 +110,25 @@ public sealed class UpdateTacticusIntegrationEndpoint
             return;
         }
 
-        if (req.ClearTacticusUserId)
+        if (req.ClearTacticusUserId || newTacticusUserId is not null)
         {
-            profile.TacticusUserId = null;
-            profile.TacticusUserIdHash = null;
-        }
-        else if (Normalize(req.TacticusUserId) is { } tacticusUserId)
-        {
-            profile.TacticusUserId = TacticusUserId.From(tacticusUserId);
-            profile.TacticusUserIdHash = TacticusUserIdHash.FromNullable(Resolve<IColumnHashService>().ComputeHash(tacticusUserId));
+            await TacticusUserIdAssignment.AssignAsync(db, Resolve<IColumnHashService>(), profile, newTacticusUserId, ct);
         }
 
-        await db.SaveChangesAsync(ct);
+        try
+        {
+            await db.SaveChangesAsync(ct);
+        }
+        catch (DbUpdateException exception) when (TacticusUserIdAssignment.IsConflict(exception))
+        {
+            await this.SendProblemAsync(
+                StatusCodes.Status409Conflict,
+                ct,
+                "This Tacticus user id is already linked to another profile.",
+                TacticusUserIdAssignment.ConflictIssueCode
+            );
+            return;
+        }
 
         await Send.OkAsync(new UpdateTacticusIntegrationResponse(
             profile.Id.Value,

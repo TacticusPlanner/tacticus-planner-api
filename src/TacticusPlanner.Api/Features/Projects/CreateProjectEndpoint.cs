@@ -1,6 +1,7 @@
 using FastEndpoints;
 using FluentValidation;
 using FluentValidation.Results;
+using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Api.Http;
 using TacticusPlanner.Domain.Projects;
@@ -17,7 +18,7 @@ public sealed class CreateProjectEndpoint : Endpoint<CreateProjectRequest, Proje
         {
             summary.Summary = "Creates a new project.";
             summary.Response<ProjectSummaryResponse>(StatusCodes.Status200OK, "The newly created project.");
-            summary.Response(StatusCodes.Status400BadRequest, "A blank name or an invalid target.");
+            summary.Response(StatusCodes.Status400BadRequest, "A blank name, an invalid target, or projectLimitReached: the profile already has 100 projects.");
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
             summary.Response(StatusCodes.Status404NotFound, "The authenticated account/profile has not been provisioned.");
         });
@@ -54,11 +55,32 @@ public sealed class CreateProjectEndpoint : Endpoint<CreateProjectRequest, Proje
         project.ProfileId = profileId;
         project.Type = ProjectType.Custom;
 
-        db.Projects.Add(project);
-        await db.SaveChangesAsync(ct);
+        // Counted under the profile lock so concurrent creates cannot both take the last slot.
+        await Resolve<ProjectGoalPlanningService>().ExecuteLockedMutationAsync(async transaction =>
+        {
+            if (await db.Projects.CountAsync(p => p.Status != ProjectStatus.Archived, ct) >= ProjectValidation.MaxProjects)
+            {
+                AddError(ProjectLimitFailure());
+                await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+                return;
+            }
 
-        await Send.OkAsync(Map.ToSummary(project, []), ct);
+            db.Projects.Add(project);
+            await db.SaveChangesAsync(ct);
+            await transaction.CommitAsync(ct);
+            await Send.OkAsync(Map.ToSummary(project, []), ct);
+        }, ct);
     }
+
+    public const string ProjectLimitReached = "projectLimitReached";
+
+    /// <summary>400 <c>projectLimitReached</c>: the profile already holds <see cref="ProjectValidation.MaxProjects"/>
+    /// non-archived projects.</summary>
+    internal static ValidationFailure ProjectLimitFailure() =>
+        new("general", $"A profile can have at most {ProjectValidation.MaxProjects} non-archived projects; archive one to make room.")
+        {
+            ErrorCode = ProjectLimitReached,
+        };
 }
 
 public sealed record CreateProjectRequest(
