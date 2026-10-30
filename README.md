@@ -406,7 +406,8 @@ from the Actions tab):
   tags `vX.Y.0`, creates a GitHub release with generated notes, and deploys
   the tag. The commit is already on `main`, so production reuses the exact
   image `CD Stage` built for it; check that commit's staging deploy succeeded
-  before releasing.
+  before releasing. `CD Stage` skips documentation-only pushes, so for such a
+  commit run `CD Stage` by hand first, or production builds a fresh image.
 - From `release/X.Y` with `patch`: tags the next `vX.Y.Z` on that branch,
   creates its release (notes since the previous `vX.Y.*`), builds the image
   for that commit, and deploys it. Land the fix on `main` first, then

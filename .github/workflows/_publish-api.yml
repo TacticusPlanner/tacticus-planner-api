@@ -60,7 +60,7 @@ jobs:
             --query digest \
             --output tsv 2> "$errors")"; then
             :
-          elif grep -qiE 'MANIFEST_UNKNOWN|NAME_UNKNOWN|not found' "$errors"; then
+          elif grep -qiE 'MANIFEST_UNKNOWN|NAME_UNKNOWN|not found|does not exist' "$errors"; then
             digest=""
           else
             cat "$errors" >&2

@@ -38,7 +38,10 @@ involved:
   `release/**`, because image publishing runs in that environment.
 - **Rulesets:** let `github-actions[bot]` create `release/**` branches and
   `v*` tags, otherwise the Release workflow cannot push them.
-- **Secrets:** the Azure OIDC variables (`AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`) on the `production` environment.
+- **Variables:** the `production` environment needs the variables (not
+  secrets) `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`,
+  `ACR_NAME`, `CONTAINER_APP_NAME` and `RESOURCE_GROUP_NAME`. The infra
+  repository's `access pre --env prod` step sets all six.
 
 ### What a Release run does
 
@@ -79,7 +82,8 @@ The latest release is `v1.3.2` and `main` has new, staging-verified work.
 **Shipping an older commit.** If the head of `main` is not ready but
 `9f8e7d6` is, run the same thing with *commit* `9f8e7d6`. The commit must be on
 `main`, come after the last `vX.Y.0` cut (here `v1.3.0`), and not already be
-released.
+released. It must also contain `release.yml` and `scripts/release/`, because
+later patches run from the release branch cut at that commit.
 
 ## Example: patching a release
 
@@ -116,9 +120,12 @@ the patch.
   non-draft `vX.Y.Z` release.
 - **Roll back:** run **CD Prod** with the previous release tag, for example
   `v1.4.0`. Check the migration notes below first: rolling back past a destructive migration needs a database restore.
-- **Release run failed after the tag was pushed:** use **Re-run all jobs** on
-  that run. It finds the tag without a GitHub Release and resumes publishing
-  and deploying instead of cutting a new version.
+- **Release run failed after the tag was pushed, before the GitHub Release
+  was published:** use **Re-run all jobs** on that run. It finds the tag
+  without a GitHub Release and resumes publishing and deploying instead of
+  cutting a new version.
+- **Failed after the GitHub Release was published:** a rerun refuses the
+  already released commit; ship the tag with **CD Prod** instead.
 - **Failed before the tag was pushed:** nothing was created; fix the cause and
   run Release again.
 
