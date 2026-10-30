@@ -65,20 +65,20 @@ describe("latestTag", () => {
 })
 
 describe("planRelease: first release", () => {
-  it("major gives v1.0.0 on release/1.0", () => {
+  it("major gives v2.0.0 on release/2.0", () => {
     assert.deepEqual(plan({ bump: "major" }), {
-      tag: "v1.0.0",
+      tag: "v2.0.0",
       previous: "",
-      branch: "release/1.0",
+      branch: "release/2.0",
       sha: "c3",
       resume: false,
     })
   })
 
-  it("minor gives v0.1.0 on release/0.1", () => {
+  it("minor gives v1.1.0 on release/1.1", () => {
     const result = plan({ bump: "minor" })
-    assert.equal(result.tag, "v0.1.0")
-    assert.equal(result.branch, "release/0.1")
+    assert.equal(result.tag, "v1.1.0")
+    assert.equal(result.branch, "release/1.1")
   })
 })
 
@@ -125,8 +125,8 @@ describe("planRelease: minor and major", () => {
   it("refuses when the release branch already exists", () => {
     rejects(
       { bump: "minor" },
-      fakeRepo({ remoteBranches: ["release/0.1"] }),
-      "release/0.1 already exists."
+      fakeRepo({ remoteBranches: ["release/1.1"] }),
+      "release/1.1 already exists."
     )
   })
 })
