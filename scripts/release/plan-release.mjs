@@ -80,15 +80,15 @@ export function planRelease({ bump, refName, commit = "" }, repo) {
     : planCut(bump, refName, tags, sha, repo)
 }
 
-// An older commit on main can be released instead of its head; patches always ship the head of
-// their release branch.
+// An older commit on main can be released instead of its head; a release branch always ships
+// its head.
 function resolveTarget({ bump, refName, commit }, repo, tags) {
   if (!commit) {
     return repo.head()
   }
-  if (bump === "patch") {
+  if (bump === "patch" && refName !== "main") {
     throw new ReleaseError(
-      "commit applies to minor/major releases only; patch ships the head of the release branch."
+      "commit applies to releases from main only; a release branch ships its head."
     )
   }
   const sha = repo.resolveCommit(commit)
@@ -109,9 +109,28 @@ function resolveTarget({ bump, refName, commit }, repo, tags) {
 }
 
 function planPatch(refName, tags, sha) {
+  // From main, a patch ships main as the next patch on the newest line, with no release branch.
+  if (refName === "main") {
+    const previous = latestTag(tags)
+    if (!previous) {
+      throw new ReleaseError(
+        "Nothing to patch yet; run a minor or major release first."
+      )
+    }
+    const { major, minor, patch } = parseVersion(previous)
+    return {
+      tag: `v${major}.${minor}.${patch + 1}`,
+      previous,
+      branch: "",
+      sha,
+      resume: false,
+    }
+  }
   const match = RELEASE_BRANCH.exec(refName)
   if (!match) {
-    throw new ReleaseError("Run patch releases from a release/X.Y branch.")
+    throw new ReleaseError(
+      "Run patch releases from main or a release/X.Y branch."
+    )
   }
   const [major, minor] = match.slice(1).map(Number)
   const previous = latestTag(

@@ -166,12 +166,18 @@ describe("planRelease: releasing an older commit", () => {
     )
   })
 
-  it("is not allowed for patches", () => {
+  it("is not allowed for patches from a release branch", () => {
     rejects(
       { bump: "patch", refName: "release/1.3", commit: "c4" },
       repo(),
-      "commit applies to minor/major releases only; patch ships the head of the release branch."
+      "commit applies to releases from main only; a release branch ships its head."
     )
+  })
+
+  it("is allowed for patches from main", () => {
+    const result = plan({ bump: "patch", commit: "c4" }, repo())
+    assert.equal(result.sha, "c4")
+    assert.equal(result.tag, "v1.3.1")
   })
 })
 
@@ -199,11 +205,29 @@ describe("planRelease: patch", () => {
     assert.equal(result.tag, "v1.4.1")
   })
 
-  it("must run from a release branch", () => {
+  it("from main tags the next patch on the newest line, no new branch", () => {
+    assert.deepEqual(plan({ bump: "patch" }, repo()), {
+      tag: "v1.5.1",
+      previous: "v1.5.0",
+      branch: "",
+      sha: "c3",
+      resume: false,
+    })
+  })
+
+  it("from main refuses when nothing is released yet", () => {
     rejects(
       { bump: "patch" },
+      fakeRepo(),
+      "Nothing to patch yet; run a minor or major release first."
+    )
+  })
+
+  it("must run from main or a release branch", () => {
+    rejects(
+      { bump: "patch", refName: "feature/x" },
       repo(),
-      "Run patch releases from a release/X.Y branch."
+      "Run patch releases from main or a release/X.Y branch."
     )
   })
 

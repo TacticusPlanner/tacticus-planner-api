@@ -67,6 +67,7 @@ release published but not live; ship it later with `CD Prod` (see below).
 | `major` | `main` | `v(X+1).0.0` and branch `release/(X+1).0` |
 | `minor` | `main` | `vX.(Y+1).0` and branch `release/X.(Y+1)` |
 | `patch` | `release/X.Y` | next `vX.Y.Z` on that branch, no new branch |
+| `patch` | `main` | next `vX.Y.Z` on the newest line, from `main`, no new branch |
 
 With no tags yet, versions count from `1.0.0`, because this rewrite ships as V2
 of Tacticus Planner: `major` gives `v2.0.0` and `minor` gives `v1.1.0`. Use
@@ -117,6 +118,15 @@ after `release/1.4` was cut stays out of the patch.
 A patch commit exists only on the release branch, so its image is built fresh and
 never ran on staging. Confirm the fix on staging from `main` before releasing
 the patch.
+
+**Patching straight from `main`.** When everything on `main` since the last
+release is safe to ship as a fix, skip the backport: Actions → **Release** →
+*Use workflow from:* `main`; *bump:* `patch`. With `v1.4.0` as the newest tag,
+this tags the head of `main` (or *commit*) as `v1.4.1`, with no new branch.
+Unlike a backport, this ships everything merged since `v1.4.0`, not just the
+fix, and it reuses the image staging already ran. `release/1.4` does not get
+the commit; a later backport patch there still counts up from the newest
+`v1.4.*` tag.
 
 ## Redeploying, rolling back and failed runs
 

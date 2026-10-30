@@ -2,13 +2,14 @@ name: Release
 
 # Cuts and ships a production release. Run from main with minor or major to create a
 # release/X.Y branch and tag vX.Y.0; run from a release/X.Y branch with patch to tag the next
-# vX.Y.Z on it (fixes land on main first, then are cherry-picked into the release branch by PR).
+# vX.Y.Z on it (fixes land on main first, then are cherry-picked into the release branch by PR),
+# or from main with patch to ship main as the next patch on the newest line, with no new branch.
 # Each run creates a GitHub release with generated notes and deploys the tag to production.
 on:
   workflow_dispatch:
     inputs:
       bump:
-        description: minor/major (run from main) cuts a new release branch; patch (run from release/X.Y) tags a fix.
+        description: minor/major (run from main) cuts a new release branch; patch tags the next fix, from release/X.Y or straight from main.
         required: true
         type: choice
         options:
@@ -17,7 +18,7 @@ on:
           - patch
         default: minor
       commit:
-        description: Optional commit on main to release (minor/major only). Defaults to the head of main.
+        description: Optional commit on main to release (runs from main only). Defaults to the head of main.
         required: false
         type: string
         default: ""
