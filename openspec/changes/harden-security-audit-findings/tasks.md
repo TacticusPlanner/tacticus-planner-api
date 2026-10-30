@@ -16,11 +16,10 @@
 
 ## 3. Column encryption
 
-- [x] 3.1 Version-2 envelope with `table.column` AAD in `AesGcmColumnEncryptionService`. Legacy envelope still decrypts. `PlannerDbContext` converters pass each column name.
+- [x] 3.1 Version-2 envelope with `table.column` AAD in `AesGcmColumnEncryptionService`. The unversioned envelope is rejected. `PlannerDbContext` converters pass each column name.
 - [x] 3.2 HKDF-SHA256 hash subkey in `HmacColumnHashService`. Key decoding moves into `ColumnEncryptionOptions`, which is validated on start (skipped for OpenAPI generation).
-- [x] 3.3 `ColumnEncryptionBackfill`: one transaction behind `pg_advisory_xact_lock`, using the envelope prefix as the progress marker. It runs from `DatabaseMigrationHostedService` after `MigrateAsync`.
-- [x] 3.4 Migration: `dotnet ef migrations add DeleteRaidObservationsForHashSubkey` (`20261029203812`) deletes `guild_raid_sync_states` and `guild_raid_seasons`. This is destructive, and allowed by the V2 policy.
-- [x] 3.5 Tests: `ColumnEncryptionTests` and `ColumnEncryptionBackfillPostgresTests`. Postgres fixtures are updated for the new options.
+- [x] 3.3 No migration or backfill: staging is recreated and production is provisioned after this change.
+- [x] 3.4 Tests: `ColumnEncryptionTests`. Postgres fixtures are updated for the new options.
 
 ## 4. Guild authority and Tacticus user id
 
@@ -72,4 +71,3 @@
   - The new `DELETE guild` statuses: 400, 403, 409, 429 and 503.
   - The `X-Sign-In-Account-Deleted` header.
   - The new V1 import part, outcome and issue codes listed in the proposal.
-- [ ] D.2 Infra (`tacticus-planner-infra`): move `V1Api:FunctionsKey` to a Key Vault secret so it can be rotated. This change leaves it unchanged (tracking issue: TBD).

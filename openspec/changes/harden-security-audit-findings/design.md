@@ -81,21 +81,10 @@ The owner set this policy during the audit: a departed or demoted member keeps r
   - New writes are `tpenc:2:{keyVersion}:{nonce}:{tag}:{ciphertext}`, with the `table.column` name as the AES-GCM AAD.
   - A ciphertext copied into another encrypted column fails to decrypt.
   - The binding is to the column, not the row: EF value converters never see the row they convert, so row binding is not possible here.
-  - The legacy five-part envelope (no AAD) still decrypts.
+  - Only the versioned envelope is read; the unversioned pre-change envelope is rejected.
 - **HKDF hash subkey.** HMAC-SHA256 lookup hashes use `HKDF-SHA256(currentKey, info "tacticus-planner/column-hash/v1")` instead of the AES key itself.
 - **Startup validation.** `ColumnEncryptionOptions` is validated on start: the current version names a key, and every key decodes (base64 or base64url) to 32 bytes. OpenAPI document generation skips this check.
-- **Backfill.**
-  - `ColumnEncryptionBackfill` runs in `DatabaseMigrationHostedService` right after `MigrateAsync`.
-  - It runs in one transaction behind `pg_advisory_xact_lock`, so replicas serialize.
-  - It selects `FOR UPDATE` every row whose encrypted column does not start with `tpenc:2:`; the envelope version is the progress marker. It re-encrypts each row and recomputes the hashes of profiles, `tacticus_integrations`, guilds and `guild_members`. Profile and member hashes change together.
-  - Unique-hash collisions cannot happen mid-transaction: the old and new hashes come from independent keys, and the plaintexts are already proven distinct.
-  - Re-runs find nothing.
-  - It loads all legacy rows at once. Today's data is small; batch it if that changes.
-- **Migration `DeleteRaidObservationsForHashSubkey`.**
-  - Raid attacker hashes are stored without plaintext, so the new subkey cannot re-hash them.
-  - The migration runs `DELETE FROM guild_raid_sync_states; DELETE FROM guild_raid_seasons;`, and attacks cascade. `Down` is empty.
-  - This is destructive. It is allowed because V2 is pre-production (`tp-destructive-changes-policy`), and the next raid refresh observes the current season again. Earlier seasons' history is lost.
-  - The migration has no schema change and no model-snapshot change beyond the Designer file.
+- **No backfill or data migration.** No environment holds data that must survive: staging is recreated and production is provisioned after this change, so there is no backfill and no legacy-envelope read. Existing local databases are reset.
 - **Key rotation.** A new `CurrentKeyVersion` re-keys new writes; old versions still decrypt. Hash lookup across key versions, as the audit suggested, is not built, because rotation would also change every hash. Add a multi-version lookup when the first rotation is planned.
 
 ### 6. Outbound HTTP, health, CI and image
@@ -120,8 +109,7 @@ The owner set this policy during the audit: a departed or demoted member keeps r
 
 ## Migration and backfill
 
-- An EF Core migration is required: `20261029203812_DeleteRaidObservationsForHashSubkey`, a data-only `DELETE` (see 5).
-- The backfill is not a migration; it is an idempotent startup step after migrations. It applies automatically on startup in every environment, like the migrations themselves.
+- No EF Core migration and no backfill. No environment holds data that must survive: staging is recreated and production is provisioned after this change, so there is no backfill and no legacy-envelope read.
 - **Rollback.** Code from before this change cannot read v2 envelopes, and its hashes would not match. A rollback therefore needs a restore. This is acceptable before production.
 
 ## Risks / Trade-offs

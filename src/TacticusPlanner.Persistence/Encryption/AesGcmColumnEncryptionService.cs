@@ -7,15 +7,13 @@ namespace TacticusPlanner.Persistence.Encryption;
 /// <summary>
 /// AES-256-GCM column encryption. Writes the version-2 envelope
 /// <c>tpenc:2:{keyVersion}:{nonce}:{tag}:{ciphertext}</c>, whose associated data is the column name, so a
-/// ciphertext copied into another encrypted column fails to decrypt. Still reads the legacy envelope
-/// <c>tpenc:{keyVersion}:{nonce}:{tag}:{ciphertext}</c> (no associated data) until
-/// <see cref="ColumnEncryptionBackfill"/> has rewritten every row.
+/// ciphertext copied into another encrypted column fails to decrypt.
 /// </summary>
 /// <remarks>The binding is to the column, not the row: EF value converters never see the row they convert.</remarks>
 public sealed class AesGcmColumnEncryptionService(IOptions<ColumnEncryptionOptions> options)
     : IColumnEncryptionService
 {
-    /// <summary>Every version-2 envelope starts with this; anything else in an encrypted column is legacy.</summary>
+    /// <summary>Every envelope starts with this.</summary>
     public const string CurrentEnvelopePrefix = "tpenc:2:";
 
     private const string Prefix = "tpenc";
@@ -64,29 +62,19 @@ public sealed class AesGcmColumnEncryptionService(IOptions<ColumnEncryptionOptio
         }
 
         var parts = envelope.Split(':');
-        byte[]? associatedData;
-        if (parts.Length == 6 && parts[0] == Prefix && parts[1] == CurrentEnvelopeVersion)
-        {
-            associatedData = Encoding.UTF8.GetBytes(column);
-            parts = parts[1..];
-        }
-        else if (parts.Length == 5 && parts[0] == Prefix)
-        {
-            associatedData = null;
-        }
-        else
+        if (parts.Length != 6 || parts[0] != Prefix || parts[1] != CurrentEnvelopeVersion)
         {
             throw new InvalidOperationException("Encrypted column value is not a valid encryption envelope.");
         }
 
-        var key = options.Value.GetKey(parts[1]);
-        var nonce = DecodeBase64Url(parts[2], NonceSize, "nonce");
-        var tag = DecodeBase64Url(parts[3], TagSize, "tag");
-        var ciphertext = DecodeBase64Url(parts[4], expectedLength: null, "ciphertext");
+        var key = options.Value.GetKey(parts[2]);
+        var nonce = DecodeBase64Url(parts[3], NonceSize, "nonce");
+        var tag = DecodeBase64Url(parts[4], TagSize, "tag");
+        var ciphertext = DecodeBase64Url(parts[5], expectedLength: null, "ciphertext");
         var plaintext = new byte[ciphertext.Length];
 
         using var aes = new AesGcm(key, TagSize);
-        aes.Decrypt(nonce, ciphertext, tag, plaintext, associatedData);
+        aes.Decrypt(nonce, ciphertext, tag, plaintext, Encoding.UTF8.GetBytes(column));
 
         return Encoding.UTF8.GetString(plaintext);
     }

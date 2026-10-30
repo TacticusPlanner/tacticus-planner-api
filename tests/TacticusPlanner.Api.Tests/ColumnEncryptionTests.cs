@@ -34,11 +34,11 @@ public sealed class ColumnEncryptionTests
     }
 
     [Fact]
-    public void LegacyEnvelopeStillDecrypts()
+    public void EnvelopeWithoutTheVersionIsRefused()
     {
-        var envelope = LegacyEncrypt("user-123");
+        var unversioned = Encryption().Encrypt("user-123", Column)!.Replace("tpenc:2:", "tpenc:", StringComparison.Ordinal);
 
-        Assert.Equal("user-123", Encryption().Decrypt(envelope, Column));
+        Assert.Throws<InvalidOperationException>(() => Encryption().Decrypt(unversioned, Column));
     }
 
     [Fact]
@@ -95,19 +95,4 @@ public sealed class ColumnEncryptionTests
         var exception = Assert.Throws<OptionsValidationException>(() => factory.CreateClient());
         Assert.Contains("ColumnEncryption:CurrentKeyVersion", exception.Message, StringComparison.Ordinal);
     }
-
-    /// <summary>The pre-AAD envelope format, as rows written before the version-2 envelope hold it.</summary>
-    private static string LegacyEncrypt(string plaintext)
-    {
-        var nonce = RandomNumberGenerator.GetBytes(12);
-        var bytes = Encoding.UTF8.GetBytes(plaintext);
-        var ciphertext = new byte[bytes.Length];
-        var tag = new byte[16];
-        using var aes = new AesGcm(Key, 16);
-        aes.Encrypt(nonce, bytes, ciphertext, tag);
-        return string.Join(':', "tpenc", "v1", Base64Url(nonce), Base64Url(tag), Base64Url(ciphertext));
-    }
-
-    private static string Base64Url(byte[] value) =>
-        Convert.ToBase64String(value).TrimEnd('=').Replace('+', '-').Replace('/', '_');
 }

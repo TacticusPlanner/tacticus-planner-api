@@ -23,7 +23,7 @@ The owner made these decisions:
   - 200 non-archived goals per goal type.
   - 100 non-archived projects. Archiving frees a slot, because projects cannot be deleted.
   - 50 teams per Legendary Event lane.
-- **Crypto migration may delete data.** Re-hashing with the new subkey cannot recover the raid observations, so the migration deletes them. The V2 destructive-changes policy allows this: V2 is greenfield and pre-production.
+- **Crypto without a data migration.** No environment holds data that must survive: staging is recreated and production is provisioned after this change, so there is no backfill and no legacy-envelope read.
 
 ## What Changes
 
@@ -54,11 +54,9 @@ The owner made these decisions:
   - V1 imports read at most 500 goals and 100 events, list at most 1000 goal outcomes, and list at most 200 issues per event.
 - **Column encryption**
   - New writes use the version-2 envelope `tpenc:2:…`, with the `table.column` name as AES-GCM associated data.
-  - The legacy envelope still decrypts.
+  - The unversioned pre-change envelope is no longer accepted.
   - Keyed hashes use an HKDF-SHA256 subkey.
   - Options are validated on start.
-  - After migrations, a startup backfill behind an advisory lock re-encrypts and re-hashes legacy rows.
-  - Migration `DeleteRaidObservationsForHashSubkey` deletes the stored Guild Raid observations.
 - **Outbound HTTP and health**
   - The standard resilience handler no longer retries unsafe methods.
   - The V1 client no longer follows redirects and caps its response buffer at 16 MB.
@@ -80,7 +78,7 @@ The owner made these decisions:
 - `tacticus-user-id`: GUID validation, canonical storage, uniqueness (409), and unlinking the guild member when the id changes.
 - `account-purge`: the guild-visible copies cleared with the profile, and the sign-in-deletion header.
 - `project-count-limit`: at most 100 non-archived projects per profile.
-- `column-encryption`: the column-bound envelope, legacy read with startup backfill, the HKDF hash subkey, and startup validation.
+- `column-encryption`: the column-bound envelope, the HKDF hash subkey, and startup validation.
 - `outbound-http-safety`: no retries of unsafe methods, and the V1 client's redirect and size bounds.
 - `health-endpoints`: readiness output caching.
 
@@ -105,8 +103,7 @@ The owner made these decisions:
   - `orchestration/TacticusPlanner.ServiceDefaults/Extensions.cs`.
   - `.github/workflows` and `.gitignore`.
 - **Migration**
-  - `20261029203812_DeleteRaidObservationsForHashSubkey` deletes all `guild_raid_sync_states` and `guild_raid_seasons` rows; attacks cascade from seasons. This is destructive by design, and the next raid refresh observes them again.
-  - The startup backfill rewrites every encrypted column and keyed hash on the profiles, `tacticus_integrations`, guilds and `guild_members` tables once.
+  - None. No environment holds data that must survive: staging is recreated and production is provisioned after this change, so there is no backfill and no legacy-envelope read. A local database written before this change must be reset (the Aspire `api-migrations` resource's `Reset Database` command).
 - **Contract**
   - `artifacts/openapi/TacticusPlanner.Api.json` is regenerated for the new statuses and descriptions.
   - No request or response schema gains a field.
@@ -124,8 +121,6 @@ The owner made these decisions:
       - part codes `invalid_tacticus_user_id` and `tacticus_user_id_conflict`;
       - goal outcome codes `goal_limit_reached`, `project_limit_reached`, `too_many_goals` and `outcomes_truncated`;
       - LE issue codes `lane_team_limit_reached` and `issues_truncated`.
-- **Infra follow-up**
-  - `V1Api:FunctionsKey` should move to a Key Vault secret so it can be rotated. This change leaves it unchanged; the key is already public in the V1 SPA bundle.
 - **Residual risk**
   - Someone who knows an unlinked Leader's or Co-Leader's GUID can still claim that self-asserted id. After the next sync they can also sync and purge, because the fresh upstream roster really does give that id the role.
   - The fix narrows this risk but does not close it:

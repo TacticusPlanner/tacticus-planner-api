@@ -1,12 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Persistence;
-using TacticusPlanner.Persistence.Encryption;
 
 namespace TacticusPlanner.Api;
 
 /// <summary>
-/// Applies every pending EF Core migration, then the idempotent <see cref="ColumnEncryptionBackfill"/>, before
-/// the web server begins accepting requests.
+/// Applies every pending EF Core migration before the web server begins accepting requests.
 /// </summary>
 public sealed partial class DatabaseMigrationHostedService(
     IServiceScopeFactory scopeFactory,
@@ -21,14 +19,6 @@ public sealed partial class DatabaseMigrationHostedService(
         await using var scope = scopeFactory.CreateAsyncScope();
         var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
         await db.Database.MigrateAsync(cancellationToken);
-        var rewritten = await ColumnEncryptionBackfill.RunAsync(
-            db,
-            scope.ServiceProvider.GetRequiredService<IColumnHashService>(),
-            cancellationToken);
-        if (rewritten > 0)
-        {
-            ColumnEncryptionBackfilled(logger, rewritten);
-        }
 
         DatabaseMigrationsApplied(logger, environment.EnvironmentName);
     }
@@ -48,11 +38,4 @@ public sealed partial class DatabaseMigrationHostedService(
         Message = "Database migrations applied for {EnvironmentName}."
     )]
     private static partial void DatabaseMigrationsApplied(ILogger logger, string environmentName);
-
-    [LoggerMessage(
-        EventId = 4,
-        Level = LogLevel.Information,
-        Message = "Re-encrypted and re-hashed {RowCount} rows still on the legacy column-encryption envelope."
-    )]
-    private static partial void ColumnEncryptionBackfilled(ILogger logger, int rowCount);
 }
