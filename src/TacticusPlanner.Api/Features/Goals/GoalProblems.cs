@@ -1,4 +1,5 @@
 using FastEndpoints;
+using FluentValidation.Results;
 using TacticusPlanner.Api.Features.Projects;
 using TacticusPlanner.Api.Http;
 using TacticusPlanner.Domain.Goals;
@@ -13,6 +14,18 @@ public static class GoalProblems
     public const string SlotOccupied = "slotOccupied";
     public const string GoalRevisionStale = "goalRevisionStale";
     public const string GoalOrderStale = "goalOrderStale";
+    public const string GoalLimitReached = "goalLimitReached";
+
+    /// <summary>400 <c>goalLimitReached</c> on <paramref name="field"/>: the change would put more than
+    /// <see cref="GoalValidation.MaxGoalsPerType"/> non-archived goals of <paramref name="goalType"/> on the
+    /// profile.</summary>
+    public static ValidationFailure GoalLimitFailure(string field, GoalType goalType) =>
+        new(field,
+            $"A profile can have at most {GoalValidation.MaxGoalsPerType} {goalType} goals that are not archived. "
+            + "Archive or delete some first.")
+        {
+            ErrorCode = GoalLimitReached,
+        };
 
     /// <summary>409 <c>slotOccupied</c>: names the goal that wanted the slot (<c>goalId</c>), the slot (entity, goal
     /// type, the normalized end target from <see cref="GoalTargetKey"/>, null only for Unlock) and the goal holding it (<c>existingGoalId</c>, detail under

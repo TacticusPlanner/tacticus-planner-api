@@ -2,10 +2,12 @@ using System.IO.Compression;
 using Azure.Monitor.OpenTelemetry.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Http.Resilience;
 using Microsoft.Extensions.Logging;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
@@ -16,6 +18,10 @@ namespace TacticusPlanner.ServiceDefaults;
 public static class Extensions
 {
     private const string LivenessTag = "live";
+
+    // Readiness runs every check (a database round-trip included) and is anonymous, so its result is shared
+    // across callers for a few seconds; liveness stays uncached and cheap.
+    private static readonly TimeSpan ReadinessCacheDuration = TimeSpan.FromSeconds(5);
 
     public static IHostApplicationBuilder AddServiceDefaults(
         this IHostApplicationBuilder builder
@@ -40,10 +46,13 @@ public static class Extensions
         builder.Services.AddServiceDiscovery();
         builder.Services.AddHealthChecks()
             .AddCheck("self", () => HealthCheckResult.Healthy(), [LivenessTag]);
+        builder.Services.AddOutputCache();
 
         builder.Services.ConfigureHttpClientDefaults(http =>
         {
-            http.AddStandardResilienceHandler();
+            // Retrying a POST/PUT/PATCH/DELETE after a timeout or 5xx can apply it upstream twice; only safe
+            // methods (GET, HEAD, OPTIONS, TRACE) are retried.
+            http.AddStandardResilienceHandler(options => options.Retry.DisableForUnsafeHttpMethods());
             http.AddServiceDiscovery();
         });
 
@@ -52,6 +61,9 @@ public static class Extensions
 
     public static WebApplication MapDefaultEndpoints(this WebApplication app)
     {
+        // Output caching is opt-in per endpoint; only /health/ready uses it.
+        app.UseOutputCache();
+
         app.MapHealthChecks("/health/live", new HealthCheckOptions
         {
             Predicate = check => check.Tags.Contains(LivenessTag),
@@ -60,9 +72,32 @@ public static class Extensions
         app.MapHealthChecks("/health/ready", new HealthCheckOptions
         {
             Predicate = _ => true,
-        }).AllowAnonymous();
+        }).AllowAnonymous().CacheOutput(new ReadinessCachePolicy());
 
         return app;
+    }
+
+    /// <summary>Caches the readiness response, healthy or not, for <see cref="ReadinessCacheDuration"/> under one
+    /// key. Unlike the default output-cache policy it ignores the query string, Host and Authorization headers,
+    /// so a caller cannot bypass the cache to force a fresh database round-trip.</summary>
+    private sealed class ReadinessCachePolicy : IOutputCachePolicy
+    {
+        public ValueTask CacheRequestAsync(OutputCacheContext context, CancellationToken cancellation)
+        {
+            context.EnableOutputCaching = true;
+            context.AllowCacheLookup = true;
+            context.AllowCacheStorage = true;
+            context.AllowLocking = true;
+            context.ResponseExpirationTimeSpan = ReadinessCacheDuration;
+            context.CacheVaryByRules.VaryByHost = false;
+            return ValueTask.CompletedTask;
+        }
+
+        public ValueTask ServeFromCacheAsync(OutputCacheContext context, CancellationToken cancellation) =>
+            ValueTask.CompletedTask;
+
+        public ValueTask ServeResponseAsync(OutputCacheContext context, CancellationToken cancellation) =>
+            ValueTask.CompletedTask;
     }
 
     private static void ConfigureOpenTelemetry(this IHostApplicationBuilder builder)

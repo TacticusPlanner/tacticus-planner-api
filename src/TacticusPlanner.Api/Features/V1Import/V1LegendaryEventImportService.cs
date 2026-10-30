@@ -36,6 +36,12 @@ public sealed partial class V1LegendaryEventImportService(
         ["Patermine"] = "genesPatriarch",
     };
 
+    /// <summary>The most V1 events one import reads (V1 knows a few dozen), bounding the outcome list.</summary>
+    internal const int MaxEvents = 100;
+
+    /// <summary>The most issues one event's outcome lists; any beyond are summarized in the last one.</summary>
+    internal const int MaxIssuesPerEvent = 200;
+
     public async Task<V1LegendaryEventImportResult> ImportAsync(
         ProfileId profileId, V1LegendaryEventImportData source, CancellationToken ct)
     {
@@ -57,7 +63,8 @@ public sealed partial class V1LegendaryEventImportService(
         var units = new UnitResolver(catalog);
         var runs = await SyncedRunsAsync(profileId, ct);
         var outcomes = new List<V1LegendaryEventOutcome>();
-        foreach (var v1Event in source.Events)
+        // ponytail: events past MaxEvents are dropped silently; V1 has far fewer, so add an outcome if that changes.
+        foreach (var v1Event in source.Events.Take(MaxEvents))
             outcomes.Add(await ImportEventAsync(profileId, catalog, units, runs, source.ShowPaidOptions, v1Event, ct));
 
         return new V1LegendaryEventImportResult(PartResult(outcomes), outcomes);
@@ -139,8 +146,16 @@ public sealed partial class V1LegendaryEventImportService(
                     context.Plan.Notes = notes;
                 if (showPaidOptions is { } paid)
                     context.Plan.ShowPaidOptions = paid;
+                // Teams are written only to a plan without teams, so each lane's orders start at the plan's next.
+                var nextSortOrder = new Dictionary<string, int>(StringComparer.Ordinal);
                 foreach (var team in importedTeams)
-                    LegendaryEventTeamMutations.CreateTeam(context, team.LaneId, team.Fields);
+                {
+                    var sortOrder = nextSortOrder.TryGetValue(team.LaneId, out var next)
+                        ? next
+                        : LegendaryEventTeamMutations.NextSortOrder(context.Plan, team.LaneId);
+                    LegendaryEventTeamMutations.CreateTeam(context, team.LaneId, team.Fields, sortOrder);
+                    nextSortOrder[team.LaneId] = sortOrder + 1;
+                }
                 V1LegendaryEventProgressImport.Apply(context, runInputs, annotations);
                 return Task.FromResult(LegendaryEventPlanMutation.Applied);
             }, ct);
@@ -205,6 +220,7 @@ public sealed partial class V1LegendaryEventImportService(
             return teams;
 
         var synthesised = new List<V1LreTeam>();
+        var byMembers = new Dictionary<string, V1LreTeam>(StringComparer.Ordinal);
         foreach (var lane in LegendaryEventValidation.LaneIds)
         {
             var map = lane switch { "alpha" => source.Alpha, "beta" => source.Beta, _ => source.Gamma };
@@ -214,21 +230,21 @@ public sealed partial class V1LegendaryEventImportService(
                 if (references.Count == 0)
                     continue;
 
-                var canonical = references.Select(units.Canonical).ToHashSet(StringComparer.Ordinal);
-                var match = synthesised.FindIndex(team => team.Section == lane
-                    && team.CharSnowprintIds!.Select(units.Canonical).ToHashSet(StringComparer.Ordinal).SetEquals(canonical));
-                if (match >= 0)
+                var key = MemberSetKey(lane, references.Select(units.Canonical));
+                if (byMembers.TryGetValue(key, out var match))
                 {
-                    if (!synthesised[match].RestrictionsIds!.Contains(restriction))
-                        synthesised[match].RestrictionsIds!.Add(restriction);
+                    if (!match.RestrictionsIds!.Contains(restriction))
+                        match.RestrictionsIds!.Add(restriction);
                     continue;
                 }
 
-                synthesised.Add(new V1LreTeam(
+                var team = new V1LreTeam(
                     Name: $"Team {synthesised.Count + 1} - {lane}",
                     Section: lane,
                     RestrictionsIds: [restriction],
-                    CharSnowprintIds: [.. references]));
+                    CharSnowprintIds: [.. references]);
+                synthesised.Add(team);
+                byMembers[key] = team;
             }
         }
 
@@ -239,6 +255,9 @@ public sealed partial class V1LegendaryEventImportService(
         GameCatalogLreView lre, UnitResolver units, List<V1LreTeam> sourceTeams, int run, List<V1LegendaryEventIssue> issues)
     {
         var resolved = new List<ResolvedTeam>();
+        var byMembers = new Dictionary<string, ResolvedTeam>(StringComparer.Ordinal);
+        var perLane = new Dictionary<string, int>(StringComparer.Ordinal);
+        var fullLanes = new HashSet<string>(StringComparer.Ordinal);
         for (var index = 0; index < sourceTeams.Count; index++)
         {
             var source = sourceTeams[index];
@@ -281,11 +300,21 @@ public sealed partial class V1LegendaryEventImportService(
                 : null;
 
             var laneId = source.Section!;
-            var duplicate = resolved.FirstOrDefault(team => team.LaneId == laneId
-                && team.Members.ToHashSet(StringComparer.Ordinal).SetEquals(members));
-            if (duplicate is null)
+            var key = MemberSetKey(laneId, members);
+            if (!byMembers.TryGetValue(key, out var duplicate))
             {
-                resolved.Add(new ResolvedTeam(laneId, name, members, objectives, depth, run));
+                if (perLane.GetValueOrDefault(laneId) >= LegendaryEventValidation.MaxTeamsPerLane)
+                {
+                    // One issue per lane, not per dropped team.
+                    if (fullLanes.Add(laneId))
+                        issues.Add(new("lane_team_limit_reached", null, laneId));
+                    continue;
+                }
+
+                var team = new ResolvedTeam(laneId, name, members, objectives, depth, run);
+                resolved.Add(team);
+                byMembers[key] = team;
+                perLane[laneId] = perLane.GetValueOrDefault(laneId) + 1;
                 continue;
             }
 
@@ -302,6 +331,10 @@ public sealed partial class V1LegendaryEventImportService(
 
         return resolved;
     }
+
+    /// <summary>A lane plus its member set, order-insensitive: equal keys are the same team.</summary>
+    private static string MemberSetKey(string laneId, IEnumerable<string> members) =>
+        string.Join('\n', members.Distinct(StringComparer.Ordinal).Order(StringComparer.Ordinal).Prepend(laneId));
 
     private static List<string> ResolveMembers(
         GameCatalogLreTrackView lane, UnitResolver units, V1LreTeam source, string teamName, List<V1LegendaryEventIssue> issues)
@@ -375,9 +408,14 @@ public sealed partial class V1LegendaryEventImportService(
 
     private static V1LegendaryEventOutcome Outcome(
         string? eventId, V1LegendaryEventSource v1Event, ImportPartStatus status, string code, string message,
-        int teamsImported, int runInputsImported, int annotationsImported, IReadOnlyList<V1LegendaryEventIssue> issues) =>
+        int teamsImported, int runInputsImported, int annotationsImported, List<V1LegendaryEventIssue> issues) =>
         new(eventId, v1Event.V1EventId, status, code, message, teamsImported, runInputsImported, annotationsImported,
-            issues);
+            issues.Count <= MaxIssuesPerEvent
+                ? issues
+                : [.. issues.Take(MaxIssuesPerEvent - 1),
+                    new V1LegendaryEventIssue(
+                        "issues_truncated", null,
+                        (issues.Count - (MaxIssuesPerEvent - 1)).ToString(CultureInfo.InvariantCulture))]);
 
     private sealed class ResolvedTeam(string laneId, string name, List<string> members, List<int> objectives, int? depth, int run)
     {
@@ -451,7 +489,9 @@ public sealed record V1LegendaryEventOutcome(
 /// <c>conflicting_depth_discarded</c>; for the notes, <c>notes_truncated</c> or <c>existing_notes_kept</c> (the
 /// V2 plan already had notes, so the V1 notes were not imported); for run inputs, <c>run_input_clamped</c>,
 /// <c>unknown_run</c> or <c>existing_run_inputs_kept</c>; for marks, <c>unknown_lane</c>, <c>unknown_battle</c>,
-/// <c>unknown_objective</c> or <c>existing_annotations_kept</c>.</param>
+/// <c>unknown_objective</c> or <c>existing_annotations_kept</c>; <c>lane_team_limit_reached</c> (once per lane: teams
+/// past <see cref="LegendaryEventValidation.MaxTeamsPerLane"/> were dropped; value is the lane) and, last,
+/// <c>issues_truncated</c> (value: how many issues past the per-event cap were not listed).</param>
 /// <param name="TeamName">The V1 team's name; null for a notes, run-input or mark issue.</param>
 /// <param name="Value">The dropped unit or objective (null when V1 held a null entry), the merged-into team's
 /// name, the discarded depth, the resolved unit count before truncation, the remaining unit count of a team too

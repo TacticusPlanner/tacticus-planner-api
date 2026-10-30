@@ -30,7 +30,7 @@ jobs:
 
     steps:
       - name: Sign in to Azure
-        uses: azure/login@v3
+        uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
         with:
           client-id: ${{ vars.AZURE_CLIENT_ID }}
           tenant-id: ${{ vars.AZURE_TENANT_ID }}
@@ -50,7 +50,7 @@ jobs:
           echo "reference=$REFERENCE" >> "$GITHUB_OUTPUT"
 
       - name: Install Container Apps CLI extension
-        run: az extension add --name containerapp --upgrade
+        run: az extension add --name containerapp --version 1.3.0b5
 
       - name: Check Container App exists
         id: check

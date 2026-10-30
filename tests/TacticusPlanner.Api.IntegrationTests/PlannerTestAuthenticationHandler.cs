@@ -18,6 +18,7 @@ public sealed class PlannerTestAuthenticationHandler : AuthenticationHandler<Aut
     public const string NoAuthHeader = "X-Test-NoAuth";
     public const string IssuerHeader = "X-Test-Issuer";
     public const string SubjectHeader = "X-Test-Subject";
+    public const string ObjectIdHeader = "X-Test-ObjectId";
     public const string NameHeader = "X-Test-Name";
     public const string OmitNameHeader = "X-Test-OmitName";
     public const string OmitScopeHeader = "X-Test-OmitScope";
@@ -46,6 +47,11 @@ public sealed class PlannerTestAuthenticationHandler : AuthenticationHandler<Aut
             new("iss", GetHeaderOrDefault(IssuerHeader, DefaultIssuer)),
             new("sub", GetHeaderOrDefault(SubjectHeader, DefaultSubject)),
         };
+        if (Request.Headers.TryGetValue(ObjectIdHeader, out var objectId) && !string.IsNullOrEmpty(objectId))
+        {
+            claims.Add(new("oid", objectId!));
+        }
+
         if (!Request.Headers.ContainsKey(OmitScopeHeader))
         {
             claims.Add(new("scp", "access_as_user"));

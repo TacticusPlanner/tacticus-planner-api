@@ -10,6 +10,7 @@
     <PackageVersion Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="13.5.4" />
     <!-- Transitive pin (via Aspire.Hosting): 2.5.302 trips NU1902 for GHSA-qhrr-8q5h-9q3h. -->
     <PackageVersion Include="MessagePack" Version="2.5.307" />
+    <PackageVersion Include="Azure.Identity" Version="1.21.0" />
     <PackageVersion Include="Azure.Monitor.OpenTelemetry.AspNetCore" Version="1.6.0" />
     <PackageVersion Include="FastEndpoints" Version="8.2.0" />
     <PackageVersion Include="FastEndpoints.OpenApi" Version="8.2.0" />

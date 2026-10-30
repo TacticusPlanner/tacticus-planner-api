@@ -185,10 +185,15 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
             return new ImportPartResult(ImportPartStatus.Skipped, "missing_tacticus_user_id", "The V1 profile has no Tacticus User ID.");
         }
 
+        // Same normalization, hashing and guild-link handling as PUT account/tacticus-integration.
+        if (TacticusUserIdAssignment.Normalize(value) is not { } tacticusUserId)
+        {
+            return new ImportPartResult(ImportPartStatus.Failed, "invalid_tacticus_user_id", "The V1 Tacticus User ID is not a GUID.");
+        }
+
         var db = Resolve<PlannerDbContext>();
         var profile = await db.Profiles.FirstAsync(entity => entity.Id == profileId, ct);
-        profile.TacticusUserId = TacticusUserId.From(value);
-        profile.TacticusUserIdHash = TacticusUserIdHash.FromNullable(Resolve<IColumnHashService>().ComputeHash(value));
+        await TacticusUserIdAssignment.AssignAsync(db, Resolve<IColumnHashService>(), profile, tacticusUserId, ct);
         try
         {
             await db.SaveChangesAsync(ct);

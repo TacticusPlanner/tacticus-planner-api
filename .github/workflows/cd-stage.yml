@@ -10,17 +10,11 @@ on:
       - '.claude/**'
       - '.agents/**'
       - LICENSE
+  # Manual re-deploys build the dispatching commit; only main may be dispatched (see the job guard below).
   workflow_dispatch:
-    inputs:
-      ref:
-        description: Git ref to deploy.
-        required: false
-        type: string
-        default: main
 
 permissions:
   contents: read
-  id-token: write
 
 concurrency:
   group: cd-stage
@@ -29,13 +23,21 @@ concurrency:
 jobs:
   publish:
     name: Publish
+    # Only main reaches stage, whether pushed or dispatched; any other dispatched branch is skipped.
+    if: github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+      id-token: write
     uses: ./.github/workflows/_publish-api.yml
     with:
-      ref: ${{ inputs.ref || github.sha }}
+      ref: ${{ github.sha }}
 
   deploy:
     name: Deploy Stage
     needs: publish
+    permissions:
+      contents: read
+      id-token: write
     uses: ./.github/workflows/_deploy-api.yml
     with:
       environment: stage

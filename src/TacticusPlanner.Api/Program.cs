@@ -53,16 +53,22 @@ if (!isOpenApiDocumentGeneration)
 builder.Services.AddProblemDetails(options =>
     options.CustomizeProblemDetails = context => ApiProblems.Complete(context.ProblemDetails, context.HttpContext));
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
-builder.Services.Configure<ColumnEncryptionOptions>(
-    builder.Configuration.GetSection(ColumnEncryptionOptions.SectionName)
-);
+var columnEncryptionOptions = builder.Services
+    .AddOptions<ColumnEncryptionOptions>()
+    .Bind(builder.Configuration.GetSection(ColumnEncryptionOptions.SectionName))
+    .Validate(options => options.IsValid(), ColumnEncryptionOptions.ValidationFailureMessage);
+if (!isOpenApiDocumentGeneration)
+{
+    columnEncryptionOptions.ValidateOnStart();
+}
+
 builder.Services.AddSingleton<IColumnEncryptionService, AesGcmColumnEncryptionService>();
 builder.Services.AddSingleton<IColumnHashService, HmacColumnHashService>();
 builder.Services.AddGameCatalog();
 builder.Services.AddTacticusApi(builder.Configuration["TacticusApi:BaseUrl"]);
 
 // Each feature slice owns the services it needs — see each Features/*/DependencyInjection.cs.
-builder.Services.AddAccountManagementFeature();
+builder.Services.AddAccountManagementFeature(builder.Configuration);
 builder.Services.AddAnalyticsFeature(builder.Configuration, validateOnStart: !isOpenApiDocumentGeneration);
 builder.Services.AddAuthFeature(builder.Configuration);
 builder.Services.AddGoalsFeature();
@@ -114,10 +120,13 @@ builder.Services.AddCors(options =>
     {
         if (allowedOrigins.Length > 0)
         {
+            // ETag is not a CORS-safelisted response header: without exposing it the client cannot read
+            // it back, never sends If-None-Match, and re-reads the full game catalog manifest every launch.
             policy
                 .WithOrigins(allowedOrigins)
                 .AllowAnyHeader()
-                .AllowAnyMethod();
+                .AllowAnyMethod()
+                .WithExposedHeaders("ETag", PurgeAccountEndpoint.SignInAccountDeletedHeader);
         }
     });
 });

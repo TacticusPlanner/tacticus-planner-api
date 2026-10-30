@@ -1,4 +1,5 @@
 using System.Net;
+using System.Text.Json;
 using TacticusPlanner.Api.Features.Guilds;
 using TacticusPlanner.TacticusApi.Models.Guild;
 using DomainGuildRole = TacticusPlanner.Domain.Guilds.GuildRole;
@@ -57,6 +58,7 @@ public sealed class SyncMyGuildEndpointTests : IAsyncLifetime
             FakeTacticusApi.BuildGuildResponse(guildId, "TAG", "Original", 1, (tacticusUserId, GuildRole.LEADER, 10, null))
         );
         await client.PostAsJsonAsync("/api/v1/guild/register", new RegisterGuildRequest(token), TestContext.Current.CancellationToken);
+        await GuildTestHelpers.ExpireSyncCooldownAsync(factory);
 
         // Caller is demoted below Co-Leader in the fresh roster — sync must reject and persist nothing.
         factory.TacticusApi.ConfigureGuildResponse(
@@ -89,6 +91,7 @@ public sealed class SyncMyGuildEndpointTests : IAsyncLifetime
             FakeTacticusApi.BuildGuildResponse(guildId, "TAG", "Original", 1, (tacticusUserId, GuildRole.LEADER, 10, null))
         );
         await client.PostAsJsonAsync("/api/v1/guild/register", new RegisterGuildRequest(token), TestContext.Current.CancellationToken);
+        await GuildTestHelpers.ExpireSyncCooldownAsync(factory);
 
         // The sync endpoint takes no request body/token — it can only succeed if it reads back the token
         // persisted at registration, since FakeTacticusApi only answers for tokens explicitly configured.
@@ -134,6 +137,7 @@ public sealed class SyncMyGuildEndpointTests : IAsyncLifetime
         var registerBody = await registerResponse.Content.ReadFromJsonAsync<RegisteredGuildResponse>(TestContext.Current.CancellationToken);
         Assert.NotNull(registerBody);
         Assert.Equal(2, registerBody.Members.Count);
+        await GuildTestHelpers.ExpireSyncCooldownAsync(factory);
 
         // The member departs the upstream guild before the next sync.
         factory.TacticusApi.ConfigureGuildResponse(
@@ -199,6 +203,7 @@ public sealed class SyncMyGuildEndpointTests : IAsyncLifetime
                 (leaderTacticusUserId, GuildRole.LEADER, 10, null),
                 (memberTacticusUserId, GuildRole.MEMBER, 5, null)));
         (await leaderClient.PostAsJsonAsync("/api/v1/guild/register", new RegisterGuildRequest(token), ct)).EnsureSuccessStatusCode();
+        await GuildTestHelpers.ExpireSyncCooldownAsync(factory);
 
         var response = await leaderClient.PostAsync("/api/v1/guild/sync", null, ct);
 
@@ -208,5 +213,66 @@ public sealed class SyncMyGuildEndpointTests : IAsyncLifetime
         var linking = Assert.Single(factory.CommandTextsFor(response), text =>
             text.Contains("FROM profiles", StringComparison.Ordinal) && text.Contains("last_seen_at", StringComparison.Ordinal));
         Assert.Contains("tacticus_user_id_hash = ANY", linking);
+    }
+
+    [Fact]
+    public async Task NonLeaderIsRejectedBeforeAnyUpstreamCall()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var (leaderClient, leaderTacticusUserId) = await GuildTestHelpers.CreateGuildReadyClientAsync(factory);
+        var (memberClient, memberTacticusUserId) = await GuildTestHelpers.CreateGuildReadyClientAsync(factory);
+        var token = $"guild-token-{Guid.NewGuid()}";
+        factory.TacticusApi.ConfigureGuildResponse(
+            token,
+            FakeTacticusApi.BuildGuildResponse(
+                Guid.NewGuid(), "TAG", "Guild", 1,
+                (leaderTacticusUserId, GuildRole.LEADER, 10, null),
+                (memberTacticusUserId, GuildRole.MEMBER, 5, null)));
+        (await leaderClient.PostAsJsonAsync("/api/v1/guild/register", new RegisterGuildRequest(token), ct)).EnsureSuccessStatusCode();
+        await GuildTestHelpers.ExpireSyncCooldownAsync(factory);
+        var callsBefore = factory.TacticusApi.GuildCallCount(token);
+
+        var response = await memberClient.PostAsync("/api/v1/guild/sync", null, ct);
+
+        Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
+        Assert.Equal(callsBefore, factory.TacticusApi.GuildCallCount(token));
+    }
+
+    [Fact]
+    public async Task SyncIsLimitedToOneUpstreamCallPerGuildPerCooldownWindow()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var (leaderClient, leaderTacticusUserId) = await GuildTestHelpers.CreateGuildReadyClientAsync(factory);
+        var (coLeaderClient, coLeaderTacticusUserId) = await GuildTestHelpers.CreateGuildReadyClientAsync(factory);
+        var token = $"guild-token-{Guid.NewGuid()}";
+        factory.TacticusApi.ConfigureGuildResponse(
+            token,
+            FakeTacticusApi.BuildGuildResponse(
+                Guid.NewGuid(), "TAG", "Guild", 1,
+                (leaderTacticusUserId, GuildRole.LEADER, 10, null),
+                (coLeaderTacticusUserId, GuildRole.CO_LEADER, 5, null)));
+        (await leaderClient.PostAsJsonAsync("/api/v1/guild/register", new RegisterGuildRequest(token), ct)).EnsureSuccessStatusCode();
+        var callsAfterRegister = factory.TacticusApi.GuildCallCount(token);
+
+        // Registration itself opened the window.
+        var tooSoon = await leaderClient.PostAsync("/api/v1/guild/sync", null, ct);
+        await AssertCooldownAsync(tooSoon);
+        Assert.Equal(callsAfterRegister, factory.TacticusApi.GuildCallCount(token));
+
+        await GuildTestHelpers.ExpireSyncCooldownAsync(factory);
+        (await leaderClient.PostAsync("/api/v1/guild/sync", null, ct)).EnsureSuccessStatusCode();
+
+        // The window is per guild: another Co-Leader of the same guild is held back too.
+        await AssertCooldownAsync(await coLeaderClient.PostAsync("/api/v1/guild/sync", null, ct));
+        Assert.Equal(callsAfterRegister + 1, factory.TacticusApi.GuildCallCount(token));
+    }
+
+    private static async Task AssertCooldownAsync(HttpResponseMessage response)
+    {
+        Assert.Equal(HttpStatusCode.TooManyRequests, response.StatusCode);
+        var retryAfter = Assert.IsType<TimeSpan>(response.Headers.RetryAfter?.Delta);
+        Assert.InRange(retryAfter.TotalSeconds, 1, GuildSyncService.CooldownWindow.TotalSeconds);
+        var problem = await response.Content.ReadFromJsonAsync<JsonElement>(TestContext.Current.CancellationToken);
+        Assert.Equal(SyncMyGuildEndpoint.CooldownIssueCode, problem.GetProperty("issueCode").GetString());
     }
 }

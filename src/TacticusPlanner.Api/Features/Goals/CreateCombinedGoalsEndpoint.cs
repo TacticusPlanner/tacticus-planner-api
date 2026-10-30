@@ -38,7 +38,8 @@ public sealed class CreateCombinedGoalsEndpoint
                 + "default false) creates the whole set Paused instead and cannot be set per goal.";
             summary.Response<CreateCombinedGoalsResponse>(StatusCodes.Status200OK, "The newly created goals, in request order.");
             summary.Response(StatusCodes.Status400BadRequest,
-                "Invalid entity/goal type, a bad DependsOnIndex or DependsOnGoalIds, an unknown project, a null/per-goal startPaused, notes over the limit, or a position out of range.");
+                "Invalid entity/goal type, a bad DependsOnIndex or DependsOnGoalIds, an unknown project, a null/per-goal startPaused, notes over the limit, a position out of range, or "
+                + "goalLimitReached: the set would put more than 200 non-archived goals of one type on the profile.");
             summary.Response(StatusCodes.Status409Conflict,
                 "slotOccupied: an active or paused goal already holds one of the requested slots (current: that goal).");
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
@@ -81,6 +82,13 @@ public sealed class CreateCombinedGoalsEndpoint
             foreach (var dependencyIndex in directDeps)
                 closure.UnionWith(closures[dependencyIndex]);
             closures.Add(closure);
+
+            if (targetValidation.ValidateSnapshotResources(spec.Snapshot) is { } snapshotError)
+            {
+                AddError(request => request.Goals, snapshotError);
+                await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+                return;
+            }
 
             // The lift is gated on a declared dependency (goal-target-model): only Ascension specs within
             // this spec's own closure count, not every Ascension spec anywhere in the request.
@@ -209,6 +217,13 @@ public sealed class CreateCombinedGoalsEndpoint
             if (await planning.FindConflictAsync(goals, ct) is { } existingConflict)
             {
                 await GoalProblems.SendSlotConflictAsync(this, existingConflict, ct);
+                return;
+            }
+
+            if (await planning.FindGoalLimitExceededAsync(goals, ct) is { } fullType)
+            {
+                AddError(GoalProblems.GoalLimitFailure("goals", fullType));
+                await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
                 return;
             }
 

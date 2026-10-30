@@ -1,5 +1,6 @@
 using FastEndpoints;
 using FluentValidation;
+using FluentValidation.Results;
 using TacticusPlanner.Domain.LegendaryEvents;
 
 namespace TacticusPlanner.Api.Features.LegendaryEventPlans;
@@ -72,7 +73,8 @@ public sealed class CreateLegendaryEventTeamEndpoint : LegendaryEventPlanEndpoin
         Summary(summary =>
         {
             summary.Summary = "Creates a team on a lane, appended after the lane's existing teams.";
-            summary.Description = "A non-null expectedBattleClears stores the depth for the given run only.";
+            summary.Description = "A non-null expectedBattleClears stores the depth for the given run only. A lane "
+                + "holds at most 50 teams; one more is a 400 with issueCode legendaryEventTeamLimitReached.";
             DescribeWrite(summary);
         });
     }
@@ -88,14 +90,29 @@ public sealed class CreateLegendaryEventTeamEndpoint : LegendaryEventPlanEndpoin
             return;
         }
 
+        var laneId = LegendaryEventValidation.LaneKey(req.LaneId);
         var result = await Resolve<LegendaryEventPlanWriter>().WriteAsync(
             resolved.ProfileId, resolved.Event.Id, req.ExpectedRevision,
             (context, _) =>
             {
-                LegendaryEventTeamMutations.CreateTeam(context, LegendaryEventValidation.LaneKey(req.LaneId), fields);
+                if (LegendaryEventTeamMutations.LaneIsFull(context.Plan, laneId))
+                    return Task.FromResult(LegendaryEventPlanMutation.Rejected);
+
+                LegendaryEventTeamMutations.CreateTeam(context, laneId, fields);
                 return Task.FromResult(LegendaryEventPlanMutation.Applied);
             },
             ct);
+        if (result is LegendaryEventPlanWriteResult.Rejected)
+        {
+            AddError(new ValidationFailure(
+                "laneId", $"A lane can have at most {LegendaryEventValidation.MaxTeamsPerLane} teams.")
+            {
+                ErrorCode = LegendaryEventPlanIssueCodes.TeamLimitReached,
+            });
+            await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+            return;
+        }
+
         await SendResultAsync(result, ct);
     }
 }

@@ -16,9 +16,10 @@ namespace TacticusPlanner.Api.IntegrationTests;
 public sealed class HandlerCommandCeilingTests(PlannerApiFactory factory) : IClassFixture<PlannerApiFactory>
 {
     private const int ListGoals = 3;
-    private const int CreateGoal = 6;
-    private const int CombinedOneSpec = 6;
-    private const int CombinedThreeSpecs = 6;
+    // Creation includes the per-type goal count behind GoalValidation.MaxGoalsPerType.
+    private const int CreateGoal = 7;
+    private const int CombinedOneSpec = 7;
+    private const int CombinedThreeSpecs = 7;
     private const int CompleteGoal = 5;
     private const int DeleteGoal = 6;
     private const int ReorderGoals = 4;

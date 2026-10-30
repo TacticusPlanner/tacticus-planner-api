@@ -56,8 +56,20 @@
           "Account"
         ],
         "summary": "Permanently deletes the authenticated user's planner account and all related data.",
-        "description": "Deletes the profile and every row it owns for the caller. This cannot be undone. Also makes a best-effort attempt to delete the corresponding Microsoft Entra External ID identity; see IExternalIdentityDeleter for the current limitation. Idempotent: repeating the request after the account is gone still succeeds.",
+        "description": "Deletes the profile and every row it owns for the caller. This cannot be undone. With deleteSignInAccount=true it also makes a best-effort attempt to delete the caller's Microsoft Entra External ID user (see IExternalIdentityDeleter). The X-Sign-In-Account-Deleted response header (true|false) reports whether the sign-in account was actually deleted. Idempotent: repeating the request after the account is gone still succeeds.",
         "operationId": "TacticusPlannerApiFeaturesAccountManagementPurgeAccountEndpoint",
+        "parameters": [
+          {
+            "name": "deleteSignInAccount",
+            "in": "query",
+            "schema": {
+              "type": [
+                "null",
+                "boolean"
+              ]
+            }
+          }
+        ],
         "responses": {
           "204": {
             "description": "The account and all related data were deleted."
@@ -197,7 +209,7 @@
             }
           },
           "400": {
-            "description": "The Tacticus API key is missing or invalid.",
+            "description": "The Tacticus API key is missing or invalid, or the Tacticus user id is not a GUID.",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -228,6 +240,16 @@
           },
           "404": {
             "description": "The authenticated user has not signed up yet.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "tacticusUserIdInUse: the Tacticus user id is already linked to another profile.",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -3238,7 +3260,7 @@
             }
           },
           "400": {
-            "description": "Invalid entity/goal type, a bad DependsOnIndex or DependsOnGoalIds, an unknown project, a null/per-goal startPaused, notes over the limit, or a position out of range.",
+            "description": "Invalid entity/goal type, a bad DependsOnIndex or DependsOnGoalIds, an unknown project, a null/per-goal startPaused, notes over the limit, a position out of range, or goalLimitReached: the set would put more than 200 non-archived goals of one type on the profile.",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -3479,7 +3501,7 @@
             }
           },
           "400": {
-            "description": "goalIds empty or repeated, an unknown status, or a missing expectedOrderRevision.",
+            "description": "goalIds empty or repeated, an unknown status, a missing expectedOrderRevision, or goalLimitReached: leaving Archived would put more than 200 non-archived goals of one type on the profile.",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -3815,11 +3837,21 @@
           "Guild"
         ],
         "summary": "Permanently deletes the caller's guild registration and roster from Planner.",
-        "description": "Requires the caller to be a linked Leader or Co-Leader of a registered guild. Deletes the guild and all of its member rows from Planner. This does not affect the guild in Tacticus itself, only Planner's registration of it, and cannot be undone — any current member can re-register it afterward.",
+        "description": "Requires a configured Tacticus User ID and the caller to be a linked Leader or Co-Leader of a registered guild, re-verified against a fresh Tacticus guild response fetched with the stored Guild API token. Nothing is deleted when that fetch fails. Deletes the guild and all of its member rows from Planner. This does not affect the guild in Tacticus itself, only Planner's registration of it, and cannot be undone — any current member can re-register it afterward.",
         "operationId": "TacticusPlannerApiFeaturesGuildsPurgeGuildEndpoint",
         "responses": {
           "204": {
             "description": "The guild and its roster were deleted."
+          },
+          "400": {
+            "description": "The Tacticus API rejected the stored Guild API token, or returned malformed guild data.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
           },
           "401": {
             "description": "The request is missing required identity claims.",
@@ -3832,7 +3864,7 @@
             }
           },
           "403": {
-            "description": "No linked/registered guild, or the caller is not Leader/Co-Leader.",
+            "description": "No Tacticus User ID, no linked/registered guild or stored token, or the caller is not currently Leader/Co-Leader in the fresh Tacticus roster.",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -3843,6 +3875,36 @@
           },
           "404": {
             "description": "The authenticated account/profile has not been provisioned.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "A database uniqueness conflict while refreshing the roster.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "The per-profile upstream-call limit for this endpoint is exhausted; see Retry-After.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "The Tacticus API is currently unavailable.",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -4170,7 +4232,7 @@
             }
           },
           "403": {
-            "description": "No linked/registered guild, no stored token, or the caller is no longer Leader/Co-Leader.",
+            "description": "No linked/registered guild, no stored token, or the caller is not (or no longer) Leader/Co-Leader.",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -4200,7 +4262,7 @@
             }
           },
           "429": {
-            "description": "The per-profile upstream-call limit for this endpoint is exhausted; see Retry-After.",
+            "description": "The per-profile upstream-call limit for this endpoint is exhausted; see Retry-After. Also guildSyncCooldown (with Retry-After) while the guild was synchronized less than a minute ago by anyone.",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -4829,7 +4891,7 @@
           "Legendary-Event-Plans"
         ],
         "summary": "Creates a team on a lane, appended after the lane's existing teams.",
-        "description": "A non-null expectedBattleClears stores the depth for the given run only.",
+        "description": "A non-null expectedBattleClears stores the depth for the given run only. A lane holds at most 50 teams; one more is a 400 with issueCode legendaryEventTeamLimitReached.",
         "operationId": "TacticusPlannerApiFeaturesLegendaryEventPlansCreateLegendaryEventTeamEndpoint",
         "parameters": [
           {
@@ -5641,7 +5703,7 @@
             }
           },
           "400": {
-            "description": "A blank name or an invalid target.",
+            "description": "A blank name, an invalid target, or projectLimitReached: the profile already has 100 projects.",
             "content": {
               "application/problem+json": {
                 "schema": {
