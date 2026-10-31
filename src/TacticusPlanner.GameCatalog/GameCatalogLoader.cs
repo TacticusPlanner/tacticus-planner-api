@@ -105,7 +105,8 @@ public static class GameCatalogLoader
                 LoadDatamine<Dictionary<string, List<DatamineCampaign>>>(GameCatalogDenormalizer.DatamineCampaignsPath),
                 unitsByFaction,
                 datamineNpcs,
-                datamineUpgrades)
+                datamineUpgrades,
+                LoadDatamine<List<DatamineCampaignEvent>>(GameCatalogDenormalizer.DatamineCampaignEventsPath))
             .ToDictionary(pair => pair.Key, pair => AssignCampaignBattleIndices(pair.Value), StringComparer.Ordinal);
 
         var lresByEvent = GameCatalogDenormalizer.ReadDatamineLres(

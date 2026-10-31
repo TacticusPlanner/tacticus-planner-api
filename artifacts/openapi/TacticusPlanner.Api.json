@@ -7525,6 +7525,57 @@
           }
         }
       },
+      "GameCatalogCampaignMedalReward": {
+        "required": [
+          "medals",
+          "id",
+          "min",
+          "max"
+        ],
+        "type": "object",
+        "properties": {
+          "medals": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "id": {
+            "type": "string"
+          },
+          "min": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "max": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GameCatalogCampaignMilestoneReward": {
+        "required": [
+          "milestone",
+          "id",
+          "min",
+          "max"
+        ],
+        "type": "object",
+        "properties": {
+          "milestone": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "min": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "max": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "GameCatalogCampaignPotentialRewardView": {
         "required": [
           "id",
@@ -7577,7 +7628,9 @@
       "GameCatalogCampaignRewardsView": {
         "required": [
           "guaranteed",
-          "potential"
+          "potential",
+          "medals",
+          "milestones"
         ],
         "type": "object",
         "properties": {
@@ -7586,6 +7639,12 @@
           },
           "potential": {
             "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogCampaignPotentialRewardView"
+          },
+          "medals": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogCampaignMedalReward"
+          },
+          "milestones": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogCampaignMilestoneReward"
           }
         }
       },
@@ -12897,6 +12956,18 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/GameCatalogCampaignGuaranteedReward"
+        }
+      },
+      "IReadOnlyListOfGameCatalogCampaignMedalReward": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogCampaignMedalReward"
+        }
+      },
+      "IReadOnlyListOfGameCatalogCampaignMilestoneReward": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogCampaignMilestoneReward"
         }
       },
       "IReadOnlyListOfGameCatalogCampaignPotentialRewardView": {

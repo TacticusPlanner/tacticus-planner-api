@@ -8,6 +8,7 @@ gameconfig/consumables.json                                  # progression-rules
 gameconfig/globalValues.json                                 # global-values
 gameconfig/items.json                                        # equipment
 gameconfig/leaderboards.json                                 # hre
+gameconfig/liveEvents/campaignEvent.json                     # campaign-battles (event milestone rewards)
 gameconfig/liveEvents/heroReleaseEvent.json                  # hre
 gameconfig/liveEvents/homeScreenEvent.json                   # event-definitions (config.hse)
 gameconfig/liveEvents/legendaryHeroEvent.json                # lres, lre-battles
