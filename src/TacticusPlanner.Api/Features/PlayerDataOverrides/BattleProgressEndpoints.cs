@@ -147,6 +147,15 @@ public sealed class UpdateBattleProgressEndpoint
                 error = $"Milestones apply to campaign-event battles only, not '{entry.BattleId}'.";
                 return false;
             }
+
+            // Extremis battles award Gold only, so Bronze and Silver are not milestones they have.
+            if (entry.Milestone is { } milestone
+                && match.battle.Rewards.Milestones.Count > 0
+                && !match.battle.Rewards.Milestones.Any(reward => reward.Milestone == milestone.ToString()))
+            {
+                error = $"Battle '{entry.BattleId}' has no {milestone} milestone.";
+                return false;
+            }
         }
 
         error = null;

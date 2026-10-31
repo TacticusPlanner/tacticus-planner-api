@@ -54,9 +54,29 @@ public sealed record GameCatalogCampaignRewards(
     IReadOnlyList<GameCatalogCampaignPotentialReward> Potential
 )
 {
+    // One-time rewards: the first time the battle is won with 1, 2 and 3 medals (absent where the game gives none).
+    public IReadOnlyList<GameCatalogCampaignMedalReward> Medals { get; init; } = [];
+
+    // One-time campaign-event milestone rewards (Bronze, Silver, Gold; Extremis battles have Gold only).
+    public IReadOnlyList<GameCatalogCampaignMilestoneReward> Milestones { get; init; } = [];
+
     public IEnumerable<string> AllRewardIds =>
         Guaranteed.Select(reward => reward.Id).Concat(Potential.Select(reward => reward.Id));
 }
+
+public sealed record GameCatalogCampaignMedalReward(
+    int Medals,
+    string Id,
+    int Min,
+    int Max
+);
+
+public sealed record GameCatalogCampaignMilestoneReward(
+    string Milestone,
+    string Id,
+    int Min,
+    int Max
+);
 
 public sealed record GameCatalogCampaignGuaranteedReward(
     string Id,
@@ -97,7 +117,9 @@ public sealed record GameCatalogCampaignPotentialRewardView(
 
 public sealed record GameCatalogCampaignRewardsView(
     IReadOnlyList<GameCatalogCampaignGuaranteedReward> Guaranteed,
-    IReadOnlyList<GameCatalogCampaignPotentialRewardView> Potential
+    IReadOnlyList<GameCatalogCampaignPotentialRewardView> Potential,
+    IReadOnlyList<GameCatalogCampaignMedalReward> Medals,
+    IReadOnlyList<GameCatalogCampaignMilestoneReward> Milestones
 );
 
 public sealed record GameCatalogCampaignBattleView(
@@ -183,8 +205,32 @@ public sealed record DatamineCampaignBattle(
     int? CampaignId = null
 );
 
-// `base` are "id[:min[-max]]" guaranteed rewards; `chanceOf` is "id%num/denom".
-public sealed record DatamineCampaignLoot(IReadOnlyList<string>? Base, string? ChanceOf);
+// `base` are "id[:min[-max]]" guaranteed rewards; `chanceOf` is "id%num/denom"; `star1`-`star3` are the one-time
+// "id[:min[-max]]" rewards for the first win with 1, 2 and 3 medals.
+public sealed record DatamineCampaignLoot(
+    IReadOnlyList<string>? Base,
+    string? ChanceOf,
+    string? Star1 = null,
+    string? Star2 = null,
+    string? Star3 = null
+);
+
+// ---- datamine shape (bound from Data/datamine/raw/gameconfig/liveEvents/campaignEvent.json) -------------------------
+// A list of campaign-event configs; each names its campaigns' standard and extremis campaign ids and, per battle
+// (`campaignBattleId` matches campaigns.json `battleId`), the one-time milestone rewards. Extremis has gold only.
+
+public sealed record DatamineCampaignEvent(IReadOnlyList<DatamineCampaignEventCampaign> Campaigns);
+
+public sealed record DatamineCampaignEventCampaign(
+    string StandardCampaignId,
+    string ExtremisCampaignId,
+    IReadOnlyList<DatamineCampaignEventBattle> StandardBattles,
+    IReadOnlyList<DatamineCampaignEventBattle> ExtremisBattles
+);
+
+public sealed record DatamineCampaignEventBattle(string CampaignBattleId, DatamineCampaignEventLoot Loot);
+
+public sealed record DatamineCampaignEventLoot(string? BronzeMedal, string? SilverMedal, string? GoldMedal);
 
 // ---- curated (Data/curated/campaign-curation.json) -----------------------------------------------------------------
 // One entry per campaign-battles dataset key: the game campaigns the group reads, in order, with the prefix of their

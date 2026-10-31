@@ -70,6 +70,11 @@ public sealed class BattleProgressEndpointTests(PlannerApiFactory factory) : ICl
             [new("I06", 4, null, null)], initial.Revision), ct);
         Assert.Equal(HttpStatusCode.BadRequest, invalidMedals.StatusCode);
 
+        // Extremis battles award Gold only.
+        var extremisBronze = await client.PutAsJsonAsync(Path, new UpdateBattleProgressRequest(
+            [new("AME01", 3, null, BattleMilestone.Bronze)], initial.Revision), ct);
+        Assert.Equal(HttpStatusCode.BadRequest, extremisBronze.StatusCode);
+
         var valid = await client.PutAsJsonAsync(Path, new UpdateBattleProgressRequest(
             [new("I06", 1, null, null)], initial.Revision), ct);
         Assert.True(valid.IsSuccessStatusCode, await valid.Content.ReadAsStringAsync(ct));

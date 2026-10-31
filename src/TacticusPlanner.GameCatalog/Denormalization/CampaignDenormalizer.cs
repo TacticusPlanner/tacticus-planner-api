@@ -62,7 +62,7 @@ internal static partial class GameCatalogDenormalizer
             battle.BattleIndex,
             battle.Slots,
             DailyAttemptsFor(battle, group),
-            new GameCatalogCampaignRewardsView(battle.Rewards.Guaranteed, potential),
+            new GameCatalogCampaignRewardsView(battle.Rewards.Guaranteed, potential, battle.Rewards.Medals, battle.Rewards.Milestones),
             battle.EnemyPower,
             group.AlliesAlliance,
             group.AlliesFactions,

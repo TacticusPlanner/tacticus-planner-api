@@ -10,6 +10,9 @@ internal static partial class GameCatalogDenormalizer
     /// <summary>Raw path of the datamine file the campaign-battles and campaign-definitions datasets are built from.</summary>
     public const string DatamineCampaignsPath = "gameconfig/battles/campaigns.json";
 
+    /// <summary>Raw path of the datamine file the campaign-event milestone rewards are read from.</summary>
+    public const string DatamineCampaignEventsPath = "gameconfig/liveEvents/campaignEvent.json";
+
     private const string CampaignEventKind = "Event";
     private const string CampaignChallengeSuffix = "B";
     private const string CampaignExtremisType = "Extremis";
@@ -49,7 +52,7 @@ internal static partial class GameCatalogDenormalizer
     /// release type follow the campaign ids and kinds; core characters are the units the campaign (or the one it
     /// follows) asks to unlock; the faction is theirs; allies are the playable factions the campaign allows. Each
     /// battle (id, energy, node, slots, rewards, power and enemies) is read in game order, campaign by campaign in
-    /// the curated order.
+    /// the curated order. Event battles also carry their one-time milestone rewards from <c>campaignEvent.json</c>.
     /// </summary>
     /// <exception cref="InvalidOperationException">A curated campaign, battle, reward or enemy cannot be read.</exception>
     public static Dictionary<string, GameCatalogCampaignGroup> ReadDatamineCampaigns(
@@ -57,8 +60,10 @@ internal static partial class GameCatalogDenormalizer
         IReadOnlyDictionary<string, List<DatamineCampaign>> campaigns,
         IReadOnlyDictionary<string, GameCatalogFactionUnits> unitsByFaction,
         IReadOnlyDictionary<string, DatamineNpc> npcs,
-        IReadOnlyDictionary<string, DatamineUpgrade> upgrades)
+        IReadOnlyDictionary<string, DatamineUpgrade> upgrades,
+        IReadOnlyList<DatamineCampaignEvent> campaignEvents)
     {
+        var milestonesByCampaign = CampaignMilestones(campaignEvents);
         var byId = campaigns
             .SelectMany(kind => kind.Value.Select(campaign => (Kind: kind.Key, Campaign: campaign)))
             .ToDictionary(entry => entry.Campaign.Id, StringComparer.Ordinal);
@@ -120,7 +125,8 @@ internal static partial class GameCatalogDenormalizer
 
             var battles = sources
                 .SelectMany(source => source.Campaign.Battles.Select(battle =>
-                    ReadCampaignBattle(key, source.Kind, source.Type, source.Source, battle, npcs, upgrades)))
+                    ReadCampaignBattle(key, source.Kind, source.Type, source.Source, battle, npcs, upgrades,
+                        CampaignBattleMilestones(key, source.Kind, source.Campaign.Id, battle.BattleId, milestonesByCampaign))))
                 .ToArray();
 
             groups[key] = new GameCatalogCampaignGroup(
@@ -209,7 +215,8 @@ internal static partial class GameCatalogDenormalizer
         GameCatalogCampaignSourceCuration source,
         DatamineCampaignBattle battle,
         IReadOnlyDictionary<string, DatamineNpc> npcs,
-        IReadOnlyDictionary<string, DatamineUpgrade> upgrades)
+        IReadOnlyDictionary<string, DatamineUpgrade> upgrades,
+        DatamineCampaignEventLoot? milestones)
     {
         var number = CampaignBattleIdRegex().Match(battle.BattleId);
         if (!number.Success)
@@ -270,7 +277,28 @@ internal static partial class GameCatalogDenormalizer
                 (battle.Loot.Base ?? []).Select(reward => ReadCampaignGuaranteedReward(key, id, reward)).ToArray(),
                 battle.Loot.ChanceOf is { } chanceOf
                     ? [ReadCampaignPotentialReward(key, id, kind, type, challenge, chanceOf, upgrades)]
-                    : []),
+                    : [])
+            {
+                Medals = new[] { battle.Loot.Star1, battle.Loot.Star2, battle.Loot.Star3 }
+                    .Select((reward, index) => (reward, Medals: index + 1))
+                    .Where(entry => entry.reward is not null)
+                    .Select(entry =>
+                    {
+                        var reward = ReadCampaignGuaranteedReward(key, id, entry.reward!);
+                        return new GameCatalogCampaignMedalReward(entry.Medals, reward.Id, reward.Min, reward.Max);
+                    })
+                    .ToArray(),
+                Milestones = milestones is null
+                    ? []
+                    : new[] { ("Bronze", milestones.BronzeMedal), ("Silver", milestones.SilverMedal), ("Gold", milestones.GoldMedal) }
+                        .Where(entry => entry.Item2 is not null)
+                        .Select(entry =>
+                        {
+                            var reward = ReadCampaignGuaranteedReward(key, id, entry.Item2!);
+                            return new GameCatalogCampaignMilestoneReward(entry.Item1, reward.Id, reward.Min, reward.Max);
+                        })
+                        .ToArray(),
+            },
             battle.Power,
             enemyNpcs.Select(npc => npc.GrandAllianceId ?? "Neutral").Distinct(StringComparer.Ordinal).Order(StringComparer.Ordinal).ToArray(),
             enemyNpcs.Select(npc => npc.FactionId ?? "Objects").Distinct(StringComparer.Ordinal).Order(StringComparer.Ordinal).ToArray(),
@@ -301,6 +329,40 @@ internal static partial class GameCatalogDenormalizer
         rank >= 0 && rank / CampaignRanksPerMetal < CampaignRankMetals.Length
             ? CampaignRankMetals[rank / CampaignRanksPerMetal] + ((rank % CampaignRanksPerMetal) + 1).ToString(CultureInfo.InvariantCulture)
             : throw CampaignError(key, $"battle '{battleId}' has an enemy at unknown rank {rank.ToString(CultureInfo.InvariantCulture)}");
+
+    // campaignEvent.json milestone loot by campaign id (eventStandard{n} / eventExtremis{n}), then campaign battle id.
+    private static Dictionary<string, Dictionary<string, DatamineCampaignEventLoot>> CampaignMilestones(
+        IReadOnlyList<DatamineCampaignEvent> campaignEvents)
+    {
+        var byCampaign = new Dictionary<string, Dictionary<string, DatamineCampaignEventLoot>>(StringComparer.Ordinal);
+        foreach (var campaign in campaignEvents.SelectMany(campaignEvent => campaignEvent.Campaigns))
+        {
+            byCampaign[campaign.StandardCampaignId] = campaign.StandardBattles
+                .ToDictionary(battle => battle.CampaignBattleId, battle => battle.Loot, StringComparer.Ordinal);
+            byCampaign[campaign.ExtremisCampaignId] = campaign.ExtremisBattles
+                .ToDictionary(battle => battle.CampaignBattleId, battle => battle.Loot, StringComparer.Ordinal);
+        }
+
+        return byCampaign;
+    }
+
+    // An event battle's milestone loot; every event battle must have one, any other battle has none.
+    private static DatamineCampaignEventLoot? CampaignBattleMilestones(
+        string key,
+        string kind,
+        string campaignId,
+        string battleId,
+        Dictionary<string, Dictionary<string, DatamineCampaignEventLoot>> milestonesByCampaign)
+    {
+        if (kind != CampaignEventKind)
+        {
+            return null;
+        }
+
+        return milestonesByCampaign.TryGetValue(campaignId, out var battles) && battles.TryGetValue(battleId, out var loot)
+            ? loot
+            : throw CampaignError(key, $"event campaign '{campaignId}' battle '{battleId}' has no milestone rewards in {DatamineCampaignEventsPath}");
+    }
 
     private static GameCatalogCampaignGuaranteedReward ReadCampaignGuaranteedReward(string key, string battleId, string reward)
     {

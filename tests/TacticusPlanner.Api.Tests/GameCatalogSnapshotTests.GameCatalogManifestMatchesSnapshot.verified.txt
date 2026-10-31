@@ -1,6 +1,6 @@
 ﻿{
-  version: 1.43.157.2989+cf0bad90835f,
-  schemaHash: 3da741ef2e6fdd6e7a04f13267a21e796a49af4a672eb741599055bb10c9d8a0,
+  version: 1.43.157.2989+80bdf533a5ee,
+  schemaHash: 105b8909d9f72b5bc3522f6ea1e2c8a09e15ee4f52ceffa880ac0eb8a2d047cf,
   gameVersion: 1.43.157.2989,
   sourceHash: {time-dependent},
   datasets: [
@@ -11,7 +11,7 @@
     },
     {
       key: campaign-battles,
-      hash: f08678b79b79ebf21bd87db3b9bfcec42f9a791dddcdedcdca01751c608e759f,
+      hash: cce8aca4d3892c2bf730c1ecffa7be7729c0ec6b8a6b6b654d458c1d25f9f82f,
       url: /api/v1/game-catalog/campaign-battles/{envelopeHash}
     },
     {

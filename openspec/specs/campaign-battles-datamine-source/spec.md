@@ -51,3 +51,12 @@ A battle's potential reward SHALL be its `chanceOf` reward with `chanceId` `{kin
 - **GIVEN** an event Standard challenge battle that drops an Epic upgrade
 - **WHEN** the catalog loads
 - **THEN** its potential reward has `chanceId` `upgradeEpic_eventStandardChallenge`
+
+### Requirement: One-time medal and milestone rewards are read from the datamine
+
+A battle's `rewards.medals` SHALL be its `loot.star1`-`star3` rewards (`medals` 1-3, `id[:min[-max]]` read as a guaranteed reward), leaving out a star with no reward. An event battle's `rewards.milestones` SHALL be its `bronzeMedal`/`silverMedal`/`goldMedal` loot (`milestone` `Bronze`, `Silver`, `Gold`) from `liveEvents/campaignEvent.json`, matched by campaign id and `campaignBattleId`. Loading SHALL fail when an event battle has no entry there; non-event battles have no milestones.
+
+#### Scenario: Extremis milestones
+
+- **WHEN** the catalog loads from datamine `v1.43.157.2989`
+- **THEN** every `eventExtremis{n}` battle has a single `Gold` milestone and every `eventStandard{n}` battle has `Bronze`, `Silver` and `Gold`

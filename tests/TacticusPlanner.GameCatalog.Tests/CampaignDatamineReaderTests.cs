@@ -51,13 +51,70 @@ public sealed class CampaignDatamineReaderTests
     private static GameCatalogCampaignGroup Read(GameCatalogCampaignCuration curation, params DatamineCampaignBattle[] battles) =>
         Read(curation, new Dictionary<string, List<DatamineCampaign>> { ["Event"] = [new DatamineCampaign("eventStandard1", battles, EventUnlock)] });
 
-    private static GameCatalogCampaignGroup Read(GameCatalogCampaignCuration curation, Dictionary<string, List<DatamineCampaign>> campaigns) =>
+    private static readonly DatamineCampaignEventLoot Milestones = new("upgHpC015", "xpCommon:2", "gold:100-150");
+
+    // Every event battle gets the same milestone loot unless a test passes its own campaignEvent.json.
+    private static List<DatamineCampaignEvent> EventsFor(Dictionary<string, List<DatamineCampaign>> campaigns) =>
+    [
+        new(campaigns.GetValueOrDefault("Event", [])
+            .Select(campaign => new DatamineCampaignEventCampaign(
+                campaign.Id,
+                campaign.Id + "-extremis",
+                campaign.Battles.Select(battle => new DatamineCampaignEventBattle(battle.BattleId, Milestones)).ToArray(),
+                []))
+            .ToArray()),
+    ];
+
+    private static GameCatalogCampaignGroup Read(
+        GameCatalogCampaignCuration curation,
+        Dictionary<string, List<DatamineCampaign>> campaigns,
+        List<DatamineCampaignEvent>? events = null) =>
         Assert.Single(GameCatalogDenormalizer.ReadDatamineCampaigns(
             new Dictionary<string, GameCatalogCampaignCuration> { [Key] = curation },
             campaigns,
             Units,
             Npcs,
-            Upgrades)).Value;
+            Upgrades,
+            events ?? EventsFor(campaigns))).Value;
+
+    [Fact]
+    public void ABattleReadsItsOneTimeMedalRewards()
+    {
+        var battle = Battle("01") with
+        {
+            Loot = new DatamineCampaignLoot(["gold:40-66"], null, "xpCommon", null, "shards_deathBlightlord:5"),
+        };
+
+        var read = Assert.Single(Read(Curation(), battle).Battles);
+
+        Assert.Equal(
+            [new GameCatalogCampaignMedalReward(1, "xpCommon", 1, 1), new GameCatalogCampaignMedalReward(3, "shards_deathBlightlord", 5, 5)],
+            read.Rewards.Medals);
+    }
+
+    [Fact]
+    public void AnEventBattleReadsItsMilestoneRewardsFromTheCampaignEvent()
+    {
+        var read = Assert.Single(Read(Curation(), Battle("01")).Battles);
+
+        Assert.Equal(
+            [
+                new GameCatalogCampaignMilestoneReward("Bronze", "upgHpC015", 1, 1),
+                new GameCatalogCampaignMilestoneReward("Silver", "xpCommon", 2, 2),
+                new GameCatalogCampaignMilestoneReward("Gold", "gold", 100, 150),
+            ],
+            read.Rewards.Milestones);
+    }
+
+    [Fact]
+    public void AnEventBattleMissingFromTheCampaignEventIsRejected()
+    {
+        var campaigns = new Dictionary<string, List<DatamineCampaign>> { ["Event"] = [new DatamineCampaign("eventStandard1", [Battle("01")], EventUnlock)] };
+
+        var error = Assert.Throws<InvalidOperationException>(() => Read(Curation(), campaigns, []));
+
+        Assert.Contains("has no milestone rewards", error.Message, StringComparison.Ordinal);
+    }
 
     [Fact]
     public void ABattleReadsItsIdRewardsAndEnemiesFromTheGame()
