@@ -184,7 +184,7 @@ do not commit secrets.
 | `ExternalIdentity__ClientSecret` | **Secret.** Fallback to the federated credential, e.g. for local development |
 | `ExternalIdentity__PermanentlyDelete` | Default `true`: also removes the user from deleted items so the email can sign up again at once |
 | `FeatureManagement__<Flag>` | `true` turns a feature flag on (see [Feature flags](#feature-flags)) |
-| `AppConfiguration__Endpoint` | Production only. Azure App Configuration store holding the feature flags; empty (the default) reads flags from `appsettings*.json` and environment variables only |
+| `AppConfiguration__Endpoint` | Staging and production. Azure App Configuration store holding the feature flags; empty (the default) reads flags from `appsettings*.json` and environment variables only |
 | `AppConfiguration__ManagedIdentityClientId` | Client id of the user-assigned identity holding `App Configuration Data Reader` on the store |
 | `AppConfiguration__RefreshInterval` | Optional, default `00:05:00`. How long flag values are cached; keeps the free tier's 1,000 requests/day |
 | `APPLICATIONINSIGHTS_CONNECTION_STRING` | Enables Azure Monitor telemetry |
@@ -202,10 +202,9 @@ Unfinished work merged to `main` stays hidden behind a feature flag
 ([Microsoft.FeatureManagement](https://learn.microsoft.com/azure/azure-app-configuration/feature-management-dotnet-reference)).
 Every flag is off unless something turns it on:
 
-- **Staging:** add `"<Flag>": true` under `FeatureManagement` in
-  `appsettings.Staging.json`, in the same PR as the feature. Merging deploys it.
-- **Production:** toggle the flag in the Azure App Configuration store
-  (`appcs-tp-prod`, Operations → Feature manager). The API picks it up within
+- **Staging and production:** toggle the flag in the environment's Azure App
+  Configuration store (`appcs-tp-stg` / `appcs-tp-prod`, Operations → Feature
+  manager). The API picks it up within
   `AppConfiguration:RefreshInterval` (5 minutes) without a restart. If the
   store is unreachable at startup, every flag reads as off.
 - **Locally:** set `FeatureManagement__<Flag>=true` or add it to

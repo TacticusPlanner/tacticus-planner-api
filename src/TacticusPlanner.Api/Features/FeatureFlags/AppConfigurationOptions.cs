@@ -1,8 +1,8 @@
 namespace TacticusPlanner.Api.Features.FeatureFlags;
 
 /// <summary>
-/// Azure App Configuration store that production reads its feature flags from. Absent (the default, and every
-/// environment but production) leaves flags to <c>appsettings*.json</c> and environment variables.
+/// Azure App Configuration store that staging and production read their feature flags from. Absent (the default,
+/// and local development) leaves flags to <c>appsettings*.json</c> and environment variables.
 /// </summary>
 public sealed class AppConfigurationOptions
 {
