@@ -8,6 +8,7 @@ using TacticusPlanner.Api.Features;
 using TacticusPlanner.Api.Features.AccountManagement;
 using TacticusPlanner.Api.Features.Analytics;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Api.Features.FeatureFlags;
 using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Api.Features.Guilds;
 using TacticusPlanner.Api.Features.LegendaryEventPlans;
@@ -71,6 +72,7 @@ builder.Services.AddTacticusApi(builder.Configuration["TacticusApi:BaseUrl"]);
 builder.Services.AddAccountManagementFeature(builder.Configuration);
 builder.Services.AddAnalyticsFeature(builder.Configuration, validateOnStart: !isOpenApiDocumentGeneration);
 builder.Services.AddAuthFeature(builder.Configuration);
+builder.AddFeatureFlagsFeature();
 builder.Services.AddGoalsFeature();
 builder.Services.AddGuildsFeature();
 builder.Services.AddLegendaryEventPlansFeature();
@@ -139,6 +141,7 @@ app.UseExceptionHandler();
 // body; headers such as Allow and WWW-Authenticate are kept.
 app.UseStatusCodePages();
 app.UseCors("Frontend");
+app.UseFeatureFlags();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseFastEndpoints(options =>

@@ -183,6 +183,10 @@ do not commit secrets.
 | `ExternalIdentity__ManagedIdentityClientId` | Client id of the user-assigned managed identity the app registration trusts through a federated credential (audience `api://AzureADTokenExchange`) |
 | `ExternalIdentity__ClientSecret` | **Secret.** Fallback to the federated credential, e.g. for local development |
 | `ExternalIdentity__PermanentlyDelete` | Default `true`: also removes the user from deleted items so the email can sign up again at once |
+| `FeatureManagement__<Flag>` | `true` turns a feature flag on (see [Feature flags](#feature-flags)) |
+| `AppConfiguration__Endpoint` | Staging and production. Azure App Configuration store holding the feature flags; empty (the default) reads flags from `appsettings*.json` and environment variables only |
+| `AppConfiguration__ManagedIdentityClientId` | Client id of the user-assigned identity holding `App Configuration Data Reader` on the store |
+| `AppConfiguration__RefreshInterval` | Optional, default `00:05:00`. How long flag values are cached; keeps the free tier's 1,000 requests/day |
 | `APPLICATIONINSIGHTS_CONNECTION_STRING` | Enables Azure Monitor telemetry |
 | `OTEL_EXPORTER_OTLP_ENDPOINT` | Sends local telemetry to an OTLP collector |
 
@@ -191,6 +195,27 @@ so `dotnet run`/`dotnet test` work locally with no setup. It only ever
 protects data in a local database and must never be reused outside
 `Development`. Staging/production supply their own key(s) via deployment
 configuration (Key Vault-backed), never through a committed `appsettings*.json`.
+
+### Feature flags
+
+Unfinished work merged to `main` stays hidden behind a feature flag
+([Microsoft.FeatureManagement](https://learn.microsoft.com/azure/azure-app-configuration/feature-management-dotnet-reference)).
+Every flag is off unless something turns it on:
+
+- **Staging and production:** toggle the flag in the environment's Azure App
+  Configuration store (`appcs-tp-stg` / `appcs-tp-prod`, Operations → Feature
+  manager). The API picks it up within
+  `AppConfiguration:RefreshInterval` (5 minutes) without a restart. If the
+  store is unreachable at startup, every flag reads as off.
+- **Locally:** set `FeatureManagement__<Flag>=true` or add it to
+  `appsettings.Development.json`.
+
+Server code checks a flag with `IFeatureManager.IsEnabledAsync(...)`, or hides
+a whole endpoint with `this.RequireFeature(FeatureFlags.X)` in `Configure()`
+(404 while off). Name flags the API checks in `Features/FeatureFlags/FeatureFlags.cs`.
+`GET /api/v1/feature-flags` (anonymous) lists the enabled flags for the web
+app, so web-only flags need configuration only. Delete the flag, its checks
+and its configuration once the feature ships.
 
 Use user-secrets for local identity values:
 
