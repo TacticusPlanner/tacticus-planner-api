@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.GuildRaids;
@@ -8,6 +9,7 @@ using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Domain.Projects;
 using TacticusPlanner.Persistence.Encryption;
+using TacticusPlanner.Persistence.FeatureGates;
 using UserSettingsEntity = TacticusPlanner.Domain.UserSettings.UserSettings;
 
 namespace TacticusPlanner.Persistence;
@@ -66,6 +68,18 @@ public sealed class PlannerDbContext(
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(PlannerDbContext).Assembly);
         ApplyEncryptedConverters(modelBuilder);
         ApplyProfileQueryFilters(modelBuilder);
+        ApplySchemaFeatureGates(modelBuilder);
+    }
+
+    /// <summary>A gated migration's column does not exist where its flag was off at startup (see
+    /// <see cref="FeatureGatedMigrationAttribute"/>), so the model must not map it there.</summary>
+    private void ApplySchemaFeatureGates(ModelBuilder modelBuilder)
+    {
+        var gate = SchemaFeatureGateOptionsExtension.GateFrom(this.GetService<IDbContextOptions>());
+        if (!gate.IsEnabled(SchemaFeatureFlags.ManualBattles))
+        {
+            modelBuilder.Entity<PlayerDataOverride>().Ignore(entity => entity.BattleProgressOverrides);
+        }
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

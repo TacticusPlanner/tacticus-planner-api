@@ -1,3 +1,5 @@
+using TacticusPlanner.Persistence.FeatureGates;
+
 namespace TacticusPlanner.Api.Features.FeatureFlags;
 
 /// <summary>
@@ -10,4 +12,7 @@ namespace TacticusPlanner.Api.Features.FeatureFlags;
 /// </remarks>
 public static class FeatureFlags
 {
+    /// <summary>Manual per-battle progress: medals, Lightning Victory and milestones. Gates a migration, so the
+    /// schema follows this flag only on restart (see <see cref="SchemaFeatureFlags"/>).</summary>
+    public const string ManualBattles = SchemaFeatureFlags.ManualBattles;
 }

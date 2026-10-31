@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
+using TacticusPlanner.Persistence.FeatureGates;
 
 #nullable disable
 
 namespace TacticusPlanner.Persistence.Migrations
 {
     /// <inheritdoc />
+    [FeatureGatedMigration(SchemaFeatureFlags.ManualBattles)]
     public partial class AddBattleProgressOverrides : Migration
     {
         /// <inheritdoc />
