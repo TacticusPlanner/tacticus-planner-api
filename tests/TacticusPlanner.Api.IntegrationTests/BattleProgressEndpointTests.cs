@@ -35,13 +35,18 @@ public sealed class BattleProgressEndpointTests(PlannerApiFactory factory) : ICl
 
         var initial = await client.GetFromJsonAsync<BattleProgressOverridesResponse>(Path, ct);
         var response = await client.PutAsJsonAsync(Path, new UpdateBattleProgressRequest(
-            [new("I06", 2, null, null), new("AMS01", 3, null, BattleMilestone.Silver)],
+            [
+                new("I06", 2, null, null),
+                new("AMS01", 3, null, BattleMilestone.Silver),
+                new("AME01", 3, false, BattleMilestone.None),
+            ],
             initial!.Revision), ct);
 
         Assert.True(response.IsSuccessStatusCode, await response.Content.ReadAsStringAsync(ct));
         var saved = await response.Content.ReadFromJsonAsync<BattleProgressOverridesResponse>(ct);
-        Assert.Equal(["I06", "AMS01"], saved!.Battles.Select(battle => battle.BattleId));
+        Assert.Equal(["I06", "AMS01", "AME01"], saved!.Battles.Select(battle => battle.BattleId));
         Assert.Equal(BattleMilestone.Silver, saved.Battles[1].Milestone);
+        Assert.Equal((false, BattleMilestone.None), (saved.Battles[2].LightningVictory, saved.Battles[2].Milestone));
         Assert.True(saved.Revision > initial.Revision);
 
         var reread = await client.GetFromJsonAsync<BattleProgressOverridesResponse>(Path, ct);
@@ -52,7 +57,7 @@ public sealed class BattleProgressEndpointTests(PlannerApiFactory factory) : ICl
         // IgnoreQueryFilters: this scope has no HttpContext, so PlannerDbContext's global profile query
         // filter (see ApplyProfileQueryFilters) has no current profile to scope to.
         Assert.Contains(db.PlayerDataOverrides.IgnoreQueryFilters(), row => row.CampaignEventProgressOverrides.Count == 1
-            && row.BattleProgressOverrides.Count == 2);
+            && row.BattleProgressOverrides.Count == 3);
     }
 
     [Fact]

@@ -6574,6 +6574,7 @@
       },
       "BattleMilestone": {
         "enum": [
+          "None",
           "Bronze",
           "Silver",
           "Gold"
