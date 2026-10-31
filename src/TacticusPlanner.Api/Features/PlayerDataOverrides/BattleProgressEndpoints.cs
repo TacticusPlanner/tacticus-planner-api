@@ -150,6 +150,7 @@ public sealed class UpdateBattleProgressEndpoint
 
             // Extremis battles award Gold only, so Bronze and Silver are not milestones they have.
             if (entry.Milestone is { } milestone
+                && milestone != BattleMilestone.None
                 && match.battle.Rewards.Milestones.Count > 0
                 && !match.battle.Rewards.Milestones.Any(reward => reward.Milestone == milestone.ToString()))
             {
@@ -171,10 +172,12 @@ public sealed class UpdateBattleProgressEndpoint
     };
 }
 
-/// <summary>Campaign-event milestone tiers: Bronze (≤2 borrowed), Silver (≤1 borrowed), Gold (Lightning
-/// Victory with no borrowed characters and none defeated).</summary>
+/// <summary>Campaign-event milestone tiers: None (no milestone earned), Bronze (≤2 borrowed), Silver (≤1
+/// borrowed), Gold (Lightning Victory with no borrowed characters and none defeated). A null milestone means
+/// the default: the best tier the battle awards.</summary>
 public enum BattleMilestone
 {
+    None,
     Bronze,
     Silver,
     Gold,

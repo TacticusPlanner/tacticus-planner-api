@@ -75,10 +75,11 @@ public sealed class BattleProgressOverrideRecord
     /// <summary>Medals earned on the battle (0-3). Below 3 the battle cannot be raided.</summary>
     public int Medals { get; set; }
 
-    /// <summary>Whether a Lightning Victory was achieved; null means unknown.</summary>
+    /// <summary>Whether a Lightning Victory was achieved; null means the default, achieved wherever the battle
+    /// has one.</summary>
     public bool? LightningVictory { get; set; }
 
-    /// <summary>Campaign-event milestone tier earned (Bronze, Silver, or Gold); null means none. Event
-    /// battles only.</summary>
+    /// <summary>Campaign-event milestone tier earned (None, Bronze, Silver, or Gold); null means the default,
+    /// the best tier the battle awards. Event battles only.</summary>
     public string? Milestone { get; set; }
 }
