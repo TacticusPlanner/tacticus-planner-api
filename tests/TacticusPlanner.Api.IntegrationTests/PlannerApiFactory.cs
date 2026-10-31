@@ -82,8 +82,7 @@ public sealed class PlannerApiFactory : WebApplicationFactory<Program>
                 // live PostHog SDK client instead of the inert path - see AGENTS.md's "no outbound
                 // network calls" rule for this test project.
                 ["Analytics:ProjectToken"] = "",
-                // Schema flags are on so the suite migrates and maps every gated change, as CI's schema checks
-                // expect. Flags that only hide behaviour stay off unless a test turns them on.
+                // On so the gated endpoints' own tests can reach them; FeatureGateTests covers the off state.
                 ["FeatureManagement:ManualBattles"] = "true",
             });
         });

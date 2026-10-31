@@ -22,7 +22,6 @@ using TacticusPlanner.Api.Http;
 using TacticusPlanner.GameCatalog;
 using TacticusPlanner.Persistence;
 using TacticusPlanner.Persistence.Encryption;
-using TacticusPlanner.Persistence.FeatureGates;
 using TacticusPlanner.Persistence.Interceptors;
 using TacticusPlanner.ServiceDefaults;
 using TacticusPlanner.TacticusApi;
@@ -37,7 +36,6 @@ builder.Services.ConfigureDbContext<PlannerDbContext>((sp, options) =>
 {
     options.AddInterceptors(sp.GetRequiredService<EntityMetadataInterceptor>());
     options.UseSnakeCaseNamingConvention();
-    options.UseSchemaFeatureGate(sp.GetRequiredService<SchemaFeatureGate>());
 });
 
 // The build-time OpenAPI tool starts the host only to inspect endpoint metadata and has no database

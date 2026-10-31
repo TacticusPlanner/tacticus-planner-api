@@ -1,10 +1,9 @@
 using FastEndpoints;
 using Microsoft.FeatureManagement;
-using TacticusPlanner.Persistence.FeatureGates;
 
 namespace TacticusPlanner.Api.Features.FeatureFlags;
 
-public sealed class GetFeatureFlagsEndpoint(IFeatureManager featureManager, SchemaFeatureGate schemaFeatures)
+public sealed class GetFeatureFlagsEndpoint(IFeatureManager featureManager)
     : EndpointWithoutRequest<FeatureFlagsResponse>
 {
     public override void Configure()
@@ -25,8 +24,7 @@ public sealed class GetFeatureFlagsEndpoint(IFeatureManager featureManager, Sche
         var enabled = new List<string>();
         await foreach (var name in featureManager.GetFeatureNamesAsync().WithCancellation(ct))
         {
-            // A schema flag turned on since startup stays hidden until the restart that migrates and maps it.
-            if (schemaFeatures.IsEnabled(name) && await featureManager.IsEnabledAsync(name, ct))
+            if (await featureManager.IsEnabledAsync(name, ct))
             {
                 enabled.Add(name);
             }

@@ -1,7 +1,6 @@
 using Azure.Identity;
 using Microsoft.Extensions.Configuration.AzureAppConfiguration;
 using Microsoft.FeatureManagement;
-using TacticusPlanner.Persistence.FeatureGates;
 
 namespace TacticusPlanner.Api.Features.FeatureFlags;
 
@@ -36,17 +35,6 @@ public static class DependencyInjection
         }
 
         builder.Services.AddFeatureManagement();
-
-        // Read once, on first use (the startup migration): the schema keeps the flags it started with until the next
-        // restart. Blocking here is safe because ASP.NET Core has no synchronization context.
-        builder.Services.AddSingleton(services =>
-        {
-            var featureManager = services.GetRequiredService<IFeatureManager>();
-            return SchemaFeatureGate
-                .EvaluateAsync(async flag => await featureManager.IsEnabledAsync(flag))
-                .GetAwaiter()
-                .GetResult();
-        });
 
         return builder;
     }

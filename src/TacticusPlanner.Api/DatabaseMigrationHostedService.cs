@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Persistence;
-using TacticusPlanner.Persistence.FeatureGates;
 
 namespace TacticusPlanner.Api;
 
@@ -10,17 +9,12 @@ namespace TacticusPlanner.Api;
 public sealed partial class DatabaseMigrationHostedService(
     IServiceScopeFactory scopeFactory,
     IHostEnvironment environment,
-    SchemaFeatureGate schemaFeatures,
     ILogger<DatabaseMigrationHostedService> logger
 ) : IHostedService
 {
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         ApplyingDatabaseMigrations(logger, environment.EnvironmentName);
-        foreach (var flag in schemaFeatures.DisabledFlags)
-        {
-            SkippingGatedMigrations(logger, flag);
-        }
 
         await using var scope = scopeFactory.CreateAsyncScope();
         var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
@@ -28,13 +22,6 @@ public sealed partial class DatabaseMigrationHostedService(
 
         DatabaseMigrationsApplied(logger, environment.EnvironmentName);
     }
-
-    [LoggerMessage(
-        EventId = 4,
-        Level = LogLevel.Information,
-        Message = "Feature flag {Flag} is off, so its gated migrations are skipped until it is on at startup."
-    )]
-    private static partial void SkippingGatedMigrations(ILogger logger, string flag);
 
     public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 

@@ -217,6 +217,10 @@ a whole endpoint with `this.RequireFeature(FeatureFlags.X)` in `Configure()`
 app, so web-only flags need configuration only. Delete the flag, its checks
 and its configuration once the feature ships.
 
+Migrations are not gated: a hidden feature's additive migration (a new table
+or nullable column) runs everywhere, and its column just stays empty where the
+flag is off. Gate the endpoints that read and write it instead.
+
 Use user-secrets for local identity values:
 
 ```powershell
