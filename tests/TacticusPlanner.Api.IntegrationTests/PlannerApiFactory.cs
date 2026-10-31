@@ -82,6 +82,8 @@ public sealed class PlannerApiFactory : WebApplicationFactory<Program>
                 // live PostHog SDK client instead of the inert path - see AGENTS.md's "no outbound
                 // network calls" rule for this test project.
                 ["Analytics:ProjectToken"] = "",
+                // On so the gated endpoints' own tests can reach them; FeatureGateTests covers the off state.
+                ["FeatureManagement:ManualBattles"] = "true",
             });
         });
         builder.ConfigureTestServices(services =>

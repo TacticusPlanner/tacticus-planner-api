@@ -2,6 +2,7 @@ using FastEndpoints;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Api.Features.FeatureFlags;
 using TacticusPlanner.Api.Http;
 using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.Profiles;
@@ -16,6 +17,7 @@ public sealed class GetBattleProgressEndpoint : EndpointWithoutRequest<BattlePro
     public override void Configure()
     {
         Get("player-data-overrides/battle-progress");
+        this.RequireFeature(FeatureFlags.FeatureFlags.ManualBattles);
         Summary(summary => summary.Summary = "Gets manual per-battle progress overrides (medals, Lightning Victory, milestones).");
     }
 
@@ -43,6 +45,7 @@ public sealed class UpdateBattleProgressEndpoint
     public override void Configure()
     {
         Put("player-data-overrides/battle-progress");
+        this.RequireFeature(FeatureFlags.FeatureFlags.ManualBattles);
         Summary(summary => summary.Summary = "Replaces manual per-battle progress overrides.");
     }
 

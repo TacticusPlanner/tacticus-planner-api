@@ -66,6 +66,15 @@ public sealed class FeatureGateTests(GameCatalogApiFactory factory) : IClassFixt
         Assert.False(await featureManager.IsEnabledAsync("OffInAppConfiguration"));
     }
 
+    [Fact]
+    public async Task BattleProgressIsNotFoundWhileManualBattlesIsOff()
+    {
+        var response = await factory.CreateClient()
+            .GetAsync("/api/v1/player-data-overrides/battle-progress", TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+    }
+
     private static async Task<HttpResponseMessage> GetProbeAsync(WebApplicationFactory<Program> host)
     {
         using var request = new HttpRequestMessage(HttpMethod.Get, "/api/v1/test/feature-gate-probe");

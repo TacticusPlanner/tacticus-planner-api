@@ -10,4 +10,6 @@ namespace TacticusPlanner.Api.Features.FeatureFlags;
 /// </remarks>
 public static class FeatureFlags
 {
+    /// <summary>Manual per-battle progress: medals, Lightning Victory and milestones.</summary>
+    public const string ManualBattles = "ManualBattles";
 }
