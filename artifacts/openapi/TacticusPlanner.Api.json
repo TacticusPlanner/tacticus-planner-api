@@ -353,6 +353,38 @@
         ]
       }
     },
+    "/api/v1/feature-flags": {
+      "get": {
+        "tags": [
+          "Feature-Flags"
+        ],
+        "summary": "Lists the feature flags turned on in this environment.",
+        "description": "Returns only the names of enabled flags, so flags still off here are not revealed. The client hides unfinished features whose flag is not listed.",
+        "operationId": "TacticusPlannerApiFeaturesFeatureFlagsGetFeatureFlagsEndpoint",
+        "responses": {
+          "200": {
+            "description": "The enabled feature flags.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeatureFlagsResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/game-catalog/ascension-costs": {
       "get": {
         "tags": [
@@ -7015,6 +7047,17 @@
           "MajorMilestones"
         ],
         "type": "string"
+      },
+      "FeatureFlagsResponse": {
+        "required": [
+          "enabled"
+        ],
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          }
+        }
       },
       "GameCatalogAbilityPowerCurves": {
         "required": [
