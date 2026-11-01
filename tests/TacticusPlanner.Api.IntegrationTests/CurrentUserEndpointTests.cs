@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Net;
 using Microsoft.Extensions.Options;
@@ -96,7 +95,9 @@ public sealed class CurrentUserEndpointTests(PlannerApiFactory factory) : IClass
             .Content.ReadFromJsonAsync<CurrentUserResponse>(TestContext.Current.CancellationToken);
         var expected = profile!.ApplicationUserId.ToString();
 
-        var tagged = new ConcurrentBag<string>();
+        // TestServer can hand the response back before the hosting activity stops, so wait for the
+        // tagged activity instead of asserting as soon as the request returns.
+        var tagged = new TaskCompletionSource<string>(TaskCreationOptions.RunContinuationsAsynchronously);
         using var listener = new ActivityListener
         {
             ShouldListenTo = source => source.Name == "Microsoft.AspNetCore",
@@ -104,9 +105,10 @@ public sealed class CurrentUserEndpointTests(PlannerApiFactory factory) : IClass
             ActivityStopped = activity =>
             {
                 if (activity.GetTagItem("enduser.id") is string id
+                    && id == expected
                     && activity.GetTagItem("enduser.pseudo.id") as string == id)
                 {
-                    tagged.Add(id);
+                    tagged.TrySetResult(id);
                 }
             },
         };
@@ -114,7 +116,7 @@ public sealed class CurrentUserEndpointTests(PlannerApiFactory factory) : IClass
 
         await client.GetAsync("/api/v1/account", TestContext.Current.CancellationToken);
 
-        Assert.Contains(expected, tagged);
+        Assert.Equal(expected, await tagged.Task.WaitAsync(TimeSpan.FromSeconds(10), TestContext.Current.CancellationToken));
     }
 
     private HttpClient CreateAuthenticatedClient(string subject)
