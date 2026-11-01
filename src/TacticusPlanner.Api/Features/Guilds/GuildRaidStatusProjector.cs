@@ -189,8 +189,9 @@ public static class GuildRaidStatusProjector
             ? difficulty
             : throw new InvalidOperationException($"Unknown Guild Raid difficulty '{value}'.");
 
+    // attack.Tier is the API's loop-counting tier; the config tier is the rarity (see ResolveProgressionIndex).
     private static bool Matches(GuildRaidAttack attack, Position position, GameCatalogRaidBossEncounterView encounter) =>
-        attack.Tier == position.Tier.Tier
+        (int)attack.Difficulty == position.Tier.Tier
         && attack.Set == position.Set.Set
         && attack.EncounterIndex == encounter.EncounterIndex
         && attack.UnitSetId == encounter.UnitSetId;

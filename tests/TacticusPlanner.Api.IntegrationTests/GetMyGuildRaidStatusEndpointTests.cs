@@ -202,6 +202,18 @@ public sealed class GetMyGuildRaidStatusEndpointTests(PlannerApiFactory factory)
     }
 
     [Fact]
+    public async Task LoopedEntryResolvesItsConfigTierByRarity()
+    {
+        var ready = await RegisterAsync();
+        factory.TacticusApi.ConfigureGuildRaidResponse(ready.Token, BuildActiveResponse(looped: true));
+
+        var status = await PostRefreshAsync(ready.Client);
+
+        Assert.Equal((int)Rarity.Legendary, status?.Season?.TierIndex);
+        Assert.False(status!.Season!.Boss.IsUpcoming);
+    }
+
+    [Fact]
     public async Task NoActiveSeasonIsSuccessfulAndReadsReuseItWithoutUpstreamCalls()
     {
         var ready = await RegisterAsync();
@@ -428,7 +440,7 @@ public sealed class GetMyGuildRaidStatusEndpointTests(PlannerApiFactory factory)
                 EncounterType = encounter.EncounterType == "Boss" ? GuildRaidEncounterType.Boss : GuildRaidEncounterType.SideBoss,
                 UnitSetId = encounter.UnitSetId,
                 ProgressionIndex = encounter.ProgressionIndex,
-                Difficulty = GuildRaidDifficulty.Common,
+                Difficulty = (GuildRaidDifficulty)position.Tier,
                 DamageDealt = 1,
                 DamageType = GuildRaidDamageType.Battle,
                 CompletedAt = origin + at,
@@ -555,7 +567,8 @@ public sealed class GetMyGuildRaidStatusEndpointTests(PlannerApiFactory factory)
 
     private GuildRaidResponse BuildActiveResponse(
         bool includeProgressionSuffix = true,
-        bool useAdvancedProgression = false)
+        bool useAdvancedProgression = false,
+        bool looped = false)
     {
         var catalog = factory.Services.GetRequiredService<IGameCatalogProvider>().Current;
         var config = catalog.RaidBossesView.Seasons.OrderBy(pair => pair.Key, StringComparer.Ordinal).First();
@@ -576,6 +589,12 @@ public sealed class GetMyGuildRaidStatusEndpointTests(PlannerApiFactory factory)
             set = advanced.Set;
             boss = advanced.Boss;
         }
+        if (looped)
+        {
+            tier = config.Value.Tiers.First(candidate => candidate.Tier == (int)Rarity.Legendary);
+            set = tier.Sets[^1];
+            boss = set.Encounters.First(encounter => encounter.EncounterType == "Boss");
+        }
         var maximumHp = catalog.RaidBossesView.Bosses
             .Single(unit => unit.UnitSetId == boss.UnitSetId)
             .StatProgression[boss.ProgressionIndex - 1].Health;
@@ -588,7 +607,8 @@ public sealed class GetMyGuildRaidStatusEndpointTests(PlannerApiFactory factory)
                 new GuildRaidEntry
                 {
                     UserId = Guid.NewGuid(),
-                    Tier = tier.Tier,
+                    // Past Mythic the API keeps counting tiers: the second Legendary climb is tier 6.
+                    Tier = looped ? tier.Tier + 2 : tier.Tier,
                     Set = set.Set,
                     EncounterIndex = boss.EncounterIndex,
                     RemainingHp = maximumHp / 2,
@@ -597,7 +617,7 @@ public sealed class GetMyGuildRaidStatusEndpointTests(PlannerApiFactory factory)
                     UnitId = includeProgressionSuffix
                         ? $"{boss.UnitSetId}:{boss.ProgressionIndex}"
                         : boss.UnitSetId,
-                    Rarity = Rarity.Common,
+                    Rarity = (Rarity)tier.Tier,
                     DamageDealt = maximumHp / 2,
                     DamageType = DamageType.Battle,
                     CompletedOn = DateTimeOffset.UtcNow.ToUnixTimeSeconds(),

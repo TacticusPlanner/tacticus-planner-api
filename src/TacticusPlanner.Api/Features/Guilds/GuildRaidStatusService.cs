@@ -430,8 +430,10 @@ public sealed partial class GuildRaidStatusService(
         string unitSetId,
         int? explicitProgressionIndex)
     {
+        // The API's Tier keeps counting up on every loop past Mythic (6 = Legendary again, 7 = Mythic, ...);
+        // the season config's tiers are the rarities 0-5, so match on Rarity.
         var encounter = config.Tiers
-            .Where(tier => tier.Tier == entry.Tier)
+            .Where(tier => tier.Tier == (int)entry.Rarity)
             .SelectMany(tier => tier.Sets)
             .Where(set => set.Set == entry.Set)
             .SelectMany(set => set.Encounters)
