@@ -1,20 +1,30 @@
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
+using TacticusPlanner.Api.Features.Goals;
 using TacticusPlanner.Api.Http;
 using TacticusPlanner.Domain.Projects;
 using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.Projects;
 
+public sealed class DeleteProjectRequest
+{
+    /// <summary>True permanently deletes the goals whose only project this is; false (the default) files them into the
+    /// Default project. Goals that also belong to another project are never deleted and keep that membership.</summary>
+    [QueryParam]
+    public bool? DeleteGoals { get; init; }
+}
+
 /// <summary>
-/// Permanently deletes a custom project — a hard delete, not a status change; archived or not. Its goals are kept:
-/// the project's <c>project_goals</c> rows cascade away, and every goal that belonged to no other project is filed
-/// into the Default project in the same transaction, so every goal keeps at least one membership. Goal status,
-/// target and global priority never change. The Default project cannot be deleted (409
+/// Permanently deletes a custom project — a hard delete, not a status change; archived or not. The project's
+/// <c>project_goals</c> rows cascade away. A goal that belonged to no other project is, in the same transaction,
+/// either filed into the Default project (default) or, with <c>deleteGoals=true</c>, hard-deleted exactly as
+/// <c>DELETE goals/{goalId}</c> does (leaves the global order, which compacts, and drops out of every dependent's
+/// <c>DependsOn</c>). Goals with another membership are never deleted. The Default project cannot be deleted (409
 /// <c>defaultProjectCannotBeDeleted</c>).
 /// </summary>
-public sealed class DeleteProjectEndpoint : EndpointWithoutRequest
+public sealed class DeleteProjectEndpoint : Endpoint<DeleteProjectRequest>
 {
     public const string DefaultProjectCannotBeDeleted = "defaultProjectCannotBeDeleted";
 
@@ -24,8 +34,9 @@ public sealed class DeleteProjectEndpoint : EndpointWithoutRequest
         Summary(summary =>
         {
             summary.Summary = "Permanently deletes a project.";
-            summary.Description = "Goals are never deleted: a goal whose only project this was moves to the "
-                + "Default project. Never changes any goal's status, target or global priority.";
+            summary.Description = "A goal whose only project this was moves to the Default project, or with "
+                + "deleteGoals=true is permanently deleted. Goals that belong to another project are never deleted. "
+                + "Moved goals keep their status, target and global priority.";
             summary.Response(StatusCodes.Status204NoContent, "The project was deleted.");
             summary.Response(StatusCodes.Status409Conflict,
                 "defaultProjectCannotBeDeleted; current is the project as it stands.");
@@ -34,7 +45,7 @@ public sealed class DeleteProjectEndpoint : EndpointWithoutRequest
         });
     }
 
-    public override async Task HandleAsync(CancellationToken ct)
+    public override async Task HandleAsync(DeleteProjectRequest req, CancellationToken ct)
     {
         if (ProcessorState<CurrentUserState>().ProfileId is not { } profileId)
         {
@@ -71,7 +82,29 @@ public sealed class DeleteProjectEndpoint : EndpointWithoutRequest
                 .Where(entity => !db.ProjectGoals.Any(other => other.GoalId == entity.GoalId && other.ProjectId != projectId))
                 .Select(entity => entity.GoalId)
                 .ToListAsync(ct);
-            if (orphanedGoalIds.Count > 0)
+            var order = Resolve<GoalOrderService>();
+            if (orphanedGoalIds.Count > 0 && req.DeleteGoals == true)
+            {
+                var deletedIds = orphanedGoalIds.Select(id => id.Value).ToList();
+                // The goals and their dependents (no foreign key guards DependsOn, a uuid[]) in one read.
+                var related = await db.Goals
+                    .Where(entity => orphanedGoalIds.Contains(entity.Id)
+                        || entity.DependsOn.Any(id => deletedIds.Contains(id)))
+                    .ToListAsync(ct);
+                foreach (var goal in related)
+                {
+                    if (deletedIds.Contains(goal.Id.Value))
+                    {
+                        order.Release(goal);
+                        db.Goals.Remove(goal);
+                    }
+                    else
+                    {
+                        goal.DependsOn = goal.DependsOn.Where(id => !deletedIds.Contains(id)).ToList();
+                    }
+                }
+            }
+            else if (orphanedGoalIds.Count > 0)
             {
                 var defaultProject = await Resolve<ProjectsService>().EnsureDefaultProjectAsync(profileId, ct);
                 var now = Resolve<TimeProvider>().GetUtcNow();
@@ -80,7 +113,7 @@ public sealed class DeleteProjectEndpoint : EndpointWithoutRequest
             }
 
             db.Projects.Remove(project);
-            await db.SaveChangesAsync(ct);
+            await order.CompleteAsync(ct);
             await transaction.CommitAsync(ct);
 
             await Send.NoContentAsync(ct);

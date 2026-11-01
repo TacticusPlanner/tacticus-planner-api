@@ -266,6 +266,30 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
     }
 
     [Fact]
+    public async Task DeleteProjectWithDeleteGoalsDeletesOnlyItsOnlyMembershipGoals()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var defaultProject = await GetDefaultProjectAsync(client);
+        var project = await CreateProjectAsync(client, "Event Prep");
+        var onlyHere = await CreateGoalAsync(client);
+        var shared = await CreateGoalAsync(client, AscensionGoal);
+        (await client.PutProjectsAsync(onlyHere.GoalId, [project.ProjectId])).EnsureSuccessStatusCode();
+        (await client.PutProjectsAsync(shared.GoalId, [defaultProject.ProjectId, project.ProjectId])).EnsureSuccessStatusCode();
+        var orderRevision = (await client.ListGoalsAsync()).OrderRevision;
+
+        var response = await client.DeleteAsync(
+            $"/api/v1/projects/{project.ProjectId}?deleteGoals=true", TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        var goals = await client.ListGoalsAsync();
+        var remaining = Assert.Single(goals.Goals);
+        Assert.Equal(shared.GoalId, remaining.GoalId);
+        Assert.Equal(1, remaining.GlobalPriority);
+        Assert.True(goals.OrderRevision > orderRevision);
+        Assert.Equal([shared.GoalId], await client.ProjectGoalIdsAsync(defaultProject.ProjectId));
+    }
+
+    [Fact]
     public async Task DeleteArchivedProjectSucceedsAndIsGone()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);

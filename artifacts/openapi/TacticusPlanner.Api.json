@@ -6063,7 +6063,7 @@
           "Projects"
         ],
         "summary": "Permanently deletes a project.",
-        "description": "Goals are never deleted: a goal whose only project this was moves to the Default project. Never changes any goal's status, target or global priority.",
+        "description": "A goal whose only project this was moves to the Default project, or with deleteGoals=true is permanently deleted. Goals that belong to another project are never deleted. Moved goals keep their status, target and global priority.",
         "operationId": "TacticusPlannerApiFeaturesProjectsDeleteProjectEndpoint",
         "parameters": [
           {
@@ -6072,6 +6072,16 @@
             "required": true,
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "deleteGoals",
+            "in": "query",
+            "schema": {
+              "type": [
+                "null",
+                "boolean"
+              ]
             }
           }
         ],

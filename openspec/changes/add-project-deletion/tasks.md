@@ -2,12 +2,12 @@
 
 ## 1. Endpoint
 
-- [x] 1.1 Add `DeleteProjectEndpoint` (`DELETE projects/{projectId}`): 404 for unknown/foreign, 409 `defaultProjectCannotBeDeleted` for Default, otherwise relocate orphaned goals to Default and delete, under the profile lock.
+- [x] 1.1 Add `DeleteProjectEndpoint` (`DELETE projects/{projectId}`): 404 for unknown/foreign, 409 `defaultProjectCannotBeDeleted` for Default, otherwise relocate orphaned goals to Default (or hard-delete them with `deleteGoals=true`) and delete, under the profile lock.
 - [x] 1.2 Regenerate `artifacts/openapi` and verify the new operation.
 
 ## 2. Tests
 
-- [x] 2.1 `ProjectsEndpointTests`: orphaned goals land in Default with unchanged priorities; shared goals keep their other memberships; archived project deletes and a repeat delete is 404; Default is rejected; another profile's project is 404.
+- [x] 2.1 `ProjectsEndpointTests`: orphaned goals land in Default with unchanged priorities; shared goals keep their other memberships; archived project deletes and a repeat delete is 404; Default is rejected; another profile's project is 404; `deleteGoals=true` deletes only-membership goals, keeps shared ones, compacts the order.
 
 ## 3. Spec
 

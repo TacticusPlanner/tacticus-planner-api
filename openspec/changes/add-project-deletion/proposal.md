@@ -7,7 +7,7 @@ Companion apps change: `add-project-deletion` in `tacticus-planner-apps` (Delete
 ## What Changes
 
 - Add `DELETE /api/v1/projects/{projectId}`: permanently deletes a custom project, archived or not. Responds 204.
-- Goals are never deleted. The project's memberships cascade away; any goal whose only membership was this project is filed into the Default project in the same transaction, so every goal keeps at least one membership. Goal status, target and global priority are unchanged.
+- The project's memberships cascade away. A goal whose only membership was this project is, in the same transaction, filed into the Default project (default; status, target and priority unchanged) or, with `?deleteGoals=true`, hard-deleted like `DELETE goals/{id}` (order compacts, dependents' `DependsOn` cleaned). Goals with another membership are never deleted.
 - The Default project cannot be deleted: 409 `defaultProjectCannotBeDeleted` with the project under `current`.
 - Runs under the profile lock, like every membership change.
 - The regenerated OpenAPI artifact gains the new operation.
