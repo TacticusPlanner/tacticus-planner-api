@@ -17,7 +17,7 @@ public sealed class GetIncursionProgressEndpoint : EndpointWithoutRequest<Incurs
     public override void Configure()
     {
         Get("player-data-overrides/incursions-progress");
-        Summary(summary => summary.Summary = "Gets the current profile's manual Incursion progress.");
+        Summary(summary => summary.Summary = "Gets the current profile's manual Incursion battle progress.");
     }
 
     public override async Task HandleAsync(CancellationToken ct)
@@ -44,12 +44,12 @@ public sealed class UpdateIncursionProgressEndpoint
     public override void Configure()
     {
         Put("player-data-overrides/incursions-progress");
-        Summary(summary => summary.Summary = "Replaces the current profile's manual Incursion progress.");
+        Summary(summary => summary.Summary = "Replaces the current profile's manual Incursion battle progress.");
     }
 
     public override async Task HandleAsync(UpdateIncursionProgressRequest req, CancellationToken ct)
     {
-        if (!ValidateAgainstCatalog(req.Progress, Resolve<IGameCatalogProvider>().Current, out var error))
+        if (!ValidateAgainstCatalog(req.Battles, Resolve<IGameCatalogProvider>().Current, out var error))
         {
             AddError(error!);
             await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
@@ -83,12 +83,18 @@ public sealed class UpdateIncursionProgressEndpoint
             return;
         }
 
-        // A MoW left out (or saved at 0) has no record, so the stored list holds only real progress.
-        overrides.IncursionProgressOverrides =
+        // A battle left out (or saved at 0 stars) has no record, so the stored list holds only real progress.
+        overrides.IncursionBattleProgressOverrides =
         [
-            .. req.Progress
-                .Where(entry => entry.TiersCleared > 0)
-                .Select(entry => new IncursionProgressOverrideRecord { MowId = entry.MowId, TiersCleared = entry.TiersCleared }),
+            .. req.Battles
+                .Where(entry => entry.Stars > 0)
+                .Select(entry => new IncursionBattleProgressOverrideRecord
+                {
+                    MowId = entry.MowId,
+                    TierIndex = entry.TierIndex,
+                    BattleId = entry.BattleId,
+                    Stars = entry.Stars,
+                }),
         ];
         if (db.Entry(overrides).State != EntityState.Added)
         {
@@ -134,25 +140,31 @@ public sealed class UpdateIncursionProgressEndpoint
             IncursionProgressOverridesResponse.From(current), ct);
     }
 
-    /// <summary>Every entry names a served Incursion and clears at most its tier count.</summary>
+    /// <summary>Every entry names a battle of a served Incursion tier.</summary>
     internal static bool ValidateAgainstCatalog(
-        IReadOnlyList<IncursionProgressOverrideRequest> progress,
+        IReadOnlyList<IncursionBattleProgressOverrideRequest> battles,
         GameCatalogSnapshot catalog,
         out string? error)
     {
-        var tierCounts = catalog.IncursionViews.ToDictionary(
-            incursion => incursion.MowId, incursion => incursion.Tiers.Count, StringComparer.Ordinal);
-        foreach (var entry in progress)
+        var incursions = catalog.IncursionViews.ToDictionary(incursion => incursion.MowId, StringComparer.Ordinal);
+        foreach (var entry in battles)
         {
-            if (!tierCounts.TryGetValue(entry.MowId, out var tiers))
+            if (!incursions.TryGetValue(entry.MowId, out var incursion))
             {
                 error = $"Unknown Incursion '{entry.MowId}'.";
                 return false;
             }
 
-            if (entry.TiersCleared > tiers)
+            var tier = incursion.Tiers.FirstOrDefault(candidate => candidate.Index == entry.TierIndex);
+            if (tier is null)
             {
-                error = $"Incursion '{entry.MowId}' has {tiers} tiers; tiers cleared must be between 0 and {tiers}.";
+                error = $"Incursion '{entry.MowId}' has no tier {entry.TierIndex}.";
+                return false;
+            }
+
+            if (!tier.Battles.Any(battle => string.Equals(battle.Id, entry.BattleId, StringComparison.Ordinal)))
+            {
+                error = $"Incursion '{entry.MowId}' tier {entry.TierIndex} has no battle '{entry.BattleId}'.";
                 return false;
             }
         }
@@ -162,43 +174,47 @@ public sealed class UpdateIncursionProgressEndpoint
     }
 }
 
-/// <summary>One MoW's cleared Incursion tiers. A MoW with no entry has cleared none.</summary>
-public sealed record IncursionProgressOverrideResponse(string MowId, int TiersCleared);
+/// <summary>The stars earned on one Incursion battle. A battle with no entry has none.</summary>
+public sealed record IncursionBattleProgressOverrideResponse(string MowId, int TierIndex, string BattleId, int Stars);
 
 public sealed record IncursionProgressOverridesResponse(
-    IReadOnlyList<IncursionProgressOverrideResponse> Progress,
+    IReadOnlyList<IncursionBattleProgressOverrideResponse> Battles,
     long Revision)
 {
     // The column was added after other overrides existed, so a row saved before it reads as null.
     public static IncursionProgressOverridesResponse From(PlayerDataOverride overrides) => new(
-        (overrides.IncursionProgressOverrides ?? [])
-            .Select(record => new IncursionProgressOverrideResponse(record.MowId, record.TiersCleared))
+        (overrides.IncursionBattleProgressOverrides ?? [])
+            .Select(record => new IncursionBattleProgressOverrideResponse(
+                record.MowId, record.TierIndex, record.BattleId, record.Stars))
             .ToArray(),
         overrides.Revision);
 }
 
-public sealed record IncursionProgressOverrideRequest(string MowId, int TiersCleared);
+public sealed record IncursionBattleProgressOverrideRequest(string MowId, int TierIndex, string BattleId, int Stars);
 
-/// <summary>Replaces every MoW's Incursion progress; a MoW left out, or saved at 0, has cleared none.</summary>
+/// <summary>Replaces every Incursion battle's stars; a battle left out, or saved at 0, has none.</summary>
 public sealed record UpdateIncursionProgressRequest(
-    IReadOnlyList<IncursionProgressOverrideRequest> Progress,
+    IReadOnlyList<IncursionBattleProgressOverrideRequest> Battles,
     long Revision);
 
 public sealed class UpdateIncursionProgressValidator : Validator<UpdateIncursionProgressRequest>
 {
     public UpdateIncursionProgressValidator()
     {
-        RuleFor(request => request.Progress).NotNull();
+        RuleFor(request => request.Battles).NotNull();
         RuleFor(request => request.Revision).GreaterThanOrEqualTo(0);
-        RuleForEach(request => request.Progress).NotNull().ChildRules(entry =>
+        RuleForEach(request => request.Battles).NotNull().ChildRules(entry =>
         {
             entry.RuleFor(value => value.MowId).NotEmpty();
-            entry.RuleFor(value => value.TiersCleared).GreaterThanOrEqualTo(0);
+            entry.RuleFor(value => value.TierIndex).GreaterThanOrEqualTo(0);
+            entry.RuleFor(value => value.BattleId).NotEmpty();
+            entry.RuleFor(value => value.Stars).InclusiveBetween(0, 3);
         });
-        RuleFor(request => request.Progress)
-            .Must(progress => progress.Where(entry => entry is not null).Select(entry => entry.MowId)
-                .Distinct(StringComparer.Ordinal).Count() == progress.Count(entry => entry is not null))
-            .When(request => request.Progress is not null)
-            .WithMessage("Each MoW may appear only once.");
+        RuleFor(request => request.Battles)
+            .Must(battles => battles.Where(entry => entry is not null)
+                .Select(entry => (entry.MowId, entry.TierIndex, entry.BattleId))
+                .Distinct().Count() == battles.Count(entry => entry is not null))
+            .When(request => request.Battles is not null)
+            .WithMessage("Each Incursion battle may appear only once.");
     }
 }

@@ -34,10 +34,11 @@ public class PlayerDataOverride : BaseEntity<ProfileId>, IRevisionedEntity
     public List<BattleProgressOverrideRecord> BattleProgressOverrides { get; set; } = [];
 
     /// <summary>
-    /// How many Incursion tiers the player has cleared for each Machine of War. The public player API does
-    /// not expose Incursion progress, so the planner keeps it as a manual override.
+    /// The stars the player has earned on each Incursion battle, per Machine of War and tier. Tiers can be
+    /// played in any order, and the public player API does not expose Incursion progress, so the planner
+    /// keeps it as a manual override. A battle with no record has no stars.
     /// </summary>
-    public List<IncursionProgressOverrideRecord> IncursionProgressOverrides { get; set; } = [];
+    public List<IncursionBattleProgressOverrideRecord> IncursionBattleProgressOverrides { get; set; } = [];
 
     // LRE overrides are intentionally excluded for now — the shape of LRE planning annotations
     // (e.g. "maybe"/"stop" per encounter) isn't settled yet; add them back once it is.
@@ -90,12 +91,17 @@ public sealed class BattleProgressOverrideRecord
     public string? Milestone { get; set; }
 }
 
-public sealed class IncursionProgressOverrideRecord
+public sealed class IncursionBattleProgressOverrideRecord
 {
     /// <summary>The catalog MoW id whose Incursion this is (e.g. <c>tauBroadside</c>).</summary>
     public string MowId { get; set; } = string.Empty;
 
-    /// <summary>Tiers cleared, counted from the first (0 = none). Tiers unlock in order, so this is also the
-    /// index of the next tier to play.</summary>
-    public int TiersCleared { get; set; }
+    /// <summary>The catalog tier index within that Incursion.</summary>
+    public int TierIndex { get; set; }
+
+    /// <summary>The catalog battle id within that tier (battle ids repeat across tiers).</summary>
+    public string BattleId { get; set; } = string.Empty;
+
+    /// <summary>Stars earned, 1-3. A 3-star battle can be raided on later runs.</summary>
+    public int Stars { get; set; }
 }
