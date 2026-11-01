@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using FastEndpoints;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Http;
 using TacticusPlanner.Domain.Profiles;
@@ -61,6 +62,9 @@ public sealed class CurrentUserPreProcessor : IGlobalPreProcessor
             // Feeds PlannerDbContext's global query filters for the rest of this request — see
             // HttpContextCurrentProfileProvider.
             httpContext.Items[HttpContextCurrentProfileProvider.ProfileIdItemKey] = id;
+            // Azure Monitor maps enduser.id to the request's UserId. The internal profile id is pseudonymous —
+            // never the issuer/subject or anything that identifies the person.
+            httpContext.Features.Get<IHttpActivityFeature>()?.Activity.SetTag("enduser.id", id.Value.ToString());
         }
     }
 }
