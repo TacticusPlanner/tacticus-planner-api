@@ -62,9 +62,12 @@ public sealed class CurrentUserPreProcessor : IGlobalPreProcessor
             // Feeds PlannerDbContext's global query filters for the rest of this request — see
             // HttpContextCurrentProfileProvider.
             httpContext.Items[HttpContextCurrentProfileProvider.ProfileIdItemKey] = id;
-            // Azure Monitor maps enduser.id to the request's UserId. The internal profile id is pseudonymous —
-            // never the issuer/subject or anything that identifies the person.
-            httpContext.Features.Get<IHttpActivityFeature>()?.Activity.SetTag("enduser.id", id.Value.ToString());
+            // Azure Monitor maps enduser.id to UserAuthenticatedId and enduser.pseudo.id to UserId. The internal
+            // profile id is pseudonymous — never the issuer/subject or anything that identifies the person.
+            var userId = id.Value.ToString();
+            httpContext.Features.Get<IHttpActivityFeature>()?.Activity
+                .SetTag("enduser.id", userId)
+                .SetTag("enduser.pseudo.id", userId);
         }
     }
 }

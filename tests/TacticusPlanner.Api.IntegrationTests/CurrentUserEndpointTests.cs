@@ -103,7 +103,8 @@ public sealed class CurrentUserEndpointTests(PlannerApiFactory factory) : IClass
             Sample = (ref ActivityCreationOptions<ActivityContext> _) => ActivitySamplingResult.AllData,
             ActivityStopped = activity =>
             {
-                if (activity.GetTagItem("enduser.id") is string id)
+                if (activity.GetTagItem("enduser.id") is string id
+                    && activity.GetTagItem("enduser.pseudo.id") as string == id)
                 {
                     tagged.Add(id);
                 }
