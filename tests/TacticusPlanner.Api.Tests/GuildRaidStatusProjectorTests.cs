@@ -68,6 +68,23 @@ public sealed class GuildRaidStatusProjectorTests(GameCatalogApiFactory factory)
     }
 
     [Fact]
+    public void LoopedAttackMatchesItsConfigTierByDifficultyNotRawTier()
+    {
+        var (configId, config) = FirstConfig();
+        var legendary = config.Tiers.First(tier => tier.Tier == (int)GuildRaidDifficulty.Legendary);
+        var set = legendary.Sets[^1];
+        var season = Season(configId);
+        var attack = Attack(set, legendary, Boss(set), 123, 456, ObservedAt);
+        attack.Tier = 6; // The API's tier on the second loop's Legendary climb.
+        season.Attacks.Add(attack);
+
+        var response = Project(season, catalog);
+        Assert.Equal(config.Tiers.ToList().IndexOf(legendary), response.Season!.TierIndex);
+        Assert.Equal(legendary.Sets.Count - 1, response.Season.SetIndex);
+        Assert.Equal(123, response.Season.Boss.RemainingHp);
+    }
+
+    [Fact]
     public void DefeatingLastSetAdvancesTierAndDefeatingLastPositionUsesConfiguredLoop()
     {
         var (configId, config) = FirstConfig();
@@ -245,7 +262,7 @@ public sealed class GuildRaidStatusProjectorTests(GameCatalogApiFactory factory)
                 : GuildRaidEncounterType.SideBoss,
             UnitSetId = encounter.UnitSetId,
             ProgressionIndex = encounter.ProgressionIndex,
-            Difficulty = GuildRaidDifficulty.Common,
+            Difficulty = (GuildRaidDifficulty)tier.Tier,
             DamageType = GuildRaidDamageType.Battle,
             CompletedAt = completedAt,
         };
