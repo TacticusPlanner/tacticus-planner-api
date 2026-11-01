@@ -68,7 +68,8 @@ public sealed record GameCatalogSnapshot(
     IReadOnlyList<GameCatalogDamageType> DamageTypeViews,
     IReadOnlyList<GameCatalogGlobalValues> GlobalValuesViews,
     IReadOnlyList<GameCatalogProgressionRules> ProgressionRulesViews,
-    IReadOnlyList<GameCatalogHre> HreViews
+    IReadOnlyList<GameCatalogHre> HreViews,
+    IReadOnlyList<GameCatalogIncursion> IncursionViews
 )
 {
     // The manifest served to clients: release metadata + per-dataset hash and download url. Built from the

@@ -45,6 +45,10 @@ public static class GameCatalogDatasets
     // hre: one record per Hero Release Event (hero, scoring, milestones, missions, leaderboard, chest shop, Oh So Close
     // offer) from the datamine liveEvents/heroReleaseEvent.json. See Denormalization/HreDenormalizer.cs.
     public const string Hre = "hre";
+    // incursions: one record per Machine of War Incursion (tokens, enhancements, tiers with battles, enemies, rewards
+    // and the run map with chest rewards) from the datamine liveEvents/mowEvent.json and loot/chests.json. See
+    // Denormalization/IncursionDenormalizer.cs.
+    public const string Incursions = "incursions";
 
     // Route/key prefixes for the split dataset families.
     public const string UnitsPrefix = "units";
@@ -263,5 +267,6 @@ public static class GameCatalogDatasets
         GlobalValues,
         ProgressionRules,
         Hre,
+        Incursions,
     ];
 }
