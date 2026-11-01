@@ -17,13 +17,14 @@ using TacticusPlanner.TacticusApi.Models.Shared;
 
 namespace TacticusPlanner.Api.Features.Guilds;
 
-public sealed class GuildRaidStatusService(
+public sealed partial class GuildRaidStatusService(
     PlannerDbContext db,
     ITacticusApi tacticusApi,
     IColumnHashService hashService,
     IGameCatalogProvider catalogProvider,
     GuildRaidRefreshCoordinator coordinator,
-    TimeProvider timeProvider)
+    TimeProvider timeProvider,
+    ILogger<GuildRaidStatusService> logger)
 {
     public static readonly TimeSpan CooldownWindow = TimeSpan.FromMinutes(1);
 
@@ -62,7 +63,8 @@ public sealed class GuildRaidStatusService(
         if (retained is not null && now - retained.SyncState.LastAttemptedAt < CooldownWindow)
         {
             return retained.SyncState.ObservedAt is not { } observedAt
-                ? new GuildRaidRefreshResult.Unavailable("The Tacticus Guild Raid API is currently unavailable.")
+                ? new GuildRaidRefreshResult.Unavailable(
+                    "A Guild Raid refresh was attempted less than a minute ago and has not produced a status yet. Retry shortly.")
                 : Project(retained, guild, FreshnessOf(retained.SyncState, observedAt));
         }
 
@@ -87,10 +89,12 @@ public sealed class GuildRaidStatusService(
         }
         catch (ApiException exception) when ((int)exception.StatusCode is 400 or 401 or 403 or 404)
         {
+            LogTokenRejected(logger, guild.Id, (int)exception.StatusCode);
             return new GuildRaidRefreshResult.Rejected("The Tacticus API rejected the stored Guild API token.");
         }
         catch (Exception exception) when (exception is ApiException or HttpRequestException or TaskCanceledException)
         {
+            LogUpstreamUnavailable(logger, exception, guild.Id);
             return retained?.SyncState.ObservedAt is null
                 ? new GuildRaidRefreshResult.Unavailable("The Tacticus Guild Raid API is currently unavailable.")
                 : Project(retained, guild, GuildRaidFreshness.Stale);
@@ -111,6 +115,7 @@ public sealed class GuildRaidStatusService(
         }
         catch (InvalidOperationException exception)
         {
+            LogObservationRejected(logger, exception, guild.Id);
             return new GuildRaidRefreshResult.Rejected(exception.Message);
         }
     }
@@ -155,9 +160,31 @@ public sealed class GuildRaidStatusService(
         }
         catch (InvalidOperationException exception)
         {
+            LogObservationRejected(logger, exception, guild.Id);
             return new GuildRaidRefreshResult.Rejected(exception.Message);
         }
     }
+
+    [LoggerMessage(
+        EventId = 1,
+        Level = LogLevel.Warning,
+        Message = "The Tacticus API rejected the Guild API token of guild {GuildId} with status {StatusCode}."
+    )]
+    private static partial void LogTokenRejected(ILogger logger, GuildId guildId, int statusCode);
+
+    [LoggerMessage(
+        EventId = 2,
+        Level = LogLevel.Warning,
+        Message = "The Tacticus Guild Raid API was unavailable for guild {GuildId}."
+    )]
+    private static partial void LogUpstreamUnavailable(ILogger logger, Exception exception, GuildId guildId);
+
+    [LoggerMessage(
+        EventId = 3,
+        Level = LogLevel.Error,
+        Message = "The Guild Raid observation of guild {GuildId} could not be persisted or projected."
+    )]
+    private static partial void LogObservationRejected(ILogger logger, Exception exception, GuildId guildId);
 
     private async Task<RetainedObservation?> LoadRetainedAsync(GuildId guildId, CancellationToken ct)
     {
