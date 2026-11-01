@@ -59,6 +59,7 @@ public sealed class UserSettingsXpBookRarityPostgresTests
 
         Assert.Equal(638, response.DailyEnergy);
         Assert.Equal(XpBookRarity.Legendary, response.XpBookRarity);
+        Assert.True(response.WatchAds);
     }
 
     private sealed class PassthroughEncryption : IColumnEncryptionService

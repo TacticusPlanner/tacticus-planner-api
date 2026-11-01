@@ -30,4 +30,8 @@ public sealed class UserSettingsData
     public int DailyEnergy { get; set; } = DefaultDailyEnergy;
 
     public string XpBookRarity { get; set; } = DefaultXpBookRarity;
+
+    /// <summary>Whether the player watches the daily ad for an extra Legendary Event token. Null (a row saved
+    /// before this field existed) reads as true.</summary>
+    public bool? WatchAds { get; set; }
 }

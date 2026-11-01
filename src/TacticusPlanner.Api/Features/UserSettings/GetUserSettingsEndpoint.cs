@@ -50,10 +50,15 @@ public enum XpBookRarity
     Mythic,
 }
 
-public sealed record UserSettingsResponse(int DailyEnergy, XpBookRarity XpBookRarity, long Revision)
+/// <param name="WatchAds">The player watches the daily Legendary Event ad token (default true).</param>
+public sealed record UserSettingsResponse(int DailyEnergy, XpBookRarity XpBookRarity, bool WatchAds, long Revision)
 {
     public static UserSettingsResponse From(UserSettingsEntity settings) =>
-        new(settings.Settings.DailyEnergy, NormalizeXpBookRarity(settings.Settings.XpBookRarity), settings.Revision);
+        new(
+            settings.Settings.DailyEnergy,
+            NormalizeXpBookRarity(settings.Settings.XpBookRarity),
+            settings.Settings.WatchAds ?? true,
+            settings.Revision);
 
     // A row saved before this field existed (or any other missing/null/unsupported stored value) reads
     // as the default rather than leaking an invalid value to the client.

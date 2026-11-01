@@ -18,6 +18,7 @@ public sealed class UserSettingsEndpointTests(PlannerApiFactory factory) : IClas
         Assert.NotNull(initial);
         Assert.Equal(288, initial.DailyEnergy);
         Assert.Equal(XpBookRarity.Legendary, initial.XpBookRarity);
+        Assert.True(initial.WatchAds);
         Assert.Equal(1, initial.Revision);
 
         var response = await client.PutAsJsonAsync(
@@ -32,6 +33,33 @@ public sealed class UserSettingsEndpointTests(PlannerApiFactory factory) : IClas
         Assert.Equal(538, updated.DailyEnergy);
         Assert.Equal(XpBookRarity.Epic, updated.XpBookRarity);
         Assert.Equal(2, updated.Revision);
+    }
+
+    [Fact]
+    public async Task WatchAdsIsWrittenAndKeptWhenOmitted()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var ct = TestContext.Current.CancellationToken;
+        var initial = await client.GetFromJsonAsync<UserSettingsResponse>("/api/v1/settings", ct);
+        Assert.NotNull(initial);
+
+        var off = await PutAsync(new UpdateUserSettingsRequest(288, XpBookRarity.Legendary, initial.Revision, WatchAds: false));
+        Assert.False(off.WatchAds);
+
+        // A write without the field (an older client) keeps the stored value.
+        var kept = await PutAsync(new UpdateUserSettingsRequest(538, XpBookRarity.Legendary, off.Revision));
+        Assert.False(kept.WatchAds);
+        Assert.Equal(538, kept.DailyEnergy);
+
+        var on = await PutAsync(new UpdateUserSettingsRequest(538, XpBookRarity.Legendary, kept.Revision, WatchAds: true));
+        Assert.True(on.WatchAds);
+
+        async Task<UserSettingsResponse> PutAsync(UpdateUserSettingsRequest request)
+        {
+            var response = await client.PutAsJsonAsync("/api/v1/settings", request, ct);
+            response.EnsureSuccessStatusCode();
+            return (await response.Content.ReadFromJsonAsync<UserSettingsResponse>(ct))!;
+        }
     }
 
     [Fact]
