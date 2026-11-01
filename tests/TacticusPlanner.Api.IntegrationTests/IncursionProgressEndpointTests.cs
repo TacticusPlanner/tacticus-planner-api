@@ -18,11 +18,11 @@ public sealed class IncursionProgressEndpointTests(PlannerApiFactory factory) : 
 
         var initial = await client.GetFromJsonAsync<IncursionProgressOverridesResponse>(Path, ct);
 
-        Assert.Empty(initial!.Progress);
+        Assert.Empty(initial!.Battles);
     }
 
     [Fact]
-    public async Task PutPersistsProgressDropsZerosAndPreservesOtherOverrides()
+    public async Task PutPersistsBattleStarsDropsZerosAndPreservesOtherOverrides()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var ct = TestContext.Current.CancellationToken;
@@ -34,56 +34,63 @@ public sealed class IncursionProgressEndpointTests(PlannerApiFactory factory) : 
         eventsResponse.EnsureSuccessStatusCode();
 
         var initial = await client.GetFromJsonAsync<IncursionProgressOverridesResponse>(Path, ct);
+        // Tiers can be played in any order, and battle ids repeat across tiers.
         var response = await client.PutAsJsonAsync(Path, new UpdateIncursionProgressRequest(
-            [new("tauBroadside", 14), new("necroReanimator", 3), new("blackForgefiend", 0)],
+            [
+                new("tauBroadside", 12, "1", 3),
+                new("tauBroadside", 0, "1", 1),
+                new("necroReanimator", 0, "2", 2),
+                new("blackForgefiend", 0, "1", 0),
+            ],
             initial!.Revision), ct);
 
         Assert.True(response.IsSuccessStatusCode, await response.Content.ReadAsStringAsync(ct));
         var saved = await response.Content.ReadFromJsonAsync<IncursionProgressOverridesResponse>(ct);
-        Assert.Equal([new("tauBroadside", 14), new("necroReanimator", 3)], saved!.Progress);
+        Assert.Equal(
+            [new("tauBroadside", 12, "1", 3), new("tauBroadside", 0, "1", 1), new("necroReanimator", 0, "2", 2)],
+            saved!.Battles);
         Assert.True(saved.Revision > initial.Revision);
 
         var reread = await client.GetFromJsonAsync<IncursionProgressOverridesResponse>(Path, ct);
-        Assert.Equal(saved.Progress, reread!.Progress);
+        Assert.Equal(saved.Battles, reread!.Battles);
 
         using var scope = factory.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
         // IgnoreQueryFilters: this scope has no HttpContext, so PlannerDbContext's global profile query
         // filter (see ApplyProfileQueryFilters) has no current profile to scope to.
         Assert.Contains(db.PlayerDataOverrides.IgnoreQueryFilters(), row => row.CampaignEventProgressOverrides.Count == 1
-            && row.IncursionProgressOverrides.Count == 2);
+            && row.IncursionBattleProgressOverrides.Count == 3);
     }
 
     [Fact]
-    public async Task PutRejectsUnknownMowsTooManyTiersDuplicatesAndStaleRevision()
+    public async Task PutRejectsUnknownBattlesBadStarsDuplicatesNullsAndStaleRevision()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var ct = TestContext.Current.CancellationToken;
         var initial = await client.GetFromJsonAsync<IncursionProgressOverridesResponse>(Path, ct);
 
-        var unknown = await client.PutAsJsonAsync(Path, new UpdateIncursionProgressRequest(
-            [new("notAMow", 1)], initial!.Revision), ct);
-        Assert.Equal(HttpStatusCode.BadRequest, unknown.StatusCode);
-
-        var tooMany = await client.PutAsJsonAsync(Path, new UpdateIncursionProgressRequest(
-            [new("tauBroadside", 15)], initial.Revision), ct);
-        Assert.Equal(HttpStatusCode.BadRequest, tooMany.StatusCode);
-
-        var negative = await client.PutAsJsonAsync(Path, new UpdateIncursionProgressRequest(
-            [new("tauBroadside", -1)], initial.Revision), ct);
-        Assert.Equal(HttpStatusCode.BadRequest, negative.StatusCode);
-
-        var duplicate = await client.PutAsJsonAsync(Path, new UpdateIncursionProgressRequest(
-            [new("tauBroadside", 1), new("tauBroadside", 2)], initial.Revision), ct);
-        Assert.Equal(HttpStatusCode.BadRequest, duplicate.StatusCode);
+        UpdateIncursionProgressRequest[] invalid =
+        [
+            new([new("notAMow", 0, "1", 1)], initial!.Revision),
+            new([new("tauBroadside", 99, "1", 1)], initial.Revision),
+            new([new("tauBroadside", 0, "notABattle", 1)], initial.Revision),
+            new([new("tauBroadside", 0, "1", 4)], initial.Revision),
+            new([new("tauBroadside", 0, "1", -1)], initial.Revision),
+            new([new("tauBroadside", 0, "1", 1), new("tauBroadside", 0, "1", 2)], initial.Revision),
+        ];
+        foreach (var request in invalid)
+        {
+            var rejected = await client.PutAsJsonAsync(Path, request, ct);
+            Assert.Equal(HttpStatusCode.BadRequest, rejected.StatusCode);
+        }
 
         using var nullEntryBody = new StringContent(
-            $"{{\"progress\":[null],\"revision\":{initial.Revision}}}", System.Text.Encoding.UTF8, "application/json");
+            $"{{\"battles\":[null],\"revision\":{initial.Revision}}}", System.Text.Encoding.UTF8, "application/json");
         var nullEntry = await client.PutAsync(Path, nullEntryBody, ct);
         Assert.Equal(HttpStatusCode.BadRequest, nullEntry.StatusCode);
 
         var valid = await client.PutAsJsonAsync(Path, new UpdateIncursionProgressRequest(
-            [new("tauBroadside", 1)], initial.Revision), ct);
+            [new("tauBroadside", 0, "1", 1)], initial.Revision), ct);
         Assert.True(valid.IsSuccessStatusCode, await valid.Content.ReadAsStringAsync(ct));
         var stale = await client.PutAsJsonAsync(Path, new UpdateIncursionProgressRequest([], initial.Revision), ct);
         Assert.Equal(HttpStatusCode.Conflict, stale.StatusCode);

@@ -1866,17 +1866,22 @@ namespace TacticusPlanner.Persistence.Migrations
                                 .HasConstraintName("fk_player_data_overrides_player_data_overrides_player_data_overr");
                         });
 
-                    b.OwnsMany("TacticusPlanner.Domain.PlayerData.IncursionProgressOverrideRecord", "IncursionProgressOverrides", b1 =>
+                    b.OwnsMany("TacticusPlanner.Domain.PlayerData.IncursionBattleProgressOverrideRecord", "IncursionBattleProgressOverrides", b1 =>
                         {
                             b1.Property<Guid>("PlayerDataOverrideId");
 
                             b1.Property<int>("__synthesizedOrdinal")
                                 .ValueGeneratedOnAdd();
 
+                            b1.Property<string>("BattleId")
+                                .IsRequired();
+
                             b1.Property<string>("MowId")
                                 .IsRequired();
 
-                            b1.Property<int>("TiersCleared");
+                            b1.Property<int>("Stars");
+
+                            b1.Property<int>("TierIndex");
 
                             b1.HasKey("PlayerDataOverrideId", "__synthesizedOrdinal")
                                 .HasName("pk_player_data_overrides");
@@ -1884,7 +1889,7 @@ namespace TacticusPlanner.Persistence.Migrations
                             b1.ToTable("player_data_overrides");
 
                             b1
-                                .ToJson("incursion_progress_overrides")
+                                .ToJson("incursion_battle_progress_overrides")
                                 .HasColumnType("jsonb");
 
                             b1.WithOwner()
@@ -1925,7 +1930,7 @@ namespace TacticusPlanner.Persistence.Migrations
 
                     b.Navigation("CampaignEventProgressOverrides");
 
-                    b.Navigation("IncursionProgressOverrides");
+                    b.Navigation("IncursionBattleProgressOverrides");
 
                     b.Navigation("OnslaughtProgressOverrides");
 
