@@ -183,6 +183,8 @@ do not commit secrets.
 | `ExternalIdentity__ManagedIdentityClientId` | Client id of the user-assigned managed identity the app registration trusts through a federated credential (audience `api://AzureADTokenExchange`) |
 | `ExternalIdentity__ClientSecret` | **Secret.** Fallback to the federated credential, e.g. for local development |
 | `ExternalIdentity__PermanentlyDelete` | Default `true`: also removes the user from deleted items so the email can sign up again at once |
+| `StagingTransfer__ServiceKey` | **Secret.** Shared by production and staging; staging presents it when redeeming a transfer code. Set alone (production) it serves the code and export endpoints; see [Copy production data to staging](#copy-production-data-to-staging) |
+| `StagingTransfer__SourceBaseUrl` | Staging only. Production API base URL (`https://api.tacticusplanner.app`); with the service key it serves `POST account/import-from-production` |
 | `FeatureManagement__<Flag>` | `true` turns a feature flag on (see [Feature flags](#feature-flags)) |
 | `AppConfiguration__Endpoint` | Staging and production. Azure App Configuration store holding the feature flags; empty (the default) reads flags from `appsettings*.json` and environment variables only |
 | `AppConfiguration__ManagedIdentityClientId` | Client id of the user-assigned identity holding `App Configuration Data Reader` on the store |
@@ -240,6 +242,24 @@ endpoints are intentionally anonymous. The frontend must request the deployed
 API's `access_as_user` scope before calling protected endpoints. Routes under
 `/api/v1` enforce that delegated scope in addition to validating the token's
 issuer and audience.
+
+### Copy production data to staging
+
+Early testers can copy their production planner data into their staging account:
+
+1. In production, `POST /api/v1/account/staging-transfer-code` returns a code valid for 10 minutes. It is the
+   profile id and expiry sealed with production's column-encryption key, so staging can neither read nor forge
+   it; nothing is stored.
+2. On staging, `POST /api/v1/account/import-from-production` sends the code to production's
+   `POST /api/v1/internal/staging-transfer/export` (anonymous, authenticated by the
+   `X-Staging-Transfer-Key` service-key header, left out of the OpenAPI document) and receives the profile's
+   goals, projects, Legendary Event plans and run records, settings and progress overrides.
+3. Staging replaces the caller's copies of those in one transaction with fresh ids. The Tacticus API key and
+   user id, player-data snapshot and guild are never copied.
+
+Both sides need the `StagingTransfer` flag on in their App Configuration store and the same
+`StagingTransfer__ServiceKey`; staging also needs `StagingTransfer__SourceBaseUrl`. With neither setting
+(local, by default) every staging-transfer endpoint answers 404.
 
 ## API and health endpoints
 

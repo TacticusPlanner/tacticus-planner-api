@@ -12,4 +12,8 @@ public static class FeatureFlags
 {
     /// <summary>Manual per-battle progress: medals, Lightning Victory and milestones.</summary>
     public const string ManualBattles = "ManualBattles";
+
+    /// <summary>Copying a tester's production data into their staging account (see <c>Features/StagingTransfer</c>).
+    /// Turn it on in both App Configuration stores; the web app reads it to show the copy actions.</summary>
+    public const string StagingTransfer = "StagingTransfer";
 }
