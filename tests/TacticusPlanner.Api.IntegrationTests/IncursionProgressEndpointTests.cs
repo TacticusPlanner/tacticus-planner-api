@@ -77,6 +77,10 @@ public sealed class IncursionProgressEndpointTests(PlannerApiFactory factory) : 
             [new("tauBroadside", 1), new("tauBroadside", 2)], initial.Revision), ct);
         Assert.Equal(HttpStatusCode.BadRequest, duplicate.StatusCode);
 
+        var nullEntry = await client.PutAsync(Path, new StringContent(
+            $"{{\"progress\":[null],\"revision\":{initial.Revision}}}", System.Text.Encoding.UTF8, "application/json"), ct);
+        Assert.Equal(HttpStatusCode.BadRequest, nullEntry.StatusCode);
+
         var valid = await client.PutAsJsonAsync(Path, new UpdateIncursionProgressRequest(
             [new("tauBroadside", 1)], initial.Revision), ct);
         Assert.True(valid.IsSuccessStatusCode, await valid.Content.ReadAsStringAsync(ct));

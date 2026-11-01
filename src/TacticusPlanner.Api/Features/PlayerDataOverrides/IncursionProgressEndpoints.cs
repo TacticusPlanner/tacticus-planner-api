@@ -1,6 +1,7 @@
 using FastEndpoints;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Api.Http;
 using TacticusPlanner.Domain.PlayerData;
@@ -105,9 +106,22 @@ public sealed class UpdateIncursionProgressEndpoint
             await SendConflictAsync(db, profileIdValue, ct);
             return;
         }
+        catch (DbUpdateException exception) when (IsFirstWriteCollision(exception))
+        {
+            // Another device created this profile's overrides row first; same outcome as a stale revision.
+            await SendConflictAsync(db, profileIdValue, ct);
+            return;
+        }
 
         await Send.OkAsync(IncursionProgressOverridesResponse.From(overrides), ct);
     }
+
+    private static bool IsFirstWriteCollision(DbUpdateException exception) =>
+        exception.InnerException is PostgresException
+        {
+            SqlState: PostgresErrorCodes.UniqueViolation,
+            TableName: "player_data_overrides",
+        };
 
     /// <summary>409 <c>concurrency</c> with the overrides re-read after the failed write, in the read shape.</summary>
     private async Task SendConflictAsync(PlannerDbContext db, ProfileId profileId, CancellationToken ct)
@@ -155,8 +169,9 @@ public sealed record IncursionProgressOverridesResponse(
     IReadOnlyList<IncursionProgressOverrideResponse> Progress,
     long Revision)
 {
+    // The column was added after other overrides existed, so a row saved before it reads as null.
     public static IncursionProgressOverridesResponse From(PlayerDataOverride overrides) => new(
-        overrides.IncursionProgressOverrides
+        (overrides.IncursionProgressOverrides ?? [])
             .Select(record => new IncursionProgressOverrideResponse(record.MowId, record.TiersCleared))
             .ToArray(),
         overrides.Revision);
@@ -175,13 +190,14 @@ public sealed class UpdateIncursionProgressValidator : Validator<UpdateIncursion
     {
         RuleFor(request => request.Progress).NotNull();
         RuleFor(request => request.Revision).GreaterThanOrEqualTo(0);
-        RuleForEach(request => request.Progress).ChildRules(entry =>
+        RuleForEach(request => request.Progress).NotNull().ChildRules(entry =>
         {
             entry.RuleFor(value => value.MowId).NotEmpty();
             entry.RuleFor(value => value.TiersCleared).GreaterThanOrEqualTo(0);
         });
         RuleFor(request => request.Progress)
-            .Must(progress => progress.Select(entry => entry.MowId).Distinct(StringComparer.Ordinal).Count() == progress.Count)
+            .Must(progress => progress.Where(entry => entry is not null).Select(entry => entry.MowId)
+                .Distinct(StringComparer.Ordinal).Count() == progress.Count(entry => entry is not null))
             .When(request => request.Progress is not null)
             .WithMessage("Each MoW may appear only once.");
     }
