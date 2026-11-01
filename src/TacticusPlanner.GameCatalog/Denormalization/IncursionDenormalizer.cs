@@ -53,6 +53,11 @@ internal static partial class GameCatalogDenormalizer
             .Select(mow =>
             {
                 var id = mow.UnitId;
+                if (mow.AvailableFrom <= 0)
+                {
+                    throw IncursionError(id, "its availableFrom must be a positive Unix time in milliseconds.");
+                }
+
                 if (mow.Tiers is not { Count: > 0 } tiers)
                 {
                     throw IncursionError(id, "it has no tiers.");
