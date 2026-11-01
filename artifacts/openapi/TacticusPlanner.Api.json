@@ -6058,6 +6058,84 @@
       }
     },
     "/api/v1/projects/{projectId}": {
+      "delete": {
+        "tags": [
+          "Projects"
+        ],
+        "summary": "Permanently deletes a project.",
+        "description": "A goal whose only project this was moves to the Default project, or with deleteGoals=true is permanently deleted. Goals that belong to another project are never deleted. Moved goals keep their status, target and global priority.",
+        "operationId": "TacticusPlannerApiFeaturesProjectsDeleteProjectEndpoint",
+        "parameters": [
+          {
+            "name": "projectId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "deleteGoals",
+            "in": "query",
+            "schema": {
+              "type": [
+                "null",
+                "boolean"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The project was deleted."
+          },
+          "401": {
+            "description": "The request is missing required identity claims.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No matching project owned by the caller.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "defaultProjectCannotBeDeleted; current is the project as it stands.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      },
       "put": {
         "tags": [
           "Projects"
