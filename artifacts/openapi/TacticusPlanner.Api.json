@@ -1757,6 +1757,104 @@
         }
       }
     },
+    "/api/v1/game-catalog/incursions": {
+      "get": {
+        "tags": [
+          "Game-Catalog"
+        ],
+        "summary": "Gets the Machine of War Incursions.",
+        "operationId": "TacticusPlannerApiFeaturesGameCatalogGetGameCatalogIncursionsEndpoint1",
+        "responses": {
+          "200": {
+            "description": "One record per Machine of War Incursion, named as the game names it: first availability, the hero factions a run may bring, the run tokens, the Oh So Close offer pricing, the enhancements its run maps use, and per difficulty tier its battles (board, challenge flag, difficulty, Lightning Victory turns, base and 1-3 star rewards, enemies by npc and level) and run-map nodes (battle, enhancement or chest with its rewards; unlockedBy and exclusiveWith node indices).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogIncursion"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "The dataset has not changed."
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The envelope hash is not the current release's.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/game-catalog/incursions/{envelopeHash}": {
+      "get": {
+        "tags": [
+          "Game-Catalog"
+        ],
+        "summary": "Gets the Machine of War Incursions.",
+        "operationId": "TacticusPlannerApiFeaturesGameCatalogGetGameCatalogIncursionsEndpoint2",
+        "parameters": [
+          {
+            "name": "envelopeHash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "One record per Machine of War Incursion, named as the game names it: first availability, the hero factions a run may bring, the run tokens, the Oh So Close offer pricing, the enhancements its run maps use, and per difficulty tier its battles (board, challenge flag, difficulty, Lightning Victory turns, base and 1-3 star rewards, enemies by npc and level) and run-map nodes (battle, enhancement or chest with its rewards; unlockedBy and exclusiveWith node indices).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogIncursion"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "The dataset has not changed."
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The envelope hash is not the current release's.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/game-catalog/lre-battles": {
       "get": {
         "tags": [
@@ -8466,6 +8564,48 @@
           }
         }
       },
+      "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogIncursion": {
+        "required": [
+          "version",
+          "schemaHash",
+          "gameVersion",
+          "sourceHash",
+          "datasetKey",
+          "datasetHash",
+          "data"
+        ],
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "schemaHash": {
+            "type": "string"
+          },
+          "gameVersion": {
+            "type": "string"
+          },
+          "sourceHash": {
+            "type": "string"
+          },
+          "datasetKey": {
+            "type": "string"
+          },
+          "datasetHash": {
+            "type": "string"
+          },
+          "data": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogIncursion"
+              }
+            ]
+          }
+        }
+      },
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogLreBattleView": {
         "required": [
           "version",
@@ -10022,6 +10162,282 @@
           },
           "guildBossScorePointsDamageTableByRarity": {
             "$ref": "#/components/schemas/IReadOnlyDictionaryOfStringAndIReadOnlyListOfInt32"
+          }
+        }
+      },
+      "GameCatalogIncursion": {
+        "required": [
+          "mowId",
+          "availableFromUtc",
+          "new",
+          "updated",
+          "allowedFactions",
+          "tokens",
+          "minUnitsOfGrandAllianceNeeded",
+          "ohSoCloseOffer",
+          "enhancements",
+          "tiers"
+        ],
+        "type": "object",
+        "properties": {
+          "mowId": {
+            "type": "string"
+          },
+          "availableFromUtc": {
+            "type": "string"
+          },
+          "new": {
+            "type": "boolean"
+          },
+          "updated": {
+            "type": "boolean"
+          },
+          "allowedFactions": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "tokens": {
+            "$ref": "#/components/schemas/GameCatalogIncursionTokens"
+          },
+          "minUnitsOfGrandAllianceNeeded": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ohSoCloseOffer": {
+            "$ref": "#/components/schemas/GameCatalogOhSoCloseOffer"
+          },
+          "enhancements": {
+            "$ref": "#/components/schemas/IReadOnlyDictionaryOfStringAndGameCatalogIncursionEnhancement"
+          },
+          "tiers": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogIncursionTier"
+          }
+        }
+      },
+      "GameCatalogIncursionBattle": {
+        "required": [
+          "id",
+          "boardId",
+          "challenge",
+          "difficultyMultiplier",
+          "lightningVictoryTurns",
+          "baseRewards",
+          "starRewards",
+          "enemies"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "boardId": {
+            "type": "string"
+          },
+          "challenge": {
+            "type": "boolean"
+          },
+          "difficultyMultiplier": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "lightningVictoryTurns": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "baseRewards": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "starRewards": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          },
+          "enemies": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogIncursionEnemy"
+          }
+        }
+      },
+      "GameCatalogIncursionChest": {
+        "required": [
+          "id",
+          "type",
+          "rewards"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "rewards": {
+            "$ref": "#/components/schemas/IReadOnlyListOfString"
+          }
+        }
+      },
+      "GameCatalogIncursionEnemy": {
+        "required": [
+          "npcId",
+          "level",
+          "count"
+        ],
+        "type": "object",
+        "properties": {
+          "npcId": {
+            "type": "string"
+          },
+          "level": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GameCatalogIncursionEnhancement": {
+        "required": [
+          "type",
+          "abilityId",
+          "unitAmount",
+          "stacks"
+        ],
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "abilityId": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "unitAmount": {
+            "type": [
+              "null",
+              "integer"
+            ],
+            "format": "int32"
+          },
+          "stacks": {
+            "type": "boolean"
+          }
+        }
+      },
+      "GameCatalogIncursionNode": {
+        "required": [
+          "index",
+          "depth",
+          "kind",
+          "name",
+          "battleId",
+          "enhancementId",
+          "chest",
+          "unlockedBy",
+          "exclusiveWith"
+        ],
+        "type": "object",
+        "properties": {
+          "index": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "depth": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "battleId": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "enhancementId": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "chest": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/GameCatalogIncursionChest"
+              }
+            ]
+          },
+          "unlockedBy": {
+            "$ref": "#/components/schemas/IReadOnlyListOfInt32"
+          },
+          "exclusiveWith": {
+            "$ref": "#/components/schemas/IReadOnlyListOfInt32"
+          }
+        }
+      },
+      "GameCatalogIncursionTier": {
+        "required": [
+          "index",
+          "rarity",
+          "battles",
+          "nodes"
+        ],
+        "type": "object",
+        "properties": {
+          "index": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rarity": {
+            "type": "string"
+          },
+          "battles": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogIncursionBattle"
+          },
+          "nodes": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogIncursionNode"
+          }
+        }
+      },
+      "GameCatalogIncursionTokens": {
+        "required": [
+          "start",
+          "max",
+          "regenSeconds",
+          "regenAmount",
+          "costPerRun"
+        ],
+        "type": "object",
+        "properties": {
+          "start": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "max": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "regenSeconds": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "regenAmount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "costPerRun": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
@@ -12859,6 +13275,12 @@
           }
         }
       },
+      "IReadOnlyDictionaryOfStringAndGameCatalogIncursionEnhancement": {
+        "type": "object",
+        "additionalProperties": {
+          "$ref": "#/components/schemas/GameCatalogIncursionEnhancement"
+        }
+      },
       "IReadOnlyDictionaryOfStringAndGameCatalogRaidBossSeasonView": {
         "type": "object",
         "additionalProperties": {
@@ -13173,6 +13595,36 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/GameCatalogHrePhaseChest"
+        }
+      },
+      "IReadOnlyListOfGameCatalogIncursion": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogIncursion"
+        }
+      },
+      "IReadOnlyListOfGameCatalogIncursionBattle": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogIncursionBattle"
+        }
+      },
+      "IReadOnlyListOfGameCatalogIncursionEnemy": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogIncursionEnemy"
+        }
+      },
+      "IReadOnlyListOfGameCatalogIncursionNode": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogIncursionNode"
+        }
+      },
+      "IReadOnlyListOfGameCatalogIncursionTier": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogIncursionTier"
         }
       },
       "IReadOnlyListOfGameCatalogLreBattleView": {

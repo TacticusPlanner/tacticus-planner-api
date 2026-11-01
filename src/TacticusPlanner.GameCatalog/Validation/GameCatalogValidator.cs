@@ -53,6 +53,7 @@ public static partial class GameCatalogValidator
         ValidateFactions(snapshot, errors);
         ValidateDamageTypes(snapshot, errors);
         ValidateHres(snapshot, errors);
+        ValidateIncursions(snapshot, errors);
         ValidateServedProjections(snapshot, errors);
 
         return errors;

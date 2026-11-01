@@ -1,6 +1,6 @@
 ﻿{
-  version: 1.43.157.2989+80bdf533a5ee,
-  schemaHash: 105b8909d9f72b5bc3522f6ea1e2c8a09e15ee4f52ceffa880ac0eb8a2d047cf,
+  version: 1.43.157.2989+9a2f4a88bca8,
+  schemaHash: 35d518461788f515d2c893e25aada052c3e49839fa00ffa6947f6bdddd9d99b1,
   gameVersion: 1.43.157.2989,
   sourceHash: {time-dependent},
   datasets: [
@@ -73,6 +73,11 @@
       key: hre,
       hash: d878e6d929b36fabf07e3e891f744a494bd8638117d9741aac6f277946242cb7,
       url: /api/v1/game-catalog/hre/{envelopeHash}
+    },
+    {
+      key: incursions,
+      hash: c56072ffa576f13cee0cf150b592265df7ebef2287e08ae8c6f89e087757e20d,
+      url: /api/v1/game-catalog/incursions/{envelopeHash}
     },
     {
       key: lre-battles,

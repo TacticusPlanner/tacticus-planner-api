@@ -330,6 +330,18 @@ public sealed class GetGameCatalogHreEndpoint(IGameCatalogProvider catalog)
     }
 }
 
+public sealed class GetGameCatalogIncursionsEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogIncursion>>(catalog, GameCatalogDatasets.Incursions)
+{
+    public override void Configure()
+    {
+        Get("game-catalog/incursions", "game-catalog/incursions/{envelopeHash}");
+        ConfigureServed(
+            "Gets the Machine of War Incursions.",
+            "One record per Machine of War Incursion, named as the game names it: first availability, the hero factions a run may bring, the run tokens, the Oh So Close offer pricing, the enhancements its run maps use, and per difficulty tier its battles (board, challenge flag, difficulty, Lightning Victory turns, base and 1-3 star rewards, enemies by npc and level) and run-map nodes (battle, enhancement or chest with its rewards; unlockedBy and exclusiveWith node indices).");
+    }
+}
+
 public sealed class GetGameCatalogEventDefinitionsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogEventDefinition>>(catalog, GameCatalogDatasets.EventDefinitionsServed)
 {

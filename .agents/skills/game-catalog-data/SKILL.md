@@ -140,6 +140,15 @@ restrictions); these are silently ignored on deserialize.
   and shard range) and the `ohSoCloseOffer` pricing. The per-step HRE ascension shards live in `progression-rules`.
   An unmappable reward, a broken quest chain or a missing leaderboard or chest fails the load;
   `Validation/HreValidation.cs` (`InvalidHre`) checks the hero, rarities, faction and mission task parameters.
+- **incursions** is one record per MoW of the single Incursion event in the datamine `liveEvents/mowEvent.json`,
+  ordered by `availableFromUtc`, then MoW id (`Denormalization/IncursionDenormalizer.cs`): the event-wide `tokens`
+  (stamina), `minUnitsOfGrandAllianceNeeded` and `ohSoCloseOffer` repeated on each record, the `enhancements` its run
+  maps use, and 14 `tiers` each with `battles` (board, `challenge` from its node's `battleType`, difficulty, Lightning
+  Victory turns, `baseRewards`, `starRewards` [1★, 2★, 3★] as game reward strings, enemies grouped by npc and level)
+  and `nodes` (the run-map DAG: `kind` battle/enhancement/chest, `unlockedBy`, `exclusiveWith`, chests inlined from
+  `loot/chests.json`). A dangling node reference or malformed battle fails the load; `Validation/IncursionValidation.cs`
+  (`InvalidIncursion`) checks the MoW, factions, rarities and enemy npcs. The game ships no Incursion schedule: the
+  calendar's `incursion` definition and occurrences stay curated.
 - **campaign-battles** is flat, keyed by globally-unique battle id, each carrying its `campaignGroupId`;
   **campaign-definitions** is keyed by `groupId` (metadata + `battleIds[]` only). Battle ids are also
   referenced from API test fixtures and the player-data transformer, so renaming a battle id is not a

@@ -13,7 +13,8 @@ gameconfig/liveEvents/heroReleaseEvent.json                  # hre
 gameconfig/liveEvents/homeScreenEvent.json                   # event-definitions (config.hse)
 gameconfig/liveEvents/legendaryHeroEvent.json                # lres, lre-battles
 gameconfig/liveEvents/linearHeroEvent.json                   # quest-events
-gameconfig/loot/chests.json                                  # lres (shards per chest), hre
+gameconfig/liveEvents/mowEvent.json                          # incursions
+gameconfig/loot/chests.json                                  # lres (shards per chest), hre, incursions
 gameconfig/loot/tieredProgressRewards.json                   # event-definitions (config.hse ladders), lres (points ladder)
 gameconfig/quests/groups.json                                # mythic-quests, lres (missions), hre
 gameconfig/shop/merchants.json                               # shops
