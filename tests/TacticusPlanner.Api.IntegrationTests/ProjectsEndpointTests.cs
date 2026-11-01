@@ -239,6 +239,92 @@ public sealed class ProjectsEndpointTests(PlannerApiFactory factory) : IClassFix
         Assert.Equal([first.GoalId, second.GoalId, third.GoalId], await client.ProjectGoalIdsAsync(project.ProjectId));
     }
 
+    [Fact]
+    public async Task DeleteProjectFilesItsOnlyMembershipGoalsIntoTheDefaultProject()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var defaultProject = await GetDefaultProjectAsync(client);
+        var project = await CreateProjectAsync(client, "Event Prep");
+        var onlyHere = await CreateGoalAsync(client);
+        var shared = await CreateGoalAsync(client, AscensionGoal);
+        (await client.PutProjectsAsync(onlyHere.GoalId, [project.ProjectId])).EnsureSuccessStatusCode();
+        (await client.PutProjectsAsync(shared.GoalId, [defaultProject.ProjectId, project.ProjectId])).EnsureSuccessStatusCode();
+        var before = (await client.ListGoalsAsync()).Goals.ToDictionary(goal => goal.GoalId, goal => goal.GlobalPriority);
+
+        var response = await client.DeleteAsync($"/api/v1/projects/{project.ProjectId}", TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        var projects = await client.GetFromJsonAsync<ListProjectsResponse>("/api/v1/projects", TestContext.Current.CancellationToken);
+        Assert.NotNull(projects);
+        Assert.DoesNotContain(projects.Projects, entry => entry.ProjectId == project.ProjectId);
+        Assert.Equivalent(
+            new[] { onlyHere.GoalId, shared.GoalId },
+            await client.ProjectGoalIdsAsync(defaultProject.ProjectId),
+            strict: true);
+        var after = (await client.ListGoalsAsync()).Goals.ToDictionary(goal => goal.GoalId, goal => goal.GlobalPriority);
+        Assert.Equal(before, after);
+    }
+
+    [Fact]
+    public async Task DeleteArchivedProjectSucceedsAndIsGone()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var project = await CreateProjectAsync(client, "Old Event");
+        (await client.PutAsJsonAsync(
+            $"/api/v1/projects/{project.ProjectId}",
+            new UpdateProjectRequest(project.Name, null, null, ProjectStatus.Archived, project.Revision),
+            TestContext.Current.CancellationToken
+        )).EnsureSuccessStatusCode();
+
+        var response = await client.DeleteAsync($"/api/v1/projects/{project.ProjectId}", TestContext.Current.CancellationToken);
+        var again = await client.DeleteAsync($"/api/v1/projects/{project.ProjectId}", TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.NoContent, response.StatusCode);
+        Assert.Equal(HttpStatusCode.NotFound, again.StatusCode);
+    }
+
+    [Fact]
+    public async Task DefaultProjectCannotBeDeleted()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var project = await GetDefaultProjectAsync(client);
+
+        var response = await client.DeleteAsync($"/api/v1/projects/{project.ProjectId}", TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.Conflict, response.StatusCode);
+        Assert.Equal("defaultProjectCannotBeDeleted", await response.ReadIssueCodeAsync());
+        Assert.Equal(project.ProjectId, (await response.ReadCurrentAsync<ProjectSummaryResponse>()).ProjectId);
+        Assert.Contains(
+            (await client.GetFromJsonAsync<ListProjectsResponse>("/api/v1/projects", TestContext.Current.CancellationToken))!.Projects,
+            entry => entry.ProjectId == project.ProjectId);
+    }
+
+    [Fact]
+    public async Task DeleteProjectOfAnotherProfileIsNotFound()
+    {
+        var owner = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var project = await CreateProjectAsync(owner, "Mine");
+        var other = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await other.DeleteAsync($"/api/v1/projects/{project.ProjectId}", TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        Assert.Contains(
+            (await owner.GetFromJsonAsync<ListProjectsResponse>("/api/v1/projects", TestContext.Current.CancellationToken))!.Projects,
+            entry => entry.ProjectId == project.ProjectId);
+    }
+
+    private static async Task<ProjectSummaryResponse> CreateProjectAsync(HttpClient client, string name)
+    {
+        var response = await client.PostAsJsonAsync(
+            "/api/v1/projects",
+            new CreateProjectRequest(name, null, null),
+            TestContext.Current.CancellationToken
+        );
+        response.EnsureSuccessStatusCode();
+        return (await response.Content.ReadFromJsonAsync<ProjectSummaryResponse>(TestContext.Current.CancellationToken))!;
+    }
+
     private static async Task<ProjectSummaryResponse> GetDefaultProjectAsync(HttpClient client)
     {
         var response = await client.GetFromJsonAsync<ListProjectsResponse>(
