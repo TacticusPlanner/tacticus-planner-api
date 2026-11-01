@@ -50,6 +50,7 @@ public sealed class GuildRaidPersistencePostgresTests
         // same registrations production DI would use, rather than constructing the service by hand.
         await using var services = new ServiceCollection()
             .AddGameCatalog()
+            .AddLogging()
             .AddSingleton<IColumnHashService>(new DeterministicHash())
             .AddSingleton<ITacticusApi>(new NoActiveSeasonTacticusApi())
             .AddSingleton(TimeProvider.System)
