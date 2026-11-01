@@ -5,6 +5,21 @@ namespace TacticusPlanner.GameCatalog.Tests;
 public sealed class GameCatalogLoaderTests
 {
     [Fact]
+    public void LoadsOnTheSameUtcDayServeTheSameSnapshotHash()
+    {
+        // Replicas start at different times; dataset URLs are content addresses, so a snapshot that depended on
+        // the exact load instant made one replica 404 another's URLs. A week covers every weekly slot boundary.
+        var day = new DateTimeOffset(2026, 11, 1, 0, 0, 0, TimeSpan.Zero);
+        for (var offset = 0; offset < 7; offset++, day = day.AddDays(1))
+        {
+            var early = GameCatalogLoader.Load(day.AddSeconds(1));
+            var late = GameCatalogLoader.Load(day.AddDays(1).AddSeconds(-1));
+
+            Assert.Equal(early.SourceHash, late.SourceHash);
+        }
+    }
+
+    [Fact]
     public void AscensionCostsCoverEveryProgressionStepInLadderOrder()
     {
         var snapshot = GameCatalogLoader.Load();
