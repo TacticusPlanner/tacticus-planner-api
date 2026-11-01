@@ -1866,6 +1866,32 @@ namespace TacticusPlanner.Persistence.Migrations
                                 .HasConstraintName("fk_player_data_overrides_player_data_overrides_player_data_overr");
                         });
 
+                    b.OwnsMany("TacticusPlanner.Domain.PlayerData.IncursionProgressOverrideRecord", "IncursionProgressOverrides", b1 =>
+                        {
+                            b1.Property<Guid>("PlayerDataOverrideId");
+
+                            b1.Property<int>("__synthesizedOrdinal")
+                                .ValueGeneratedOnAdd();
+
+                            b1.Property<string>("MowId")
+                                .IsRequired();
+
+                            b1.Property<int>("TiersCleared");
+
+                            b1.HasKey("PlayerDataOverrideId", "__synthesizedOrdinal")
+                                .HasName("pk_player_data_overrides");
+
+                            b1.ToTable("player_data_overrides");
+
+                            b1
+                                .ToJson("incursion_progress_overrides")
+                                .HasColumnType("jsonb");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PlayerDataOverrideId")
+                                .HasConstraintName("fk_player_data_overrides_player_data_overrides_player_data_overr");
+                        });
+
                     b.OwnsMany("TacticusPlanner.Domain.PlayerData.OnslaughtProgressOverrideRecord", "OnslaughtProgressOverrides", b1 =>
                         {
                             b1.Property<Guid>("PlayerDataOverrideId");
@@ -1898,6 +1924,8 @@ namespace TacticusPlanner.Persistence.Migrations
                     b.Navigation("BattleProgressOverrides");
 
                     b.Navigation("CampaignEventProgressOverrides");
+
+                    b.Navigation("IncursionProgressOverrides");
 
                     b.Navigation("OnslaughtProgressOverrides");
 

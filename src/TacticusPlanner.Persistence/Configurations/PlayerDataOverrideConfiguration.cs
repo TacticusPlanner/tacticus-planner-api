@@ -25,6 +25,7 @@ public sealed class PlayerDataOverrideConfiguration : IEntityTypeConfiguration<P
             chunk.ToJson("campaign_event_progress_overrides"));
         builder.OwnsMany(entity => entity.OnslaughtProgressOverrides, chunk => chunk.ToJson("onslaught_progress_overrides"));
         builder.OwnsMany(entity => entity.BattleProgressOverrides, chunk => chunk.ToJson("battle_progress_overrides"));
+        builder.OwnsMany(entity => entity.IncursionProgressOverrides, chunk => chunk.ToJson("incursion_progress_overrides"));
 
         builder
             .HasOne(entity => entity.Profile)
