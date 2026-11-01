@@ -5637,6 +5637,116 @@
         ]
       }
     },
+    "/api/v1/player-data-overrides/incursions-progress": {
+      "get": {
+        "tags": [
+          "Player-Data-Overrides"
+        ],
+        "summary": "Gets the current profile's manual Incursion progress.",
+        "operationId": "TacticusPlannerApiFeaturesPlayerDataOverridesGetIncursionProgressEndpoint",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IncursionProgressOverridesResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Player-Data-Overrides"
+        ],
+        "summary": "Replaces the current profile's manual Incursion progress.",
+        "operationId": "TacticusPlannerApiFeaturesPlayerDataOverridesUpdateIncursionProgressEndpoint",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateIncursionProgressRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IncursionProgressOverridesResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
     "/api/v1/player-data-overrides/onslaught-progress": {
       "get": {
         "tags": [
@@ -13275,6 +13385,54 @@
           }
         }
       },
+      "IncursionProgressOverrideRequest": {
+        "required": [
+          "mowId",
+          "tiersCleared"
+        ],
+        "type": "object",
+        "properties": {
+          "mowId": {
+            "type": "string"
+          },
+          "tiersCleared": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "IncursionProgressOverrideResponse": {
+        "required": [
+          "mowId",
+          "tiersCleared"
+        ],
+        "type": "object",
+        "properties": {
+          "mowId": {
+            "type": "string"
+          },
+          "tiersCleared": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "IncursionProgressOverridesResponse": {
+        "required": [
+          "progress",
+          "revision"
+        ],
+        "type": "object",
+        "properties": {
+          "progress": {
+            "$ref": "#/components/schemas/IReadOnlyListOfIncursionProgressOverrideResponse"
+          },
+          "revision": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
       "IReadOnlyDictionaryOfStringAndGameCatalogIncursionEnhancement": {
         "type": "object",
         "additionalProperties": {
@@ -13938,6 +14096,18 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/GuildRaidPrimeStatusResponse"
+        }
+      },
+      "IReadOnlyListOfIncursionProgressOverrideRequest": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/IncursionProgressOverrideRequest"
+        }
+      },
+      "IReadOnlyListOfIncursionProgressOverrideResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/IncursionProgressOverrideResponse"
         }
       },
       "IReadOnlyListOfInt32": {
@@ -15512,6 +15682,23 @@
           },
           "target": {
             "$ref": "#/components/schemas/GoalTargetEditRequest"
+          }
+        }
+      },
+      "UpdateIncursionProgressRequest": {
+        "required": [
+          "progress",
+          "revision"
+        ],
+        "type": "object",
+        "properties": {
+          "progress": {
+            "$ref": "#/components/schemas/IReadOnlyListOfIncursionProgressOverrideRequest"
+          },
+          "revision": {
+            "minimum": 0,
+            "type": "integer",
+            "format": "int64"
           }
         }
       },
