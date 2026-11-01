@@ -40,10 +40,12 @@ public sealed class IncursionDenormalizerTests
                 new(2, "chest", "C", 3, null, null, null, "mowe_x_00_01", [new(1), new(2)], null),
             ]);
 
-    private static DatamineMowEvent Event(params DatamineMowEventTier[] tiers) =>
+    private static DatamineMowEvent Event(params DatamineMowEventTier[] tiers) => Event(1733126400000, tiers);
+
+    private static DatamineMowEvent Event(long availableFrom, params DatamineMowEventTier[] tiers) =>
         new(
             1, 2, 3, 72001, 1, 3,
-            [new DatamineMowEventMow("x", 1733126400000, false, true, ["Ultramarines"], tiers.Length > 0 ? tiers : [Tier()])],
+            [new DatamineMowEventMow("x", availableFrom, false, true, ["Ultramarines"], tiers.Length > 0 ? tiers : [Tier()])],
             new GameCatalogOhSoCloseOffer(new(200, 50), new(200, 50)),
             new Dictionary<string, DatamineMowEventEnhancement>
             {
@@ -128,6 +130,7 @@ public sealed class IncursionDenormalizerTests
         { "unknown type 'portal'", Event(Tier(nodes: [BattleNode(0, 0, "1"), new(1, "portal", "P", 1, null, null, null, null, [new(0)], null)])), Chests },
         { "invalid unlockedBy", Event(Tier(nodes: [BattleNode(0, 0, "1"), BattleNode(1, 1, "2", "normal", 5)])), Chests },
         { "is not npcId:level", Event(Tier(battles: [Battle("1", "npcA"), Battle("2", "npcA:1")])), Chests },
+        { "positive Unix time", Event(0), Chests },
         { "three star rewards", Event(Tier(battles: [Battle("1", "npcA:1") with { Loot = null }, Battle("2", "npcA:1")])), Chests },
     };
 
