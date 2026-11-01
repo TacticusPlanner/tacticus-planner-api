@@ -1,3 +1,5 @@
+using System.Collections.Concurrent;
+using System.Diagnostics;
 using System.Net;
 using Microsoft.Extensions.Options;
 using TacticusPlanner.Api.Features.Analytics;
@@ -84,6 +86,34 @@ public sealed class CurrentUserEndpointTests(PlannerApiFactory factory) : IClass
         var response = await client.SendAsync(request, TestContext.Current.CancellationToken);
 
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+    }
+
+    [Fact]
+    public async Task RequestTelemetryCarriesTheProfileIdAsEndUser()
+    {
+        var client = CreateAuthenticatedClient(NewSubject());
+        var profile = await (await client.GetAsync("/api/v1/account", TestContext.Current.CancellationToken))
+            .Content.ReadFromJsonAsync<CurrentUserResponse>(TestContext.Current.CancellationToken);
+        var expected = profile!.ApplicationUserId.ToString();
+
+        var tagged = new ConcurrentBag<string>();
+        using var listener = new ActivityListener
+        {
+            ShouldListenTo = source => source.Name == "Microsoft.AspNetCore",
+            Sample = (ref ActivityCreationOptions<ActivityContext> _) => ActivitySamplingResult.AllData,
+            ActivityStopped = activity =>
+            {
+                if (activity.GetTagItem("enduser.id") is string id)
+                {
+                    tagged.Add(id);
+                }
+            },
+        };
+        ActivitySource.AddActivityListener(listener);
+
+        await client.GetAsync("/api/v1/account", TestContext.Current.CancellationToken);
+
+        Assert.Contains(expected, tagged);
     }
 
     private HttpClient CreateAuthenticatedClient(string subject)
