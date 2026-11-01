@@ -20,7 +20,12 @@ public static class GameCatalogLoader
 
     /// <summary>Loads the embedded catalog, denormalizes the served datasets, and validates the result.</summary>
     /// <exception cref="InvalidOperationException">A source file is missing/empty or validation fails.</exception>
-    public static GameCatalogSnapshot Load()
+    public static GameCatalogSnapshot Load() => Load(DateTimeOffset.UtcNow);
+
+    /// <summary>Loads the catalog as of <paramref name="asOf"/>'s UTC day. The events calendar is projected from
+    /// the start of that day, not the exact instant, so every replica that loads on the same day serves the same
+    /// snapshot — and the same content-addressed dataset URLs.</summary>
+    public static GameCatalogSnapshot Load(DateTimeOffset asOf)
     {
         // ---- load raw source collections (by convention: key -> {key}.json) --------------------
         var abilities = LoadDatamine<Dictionary<string, DatamineAbility?>>(GameCatalogDenormalizer.DatamineAbilitiesPath);
@@ -149,8 +154,8 @@ public static class GameCatalogLoader
         var lreBattleViews = GameCatalogDenormalizer.BuildLreBattles(lresByEvent);
         var hordeModeTiersViews = GameCatalogDenormalizer.BuildHordeModeTiers(hordeModeTiersRaw);
         var eventDefinitionViews = GameCatalogDenormalizer.BuildEventDefinitions(eventDefinitions, hseScoring);
-        var loadTime = DateTimeOffset.UtcNow;
-        var eventsCalendar = GameCatalogDenormalizer.BuildEventsCalendar(eventDefinitions, eventOccurrences, loadTime);
+        var calendarDay = new DateTimeOffset(asOf.UtcDateTime.Date, TimeSpan.Zero);
+        var eventsCalendar = GameCatalogDenormalizer.BuildEventsCalendar(eventDefinitions, eventOccurrences, calendarDay);
         var shopViews = GameCatalogDenormalizer.BuildShops(rawShopsBySourceKey);
         var raidBossesView = GameCatalogDenormalizer.BuildRaidBosses(raidBossRawData);
         var guildRaidMetaView = GameCatalogDenormalizer.BuildGuildRaidMeta(guildRaidMetaRawData);

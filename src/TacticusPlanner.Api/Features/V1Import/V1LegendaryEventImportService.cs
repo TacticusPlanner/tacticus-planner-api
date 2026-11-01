@@ -104,19 +104,29 @@ public sealed partial class V1LegendaryEventImportService(
         var run = runs.GetValueOrDefault(lre.Id, LegendaryEventValidation.MinRun);
         var teams = v1Event.Teams is null ? new List<ResolvedTeam>() : ResolveTeams(lre, units, SourceTeams(v1Event.Teams, units), run, issues);
 
-        var existing = await db.LegendaryEventPlans.AsNoTracking()
+        var row = await db.LegendaryEventPlans.AsNoTracking()
             .Where(plan => plan.EventId == lre.Id)
             .Select(plan => new
             {
                 plan.Revision,
                 plan.Notes,
                 HasTeams = plan.Teams.Any(),
-                Runs = plan.Runs.Select(entry => entry.Run).ToList(),
-                Cells = plan.Annotations
-                    .Select(entry => new { entry.LaneId, entry.BattleIndex, entry.ObjectiveId })
-                    .ToList(),
+                // Whole JSON columns, mapped below: projecting elements of both collections joins them laterally
+                // (runs x annotations rows) and trips EF's multiple-collection warning.
+                plan.Runs,
+                plan.Annotations,
             })
             .FirstOrDefaultAsync(ct);
+        var existing = row is null
+            ? null
+            : new
+            {
+                row.Revision,
+                row.Notes,
+                row.HasTeams,
+                Runs = row.Runs.Select(entry => entry.Run).ToList(),
+                Cells = row.Annotations.Select(entry => new { entry.LaneId, entry.BattleIndex, entry.ObjectiveId }).ToList(),
+            };
         var writeTeams = existing?.HasTeams != true && teams.Count > 0;
         var runInputs = V1LegendaryEventProgressImport.ResolveRunInputs(
             lre, v1Event.Progress?.Overview, existing?.Runs ?? [], issues);
