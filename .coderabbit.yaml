@@ -6,7 +6,7 @@ reviews:
     auto_incremental_review: false
   path_filters:
     - "!artifacts/openapi/**"
-    - "!src/TacticusPlanner.GameCatalog/Data/datamine/**"
+    - "!src/TacticusPlanner.GameCatalog/Data/datamine/raw/**"
     - "!src/TacticusPlanner.Persistence/Migrations/*.Designer.cs"
     - "!src/TacticusPlanner.Persistence/Migrations/*ModelSnapshot.cs"
     - "!**/packages.lock.json"
