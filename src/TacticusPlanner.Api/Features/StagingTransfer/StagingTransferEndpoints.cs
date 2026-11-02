@@ -151,7 +151,7 @@ public sealed class ImportFromProductionEndpoint : Endpoint<ImportFromProduction
                 await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
                 return;
             case StagingTransferSourceResult.UnsupportedFormat:
-                AddError(request => request.Code!, "Production exported a newer data format than staging understands.");
+                AddError(request => request.Code!, "This code can't be applied yet.");
                 await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
                 return;
             case StagingTransferSourceResult.Unavailable:
@@ -173,5 +173,5 @@ public sealed class ImportFromProductionEndpoint : Endpoint<ImportFromProduction
 
 internal static class StagingTransferErrors
 {
-    public const string InvalidCodeMessage = "The transfer code is invalid or has expired. Create a new one in production.";
+    public const string InvalidCodeMessage = "The code is invalid or has expired.";
 }
