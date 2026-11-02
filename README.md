@@ -291,10 +291,11 @@ Create migrations when the persisted model changes:
 dotnet ef migrations add <MigrationName> --project src/TacticusPlanner.Persistence --startup-project src/TacticusPlanner.Api
 ```
 
-The schema is one `InitialCreate` migration (recreated pre-launch by `rebuild-foundation-pre-launch`). It is the EF
-model plus exactly one raw statement appended to its `Up`: the deferrable
+The schema starts with the `InitialCreate` migration, followed by the migrations added since. Migration history is
+append-only: a migration that has run in production is never replaced or squashed. `InitialCreate` is the EF model plus
+exactly one raw statement appended to its `Up`: the deferrable
 `ix_goals_profile_global_priority UNIQUE (profile_id, global_priority)` constraint, which the EF model cannot
-express. `SchemaPostgresTests` fails if a future squash loses it. Database constraints are limited to keys, foreign
+express. `SchemaPostgresTests` guards it. Database constraints are limited to keys, foreign
 keys, uniqueness, nullability and `ck_goals_global_priority_in_flight`; range and enum rules live in validators.
 
 The API always applies pending migrations before the server accepts requests.
@@ -341,8 +342,8 @@ resource, change the database password manually, or reset the local
 If `Update Database` fails with an error such as
 `42P07: relation "profiles" already exists`, the local database already has
 tables but does not have matching EF migration history — for example a database
-created by the migrations that `InitialCreate` replaced. For this greenfield
-project, reset the local database instead of trying to preserve that state: use
+created by the migrations that `InitialCreate` replaced. Local databases are
+disposable, so reset the local database instead of trying to preserve that state: use
 the `api-migrations` resource `Reset Database` command in the Aspire Dashboard,
 or run the `Drop Database` command followed by `Update Database`:
 
@@ -352,9 +353,8 @@ aspire resource api-migrations update-database --apphost orchestration/TacticusP
 ```
 
 The first `GET /api/v1/me` against the fresh database provisions the caller's
-profile and default project. Staging and production have no data to keep
-pre-launch: `tacticus-planner-infra` drops and recreates their databases when
-an image with a replaced migration history is deployed.
+profile and default project. Only local databases are reset this way; staging
+and production keep their data and only ever receive new migrations.
 
 ## Container image
 
@@ -458,7 +458,8 @@ Infrastructure changes, such as configuration or scaling, still go through
 
 ### Breaking contracts
 
-Staging promotes every push to `main`. Merge a breaking API change and its web
-client back to back; staging serves a mismatched pair until both deploys finish.
-A replaced migration history also needs the staging database dropped and
-recreated (`tacticus-planner-infra`) before the API deploys.
+Production runs the API and the web client as separate deploys, so for a while
+after every release one side serves the other's previous version. Make contract
+changes in compatible steps: add the new field or endpoint, release the client
+that uses it, then remove the old one in a later release. Migrations that have
+run in production are never replaced or squashed.

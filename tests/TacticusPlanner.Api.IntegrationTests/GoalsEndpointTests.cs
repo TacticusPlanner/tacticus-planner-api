@@ -77,6 +77,39 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     }
 
     [Fact]
+    public async Task CreateRankGoalForTheStartRanksOwnTopRowIsAccepted()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var diamond3 = (int)UnitRank.Diamond3;
+
+        var response = await client.PostGoalAsync(RankGoal with
+        {
+            Config = new CreateGoalConfigRequest(Rank: new RankTargetRequest(diamond3, false, 0, diamond3, true, 0)),
+        });
+
+        response.EnsureSuccessStatusCode();
+    }
+
+    [Fact]
+    public async Task CreateRankGoalEndingAtTheStartRankWithNoMoreSlotsIsRejected()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var diamond3 = (int)UnitRank.Diamond3;
+
+        var clean = await client.PostGoalAsync(RankGoal with
+        {
+            Config = new CreateGoalConfigRequest(Rank: new RankTargetRequest(diamond3, false, 0, diamond3, false, 0)),
+        });
+        var sameSlots = await client.PostGoalAsync(RankGoal with
+        {
+            Config = new CreateGoalConfigRequest(Rank: new RankTargetRequest(diamond3, true, 0, diamond3, false, 3)),
+        });
+
+        Assert.Equal(HttpStatusCode.BadRequest, clean.StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, sameSlots.StatusCode);
+    }
+
+    [Fact]
     public async Task CreateGoalWithMultipleProjectIdsAddsToEachProject()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);

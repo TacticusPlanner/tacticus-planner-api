@@ -1,9 +1,10 @@
 # yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
 reviews:
   auto_review:
-    # One review when a PR opens or leaves draft; re-run on demand with `@coderabbitai review`.
-    # Reviewing every agent push burned the hourly rate limit, so most PRs got no review at all.
-    auto_incremental_review: false
+    # No automatic reviews: agents already review locally with the CodeRabbit CLI, so an automatic
+    # PR review mostly repeats it and spends the shared hourly rate limit. Request one with a
+    # `@coderabbitai review` comment when the PR needs it (see the workspace AGENTS.md).
+    enabled: false
   path_filters:
     - "!artifacts/openapi/**"
     - "!src/TacticusPlanner.GameCatalog/Data/datamine/raw/**"

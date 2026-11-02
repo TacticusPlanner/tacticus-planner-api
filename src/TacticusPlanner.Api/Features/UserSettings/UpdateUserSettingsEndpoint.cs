@@ -49,7 +49,12 @@ public sealed class UpdateUserSettingsEndpoint
             return;
         }
 
-        settings.Settings = new UserSettingsData { DailyEnergy = req.DailyEnergy, XpBookRarity = req.XpBookRarity.ToString() };
+        settings.Settings = new UserSettingsData
+        {
+            DailyEnergy = req.DailyEnergy,
+            XpBookRarity = req.XpBookRarity.ToString(),
+            WatchAds = req.WatchAds ?? settings.Settings.WatchAds,
+        };
 
         // A nested owned-JSON property mutation isn't always picked up by snapshot change detection on
         // its owning entity — force Modified explicitly so EntityMetadataInterceptor reliably bumps
@@ -85,10 +90,12 @@ public sealed class UpdateUserSettingsEndpoint
     }
 }
 
+/// <param name="WatchAds">Null keeps the stored value, so a client that predates the field doesn't reset it.</param>
 public sealed record UpdateUserSettingsRequest(
     int DailyEnergy,
     [property: JsonRequired] XpBookRarity XpBookRarity,
-    long Revision);
+    long Revision,
+    bool? WatchAds = null);
 
 public sealed class UpdateUserSettingsValidator : Validator<UpdateUserSettingsRequest>
 {
