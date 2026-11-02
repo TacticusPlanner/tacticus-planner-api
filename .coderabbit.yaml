@@ -13,8 +13,9 @@ reviews:
   path_instructions:
     - path: "src/**"
       instructions: >-
-        V2 is pre-production: breaking changes to endpoints, contracts, columns and config keys are
-        allowed and should not be flagged as compatibility issues.
+        V2 is in production and the apps client deploys separately: flag breaking changes to
+        endpoints, contracts, columns and config keys that the currently deployed client or existing
+        data would not survive.
     - path: "src/TacticusPlanner.Persistence/Migrations/*.cs"
       instructions: >-
         Check that the migration matches the model change and is safe to apply on existing data.
