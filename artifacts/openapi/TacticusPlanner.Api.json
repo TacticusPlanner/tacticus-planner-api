@@ -16441,6 +16441,12 @@
             "minimum": 0,
             "type": "integer",
             "format": "int64"
+          },
+          "watchAds": {
+            "type": [
+              "null",
+              "boolean"
+            ]
           }
         }
       },
@@ -16616,6 +16622,7 @@
         "required": [
           "dailyEnergy",
           "xpBookRarity",
+          "watchAds",
           "revision"
         ],
         "type": "object",
@@ -16626,6 +16633,9 @@
           },
           "xpBookRarity": {
             "$ref": "#/components/schemas/XpBookRarity"
+          },
+          "watchAds": {
+            "type": "boolean"
           },
           "revision": {
             "type": "integer",
