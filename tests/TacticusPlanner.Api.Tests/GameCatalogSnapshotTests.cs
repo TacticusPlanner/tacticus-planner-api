@@ -139,8 +139,8 @@ public sealed class GameCatalogSnapshotTests(GameCatalogApiFactory factory)
 
     [Theory]
     [InlineData("votanUthar", new[] { "2026-03-08T00:00:00Z", "2026-10-04T00:00:00Z" })]
-    [InlineData("tauFarsight", new[] { "2025-12-28T00:00:00Z", "2026-06-21T00:00:00Z" })]
-    [InlineData("astarLysander", new[] { "2026-08-30T00:00:00Z" })]
+    [InlineData("tauFarsight", new[] { "2025-12-28T00:00:00Z", "2026-06-21T00:00:00Z", "2027-01-17T00:00:00Z" })]
+    [InlineData("astarLysander", new[] { "2026-08-30T00:00:00Z", "2026-12-13T00:00:00Z" })]
     [InlineData("lostaBile", new[] { "2026-11-08T00:00:00Z" })]
     public async Task LresServeTheirRunStartsIndexedByRun(string id, string[] expected)
     {
