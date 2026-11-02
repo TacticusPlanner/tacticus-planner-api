@@ -50,6 +50,84 @@ jobs:
     with:
       skip: ${{ needs.changes.outputs.code != 'true' }}
 
+  # Publishes the coverage that Build already collected, so PR tests run once. Publishing needs a
+  # write token, so it runs apart from the job that executes the PR's code. Named "Coverage" to
+  # satisfy the required check of that name. Build tests the PR's merge commit, so the report can
+  # drift slightly from the head commit it is attached to when main touched the same files.
+  coverage:
+    name: Coverage
+    needs: [changes, build]
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15 # four uploads, each may wait up to 160 s for processing
+    permissions:
+      contents: read
+      code-quality: write
+
+    steps:
+      - name: Download test results
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: api-test-results
+          path: TestResults
+
+      # The solution-level test run puts each project's coverage in a GUID folder; the copy the .trx
+      # attaches (`<runDeploymentRoot>/In/<href>`) is the one that can be traced back to the project.
+      # Read both from the .trx: two projects starting in the same second share a folder name.
+      - name: Resolve coverage file paths
+        id: coverage-files
+        shell: bash
+        run: |
+          for trx in TestResults/*.trx; do
+            case "$(grep -m1 -oE 'storage="[^"]+\.dll"' "$trx" | head -1)" in
+              *tacticusplanner.api.tests.dll*) label=api ;;
+              *tacticusplanner.api.integrationtests.dll*) label=api-integration ;;
+              *tacticusplanner.persistence.integrationtests.dll*) label=persistence ;;
+              *tacticusplanner.gamecatalog.tests.dll*) label=game-catalog ;;
+              *) continue ;;
+            esac
+            root=$(grep -m1 -oE 'runDeploymentRoot="[^"]+"' "$trx" | head -1 | cut -d'"' -f2)
+            href=$(grep -m1 -oE '<A href="[^"]*coverage\.cobertura[^"]*\.xml"' "$trx" | head -1 | cut -d'"' -f2)
+            file="TestResults/$root/In/$href"
+            [ -n "$root" ] && [ -n "$href" ] && [ -f "$file" ] && echo "$label=$file" >> "$GITHUB_OUTPUT"
+          done
+          for label in api api-integration persistence game-catalog; do
+            grep -q "^$label=" "$GITHUB_OUTPUT" || { echo "Missing coverage report for $label" >&2; exit 1; }
+          done
+
+      - name: Upload API coverage
+        uses: actions/upload-code-coverage@2b21a77928be8d5168c2b9581a67f2adbebacc52 # v1.4.4
+        with:
+          file: ${{ steps.coverage-files.outputs.api }}
+          language: C#
+          label: coverage/api
+          # Upload is rejected for some branch names (HTTP 400); a publishing hiccup must not fail the PR.
+          fail-on-error: false
+
+      - name: Upload API integration coverage
+        uses: actions/upload-code-coverage@2b21a77928be8d5168c2b9581a67f2adbebacc52 # v1.4.4
+        with:
+          file: ${{ steps.coverage-files.outputs.api-integration }}
+          language: C#
+          label: coverage/api-integration
+          fail-on-error: false
+
+      - name: Upload persistence integration coverage
+        uses: actions/upload-code-coverage@2b21a77928be8d5168c2b9581a67f2adbebacc52 # v1.4.4
+        with:
+          file: ${{ steps.coverage-files.outputs.persistence }}
+          language: C#
+          label: coverage/persistence
+          fail-on-error: false
+
+      - name: Upload GameCatalog coverage
+        uses: actions/upload-code-coverage@2b21a77928be8d5168c2b9581a67f2adbebacc52 # v1.4.4
+        with:
+          file: ${{ steps.coverage-files.outputs.game-catalog }}
+          language: C#
+          label: coverage/game-catalog
+          fail-on-error: false
+
   release-scripts:
     name: Release scripts (${{ matrix.os }})
     strategy:

@@ -1,14 +1,8 @@
 name: Coverage
 
+# Pull requests publish coverage from CI's test run (ci.yml), so tests run once per PR push.
+# This workflow keeps the main-branch baseline that PR coverage is compared against.
 on:
-  pull_request:
-    branches:
-      - main
-    types:
-      - opened
-      - synchronize
-      - reopened
-      - ready_for_review
   push:
     branches:
       - main
@@ -23,40 +17,14 @@ on:
 permissions:
   contents: read
   code-quality: write
-  pull-requests: read
 
 concurrency:
   group: coverage-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  # Required checks must always report, so PRs are not filtered with paths-ignore;
-  # instead the work is skipped (a skipped job satisfies a required check).
-  changes:
-    name: Detect changes
-    runs-on: ubuntu-latest
-    permissions:
-      pull-requests: read
-    outputs:
-      code: ${{ steps.filter.outputs.code }}
-    steps:
-      - id: filter
-        env:
-          GH_TOKEN: ${{ github.token }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
-        run: |
-          if [ -z "$PR_NUMBER" ]; then echo code=true >> "$GITHUB_OUTPUT"; exit 0; fi
-          files=$(gh api --paginate "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/files" --jq '.[].filename') || { echo code=true >> "$GITHUB_OUTPUT"; exit 0; }
-          if grep -qvE '\.md$|^(openspec|\.claude|\.agents)/|^LICENSE$' <<< "$files"; then
-            echo code=true >> "$GITHUB_OUTPUT"
-          else
-            echo code=false >> "$GITHUB_OUTPUT"
-          fi
-
   coverage:
     name: Coverage
-    needs: changes
-    if: needs.changes.outputs.code == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
@@ -68,7 +36,7 @@ jobs:
       - name: Check out code
         uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
         with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          ref: ${{ github.sha }}
 
       - name: Set up .NET
         uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5.4.0
@@ -129,9 +97,6 @@ jobs:
           file: ${{ steps.coverage-files.outputs.api }}
           language: C#
           label: coverage/api
-          # Upload is rejected for some PR branch names (HTTP 400); that must not fail the PR, but a
-          # failed upload of the main baseline still fails the run.
-          fail-on-error: ${{ github.event_name != 'pull_request' }}
 
       - name: Upload API integration coverage
         uses: actions/upload-code-coverage@2b21a77928be8d5168c2b9581a67f2adbebacc52 # v1.4.4
@@ -139,9 +104,6 @@ jobs:
           file: ${{ steps.coverage-files.outputs.api-integration }}
           language: C#
           label: coverage/api-integration
-          # Upload is rejected for some PR branch names (HTTP 400); that must not fail the PR, but a
-          # failed upload of the main baseline still fails the run.
-          fail-on-error: ${{ github.event_name != 'pull_request' }}
 
       - name: Upload persistence integration coverage
         uses: actions/upload-code-coverage@2b21a77928be8d5168c2b9581a67f2adbebacc52 # v1.4.4
@@ -149,9 +111,6 @@ jobs:
           file: ${{ steps.coverage-files.outputs.persistence }}
           language: C#
           label: coverage/persistence
-          # Upload is rejected for some PR branch names (HTTP 400); that must not fail the PR, but a
-          # failed upload of the main baseline still fails the run.
-          fail-on-error: ${{ github.event_name != 'pull_request' }}
 
       - name: Upload GameCatalog coverage
         uses: actions/upload-code-coverage@2b21a77928be8d5168c2b9581a67f2adbebacc52 # v1.4.4
@@ -159,9 +118,6 @@ jobs:
           file: ${{ steps.coverage-files.outputs.game-catalog }}
           language: C#
           label: coverage/game-catalog
-          # Upload is rejected for some PR branch names (HTTP 400); that must not fail the PR, but a
-          # failed upload of the main baseline still fails the run.
-          fail-on-error: ${{ github.event_name != 'pull_request' }}
 
       - name: Retain coverage test results
         if: always()
