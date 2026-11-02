@@ -24,6 +24,12 @@ public sealed class PlannerApiFactory : WebApplicationFactory<Program>
     internal RecordingProductAnalytics Analytics { get; } = new();
     internal RecordingExternalIdentityDeleter ExternalIdentityDeleter { get; } = new();
 
+    /// <summary>Extra configuration, applied after the defaults below. Set before the host first starts.</summary>
+    internal Dictionary<string, string?> ExtraSettings { get; } = [];
+
+    /// <summary>Extra service registrations, applied last. Set before the host first starts.</summary>
+    internal Action<IServiceCollection>? ExtraServices { get; set; }
+
     internal Func<PlannerDbContext, bool>? FailAfterSave { get; set; }
     internal bool FailureInjected { get; set; }
 
@@ -85,6 +91,7 @@ public sealed class PlannerApiFactory : WebApplicationFactory<Program>
                 // On so the gated endpoints' own tests can reach them; FeatureGateTests covers the off state.
                 ["FeatureManagement:ManualBattles"] = "true",
             });
+            configuration.AddInMemoryCollection(ExtraSettings);
         });
         builder.ConfigureTestServices(services =>
         {
@@ -120,6 +127,8 @@ public sealed class PlannerApiFactory : WebApplicationFactory<Program>
 
             services.RemoveAll<IExternalIdentityDeleter>();
             services.AddSingleton<IExternalIdentityDeleter>(ExternalIdentityDeleter);
+
+            ExtraServices?.Invoke(services);
         });
     }
 }
