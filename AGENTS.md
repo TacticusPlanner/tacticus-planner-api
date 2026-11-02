@@ -9,6 +9,8 @@ and .NET Aspire for local orchestration.
   auth policies). Generates the OpenAPI artifact under `artifacts/openapi` on
   every build.
 - `src/TacticusPlanner.Domain`: domain model shared across the API.
+- `src/TacticusPlanner.GameDomain`: game rules shared across projects (unit
+  ranks and progression).
 - `src/TacticusPlanner.Persistence`: EF Core `DbContext`, entity
   configuration, and migrations (`dotnet ef migrations add ...` targets this
   project).
@@ -43,7 +45,7 @@ dotnet format TacticusPlanner.slnx --verify-no-changes --no-restore
 ```
 
 - Package versions are centrally managed in `Directory.Packages.props`. Lock
-  files are committed for the API and ServiceDefaults projects; AppHost is
+  files are committed for every project except the AppHost, which is
   intentionally unlocked (Aspire injects platform-specific packages).
 - Run the local full stack with **Aspire, not `dotnet run`**:
   `aspire run --project orchestration/TacticusPlanner.AppHost/TacticusPlanner.AppHost.csproj`.
@@ -94,10 +96,12 @@ dotnet ef migrations add <MigrationName> --project src/TacticusPlanner.Persisten
 ```
 
 The API always applies pending migrations on startup (Development, Staging,
-and Production alike). The history is a single `InitialCreate` (pre-launch reset)
-plus whatever follows it; its `Up` ends with the one raw statement the EF model
-cannot express — the deferrable `ix_goals_profile_global_priority` unique
-constraint — and any squash must keep it (`SchemaPostgresTests` guards it). Keep
+and Production alike). Migrations already applied in production are immutable:
+never squash, edit or replace them; add a new migration instead, and make it
+safe for the data users already have. `InitialCreate`'s `Up` ends with the one
+raw statement the EF model cannot express — the deferrable
+`ix_goals_profile_global_priority` unique constraint (`SchemaPostgresTests`
+guards it). Keep
 database constraints to keys, foreign keys, uniqueness and nullability (plus
 `ck_goals_global_priority_in_flight`); put range/enum invariants in validators.
 Mark nothing under `Migrations/` by hand: it is generated code (see its
@@ -108,12 +112,14 @@ SQL against the local database.
 
 ## Commit & Pull Request Guidelines
 
-This repository currently tracks work on the `svehera/goals-phase-9` branch,
-not `main` — open PRs against that branch unless told otherwise. Any new
+Open PRs against `main`. Any new
 endpoint or protocol change to an existing endpoint must be reflected in the
 generated OpenAPI artifact (produced automatically on build) and, if the
-frontend consumes it, coordinated with `tacticus-planner-apps`: merge a breaking contract and its
-client back to back — see README "Breaking contracts".
+frontend consumes it, coordinated with `tacticus-planner-apps`. V2 is in production and the apps
+client deploys separately, so keep the contract compatible with the apps build
+that is currently deployed: add first, migrate the client, remove later (see
+README "Breaking contracts"). Ask the user before a change that can't be made
+compatible.
 
 Validation before opening a PR:
 
