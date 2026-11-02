@@ -52,7 +52,8 @@ jobs:
 
   # Publishes the coverage that Build already collected, so PR tests run once. Publishing needs a
   # write token, so it runs apart from the job that executes the PR's code. Named "Coverage" to
-  # satisfy the required check of that name.
+  # satisfy the required check of that name. Build tests the PR's merge commit, so the report can
+  # drift slightly from the head commit it is attached to when main touched the same files.
   coverage:
     name: Coverage
     needs: [changes, build]
@@ -70,8 +71,9 @@ jobs:
           name: api-test-results
           path: TestResults
 
-      # The solution-level test run puts each project's coverage in a GUID folder; the copy next to
-      # each project's .trx (named after the .trx) is the one that can be traced back to the project.
+      # The solution-level test run puts each project's coverage in a GUID folder; the copy the .trx
+      # attaches (`<runDeploymentRoot>/In/<href>`) is the one that can be traced back to the project.
+      # Read both from the .trx: two projects starting in the same second share a folder name.
       - name: Resolve coverage file paths
         id: coverage-files
         shell: bash
@@ -84,8 +86,10 @@ jobs:
               *tacticusplanner.gamecatalog.tests.dll*) label=game-catalog ;;
               *) continue ;;
             esac
-            file=$(find "${trx%_net*.trx}/In" -name coverage.cobertura.xml -print -quit)
-            [ -n "$file" ] && echo "$label=$file" >> "$GITHUB_OUTPUT"
+            root=$(grep -oE 'runDeploymentRoot="[^"]+"' "$trx" | head -1 | cut -d'"' -f2)
+            href=$(grep -oE '<A href="[^"]*coverage\.cobertura[^"]*\.xml"' "$trx" | head -1 | cut -d'"' -f2)
+            file="TestResults/$root/In/$href"
+            [ -n "$root" ] && [ -n "$href" ] && [ -f "$file" ] && echo "$label=$file" >> "$GITHUB_OUTPUT"
           done
           for label in api api-integration persistence game-catalog; do
             grep -q "^$label=" "$GITHUB_OUTPUT" || { echo "Missing coverage report for $label" >&2; exit 1; }
