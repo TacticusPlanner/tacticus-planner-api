@@ -1,0 +1,34 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+reviews:
+  auto_review:
+    # No automatic reviews: agents already review locally with the CodeRabbit CLI, so an automatic
+    # PR review mostly repeats it and spends the shared hourly rate limit. Request one with a
+    # `@coderabbitai review` comment when the PR needs it (see the workspace AGENTS.md).
+    enabled: false
+  path_filters:
+    - "!artifacts/openapi/**"
+    - "!src/TacticusPlanner.GameCatalog/Data/datamine/raw/**"
+    - "!src/TacticusPlanner.Persistence/Migrations/*.Designer.cs"
+    - "!src/TacticusPlanner.Persistence/Migrations/*ModelSnapshot.cs"
+    - "!**/packages.lock.json"
+  path_instructions:
+    - path: "src/**"
+      instructions: >-
+        V2 is in production and the apps client deploys separately: flag breaking changes to
+        endpoints, contracts, columns and config keys that the currently deployed client or existing
+        data would not survive.
+    - path: "src/TacticusPlanner.Persistence/Migrations/*.cs"
+      instructions: >-
+        Check that the migration matches the model change and is safe to apply on existing data.
+    - path: "tests/**"
+      instructions: >-
+        Flag weakened or removed assertions, skipped tests, edited snapshots without a matching
+        behavior change, and tests that only cover the happy path.
+    - path: ".github/workflows/**"
+      instructions: >-
+        Flag removed or skipped checks and new permissions or secrets reaching jobs that run pull
+        request code.
+knowledge_base:
+  code_guidelines:
+    filePatterns:
+      - "AGENTS.md"
