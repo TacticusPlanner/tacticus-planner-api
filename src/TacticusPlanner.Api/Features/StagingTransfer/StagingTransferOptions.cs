@@ -8,7 +8,6 @@ namespace TacticusPlanner.Api.Features.StagingTransfer;
 /// <item><b>Target</b> (staging): <see cref="ServiceKey"/> and <see cref="SourceBaseUrl"/>. Serves the import endpoint.</item>
 /// <item>Neither (local by default): every staging-transfer endpoint answers 404.</item>
 /// </list>
-/// The feature flag <c>StagingTransfer</c> must also be on in the environment.
 /// </summary>
 public sealed class StagingTransferOptions
 {

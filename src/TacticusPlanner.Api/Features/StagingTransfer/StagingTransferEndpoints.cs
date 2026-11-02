@@ -4,7 +4,6 @@ using FastEndpoints;
 using FluentValidation;
 using Microsoft.Extensions.Options;
 using TacticusPlanner.Api.Features.Auth;
-using TacticusPlanner.Api.Features.FeatureFlags;
 using TacticusPlanner.Api.Features.UpstreamRateLimiting;
 using TacticusPlanner.Api.Http;
 
@@ -18,11 +17,10 @@ public sealed class CreateStagingTransferCodeEndpoint : EndpointWithoutRequest<C
     public override void Configure()
     {
         Post("account/staging-transfer-code");
-        this.RequireFeature(FeatureFlags.FeatureFlags.StagingTransfer);
         Summary(summary =>
         {
             summary.Summary = "Creates a short-lived code that copies this account's planner data into staging.";
-            summary.Description = "Production only (404 elsewhere, and while the StagingTransfer flag is off). "
+            summary.Description = "Production only (404 elsewhere). "
                 + "The code is valid for 10 minutes and is redeemed on staging with "
                 + "POST account/import-from-production. It carries no data itself.";
             summary.Response(StatusCodes.Status404NotFound, "Not available in this environment, or no profile.");
@@ -59,7 +57,6 @@ public sealed class ExportForStagingEndpoint : Endpoint<ExportForStagingRequest>
     {
         Post(Route);
         AllowAnonymous();
-        this.RequireFeature(FeatureFlags.FeatureFlags.StagingTransfer);
         Description(builder => builder.ExcludeFromDescription());
     }
 
@@ -120,11 +117,10 @@ public sealed class ImportFromProductionEndpoint : Endpoint<ImportFromProduction
     {
         Post("account/import-from-production");
         Options(builder => builder.WithMetadata(UpstreamRateLimit.Slow));
-        this.RequireFeature(FeatureFlags.FeatureFlags.StagingTransfer);
         Summary(summary =>
         {
             summary.Summary = "Replaces this staging account's planner data with a copy from production.";
-            summary.Description = "Staging only (404 elsewhere, and while the StagingTransfer flag is off). "
+            summary.Description = "Staging only (404 elsewhere). "
                 + "Redeems a code from production's POST account/staging-transfer-code and, in one transaction, "
                 + "replaces goals, projects, Legendary Event plans and run records, settings and progress "
                 + "overrides. The Tacticus API key, player data and guild are not copied. 400 when the code is "

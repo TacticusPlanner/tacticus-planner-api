@@ -257,7 +257,7 @@ Early testers can copy their production planner data into their staging account:
 3. Staging replaces the caller's copies of those in one transaction with fresh ids. The Tacticus API key and
    user id, player-data snapshot and guild are never copied.
 
-Both sides need the `StagingTransfer` flag on in their App Configuration store and the same
+Configuration alone switches it on (no feature flag): both sides need the same
 `StagingTransfer__ServiceKey`; staging also needs `StagingTransfer__SourceBaseUrl`. With neither setting
 (local, by default) every staging-transfer endpoint answers 404.
 

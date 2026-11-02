@@ -26,11 +26,9 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
     public StagingTransferEndpointTests()
     {
         source.ExtraSettings["StagingTransfer:ServiceKey"] = ServiceKey;
-        source.ExtraSettings["FeatureManagement:StagingTransfer"] = "true";
 
         target.ExtraSettings["StagingTransfer:ServiceKey"] = ServiceKey;
         target.ExtraSettings["StagingTransfer:SourceBaseUrl"] = "http://localhost/";
-        target.ExtraSettings["FeatureManagement:StagingTransfer"] = "true";
         target.ExtraServices = services => services
             .AddHttpClient(StagingTransferSourceClient.HttpClientName)
             .ConfigurePrimaryHttpMessageHandler(() => source.Server.CreateHandler());
