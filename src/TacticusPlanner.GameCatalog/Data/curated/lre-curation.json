@@ -1,7 +1,8 @@
 {
   "astarLysander": {
     "runStartDatesUtc": [
-      "Sun, 30 August 2026 00:00:00 GMT"
+      "Sun, 30 August 2026 00:00:00 GMT",
+      "Sun, 13 December 2026 00:00:00 GMT"
     ]
   },
   "lostaBile": {
@@ -12,7 +13,8 @@
   "tauFarsight": {
     "runStartDatesUtc": [
       "Sun, 28 December 2025 00:00:00 GMT",
-      "Sun, 21 June 2026 00:00:00 GMT"
+      "Sun, 21 June 2026 00:00:00 GMT",
+      "Sun, 17 January 2027 00:00:00 GMT"
     ]
   },
   "votanUthar": {
