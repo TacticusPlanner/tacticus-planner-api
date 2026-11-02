@@ -40,6 +40,19 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
         return null;
     }
 
+    /// <summary>A Rank target is above its effective start (the higher of its start and
+    /// <paramref name="current"/>) when its rank is higher, or when it stays on that rank but names more of
+    /// the rank's own upgrade slots than the start holds — e.g. Diamond3 to Diamond3 plus its top row.</summary>
+    private static bool RankEndAboveStart(RankTargetRequest rank, int current)
+    {
+        var floor = Math.Max(rank.Start, current);
+        if (rank.End != floor) return rank.End > floor;
+        var startSlots = rank.Start == floor
+            ? RankTargetKey.Slots(rank.Start, rank.StartPointFive, rank.StartAppliedUpgrades)
+            : 0;
+        return RankTargetKey.Slots(rank.End, rank.EndPointFive, rank.EndAppliedUpgrades) > startSlots;
+    }
+
     private static string? AbilityRangeError(UpgradeRangeRequest? range, int recipeRows) =>
         range is { } r && (r.Start < 1 || r.Start >= r.End || r.End > recipeRows + 1)
             ? $"must satisfy 1 <= start < end <= {recipeRows + 1} for this unit."
@@ -143,7 +156,7 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
             if (config.Rank is null) return "Rank requires a character rank target.";
             var current = againstBaseline ? config.Rank.Start : (int?)playerCharacter?.Rank ?? config.Rank.Start;
             if (config.Rank.Start < current) return "The starting rank cannot be lower than the current rank.";
-            if (config.Rank.End <= Math.Max(config.Rank.Start, current) || config.Rank.End > (int)UnitRank.Adamantine3)
+            if (!RankEndAboveStart(config.Rank, current) || config.Rank.End > (int)UnitRank.Adamantine3)
                 return "The target rank must be above the effective starting rank and within the rank ladder.";
         }
 

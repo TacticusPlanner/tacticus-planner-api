@@ -12,6 +12,14 @@ public sealed class GoalTargetKeyTests
         Assert.Equal(RankTargetKey.From((int)UnitRank.Silver3, false, 3), GoalTargetKey.For(GoalType.Rank, config));
     }
 
+    [Theory]
+    [InlineData((int)UnitRank.Diamond3, false, 0, 0)]
+    [InlineData((int)UnitRank.Diamond3, true, 0, 3)]
+    [InlineData((int)UnitRank.Diamond3, false, 5, 3)]
+    [InlineData((int)UnitRank.Adamantine1, true, 4, 4)]
+    public void RankSlotsNormalizePointFiveBelowAdamantine(int rank, bool pointFive, int applied, int expected) =>
+        Assert.Equal(expected, RankTargetKey.Slots(rank, pointFive, applied));
+
     [Fact]
     public void AscensionStartDoesNotDistinguish() =>
         Assert.Equal(
