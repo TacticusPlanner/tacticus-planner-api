@@ -14,8 +14,9 @@ public static class DependencyInjection
             .Bind(section)
             .Validate(
                 options => string.IsNullOrWhiteSpace(options.SourceBaseUrl)
-                    || Uri.TryCreate(options.SourceBaseUrl, UriKind.Absolute, out _),
-                "StagingTransfer:SourceBaseUrl must be an absolute URL when set.")
+                    || (Uri.TryCreate(options.SourceBaseUrl, UriKind.Absolute, out var uri)
+                        && (uri.Scheme == Uri.UriSchemeHttps || (uri.Scheme == Uri.UriSchemeHttp && uri.IsLoopback))),
+                "StagingTransfer:SourceBaseUrl must be an absolute https URL when set (http only for loopback).")
             .ValidateOnStart();
         services.AddSingleton<StagingTransferCodeService>();
         services.AddScoped<StagingTransferExporter>();
