@@ -291,10 +291,11 @@ Create migrations when the persisted model changes:
 dotnet ef migrations add <MigrationName> --project src/TacticusPlanner.Persistence --startup-project src/TacticusPlanner.Api
 ```
 
-The schema is one `InitialCreate` migration (recreated pre-launch by `rebuild-foundation-pre-launch`). It is the EF
-model plus exactly one raw statement appended to its `Up`: the deferrable
+The schema starts with the `InitialCreate` migration, followed by the migrations added since. Migration history is
+append-only: a migration that has run in production is never replaced or squashed. `InitialCreate` is the EF model plus
+exactly one raw statement appended to its `Up`: the deferrable
 `ix_goals_profile_global_priority UNIQUE (profile_id, global_priority)` constraint, which the EF model cannot
-express. `SchemaPostgresTests` fails if a future squash loses it. Database constraints are limited to keys, foreign
+express. `SchemaPostgresTests` guards it. Database constraints are limited to keys, foreign
 keys, uniqueness, nullability and `ck_goals_global_priority_in_flight`; range and enum rules live in validators.
 
 The API always applies pending migrations before the server accepts requests.
@@ -352,9 +353,8 @@ aspire resource api-migrations update-database --apphost orchestration/TacticusP
 ```
 
 The first `GET /api/v1/me` against the fresh database provisions the caller's
-profile and default project. Staging and production have no data to keep
-pre-launch: `tacticus-planner-infra` drops and recreates their databases when
-an image with a replaced migration history is deployed.
+profile and default project. Only local databases are reset this way; staging
+and production keep their data and only ever receive new migrations.
 
 ## Container image
 
