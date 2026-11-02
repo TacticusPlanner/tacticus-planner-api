@@ -79,15 +79,15 @@ jobs:
         shell: bash
         run: |
           for trx in TestResults/*.trx; do
-            case "$(grep -oE 'storage="[^"]+\.dll"' "$trx" | head -1)" in
+            case "$(grep -m1 -oE 'storage="[^"]+\.dll"' "$trx" | head -1)" in
               *tacticusplanner.api.tests.dll*) label=api ;;
               *tacticusplanner.api.integrationtests.dll*) label=api-integration ;;
               *tacticusplanner.persistence.integrationtests.dll*) label=persistence ;;
               *tacticusplanner.gamecatalog.tests.dll*) label=game-catalog ;;
               *) continue ;;
             esac
-            root=$(grep -oE 'runDeploymentRoot="[^"]+"' "$trx" | head -1 | cut -d'"' -f2)
-            href=$(grep -oE '<A href="[^"]*coverage\.cobertura[^"]*\.xml"' "$trx" | head -1 | cut -d'"' -f2)
+            root=$(grep -m1 -oE 'runDeploymentRoot="[^"]+"' "$trx" | head -1 | cut -d'"' -f2)
+            href=$(grep -m1 -oE '<A href="[^"]*coverage\.cobertura[^"]*\.xml"' "$trx" | head -1 | cut -d'"' -f2)
             file="TestResults/$root/In/$href"
             [ -n "$root" ] && [ -n "$href" ] && [ -f "$file" ] && echo "$label=$file" >> "$GITHUB_OUTPUT"
           done
