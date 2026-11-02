@@ -341,8 +341,8 @@ resource, change the database password manually, or reset the local
 If `Update Database` fails with an error such as
 `42P07: relation "profiles" already exists`, the local database already has
 tables but does not have matching EF migration history — for example a database
-created by the migrations that `InitialCreate` replaced. For this greenfield
-project, reset the local database instead of trying to preserve that state: use
+created by the migrations that `InitialCreate` replaced. Local databases are
+disposable, so reset the local database instead of trying to preserve that state: use
 the `api-migrations` resource `Reset Database` command in the Aspire Dashboard,
 or run the `Drop Database` command followed by `Update Database`:
 
@@ -458,7 +458,8 @@ Infrastructure changes, such as configuration or scaling, still go through
 
 ### Breaking contracts
 
-Staging promotes every push to `main`. Merge a breaking API change and its web
-client back to back; staging serves a mismatched pair until both deploys finish.
-A replaced migration history also needs the staging database dropped and
-recreated (`tacticus-planner-infra`) before the API deploys.
+Production runs the API and the web client as separate deploys, so for a while
+after every release one side serves the other's previous version. Make contract
+changes in compatible steps: add the new field or endpoint, release the client
+that uses it, then remove the old one in a later release. Migrations that have
+run in production are never replaced or squashed.
