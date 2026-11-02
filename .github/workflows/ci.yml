@@ -58,7 +58,7 @@ jobs:
     needs: [changes, build]
     if: needs.changes.outputs.code == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 15 # four uploads, each may wait up to 160 s for processing
     permissions:
       contents: read
       code-quality: write
