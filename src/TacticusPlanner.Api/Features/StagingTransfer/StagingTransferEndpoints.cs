@@ -129,6 +129,7 @@ public sealed class ImportFromProductionEndpoint : Endpoint<ImportFromProduction
                 + "replaces goals, projects, Legendary Event plans and run records, settings and progress "
                 + "overrides. The Tacticus API key, player data and guild are not copied. 400 when the code is "
                 + "invalid or expired; 502 when production cannot be reached.";
+            summary.Response(StatusCodes.Status404NotFound, "Not available in this environment, or no profile.");
             summary.Response(StatusCodes.Status429TooManyRequests, UpstreamRateLimit.ResponseDescription);
             summary.Response(StatusCodes.Status502BadGateway, "Production could not be reached or refused the request.");
         });

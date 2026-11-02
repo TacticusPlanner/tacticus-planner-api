@@ -238,6 +238,16 @@
               }
             }
           },
+          "404": {
+            "description": "Not available in this environment, or no profile.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
           "429": {
             "description": "The per-profile upstream-call limit for this endpoint is exhausted; see Retry-After.",
             "content": {

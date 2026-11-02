@@ -10,7 +10,13 @@ public static class DependencyInjection
     public static IServiceCollection AddStagingTransferFeature(this IServiceCollection services, IConfiguration configuration)
     {
         var section = configuration.GetSection(StagingTransferOptions.SectionName);
-        services.AddOptions<StagingTransferOptions>().Bind(section);
+        services.AddOptions<StagingTransferOptions>()
+            .Bind(section)
+            .Validate(
+                options => string.IsNullOrWhiteSpace(options.SourceBaseUrl)
+                    || Uri.TryCreate(options.SourceBaseUrl, UriKind.Absolute, out _),
+                "StagingTransfer:SourceBaseUrl must be an absolute URL when set.")
+            .ValidateOnStart();
         services.AddSingleton<StagingTransferCodeService>();
         services.AddScoped<StagingTransferExporter>();
         services.AddScoped<StagingTransferImporter>();

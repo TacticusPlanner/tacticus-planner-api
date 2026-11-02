@@ -41,6 +41,9 @@ public sealed class StagingTransferImporter(PlannerDbContext db, TimeProvider ti
             db.ChangeTracker.Clear();
             await using var transaction = await db.Database.BeginTransactionAsync(ct);
 
+            // Serializes with other profile-level writers, and with a second redemption of the same code.
+            var profile = await db.LockCurrentProfileAsync(ct);
+
             // Project-goal links cascade with either side.
             await db.Goals.Where(entity => entity.ProfileId == profileId).ExecuteDeleteAsync(ct);
             await db.Projects.Where(entity => entity.ProfileId == profileId).ExecuteDeleteAsync(ct);
@@ -49,7 +52,6 @@ public sealed class StagingTransferImporter(PlannerDbContext db, TimeProvider ti
             await db.UserSettings.Where(entity => entity.Id == profileId).ExecuteDeleteAsync(ct);
             await db.PlayerDataOverrides.Where(entity => entity.Id == profileId).ExecuteDeleteAsync(ct);
 
-            var profile = await db.Profiles.FirstAsync(entity => entity.Id == profileId, ct);
             profile.GoalOrderRevision++;
             if (string.IsNullOrEmpty(profile.DisplayName) && !string.IsNullOrWhiteSpace(bundle.DisplayName))
             {
