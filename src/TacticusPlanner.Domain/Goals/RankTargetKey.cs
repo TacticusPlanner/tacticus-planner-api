@@ -13,12 +13,17 @@ public static class RankTargetKey
     /// <summary>Below Adamantine1 a rank's upgrades are a 3-slot row and point-five means all 3, so
     /// (pointFive, 0) and (false, 3) are one end state; at Adamantine1+ slots are numbered individually and
     /// point-five carries no meaning.</summary>
-    public static string From(int end, bool endPointFive, int endAppliedUpgrades)
+    public static string From(int end, bool endPointFive, int endAppliedUpgrades) =>
+        $"{end}:{Slots(end, endPointFive, endAppliedUpgrades)}";
+
+    /// <summary>The normalized number of <paramref name="rank"/>'s own upgrade slots a target past that rank
+    /// names (0 for a clean rank boundary); see <see cref="From(int, bool, int)"/>.</summary>
+    public static int Slots(int rank, bool pointFive, int appliedUpgrades)
     {
-        var slots = Math.Max(endAppliedUpgrades, 0);
-        if (end < (int)UnitRank.Adamantine1)
-            slots = endPointFive ? 3 : Math.Min(slots, 3);
-        return $"{end}:{slots}";
+        var slots = Math.Max(appliedUpgrades, 0);
+        if (rank < (int)UnitRank.Adamantine1)
+            slots = pointFive ? 3 : Math.Min(slots, 3);
+        return slots;
     }
 
     public static string From(RankTarget target) => From(target.End, target.EndPointFive, target.EndAppliedUpgrades);
