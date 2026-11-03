@@ -394,7 +394,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     }
 
     [Fact]
-    public async Task CreateMowAscensionGoalRejectsAnOnslaughtSource()
+    public async Task CreateMowAscensionGoalAcceptsAnOnslaughtSource()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
@@ -409,7 +409,7 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
                 null
             ));
 
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        response.EnsureSuccessStatusCode();
     }
 
     [Fact]
