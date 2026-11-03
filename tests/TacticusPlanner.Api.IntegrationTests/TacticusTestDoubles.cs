@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using System.Net;
+using Polly.Timeout;
 using Refit;
 using TacticusPlanner.Api.Features.V1Import;
 using TacticusPlanner.TacticusApi;
@@ -43,7 +44,7 @@ internal sealed class FakeTacticusApi : ITacticusApi
     public void ConfigureGuildRejection(string guildApiToken, HttpStatusCode statusCode) =>
         GuildRejectionsByToken[guildApiToken] = statusCode;
 
-    /// <summary>Makes <see cref="GetGuildAsync"/> throw an <see cref="HttpRequestException"/> for
+    /// <summary>Makes <see cref="GetGuildAsync"/> throw Refit's <see cref="ApiRequestException"/> for
     /// <paramref name="guildApiToken"/> — simulates the Tacticus API being unreachable.</summary>
     public void ConfigureGuildUnavailable(string guildApiToken) =>
         GuildUnavailableTokens[guildApiToken] = true;
@@ -232,14 +233,19 @@ internal sealed class FakeTacticusApi : ITacticusApi
 
     private readonly ConcurrentDictionary<string, bool> timingOutPlayers = new();
 
-    /// <summary>Makes every later <see cref="GetPlayerAsync"/> call for the token time out, as an HttpClient
-    /// timeout surfaces.</summary>
+    /// <summary>Makes every later <see cref="GetPlayerAsync"/> call for the token time out, as the resilience
+    /// handler's timeout surfaces through Refit.</summary>
     public void ConfigurePlayerTimeout(string personalApiToken) => timingOutPlayers[personalApiToken] = true;
+
+    // Refit wraps every failure before a response arrives (connection error, timeout) in ApiRequestException,
+    // which is not an ApiException.
+    private static ApiRequestException TransportFailure(Exception inner) =>
+        new(new HttpRequestMessage(HttpMethod.Get, "https://api.tacticusgame.com/"), HttpMethod.Get, new RefitSettings(), inner);
 
     public async Task<PlayerResponse> GetPlayerAsync(string personalApiToken, CancellationToken cancellationToken = default)
     {
         if (timingOutPlayers.ContainsKey(personalApiToken))
-            throw new TaskCanceledException("Simulated Tacticus API timeout.");
+            throw TransportFailure(new TimeoutRejectedException("Simulated Tacticus API timeout."));
 
         var response = ResolvePlayerResponse(personalApiToken);
         if (playerHolds.TryRemove(personalApiToken, out var hold))
@@ -280,7 +286,7 @@ internal sealed class FakeTacticusApi : ITacticusApi
         GuildCallsByToken.AddOrUpdate(guildApiToken, 1, (_, count) => count + 1);
         if (GuildUnavailableTokens.ContainsKey(guildApiToken))
         {
-            throw new HttpRequestException("Simulated Tacticus API outage.");
+            throw TransportFailure(new HttpRequestException("Simulated Tacticus API outage."));
         }
 
         if (GuildRejectionsByToken.TryGetValue(guildApiToken, out var statusCode))
@@ -309,7 +315,7 @@ internal sealed class FakeTacticusApi : ITacticusApi
         }
         if (GuildRaidUnavailableTokens.ContainsKey(guildApiToken))
         {
-            throw new HttpRequestException("Simulated Guild Raid API outage.");
+            throw TransportFailure(new HttpRequestException("Simulated Guild Raid API outage."));
         }
         if (GuildRaidRejectionsByToken.TryGetValue(guildApiToken, out var statusCode))
         {

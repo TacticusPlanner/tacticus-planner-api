@@ -92,7 +92,7 @@ public sealed partial class GuildRaidStatusService(
             LogTokenRejected(logger, guild.Id, (int)exception.StatusCode);
             return new GuildRaidRefreshResult.Rejected("The Tacticus API rejected the stored Guild API token.");
         }
-        catch (Exception exception) when (exception is ApiException or HttpRequestException or TaskCanceledException)
+        catch (Exception exception) when (exception is ApiExceptionBase or HttpRequestException or TaskCanceledException)
         {
             LogUpstreamUnavailable(logger, exception, guild.Id);
             return retained?.SyncState.ObservedAt is null

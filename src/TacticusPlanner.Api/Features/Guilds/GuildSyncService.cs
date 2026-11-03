@@ -52,7 +52,7 @@ public sealed class GuildSyncService(
                 "The Tacticus API could not fetch guild data for the supplied Guild API token."
             );
         }
-        catch (Exception exception) when (exception is ApiException or HttpRequestException or TaskCanceledException)
+        catch (Exception exception) when (exception is ApiExceptionBase or HttpRequestException or TaskCanceledException)
         {
             return new GuildSyncResult.UpstreamUnavailable(
                 "The Tacticus API is currently unavailable. Try again shortly."
