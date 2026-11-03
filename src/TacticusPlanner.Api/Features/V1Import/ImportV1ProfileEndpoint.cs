@@ -171,7 +171,7 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
         {
             await Resolve<PlayerDataSyncService>().SyncAsync(profileId, apiKey, ct);
         }
-        catch (Exception exception) when (exception is ApiException or HttpRequestException)
+        catch (Exception exception) when (exception is ApiExceptionBase or HttpRequestException)
         {
             // Best-effort, as documented above: the Tacticus API being unreachable here just leaves
             // goals refusing with player_data_required (and LRE depths on run 1), same as before this sync existed.

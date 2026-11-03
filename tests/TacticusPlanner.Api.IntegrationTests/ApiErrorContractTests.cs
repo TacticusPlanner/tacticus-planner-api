@@ -106,6 +106,18 @@ public sealed class ApiErrorContractTests(PlannerApiFactory factory) : IClassFix
         Assert.DoesNotContain("Exception", problem["detail"]!.GetValue<string>(), StringComparison.Ordinal);
     }
 
+    [Fact]
+    public async Task AnUpstreamTimeoutWhileValidatingTheApiKeyIsUpstreamUnavailable()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var token = $"timeout-{Guid.NewGuid()}";
+        factory.TacticusApi.ConfigurePlayerTimeout(token);
+
+        var response = await client.PutAsJsonAsync("/api/v1/account/tacticus-integration", new UpdateTacticusIntegrationRequest(token, null), Ct);
+
+        await AssertProblemAsync(response, HttpStatusCode.ServiceUnavailable, "upstreamUnavailable");
+    }
+
     [Theory]
     [InlineData("""{"entityType":"character","entityId":"blackTerminator","goals":[{"goalType":"unlock","config":{}}],"startPaused":null}""")]
     [InlineData("""{"entityType":"character","entityId":"blackTerminator","goals":[{"goalType":"unlock","config":{}}],"startPaused":"yes"}""")]

@@ -114,7 +114,7 @@ public sealed class PlayerDataSyncService(
             await db.SaveChangesAsync(ct);
             return new PlayerDataSyncResult.UpstreamRejected();
         }
-        catch (Exception exception) when (exception is ApiException or HttpRequestException
+        catch (Exception exception) when (exception is ApiExceptionBase or HttpRequestException
             || (exception is TaskCanceledException && !ct.IsCancellationRequested))
         {
             await db.SaveChangesAsync(ct);

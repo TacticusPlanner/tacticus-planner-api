@@ -6,9 +6,10 @@ namespace TacticusPlanner.Api.Http;
 
 /// <summary>
 /// The last-resort error writer (<c>api-error-contract</c>): an unexpected exception becomes a 500 <c>internal</c>
-/// problem (no stack trace), an optimistic-concurrency failure no endpoint handled a 409 <c>concurrency</c>, and a
-/// bad request from the framework a 400. Once response headers have started nothing may be rewritten or appended,
-/// so the failure is logged with its trace id and the connection aborted.
+/// problem (no stack trace), an optimistic-concurrency failure no endpoint handled a 409 <c>concurrency</c>, an
+/// upstream that could not be reached (Refit's <see cref="Refit.ApiRequestException"/>: connection failure or
+/// timeout) a 503 <c>upstreamUnavailable</c>, and a bad request from the framework a 400. Once response headers have
+/// started nothing may be rewritten or appended, so the failure is logged with its trace id and the connection aborted.
 /// </summary>
 public sealed partial class GlobalExceptionHandler(
     ILogger<GlobalExceptionHandler> logger,
@@ -49,6 +50,7 @@ public sealed partial class GlobalExceptionHandler(
             BadHttpRequestException badRequest => badRequest.StatusCode,
             UnauthorizedAccessException => StatusCodes.Status403Forbidden,
             DbUpdateConcurrencyException => StatusCodes.Status409Conflict,
+            Refit.ApiRequestException => StatusCodes.Status503ServiceUnavailable,
             _ => StatusCodes.Status500InternalServerError,
         };
     }
