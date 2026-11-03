@@ -296,7 +296,7 @@ public sealed class V1GoalImportService(
                     Progression: new ProgressionTargetRequest(
                         ProgressionRules.FromWireName(currentProgressionWire), ProgressionRules.FromWireName(endWire)),
                     AcquisitionSources: BuildAcquisitionSources(
-                        entityType, sourceGoal.ShardFarmType, sourceGoal.CampaignsUsage, sourceGoal.MythicCampaignsUsage));
+                        sourceGoal.ShardFarmType, sourceGoal.CampaignsUsage, sourceGoal.MythicCampaignsUsage));
                 break;
 
             case 3:
@@ -307,7 +307,7 @@ public sealed class V1GoalImportService(
                 }
                 goalType = GoalType.Unlock;
                 config = new CreateGoalConfigRequest(
-                    AcquisitionSources: BuildAcquisitionSources(entityType, null, sourceGoal.CampaignsUsage, null));
+                    AcquisitionSources: BuildAcquisitionSources(null, sourceGoal.CampaignsUsage, null));
                 break;
 
             case 4 or 5 when sourceGoal.FirstAbilityLevel is not null || sourceGoal.SecondAbilityLevel is not null:
@@ -339,16 +339,16 @@ public sealed class V1GoalImportService(
     }
 
     /// <summary>Translates V1's shard-source fields (previously dropped entirely) into acquisition
-    /// sources. Onslaught is meaningful only for Character Ascension goals (see
-    /// <c>AcquisitionSourceRules.SemanticError</c>) — omitted rather than passed through and rejected for
-    /// a Machine of War, so an otherwise-valid goal is never failed over an invalid source kind.</summary>
+    /// sources. Onslaught is meaningful only for Ascension goals (see
+    /// <c>AcquisitionSourceRules.SemanticError</c>); Unlock callers pass no <paramref name="shardFarmType"/>,
+    /// so it is never emitted there.</summary>
     private static List<AcquisitionSourceRequest>? BuildAcquisitionSources(
-        GoalEntityType entityType, string? shardFarmType, int? campaignsUsage, int? mythicCampaignsUsage)
+        string? shardFarmType, int? campaignsUsage, int? mythicCampaignsUsage)
     {
         var sources = new List<AcquisitionSourceRequest>();
-        var wantsOnslaught = entityType == GoalEntityType.Character
-            && (string.Equals(shardFarmType, V1ShardFarmType.Onslaught, StringComparison.OrdinalIgnoreCase)
-                || string.Equals(shardFarmType, V1ShardFarmType.Both, StringComparison.OrdinalIgnoreCase));
+        var wantsOnslaught =
+            string.Equals(shardFarmType, V1ShardFarmType.Onslaught, StringComparison.OrdinalIgnoreCase)
+            || string.Equals(shardFarmType, V1ShardFarmType.Both, StringComparison.OrdinalIgnoreCase);
         if (wantsOnslaught)
         {
             sources.Add(new AcquisitionSourceRequest(AcquisitionSourceKind.Onslaught, []));

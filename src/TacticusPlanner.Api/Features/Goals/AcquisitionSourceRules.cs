@@ -108,8 +108,9 @@ public static partial class AcquisitionSourceRules
                     break;
 
                 case AcquisitionSourceKind.Onslaught:
-                    if (entityType != GoalEntityType.Character || goalType != GoalType.Ascension)
-                        return "Onslaught is only available for Character Ascension goals.";
+                    // Onslaught rewards shards for both characters and Machines of War — Ascension only.
+                    if (goalType != GoalType.Ascension)
+                        return "Onslaught is only available for Ascension goals.";
 
                     break;
 

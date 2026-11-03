@@ -601,7 +601,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
     }
 
     [Fact]
-    public async Task MachineOfWarAscensionOmitsTheInvalidOnslaughtSourceAndIsStillCreated()
+    public async Task MachineOfWarAscensionKeepsItsOnslaughtSource()
     {
         var (client, subject) = await CreateProvisionedClientAsync();
         await SeedPlayerDataSnapshotAsync(subject, mows: [Mow(MowId)]);
@@ -616,7 +616,7 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         var outcome = Assert.Single(body.Outcomes);
         Assert.Equal(V1GoalOutcomeStatus.Created, outcome.Status);
         var goal = await GetGoalAsync(client, outcome.GoalId!.Value);
-        Assert.DoesNotContain(goal.Config.AcquisitionSources ?? [], s => s.Kind == AcquisitionSourceKind.Onslaught);
+        Assert.Contains(goal.Config.AcquisitionSources ?? [], s => s.Kind == AcquisitionSourceKind.Onslaught);
         Assert.Contains(goal.Config.AcquisitionSources ?? [], s => s.Kind == AcquisitionSourceKind.Campaign);
     }
 
