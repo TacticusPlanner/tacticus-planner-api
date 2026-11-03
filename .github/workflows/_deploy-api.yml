@@ -131,7 +131,7 @@ jobs:
                 running="${revision_fields[1]:-}"
                 revision_image="${revision_fields[2]:-}"
 
-                if [[ "$revision_image" == "$IMAGE_REFERENCE" && "$health" == "Healthy" && "$running" == "Running" ]]; then
+                if [[ "$revision_image" == "$IMAGE_REFERENCE" && "$health" == "Healthy" && "$running" == Running* ]]; then # Running or RunningAtMaxScale
                   break
                 fi
 
@@ -144,6 +144,7 @@ jobs:
               fi
             fi
 
+            echo "Attempt $attempt: revision=$revision health=${health:-} running=${running:-}"
             if [[ "$attempt" == "30" ]]; then
               echo "::error::Revision $revision did not become healthy within five minutes."
               exit 1
