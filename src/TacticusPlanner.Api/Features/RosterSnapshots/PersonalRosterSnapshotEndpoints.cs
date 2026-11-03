@@ -69,7 +69,7 @@ public sealed class CreatePersonalRosterSnapshotEndpoint
         }
 
         var result = await Resolve<PersonalRosterSnapshotService>()
-            .CreateAsync(profileId, req.Name, req.FromLastSync == true, ct);
+            .CreateAsync(profileId, req.Name, PersonalRosterSnapshotProblems.IsFromLastSync(HttpContext.Request), ct);
         switch (result)
         {
             case CreatePersonalRosterSnapshotResult.Created created:
