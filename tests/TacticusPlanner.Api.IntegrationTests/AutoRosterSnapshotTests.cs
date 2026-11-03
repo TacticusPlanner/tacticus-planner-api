@@ -241,7 +241,9 @@ public sealed class AutoRosterSnapshotTests(PlannerApiFactory factory) : IClassF
         using var scope = factory.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
         foreach (var (source, takenAt) in snapshots)
-            db.PersonalRosterSnapshots.Add(PersonalRosterSnapshot.Create(profileId, null, source, Roster(takenAt)));
+            db.PersonalRosterSnapshots.Add(PersonalRosterSnapshot.Create(
+                profileId, null, source, Roster(takenAt),
+                source == RosterSnapshotSource.V1Import ? $"v1:{takenAt.ToUnixTimeMilliseconds()}:test" : null));
         await db.SaveChangesAsync(Ct);
     }
 

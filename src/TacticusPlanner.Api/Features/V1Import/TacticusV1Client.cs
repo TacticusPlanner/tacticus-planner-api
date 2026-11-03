@@ -35,6 +35,9 @@ public sealed record TacticusV1Profile(
     /// <c>leProgress</c>/<c>legendaryEventsProgress</c>, <c>leSettings</c>); missing unless the profile carries
     /// them.</summary>
     public V1LegendaryEventImportData LegendaryEvents { get; init; } = V1LegendaryEventImportData.Missing();
+
+    /// <summary>V1 <c>rosterSnapshots</c>; missing unless the profile carries a base snapshot.</summary>
+    public V1RosterSnapshotImportData RosterSnapshots { get; init; } = V1RosterSnapshotImportData.Missing();
 }
 
 /// <summary>Distinguishes a profile with no V1 Legendary Event teams or progress from one whose teams cannot be
@@ -275,6 +278,7 @@ public sealed class TacticusV1Client(IHttpClientFactory httpClientFactory) : ITa
         )
         {
             LegendaryEvents = ReadLegendaryEvents(payload.Data),
+            RosterSnapshots = ReadRosterSnapshots(payload.Data?.RosterSnapshots),
         };
     }
 
@@ -284,6 +288,29 @@ public sealed class TacticusV1Client(IHttpClientFactory httpClientFactory) : ITa
             Present(data?.LeTeams) ?? Present(data?.LegendaryEvents3),
             Present(data?.LeProgress) ?? Present(data?.LegendaryEventsProgress),
             Present(data?.LeSettings));
+
+    /// <summary>Reads V1 <c>rosterSnapshots</c> (<c>{ base, diffs }</c>). The blob stays a raw
+    /// <see cref="JsonElement"/> on <see cref="V1UserData"/> so a malformed one fails only this part. No key, or a key
+    /// without a base (V1 then ignores the diffs), is missing.</summary>
+    internal static V1RosterSnapshotImportData ReadRosterSnapshots(JsonElement? element)
+    {
+        if (Present(element) is not { } present)
+        {
+            return V1RosterSnapshotImportData.Missing();
+        }
+
+        try
+        {
+            var state = present.Deserialize<V1RosterSnapshotsState>(WebJsonOptions);
+            return state?.Base is null
+                ? V1RosterSnapshotImportData.Missing()
+                : V1RosterSnapshotImportData.Valid(state);
+        }
+        catch (JsonException)
+        {
+            return V1RosterSnapshotImportData.Invalid();
+        }
+    }
 
     private static JsonElement? Present(JsonElement? element) =>
         element is { ValueKind: not JsonValueKind.Null and not JsonValueKind.Undefined } ? element : null;
@@ -511,7 +538,8 @@ internal sealed record V1UserData(
     JsonElement? LegendaryEvents3 = null,
     JsonElement? LeProgress = null,
     JsonElement? LegendaryEventsProgress = null,
-    JsonElement? LeSettings = null
+    JsonElement? LeSettings = null,
+    JsonElement? RosterSnapshots = null
 );
 
 internal sealed record V1OnslaughtPreferencesData(

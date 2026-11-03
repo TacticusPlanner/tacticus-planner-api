@@ -29,7 +29,8 @@ public sealed class ImportV1ProfileValidator : Validator<ImportV1ProfileRequest>
                     || selection.Goals
                     || selection.OnslaughtProgress
                     || selection.CampaignEventProgress
-                    || selection.LegendaryEventPlans))
+                    || selection.LegendaryEventPlans
+                    || selection.RosterSnapshots))
             .WithMessage("Select at least one V1 profile part to import.");
     }
 }
