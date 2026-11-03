@@ -6,7 +6,7 @@ Companion: `add-automatic-roster-snapshots` in apps. Shared contract: `source` v
 
 ## Decisions
 
-1. **Trigger: after every successful sync, in the same transaction, after the run-record recorder.** A run record opened or refreshed by that sync counts as a recent snapshot, so no automatic snapshot is added on top of it. The sync inside `POST me/roster-snapshots` skips the check, because a manual snapshot is about to be taken.
+1. **Trigger: after every successful sync, in the same transaction, after the run-record recorder.** It uses the post-write hook from `add-personal-roster-snapshots`, which receives the transformed roster. The metadata-only snapshot `WriteAsync` returns for an existing row would be incomplete. A run record opened or refreshed by that sync counts as a recent snapshot, so no automatic snapshot is added on top of it. The sync inside `POST me/roster-snapshots` skips the check, because a manual snapshot is about to be taken.
 2. **30-day rule.** Take one when `max(takenAt)` over personal snapshots (any source) and run-record rosters is older than `now - 30 days`, or when none exist. The window is configuration with a default of 30 days.
 3. **Rolling quota of 12 (configurable).** At the quota, the oldest `Auto` row (by `takenAt`) is deleted in the same transaction as the insert. Replacing is acceptable here, unlike for manual snapshots, because the system made these rows and the user can Keep any that matter.
 4. **Keep** sets `source = Manual` and leaves the name and roster unchanged. It is refused at the manual limit, and for a snapshot that isn't `Auto` it returns 409 `rosterSnapshotNotAutomatic`.

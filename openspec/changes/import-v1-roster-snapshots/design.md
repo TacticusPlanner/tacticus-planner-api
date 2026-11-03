@@ -16,6 +16,7 @@ Companion: the apps half ships in `add-automatic-roster-snapshots` (import page 
    - `xpLevel`, `shards` and `mythicShards` are copied. `xp = 0` and `appliedUpgradeSlots = []` mean unknown (see 4).
 3. **Capacity.** `room = limit - count(Manual + V1Import)`. Live V1 snapshots are taken newest `dateMillisUtc` first. Duplicates are skipped before counting room. The rest beyond `room` get `skippedLimit`.
 4. **Unknown fields.** The wire shape stays non-null. The rule "a `V1Import` snapshot's `xp` and `appliedUpgradeSlots` are unknown" lives in the spec, and the client renders them as "—". Alternative rejected: nullable fields on `RosterSnapshotResponse`. That would ripple through the LE run-record contract for one source's benefit.
-5. **Idempotency key** is `(source = V1Import, name, takenAt)`. A user-renamed import is no longer recognised and would be imported again. That's acceptable, because the result is visible and can be deleted.
-6. **Catalog version** of an imported roster is `v1-import`.
+5. **Idempotency key** is an immutable `importKey` column on the snapshot (nullable, set only for `V1Import`): `v1:<dateMillisUtc>:<original V1 name>`. Renaming changes `name` only, so a renamed import is still recognised as a duplicate. Deleting it does free the key, so a re-run imports it again. That's intended, since the user removed it.
+6. **Catalog version** of an imported roster is `v1-import`. The `roster-snapshots` contract is modified to allow this exception (reconstructed values, no synced source), while keeping "full roster, never a diff".
+8. **MoW XP level.** V1 MoW snapshots carry no `xpLevel`. Imported MoWs store `xpLevel = 0`, which means unknown, under the same convention as `xp`.
 7. **Failure isolation.** A snapshot that throws during mapping gets `failed` and does not stop the others. An unreadable `rosterSnapshots` key fails the part with `invalid_roster_snapshots`. A missing or empty key skips it with `missing_roster_snapshots`.

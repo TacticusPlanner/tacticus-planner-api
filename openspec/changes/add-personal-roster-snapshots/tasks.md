@@ -9,13 +9,14 @@
 
 ## 2. Endpoints
 
-- [ ] 2.1 `POST me/roster-snapshots`: under the profile lock, sync (reusing the sync service), check the limit, capture, and save. Support `fromLastSync=true`. Errors: `rosterSnapshotLimitReached`, `playerDataNotSynced`, and the upstream errors the sync already returns.
-- [ ] 2.2 `GET me/roster-snapshots`: metadata list, newest first, with `limit` and `count`.
-- [ ] 2.3 `GET me/roster-snapshots/{id}`: `RosterSnapshotResponse`. 404 for an unknown id or another profile's id.
-- [ ] 2.4 `PATCH me/roster-snapshots/{id}`: rename, with the same name rules.
-- [ ] 2.5 `DELETE me/roster-snapshots/{id}`: hard delete. 404 when it is unknown or not owned.
-- [ ] 2.6 Validators (name length, trimming) and the domain invariant check before save.
-- [ ] 2.7 Add `POST me/roster-snapshots` (sync path) to the `upstream-slow` limiter.
+- [ ] 2.1 Add an optional post-write callback to `PlayerDataSyncService` that receives the transformed `Characters`/`Mows` inside `WriteAsync`'s transaction, after `RecordRunsAsync`.
+- [ ] 2.2 `POST me/roster-snapshots`: check the limit first and return `rosterSnapshotLimitReached` without calling the sync service, so player data and run records are unchanged. Otherwise sync with the callback, which re-checks the limit and builds the snapshot from the transformed roster in the same transaction. Support `fromLastSync=true`, which loads the stored `characters`/`mows` chunks without calling upstream. Errors: `rosterSnapshotLimitReached`, `playerDataNotSynced`, and the upstream errors the sync already returns.
+- [ ] 2.3 `GET me/roster-snapshots`: metadata list, newest first, with `limit` and `count`.
+- [ ] 2.4 `GET me/roster-snapshots/{id}`: `RosterSnapshotResponse`. 404 for an unknown id or another profile's id.
+- [ ] 2.5 `PATCH me/roster-snapshots/{id}`: rename, with the same name rules.
+- [ ] 2.6 `DELETE me/roster-snapshots/{id}`: hard delete. 404 when it is unknown or not owned.
+- [ ] 2.7 Validators (name length, trimming) and the domain invariant check before save.
+- [ ] 2.8 Apply the `upstream-slow` limit to `POST me/roster-snapshots` only when `fromLastSync` is not `true`. `UpstreamRateLimitPreProcessor` reads endpoint metadata only, so add a request-level predicate to it (or split the fallback into its own route). The `fromLastSync=true` fallback stays unlimited, with a test that it succeeds after the slow quota is exhausted.
 
 ## 3. Lifecycle
 

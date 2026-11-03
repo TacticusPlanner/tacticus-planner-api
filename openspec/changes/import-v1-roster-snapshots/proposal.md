@@ -11,7 +11,7 @@ Depends on `add-personal-roster-snapshots` (apply that first). Companion apps wo
 - Each live V1 snapshot becomes a personal snapshot with `source` `V1Import`, `takenAt` from V1 `dateMillisUtc`, and the V1 name (trimmed and cut to 60 characters). The client labels it "V1 · <name>".
 - Units are mapped onto catalog ids and the V2 roster shape. Locked units are dropped. Total XP and applied upgrade slots, which V1 did not record, are stored as `0` and `[]`, and the `V1Import` source tells the client to show them as unknown.
 - Snapshots are imported newest first, up to the room left under the manual limit of 20. Every source snapshot gets one outcome: `imported`, `skippedLimit`, `skippedDuplicate`, `skippedDeleted` or `failed`.
-- Re-running the import is idempotent: a V1 snapshot whose name and `takenAt` match an existing `V1Import` snapshot is skipped.
+- Re-running the import is idempotent: each imported snapshot stores an immutable import key (V1 date and original name), and a V1 snapshot whose key already exists is skipped, even when the user renamed it.
 
 ## Capabilities
 
@@ -21,7 +21,7 @@ Depends on `add-personal-roster-snapshots` (apply that first). Companion apps wo
 
 ### Modified Capabilities
 
-<!-- none: other V1 import parts are unchanged -->
+- `roster-snapshots`: `V1Import` snapshots are exempt from the "copied as synced" and capture-time catalog-version rules.
 
 ## Impact
 
@@ -29,4 +29,4 @@ Depends on `add-personal-roster-snapshots` (apply that first). Companion apps wo
 - Reuses `ProgressionWire`/`ProgressionRules` from the goal import, and `RosterSnapshotFactory` and the limit from `Features/RosterSnapshots`.
 - `artifacts/openapi`: the selection flag and the outcome schema.
 - Tests: chain reconstruction fixtures taken from real V1 blobs (base only, base + diffs, trashed entries, legacy bad stars), the mapping, the limit and idempotency.
-- No migration (`V1Import` is already a `source` value).
+- Migration `AddRosterSnapshotImportKey`: a nullable `import_key` column with a unique index on `(profile_id, import_key)`.

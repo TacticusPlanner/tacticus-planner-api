@@ -24,7 +24,8 @@ Each imported snapshot SHALL be stored as a personal snapshot with `source` `V1I
 - the V1 rank SHALL become `rank`;
 - active/passive (characters) and primary/secondary (MoWs) levels SHALL become `abilities`, under the catalog unit's first ability ids of those kinds;
 - `equip0..2` with their levels SHALL become `equippedItems` in the catalog slot matching each item's type;
-- `xpLevel`, `shards` and `mythicShards` SHALL be copied.
+- `xpLevel` SHALL be copied for characters. V1 MoWs have no XP level, so an imported MoW's `xpLevel` SHALL be stored as 0 and mean unknown;
+- `shards` and `mythicShards` SHALL be copied.
 
 Locked characters (rank `Locked`) and locked MoWs SHALL be omitted. Units and items whose ids the catalog does not know SHALL be omitted and counted in the outcome's `droppedUnits`. `xp` SHALL be stored as 0 and `appliedUpgradeSlots` as empty. For a `V1Import` snapshot both SHALL mean unknown, never zero progress.
 
@@ -42,7 +43,7 @@ Locked characters (rank `Locked`) and locked MoWs SHALL be omitted. Units and it
 
 ### Requirement: Imported snapshots respect the manual limit, newest first
 
-Live V1 snapshots SHALL be considered newest `dateMillisUtc` first. A snapshot that duplicates an existing `V1Import` snapshot (same name and `takenAt`) SHALL get `skippedDuplicate` and SHALL NOT use room. The others SHALL be imported while the profile's `Manual` + `V1Import` count is below the manual limit (see `personal-roster-snapshots`). The remaining ones SHALL get `skippedLimit`. Every source V1 snapshot SHALL get exactly one outcome `{ name, takenAt, status, code, droppedUnits }`, with status `imported`, `skippedDeleted`, `skippedDuplicate`, `skippedLimit` or `failed`. A failure on one snapshot SHALL NOT discard the others.
+Live V1 snapshots SHALL be considered newest `dateMillisUtc` first. Each imported snapshot SHALL carry an immutable import key derived from the V1 `dateMillisUtc` and the original V1 name, which renaming SHALL NOT change. A V1 snapshot whose key matches an existing snapshot of the profile SHALL get `skippedDuplicate` and SHALL NOT use room. The others SHALL be imported while the profile's `Manual` + `V1Import` count is below the manual limit (see `personal-roster-snapshots`). The remaining ones SHALL get `skippedLimit`. Every source V1 snapshot SHALL get exactly one outcome `{ name, takenAt, status, code, droppedUnits }`, with status `imported`, `skippedDeleted`, `skippedDuplicate`, `skippedLimit` or `failed`. A failure on one snapshot SHALL NOT discard the others.
 
 #### Scenario: Room for two
 
@@ -52,6 +53,6 @@ Live V1 snapshots SHALL be considered newest `dateMillisUtc` first. A snapshot t
 
 #### Scenario: Re-running the import
 
-- **GIVEN** a previous run imported all of a profile's V1 snapshots
+- **GIVEN** a previous run imported all of a profile's V1 snapshots, and the user then renamed one of them
 - **WHEN** the part is imported again
-- **THEN** every V1 snapshot gets `skippedDuplicate` and the count is unchanged
+- **THEN** every V1 snapshot, including the renamed one, gets `skippedDuplicate` and the count is unchanged

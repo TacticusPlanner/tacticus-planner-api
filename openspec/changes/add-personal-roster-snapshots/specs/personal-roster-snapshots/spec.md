@@ -2,13 +2,19 @@
 
 ### Requirement: A profile can take a personal roster snapshot from a fresh sync
 
-`POST /api/v1/me/roster-snapshots` SHALL, for the authenticated profile and under its profile lock, run a player-data sync with the Tacticus API and then store a new personal snapshot whose roster is a copy of the freshly synced characters and MoWs (see `roster-snapshots`), with `source` `Manual`, `takenAt` equal to the sync time, and the optional `name`. When the sync fails (upstream unavailable, timeout, missing or invalid key, rate limited), the request SHALL fail with that error and SHALL NOT create a snapshot. With `fromLastSync=true`, the request SHALL NOT call upstream and SHALL copy the stored synced roster, with `takenAt` equal to that snapshot's `syncedAt`. When the profile has no synced player data, it SHALL be rejected with `playerDataNotSynced`. The response SHALL be the created snapshot's metadata (see "Personal snapshots are listed as metadata").
+`POST /api/v1/me/roster-snapshots` SHALL, for the authenticated profile, run a player-data sync with the Tacticus API and, in the same transaction that writes the synced data, store a new personal snapshot whose roster is a complete copy of the freshly synced characters and MoWs (see `roster-snapshots`), including when the sync changed no chunk, with `source` `Manual`, `takenAt` equal to the sync time, and the optional `name`. When the sync fails (upstream unavailable, timeout, missing or invalid key, rate limited), the request SHALL fail with that error and SHALL NOT create a snapshot. With `fromLastSync=true`, the request SHALL NOT call upstream and SHALL copy the stored synced roster, with `takenAt` equal to that snapshot's `syncedAt`. When the profile has no synced player data, it SHALL be rejected with `playerDataNotSynced`. The response SHALL be the created snapshot's metadata (see "Personal snapshots are listed as metadata").
 
 #### Scenario: Snapshot from a fresh sync
 
 - **GIVEN** a profile with a valid Tacticus key whose last sync was 2 hours ago, and the game now has `ultraCalgar` at Diamond3
 - **WHEN** it posts `{ "name": "Before LE" }`
 - **THEN** a sync runs, a snapshot named "Before LE" with source `Manual` is stored, and its roster has Calgar at Diamond3
+
+#### Scenario: Repeat sync with unchanged roster still captures every unit
+
+- **GIVEN** a profile whose stored player data already matches the game, with 92 characters and 14 MoWs
+- **WHEN** it posts a snapshot
+- **THEN** the snapshot's roster lists all 92 characters and 14 MoWs
 
 #### Scenario: Sync failure creates nothing
 
@@ -30,7 +36,7 @@
 
 ### Requirement: Personal snapshots are limited per profile
 
-A profile SHALL hold at most 20 personal snapshots whose `source` is `Manual` or `V1Import` (configurable, default 20). A create that would exceed the limit SHALL be rejected with conflict `rosterSnapshotLimitReached`, carrying `limit` and `count`. It SHALL NOT sync, and it SHALL NOT replace or delete any snapshot. Snapshots with other sources and Legendary Event run-record rosters SHALL NOT count toward this limit.
+A profile SHALL hold at most 20 personal snapshots whose `source` is `Manual` or `V1Import` (configurable, default 20). A create that would exceed the limit SHALL be rejected with conflict `rosterSnapshotLimitReached`, carrying `limit` and `count`. The limit SHALL be checked before any upstream call, so a rejected create SHALL NOT sync or change player data or run records. Two concurrent creates SHALL NOT together exceed the limit. A rejected create SHALL NOT replace or delete any snapshot. Snapshots with other sources and Legendary Event run-record rosters SHALL NOT count toward this limit.
 
 #### Scenario: Limit reached
 
