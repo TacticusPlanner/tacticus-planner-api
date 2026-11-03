@@ -291,7 +291,8 @@ public sealed class TacticusV1Client(IHttpClientFactory httpClientFactory) : ITa
 
     /// <summary>Reads V1 <c>rosterSnapshots</c> (<c>{ base, diffs }</c>). The blob stays a raw
     /// <see cref="JsonElement"/> on <see cref="V1UserData"/> so a malformed one fails only this part. No key, or a key
-    /// without a base (V1 then ignores the diffs), is missing.</summary>
+    /// without a base (V1 then ignores the diffs), is missing. Null list entries and dates outside the
+    /// <see cref="DateTimeOffset"/> range make it invalid, so chain resolution and mapping never see them.</summary>
     internal static V1RosterSnapshotImportData ReadRosterSnapshots(JsonElement? element)
     {
         if (Present(element) is not { } present)
@@ -302,15 +303,44 @@ public sealed class TacticusV1Client(IHttpClientFactory httpClientFactory) : ITa
         try
         {
             var state = present.Deserialize<V1RosterSnapshotsState>(WebJsonOptions);
-            return state?.Base is null
-                ? V1RosterSnapshotImportData.Missing()
-                : V1RosterSnapshotImportData.Valid(state);
+            if (state?.Base is null)
+            {
+                return V1RosterSnapshotImportData.Missing();
+            }
+
+            return IsWellFormed(state)
+                ? V1RosterSnapshotImportData.Valid(state)
+                : V1RosterSnapshotImportData.Invalid();
         }
         catch (JsonException)
         {
             return V1RosterSnapshotImportData.Invalid();
         }
     }
+
+    private static bool IsWellFormed(V1RosterSnapshotsState state)
+    {
+        var snapshot = state.Base!;
+        if (!InDateRange(snapshot.DateMillisUtc)
+            || HasNull(snapshot.Chars)
+            || HasNull(snapshot.Mows)
+            || HasNull(state.Diffs))
+        {
+            return false;
+        }
+
+        return (state.Diffs ?? []).All(diff =>
+            InDateRange(diff.DateMillisUtc) && !HasNull(diff.CharDiffs) && !HasNull(diff.MowDiffs));
+    }
+
+    private static bool InDateRange(long millis) =>
+        millis is >= MinUnixMillis and <= MaxUnixMillis;
+
+    private const long MinUnixMillis = -62_135_596_800_000;
+    private const long MaxUnixMillis = 253_402_300_799_999;
+
+    private static bool HasNull<T>(IReadOnlyList<T>? items) where T : class =>
+        items is not null && items.Any(item => item is null);
 
     private static JsonElement? Present(JsonElement? element) =>
         element is { ValueKind: not JsonValueKind.Null and not JsonValueKind.Undefined } ? element : null;

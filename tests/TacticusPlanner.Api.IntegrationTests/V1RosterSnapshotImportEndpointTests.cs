@@ -102,7 +102,7 @@ public sealed class V1RosterSnapshotImportEndpointTests(PlannerApiFactory factor
     {
         var client = await ClientAsync();
         var (item, slotId) = CalgarItem;
-        var calgar = CalgarJson(V1Diamond1, 38, $$""", "equip0": {"id": "{{item.Id}}", "type": "{{item.Type}}"}, "equip0Level": 3""");
+        var calgar = CalgarJson(V1Diamond1, 38, $$""", "equip0": {"id": "{{item.Id}}", "type": "{{item.Type}}"}, "equip0Level": 3, "equip1": {"id": "notAnItem", "type": "notAType"}, "equip1Level": 1""");
         var lockedTigurius = $$"""{"id": "{{Tigurius}}", "rank": 0, "rarity": 0, "stars": 0, "shards": 5, "mythicShards": 0, "activeAbilityLevel": 0, "passiveAbilityLevel": 0, "xpLevel": 0}""";
         var unknown = """{"id": "notAUnit", "rank": 3, "rarity": 0, "stars": 0, "shards": 0, "mythicShards": 0, "activeAbilityLevel": 1, "passiveAbilityLevel": 1, "xpLevel": 1}""";
         var lockedMow = $$"""{"id": "{{Mow.Id}}", "rarity": 0, "stars": 0, "primaryAbilityLevel": 1, "secondaryAbilityLevel": 1, "shards": 0, "mythicShards": 0, "locked": true}""";
@@ -110,7 +110,8 @@ public sealed class V1RosterSnapshotImportEndpointTests(PlannerApiFactory factor
 
         var body = await ImportAsync(client, Configure(json));
 
-        Assert.Equal(1, Assert.Single(body.RosterSnapshotOutcomes).DroppedUnits);
+        // The unknown unit and the unknown item.
+        Assert.Equal(2, Assert.Single(body.RosterSnapshotOutcomes).DroppedUnits);
         var snapshot = Assert.Single((await ListAsync(client)).Items);
         Assert.Equal(("Worked example", Day(0), 1, 0), (snapshot.Name, snapshot.TakenAt, snapshot.CharacterCount, snapshot.MowCount));
         var roster = await ReadRosterAsync(client, snapshot.Id);

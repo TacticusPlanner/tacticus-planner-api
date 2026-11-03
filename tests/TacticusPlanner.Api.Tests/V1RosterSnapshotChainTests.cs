@@ -79,6 +79,21 @@ public sealed class V1RosterSnapshotChainTests
     public void NoBaseIsMissing(string json) =>
         Assert.False(TacticusV1Client.ReadRosterSnapshots(JsonDocument.Parse(json).RootElement).IsPresent);
 
+    [Theory]
+    [InlineData("""{"base": {"name": "B", "dateMillisUtc": 1, "chars": [null], "mows": []}, "diffs": []}""")]
+    [InlineData("""{"base": {"name": "B", "dateMillisUtc": 1, "chars": [], "mows": [null]}, "diffs": []}""")]
+    [InlineData("""{"base": {"name": "B", "dateMillisUtc": 1, "chars": [], "mows": []}, "diffs": [null]}""")]
+    [InlineData("""{"base": {"name": "B", "dateMillisUtc": 1, "chars": [], "mows": []}, "diffs": [{"name": "D", "dateMillisUtc": 2, "charDiffs": [null], "mowDiffs": []}]}""")]
+    [InlineData("""{"base": {"name": "B", "dateMillisUtc": 1, "chars": [], "mows": []}, "diffs": [{"name": "D", "dateMillisUtc": 2, "charDiffs": [], "mowDiffs": [null]}]}""")]
+    [InlineData("""{"base": {"name": "B", "dateMillisUtc": 9223372036854775807, "chars": [], "mows": []}, "diffs": []}""")]
+    [InlineData("""{"base": {"name": "B", "dateMillisUtc": 1, "chars": [], "mows": []}, "diffs": [{"name": "D", "dateMillisUtc": -9223372036854775808, "charDiffs": [], "mowDiffs": []}]}""")]
+    public void NullEntriesAndOutOfRangeDatesAreInvalid(string json)
+    {
+        var data = TacticusV1Client.ReadRosterSnapshots(JsonDocument.Parse(json).RootElement);
+
+        Assert.Equal((true, null), (data.IsPresent, data.State));
+    }
+
     [Fact]
     public void AnUnreadableBlobIsInvalid()
     {
