@@ -5,6 +5,7 @@ using TacticusPlanner.Domain.LegendaryEvents;
 using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Domain.Projects;
+using TacticusPlanner.Domain.RosterSnapshots;
 using Vogen;
 
 [assembly: VogenDefaults(openApiSchemaCustomizations: OpenApiSchemaCustomizations.GenerateOpenApiMappingExtensionMethod)]
@@ -26,6 +27,7 @@ namespace TacticusPlanner.Api.Http;
 [OpenApiMarker<LegendaryEventPlanId>]
 [OpenApiMarker<LegendaryEventRunRecordId>]
 [OpenApiMarker<LegendaryEventTeamId>]
+[OpenApiMarker<PersonalRosterSnapshotId>]
 [OpenApiMarker<ProfileId>]
 [OpenApiMarker<ProjectId>]
 [OpenApiMarker<TacticusGuildId>]

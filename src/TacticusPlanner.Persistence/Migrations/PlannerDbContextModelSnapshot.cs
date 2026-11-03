@@ -798,6 +798,58 @@ namespace TacticusPlanner.Persistence.Migrations
                     b.ToTable("project_goals", (string)null);
                 });
 
+            modelBuilder.Entity("TacticusPlanner.Domain.RosterSnapshots.PersonalRosterSnapshot", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<int>("CharacterCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("character_count");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<int>("MowCount")
+                        .HasColumnType("integer")
+                        .HasColumnName("mow_count");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(60)
+                        .HasColumnType("character varying(60)")
+                        .HasColumnName("name");
+
+                    b.Property<Guid>("ProfileId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("profile_id");
+
+                    b.Property<string>("Source")
+                        .IsRequired()
+                        .HasMaxLength(16)
+                        .HasColumnType("character varying(16)")
+                        .HasColumnName("source");
+
+                    b.Property<DateTimeOffset>("TakenAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("taken_at");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("pk_personal_roster_snapshots");
+
+                    b.HasIndex("ProfileId", "TakenAt", "Id")
+                        .IsDescending(false, true, true)
+                        .HasDatabaseName("ix_personal_roster_snapshots_profile_id_taken_at_id");
+
+                    b.ToTable("personal_roster_snapshots", (string)null);
+                });
+
             modelBuilder.Entity("TacticusPlanner.Domain.UserSettings.UserSettings", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1407,6 +1459,180 @@ namespace TacticusPlanner.Persistence.Migrations
                         .IsRequired()
                         .HasConstraintName("fk_legendary_event_run_records_profiles_profile_id");
 
+                    b.OwnsOne("TacticusPlanner.Domain.RosterSnapshots.RosterSnapshot", "Roster", b1 =>
+                        {
+                            b1.Property<Guid>("LegendaryEventRunRecordId");
+
+                            b1.Property<string>("CatalogVersion")
+                                .IsRequired();
+
+                            b1.Property<DateTimeOffset>("TakenAt");
+
+                            b1.HasKey("LegendaryEventRunRecordId")
+                                .HasName("pk_legendary_event_run_records");
+
+                            b1.ToTable("legendary_event_run_records");
+
+                            b1
+                                .ToJson("roster")
+                                .HasColumnType("jsonb");
+
+                            b1.WithOwner()
+                                .HasForeignKey("LegendaryEventRunRecordId")
+                                .HasConstraintName("fk_legendary_event_run_records_legendary_event_run_records_leg");
+
+                            b1.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.PlayerCharacterRecord", "Characters", b2 =>
+                                {
+                                    b2.Property<Guid>("RosterSnapshotLegendaryEventRunRecordId");
+
+                                    b2.Property<int>("__synthesizedOrdinal")
+                                        .ValueGeneratedOnAdd();
+
+                                    b2.PrimitiveCollection<string>("AppliedUpgradeSlots")
+                                        .IsRequired();
+
+                                    b2.Property<long>("MythicShards");
+
+                                    b2.Property<int>("ProgressionIndex");
+
+                                    b2.Property<int>("Rank");
+
+                                    b2.Property<long>("Shards");
+
+                                    b2.Property<string>("UnitId")
+                                        .IsRequired();
+
+                                    b2.Property<long>("Xp");
+
+                                    b2.Property<int>("XpLevel");
+
+                                    b2.HasKey("RosterSnapshotLegendaryEventRunRecordId", "__synthesizedOrdinal")
+                                        .HasName("pk_legendary_event_run_records");
+
+                                    b2.ToTable("legendary_event_run_records");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("RosterSnapshotLegendaryEventRunRecordId")
+                                        .HasConstraintName("fk_legendary_event_run_records_legendary_event_run_records_ros");
+
+                                    b2.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.PlayerUnitAbilityRecord", "Abilities", b3 =>
+                                        {
+                                            b3.Property<Guid>("PlayerCharacterRecordRosterSnapshotLegendaryEventRunRecordId");
+
+                                            b3.Property<int>("PlayerCharacterRecord__synthesizedOrdinal");
+
+                                            b3.Property<int>("__synthesizedOrdinal")
+                                                .ValueGeneratedOnAdd();
+
+                                            b3.Property<string>("AbilityId")
+                                                .IsRequired();
+
+                                            b3.Property<int>("Level");
+
+                                            b3.HasKey("PlayerCharacterRecordRosterSnapshotLegendaryEventRunRecordId", "PlayerCharacterRecord__synthesizedOrdinal", "__synthesizedOrdinal");
+
+                                            b3.ToTable("legendary_event_run_records");
+
+                                            b3.WithOwner()
+                                                .HasForeignKey("PlayerCharacterRecordRosterSnapshotLegendaryEventRunRecordId", "PlayerCharacterRecord__synthesizedOrdinal")
+                                                .HasConstraintName("fk_legendary_event_run_records_legendary_event_run_records_pla");
+                                        });
+
+                                    b2.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.PlayerUnitEquipmentSlotRecord", "EquippedItems", b3 =>
+                                        {
+                                            b3.Property<Guid>("PlayerCharacterRecordRosterSnapshotLegendaryEventRunRecordId");
+
+                                            b3.Property<int>("PlayerCharacterRecord__synthesizedOrdinal");
+
+                                            b3.Property<int>("__synthesizedOrdinal")
+                                                .ValueGeneratedOnAdd();
+
+                                            b3.Property<string>("EquipmentId")
+                                                .IsRequired();
+
+                                            b3.Property<int>("Level");
+
+                                            b3.Property<string>("SlotId")
+                                                .IsRequired();
+
+                                            b3.HasKey("PlayerCharacterRecordRosterSnapshotLegendaryEventRunRecordId", "PlayerCharacterRecord__synthesizedOrdinal", "__synthesizedOrdinal");
+
+                                            b3.ToTable("legendary_event_run_records");
+
+                                            b3.WithOwner()
+                                                .HasForeignKey("PlayerCharacterRecordRosterSnapshotLegendaryEventRunRecordId", "PlayerCharacterRecord__synthesizedOrdinal")
+                                                .HasConstraintName("fk_legendary_event_run_records_legendary_event_run_records_pla");
+                                        });
+
+                                    b2.Navigation("Abilities");
+
+                                    b2.Navigation("EquippedItems");
+                                });
+
+                            b1.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.PlayerMowRecord", "Mows", b2 =>
+                                {
+                                    b2.Property<Guid>("RosterSnapshotLegendaryEventRunRecordId");
+
+                                    b2.Property<int>("__synthesizedOrdinal")
+                                        .ValueGeneratedOnAdd();
+
+                                    b2.PrimitiveCollection<string>("AppliedUpgradeSlots")
+                                        .IsRequired();
+
+                                    b2.Property<long>("MythicShards");
+
+                                    b2.Property<int>("ProgressionIndex");
+
+                                    b2.Property<long>("Shards");
+
+                                    b2.Property<string>("UnitId")
+                                        .IsRequired();
+
+                                    b2.Property<long>("Xp");
+
+                                    b2.Property<int>("XpLevel");
+
+                                    b2.HasKey("RosterSnapshotLegendaryEventRunRecordId", "__synthesizedOrdinal")
+                                        .HasName("pk_legendary_event_run_records");
+
+                                    b2.ToTable("legendary_event_run_records");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("RosterSnapshotLegendaryEventRunRecordId")
+                                        .HasConstraintName("fk_legendary_event_run_records_legendary_event_run_records_ros");
+
+                                    b2.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.PlayerUnitAbilityRecord", "Abilities", b3 =>
+                                        {
+                                            b3.Property<Guid>("PlayerMowRecordRosterSnapshotLegendaryEventRunRecordId");
+
+                                            b3.Property<int>("PlayerMowRecord__synthesizedOrdinal");
+
+                                            b3.Property<int>("__synthesizedOrdinal")
+                                                .ValueGeneratedOnAdd();
+
+                                            b3.Property<string>("AbilityId")
+                                                .IsRequired();
+
+                                            b3.Property<int>("Level");
+
+                                            b3.HasKey("PlayerMowRecordRosterSnapshotLegendaryEventRunRecordId", "PlayerMowRecord__synthesizedOrdinal", "__synthesizedOrdinal")
+                                                .HasName("pk_legendary_event_run_records");
+
+                                            b3.ToTable("legendary_event_run_records");
+
+                                            b3.WithOwner()
+                                                .HasForeignKey("PlayerMowRecordRosterSnapshotLegendaryEventRunRecordId", "PlayerMowRecord__synthesizedOrdinal")
+                                                .HasConstraintName("fk_legendary_event_run_records_legendary_event_run_records_pla");
+                                        });
+
+                                    b2.Navigation("Abilities");
+                                });
+
+                            b1.Navigation("Characters");
+
+                            b1.Navigation("Mows");
+                        });
+
                     b.OwnsMany("TacticusPlanner.Domain.LegendaryEvents.LegendaryEventTeamRecord", "Teams", b1 =>
                         {
                             b1.Property<Guid>("LegendaryEventRunRecordId");
@@ -1609,180 +1835,6 @@ namespace TacticusPlanner.Persistence.Migrations
                             b1.Navigation("Beta");
 
                             b1.Navigation("Gamma");
-                        });
-
-                    b.OwnsOne("TacticusPlanner.Domain.RosterSnapshots.RosterSnapshot", "Roster", b1 =>
-                        {
-                            b1.Property<Guid>("LegendaryEventRunRecordId");
-
-                            b1.Property<string>("CatalogVersion")
-                                .IsRequired();
-
-                            b1.Property<DateTimeOffset>("TakenAt");
-
-                            b1.HasKey("LegendaryEventRunRecordId");
-
-                            b1.ToTable("legendary_event_run_records");
-
-                            b1
-                                .ToJson("roster")
-                                .HasColumnType("jsonb");
-
-                            b1.WithOwner()
-                                .HasForeignKey("LegendaryEventRunRecordId")
-                                .HasConstraintName("fk_legendary_event_run_records_legendary_event_run_records_id");
-
-                            b1.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.PlayerCharacterRecord", "Characters", b2 =>
-                                {
-                                    b2.Property<Guid>("RosterSnapshotLegendaryEventRunRecordId");
-
-                                    b2.Property<int>("__synthesizedOrdinal")
-                                        .ValueGeneratedOnAdd();
-
-                                    b2.PrimitiveCollection<string>("AppliedUpgradeSlots")
-                                        .IsRequired();
-
-                                    b2.Property<long>("MythicShards");
-
-                                    b2.Property<int>("ProgressionIndex");
-
-                                    b2.Property<int>("Rank");
-
-                                    b2.Property<long>("Shards");
-
-                                    b2.Property<string>("UnitId")
-                                        .IsRequired();
-
-                                    b2.Property<long>("Xp");
-
-                                    b2.Property<int>("XpLevel");
-
-                                    b2.HasKey("RosterSnapshotLegendaryEventRunRecordId", "__synthesizedOrdinal")
-                                        .HasName("pk_legendary_event_run_records");
-
-                                    b2.ToTable("legendary_event_run_records");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("RosterSnapshotLegendaryEventRunRecordId")
-                                        .HasConstraintName("fk_legendary_event_run_records_legendary_event_run_records_ros");
-
-                                    b2.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.PlayerUnitAbilityRecord", "Abilities", b3 =>
-                                        {
-                                            b3.Property<Guid>("PlayerCharacterRecordRosterSnapshotLegendaryEventRunRecordId");
-
-                                            b3.Property<int>("PlayerCharacterRecord__synthesizedOrdinal");
-
-                                            b3.Property<int>("__synthesizedOrdinal")
-                                                .ValueGeneratedOnAdd();
-
-                                            b3.Property<string>("AbilityId")
-                                                .IsRequired();
-
-                                            b3.Property<int>("Level");
-
-                                            b3.HasKey("PlayerCharacterRecordRosterSnapshotLegendaryEventRunRecordId", "PlayerCharacterRecord__synthesizedOrdinal", "__synthesizedOrdinal");
-
-                                            b3.ToTable("legendary_event_run_records");
-
-                                            b3.WithOwner()
-                                                .HasForeignKey("PlayerCharacterRecordRosterSnapshotLegendaryEventRunRecordId", "PlayerCharacterRecord__synthesizedOrdinal")
-                                                .HasConstraintName("fk_legendary_event_run_records_legendary_event_run_records_pla");
-                                        });
-
-                                    b2.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.PlayerUnitEquipmentSlotRecord", "EquippedItems", b3 =>
-                                        {
-                                            b3.Property<Guid>("PlayerCharacterRecordRosterSnapshotLegendaryEventRunRecordId");
-
-                                            b3.Property<int>("PlayerCharacterRecord__synthesizedOrdinal");
-
-                                            b3.Property<int>("__synthesizedOrdinal")
-                                                .ValueGeneratedOnAdd();
-
-                                            b3.Property<string>("EquipmentId")
-                                                .IsRequired();
-
-                                            b3.Property<int>("Level");
-
-                                            b3.Property<string>("SlotId")
-                                                .IsRequired();
-
-                                            b3.HasKey("PlayerCharacterRecordRosterSnapshotLegendaryEventRunRecordId", "PlayerCharacterRecord__synthesizedOrdinal", "__synthesizedOrdinal")
-                                                .HasName("pk_legendary_event_run_records");
-
-                                            b3.ToTable("legendary_event_run_records");
-
-                                            b3.WithOwner()
-                                                .HasForeignKey("PlayerCharacterRecordRosterSnapshotLegendaryEventRunRecordId", "PlayerCharacterRecord__synthesizedOrdinal")
-                                                .HasConstraintName("fk_legendary_event_run_records_legendary_event_run_records_pla");
-                                        });
-
-                                    b2.Navigation("Abilities");
-
-                                    b2.Navigation("EquippedItems");
-                                });
-
-                            b1.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.PlayerMowRecord", "Mows", b2 =>
-                                {
-                                    b2.Property<Guid>("RosterSnapshotLegendaryEventRunRecordId");
-
-                                    b2.Property<int>("__synthesizedOrdinal")
-                                        .ValueGeneratedOnAdd();
-
-                                    b2.PrimitiveCollection<string>("AppliedUpgradeSlots")
-                                        .IsRequired();
-
-                                    b2.Property<long>("MythicShards");
-
-                                    b2.Property<int>("ProgressionIndex");
-
-                                    b2.Property<long>("Shards");
-
-                                    b2.Property<string>("UnitId")
-                                        .IsRequired();
-
-                                    b2.Property<long>("Xp");
-
-                                    b2.Property<int>("XpLevel");
-
-                                    b2.HasKey("RosterSnapshotLegendaryEventRunRecordId", "__synthesizedOrdinal")
-                                        .HasName("pk_legendary_event_run_records");
-
-                                    b2.ToTable("legendary_event_run_records");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("RosterSnapshotLegendaryEventRunRecordId")
-                                        .HasConstraintName("fk_legendary_event_run_records_legendary_event_run_records_ros");
-
-                                    b2.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.PlayerUnitAbilityRecord", "Abilities", b3 =>
-                                        {
-                                            b3.Property<Guid>("PlayerMowRecordRosterSnapshotLegendaryEventRunRecordId");
-
-                                            b3.Property<int>("PlayerMowRecord__synthesizedOrdinal");
-
-                                            b3.Property<int>("__synthesizedOrdinal")
-                                                .ValueGeneratedOnAdd();
-
-                                            b3.Property<string>("AbilityId")
-                                                .IsRequired();
-
-                                            b3.Property<int>("Level");
-
-                                            b3.HasKey("PlayerMowRecordRosterSnapshotLegendaryEventRunRecordId", "PlayerMowRecord__synthesizedOrdinal", "__synthesizedOrdinal")
-                                                .HasName("pk_legendary_event_run_records");
-
-                                            b3.ToTable("legendary_event_run_records");
-
-                                            b3.WithOwner()
-                                                .HasForeignKey("PlayerMowRecordRosterSnapshotLegendaryEventRunRecordId", "PlayerMowRecord__synthesizedOrdinal")
-                                                .HasConstraintName("fk_legendary_event_run_records_legendary_event_run_records_pla");
-                                        });
-
-                                    b2.Navigation("Abilities");
-                                });
-
-                            b1.Navigation("Characters");
-
-                            b1.Navigation("Mows");
                         });
 
                     b.Navigation("Lanes")
@@ -3064,6 +3116,192 @@ namespace TacticusPlanner.Persistence.Migrations
                     b.Navigation("Project");
                 });
 
+            modelBuilder.Entity("TacticusPlanner.Domain.RosterSnapshots.PersonalRosterSnapshot", b =>
+                {
+                    b.HasOne("TacticusPlanner.Domain.Profiles.Profile", "Profile")
+                        .WithMany()
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_personal_roster_snapshots_profiles_profile_id");
+
+                    b.OwnsOne("TacticusPlanner.Domain.RosterSnapshots.RosterSnapshot", "Roster", b1 =>
+                        {
+                            b1.Property<Guid>("PersonalRosterSnapshotId");
+
+                            b1.Property<string>("CatalogVersion")
+                                .IsRequired();
+
+                            b1.Property<DateTimeOffset>("TakenAt");
+
+                            b1.HasKey("PersonalRosterSnapshotId");
+
+                            b1.ToTable("personal_roster_snapshots");
+
+                            b1
+                                .ToJson("roster")
+                                .HasColumnType("jsonb");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PersonalRosterSnapshotId")
+                                .HasConstraintName("fk_personal_roster_snapshots_personal_roster_snapshots_id");
+
+                            b1.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.PlayerCharacterRecord", "Characters", b2 =>
+                                {
+                                    b2.Property<Guid>("RosterSnapshotPersonalRosterSnapshotId");
+
+                                    b2.Property<int>("__synthesizedOrdinal")
+                                        .ValueGeneratedOnAdd();
+
+                                    b2.PrimitiveCollection<string>("AppliedUpgradeSlots")
+                                        .IsRequired();
+
+                                    b2.Property<long>("MythicShards");
+
+                                    b2.Property<int>("ProgressionIndex");
+
+                                    b2.Property<int>("Rank");
+
+                                    b2.Property<long>("Shards");
+
+                                    b2.Property<string>("UnitId")
+                                        .IsRequired();
+
+                                    b2.Property<long>("Xp");
+
+                                    b2.Property<int>("XpLevel");
+
+                                    b2.HasKey("RosterSnapshotPersonalRosterSnapshotId", "__synthesizedOrdinal");
+
+                                    b2.ToTable("personal_roster_snapshots");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("RosterSnapshotPersonalRosterSnapshotId")
+                                        .HasConstraintName("fk_personal_roster_snapshots_personal_roster_snapshots_roster_s");
+
+                                    b2.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.PlayerUnitAbilityRecord", "Abilities", b3 =>
+                                        {
+                                            b3.Property<Guid>("PlayerCharacterRecordRosterSnapshotPersonalRosterSnapshotId");
+
+                                            b3.Property<int>("PlayerCharacterRecord__synthesizedOrdinal");
+
+                                            b3.Property<int>("__synthesizedOrdinal")
+                                                .ValueGeneratedOnAdd();
+
+                                            b3.Property<string>("AbilityId")
+                                                .IsRequired();
+
+                                            b3.Property<int>("Level");
+
+                                            b3.HasKey("PlayerCharacterRecordRosterSnapshotPersonalRosterSnapshotId", "PlayerCharacterRecord__synthesizedOrdinal", "__synthesizedOrdinal");
+
+                                            b3.ToTable("personal_roster_snapshots");
+
+                                            b3.WithOwner()
+                                                .HasForeignKey("PlayerCharacterRecordRosterSnapshotPersonalRosterSnapshotId", "PlayerCharacterRecord__synthesizedOrdinal")
+                                                .HasConstraintName("fk_personal_roster_snapshots_personal_roster_snapshots_player_c");
+                                        });
+
+                                    b2.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.PlayerUnitEquipmentSlotRecord", "EquippedItems", b3 =>
+                                        {
+                                            b3.Property<Guid>("PlayerCharacterRecordRosterSnapshotPersonalRosterSnapshotId");
+
+                                            b3.Property<int>("PlayerCharacterRecord__synthesizedOrdinal");
+
+                                            b3.Property<int>("__synthesizedOrdinal")
+                                                .ValueGeneratedOnAdd();
+
+                                            b3.Property<string>("EquipmentId")
+                                                .IsRequired();
+
+                                            b3.Property<int>("Level");
+
+                                            b3.Property<string>("SlotId")
+                                                .IsRequired();
+
+                                            b3.HasKey("PlayerCharacterRecordRosterSnapshotPersonalRosterSnapshotId", "PlayerCharacterRecord__synthesizedOrdinal", "__synthesizedOrdinal");
+
+                                            b3.ToTable("personal_roster_snapshots");
+
+                                            b3.WithOwner()
+                                                .HasForeignKey("PlayerCharacterRecordRosterSnapshotPersonalRosterSnapshotId", "PlayerCharacterRecord__synthesizedOrdinal")
+                                                .HasConstraintName("fk_personal_roster_snapshots_personal_roster_snapshots_player_c");
+                                        });
+
+                                    b2.Navigation("Abilities");
+
+                                    b2.Navigation("EquippedItems");
+                                });
+
+                            b1.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.PlayerMowRecord", "Mows", b2 =>
+                                {
+                                    b2.Property<Guid>("RosterSnapshotPersonalRosterSnapshotId");
+
+                                    b2.Property<int>("__synthesizedOrdinal")
+                                        .ValueGeneratedOnAdd();
+
+                                    b2.PrimitiveCollection<string>("AppliedUpgradeSlots")
+                                        .IsRequired();
+
+                                    b2.Property<long>("MythicShards");
+
+                                    b2.Property<int>("ProgressionIndex");
+
+                                    b2.Property<long>("Shards");
+
+                                    b2.Property<string>("UnitId")
+                                        .IsRequired();
+
+                                    b2.Property<long>("Xp");
+
+                                    b2.Property<int>("XpLevel");
+
+                                    b2.HasKey("RosterSnapshotPersonalRosterSnapshotId", "__synthesizedOrdinal")
+                                        .HasName("pk_personal_roster_snapshots");
+
+                                    b2.ToTable("personal_roster_snapshots");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("RosterSnapshotPersonalRosterSnapshotId")
+                                        .HasConstraintName("fk_personal_roster_snapshots_personal_roster_snapshots_roster_s");
+
+                                    b2.OwnsMany("TacticusPlanner.Domain.PlayerData.Chunks.PlayerUnitAbilityRecord", "Abilities", b3 =>
+                                        {
+                                            b3.Property<Guid>("PlayerMowRecordRosterSnapshotPersonalRosterSnapshotId");
+
+                                            b3.Property<int>("PlayerMowRecord__synthesizedOrdinal");
+
+                                            b3.Property<int>("__synthesizedOrdinal")
+                                                .ValueGeneratedOnAdd();
+
+                                            b3.Property<string>("AbilityId")
+                                                .IsRequired();
+
+                                            b3.Property<int>("Level");
+
+                                            b3.HasKey("PlayerMowRecordRosterSnapshotPersonalRosterSnapshotId", "PlayerMowRecord__synthesizedOrdinal", "__synthesizedOrdinal");
+
+                                            b3.ToTable("personal_roster_snapshots");
+
+                                            b3.WithOwner()
+                                                .HasForeignKey("PlayerMowRecordRosterSnapshotPersonalRosterSnapshotId", "PlayerMowRecord__synthesizedOrdinal")
+                                                .HasConstraintName("fk_personal_roster_snapshots_personal_roster_snapshots_player_m");
+                                        });
+
+                                    b2.Navigation("Abilities");
+                                });
+
+                            b1.Navigation("Characters");
+
+                            b1.Navigation("Mows");
+                        });
+
+                    b.Navigation("Profile");
+
+                    b.Navigation("Roster")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("TacticusPlanner.Domain.UserSettings.UserSettings", b =>
                 {
                     b.HasOne("TacticusPlanner.Domain.Profiles.Profile", "Profile")
@@ -3078,6 +3316,8 @@ namespace TacticusPlanner.Persistence.Migrations
                             b1.Property<Guid>("UserSettingsId");
 
                             b1.Property<int>("DailyEnergy");
+
+                            b1.Property<bool?>("WatchAds");
 
                             b1.Property<string>("XpBookRarity")
                                 .IsRequired();

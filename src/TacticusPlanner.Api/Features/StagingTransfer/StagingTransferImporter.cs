@@ -4,6 +4,7 @@ using TacticusPlanner.Domain.LegendaryEvents;
 using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Domain.Projects;
+using TacticusPlanner.Domain.RosterSnapshots;
 using TacticusPlanner.Persistence;
 using UserSettingsEntity = TacticusPlanner.Domain.UserSettings.UserSettings;
 
@@ -14,12 +15,13 @@ public sealed record StagingTransferImportCounts(
     int Projects,
     int LegendaryEventPlans,
     int LegendaryEventRunRecords,
+    int PersonalRosterSnapshots,
     bool Settings,
     bool Overrides);
 
 /// <summary>
 /// Staging side: replaces the caller's planner data with a production bundle, in one transaction. Goals,
-/// projects, Legendary Event plans and run records, user settings and player-data overrides are deleted and
+/// projects, Legendary Event plans and run records, personal roster snapshots, user settings and player-data overrides are deleted and
 /// recreated with fresh ids (so two staging accounts can import the same production profile). The display
 /// name is copied only when the staging account has not confirmed one. The Tacticus integration, player-data
 /// snapshot and guild membership are left as they are.
@@ -49,6 +51,7 @@ public sealed class StagingTransferImporter(PlannerDbContext db, TimeProvider ti
             await db.Projects.Where(entity => entity.ProfileId == profileId).ExecuteDeleteAsync(ct);
             await db.LegendaryEventPlans.Where(entity => entity.ProfileId == profileId).ExecuteDeleteAsync(ct);
             await db.LegendaryEventRunRecords.Where(entity => entity.ProfileId == profileId).ExecuteDeleteAsync(ct);
+            await db.PersonalRosterSnapshots.Where(entity => entity.ProfileId == profileId).ExecuteDeleteAsync(ct);
             await db.UserSettings.Where(entity => entity.Id == profileId).ExecuteDeleteAsync(ct);
             await db.PlayerDataOverrides.Where(entity => entity.Id == profileId).ExecuteDeleteAsync(ct);
 
@@ -159,6 +162,14 @@ public sealed class StagingTransferImporter(PlannerDbContext db, TimeProvider ti
                 });
             }
 
+            foreach (var source in bundle.PersonalRosterSnapshots)
+            {
+                // The roster carries its own takenAt; the exported one wins so the metadata matches it.
+                source.Roster.TakenAt = source.TakenAt;
+                db.PersonalRosterSnapshots.Add(
+                    PersonalRosterSnapshot.Create(profileId, source.Name, source.Source, source.Roster));
+            }
+
             await db.SaveChangesAsync(ct);
             await transaction.CommitAsync(ct);
         });
@@ -168,6 +179,7 @@ public sealed class StagingTransferImporter(PlannerDbContext db, TimeProvider ti
             bundle.Projects.DistinctBy(project => project.Id).Count(),
             bundle.LegendaryEventPlans.DistinctBy(plan => plan.EventId).Count(),
             bundle.LegendaryEventRunRecords.Count,
+            bundle.PersonalRosterSnapshots.Count,
             bundle.Settings is not null,
             bundle.Overrides is not null);
     }

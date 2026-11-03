@@ -26,6 +26,10 @@ internal static class HttpJsonExtensions
         this HttpClient client, string? requestUri, T value, CancellationToken cancellationToken = default) =>
         HttpClientJsonExtensions.PutAsJsonAsync(client, requestUri, value, TestJson.Options, cancellationToken);
 
+    public static Task<HttpResponseMessage> PatchAsJsonAsync<T>(
+        this HttpClient client, string? requestUri, T value, CancellationToken cancellationToken = default) =>
+        HttpClientJsonExtensions.PatchAsJsonAsync(client, requestUri, value, TestJson.Options, cancellationToken);
+
     public static Task<T?> GetFromJsonAsync<T>(
         this HttpClient client, string? requestUri, CancellationToken cancellationToken = default) =>
         HttpClientJsonExtensions.GetFromJsonAsync<T>(client, requestUri, TestJson.Options, cancellationToken);

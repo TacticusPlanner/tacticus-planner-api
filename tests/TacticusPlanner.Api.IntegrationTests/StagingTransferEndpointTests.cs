@@ -5,8 +5,11 @@ using TacticusPlanner.Api.Features.StagingTransfer;
 using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.LegendaryEvents;
 using TacticusPlanner.Domain.PlayerData;
+using TacticusPlanner.Domain.PlayerData.Chunks;
 using TacticusPlanner.Domain.Projects;
+using TacticusPlanner.Domain.RosterSnapshots;
 using TacticusPlanner.Domain.UserSettings;
+using TacticusPlanner.GameDomain;
 using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.IntegrationTests;
@@ -63,7 +66,7 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
         importResponse.EnsureSuccessStatusCode();
         var counts = await importResponse.Content.ReadFromJsonAsync<ImportFromProductionResponse>(Ct);
         // Two projects: the seeded one and the Default project provisioned with the production account.
-        Assert.Equal(new ImportFromProductionResponse(2, 2, 1, 1, true, true), counts);
+        Assert.Equal(new ImportFromProductionResponse(2, 2, 1, 1, 1, true, true), counts);
 
         using var scope = target.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
@@ -100,6 +103,13 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
         var record = Assert.Single(await db.LegendaryEventRunRecords.IgnoreQueryFilters().AsNoTracking()
             .Where(entity => entity.ProfileId == profile.Id).ToListAsync(Ct));
         Assert.Equal(1234, record.Points);
+
+        var snapshot = Assert.Single(await db.PersonalRosterSnapshots.IgnoreQueryFilters().AsNoTracking()
+            .Where(entity => entity.ProfileId == profile.Id).ToListAsync(Ct));
+        Assert.Equal(("Before LE", RosterSnapshotSource.Manual, seeded.SnapshotTakenAt),
+            (snapshot.Name, snapshot.Source, snapshot.TakenAt));
+        Assert.Equal("ultraCalgar", Assert.Single(snapshot.Roster.Characters).UnitId.Value);
+        Assert.Equal(1, snapshot.CharacterCount);
 
         var settings = await db.UserSettings.IgnoreQueryFilters().AsNoTracking().FirstAsync(entity => entity.Id == profile.Id, Ct);
         Assert.Equal(538, settings.Settings.DailyEnergy);
@@ -149,7 +159,7 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
         Assert.Equal(HttpStatusCode.NotFound, codeOnTarget.StatusCode);
     }
 
-    private sealed record SeededSource(GoalId ParentGoalId, GoalId ChildGoalId);
+    private sealed record SeededSource(GoalId ParentGoalId, GoalId ChildGoalId, DateTimeOffset SnapshotTakenAt);
 
     private async Task<SeededSource> SeedSourceAsync(string subject)
     {
@@ -209,6 +219,17 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
             CatalogVersion = "1",
             Points = 1234,
         });
+        var takenAt = new DateTimeOffset(2026, 10, 1, 12, 0, 0, TimeSpan.Zero);
+        db.PersonalRosterSnapshots.Add(PersonalRosterSnapshot.Create(
+            profileId,
+            "Before LE",
+            RosterSnapshotSource.Manual,
+            new RosterSnapshot
+            {
+                TakenAt = takenAt,
+                CatalogVersion = "1",
+                Characters = [new PlayerCharacterRecord { UnitId = UnitId.From("ultraCalgar"), Rank = (UnitRank)12 }],
+            }));
         db.UserSettings.Add(new UserSettings { Id = profileId, Settings = new UserSettingsData { DailyEnergy = 538 } });
         db.PlayerDataOverrides.Add(new PlayerDataOverride
         {
@@ -217,6 +238,6 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
         });
 
         await db.SaveChangesAsync(Ct);
-        return new SeededSource(parent.Id, child.Id);
+        return new SeededSource(parent.Id, child.Id, takenAt);
     }
 }
