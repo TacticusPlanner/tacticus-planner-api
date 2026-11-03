@@ -126,11 +126,14 @@ builder.Services.AddCors(options =>
         {
             // ETag is not a CORS-safelisted response header: without exposing it the client cannot read
             // it back, never sends If-None-Match, and re-reads the full game catalog manifest every launch.
+            // Without a preflight max age Chrome re-sends OPTIONS after 5s; preflights were ~40% of prod
+            // traffic. 2h is Chrome's cap (Firefox allows 24h).
             policy
                 .WithOrigins(allowedOrigins)
                 .AllowAnyHeader()
                 .AllowAnyMethod()
-                .WithExposedHeaders("ETag", PurgeAccountEndpoint.SignInAccountDeletedHeader);
+                .WithExposedHeaders("ETag", PurgeAccountEndpoint.SignInAccountDeletedHeader)
+                .SetPreflightMaxAge(TimeSpan.FromHours(2));
         }
     });
 });
