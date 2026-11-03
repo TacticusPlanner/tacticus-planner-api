@@ -174,6 +174,8 @@ do not commit secrets.
 | `RateLimiting__UpstreamFastPerMinute` | Optional, default `10`. Per-profile, per-endpoint requests/minute for `POST tacticus-api-key/validate` and `PUT me/tacticus-integration`; excess requests get `429` with `Retry-After` |
 | `RateLimiting__UpstreamSlowPerHour` | Optional, default `6`. Per-profile, per-endpoint requests/hour for `POST tacticus-integration/player-sync`, `POST guilds/register`, `POST guilds/me/sync`, `POST me/v1-import` and `POST me/roster-snapshots` (not with `fromLastSync=true`) |
 | `RosterSnapshots__PersonalLimit` | Optional, default `20`. How many manual and V1-imported roster snapshots a profile may hold; automatic snapshots do not count |
+| `RosterSnapshots__AutoLimit` | Optional, default `12`. How many automatic roster snapshots a profile keeps; the oldest is replaced at the limit |
+| `RosterSnapshots__AutoWindowDays` | Optional, default `30`. A sync takes an automatic roster snapshot only when no roster snapshot of any kind was taken within this many days |
 | `ColumnEncryption__CurrentKeyVersion` | Logical key version used to encrypt new/updated sensitive columns |
 | `ColumnEncryption__Keys__<version>` | Base64/base64url 32-byte AES-256 key for the matching key version |
 | `Analytics__ProjectToken` | PostHog project token (public — identifies the project, not a secret) |

@@ -51,14 +51,17 @@ public enum XpBookRarity
 }
 
 /// <param name="WatchAds">The player watches the daily Legendary Event ad token (default true).</param>
-public sealed record UserSettingsResponse(int DailyEnergy, XpBookRarity XpBookRarity, bool WatchAds, long Revision)
+/// <param name="AutoRosterSnapshots">A sync takes an automatic roster snapshot when none is recent (default true).</param>
+public sealed record UserSettingsResponse(
+    int DailyEnergy, XpBookRarity XpBookRarity, bool WatchAds, long Revision, bool AutoRosterSnapshots)
 {
     public static UserSettingsResponse From(UserSettingsEntity settings) =>
         new(
             settings.Settings.DailyEnergy,
             NormalizeXpBookRarity(settings.Settings.XpBookRarity),
             settings.Settings.WatchAds ?? true,
-            settings.Revision);
+            settings.Revision,
+            settings.Settings.AutoRosterSnapshots ?? true);
 
     // A row saved before this field existed (or any other missing/null/unsupported stored value) reads
     // as the default rather than leaking an invalid value to the client.

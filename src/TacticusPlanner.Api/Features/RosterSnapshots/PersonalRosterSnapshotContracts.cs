@@ -61,8 +61,14 @@ public sealed record PersonalRosterSnapshotResponse(
 /// <param name="Limit">How many snapshots that count toward the limit the profile may hold.</param>
 /// <param name="Count">How many it holds (manual and V1 imports; automatic snapshots do not count).</param>
 /// <param name="Items">Newest <c>takenAt</c> first.</param>
+/// <param name="Limit">The limit on snapshots that count toward it (manual and V1-imported).</param>
+/// <param name="Count">The caller's snapshots that count toward <paramref name="Limit"/>.</param>
+/// <param name="AutoLimit">The rolling quota of automatic snapshots.</param>
+/// <param name="AutoCount">The caller's automatic snapshots.</param>
 public sealed record PersonalRosterSnapshotListResponse(
     int Limit,
     int Count,
+    int AutoLimit,
+    int AutoCount,
     IReadOnlyList<PersonalRosterSnapshotResponse> Items
 );

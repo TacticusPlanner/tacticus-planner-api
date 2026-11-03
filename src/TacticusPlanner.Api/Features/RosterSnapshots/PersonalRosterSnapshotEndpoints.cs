@@ -13,6 +13,7 @@ internal static class PersonalRosterSnapshotProblems
 {
     public const string LimitReached = "rosterSnapshotLimitReached";
     public const string PlayerDataNotSynced = "playerDataNotSynced";
+    public const string NotAutomatic = "rosterSnapshotNotAutomatic";
 
     public static bool IsFromLastSync(HttpRequest request) =>
         bool.TryParse(request.Query["fromLastSync"].ToString(), out var value) && value;
@@ -109,7 +110,8 @@ public sealed class ListPersonalRosterSnapshotsEndpoint : EndpointWithoutRequest
         Summary(summary =>
         {
             summary.Summary = "Lists the caller's personal roster snapshots, newest first, without rosters.";
-            summary.Description = "count is the number that counts toward limit (manual and V1-imported snapshots). "
+            summary.Description = "count is the number that counts toward limit (manual and V1-imported snapshots); "
+                + "autoCount the automatic snapshots, kept to autoLimit by replacing the oldest. "
                 + "Legendary Event run-record rosters are not listed here.";
             summary.Response<PersonalRosterSnapshotListResponse>(StatusCodes.Status200OK);
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
@@ -137,6 +139,8 @@ public sealed class ListPersonalRosterSnapshotsEndpoint : EndpointWithoutRequest
             new PersonalRosterSnapshotListResponse(
                 service.Limit,
                 items.Count(item => PersonalRosterSnapshotValidation.CountsTowardLimit(item.Source)),
+                service.AutoLimit,
+                items.Count(item => item.Source == RosterSnapshotSource.Auto),
                 items),
             ct);
     }
@@ -269,5 +273,55 @@ public sealed class DeletePersonalRosterSnapshotEndpoint : EndpointWithoutReques
         }
 
         await Send.NoContentAsync(ct);
+    }
+}
+
+public sealed class KeepPersonalRosterSnapshotEndpoint : EndpointWithoutRequest<PersonalRosterSnapshotResponse>
+{
+    public override void Configure()
+    {
+        Post("me/roster-snapshots/{snapshotId}/keep");
+        Summary(summary =>
+        {
+            summary.Summary = "Keeps one of the caller's automatic snapshots as a manual one.";
+            summary.Description = "source becomes manual; the name, takenAt and roster do not change. It then counts "
+                + "toward limit, and the automatic quota can no longer replace it.";
+            summary.Response<PersonalRosterSnapshotResponse>(StatusCodes.Status200OK);
+            summary.Response(StatusCodes.Status409Conflict,
+                PersonalRosterSnapshotProblems.LimitReached + " (extensions limit, count) at the limit; "
+                + PersonalRosterSnapshotProblems.NotAutomatic + " (current is the snapshot) when it is not automatic.");
+            summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
+            summary.Response(StatusCodes.Status404NotFound, "No snapshot with this id belongs to the caller.");
+        });
+    }
+
+    public override async Task HandleAsync(CancellationToken ct)
+    {
+        if (ProcessorState<CurrentUserState>().ProfileId is null
+            || PersonalRosterSnapshotProblems.RouteId(this) is not { } snapshotId)
+        {
+            await this.SendNotFoundProblemAsync(ct);
+            return;
+        }
+
+        switch (await Resolve<PersonalRosterSnapshotService>().KeepAsync(snapshotId, ct))
+        {
+            case KeepPersonalRosterSnapshotResult.Kept kept:
+                await Send.OkAsync(PersonalRosterSnapshotResponse.From(kept.Snapshot), ct);
+                return;
+            case KeepPersonalRosterSnapshotResult.LimitReached limit:
+                await PersonalRosterSnapshotProblems.SendLimitReachedAsync(this, limit.Limit, limit.Count, ct);
+                return;
+            case KeepPersonalRosterSnapshotResult.NotAutomatic notAutomatic:
+                await this.SendConflictAsync(
+                    PersonalRosterSnapshotProblems.NotAutomatic,
+                    "Only an automatic snapshot can be kept.",
+                    PersonalRosterSnapshotResponse.From(notAutomatic.Snapshot),
+                    ct);
+                return;
+            default:
+                await this.SendNotFoundProblemAsync(ct);
+                return;
+        }
     }
 }

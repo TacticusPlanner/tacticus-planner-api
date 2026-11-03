@@ -22,12 +22,14 @@ namespace TacticusPlanner.Api.Features.PlayerData;
 /// request happens to trigger the player-data provider's own sync (rewrite-v1-goal-import's
 /// player_data_required refusal was otherwise near-guaranteed on a brand-new account's first import).
 /// </summary>
-public sealed class PlayerDataSyncService(
+public sealed partial class PlayerDataSyncService(
     PlannerDbContext db,
     ITacticusApi tacticusApi,
     PlayerDataTransformer transformer,
     LegendaryEventRunRecordRecorder runRecordRecorder,
-    TimeProvider timeProvider)
+    TimeProvider timeProvider,
+    IEnumerable<IPlayerDataSyncDefaultStep> defaultSteps,
+    ILogger<PlayerDataSyncService> logger)
 {
     private static readonly IReadOnlyDictionary<string, Action<PlayerDataSnapshotEntity, PlayerDataTransformResult>> ChunkSetters =
         new Dictionary<string, Action<PlayerDataSnapshotEntity, PlayerDataTransformResult>>(StringComparer.Ordinal)
@@ -211,10 +213,10 @@ public sealed class PlayerDataSyncService(
             }
 
             await RecordRunsAsync(profileId, transformed, syncedAt, ct);
+            var write = new PlayerDataSyncWrite(profileId, transformed.Characters, transformed.Mows, syncedAt);
             if (postWrite is not null)
             {
-                await postWrite.ApplyAsync(
-                    new PlayerDataSyncWrite(profileId, transformed.Characters, transformed.Mows, syncedAt), ct);
+                await postWrite.ApplyAsync(write, ct);
             }
 
             if (integration is not null)
@@ -233,10 +235,44 @@ public sealed class PlayerDataSyncService(
                 throw;
             }
 
+            // A caller's own step (a manual snapshot) replaces the default steps for this sync.
+            if (postWrite is null)
+            {
+                await RunDefaultStepsAsync(transaction, write, ct);
+            }
+
             await transaction.CommitAsync(ct);
             return new PlayerDataSyncResult.Success(snapshot);
         });
     }
+
+    /// <summary>Runs each default step after the sync's own writes are saved, each behind a savepoint: a failing step is
+    /// rolled back and logged, and the sync still commits.</summary>
+    private async Task RunDefaultStepsAsync(
+        Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction transaction,
+        PlayerDataSyncWrite write,
+        CancellationToken ct)
+    {
+        foreach (var step in defaultSteps)
+        {
+            const string savepoint = "player_data_sync_default_step";
+            await transaction.CreateSavepointAsync(savepoint, ct);
+            try
+            {
+                await step.ApplyAsync(write, ct);
+                await db.SaveChangesAsync(ct);
+            }
+            catch (Exception exception) when (exception is not OperationCanceledException)
+            {
+                step.Discard();
+                await transaction.RollbackToSavepointAsync(savepoint, ct);
+                DefaultStepFailed(logger, exception, step.GetType().Name);
+            }
+        }
+    }
+
+    [LoggerMessage(Level = LogLevel.Warning, Message = "Post-sync step {Step} failed; the sync was kept.")]
+    private static partial void DefaultStepFailed(ILogger logger, Exception exception, string step);
 
     /// <summary>Writes only the chunks whose hash changed, plus the metadata, as one statement predicated on the
     /// revision read before the upstream fetch. <c>ExecuteUpdateAsync</c> cannot set the owned-JSON chunk columns
@@ -360,3 +396,10 @@ public abstract record PlayerDataSyncResult
     /// <summary>The Tacticus API failed or timed out; nothing was synced.</summary>
     public sealed record UpstreamUnavailable : PlayerDataSyncResult;
 }
+
+/// <summary>
+/// A step every sync runs when its caller supplies no <see cref="IPlayerDataSyncPostWriteStep"/> of its own (the
+/// automatic roster snapshot). It runs after the sync's writes are saved, so its reads see them, and behind a
+/// savepoint, so its failure never fails the sync.
+/// </summary>
+public interface IPlayerDataSyncDefaultStep : IPlayerDataSyncPostWriteStep;

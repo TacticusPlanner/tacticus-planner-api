@@ -15,6 +15,14 @@ public sealed class RosterSnapshotOptions
     /// <summary>How many snapshots that count toward the limit (manual and V1 imports) a profile may hold.</summary>
     [Range(1, 1000)]
     public int PersonalLimit { get; set; } = PersonalRosterSnapshotValidation.DefaultLimit;
+
+    /// <summary>The rolling quota of automatic snapshots; at it, a new one replaces the oldest automatic one.</summary>
+    [Range(1, 1000)]
+    public int AutoLimit { get; set; } = PersonalRosterSnapshotValidation.DefaultAutoLimit;
+
+    /// <summary>Days without any roster snapshot after which a sync takes an automatic one.</summary>
+    [Range(1, 3650)]
+    public int AutoWindowDays { get; set; } = PersonalRosterSnapshotValidation.DefaultAutoWindowDays;
 }
 
 public abstract record CreatePersonalRosterSnapshotResult
@@ -34,6 +42,17 @@ public abstract record CreatePersonalRosterSnapshotResult
     public sealed record UpstreamUnavailable : CreatePersonalRosterSnapshotResult;
 }
 
+public abstract record KeepPersonalRosterSnapshotResult
+{
+    public sealed record Kept(PersonalRosterSnapshot Snapshot) : KeepPersonalRosterSnapshotResult;
+
+    public sealed record NotFound : KeepPersonalRosterSnapshotResult;
+
+    public sealed record NotAutomatic(PersonalRosterSnapshot Snapshot) : KeepPersonalRosterSnapshotResult;
+
+    public sealed record LimitReached(int Limit, int Count) : KeepPersonalRosterSnapshotResult;
+}
+
 /// <summary>
 /// Takes personal roster snapshots (<c>personal-roster-snapshots</c>): from a fresh sync, captured inside the
 /// sync's write transaction, or with <c>fromLastSync</c> from the stored roster without calling upstream. The limit
@@ -46,6 +65,8 @@ public sealed class PersonalRosterSnapshotService(
     IOptions<RosterSnapshotOptions> options)
 {
     public int Limit => options.Value.PersonalLimit;
+
+    public int AutoLimit => options.Value.AutoLimit;
 
     /// <summary>The number of the caller's snapshots that count toward the limit.</summary>
     public Task<int> CountAsync(CancellationToken ct) =>
@@ -104,6 +125,32 @@ public sealed class PersonalRosterSnapshotService(
             await db.SaveChangesAsync(ct);
             await transaction.CommitAsync(ct);
             return outcome;
+        });
+    }
+
+    /// <summary>Keeps an automatic snapshot as a manual one, under the profile lock so it cannot pass the limit.</summary>
+    public async Task<KeepPersonalRosterSnapshotResult> KeepAsync(
+        PersonalRosterSnapshotId snapshotId, CancellationToken ct)
+    {
+        var strategy = db.Database.CreateExecutionStrategy();
+        return await strategy.ExecuteAsync(async Task<KeepPersonalRosterSnapshotResult> () =>
+        {
+            db.ChangeTracker.Clear();
+            await using var transaction = await db.Database.BeginTransactionAsync(ct);
+            await db.LockCurrentProfileAsync(ct);
+            var snapshot = await db.PersonalRosterSnapshots.FirstOrDefaultAsync(entity => entity.Id == snapshotId, ct);
+            if (snapshot is null)
+                return new KeepPersonalRosterSnapshotResult.NotFound();
+            if (snapshot.Source != RosterSnapshotSource.Auto)
+                return new KeepPersonalRosterSnapshotResult.NotAutomatic(snapshot);
+            var count = await CountAsync(ct);
+            if (count >= Limit)
+                return new KeepPersonalRosterSnapshotResult.LimitReached(Limit, count);
+
+            snapshot.Keep();
+            await db.SaveChangesAsync(ct);
+            await transaction.CommitAsync(ct);
+            return new KeepPersonalRosterSnapshotResult.Kept(snapshot);
         });
     }
 
