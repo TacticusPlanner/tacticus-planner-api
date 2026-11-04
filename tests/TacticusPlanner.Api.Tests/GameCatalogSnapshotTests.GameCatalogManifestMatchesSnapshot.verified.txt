@@ -1,6 +1,6 @@
 ﻿{
   version: 1.43.157.2989+ab5e36a1a67b,
-  schemaHash: 35d518461788f515d2c893e25aada052c3e49839fa00ffa6947f6bdddd9d99b1,
+  schemaHash: 60d1fb5a7c7ff0fdfc8f6d111450303793475d7fe9b15ae8d3b3ef94cfcb0ec7,
   gameVersion: 1.43.157.2989,
   sourceHash: {time-dependent},
   datasets: [
@@ -11,7 +11,7 @@
     },
     {
       key: campaign-battles,
-      hash: cce8aca4d3892c2bf730c1ecffa7be7729c0ec6b8a6b6b654d458c1d25f9f82f,
+      hash: 5175fa83a540960de2d17e910a74eb711241d067fd414bd7ba91897c15ea58c0,
       url: /api/v1/game-catalog/campaign-battles/{envelopeHash}
     },
     {
@@ -103,6 +103,11 @@
       key: mythic-quests,
       hash: 42a2a9de7e04a7af00610d6cd6edc02a8c47c092bc492f82ede28e476be9b1f6,
       url: /api/v1/game-catalog/mythic-quests/{envelopeHash}
+    },
+    {
+      key: npc-encounters,
+      hash: 1d4765e640d39b10e19f0c1a170861ab2bfb7080b3ccfd77bb4d57f29d6dda69,
+      url: /api/v1/game-catalog/npc-encounters/{envelopeHash}
     },
     {
       key: npcs,

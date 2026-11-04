@@ -43,6 +43,7 @@ public static class ServedDatasets
             [GameCatalogDatasets.ProgressionRules] = snapshot => snapshot.ProgressionRulesViews,
             [GameCatalogDatasets.Hre] = snapshot => snapshot.HreViews,
             [GameCatalogDatasets.Incursions] = snapshot => snapshot.IncursionViews,
+            [GameCatalogDatasets.NpcEncounters] = snapshot => snapshot.NpcEncounterViews,
             [GameCatalogDatasets.EventDefinitionsServed] = snapshot => snapshot.EventDefinitionViews,
             [GameCatalogDatasets.EventsCalendar] = snapshot => snapshot.EventsCalendar,
             [GameCatalogDatasets.Shops] = snapshot => snapshot.ShopViews,
