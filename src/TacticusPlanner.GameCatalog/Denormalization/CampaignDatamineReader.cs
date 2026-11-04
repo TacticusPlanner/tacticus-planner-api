@@ -261,8 +261,9 @@ internal static partial class GameCatalogDenormalizer
             var npc = npcs.TryGetValue(enemy.NpcId, out var found)
                 ? found
                 : throw CampaignError(key, $"battle '{id}' names enemy '{enemy.NpcId}' the game does not have");
-            var row = CampaignEnemyStatRow(key, id, enemy.NpcId, enemy.Index, npc);
-            return new GameCatalogCampaignDetailedEnemy(enemy.NpcId, npc.Name, enemy.Count, row.StarLevel, CampaignRankName(key, id, row.Rank));
+            var servedIndex = CampaignEnemyStatRow(key, id, enemy.NpcId, enemy.Index, npc);
+            var row = npc.Stats[servedIndex];
+            return new GameCatalogCampaignDetailedEnemy(enemy.NpcId, npc.Name, enemy.Count, row.StarLevel, CampaignRankName(key, id, row.Rank), servedIndex);
         }).ToArray();
         var enemyNpcs = enemies.Select(enemy => npcs[enemy.NpcId]).ToArray();
 
@@ -310,18 +311,18 @@ internal static partial class GameCatalogDenormalizer
             battle.LightningVictory);
     }
 
-    // The stat row an enemy's index points at, as V1 read it: a boss index is 1-based, any other npc's is 0-based
-    // and capped at the last row.
-    private static DatamineNpcStat CampaignEnemyStatRow(string key, string battleId, string npcId, int index, DatamineNpc npc)
+    // The position of the stat row an enemy's index points at. Every index is 1-based: with these rows a battle's
+    // enemies add up to the power the game gives it, and V1's battle cards read them the same way.
+    private static int CampaignEnemyStatRow(string key, string battleId, string npcId, int index, DatamineNpc npc)
     {
         if (npc.Stats.Count == 0)
         {
             throw CampaignError(key, $"battle '{battleId}' enemy '{npcId}' has no stat rows");
         }
 
-        var row = npcId.Contains("Boss", StringComparison.Ordinal) ? index - 1 : Math.Min(index, npc.Stats.Count - 1);
+        var row = index - 1;
         return row >= 0 && row < npc.Stats.Count
-            ? npc.Stats[row]
+            ? row
             : throw CampaignError(key, $"battle '{battleId}' enemy '{npcId}:{index.ToString(CultureInfo.InvariantCulture)}' points past its {npc.Stats.Count} stat rows");
     }
 

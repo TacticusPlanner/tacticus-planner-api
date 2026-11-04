@@ -342,6 +342,18 @@ public sealed class GetGameCatalogIncursionsEndpoint(IGameCatalogProvider catalo
     }
 }
 
+public sealed class GetGameCatalogNpcEncountersEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogNpcEncounter>>(catalog, GameCatalogDatasets.NpcEncounters)
+{
+    public override void Configure()
+    {
+        Get("game-catalog/npc-encounters", "game-catalog/npc-encounters/{envelopeHash}");
+        ConfigureServed(
+            "Gets where each NPC is encountered.",
+            "One record per npc, source and group naming every battle the npc fights in as an enemy: source is campaign, campaignEvent, legendaryEvent, questEvent, incursion, guildRaid, survival or onslaught; groupId is the campaign group, event id (lreId or featured character), MoW, raid boss / prime unit set, Survival battle set or onslaught; each battle carries the served battle id, track, tier, node or battle number, challenge flag, guild raid role and the wave rounds where the source has them. Ids and numbers only; no schedule.");
+    }
+}
+
 public sealed class GetGameCatalogEventDefinitionsEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogEventDefinition>>(catalog, GameCatalogDatasets.EventDefinitionsServed)
 {
