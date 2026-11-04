@@ -49,6 +49,10 @@ public static class GameCatalogDatasets
     // and the run map with chest rewards) from the datamine liveEvents/mowEvent.json and loot/chests.json. See
     // Denormalization/IncursionDenormalizer.cs.
     public const string Incursions = "incursions";
+    // npc-encounters: one record per (npc, source, group) naming every battle the npc fights in as an enemy, inverted
+    // from the campaign, LRE, quest, incursion and raid-boss views plus the raw Survival and Onslaught waves. See
+    // Denormalization/NpcEncounterDenormalizer.cs.
+    public const string NpcEncounters = "npc-encounters";
 
     // Route/key prefixes for the split dataset families.
     public const string UnitsPrefix = "units";
@@ -268,5 +272,6 @@ public static class GameCatalogDatasets
         ProgressionRules,
         Hre,
         Incursions,
+        NpcEncounters,
     ];
 }
