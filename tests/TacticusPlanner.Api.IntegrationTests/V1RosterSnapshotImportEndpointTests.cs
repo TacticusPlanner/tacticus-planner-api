@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TacticusPlanner.Api.Features.LegendaryEventPlans;
 using TacticusPlanner.Api.Features.RosterSnapshots;
@@ -48,6 +49,29 @@ public sealed class V1RosterSnapshotImportEndpointTests(PlannerApiFactory factor
         Assert.Equal((ImportPartStatus.Skipped, "not_selected"), (body.RosterSnapshots.Status, body.RosterSnapshots.Code));
         Assert.Empty(body.RosterSnapshotOutcomes);
         Assert.Empty((await ListAsync(client)).Items);
+    }
+
+    [Fact]
+    public async Task WithTheFeatureFlagOffThePartReadsAsNotSelected()
+    {
+        using var off = factory.WithWebHostBuilder(builder => builder.ConfigureAppConfiguration((_, configuration) =>
+            configuration.AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                ["FeatureManagement:RosterSnapshots"] = "false",
+            })));
+        subject = $"v1-snap-import-{Guid.NewGuid()}";
+        var client = off.CreateClient();
+        client.DefaultRequestHeaders.Add(PlannerTestAuthenticationHandler.SubjectHeader, subject);
+        (await client.GetAsync("/api/v1/account", Ct)).EnsureSuccessStatusCode();
+        var username = Configure(ChainJson(Base("Oct", Day(0), CalgarJson(V1Diamond1, 38))));
+
+        var body = await ImportAsync(client, username);
+
+        Assert.Equal((ImportPartStatus.Skipped, "not_selected"), (body.RosterSnapshots.Status, body.RosterSnapshots.Code));
+        using var scope = factory.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
+        Assert.False(await db.PersonalRosterSnapshots.IgnoreQueryFilters()
+            .AnyAsync(entity => entity.Profile!.Subject == subject, Ct));
     }
 
     [Theory]
