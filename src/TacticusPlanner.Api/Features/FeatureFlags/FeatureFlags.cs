@@ -10,4 +10,6 @@ namespace TacticusPlanner.Api.Features.FeatureFlags;
 /// </remarks>
 public static class FeatureFlags
 {
+    /// <summary>Personal roster snapshots: the <c>me/roster-snapshots</c> endpoints.</summary>
+    public const string RosterSnapshots = "RosterSnapshots";
 }
