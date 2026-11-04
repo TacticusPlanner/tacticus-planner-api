@@ -254,7 +254,8 @@ Early testers can copy their production planner data into their staging account:
 2. On staging, `POST /api/v1/account/import-from-production` sends the code to production's
    `POST /api/v1/internal/staging-transfer/export` (anonymous, authenticated by the
    `X-Staging-Transfer-Key` service-key header, left out of the OpenAPI document) and receives the profile's
-   goals, projects, Legendary Event plans and run records, settings and progress overrides.
+   goals, projects, Legendary Event plans and run records, personal roster snapshots, settings and progress
+   overrides.
 3. Staging replaces the caller's copies of those in one transaction with fresh ids. The Tacticus API key and
    user id, player-data snapshot and guild are never copied.
 
