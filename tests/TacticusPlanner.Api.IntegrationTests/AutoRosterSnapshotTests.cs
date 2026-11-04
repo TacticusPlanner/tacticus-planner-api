@@ -97,7 +97,8 @@ public sealed class AutoRosterSnapshotTests(PlannerApiFactory factory) : IClassF
     public async Task WithTheSettingOffNoneIsTakenAndExistingOnesAreKept()
     {
         var (client, profileId) = await CreateSyncingClientAsync(factory);
-        await SeedAsync(profileId, [(RosterSnapshotSource.Auto, DaysAgo(60))]);
+        var takenAt = DaysAgo(60);
+        await SeedAsync(profileId, [(RosterSnapshotSource.Auto, takenAt)]);
         var settings = (await client.GetFromJsonAsync<UserSettingsResponse>("/api/v1/settings", Ct))!;
         Assert.True(settings.AutoRosterSnapshots);
         var off = await client.PutAsJsonAsync("/api/v1/settings",
@@ -107,7 +108,7 @@ public sealed class AutoRosterSnapshotTests(PlannerApiFactory factory) : IClassF
 
         await SyncAsync(client);
 
-        Assert.Equal(DaysAgo(60), Assert.Single((await ListAsync(client)).Items).TakenAt);
+        Assert.Equal(takenAt, Assert.Single((await ListAsync(client)).Items).TakenAt);
     }
 
     [Fact]
