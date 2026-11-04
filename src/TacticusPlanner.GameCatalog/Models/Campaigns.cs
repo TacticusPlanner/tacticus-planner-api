@@ -103,7 +103,9 @@ public sealed record GameCatalogCampaignDetailedEnemy(
     string Name,
     int Count,
     int Stars,
-    string Rank
+    string Rank,
+    // The 0-based position of this enemy's row in the npc's served stats.
+    int ServedIndex
 );
 
 public sealed record GameCatalogCampaignPotentialRewardView(

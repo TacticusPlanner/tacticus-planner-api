@@ -42,7 +42,7 @@ public sealed class CampaignDatamineReaderTests
         4,
         900,
         [
-            ["admecNpc1Vanguard:5", "admecNpc1Vanguard:1", "admecBossDestroyer:1", "powupHealth", "admecNpc1Vanguard:1"],
+            ["admecNpc1Vanguard:3", "admecNpc1Vanguard:1", "admecBossDestroyer:1", "powupHealth", "admecNpc1Vanguard:1"],
             ["blackNpc3TraitorGuardsman:0"],
         ],
         [2, 1],
@@ -129,15 +129,15 @@ public sealed class CampaignDatamineReaderTests
         Assert.Equal(new GameCatalogCampaignPotentialReward("upgHpC015", "upgradeCommon_eventStandard"), Assert.Single(battle.Rewards.Potential));
         Assert.Equal("upgradeCommon_eventStandardChallenge", Assert.Single(group.Battles[1].Rewards.Potential).ChanceId);
 
-        // The allied team and the power-up are not enemies; a boss index is 1-based, an npc's 0-based and capped.
+        // The allied team and the power-up are not enemies; every index is 1-based.
         Assert.Equal(4, battle.EnemiesTotal);
         Assert.Equal(["AdeptusMechanicus"], battle.EnemiesFactions);
         Assert.Equal(["Exitor-Rho", "Skitarii Vanguard"], battle.EnemiesTypes);
         Assert.Equal(
             [
-                new GameCatalogCampaignDetailedEnemy("admecBossDestroyer", "Exitor-Rho", 1, 3, "Stone3"),
-                new GameCatalogCampaignDetailedEnemy("admecNpc1Vanguard", "Skitarii Vanguard", 2, 0, "Stone2"),
-                new GameCatalogCampaignDetailedEnemy("admecNpc1Vanguard", "Skitarii Vanguard", 1, 1, "Stone3"),
+                new GameCatalogCampaignDetailedEnemy("admecBossDestroyer", "Exitor-Rho", 1, 3, "Stone3", 0),
+                new GameCatalogCampaignDetailedEnemy("admecNpc1Vanguard", "Skitarii Vanguard", 2, 0, "Stone1", 0),
+                new GameCatalogCampaignDetailedEnemy("admecNpc1Vanguard", "Skitarii Vanguard", 1, 1, "Stone3", 2),
             ],
             battle.DetailedEnemyTypes);
     }
