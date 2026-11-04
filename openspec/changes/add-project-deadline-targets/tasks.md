@@ -17,7 +17,7 @@
 
 ## 3. Staging transfer
 
-- [ ] 3.1 `StagingTransferBundle` carries `TargetRun`, `TargetSeason`, `TargetDate`; exporter and importer map them; round-trip test with a season and a date target
+- [ ] 3.1 `StagingTransferBundle` carries `TargetRun`, `TargetSeason`, `TargetDate`; exporter and importer map them; round-trip test with a Legendary Event target with `TargetRun` 1, a season target and a date target, checking all three values survive export and import
 
 ## 4. Verification
 
