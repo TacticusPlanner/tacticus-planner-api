@@ -50,15 +50,47 @@ public enum XpBookRarity
     Mythic,
 }
 
+/// <summary>An on/off account preference; a flag listed in <see cref="UserSettingsResponse.Flags"/> is on.
+/// New preferences are added here, so they need no new field.</summary>
+public enum UserPreference
+{
+    /// <summary>Legendary Event planners include paid options (premium missions, the event bundle and bought
+    /// shards) in every event.</summary>
+    LegendaryEventShowPaidOptions,
+}
+
 /// <param name="WatchAds">The player watches the daily Legendary Event ad token (default true).</param>
-public sealed record UserSettingsResponse(int DailyEnergy, XpBookRarity XpBookRarity, bool WatchAds, long Revision)
+/// <param name="Flags">The account preferences that are on, each once, in declaration order (default none).</param>
+public sealed record UserSettingsResponse(
+    int DailyEnergy,
+    XpBookRarity XpBookRarity,
+    bool WatchAds,
+    UserPreference[] Flags,
+    long Revision)
 {
     public static UserSettingsResponse From(UserSettingsEntity settings) =>
         new(
             settings.Settings.DailyEnergy,
             NormalizeXpBookRarity(settings.Settings.XpBookRarity),
             settings.Settings.WatchAds ?? true,
+            ReadFlags(settings.Settings.Flags),
             settings.Revision);
+
+    /// <summary>Stored flag names to flags: unknown names (a flag since removed) are dropped, duplicates
+    /// collapse.</summary>
+    public static UserPreference[] ReadFlags(IEnumerable<string>? stored) =>
+        (stored ?? [])
+            .Select(name => Enum.TryParse<UserPreference>(name, out var flag) && Enum.IsDefined(flag)
+                ? flag
+                : (UserPreference?)null)
+            .OfType<UserPreference>()
+            .Distinct()
+            .Order()
+            .ToArray();
+
+    /// <summary>Flags to their stored names, each once in declaration order.</summary>
+    public static List<string> WriteFlags(IEnumerable<UserPreference> flags) =>
+        flags.Distinct().Order().Select(flag => flag.ToString()).ToList();
 
     // A row saved before this field existed (or any other missing/null/unsupported stored value) reads
     // as the default rather than leaking an invalid value to the client.

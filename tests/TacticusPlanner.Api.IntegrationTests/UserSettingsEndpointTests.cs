@@ -1,10 +1,13 @@
 using System.Net;
+using System.Net.Http.Json;
 using TacticusPlanner.Api.Features.UserSettings;
 
 namespace TacticusPlanner.Api.IntegrationTests;
 
 public sealed class UserSettingsEndpointTests(PlannerApiFactory factory) : IClassFixture<PlannerApiFactory>
 {
+    private static readonly string[] UnknownFlags = ["NotAFlag"];
+
     [Fact]
     public async Task GetCreatesProfileDefaultsAndPutPersistsSupportedValues()
     {
@@ -19,6 +22,7 @@ public sealed class UserSettingsEndpointTests(PlannerApiFactory factory) : IClas
         Assert.Equal(288, initial.DailyEnergy);
         Assert.Equal(XpBookRarity.Legendary, initial.XpBookRarity);
         Assert.True(initial.WatchAds);
+        Assert.Empty(initial.Flags);
         Assert.Equal(1, initial.Revision);
 
         var response = await client.PutAsJsonAsync(
@@ -60,6 +64,58 @@ public sealed class UserSettingsEndpointTests(PlannerApiFactory factory) : IClas
             response.EnsureSuccessStatusCode();
             return (await response.Content.ReadFromJsonAsync<UserSettingsResponse>(ct))!;
         }
+    }
+
+    [Fact]
+    public async Task FlagsAreWrittenAndKeptWhenOmitted()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var ct = TestContext.Current.CancellationToken;
+        var initial = await client.GetFromJsonAsync<UserSettingsResponse>("/api/v1/settings", ct);
+        Assert.NotNull(initial);
+
+        var on = await PutAsync(new UpdateUserSettingsRequest(
+            288, XpBookRarity.Legendary, initial.Revision,
+            Flags: [UserPreference.LegendaryEventShowPaidOptions, UserPreference.LegendaryEventShowPaidOptions]));
+        Assert.Equal([UserPreference.LegendaryEventShowPaidOptions], on.Flags);
+
+        // A write without the field (an older client) keeps the stored flags.
+        var kept = await PutAsync(new UpdateUserSettingsRequest(538, XpBookRarity.Legendary, on.Revision));
+        Assert.Equal([UserPreference.LegendaryEventShowPaidOptions], kept.Flags);
+
+        var read = await client.GetFromJsonAsync<UserSettingsResponse>("/api/v1/settings", ct);
+        Assert.Equal([UserPreference.LegendaryEventShowPaidOptions], read!.Flags);
+
+        var off = await PutAsync(new UpdateUserSettingsRequest(538, XpBookRarity.Legendary, kept.Revision, Flags: []));
+        Assert.Empty(off.Flags);
+
+        async Task<UserSettingsResponse> PutAsync(UpdateUserSettingsRequest request)
+        {
+            var response = await client.PutAsJsonAsync("/api/v1/settings", request, ct);
+            response.EnsureSuccessStatusCode();
+            return (await response.Content.ReadFromJsonAsync<UserSettingsResponse>(ct))!;
+        }
+    }
+
+    [Fact]
+    public async Task PutRejectsAnUnknownFlag()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+        var ct = TestContext.Current.CancellationToken;
+        var initial = await client.GetFromJsonAsync<UserSettingsResponse>("/api/v1/settings", ct);
+
+        var response = await client.PutAsync(
+            "/api/v1/settings",
+            JsonContent.Create(new
+            {
+                dailyEnergy = 288,
+                xpBookRarity = "Legendary",
+                revision = initial!.Revision,
+                flags = UnknownFlags,
+            }),
+            ct);
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
     }
 
     [Fact]

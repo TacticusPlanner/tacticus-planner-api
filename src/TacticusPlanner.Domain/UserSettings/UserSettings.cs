@@ -34,4 +34,8 @@ public sealed class UserSettingsData
     /// <summary>Whether the player watches the daily ad for an extra Legendary Event token. Null (a row saved
     /// before this field existed) reads as true.</summary>
     public bool? WatchAds { get; set; }
+
+    /// <summary>On/off account preferences stored by flag name (only the flags that are on). Null (a row saved
+    /// before this field existed) reads as no flags; an unknown stored name is ignored on read.</summary>
+    public List<string>? Flags { get; set; }
 }
