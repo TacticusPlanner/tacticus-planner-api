@@ -7,7 +7,7 @@ namespace TacticusPlanner.Api.Features.LegendaryEventPlans;
 /// <summary>The one served plan shape, returned by every plan endpoint (design D8). Ids only: no unit,
 /// objective or event display strings.</summary>
 /// <param name="Teams">Ordered by lane (alpha, beta, gamma), then <c>sortOrder</c>.</param>
-/// <param name="Runs">Run inputs, one entry per stored run, ascending by run; absent runs were never written (clients plan every free mission for them).</param>
+/// <param name="Runs">Run inputs, one entry per stored run, ascending by run; an absent run has no stored inputs (clients plan every free mission for it). Before all-zero writes were stored, and in V1 imports, an absent run can also be an earlier all-zero choice.</param>
 /// <param name="Annotations">Maybe clear / Stop here marks, ordered by lane, then <c>battleIndex</c>, then
 /// <c>objectiveId</c>. The client applies a mark only while synced progress shows its cell not cleared.</param>
 public sealed record LegendaryEventPlanResponse(

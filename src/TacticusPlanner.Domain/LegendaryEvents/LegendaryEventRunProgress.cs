@@ -1,7 +1,8 @@
 namespace TacticusPlanner.Domain.LegendaryEvents;
 
 /// <summary>The manual economy inputs of one run (1–3) of a <see cref="LegendaryEventPlan"/> (LRE Stage 3): what
-/// the Tacticus API cannot see. A run with no entry was never written.</summary>
+/// the Tacticus API cannot see. A run with no entry has no stored inputs;
+/// plans written before all-zero writes were stored, and V1 imports, can also leave an earlier all-zero choice absent.</summary>
 public sealed class LegendaryEventRunProgress
 {
     public int Run { get; set; }

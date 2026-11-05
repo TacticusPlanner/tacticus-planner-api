@@ -112,6 +112,13 @@ public sealed class LegendaryEventRunInputsEndpointTests(PlannerApiFactory facto
         Assert.Equal(1, plan.Revision);
         var run = Assert.Single(plan.Runs);
         Assert.Equal((2, 0), (run.Run, run.RegularMissions));
+
+        var reread = await ReadPlanAsync(await client.GetAsync(PlanUrl, Ct));
+        var stored = Assert.Single(reread.Runs);
+        Assert.Equal((1L, 2, 0, run.UpdatedAt), (reread.Revision, stored.Run, stored.RegularMissions, stored.UpdatedAt));
+
+        var repeated = await ReadPlanAsync(await WriteRunAsync(client, 2, new(plan.Revision, 0, 0, false, 0)));
+        Assert.Equal((1L, run.UpdatedAt), (repeated.Revision, Assert.Single(repeated.Runs).UpdatedAt));
     }
 
     [Fact]
