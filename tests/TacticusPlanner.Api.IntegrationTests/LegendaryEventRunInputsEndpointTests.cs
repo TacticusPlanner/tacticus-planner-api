@@ -102,15 +102,16 @@ public sealed class LegendaryEventRunInputsEndpointTests(PlannerApiFactory facto
     }
 
     [Fact]
-    public async Task AllZeroInputsForAnAbsentRunCreateNothing()
+    public async Task AllZeroInputsForAnAbsentRunAreStored()
     {
+        // A run with no row plans every free mission client side, so zeros are an explicit choice.
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
         var plan = await ReadPlanAsync(await WriteRunAsync(client, 2, new(0, 0, 0, false, 0)));
 
-        Assert.Equal(0, plan.Revision);
-        Assert.Empty(plan.Runs);
-        Assert.Equal(0, (await ReadPlanAsync(await client.GetAsync(PlanUrl, Ct))).Revision);
+        Assert.Equal(1, plan.Revision);
+        var run = Assert.Single(plan.Runs);
+        Assert.Equal((2, 0), (run.Run, run.RegularMissions));
     }
 
     [Fact]

@@ -8,7 +8,9 @@ namespace TacticusPlanner.Api.Features.LegendaryEventPlans;
 public static class LegendaryEventPlanInputMutations
 {
     /// <summary>Upserts one run's inputs; other runs are untouched. Values equal to the stored row (completed
-    /// arrays compared as sorted sets), or all zero and no completed missions for a run with no row, change nothing. There is no delete: zeros are the reset.</summary>
+    /// arrays compared as sorted sets) change nothing. A run with no row is stored even when every value is zero:
+    /// clients plan every free mission for a run with no row, so zeros are an explicit choice. There is no
+    /// delete.</summary>
     public static LegendaryEventPlanMutation SetRunInputs(
         LegendaryEventPlanMutationContext context, int run, UpdateLegendaryEventRunInputsRequest request)
     {
@@ -18,12 +20,6 @@ public static class LegendaryEventPlanInputMutations
         var existing = plan.Runs.FirstOrDefault(entry => entry.Run == run);
         if (existing is null)
         {
-            if (request is { RegularMissions: 0, PremiumMissions: 0, BundlePurchased: false, CloseShards: 0 }
-                && completedRegular.Count == 0 && completedPremium.Count == 0)
-            {
-                return LegendaryEventPlanMutation.Unchanged;
-            }
-
             existing = new LegendaryEventRunProgress { Run = run };
             // Appended, never re-sorted: owned JSON items are tracked by position. Reads order by run.
             plan.Runs.Add(existing);
