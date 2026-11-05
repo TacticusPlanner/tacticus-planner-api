@@ -2,7 +2,7 @@
 
 ### Requirement: An automatic snapshot is taken after a sync when none is recent
 
-After every successful player-data sync, and after Legendary Event run records have been opened or refreshed by that sync, the system SHALL store a personal snapshot with `source` `Auto` of the just-synced roster when the profile's `autoRosterSnapshots` setting is `true` and no roster snapshot of the profile has `takenAt` within the last 30 days (configurable). Personal snapshots of every source and Legendary Event run-record rosters SHALL count as snapshots. It SHALL NOT make any additional upstream call. The sync performed by `POST me/roster-snapshots` SHALL NOT take an automatic snapshot. A failure while taking the automatic snapshot SHALL NOT fail the sync.
+After every successful player-data sync, and after Legendary Event run records have been opened or refreshed by that sync, the system SHALL store a personal snapshot with `source` `Auto` of the just-synced roster when no roster snapshot of the profile has `takenAt` within the last 30 days (configurable). Personal snapshots of every source and Legendary Event run-record rosters SHALL count as snapshots. It SHALL NOT make any additional upstream call. The sync performed by `POST me/roster-snapshots` SHALL NOT take an automatic snapshot. A failure while taking the automatic snapshot SHALL NOT fail the sync. There is no per-user setting; the `RosterSnapshots` feature flag turns automatic snapshots off for everyone.
 
 #### Scenario: First sync takes a baseline
 
@@ -34,11 +34,11 @@ After every successful player-data sync, and after Legendary Event run records h
 - **WHEN** a sync succeeds
 - **THEN** one `Auto` snapshot is taken with `takenAt` equal to the sync time
 
-#### Scenario: Setting off
+#### Scenario: Feature flag off
 
-- **GIVEN** `autoRosterSnapshots` is `false` and the newest snapshot is 60 days old
+- **GIVEN** the `RosterSnapshots` feature flag is off and the profile has no snapshots
 - **WHEN** a sync succeeds
-- **THEN** no `Auto` snapshot is taken and existing `Auto` snapshots remain
+- **THEN** no `Auto` snapshot is taken
 
 ### Requirement: Automatic snapshots have their own rolling quota
 

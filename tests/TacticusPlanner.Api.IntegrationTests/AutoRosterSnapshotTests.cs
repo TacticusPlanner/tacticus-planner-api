@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using TacticusPlanner.Api.Features.PlayerData;
 using TacticusPlanner.Api.Features.RosterSnapshots;
 using TacticusPlanner.Api.Features.TacticusIntegration;
-using TacticusPlanner.Api.Features.UserSettings;
 using TacticusPlanner.Domain.LegendaryEvents;
 using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.PlayerData.Chunks;
@@ -92,24 +91,6 @@ public sealed class AutoRosterSnapshotTests(PlannerApiFactory factory) : IClassF
         Assert.Equal((12, 1, 13), (list.AutoCount, list.Count, list.Items.Count));
         Assert.DoesNotContain(list.Items, item => item.Id == oldestAuto.Id);
         Assert.Equal(RosterSnapshotSource.Manual, list.Items[^1].Source);
-    }
-
-    [Fact]
-    public async Task WithTheSettingOffNoneIsTakenAndExistingOnesAreKept()
-    {
-        var (client, profileId) = await CreateSyncingClientAsync(factory);
-        var takenAt = DaysAgo(60);
-        await SeedAsync(profileId, [(RosterSnapshotSource.Auto, takenAt)]);
-        var settings = (await client.GetFromJsonAsync<UserSettingsResponse>("/api/v1/settings", Ct))!;
-        Assert.True(settings.AutoRosterSnapshots);
-        var off = await client.PutAsJsonAsync("/api/v1/settings",
-            new UpdateUserSettingsRequest(settings.DailyEnergy, settings.XpBookRarity, settings.Revision, AutoRosterSnapshots: false), Ct);
-        off.EnsureSuccessStatusCode();
-        Assert.False((await off.Content.ReadFromJsonAsync<UserSettingsResponse>(Ct))!.AutoRosterSnapshots);
-
-        await SyncAsync(client);
-
-        Assert.Equal(takenAt, Assert.Single((await ListAsync(client)).Items).TakenAt);
     }
 
     [Fact]

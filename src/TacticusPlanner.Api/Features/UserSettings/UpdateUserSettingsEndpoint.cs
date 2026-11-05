@@ -54,7 +54,6 @@ public sealed class UpdateUserSettingsEndpoint
             DailyEnergy = req.DailyEnergy,
             XpBookRarity = req.XpBookRarity.ToString(),
             WatchAds = req.WatchAds ?? settings.Settings.WatchAds,
-            AutoRosterSnapshots = req.AutoRosterSnapshots ?? settings.Settings.AutoRosterSnapshots,
         };
 
         // A nested owned-JSON property mutation isn't always picked up by snapshot change detection on
@@ -92,13 +91,11 @@ public sealed class UpdateUserSettingsEndpoint
 }
 
 /// <param name="WatchAds">Null keeps the stored value, so a client that predates the field doesn't reset it.</param>
-/// <param name="AutoRosterSnapshots">Null keeps the stored value, as for <paramref name="WatchAds"/>.</param>
 public sealed record UpdateUserSettingsRequest(
     int DailyEnergy,
     [property: JsonRequired] XpBookRarity XpBookRarity,
     long Revision,
-    bool? WatchAds = null,
-    bool? AutoRosterSnapshots = null);
+    bool? WatchAds = null);
 
 public sealed class UpdateUserSettingsValidator : Validator<UpdateUserSettingsRequest>
 {

@@ -17285,12 +17285,6 @@
               "null",
               "boolean"
             ]
-          },
-          "autoRosterSnapshots": {
-            "type": [
-              "null",
-              "boolean"
-            ]
           }
         }
       },
@@ -17467,8 +17461,7 @@
           "dailyEnergy",
           "xpBookRarity",
           "watchAds",
-          "revision",
-          "autoRosterSnapshots"
+          "revision"
         ],
         "type": "object",
         "properties": {
@@ -17485,9 +17478,6 @@
           "revision": {
             "type": "integer",
             "format": "int64"
-          },
-          "autoRosterSnapshots": {
-            "type": "boolean"
           }
         }
       },

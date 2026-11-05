@@ -34,8 +34,4 @@ public sealed class UserSettingsData
     /// <summary>Whether the player watches the daily ad for an extra Legendary Event token. Null (a row saved
     /// before this field existed) reads as true.</summary>
     public bool? WatchAds { get; set; }
-
-    /// <summary>Whether a sync takes an automatic roster snapshot when none is recent. Null (a row saved before this
-    /// field existed) reads as true.</summary>
-    public bool? AutoRosterSnapshots { get; set; }
 }

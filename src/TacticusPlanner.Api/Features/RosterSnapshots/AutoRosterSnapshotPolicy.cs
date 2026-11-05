@@ -8,8 +8,7 @@ using TacticusPlanner.Persistence;
 namespace TacticusPlanner.Api.Features.RosterSnapshots;
 
 /// <summary>
-/// Takes an automatic roster snapshot after a sync (<c>automatic-roster-snapshots</c>): when the profile's
-/// <c>autoRosterSnapshots</c> setting is on and no roster snapshot of any kind (personal snapshots of every source and
+/// Takes an automatic roster snapshot after a sync (<c>automatic-roster-snapshots</c>): when no roster snapshot of any kind (personal snapshots of every source and
 /// Legendary Event run-record rosters, including one this sync just opened or refreshed) was taken within the window.
 /// At the rolling quota the oldest automatic snapshot is deleted in the same unit of work; manual and imported
 /// snapshots are never touched. It runs after the sync has saved its own writes, so its checks see this sync's run
@@ -27,13 +26,6 @@ public sealed class AutoRosterSnapshotPolicy(
             return;
 
         var profileId = write.ProfileId;
-        var enabled = await db.UserSettings.AsNoTracking()
-            .Where(entity => entity.Id == profileId)
-            .Select(entity => entity.Settings.AutoRosterSnapshots)
-            .FirstOrDefaultAsync(ct);
-        if (enabled == false)
-            return;
-
         // Serializes with a concurrent sync or manual snapshot of the same profile.
         await db.LockCurrentProfileAsync(ct);
         var since = write.SyncedAt - TimeSpan.FromDays(options.Value.AutoWindowDays);
