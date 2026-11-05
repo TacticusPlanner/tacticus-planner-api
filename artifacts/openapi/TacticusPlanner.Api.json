@@ -16709,10 +16709,14 @@
             "type": "integer",
             "format": "int64"
           },
-          "watchAds": {
-            "type": [
-              "null",
-              "boolean"
+          "preferences": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/UserPreferenceArray"
+              }
             ]
           }
         }
@@ -16885,11 +16889,24 @@
           }
         }
       },
+      "UserPreference": {
+        "enum": [
+          "LegendaryEventShowPaidOptions",
+          "LegendaryEventSkipDailyAds"
+        ],
+        "type": "string"
+      },
+      "UserPreferenceArray": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/UserPreference"
+        }
+      },
       "UserSettingsResponse": {
         "required": [
           "dailyEnergy",
           "xpBookRarity",
-          "watchAds",
+          "preferences",
           "revision"
         ],
         "type": "object",
@@ -16901,8 +16918,8 @@
           "xpBookRarity": {
             "$ref": "#/components/schemas/XpBookRarity"
           },
-          "watchAds": {
-            "type": "boolean"
+          "preferences": {
+            "$ref": "#/components/schemas/UserPreferenceArray"
           },
           "revision": {
             "type": "integer",
