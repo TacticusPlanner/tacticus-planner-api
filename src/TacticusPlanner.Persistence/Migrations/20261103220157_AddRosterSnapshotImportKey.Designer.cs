@@ -3328,8 +3328,6 @@ namespace TacticusPlanner.Persistence.Migrations
                         {
                             b1.Property<Guid>("UserSettingsId");
 
-                            b1.Property<bool?>("AutoRosterSnapshots");
-
                             b1.Property<int>("DailyEnergy");
 
                             b1.Property<bool?>("WatchAds");
