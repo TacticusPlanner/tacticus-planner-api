@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Api.Http;
 using TacticusPlanner.Persistence;
+using UserPreferences = TacticusPlanner.Domain.UserSettings.UserPreferences;
 using UserSettingsData = TacticusPlanner.Domain.UserSettings.UserSettingsData;
 using UserSettingsEntity = TacticusPlanner.Domain.UserSettings.UserSettings;
 
@@ -50,47 +51,47 @@ public enum XpBookRarity
     Mythic,
 }
 
-/// <summary>An on/off account preference; a flag listed in <see cref="UserSettingsResponse.Flags"/> is on.
-/// New preferences are added here, so they need no new field.</summary>
+/// <summary>One on/off account preference (a <see cref="UserPreferences"/> flag); listed in
+/// <see cref="UserSettingsResponse.Preferences"/> when it is on.</summary>
 public enum UserPreference
 {
-    /// <summary>Legendary Event planners include paid options (premium missions, the event bundle and bought
-    /// shards) in every event.</summary>
+    /// <inheritdoc cref="UserPreferences.LegendaryEventShowPaidOptions"/>
     LegendaryEventShowPaidOptions,
+
+    /// <inheritdoc cref="UserPreferences.LegendaryEventSkipDailyAds"/>
+    LegendaryEventSkipDailyAds,
 }
 
-/// <param name="WatchAds">The player watches the daily Legendary Event ad token (default true).</param>
-/// <param name="Flags">The account preferences that are on, each once, in declaration order (default none).</param>
+/// <param name="Preferences">The account preferences that are on, each once, in declaration order (default
+/// none).</param>
 public sealed record UserSettingsResponse(
     int DailyEnergy,
     XpBookRarity XpBookRarity,
-    bool WatchAds,
-    UserPreference[] Flags,
+    UserPreference[] Preferences,
     long Revision)
 {
     public static UserSettingsResponse From(UserSettingsEntity settings) =>
         new(
             settings.Settings.DailyEnergy,
             NormalizeXpBookRarity(settings.Settings.XpBookRarity),
-            settings.Settings.WatchAds ?? true,
-            ReadFlags(settings.Settings.Flags),
+            ToList(settings.Settings.EffectivePreferences),
             settings.Revision);
 
-    /// <summary>Stored flag names to flags: unknown names (a flag since removed) are dropped, duplicates
-    /// collapse.</summary>
-    public static UserPreference[] ReadFlags(IEnumerable<string>? stored) =>
-        (stored ?? [])
-            .Select(name => Enum.TryParse<UserPreference>(name, out var flag) && Enum.IsDefined(flag)
-                ? flag
-                : (UserPreference?)null)
-            .OfType<UserPreference>()
-            .Distinct()
-            .Order()
-            .ToArray();
+    private static readonly (UserPreference Preference, UserPreferences Flag)[] Bits =
+    [
+        (UserPreference.LegendaryEventShowPaidOptions, UserPreferences.LegendaryEventShowPaidOptions),
+        (UserPreference.LegendaryEventSkipDailyAds, UserPreferences.LegendaryEventSkipDailyAds),
+    ];
 
-    /// <summary>Flags to their stored names, each once in declaration order.</summary>
-    public static List<string> WriteFlags(IEnumerable<UserPreference> flags) =>
-        flags.Distinct().Order().Select(flag => flag.ToString()).ToList();
+    /// <summary>The bitmask's preferences in declaration order; a bit no preference names is dropped.</summary>
+    public static UserPreference[] ToList(UserPreferences flags) =>
+        Bits.Where(bit => flags.HasFlag(bit.Flag)).Select(bit => bit.Preference).ToArray();
+
+    /// <summary>The listed preferences as one bitmask (duplicates collapse).</summary>
+    public static UserPreferences ToFlags(IEnumerable<UserPreference> preferences) =>
+        preferences.Aggregate(
+            UserPreferences.None,
+            (flags, preference) => flags | Bits.Single(bit => bit.Preference == preference).Flag);
 
     // A row saved before this field existed (or any other missing/null/unsupported stored value) reads
     // as the default rather than leaking an invalid value to the client.

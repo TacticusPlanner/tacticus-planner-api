@@ -31,11 +31,32 @@ public sealed class UserSettingsData
 
     public string XpBookRarity { get; set; } = DefaultXpBookRarity;
 
-    /// <summary>Whether the player watches the daily ad for an extra Legendary Event token. Null (a row saved
-    /// before this field existed) reads as true.</summary>
+    /// <summary>Legacy: whether the player watches the daily Legendary Event ad, from before
+    /// <see cref="Preferences"/>. Only read (false reads as <see cref="UserPreferences.LegendaryEventSkipDailyAds"/>);
+    /// every write clears it.</summary>
     public bool? WatchAds { get; set; }
 
-    /// <summary>On/off account preferences stored by flag name (only the flags that are on). Null (a row saved
-    /// before this field existed) reads as no flags; an unknown stored name is ignored on read.</summary>
-    public List<string>? Flags { get; set; }
+    /// <summary>On/off account preferences as one bitmask (a row saved before this field existed reads as
+    /// <see cref="UserPreferences.None"/>).</summary>
+    public UserPreferences Preferences { get; set; }
+
+    /// <summary>The preferences with the legacy <see cref="WatchAds"/> folded in.</summary>
+    public UserPreferences EffectivePreferences =>
+        WatchAds == false ? Preferences | UserPreferences.LegendaryEventSkipDailyAds : Preferences;
+}
+
+/// <summary>On/off account preferences, stored as a bitmask. Every flag is off by default, so a preference
+/// whose default is "on" is named for its opposite (<see cref="LegendaryEventSkipDailyAds"/>). Add a flag with
+/// the next free bit; never reuse or renumber one.</summary>
+[Flags]
+public enum UserPreferences : long
+{
+    None = 0,
+
+    /// <summary>Legendary Event planners include paid options (premium missions, the event bundle and bought
+    /// shards) in every event.</summary>
+    LegendaryEventShowPaidOptions = 1L << 0,
+
+    /// <summary>The player doesn't watch the daily ad, so Legendary Event plans leave out the ad token.</summary>
+    LegendaryEventSkipDailyAds = 1L << 1,
 }

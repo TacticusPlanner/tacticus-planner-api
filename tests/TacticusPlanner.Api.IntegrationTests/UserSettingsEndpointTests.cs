@@ -6,7 +6,7 @@ namespace TacticusPlanner.Api.IntegrationTests;
 
 public sealed class UserSettingsEndpointTests(PlannerApiFactory factory) : IClassFixture<PlannerApiFactory>
 {
-    private static readonly string[] UnknownFlags = ["NotAFlag"];
+    private static readonly string[] UnknownPreferences = ["NotAPreference"];
 
     [Fact]
     public async Task GetCreatesProfileDefaultsAndPutPersistsSupportedValues()
@@ -21,8 +21,7 @@ public sealed class UserSettingsEndpointTests(PlannerApiFactory factory) : IClas
         Assert.NotNull(initial);
         Assert.Equal(288, initial.DailyEnergy);
         Assert.Equal(XpBookRarity.Legendary, initial.XpBookRarity);
-        Assert.True(initial.WatchAds);
-        Assert.Empty(initial.Flags);
+        Assert.Empty(initial.Preferences);
         Assert.Equal(1, initial.Revision);
 
         var response = await client.PutAsJsonAsync(
@@ -40,34 +39,7 @@ public sealed class UserSettingsEndpointTests(PlannerApiFactory factory) : IClas
     }
 
     [Fact]
-    public async Task WatchAdsIsWrittenAndKeptWhenOmitted()
-    {
-        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
-        var ct = TestContext.Current.CancellationToken;
-        var initial = await client.GetFromJsonAsync<UserSettingsResponse>("/api/v1/settings", ct);
-        Assert.NotNull(initial);
-
-        var off = await PutAsync(new UpdateUserSettingsRequest(288, XpBookRarity.Legendary, initial.Revision, WatchAds: false));
-        Assert.False(off.WatchAds);
-
-        // A write without the field (an older client) keeps the stored value.
-        var kept = await PutAsync(new UpdateUserSettingsRequest(538, XpBookRarity.Legendary, off.Revision));
-        Assert.False(kept.WatchAds);
-        Assert.Equal(538, kept.DailyEnergy);
-
-        var on = await PutAsync(new UpdateUserSettingsRequest(538, XpBookRarity.Legendary, kept.Revision, WatchAds: true));
-        Assert.True(on.WatchAds);
-
-        async Task<UserSettingsResponse> PutAsync(UpdateUserSettingsRequest request)
-        {
-            var response = await client.PutAsJsonAsync("/api/v1/settings", request, ct);
-            response.EnsureSuccessStatusCode();
-            return (await response.Content.ReadFromJsonAsync<UserSettingsResponse>(ct))!;
-        }
-    }
-
-    [Fact]
-    public async Task FlagsAreWrittenAndKeptWhenOmitted()
+    public async Task PreferencesAreWrittenAndKeptWhenOmitted()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var ct = TestContext.Current.CancellationToken;
@@ -76,18 +48,26 @@ public sealed class UserSettingsEndpointTests(PlannerApiFactory factory) : IClas
 
         var on = await PutAsync(new UpdateUserSettingsRequest(
             288, XpBookRarity.Legendary, initial.Revision,
-            Flags: [UserPreference.LegendaryEventShowPaidOptions, UserPreference.LegendaryEventShowPaidOptions]));
-        Assert.Equal([UserPreference.LegendaryEventShowPaidOptions], on.Flags);
+            Preferences:
+            [
+                UserPreference.LegendaryEventSkipDailyAds,
+                UserPreference.LegendaryEventShowPaidOptions,
+                UserPreference.LegendaryEventSkipDailyAds,
+            ]));
+        Assert.Equal(
+            [UserPreference.LegendaryEventShowPaidOptions, UserPreference.LegendaryEventSkipDailyAds],
+            on.Preferences);
 
-        // A write without the field (an older client) keeps the stored flags.
+        // A write without the field (an older client) keeps the stored preferences.
         var kept = await PutAsync(new UpdateUserSettingsRequest(538, XpBookRarity.Legendary, on.Revision));
-        Assert.Equal([UserPreference.LegendaryEventShowPaidOptions], kept.Flags);
+        Assert.Equal(on.Preferences, kept.Preferences);
+        Assert.Equal(538, kept.DailyEnergy);
 
         var read = await client.GetFromJsonAsync<UserSettingsResponse>("/api/v1/settings", ct);
-        Assert.Equal([UserPreference.LegendaryEventShowPaidOptions], read!.Flags);
+        Assert.Equal(on.Preferences, read!.Preferences);
 
-        var off = await PutAsync(new UpdateUserSettingsRequest(538, XpBookRarity.Legendary, kept.Revision, Flags: []));
-        Assert.Empty(off.Flags);
+        var off = await PutAsync(new UpdateUserSettingsRequest(538, XpBookRarity.Legendary, kept.Revision, Preferences: []));
+        Assert.Empty(off.Preferences);
 
         async Task<UserSettingsResponse> PutAsync(UpdateUserSettingsRequest request)
         {
@@ -98,7 +78,7 @@ public sealed class UserSettingsEndpointTests(PlannerApiFactory factory) : IClas
     }
 
     [Fact]
-    public async Task PutRejectsAnUnknownFlag()
+    public async Task PutRejectsAnUnknownPreference()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
         var ct = TestContext.Current.CancellationToken;
@@ -111,7 +91,7 @@ public sealed class UserSettingsEndpointTests(PlannerApiFactory factory) : IClas
                 dailyEnergy = 288,
                 xpBookRarity = "Legendary",
                 revision = initial!.Revision,
-                flags = UnknownFlags,
+                preferences = UnknownPreferences,
             }),
             ct);
 

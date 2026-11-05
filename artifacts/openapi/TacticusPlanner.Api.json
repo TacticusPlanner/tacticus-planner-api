@@ -16709,13 +16709,7 @@
             "type": "integer",
             "format": "int64"
           },
-          "watchAds": {
-            "type": [
-              "null",
-              "boolean"
-            ]
-          },
-          "flags": {
+          "preferences": {
             "oneOf": [
               {
                 "type": "null"
@@ -16897,7 +16891,8 @@
       },
       "UserPreference": {
         "enum": [
-          "LegendaryEventShowPaidOptions"
+          "LegendaryEventShowPaidOptions",
+          "LegendaryEventSkipDailyAds"
         ],
         "type": "string"
       },
@@ -16911,8 +16906,7 @@
         "required": [
           "dailyEnergy",
           "xpBookRarity",
-          "watchAds",
-          "flags",
+          "preferences",
           "revision"
         ],
         "type": "object",
@@ -16924,10 +16918,7 @@
           "xpBookRarity": {
             "$ref": "#/components/schemas/XpBookRarity"
           },
-          "watchAds": {
-            "type": "boolean"
-          },
-          "flags": {
+          "preferences": {
             "$ref": "#/components/schemas/UserPreferenceArray"
           },
           "revision": {
