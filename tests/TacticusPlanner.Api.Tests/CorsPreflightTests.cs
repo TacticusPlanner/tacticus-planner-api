@@ -31,6 +31,7 @@ public sealed class CorsPreflightTests(GameCatalogApiFactory factory) : IClassFi
 
         var response = await host.CreateClient().SendAsync(request, TestContext.Current.CancellationToken);
 
-        Assert.Contains("Retry-After", Assert.Single(response.Headers.GetValues("Access-Control-Expose-Headers")));
+        var exposed = Assert.Single(response.Headers.GetValues("Access-Control-Expose-Headers"));
+        Assert.Contains("Retry-After", exposed.Split(',', StringSplitOptions.TrimEntries), StringComparer.OrdinalIgnoreCase);
     }
 }
