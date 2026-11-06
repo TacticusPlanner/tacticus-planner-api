@@ -1,4 +1,5 @@
 using System.Net;
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TacticusPlanner.Api.Features.Guilds;
@@ -294,6 +295,23 @@ public sealed class GetMyGuildRaidStatusEndpointTests(PlannerApiFactory factory)
     }
 
     [Fact]
+    public async Task RejectedCredentialWithoutObservationNamesTheKeyThenCoolsDownWithoutCallingUpstream()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var ready = await RegisterAsync();
+        factory.TacticusApi.ConfigureGuildRaidRejection(ready.Token, HttpStatusCode.Forbidden);
+
+        var rejected = await ready.Client.PostAsync(RefreshPath, null, ct);
+        Assert.Equal(HttpStatusCode.BadGateway, rejected.StatusCode);
+        var problem = await rejected.Content.ReadFromJsonAsync<JsonElement>(ct);
+        Assert.Equal(GuildRaidRefreshResult.TokenRejectedIssueCode, problem.GetProperty("issueCode").GetString());
+
+        var retry = await ready.Client.PostAsync(RefreshPath, null, ct);
+        Assert.Equal(HttpStatusCode.ServiceUnavailable, retry.StatusCode);
+        Assert.Equal(1, factory.TacticusApi.GuildRaidCallCount(ready.Token));
+    }
+
+    [Fact]
     public async Task RetainedObservationThatNoLongerResolvesInCatalogReturnsBadGatewayOnRead()
     {
         var ready = await RegisterAsync();
@@ -542,6 +560,7 @@ public sealed class GetMyGuildRaidStatusEndpointTests(PlannerApiFactory factory)
             new RegisterGuildRequest(token),
             TestContext.Current.CancellationToken);
         response.EnsureSuccessStatusCode();
+        factory.TacticusApi.ResetGuildRaidCallCount(token);
         return new ReadyGuild(client, token, tag);
     }
 

@@ -4440,7 +4440,7 @@
             }
           },
           "502": {
-            "description": "The upstream credential or response was rejected.",
+            "description": "The upstream credential (issueCode guildRaidTokenRejected) or response was rejected.",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -4472,7 +4472,7 @@
         "tags": [
           "Guild"
         ],
-        "summary": "Registers a Tacticus guild using a Guild-scoped API token.",
+        "summary": "Registers a Tacticus guild using an API token with the Guild and Guild Raid scopes.",
         "description": "Requires the caller to have a configured Tacticus User ID and to appear as the guild's Leader or Co-Leader in the upstream response. Performs a complete synchronization and persists the encrypted token. Re-registering an already-registered guild updates it rather than duplicating it.",
         "operationId": "TacticusPlannerApiFeaturesGuildsRegisterGuildEndpoint",
         "requestBody": {
@@ -4497,7 +4497,7 @@
             }
           },
           "400": {
-            "description": "Blank/invalid token, malformed upstream guild response, or no Tacticus User ID configured.",
+            "description": "Blank/invalid token, a token without Guild Raid access, malformed upstream guild response, or no Tacticus User ID configured.",
             "content": {
               "application/problem+json": {
                 "schema": {

@@ -325,9 +325,12 @@ internal sealed class FakeTacticusApi : ITacticusApi
         {
             return response;
         }
-        throw new InvalidOperationException(
-            $"No Guild Raid response configured for token '{guildApiToken}'.");
+        // Registration checks a new key can read raids and ignores the body, so an unconfigured token passes.
+        return new GuildRaidResponse();
     }
+
+    /// <summary>Forgets calls made so far, so a test can count refreshes without the one registration makes.</summary>
+    public void ResetGuildRaidCallCount(string guildApiToken) => GuildRaidCallsByToken.TryRemove(guildApiToken, out _);
 
     public Task<GuildRaidResponse> GetGuildRaidBySeasonAsync(
         string guildApiToken,

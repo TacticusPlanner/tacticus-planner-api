@@ -44,6 +44,45 @@ public sealed class RegisterGuildEndpointTests : IAsyncLifetime
         Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
     }
 
+    [Theory]
+    [InlineData(HttpStatusCode.Forbidden, HttpStatusCode.BadRequest)]
+    [InlineData(HttpStatusCode.Unauthorized, HttpStatusCode.BadRequest)]
+    [InlineData(HttpStatusCode.NotFound, HttpStatusCode.OK)]
+    public async Task GuildRaidAccessDecidesWhetherTheKeyRegisters(HttpStatusCode raidStatus, HttpStatusCode expected)
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var (client, tacticusUserId) = await GuildTestHelpers.CreateGuildReadyClientAsync(factory);
+        var token = $"guild-only-{Guid.NewGuid()}";
+        factory.TacticusApi.ConfigureGuildResponse(
+            token,
+            FakeTacticusApi.BuildGuildResponse(Guid.NewGuid(), "TAG", "Guild", 1, (tacticusUserId, GuildRole.LEADER, 10, null))
+        );
+        factory.TacticusApi.ConfigureGuildRaidRejection(token, raidStatus);
+
+        var response = await client.PostAsJsonAsync("/api/v1/guild/register", new RegisterGuildRequest(token), ct);
+
+        Assert.Equal(expected, response.StatusCode);
+        var mine = await client.GetFromJsonAsync<MyGuildResponse>("/api/v1/guild", ct);
+        Assert.Equal(expected == HttpStatusCode.OK, mine!.Guild is not null);
+    }
+
+    [Fact]
+    public async Task UnreachableGuildRaidApiDoesNotRegisterTheKey()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var (client, tacticusUserId) = await GuildTestHelpers.CreateGuildReadyClientAsync(factory);
+        var token = $"guild-raid-down-{Guid.NewGuid()}";
+        factory.TacticusApi.ConfigureGuildResponse(
+            token,
+            FakeTacticusApi.BuildGuildResponse(Guid.NewGuid(), "TAG", "Guild", 1, (tacticusUserId, GuildRole.LEADER, 10, null))
+        );
+        factory.TacticusApi.ConfigureGuildRaidUnavailable(token);
+
+        var response = await client.PostAsJsonAsync("/api/v1/guild/register", new RegisterGuildRequest(token), ct);
+
+        Assert.Equal(HttpStatusCode.ServiceUnavailable, response.StatusCode);
+    }
+
     [Fact]
     public async Task BlankTokenIsRejected()
     {
