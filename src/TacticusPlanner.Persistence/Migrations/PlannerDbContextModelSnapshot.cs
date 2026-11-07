@@ -812,6 +812,11 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("created_at");
 
+                    b.Property<string>("ImportKey")
+                        .HasMaxLength(512)
+                        .HasColumnType("character varying(512)")
+                        .HasColumnName("import_key");
+
                     b.Property<int>("MowCount")
                         .HasColumnType("integer")
                         .HasColumnName("mow_count");
@@ -842,6 +847,11 @@ namespace TacticusPlanner.Persistence.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_personal_roster_snapshots");
+
+                    b.HasIndex("ProfileId", "ImportKey")
+                        .IsUnique()
+                        .HasDatabaseName("ux_personal_roster_snapshots_profile_id_import_key")
+                        .HasFilter("import_key IS NOT NULL");
 
                     b.HasIndex("ProfileId", "TakenAt", "Id")
                         .IsDescending(false, true, true)

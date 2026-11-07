@@ -27,6 +27,7 @@ public sealed class PersonalRosterSnapshotConfiguration : IEntityTypeConfigurati
         builder.Property(entity => entity.TakenAt).IsRequired();
         builder.Property(entity => entity.CharacterCount).IsRequired();
         builder.Property(entity => entity.MowCount).IsRequired();
+        builder.Property(entity => entity.ImportKey).HasMaxLength(PersonalRosterSnapshotValidation.MaxImportKeyLength);
         builder.Property(entity => entity.CreatedAt).IsRequired();
         builder.Property(entity => entity.UpdatedAt).IsRequired();
 
@@ -46,6 +47,12 @@ public sealed class PersonalRosterSnapshotConfiguration : IEntityTypeConfigurati
         builder.HasIndex(entity => new { entity.ProfileId, entity.TakenAt, entity.Id })
             .IsDescending(false, true, true)
             .HasDatabaseName("ix_personal_roster_snapshots_profile_id_taken_at_id");
+
+        // One snapshot per import source and profile; a re-run of the import skips existing keys.
+        builder.HasIndex(entity => new { entity.ProfileId, entity.ImportKey })
+            .IsUnique()
+            .HasFilter("import_key IS NOT NULL")
+            .HasDatabaseName("ux_personal_roster_snapshots_profile_id_import_key");
 
         builder
             .HasOne(entity => entity.Profile)

@@ -40,12 +40,16 @@ public class PersonalRosterSnapshot : BaseEntity<PersonalRosterSnapshotId>
 
     public RosterSnapshot Roster { get; set; } = new();
 
+    /// <summary>Identifies the source of an imported snapshot (<c>v1-roster-snapshot-import</c>), so a re-run skips
+    /// it; set once at creation, never changed by a rename, and null for every other source.</summary>
+    public string? ImportKey { get; private set; }
+
     public virtual Profile? Profile { get; set; }
 
     /// <summary>A new snapshot of <paramref name="roster"/>, named <paramref name="name"/> or, when that is blank,
     /// the ISO date of the roster's <c>TakenAt</c>.</summary>
     public static PersonalRosterSnapshot Create(
-        ProfileId profileId, string? name, RosterSnapshotSource source, RosterSnapshot roster)
+        ProfileId profileId, string? name, RosterSnapshotSource source, RosterSnapshot roster, string? importKey = null)
     {
         var snapshot = new PersonalRosterSnapshot
         {
@@ -57,6 +61,7 @@ public class PersonalRosterSnapshot : BaseEntity<PersonalRosterSnapshotId>
             CharacterCount = roster.Characters.Count,
             MowCount = roster.Mows.Count,
             Roster = roster,
+            ImportKey = importKey,
         };
         snapshot.EnsureValid();
         return snapshot;
@@ -85,12 +90,17 @@ public class PersonalRosterSnapshot : BaseEntity<PersonalRosterSnapshotId>
             throw new InvalidOperationException("A roster snapshot name must be 1 to 60 characters after trimming.");
         if (TakenAt != Roster.TakenAt || CharacterCount != Roster.Characters.Count || MowCount != Roster.Mows.Count)
             throw new InvalidOperationException("A roster snapshot's metadata must match its roster.");
+        if ((ImportKey is null) == (Source == RosterSnapshotSource.V1Import)
+            || ImportKey?.Length > PersonalRosterSnapshotValidation.MaxImportKeyLength)
+            throw new InvalidOperationException("Exactly the imported roster snapshots carry an import key.");
     }
 }
 
 public static class PersonalRosterSnapshotValidation
 {
     public const int MaxNameLength = 60;
+
+    public const int MaxImportKeyLength = 512;
 
     /// <summary>The default per-profile limit on snapshots that count toward it.</summary>
     public const int DefaultLimit = 20;

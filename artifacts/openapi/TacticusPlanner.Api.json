@@ -436,7 +436,7 @@
           "Account"
         ],
         "summary": "Selectively imports integration data, progress, and goals from V1.",
-        "description": "V1 credentials are used once and never persisted. After profile retrieval, each selected part is applied independently and reports Imported, Skipped, or Failed. Goals are created directly by this operation, in V1 priority order — the response carries one outcome per source V1 goal (created, skipped, or failed), one per linked unit when a pre-farm goal fans out, plus one per automatically added prerequisite. The goals part is refused (no goals created) when the account has no player data snapshot. The legendaryEventPlans part creates one Legendary Event plan per V1 event (never touching a plan that already has teams) and reports one outcome per V1 event in legendaryEventOutcomes.",
+        "description": "V1 credentials are used once and never persisted. After profile retrieval, each selected part is applied independently and reports Imported, Skipped, or Failed. Goals are created directly by this operation, in V1 priority order — the response carries one outcome per source V1 goal (created, skipped, or failed), one per linked unit when a pre-farm goal fans out, plus one per automatically added prerequisite. The goals part is refused (no goals created) when the account has no player data snapshot. The legendaryEventPlans part creates one Legendary Event plan per V1 event (never touching a plan that already has teams) and reports one outcome per V1 event in legendaryEventOutcomes. The rosterSnapshots part rebuilds V1 roster snapshots and stores the live ones as V1Import personal snapshots, newest first within the manual limit, skipping ones an earlier run imported; it reports one outcome per V1 snapshot in rosterSnapshotOutcomes.",
         "operationId": "TacticusPlannerApiFeaturesV1ImportImportV1ProfileEndpoint",
         "requestBody": {
           "content": {
@@ -14290,6 +14290,8 @@
           "outcomes",
           "legendaryEventPlans",
           "legendaryEventOutcomes",
+          "rosterSnapshots",
+          "rosterSnapshotOutcomes",
           "importProjectId",
           "profileId",
           "playerName",
@@ -14326,6 +14328,12 @@
           },
           "legendaryEventOutcomes": {
             "$ref": "#/components/schemas/IReadOnlyListOfV1LegendaryEventOutcome"
+          },
+          "rosterSnapshots": {
+            "$ref": "#/components/schemas/ImportPartResult"
+          },
+          "rosterSnapshotOutcomes": {
+            "$ref": "#/components/schemas/IReadOnlyListOfV1RosterSnapshotOutcome"
           },
           "importProjectId": {
             "type": [
@@ -14402,6 +14410,10 @@
             "default": true
           },
           "legendaryEventPlans": {
+            "type": "boolean",
+            "default": false
+          },
+          "rosterSnapshots": {
             "type": "boolean",
             "default": false
           }
@@ -15300,6 +15312,12 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/V1LegendaryEventOutcome"
+        }
+      },
+      "IReadOnlyListOfV1RosterSnapshotOutcome": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/V1RosterSnapshotOutcome"
         }
       },
       "LegendaryEventAnnotationStatus": {
@@ -17669,6 +17687,48 @@
             "$ref": "#/components/schemas/IReadOnlyListOfV1LegendaryEventIssue"
           }
         }
+      },
+      "V1RosterSnapshotOutcome": {
+        "required": [
+          "name",
+          "takenAt",
+          "status",
+          "code",
+          "droppedUnits"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "takenAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "$ref": "#/components/schemas/V1RosterSnapshotOutcomeStatus"
+          },
+          "code": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "droppedUnits": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "V1RosterSnapshotOutcomeStatus": {
+        "enum": [
+          "imported",
+          "skippedDeleted",
+          "skippedDuplicate",
+          "skippedLimit",
+          "failed"
+        ],
+        "type": "string"
       },
       "XpBookRarity": {
         "enum": [
