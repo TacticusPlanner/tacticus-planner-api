@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using Microsoft.FeatureManagement;
 using TacticusPlanner.Api.Features.PlayerData;
 using TacticusPlanner.Domain.RosterSnapshots;
 using TacticusPlanner.Persistence;
@@ -8,23 +7,19 @@ using TacticusPlanner.Persistence;
 namespace TacticusPlanner.Api.Features.RosterSnapshots;
 
 /// <summary>
-/// Takes an automatic roster snapshot after a sync (<c>automatic-roster-snapshots</c>): when no roster snapshot of any kind (personal snapshots of every source and
-/// Legendary Event run-record rosters, including one this sync just opened or refreshed) was taken within the window.
-/// At the rolling quota the oldest automatic snapshot is deleted in the same unit of work; manual and imported
-/// snapshots are never touched. It runs after the sync has saved its own writes, so its checks see this sync's run
-/// records, and the sync isolates its failures (see <see cref="IPlayerDataSyncDefaultStep"/>). Nothing is taken while
-/// the <c>RosterSnapshots</c> feature flag is off.
+/// Takes an automatic roster snapshot after a sync (<c>automatic-roster-snapshots</c>): when no roster snapshot of
+/// any kind (personal snapshots of every source and Legendary Event run-record rosters, including one this sync just
+/// opened or refreshed) was taken within the window. At the rolling quota the oldest automatic snapshot is deleted in
+/// the same unit of work; manual and imported snapshots are never touched. It runs after the sync has saved its own
+/// writes, so its checks see this sync's run records, and the sync isolates its failures (see
+/// <see cref="IPlayerDataSyncDefaultStep"/>).
 /// </summary>
 public sealed class AutoRosterSnapshotPolicy(
     PlannerDbContext db,
-    IOptions<RosterSnapshotOptions> options,
-    IFeatureManager featureManager) : IPlayerDataSyncDefaultStep
+    IOptions<RosterSnapshotOptions> options) : IPlayerDataSyncDefaultStep
 {
     public async Task ApplyAsync(PlayerDataSyncWrite write, CancellationToken ct)
     {
-        if (!await featureManager.IsEnabledAsync(FeatureFlags.FeatureFlags.RosterSnapshots, ct))
-            return;
-
         var profileId = write.ProfileId;
         // Serializes with a concurrent sync or manual snapshot of the same profile.
         await db.LockCurrentProfileAsync(ct);

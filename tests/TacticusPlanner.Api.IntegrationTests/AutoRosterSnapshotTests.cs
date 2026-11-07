@@ -1,7 +1,6 @@
 using System.Net;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using TacticusPlanner.Api.Features.PlayerData;
@@ -169,24 +168,6 @@ public sealed class AutoRosterSnapshotTests(PlannerApiFactory factory) : IClassF
         var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
         Assert.True(await db.PlayerDataSnapshots.IgnoreQueryFilters().AnyAsync(entity => entity.Id == profileId, Ct));
         Assert.False(await db.PersonalRosterSnapshots.IgnoreQueryFilters().AnyAsync(entity => entity.ProfileId == profileId, Ct));
-    }
-
-    [Fact]
-    public async Task WithTheFeatureFlagOffASyncTakesNone()
-    {
-        using var off = factory.WithWebHostBuilder(builder => builder.ConfigureAppConfiguration((_, configuration) =>
-            configuration.AddInMemoryCollection(new Dictionary<string, string?>
-            {
-                ["FeatureManagement:RosterSnapshots"] = "false",
-            })));
-        var (client, profileId) = await CreateSyncingClientAsync(off);
-
-        await SyncAsync(client);
-
-        using var scope = factory.Services.CreateScope();
-        var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
-        Assert.False(await db.PersonalRosterSnapshots.IgnoreQueryFilters().AnyAsync(entity => entity.ProfileId == profileId, Ct));
-        Assert.Equal(HttpStatusCode.NotFound, (await client.GetAsync(Url, Ct)).StatusCode);
     }
 
     /// <summary>Adds a snapshot, then aborts the transaction with a failing statement.</summary>

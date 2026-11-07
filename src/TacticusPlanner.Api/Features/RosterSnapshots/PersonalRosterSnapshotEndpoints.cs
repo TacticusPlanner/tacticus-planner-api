@@ -281,7 +281,6 @@ public sealed class KeepPersonalRosterSnapshotEndpoint : EndpointWithoutRequest<
     public override void Configure()
     {
         Post("me/roster-snapshots/{snapshotId}/keep");
-        this.RequireFeature(FeatureFlags.FeatureFlags.RosterSnapshots);
         Summary(summary =>
         {
             summary.Summary = "Keeps one of the caller's automatic snapshots as a manual one.";

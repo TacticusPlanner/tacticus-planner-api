@@ -9,7 +9,7 @@ Depends on `add-personal-roster-snapshots` (apply that first). Companion apps ch
 - After every successful player-data sync, the server takes an automatic snapshot (`source` `Auto`) of the just-synced roster when the profile has no roster snapshot with `takenAt` in the last 30 days. Manual, automatic and V1-imported personal snapshots and Legendary Event run-record rosters all count. No extra upstream call is made. A profile's first sync therefore takes a baseline.
 - Automatic snapshots have their own rolling quota of 12. Taking a 13th deletes the oldest automatic one in the same transaction. Automatic snapshots never count toward the manual limit of 20, and the quota never touches manual or imported ones.
 - `POST /api/v1/me/roster-snapshots/{id}/keep` converts an automatic snapshot into a manual one. It then counts toward the manual limit and is refused with `rosterSnapshotLimitReached` at 20.
-- There is no per-user setting. The `RosterSnapshots` feature flag turns automatic snapshots off for everyone.
+- There is no per-user setting.
 - Automatic snapshots appear in the list with `source` `Auto`. They can be read, renamed and deleted like manual ones.
 
 ## Capabilities
