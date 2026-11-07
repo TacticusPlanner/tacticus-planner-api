@@ -20,7 +20,7 @@ public sealed class RefreshMyGuildRaidStatusEndpoint : EndpointWithoutRequest<Gu
             summary.Response<GuildRaidStatusResponse>(StatusCodes.Status200OK, "Current Guild Raid status after refresh.");
             summary.Response(StatusCodes.Status404NotFound, "The authenticated profile has not been provisioned.");
             summary.Response(StatusCodes.Status409Conflict, "Guild access, synchronization, or token is not ready.");
-            summary.Response(StatusCodes.Status502BadGateway, "The upstream credential or response was rejected.");
+            summary.Response(StatusCodes.Status502BadGateway, "The upstream credential (issueCode guildRaidTokenRejected) or response was rejected.");
             summary.Response(StatusCodes.Status503ServiceUnavailable, "The upstream service is unavailable and no retained status exists.");
         });
     }
@@ -55,7 +55,7 @@ public sealed class RefreshMyGuildRaidStatusEndpoint : EndpointWithoutRequest<Gu
                 await Send.OkAsync(success.Response, ct);
                 break;
             case GuildRaidRefreshResult.Rejected rejected:
-                AddError(rejected.Message);
+                AddError(rejected.Message, rejected.IssueCode);
                 await Send.ErrorsAsync(StatusCodes.Status502BadGateway, ct);
                 break;
             case GuildRaidRefreshResult.Unavailable unavailable:

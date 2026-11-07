@@ -27,6 +27,36 @@ public sealed class GuildSyncService(
     /// window however many of its Leader/Co-Leaders ask. Mirrors <see cref="GuildRaidStatusService.CooldownWindow"/>.</summary>
     public static readonly TimeSpan CooldownWindow = TimeSpan.FromMinutes(1);
 
+    /// <summary>
+    /// A key needs the Guild Raid scope as well as the Guild one, but <c>GET guild</c> only proves the latter. Refuse
+    /// to store a key that cannot read raids rather than letting every later refresh fail. A 404 is not about scope
+    /// (the guild was just returned for this key), so it does not block registration.
+    /// </summary>
+    private async Task<GuildSyncResult?> CheckGuildRaidAccessAsync(string guildApiToken, CancellationToken ct)
+    {
+        try
+        {
+            await tacticusApi.GetGuildRaidsAsync(guildApiToken, ct);
+            return null;
+        }
+        catch (ApiException exception) when ((int)exception.StatusCode is 404)
+        {
+            return null;
+        }
+        catch (ApiException exception) when ((int)exception.StatusCode is 400 or 401 or 403)
+        {
+            return new GuildSyncResult.UpstreamRejected(
+                "This Guild API key cannot read Guild Raid data. Create a key with both the Guild and Guild Raid scopes."
+            );
+        }
+        catch (Exception exception) when (exception is ApiExceptionBase or HttpRequestException or TaskCanceledException)
+        {
+            return new GuildSyncResult.UpstreamUnavailable(
+                "The Tacticus API is currently unavailable. Try again shortly."
+            );
+        }
+    }
+
     public async Task<GuildSyncResult> SynchronizeAsync(
         ProfileId callerProfileId,
         TacticusUserId callerTacticusUserId,
@@ -103,11 +133,17 @@ public sealed class GuildSyncService(
             Name = upstream.Name,
         };
 
+        var persistsToken = persistToken && (!persistTokenOnlyIfNew || isNewGuild);
+        if (persistsToken && await CheckGuildRaidAccessAsync(guildApiToken, ct) is { } accessFailure)
+        {
+            return accessFailure;
+        }
+
         guild.Tag = upstream.GuildTag;
         guild.Name = upstream.Name;
         guild.Level = upstream.Level;
 
-        if (persistToken && (!persistTokenOnlyIfNew || isNewGuild))
+        if (persistsToken)
         {
             guild.GuildApiToken = guildApiToken;
             guild.ConfiguredByProfileId = callerProfileId;

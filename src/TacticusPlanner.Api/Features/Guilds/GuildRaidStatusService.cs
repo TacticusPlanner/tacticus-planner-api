@@ -90,7 +90,9 @@ public sealed partial class GuildRaidStatusService(
         catch (ApiException exception) when ((int)exception.StatusCode is 400 or 401 or 403 or 404)
         {
             LogTokenRejected(logger, guild.Id, (int)exception.StatusCode);
-            return new GuildRaidRefreshResult.Rejected("The Tacticus API rejected the stored Guild API token.");
+            return new GuildRaidRefreshResult.Rejected(
+                "The Tacticus API rejected the stored Guild API token.",
+                GuildRaidRefreshResult.TokenRejectedIssueCode);
         }
         catch (Exception exception) when (exception is ApiExceptionBase or HttpRequestException or TaskCanceledException)
         {
@@ -476,8 +478,11 @@ public sealed partial class GuildRaidStatusService(
 
 public abstract record GuildRaidRefreshResult
 {
+    /// <summary>Tells the client the stored key needs replacing, which a bad observation (also a 502) does not.</summary>
+    public const string TokenRejectedIssueCode = "guildRaidTokenRejected";
+
     public sealed record Success(GuildRaidStatusResponse Response) : GuildRaidRefreshResult;
     public sealed record NeverObserved : GuildRaidRefreshResult;
-    public sealed record Rejected(string Message) : GuildRaidRefreshResult;
+    public sealed record Rejected(string Message, string? IssueCode = null) : GuildRaidRefreshResult;
     public sealed record Unavailable(string Message) : GuildRaidRefreshResult;
 }
