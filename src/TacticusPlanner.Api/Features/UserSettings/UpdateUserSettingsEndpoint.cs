@@ -53,7 +53,10 @@ public sealed class UpdateUserSettingsEndpoint
         {
             DailyEnergy = req.DailyEnergy,
             XpBookRarity = req.XpBookRarity.ToString(),
-            WatchAds = req.WatchAds ?? settings.Settings.WatchAds,
+            // The legacy WatchAds folds into the bitmask on this first write and is cleared.
+            Preferences = req.Preferences is null
+                ? settings.Settings.EffectivePreferences
+                : UserSettingsResponse.ToFlags(req.Preferences),
         };
 
         // A nested owned-JSON property mutation isn't always picked up by snapshot change detection on
@@ -90,12 +93,13 @@ public sealed class UpdateUserSettingsEndpoint
     }
 }
 
-/// <param name="WatchAds">Null keeps the stored value, so a client that predates the field doesn't reset it.</param>
+/// <param name="Preferences">The account preferences that are on (replaces the stored set). Null keeps the
+/// stored preferences, so a client that predates the field doesn't reset them.</param>
 public sealed record UpdateUserSettingsRequest(
     int DailyEnergy,
     [property: JsonRequired] XpBookRarity XpBookRarity,
     long Revision,
-    bool? WatchAds = null);
+    UserPreference[]? Preferences = null);
 
 public sealed class UpdateUserSettingsValidator : Validator<UpdateUserSettingsRequest>
 {

@@ -142,6 +142,18 @@ public sealed class CampaignDatamineReaderTests
             battle.DetailedEnemyTypes);
     }
 
+    [Theory]
+    [InlineData(0)]
+    [InlineData(4)]
+    public void AnEnemyIndexOutsideItsStatRowsFailsTheLoad(int index)
+    {
+        var error = Assert.Throws<InvalidOperationException>(() => Read(
+            Curation(),
+            Battle("01") with { Units = [[$"admecNpc1Vanguard:{index}"], ["blackNpc3TraitorGuardsman:0"]] }));
+
+        Assert.Contains($"enemy 'admecNpc1Vanguard:{index}' points past its 3 stat rows", error.Message, StringComparison.Ordinal);
+    }
+
     [Fact]
     public void GroupMetadataFollowsTheGamesUnlockConditions()
     {

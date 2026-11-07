@@ -21,7 +21,7 @@ public sealed class RegisterGuildEndpoint : Endpoint<RegisterGuildRequest, Regis
         Options(builder => builder.WithMetadata(UpstreamRateLimit.Slow));
         Summary(summary =>
         {
-            summary.Summary = "Registers a Tacticus guild using a Guild-scoped API token.";
+            summary.Summary = "Registers a Tacticus guild using an API token with the Guild and Guild Raid scopes.";
             summary.Description = "Requires the caller to have a configured Tacticus User ID and to appear "
                 + "as the guild's Leader or Co-Leader in the upstream response. Performs a complete "
                 + "synchronization and persists the encrypted token. Re-registering an already-registered "
@@ -29,7 +29,7 @@ public sealed class RegisterGuildEndpoint : Endpoint<RegisterGuildRequest, Regis
             summary.Response<RegisteredGuildResponse>(StatusCodes.Status200OK, "The newly registered guild.");
             summary.Response(
                 StatusCodes.Status400BadRequest,
-                "Blank/invalid token, malformed upstream guild response, or no Tacticus User ID configured."
+                "Blank/invalid token, a token without Guild Raid access, malformed upstream guild response, or no Tacticus User ID configured."
             );
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
             summary.Response(StatusCodes.Status429TooManyRequests, UpstreamRateLimit.ResponseDescription);

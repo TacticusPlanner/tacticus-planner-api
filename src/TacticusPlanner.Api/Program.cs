@@ -38,6 +38,10 @@ builder.Services.ConfigureDbContext<PlannerDbContext>((sp, options) =>
 {
     options.AddInterceptors(sp.GetRequiredService<EntityMetadataInterceptor>());
     options.UseSnakeCaseNamingConvention();
+    // One span event per database call, exported as a log row: over 80% of prod's AppTraces, and the span's
+    // own duration already covers it.
+    options.UseNpgsql(npgsql => npgsql.ConfigureDataSource(
+        dataSource => dataSource.ConfigureTracing(tracing => tracing.EnableFirstResponseEvent(false))));
 });
 
 // The build-time OpenAPI tool starts the host only to inspect endpoint metadata and has no database
@@ -129,12 +133,13 @@ builder.Services.AddCors(options =>
             // ETag is not a CORS-safelisted response header: without exposing it the client cannot read
             // it back, never sends If-None-Match, and re-reads the full game catalog manifest every launch.
             // Without a preflight max age Chrome re-sends OPTIONS after 5s; preflights were ~40% of prod
-            // traffic. 2h is Chrome's cap (Firefox allows 24h).
+            // traffic. 2h is Chrome's cap (Firefox allows 24h). Retry-After is not safelisted either: without
+            // exposing it the client cannot tell the user how long a 429 lasts.
             policy
                 .WithOrigins(allowedOrigins)
                 .AllowAnyHeader()
                 .AllowAnyMethod()
-                .WithExposedHeaders("ETag", PurgeAccountEndpoint.SignInAccountDeletedHeader)
+                .WithExposedHeaders("ETag", "Retry-After", PurgeAccountEndpoint.SignInAccountDeletedHeader)
                 .SetPreflightMaxAge(TimeSpan.FromHours(2));
         }
     });
