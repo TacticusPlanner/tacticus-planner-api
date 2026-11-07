@@ -158,6 +158,7 @@ public sealed class AutoRosterSnapshotTests(PlannerApiFactory factory) : IClassF
         {
             services.RemoveAll<IPlayerDataSyncDefaultStep>();
             services.AddScoped<IPlayerDataSyncDefaultStep, PoisoningStep>();
+            services.AddSingleton<PoisoningProbe>();
         }));
         var (client, profileId) = await CreateSyncingClientAsync(failing);
 
@@ -168,13 +169,25 @@ public sealed class AutoRosterSnapshotTests(PlannerApiFactory factory) : IClassF
         var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
         Assert.True(await db.PlayerDataSnapshots.IgnoreQueryFilters().AnyAsync(entity => entity.Id == profileId, Ct));
         Assert.False(await db.PersonalRosterSnapshots.IgnoreQueryFilters().AnyAsync(entity => entity.ProfileId == profileId, Ct));
+        var probe = failing.Services.GetRequiredService<PoisoningProbe>();
+        Assert.True(probe.Applied);
+        Assert.True(probe.Discarded);
+    }
+
+    /// <summary>Records that the failing step ran and was discarded.</summary>
+    private sealed class PoisoningProbe
+    {
+        public bool Applied { get; set; }
+
+        public bool Discarded { get; set; }
     }
 
     /// <summary>Adds a snapshot, then aborts the transaction with a failing statement.</summary>
-    private sealed class PoisoningStep(PlannerDbContext db) : IPlayerDataSyncDefaultStep
+    private sealed class PoisoningStep(PlannerDbContext db, PoisoningProbe probe) : IPlayerDataSyncDefaultStep
     {
         public async Task ApplyAsync(PlayerDataSyncWrite write, CancellationToken ct)
         {
+            probe.Applied = true;
             db.PersonalRosterSnapshots.Add(PersonalRosterSnapshot.Create(
                 write.ProfileId, null, RosterSnapshotSource.Auto, RosterSnapshotFactory.Create(write.Characters, write.Mows, write.SyncedAt)));
             await db.Database.ExecuteSqlRawAsync("SELECT 1 / 0", ct);
@@ -182,6 +195,7 @@ public sealed class AutoRosterSnapshotTests(PlannerApiFactory factory) : IClassF
 
         public void Discard()
         {
+            probe.Discarded = true;
             foreach (var entry in db.ChangeTracker.Entries<PersonalRosterSnapshot>().ToList())
                 entry.State = EntityState.Detached;
         }
