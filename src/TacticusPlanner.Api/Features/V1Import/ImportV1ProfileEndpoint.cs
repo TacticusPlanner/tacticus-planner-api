@@ -1,7 +1,6 @@
 using System.Text.Json.Serialization;
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.FeatureManagement;
 using Refit;
 using TacticusPlanner.Api.Features.Auth;
 using TacticusPlanner.Api.Features.Guilds;
@@ -112,9 +111,7 @@ public sealed class ImportV1ProfileEndpoint : Endpoint<ImportV1ProfileRequest, I
                 : new ImportPartResult(ImportPartStatus.Imported, null, null);
         }
 
-        // Hidden with the rest of roster snapshots: while the flag is off the part reads as not selected.
         var rosterSnapshots = selection.RosterSnapshots
-            && await Resolve<IFeatureManager>().IsEnabledAsync(FeatureFlags.FeatureFlags.RosterSnapshots, ct)
             ? await Resolve<V1RosterSnapshotImportService>().ImportAsync(profileId.Value, v1.RosterSnapshots, ct)
             : new V1RosterSnapshotImportResult(ImportPartResult.NotSelected(), []);
 
