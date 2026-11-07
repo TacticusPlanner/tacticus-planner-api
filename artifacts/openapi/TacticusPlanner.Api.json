@@ -5792,7 +5792,7 @@
           "Me"
         ],
         "summary": "Lists the caller's personal roster snapshots, newest first, without rosters.",
-        "description": "count is the number that counts toward limit (manual and V1-imported snapshots). Legendary Event run-record rosters are not listed here.",
+        "description": "count is the number that counts toward limit (manual and V1-imported snapshots); autoCount the automatic snapshots, kept to autoLimit by replacing the oldest. Legendary Event run-record rosters are not listed here.",
         "operationId": "TacticusPlannerApiFeaturesRosterSnapshotsListPersonalRosterSnapshotsEndpoint",
         "responses": {
           "200": {
@@ -6037,6 +6037,83 @@
           },
           "404": {
             "description": "No snapshot with this id belongs to the caller.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/me/roster-snapshots/{snapshotId}/keep": {
+      "post": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Keeps one of the caller's automatic snapshots as a manual one.",
+        "description": "source becomes manual; the name, takenAt and roster do not change. It then counts toward limit, and the automatic quota can no longer replace it.",
+        "operationId": "TacticusPlannerApiFeaturesRosterSnapshotsKeepPersonalRosterSnapshotEndpoint",
+        "parameters": [
+          {
+            "name": "snapshotId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonalRosterSnapshotResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is missing required identity claims.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No snapshot with this id belongs to the caller.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "rosterSnapshotLimitReached (extensions limit, count) at the limit; rosterSnapshotNotAutomatic (current is the snapshot) when it is not automatic.",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -15869,6 +15946,8 @@
         "required": [
           "limit",
           "count",
+          "autoLimit",
+          "autoCount",
           "items"
         ],
         "type": "object",
@@ -15878,6 +15957,14 @@
             "format": "int32"
           },
           "count": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "autoLimit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "autoCount": {
             "type": "integer",
             "format": "int32"
           },

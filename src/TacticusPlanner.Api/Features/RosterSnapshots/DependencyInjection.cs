@@ -1,3 +1,5 @@
+using TacticusPlanner.Api.Features.PlayerData;
+
 namespace TacticusPlanner.Api.Features.RosterSnapshots;
 
 public static class DependencyInjection
@@ -9,6 +11,7 @@ public static class DependencyInjection
             .ValidateDataAnnotations()
             .ValidateOnStart();
         services.AddScoped<PersonalRosterSnapshotService>();
+        services.AddScoped<IPlayerDataSyncDefaultStep, AutoRosterSnapshotPolicy>();
 
         return services;
     }

@@ -69,6 +69,15 @@ public class PersonalRosterSnapshot : BaseEntity<PersonalRosterSnapshotId>
         EnsureValid();
     }
 
+    /// <summary>Keeps an automatic snapshot: it becomes <see cref="RosterSnapshotSource.Manual"/>, with its name,
+    /// <see cref="TakenAt"/> and roster unchanged, so the automatic quota can no longer replace it.</summary>
+    public void Keep()
+    {
+        if (Source != RosterSnapshotSource.Auto)
+            throw new InvalidOperationException("Only an automatic roster snapshot can be kept.");
+        Source = RosterSnapshotSource.Manual;
+    }
+
     /// <summary>The invariants the database does not enforce, checked before a save.</summary>
     public void EnsureValid()
     {
@@ -85,6 +94,12 @@ public static class PersonalRosterSnapshotValidation
 
     /// <summary>The default per-profile limit on snapshots that count toward it.</summary>
     public const int DefaultLimit = 20;
+
+    /// <summary>The default rolling quota of automatic snapshots per profile.</summary>
+    public const int DefaultAutoLimit = 12;
+
+    /// <summary>The default number of days without any roster snapshot after which a sync takes an automatic one.</summary>
+    public const int DefaultAutoWindowDays = 30;
 
     public static bool IsValidName(string? name) =>
         name is not null && name == name.Trim() && name.Length is >= 1 and <= MaxNameLength;
