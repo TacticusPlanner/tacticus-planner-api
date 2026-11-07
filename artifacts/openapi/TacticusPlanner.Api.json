@@ -185,7 +185,7 @@
           "Account"
         ],
         "summary": "Replaces this staging account's planner data with a copy from production.",
-        "description": "Staging only (404 elsewhere). Redeems a code from production's POST account/staging-transfer-code and, in one transaction, replaces goals, projects, Legendary Event plans and run records, settings and progress overrides. The Tacticus API key, player data and guild are not copied. 400 when the code is invalid or expired; 502 when production cannot be reached.",
+        "description": "Staging only (404 elsewhere). Redeems a code from production's POST account/staging-transfer-code and, in one transaction, replaces goals, projects, Legendary Event plans and run records, personal roster snapshots, settings and progress overrides. The Tacticus API key, player data and guild are not copied. 400 when the code is invalid or expired; 502 when production cannot be reached.",
         "operationId": "TacticusPlannerApiFeaturesStagingTransferImportFromProductionEndpoint",
         "requestBody": {
           "content": {
@@ -5669,6 +5669,390 @@
         ]
       }
     },
+    "/api/v1/me/roster-snapshots": {
+      "post": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Takes a personal roster snapshot from a fresh sync.",
+        "description": "Syncs player data from the Tacticus API and, in the same transaction, stores a copy of the whole synced roster as a snapshot with source manual. With fromLastSync=true it copies the last synced roster without calling the Tacticus API (takenAt is that sync's time) and is not rate limited. A sync failure creates nothing. At the limit (manual and V1-imported snapshots) the request is rejected before any sync with 409 rosterSnapshotLimitReached, carrying limit and count.",
+        "operationId": "TacticusPlannerApiFeaturesRosterSnapshotsCreatePersonalRosterSnapshotEndpoint",
+        "parameters": [
+          {
+            "name": "fromLastSync",
+            "in": "query",
+            "schema": {
+              "type": [
+                "null",
+                "boolean"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePersonalRosterSnapshotRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The created snapshot.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonalRosterSnapshotResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The name is too long, no Tacticus API key is configured, or the Tacticus API rejected it.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is missing required identity claims.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The authenticated user has not signed up yet.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "rosterSnapshotLimitReached (with limit and count), or playerDataNotSynced for fromLastSync=true.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "The per-profile upstream-call limit for this endpoint is exhausted; see Retry-After.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "The Tacticus API failed or timed out (upstreamUnavailable).",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Lists the caller's personal roster snapshots, newest first, without rosters.",
+        "description": "count is the number that counts toward limit (manual and V1-imported snapshots). Legendary Event run-record rosters are not listed here.",
+        "operationId": "TacticusPlannerApiFeaturesRosterSnapshotsListPersonalRosterSnapshotsEndpoint",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonalRosterSnapshotListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is missing required identity claims.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The caller has no profile.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/me/roster-snapshots/{snapshotId}": {
+      "get": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Reads the roster of one of the caller's personal snapshots.",
+        "description": "The roster never changes after creation, so the response may be cached for good.",
+        "operationId": "TacticusPlannerApiFeaturesRosterSnapshotsGetPersonalRosterSnapshotEndpoint",
+        "parameters": [
+          {
+            "name": "snapshotId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RosterSnapshotResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is missing required identity claims.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No snapshot with this id belongs to the caller.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Renames one of the caller's personal snapshots.",
+        "description": "The name is trimmed and must be 1–60 characters; it need not be unique. The roster and takenAt do not change.",
+        "operationId": "TacticusPlannerApiFeaturesRosterSnapshotsRenamePersonalRosterSnapshotEndpoint",
+        "parameters": [
+          {
+            "name": "snapshotId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RenamePersonalRosterSnapshotRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonalRosterSnapshotResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The name is blank or longer than 60 characters.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is missing required identity claims.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No snapshot with this id belongs to the caller.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Me"
+        ],
+        "summary": "Permanently deletes one of the caller's personal snapshots.",
+        "description": "A hard delete with no trash or restore. The synced roster and run records are not affected.",
+        "operationId": "TacticusPlannerApiFeaturesRosterSnapshotsDeletePersonalRosterSnapshotEndpoint",
+        "parameters": [
+          {
+            "name": "snapshotId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The snapshot was deleted."
+          },
+          "401": {
+            "description": "The request is missing required identity claims.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No snapshot with this id belongs to the caller.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
     "/api/v1/player-data-overrides/battle-progress": {
       "get": {
         "tags": [
@@ -7577,6 +7961,17 @@
               {
                 "$ref": "#/components/schemas/LegendaryEventDepthSource"
               }
+            ]
+          }
+        }
+      },
+      "CreatePersonalRosterSnapshotRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": [
+              "null",
+              "string"
             ]
           }
         }
@@ -13712,6 +14107,7 @@
           "projects",
           "legendaryEventPlans",
           "legendaryEventRunRecords",
+          "personalRosterSnapshots",
           "settings",
           "overrides"
         ],
@@ -13730,6 +14126,10 @@
             "format": "int32"
           },
           "legendaryEventRunRecords": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "personalRosterSnapshots": {
             "type": "integer",
             "format": "int32"
           },
@@ -14765,6 +15165,12 @@
           "$ref": "#/components/schemas/LegendaryEventTeamRunDepthResponse"
         }
       },
+      "IReadOnlyListOfPersonalRosterSnapshotResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/PersonalRosterSnapshotResponse"
+        }
+      },
       "IReadOnlyListOfPlayerDataManifestChunk": {
         "type": "array",
         "items": {
@@ -15459,6 +15865,62 @@
         ],
         "type": "string"
       },
+      "PersonalRosterSnapshotListResponse": {
+        "required": [
+          "limit",
+          "count",
+          "items"
+        ],
+        "type": "object",
+        "properties": {
+          "limit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "items": {
+            "$ref": "#/components/schemas/IReadOnlyListOfPersonalRosterSnapshotResponse"
+          }
+        }
+      },
+      "PersonalRosterSnapshotResponse": {
+        "required": [
+          "id",
+          "name",
+          "source",
+          "takenAt",
+          "characterCount",
+          "mowCount"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "source": {
+            "$ref": "#/components/schemas/RosterSnapshotSource"
+          },
+          "takenAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "characterCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "mowCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
       "PlayerDataChunkEnvelopeOfObject": {
         "required": [
           "schemaVersion",
@@ -15882,6 +16344,20 @@
           }
         }
       },
+      "RenamePersonalRosterSnapshotRequest": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
       "RosterAbilityResponse": {
         "required": [
           "abilityId",
@@ -16035,6 +16511,14 @@
             "$ref": "#/components/schemas/IReadOnlyListOfRosterMowResponse"
           }
         }
+      },
+      "RosterSnapshotSource": {
+        "enum": [
+          "manual",
+          "auto",
+          "v1Import"
+        ],
+        "type": "string"
       },
       "UnitId": {
         "type": "string"

@@ -172,7 +172,8 @@ do not commit secrets.
 | `V1Api__BaseUrl` | Base URL of the legacy V1 planner backend used by V1 profile import |
 | `V1Api__FunctionsKey` | Azure Functions `x-functions-key` for the V1 backend's `LoginUser`/`GetUserData` HTTP triggers (`AuthorizationLevel.Function`); sent as a header on every V1 request when set |
 | `RateLimiting__UpstreamFastPerMinute` | Optional, default `10`. Per-profile, per-endpoint requests/minute for `POST tacticus-api-key/validate` and `PUT me/tacticus-integration`; excess requests get `429` with `Retry-After` |
-| `RateLimiting__UpstreamSlowPerHour` | Optional, default `6`. Per-profile, per-endpoint requests/hour for `POST tacticus-integration/player-sync`, `POST guilds/register`, `POST guilds/me/sync` and `POST me/v1-import` |
+| `RateLimiting__UpstreamSlowPerHour` | Optional, default `6`. Per-profile, per-endpoint requests/hour for `POST tacticus-integration/player-sync`, `POST guilds/register`, `POST guilds/me/sync`, `POST me/v1-import` and `POST me/roster-snapshots` (not with `fromLastSync=true`) |
+| `RosterSnapshots__PersonalLimit` | Optional, default `20`. How many manual and V1-imported roster snapshots a profile may hold; automatic snapshots do not count |
 | `ColumnEncryption__CurrentKeyVersion` | Logical key version used to encrypt new/updated sensitive columns |
 | `ColumnEncryption__Keys__<version>` | Base64/base64url 32-byte AES-256 key for the matching key version |
 | `Analytics__ProjectToken` | PostHog project token (public — identifies the project, not a secret) |
@@ -253,7 +254,8 @@ Early testers can copy their production planner data into their staging account:
 2. On staging, `POST /api/v1/account/import-from-production` sends the code to production's
    `POST /api/v1/internal/staging-transfer/export` (anonymous, authenticated by the
    `X-Staging-Transfer-Key` service-key header, left out of the OpenAPI document) and receives the profile's
-   goals, projects, Legendary Event plans and run records, settings and progress overrides.
+   goals, projects, Legendary Event plans and run records, personal roster snapshots, settings and progress
+   overrides.
 3. Staging replaces the caller's copies of those in one transaction with fresh ids. The Tacticus API key and
    user id, player-data snapshot and guild are never copied.
 

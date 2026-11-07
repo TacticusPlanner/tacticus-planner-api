@@ -38,6 +38,8 @@ public sealed record StagingTransferBundle
     public List<StagingTransferLegendaryEventPlan> LegendaryEventPlans { get; init; } = [];
 
     public List<StagingTransferLegendaryEventRunRecord> LegendaryEventRunRecords { get; init; } = [];
+
+    public List<StagingTransferPersonalRosterSnapshot> PersonalRosterSnapshots { get; init; } = [];
 }
 
 public sealed record StagingTransferOverrides
@@ -133,6 +135,17 @@ public sealed record StagingTransferLegendaryEventRunRecord
     public LegendaryEventRunRecordLanes Lanes { get; init; } = new();
 
     public List<LegendaryEventTeamRecord> Teams { get; init; } = [];
+
+    public RosterSnapshot Roster { get; init; } = new();
+}
+
+public sealed record StagingTransferPersonalRosterSnapshot
+{
+    public string Name { get; init; } = string.Empty;
+
+    public RosterSnapshotSource Source { get; init; }
+
+    public DateTimeOffset TakenAt { get; init; }
 
     public RosterSnapshot Roster { get; init; } = new();
 }
