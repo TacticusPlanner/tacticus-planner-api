@@ -1,7 +1,6 @@
 using FastEndpoints;
 using Microsoft.EntityFrameworkCore;
 using TacticusPlanner.Api.Features.Auth;
-using TacticusPlanner.Api.Features.FeatureFlags;
 using TacticusPlanner.Api.Features.LegendaryEventPlans;
 using TacticusPlanner.Api.Features.UpstreamRateLimiting;
 using TacticusPlanner.Api.Http;
@@ -39,7 +38,6 @@ public sealed class CreatePersonalRosterSnapshotEndpoint
     public override void Configure()
     {
         Post("me/roster-snapshots");
-        this.RequireFeature(FeatureFlags.FeatureFlags.RosterSnapshots);
         Options(builder => builder.WithMetadata(
             UpstreamRateLimit.SlowUnless(PersonalRosterSnapshotProblems.IsFromLastSync)));
         Summary(summary =>
@@ -108,7 +106,6 @@ public sealed class ListPersonalRosterSnapshotsEndpoint : EndpointWithoutRequest
     public override void Configure()
     {
         Get("me/roster-snapshots");
-        this.RequireFeature(FeatureFlags.FeatureFlags.RosterSnapshots);
         Summary(summary =>
         {
             summary.Summary = "Lists the caller's personal roster snapshots, newest first, without rosters.";
@@ -150,7 +147,6 @@ public sealed class GetPersonalRosterSnapshotEndpoint : EndpointWithoutRequest<R
     public override void Configure()
     {
         Get("me/roster-snapshots/{snapshotId}");
-        this.RequireFeature(FeatureFlags.FeatureFlags.RosterSnapshots);
         Summary(summary =>
         {
             summary.Summary = "Reads the roster of one of the caller's personal snapshots.";
@@ -192,7 +188,6 @@ public sealed class RenamePersonalRosterSnapshotEndpoint
     public override void Configure()
     {
         Patch("me/roster-snapshots/{snapshotId}");
-        this.RequireFeature(FeatureFlags.FeatureFlags.RosterSnapshots);
         Summary(summary =>
         {
             summary.Summary = "Renames one of the caller's personal snapshots.";
@@ -243,7 +238,6 @@ public sealed class DeletePersonalRosterSnapshotEndpoint : EndpointWithoutReques
     public override void Configure()
     {
         Delete("me/roster-snapshots/{snapshotId}");
-        this.RequireFeature(FeatureFlags.FeatureFlags.RosterSnapshots);
         Summary(summary =>
         {
             summary.Summary = "Permanently deletes one of the caller's personal snapshots.";
