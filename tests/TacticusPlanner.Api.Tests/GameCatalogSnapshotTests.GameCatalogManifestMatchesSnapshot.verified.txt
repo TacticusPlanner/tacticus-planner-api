@@ -1,6 +1,6 @@
 ﻿{
-  version: 1.43.157.2989+ab5e36a1a67b,
-  schemaHash: 60d1fb5a7c7ff0fdfc8f6d111450303793475d7fe9b15ae8d3b3ef94cfcb0ec7,
+  version: 1.43.157.2989+58f560260293,
+  schemaHash: 963042d58da8c6de5951ab0450fb200a5d82d63db922a7691a728d2c4b43bb73,
   gameVersion: 1.43.157.2989,
   sourceHash: {time-dependent},
   datasets: [
@@ -108,6 +108,11 @@
       key: npc-encounters,
       hash: 1d4765e640d39b10e19f0c1a170861ab2bfb7080b3ccfd77bb4d57f29d6dda69,
       url: /api/v1/game-catalog/npc-encounters/{envelopeHash}
+    },
+    {
+      key: npc-tiers,
+      hash: bea89120d5d9a53a1a2c65b384f4f059101faba938a3871bd96d4d192700fd89,
+      url: /api/v1/game-catalog/npc-tiers/{envelopeHash}
     },
     {
       key: npcs,

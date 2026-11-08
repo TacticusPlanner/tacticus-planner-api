@@ -1,0 +1,153 @@
+using System.Text.Json;
+using TacticusPlanner.GameCatalog.Denormalization;
+using TacticusPlanner.GameCatalog.Models;
+using TacticusPlanner.GameCatalog.Utils;
+using TacticusPlanner.GameCatalog.Validation;
+using Xunit;
+
+namespace TacticusPlanner.GameCatalog.Tests;
+
+public sealed class NpcTiersTests
+{
+    private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
+
+    private static readonly HashSet<string> NpcIds =
+        new(["darkaNpc2Hellblaster", "eldarNpc1Guardian", "eldarNpc4Wraithguard"], StringComparer.Ordinal);
+
+    private static readonly GameCatalogHordeModeTier[] DefaultTiers =
+    [
+        new("S", 2.0),
+        new("A", 1.7),
+        new("B", 1.45),
+        new("C", 1.2),
+        new("D", 1.0),
+    ];
+
+    private static GameCatalogNpcTiers Record(params GameCatalogNpcTier[] npcs) =>
+        new(GameCatalogDatasets.NpcTiers, DefaultTiers, npcs);
+
+    private static List<GameCatalogValidationError> Validate(params GameCatalogNpcTiers[] records)
+    {
+        var errors = new List<GameCatalogValidationError>();
+        GameCatalogValidator.ValidateNpcTiers(records, NpcIds, errors);
+        return errors;
+    }
+
+    private static void AssertSingleError(List<GameCatalogValidationError> errors, params string[] expectedFragments)
+    {
+        var error = Assert.Single(errors);
+        Assert.Equal(GameCatalogDatasets.NpcTiers, error.Dataset);
+        Assert.Equal("InvalidNpcTiers", error.Code);
+        Assert.Contains("npc-tiers", error.Message, StringComparison.Ordinal);
+        foreach (var fragment in expectedFragments)
+        {
+            Assert.Contains(fragment, error.Message, StringComparison.Ordinal);
+        }
+    }
+
+    [Fact]
+    public void InitialDatasetListsTheActiveLegendaryEventNpcsAtTierD()
+    {
+        var snapshot = GameCatalogLoader.Load();
+
+        var record = Assert.Single(snapshot.NpcTiersViews);
+        Assert.Equal("npc-tiers", record.Id);
+        Assert.Equal(["S", "A", "B", "C", "D"], record.Tiers.Select(tier => tier.Tier));
+        Assert.Equal(1.0, Assert.Single(record.Tiers, tier => tier.Tier == "D").Multiplier);
+        Assert.Equal(30, record.Npcs.Count);
+        Assert.All(record.Npcs, npc =>
+        {
+            Assert.Equal("D", npc.Tier);
+            Assert.Null(npc.Multiplier);
+        });
+        Assert.Contains(record.Npcs, npc => npc.NpcId == "darkaNpc2Hellblaster");
+        Assert.Contains(record.Npcs, npc => npc.NpcId == "eldarNpc4Wraithguard");
+        Assert.Contains(record.Npcs, npc => npc.NpcId == "thousNpc1PinkHorror");
+    }
+
+    [Fact]
+    public void DatasetIsListedInTheManifestWithAHash()
+    {
+        var snapshot = GameCatalogLoader.Load();
+
+        var entry = Assert.Single(snapshot.Manifest.Datasets, dataset => dataset.Key == GameCatalogDatasets.NpcTiers);
+        Assert.False(string.IsNullOrWhiteSpace(entry.Hash));
+        Assert.Contains(GameCatalogDatasets.NpcTiers, GameCatalogDatasets.Served);
+    }
+
+    [Fact]
+    public void NpcsAreSortedByIdAndTheHashIgnoresAuthoringOrder()
+    {
+        var served = GameCatalogDenormalizer.BuildNpcTiers([Record(new("eldarNpc4Wraithguard", "A"), new("darkaNpc2Hellblaster", "B"))]);
+        var servedReversed = GameCatalogDenormalizer.BuildNpcTiers([Record(new("darkaNpc2Hellblaster", "B"), new("eldarNpc4Wraithguard", "A"))]);
+
+        Assert.Equal(["darkaNpc2Hellblaster", "eldarNpc4Wraithguard"], Assert.Single(served).Npcs.Select(npc => npc.NpcId));
+        Assert.Equal(
+            GameCatalogHashing.ComputeCanonicalJsonHash(served, JsonOptions),
+            GameCatalogHashing.ComputeCanonicalJsonHash(servedReversed, JsonOptions));
+    }
+
+    [Fact]
+    public void MissingListsAreServedEmpty()
+    {
+        var served = Assert.Single(GameCatalogDenormalizer.BuildNpcTiers([Record() with { Tiers = null!, Npcs = null! }]));
+
+        Assert.Empty(served.Tiers);
+        Assert.Empty(served.Npcs);
+    }
+
+    [Fact]
+    public void ValidRecordPasses() =>
+        Assert.Empty(Validate(Record(new("darkaNpc2Hellblaster", "A", 1.8), new("eldarNpc1Guardian", "D"))));
+
+    [Fact]
+    public void WrongRecordIdFails() =>
+        AssertSingleError(Validate(Record() with { Id = "not-the-id" }), "not-the-id");
+
+    [Fact]
+    public void MoreThanOneRecordFails() =>
+        AssertSingleError(Validate(Record(), Record()), "exactly one record");
+
+    [Fact]
+    public void UnknownNpcFails() =>
+        AssertSingleError(Validate(Record(new GameCatalogNpcTier("notAnNpc", "A"))), "notAnNpc");
+
+    [Fact]
+    public void DuplicateNpcFails() =>
+        AssertSingleError(
+            Validate(Record(new("eldarNpc1Guardian", "A"), new("eldarNpc1Guardian", "B"))),
+            "eldarNpc1Guardian",
+            "more than once");
+
+    [Fact]
+    public void UnknownTierFails() =>
+        AssertSingleError(Validate(Record(new GameCatalogNpcTier("eldarNpc1Guardian", "X"))), "tier 'X'");
+
+    [Fact]
+    public void TiersOutOfOrderFail() =>
+        AssertSingleError(
+            Validate(Record() with { Tiers = [DefaultTiers[1], DefaultTiers[0], .. DefaultTiers[2..]] }),
+            "A, S, B, C, D");
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(-1)]
+    [InlineData(5.01)]
+    public void NpcMultiplierOutOfRangeFails(double multiplier) =>
+        AssertSingleError(Validate(Record(new GameCatalogNpcTier("eldarNpc1Guardian", "A", multiplier))), "eldarNpc1Guardian", "multiplier");
+
+    [Fact]
+    public void TierMultiplierOutOfRangeFails() =>
+        AssertSingleError(Validate(Record() with { Tiers = [.. DefaultTiers[..4], new("D", 0)] }), "tier 'D'", "multiplier");
+
+    [Fact]
+    public void NpcMultiplierIsSerializedOnlyWhenSet()
+    {
+        var json = JsonSerializer.Serialize(
+            Record(new("eldarNpc1Guardian", "D"), new("darkaNpc2Hellblaster", "A", 1.8)),
+            JsonOptions);
+
+        Assert.Contains("\"npcId\":\"darkaNpc2Hellblaster\",\"tier\":\"A\",\"multiplier\":1.8", json, StringComparison.Ordinal);
+        Assert.Contains("\"npcId\":\"eldarNpc1Guardian\",\"tier\":\"D\"}", json, StringComparison.Ordinal);
+    }
+}

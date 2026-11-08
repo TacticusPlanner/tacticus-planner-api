@@ -52,6 +52,7 @@ public static class GameCatalogLoader
             tieredProgressRewards,
             abilities);
         var hordeModeTiersRaw = LoadDataset<IReadOnlyList<GameCatalogHordeModeTiers>>(GameCatalogDatasets.HordeModeTiers);
+        var npcTiersRaw = LoadDataset<IReadOnlyList<GameCatalogNpcTiers>>(GameCatalogDatasets.NpcTiers);
         // groups.json holds chains of several shapes; each reader deserializes only the groups it names.
         var questGroups = LoadDatamine<Dictionary<string, JsonElement>>(GameCatalogDenormalizer.DatamineQuestGroupsPath);
         var mythicQuests = GameCatalogDenormalizer.ReadDatamineMythicQuests(
@@ -156,6 +157,7 @@ public static class GameCatalogLoader
         var lreViews = GameCatalogDenormalizer.BuildLres(lresByEvent, unitsByFaction);
         var lreBattleViews = GameCatalogDenormalizer.BuildLreBattles(lresByEvent);
         var hordeModeTiersViews = GameCatalogDenormalizer.BuildHordeModeTiers(hordeModeTiersRaw);
+        var npcTiersViews = GameCatalogDenormalizer.BuildNpcTiers(npcTiersRaw);
         var eventDefinitionViews = GameCatalogDenormalizer.BuildEventDefinitions(eventDefinitions, hseScoring);
         var calendarDay = new DateTimeOffset(asOf.UtcDateTime.Date, TimeSpan.Zero);
         var eventsCalendar = GameCatalogDenormalizer.BuildEventsCalendar(eventDefinitions, eventOccurrences, calendarDay);
@@ -209,6 +211,7 @@ public static class GameCatalogLoader
             [GameCatalogDatasets.Lres] = HashServed(GameCatalogDatasets.Lres, lreViews),
             [GameCatalogDatasets.LreBattles] = HashServed(GameCatalogDatasets.LreBattles, lreBattleViews),
             [GameCatalogDatasets.HordeModeTiers] = HashServed(GameCatalogDatasets.HordeModeTiers, hordeModeTiersViews),
+            [GameCatalogDatasets.NpcTiers] = HashServed(GameCatalogDatasets.NpcTiers, npcTiersViews),
             [GameCatalogDatasets.EventDefinitionsServed] = HashServed(GameCatalogDatasets.EventDefinitionsServed, eventDefinitionViews),
             [GameCatalogDatasets.EventsCalendar] = HashServed(GameCatalogDatasets.EventsCalendar, eventsCalendar),
             [GameCatalogDatasets.Shops] = HashServed(GameCatalogDatasets.Shops, shopViews),
@@ -272,6 +275,7 @@ public static class GameCatalogLoader
             lreViews,
             lreBattleViews,
             hordeModeTiersViews,
+            npcTiersViews,
             eventDefinitionViews,
             eventsCalendar,
             shopViews,

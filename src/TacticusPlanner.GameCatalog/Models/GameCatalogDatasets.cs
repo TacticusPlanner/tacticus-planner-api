@@ -20,6 +20,10 @@ public static class GameCatalogDatasets
     // tier's power multiplier; denormalization only sorts the characters by unit id.
     // See Models/HordeModeTiers.cs.
     public const string HordeModeTiers = "horde-mode-tiers";
+    // npc-tiers is a single curated S/A/B/C/D tier list of enemy NPCs for horde modes (how much harder an NPC is
+    // than its power says), with each tier's power multiplier; denormalization only sorts the NPCs by id.
+    // See Models/NpcTiers.cs.
+    public const string NpcTiers = "npc-tiers";
     public const string MythicQuests = "mythic-quests";
     // quest-events: the datamine's Quest Events (linearHeroEvent.json; one record per featured hero, 17 battles
     // each). quest-crates: the shared 17-crate point track. Both are served under the same key.
@@ -180,6 +184,7 @@ public static class GameCatalogDatasets
         EventDefinitions,
         EventOccurrences,
         HordeModeTiers,
+        NpcTiers,
         QuestCrates,
         CampaignCuration,
         LreCuration,
@@ -257,6 +262,7 @@ public static class GameCatalogDatasets
         Lres,
         LreBattles,
         HordeModeTiers,
+        NpcTiers,
         EventDefinitionsServed,
         EventsCalendar,
         Shops,

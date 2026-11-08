@@ -49,6 +49,7 @@ public static partial class GameCatalogValidator
         ValidateNpcs(snapshot, errors);
         ValidateGuildRaidMeta(snapshot, errors);
         ValidateHordeModeTiers(snapshot, errors);
+        ValidateNpcTiers(snapshot, errors);
         ValidateUnitPower(snapshot, errors);
         ValidateFactions(snapshot, errors);
         ValidateDamageTypes(snapshot, errors);

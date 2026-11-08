@@ -278,6 +278,22 @@ the apps code (not in the catalog), so ratio changes ship as a web release.
 - Enforced at load (`Validation/HordeModeTiersValidation.cs`, `InvalidHordeModeTiers`). A value change
   only moves this dataset's hash; a new field moves the derived `schemaHash`.
 
+## NPC tiers
+
+`Data/curated/npc-tiers.json` is the enemy-side counterpart of `horde-mode-tiers`: a single hand-curated
+tier list (a one-element array) of how much harder an NPC is in horde modes than its power says (summons,
+anti-heal, pierce and plasma are under-rated by power), served as `npc-tiers` with `npcs` sorted by `npcId`.
+The apps' Legendary Event clear estimate multiplies each battle enemy's power by its NPC multiplier before
+comparing with the team's effective power.
+
+- **`tiers`**: the same `S`, `A`, `B`, `C`, `D` names and (0, 5] range as `horde-mode-tiers`; D is 1.00
+  (power is right). An NPC not listed is untiered and gets 1.0.
+- **`npcs`** (`{ npcId, tier, multiplier? }`): `npcId` must be a catalog NPC id, listed once; `multiplier`
+  is an optional per-NPC override in (0, 5], omitted from the served JSON when not set. Seed: every NPC of
+  the active Legendary Event(s) at D. When an event starts, add its NPCs (from `battleSets.json`
+  `legendary_event_{N}_lane_{1..3}`); put the evidence (estimated vs real clear depths) for a coefficient
+  in the PR description.
+
 ## Unit power
 
 `unit-power` is the single record of the power tables the in-game power formula reads (the apps compute

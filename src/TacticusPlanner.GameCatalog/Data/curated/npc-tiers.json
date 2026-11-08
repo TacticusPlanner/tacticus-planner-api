@@ -1,0 +1,44 @@
+[
+  {
+    "id": "npc-tiers",
+    "tiers": [
+      { "tier": "S", "multiplier": 1.9 },
+      { "tier": "A", "multiplier": 1.7 },
+      { "tier": "B", "multiplier": 1.45 },
+      { "tier": "C", "multiplier": 1.2 },
+      { "tier": "D", "multiplier": 1.0 }
+    ],
+    "npcs": [
+      { "npcId": "blackBossObliteratorLEG", "tier": "D" },
+      { "npcId": "blackBossPossessionLEG", "tier": "D" },
+      { "npcId": "blackNpc1Bloodletter", "tier": "D" },
+      { "npcId": "bloodNpc1Intercessor", "tier": "D" },
+      { "npcId": "darkaBossAsmodaiLEG", "tier": "D" },
+      { "npcId": "darkaBossCompanionLEG", "tier": "D" },
+      { "npcId": "darkaNpc1Infiltrator", "tier": "D" },
+      { "npcId": "darkaNpc2Hellblaster", "tier": "D" },
+      { "npcId": "darkaNpc3Terminator", "tier": "D" },
+      { "npcId": "darkaNpcAzrael", "tier": "D" },
+      { "npcId": "darkaNpcHellblaster", "tier": "D" },
+      { "npcId": "darkaNpcSternguard", "tier": "D" },
+      { "npcId": "darkaNpcTerminator", "tier": "D" },
+      { "npcId": "deathNpc3Nurglings", "tier": "D" },
+      { "npcId": "eldarBossAutarch", "tier": "D" },
+      { "npcId": "eldarBossFarseerLEG", "tier": "D" },
+      { "npcId": "eldarBossJainZarLEG", "tier": "D" },
+      { "npcId": "eldarBossLhykhis", "tier": "D" },
+      { "npcId": "eldarBossMauganRa", "tier": "D" },
+      { "npcId": "eldarBossRanger", "tier": "D" },
+      { "npcId": "eldarNpc1Guardian", "tier": "D" },
+      { "npcId": "eldarNpc2Warlock", "tier": "D" },
+      { "npcId": "eldarNpc3Harlequin", "tier": "D" },
+      { "npcId": "eldarNpc4Wraithguard", "tier": "D" },
+      { "npcId": "thousBossInfernalMaster", "tier": "D" },
+      { "npcId": "thousNpc1PinkHorror", "tier": "D" },
+      { "npcId": "thousNpc2Screamer", "tier": "D" },
+      { "npcId": "thousNpc3RubricMarine", "tier": "D" },
+      { "npcId": "worldNpc1Berzerker", "tier": "D" },
+      { "npcId": "worldNpcEightbound", "tier": "D" }
+    ]
+  }
+]
