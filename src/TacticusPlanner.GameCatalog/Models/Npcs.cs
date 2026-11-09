@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace TacticusPlanner.GameCatalog.Models;
 
 /// <summary>
@@ -29,7 +31,10 @@ public sealed record GameCatalogRawNpc(
     IReadOnlyList<string> ActiveAbilities,
     IReadOnlyList<string> PassiveAbilityDamage,
     IReadOnlyList<string> PassiveAbilities,
-    IReadOnlyList<GameCatalogNpcStat> Stats
+    IReadOnlyList<GameCatalogNpcStat> Stats,
+    // A named boss (Azrael, Gulgortz, ...): the datamine marks it with the Hero trait, which Traits drops.
+    // Read by validation only; never served.
+    [property: JsonIgnore] bool IsBoss = false
 );
 
 /// <summary>

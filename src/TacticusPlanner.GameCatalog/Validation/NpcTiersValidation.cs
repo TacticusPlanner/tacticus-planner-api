@@ -8,13 +8,9 @@ public static partial class GameCatalogValidator
     {
         var npcIds = new HashSet<string>(snapshot.NpcList.Select(npc => npc.Id), StringComparer.Ordinal);
         var bossIds = new HashSet<string>(
-            snapshot.NpcList.Where(npc => npc.Traits.Contains(BossTrait, StringComparer.Ordinal)).Select(npc => npc.Id),
-            StringComparer.Ordinal);
+            snapshot.Npcs.Where(npc => npc.IsBoss).Select(npc => npc.Id), StringComparer.Ordinal);
         ValidateNpcTiers(snapshot.NpcTiersViews, npcIds, bossIds, errors);
     }
-
-    /// <summary>The NPC trait that marks a named boss (Azrael, Gulgortz, ...): bosses are not tiered.</summary>
-    private const string BossTrait = "Hero";
 
     /// <summary>
     /// Validates the <c>npc-tiers</c> file: exactly one record with the dataset's id; <c>tiers</c> lists S, A,

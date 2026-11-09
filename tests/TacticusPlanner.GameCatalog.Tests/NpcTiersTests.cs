@@ -57,7 +57,11 @@ public sealed class NpcTiersTests
         Assert.Equal(["S", "A", "B", "C", "D"], record.Tiers.Select(tier => tier.Tier));
         Assert.Equal(1.0, Assert.Single(record.Tiers, tier => tier.Tier == "D").Multiplier);
         Assert.Equal(44, record.Npcs.Count);
-        Assert.DoesNotContain(record.Npcs, npc => npc.NpcId.Contains("Boss", StringComparison.Ordinal));
+        var bossIds = snapshot.Npcs.Where(npc => npc.IsBoss).Select(npc => npc.Id).ToHashSet(StringComparer.Ordinal);
+        Assert.Contains("darkaNpcAzrael", bossIds);
+        Assert.Contains("orksBossWarboss", bossIds);
+        Assert.DoesNotContain("darkaNpc2Hellblaster", bossIds);
+        Assert.DoesNotContain(record.Npcs, npc => bossIds.Contains(npc.NpcId));
         Assert.All(record.Npcs, npc =>
         {
             Assert.Equal("D", npc.Tier);
