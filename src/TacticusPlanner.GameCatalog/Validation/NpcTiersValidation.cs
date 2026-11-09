@@ -7,18 +7,25 @@ public static partial class GameCatalogValidator
     private static void ValidateNpcTiers(GameCatalogSnapshot snapshot, List<GameCatalogValidationError> errors)
     {
         var npcIds = new HashSet<string>(snapshot.NpcList.Select(npc => npc.Id), StringComparer.Ordinal);
-        ValidateNpcTiers(snapshot.NpcTiersViews, npcIds, errors);
+        var bossIds = new HashSet<string>(
+            snapshot.NpcList.Where(npc => npc.Traits.Contains(BossTrait, StringComparer.Ordinal)).Select(npc => npc.Id),
+            StringComparer.Ordinal);
+        ValidateNpcTiers(snapshot.NpcTiersViews, npcIds, bossIds, errors);
     }
+
+    /// <summary>The NPC trait that marks a named boss (Azrael, Gulgortz, ...): bosses are not tiered.</summary>
+    private const string BossTrait = "Hero";
 
     /// <summary>
     /// Validates the <c>npc-tiers</c> file: exactly one record with the dataset's id; <c>tiers</c> lists S, A,
     /// B, C and D in that order, each with a <c>multiplier</c> in (0, 5]; every NPC's <c>npcId</c> is a catalog
-    /// NPC id listed once, with one of those tiers and, when set, its own <c>multiplier</c> in (0, 5].
+    /// NPC id listed once, not a boss (an NPC with the <c>Hero</c> trait), with one of those tiers and, when set, its own <c>multiplier</c> in (0, 5].
     /// Each failure is an <c>InvalidNpcTiers</c> error naming the offending value.
     /// </summary>
     internal static void ValidateNpcTiers(
         IReadOnlyList<GameCatalogNpcTiers> records,
         HashSet<string> npcIds,
+        HashSet<string> bossIds,
         List<GameCatalogValidationError> errors)
     {
         const string dataset = GameCatalogDatasets.NpcTiers;
@@ -64,6 +71,11 @@ public static partial class GameCatalogValidator
             {
                 errors.Add(new GameCatalogValidationError(
                     dataset, code, $"Dataset '{dataset}' npcId '{npc.NpcId}' is not a catalog NPC id."));
+            }
+            else if (bossIds.Contains(npc.NpcId))
+            {
+                errors.Add(new GameCatalogValidationError(
+                    dataset, code, $"Dataset '{dataset}' npcId '{npc.NpcId}' is a boss; only regular NPCs are tiered."));
             }
             else if (!seen.Add(npc.NpcId))
             {

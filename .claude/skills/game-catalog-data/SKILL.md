@@ -288,11 +288,13 @@ comparing with the team's effective power.
 
 - **`tiers`**: the same `S`, `A`, `B`, `C`, `D` names and (0, 5] range as `horde-mode-tiers`; D is 1.00
   (power is right). An NPC not listed is untiered and gets 1.0.
-- **`npcs`** (`{ npcId, tier, multiplier? }`): `npcId` must be a catalog NPC id, listed once; `multiplier`
-  is an optional per-NPC override in (0, 5], omitted from the served JSON when not set. Seed: every NPC of
-  the active Legendary Event(s) at D. When an event starts, add its NPCs (from `battleSets.json`
-  `legendary_event_{N}_lane_{1..3}`); put the evidence (estimated vs real clear depths) for a coefficient
-  in the PR description.
+- **`npcs`** (`{ npcId, tier, multiplier? }`): `npcId` must be a catalog NPC id, listed once, and not a
+  boss (an NPC with the `Hero` trait: Azrael, Gulgortz, ...); `multiplier` is an optional per-NPC override in
+  (0, 5], omitted from the served JSON when not set. Seed: every regular NPC of the Legendary Events still in
+  rotation (`lre-curation.json` lists a run date: Bile, Lysander, Farsight, Ûthar) at D, from their
+  `legendaryHeroEvent.json` lanes' `battleSetId` (`battleSets.json` waves' `army`). When an event joins the
+  rotation, add its regular NPCs; put the evidence (estimated vs real clear depths) for a coefficient in the
+  PR description.
 
 ## Unit power
 

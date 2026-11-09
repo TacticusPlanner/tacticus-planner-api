@@ -12,7 +12,9 @@ public sealed class NpcTiersTests
     private static readonly JsonSerializerOptions JsonOptions = new(JsonSerializerDefaults.Web);
 
     private static readonly HashSet<string> NpcIds =
-        new(["darkaNpc2Hellblaster", "eldarNpc1Guardian", "eldarNpc4Wraithguard"], StringComparer.Ordinal);
+        new(["darkaNpc2Hellblaster", "eldarNpc1Guardian", "eldarNpc4Wraithguard", "darkaNpcAzrael"], StringComparer.Ordinal);
+
+    private static readonly HashSet<string> BossIds = new(["darkaNpcAzrael"], StringComparer.Ordinal);
 
     private static readonly GameCatalogHordeModeTier[] DefaultTiers =
     [
@@ -29,7 +31,7 @@ public sealed class NpcTiersTests
     private static List<GameCatalogValidationError> Validate(params GameCatalogNpcTiers[] records)
     {
         var errors = new List<GameCatalogValidationError>();
-        GameCatalogValidator.ValidateNpcTiers(records, NpcIds, errors);
+        GameCatalogValidator.ValidateNpcTiers(records, NpcIds, BossIds, errors);
         return errors;
     }
 
@@ -46,7 +48,7 @@ public sealed class NpcTiersTests
     }
 
     [Fact]
-    public void InitialDatasetListsTheActiveLegendaryEventNpcsAtTierD()
+    public void InitialDatasetListsTheRotationLegendaryEventNpcsAtTierD()
     {
         var snapshot = GameCatalogLoader.Load();
 
@@ -54,7 +56,8 @@ public sealed class NpcTiersTests
         Assert.Equal("npc-tiers", record.Id);
         Assert.Equal(["S", "A", "B", "C", "D"], record.Tiers.Select(tier => tier.Tier));
         Assert.Equal(1.0, Assert.Single(record.Tiers, tier => tier.Tier == "D").Multiplier);
-        Assert.Equal(30, record.Npcs.Count);
+        Assert.Equal(44, record.Npcs.Count);
+        Assert.DoesNotContain(record.Npcs, npc => npc.NpcId.Contains("Boss", StringComparison.Ordinal));
         Assert.All(record.Npcs, npc =>
         {
             Assert.Equal("D", npc.Tier);
@@ -111,6 +114,10 @@ public sealed class NpcTiersTests
     [Fact]
     public void UnknownNpcFails() =>
         AssertSingleError(Validate(Record(new GameCatalogNpcTier("notAnNpc", "A"))), "notAnNpc");
+
+    [Fact]
+    public void BossNpcFails() =>
+        AssertSingleError(Validate(Record(new GameCatalogNpcTier("darkaNpcAzrael", "D", null))), "darkaNpcAzrael", "boss");
 
     [Fact]
     public void DuplicateNpcFails() =>
