@@ -24,7 +24,7 @@ public sealed class EditGoalEndpoint : Endpoint<EditGoalRequest, EditGoalRespons
             summary.Summary = "Edits a goal's target, details, project memberships and priority in one atomic request.";
             summary.Description = "Every section is optional and an absent section leaves that aspect unchanged; "
                 + "a request with no section is a no-op. Sections apply in the order target, details, projectIds, "
-                + "priority; if any fails nothing is saved. target carries its own expectedRevision (the goal "
+                + "priority, linkedGoalIds; if any fails nothing is saved. target carries its own expectedRevision (the goal "
                 + "revision); priority.position is the 1-based position among the account's Active/Paused goals and "
                 + "priority.expectedOrderRevision the order revision the client computed it from. The response "
                 + "carries the updated goal and the new order (null unless priority was supplied).";
@@ -84,11 +84,14 @@ public sealed class EditGoalEndpoint : Endpoint<EditGoalRequest, EditGoalRespons
 /// locations clear them; a null strategy leaves it).</param>
 /// <param name="ProjectIds">The complete replacement membership (non-empty when present).</param>
 /// <param name="Priority">Move the goal to a position in the account-wide order.</param>
+/// <param name="LinkedGoalIds">Upgrade goals only: the complete replacement list of the same unit's Active/Paused
+/// Rank (Character) or Ability (Mow) goals it pre-farms for; empty unlinks it.</param>
 public sealed record EditGoalRequest(
     UpdateGoalTargetRequest? Target = null,
     UpdateGoalRequest? Details = null,
     List<Guid>? ProjectIds = null,
-    EditGoalPriorityRequest? Priority = null
+    EditGoalPriorityRequest? Priority = null,
+    List<Guid>? LinkedGoalIds = null
 );
 
 /// <param name="Position">1-based position among the account's Active/Paused goals.</param>
@@ -110,6 +113,9 @@ public sealed class EditGoalValidator : Validator<EditGoalRequest>
             .NotEmpty()
             .WithMessage("A goal must belong to at least one project.")
             .When(request => request.ProjectIds is not null);
+        RuleFor(request => request.LinkedGoalIds)
+            .Must(GoalLinkRules.HasValidShape)
+            .WithMessage(GoalLinkRules.ShapeMessage);
         RuleFor(request => request.Priority!.ExpectedOrderRevision)
             .GreaterThanOrEqualTo(0)
             .When(request => request.Priority is not null);

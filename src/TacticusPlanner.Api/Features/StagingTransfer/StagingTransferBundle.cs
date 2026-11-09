@@ -75,6 +75,8 @@ public sealed record StagingTransferGoal
 
     public List<Guid> DependsOn { get; init; } = [];
 
+    public List<Guid> LinkedGoalIds { get; init; } = [];
+
     public DateTimeOffset CreatedAt { get; init; }
 }
 

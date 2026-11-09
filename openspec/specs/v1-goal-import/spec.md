@@ -423,6 +423,8 @@ goal's own priority:
   and an ability-level range per Machine of War track from its live level to its highest linked Ability
   target. A range SHALL be set only when a linked goal of that kind was imported and something is left to
   raise.
+  Each such Upgrade goal SHALL also link (`linkedGoalIds`) to the Rank or Ability goals of its own unit
+  created from its linked V1 goals in the same import.
 - An upgrade-material goal SHALL become an Upgrade goal for its quantity on a suggested unit that uses the
   material — in order of preference, the first unit by V1 priority among the profile's own imported unit
   goals (whether or not the unit is on the roster), then the roster's characters, then its Machines of

@@ -86,10 +86,12 @@ public sealed class DeleteProjectEndpoint : Endpoint<DeleteProjectRequest>
             if (orphanedGoalIds.Count > 0 && req.DeleteGoals == true)
             {
                 var deletedIds = orphanedGoalIds.Select(id => id.Value).ToList();
-                // The goals and their dependents (no foreign key guards DependsOn, a uuid[]) in one read.
+                // The goals, their dependents and the Upgrade goals linking to them (no foreign key guards
+                // DependsOn or LinkedGoalIds, both uuid[]) in one read.
                 var related = await db.Goals
                     .Where(entity => orphanedGoalIds.Contains(entity.Id)
-                        || entity.DependsOn.Any(id => deletedIds.Contains(id)))
+                        || entity.DependsOn.Any(id => deletedIds.Contains(id))
+                        || entity.LinkedGoalIds.Any(id => deletedIds.Contains(id)))
                     .ToListAsync(ct);
                 foreach (var goal in related)
                 {
@@ -101,6 +103,7 @@ public sealed class DeleteProjectEndpoint : Endpoint<DeleteProjectRequest>
                     else
                     {
                         goal.DependsOn = goal.DependsOn.Where(id => !deletedIds.Contains(id)).ToList();
+                        goal.LinkedGoalIds = goal.LinkedGoalIds.Where(id => !deletedIds.Contains(id)).ToList();
                     }
                 }
             }

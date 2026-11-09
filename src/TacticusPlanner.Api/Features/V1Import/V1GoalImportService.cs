@@ -957,6 +957,25 @@ public sealed class V1GoalImportService(
                 }
             }
 
+            // A pre-farm's Upgrade goal links to the Rank/Ability goals it was for, as created on its own unit.
+            var stagedBySourceId = staged
+                .Where(entry => sourceIdBySlot[entry.Key] is not null)
+                .GroupBy(entry => sourceIdBySlot[entry.Key]!, StringComparer.Ordinal)
+                .ToDictionary(group => group.Key, group => group.Select(entry => entry.Value.Goal).ToList(), StringComparer.Ordinal);
+            foreach (var (goal, candidate) in staged.Values)
+            {
+                if (goal.GoalType != GoalType.Upgrade || candidate.LinkedSourceGoalIds is not { Count: > 0 } linkedSourceIds)
+                    continue;
+                var linkable = GoalLinkRules.LinkableType(goal.EntityType);
+                goal.LinkedGoalIds = linkedSourceIds
+                    .SelectMany(sourceId => stagedBySourceId.GetValueOrDefault(sourceId) ?? [])
+                    .Where(linked => linked.EntityType == goal.EntityType && linked.EntityId == goal.EntityId && linked.GoalType == linkable)
+                    .Select(linked => linked.Id.Value)
+                    .Distinct()
+                    .Take(GoalLinkRules.MaxLinks)
+                    .ToList();
+            }
+
             if (pending.Count > 0)
             {
                 db.Projects.Add(project);
