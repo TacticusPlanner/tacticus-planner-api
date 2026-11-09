@@ -24,7 +24,7 @@ public sealed class EditGoalEndpoint : Endpoint<EditGoalRequest, EditGoalRespons
             summary.Summary = "Edits a goal's target, details, project memberships and priority in one atomic request.";
             summary.Description = "Every section is optional and an absent section leaves that aspect unchanged; "
                 + "a request with no section is a no-op. Sections apply in the order target, details, projectIds, "
-                + "priority, linkedGoalIds; if any fails nothing is saved. target carries its own expectedRevision (the goal "
+                + "linkedGoalIds, priority; if any fails nothing is saved. target carries its own expectedRevision (the goal "
                 + "revision); priority.position is the 1-based position among the account's Active/Paused goals and "
                 + "priority.expectedOrderRevision the order revision the client computed it from. The response "
                 + "carries the updated goal and the new order (null unless priority was supplied).";
