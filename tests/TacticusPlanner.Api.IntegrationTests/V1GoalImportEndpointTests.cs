@@ -723,6 +723,16 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
             Assert.Equal(1, outcome.UpgradeQuantity);
         });
 
+        // Each Upgrade goal's rank range runs from the unit's live rank to its linked Rank goal's target, so
+        // the planner counts its pieces toward that Rank goal instead of farming them twice.
+        foreach (var outcome in preFarm)
+        {
+            var goal = await GetGoalAsync(client, outcome.GoalId!.Value);
+            var range = goal.Config.Upgrade!.RankRange!;
+            Assert.Equal(((int)UnitRank.Stone1, (int)UnitRank.Iron1), (range.Start, range.End));
+            Assert.Null(goal.Config.Upgrade.ActiveRange);
+        }
+
         var priorities = await ImportPrioritiesAsync(client);
         var ordered = new[] { preFarm[0].GoalId!.Value, preFarm[1].GoalId!.Value, GoalIdOf(body, "r1"), GoalIdOf(body, "r2") }
             .Select(id => priorities[id])
@@ -751,6 +761,9 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         var goal = await GetGoalAsync(client, survivor.GoalId!.Value);
         var target = Assert.Single(goal.Config.Upgrade!.Targets);
         Assert.Equal((SharedStoneUpgradeId, 10), (target.UpgradeId, target.Quantity));
+        // The pre-farm's range survives the merge with a range-less material goal.
+        var range = goal.Config.Upgrade.RankRange!;
+        Assert.Equal(((int)UnitRank.Stone1, (int)UnitRank.Iron1), (range.Start, range.End));
     }
 
     [Fact]
