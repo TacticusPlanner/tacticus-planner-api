@@ -276,6 +276,19 @@ public sealed class V1GoalImportService(
                 }
                 config = new CreateGoalConfigRequest(Rank: new RankTargetRequest(
                     currentRank, false, 0, targetRank, sourceGoal.RankPoint5 ?? false, sourceGoal.RankAppliedUpgrades ?? 0));
+                if (sourceGoal.UpgradesRarity is { Count: > 0 } upgradesRarity)
+                {
+                    // A rarity-filtered Rank goal is a pre-farm, not a rank-up: it becomes an Upgrade goal, so it
+                    // no longer shares (and merges into) a full Rank goal's target key.
+                    goalType = GoalType.Upgrade;
+                    var rarityConfig = RarityUpgradeConfig(entityId, config.Rank!, upgradesRarity);
+                    if (rarityConfig is null)
+                    {
+                        return (null, Skipped(sourceGoal, entityType, entityId, goalType, "target_already_reached",
+                            "No base material of the chosen rarities is left in the goal's rank range."));
+                    }
+                    config = rarityConfig;
+                }
                 break;
 
             case 2:
@@ -505,22 +518,8 @@ public sealed class V1GoalImportService(
                 .Select(goal => goal.Config.Rank)
                 .OfType<RankTargetRequest>()
                 .MaxBy(rank => (rank.End, rank.EndPointFive ? 1 : 0, rank.EndAppliedUpgrades));
-            var end = target?.End ?? steps.Count;
-            ids.AddRange(steps.Skip(start).Take(Math.Max(0, end - start)).SelectMany(step => step.UpgradeIds));
-            if (target is not null && steps.ElementAtOrDefault(end) is { } endStep)
-            {
-                // Upgrades are column-major (two rows of three), so a ".5" target is the top row: 0, 2 and 4.
-                ids.AddRange(target.EndAppliedUpgrades > 0
-                    ? endStep.UpgradeIds.Take(target.EndAppliedUpgrades)
-                    : target.EndPointFive ? endStep.UpgradeIds.Where((_, index) => index % 2 == 0) : Enumerable.Empty<string>());
-            }
-
-            if (target is not null)
-            {
-                var partialEnd = target.EndAppliedUpgrades > 0 || target.EndPointFive;
-                var rangeEnd = Math.Min(partialEnd ? end + 1 : end, (int)UnitRank.Adamantine3);
-                rankRange = start < rangeEnd ? new UpgradeRangeRequest(start, rangeEnd) : null;
-            }
+            ids.AddRange(RankSpanUpgradeIds(steps, start, target));
+            if (target is not null) rankRange = RankSpanRange(start, target);
         }
         else
         {
@@ -540,6 +539,76 @@ public sealed class V1GoalImportService(
 
         var upgrades = catalog.Current.UpgradeViews.ToDictionary(item => item.Id, StringComparer.Ordinal);
         return new PreFarmNeed(ids.Sum(id => CountWithin(id, upgradeId, upgrades, 0)), rankRange, activeRange, passiveRange);
+    }
+
+    /// <summary>The rank-up upgrade ids from <paramref name="start"/> up to <paramref name="target"/> (the whole
+    /// remaining ladder without one), including the target rank's own slots a .5 or applied-upgrades target names.</summary>
+    private static IEnumerable<string> RankSpanUpgradeIds(
+        IReadOnlyList<GameCatalogCharacterRankUp> steps, int start, RankTargetRequest? target)
+    {
+        var end = target?.End ?? steps.Count;
+        var ids = steps.Skip(start).Take(Math.Max(0, end - start)).SelectMany(step => step.UpgradeIds);
+        if (target is null || steps.ElementAtOrDefault(end) is not { } endStep) return ids;
+        // Upgrades are column-major (two rows of three), so a ".5" target is the top row: 0, 2 and 4.
+        return ids.Concat(target.EndAppliedUpgrades > 0
+            ? endStep.UpgradeIds.Take(target.EndAppliedUpgrades)
+            : target.EndPointFive ? endStep.UpgradeIds.Where((_, index) => index % 2 == 0) : Enumerable.Empty<string>());
+    }
+
+    /// <summary>An Upgrade goal's rank range covering <paramref name="start"/> up to <paramref name="target"/>:
+    /// one rank further when the target names some of its own rank's slots, capped at Adamantine3. Null when
+    /// nothing is left to raise.</summary>
+    private static UpgradeRangeRequest? RankSpanRange(int start, RankTargetRequest target)
+    {
+        var partialEnd = target.EndAppliedUpgrades > 0 || target.EndPointFive;
+        var rangeEnd = Math.Min(partialEnd ? target.End + 1 : target.End, (int)UnitRank.Adamantine3);
+        return start < rangeEnd ? new UpgradeRangeRequest(start, rangeEnd) : null;
+    }
+
+    private static readonly string[] V1RarityNames = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic"];
+
+    /// <summary>A V1 rarity-filtered Rank goal as an Upgrade goal: every base material of those rarities the
+    /// character's rank-up slots from <paramref name="rank"/>'s start to its target take (counted down through
+    /// crafted recipes, in ladder order), over that rank range. Null when none is left.</summary>
+    private CreateGoalConfigRequest? RarityUpgradeConfig(string characterId, RankTargetRequest rank, IReadOnlyList<int> v1Rarities)
+    {
+        var steps = catalog.Current.CharacterViews.FirstOrDefault(item => item.Id == characterId)?.RankUpUpgrades;
+        var rankRange = RankSpanRange(rank.Start, rank);
+        if (steps is null || rankRange is null) return null;
+        var rarities = v1Rarities
+            .Where(rarity => rarity >= 0 && rarity < V1RarityNames.Length)
+            .Select(rarity => V1RarityNames[rarity])
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var upgrades = catalog.Current.UpgradeViews.ToDictionary(item => item.Id, StringComparer.Ordinal);
+        var counts = new Dictionary<string, int>(StringComparer.Ordinal);
+        var order = new List<string>();
+        foreach (var id in RankSpanUpgradeIds(steps, rank.Start, rank))
+            AddBaseCounts(id, 1, upgrades, counts, order, 0);
+        var targets = order
+            .Where(id => upgrades.TryGetValue(id, out var upgrade) && rarities.Contains(upgrade.Rarity))
+            .Select(id => new UpgradeMaterialTargetRequest(id, counts[id]))
+            .ToList();
+        return targets.Count == 0
+            ? null
+            : new CreateGoalConfigRequest(Upgrade: new UpgradeTargetRequest(targets, rankRange));
+    }
+
+    /// <summary>Adds <paramref name="multiplier"/> of <paramref name="id"/>'s base materials to
+    /// <paramref name="counts"/>, through its recipe when crafted; <paramref name="order"/> keeps first-seen order.
+    /// The depth bound stops a recipe cycle.</summary>
+    private static void AddBaseCounts(
+        string id, int multiplier, IReadOnlyDictionary<string, GameCatalogUpgradeView> upgrades,
+        Dictionary<string, int> counts, List<string> order, int depth)
+    {
+        if (depth <= 16 && upgrades.TryGetValue(id, out var upgrade) && upgrade.Craftable)
+        {
+            foreach (var ingredient in upgrade.Recipe)
+                AddBaseCounts(ingredient.Material, multiplier * ingredient.Count, upgrades, counts, order, depth + 1);
+            return;
+        }
+
+        if (!counts.TryAdd(id, multiplier)) counts[id] += multiplier;
+        else order.Add(id);
     }
 
     /// <summary>A Mow track range from the live level to <paramref name="end"/>, within the track's ladder

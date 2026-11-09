@@ -8,6 +8,7 @@ using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.PlayerData.Chunks;
 using TacticusPlanner.Domain.Projects;
+using TacticusPlanner.GameCatalog;
 using TacticusPlanner.GameDomain;
 using TacticusPlanner.Persistence;
 
@@ -279,6 +280,37 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         Assert.Equal((int)UnitRank.Bronze1, goal.Config.Rank!.End);
         Assert.Contains("first", goal.Notes);
         Assert.Contains("second", goal.Notes);
+    }
+
+    [Fact]
+    public async Task ARarityFilteredRankGoalBecomesAnUpgradeGoalBesideTheFullRankGoal()
+    {
+        var (client, subject) = await CreateProvisionedClientAsync();
+        await SeedPlayerDataSnapshotAsync(subject, [Character(CharacterId, xpLevel: 60)]);
+
+        var body = await ImportGoalsAsync(
+            client,
+            [
+                RankGoal("r-common", CharacterId, 1, UnitRank.Bronze1) with { UpgradesRarity = [0] },
+                RankGoal("r-full", CharacterId, 2, UnitRank.Bronze1),
+            ],
+            automaticPrerequisites: false);
+
+        Assert.All(body.Outcomes, outcome => Assert.Equal(V1GoalOutcomeStatus.Created, outcome.Status));
+        Assert.Equal(GoalType.Rank, body.Outcomes.Single(o => o.SourceGoalId == "r-full").GoalType);
+        var upgradeGoal = await GetGoalAsync(client, GoalIdOf(body, "r-common"));
+        Assert.Equal(GoalType.Upgrade, upgradeGoal.GoalType);
+        var upgrade = upgradeGoal.Config.Upgrade!;
+        Assert.Equal(((int)UnitRank.Stone1, (int)UnitRank.Bronze1), (upgrade.RankRange!.Start, upgrade.RankRange.End));
+        Assert.NotEmpty(upgrade.Targets);
+        var upgrades = factory.Services.GetRequiredService<IGameCatalogProvider>().Current.UpgradeViews
+            .ToDictionary(item => item.Id);
+        Assert.All(upgrade.Targets, target =>
+        {
+            Assert.Equal("Common", upgrades[target.UpgradeId].Rarity);
+            Assert.False(upgrades[target.UpgradeId].Craftable);
+            Assert.True(target.Quantity > 0);
+        });
     }
 
     [Fact]
