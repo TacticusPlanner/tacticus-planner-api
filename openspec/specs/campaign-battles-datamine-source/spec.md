@@ -32,6 +32,15 @@ Core characters SHALL be the `unlockedUnitIds` of the group's campaigns, or of t
 - **WHEN** the catalog loads from datamine `v1.43.157.2989`
 - **THEN** `elite2` (which follows `campaign2`) has core characters `["blackHaarken", "blackTerminator", "blackPossession"]`, faction `BlackLegion`, and allies including `TheLostAndTheDamned`
 
+### Requirement: A campaign definition names the campaign it follows
+
+A storyline campaign definition SHALL carry `requiredCampaignGroupId`: the id of the group that must be fully cleared before it opens, read from its first campaign's `completedCampaigns` unlock condition (a storyline group's id is its campaign id). It SHALL be null when the campaign follows none, and for campaign-event groups, whose Extremis track follows the group's own Standard track. A campaign that follows a campaign the game does not have, or more than one, SHALL fail the load.
+
+#### Scenario: Elite and Mirror Elite campaigns
+
+- **WHEN** the catalog loads from datamine `v1.43.157.2989`
+- **THEN** `elite1`-`elite4` follow `campaign1`-`campaign4`, `eliteMirror1`-`eliteMirror4` follow `mirror1`-`mirror4`, and every other group follows none
+
 ### Requirement: Battle enemies come from the opposing teams
 
 A battle's enemies SHALL be the `npcId:index` units of every team whose `playerTeams` value is not 1, without board power-ups, counted per unit and sorted by npc id, then index. `stars` and `rank` SHALL come from the npc's stat row at the 1-based index, for bosses and every other npc, and `servedIndex` SHALL be that row's 0-based position. An index past the npc's ladder SHALL fail the load.

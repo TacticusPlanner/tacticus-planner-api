@@ -138,7 +138,10 @@ internal static partial class GameCatalogDenormalizer
                 coreCharacters,
                 sources.Select(source => source.Type).ToArray(),
                 battles,
-                number);
+                number)
+            {
+                RequiredCampaignGroupId = releaseType == "event" ? null : RequiredCampaign(key, sources[0].Campaign, byId),
+            };
         }
 
         return groups;
@@ -176,6 +179,21 @@ internal static partial class GameCatalogDenormalizer
             ? ("eventCampaign" + number.Groups[1].Value, "event", int.Parse(number.Groups[1].ValueSpan, CultureInfo.InvariantCulture))
             : throw CampaignError(key, $"starts with event campaign '{campaignId}', which is not an eventStandard campaign");
     }
+
+    // The storyline campaign a campaign follows (its game unlock condition `completedCampaigns`), whose id is that
+    // group's id; null when it follows none.
+    private static string? RequiredCampaign(
+        string key,
+        DatamineCampaign campaign,
+        Dictionary<string, (string Kind, DatamineCampaign Campaign)> byId) =>
+        campaign.UnlockConditions?.CompletedCampaigns switch
+        {
+            null or [] => null,
+            [var previous] => byId.ContainsKey(previous.CampaignId)
+                ? previous.CampaignId
+                : throw CampaignError(key, $"follows campaign '{previous.CampaignId}' the game does not have"),
+            _ => throw CampaignError(key, "follows more than one campaign"),
+        };
 
     // The units a campaign asks to unlock, or those of the campaign it follows when it names none.
     private static IReadOnlyList<string>? CampaignUnlockUnits(
