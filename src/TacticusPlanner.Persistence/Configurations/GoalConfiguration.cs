@@ -37,6 +37,7 @@ public sealed class GoalConfiguration : IEntityTypeConfiguration<Goal>
         // EF Core's primitive-collection support (8+) handles List<Guid> directly via Npgsql's array
         // type mapping. Reserved for genuinely structured payloads (below) is the jsonb/OwnsX approach.
         builder.Property(entity => entity.DependsOn);
+        builder.Property(entity => entity.LinkedGoalIds);
 
         // Each jsonb payload below is EF Core's JSON owned-entity mapping (OwnsOne/OwnsMany + ToJson()),
         // per ADR 0002/0007 — config/snapshot are kept as separate columns, not merged into one blob, so

@@ -92,6 +92,11 @@ public sealed class CreateCombinedGoalsValidator : Validator<CreateCombinedGoals
                 .Must(ids => ids is null || (ids.TrueForAll(id => id != Guid.Empty) && ids.Distinct().Count() == ids.Count))
                 .WithMessage("DependsOnGoalIds must be distinct, non-empty goal ids."));
 
+        RuleForEach(request => request.Goals)
+            .ChildRules(goal => goal.RuleFor(spec => spec.LinkedGoalIds)
+                .Must(GoalLinkRules.HasValidShape)
+                .WithMessage(GoalLinkRules.ShapeMessage));
+
         RuleFor(request => request)
             .Must(request => request.EntityType != GoalEntityType.Mow
                 || request.Goals is null

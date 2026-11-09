@@ -731,6 +731,9 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
             var range = goal.Config.Upgrade!.RankRange!;
             Assert.Equal(((int)UnitRank.Stone1, (int)UnitRank.Iron1), (range.Start, range.End));
             Assert.Null(goal.Config.Upgrade.ActiveRange);
+            // And links to that unit's own imported Rank goal only.
+            var ownRank = outcome.EntityId == CharacterId ? "r1" : "r2";
+            Assert.Equal([GoalIdOf(body, ownRank)], goal.LinkedGoalIds);
         }
 
         var priorities = await ImportPrioritiesAsync(client);

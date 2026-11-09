@@ -94,6 +94,10 @@ public sealed class StagingTransferImporter(PlannerDbContext db, TimeProvider ti
                         .Where(goalIds.ContainsKey)
                         .Select(id => goalIds[id].Value)
                         .ToList(),
+                    LinkedGoalIds = source.LinkedGoalIds
+                        .Where(goalIds.ContainsKey)
+                        .Select(id => goalIds[id].Value)
+                        .ToList(),
                 });
             }
 

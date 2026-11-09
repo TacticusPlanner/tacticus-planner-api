@@ -407,3 +407,34 @@ materials").
 - **GIVEN** an Upgrade goal created without any range group
 - **WHEN** its detail is read
 - **THEN** all three range groups are null and the goal remains editable
+
+### Requirement: Upgrade goals can link to the goals they pre-farm for
+
+An Upgrade goal SHALL carry `linkedGoalIds`, the same unit's goals it pre-farms for, in link order: Rank
+goals for a Character, Ability goals for a Machine of War. Creation (`linkedGoalIds` on a goal spec) and
+the edit endpoint (`linkedGoalIds`, a complete replacement; empty unlinks) SHALL accept only distinct ids, at
+most 10, each naming an Active or Paused goal of that kind on the same unit; anything else, or links on a
+goal that is not an Upgrade goal, SHALL be rejected with a 400 and nothing saved. Every goal's detail SHALL
+carry the list (empty when unlinked). Deleting a goal, alone or with its project, SHALL remove it from every
+Upgrade goal's links. A linked goal that is completed or archived SHALL stay in the list; clients consider
+only in-flight links. Clients count a linked Upgrade goal's pieces toward the linked goals' slots; an
+unlinked one keeps the implicit link of an overlapping range on the same unit.
+
+#### Scenario: Link on create, unlink and relink on edit
+
+- **GIVEN** a character's Rank goal
+- **WHEN** an Upgrade goal for that character is created with `linkedGoalIds` naming it, then edited with
+  an empty list, then edited with it again
+- **THEN** the detail carries the Rank goal's id, then none, then the id again
+
+#### Scenario: Link to another unit's goal
+
+- **GIVEN** a Rank goal for another character
+- **WHEN** an Upgrade goal is created linking to it
+- **THEN** the request is rejected with a 400 and no goal is created
+
+#### Scenario: Deleting a linked goal
+
+- **GIVEN** an Upgrade goal linked to a Rank goal
+- **WHEN** the Rank goal is deleted
+- **THEN** the Upgrade goal's `linkedGoalIds` is empty

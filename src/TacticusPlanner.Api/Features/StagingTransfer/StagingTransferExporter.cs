@@ -74,6 +74,7 @@ public sealed class StagingTransferExporter(PlannerDbContext db, TimeProvider ti
                 Config = goal.Config,
                 Snapshot = goal.Snapshot,
                 DependsOn = goal.DependsOn,
+                LinkedGoalIds = goal.LinkedGoalIds,
                 CreatedAt = goal.CreatedAt,
             }).ToList(),
             Projects = projects.Select(project => new StagingTransferProject
