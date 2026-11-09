@@ -206,7 +206,10 @@ public sealed record V1Goal(
     // quantity; type 7 (pre-farm) carries the material and the V1 ids of the goals it pre-farms for.
     string? UpgradeMaterialId = null,
     int? UpgradeMaterialQuantity = null,
-    IReadOnlyList<string>? PreFarmGoalIds = null
+    IReadOnlyList<string>? PreFarmGoalIds = null,
+    // V1's "Upgrades rarity" filter on a Rank goal (V1 Rarity enum: Common = 0 … Mythic = 5): the goal
+    // farms only the base materials of those rarities.
+    IReadOnlyList<int>? UpgradesRarity = null
 );
 
 public sealed class TacticusV1Client(IHttpClientFactory httpClientFactory) : ITacticusV1Client

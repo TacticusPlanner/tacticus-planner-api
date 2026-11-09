@@ -205,6 +205,16 @@ When V1 contains multiple goals of one type for one unit, the import SHALL prese
 - **WHEN** goals are imported
 - **THEN** four V2 goals are created, each with its own notes, in V1 priority order
 
+### Requirement: A V1 rarity-filtered Rank goal becomes an Upgrade goal
+
+A V1 Rank goal with a non-empty `upgradesRarity` filter is a pre-farm of those rarities, not a rank-up. The import SHALL create it as an Upgrade goal on the same character, at the V1 goal's priority, instead of a Rank goal: its rank range runs from the character's live rank to the V1 target (one rank further when the target is .5 or names applied upgrades, capped at Adamantine3), and its targets are every base material of the chosen rarities the rank-up slots in that span take, counted down through crafted recipes. It therefore never shares a target key with, or merges into, a full Rank goal to the same rank. When no such material is left, the source SHALL report `target_already_reached`.
+
+#### Scenario: A filtered and a full Rank goal to the same rank both import
+
+- **GIVEN** V1 has a Rank goal for Bellator to Bronze1 filtered to Common upgrades, and a full Rank goal to Bronze1
+- **WHEN** goals are imported
+- **THEN** the full goal becomes a Rank goal, the filtered goal becomes an Upgrade goal with range Stone1 to Bronze1 and only Common base materials, and neither reports a merge
+
 ### Requirement: V1 shard-source choices are carried into acquisition sources
 
 An imported Unlock or Ascension goal's acquisition sources SHALL be derived
