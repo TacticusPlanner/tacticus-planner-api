@@ -21,9 +21,9 @@ public sealed class MowMythicAbilityTests
     {
         var mows = GameCatalogLoader.Load().MowList;
 
-        Assert.Equal(11, mows.Count);
+        Assert.Equal(12, mows.Count);
         Assert.All(mows, mow => Assert.False(string.IsNullOrWhiteSpace(mow.MythicAbility?.Name)));
-        Assert.Equal(11, mows.Select(mow => mow.MythicAbility!.Name).Distinct(StringComparer.Ordinal).Count());
+        Assert.Equal(12, mows.Select(mow => mow.MythicAbility!.Name).Distinct(StringComparer.Ordinal).Count());
         Assert.Equal("WisdomOfTheAncients", mows.Single(mow => mow.Id == "ultraDreadnought").MythicAbility!.Name);
     }
 

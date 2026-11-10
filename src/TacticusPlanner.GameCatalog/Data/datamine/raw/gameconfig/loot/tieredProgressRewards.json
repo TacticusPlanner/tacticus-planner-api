@@ -222,7 +222,7 @@
     },
     {
       "requiredProgress": 1800,
-      "chestRewardId": "shards_darkaSternguard:2"
+      "chestRewardId": "shards_spaceWolfPriest:2"
     },
     {
       "requiredProgress": 2160,
@@ -242,7 +242,7 @@
     },
     {
       "requiredProgress": 3600,
-      "chestRewardId": "shards_darkaSternguard:3"
+      "chestRewardId": "shards_spaceWolfPriest:3"
     },
     {
       "requiredProgress": 3960,
@@ -282,7 +282,7 @@
     },
     {
       "requiredProgress": 7200,
-      "chestRewardId": "shards_darkaSternguard:5"
+      "chestRewardId": "shards_spaceWolfPriest:5"
     },
     {
       "requiredProgress": 7560,
@@ -306,7 +306,7 @@
     },
     {
       "requiredProgress": 9360,
-      "chestRewardId": "upgHpR032"
+      "chestRewardId": "upgHpR031"
     },
     {
       "requiredProgress": 9720,
@@ -322,11 +322,11 @@
     },
     {
       "requiredProgress": 10800,
-      "chestRewardId": "shards_darkaSternguard:5"
+      "chestRewardId": "shards_spaceWolfPriest:5"
     },
     {
       "requiredProgress": 11160,
-      "chestRewardId": "upgDmgR032"
+      "chestRewardId": "upgDmgR031"
     },
     {
       "requiredProgress": 11520,
@@ -362,11 +362,11 @@
     },
     {
       "requiredProgress": 14400,
-      "chestRewardId": "shards_darkaSternguard:5"
+      "chestRewardId": "shards_spaceWolfPriest:5"
     },
     {
       "requiredProgress": 14760,
-      "chestRewardId": "upgArmR032"
+      "chestRewardId": "upgArmR031"
     },
     {
       "requiredProgress": 15120,
@@ -434,7 +434,7 @@
     },
     {
       "requiredProgress": 1800,
-      "chestRewardId": "shards_darkaSternguard:5"
+      "chestRewardId": "shards_spaceWolfPriest:5"
     },
     {
       "requiredProgress": 2160,
@@ -474,7 +474,7 @@
     },
     {
       "requiredProgress": 5400,
-      "chestRewardId": "shards_darkaSternguard:10"
+      "chestRewardId": "shards_spaceWolfPriest:10"
     },
     {
       "requiredProgress": 5760,
@@ -514,7 +514,7 @@
     },
     {
       "requiredProgress": 9000,
-      "chestRewardId": "shards_darkaSternguard:15"
+      "chestRewardId": "shards_spaceWolfPriest:15"
     },
     {
       "requiredProgress": 9360,
@@ -554,7 +554,7 @@
     },
     {
       "requiredProgress": 12600,
-      "chestRewardId": "shards_darkaSternguard:15"
+      "chestRewardId": "shards_spaceWolfPriest:15"
     },
     {
       "requiredProgress": 12960,
@@ -586,7 +586,7 @@
     },
     {
       "requiredProgress": 15480,
-      "chestRewardId": "upgHpL112"
+      "chestRewardId": "upgHpL111"
     },
     {
       "requiredProgress": 15840,
@@ -594,7 +594,7 @@
     },
     {
       "requiredProgress": 16200,
-      "chestRewardId": "shards_darkaSternguard:25"
+      "chestRewardId": "shards_spaceWolfPriest:25"
     },
     {
       "requiredProgress": 16560,
@@ -614,7 +614,7 @@
     },
     {
       "requiredProgress": 18000,
-      "chestRewardId": "avatar_darka_sternguard_01_premium"
+      "chestRewardId": "avatar_space_wolfpriest_01_premium"
     },
     {
       "requiredProgress": 360,
@@ -634,7 +634,7 @@
     },
     {
       "requiredProgress": 720,
-      "chestRewardId": "shards_darkaSternguard:10"
+      "chestRewardId": "shards_spaceWolfPriest:10"
     },
     {
       "requiredProgress": 1080,
@@ -682,7 +682,7 @@
     },
     {
       "requiredProgress": 5040,
-      "chestRewardId": "shards_darkaSternguard:15"
+      "chestRewardId": "shards_spaceWolfPriest:15"
     },
     {
       "requiredProgress": 5400,
@@ -698,7 +698,7 @@
     },
     {
       "requiredProgress": 6480,
-      "chestRewardId": "upgHpE032C"
+      "chestRewardId": "upgHpE031C"
     },
     {
       "requiredProgress": 6840,
@@ -730,7 +730,7 @@
     },
     {
       "requiredProgress": 9360,
-      "chestRewardId": "upgDmgE032C"
+      "chestRewardId": "upgDmgE031C"
     },
     {
       "requiredProgress": 9720,
@@ -746,7 +746,7 @@
     },
     {
       "requiredProgress": 10800,
-      "chestRewardId": "playerProfileOrnament_darkaSternguard"
+      "chestRewardId": "playerProfileOrnament_spaceWolfPriest"
     },
     {
       "requiredProgress": 11160,
@@ -762,7 +762,7 @@
     },
     {
       "requiredProgress": 12240,
-      "chestRewardId": "shards_darkaSternguard:15"
+      "chestRewardId": "shards_spaceWolfPriest:15"
     },
     {
       "requiredProgress": 12600,
@@ -778,7 +778,7 @@
     },
     {
       "requiredProgress": 13680,
-      "chestRewardId": "upgArmE032C"
+      "chestRewardId": "upgArmE031C"
     },
     {
       "requiredProgress": 14040,
@@ -810,7 +810,7 @@
     },
     {
       "requiredProgress": 16560,
-      "chestRewardId": "shards_darkaSternguard:30"
+      "chestRewardId": "shards_spaceWolfPriest:30"
     },
     {
       "requiredProgress": 16920,
@@ -6315,7 +6315,203 @@
       "chestRewardId": "stamina:100"
     }
   ],
-  "seasonal_event_crescendo_01": [
+  "seasonal_event_december_2026": [
+    {
+      "requiredProgress": 100,
+      "chestRewardId": "seasonalEventCurrencyDecember2026:30"
+    },
+    {
+      "requiredProgress": 205,
+      "chestRewardId": "seasonalEventCurrencyDecember2026:40"
+    },
+    {
+      "requiredProgress": 315,
+      "chestRewardId": "seasonalEventCurrencyDecember2026:55"
+    },
+    {
+      "requiredProgress": 430,
+      "chestRewardId": "seasonalEventCurrencyDecember2026:60"
+    },
+    {
+      "requiredProgress": 550,
+      "chestRewardId": "seasonalEventCurrencyDecember2026:65"
+    },
+    {
+      "requiredProgress": 675,
+      "chestRewardId": "seasonalEventCurrencyDecember2026:70"
+    },
+    {
+      "requiredProgress": 805,
+      "chestRewardId": "seasonalEventCurrencyDecember2026:75"
+    },
+    {
+      "requiredProgress": 940,
+      "chestRewardId": "seasonalEventCurrencyDecember2026:80"
+    },
+    {
+      "requiredProgress": 1080,
+      "chestRewardId": "seasonalEventCurrencyDecember2026:85"
+    },
+    {
+      "requiredProgress": 1225,
+      "chestRewardId": "seasonalEventCurrencyDecember2026:90"
+    },
+    {
+      "requiredProgress": 1375,
+      "chestRewardId": "seasonalEventCurrencyDecember2026:95"
+    },
+    {
+      "requiredProgress": 1530,
+      "chestRewardId": "seasonalEventCurrencyDecember2026:100"
+    },
+    {
+      "requiredProgress": 1690,
+      "chestRewardId": "seasonalEventCurrencyDecember2026:105"
+    },
+    {
+      "requiredProgress": 1860,
+      "chestRewardId": "seasonalEventCurrencyDecember2026:110"
+    },
+    {
+      "requiredProgress": 2040,
+      "chestRewardId": "seasonalEventCurrencyDecember2026:115"
+    },
+    {
+      "requiredProgress": 2240,
+      "chestRewardId": "seasonalEventCurrencyDecember2026:120"
+    },
+    {
+      "requiredProgress": 2465,
+      "chestRewardId": "seasonalEventCurrencyDecember2026:125"
+    },
+    {
+      "requiredProgress": 2715,
+      "chestRewardId": "seasonalEventCurrencyDecember2026:130"
+    },
+    {
+      "requiredProgress": 2990,
+      "chestRewardId": "seasonalEventCurrencyDecember2026:135"
+    },
+    {
+      "requiredProgress": 3290,
+      "chestRewardId": "seasonalEventCurrencyDecember2026:140"
+    },
+    {
+      "requiredProgress": 3620,
+      "chestRewardId": "seasonalEventCurrencyDecember2026:145"
+    },
+    {
+      "requiredProgress": 3980,
+      "chestRewardId": "seasonalEventCurrencyDecember2026:150"
+    },
+    {
+      "requiredProgress": 4400,
+      "chestRewardId": "summoningToken:1"
+    },
+    {
+      "requiredProgress": 5000,
+      "chestRewardId": "stamina:100"
+    }
+  ],
+  "seasonal_event_crescendo_a": [
+    {
+      "requiredProgress": 100,
+      "chestRewardId": "seasonalEventCurrencyCrescendo:30"
+    },
+    {
+      "requiredProgress": 205,
+      "chestRewardId": "seasonalEventCurrencyCrescendo:40"
+    },
+    {
+      "requiredProgress": 315,
+      "chestRewardId": "seasonalEventCurrencyCrescendo:55"
+    },
+    {
+      "requiredProgress": 430,
+      "chestRewardId": "seasonalEventCurrencyCrescendo:60"
+    },
+    {
+      "requiredProgress": 550,
+      "chestRewardId": "seasonalEventCurrencyCrescendo:65"
+    },
+    {
+      "requiredProgress": 675,
+      "chestRewardId": "seasonalEventCurrencyCrescendo:70"
+    },
+    {
+      "requiredProgress": 805,
+      "chestRewardId": "seasonalEventCurrencyCrescendo:75"
+    },
+    {
+      "requiredProgress": 940,
+      "chestRewardId": "seasonalEventCurrencyCrescendo:80"
+    },
+    {
+      "requiredProgress": 1080,
+      "chestRewardId": "seasonalEventCurrencyCrescendo:85"
+    },
+    {
+      "requiredProgress": 1225,
+      "chestRewardId": "seasonalEventCurrencyCrescendo:90"
+    },
+    {
+      "requiredProgress": 1375,
+      "chestRewardId": "seasonalEventCurrencyCrescendo:95"
+    },
+    {
+      "requiredProgress": 1530,
+      "chestRewardId": "seasonalEventCurrencyCrescendo:100"
+    },
+    {
+      "requiredProgress": 1690,
+      "chestRewardId": "seasonalEventCurrencyCrescendo:105"
+    },
+    {
+      "requiredProgress": 1860,
+      "chestRewardId": "seasonalEventCurrencyCrescendo:110"
+    },
+    {
+      "requiredProgress": 2040,
+      "chestRewardId": "seasonalEventCurrencyCrescendo:115"
+    },
+    {
+      "requiredProgress": 2240,
+      "chestRewardId": "seasonalEventCurrencyCrescendo:120"
+    },
+    {
+      "requiredProgress": 2465,
+      "chestRewardId": "seasonalEventCurrencyCrescendo:125"
+    },
+    {
+      "requiredProgress": 2715,
+      "chestRewardId": "seasonalEventCurrencyCrescendo:130"
+    },
+    {
+      "requiredProgress": 2990,
+      "chestRewardId": "seasonalEventCurrencyCrescendo:135"
+    },
+    {
+      "requiredProgress": 3290,
+      "chestRewardId": "seasonalEventCurrencyCrescendo:140"
+    },
+    {
+      "requiredProgress": 3620,
+      "chestRewardId": "seasonalEventCurrencyCrescendo:145"
+    },
+    {
+      "requiredProgress": 3980,
+      "chestRewardId": "seasonalEventCurrencyCrescendo:150"
+    },
+    {
+      "requiredProgress": 4400,
+      "chestRewardId": "summoningToken:1"
+    },
+    {
+      "requiredProgress": 5000,
+      "chestRewardId": "stamina:100"
+    }
+  ],
+  "seasonal_event_crescendo_b": [
     {
       "requiredProgress": 100,
       "chestRewardId": "seasonalEventCurrencyCrescendo:30"
@@ -7117,6 +7313,162 @@
     {
       "requiredProgress": 3580,
       "chestRewardId": "seasonalEventCurrencyOctober2026:75"
+    },
+    {
+      "requiredProgress": 4020,
+      "chestRewardId": "specialSummoningToken:1"
+    },
+    {
+      "requiredProgress": 4500,
+      "chestRewardId": "stamina:100"
+    }
+  ],
+  "se_progress_chests_november_2026": [
+    {
+      "requiredProgress": 30,
+      "chestRewardId": "se_progress_chest_november_2026_01"
+    },
+    {
+      "requiredProgress": 65,
+      "chestRewardId": "se_progress_chest_november_2026_02"
+    },
+    {
+      "requiredProgress": 105,
+      "chestRewardId": "se_progress_chest_november_2026_03"
+    },
+    {
+      "requiredProgress": 150,
+      "chestRewardId": "se_progress_chest_november_2026_04"
+    },
+    {
+      "requiredProgress": 200,
+      "chestRewardId": "se_progress_chest_november_2026_05"
+    },
+    {
+      "requiredProgress": 255,
+      "chestRewardId": "se_progress_chest_november_2026_06"
+    },
+    {
+      "requiredProgress": 315,
+      "chestRewardId": "se_progress_chest_november_2026_07"
+    },
+    {
+      "requiredProgress": 380,
+      "chestRewardId": "se_progress_chest_november_2026_08"
+    },
+    {
+      "requiredProgress": 450,
+      "chestRewardId": "se_progress_chest_november_2026_09"
+    },
+    {
+      "requiredProgress": 525,
+      "chestRewardId": "se_progress_chest_november_2026_10"
+    },
+    {
+      "requiredProgress": 605,
+      "chestRewardId": "se_progress_chest_november_2026_11"
+    },
+    {
+      "requiredProgress": 690,
+      "chestRewardId": "se_progress_chest_november_2026_12"
+    },
+    {
+      "requiredProgress": 780,
+      "chestRewardId": "se_progress_chest_november_2026_13"
+    },
+    {
+      "requiredProgress": 875,
+      "chestRewardId": "se_progress_chest_november_2026_14"
+    },
+    {
+      "requiredProgress": 975,
+      "chestRewardId": "se_progress_chest_november_2026_15"
+    },
+    {
+      "requiredProgress": 1085,
+      "chestRewardId": "se_progress_chest_november_2026_16"
+    },
+    {
+      "requiredProgress": 1215,
+      "chestRewardId": "se_progress_chest_november_2026_17"
+    },
+    {
+      "requiredProgress": 1375,
+      "chestRewardId": "se_progress_chest_november_2026_18"
+    },
+    {
+      "requiredProgress": 1595,
+      "chestRewardId": "se_progress_chest_november_2026_19"
+    },
+    {
+      "requiredProgress": 1845,
+      "chestRewardId": "se_progress_chest_november_2026_20"
+    }
+  ],
+  "se_milestones_november_2026": [
+    {
+      "requiredProgress": 100,
+      "chestRewardId": "seasonalEventCurrencyNovember2026:15"
+    },
+    {
+      "requiredProgress": 210,
+      "chestRewardId": "seasonalEventCurrencyNovember2026:15"
+    },
+    {
+      "requiredProgress": 330,
+      "chestRewardId": "seasonalEventCurrencyNovember2026:15"
+    },
+    {
+      "requiredProgress": 460,
+      "chestRewardId": "seasonalEventCurrencyNovember2026:15"
+    },
+    {
+      "requiredProgress": 600,
+      "chestRewardId": "seasonalEventCurrencyNovember2026:15"
+    },
+    {
+      "requiredProgress": 760,
+      "chestRewardId": "seasonalEventCurrencyNovember2026:15"
+    },
+    {
+      "requiredProgress": 940,
+      "chestRewardId": "seasonalEventCurrencyNovember2026:20"
+    },
+    {
+      "requiredProgress": 1140,
+      "chestRewardId": "seasonalEventCurrencyNovember2026:20"
+    },
+    {
+      "requiredProgress": 1360,
+      "chestRewardId": "seasonalEventCurrencyNovember2026:20"
+    },
+    {
+      "requiredProgress": 1600,
+      "chestRewardId": "seasonalEventCurrencyNovember2026:25"
+    },
+    {
+      "requiredProgress": 1860,
+      "chestRewardId": "seasonalEventCurrencyNovember2026:30"
+    },
+    {
+      "requiredProgress": 2140,
+      "chestRewardId": "seasonalEventCurrencyNovember2026:35"
+    },
+    {
+      "requiredProgress": 2440,
+      "chestRewardId": "seasonalEventCurrencyNovember2026:40"
+    },
+    {
+      "requiredProgress": 2790,
+      "chestRewardId": "seasonalEventCurrencyNovember2026:45"
+    },
+    {
+      "requiredProgress": 3170,
+      "chestRewardId": "seasonalEventCurrencyNovember2026:50"
+    },
+    {
+      "requiredProgress": 3580,
+      "chestRewardId": "seasonalEventCurrencyNovember2026:75"
     },
     {
       "requiredProgress": 4020,
@@ -8101,6 +8453,69 @@
     {
       "requiredProgress": 500,
       "chestRewardId": "chest_ce_06_15",
+      "endless": true
+    }
+  ],
+  "ce_07": [
+    {
+      "requiredProgress": 20,
+      "chestRewardId": "chest_ce_07_01"
+    },
+    {
+      "requiredProgress": 60,
+      "chestRewardId": "chest_ce_07_02"
+    },
+    {
+      "requiredProgress": 120,
+      "chestRewardId": "chest_ce_07_03"
+    },
+    {
+      "requiredProgress": 200,
+      "chestRewardId": "chest_ce_07_04"
+    },
+    {
+      "requiredProgress": 300,
+      "chestRewardId": "chest_ce_07_05"
+    },
+    {
+      "requiredProgress": 420,
+      "chestRewardId": "chest_ce_07_06"
+    },
+    {
+      "requiredProgress": 560,
+      "chestRewardId": "chest_ce_07_07"
+    },
+    {
+      "requiredProgress": 720,
+      "chestRewardId": "chest_ce_07_08"
+    },
+    {
+      "requiredProgress": 900,
+      "chestRewardId": "chest_ce_07_09"
+    },
+    {
+      "requiredProgress": 1100,
+      "chestRewardId": "chest_ce_07_10"
+    },
+    {
+      "requiredProgress": 1325,
+      "chestRewardId": "chest_ce_07_11"
+    },
+    {
+      "requiredProgress": 1575,
+      "chestRewardId": "chest_ce_07_12"
+    },
+    {
+      "requiredProgress": 1850,
+      "chestRewardId": "chest_ce_07_13"
+    },
+    {
+      "requiredProgress": 2200,
+      "chestRewardId": "chest_ce_07_14"
+    },
+    {
+      "requiredProgress": 500,
+      "chestRewardId": "chest_ce_07_15",
       "endless": true
     }
   ],
@@ -9838,27 +10253,27 @@
   "hse_defeat_waves_2_tier_high": [
     {
       "requiredProgress": 20,
-      "chestRewardId": "itemsXenosEpic"
+      "chestRewardId": "itemsImperialEpic"
     },
     {
       "requiredProgress": 40,
-      "chestRewardId": "itemsXenosEpic"
+      "chestRewardId": "itemsImperialEpic"
     },
     {
       "requiredProgress": 60,
-      "chestRewardId": "itemsXenosEpic"
+      "chestRewardId": "itemsImperialEpic"
     },
     {
       "requiredProgress": 85,
-      "chestRewardId": "itemsXenosEpic"
+      "chestRewardId": "itemsImperialEpic"
     },
     {
       "requiredProgress": 110,
-      "chestRewardId": "seasonalEventCurrencySeptember2026:50"
+      "chestRewardId": "seasonalEventCurrencyDecember2026:50"
     },
     {
       "requiredProgress": 135,
-      "chestRewardId": "itemsXenosEpic"
+      "chestRewardId": "itemsImperialEpic"
     },
     {
       "requiredProgress": 160,
@@ -9866,19 +10281,19 @@
     },
     {
       "requiredProgress": 190,
-      "chestRewardId": "itemsXenosLegendary"
+      "chestRewardId": "itemsImperialLegendary"
     },
     {
       "requiredProgress": 220,
-      "chestRewardId": "itemsXenosLegendary"
+      "chestRewardId": "itemsImperialLegendary"
     },
     {
       "requiredProgress": 250,
-      "chestRewardId": "seasonalEventCurrencySeptember2026:80"
+      "chestRewardId": "seasonalEventCurrencyDecember2026:80"
     },
     {
       "requiredProgress": 280,
-      "chestRewardId": "itemsXenosLegendary"
+      "chestRewardId": "itemsImperialLegendary"
     },
     {
       "requiredProgress": 315,
@@ -9886,42 +10301,42 @@
     },
     {
       "requiredProgress": 350,
-      "chestRewardId": "itemsXenosMythic"
+      "chestRewardId": "itemsImperialMythic"
     },
     {
       "requiredProgress": 385,
-      "chestRewardId": "R_Booster_Crit_NetherRealmCasket"
+      "chestRewardId": "R_Crit_RelicBoltPistol"
     },
     {
       "requiredProgress": 40,
-      "chestRewardId": "itemsXenosLegendary",
+      "chestRewardId": "itemsImperialLegendary",
       "endless": true
     }
   ],
   "hse_defeat_waves_2_tier_mid": [
     {
       "requiredProgress": 10,
-      "chestRewardId": "itemsXenosRare"
+      "chestRewardId": "itemsImperialRare"
     },
     {
       "requiredProgress": 20,
-      "chestRewardId": "itemsXenosRare"
+      "chestRewardId": "itemsImperialRare"
     },
     {
       "requiredProgress": 30,
-      "chestRewardId": "itemsXenosRare"
+      "chestRewardId": "itemsImperialRare"
     },
     {
       "requiredProgress": 45,
-      "chestRewardId": "itemsXenosRare"
+      "chestRewardId": "itemsImperialRare"
     },
     {
       "requiredProgress": 60,
-      "chestRewardId": "seasonalEventCurrencySeptember2026:50"
+      "chestRewardId": "seasonalEventCurrencyDecember2026:50"
     },
     {
       "requiredProgress": 75,
-      "chestRewardId": "itemsXenosRare"
+      "chestRewardId": "itemsImperialRare"
     },
     {
       "requiredProgress": 95,
@@ -9929,19 +10344,19 @@
     },
     {
       "requiredProgress": 115,
-      "chestRewardId": "itemsXenosEpic"
+      "chestRewardId": "itemsImperialEpic"
     },
     {
       "requiredProgress": 135,
-      "chestRewardId": "itemsXenosEpic"
+      "chestRewardId": "itemsImperialEpic"
     },
     {
       "requiredProgress": 155,
-      "chestRewardId": "seasonalEventCurrencySeptember2026:80"
+      "chestRewardId": "seasonalEventCurrencyDecember2026:80"
     },
     {
       "requiredProgress": 180,
-      "chestRewardId": "itemsXenosEpic"
+      "chestRewardId": "itemsImperialEpic"
     },
     {
       "requiredProgress": 210,
@@ -9949,42 +10364,42 @@
     },
     {
       "requiredProgress": 245,
-      "chestRewardId": "itemsXenosLegendary"
+      "chestRewardId": "itemsImperialLegendary"
     },
     {
       "requiredProgress": 285,
-      "chestRewardId": "itemsXenosLegendary"
+      "chestRewardId": "itemsImperialLegendary"
     },
     {
       "requiredProgress": 25,
-      "chestRewardId": "itemsXenosEpic",
+      "chestRewardId": "itemsImperialEpic",
       "endless": true
     }
   ],
   "hse_defeat_waves_2_tier_low": [
     {
       "requiredProgress": 10,
-      "chestRewardId": "itemsXenosUncommon"
+      "chestRewardId": "itemsImperialUncommon"
     },
     {
       "requiredProgress": 20,
-      "chestRewardId": "itemsXenosUncommon"
+      "chestRewardId": "itemsImperialUncommon"
     },
     {
       "requiredProgress": 30,
-      "chestRewardId": "itemsXenosUncommon"
+      "chestRewardId": "itemsImperialUncommon"
     },
     {
       "requiredProgress": 40,
-      "chestRewardId": "itemsXenosUncommon"
+      "chestRewardId": "itemsImperialUncommon"
     },
     {
       "requiredProgress": 50,
-      "chestRewardId": "seasonalEventCurrencySeptember2026:50"
+      "chestRewardId": "seasonalEventCurrencyDecember2026:50"
     },
     {
       "requiredProgress": 65,
-      "chestRewardId": "itemsXenosUncommon"
+      "chestRewardId": "itemsImperialUncommon"
     },
     {
       "requiredProgress": 80,
@@ -9992,19 +10407,19 @@
     },
     {
       "requiredProgress": 95,
-      "chestRewardId": "itemsXenosRare"
+      "chestRewardId": "itemsImperialRare"
     },
     {
       "requiredProgress": 110,
-      "chestRewardId": "itemsXenosRare"
+      "chestRewardId": "itemsImperialRare"
     },
     {
       "requiredProgress": 125,
-      "chestRewardId": "seasonalEventCurrencySeptember2026:80"
+      "chestRewardId": "seasonalEventCurrencyDecember2026:80"
     },
     {
       "requiredProgress": 145,
-      "chestRewardId": "itemsXenosRare"
+      "chestRewardId": "itemsImperialRare"
     },
     {
       "requiredProgress": 170,
@@ -10012,15 +10427,15 @@
     },
     {
       "requiredProgress": 200,
-      "chestRewardId": "itemsXenosEpic"
+      "chestRewardId": "itemsImperialEpic"
     },
     {
       "requiredProgress": 235,
-      "chestRewardId": "itemsXenosEpic"
+      "chestRewardId": "itemsImperialEpic"
     },
     {
       "requiredProgress": 15,
-      "chestRewardId": "itemsXenosRare",
+      "chestRewardId": "itemsImperialRare",
       "endless": true
     }
   ],
@@ -13560,6 +13975,93 @@
     {
       "requiredProgress": 50,
       "chestRewardId": "gold:3000",
+      "endless": true
+    }
+  ],
+  "hse_faction_boost_world_eaters": [
+    {
+      "requiredProgress": 50,
+      "chestRewardId": "seasonalEventCurrencyNovember2026:5"
+    },
+    {
+      "requiredProgress": 100,
+      "chestRewardId": "seasonalEventCurrencyNovember2026:5"
+    },
+    {
+      "requiredProgress": 150,
+      "chestRewardId": "seasonalEventCurrencyNovember2026:5"
+    },
+    {
+      "requiredProgress": 200,
+      "chestRewardId": "seasonalEventCurrencyNovember2026:10"
+    },
+    {
+      "requiredProgress": 250,
+      "chestRewardId": "seasonalEventCurrencyNovember2026:10"
+    },
+    {
+      "requiredProgress": 300,
+      "chestRewardId": "seasonalEventCurrencyNovember2026:10"
+    },
+    {
+      "requiredProgress": 350,
+      "chestRewardId": "seasonalEventCurrencyNovember2026:15"
+    },
+    {
+      "requiredProgress": 400,
+      "chestRewardId": "seasonalEventCurrencyNovember2026:20"
+    },
+    {
+      "requiredProgress": 500,
+      "chestRewardId": "seasonalEventCurrencyNovember2026:25"
+    },
+    {
+      "requiredProgress": 550,
+      "chestRewardId": "seasonalEventCurrencyNovember2026:30"
+    },
+    {
+      "requiredProgress": 625,
+      "chestRewardId": "seasonalEventCurrencyNovember2026:35"
+    },
+    {
+      "requiredProgress": 725,
+      "chestRewardId": "seasonalEventCurrencyNovember2026:40"
+    },
+    {
+      "requiredProgress": 850,
+      "chestRewardId": "summoningToken"
+    },
+    {
+      "requiredProgress": 1000,
+      "chestRewardId": "seasonalEventCurrencyNovember2026:50"
+    },
+    {
+      "requiredProgress": 50,
+      "chestRewardId": "gold:3000",
+      "endless": true,
+      "endlessCap": 200
+    }
+  ],
+  "global_hse_blood_tithe": [
+    {
+      "requiredProgress": 1000000,
+      "chestRewardId": "summoningToken"
+    },
+    {
+      "requiredProgress": 2100000,
+      "chestRewardId": "stamina:100"
+    },
+    {
+      "requiredProgress": 3300000,
+      "chestRewardId": "seasonalEventCurrencyNovember2026:50"
+    },
+    {
+      "requiredProgress": 4600000,
+      "chestRewardId": "specialSummoningToken"
+    },
+    {
+      "requiredProgress": 1300000,
+      "chestRewardId": "ShardsWorldEaters:5",
       "endless": true
     }
   ]
