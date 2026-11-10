@@ -15,7 +15,8 @@
     "GuildWarLeagues",
     "BattleVisualsCanPauseAICalculation",
     "BattleVisualsMessageExecutionStop",
-    "Expeditions"
+    "Expeditions",
+    "PlayerTitles"
   ],
   "disabledFeatureParts": [
     "screen_visibility_treat_hiding_as_disabled"
@@ -85,7 +86,8 @@
     1088,
     1089,
     1090,
-    1107
+    1107,
+    1109
   ],
   "traitVariables": {
     "livingMetalHp": 10,
@@ -151,7 +153,9 @@
     "machineVengeanceExtraPct": 5,
     "despoiledGroundMinDmgPct": 6,
     "despoiledGroundMaxDmgPct": 9,
-    "despoiledGroundExtraDmgPct": 15
+    "despoiledGroundExtraDmgPct": 15,
+    "poisonedNrOfHits": 1,
+    "poisonedDamageProfile": 24
   },
   "itemAscensionCosts": {
     "Common": {
@@ -184,7 +188,7 @@
   "enableLoyaltyProgramButtonDesktop": true,
   "enableLoyaltyProgramButtonMobile": true,
   "enableLoyaltyProgramButtonIOS": true,
-  "enableLoyaltyProgramButtonAndroid": false,
+  "enableLoyaltyProgramButtonAndroid": true,
   "enableLoyaltyProgramButtonSamsung": true,
   "webstoreUseMissionUnclaimedPoints": true,
   "webstoreDirectRewards": [
@@ -400,6 +404,7 @@
     "custoKyrus",
     "custoBladeChampion",
     "custoTrajann",
+    "custoDreadnought",
     "emperNoiseMarine",
     "emperFlawlessBlade",
     "emperKakophonist",
@@ -413,6 +418,7 @@
     "astarCyrus",
     "astarLysander",
     "astarEradicator",
+    "lostaFearmonger",
     "lostaBile"
   ],
   "unitsToHideInCollectionScreen": [],
@@ -508,7 +514,9 @@
     "frameAugust2026",
     "frameCrusade",
     "frameSeptember2026",
-    "frameOctober2026"
+    "frameOctober2026",
+    "frameDecember2026",
+    "frameNovember2026"
   ],
   "androidApplicationQuitBehavior": 2,
   "maxQuestLevelBeforeDownloadingDLC": 3,
@@ -737,6 +745,12 @@
         "allowedCountries": [
           "USA"
         ]
+      },
+      {
+        "distribution": "GooglePlayStore",
+        "allowedCountries": [
+          "US"
+        ]
       }
     ]
   },
@@ -796,5 +810,8 @@
     "postponeSaveFlushDelayFrames": 3,
     "flushOnScreenChanged": false
   },
-  "showLeaderboardEntriesUnderThreshold": true
+  "showLeaderboardEntriesUnderThreshold": true,
+  "enableCrashReplayUpload": true,
+  "enableTacticiansClubLockId": "pl7",
+  "gamepadControllerEnabled": true
 }

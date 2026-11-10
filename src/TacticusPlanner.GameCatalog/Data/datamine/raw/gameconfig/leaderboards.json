@@ -1330,7 +1330,220 @@
         }
       ]
     },
-    "leaderboard_seasonal_event_crescendo_01": {
+    "leaderboard_seasonal_event_december_2026": {
+      "positionRewards": [
+        {
+          "position": 0,
+          "rewardId": "seasonalEventCurrencyDecember2026:50"
+        },
+        {
+          "position": 1,
+          "rewardId": "seasonalEventCurrencyDecember2026:46"
+        },
+        {
+          "position": 2,
+          "rewardId": "seasonalEventCurrencyDecember2026:44"
+        },
+        {
+          "position": 3,
+          "rewardId": "seasonalEventCurrencyDecember2026:42"
+        },
+        {
+          "position": 10,
+          "rewardId": "seasonalEventCurrencyDecember2026:40"
+        },
+        {
+          "position": 25,
+          "rewardId": "seasonalEventCurrencyDecember2026:38"
+        },
+        {
+          "position": 50,
+          "rewardId": "seasonalEventCurrencyDecember2026:36"
+        },
+        {
+          "position": 100,
+          "rewardId": "seasonalEventCurrencyDecember2026:34"
+        },
+        {
+          "position": 150,
+          "rewardId": "seasonalEventCurrencyDecember2026:32"
+        },
+        {
+          "position": 250,
+          "rewardId": "seasonalEventCurrencyDecember2026:30"
+        },
+        {
+          "position": 500,
+          "rewardId": "seasonalEventCurrencyDecember2026:28"
+        },
+        {
+          "position": 1000,
+          "rewardId": "seasonalEventCurrencyDecember2026:26"
+        },
+        {
+          "position": 1500,
+          "rewardId": "seasonalEventCurrencyDecember2026:24"
+        },
+        {
+          "position": 2500,
+          "rewardId": "seasonalEventCurrencyDecember2026:23"
+        },
+        {
+          "position": 5000,
+          "rewardId": "seasonalEventCurrencyDecember2026:21"
+        },
+        {
+          "position": 10000,
+          "rewardId": "seasonalEventCurrencyDecember2026:19"
+        },
+        {
+          "position": 15000,
+          "rewardId": "seasonalEventCurrencyDecember2026:18"
+        },
+        {
+          "position": 20000,
+          "rewardId": "seasonalEventCurrencyDecember2026:16"
+        },
+        {
+          "position": 25000,
+          "rewardId": "seasonalEventCurrencyDecember2026:15"
+        },
+        {
+          "position": 35000,
+          "rewardId": "seasonalEventCurrencyDecember2026:13"
+        },
+        {
+          "position": 50000,
+          "rewardId": "seasonalEventCurrencyDecember2026:11"
+        },
+        {
+          "position": 75000,
+          "rewardId": "seasonalEventCurrencyDecember2026:9"
+        },
+        {
+          "position": 100000,
+          "rewardId": "seasonalEventCurrencyDecember2026:7"
+        },
+        {
+          "position": 150000,
+          "rewardId": "seasonalEventCurrencyDecember2026:6"
+        },
+        {
+          "position": 200000,
+          "rewardId": "seasonalEventCurrencyDecember2026:4"
+        }
+      ],
+      "positionRewardStartOffset": {
+        "days": 0
+      },
+      "rewardSchedules": [
+        {
+          "rewardTiers": [
+            {
+              "positionAbsolute": 0,
+              "rewardId": "seasonal_event_december_2026_leaderboard_chest_00"
+            },
+            {
+              "positionAbsolute": 1,
+              "rewardId": "seasonal_event_december_2026_leaderboard_chest_10"
+            },
+            {
+              "positionAbsolute": 2,
+              "rewardId": "seasonal_event_december_2026_leaderboard_chest_20"
+            },
+            {
+              "positionAbsolute": 3,
+              "rewardId": "seasonal_event_december_2026_leaderboard_chest_30"
+            },
+            {
+              "positionAbsolute": 10,
+              "rewardId": "seasonal_event_december_2026_leaderboard_chest_40"
+            },
+            {
+              "positionAbsolute": 25,
+              "rewardId": "seasonal_event_december_2026_leaderboard_chest_50"
+            },
+            {
+              "positionAbsolute": 50,
+              "rewardId": "seasonal_event_december_2026_leaderboard_chest_60"
+            },
+            {
+              "positionAbsolute": 100,
+              "rewardId": "seasonal_event_december_2026_leaderboard_chest_70"
+            },
+            {
+              "positionAbsolute": 150,
+              "rewardId": "seasonal_event_december_2026_leaderboard_chest_80"
+            },
+            {
+              "positionAbsolute": 250,
+              "rewardId": "seasonal_event_december_2026_leaderboard_chest_90"
+            },
+            {
+              "positionAbsolute": 500,
+              "rewardId": "seasonal_event_december_2026_leaderboard_chest_100"
+            },
+            {
+              "positionAbsolute": 1000,
+              "rewardId": "seasonal_event_december_2026_leaderboard_chest_110"
+            },
+            {
+              "positionAbsolute": 1500,
+              "rewardId": "seasonal_event_december_2026_leaderboard_chest_120"
+            },
+            {
+              "positionAbsolute": 2500,
+              "rewardId": "seasonal_event_december_2026_leaderboard_chest_130"
+            },
+            {
+              "positionAbsolute": 5000,
+              "rewardId": "seasonal_event_december_2026_leaderboard_chest_140"
+            },
+            {
+              "positionAbsolute": 10000,
+              "rewardId": "seasonal_event_december_2026_leaderboard_chest_150"
+            },
+            {
+              "positionAbsolute": 15000,
+              "rewardId": "seasonal_event_december_2026_leaderboard_chest_160"
+            },
+            {
+              "positionAbsolute": 20000,
+              "rewardId": "seasonal_event_december_2026_leaderboard_chest_170"
+            },
+            {
+              "positionAbsolute": 25000,
+              "rewardId": "seasonal_event_december_2026_leaderboard_chest_180"
+            },
+            {
+              "positionAbsolute": 35000,
+              "rewardId": "seasonal_event_december_2026_leaderboard_chest_190"
+            },
+            {
+              "positionAbsolute": 50000,
+              "rewardId": "seasonal_event_december_2026_leaderboard_chest_200"
+            },
+            {
+              "positionAbsolute": 75000,
+              "rewardId": "seasonal_event_december_2026_leaderboard_chest_210"
+            },
+            {
+              "positionAbsolute": 100000,
+              "rewardId": "seasonal_event_december_2026_leaderboard_chest_220"
+            },
+            {
+              "positionAbsolute": 150000,
+              "rewardId": "seasonal_event_december_2026_leaderboard_chest_230"
+            },
+            {
+              "positionAbsolute": 200000,
+              "rewardId": "seasonal_event_december_2026_leaderboard_chest_240"
+            }
+          ]
+        }
+      ]
+    },
+    "leaderboard_seasonal_event_crescendo_a": {
       "positionRewards": [
         {
           "position": 0,
@@ -1441,103 +1654,316 @@
           "rewardTiers": [
             {
               "positionAbsolute": 0,
-              "rewardId": "seasonal_event_crescendo_01_leaderboard_chest_00"
+              "rewardId": "seasonal_event_crescendo_a_leaderboard_chest_00"
             },
             {
               "positionAbsolute": 1,
-              "rewardId": "seasonal_event_crescendo_01_leaderboard_chest_10"
+              "rewardId": "seasonal_event_crescendo_a_leaderboard_chest_10"
             },
             {
               "positionAbsolute": 2,
-              "rewardId": "seasonal_event_crescendo_01_leaderboard_chest_20"
+              "rewardId": "seasonal_event_crescendo_a_leaderboard_chest_20"
             },
             {
               "positionAbsolute": 3,
-              "rewardId": "seasonal_event_crescendo_01_leaderboard_chest_30"
+              "rewardId": "seasonal_event_crescendo_a_leaderboard_chest_30"
             },
             {
               "positionAbsolute": 10,
-              "rewardId": "seasonal_event_crescendo_01_leaderboard_chest_40"
+              "rewardId": "seasonal_event_crescendo_a_leaderboard_chest_40"
             },
             {
               "positionAbsolute": 25,
-              "rewardId": "seasonal_event_crescendo_01_leaderboard_chest_50"
+              "rewardId": "seasonal_event_crescendo_a_leaderboard_chest_50"
             },
             {
               "positionAbsolute": 50,
-              "rewardId": "seasonal_event_crescendo_01_leaderboard_chest_60"
+              "rewardId": "seasonal_event_crescendo_a_leaderboard_chest_60"
             },
             {
               "positionAbsolute": 100,
-              "rewardId": "seasonal_event_crescendo_01_leaderboard_chest_70"
+              "rewardId": "seasonal_event_crescendo_a_leaderboard_chest_70"
             },
             {
               "positionAbsolute": 150,
-              "rewardId": "seasonal_event_crescendo_01_leaderboard_chest_80"
+              "rewardId": "seasonal_event_crescendo_a_leaderboard_chest_80"
             },
             {
               "positionAbsolute": 250,
-              "rewardId": "seasonal_event_crescendo_01_leaderboard_chest_90"
+              "rewardId": "seasonal_event_crescendo_a_leaderboard_chest_90"
             },
             {
               "positionAbsolute": 500,
-              "rewardId": "seasonal_event_crescendo_01_leaderboard_chest_100"
+              "rewardId": "seasonal_event_crescendo_a_leaderboard_chest_100"
             },
             {
               "positionAbsolute": 1000,
-              "rewardId": "seasonal_event_crescendo_01_leaderboard_chest_110"
+              "rewardId": "seasonal_event_crescendo_a_leaderboard_chest_110"
             },
             {
               "positionAbsolute": 1500,
-              "rewardId": "seasonal_event_crescendo_01_leaderboard_chest_120"
+              "rewardId": "seasonal_event_crescendo_a_leaderboard_chest_120"
             },
             {
               "positionAbsolute": 2500,
-              "rewardId": "seasonal_event_crescendo_01_leaderboard_chest_130"
+              "rewardId": "seasonal_event_crescendo_a_leaderboard_chest_130"
             },
             {
               "positionAbsolute": 5000,
-              "rewardId": "seasonal_event_crescendo_01_leaderboard_chest_140"
+              "rewardId": "seasonal_event_crescendo_a_leaderboard_chest_140"
             },
             {
               "positionAbsolute": 10000,
-              "rewardId": "seasonal_event_crescendo_01_leaderboard_chest_150"
+              "rewardId": "seasonal_event_crescendo_a_leaderboard_chest_150"
             },
             {
               "positionAbsolute": 15000,
-              "rewardId": "seasonal_event_crescendo_01_leaderboard_chest_160"
+              "rewardId": "seasonal_event_crescendo_a_leaderboard_chest_160"
             },
             {
               "positionAbsolute": 20000,
-              "rewardId": "seasonal_event_crescendo_01_leaderboard_chest_170"
+              "rewardId": "seasonal_event_crescendo_a_leaderboard_chest_170"
             },
             {
               "positionAbsolute": 25000,
-              "rewardId": "seasonal_event_crescendo_01_leaderboard_chest_180"
+              "rewardId": "seasonal_event_crescendo_a_leaderboard_chest_180"
             },
             {
               "positionAbsolute": 35000,
-              "rewardId": "seasonal_event_crescendo_01_leaderboard_chest_190"
+              "rewardId": "seasonal_event_crescendo_a_leaderboard_chest_190"
             },
             {
               "positionAbsolute": 50000,
-              "rewardId": "seasonal_event_crescendo_01_leaderboard_chest_200"
+              "rewardId": "seasonal_event_crescendo_a_leaderboard_chest_200"
             },
             {
               "positionAbsolute": 75000,
-              "rewardId": "seasonal_event_crescendo_01_leaderboard_chest_210"
+              "rewardId": "seasonal_event_crescendo_a_leaderboard_chest_210"
             },
             {
               "positionAbsolute": 100000,
-              "rewardId": "seasonal_event_crescendo_01_leaderboard_chest_220"
+              "rewardId": "seasonal_event_crescendo_a_leaderboard_chest_220"
             },
             {
               "positionAbsolute": 150000,
-              "rewardId": "seasonal_event_crescendo_01_leaderboard_chest_230"
+              "rewardId": "seasonal_event_crescendo_a_leaderboard_chest_230"
             },
             {
               "positionAbsolute": 200000,
-              "rewardId": "seasonal_event_crescendo_01_leaderboard_chest_240"
+              "rewardId": "seasonal_event_crescendo_a_leaderboard_chest_240"
+            }
+          ]
+        }
+      ]
+    },
+    "leaderboard_seasonal_event_crescendo_b": {
+      "positionRewards": [
+        {
+          "position": 0,
+          "rewardId": "seasonalEventCurrencyCrescendo:50"
+        },
+        {
+          "position": 1,
+          "rewardId": "seasonalEventCurrencyCrescendo:46"
+        },
+        {
+          "position": 2,
+          "rewardId": "seasonalEventCurrencyCrescendo:44"
+        },
+        {
+          "position": 3,
+          "rewardId": "seasonalEventCurrencyCrescendo:42"
+        },
+        {
+          "position": 10,
+          "rewardId": "seasonalEventCurrencyCrescendo:40"
+        },
+        {
+          "position": 25,
+          "rewardId": "seasonalEventCurrencyCrescendo:38"
+        },
+        {
+          "position": 50,
+          "rewardId": "seasonalEventCurrencyCrescendo:36"
+        },
+        {
+          "position": 100,
+          "rewardId": "seasonalEventCurrencyCrescendo:34"
+        },
+        {
+          "position": 150,
+          "rewardId": "seasonalEventCurrencyCrescendo:32"
+        },
+        {
+          "position": 250,
+          "rewardId": "seasonalEventCurrencyCrescendo:30"
+        },
+        {
+          "position": 500,
+          "rewardId": "seasonalEventCurrencyCrescendo:28"
+        },
+        {
+          "position": 1000,
+          "rewardId": "seasonalEventCurrencyCrescendo:26"
+        },
+        {
+          "position": 1500,
+          "rewardId": "seasonalEventCurrencyCrescendo:24"
+        },
+        {
+          "position": 2500,
+          "rewardId": "seasonalEventCurrencyCrescendo:23"
+        },
+        {
+          "position": 5000,
+          "rewardId": "seasonalEventCurrencyCrescendo:21"
+        },
+        {
+          "position": 10000,
+          "rewardId": "seasonalEventCurrencyCrescendo:19"
+        },
+        {
+          "position": 15000,
+          "rewardId": "seasonalEventCurrencyCrescendo:18"
+        },
+        {
+          "position": 20000,
+          "rewardId": "seasonalEventCurrencyCrescendo:16"
+        },
+        {
+          "position": 25000,
+          "rewardId": "seasonalEventCurrencyCrescendo:15"
+        },
+        {
+          "position": 35000,
+          "rewardId": "seasonalEventCurrencyCrescendo:13"
+        },
+        {
+          "position": 50000,
+          "rewardId": "seasonalEventCurrencyCrescendo:11"
+        },
+        {
+          "position": 75000,
+          "rewardId": "seasonalEventCurrencyCrescendo:9"
+        },
+        {
+          "position": 100000,
+          "rewardId": "seasonalEventCurrencyCrescendo:7"
+        },
+        {
+          "position": 150000,
+          "rewardId": "seasonalEventCurrencyCrescendo:6"
+        },
+        {
+          "position": 200000,
+          "rewardId": "seasonalEventCurrencyCrescendo:4"
+        }
+      ],
+      "positionRewardStartOffset": {
+        "days": 0
+      },
+      "rewardSchedules": [
+        {
+          "rewardTiers": [
+            {
+              "positionAbsolute": 0,
+              "rewardId": "seasonal_event_crescendo_b_leaderboard_chest_00"
+            },
+            {
+              "positionAbsolute": 1,
+              "rewardId": "seasonal_event_crescendo_b_leaderboard_chest_10"
+            },
+            {
+              "positionAbsolute": 2,
+              "rewardId": "seasonal_event_crescendo_b_leaderboard_chest_20"
+            },
+            {
+              "positionAbsolute": 3,
+              "rewardId": "seasonal_event_crescendo_b_leaderboard_chest_30"
+            },
+            {
+              "positionAbsolute": 10,
+              "rewardId": "seasonal_event_crescendo_b_leaderboard_chest_40"
+            },
+            {
+              "positionAbsolute": 25,
+              "rewardId": "seasonal_event_crescendo_b_leaderboard_chest_50"
+            },
+            {
+              "positionAbsolute": 50,
+              "rewardId": "seasonal_event_crescendo_b_leaderboard_chest_60"
+            },
+            {
+              "positionAbsolute": 100,
+              "rewardId": "seasonal_event_crescendo_b_leaderboard_chest_70"
+            },
+            {
+              "positionAbsolute": 150,
+              "rewardId": "seasonal_event_crescendo_b_leaderboard_chest_80"
+            },
+            {
+              "positionAbsolute": 250,
+              "rewardId": "seasonal_event_crescendo_b_leaderboard_chest_90"
+            },
+            {
+              "positionAbsolute": 500,
+              "rewardId": "seasonal_event_crescendo_b_leaderboard_chest_100"
+            },
+            {
+              "positionAbsolute": 1000,
+              "rewardId": "seasonal_event_crescendo_b_leaderboard_chest_110"
+            },
+            {
+              "positionAbsolute": 1500,
+              "rewardId": "seasonal_event_crescendo_b_leaderboard_chest_120"
+            },
+            {
+              "positionAbsolute": 2500,
+              "rewardId": "seasonal_event_crescendo_b_leaderboard_chest_130"
+            },
+            {
+              "positionAbsolute": 5000,
+              "rewardId": "seasonal_event_crescendo_b_leaderboard_chest_140"
+            },
+            {
+              "positionAbsolute": 10000,
+              "rewardId": "seasonal_event_crescendo_b_leaderboard_chest_150"
+            },
+            {
+              "positionAbsolute": 15000,
+              "rewardId": "seasonal_event_crescendo_b_leaderboard_chest_160"
+            },
+            {
+              "positionAbsolute": 20000,
+              "rewardId": "seasonal_event_crescendo_b_leaderboard_chest_170"
+            },
+            {
+              "positionAbsolute": 25000,
+              "rewardId": "seasonal_event_crescendo_b_leaderboard_chest_180"
+            },
+            {
+              "positionAbsolute": 35000,
+              "rewardId": "seasonal_event_crescendo_b_leaderboard_chest_190"
+            },
+            {
+              "positionAbsolute": 50000,
+              "rewardId": "seasonal_event_crescendo_b_leaderboard_chest_200"
+            },
+            {
+              "positionAbsolute": 75000,
+              "rewardId": "seasonal_event_crescendo_b_leaderboard_chest_210"
+            },
+            {
+              "positionAbsolute": 100000,
+              "rewardId": "seasonal_event_crescendo_b_leaderboard_chest_220"
+            },
+            {
+              "positionAbsolute": 150000,
+              "rewardId": "seasonal_event_crescendo_b_leaderboard_chest_230"
+            },
+            {
+              "positionAbsolute": 200000,
+              "rewardId": "seasonal_event_crescendo_b_leaderboard_chest_240"
             }
           ]
         }
