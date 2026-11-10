@@ -92,6 +92,31 @@ describe("createGitRepo", () => {
     )
   })
 
+  it("cuts a patch branch from main", () => {
+    assert.deepEqual(planRelease({ bump: "patch", refName: "main" }, repo()), {
+      tag: "v1.0.1",
+      previous: "v1.0.0",
+      branch: "release/1.0.1",
+      sha: commits[3],
+      resume: false,
+    })
+  })
+
+  it("hotfixes a release branch that contains the line's latest tag", () => {
+    git(work, "switch", "--detach", commits[1])
+    try {
+      git(work, "commit", "--allow-empty", "-m", "backport")
+      const result = planRelease(
+        { bump: "hotfix", refName: "release/1.0" },
+        repo()
+      )
+      assert.equal(result.tag, "v1.0.1")
+      assert.equal(result.previous, "v1.0.0")
+    } finally {
+      git(work, "switch", "main")
+    }
+  })
+
   it("resumes a pushed tag that has no release", () => {
     git(work, "tag", "-a", "v1.1.0", commits[3], "-m", "v1.1.0")
     try {
