@@ -26,7 +26,7 @@ involved:
 | Workflow | Trigger | What it does |
 | --- | --- | --- |
 | `CD Stage` | every push to `main` | publishes the API image and deploys it to staging |
-| `Release` | by hand (Actions tab) | cuts or patches a release, tags it, publishes the GitHub Release, then calls `CD Prod` |
+| `Release` | by hand (Actions tab) | cuts or hotfixes a release, tags it, publishes the GitHub Release, then calls `CD Prod` |
 | `CD Prod` | called by `Release`, or by hand | deploys an existing published release tag to production |
 
 ### One-time setup
@@ -49,9 +49,9 @@ involved:
 
 ### What a Release run does
 
-1. **Tag:** computes the version, pushes `release/X.Y` (minor/major only) and
-   an annotated `vX.Y.Z` tag in one atomic push, then publishes a GitHub
-   Release with notes generated since the previous tag.
+1. **Tag:** computes the version, pushes the new release branch (major, minor
+   and patch only) and an annotated `vX.Y.Z` tag in one atomic push, then
+   publishes a GitHub Release with notes generated since the previous tag.
 2. **Check:** confirms the tag is a published, non-draft release.
 3. **Build:** reuses the image staging already published for that commit (`tacticus-planner-api:<sha>`), or builds and pushes it if none exists. Production always deploys the `@sha256:` digest.
 4. **Approve:** the deploy job waits for a `production` reviewer.
@@ -66,8 +66,8 @@ release published but not live; ship it later with `CD Prod` (see below).
 | --- | --- | --- |
 | `major` | `main` | `v(X+1).0.0` and branch `release/(X+1).0` |
 | `minor` | `main` | `vX.(Y+1).0` and branch `release/X.(Y+1)` |
-| `patch` | `release/X.Y` | next `vX.Y.Z` on that branch, no new branch |
-| `patch` | `main` | next `vX.Y.Z` on the newest line, from `main`, no new branch |
+| `patch` | `main` | `vX.Y.(Z+1)` on the newest line and branch `release/X.Y.(Z+1)` |
+| `hotfix` | `release/X.Y` or `release/X.Y.Z` | next `vX.Y.Z` on that line, no new branch |
 
 With no tags yet, versions count from `1.0.0`, because this rewrite ships as V2
 of Tacticus Planner: `major` gives `v2.0.0` and `minor` gives `v1.1.0`. Use
@@ -87,13 +87,16 @@ The latest release is `v1.3.2` and `main` has new, staging-verified work.
 
 **Shipping an older commit.** If the head of `main` is not ready but
 `9f8e7d6` is, run the same thing with *commit* `9f8e7d6`. The commit must be on
-`main`, come after the last `vX.Y.0` cut (here `v1.3.0`), and not already be
-released. It must also contain `release.yml` and `scripts/release/`, because
-later patches run from the release branch cut at that commit.
+`main`, come after the newest release tag on `main` (any major, minor or patch
+cut), and not already be released. It must also contain `release.yml` and `scripts/release/`, because
+later hotfixes run from the release branch cut at that commit.
 
 ## Example: patching a release
 
-`v1.4.0` is live and has a bug.
+`v1.4.0` is live and has a bug. Either ship just the fix as a **hotfix** on the
+release branch, or ship `main` as a **patch** on a branch of its own.
+
+### Hotfix: ship only the fix
 
 1. Fix it on `main` first through a normal pull request, so the next release
    keeps the fix. Say the squash commit is `5a6b7c8`.
@@ -109,24 +112,32 @@ later patches run from the release branch cut at that commit.
 3. Open a pull request from `backport/fix-login` into `release/1.4`, get it
    reviewed, and squash-merge it.
 4. Actions → **Release** → *Use workflow from:* `release/1.4`; *bump:*
-   `patch`.
+   `hotfix`.
 5. The run tags `v1.4.1` with notes since `v1.4.0`. Approve the deploy.
 
 A second fix on the same line becomes `v1.4.2`. Anything merged to `main`
-after `release/1.4` was cut stays out of the patch.
+after `release/1.4` was cut stays out of the hotfix.
 
-A patch commit exists only on the release branch, so its image is built fresh and
-never ran on staging. Confirm the fix on staging from `main` before releasing
-the patch.
+A hotfix commit exists only on the release branch, so its image is built fresh
+and never ran on staging. Confirm the fix on staging from `main` before
+releasing the hotfix.
 
-**Patching straight from `main`.** When everything on `main` since the last
-release is safe to ship as a fix, skip the backport: Actions → **Release** →
-*Use workflow from:* `main`; *bump:* `patch`. With `v1.4.0` as the newest tag,
-this tags the head of `main` (or *commit*) as `v1.4.1`, with no new branch.
-Unlike a backport, this ships everything merged since `v1.4.0`, not just the
-fix, and it reuses the image staging already ran. `release/1.4` does not get
-the commit; a later backport patch there still counts up from the newest
-`v1.4.*` tag.
+The branch must contain the newest `v1.4.*` tag, or the run refuses: a hotfix
+on a branch that lacks it would silently drop what that release shipped. After
+a patch (below), hotfix that patch's `release/X.Y.Z` branch instead.
+
+### Patch: ship `main`
+
+When everything on `main` since the last release is safe to ship as a fix, skip
+the backport: Actions → **Release** → *Use workflow from:* `main`; *bump:*
+`patch`. With `v1.4.0` as the newest tag, this tags the head of `main` (or
+*commit*) as `v1.4.1` and cuts `release/1.4.1` from it, just like a minor
+cut. Unlike a hotfix, this ships everything merged since `v1.4.0`, not just
+the fix, and it reuses the image staging already ran.
+
+Later hotfixes for `v1.4.1` go into `release/1.4.1`, and become `v1.4.2`,
+`v1.4.3`, and so on. `release/1.4` no longer takes hotfixes, because it lacks
+`v1.4.1`.
 
 ## Redeploying, rolling back and failed runs
 
@@ -167,7 +178,8 @@ CI runs them on Linux and Windows. The folder is kept identical in
 - Never move, delete or reuse a published tag.
 - Never merge features into a release branch; only backports of fixes already
   on `main`.
-- Keep `release/X.Y` only while that release line is supported.
+- Keep `release/X.Y` and `release/X.Y.Z` branches only while that release is
+  supported.
 
 ## Compatibility and migrations
 
