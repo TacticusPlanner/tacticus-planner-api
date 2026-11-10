@@ -3,7 +3,9 @@
 // Kept identical in tacticus-planner-apps and tacticus-planner-api.
 
 const VERSION_TAG = /^v(\d+)\.(\d+)\.(\d+)$/
-const RELEASE_BRANCH = /^release\/(\d+)\.(\d+)$/
+// release/X.Y comes from a minor or major cut, release/X.Y.Z from a patch cut.
+const RELEASE_BRANCH = /^release\/(\d+)\.(\d+)(?:\.(\d+))?$/
+const BUMPS = ["major", "minor", "patch", "hotfix"]
 
 export class ReleaseError extends Error {
   name = "ReleaseError"
@@ -23,7 +25,9 @@ export function compareVersions(a, b) {
   return a.major - b.major || a.minor - b.minor || a.patch - b.patch
 }
 
-/** Returns the highest vX.Y.Z tag whose version matches `filter`, or "" when none does. */
+/**
+ * Returns the highest vX.Y.Z tag for which `filter(version, tag)` is true, or "" when none is.
+ */
 export function latestTag(tags, filter = () => true) {
   let best = ""
   let bestVersion = null
@@ -31,7 +35,7 @@ export function latestTag(tags, filter = () => true) {
     const version = parseVersion(tag)
     if (
       version &&
-      filter(version) &&
+      filter(version, tag) &&
       (!bestVersion || compareVersions(version, bestVersion) > 0)
     ) {
       best = tag
@@ -44,7 +48,10 @@ export function latestTag(tags, filter = () => true) {
 /**
  * Plans a release.
  *
- * @param {{ bump: "major" | "minor" | "patch", refName: string, commit?: string }} inputs
+ * major, minor and patch run from main and cut a new release branch; hotfix runs from a release
+ * branch and tags its head as the next patch on that line.
+ *
+ * @param {{ bump: "major" | "minor" | "patch" | "hotfix", refName: string, commit?: string }} inputs
  * @param {{
  *   head(): string,
  *   resolveCommit(ref: string): string | null,
@@ -57,7 +64,7 @@ export function latestTag(tags, filter = () => true) {
  * @returns {{ tag: string, previous: string, branch: string, sha: string, resume: boolean }}
  */
 export function planRelease({ bump, refName, commit = "" }, repo) {
-  if (!["major", "minor", "patch"].includes(bump)) {
+  if (!BUMPS.includes(bump)) {
     throw new ReleaseError(`Unknown bump "${bump}".`)
   }
   const tags = repo.tags()
@@ -75,8 +82,8 @@ export function planRelease({ bump, refName, commit = "" }, repo) {
     return { tag: existing, previous, branch: "", sha, resume: true }
   }
 
-  return bump === "patch"
-    ? planPatch(refName, tags, sha)
+  return bump === "hotfix"
+    ? planHotfix(refName, tags, sha, repo)
     : planCut(bump, refName, tags, sha, repo)
 }
 
@@ -86,7 +93,7 @@ function resolveTarget({ bump, refName, commit }, repo, tags) {
   if (!commit) {
     return repo.head()
   }
-  if (bump === "patch" && refName !== "main") {
+  if (bump === "hotfix") {
     throw new ReleaseError(
       "commit applies to releases from main only; a release branch ships its head."
     )
@@ -98,8 +105,9 @@ function resolveTarget({ bump, refName, commit }, repo, tags) {
   if (!repo.isAncestor(sha, repo.head())) {
     throw new ReleaseError(`${commit} is not on ${refName}.`)
   }
-  // Every vX.Y.0 is cut from main, so the newest one marks what main has already shipped.
-  const lastCut = latestTag(tags, (v) => v.patch === 0)
+  // Every cut (major, minor or patch) tags a commit on main, so the newest tag in main's history
+  // marks what main has already shipped. Hotfix tags live only on release branches.
+  const lastCut = latestTag(tags, (_, tag) => repo.isAncestor(tag, repo.head()))
   if (lastCut && !repo.isAncestor(lastCut, sha)) {
     throw new ReleaseError(
       `${commit} predates ${lastCut}; pick a commit after the last release.`
@@ -108,38 +116,29 @@ function resolveTarget({ bump, refName, commit }, repo, tags) {
   return sha
 }
 
-function planPatch(refName, tags, sha) {
-  // From main, a patch ships main as the next patch on the newest line, with no release branch.
-  if (refName === "main") {
-    const previous = latestTag(tags)
-    if (!previous) {
-      throw new ReleaseError(
-        "Nothing to patch yet; run a minor or major release first."
-      )
-    }
-    const { major, minor, patch } = parseVersion(previous)
-    return {
-      tag: `v${major}.${minor}.${patch + 1}`,
-      previous,
-      branch: "",
-      sha,
-      resume: false,
-    }
-  }
+// A hotfix ships the head of a release branch as the next patch on its line. That branch must
+// already contain the line's latest tag; otherwise the hotfix would silently drop whatever that
+// release shipped (for example a patch cut from main onto its own release/X.Y.Z branch).
+function planHotfix(refName, tags, sha, repo) {
   const match = RELEASE_BRANCH.exec(refName)
   if (!match) {
     throw new ReleaseError(
-      "Run patch releases from main or a release/X.Y branch."
+      "Run hotfix releases from a release/X.Y or release/X.Y.Z branch."
     )
   }
-  const [major, minor] = match.slice(1).map(Number)
+  const [major, minor] = match.slice(1, 3).map(Number)
   const previous = latestTag(
     tags,
     (v) => v.major === major && v.minor === minor
   )
   if (!previous) {
     throw new ReleaseError(
-      `release/${major}.${minor} has no v${major}.${minor}.* tag to patch.`
+      `${refName} has no v${major}.${minor}.* tag to hotfix.`
+    )
+  }
+  if (!repo.isAncestor(previous, sha)) {
+    throw new ReleaseError(
+      `${refName} does not contain ${previous}; hotfix the branch that release was cut on.`
     )
   }
   const patch = parseVersion(previous).patch + 1
@@ -157,15 +156,41 @@ function planCut(bump, refName, tags, sha, repo) {
     throw new ReleaseError(`Run ${bump} releases from main.`)
   }
   const previous = latestTag(tags)
+  if (bump === "patch" && !previous) {
+    throw new ReleaseError(
+      "Nothing to patch yet; run a minor or major release first."
+    )
+  }
   // With no tags yet, count from 1.0.0: this rewrite ships as V2 of Tacticus Planner.
   const last = previous
     ? parseVersion(previous)
     : { major: 1, minor: 0, patch: 0 }
-  const major = bump === "major" ? last.major + 1 : last.major
-  const minor = bump === "major" ? 0 : last.minor + 1
-  const branch = `release/${major}.${minor}`
+  const { major, minor, patch } = nextVersion(bump, last)
+  // A patch gets a branch of its own, release/X.Y.Z, so later hotfixes build on exactly what it
+  // shipped instead of on an older release/X.Y that lacks it.
+  const branch =
+    bump === "patch"
+      ? `release/${major}.${minor}.${patch}`
+      : `release/${major}.${minor}`
   if (repo.remoteBranchExists(branch)) {
     throw new ReleaseError(`${branch} already exists.`)
   }
-  return { tag: `v${major}.${minor}.0`, previous, branch, sha, resume: false }
+  return {
+    tag: `v${major}.${minor}.${patch}`,
+    previous,
+    branch,
+    sha,
+    resume: false,
+  }
+}
+
+function nextVersion(bump, last) {
+  switch (bump) {
+    case "major":
+      return { major: last.major + 1, minor: 0, patch: 0 }
+    case "minor":
+      return { major: last.major, minor: last.minor + 1, patch: 0 }
+    default:
+      return { major: last.major, minor: last.minor, patch: last.patch + 1 }
+  }
 }
