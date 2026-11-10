@@ -180,8 +180,9 @@ internal static partial class GameCatalogDenormalizer
             : throw CampaignError(key, $"starts with event campaign '{campaignId}', which is not an eventStandard campaign");
     }
 
-    // The storyline campaign a campaign follows (its game unlock condition `completedCampaigns`), whose id is that
-    // group's id; null when it follows none.
+    // The storyline campaign a storyline campaign follows (its game unlock condition `completedCampaigns`), whose id
+    // is that group's id; null when it follows none. Event groups never read it: their Extremis track follows their
+    // own Standard track.
     private static string? RequiredCampaign(
         string key,
         DatamineCampaign campaign,
@@ -189,8 +190,10 @@ internal static partial class GameCatalogDenormalizer
         campaign.UnlockConditions?.CompletedCampaigns switch
         {
             null or [] => null,
-            [var previous] => byId.ContainsKey(previous.CampaignId)
-                ? previous.CampaignId
+            [var previous] => byId.TryGetValue(previous.CampaignId, out var found)
+                ? found.Kind != CampaignEventKind
+                    ? previous.CampaignId
+                    : throw CampaignError(key, $"follows event campaign '{previous.CampaignId}', which is not a storyline group")
                 : throw CampaignError(key, $"follows campaign '{previous.CampaignId}' the game does not have"),
             _ => throw CampaignError(key, "follows more than one campaign"),
         };

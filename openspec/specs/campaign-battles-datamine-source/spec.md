@@ -34,7 +34,7 @@ Core characters SHALL be the `unlockedUnitIds` of the group's campaigns, or of t
 
 ### Requirement: A campaign definition names the campaign it follows
 
-A storyline campaign definition SHALL carry `requiredCampaignGroupId`: the id of the group that must be fully cleared before it opens, read from its first campaign's `completedCampaigns` unlock condition (a storyline group's id is its campaign id). It SHALL be null when the campaign follows none, and for campaign-event groups, whose Extremis track follows the group's own Standard track. A campaign that follows a campaign the game does not have, or more than one, SHALL fail the load.
+A storyline campaign definition SHALL carry `requiredCampaignGroupId`: the id of the group that must be fully cleared before it opens, read from its first campaign's `completedCampaigns` unlock condition (a storyline group's id is its campaign id). It SHALL be null when the campaign follows none, and for campaign-event groups, whose Extremis track follows the group's own Standard track. A storyline campaign that follows a campaign the game does not have, an event campaign, or more than one campaign SHALL fail the load; event groups are not checked.
 
 #### Scenario: Elite and Mirror Elite campaigns
 

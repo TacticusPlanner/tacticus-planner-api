@@ -211,6 +211,16 @@ public sealed class CampaignDatamineReaderTests
         // An Elite group follows its Standard group, whose id is the campaign id.
         Assert.Equal("campaign1", elite.RequiredCampaignGroupId);
 
+        // A storyline campaign that follows an event campaign names no served group.
+        var campaigns = Indomitus();
+        campaigns["Elite"] = [campaigns["Elite"][0] with
+        {
+            UnlockConditions = campaigns["Elite"][0].UnlockConditions! with { CompletedCampaigns = [new DatamineCompletedCampaign("Event", "eventStandard1")] },
+        }];
+        campaigns["Event"] = [new DatamineCampaign("eventStandard1", [Battle("01")], EventUnlock)];
+        var followsEvent = Assert.Throws<InvalidOperationException>(() => Read(new([new("elite1", "IE")]), campaigns));
+        Assert.Contains("not a storyline group", followsEvent.Message, StringComparison.Ordinal);
+
         var missing = Assert.Throws<InvalidOperationException>(() => Read(new([new("campaign1", "I")]), Indomitus()));
         Assert.Contains("must be curated", missing.Message, StringComparison.Ordinal);
         var redundant = Assert.Throws<InvalidOperationException>(() => Read(Curation() with { CoreCharacters = core }, Battle("01")));
