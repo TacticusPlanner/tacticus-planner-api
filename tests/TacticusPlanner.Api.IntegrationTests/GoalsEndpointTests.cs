@@ -580,16 +580,13 @@ public sealed class GoalsEndpointTests(PlannerApiFactory factory) : IClassFixtur
     [Fact]
     public async Task CreateMowUnlockGoalRejectsAShopSource()
     {
-        // Unlock is Character-only (see CreateGoalDeferredGoalTypeOrEntityTypeIsRejected), so this proves
-        // Shop-source gating for MoW goals via Ascension instead.
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
         var response = await client.PostGoalAsync(new CreateGoalRequest(
                 GoalEntityType.Mow,
                 "astraOrdnanceBattery",
-                GoalType.Ascension,
+                GoalType.Unlock,
                 new CreateGoalConfigRequest(
-                    Progression: new ProgressionTargetRequest(UnitProgression.CommonNone, UnitProgression.CommonOneStar),
                     AcquisitionSources: [new AcquisitionSourceRequest(AcquisitionSourceKind.Shop, ["guild:shards_eldarFarseer"])]
                 ),
                 null

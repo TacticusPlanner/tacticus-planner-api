@@ -1026,8 +1026,8 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
     [Fact]
     public async Task UnlockIsNeverSynthesizedForAMachineOfWarNotInTheRoster()
     {
-        // Unlock is only ever a valid goal type for a Character (GoalTargetValidationService); a Mow
-        // absent from the roster must not get a synthesized Unlock attempt.
+        // The import only synthesizes Unlock for a Character (NeedsUnlock); a Mow absent from the roster
+        // must not get a synthesized Unlock attempt.
         var (client, subject) = await CreateProvisionedClientAsync();
         await SeedPlayerDataSnapshotAsync(subject, []); // account has player data, but not this Mow
 
