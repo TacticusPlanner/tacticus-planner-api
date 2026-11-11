@@ -1,6 +1,6 @@
 ﻿{
   version: 1.44.87.3088+5913fe6fec42,
-  schemaHash: 60d1fb5a7c7ff0fdfc8f6d111450303793475d7fe9b15ae8d3b3ef94cfcb0ec7,
+  schemaHash: 26fe1e9b5c477f0942484958b76a740bedcce178ec9a7699a6126d7a886d5d57,
   gameVersion: 1.44.87.3088,
   sourceHash: {time-dependent},
   datasets: [
@@ -16,7 +16,7 @@
     },
     {
       key: campaign-definitions,
-      hash: da47cca25517ac1afe11544848f9e4df927fbcbc02920534ade2f3156eb1e9a6,
+      hash: 60e4ce3e5deff335c10606ed99460612d22ebeff65884ff825e44f5a04c857b6,
       url: /api/v1/game-catalog/campaign-definitions/{envelopeHash}
     },
     {
@@ -56,7 +56,7 @@
     },
     {
       key: global-values,
-      hash: e57acb83d1980a83fc3b8a85cf904adda736a9a41e7fe9eb69204b6550e90aa2,
+      hash: 10598409ba91c5b4a97ea785aed2c1777ff6c9d741d312da68f45d0648c55552,
       url: /api/v1/game-catalog/global-values/{envelopeHash}
     },
     {

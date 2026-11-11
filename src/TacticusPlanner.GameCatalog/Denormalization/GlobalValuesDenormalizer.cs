@@ -59,7 +59,8 @@ internal static partial class GameCatalogDenormalizer
                 : throw Invalid("'traitVariables' is missing or empty."),
             staminaShopTiers.Count > 0
                 ? staminaShopTiers.Select(productId => ReadStaminaShopTier(productId, products)).ToArray()
-                : throw Invalid("the stamina shop has no tiers."));
+                : throw Invalid("the stamina shop has no tiers."),
+            Positive(values.PowerLevelNeededToUnlockEliteCampaign?.PowerLevel, "powerLevelNeededToUnlockEliteCampaign.PowerLevel"));
 
         return [record];
     }

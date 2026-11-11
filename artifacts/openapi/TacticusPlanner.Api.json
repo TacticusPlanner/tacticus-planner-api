@@ -8494,7 +8494,8 @@
           "coreCharacters",
           "types",
           "battleIds",
-          "number"
+          "number",
+          "requiredCampaignGroupId"
         ],
         "type": "object",
         "properties": {
@@ -8519,6 +8520,12 @@
           "number": {
             "type": "integer",
             "format": "int32"
+          },
+          "requiredCampaignGroupId": {
+            "type": [
+              "null",
+              "string"
+            ]
           }
         }
       },
@@ -10506,7 +10513,8 @@
           "battleFatigueFleeChance",
           "battleFatigueFleeChanceOverkill",
           "traitVariables",
-          "staminaShopTiers"
+          "staminaShopTiers",
+          "eliteCampaignMinPowerLevel"
         ],
         "type": "object",
         "properties": {
@@ -10571,6 +10579,10 @@
           },
           "staminaShopTiers": {
             "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogStaminaShopTier"
+          },
+          "eliteCampaignMinPowerLevel": {
+            "type": "integer",
+            "format": "int32"
           }
         }
       },
