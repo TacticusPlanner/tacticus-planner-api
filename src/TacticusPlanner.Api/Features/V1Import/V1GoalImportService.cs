@@ -889,9 +889,9 @@ public sealed class V1GoalImportService(
                 if (needsUnlock)
                 {
                     // Validated like every other synthesized/candidate goal before persisting (unlike the
-                    // synthesized Ascension path below, this one isn't structurally guaranteed valid: Unlock
-                    // is Character-only and further requires catalog shard-upgrade data — see
-                    // GoalTargetValidationService — neither of which NeedsUnlock checks).
+                    // synthesized Ascension path below, this one isn't structurally guaranteed valid: a
+                    // Character Unlock requires catalog shard-source data — see GoalTargetValidationService —
+                    // which NeedsUnlock doesn't check).
                     var unlockConfig = new CreateGoalConfigRequest();
                     var unlockError = await targetValidation.ValidateAsync(
                         profileId, unitKey.EntityType, unitKey.EntityId, GoalType.Unlock, unlockConfig, ct);
@@ -1118,8 +1118,8 @@ public sealed class V1GoalImportService(
 
     /// <summary>Whether a Character absent from the roster needs a synthesized Unlock: not when the unit's
     /// imported goals include one, or the account already has one (v1-goal-import: "Missing prerequisites are
-    /// created automatically by the same rules as manual creation"). Unlock is only ever valid for a Character
-    /// (GoalTargetValidationService), so a Mow missing from the roster never gets one.</summary>
+    /// created automatically by the same rules as manual creation"). Only a Character gets a synthesized Unlock;
+    /// a Mow missing from the roster never gets one.</summary>
     private static bool NeedsUnlock(
         UnitKey unitKey, List<TranslatedGoal> unitCandidates, PlayerBaseUnitRecord? playerUnit,
         Dictionary<GoalKey, ExistingGoalRef> existingByKey) =>

@@ -124,12 +124,12 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
         var playerCharacter = units.Character;
         var playerUnit = (PlayerBaseUnitRecord?)playerCharacter ?? units.Mow;
 
-        // Each goal type is only ever valid for one entity type (Rank/Unlock: Character only;
-        // Ascension/Ability/Upgrade: Character or Mow) — checked once
+        // Rank is the only goal type tied to one entity type (Character only; Machines of War have no
+        // rank ladder). Unlock/Ascension/Ability/Upgrade are valid for a Character or a Mow — checked once
         // up front so every branch below can assume the pairing already makes sense.
         var entityTypeMismatch = (goalType, entityType) switch
         {
-            (GoalType.Rank or GoalType.Unlock, not GoalEntityType.Character) => true,
+            (GoalType.Rank, not GoalEntityType.Character) => true,
             _ => false,
         };
         if (entityTypeMismatch)
@@ -146,9 +146,12 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
 
         if (goalType == GoalType.Unlock)
         {
-            if (!catalog.Current.IsUnlockEligible(entityId))
+            // A character needs a way to farm its regular shards. A Machine of War has no shard nodes in
+            // the catalog, so any MoW the account doesn't own can get an Unlock goal (the create sheet
+            // offers it the same way).
+            if (entityType == GoalEntityType.Character && !catalog.Current.IsUnlockEligible(entityId))
                 return "Unlock is unavailable because the catalog has no campaign shard node or shop shard offer for this character.";
-            if (playerUnit is not null) return "The selected character is already unlocked.";
+            if (playerUnit is not null) return "The selected unit is already unlocked.";
         }
 
         if (goalType == GoalType.Rank)
