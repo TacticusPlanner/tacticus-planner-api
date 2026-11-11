@@ -248,7 +248,7 @@ public sealed class NpcEncounterDenormalizerTests
     [Fact]
     public void AQuestEventBattleIsServedByNumber()
     {
-        var record = Record("necroNpc1Warrior", NpcEncounterSources.QuestEvent, "astarCyrus");
+        var record = Record("blackNpc3TraitorGuardsman", NpcEncounterSources.QuestEvent, "astarEradicator");
 
         var first = record.Battles[0];
         Assert.Equal(1, first.Number);

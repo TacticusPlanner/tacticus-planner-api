@@ -4,7 +4,7 @@
     "eventName": "rarity_training_rush_tier_high",
     "subtitleLocaKey": "",
     "titleLocaKey": "",
-    "previewTitleLocaKey": "HomeScreenEvents/HomeScreenEvent_training_rush_Interstitial_Header",
+    "previewTitleLocaKey": "HomeScreenEvents/HomeScreenEvent_mythic_training_rush_Interstitial_Header",
     "visualId": "homescreenevent_training_rush",
     "offerId": "",
     "shortDescriptionLocaKey": "",
@@ -19,6 +19,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_rarity_training_rush_tier_high_bundle",
       "offer_homescreen_event_rarity_training_rush_tier_high_playmore",
@@ -126,7 +132,7 @@
     "eventName": "rarity_training_rush_tier_mid",
     "subtitleLocaKey": "",
     "titleLocaKey": "",
-    "previewTitleLocaKey": "HomeScreenEvents/HomeScreenEvent_training_rush_Interstitial_Header",
+    "previewTitleLocaKey": "HomeScreenEvents/HomeScreenEvent_mythic_training_rush_Interstitial_Header",
     "visualId": "homescreenevent_training_rush",
     "offerId": "",
     "shortDescriptionLocaKey": "",
@@ -141,6 +147,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_rarity_training_rush_tier_mid_bundle",
       "offer_homescreen_event_rarity_training_rush_tier_mid_playmore",
@@ -248,7 +260,7 @@
     "eventName": "rarity_training_rush_tier_low",
     "subtitleLocaKey": "",
     "titleLocaKey": "",
-    "previewTitleLocaKey": "HomeScreenEvents/HomeScreenEvent_training_rush_Interstitial_Header",
+    "previewTitleLocaKey": "HomeScreenEvents/HomeScreenEvent_mythic_training_rush_Interstitial_Header",
     "visualId": "homescreenevent_training_rush",
     "offerId": "",
     "shortDescriptionLocaKey": "",
@@ -263,6 +275,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_rarity_training_rush_tier_low_bundle",
       "offer_homescreen_event_rarity_training_rush_tier_low_playmore",
@@ -385,6 +403,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_kill_tyranids_tier_high_bundle",
       "offer_homescreen_event_kill_tyranids_tier_high_playmore",
@@ -539,6 +563,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_kill_tyranids_tier_mid_bundle",
       "offer_homescreen_event_kill_tyranids_tier_mid_playmore",
@@ -693,6 +723,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_kill_tyranids_tier_low_bundle",
       "offer_homescreen_event_kill_tyranids_tier_low_playmore",
@@ -847,6 +883,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_squig_smash_tier_high_bundle",
       "offer_homescreen_event_squig_smash_tier_high_playmore",
@@ -912,6 +954,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_squig_smash_tier_mid_bundle",
       "offer_homescreen_event_squig_smash_tier_mid_playmore",
@@ -977,6 +1025,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_squig_smash_tier_low_bundle",
       "offer_homescreen_event_squig_smash_tier_low_playmore",
@@ -1042,6 +1096,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_defeat_waves_tier_high_bundle",
       "offer_homescreen_event_defeat_waves_tier_high_playmore",
@@ -1086,6 +1146,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_defeat_waves_tier_mid_bundle",
       "offer_homescreen_event_defeat_waves_tier_mid_playmore",
@@ -1130,6 +1196,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_defeat_waves_tier_low_bundle",
       "offer_homescreen_event_defeat_waves_tier_low_playmore",
@@ -1174,6 +1246,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_defeat_waves_2_tier_high_bundle",
       "offer_homescreen_event_defeat_waves_2_tier_high_playmore",
@@ -1218,6 +1296,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_defeat_waves_2_tier_mid_bundle",
       "offer_homescreen_event_defeat_waves_2_tier_mid_playmore",
@@ -1262,6 +1346,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_defeat_waves_2_tier_low_bundle",
       "offer_homescreen_event_defeat_waves_2_tier_low_playmore",
@@ -1306,6 +1396,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_warp_surge_tier_high_bundle",
       "offer_homescreen_event_warp_surge_tier_high_playmore",
@@ -1512,6 +1608,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_warp_surge_tier_mid_bundle",
       "offer_homescreen_event_warp_surge_tier_mid_playmore",
@@ -1718,6 +1820,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_warp_surge_tier_low_bundle",
       "offer_homescreen_event_warp_surge_tier_low_playmore",
@@ -1924,6 +2032,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_machine_hunt_tier_high_bundle",
       "offer_homescreen_event_machine_hunt_tier_high_playmore",
@@ -2046,6 +2160,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_machine_hunt_tier_mid_bundle",
       "offer_homescreen_event_machine_hunt_tier_mid_playmore",
@@ -2168,6 +2288,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_machine_hunt_tier_low_bundle",
       "offer_homescreen_event_machine_hunt_tier_low_playmore",
@@ -2290,6 +2416,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_emperor_dark_gods_tier_high_bundle",
       "offer_homescreen_event_emperor_dark_gods_tier_high_playmore"
@@ -2345,6 +2477,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_emperor_dark_gods_tier_mid_bundle",
       "offer_homescreen_event_emperor_dark_gods_tier_mid_playmore"
@@ -2400,6 +2538,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_emperor_dark_gods_tier_low_bundle",
       "offer_homescreen_event_emperor_dark_gods_tier_low_playmore"
@@ -2455,6 +2599,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_emperor_dark_gods_tier_high_booster"
     ],
@@ -2509,6 +2659,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_emperor_dark_gods_tier_mid_booster"
     ],
@@ -2563,6 +2719,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_emperor_dark_gods_tier_low_booster"
     ],
@@ -2617,6 +2779,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_faction_focus_tier_high_bundle",
       "offer_homescreen_event_faction_focus_tier_high_playmore",
@@ -2734,6 +2902,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_faction_focus_tier_mid_bundle",
       "offer_homescreen_event_faction_focus_tier_mid_playmore",
@@ -2851,6 +3025,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_faction_focus_tier_low_bundle",
       "offer_homescreen_event_faction_focus_tier_low_playmore",
@@ -2968,6 +3148,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_faction_boost_space_wolves_tier_high_bundle",
       "offer_homescreen_event_faction_boost_space_wolves_tier_high_playmore",
@@ -3087,6 +3273,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_faction_boost_space_wolves_tier_mid_bundle",
       "offer_homescreen_event_faction_boost_space_wolves_tier_mid_playmore",
@@ -3206,6 +3398,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_faction_boost_space_wolves_tier_low_bundle",
       "offer_homescreen_event_faction_boost_space_wolves_tier_low_playmore",
@@ -3325,6 +3523,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_trait_boost_flying_tier_high_bundle",
       "offer_homescreen_event_trait_boost_flying_tier_high_playmore",
@@ -3392,6 +3596,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_trait_boost_flying_tier_mid_bundle",
       "offer_homescreen_event_trait_boost_flying_tier_mid_playmore",
@@ -3459,6 +3669,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_trait_boost_flying_tier_low_bundle",
       "offer_homescreen_event_trait_boost_flying_tier_low_playmore",
@@ -3526,6 +3742,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_faction_boost_adeptus_mechanicus_tier_high_bundle",
       "offer_homescreen_event_faction_boost_adeptus_mechanicus_tier_high_playmore",
@@ -3645,6 +3867,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_faction_boost_adeptus_mechanicus_tier_mid_bundle",
       "offer_homescreen_event_faction_boost_adeptus_mechanicus_tier_mid_playmore",
@@ -3764,6 +3992,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_faction_boost_adeptus_mechanicus_tier_low_bundle",
       "offer_homescreen_event_faction_boost_adeptus_mechanicus_tier_low_playmore",
@@ -3883,6 +4117,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_faction_boost_dark_angels_tier_high_bundle",
       "offer_homescreen_event_faction_boost_dark_angels_tier_high_playmore",
@@ -4002,6 +4242,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_faction_boost_dark_angels_tier_mid_bundle",
       "offer_homescreen_event_faction_boost_dark_angels_tier_mid_playmore",
@@ -4121,6 +4367,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_faction_boost_dark_angels_tier_low_bundle",
       "offer_homescreen_event_faction_boost_dark_angels_tier_low_playmore",
@@ -4240,6 +4492,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_trait_boost_psyker_tier_high_bundle",
       "offer_homescreen_event_trait_boost_psyker_tier_high_playmore",
@@ -4326,6 +4584,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_trait_boost_psyker_tier_mid_bundle",
       "offer_homescreen_event_trait_boost_psyker_tier_mid_playmore",
@@ -4412,6 +4676,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_trait_boost_psyker_tier_low_bundle",
       "offer_homescreen_event_trait_boost_psyker_tier_low_playmore",
@@ -4498,6 +4768,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_trait_boost_rapidassault_tier_high_bundle",
       "offer_homescreen_event_trait_boost_rapidassault_tier_high_playmore",
@@ -4584,6 +4860,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_trait_boost_rapidassault_tier_mid_bundle",
       "offer_homescreen_event_trait_boost_rapidassault_tier_mid_playmore",
@@ -4670,6 +4952,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_trait_boost_rapidassault_tier_low_bundle",
       "offer_homescreen_event_trait_boost_rapidassault_tier_low_playmore",
@@ -4756,6 +5044,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_11th_edition_week1_tier_high_bundle",
       "offer_homescreen_event_11th_edition_week1_tier_high_playmore",
@@ -4824,6 +5118,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_11th_edition_week1_tier_mid_bundle",
       "offer_homescreen_event_11th_edition_week1_tier_mid_playmore",
@@ -4892,6 +5192,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_11th_edition_week1_tier_low_bundle",
       "offer_homescreen_event_11th_edition_week1_tier_low_playmore",
@@ -4960,6 +5266,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_11th_edition_week2_tier_high_bundle",
       "offer_homescreen_event_11th_edition_week2_tier_high_playmore",
@@ -5028,6 +5340,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_11th_edition_week2_tier_mid_bundle",
       "offer_homescreen_event_11th_edition_week2_tier_mid_playmore",
@@ -5096,6 +5414,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_11th_edition_week2_tier_low_bundle",
       "offer_homescreen_event_11th_edition_week2_tier_low_playmore",
@@ -5164,6 +5488,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_11th_edition_week3_tier_high_bundle",
       "offer_homescreen_event_11th_edition_week3_tier_high_playmore",
@@ -5275,6 +5605,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_11th_edition_week3_tier_mid_bundle",
       "offer_homescreen_event_11th_edition_week3_tier_mid_playmore",
@@ -5386,6 +5722,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_11th_edition_week3_tier_low_bundle",
       "offer_homescreen_event_11th_edition_week3_tier_low_playmore",
@@ -5497,6 +5839,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "trackers": [
       {
         "type": "killUnits",
@@ -5545,6 +5893,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "trackers": [
       {
         "type": "killUnits",
@@ -5593,6 +5947,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "trackers": [
       {
         "type": "killUnits",
@@ -5641,6 +6001,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "trackers": [
       {
         "type": "killUnits",
@@ -5689,6 +6055,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "trackers": [
       {
         "type": "killUnits",
@@ -5737,6 +6109,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "trackers": [
       {
         "type": "killUnits",
@@ -5785,6 +6163,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "trackers": [
       {
         "type": "dispatchExpedition",
@@ -5818,6 +6202,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_arsenal_of_war_tier_high_bundle",
       "offer_homescreen_event_arsenal_of_war_tier_high_playmore",
@@ -5868,6 +6258,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_arsenal_of_war_tier_mid_bundle",
       "offer_homescreen_event_arsenal_of_war_tier_mid_playmore",
@@ -5918,6 +6314,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_arsenal_of_war_tier_low_bundle",
       "offer_homescreen_event_arsenal_of_war_tier_low_playmore",
@@ -5968,6 +6370,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_trait_boost_terminator_armour_tier_high_bundle",
       "offer_homescreen_event_trait_boost_terminator_armour_tier_high_playmore",
@@ -6054,6 +6462,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_trait_boost_terminator_armour_tier_mid_bundle",
       "offer_homescreen_event_trait_boost_terminator_armour_tier_mid_playmore",
@@ -6140,6 +6554,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_trait_boost_terminator_armour_tier_low_bundle",
       "offer_homescreen_event_trait_boost_terminator_armour_tier_low_playmore",
@@ -6226,6 +6646,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "trackers": [
       {
         "type": "killUnits",
@@ -6324,6 +6750,12 @@
     "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
     "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
     "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
     "initialOfferIds": [
       "offer_homescreen_event_faction_focus_october_2026_bundle",
       "offer_homescreen_event_faction_focus_october_2026_playmore",
@@ -6413,6 +6845,187 @@
         "playerTraitRestrictions": {
           "disallowed": [
             "MachineOfWar"
+          ]
+        }
+      }
+    ],
+    "unlockRequirements": {
+      "PowerLevel": 7
+    }
+  },
+  {
+    "eventType": "homeScreenEvent",
+    "eventName": "hse_faction_boost_world_eaters",
+    "subtitleLocaKey": "",
+    "titleLocaKey": "",
+    "previewTitleLocaKey": "HomeScreenEvents/HomeScreenEvent_faction_boost_world_eaters_Interstitial_Header",
+    "visualId": "homescreenevent_faction_boost_world_eaters",
+    "offerId": "",
+    "shortDescriptionLocaKey": "",
+    "longDescriptionLocaKey": "",
+    "removalDelayAfterPurchase": "",
+    "previewSubtitleLocaKey": "HomeScreenEvents/HomeScreenEvent_faction_boost_world_eaters_Interstitial_Description",
+    "eventId": "hse_faction_boost_world_eaters",
+    "rewardProgressId": "hse_faction_boost_world_eaters",
+    "theme": "faction_boost_world_eaters",
+    "tradeInResourceCurrency": "gold",
+    "tradeInResourceAmountPerPoint": 50,
+    "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
+    "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
+    "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
+    "initialOfferIds": [
+      "offer_homescreen_event_faction_boost_world_eaters_bundle",
+      "offer_homescreen_event_faction_boost_world_eaters_playmore",
+      "offer_homescreen_event_faction_boost_world_eaters_booster"
+    ],
+    "modifiers": [
+      {
+        "type": "unitXp",
+        "operator": "multiply",
+        "modifier": 200,
+        "percentageModifier": true,
+        "sameFactionBonus": true,
+        "locaKey": "HomeScreenEvents/Modifier_unitxp_faction_boost_world_eaters_Description",
+        "gameModeRestrictions": {
+          "allowed": [
+            "PvP",
+            "TreasureBeach",
+            "Waves"
+          ]
+        },
+        "playerFactionRestrictions": {
+          "allowed": [
+            "WorldEaters"
+          ]
+        }
+      },
+      {
+        "type": "battleEnvironmentAbility",
+        "abilityId": "EnvStatBoost:FactionBoost_WorldEaters",
+        "locaKey": "HomeScreenEvents/Modifier_battleEnvironmentAbility_statBoost_world_eaters_Description",
+        "gameModeRestrictions": {
+          "allowed": [
+            "PvP"
+          ]
+        }
+      }
+    ],
+    "trackers": [
+      {
+        "type": "killUnits",
+        "scope": "personal",
+        "points": 2,
+        "locaKey": "HomeScreenEvents/Tracker_killunits_faction_boost_world_eaters_Description",
+        "gameModeRestrictions": {
+          "allowed": [
+            "PvP",
+            "TreasureBeach",
+            "Waves"
+          ]
+        },
+        "traitRestrictions": {
+          "disallowed": [
+            "Summon",
+            "Steppable"
+          ]
+        },
+        "playerTraitRestrictions": {
+          "allowed": [
+            "Chaos"
+          ],
+          "disallowed": [
+            "MachineOfWar"
+          ]
+        }
+      },
+      {
+        "type": "killUnits",
+        "scope": "personal",
+        "points": 1,
+        "locaKey": "HomeScreenEvents/Tracker_killunits2_faction_boost_world_eaters_Description",
+        "gameModeRestrictions": {
+          "allowed": [
+            "PvP",
+            "TreasureBeach",
+            "Waves"
+          ]
+        },
+        "traitRestrictions": {
+          "disallowed": [
+            "Summon",
+            "Steppable"
+          ]
+        },
+        "playerFactionRestrictions": {
+          "allowed": [
+            "WorldEaters"
+          ]
+        },
+        "playerTraitRestrictions": {
+          "disallowed": [
+            "MachineOfWar"
+          ]
+        }
+      }
+    ],
+    "unlockRequirements": {
+      "PowerLevel": 7
+    }
+  },
+  {
+    "eventType": "homeScreenEvent",
+    "eventName": "global_hse_blood_tithe",
+    "subtitleLocaKey": "",
+    "titleLocaKey": "",
+    "previewTitleLocaKey": "HomeScreenEvents/HomeScreenEvent_global_hse_blood_tithe_Interstitial_Header",
+    "visualId": "homescreenevent_global_hse_blood_tithe",
+    "offerId": "",
+    "shortDescriptionLocaKey": "",
+    "longDescriptionLocaKey": "",
+    "removalDelayAfterPurchase": "",
+    "previewSubtitleLocaKey": "HomeScreenEvents/HomeScreenEvent_global_hse_blood_tithe_Interstitial_Description",
+    "eventId": "global_hse_blood_tithe",
+    "rewardProgressId": "global_hse_blood_tithe",
+    "theme": "global_hse_blood_tithe",
+    "tradeInResourceCurrency": "gold",
+    "tradeInResourceAmountPerPoint": 0,
+    "endRewardTitle": "Inbox/SeasonalEvent_UnclaimedRewards_Title",
+    "endRewardBody": "Inbox/SeasonalEvent_UnclaimedRewards_Body",
+    "endRewardSender": "Inbox/Sender_Tacticus",
+    "endRewardValidFor": {
+      "seconds": 0,
+      "minutes": 0,
+      "hours": 0,
+      "days": 1
+    },
+    "trackers": [
+      {
+        "type": "killUnits",
+        "scope": "global",
+        "points": 1,
+        "locaKey": "HomeScreenEvents/Tracker_killunits_blood_tithe_Description",
+        "gameModeRestrictions": {
+          "allowed": [
+            "PvP",
+            "TreasureBeach",
+            "Waves"
+          ]
+        },
+        "traitRestrictions": {
+          "disallowed": [
+            "Summon",
+            "Steppable"
+          ]
+        },
+        "playerFactionRestrictions": {
+          "allowed": [
+            "WorldEaters"
           ]
         }
       }

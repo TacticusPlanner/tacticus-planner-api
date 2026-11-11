@@ -1,7 +1,7 @@
 ﻿{
-  version: 1.43.157.2989+ab5e36a1a67b,
+  version: 1.44.87.3088+5913fe6fec42,
   schemaHash: 26fe1e9b5c477f0942484958b76a740bedcce178ec9a7699a6126d7a886d5d57,
-  gameVersion: 1.43.157.2989,
+  gameVersion: 1.44.87.3088,
   sourceHash: {time-dependent},
   datasets: [
     {
@@ -11,7 +11,7 @@
     },
     {
       key: campaign-battles,
-      hash: 5175fa83a540960de2d17e910a74eb711241d067fd414bd7ba91897c15ea58c0,
+      hash: 1ac8da493e1d6779c2358d29097c2fc40b2a4daee1304baa9709fe7efec473e5,
       url: /api/v1/game-catalog/campaign-battles/{envelopeHash}
     },
     {
@@ -26,7 +26,7 @@
     },
     {
       key: characters,
-      hash: 41f6f09bb5ed47365e4c91ba613744ad64a4adbbca03d044cbbb4f3f93e1245d,
+      hash: 1b20472613553065255e6c3dd25cdd860bface090622471d0a123c9cc295a92e,
       url: /api/v1/game-catalog/characters/{envelopeHash}
     },
     {
@@ -36,12 +36,12 @@
     },
     {
       key: equipment,
-      hash: b18ee01b5214e19b24f22b6877923e490ff9fb8712d7368385f3aa57019a5f2f,
+      hash: 10afc81f19d6027f61a7c70d918591e9667427300cf61eb348e6322942801266,
       url: /api/v1/game-catalog/equipment/{envelopeHash}
     },
     {
       key: event-definitions,
-      hash: 5ffa74599bcc264f9d5ce47c4bf80fced1cdf76cf1fb7d44e50d5236b717cf94,
+      hash: ad6b59cb99bec9265a57cc1d2be35322fa3cbf29d7496407e2c95cf8e62ad867,
       url: /api/v1/game-catalog/event-definitions/{envelopeHash}
     },
     {
@@ -71,22 +71,22 @@
     },
     {
       key: hre,
-      hash: d878e6d929b36fabf07e3e891f744a494bd8638117d9741aac6f277946242cb7,
+      hash: 58099c3a704dc090613a6a3ea90ddf121d444a050b10efc86e2cec0d710c9201,
       url: /api/v1/game-catalog/hre/{envelopeHash}
     },
     {
       key: incursions,
-      hash: c56072ffa576f13cee0cf150b592265df7ebef2287e08ae8c6f89e087757e20d,
+      hash: 49d3ab320f95d2ed4d5ee788d15ac5bb984dac0a23ce1e1e546f72459c1741c0,
       url: /api/v1/game-catalog/incursions/{envelopeHash}
     },
     {
       key: lre-battles,
-      hash: e1de4842c36e546785e8ec3577a1ce31ee28f0570847148acf633c53ae725e6a,
+      hash: 452213407b5fc6e2ca2066c2398ccc48a2bd953dd31ddbf4ee79c72e88a23582,
       url: /api/v1/game-catalog/lre-battles/{envelopeHash}
     },
     {
       key: lres,
-      hash: e8bbf2d292ab95c17046e143072b1e55f95cd68b9b8604674f62d3e97f702932,
+      hash: 9e67e070dc4b51d9bbd9f2f53fb566bc11be3715f63797b836d14af6b5002309,
       url: /api/v1/game-catalog/lres/{envelopeHash}
     },
     {
@@ -96,22 +96,22 @@
     },
     {
       key: mows,
-      hash: 62fd5b8072cbe1565e9c691f1926e2ef04052f93e3bf0f31712e3991fd2e4e8d,
+      hash: 6ca02af56ed2052294bfa18c8886aa0d8f4fcc61c223a96d76a1ac5442f503f0,
       url: /api/v1/game-catalog/mows/{envelopeHash}
     },
     {
       key: mythic-quests,
-      hash: 42a2a9de7e04a7af00610d6cd6edc02a8c47c092bc492f82ede28e476be9b1f6,
+      hash: 698f6f04002f877a68062da485546683406baf92b8766755d7c03dd7b5054209,
       url: /api/v1/game-catalog/mythic-quests/{envelopeHash}
     },
     {
       key: npc-encounters,
-      hash: 1d4765e640d39b10e19f0c1a170861ab2bfb7080b3ccfd77bb4d57f29d6dda69,
+      hash: 5c6314dbdfd81dbe185b231928b06411b5b01d761f9999743429d25a5c8f5d72,
       url: /api/v1/game-catalog/npc-encounters/{envelopeHash}
     },
     {
       key: npcs,
-      hash: 44c90192c75e1bd4dc3209987c0b97d86725f1603a8a9414c6add81bf79c3d94,
+      hash: b19cb417dd7705dec82c1a40c5e99d241c357b34bd56e3f133fc338140a9cd03,
       url: /api/v1/game-catalog/npcs/{envelopeHash}
     },
     {
@@ -131,22 +131,22 @@
     },
     {
       key: quest-events,
-      hash: bf032ef94205eac156746cce4f523b05be6d113f0c24f1c99fec0bf05d7fb82d,
+      hash: 83e62ef4a5986f92d62c2adb18dcafc694e5a3c7d4266a3e925ebd02905b6e3e,
       url: /api/v1/game-catalog/quest-events/{envelopeHash}
     },
     {
       key: raid-bosses,
-      hash: 6fb75188fa5ded0f8b40df2f0762bd204b032b26d86d5bdbb987c552e6df4f53,
+      hash: 6848331ec570239571e66d38e702b4f4a9bd46a28cc7003477d4498792d478c4,
       url: /api/v1/game-catalog/raid-bosses/{envelopeHash}
     },
     {
       key: shops,
-      hash: 247051ce08560fd23565b0e411964d11fdc476059a4f8f161a35835c1323932f,
+      hash: 2c077ac117fce981f6f4dfb2bbbaa9edca1b1f6253a106fbe4087958e5150518,
       url: /api/v1/game-catalog/shops/{envelopeHash}
     },
     {
       key: unit-power,
-      hash: 57679ffb62bba11a21e538761b546fb16acb7544b93e3be6cc02e5df30242854,
+      hash: 3b4e2a3bbd3516678f08b6d139ce8f98ccf938d7ff832efa828855f33947bb5e,
       url: /api/v1/game-catalog/unit-power/{envelopeHash}
     },
     {

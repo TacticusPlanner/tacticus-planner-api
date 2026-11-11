@@ -285,5 +285,124 @@
     "startUtc": "2026-11-11T00:00:00Z",
     "endUtc": "2026-11-14T00:00:00Z",
     "parameters": { "featuredCharacterId": "votanChampion", "enemyFactionId": "Orks" }
+  },
+  {
+    "id": "occ-2026-11-15-battle-pass-s43-ahriman",
+    "definitionId": "battle-pass",
+    "startUtc": "2026-11-15T00:00:00Z",
+    "endUtc": "2026-12-20T00:00:00Z",
+    "parameters": { "featuredCharacterId": "thousAhriman" }
+  },
+  {
+    "id": "occ-2026-11-15-hse-training-rush",
+    "definitionId": "hse-training-rush",
+    "startUtc": "2026-11-15T08:00:00Z",
+    "endUtc": "2026-11-16T08:00:00Z",
+    "parameters": null
+  },
+  {
+    "id": "occ-2026-11-18-ta-faction-war-legendary-no-mow",
+    "definitionId": "ta-faction-war",
+    "startUtc": "2026-11-18T00:00:00Z",
+    "endUtc": "2026-11-22T00:00:00Z",
+    "parameters": { "rarityCap": "Legendary", "includesMow": false }
+  },
+  {
+    "id": "occ-2026-11-18-hse-squig-smash",
+    "definitionId": "hse-squig-smash",
+    "startUtc": "2026-11-18T08:00:00Z",
+    "endUtc": "2026-11-20T08:00:00Z",
+    "parameters": null
+  },
+  {
+    "id": "occ-2026-11-19-campaign-event-20",
+    "definitionId": "campaign-event",
+    "startUtc": "2026-11-19T09:00:00Z",
+    "endUtc": "2026-12-03T09:00:00Z",
+    "parameters": { "newContentDebut": false }
+  },
+  {
+    "id": "occ-2026-11-22-new-character-event-daras-carrow",
+    "definitionId": "new-character-event",
+    "startUtc": "2026-11-22T00:00:00Z",
+    "endUtc": "2026-12-06T00:00:00Z",
+    "parameters": { "featuredCharacterId": "lostaFearmonger" }
+  },
+  {
+    "id": "occ-2026-11-22-hse-global-blood-tithe",
+    "definitionId": "hse-global-blood-tithe",
+    "startUtc": "2026-11-22T08:00:00Z",
+    "endUtc": "2026-11-29T08:00:00Z",
+    "parameters": null
+  },
+  {
+    "id": "occ-2026-11-22-hse-faction-boost-world-eaters",
+    "definitionId": "hse-faction-boost",
+    "startUtc": "2026-11-22T08:00:00Z",
+    "endUtc": "2026-11-29T08:00:00Z",
+    "parameters": { "targetFactionId": "WorldEaters" }
+  },
+  {
+    "id": "occ-2026-11-25-quest-weirdboy-vs-tau",
+    "definitionId": "quest",
+    "startUtc": "2026-11-25T00:00:00Z",
+    "endUtc": "2026-11-28T00:00:00Z",
+    "parameters": { "featuredCharacterId": "orksWeirdboy", "enemyFactionId": "Tau" }
+  },
+  {
+    "id": "occ-2026-11-27-guild-war-season-29",
+    "definitionId": "guild-war-season",
+    "startUtc": "2026-11-27T09:00:00Z",
+    "endUtc": "2026-12-12T09:00:00Z",
+    "parameters": { "season": 29 }
+  },
+  {
+    "id": "occ-2026-12-01-ta-power-ups-legendary-mow",
+    "definitionId": "ta-power-ups",
+    "startUtc": "2026-12-01T00:00:00Z",
+    "endUtc": "2026-12-05T00:00:00Z",
+    "parameters": { "rarityCap": "Legendary", "includesMow": true }
+  },
+  {
+    "id": "occ-2026-12-03-hse-against-the-tide",
+    "definitionId": "hse-against-the-tide",
+    "startUtc": "2026-12-03T08:00:00Z",
+    "endUtc": "2026-12-10T08:00:00Z",
+    "parameters": null
+  },
+  {
+    "id": "occ-2026-12-07-incursion-boudicari-debut",
+    "definitionId": "incursion",
+    "startUtc": "2026-12-07T08:00:00Z",
+    "endUtc": "2026-12-12T08:00:00Z",
+    "parameters": { "newContentDebut": true, "featuredMowId": "custoDreadnought" }
+  },
+  {
+    "id": "occ-2026-12-12-hse-training-rush",
+    "definitionId": "hse-training-rush",
+    "startUtc": "2026-12-12T08:00:00Z",
+    "endUtc": "2026-12-16T08:00:00Z",
+    "parameters": null
+  },
+  {
+    "id": "occ-2026-12-13-legendary-event-lysander-iter2",
+    "definitionId": "legendary-event",
+    "startUtc": "2026-12-13T00:00:00Z",
+    "endUtc": "2026-12-20T00:00:00Z",
+    "parameters": { "featuredCharacterId": "astarLysander", "iterationNumber": 2 }
+  },
+  {
+    "id": "occ-2026-12-16-quest-parasite-of-mortrex-vs-black-templars",
+    "definitionId": "quest",
+    "startUtc": "2026-12-16T00:00:00Z",
+    "endUtc": "2026-12-19T00:00:00Z",
+    "parameters": { "featuredCharacterId": "tyranParasite", "enemyFactionId": "BlackTemplars" }
+  },
+  {
+    "id": "occ-2026-12-19-hse-against-the-tide",
+    "definitionId": "hse-against-the-tide",
+    "startUtc": "2026-12-19T08:00:00Z",
+    "endUtc": "2026-12-20T08:00:00Z",
+    "parameters": null
   }
 ]
