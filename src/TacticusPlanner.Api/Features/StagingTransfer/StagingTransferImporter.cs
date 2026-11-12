@@ -166,12 +166,13 @@ public sealed class StagingTransferImporter(PlannerDbContext db, TimeProvider ti
                 });
             }
 
-            foreach (var source in bundle.PersonalRosterSnapshots)
+            var importKeys = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var (source, index) in bundle.PersonalRosterSnapshots.Select((snapshot, index) => (snapshot, index)))
             {
                 // The roster carries its own takenAt; the exported one wins so the metadata matches it.
                 source.Roster.TakenAt = source.TakenAt;
-                db.PersonalRosterSnapshots.Add(
-                    PersonalRosterSnapshot.Create(profileId, source.Name, source.Source, source.Roster));
+                db.PersonalRosterSnapshots.Add(PersonalRosterSnapshot.Create(
+                    profileId, source.Name, source.Source, source.Roster, ImportKeyFor(source, index, importKeys)));
             }
 
             await db.SaveChangesAsync(ct);
@@ -186,5 +187,27 @@ public sealed class StagingTransferImporter(PlannerDbContext db, TimeProvider ti
             bundle.PersonalRosterSnapshots.Count,
             bundle.Settings is not null,
             bundle.Overrides is not null);
+    }
+
+    /// <summary>
+    /// The import key a recreated snapshot needs: a V1-imported snapshot must carry one and every other must not
+    /// (<see cref="PersonalRosterSnapshot.EnsureValid"/>). An older production omits it from the bundle, and the key
+    /// must be unique per profile, so a missing or repeated key is replaced by one derived from the snapshot's place.
+    /// </summary>
+    public static string? ImportKeyFor(StagingTransferPersonalRosterSnapshot source, int index, ISet<string> used)
+    {
+        if (source.Source != RosterSnapshotSource.V1Import)
+        {
+            return null;
+        }
+
+        var key = source.ImportKey;
+        if (string.IsNullOrEmpty(key) || key.Length > PersonalRosterSnapshotValidation.MaxImportKeyLength || !used.Add(key))
+        {
+            key = $"staging-transfer:{index}";
+            used.Add(key);
+        }
+
+        return key;
     }
 }

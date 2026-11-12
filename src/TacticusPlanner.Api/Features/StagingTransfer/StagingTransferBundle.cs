@@ -149,5 +149,9 @@ public sealed record StagingTransferPersonalRosterSnapshot
 
     public DateTimeOffset TakenAt { get; init; }
 
+    /// <summary>Set exactly on a <see cref="RosterSnapshotSource.V1Import"/> snapshot, which needs one. Absent from
+    /// bundles exported before it was added; the importer then makes one up.</summary>
+    public string? ImportKey { get; init; }
+
     public RosterSnapshot Roster { get; init; } = new();
 }
