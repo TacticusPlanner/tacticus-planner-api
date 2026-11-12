@@ -188,6 +188,30 @@ public sealed class GoalAbilityCapEffectiveProgressionTests(PlannerApiFactory fa
     }
 
     [Fact]
+    public async Task EditingAnAbilityTargetPastTheRarityCapIsAcceptedWithoutAnAscension()
+    {
+        var (client, _) = await ProvisionWithLiveProgressionAsync(UnitProgression.CommonNone);
+        var ability = await (await PostCombinedAsync(client, AbilityDependingOn(5))).ReadCreatedGoalAsync();
+
+        var response = await client.PutTargetAsync(ability.GoalId, new UpdateGoalTargetRequest(
+            ability.Revision, new GoalTargetEditRequest(Ability: new AbilityEndTargetRequest(60, 40))));
+
+        response.EnsureSuccessStatusCode();
+    }
+
+    [Fact]
+    public async Task EditingAnAbilityTargetPastTheMaximumLevelIsRejected()
+    {
+        var (client, _) = await ProvisionWithLiveProgressionAsync(UnitProgression.CommonNone);
+        var ability = await (await PostCombinedAsync(client, AbilityDependingOn(5))).ReadCreatedGoalAsync();
+
+        var response = await client.PutTargetAsync(ability.GoalId, new UpdateGoalTargetRequest(
+            ability.Revision, new GoalTargetEditRequest(Ability: new AbilityEndTargetRequest(61, 0))));
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
     public async Task AnExistingAscensionGoalTheAbilityDoesNotDependOnLeavesTheCap()
     {
         var (client, _) = await ProvisionWithLiveProgressionAsync(UnitProgression.CommonNone);
