@@ -120,6 +120,7 @@ public sealed class StagingTransferExporter(PlannerDbContext db, TimeProvider ti
                 Name = snapshot.Name,
                 Source = snapshot.Source,
                 TakenAt = snapshot.TakenAt,
+                ImportKey = snapshot.ImportKey,
                 Roster = snapshot.Roster,
             }).ToList(),
         };
