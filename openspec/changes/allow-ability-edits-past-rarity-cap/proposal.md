@@ -6,7 +6,8 @@ UserJot request "Allow Editing Goals Beyond Rarity Caps": an owner with a Legend
 
 - A target edit (`PUT /goals/{id}/target`) bounds an Ability target by the highest ability level (60) instead of the unit's current rarity cap. Ascension dependencies no longer matter to an edit.
 - Creation is unchanged: single and combined creation still validate Ability targets against the live rarity cap, lifted by depended-upon Ascension goals.
-- No apps change is needed: the edit form already offers levels up to 60, and the goals page already marks the part of a target past the unit's rarity as "capped by rarity".
+- Rank, Ascension and Upgrade targets were never bound by the unit's rarity, on create or edit; a test now pins that for Rank and Ascension.
+- Companion apps change (`allow-ability-goals-past-rarity-cap` in `tacticus-planner-apps`): the creation form keeps offering an Ability goal once a unit's abilities reach its rarity cap. The edit form already offers levels up to 60, and the goals page already marks the part of a target past the unit's rarity as "capped by rarity".
 
 ## Capabilities
 
@@ -18,5 +19,5 @@ UserJot request "Allow Editing Goals Beyond Rarity Caps": an owner with a Legend
 ## Impact
 
 - `src/TacticusPlanner.Api/Features/Goals/GoalTargetValidationService.cs`, `GoalEditing.cs`, `AscensionFloor.cs` (doc only).
-- Tests: two new target edit cases in `GoalAbilityCapEffectiveProgressionTests`.
+- Tests: three new cases in `GoalAbilityCapEffectiveProgressionTests`.
 - No contract, OpenAPI, database or configuration changes.

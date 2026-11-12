@@ -7,3 +7,4 @@
 
 - [x] 2.1 Editing an Ability target past the live rarity cap without an Ascension is accepted
 - [x] 2.2 Editing an Ability target past the highest ability level is rejected
+- [x] 2.3 Rank and Ascension goals past the unit's rarity are accepted on create and edit

@@ -200,6 +200,25 @@ public sealed class GoalAbilityCapEffectiveProgressionTests(PlannerApiFactory fa
     }
 
     [Fact]
+    public async Task RankAndAscensionTargetsPastTheRarityAreAcceptedOnCreateAndEdit()
+    {
+        var (client, _) = await ProvisionWithLiveProgressionAsync(UnitProgression.CommonNone);
+        var rank = await client.CreateGoalAsync(new CreateGoalRequest(
+            GoalEntityType.Character, CharacterId, GoalType.Rank,
+            new CreateGoalConfigRequest(Rank: new RankTargetRequest(0, false, 0, (int)UnitRank.Gold1, false, 0)),
+            null));
+        var ascension = await CreateExistingAscensionAsync(client, UnitProgression.RareFourStars);
+
+        var rankEdit = await client.PutTargetAsync(rank.GoalId, new UpdateGoalTargetRequest(
+            rank.Revision, new GoalTargetEditRequest(Rank: new RankEndTargetRequest((int)UnitRank.Diamond3, false, 0))));
+        var ascensionEdit = await client.PutTargetAsync(ascension.GoalId, new UpdateGoalTargetRequest(
+            ascension.Revision, new GoalTargetEditRequest(Progression: new ProgressionEndTargetRequest(UnitProgression.MythicMythicWings))));
+
+        rankEdit.EnsureSuccessStatusCode();
+        ascensionEdit.EnsureSuccessStatusCode();
+    }
+
+    [Fact]
     public async Task EditingAnAbilityTargetPastTheMaximumLevelIsRejected()
     {
         var (client, _) = await ProvisionWithLiveProgressionAsync(UnitProgression.CommonNone);
