@@ -220,7 +220,7 @@
     "id": "occ-2026-11-12-hse-training-rush",
     "definitionId": "hse-training-rush",
     "startUtc": "2026-11-12T08:00:00Z",
-    "endUtc": "2026-11-14T08:00:00Z",
+    "endUtc": "2026-11-16T00:00:00Z",
     "parameters": null
   },
   {
@@ -292,13 +292,6 @@
     "startUtc": "2026-11-15T00:00:00Z",
     "endUtc": "2026-12-20T00:00:00Z",
     "parameters": { "featuredCharacterId": "thousAhriman" }
-  },
-  {
-    "id": "occ-2026-11-15-hse-training-rush",
-    "definitionId": "hse-training-rush",
-    "startUtc": "2026-11-15T08:00:00Z",
-    "endUtc": "2026-11-16T08:00:00Z",
-    "parameters": null
   },
   {
     "id": "occ-2026-11-18-ta-faction-war-legendary-no-mow",
