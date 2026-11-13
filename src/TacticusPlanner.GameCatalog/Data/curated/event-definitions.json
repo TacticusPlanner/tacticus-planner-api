@@ -222,7 +222,13 @@
     "id": "anniversary-event",
     "type": "ShopEvent",
     "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
-    "requiredParameters": ["weekNumber"]
+    "requiredParameters": ["weekNumber", "eventKey"]
+  },
+  {
+    "id": "armageddon-shop",
+    "type": "ShopEvent",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": ["weekNumber", "eventKey"]
   },
   {
     "id": "crusade-season",

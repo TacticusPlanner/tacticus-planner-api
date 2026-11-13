@@ -388,6 +388,18 @@ public sealed class GetGameCatalogShopsEndpoint(IGameCatalogProvider catalog)
     }
 }
 
+public sealed class GetGameCatalogEventShopsEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogEventShopView>>(catalog, GameCatalogDatasets.EventShops)
+{
+    public override void Configure()
+    {
+        Get("game-catalog/event-shops", "game-catalog/event-shops/{envelopeHash}");
+        ConfigureServed(
+            "Gets the seasonal event shops.",
+            "One record per dated seasonal event shop (start, day count, per-week slots with the shops variant projection, milestone and progress-chest ladders, missions, optional weekly income) — ids and structured values only, no display text or icons.");
+    }
+}
+
 public sealed class GetGameCatalogRaidBossesEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<GameCatalogRaidBossesView>(catalog, GameCatalogDatasets.RaidBosses)
 {

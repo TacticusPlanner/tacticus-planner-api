@@ -47,6 +47,7 @@ public static class ServedDatasets
             [GameCatalogDatasets.EventDefinitionsServed] = snapshot => snapshot.EventDefinitionViews,
             [GameCatalogDatasets.EventsCalendar] = snapshot => snapshot.EventsCalendar,
             [GameCatalogDatasets.Shops] = snapshot => snapshot.ShopViews,
+            [GameCatalogDatasets.EventShops] = snapshot => snapshot.EventShopViews,
             [GameCatalogDatasets.RaidBosses] = snapshot => snapshot.RaidBossesView,
             [GameCatalogDatasets.GuildRaidMeta] = snapshot => snapshot.GuildRaidMetaView,
         };

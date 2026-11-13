@@ -45,6 +45,7 @@ public static partial class GameCatalogValidator
         ValidateEvents(snapshot, errors);
         ValidateHseScoring(snapshot, errors);
         ValidateShops(snapshot, errors);
+        ValidateEventShops(snapshot, errors);
         ValidateRaidBosses(snapshot, errors);
         ValidateNpcs(snapshot, errors);
         ValidateGuildRaidMeta(snapshot, errors);

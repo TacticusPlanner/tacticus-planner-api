@@ -1,6 +1,6 @@
 ﻿{
-  version: 1.44.88.3089+879fc1ffcf92,
-  schemaHash: 26fe1e9b5c477f0942484958b76a740bedcce178ec9a7699a6126d7a886d5d57,
+  version: 1.44.88.3089+2e3109632c7f,
+  schemaHash: 24abcf0fe81a6c1eacd91e5038fbe2968caa586d6147311a48ca9e741ee7fd01,
   gameVersion: 1.44.88.3089,
   sourceHash: {time-dependent},
   datasets: [
@@ -41,8 +41,13 @@
     },
     {
       key: event-definitions,
-      hash: ad6b59cb99bec9265a57cc1d2be35322fa3cbf29d7496407e2c95cf8e62ad867,
+      hash: da4216a00039cceb81ad5cd1609dae5d75f6d8f7768856cc0ee993ae4196885b,
       url: /api/v1/game-catalog/event-definitions/{envelopeHash}
+    },
+    {
+      key: event-shops,
+      hash: 9e55ae6982b6908b5b633dfaa6155344f1b4f1d04815b8467da2d7c1ea080cc3,
+      url: /api/v1/game-catalog/event-shops/{envelopeHash}
     },
     {
       key: events-calendar,

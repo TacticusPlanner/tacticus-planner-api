@@ -43,6 +43,10 @@ public sealed class StagingTransferExporter(PlannerDbContext db, TimeProvider ti
             .Where(entity => entity.ProfileId == profileId)
             .OrderBy(entity => entity.EventId).ThenBy(entity => entity.StartedAt).ThenBy(entity => entity.Id)
             .ToListAsync(ct);
+        var eventShopPlans = await db.EventShopPlans.IgnoreQueryFilters().AsNoTracking()
+            .Where(entity => entity.ProfileId == profileId)
+            .OrderBy(entity => entity.EventId)
+            .ToListAsync(ct);
         var rosterSnapshots = await db.PersonalRosterSnapshots.IgnoreQueryFilters().AsNoTracking()
             .Where(entity => entity.ProfileId == profileId)
             .OrderBy(entity => entity.TakenAt).ThenBy(entity => entity.Id)
@@ -122,6 +126,12 @@ public sealed class StagingTransferExporter(PlannerDbContext db, TimeProvider ti
                 TakenAt = snapshot.TakenAt,
                 ImportKey = snapshot.ImportKey,
                 Roster = snapshot.Roster,
+            }).ToList(),
+            EventShopPlans = eventShopPlans.Select(plan => new StagingTransferEventShopPlan
+            {
+                EventId = plan.EventId,
+                CatalogVersion = plan.CatalogVersion,
+                Entries = plan.Entries,
             }).ToList(),
         };
     }
