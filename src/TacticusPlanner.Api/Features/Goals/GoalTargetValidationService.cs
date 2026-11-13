@@ -70,7 +70,8 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
     /// (<c>edit-goal-targets-in-place</c>): the request's start values are the goal's persisted baseline, and
     /// every "not below current progress" / "above the effective start" check compares against that baseline
     /// instead of the unit's live synced progress, so a target already reached in player data is still a valid
-    /// (zero-need) target. Catalog, entity-type, shape and rarity-cap rules are unchanged.</summary>
+    /// (zero-need) target, and an Ability target is bounded by the highest ability level instead of the unit's
+    /// current rarity cap. Catalog, entity-type and shape rules are unchanged.</summary>
     public async Task<string?> ValidateAsync(
         ProfileId profileId,
         GoalEntityType entityType,
@@ -124,12 +125,12 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
         var playerCharacter = units.Character;
         var playerUnit = (PlayerBaseUnitRecord?)playerCharacter ?? units.Mow;
 
-        // Each goal type is only ever valid for one entity type (Rank/Unlock: Character only;
-        // Ascension/Ability/Upgrade: Character or Mow) — checked once
+        // Rank is the only goal type tied to one entity type (Character only; Machines of War have no
+        // rank ladder). Unlock/Ascension/Ability/Upgrade are valid for a Character or a Mow — checked once
         // up front so every branch below can assume the pairing already makes sense.
         var entityTypeMismatch = (goalType, entityType) switch
         {
-            (GoalType.Rank or GoalType.Unlock, not GoalEntityType.Character) => true,
+            (GoalType.Rank, not GoalEntityType.Character) => true,
             _ => false,
         };
         if (entityTypeMismatch)
@@ -146,9 +147,12 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
 
         if (goalType == GoalType.Unlock)
         {
-            if (!catalog.Current.IsUnlockEligible(entityId))
+            // A character needs a way to farm its regular shards. A Machine of War has no shard nodes in
+            // the catalog, so any MoW the account doesn't own can get an Unlock goal (the create sheet
+            // offers it the same way).
+            if (entityType == GoalEntityType.Character && !catalog.Current.IsUnlockEligible(entityId))
                 return "Unlock is unavailable because the catalog has no campaign shard node or shop shard offer for this character.";
-            if (playerUnit is not null) return "The selected character is already unlocked.";
+            if (playerUnit is not null) return "The selected unit is already unlocked.";
         }
 
         if (goalType == GoalType.Rank)
@@ -184,13 +188,25 @@ public sealed class GoalTargetValidationService(PlannerDbContext db, IGameCatalo
             if (config.Ability.ActiveEnd <= config.Ability.ActiveStart
                 && config.Ability.PassiveEnd <= config.Ability.PassiveStart)
                 return "At least one ability target must be above its effective start.";
-            var liveProgression = playerUnit?.ProgressionIndex;
-            var effectiveProgression = effectiveProgressionFloor is { } floor
-                ? (UnitProgression)Math.Max((int)(liveProgression ?? floor), (int)floor)
-                : liveProgression ?? UnitProgression.MythicMythicWings;
-            var cap = ProgressionRules.AbilityCapForProgression(effectiveProgression);
-            if (config.Ability.ActiveEnd > cap || config.Ability.PassiveEnd > cap)
-                return $"Ability targets cannot exceed the current rarity cap of {cap}.";
+            // A target edit is only bounded by the highest ability level, not the unit's current rarity
+            // cap: the owner may plan levels that need a future Ascension (as V1 allowed), and the goal
+            // just shows them as capped by rarity until the unit ascends.
+            if (againstBaseline)
+            {
+                var max = ProgressionRules.AbilityCapForProgression(UnitProgression.MythicMythicWings);
+                if (config.Ability.ActiveEnd > max || config.Ability.PassiveEnd > max)
+                    return $"Ability targets cannot exceed the maximum level of {max}.";
+            }
+            else
+            {
+                var liveProgression = playerUnit?.ProgressionIndex;
+                var effectiveProgression = effectiveProgressionFloor is { } floor
+                    ? (UnitProgression)Math.Max((int)(liveProgression ?? floor), (int)floor)
+                    : liveProgression ?? UnitProgression.MythicMythicWings;
+                var cap = ProgressionRules.AbilityCapForProgression(effectiveProgression);
+                if (config.Ability.ActiveEnd > cap || config.Ability.PassiveEnd > cap)
+                    return $"Ability targets cannot exceed the current rarity cap of {cap}.";
+            }
         }
 
         if (goalType == GoalType.Upgrade)

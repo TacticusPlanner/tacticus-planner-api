@@ -58,6 +58,11 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasColumnType("text")
                         .HasColumnName("goal_type");
 
+                    b.PrimitiveCollection<List<Guid>>("LinkedGoalIds")
+                        .IsRequired()
+                        .HasColumnType("uuid[]")
+                        .HasColumnName("linked_goal_ids");
+
                     b.Property<string>("Notes")
                         .HasMaxLength(2000)
                         .HasColumnType("character varying(2000)")
@@ -3326,6 +3331,8 @@ namespace TacticusPlanner.Persistence.Migrations
                             b1.Property<Guid>("UserSettingsId");
 
                             b1.Property<int>("DailyEnergy");
+
+                            b1.Property<long>("Preferences");
 
                             b1.Property<bool?>("WatchAds");
 

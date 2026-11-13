@@ -119,6 +119,43 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
     }
 
     [Fact]
+    public async Task ImportKeepsV1ImportedRosterSnapshots()
+    {
+        // A V1-imported snapshot must carry its import key; dropping it in the bundle failed the whole import.
+        var sourceSubject = $"prod-{Guid.NewGuid()}";
+        var sourceClient = await GoalsTestHelpers.CreateProvisionedClientAsync(source, sourceSubject);
+        using (var scope = source.Services.CreateScope())
+        {
+            var sourceDb = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
+            var sourceProfileId = (await sourceDb.Profiles.IgnoreQueryFilters().FirstAsync(entity => entity.Subject == sourceSubject, Ct)).Id;
+            sourceDb.PersonalRosterSnapshots.Add(PersonalRosterSnapshot.Create(
+                sourceProfileId,
+                "From V1",
+                RosterSnapshotSource.V1Import,
+                new RosterSnapshot { TakenAt = new DateTimeOffset(2026, 9, 1, 0, 0, 0, TimeSpan.Zero), CatalogVersion = "1" },
+                "v1:snapshot-1"));
+            await sourceDb.SaveChangesAsync(Ct);
+        }
+
+        var targetSubject = $"stg-{Guid.NewGuid()}";
+        var targetClient = await GoalsTestHelpers.CreateProvisionedClientAsync(target, targetSubject);
+        var codeResponse = await sourceClient.PostAsync("/api/v1/account/staging-transfer-code", null, Ct);
+        var code = await codeResponse.Content.ReadFromJsonAsync<CreateStagingTransferCodeResponse>(Ct);
+
+        var importResponse = await targetClient.PostAsJsonAsync(
+            "/api/v1/account/import-from-production", new ImportFromProductionRequest(code!.Code), Ct);
+        importResponse.EnsureSuccessStatusCode();
+
+        using var targetScope = target.Services.CreateScope();
+        var db = targetScope.ServiceProvider.GetRequiredService<PlannerDbContext>();
+        var profile = await db.Profiles.IgnoreQueryFilters().AsNoTracking().FirstAsync(entity => entity.Subject == targetSubject, Ct);
+        var snapshot = Assert.Single(await db.PersonalRosterSnapshots.IgnoreQueryFilters().AsNoTracking()
+            .Where(entity => entity.ProfileId == profile.Id).ToListAsync(Ct));
+        Assert.Equal(("From V1", RosterSnapshotSource.V1Import, "v1:snapshot-1"),
+            (snapshot.Name, snapshot.Source, snapshot.ImportKey));
+    }
+
+    [Fact]
     public async Task ImportRejectsAnInvalidCode()
     {
         var targetClient = await GoalsTestHelpers.CreateProvisionedClientAsync(target);

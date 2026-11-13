@@ -188,6 +188,49 @@ public sealed class GoalAbilityCapEffectiveProgressionTests(PlannerApiFactory fa
     }
 
     [Fact]
+    public async Task EditingAnAbilityTargetPastTheRarityCapIsAcceptedWithoutAnAscension()
+    {
+        var (client, _) = await ProvisionWithLiveProgressionAsync(UnitProgression.CommonNone);
+        var ability = await (await PostCombinedAsync(client, AbilityDependingOn(5))).ReadCreatedGoalAsync();
+
+        var response = await client.PutTargetAsync(ability.GoalId, new UpdateGoalTargetRequest(
+            ability.Revision, new GoalTargetEditRequest(Ability: new AbilityEndTargetRequest(60, 40))));
+
+        response.EnsureSuccessStatusCode();
+    }
+
+    [Fact]
+    public async Task RankAndAscensionTargetsPastTheRarityAreAcceptedOnCreateAndEdit()
+    {
+        var (client, _) = await ProvisionWithLiveProgressionAsync(UnitProgression.CommonNone);
+        var rank = await client.CreateGoalAsync(new CreateGoalRequest(
+            GoalEntityType.Character, CharacterId, GoalType.Rank,
+            new CreateGoalConfigRequest(Rank: new RankTargetRequest(0, false, 0, (int)UnitRank.Gold1, false, 0)),
+            null));
+        var ascension = await CreateExistingAscensionAsync(client, UnitProgression.RareFourStars);
+
+        var rankEdit = await client.PutTargetAsync(rank.GoalId, new UpdateGoalTargetRequest(
+            rank.Revision, new GoalTargetEditRequest(Rank: new RankEndTargetRequest((int)UnitRank.Diamond3, false, 0))));
+        var ascensionEdit = await client.PutTargetAsync(ascension.GoalId, new UpdateGoalTargetRequest(
+            ascension.Revision, new GoalTargetEditRequest(Progression: new ProgressionEndTargetRequest(UnitProgression.MythicMythicWings))));
+
+        rankEdit.EnsureSuccessStatusCode();
+        ascensionEdit.EnsureSuccessStatusCode();
+    }
+
+    [Fact]
+    public async Task EditingAnAbilityTargetPastTheMaximumLevelIsRejected()
+    {
+        var (client, _) = await ProvisionWithLiveProgressionAsync(UnitProgression.CommonNone);
+        var ability = await (await PostCombinedAsync(client, AbilityDependingOn(5))).ReadCreatedGoalAsync();
+
+        var response = await client.PutTargetAsync(ability.GoalId, new UpdateGoalTargetRequest(
+            ability.Revision, new GoalTargetEditRequest(Ability: new AbilityEndTargetRequest(61, 0))));
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+    }
+
+    [Fact]
     public async Task AnExistingAscensionGoalTheAbilityDoesNotDependOnLeavesTheCap()
     {
         var (client, _) = await ProvisionWithLiveProgressionAsync(UnitProgression.CommonNone);

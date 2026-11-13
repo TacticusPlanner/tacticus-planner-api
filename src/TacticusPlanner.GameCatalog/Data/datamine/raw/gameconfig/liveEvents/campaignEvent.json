@@ -4,7 +4,7 @@
     "eventName": "campaign_event",
     "subtitleLocaKey": "",
     "titleLocaKey": "CampaignEvents/Ce_Interstitial_Title_NewCampaign",
-    "trackingAdditionalData": "{\"campaign_events\":[\"CE_DarkAngels\",\"CE_Sororitas\",\"CE_Death\",\"CE_Tau\",\"CE_Tyranids\",\"CE_AdMech\"],\"new\":[]}",
+    "trackingAdditionalData": "{\"campaign_events\":[\"CE_BloodAngels\",\"CE_DarkAngels\",\"CE_Sororitas\",\"CE_Death\",\"CE_Tau\",\"CE_Tyranids\",\"CE_AdMech\"],\"new\":[\"CE_BloodAngels\"]}",
     "previewTitleLocaKey": "",
     "visualId": "campaign_event",
     "offerId": "",
@@ -53,6 +53,1138 @@
     },
     "lightningRaidCost": 2,
     "campaigns": [
+      {
+        "new": true,
+        "standardCampaignId": "eventStandard7",
+        "extremisCampaignId": "eventExtremis7",
+        "eventCampaignId": "eventCampaign7",
+        "passOfferId": "offer_campaign_eventCampaign7_pass",
+        "visualId": "none",
+        "progressRewardId": "ce_07",
+        "standardBattles": [
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "01",
+            "battleType": "normal",
+            "rarity": "Common",
+            "index": 0,
+            "loot": {
+              "bronzeMedal": "upgHpU016",
+              "silverMedal": "xpCommon",
+              "goldMedal": "abilityTokenCommon_Imperial"
+            }
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "02",
+            "battleType": "normal",
+            "rarity": "Common",
+            "index": 1,
+            "loot": {
+              "bronzeMedal": "upgDmgU012",
+              "silverMedal": "upgHpU002",
+              "goldMedal": "dust:10"
+            },
+            "unlockedBy": [
+              {
+                "index": 0,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "03",
+            "battleType": "normal",
+            "rarity": "Common",
+            "index": 2,
+            "loot": {
+              "bronzeMedal": "abilityTokenCommon_Imperial",
+              "silverMedal": "upgDmgU011",
+              "goldMedal": "upgHpU016"
+            },
+            "unlockedBy": [
+              {
+                "index": 1,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "03B",
+            "battleType": "challenge",
+            "rarity": "Common",
+            "index": 3,
+            "loot": {
+              "bronzeMedal": "xpRare",
+              "silverMedal": "upgHpL115",
+              "goldMedal": "gems:100"
+            },
+            "unlockedBy": [
+              {
+                "index": 2,
+                "stars": 3
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "04",
+            "battleType": "normal",
+            "rarity": "Common",
+            "index": 4,
+            "loot": {
+              "bronzeMedal": "upgArmU009",
+              "silverMedal": "upgArmU001",
+              "goldMedal": "dust:10"
+            },
+            "unlockedBy": [
+              {
+                "index": 2,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "05",
+            "battleType": "normal",
+            "rarity": "Common",
+            "index": 5,
+            "loot": {
+              "bronzeMedal": "abilityTokenCommon_Imperial",
+              "silverMedal": "upgHpU007",
+              "goldMedal": "upgDmgU012"
+            },
+            "unlockedBy": [
+              {
+                "index": 4,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "06",
+            "battleType": "normal",
+            "rarity": "Common",
+            "index": 6,
+            "loot": {
+              "bronzeMedal": "shards_bloodIntercessor",
+              "silverMedal": "shards_bloodIntercessor:2",
+              "goldMedal": "shards_bloodIntercessor:3"
+            },
+            "unlockedBy": [
+              {
+                "index": 5,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "07",
+            "battleType": "normal",
+            "rarity": "Common",
+            "index": 7,
+            "loot": {
+              "bronzeMedal": "upgDmgU004",
+              "silverMedal": "gold:500",
+              "goldMedal": "upgHpR035"
+            },
+            "unlockedBy": [
+              {
+                "index": 6,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "08",
+            "battleType": "normal",
+            "rarity": "Common",
+            "index": 8,
+            "loot": {
+              "bronzeMedal": "abilityTokenCommon_Imperial",
+              "silverMedal": "dust:25",
+              "goldMedal": "upgDmgR035"
+            },
+            "unlockedBy": [
+              {
+                "index": 7,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "09",
+            "battleType": "normal",
+            "rarity": "Common",
+            "index": 9,
+            "loot": {
+              "bronzeMedal": "upgArmU005",
+              "silverMedal": "upgArmU009",
+              "goldMedal": "upgArmR035"
+            },
+            "unlockedBy": [
+              {
+                "index": 8,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "10",
+            "battleType": "normal",
+            "rarity": "Common",
+            "index": 10,
+            "loot": {
+              "bronzeMedal": "abilityTokenCommon_Imperial",
+              "silverMedal": "xpUncommon",
+              "goldMedal": "upgHpR005"
+            },
+            "unlockedBy": [
+              {
+                "index": 9,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "11",
+            "battleType": "normal",
+            "rarity": "Common",
+            "index": 11,
+            "loot": {
+              "bronzeMedal": "shards_bloodDeathCompany",
+              "silverMedal": "shards_bloodDeathCompany:2",
+              "goldMedal": "shards_bloodDeathCompany:3"
+            },
+            "unlockedBy": [
+              {
+                "index": 10,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "12",
+            "battleType": "normal",
+            "rarity": "Uncommon",
+            "index": 12,
+            "loot": {
+              "bronzeMedal": "abilityTokenUncommon_Imperial",
+              "silverMedal": "upgDmgR002",
+              "goldMedal": "gold:1000"
+            },
+            "unlockedBy": [
+              {
+                "index": 11,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "13",
+            "battleType": "normal",
+            "rarity": "Uncommon",
+            "index": 13,
+            "loot": {
+              "bronzeMedal": "abilityTokenUncommon_Imperial",
+              "silverMedal": "upgArmR005",
+              "goldMedal": "dust:25"
+            },
+            "unlockedBy": [
+              {
+                "index": 12,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "13B",
+            "battleType": "challenge",
+            "rarity": "Uncommon",
+            "index": 14,
+            "loot": {
+              "bronzeMedal": "I_Block_U003",
+              "silverMedal": "upgHpL115",
+              "goldMedal": "gems:100"
+            },
+            "unlockedBy": [
+              {
+                "index": 13,
+                "stars": 3
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "14",
+            "battleType": "normal",
+            "rarity": "Uncommon",
+            "index": 15,
+            "loot": {
+              "bronzeMedal": "abilityTokenUncommon_Imperial",
+              "silverMedal": "upgHpR035",
+              "goldMedal": "xpRare"
+            },
+            "unlockedBy": [
+              {
+                "index": 13,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "15",
+            "battleType": "normal",
+            "rarity": "Uncommon",
+            "index": 16,
+            "loot": {
+              "bronzeMedal": "abilityTokenUncommon_Imperial",
+              "silverMedal": "upgDmgR035",
+              "goldMedal": "xpRare"
+            },
+            "unlockedBy": [
+              {
+                "index": 15,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "16",
+            "battleType": "normal",
+            "rarity": "Uncommon",
+            "index": 17,
+            "loot": {
+              "bronzeMedal": "abilityTokenUncommon_Imperial",
+              "silverMedal": "upgArmR035",
+              "goldMedal": "dust:50"
+            },
+            "unlockedBy": [
+              {
+                "index": 16,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "17",
+            "battleType": "normal",
+            "rarity": "Uncommon",
+            "index": 18,
+            "loot": {
+              "bronzeMedal": "shards_bloodSanguinary",
+              "silverMedal": "shards_bloodSanguinary:2",
+              "goldMedal": "shards_bloodSanguinary:3"
+            },
+            "unlockedBy": [
+              {
+                "index": 17,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "18",
+            "battleType": "normal",
+            "rarity": "Uncommon",
+            "index": 19,
+            "loot": {
+              "bronzeMedal": "upgHpR005",
+              "silverMedal": "abilityTokenRare_Imperial",
+              "goldMedal": "I_Crit_U002"
+            },
+            "unlockedBy": [
+              {
+                "index": 18,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "19",
+            "battleType": "normal",
+            "rarity": "Uncommon",
+            "index": 20,
+            "loot": {
+              "bronzeMedal": "gold:1500",
+              "silverMedal": "xpRare",
+              "goldMedal": "dust:50"
+            },
+            "unlockedBy": [
+              {
+                "index": 19,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "20",
+            "battleType": "normal",
+            "rarity": "Uncommon",
+            "index": 21,
+            "loot": {
+              "bronzeMedal": "upgDmgR002",
+              "silverMedal": "xpRare",
+              "goldMedal": "gold:1000"
+            },
+            "unlockedBy": [
+              {
+                "index": 20,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "21",
+            "battleType": "normal",
+            "rarity": "Uncommon",
+            "index": 22,
+            "loot": {
+              "bronzeMedal": "upgHpR005",
+              "silverMedal": "abilityTokenRare_Imperial",
+              "goldMedal": "upgHpE003"
+            },
+            "unlockedBy": [
+              {
+                "index": 21,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "22",
+            "battleType": "normal",
+            "rarity": "Uncommon",
+            "index": 23,
+            "loot": {
+              "bronzeMedal": "shards_bloodTerminator",
+              "silverMedal": "shards_bloodTerminator:2",
+              "goldMedal": "shards_bloodTerminator:3"
+            },
+            "unlockedBy": [
+              {
+                "index": 22,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "23",
+            "battleType": "normal",
+            "rarity": "Rare",
+            "index": 24,
+            "loot": {
+              "bronzeMedal": "upgArmR005",
+              "silverMedal": "xpRare",
+              "goldMedal": "I_Crit_U002"
+            },
+            "unlockedBy": [
+              {
+                "index": 23,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "24",
+            "battleType": "normal",
+            "rarity": "Rare",
+            "index": 25,
+            "loot": {
+              "bronzeMedal": "gold:2500",
+              "silverMedal": "abilityTokenRare_Imperial",
+              "goldMedal": "dust:100"
+            },
+            "unlockedBy": [
+              {
+                "index": 24,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "25",
+            "battleType": "normal",
+            "rarity": "Rare",
+            "index": 26,
+            "loot": {
+              "bronzeMedal": "upgHpR005",
+              "silverMedal": "xpRare",
+              "goldMedal": "gems:25"
+            },
+            "unlockedBy": [
+              {
+                "index": 25,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "25B",
+            "battleType": "challenge",
+            "rarity": "Rare",
+            "index": 27,
+            "loot": {
+              "bronzeMedal": "I_Booster_Crit_R001",
+              "silverMedal": "upgHpL115",
+              "goldMedal": "gems:100"
+            },
+            "unlockedBy": [
+              {
+                "index": 26,
+                "stars": 3
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "26",
+            "battleType": "normal",
+            "rarity": "Rare",
+            "index": 28,
+            "loot": {
+              "bronzeMedal": "upgHpR035",
+              "silverMedal": "abilityTokenRare_Imperial",
+              "goldMedal": "I_Crit_R002"
+            },
+            "unlockedBy": [
+              {
+                "index": 26,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "27",
+            "battleType": "normal",
+            "rarity": "Rare",
+            "index": 29,
+            "loot": {
+              "bronzeMedal": "upgDmgR035",
+              "silverMedal": "upgArmE013",
+              "goldMedal": "xpEpic"
+            },
+            "unlockedBy": [
+              {
+                "index": 28,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "28",
+            "battleType": "normal",
+            "rarity": "Rare",
+            "index": 30,
+            "loot": {
+              "bronzeMedal": "upgArmR035",
+              "silverMedal": "abilityTokenRare_Imperial",
+              "goldMedal": "xpEpic"
+            },
+            "unlockedBy": [
+              {
+                "index": 29,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "29",
+            "battleType": "normal",
+            "rarity": "Rare",
+            "index": 31,
+            "loot": {
+              "bronzeMedal": "abilityTokenRare_Imperial",
+              "silverMedal": "upgDmgE011",
+              "goldMedal": "xpEpic"
+            },
+            "unlockedBy": [
+              {
+                "index": 30,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "30",
+            "battleType": "boss",
+            "rarity": "Rare",
+            "index": 32,
+            "loot": {
+              "bronzeMedal": "shards_bloodMephiston",
+              "silverMedal": "shards_bloodMephiston:2",
+              "goldMedal": "shards_bloodMephiston:3"
+            },
+            "unlockedBy": [
+              {
+                "index": 31,
+                "stars": 1
+              }
+            ]
+          }
+        ],
+        "extremisBattles": [
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "01",
+            "battleType": "normal",
+            "rarity": "Epic",
+            "index": 0,
+            "loot": {
+              "goldMedal": "upgHpE003"
+            }
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "02",
+            "battleType": "normal",
+            "rarity": "Epic",
+            "index": 1,
+            "loot": {
+              "goldMedal": "upgDmgE011"
+            },
+            "unlockedBy": [
+              {
+                "index": 0,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "03",
+            "battleType": "normal",
+            "rarity": "Epic",
+            "index": 2,
+            "loot": {
+              "goldMedal": "upgArmE013"
+            },
+            "unlockedBy": [
+              {
+                "index": 1,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "03B",
+            "battleType": "challenge",
+            "rarity": "Epic",
+            "index": 3,
+            "loot": {
+              "goldMedal": "summoningToken"
+            },
+            "unlockedBy": [
+              {
+                "index": 2,
+                "stars": 3
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "04",
+            "battleType": "normal",
+            "rarity": "Epic",
+            "index": 4,
+            "loot": {
+              "goldMedal": "gems:50"
+            },
+            "unlockedBy": [
+              {
+                "index": 2,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "05",
+            "battleType": "normal",
+            "rarity": "Epic",
+            "index": 5,
+            "loot": {
+              "goldMedal": "upgHpL115"
+            },
+            "unlockedBy": [
+              {
+                "index": 4,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "06",
+            "battleType": "normal",
+            "rarity": "Epic",
+            "index": 6,
+            "loot": {
+              "goldMedal": "shards_bloodIntercessor:6"
+            },
+            "unlockedBy": [
+              {
+                "index": 5,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "07",
+            "battleType": "normal",
+            "rarity": "Epic",
+            "index": 7,
+            "loot": {
+              "goldMedal": "I_Crit_E002"
+            },
+            "unlockedBy": [
+              {
+                "index": 6,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "08",
+            "battleType": "normal",
+            "rarity": "Epic",
+            "index": 8,
+            "loot": {
+              "goldMedal": "gems:40"
+            },
+            "unlockedBy": [
+              {
+                "index": 7,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "09",
+            "battleType": "normal",
+            "rarity": "Epic",
+            "index": 9,
+            "loot": {
+              "goldMedal": "dust:250"
+            },
+            "unlockedBy": [
+              {
+                "index": 8,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "10",
+            "battleType": "normal",
+            "rarity": "Epic",
+            "index": 10,
+            "loot": {
+              "goldMedal": "upgHpL115"
+            },
+            "unlockedBy": [
+              {
+                "index": 9,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "11",
+            "battleType": "normal",
+            "rarity": "Epic",
+            "index": 11,
+            "loot": {
+              "goldMedal": "shards_bloodDeathCompany:6"
+            },
+            "unlockedBy": [
+              {
+                "index": 10,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "12",
+            "battleType": "normal",
+            "rarity": "Legendary",
+            "index": 12,
+            "loot": {
+              "goldMedal": "xpLegendary"
+            },
+            "unlockedBy": [
+              {
+                "index": 11,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "13",
+            "battleType": "normal",
+            "rarity": "Legendary",
+            "index": 13,
+            "loot": {
+              "goldMedal": "xpLegendary"
+            },
+            "unlockedBy": [
+              {
+                "index": 12,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "13B",
+            "battleType": "challenge",
+            "rarity": "Legendary",
+            "index": 14,
+            "loot": {
+              "goldMedal": "summoningToken"
+            },
+            "unlockedBy": [
+              {
+                "index": 13,
+                "stars": 3
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "14",
+            "battleType": "normal",
+            "rarity": "Legendary",
+            "index": 15,
+            "loot": {
+              "goldMedal": "xpLegendary"
+            },
+            "unlockedBy": [
+              {
+                "index": 13,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "15",
+            "battleType": "normal",
+            "rarity": "Legendary",
+            "index": 16,
+            "loot": {
+              "goldMedal": "abilityTokenLegendary_Imperial"
+            },
+            "unlockedBy": [
+              {
+                "index": 15,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "16",
+            "battleType": "normal",
+            "rarity": "Legendary",
+            "index": 17,
+            "loot": {
+              "goldMedal": "xpLegendary"
+            },
+            "unlockedBy": [
+              {
+                "index": 16,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "17",
+            "battleType": "normal",
+            "rarity": "Legendary",
+            "index": 18,
+            "loot": {
+              "goldMedal": "shards_bloodSanguinary:6"
+            },
+            "unlockedBy": [
+              {
+                "index": 17,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "18",
+            "battleType": "normal",
+            "rarity": "Legendary",
+            "index": 19,
+            "loot": {
+              "goldMedal": "dust:500"
+            },
+            "unlockedBy": [
+              {
+                "index": 18,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "19",
+            "battleType": "normal",
+            "rarity": "Legendary",
+            "index": 20,
+            "loot": {
+              "goldMedal": "gems:60"
+            },
+            "unlockedBy": [
+              {
+                "index": 19,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "20",
+            "battleType": "normal",
+            "rarity": "Legendary",
+            "index": 21,
+            "loot": {
+              "goldMedal": "abilityTokenLegendary_Imperial"
+            },
+            "unlockedBy": [
+              {
+                "index": 20,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "21",
+            "battleType": "normal",
+            "rarity": "Legendary",
+            "index": 22,
+            "loot": {
+              "goldMedal": "I_Crit_L002"
+            },
+            "unlockedBy": [
+              {
+                "index": 21,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "22",
+            "battleType": "normal",
+            "rarity": "Legendary",
+            "index": 23,
+            "loot": {
+              "goldMedal": "shards_bloodTerminator:6"
+            },
+            "unlockedBy": [
+              {
+                "index": 22,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "23",
+            "battleType": "normal",
+            "rarity": "Mythic",
+            "index": 24,
+            "loot": {
+              "goldMedal": "upgDmgE035C"
+            },
+            "unlockedBy": [
+              {
+                "index": 23,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "24",
+            "battleType": "normal",
+            "rarity": "Mythic",
+            "index": 25,
+            "loot": {
+              "goldMedal": "shards_bloodMephiston:10"
+            },
+            "unlockedBy": [
+              {
+                "index": 24,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "25",
+            "battleType": "normal",
+            "rarity": "Mythic",
+            "index": 26,
+            "loot": {
+              "goldMedal": "upgDmgE035C"
+            },
+            "unlockedBy": [
+              {
+                "index": 25,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "25B",
+            "battleType": "challenge",
+            "rarity": "Mythic",
+            "index": 27,
+            "loot": {
+              "goldMedal": "R_Crit_RelicPowerFist"
+            },
+            "unlockedBy": [
+              {
+                "index": 26,
+                "stars": 3
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "26",
+            "battleType": "normal",
+            "rarity": "Mythic",
+            "index": 28,
+            "loot": {
+              "goldMedal": "upgArmE035C"
+            },
+            "unlockedBy": [
+              {
+                "index": 26,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "27",
+            "battleType": "normal",
+            "rarity": "Mythic",
+            "index": 29,
+            "loot": {
+              "goldMedal": "abilityTokenMythic_Imperial"
+            },
+            "unlockedBy": [
+              {
+                "index": 28,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "28",
+            "battleType": "normal",
+            "rarity": "Mythic",
+            "index": 30,
+            "loot": {
+              "goldMedal": "xpMythic"
+            },
+            "unlockedBy": [
+              {
+                "index": 29,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "29",
+            "battleType": "normal",
+            "rarity": "Mythic",
+            "index": 31,
+            "loot": {
+              "goldMedal": "abilityTokenMythic_Imperial:2"
+            },
+            "unlockedBy": [
+              {
+                "index": 30,
+                "stars": 1
+              }
+            ]
+          },
+          {
+            "type": "campaignBattle",
+            "campaignBattleId": "30",
+            "battleType": "boss",
+            "rarity": "Mythic",
+            "index": 32,
+            "loot": {
+              "goldMedal": "R_Crit_Vitarus"
+            },
+            "unlockedBy": [
+              {
+                "index": 31,
+                "stars": 1
+              }
+            ]
+          }
+        ],
+        "borrowableHeroes": [
+          "orksNob",
+          "orksRuntherd",
+          "orksWeirdboy"
+        ],
+        "tutorialId": "tut_campaign_event_CE7_lore",
+        "factionId": "BloodAngels",
+        "extremisOfferId": "offer_eventCampaign7_character_unlock",
+        "subtitleLocaKey": "Campaigns/Event_campaign7_name"
+      },
       {
         "new": false,
         "standardCampaignId": "eventStandard6",
@@ -1182,7 +2314,8 @@
         ],
         "tutorialId": "tut_campaign_event_CE6_lore",
         "factionId": "DarkAngels",
-        "extremisOfferId": "offer_campaign_eventCampaign6_ThutmoseUnlock"
+        "extremisOfferId": "offer_campaign_eventCampaign6_ThutmoseUnlock",
+        "subtitleLocaKey": "Campaigns/Event_campaign6_name"
       },
       {
         "new": false,
@@ -2313,7 +3446,8 @@
         ],
         "tutorialId": "tut_campaign_event_CE5_lore",
         "factionId": "Sisterhood",
-        "extremisOfferId": "offer_eventCampaign5_character_unlock"
+        "extremisOfferId": "offer_eventCampaign5_character_unlock",
+        "subtitleLocaKey": "Campaigns/Event_campaign5_name"
       },
       {
         "new": false,
@@ -3444,7 +4578,8 @@
         ],
         "tutorialId": "tut_campaign_event_CE4_lore",
         "factionId": "DeathGuard",
-        "extremisOfferId": "offer_eventCampaign4_character_unlock"
+        "extremisOfferId": "offer_eventCampaign4_character_unlock",
+        "subtitleLocaKey": "Campaigns/Event_campaign4_name"
       },
       {
         "new": false,
@@ -4575,7 +5710,8 @@
         ],
         "tutorialId": "tut_campaign_event_CE3_lore",
         "factionId": "Tau",
-        "extremisOfferId": "offer_eventCampaign3_character_unlock"
+        "extremisOfferId": "offer_eventCampaign3_character_unlock",
+        "subtitleLocaKey": "Campaigns/Event_campaign3_name"
       },
       {
         "new": false,
@@ -5706,7 +6842,8 @@
         ],
         "tutorialId": "tut_campaign_event_CE2_lore",
         "factionId": "Tyranids",
-        "extremisOfferId": "offer_campaign_eventCampaign2_TitusUnlock"
+        "extremisOfferId": "offer_campaign_eventCampaign2_TitusUnlock",
+        "subtitleLocaKey": "Campaigns/Event_campaign2_name"
       },
       {
         "new": false,
@@ -6837,7 +7974,8 @@
         ],
         "tutorialId": "tut_campaign_event_CE1_lore",
         "factionId": "AdeptusMechanicus",
-        "extremisOfferId": "offer_eventCampaign1_character_unlock"
+        "extremisOfferId": "offer_eventCampaign1_character_unlock",
+        "subtitleLocaKey": "Campaigns/Event_campaign1_name"
       }
     ]
   }

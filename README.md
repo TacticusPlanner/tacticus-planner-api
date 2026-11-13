@@ -461,11 +461,14 @@ from the Actions tab):
   image `CD Stage` built for it; check that commit's staging deploy succeeded
   before releasing. `CD Stage` skips documentation-only pushes, so for such a
   commit run `CD Stage` by hand first, or production builds a fresh image.
-- From `release/X.Y` with `patch`: tags the next `vX.Y.Z` on that branch,
-  creates its release (notes since the previous `vX.Y.*`), builds the image
-  for that commit, and deploys it. Land the fix on `main` first, then
-  cherry-pick it into the release branch with a PR (CI runs on PRs to
-  `release/**`).
+- From `main` with `patch`: creates `release/X.Y.Z` from `main`, tags the
+  next `vX.Y.Z` on the newest line, creates its release, and deploys the image
+  `CD Stage` built for that commit, like a minor cut.
+- From `release/X.Y` or `release/X.Y.Z` with `hotfix`: tags the next `vX.Y.Z`
+  on that branch, creates its release (notes since the previous `vX.Y.*`),
+  builds the image for that commit, and deploys it. Land the fix on `main`
+  first, then cherry-pick it into the release branch with a PR (CI runs on PRs
+  to `release/**`).
 
 `CD Prod` does the deploy. `Release` calls it; run it by hand only to redeploy
 an existing tag. Images are always built and pushed under the `stage`

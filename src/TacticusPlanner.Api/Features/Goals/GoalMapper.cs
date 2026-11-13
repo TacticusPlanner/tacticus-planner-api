@@ -30,6 +30,7 @@ public sealed class GoalMapper : ResponseMapper<GoalDetailResponse, Goal>
         BuildConfig(goal.Config),
         goal.Snapshot is null ? null : BuildSnapshot(goal.Snapshot),
         goal.DependsOn.ToList(),
+        goal.LinkedGoalIds.ToList(),
         projectIds.Order().ToList(),
         goal.CreatedAt,
         goal.UpdatedAt,
@@ -168,6 +169,8 @@ public sealed record GoalDetailResponse(
     GoalConfigResponse Config,
     GoalSnapshotResponse? Snapshot,
     List<Guid> DependsOn,
+    // Upgrade goals only: the same unit's Rank/Ability goals this goal pre-farms for (empty: the implicit link).
+    List<Guid> LinkedGoalIds,
     // The ids of every project this goal currently belongs to (a goal may belong to several projects).
     List<Guid> ProjectIds,
     DateTimeOffset CreatedAt,

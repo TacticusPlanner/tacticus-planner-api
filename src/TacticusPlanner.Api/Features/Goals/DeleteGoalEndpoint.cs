@@ -42,10 +42,13 @@ public sealed class DeleteGoalEndpoint : EndpointWithoutRequest
         var order = Resolve<GoalOrderService>();
         await Resolve<ProjectGoalPlanningService>().ExecuteLockedMutationAsync(async transaction =>
         {
-            // Scoped to the caller's profile by PlannerDbContext's global query filter. The goal and its dependents
-            // (no foreign key guards DependsOn, a uuid[]) in one read.
+            // Scoped to the caller's profile by PlannerDbContext's global query filter. The goal, its dependents and
+            // the Upgrade goals linking to it (no foreign key guards DependsOn or LinkedGoalIds, both uuid[]) in
+            // one read.
             var related = await db.Goals
-                .Where(entity => entity.Id == GoalId.From(goalId) || entity.DependsOn.Contains(goalId))
+                .Where(entity => entity.Id == GoalId.From(goalId)
+                    || entity.DependsOn.Contains(goalId)
+                    || entity.LinkedGoalIds.Contains(goalId))
                 .ToListAsync(ct);
             var goal = related.FirstOrDefault(entity => entity.Id == GoalId.From(goalId));
             if (goal is null)
@@ -57,7 +60,10 @@ public sealed class DeleteGoalEndpoint : EndpointWithoutRequest
             order.Release(goal);
             db.Goals.Remove(goal);
             foreach (var dependent in related.Where(entity => entity != goal))
+            {
                 dependent.DependsOn = dependent.DependsOn.Where(id => id != goalId).ToList();
+                dependent.LinkedGoalIds = dependent.LinkedGoalIds.Where(id => id != goalId).ToList();
+            }
             await order.CompleteAsync(ct);
             await transaction.CommitAsync(ct);
 

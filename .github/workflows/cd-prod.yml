@@ -1,7 +1,7 @@
 name: CD Prod
 
 # Release (release.yml) calls this with the tag it just created. Run it by hand only to redeploy
-# an existing release tag. A tag on a main commit reuses the image CD Stage built; a patch tag on
+# an existing release tag. A tag on a main commit reuses the image CD Stage built; a hotfix tag on
 # a release branch gets its image built here.
 on:
   workflow_dispatch:

@@ -19,7 +19,13 @@ public sealed record GameCatalogCampaignGroup(
     // The campaign's number: 1-4 for a storyline (shared by its Standard, Mirror, Elite and EliteMirror groups), the
     // event's n for eventCampaign{n}.
     int Number
-);
+)
+{
+    // The group that must be fully cleared before this one opens (an Elite group's Standard, a Mirror Elite group's
+    // Mirror), from the game's unlock conditions; null when none is. An event's Extremis track follows its own
+    // group's Standard track, so event groups have none.
+    public string? RequiredCampaignGroupId { get; init; }
+}
 
 public sealed record GameCatalogCampaignBattle(
     string Id,
@@ -164,7 +170,9 @@ public sealed record GameCatalogCampaignDefinitionView(
     IReadOnlyList<string> Types,
     IReadOnlyList<string> BattleIds,
     // 1-4 for a storyline group (campaign1, mirror1, elite1 and eliteMirror1 are all 1), n for eventCampaign{n}.
-    int Number
+    int Number,
+    // The group that must be fully cleared before this one opens, or null (see GameCatalogCampaignGroup).
+    string? RequiredCampaignGroupId
 );
 
 // ---- datamine shape (bound from Data/datamine/raw/gameconfig/battles/campaigns.json) ----------------------------

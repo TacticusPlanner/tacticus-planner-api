@@ -10,6 +10,7 @@ public sealed class HomeScreenEventCalendarTests
         "purge-order", "squig-smash", "against-the-tide", "trait-boost-rapid-assault", "trait-boost-flying",
         "trait-boost-psyker", "for-the-dark-gods", "for-the-emperor", "defeat-waves",
         "11th-edition-week-1", "11th-edition-week-2", "11th-edition-week-3", "global-operation-imperator",
+        "global-blood-tithe",
     ];
 
     // Stale-calendar guard: fails once no HSE run ends after "today" (UTC). Fix by authoring the next
@@ -28,15 +29,15 @@ public sealed class HomeScreenEventCalendarTests
         var snapshot = GameCatalogLoader.Load();
         var message = FindStaleCalendar(snapshot, DateTimeOffset.Parse("2099-01-01T00:00:00Z", System.Globalization.CultureInfo.InvariantCulture));
         Assert.NotNull(message);
-        Assert.Contains("2026-11-14", message);
+        Assert.Contains("2026-12-20", message);
     }
 
     [Fact]
-    public void HseDefinitionsAndUpdate142And143OccurrencesExist()
+    public void HseDefinitionsAndUpdate142To144OccurrencesExist()
     {
         var snapshot = GameCatalogLoader.Load();
         var ids = snapshot.EventDefinitions.Where(d => d.Type == "HomeScreenEvent").Select(d => d.Id).ToHashSet();
-        Assert.Equal(21, ids.Count(id => id.StartsWith("hse-", StringComparison.Ordinal)));
+        Assert.Equal(22, ids.Count(id => id.StartsWith("hse-", StringComparison.Ordinal)));
         foreach (var id in Added)
             Assert.Contains($"hse-{id}", ids);
 
@@ -52,7 +53,13 @@ public sealed class HomeScreenEventCalendarTests
             ("hse-global-operation-imperator", "2026-10-26T08:00:00Z", "2026-11-01T00:00:00Z"),
             ("hse-faction-focus", "2026-10-26T08:00:00Z", "2026-11-01T00:00:00Z"),
             ("hse-warp-surge", "2026-11-05T08:00:00Z", "2026-11-08T08:00:00Z"),
-            ("hse-training-rush", "2026-11-12T08:00:00Z", "2026-11-14T08:00:00Z"),
+            ("hse-training-rush", "2026-11-12T08:00:00Z", "2026-11-16T00:00:00Z"),
+            ("hse-squig-smash", "2026-11-18T08:00:00Z", "2026-11-20T08:00:00Z"),
+            ("hse-global-blood-tithe", "2026-11-22T08:00:00Z", "2026-11-29T08:00:00Z"),
+            ("hse-faction-boost", "2026-11-22T08:00:00Z", "2026-11-29T08:00:00Z"),
+            ("hse-against-the-tide", "2026-12-03T08:00:00Z", "2026-12-10T08:00:00Z"),
+            ("hse-training-rush", "2026-12-12T08:00:00Z", "2026-12-16T08:00:00Z"),
+            ("hse-against-the-tide", "2026-12-19T08:00:00Z", "2026-12-20T08:00:00Z"),
         ];
         foreach (var (def, start, end) in expected)
             Assert.Contains(snapshot.EventOccurrences, o =>
