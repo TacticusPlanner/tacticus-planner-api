@@ -60,8 +60,14 @@ public static class ShopNormalization
     /// </summary>
     public static bool TryParseRewardRange(string? raw, out string type, out int min, out int max)
     {
+        type = string.Empty;
         min = 0;
         max = 0;
+
+        if (string.IsNullOrWhiteSpace(raw))
+        {
+            return false;
+        }
 
         if (TryParseTypedQuantity(raw, out type, out var qty))
         {
@@ -70,13 +76,13 @@ public static class ShopNormalization
             return true;
         }
 
-        var separator = raw?.IndexOf(':') ?? -1;
+        var separator = raw.IndexOf(':');
         if (separator <= 0)
         {
             return false;
         }
 
-        var range = raw![(separator + 1)..].Split('-');
+        var range = raw[(separator + 1)..].Split('-');
         if (range.Length != 2
             || !int.TryParse(range[0], NumberStyles.None, CultureInfo.InvariantCulture, out var low)
             || !int.TryParse(range[1], NumberStyles.None, CultureInfo.InvariantCulture, out var high)

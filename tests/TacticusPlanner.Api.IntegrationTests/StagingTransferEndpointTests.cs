@@ -168,6 +168,30 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
     }
 
     [Fact]
+    public async Task ImportClearsStagingEventShopPlansWhenProductionHasNone()
+    {
+        var sourceSubject = $"prod-{Guid.NewGuid()}";
+        var sourceClient = await GoalsTestHelpers.CreateProvisionedClientAsync(source, sourceSubject);
+        var targetSubject = $"stg-{Guid.NewGuid()}";
+        var targetClient = await GoalsTestHelpers.CreateProvisionedClientAsync(target, targetSubject);
+        await SeedStaleEventShopPlansAsync(targetSubject);
+
+        var codeResponse = await sourceClient.PostAsync("/api/v1/account/staging-transfer-code", null, Ct);
+        var code = await codeResponse.Content.ReadFromJsonAsync<CreateStagingTransferCodeResponse>(Ct);
+        var importResponse = await targetClient.PostAsJsonAsync(
+            "/api/v1/account/import-from-production", new ImportFromProductionRequest(code!.Code), Ct);
+        importResponse.EnsureSuccessStatusCode();
+        var counts = await importResponse.Content.ReadFromJsonAsync<ImportFromProductionResponse>(Ct);
+        Assert.Equal(0, counts!.EventShopPlans);
+
+        using var scope = target.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
+        var profile = await db.Profiles.IgnoreQueryFilters().AsNoTracking().FirstAsync(entity => entity.Subject == targetSubject, Ct);
+        Assert.Empty(await db.EventShopPlans.IgnoreQueryFilters().AsNoTracking()
+            .Where(entity => entity.ProfileId == profile.Id).ToListAsync(Ct));
+    }
+
+    [Fact]
     public async Task ImportRejectsAnInvalidCode()
     {
         var targetClient = await GoalsTestHelpers.CreateProvisionedClientAsync(target);
