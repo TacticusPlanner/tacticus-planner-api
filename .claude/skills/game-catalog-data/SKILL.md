@@ -295,6 +295,12 @@ comparing with the team's effective power.
   `legendaryHeroEvent.json` lanes' `battleSetId` (`battleSets.json` waves' `army`). When an event joins the
   rotation, add its regular NPCs; put the evidence (estimated vs real clear depths) for a coefficient in the
   PR description.
+- **Current coefficients** (S 2.2, A 1.5, B 1.35, C 1.15, D 1.0) were fitted to Fabius Bile clear and fail
+  results from PostHog (Nov 2026, about 2,300 battle attempts) together with the apps' clear curve: Hellblaster
+  S; Warlock A; Wraithguard, Guardian and Deathwing Knight (`darkaNpc3Terminator`) B; Pink Horror and
+  Nurglings C; everything else D. NPCs only ever get harder than their power (the fit's sub-1 values were
+  floored at D with no loss of accuracy). The tier values are tied to the apps' curve constants, so refit
+  both together.
 
 ## Unit power
 

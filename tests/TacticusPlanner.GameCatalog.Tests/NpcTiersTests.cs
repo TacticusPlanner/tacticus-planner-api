@@ -48,28 +48,35 @@ public sealed class NpcTiersTests
     }
 
     [Fact]
-    public void InitialDatasetListsTheRotationLegendaryEventNpcsAtTierD()
+    public void InitialDatasetListsTheRotationLegendaryEventNpcsWithTheFittedTiers()
     {
         var snapshot = GameCatalogLoader.Load();
 
         var record = Assert.Single(snapshot.NpcTiersViews);
         Assert.Equal("npc-tiers", record.Id);
         Assert.Equal(["S", "A", "B", "C", "D"], record.Tiers.Select(tier => tier.Tier));
-        Assert.Equal(1.0, Assert.Single(record.Tiers, tier => tier.Tier == "D").Multiplier);
+        Assert.Equal([2.2, 1.5, 1.35, 1.15, 1.0], record.Tiers.Select(tier => tier.Multiplier));
         Assert.Equal(44, record.Npcs.Count);
         var bossIds = snapshot.Npcs.Where(npc => npc.IsBoss).Select(npc => npc.Id).ToHashSet(StringComparer.Ordinal);
         Assert.Contains("darkaNpcAzrael", bossIds);
         Assert.Contains("orksBossWarboss", bossIds);
         Assert.DoesNotContain("darkaNpc2Hellblaster", bossIds);
         Assert.DoesNotContain(record.Npcs, npc => bossIds.Contains(npc.NpcId));
-        Assert.All(record.Npcs, npc =>
+        Assert.All(record.Npcs, npc => Assert.Null(npc.Multiplier));
+
+        // Fitted to Fabius Bile clear results (Nov 2026); every other NPC stays at D (power is right).
+        var tiered = new Dictionary<string, string>(StringComparer.Ordinal)
         {
-            Assert.Equal("D", npc.Tier);
-            Assert.Null(npc.Multiplier);
-        });
-        Assert.Contains(record.Npcs, npc => npc.NpcId == "darkaNpc2Hellblaster");
-        Assert.Contains(record.Npcs, npc => npc.NpcId == "eldarNpc4Wraithguard");
-        Assert.Contains(record.Npcs, npc => npc.NpcId == "thousNpc1PinkHorror");
+            ["darkaNpc2Hellblaster"] = "S",
+            ["eldarNpc2Warlock"] = "A",
+            ["eldarNpc4Wraithguard"] = "B",
+            ["eldarNpc1Guardian"] = "B",
+            ["darkaNpc3Terminator"] = "B",
+            ["thousNpc1PinkHorror"] = "C",
+            ["deathNpc3Nurglings"] = "C",
+        };
+        Assert.All(record.Npcs, npc => Assert.Equal(tiered.GetValueOrDefault(npc.NpcId, "D"), npc.Tier));
+        Assert.All(tiered.Keys, npcId => Assert.Contains(record.Npcs, npc => npc.NpcId == npcId));
     }
 
     [Fact]
