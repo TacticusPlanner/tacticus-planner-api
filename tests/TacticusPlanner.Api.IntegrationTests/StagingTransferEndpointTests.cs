@@ -2,6 +2,7 @@ using System.Net;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TacticusPlanner.Api.Features.StagingTransfer;
+using TacticusPlanner.Domain.EventShops;
 using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.LegendaryEvents;
 using TacticusPlanner.Domain.PlayerData;
@@ -66,7 +67,7 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
         importResponse.EnsureSuccessStatusCode();
         var counts = await importResponse.Content.ReadFromJsonAsync<ImportFromProductionResponse>(Ct);
         // Two projects: the seeded one and the Default project provisioned with the production account.
-        Assert.Equal(new ImportFromProductionResponse(2, 2, 1, 1, 1, true, true), counts);
+        Assert.Equal(new ImportFromProductionResponse(2, 2, 1, 1, 1, 1, true, true), counts);
 
         using var scope = target.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
@@ -99,6 +100,12 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
             .Where(entity => entity.ProfileId == profile.Id).ToListAsync(Ct));
         Assert.Equal("testEvent", plan.EventId);
         Assert.Equal("Alpha team", Assert.Single(plan.Teams).Name);
+
+        var eventShopPlan = Assert.Single(await db.EventShopPlans.IgnoreQueryFilters().AsNoTracking()
+            .Where(entity => entity.ProfileId == profile.Id).ToListAsync(Ct));
+        Assert.Equal(("october-2026", "1"), (eventShopPlan.EventId, eventShopPlan.CatalogVersion));
+        var entry = Assert.Single(eventShopPlan.Entries);
+        Assert.Equal((1, "THU", 1, "shards_astraYarrick", 2, 1), (entry.Week, entry.Day, entry.SlotIndex, entry.RewardType, entry.Quantity, entry.PurchasedQuantity));
 
         var record = Assert.Single(await db.LegendaryEventRunRecords.IgnoreQueryFilters().AsNoTracking()
             .Where(entity => entity.ProfileId == profile.Id).ToListAsync(Ct));
@@ -244,6 +251,14 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
             EventId = "testEvent",
             CatalogVersion = "1",
             Teams = [new LegendaryEventTeamRecord { Id = LegendaryEventTeamId.From(Guid.CreateVersion7()), LaneId = "alpha", Name = "Alpha team" }],
+        });
+        db.EventShopPlans.Add(new EventShopPlan
+        {
+            Id = EventShopPlanId.From(Guid.CreateVersion7()),
+            ProfileId = profileId,
+            EventId = "october-2026",
+            CatalogVersion = "1",
+            Entries = [new EventShopCartEntry { Week = 1, Day = "THU", SlotIndex = 1, RewardType = "shards_astraYarrick", Quantity = 2, PurchasedQuantity = 1 }],
         });
         db.LegendaryEventRunRecords.Add(new LegendaryEventRunRecord
         {

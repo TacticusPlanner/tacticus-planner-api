@@ -185,7 +185,7 @@
           "Account"
         ],
         "summary": "Replaces this staging account's planner data with a copy from production.",
-        "description": "Staging only (404 elsewhere). Redeems a code from production's POST account/staging-transfer-code and, in one transaction, replaces goals, projects, Legendary Event plans and run records, personal roster snapshots, settings and progress overrides. The Tacticus API key, player data and guild are not copied. 400 when the code is invalid or expired; 502 when production cannot be reached.",
+        "description": "Staging only (404 elsewhere). Redeems a code from production's POST account/staging-transfer-code and, in one transaction, replaces goals, projects, Legendary Event plans and run records, event shop plans, personal roster snapshots, settings and progress overrides. The Tacticus API key, player data and guild are not copied. 400 when the code is invalid or expired; 502 when production cannot be reached.",
         "operationId": "TacticusPlannerApiFeaturesStagingTransferImportFromProductionEndpoint",
         "requestBody": {
           "content": {
@@ -491,6 +491,314 @@
           },
           "429": {
             "description": "The per-profile upstream-call limit for this endpoint is exhausted; see Retry-After.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/event-shop-plans": {
+      "get": {
+        "tags": [
+          "Event-Shop-Plans"
+        ],
+        "summary": "Lists every stored event shop plan of the caller's profile.",
+        "description": "Ordered by eventId (ordinal). Events never written are not listed; plans whose event left the catalog are included.",
+        "operationId": "TacticusPlannerApiFeaturesEventShopPlansListEventShopPlansEndpoint",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventShopPlanListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is missing required identity claims.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The caller has no profile.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      }
+    },
+    "/api/v1/event-shop-plans/{eventId}": {
+      "get": {
+        "tags": [
+          "Event-Shop-Plans"
+        ],
+        "summary": "Reads the caller's plan for an event shop.",
+        "description": "A missing plan reads as revision 0 with no entries, whether or not the event is in the catalog; nothing is created. A stored plan stays readable after its event leaves the catalog.",
+        "operationId": "TacticusPlannerApiFeaturesEventShopPlansGetEventShopPlanEndpoint",
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventShopPlanResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is missing required identity claims.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The caller has no profile.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Event-Shop-Plans"
+        ],
+        "summary": "Replaces the cart of the caller's event shop plan, creating the plan if needed.",
+        "description": "Each entry must name a week, day and slot of the current catalog event, a reward that slot offers that day, a quantity within that offer's per-day cap and a purchased quantity up to it. Lock ids and power levels are not checked. A cart equal to the stored one succeeds without bumping the revision.",
+        "operationId": "TacticusPlannerApiFeaturesEventShopPlansPutEventShopPlanEndpoint",
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PutEventShopPlanRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "The whole plan after the write.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EventShopPlanResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "An entry fails validation; the error names the field.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is missing required identity claims.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The event is not in the current catalog, or the caller has no profile.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "expectedRevision is stale or another write won (issueCode eventShopPlanStale); current is the plan as it stands.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWTBearerAuth": [ ]
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Event-Shop-Plans"
+        ],
+        "summary": "Deletes the caller's plan for an event shop.",
+        "description": "expectedRevision is required; 0 with no stored plan succeeds. Works whether or not the event is still in the catalog.",
+        "operationId": "TacticusPlannerApiFeaturesEventShopPlansDeleteEventShopPlanEndpoint",
+        "parameters": [
+          {
+            "name": "eventId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "expectedRevision",
+            "in": "query",
+            "schema": {
+              "type": [
+                "null",
+                "integer"
+              ],
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The plan is gone."
+          },
+          "400": {
+            "description": "expectedRevision is missing.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The request is missing required identity claims.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The caller has no profile.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "expectedRevision is stale or another write won (issueCode eventShopPlanStale); current is the plan as it stands.",
             "content": {
               "application/problem+json": {
                 "schema": {
@@ -1293,6 +1601,104 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogEventDefinition"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "The dataset has not changed."
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The envelope hash is not the current release's.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/game-catalog/event-shops": {
+      "get": {
+        "tags": [
+          "Game-Catalog"
+        ],
+        "summary": "Gets the seasonal event shops.",
+        "operationId": "TacticusPlannerApiFeaturesGameCatalogGetGameCatalogEventShopsEndpoint1",
+        "responses": {
+          "200": {
+            "description": "One record per dated seasonal event shop (start, day count, per-week slots with the shops variant projection, milestone and progress-chest ladders, missions, optional weekly income) — ids and structured values only, no display text or icons.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogEventShopView"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "The dataset has not changed."
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The envelope hash is not the current release's.",
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiProblem"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/game-catalog/event-shops/{envelopeHash}": {
+      "get": {
+        "tags": [
+          "Game-Catalog"
+        ],
+        "summary": "Gets the seasonal event shops.",
+        "operationId": "TacticusPlannerApiFeaturesGameCatalogGetGameCatalogEventShopsEndpoint2",
+        "parameters": [
+          {
+            "name": "envelopeHash",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "One record per dated seasonal event shop (start, day count, per-week slots with the shops variant projection, milestone and progress-chest ladders, missions, optional weekly income) — ids and structured values only, no display text or icons.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogEventShopView"
                 }
               }
             }
@@ -8288,6 +8694,134 @@
         },
         "description": "the dto used to send an error response to the client"
       },
+      "EventShopCartEntryRequest": {
+        "required": [
+          "week",
+          "day",
+          "slotIndex",
+          "rewardType",
+          "quantity",
+          "purchasedQuantity",
+          "draftAlliance"
+        ],
+        "type": "object",
+        "properties": {
+          "week": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "day": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "slotIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rewardType": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "purchasedQuantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "draftAlliance": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "EventShopCartEntryResponse": {
+        "required": [
+          "week",
+          "day",
+          "slotIndex",
+          "rewardType",
+          "quantity",
+          "purchasedQuantity",
+          "draftAlliance"
+        ],
+        "type": "object",
+        "properties": {
+          "week": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "day": {
+            "type": "string"
+          },
+          "slotIndex": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rewardType": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "purchasedQuantity": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "draftAlliance": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      },
+      "EventShopPlanListResponse": {
+        "required": [
+          "plans"
+        ],
+        "type": "object",
+        "properties": {
+          "plans": {
+            "$ref": "#/components/schemas/IReadOnlyListOfEventShopPlanResponse"
+          }
+        }
+      },
+      "EventShopPlanResponse": {
+        "required": [
+          "eventId",
+          "revision",
+          "catalogVersion",
+          "entries"
+        ],
+        "type": "object",
+        "properties": {
+          "eventId": {
+            "type": "string"
+          },
+          "revision": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "catalogVersion": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "entries": {
+            "$ref": "#/components/schemas/IReadOnlyListOfEventShopCartEntryResponse"
+          }
+        }
+      },
       "FarmingStrategy": {
         "enum": [
           "TotalUpgrades",
@@ -9356,6 +9890,48 @@
           }
         }
       },
+      "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogEventShopView": {
+        "required": [
+          "version",
+          "schemaHash",
+          "gameVersion",
+          "sourceHash",
+          "datasetKey",
+          "datasetHash",
+          "data"
+        ],
+        "type": "object",
+        "properties": {
+          "version": {
+            "type": "string"
+          },
+          "schemaHash": {
+            "type": "string"
+          },
+          "gameVersion": {
+            "type": "string"
+          },
+          "sourceHash": {
+            "type": "string"
+          },
+          "datasetKey": {
+            "type": "string"
+          },
+          "datasetHash": {
+            "type": "string"
+          },
+          "data": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogEventShopView"
+              }
+            ]
+          }
+        }
+      },
       "GameCatalogDatasetEnvelopeOfIReadOnlyListOfGameCatalogFaction": {
         "required": [
           "version",
@@ -10404,6 +10980,179 @@
                 "$ref": "#/components/schemas/IReadOnlyDictionaryOfStringAndJsonElement"
               }
             ]
+          }
+        }
+      },
+      "GameCatalogEventShopIncomeView": {
+        "required": [
+          "free",
+          "bonusShipment"
+        ],
+        "type": "object",
+        "properties": {
+          "free": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "bonusShipment": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GameCatalogEventShopMissionChainView": {
+        "required": [
+          "id",
+          "missions"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "missions": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogEventShopMissionView"
+          }
+        }
+      },
+      "GameCatalogEventShopMissionsView": {
+        "required": [
+          "daily",
+          "free",
+          "premium"
+        ],
+        "type": "object",
+        "properties": {
+          "daily": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogEventShopMissionView"
+          },
+          "free": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogEventShopMissionChainView"
+          },
+          "premium": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogEventShopMissionChainView"
+          }
+        }
+      },
+      "GameCatalogEventShopMissionView": {
+        "required": [
+          "id",
+          "rewards",
+          "tasks"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "rewards": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogRewardRangeView"
+          },
+          "tasks": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogEventShopTaskView"
+          }
+        }
+      },
+      "GameCatalogEventShopTaskView": {
+        "required": [
+          "taskId",
+          "target",
+          "parameters"
+        ],
+        "type": "object",
+        "properties": {
+          "taskId": {
+            "type": "string"
+          },
+          "target": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "parameters": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/IReadOnlyDictionaryOfStringAndJsonElement"
+              }
+            ]
+          }
+        }
+      },
+      "GameCatalogEventShopView": {
+        "required": [
+          "id",
+          "eventKey",
+          "definitionId",
+          "currency",
+          "startUtc",
+          "dayCount",
+          "milestones",
+          "weeks"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "eventKey": {
+            "type": "string"
+          },
+          "definitionId": {
+            "type": "string"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "startUtc": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "dayCount": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "milestones": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogRewardTierView"
+          },
+          "weeks": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogEventShopWeekView"
+          }
+        }
+      },
+      "GameCatalogEventShopWeekView": {
+        "required": [
+          "week",
+          "estimatedWeeklyIncome",
+          "slots",
+          "progressChests",
+          "missions"
+        ],
+        "type": "object",
+        "properties": {
+          "week": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "estimatedWeeklyIncome": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/GameCatalogEventShopIncomeView"
+              }
+            ]
+          },
+          "slots": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogShopSlotView"
+          },
+          "progressChests": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogRewardTierView"
+          },
+          "missions": {
+            "$ref": "#/components/schemas/GameCatalogEventShopMissionsView"
           }
         }
       },
@@ -13175,6 +13924,43 @@
           }
         }
       },
+      "GameCatalogRewardRangeView": {
+        "required": [
+          "type",
+          "min",
+          "max"
+        ],
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "min": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "max": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "GameCatalogRewardTierView": {
+        "required": [
+          "requiredProgress",
+          "rewards"
+        ],
+        "type": "object",
+        "properties": {
+          "requiredProgress": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "rewards": {
+            "$ref": "#/components/schemas/IReadOnlyListOfGameCatalogRewardRangeView"
+          }
+        }
+      },
       "GameCatalogShopCostView": {
         "required": [
           "currency",
@@ -14221,6 +15007,7 @@
           "legendaryEventPlans",
           "legendaryEventRunRecords",
           "personalRosterSnapshots",
+          "eventShopPlans",
           "settings",
           "overrides"
         ],
@@ -14243,6 +15030,10 @@
             "format": "int32"
           },
           "personalRosterSnapshots": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "eventShopPlans": {
             "type": "integer",
             "format": "int32"
           },
@@ -14585,6 +15376,24 @@
           "$ref": "#/components/schemas/CampaignEventProgressOverrideResponse"
         }
       },
+      "IReadOnlyListOfEventShopCartEntryRequest": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/EventShopCartEntryRequest"
+        }
+      },
+      "IReadOnlyListOfEventShopCartEntryResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/EventShopCartEntryResponse"
+        }
+      },
+      "IReadOnlyListOfEventShopPlanResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/EventShopPlanResponse"
+        }
+      },
       "IReadOnlyListOfGameCatalogAbilityPowerModifier": {
         "type": "array",
         "items": {
@@ -14709,6 +15518,36 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/GameCatalogEventsCalendarEntry"
+        }
+      },
+      "IReadOnlyListOfGameCatalogEventShopMissionChainView": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogEventShopMissionChainView"
+        }
+      },
+      "IReadOnlyListOfGameCatalogEventShopMissionView": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogEventShopMissionView"
+        }
+      },
+      "IReadOnlyListOfGameCatalogEventShopTaskView": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogEventShopTaskView"
+        }
+      },
+      "IReadOnlyListOfGameCatalogEventShopView": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogEventShopView"
+        }
+      },
+      "IReadOnlyListOfGameCatalogEventShopWeekView": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogEventShopWeekView"
         }
       },
       "IReadOnlyListOfGameCatalogFaction": {
@@ -15105,6 +15944,18 @@
         "type": "array",
         "items": {
           "$ref": "#/components/schemas/GameCatalogRewardRange"
+        }
+      },
+      "IReadOnlyListOfGameCatalogRewardRangeView": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogRewardRangeView"
+        }
+      },
+      "IReadOnlyListOfGameCatalogRewardTierView": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/GameCatalogRewardTierView"
         }
       },
       "IReadOnlyListOfGameCatalogShopSlotView": {
@@ -16332,6 +17183,29 @@
           "legendaryEvent"
         ],
         "type": "string"
+      },
+      "PutEventShopPlanRequest": {
+        "required": [
+          "expectedRevision",
+          "entries"
+        ],
+        "type": "object",
+        "properties": {
+          "expectedRevision": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "entries": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/IReadOnlyListOfEventShopCartEntryRequest"
+              }
+            ]
+          }
+        }
       },
       "RankEndTargetRequest": {
         "required": [

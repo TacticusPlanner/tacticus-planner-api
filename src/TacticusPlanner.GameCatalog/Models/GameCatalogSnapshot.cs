@@ -26,6 +26,9 @@ public sealed record GameCatalogSnapshot(
     // Raw daily-shop source files, keyed by source dataset key (shops-guild, ...). Kept for validation
     // (reward/free-offer/cost parse checks run over the raw "type:qty" strings).
     IReadOnlyDictionary<string, GameCatalogRawShop> RawShopsBySourceKey,
+    // Seasonal event shops as discovered (merchant + calendar week per week). Kept for validation (week, merchant,
+    // currency and variant checks) and for event shop plan writes.
+    IReadOnlyList<GameCatalogRawEventShop> RawEventShops,
     // Raw raid-boss source (one file, ported from V1's guild_boss.json). Kept for validation — the
     // encounter unit / field-npc / modifier cross-reference checks run over the raw collections.
     GameCatalogRaidBossRawData RaidBossRawData,
@@ -58,6 +61,7 @@ public sealed record GameCatalogSnapshot(
     IReadOnlyList<GameCatalogEventDefinition> EventDefinitionViews,
     IReadOnlyDictionary<string, IReadOnlyList<GameCatalogEventsCalendarEntry>> EventsCalendar,
     IReadOnlyList<GameCatalogShopView> ShopViews,
+    IReadOnlyList<GameCatalogEventShopView> EventShopViews,
     GameCatalogRaidBossesView RaidBossesView,
     GameCatalogGuildRaidMetaView GuildRaidMetaView,
     IReadOnlyList<GameCatalogMythicQuestsView> MythicQuestViews,

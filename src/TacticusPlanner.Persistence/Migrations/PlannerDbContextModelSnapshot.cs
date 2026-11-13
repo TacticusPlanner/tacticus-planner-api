@@ -18,10 +18,55 @@ namespace TacticusPlanner.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.12")
+                .HasAnnotation("ProductVersion", "10.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("TacticusPlanner.Domain.EventShops.EventShopPlan", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("CatalogVersion")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("catalog_version");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<string>("EventId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("character varying(128)")
+                        .HasColumnName("event_id");
+
+                    b.Property<Guid>("ProfileId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("profile_id");
+
+                    b.Property<long>("Revision")
+                        .IsConcurrencyToken()
+                        .HasColumnType("bigint")
+                        .HasColumnName("revision");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("pk_event_shop_plans");
+
+                    b.HasIndex("ProfileId", "EventId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_event_shop_plans_profile_id_event_id");
+
+                    b.ToTable("event_shop_plans", (string)null);
+                });
 
             modelBuilder.Entity("TacticusPlanner.Domain.Goals.Goal", b =>
                 {
@@ -888,6 +933,57 @@ namespace TacticusPlanner.Persistence.Migrations
                         .HasName("pk_user_settings");
 
                     b.ToTable("user_settings", (string)null);
+                });
+
+            modelBuilder.Entity("TacticusPlanner.Domain.EventShops.EventShopPlan", b =>
+                {
+                    b.HasOne("TacticusPlanner.Domain.Profiles.Profile", "Profile")
+                        .WithMany()
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_event_shop_plans_profiles_profile_id");
+
+                    b.OwnsMany("TacticusPlanner.Domain.EventShops.EventShopCartEntry", "Entries", b1 =>
+                        {
+                            b1.Property<Guid>("EventShopPlanId");
+
+                            b1.Property<int>("__synthesizedOrdinal")
+                                .ValueGeneratedOnAdd();
+
+                            b1.Property<string>("Day")
+                                .IsRequired();
+
+                            b1.Property<string>("DraftAlliance");
+
+                            b1.Property<int>("PurchasedQuantity");
+
+                            b1.Property<int>("Quantity");
+
+                            b1.Property<string>("RewardType")
+                                .IsRequired();
+
+                            b1.Property<int>("SlotIndex");
+
+                            b1.Property<int>("Week");
+
+                            b1.HasKey("EventShopPlanId", "__synthesizedOrdinal")
+                                .HasName("pk_event_shop_plans");
+
+                            b1.ToTable("event_shop_plans");
+
+                            b1
+                                .ToJson("entries")
+                                .HasColumnType("jsonb");
+
+                            b1.WithOwner()
+                                .HasForeignKey("EventShopPlanId")
+                                .HasConstraintName("fk_event_shop_plans_event_shop_plans_event_shop_plan_id");
+                        });
+
+                    b.Navigation("Entries");
+
+                    b.Navigation("Profile");
                 });
 
             modelBuilder.Entity("TacticusPlanner.Domain.Goals.Goal", b =>

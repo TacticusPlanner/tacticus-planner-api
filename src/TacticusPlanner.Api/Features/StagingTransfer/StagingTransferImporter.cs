@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using TacticusPlanner.Domain.EventShops;
 using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.LegendaryEvents;
 using TacticusPlanner.Domain.PlayerData;
@@ -16,12 +17,13 @@ public sealed record StagingTransferImportCounts(
     int LegendaryEventPlans,
     int LegendaryEventRunRecords,
     int PersonalRosterSnapshots,
+    int EventShopPlans,
     bool Settings,
     bool Overrides);
 
 /// <summary>
 /// Staging side: replaces the caller's planner data with a production bundle, in one transaction. Goals,
-/// projects, Legendary Event plans and run records, personal roster snapshots, user settings and player-data overrides are deleted and
+/// projects, Legendary Event plans and run records, event shop plans, personal roster snapshots, user settings and player-data overrides are deleted and
 /// recreated with fresh ids (so two staging accounts can import the same production profile). The display
 /// name is copied only when the staging account has not confirmed one. The Tacticus integration, player-data
 /// snapshot and guild membership are left as they are.
@@ -52,6 +54,7 @@ public sealed class StagingTransferImporter(PlannerDbContext db, TimeProvider ti
             await db.LegendaryEventPlans.Where(entity => entity.ProfileId == profileId).ExecuteDeleteAsync(ct);
             await db.LegendaryEventRunRecords.Where(entity => entity.ProfileId == profileId).ExecuteDeleteAsync(ct);
             await db.PersonalRosterSnapshots.Where(entity => entity.ProfileId == profileId).ExecuteDeleteAsync(ct);
+            await db.EventShopPlans.Where(entity => entity.ProfileId == profileId).ExecuteDeleteAsync(ct);
             await db.UserSettings.Where(entity => entity.Id == profileId).ExecuteDeleteAsync(ct);
             await db.PlayerDataOverrides.Where(entity => entity.Id == profileId).ExecuteDeleteAsync(ct);
 
@@ -175,6 +178,18 @@ public sealed class StagingTransferImporter(PlannerDbContext db, TimeProvider ti
                     profileId, source.Name, source.Source, source.Roster, ImportKeyFor(source, index, importKeys)));
             }
 
+            foreach (var source in bundle.EventShopPlans.DistinctBy(plan => plan.EventId))
+            {
+                db.EventShopPlans.Add(new EventShopPlan
+                {
+                    Id = EventShopPlanId.From(Guid.CreateVersion7()),
+                    ProfileId = profileId,
+                    EventId = source.EventId,
+                    CatalogVersion = source.CatalogVersion,
+                    Entries = source.Entries,
+                });
+            }
+
             await db.SaveChangesAsync(ct);
             await transaction.CommitAsync(ct);
         });
@@ -185,6 +200,7 @@ public sealed class StagingTransferImporter(PlannerDbContext db, TimeProvider ti
             bundle.LegendaryEventPlans.DistinctBy(plan => plan.EventId).Count(),
             bundle.LegendaryEventRunRecords.Count,
             bundle.PersonalRosterSnapshots.Count,
+            bundle.EventShopPlans.DistinctBy(plan => plan.EventId).Count(),
             bundle.Settings is not null,
             bundle.Overrides is not null);
     }

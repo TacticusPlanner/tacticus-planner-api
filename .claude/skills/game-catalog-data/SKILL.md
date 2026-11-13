@@ -244,6 +244,23 @@ restrictions); these are silently ignored on deserialize.
   scoring merged into its served `config` as `config.hse` (variants → tiers/milestones/repeat, trackers, modifiers; see
   `EventsDenormalizer.BuildEventDefinitions`). An occurrence resolves its variant by `hseVariant`, else
   `targetFactionId`, else `default`; validation fails the load when one resolves to nothing.
+- **event-shops** — one record per seasonal event shop (`Denormalization/EventShopsDenormalizer.cs`), with no
+  hand-kept file. Events are **discovered** from `shop/merchants.json`: a `liveEventRequired` merchant named
+  `<Month><Year>EventShop` (one shop for every week) or `<Month><Year>Week<N>EventShop` (one per week) belongs to event
+  key `<Month><Year>`. Currency `seasonalEventCurrency<Month><Year>`, ladders `se_milestones_<month>_<year>` and
+  `se_progress_chests_<month>_<year>[_week<N>]` (`loot/tieredProgressRewards.json`, chest ids resolved in
+  `loot/chests.json`) and missions (`quests/groups.json` `seasonal_daily` / `seasonal_seasonal` /
+  `seasonal_seasonal_premium`, prefix `<month>_<year>[_week<N>]`) follow the same naming. Events are **dated only by the
+  calendar**: their weeks are the `ShopEvent` occurrences (`anniversary-event`, `armageddon-shop`) whose `eventKey`
+  parameter is the event key, ordered by `weekNumber`; the optional `incomeFree` / `incomeBonusShipment` parameters
+  become that week's `estimatedWeeklyIncome`. Slots reuse the `shops` variant projection. **Adding a new event** in a
+  datamine bump: list the new `*EventShop` merchants, then author one `ShopEvent` occurrence per week in
+  `event-occurrences.json` (7 days from 00:00 UTC, contiguous, `weekNumber` 1..W, `eventKey`, optional income); a new
+  event name gets its own `ShopEvent` definition (and the apps an `events` locale name). A merchant with no calendar
+  week is not served; a dated event whose week merchant, mission prefix or currency doesn't match fails the load
+  (`Validation/EventShopsValidation.cs`). **When a datamine drops an old event's merchants**, the event simply stops
+  being served (stored plans stay readable); `ShopEventCalendarTests` fails only for a week that has not ended yet
+  whose `eventKey` has no merchant (a typo, or a calendar entry ahead of the datamine).
 
 ## Horde-mode tiers
 
@@ -346,6 +363,8 @@ genuine game changes.
 - **npcs**: now from the datamine (see above); refresh by bumping `REF`.
 - **upgrades**: now from the datamine (see **upgrades** above); refresh by bumping `REF`.
 - **unit-power**, **raid-bosses**, **shops**: now from the datamine (see above); refresh by bumping `REF`.
+- **event-shops**: from the datamine, dated by the calendar; a bump that ships a new event needs its `ShopEvent`
+  calendar weeks (see **event-shops** above).
 - **campaign-battles**: now from the datamine (see **campaign-battles** above); refresh by bumping `REF`. A new
   campaign or event needs a `campaign-curation.json` entry and a `CampaignBattleGroups` key (startup fails when
   the two disagree).

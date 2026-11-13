@@ -54,6 +54,44 @@ public static class ShopNormalization
         return true;
     }
 
+    /// <summary>
+    /// Parses a ladder / chest / mission reward string: <c>"type"</c> (1), <c>"type:qty"</c> (qty..qty) or
+    /// <c>"type:min-max"</c>. Fails on an empty type, a non-positive or non-integer quantity, or <c>min &gt; max</c>.
+    /// </summary>
+    public static bool TryParseRewardRange(string? raw, out string type, out int min, out int max)
+    {
+        min = 0;
+        max = 0;
+
+        if (TryParseTypedQuantity(raw, out type, out var qty))
+        {
+            min = qty;
+            max = qty;
+            return true;
+        }
+
+        var separator = raw?.IndexOf(':') ?? -1;
+        if (separator <= 0)
+        {
+            return false;
+        }
+
+        var range = raw![(separator + 1)..].Split('-');
+        if (range.Length != 2
+            || !int.TryParse(range[0], NumberStyles.None, CultureInfo.InvariantCulture, out var low)
+            || !int.TryParse(range[1], NumberStyles.None, CultureInfo.InvariantCulture, out var high)
+            || low <= 0
+            || low > high)
+        {
+            return false;
+        }
+
+        type = raw[..separator];
+        min = low;
+        max = high;
+        return true;
+    }
+
     /// <summary>True when <paramref name="type"/> non-empty and <paramref name="amount"/> is a finite, non-negative number.</summary>
     public static bool IsParseableCost(string? type, double amount) =>
         !string.IsNullOrWhiteSpace(type) && double.IsFinite(amount) && amount >= 0;

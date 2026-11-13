@@ -227,6 +227,10 @@ public static class GameCatalogDatasets
     // directly. Reward/free-offer "type:qty" strings and the Quartz cronSchedule are normalized to
     // structured values + an explicit day-of-week list at build time (see Denormalization/ShopsDenormalizer.cs).
     public const string Shops = "shops";
+    // event-shops is a plain array, one record per seasonal event shop (id = october-2026, ...), discovered from the
+    // datamine's <Month><Year>[Week<N>]EventShop merchants and dated by the calendar's ShopEvent occurrences (no
+    // hand-kept file). Slots reuse the shops variant projection. See Denormalization/EventShopsDenormalizer.cs.
+    public const string EventShops = "event-shops";
     // raid-bosses is one consolidated, self-contained dataset assembled from the datamine guildBoss files:
     // the season-config rotation, the raid bosses and raid-boss primes (identity + progression ladder +
     // weapons + ability/trait ids), and the season configs whose encounters carry their referenced unit-set
@@ -260,6 +264,7 @@ public static class GameCatalogDatasets
         EventDefinitionsServed,
         EventsCalendar,
         Shops,
+        EventShops,
         RaidBosses,
         GuildRaidMeta,
         MythicQuestsServed,

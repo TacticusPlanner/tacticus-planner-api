@@ -98,6 +98,46 @@ public static partial class GameCatalogValidator
                     "MissingRequiredParameter",
                     $"'{occurrence.Id}' is missing required parameter '{missingParameter}' declared by definition '{definition.Id}'."));
             }
+
+            if (definition.Type == ShopEventParameters.DefinitionType)
+            {
+                ValidateShopEventParameters(occurrence, errors);
+            }
+        }
+    }
+
+    /// <summary>
+    /// A <c>ShopEvent</c> week names its datamine event key (<c>October2026</c>) and may carry the week's estimated
+    /// event-currency income. See specs/game-events-calendar-dataset and specs/game-event-shops-dataset.
+    /// </summary>
+    private static void ValidateShopEventParameters(
+        GameCatalogEventOccurrence occurrence, List<GameCatalogValidationError> errors)
+    {
+        var parameters = occurrence.Parameters;
+        if (parameters is null)
+        {
+            return;
+        }
+
+        if (parameters.TryGetValue(ShopEventParameters.EventKey, out var eventKey)
+            && ShopEventParameters.ReadEventKey(eventKey) is null)
+        {
+            errors.Add(new GameCatalogValidationError(
+                GameCatalogDatasets.EventOccurrences,
+                "InvalidShopEventKey",
+                $"'{occurrence.Id}' has eventKey '{eventKey}'; expected a datamine event key like 'October2026'."));
+        }
+
+        foreach (var incomeParameter in ShopEventParameters.IncomeParameters)
+        {
+            if (parameters.TryGetValue(incomeParameter, out var income)
+                && ShopEventParameters.ReadIncome(income) is null)
+            {
+                errors.Add(new GameCatalogValidationError(
+                    GameCatalogDatasets.EventOccurrences,
+                    "InvalidShopEventIncome",
+                    $"'{occurrence.Id}' has {incomeParameter} '{income}'; expected a non-negative integer."));
+            }
         }
     }
 }

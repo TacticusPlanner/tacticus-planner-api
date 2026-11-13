@@ -58,12 +58,18 @@ internal static partial class GameCatalogDenormalizer
     public static string ShopId(string sourceKey) =>
         sourceKey.StartsWith("shops-", StringComparison.Ordinal) ? sourceKey["shops-".Length..] : sourceKey;
 
+    /// <summary>
+    /// The served slot/variant projection of a merchant. Shared by the daily <c>shops</c> and the seasonal
+    /// <c>event-shops</c> datasets so both serve variants built by exactly the same rules.
+    /// </summary>
+    internal static IReadOnlyList<GameCatalogShopSlotView> BuildShopSlots(GameCatalogRawShop raw) =>
+        raw.Products
+            .Select(variants => new GameCatalogShopSlotView(variants.Select(BuildVariant).ToArray()))
+            .ToArray();
+
     private static GameCatalogShopView BuildShop(string id, GameCatalogRawShop raw)
     {
-        var slots = raw.Products
-            .Select(variants => new GameCatalogShopSlotView(
-                variants.Select(BuildVariant).ToArray()))
-            .ToArray();
+        var slots = BuildShopSlots(raw);
 
         var refreshCost = raw.RefreshCost is { } cost
             ? new GameCatalogShopRefreshCostView(cost.ResourceType, cost.Amount)
