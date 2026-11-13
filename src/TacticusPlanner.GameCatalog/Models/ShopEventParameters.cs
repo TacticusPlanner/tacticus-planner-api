@@ -37,7 +37,7 @@ public static partial class ShopEventParameters
     public static int? ReadIncome(JsonElement value) =>
         value.ValueKind == JsonValueKind.Number && value.TryGetInt32(out var income) && income >= 0 ? income : null;
 
-    /// <summary>The week number when <paramref name="value"/> is a JSON integer, else null.</summary>
+    /// <summary>The week number when <paramref name="value"/> is a positive JSON integer, else null.</summary>
     public static int? ReadWeekNumber(JsonElement value) =>
-        value.ValueKind == JsonValueKind.Number && value.TryGetInt32(out var week) ? week : null;
+        value.ValueKind == JsonValueKind.Number && value.TryGetInt32(out var week) && week >= 1 ? week : null;
 }

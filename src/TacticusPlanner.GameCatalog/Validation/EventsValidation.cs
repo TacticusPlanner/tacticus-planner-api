@@ -119,6 +119,17 @@ public static partial class GameCatalogValidator
             return;
         }
 
+        // The event-shops denormalizer drops a week it cannot read, so a malformed final week would otherwise pass the
+        // 1..N week check and silently shorten the event.
+        if (parameters.TryGetValue(ShopEventParameters.WeekNumber, out var weekNumber)
+            && ShopEventParameters.ReadWeekNumber(weekNumber) is null)
+        {
+            errors.Add(new GameCatalogValidationError(
+                GameCatalogDatasets.EventOccurrences,
+                "InvalidShopEventWeek",
+                $"'{occurrence.Id}' has weekNumber '{weekNumber}'; expected a positive integer."));
+        }
+
         if (parameters.TryGetValue(ShopEventParameters.EventKey, out var eventKey)
             && ShopEventParameters.ReadEventKey(eventKey) is null)
         {

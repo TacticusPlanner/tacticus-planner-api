@@ -213,6 +213,28 @@ public sealed class EventsValidationTests
     }
 
     [Theory]
+    [InlineData("\"2\"")]
+    [InlineData("1.5")]
+    [InlineData("0")]
+    public void ShopEventWeekWithMalformedWeekNumberFailsValidation(string weekNumber)
+    {
+        var errors = new List<GameCatalogValidationError>();
+
+        GameCatalogValidator.ValidateEvents(
+            [ShopEventDefinition()],
+            [ShopEventWeek(new()
+            {
+                ["weekNumber"] = JsonDocument.Parse(weekNumber).RootElement.Clone(),
+                ["eventKey"] = Json("August2026"),
+            })],
+            errors);
+
+        var error = Assert.Single(errors);
+        Assert.Equal("InvalidShopEventWeek", error.Code);
+        Assert.Contains("occ-shop", error.Message);
+    }
+
+    [Theory]
     [InlineData("incomeFree")]
     [InlineData("incomeBonusShipment")]
     public void ShopEventWeekWithNegativeIncomeFailsValidation(string parameter)
