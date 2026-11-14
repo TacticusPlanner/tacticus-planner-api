@@ -15,7 +15,7 @@ internal static partial class GameCatalogDenormalizer
     /// <summary>Raw path of the datamine ability table (damage profiles, MoW ability recipes).</summary>
     public const string DatamineAbilitiesPath = "gameconfig/units/abilities.json";
 
-    // Every lineup unit and NPC carries this trait in the game; the catalog has never served it.
+    // Every lineup unit and every named NPC boss carries this trait in the game; the catalog has never served it.
     private const string HeroTraitId = "Hero";
 
     // Faction-less loot objects in npc.json go to this bucket.
@@ -158,7 +158,8 @@ internal static partial class GameCatalogDenormalizer
             npc.Stats
                 .Select(stat => new GameCatalogNpcStat(
                     stat.AbilityLevel, stat.Damage, stat.FixedArmor, stat.Health, stat.ProgressionIndex, stat.Rank, stat.StarLevel))
-                .ToArray());
+                .ToArray(),
+            (npc.Traits ?? []).Contains(HeroTraitId, StringComparer.Ordinal));
     }
 
     private static (DatamineWeapon? Melee, DatamineWeapon? Ranged) ReadWeapons(
