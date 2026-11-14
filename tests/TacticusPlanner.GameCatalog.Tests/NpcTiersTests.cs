@@ -64,7 +64,7 @@ public sealed class NpcTiersTests
         Assert.DoesNotContain(record.Npcs, npc => bossIds.Contains(npc.NpcId));
         Assert.All(record.Npcs, npc => Assert.Null(npc.Multiplier));
 
-        // Fitted to Fabius Bile clear results (Nov 2026); every other NPC stays at D (power is right).
+        // Bile NPCs fitted to clear results (Nov 2026); every other NPC stays at D (power is right).
         var tiered = new Dictionary<string, string>(StringComparer.Ordinal)
         {
             ["darkaNpc2Hellblaster"] = "S",
@@ -74,6 +74,22 @@ public sealed class NpcTiersTests
             ["darkaNpc3Terminator"] = "B",
             ["thousNpc1PinkHorror"] = "C",
             ["deathNpc3Nurglings"] = "C",
+            // Provisional Lysander and Farsight tiers (judged from stats, abilities and traits, not yet fitted).
+            ["templNpc4Aggressor"] = "B",
+            ["blackNpc2Terminator"] = "B",
+            ["admecNpc1Vanguard"] = "B",
+            ["astraNpc4Mortar"] = "B",
+            ["tauNpc2DroneSniper"] = "B",
+            ["tauNpc5StealthSuit"] = "B",
+            ["orksNpc2OrkBoy"] = "C",
+            ["orksNpc3GrotTank"] = "C",
+            ["templNpc2Neophyte"] = "C",
+            ["templNpc3InitiatePyreblaster"] = "C",
+            ["blackNpc4Havoc"] = "C",
+            ["admecNpc3Electropriest"] = "C",
+            ["admecNpc2Techpriest"] = "C",
+            ["tauNpc1FireWarrior"] = "C",
+            ["tauNpc6Carnivore"] = "C",
         };
         Assert.All(record.Npcs, npc => Assert.Equal(tiered.GetValueOrDefault(npc.NpcId, "D"), npc.Tier));
         Assert.All(tiered.Keys, npcId => Assert.Contains(record.Npcs, npc => npc.NpcId == npcId));
