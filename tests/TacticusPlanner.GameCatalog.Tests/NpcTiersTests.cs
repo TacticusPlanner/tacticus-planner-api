@@ -74,7 +74,7 @@ public sealed class NpcTiersTests
             ["darkaNpc3Terminator"] = "B",
             ["thousNpc1PinkHorror"] = "C",
             ["deathNpc3Nurglings"] = "C",
-            // Provisional Lysander and Farsight tiers (judged from stats, abilities and traits, not yet fitted).
+            // Provisional Lysander, Farsight and Uthar tiers (judged from stats, abilities and traits, not yet fitted).
             ["templNpc4Aggressor"] = "B",
             ["blackNpc2Terminator"] = "B",
             ["admecNpc1Vanguard"] = "B",
@@ -90,6 +90,11 @@ public sealed class NpcTiersTests
             ["admecNpc2Techpriest"] = "C",
             ["tauNpc1FireWarrior"] = "C",
             ["tauNpc6Carnivore"] = "C",
+            ["necroNpc4Destroyer"] = "B",
+            ["deathNpc2PlagueMarine"] = "B",
+            ["necroNpc3Deathmark"] = "C",
+            ["necroNpc5Swarm"] = "C",
+            ["deathNpc1Poxwalker"] = "C",
         };
         Assert.All(record.Npcs, npc => Assert.Equal(tiered.GetValueOrDefault(npc.NpcId, "D"), npc.Tier));
         Assert.All(tiered.Keys, npcId => Assert.Contains(record.Npcs, npc => npc.NpcId == npcId));
