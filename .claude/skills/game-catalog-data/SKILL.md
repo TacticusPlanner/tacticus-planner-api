@@ -301,6 +301,15 @@ comparing with the team's effective power.
   Nurglings C; everything else D. NPCs only ever get harder than their power (the fit's sub-1 values were
   floored at D with no loss of accuracy). The tier values are tied to the apps' curve constants, so refit
   both together.
+- **Provisional tiers** (Nov 2026, not yet fitted, refit once clear data exists). For Lysander,
+  Farsight and Uthar, tiers were judged from stats, abilities and traits, using the Bile fit as reference. Damage
+  that ignores armour, and traits the game's power omits, push an NPC up. Abilities are already in power
+  through `abilityPowerModifiers`. The tiers are: B for Aggressor, Chaos Terminator (`blackNpc2Terminator`),
+  Skitarii Vanguard, Cadian Mortar Team, Sniper Drone and Stealth Battlesuit; C for Ork Boy, Grot Tank,
+  Neophyte, Initiate with Pyreblaster, Havoc, Electro-priest, Tech-Priest Enginseer, Fire Warrior and Kroot
+  (`tauNpc6Carnivore`). Uthar adds B for Ophydian Destroyer and Plague Marine, and C for Deathmark, Scarab Swarm
+  and Poxwalker. Flayed One, Necron Warrior and Blightlord Terminator stay at D, because the maintainer
+  judged from play that they are not a threat.
 
 ## Unit power
 

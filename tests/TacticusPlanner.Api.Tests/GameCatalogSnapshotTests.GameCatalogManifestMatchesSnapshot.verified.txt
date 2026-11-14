@@ -1,5 +1,5 @@
 ﻿{
-  version: 1.44.88.3089+3546544af2a1,
+  version: 1.44.88.3089+0e03961976b0,
   schemaHash: f89f49a6c5eac37bcce1e437053951ddbaec4e03c8f5fe3496fafa7eb90ee718,
   gameVersion: 1.44.88.3089,
   sourceHash: {time-dependent},
@@ -111,7 +111,7 @@
     },
     {
       key: npc-tiers,
-      hash: eea2dcdffb7b7e9dc158ab4b35cb401aab19b0716238447602416d21c1fc0b19,
+      hash: ec763d993361e7260cf7ecaee5f19039d610766651aa2491d83909d97e3e0747,
       url: /api/v1/game-catalog/npc-tiers/{envelopeHash}
     },
     {
