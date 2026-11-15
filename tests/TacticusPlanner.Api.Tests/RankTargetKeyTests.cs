@@ -8,8 +8,8 @@ public sealed class RankTargetKeyTests
     private const int Silver3 = (int)UnitRank.Silver3;
 
     [Theory]
-    [InlineData(false, 3, true, 0)] // three applied slots == point-five below Adamantine1
-    [InlineData(false, 7, false, 3)] // applied slots cap at the 3-slot row below Adamantine1
+    [InlineData(false, 3, true, 0)] // three applied slots == point-five below Diamond3
+    [InlineData(false, 7, false, 3)] // applied slots cap at the 3-slot row below Diamond3
     public void EquivalentEndStatesShareOneKey(bool pointFiveA, int appliedA, bool pointFiveB, int appliedB) =>
         Assert.Equal(
             RankTargetKey.From(Silver3, pointFiveA, appliedA),
@@ -28,6 +28,18 @@ public sealed class RankTargetKeyTests
         Assert.NotEqual(
             RankTargetKey.From(Silver3, false, 0),
             RankTargetKey.From((int)UnitRank.Gold1, false, 0));
+
+    [Fact]
+    public void Diamond3NumbersEachSlot() =>
+        Assert.NotEqual(
+            RankTargetKey.From((int)UnitRank.Diamond3, false, 4),
+            RankTargetKey.From((int)UnitRank.Diamond3, false, 3));
+
+    [Fact]
+    public void Diamond3PointFiveStillMeansTheTopRow() =>
+        Assert.Equal(
+            RankTargetKey.From((int)UnitRank.Diamond3, true, 0),
+            RankTargetKey.From((int)UnitRank.Diamond3, false, 3));
 
     [Fact]
     public void PointFiveIsIgnoredFromAdamantine1() =>
