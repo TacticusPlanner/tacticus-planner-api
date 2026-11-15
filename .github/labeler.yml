@@ -1,0 +1,82 @@
+# Labels for pull requests, applied by the "Detect changes" job in ci.yml (actions/labeler).
+# CI reads three of them to skip work a PR cannot affect: docs-only, area:docker, release-scripts.
+# The rest only tell reviewers what a PR touches. sync-labels is on, so a label whose files are no
+# longer changed (or that was added by hand without matching files) is removed on the next push.
+
+# Gate: when every changed file is documentation or agent config, Build and Coverage are skipped.
+docs-only:
+  - changed-files:
+      - any-glob-to-all-files:
+          - "**/*.md"
+          - "openspec/**"
+          - ".claude/**"
+          - ".agents/**"
+          - "LICENSE"
+
+# Gate: the container image is built on a PR only when something that feeds it changed.
+area:docker:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "**/Dockerfile"
+          - ".dockerignore"
+          - "**/*.csproj"
+          - "Directory.*.props"
+          - "**/packages.lock.json"
+          - "global.json"
+
+# Gate: the release script tests (Ubuntu and Windows) run only when the scripts changed.
+release-scripts:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "scripts/release/**"
+
+ci:
+  - changed-files:
+      - any-glob-to-any-file:
+          - ".github/**"
+
+api-contract:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "artifacts/openapi/**"
+
+db-migration:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/TacticusPlanner.Persistence/Migrations/**"
+
+area:api:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/TacticusPlanner.Api/**"
+
+area:domain:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/TacticusPlanner.Domain/**"
+          - "src/TacticusPlanner.GameDomain/**"
+
+area:game-catalog:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/TacticusPlanner.GameCatalog/**"
+
+area:persistence:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/TacticusPlanner.Persistence/**"
+
+area:tacticus-api:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "src/TacticusPlanner.TacticusApi/**"
+
+area:orchestration:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "orchestration/**"
+
+tests-only:
+  - changed-files:
+      - any-glob-to-all-files:
+          - "tests/**"
