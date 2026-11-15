@@ -36,6 +36,7 @@ updates:
         patterns:
           - "Aspire.*"
       # Ships together with each .NET servicing release.
+      # Microsoft.OpenApi rides along: ApiDescription.Server's getdocument tool needs a matching minimum.
       dotnet-platform:
         patterns:
           - "Microsoft.AspNetCore.*"
@@ -43,6 +44,7 @@ updates:
           - "Microsoft.Extensions.*"
           - "Npgsql.*"
           - "EFCore.*"
+          - "Microsoft.OpenApi*"
       opentelemetry:
         patterns:
           - "OpenTelemetry.*"
@@ -60,9 +62,28 @@ updates:
           - "coverlet.*"
           - "Verify.*"
           - "Testcontainers.*"
+      # Everything else. The exclusions keep packages that have their own group out of this
+      # catch-all; without them Dependabot folded every group into one PR here (#221).
       minor-patch:
         patterns:
           - "*"
+        exclude-patterns:
+          - "Aspire.*"
+          - "Microsoft.AspNetCore.*"
+          - "Microsoft.EntityFrameworkCore*"
+          - "Microsoft.Extensions.*"
+          - "Npgsql.*"
+          - "EFCore.*"
+          - "Microsoft.OpenApi*"
+          - "OpenTelemetry.*"
+          - "Azure.Monitor.OpenTelemetry.*"
+          - "FastEndpoints*"
+          - "Refit*"
+          - "xunit*"
+          - "Microsoft.NET.Test.Sdk"
+          - "coverlet.*"
+          - "Verify.*"
+          - "Testcontainers.*"
         update-types:
           - minor
           - patch
@@ -75,6 +96,21 @@ updates:
         update-types:
           - version-update:semver-major
       - dependency-name: "Microsoft.Extensions.*"
+        update-types:
+          - version-update:semver-major
+      # ASP.NET Core 10 requires Microsoft.OpenApi 2.x.
+      - dependency-name: "Microsoft.OpenApi"
+        update-types:
+          - version-update:semver-major
+      # xunit v4 drops VSTest mode for `dotnet test` on the .NET 10 SDK, and Verify.XunitV3 33+
+      # requires xunit v4. Moving to Microsoft.Testing.Platform is a planned migration.
+      - dependency-name: "xunit.v3"
+        update-types:
+          - version-update:semver-major
+      - dependency-name: "xunit.runner.visualstudio"
+        update-types:
+          - version-update:semver-major
+      - dependency-name: "Verify.XunitV3"
         update-types:
           - version-update:semver-major
 
