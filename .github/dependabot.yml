@@ -1,6 +1,18 @@
 # Dependabot version updates. Security alerts and security updates are repo settings
 # (Settings → Advanced Security), not configured here.
 version: 2
+
+# One PR for every ecosystem that names the group.
+multi-ecosystem-groups:
+  dotnet-sdk:
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Kyiv
+    commit-message:
+      prefix: build(deps)
+
 updates:
   # Central Package Management: Directory.Packages.props plus each project's packages.lock.json.
   - package-ecosystem: nuget
@@ -66,21 +78,13 @@ updates:
         update-types:
           - version-update:semver-major
 
-  # Base-image digests carry OS security fixes. Keep the SDK tag in step with global.json.
+  # The Dockerfile SDK/runtime images and global.json move together in one PR
+  # (multi-ecosystem group "dotnet-sdk" above). Base-image digests carry OS security fixes.
   - package-ecosystem: docker
     directory: /src/TacticusPlanner.Api
-    schedule:
-      interval: weekly
-      day: monday
-      time: "06:00"
-      timezone: Europe/Kyiv
-    open-pull-requests-limit: 5
-    commit-message:
-      prefix: build(deps)
-    groups:
-      dotnet-images:
-        patterns:
-          - "*"
+    multi-ecosystem-group: dotnet-sdk
+    patterns:
+      - "*"
     ignore:
       - dependency-name: "*"
         update-types:
@@ -89,14 +93,9 @@ updates:
   # global.json: SDK feature-band and patch updates within .NET 10.
   - package-ecosystem: dotnet-sdk
     directory: /
-    schedule:
-      interval: weekly
-      day: monday
-      time: "06:00"
-      timezone: Europe/Kyiv
-    open-pull-requests-limit: 5
-    commit-message:
-      prefix: build(deps)
+    multi-ecosystem-group: dotnet-sdk
+    patterns:
+      - "*"
     ignore:
       - dependency-name: "*"
         update-types:
