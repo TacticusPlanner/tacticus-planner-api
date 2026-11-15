@@ -231,6 +231,12 @@
     "requiredParameters": ["weekNumber", "eventKey"]
   },
   {
+    "id": "skull-harvest-shop",
+    "type": "ShopEvent",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": ["weekNumber", "eventKey"]
+  },
+  {
     "id": "crusade-season",
     "type": "CrusadeSeason",
     "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },

@@ -16,10 +16,10 @@ public sealed class EventShopsDenormalizerTests
         Assert.Single(Snapshot.EventShopViews, eventShop => eventShop.Id == id);
 
     [Fact]
-    public void ServesTheThreeDatedEventsInStartOrder()
+    public void ServesTheFourDatedEventsInStartOrder()
     {
-        Assert.Equal(["june-2026", "august-2026", "october-2026"], Snapshot.EventShopViews.Select(view => view.Id));
-        Assert.Equal(["June2026", "August2026", "October2026"], Snapshot.EventShopViews.Select(view => view.EventKey));
+        Assert.Equal(["june-2026", "august-2026", "october-2026", "november-2026"], Snapshot.EventShopViews.Select(view => view.Id));
+        Assert.Equal(["June2026", "August2026", "October2026", "November2026"], Snapshot.EventShopViews.Select(view => view.EventKey));
     }
 
     [Fact]
@@ -38,6 +38,12 @@ public sealed class EventShopsDenormalizerTests
         Assert.Equal("armageddon-shop", june.DefinitionId);
         Assert.Equal("anniversary-event", august.DefinitionId);
         Assert.Equal("seasonalEventCurrencyOctober2026", october.Currency);
+
+        // Skull Harvest: the game's event text says it begins Monday 23 November and is week-long.
+        var november = Event("november-2026");
+        Assert.Equal(new DateTimeOffset(2026, 11, 23, 0, 0, 0, TimeSpan.Zero), november.StartUtc);
+        Assert.Equal(7, november.DayCount);
+        Assert.Equal("skull-harvest-shop", november.DefinitionId);
     }
 
     [Fact]
