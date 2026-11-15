@@ -464,8 +464,9 @@ from the Actions tab):
 - From `main` with `patch`: creates `release/X.Y.Z` from `main`, tags the
   next `vX.Y.Z` on the newest line, creates its release, and deploys the image
   `CD Stage` built for that commit, like a minor cut.
-- From `release/X.Y` or `release/X.Y.Z` with `hotfix`: tags the next `vX.Y.Z`
-  on that branch, creates its release (notes since the previous `vX.Y.*`),
+- From `release/X.Y` or `release/X.Y.Z` with `hotfix`: tags the next hotfix of
+  that release, `vX.Y.Z.N` (so `v2.4.1` is followed by `v2.4.1.1`, leaving
+  `v2.4.2` for the next patch), creates its release (notes since the previous `vX.Y.*`),
   builds the image for that commit, and deploys it. Land the fix on `main`
   first, then cherry-pick it into the release branch with a PR (CI runs on PRs
   to `release/**`).

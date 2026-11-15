@@ -39,9 +39,9 @@ jobs:
           REF: ${{ inputs.ref }}
         run: |
           # gh release view also finds drafts, so require isDraft to be false.
-          if [[ ! "$REF" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] \
+          if [[ ! "$REF" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(\.[0-9]+)?$ ]] \
             || [[ "$(gh release view "$REF" --repo "$GITHUB_REPOSITORY" --json isDraft --jq .isDraft 2> /dev/null)" != "false" ]]; then
-            echo "::error::$REF is not a published release tag (vX.Y.Z)."
+            echo "::error::$REF is not a published release tag (vX.Y.Z or vX.Y.Z.N)."
             exit 1
           fi
 
