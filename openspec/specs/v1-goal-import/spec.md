@@ -205,6 +205,16 @@ When V1 contains multiple goals of one type for one unit, the import SHALL prese
 - **WHEN** goals are imported
 - **THEN** four V2 goals are created, each with its own notes, in V1 priority order
 
+### Requirement: A V1 rarity-filtered Rank goal becomes an Upgrade goal
+
+A V1 Rank goal with a non-empty `upgradesRarity` filter is a pre-farm of those rarities, not a rank-up. The import SHALL create it as an Upgrade goal on the same character, at the V1 goal's priority, instead of a Rank goal: its rank range runs from the character's live rank to the V1 target (one rank further when the target is .5 or names applied upgrades, capped at Adamantine3), and its targets are every base material of the chosen rarities the rank-up slots in that span take, counted down through crafted recipes. It therefore never shares a target key with, or merges into, a full Rank goal to the same rank. When no such material is left, the source SHALL report `target_already_reached`.
+
+#### Scenario: A filtered and a full Rank goal to the same rank both import
+
+- **GIVEN** V1 has a Rank goal for Bellator to Bronze1 filtered to Common upgrades, and a full Rank goal to Bronze1
+- **WHEN** goals are imported
+- **THEN** the full goal becomes a Rank goal, the filtered goal becomes an Upgrade goal with range Stone1 to Bronze1 and only Common base materials, and neither reports a merge
+
 ### Requirement: V1 shard-source choices are carried into acquisition sources
 
 An imported Unlock or Ascension goal's acquisition sources SHALL be derived
@@ -417,13 +427,21 @@ goal's own priority:
   its whole remaining ladder; a Machine of War from its live ability levels to its linked Ability targets,
   else both whole tracks; crafted upgrades counted through their recipes). A unit that no longer needs the
   material SHALL be left out; when none does, the goal SHALL report as skipped as already reached.
+  Each such Upgrade goal SHALL carry the range of its linked goals, so the planner counts its pieces toward
+  them instead of farming them twice: a rank range from the Character's live rank to its highest linked
+  Rank target (one rank further when that target names part of its own rank, .5 or applied upgrades),
+  and an ability-level range per Machine of War track from its live level to its highest linked Ability
+  target. A range SHALL be set only when a linked goal of that kind was imported and something is left to
+  raise.
+  Each such Upgrade goal SHALL also link (`linkedGoalIds`) to the Rank or Ability goals of its own unit
+  created from its linked V1 goals in the same import.
 - An upgrade-material goal SHALL become an Upgrade goal for its quantity on a suggested unit that uses the
   material — in order of preference, the first unit by V1 priority among the profile's own imported unit
   goals (whether or not the unit is on the roster), then the roster's characters, then its Machines of
   War — reported with a code that says the unit was suggested.
 
 Material goals landing on the same unit with the same material SHALL merge into one Upgrade goal at the
-earliest one's priority, keeping the larger quantity. Material goals with different materials SHALL stay
+earliest one's priority, keeping the larger quantity and the smallest range covering all of theirs. Material goals with different materials SHALL stay
 separate Upgrade goals at their own V1 priorities (`goal-target-milestones`), and a unit's existing Upgrade
 goal for other materials SHALL NOT block one. A pre-farm goal none of whose linked goals was imported SHALL
 report as skipped with a code identifying a required manual step, carrying the material, the unit chosen by
@@ -436,6 +454,7 @@ with a code identifying that no unit uses it.
 - **GIVEN** a V1 pre-farm goal at priority 1 linked to Rank goals for two characters at priorities 2 and 3, and to an id no longer present
 - **WHEN** the goals part is imported
 - **THEN** an Upgrade goal for the material is created on each character, in link order, both ahead of the Rank goals, each for what that character's Rank goal needs
+- **AND** each Upgrade goal's rank range runs from the character's live rank to its Rank goal's target
 
 #### Scenario: Upgrade-material goal goes on a suggested unit at its priority
 

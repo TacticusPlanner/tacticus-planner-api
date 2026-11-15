@@ -258,6 +258,18 @@ public sealed class GetGameCatalogHordeModeTiersEndpoint(IGameCatalogProvider ca
     }
 }
 
+public sealed class GetGameCatalogNpcTiersEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogNpcTiers>>(catalog, GameCatalogDatasets.NpcTiers)
+{
+    public override void Configure()
+    {
+        Get("game-catalog/npc-tiers", "game-catalog/npc-tiers/{envelopeHash}");
+        ConfigureServed(
+            "Gets the horde-mode NPC tier list.",
+            "The single S/A/B/C/D tier list of enemy NPCs for horde modes, with each tier's power multiplier applied to an NPC's power in clear estimates; an NPC may override its tier's multiplier, and one not listed is unrated (multiplier 1.0).");
+    }
+}
+
 public sealed class GetGameCatalogUnitPowerEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogUnitPower>>(catalog, GameCatalogDatasets.UnitPower)
 {
@@ -339,6 +351,18 @@ public sealed class GetGameCatalogIncursionsEndpoint(IGameCatalogProvider catalo
         ConfigureServed(
             "Gets the Machine of War Incursions.",
             "One record per Machine of War Incursion, named as the game names it: first availability, the hero factions a run may bring, the run tokens, the Oh So Close offer pricing, the enhancements its run maps use, and per difficulty tier its battles (board, challenge flag, difficulty, Lightning Victory turns, base and 1-3 star rewards, enemies by npc and level) and run-map nodes (battle, enhancement or chest with its rewards; unlockedBy and exclusiveWith node indices).");
+    }
+}
+
+public sealed class GetGameCatalogNpcEncountersEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogNpcEncounter>>(catalog, GameCatalogDatasets.NpcEncounters)
+{
+    public override void Configure()
+    {
+        Get("game-catalog/npc-encounters", "game-catalog/npc-encounters/{envelopeHash}");
+        ConfigureServed(
+            "Gets where each NPC is encountered.",
+            "One record per npc, source and group naming every battle the npc fights in as an enemy: source is campaign, campaignEvent, legendaryEvent, questEvent, incursion, guildRaid, survival or onslaught; groupId is the campaign group, event id (lreId or featured character), MoW, raid boss / prime unit set, Survival battle set or onslaught; each battle carries the served battle id, track, tier, node or battle number, challenge flag, guild raid role and the wave rounds where the source has them. Ids and numbers only; no schedule.");
     }
 }
 

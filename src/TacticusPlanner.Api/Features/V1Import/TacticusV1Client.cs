@@ -35,6 +35,9 @@ public sealed record TacticusV1Profile(
     /// <c>leProgress</c>/<c>legendaryEventsProgress</c>, <c>leSettings</c>); missing unless the profile carries
     /// them.</summary>
     public V1LegendaryEventImportData LegendaryEvents { get; init; } = V1LegendaryEventImportData.Missing();
+
+    /// <summary>V1 <c>rosterSnapshots</c>; missing unless the profile carries a base snapshot.</summary>
+    public V1RosterSnapshotImportData RosterSnapshots { get; init; } = V1RosterSnapshotImportData.Missing();
 }
 
 /// <summary>Distinguishes a profile with no V1 Legendary Event teams or progress from one whose teams cannot be
@@ -203,7 +206,10 @@ public sealed record V1Goal(
     // quantity; type 7 (pre-farm) carries the material and the V1 ids of the goals it pre-farms for.
     string? UpgradeMaterialId = null,
     int? UpgradeMaterialQuantity = null,
-    IReadOnlyList<string>? PreFarmGoalIds = null
+    IReadOnlyList<string>? PreFarmGoalIds = null,
+    // V1's "Upgrades rarity" filter on a Rank goal (V1 Rarity enum: Common = 0 … Mythic = 5): the goal
+    // farms only the base materials of those rarities.
+    IReadOnlyList<int>? UpgradesRarity = null
 );
 
 public sealed class TacticusV1Client(IHttpClientFactory httpClientFactory) : ITacticusV1Client
@@ -275,6 +281,7 @@ public sealed class TacticusV1Client(IHttpClientFactory httpClientFactory) : ITa
         )
         {
             LegendaryEvents = ReadLegendaryEvents(payload.Data),
+            RosterSnapshots = ReadRosterSnapshots(payload.Data?.RosterSnapshots),
         };
     }
 
@@ -284,6 +291,59 @@ public sealed class TacticusV1Client(IHttpClientFactory httpClientFactory) : ITa
             Present(data?.LeTeams) ?? Present(data?.LegendaryEvents3),
             Present(data?.LeProgress) ?? Present(data?.LegendaryEventsProgress),
             Present(data?.LeSettings));
+
+    /// <summary>Reads V1 <c>rosterSnapshots</c> (<c>{ base, diffs }</c>). The blob stays a raw
+    /// <see cref="JsonElement"/> on <see cref="V1UserData"/> so a malformed one fails only this part. No key, or a key
+    /// without a base (V1 then ignores the diffs), is missing. Null list entries and dates outside the
+    /// <see cref="DateTimeOffset"/> range make it invalid, so chain resolution and mapping never see them.</summary>
+    internal static V1RosterSnapshotImportData ReadRosterSnapshots(JsonElement? element)
+    {
+        if (Present(element) is not { } present)
+        {
+            return V1RosterSnapshotImportData.Missing();
+        }
+
+        try
+        {
+            var state = present.Deserialize<V1RosterSnapshotsState>(WebJsonOptions);
+            if (state?.Base is null)
+            {
+                return V1RosterSnapshotImportData.Missing();
+            }
+
+            return IsWellFormed(state)
+                ? V1RosterSnapshotImportData.Valid(state)
+                : V1RosterSnapshotImportData.Invalid();
+        }
+        catch (JsonException)
+        {
+            return V1RosterSnapshotImportData.Invalid();
+        }
+    }
+
+    private static bool IsWellFormed(V1RosterSnapshotsState state)
+    {
+        var snapshot = state.Base!;
+        if (!InDateRange(snapshot.DateMillisUtc)
+            || HasNull(snapshot.Chars)
+            || HasNull(snapshot.Mows)
+            || HasNull(state.Diffs))
+        {
+            return false;
+        }
+
+        return (state.Diffs ?? []).All(diff =>
+            InDateRange(diff.DateMillisUtc) && !HasNull(diff.CharDiffs) && !HasNull(diff.MowDiffs));
+    }
+
+    private static bool InDateRange(long millis) =>
+        millis is >= MinUnixMillis and <= MaxUnixMillis;
+
+    private const long MinUnixMillis = -62_135_596_800_000;
+    private const long MaxUnixMillis = 253_402_300_799_999;
+
+    private static bool HasNull<T>(IReadOnlyList<T>? items) where T : class =>
+        items is not null && items.Any(item => item is null);
 
     private static JsonElement? Present(JsonElement? element) =>
         element is { ValueKind: not JsonValueKind.Null and not JsonValueKind.Undefined } ? element : null;
@@ -511,7 +571,8 @@ internal sealed record V1UserData(
     JsonElement? LegendaryEvents3 = null,
     JsonElement? LeProgress = null,
     JsonElement? LegendaryEventsProgress = null,
-    JsonElement? LeSettings = null
+    JsonElement? LeSettings = null,
+    JsonElement? RosterSnapshots = null
 );
 
 internal sealed record V1OnslaughtPreferencesData(

@@ -33,7 +33,8 @@ internal static partial class GameCatalogDenormalizer
                 group.CoreCharacters,
                 group.Types,
                 group.Battles.Select(battle => battle.Id).ToArray(),
-                group.Number))
+                group.Number,
+                group.RequiredCampaignGroupId))
             .ToArray();
 
     private static GameCatalogCampaignBattleView BuildBattleView(

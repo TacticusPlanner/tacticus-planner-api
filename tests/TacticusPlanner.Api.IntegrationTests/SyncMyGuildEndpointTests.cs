@@ -80,6 +80,24 @@ public sealed class SyncMyGuildEndpointTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task StoredKeyThatLostGuildRaidAccessStillSynchronizesTheGuild()
+    {
+        var (client, tacticusUserId) = await GuildTestHelpers.CreateGuildReadyClientAsync(factory);
+        var token = $"guild-token-{Guid.NewGuid()}";
+        factory.TacticusApi.ConfigureGuildResponse(
+            token,
+            FakeTacticusApi.BuildGuildResponse(Guid.NewGuid(), "TAG", "Original", 1, (tacticusUserId, GuildRole.LEADER, 10, null))
+        );
+        await client.PostAsJsonAsync("/api/v1/guild/register", new RegisterGuildRequest(token), TestContext.Current.CancellationToken);
+        await GuildTestHelpers.ExpireSyncCooldownAsync(factory);
+        factory.TacticusApi.ConfigureGuildRaidRejection(token, HttpStatusCode.Forbidden);
+
+        var response = await client.PostAsync("/api/v1/guild/sync", null, TestContext.Current.CancellationToken);
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+    }
+
+    [Fact]
     public async Task SuccessfulSyncRefreshesGuildDataUsingTheStoredToken()
     {
         var (client, tacticusUserId) = await GuildTestHelpers.CreateGuildReadyClientAsync(factory);

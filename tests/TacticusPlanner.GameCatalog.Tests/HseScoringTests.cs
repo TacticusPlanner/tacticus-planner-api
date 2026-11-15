@@ -94,10 +94,11 @@ public sealed class HseScoringTests
     {
         var factionKeys = ServedHse("hse-faction-boost").GetProperty("variants").EnumerateArray()
             .Select(variant => variant.GetProperty("variantKey").GetString()!).ToArray();
-        Assert.Equal(["AdeptusMechanicus", "DarkAngels", "SpaceWolves"], factionKeys);
+        Assert.Equal(["AdeptusMechanicus", "DarkAngels", "SpaceWolves", "WorldEaters"], factionKeys);
 
         Assert.Equal("Global", ServedVariant("hse-11th-edition-week-1", "global-orks").GetProperty("scope").GetString());
         Assert.Equal("Global", ServedVariant("hse-global-operation-imperator", "default").GetProperty("scope").GetString());
+        Assert.Equal("Global", ServedVariant("hse-global-blood-tithe", "default").GetProperty("scope").GetString());
     }
 
     [Fact]

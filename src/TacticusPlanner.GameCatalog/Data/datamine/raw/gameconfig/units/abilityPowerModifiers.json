@@ -638,6 +638,15 @@
   "PowerUp_SummonSpawn_necroSmnSwarm": {
     "baseMultiplier": 80
   },
+  "PowerUp_SummonSpawn_admecSmnVanguard": {
+    "baseMultiplier": 80
+  },
+  "PowerUp_SummonSpawn_admecSmnTechpriest": {
+    "baseMultiplier": 80
+  },
+  "PowerUp_SummonSpawn_admecSmnElectropriest": {
+    "baseMultiplier": 80
+  },
   "Player_SummonSpawn:astraSmnGuardsman": {
     "baseMultiplier": 80
   },
@@ -1100,6 +1109,9 @@
   "RedRampage": {
     "baseMultiplier": 100
   },
+  "RelentlessAssault": {
+    "baseMultiplier": 100
+  },
   "DutyEternal": {
     "baseMultiplier": 100
   },
@@ -1238,6 +1250,9 @@
   "EnhancementCritBoost": {
     "baseMultiplier": 100
   },
+  "EnhancementCritReduction": {
+    "baseMultiplier": 100
+  },
   "EnhancementDamageBoost": {
     "baseMultiplier": 100
   },
@@ -1272,6 +1287,9 @@
     "baseMultiplier": 100
   },
   "EnhancementSummon:DeathPlagueMarine": {
+    "baseMultiplier": 100
+  },
+  "EnhancementSummon:PinkHorror": {
     "baseMultiplier": 100
   },
   "EnhancementSummon:Warrior": {
@@ -1394,6 +1412,21 @@
   "LegacyOfCombat": {
     "baseMultiplier": 105
   },
+  "WrathfulAdvance": {
+    "baseMultiplier": 100
+  },
+  "RelentlessPersecution": {
+    "baseMultiplier": 100
+  },
+  "EmperorsExecutioner": {
+    "baseMultiplier": 100
+  },
+  "PunishmentInescapable": {
+    "baseMultiplier": 105
+  },
+  "PeerlessWarrior": {
+    "baseMultiplier": 105
+  },
   "EnvAllyAndEnemyNpcs:WarpSurge": {
     "baseMultiplier": 100
   },
@@ -1415,6 +1448,9 @@
   "EnvStatBoost:FactionBoost_Orks": {
     "baseMultiplier": 100
   },
+  "EnvStatBoost:FactionBoost_WorldEaters": {
+    "baseMultiplier": 100
+  },
   "EnvStatBoost:TraitBoost_Flying": {
     "baseMultiplier": 100
   },
@@ -1431,6 +1467,9 @@
     "baseMultiplier": 100
   },
   "EnvStrategicBuff:PowerMatrix": {
+    "baseMultiplier": 100
+  },
+  "EnvStrategicBuff:RepairField": {
     "baseMultiplier": 100
   },
   "LashOfTorment": {
@@ -1631,6 +1670,9 @@
   "MastersOfManoeuvre": {
     "baseMultiplier": 100
   },
+  "DefiantToTheLast": {
+    "baseMultiplier": 100
+  },
   "SquigLaunchas": {
     "baseMultiplier": 100
   },
@@ -1737,6 +1779,12 @@
     "baseMultiplier": 100
   },
   "DiabolicRegeneration": {
+    "baseMultiplier": 100
+  },
+  "ProclivityForMurder": {
+    "baseMultiplier": 100
+  },
+  "TerrorchemPoison": {
     "baseMultiplier": 100
   },
   "DeathOnTheWind": {

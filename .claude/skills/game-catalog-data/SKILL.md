@@ -149,6 +149,18 @@ restrictions); these are silently ignored on deserialize.
   `loot/chests.json`). A dangling node reference or malformed battle fails the load; `Validation/IncursionValidation.cs`
   (`InvalidIncursion`) checks the MoW, factions, rarities and enemy npcs. The game ships no Incursion schedule: the
   calendar's `incursion` definition and occurrences stay curated.
+- **npc-encounters** inverts the battle data into one record per `(npcId, source, groupId)` with typed `battles`
+  (`Denormalization/NpcEncounterDenormalizer.cs`, built last in the loader). Campaign / Campaign Event, Legendary
+  Event, Quest Event, Incursion and Guild Raid encounters come from the finished served views (`campaign-battles` +
+  `campaign-definitions` `releaseType`, `lre-battles`, `quest-events`, `incursions`, `raid-bosses`), so every `groupId`
+  and `battleId` resolves in the dataset a client links to. Survival (`battles/battleSets.json` `survival_*` waves) and
+  Onslaught (`battles/onslaught.json` `tierWaves` `enemies`) are read raw: `rounds` per season / tier; an Onslaught
+  entry means the npc *can* appear (waves are a weighted pool). Guild raid units are their own unit sets: a boss /
+  prime / field unit names its npc through `questUnitId`; a hero-based prime names a *character* and is skipped, any
+  other non-npc id fails the load. Only `unit` / `machineOfWar` npcs are indexed (board power-ups are skipped); Sync
+  PvP and tutorial-only sets are not read. No timing is served: the client joins `groupId` to `events-calendar`
+  (`featuredCharacterId` for Legendary / Quest Events; any `incursion` window for Incursions). `Validation/NpcEncounterValidation.cs` (`InvalidNpcEncounter`) checks the
+  ids resolve.
 - **campaign-battles** is flat, keyed by globally-unique battle id, each carrying its `campaignGroupId`;
   **campaign-definitions** is keyed by `groupId` (metadata + `battleIds[]` only). Battle ids are also
   referenced from API test fixtures and the player-data transformer, so renaming a battle id is not a
@@ -166,7 +178,7 @@ restrictions); these are silently ignored on deserialize.
   `{prefix}{battleId}` (`I07`), or `{prefix}C{node}B` for an event challenge battle (game `13B` → `AMSC13B`).
   Enemies are the indexed units of every team that is not `playerTeams` 1 (allies) — board power-ups have no
   index — counted per `npcId:index` and sorted by npc id, then index. Their `stars`/`rank` read the npc stat row
-  V1's way: a boss index (`Boss` in the id) is 1-based, any other npc's 0-based and capped at the last row. The
+  at the 1-based index, for bosses and every other npc, and an index past the ladder fails the load. The
   `chanceId` is `{shard|mythicShard|upgrade<Rarity>}_{difficulty}` (`standard`, `mirror`, `elite` for both Elite
   kinds, `eventStandard`/`eventExtremis`, plus `Challenge`), resolved against the curated `drop-chances`.
 - **LRE is split in two** (mirroring campaign-battles / campaign-definitions). Both are built from the datamine
@@ -265,6 +277,39 @@ the apps code (not in the catalog), so ratio changes ship as a web release.
   the synced roster has equipped (any level) in place of the base; the Tier List still ranks by base.
 - Enforced at load (`Validation/HordeModeTiersValidation.cs`, `InvalidHordeModeTiers`). A value change
   only moves this dataset's hash; a new field moves the derived `schemaHash`.
+
+## NPC tiers
+
+`Data/curated/npc-tiers.json` is the enemy-side counterpart of `horde-mode-tiers`: a single hand-curated
+tier list (a one-element array) of how much harder an NPC is in horde modes than its power says (summons,
+anti-heal, pierce and plasma are under-rated by power), served as `npc-tiers` with `npcs` sorted by `npcId`.
+The apps' Legendary Event clear estimate multiplies each battle enemy's power by its NPC multiplier before
+comparing with the team's effective power.
+
+- **`tiers`**: the same `S`, `A`, `B`, `C`, `D` names and (0, 5] range as `horde-mode-tiers`; D is 1.00
+  (power is right). An NPC not listed is untiered and gets 1.0.
+- **`npcs`** (`{ npcId, tier, multiplier? }`): `npcId` must be a catalog NPC id, listed once, and not a
+  boss (an NPC with the `Hero` trait: Azrael, Gulgortz, ...); `multiplier` is an optional per-NPC override in
+  (0, 5], omitted from the served JSON when not set. Seed: every regular NPC of the Legendary Events still in
+  rotation (`lre-curation.json` lists a run date: Bile, Lysander, Farsight, Ûthar) at D, from their
+  `legendaryHeroEvent.json` lanes' `battleSetId` (`battleSets.json` waves' `army`). When an event joins the
+  rotation, add its regular NPCs; put the evidence (estimated vs real clear depths) for a coefficient in the
+  PR description.
+- **Current coefficients** (S 2.2, A 1.5, B 1.35, C 1.15, D 1.0) were fitted to Fabius Bile clear and fail
+  results from PostHog (Nov 2026, about 2,300 battle attempts) together with the apps' clear curve: Hellblaster
+  S; Warlock A; Wraithguard, Guardian and Deathwing Knight (`darkaNpc3Terminator`) B; Pink Horror and
+  Nurglings C; everything else D. NPCs only ever get harder than their power (the fit's sub-1 values were
+  floored at D with no loss of accuracy). The tier values are tied to the apps' curve constants, so refit
+  both together.
+- **Provisional tiers** (Nov 2026, not yet fitted, refit once clear data exists). For Lysander,
+  Farsight and Uthar, tiers were judged from stats, abilities and traits, using the Bile fit as reference. Damage
+  that ignores armour, and traits the game's power omits, push an NPC up. Abilities are already in power
+  through `abilityPowerModifiers`. The tiers are: B for Aggressor, Chaos Terminator (`blackNpc2Terminator`),
+  Skitarii Vanguard, Cadian Mortar Team, Sniper Drone and Stealth Battlesuit; C for Ork Boy, Grot Tank,
+  Neophyte, Initiate with Pyreblaster, Havoc, Electro-priest, Tech-Priest Enginseer, Fire Warrior and Kroot
+  (`tauNpc6Carnivore`). Uthar adds B for Ophydian Destroyer and Plague Marine, and C for Deathmark, Scarab Swarm
+  and Poxwalker. Flayed One, Necron Warrior and Blightlord Terminator stay at D, because the maintainer
+  judged from play that they are not a threat.
 
 ## Unit power
 

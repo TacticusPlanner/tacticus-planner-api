@@ -15,53 +15,53 @@ public sealed class QuestEventsDenormalizerTests
     [Fact]
     public void ShippedDatasetServesTheGamesFiveQuestsWithSeventeenBattlesEach()
     {
-        Assert.Equal(["astarCyrus", "astarEradicator", "darkaSternguard", "thousSekhetar", "votanChampion"], Snapshot.QuestEventViews.Select(quest => quest.FeaturedCharacterId));
+        Assert.Equal(["astarEradicator", "lostaFearmonger", "orksWeirdboy", "tyranParasite", "votanChampion"], Snapshot.QuestEventViews.Select(quest => quest.FeaturedCharacterId));
         Assert.All(Snapshot.QuestEventViews, quest => Assert.Equal(Enumerable.Range(1, 17), quest.Battles.Select(battle => battle.Number)));
     }
 
     [Fact]
-    public void CyrusBattleOneIsServedWithGroupedEnemiesAndTypedObjectives()
+    public void EradicatorBattleOneIsServedWithGroupedEnemiesAndTypedObjectives()
     {
-        var cyrus = Quest("astarCyrus");
+        var eradicator = Quest("astarEradicator");
 
-        Assert.Equal(["AdeptusAstartes", "Ultramarines", "SpaceWolves", "BlackTemplars"], cyrus.AllowedFactionIds);
-        Assert.Equal(["Necrons"], cyrus.EnemyFactionIds);
-        var battle = cyrus.Battles[0];
-        Assert.Equal(("Common", 1, 3, "C3_70", 6, 3), (battle.Tier, battle.TierPosition, battle.DeploySlots, battle.BoardId, battle.SpawnPointsSet, battle.LightningVictoryTurns));
+        Assert.Equal(["AdeptusAstartes", "Ultramarines", "Sisterhood", "BloodAngels"], eradicator.AllowedFactionIds);
+        Assert.Equal(["BlackLegion"], eradicator.EnemyFactionIds);
+        var battle = eradicator.Battles[0];
+        Assert.Equal(("Common", 1, 3, "EC2_04", 3, 2), (battle.Tier, battle.TierPosition, battle.DeploySlots, battle.BoardId, battle.SpawnPointsSet, battle.LightningVictoryTurns));
         Assert.Equal(
-            [new GameCatalogQuestEnemyView("necroNpc2FlayedOne", 1, 3), new GameCatalogQuestEnemyView("necroNpc1Warrior", 1, 4)],
+            [new GameCatalogQuestEnemyView("blackBossHaarkenLHE", 1, 1), new GameCatalogQuestEnemyView("blackNpc3TraitorGuardsman", 3, 6)],
             battle.Enemies);
         Assert.Equal(
-            [new GameCatalogQuestObjectiveView("NoDamageTakenByAnyHero", null, 100), new GameCatalogQuestObjectiveView("NotDamageType", "Power", 100)],
+            [new GameCatalogQuestObjectiveView("NoDamageTakenByAnyHero", null, 100), new GameCatalogQuestObjectiveView("UseNoSummons", null, 100)],
             battle.Objectives);
-        Assert.Equal(new GameCatalogQuestLootView("upgDmgC001", 3, 4), battle.Loot);
+        Assert.Equal(new GameCatalogQuestLootView("upgArmC002", 3, 4), battle.Loot);
     }
 
     [Fact]
-    public void CyrusBattleThreeKeepsTheSameNpcAtDifferentIndexesApart()
+    public void EradicatorBattleThreeKeepsTheSameNpcAtDifferentIndexesApart()
     {
         Assert.Equal(
             [
-                new GameCatalogQuestEnemyView("necroBossPlasmancerLHE", 3, 1),
-                new GameCatalogQuestEnemyView("necroNpc2FlayedOne", 3, 3),
-                new GameCatalogQuestEnemyView("necroNpc1Warrior", 2, 4),
+                new GameCatalogQuestEnemyView("blackBossHaarkenLHE", 2, 1),
+                new GameCatalogQuestEnemyView("blackNpc3TraitorGuardsman", 8, 1),
+                new GameCatalogQuestEnemyView("blackNpc3TraitorGuardsman", 5, 9),
             ],
-            Quest("astarCyrus").Battles[2].Enemies);
+            Quest("astarEradicator").Battles[2].Enemies);
     }
 
     [Fact]
-    public void CyrusBattleSeventeenIsTheMythicBattle()
+    public void EradicatorBattleSeventeenIsTheMythicBattle()
     {
-        var battle = Quest("astarCyrus").Battles[16];
+        var battle = Quest("astarEradicator").Battles[16];
 
-        Assert.Equal(("Mythic", 1, 5, "LE3_24", 4), (battle.Tier, battle.TierPosition, battle.DeploySlots, battle.BoardId, battle.LightningVictoryTurns));
-        Assert.Equal(new GameCatalogQuestLootView("upgHpM001", 1, 6), battle.Loot);
+        Assert.Equal(("Mythic", 1, 5, "C2_47", 3), (battle.Tier, battle.TierPosition, battle.DeploySlots, battle.BoardId, battle.LightningVictoryTurns));
+        Assert.Equal(new GameCatalogQuestLootView("upgHpM004", 1, 6), battle.Loot);
     }
 
     [Fact]
     public void DeploySlotsFollowTheTierPositionRule()
     {
-        var battles = Quest("astarCyrus").Battles;
+        var battles = Quest("astarEradicator").Battles;
 
         Assert.Equal([3, 4, 5, 3, 4, 5, 3, 3, 3, 4, 5, 3, 4, 5, 5, 5, 5], battles.Select(battle => battle.DeploySlots));
         Assert.Equal([1, 2, 3, 4, 5], battles.Where(battle => battle.Tier == "Rare").Select(battle => battle.TierPosition));

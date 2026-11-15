@@ -29477,7 +29477,7 @@
       "tier": 1,
       "battleNr": 12,
       "boardId": "LE3_14",
-      "power": 1014995,
+      "power": 1005857,
       "waves": [
         {
           "round": 1,
@@ -29563,7 +29563,7 @@
         },
         {
           "round": 8,
-          "power": 178301,
+          "power": 169163,
           "army": [
             "orksNpcWarboss:14",
             "orksNpc3GrotTank:31",
@@ -39038,7 +39038,7 @@
       "tier": 1,
       "battleNr": 14,
       "boardId": "LE1_12",
-      "power": 2546540,
+      "power": 2503866,
       "waves": [
         {
           "round": 1,
@@ -39072,7 +39072,7 @@
         },
         {
           "round": 4,
-          "power": 686332,
+          "power": 643658,
           "army": [
             "orksNpc2OrkBoy:40",
             "orksBossWarboss:4",
@@ -51274,7 +51274,7 @@
       "tier": 0,
       "battleNr": 0,
       "boardId": "survival_13",
-      "power": 60054283733,
+      "power": 60054257326,
       "waves": [
         {
           "round": 1,
@@ -51519,7 +51519,7 @@
         },
         {
           "round": 26,
-          "power": 1361618,
+          "power": 1335211,
           "army": [
             "orksNpc2OrkBoy:42",
             "orksNpc2OrkBoy:42",
@@ -51702,7 +51702,7 @@
     {
       "tier": 0,
       "battleNr": 0,
-      "boardId": "survival_14",
+      "boardId": "survival_13",
       "power": 58875322734,
       "waves": [
         {
@@ -52113,6 +52113,428 @@
         "Custodes",
         "EmperorsChildren",
         "AdeptusAstartes",
+        "TheLostAndTheDamned"
+      ]
+    }
+  ],
+  "survival_december_2026": [
+    {
+      "tier": 0,
+      "battleNr": 0,
+      "boardId": "survival_13",
+      "power": 60051940240,
+      "waves": [
+        {
+          "round": 1,
+          "power": 350,
+          "army": [
+            "necroNpc2FlayedOne:3",
+            "necroNpc2FlayedOne:3",
+            "necroNpc2FlayedOne:3",
+            "necroNpc2FlayedOne:3",
+            "necroNpc2FlayedOne:3",
+            "necroNpc2FlayedOne:3",
+            "necroNpc2FlayedOne:3"
+          ],
+          "armyAfterCompletion": [
+            "powupReinforcement",
+            "powupSummonSpawn_admecSmnVanguard:1"
+          ],
+          "armyScore": 100
+        },
+        {
+          "round": 3,
+          "power": 449,
+          "army": [
+            "orksNpc1Grot:6",
+            "orksNpc1Grot:6",
+            "orksNpc1Grot:6",
+            "orksNpc1Grot:6",
+            "orksNpc1Grot:6",
+            "orksNpc2OrkBoy:6",
+            "orksNpc2OrkBoy:6",
+            "orksNpc2OrkBoy:6"
+          ],
+          "armyAfterCompletion": [
+            "powupHits",
+            "powupReinforcementShield"
+          ],
+          "armyScore": 150
+        },
+        {
+          "round": 5,
+          "power": 1292,
+          "army": [
+            "eldarNpc2Warlock:7",
+            "eldarNpc1Guardian:7",
+            "eldarNpc1Guardian:7",
+            "eldarNpc1Guardian:7",
+            "eldarNpc1Guardian:7",
+            "eldarNpc1Guardian:7"
+          ],
+          "armyAfterCompletion": [
+            "powupHealing",
+            "powupSummonSpawn_admecSmnTechpriest:2"
+          ],
+          "armyScore": 150,
+          "rarityUpgradeOnCompletion": "Uncommon"
+        },
+        {
+          "round": 8,
+          "power": 1675,
+          "army": [
+            "tauNpc6Carnivore:8",
+            "tauNpc6Carnivore:8",
+            "tauNpc6Carnivore:8",
+            "tauNpc6Carnivore:8",
+            "tauNpc1FireWarrior:8",
+            "tauNpc1FireWarrior:8",
+            "tauNpc1FireWarrior:8",
+            "tauNpc1FireWarrior:8",
+            "tauNpc1FireWarrior:8"
+          ],
+          "armyAfterCompletion": [
+            "powupHealth",
+            "powupReinforcement"
+          ],
+          "armyScore": 200
+        },
+        {
+          "round": 10,
+          "power": 3579,
+          "army": [
+            "blackNpc2Terminator:10",
+            "blackNpc1Bloodletter:10",
+            "blackNpc1Bloodletter:10",
+            "blackNpc1Bloodletter:10",
+            "blackNpc3TraitorGuardsman:11",
+            "blackNpc3TraitorGuardsman:11",
+            "blackNpc3TraitorGuardsman:11",
+            "blackNpc3TraitorGuardsman:11",
+            "blackNpc3TraitorGuardsman:11"
+          ],
+          "armyAfterCompletion": [
+            "powupMeleeHits",
+            "powupSummonSpawn_admecSmnElectropriest:3"
+          ],
+          "armyScore": 250,
+          "rarityUpgradeOnCompletion": "Rare"
+        },
+        {
+          "round": 12,
+          "power": 10215,
+          "army": [
+            "thousNpc1PinkHorror:12",
+            "thousNpc1PinkHorror:12",
+            "thousNpc1PinkHorror:12",
+            "thousNpc1PinkHorror:12",
+            "thousNpc1PinkHorror:12",
+            "thousNpc2Screamer:12",
+            "thousNpc2Screamer:12",
+            "thousNpc2Screamer:12",
+            "thousNpc2Screamer:12"
+          ],
+          "armyAfterCompletion": [
+            "powupHealing",
+            "powupReactivateAbility"
+          ],
+          "armyScore": 400
+        },
+        {
+          "round": 14,
+          "power": 15683,
+          "army": [
+            "tyranBossTyrantGuardSurv:1",
+            "tyranNpc1Hormagaunt:15",
+            "tyranNpc1Hormagaunt:15",
+            "tyranNpc1Hormagaunt:15",
+            "tyranNpc1Hormagaunt:15",
+            "tyranNpc3Termagant:15",
+            "tyranNpc3Termagant:15",
+            "tyranNpc3Termagant:15",
+            "tyranNpc3Termagant:15",
+            "tyranNpc2RipperSwarm:15",
+            "tyranNpc2RipperSwarm:15"
+          ],
+          "armyAfterCompletion": [
+            "powupReinforcementShield",
+            "powupSummonSpawn_admecSmnTechpriest:4"
+          ],
+          "armyScore": 450,
+          "rarityUpgradeOnCompletion": "Epic"
+        },
+        {
+          "round": 16,
+          "power": 66898,
+          "army": [
+            "necroNpcPlasmancer:12",
+            "necroNpcDestroyer:12",
+            "necroNpc1Warrior:17",
+            "necroNpc1Warrior:17",
+            "necroNpc1Warrior:17",
+            "necroNpc3Deathmark:17",
+            "necroNpc3Deathmark:17",
+            "necroNpc3Deathmark:17"
+          ],
+          "armyAfterCompletion": [
+            "powupDamage"
+          ],
+          "armyScore": 600
+        },
+        {
+          "round": 18,
+          "power": 70964,
+          "army": [
+            "deathBossBlightlordSurv:2",
+            "deathBossRotboneSurv:2",
+            "deathNpc1Poxwalker:18",
+            "deathNpc1Poxwalker:18",
+            "deathNpc1Poxwalker:18",
+            "deathNpc1Poxwalker:18",
+            "deathNpc2PlagueMarine:18",
+            "deathNpc2PlagueMarine:18",
+            "deathNpc2PlagueMarine:18"
+          ],
+          "armyAfterCompletion": [
+            "powupArmor",
+            "powupReinforcement"
+          ],
+          "armyScore": 600
+        },
+        {
+          "round": 20,
+          "power": 122260,
+          "army": [
+            "worldBossJakhalSurv:1",
+            "worldNpc1Berzerker:21",
+            "worldNpc1Berzerker:21",
+            "worldNpc1Berzerker:21",
+            "worldNpc1Berzerker:21",
+            "worldNpc1Berzerker:21",
+            "worldNpc1Berzerker:21",
+            "worldNpc1Berzerker:21"
+          ],
+          "armyAfterCompletion": [
+            "powupHealing",
+            "powupSummonSpawn_admecSmnTechpriest:5"
+          ],
+          "armyScore": 650,
+          "rarityUpgradeOnCompletion": "Legendary"
+        },
+        {
+          "round": 22,
+          "power": 275409,
+          "army": [
+            "eldarNpc4Wraithguard:22",
+            "eldarBossLhykhisSurv:1",
+            "eldarNpc3Harlequin:23",
+            "eldarNpc3Harlequin:23",
+            "eldarNpc3Harlequin:23",
+            "eldarNpc3Harlequin:23",
+            "eldarNpc1Guardian:23",
+            "eldarNpc1Guardian:23",
+            "eldarNpc1Guardian:23",
+            "eldarNpc1Guardian:23"
+          ],
+          "armyAfterCompletion": [
+            "powupHits",
+            "powupReactivateAbility"
+          ],
+          "armyScore": 650
+        },
+        {
+          "round": 24,
+          "power": 262440,
+          "army": [
+            "genesNpc2Genestealer:24",
+            "genesNpc2Genestealer:24",
+            "genesNpc2Genestealer:24",
+            "genesNpc2Genestealer:24",
+            "genesNpcPrimus:13",
+            "genesNpcPatriarch:13",
+            "genesNpc1Aberrant:24",
+            "genesNpc1Aberrant:24"
+          ],
+          "armyAfterCompletion": [
+            "powupSummonSpawn_admecSmnElectropriest:5"
+          ],
+          "armyScore": 1000
+        },
+        {
+          "round": 26,
+          "power": 595202,
+          "army": [
+            "orksBossRuntherdSurv:1",
+            "orksBossWeirdboySurv:1",
+            "orksNpc2OrkBoy:38",
+            "orksNpc2OrkBoy:38",
+            "orksNpc3GrotTank:38",
+            "orksNpc3GrotTank:38",
+            "orksNpc3GrotTank:38",
+            "orksNpc3GrotTank:38",
+            "orksNpc3GrotTank:38",
+            "orksNpc6Stormboy:38",
+            "orksNpc6Stormboy:38",
+            "orksNpc6Stormboy:38"
+          ],
+          "armyAfterCompletion": [
+            "powupDamage",
+            "powupReinforcement"
+          ],
+          "armyScore": 1000
+        },
+        {
+          "round": 28,
+          "power": 1181575,
+          "army": [
+            "necroNpcSpyder:17",
+            "necroNpcWarden:17",
+            "necroNpc4Destroyer:22",
+            "necroNpc3Deathmark:26",
+            "necroNpc3Deathmark:26",
+            "necroNpc3Deathmark:26",
+            "necroNpc3Deathmark:26",
+            "necroNpc3Deathmark:26",
+            "necroNpc3Deathmark:26",
+            "necroNpc3Deathmark:26",
+            "necroNpcOverlord:17"
+          ],
+          "armyAfterCompletion": [
+            "powupHealing",
+            "powupSummonSpawn_admecSmnTechpriest:6"
+          ],
+          "armyScore": 1500,
+          "rarityUpgradeOnCompletion": "Mythic"
+        },
+        {
+          "round": 30,
+          "power": 2491558,
+          "army": [
+            "thousNpc4Terminator:30",
+            "thousNpc4Terminator:30",
+            "thousNpc3RubricMarine:30",
+            "thousNpc3RubricMarine:30",
+            "thousNpc1PinkHorror:30",
+            "thousNpc1PinkHorror:30",
+            "thousNpc1PinkHorror:30",
+            "thousNpc1PinkHorror:30",
+            "thousBossSekhetarSurv:1",
+            "thousBossAhrimanSurv:1"
+          ],
+          "armyAfterCompletion": [
+            "powupMeleeHits",
+            "powupReinforcement"
+          ],
+          "armyScore": 1500
+        },
+        {
+          "round": 32,
+          "power": 0,
+          "isCloneWave": true,
+          "cloneWaveHealthPct": 80,
+          "armyAfterCompletion": [
+            "powupResurrect"
+          ],
+          "armyScore": 1500
+        },
+        {
+          "round": 34,
+          "power": 5263279,
+          "army": [
+            "tauNpc5StealthSuit:34",
+            "tauNpc5StealthSuit:34",
+            "tauNpc5StealthSuit:34",
+            "tauNpc5StealthSuit:34",
+            "tauBossMarksmanInc:19",
+            "tauBossCrisisInc:19",
+            "tauNpc3DroneShield:34",
+            "tauNpc3DroneShield:34",
+            "tauNpc1FireWarrior:34",
+            "tauNpc1FireWarrior:34",
+            "tauNpc1FireWarrior:34",
+            "tauNpc1FireWarrior:34"
+          ],
+          "armyAfterCompletion": [
+            "powupReactivateAbility",
+            "powupSummonSpawn_admecSmnElectropriest:6"
+          ],
+          "armyScore": 1500
+        },
+        {
+          "round": 36,
+          "power": 7073674,
+          "army": [
+            "blackNpcTerminator:18",
+            "blackNpcHaarken:18",
+            "blackNpcAbaddon:18",
+            "blackNpc1Bloodletter:39",
+            "blackNpc1Bloodletter:39",
+            "blackNpc1Bloodletter:39",
+            "blackNpc4Havoc:39",
+            "blackNpc4Havoc:39",
+            "blackNpc4Havoc:39"
+          ],
+          "armyAfterCompletion": [
+            "powupReinforcement"
+          ],
+          "armyScore": 1500
+        },
+        {
+          "round": 38,
+          "power": 12247428,
+          "army": [
+            "worldBossKharnSurv:1",
+            "worldBossExecutionsSurv:1",
+            "worldBossEightboundSurv:1",
+            "worldBossTerminatorSurv:1",
+            "worldNpc1Berzerker:44",
+            "worldNpc1Berzerker:44",
+            "worldNpc1Berzerker:44",
+            "worldNpc1Berzerker:44",
+            "worldNpc1Berzerker:44",
+            "worldNpc1Berzerker:44"
+          ],
+          "armyAfterCompletion": [
+            "powupHealing"
+          ],
+          "armyScore": 1500
+        },
+        {
+          "round": 41,
+          "power": 60022256310,
+          "army": [
+            "necroNpc1WarriorSurv:3",
+            "necroNpc1WarriorSurv:3",
+            "necroNpc1WarriorSurv:3",
+            "necroNpc1WarriorSurv:3",
+            "necroNpc1WarriorSurv:3",
+            "necroNpc1WarriorSurv:3",
+            "necroNpc4DestroyerSurv:3",
+            "necroNpc4DestroyerSurv:3",
+            "necroNpc4DestroyerSurv:3",
+            "necroNpc4DestroyerSurv:3",
+            "necroNpc4DestroyerSurv:3",
+            "necroNpc4DestroyerSurv:3"
+          ],
+          "armyScore": 2000
+        }
+      ],
+      "disallowedFactions": [
+        "Necrons",
+        "BlackLegion",
+        "DeathGuard",
+        "Tyranids",
+        "Orks",
+        "BlackTemplars",
+        "Aeldari",
+        "Tau",
+        "SpaceWolves",
+        "ThousandSons",
+        "DarkAngels",
+        "WorldEaters",
+        "BloodAngels",
+        "Genestealers",
+        "EmperorsChildren",
         "TheLostAndTheDamned"
       ]
     }
@@ -52563,6 +52985,455 @@
         "EmperorsChildren",
         "LeaguesOfVotann",
         "AdeptusAstartes",
+        "TheLostAndTheDamned"
+      ]
+    }
+  ],
+  "survival_crescendo_02": [
+    {
+      "tier": 0,
+      "battleNr": 0,
+      "boardId": "crescendo_01",
+      "power": 145551961585,
+      "waves": [
+        {
+          "round": 1,
+          "power": 504,
+          "army": [
+            "blackNpc3TraitorGuardsman:6",
+            "blackNpc3TraitorGuardsman:6",
+            "blackNpc3TraitorGuardsman:6",
+            "blackNpc3TraitorGuardsman:6",
+            "blackNpc3TraitorGuardsman:6",
+            "blackNpc3TraitorGuardsman:6",
+            "blackNpc3TraitorGuardsman:6",
+            "blackNpc3TraitorGuardsman:6",
+            "blackNpc1Bloodletter:6",
+            "blackNpc1Bloodletter:6"
+          ],
+          "armyAfterCompletion": [
+            "powupHits",
+            "powupReinforcement"
+          ],
+          "armyScore": 100
+        },
+        {
+          "round": 3,
+          "power": 1488,
+          "army": [
+            "blackNpc3TraitorGuardsman:9",
+            "blackNpc3TraitorGuardsman:9",
+            "blackNpc3TraitorGuardsman:9",
+            "blackNpc3TraitorGuardsman:9",
+            "blackNpc3TraitorGuardsman:9",
+            "blackNpc3TraitorGuardsman:9",
+            "blackNpc3TraitorGuardsman:9",
+            "blackNpc3TraitorGuardsman:9",
+            "blackNpc3TraitorGuardsman:9",
+            "blackNpc3TraitorGuardsman:9",
+            "blackNpc3TraitorGuardsman:9",
+            "blackNpc3TraitorGuardsman:9"
+          ],
+          "armyAfterCompletion": [
+            "powupHealth",
+            "powupReinforcementShield"
+          ],
+          "armyScore": 150
+        },
+        {
+          "round": 5,
+          "power": 1132,
+          "army": [
+            "blackNpc1Bloodletter:7",
+            "blackNpc1Bloodletter:7",
+            "blackNpc1Bloodletter:7",
+            "blackNpc1Bloodletter:7",
+            "blackNpc1Bloodletter:7",
+            "blackNpc3TraitorGuardsman:7",
+            "blackNpc3TraitorGuardsman:7",
+            "blackNpc3TraitorGuardsman:7",
+            "blackNpc3TraitorGuardsman:7"
+          ],
+          "armyAfterCompletion": [
+            "powupResurrect",
+            "powupReactivateAbility"
+          ],
+          "armyScore": 150,
+          "rarityUpgradeOnCompletion": "Uncommon"
+        },
+        {
+          "round": 8,
+          "power": 3616,
+          "army": [
+            "thousNpc1PinkHorror:7",
+            "thousNpc1PinkHorror:7",
+            "thousNpc1PinkHorror:7",
+            "thousNpc1PinkHorror:7",
+            "thousNpc1PinkHorror:7",
+            "thousNpc1PinkHorror:7",
+            "thousNpc1PinkHorror:7",
+            "thousNpc1PinkHorror:7"
+          ],
+          "armyAfterCompletion": [
+            "powupReinforcement",
+            "powupMeleeHits"
+          ],
+          "armyScore": 200
+        },
+        {
+          "round": 10,
+          "power": 3505,
+          "army": [
+            "deathNpc1Poxwalker:12",
+            "deathNpc1Poxwalker:12",
+            "deathNpc1Poxwalker:12",
+            "deathNpc1Poxwalker:12",
+            "deathNpc1Poxwalker:12",
+            "deathNpc2PlagueMarine:10",
+            "deathNpc2PlagueMarine:10",
+            "deathNpc3Nurglings:10"
+          ],
+          "armyAfterCompletion": [
+            "powupBomb",
+            "powupHealing"
+          ],
+          "armyScore": 250,
+          "rarityUpgradeOnCompletion": "Rare"
+        },
+        {
+          "round": 12,
+          "power": 15362,
+          "army": [
+            "blackNpc2Terminator:13",
+            "blackNpc2Terminator:13",
+            "blackNpc1Bloodletter:13",
+            "blackNpc1Bloodletter:13",
+            "blackNpc1Bloodletter:13",
+            "blackNpc1Bloodletter:13",
+            "blackNpc3TraitorGuardsman:13",
+            "blackNpc3TraitorGuardsman:13",
+            "blackNpc3TraitorGuardsman:13",
+            "blackNpc3TraitorGuardsman:13"
+          ],
+          "armyAfterCompletion": [
+            "powupReinforcement",
+            "powupReinforcementShield"
+          ],
+          "armyScore": 400
+        },
+        {
+          "round": 14,
+          "power": 40594,
+          "army": [
+            "thousNpc2Screamer:16",
+            "thousNpc2Screamer:16",
+            "thousNpc2Screamer:16",
+            "thousNpc2Screamer:16",
+            "thousNpc2Screamer:16",
+            "thousNpc2Screamer:16",
+            "thousNpc1PinkHorror:16",
+            "thousNpc1PinkHorror:16",
+            "thousNpc1PinkHorror:16",
+            "thousNpc1PinkHorror:16"
+          ],
+          "armyAfterCompletion": [
+            "powupResurrect",
+            "powupReactivateAbility"
+          ],
+          "armyScore": 450,
+          "rarityUpgradeOnCompletion": "Epic"
+        },
+        {
+          "round": 16,
+          "power": 63105,
+          "army": [
+            "deathNpcPutrifier:12",
+            "deathNpc2PlagueMarine:17",
+            "deathNpc2PlagueMarine:17",
+            "deathNpc2PlagueMarine:17",
+            "deathNpc2PlagueMarine:17",
+            "deathNpc2PlagueMarine:17",
+            "deathNpc3Nurglings:17",
+            "deathNpc3Nurglings:17",
+            "deathNpc3Nurglings:17"
+          ],
+          "armyAfterCompletion": [
+            "powupDamage",
+            "powupHealing"
+          ],
+          "armyScore": 600
+        },
+        {
+          "round": 18,
+          "power": 109720,
+          "army": [
+            "blackBossTerminator:5",
+            "blackNpc1Bloodletter:21",
+            "blackNpc1Bloodletter:21",
+            "blackNpc1Bloodletter:21",
+            "blackNpc1Bloodletter:21",
+            "blackNpc1Bloodletter:21",
+            "blackNpc3TraitorGuardsman:25",
+            "blackNpc3TraitorGuardsman:25",
+            "blackNpc3TraitorGuardsman:25",
+            "blackNpc3TraitorGuardsman:25"
+          ],
+          "armyAfterCompletion": [
+            "powupBomb",
+            "powupReinforcement"
+          ],
+          "armyScore": 600
+        },
+        {
+          "round": 20,
+          "power": 174644,
+          "army": [
+            "thousNpc2Screamer:21",
+            "thousNpc2Screamer:21",
+            "thousNpc2Screamer:21",
+            "thousNpc2Screamer:21",
+            "thousNpc2Screamer:21",
+            "thousNpcInfernalMaster:13",
+            "thousNpc3RubricMarine:21",
+            "thousNpc3RubricMarine:21",
+            "thousNpc3RubricMarine:21",
+            "thousNpc3RubricMarine:21"
+          ],
+          "armyAfterCompletion": [
+            "powupArmor",
+            "powupReactivateAbility"
+          ],
+          "armyScore": 650,
+          "rarityUpgradeOnCompletion": "Legendary"
+        },
+        {
+          "round": 22,
+          "power": 260235,
+          "army": [
+            "blackNpc3TraitorGuardsman:24",
+            "blackNpc3TraitorGuardsman:24",
+            "blackNpc3TraitorGuardsman:24",
+            "blackNpc3TraitorGuardsman:24",
+            "blackNpc4Havoc:24",
+            "blackNpc3TraitorGuardsman:24",
+            "blackNpc3TraitorGuardsman:24",
+            "blackNpc4Havoc:24",
+            "blackNpc4Havoc:24",
+            "blackNpc3TraitorGuardsman:24",
+            "blackNpc3TraitorGuardsman:24",
+            "blackNpc3TraitorGuardsman:24"
+          ],
+          "armyAfterCompletion": [
+            "powupHits",
+            "powupReinforcement"
+          ],
+          "armyScore": 650
+        },
+        {
+          "round": 24,
+          "power": 472778,
+          "army": [
+            "deathNpc3Nurglings:24",
+            "deathNpc3Nurglings:24",
+            "deathNpc3Nurglings:24",
+            "deathNpc2PlagueMarine:24",
+            "deathNpc2PlagueMarine:24",
+            "deathNpcBlightlord:14",
+            "deathNpc2PlagueMarine:24",
+            "deathNpcRotbone:14",
+            "deathNpc2PlagueMarine:24",
+            "deathNpc2PlagueMarine:24"
+          ],
+          "armyAfterCompletion": [
+            "powupHealing"
+          ],
+          "armyScore": 1000
+        },
+        {
+          "round": 26,
+          "power": 1639489,
+          "army": [
+            "thousNpc1PinkHorror:28",
+            "thousNpc1PinkHorror:28",
+            "thousNpc1PinkHorror:28",
+            "thousNpc1PinkHorror:28",
+            "thousNpc1PinkHorror:28",
+            "thousNpc1PinkHorror:28",
+            "thousNpcAhriman:16",
+            "thousNpcSekhetar:16"
+          ],
+          "armyAfterCompletion": [
+            "powupMeleeHits",
+            "powupResurrect"
+          ],
+          "armyScore": 1000
+        },
+        {
+          "round": 28,
+          "power": 2212371,
+          "army": [
+            "blackNpc1Bloodletter:33",
+            "blackNpc1Bloodletter:33",
+            "blackNpc4Havoc:33",
+            "blackNpc4Havoc:33",
+            "blackNpc1Bloodletter:33",
+            "blackNpc1Bloodletter:33",
+            "blackNpc1Bloodletter:33",
+            "blackNpc1Bloodletter:33",
+            "blackNpc3TraitorGuardsman:33",
+            "blackNpc3TraitorGuardsman:33",
+            "blackNpc3TraitorGuardsman:33",
+            "blackNpc4Havoc:33"
+          ],
+          "armyAfterCompletion": [
+            "powupBomb",
+            "powupReactivateAbility"
+          ],
+          "armyScore": 1500,
+          "rarityUpgradeOnCompletion": "Mythic"
+        },
+        {
+          "round": 30,
+          "power": 3524933,
+          "army": [
+            "thousNpc2Screamer:35",
+            "thousNpc2Screamer:35",
+            "thousNpc2Screamer:35",
+            "thousNpc2Screamer:35",
+            "thousNpc2Screamer:35",
+            "thousNpcTerminator:17",
+            "thousNpc3RubricMarine:35",
+            "thousNpc3RubricMarine:35",
+            "thousNpc3RubricMarine:35",
+            "thousNpc3RubricMarine:35"
+          ],
+          "armyAfterCompletion": [
+            "powupDamage",
+            "powupReinforcement"
+          ],
+          "armyScore": 1500
+        },
+        {
+          "round": 32,
+          "power": 4904030,
+          "army": [
+            "deathNpc1Poxwalker:38",
+            "deathNpc1Poxwalker:38",
+            "deathNpc1Poxwalker:38",
+            "deathNpc1Poxwalker:38",
+            "deathNpc1Poxwalker:38",
+            "deathNpcBlightbringer:17",
+            "deathNpc2PlagueMarine:38",
+            "deathNpc2PlagueMarine:38",
+            "deathNpc2PlagueMarine:38",
+            "deathNpc2PlagueMarine:38",
+            "deathNpcTyphus:17"
+          ],
+          "armyAfterCompletion": [
+            "powupHealing"
+          ],
+          "armyScore": 1500
+        },
+        {
+          "round": 34,
+          "power": 6813223,
+          "army": [
+            "blackNpc1Bloodletter:40",
+            "blackNpc1Bloodletter:40",
+            "blackNpcHaarken:18",
+            "blackNpc1Bloodletter:40",
+            "blackNpc1Bloodletter:40",
+            "blackNpcAbaddon:18",
+            "blackNpc3TraitorGuardsman:40",
+            "blackNpc3TraitorGuardsman:40",
+            "blackNpc3TraitorGuardsman:40",
+            "blackNpc3TraitorGuardsman:40",
+            "blackNpcObliterator:18",
+            "blackNpc2Terminator:43"
+          ],
+          "armyAfterCompletion": [
+            "powupBomb"
+          ],
+          "armyScore": 1500
+        },
+        {
+          "round": 36,
+          "power": 9681680,
+          "army": [
+            "thousNpc1PinkHorror:42",
+            "thousNpc1PinkHorror:42",
+            "thousNpc1PinkHorror:42",
+            "thousNpc1PinkHorror:42",
+            "thousNpcInfernalMaster:18",
+            "thousNpc3RubricMarine:42",
+            "thousNpc3RubricMarine:42",
+            "thousNpc3RubricMarine:42",
+            "thousNpcTzaangor:18",
+            "thousNpcSorcerer:18"
+          ],
+          "armyAfterCompletion": [
+            "powupHealing"
+          ],
+          "armyScore": 1500
+        },
+        {
+          "round": 38,
+          "power": 13991848,
+          "army": [
+            "deathNpc3Nurglings:45",
+            "deathNpc3Nurglings:45",
+            "deathNpc3Nurglings:45",
+            "deathBossBlightlordSurv:1",
+            "deathBossPutrifierSurv:1",
+            "deathBossBlightbringerSurv:1",
+            "deathNpc2PlagueMarine:45",
+            "deathNpc2PlagueMarine:45",
+            "deathBossTyphusSurv:2",
+            "deathBossRotboneSurv:1",
+            "deathNpc2PlagueMarine:45"
+          ],
+          "armyAfterCompletion": [
+            "powupBomb"
+          ],
+          "armyScore": 1500
+        },
+        {
+          "round": 41,
+          "power": 145508047328,
+          "army": [
+            "deathNpc2PlagueMarineSurv:3",
+            "thousNpc3RubricMarineSurv:3",
+            "blackNpc4HavocSurv:3",
+            "deathNpc2PlagueMarineSurv:3",
+            "thousNpc3RubricMarineSurv:3",
+            "blackNpc4HavocSurv:3",
+            "deathNpc2PlagueMarineSurv:3",
+            "thousNpc3RubricMarineSurv:3",
+            "blackNpc4HavocSurv:3",
+            "deathNpc2PlagueMarineSurv:3",
+            "thousNpc3RubricMarineSurv:3",
+            "blackNpc4HavocSurv:3"
+          ],
+          "armyScore": 2000
+        }
+      ],
+      "disallowedFactions": [
+        "Necrons",
+        "Sisterhood",
+        "AstraMilitarum",
+        "BlackLegion",
+        "DeathGuard",
+        "Tyranids",
+        "Orks",
+        "Aeldari",
+        "Tau",
+        "ThousandSons",
+        "AdeptusMechanicus",
+        "WorldEaters",
+        "Genestealers",
+        "Custodes",
+        "EmperorsChildren",
+        "LeaguesOfVotann",
         "TheLostAndTheDamned"
       ]
     }

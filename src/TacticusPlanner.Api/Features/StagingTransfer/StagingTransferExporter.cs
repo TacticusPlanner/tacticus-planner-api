@@ -43,6 +43,10 @@ public sealed class StagingTransferExporter(PlannerDbContext db, TimeProvider ti
             .Where(entity => entity.ProfileId == profileId)
             .OrderBy(entity => entity.EventId).ThenBy(entity => entity.StartedAt).ThenBy(entity => entity.Id)
             .ToListAsync(ct);
+        var rosterSnapshots = await db.PersonalRosterSnapshots.IgnoreQueryFilters().AsNoTracking()
+            .Where(entity => entity.ProfileId == profileId)
+            .OrderBy(entity => entity.TakenAt).ThenBy(entity => entity.Id)
+            .ToListAsync(ct);
 
         return new StagingTransferBundle
         {
@@ -70,6 +74,7 @@ public sealed class StagingTransferExporter(PlannerDbContext db, TimeProvider ti
                 Config = goal.Config,
                 Snapshot = goal.Snapshot,
                 DependsOn = goal.DependsOn,
+                LinkedGoalIds = goal.LinkedGoalIds,
                 CreatedAt = goal.CreatedAt,
             }).ToList(),
             Projects = projects.Select(project => new StagingTransferProject
@@ -109,6 +114,14 @@ public sealed class StagingTransferExporter(PlannerDbContext db, TimeProvider ti
                 Lanes = record.Lanes,
                 Teams = record.Teams,
                 Roster = record.Roster,
+            }).ToList(),
+            PersonalRosterSnapshots = rosterSnapshots.Select(snapshot => new StagingTransferPersonalRosterSnapshot
+            {
+                Name = snapshot.Name,
+                Source = snapshot.Source,
+                TakenAt = snapshot.TakenAt,
+                ImportKey = snapshot.ImportKey,
+                Roster = snapshot.Roster,
             }).ToList(),
         };
     }

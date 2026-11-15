@@ -153,6 +153,7 @@ public sealed class CreateCombinedGoalsEndpoint
             Config = GoalMapper.MapConfig(spec.Config),
             Snapshot = GoalMapper.MapSnapshot(spec.Snapshot),
             Notes = spec.Notes,
+            LinkedGoalIds = spec.LinkedGoalIds ?? [],
         }).ToList();
         for (var i = 0; i < req.Goals.Count; i++)
         {
@@ -202,6 +203,19 @@ public sealed class CreateCombinedGoalsEndpoint
                         await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
                         return;
                     }
+                }
+            }
+
+            if (goals.Any(goal => goal.LinkedGoalIds.Count > 0))
+            {
+                var inFlight = (await order.InFlightAsync(ct)).ToDictionary(goal => goal.Id.Value);
+                if (goals.Select(goal => GoalLinkRules.Error(
+                        goal.GoalType, goal.EntityType, goal.EntityId, goal.LinkedGoalIds, inFlight))
+                    .FirstOrDefault(error => error is not null) is { } linkError)
+                {
+                    AddError(request => request.Goals, linkError);
+                    await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
+                    return;
                 }
             }
 
@@ -271,7 +285,10 @@ public sealed record CombinedGoalSpec(
     List<int> DependsOnIndex,
     CreateGoalSnapshotRequest? Snapshot = null,
     List<Guid>? DependsOnGoalIds = null,
-    string? Notes = null
+    string? Notes = null,
+    // Upgrade goals only: existing Active/Paused Rank (Character) or Ability (Mow) goals of the same unit this
+    // goal pre-farms for (see Goal.LinkedGoalIds).
+    List<Guid>? LinkedGoalIds = null
 );
 
 public sealed record CreateCombinedGoalsResponse(List<GoalDetailResponse> Goals);

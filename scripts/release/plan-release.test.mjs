@@ -42,9 +42,28 @@ const rejects = (inputs, repo, message) =>
   })
 
 describe("parseVersion", () => {
-  it("accepts only strict vX.Y.Z tags", () => {
-    assert.deepEqual(parseVersion("v1.12.3"), { major: 1, minor: 12, patch: 3 })
-    for (const tag of ["1.2.3", "v1.2", "v1.2.3-rc.1", "v1.2.3.4", "release"]) {
+  it("accepts only strict vX.Y.Z and vX.Y.Z.N tags", () => {
+    assert.deepEqual(parseVersion("v1.12.3"), {
+      major: 1,
+      minor: 12,
+      patch: 3,
+      hotfix: 0,
+    })
+    assert.deepEqual(parseVersion("v1.12.3.4"), {
+      major: 1,
+      minor: 12,
+      patch: 3,
+      hotfix: 4,
+    })
+    for (const tag of [
+      "1.2.3",
+      "v1.2",
+      "v1.2.3-rc.1",
+      "v1.2.3.0",
+      "v1.2.3.04",
+      "v1.2.3.4.5",
+      "release",
+    ]) {
       assert.equal(parseVersion(tag), null, tag)
     }
   })
@@ -53,6 +72,11 @@ describe("parseVersion", () => {
 describe("latestTag", () => {
   it("compares numerically, not as text", () => {
     assert.equal(latestTag(["v1.9.0", "v1.10.0", "v1.2.0"]), "v1.10.0")
+  })
+
+  it("orders a hotfix after its release and before the next patch", () => {
+    assert.equal(latestTag(["v1.4.1", "v1.4.1.2", "v1.4.1.10"]), "v1.4.1.10")
+    assert.equal(latestTag(["v1.4.1.9", "v1.4.2"]), "v1.4.2")
   })
 
   it("ignores tags that are not versions", () => {
@@ -166,56 +190,90 @@ describe("planRelease: releasing an older commit", () => {
     )
   })
 
-  it("is not allowed for patches from a release branch", () => {
+  it("is not allowed for hotfixes", () => {
     rejects(
-      { bump: "patch", refName: "release/1.3", commit: "c4" },
+      { bump: "hotfix", refName: "release/1.3", commit: "c4" },
       repo(),
       "commit applies to releases from main only; a release branch ships its head."
     )
   })
 
-  it("is allowed for patches from main", () => {
+  it("is allowed for patches", () => {
     const result = plan({ bump: "patch", commit: "c4" }, repo())
     assert.equal(result.sha, "c4")
     assert.equal(result.tag, "v1.3.1")
+    assert.equal(result.branch, "release/1.3.1")
+  })
+
+  it("counts a patch cut from main as the last release", () => {
+    rejects(
+      { bump: "minor", commit: "c3" },
+      fakeRepo({
+        commits: ["c1", "c2", "c3", "c4", "c5"],
+        tags: { "v1.3.0": "c2", "v1.3.1": "c4" },
+      }),
+      "c3 predates v1.3.1; pick a commit after the last release."
+    )
+  })
+
+  it("ignores hotfix tags, which are not on main", () => {
+    const result = plan(
+      { bump: "minor", commit: "c3" },
+      fakeRepo({
+        commits: ["c1", "c2", "c3", "c4", "c5"],
+        tags: { "v1.3.0": "c2", "v1.3.1": "hotfix" },
+      })
+    )
+    assert.equal(result.sha, "c3")
+    assert.equal(result.tag, "v1.4.0")
   })
 })
 
 describe("planRelease: patch", () => {
-  const repo = () =>
+  const repo = (remoteBranches = []) =>
     fakeRepo({
-      tags: { "v1.4.0": "c1", "v1.4.1": "c2", "v1.5.0": "x" },
+      commits: ["c1", "c2", "c3"],
+      tags: { "v1.4.0": "c1", "v1.4.1": "x", "v1.5.0": "c2" },
+      remoteBranches,
     })
 
-  it("tags the next patch on the release branch", () => {
-    assert.deepEqual(plan({ bump: "patch", refName: "release/1.4" }, repo()), {
-      tag: "v1.4.2",
-      previous: "v1.4.1",
-      branch: "",
-      sha: "c3",
-      resume: false,
-    })
-  })
-
-  it("only counts tags on the same release line", () => {
-    const result = plan(
-      { bump: "patch", refName: "release/1.4" },
-      fakeRepo({ tags: { "v1.4.0": "c1", "v1.40.3": "x" } })
-    )
-    assert.equal(result.tag, "v1.4.1")
-  })
-
-  it("from main tags the next patch on the newest line, no new branch", () => {
+  it("cuts a release/X.Y.Z branch for the next patch on the newest line", () => {
     assert.deepEqual(plan({ bump: "patch" }, repo()), {
       tag: "v1.5.1",
       previous: "v1.5.0",
-      branch: "",
+      branch: "release/1.5.1",
       sha: "c3",
       resume: false,
     })
   })
 
-  it("from main refuses when nothing is released yet", () => {
+  it("counts up from the newest tag, even a hotfix", () => {
+    const result = plan(
+      { bump: "patch" },
+      fakeRepo({ tags: { "v1.5.0": "c1", "v1.5.1": "x" } })
+    )
+    assert.equal(result.tag, "v1.5.2")
+    assert.equal(result.branch, "release/1.5.2")
+  })
+
+  it("drops the hotfix number when the newest tag is a hotfix", () => {
+    const result = plan(
+      { bump: "patch" },
+      fakeRepo({ tags: { "v1.5.0": "c1", "v1.5.0.2": "x" } })
+    )
+    assert.equal(result.tag, "v1.5.1")
+    assert.equal(result.previous, "v1.5.0.2")
+  })
+
+  it("must run from main", () => {
+    rejects(
+      { bump: "patch", refName: "release/1.5" },
+      repo(),
+      "Run patch releases from main."
+    )
+  })
+
+  it("refuses when nothing is released yet", () => {
     rejects(
       { bump: "patch" },
       fakeRepo(),
@@ -223,19 +281,106 @@ describe("planRelease: patch", () => {
     )
   })
 
-  it("must run from main or a release branch", () => {
+  it("refuses when the patch branch already exists", () => {
     rejects(
-      { bump: "patch", refName: "feature/x" },
-      repo(),
-      "Run patch releases from main or a release/X.Y branch."
+      { bump: "patch" },
+      repo(["release/1.5.1"]),
+      "release/1.5.1 already exists."
+    )
+  })
+})
+
+describe("planRelease: hotfix", () => {
+  const repo = () =>
+    fakeRepo({
+      tags: { "v1.4.0": "c1", "v1.4.1": "c2", "v1.5.0": "x" },
+    })
+
+  it("tags the next hotfix of the line's latest release, no new branch", () => {
+    assert.deepEqual(plan({ bump: "hotfix", refName: "release/1.4" }, repo()), {
+      tag: "v1.4.1.1",
+      previous: "v1.4.1",
+      branch: "",
+      sha: "c3",
+      resume: false,
+    })
+  })
+
+  it("runs from a patch branch too", () => {
+    const result = plan(
+      { bump: "hotfix", refName: "release/1.4.1" },
+      fakeRepo({ tags: { "v1.4.0": "c1", "v1.4.1": "c2" } })
+    )
+    assert.equal(result.tag, "v1.4.1.1")
+    assert.equal(result.previous, "v1.4.1")
+    assert.equal(result.branch, "")
+  })
+
+  it("counts up from the previous hotfix, leaving the patch number alone", () => {
+    const result = plan(
+      { bump: "hotfix", refName: "release/1.4.1" },
+      fakeRepo({
+        tags: { "v1.4.0": "x", "v1.4.1": "c1", "v1.4.1.1": "c2" },
+      })
+    )
+    assert.equal(result.tag, "v1.4.1.2")
+    assert.equal(result.previous, "v1.4.1.1")
+  })
+
+  it("hotfixes a minor release as vX.Y.0.N", () => {
+    const result = plan(
+      { bump: "hotfix", refName: "release/1.4" },
+      fakeRepo({ tags: { "v1.4.0": "c1" } })
+    )
+    assert.equal(result.tag, "v1.4.0.1")
+  })
+
+  it("builds on older three-part hotfix tags already on the branch", () => {
+    const result = plan(
+      { bump: "hotfix", refName: "release/1.4.1" },
+      fakeRepo({
+        commits: ["c1", "c2", "c3", "c4"],
+        tags: { "v1.4.1": "c1", "v1.4.2": "c2", "v1.4.3": "c3" },
+      })
+    )
+    assert.equal(result.tag, "v1.4.3.1")
+    assert.equal(result.previous, "v1.4.3")
+  })
+
+  it("only counts tags on the same release line", () => {
+    const result = plan(
+      { bump: "hotfix", refName: "release/1.4" },
+      fakeRepo({ tags: { "v1.4.0": "c1", "v1.40.3": "x" } })
+    )
+    assert.equal(result.tag, "v1.4.0.1")
+  })
+
+  it("refuses a branch that lacks the line's latest release", () => {
+    rejects(
+      { bump: "hotfix", refName: "release/1.4" },
+      fakeRepo({ tags: { "v1.4.0": "c1", "v1.4.1": "elsewhere" } }),
+      "release/1.4 does not contain v1.4.1; hotfix the branch that release was cut on."
     )
   })
 
-  it("refuses a release branch with nothing to patch", () => {
+  it("must run from a release branch", () => {
     rejects(
-      { bump: "patch", refName: "release/1.9" },
+      { bump: "hotfix" },
       repo(),
-      "release/1.9 has no v1.9.* tag to patch."
+      "Run hotfix releases from a release/X.Y or release/X.Y.Z branch."
+    )
+    rejects(
+      { bump: "hotfix", refName: "feature/x" },
+      repo(),
+      "Run hotfix releases from a release/X.Y or release/X.Y.Z branch."
+    )
+  })
+
+  it("refuses a release branch with nothing to hotfix", () => {
+    rejects(
+      { bump: "hotfix", refName: "release/1.9" },
+      repo(),
+      "release/1.9 has no v1.9.* tag to hotfix."
     )
   })
 })
@@ -253,6 +398,17 @@ describe("planRelease: rerun after the tag was pushed", () => {
       sha: "c3",
       resume: true,
     })
+  })
+
+  it("resumes a hotfix tag, counting its release as the previous one", () => {
+    const repo = fakeRepo({
+      tags: { "v1.0.0": "c1", "v1.0.0.1": "c3", "v1.1.0": "x" },
+      releases: ["v1.0.0", "v1.1.0"],
+    })
+    const result = plan({ bump: "hotfix", refName: "release/1.0" }, repo)
+    assert.equal(result.tag, "v1.0.0.1")
+    assert.equal(result.previous, "v1.0.0")
+    assert.equal(result.resume, true)
   })
 
   it("resumes the first release with no previous tag", () => {

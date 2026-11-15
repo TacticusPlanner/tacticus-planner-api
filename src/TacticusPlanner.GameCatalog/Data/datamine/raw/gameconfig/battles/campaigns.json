@@ -33962,8 +33962,8 @@
           "BoardId": "MC3_75",
           "spawnpoints": 5,
           "difficultyMultiplier": 110,
-          "power": 19146,
-          "xp": 139,
+          "power": 18316,
+          "xp": 136,
           "lightningVictory": 4,
           "staminaCost": 6,
           "maxAttempts": 10,
@@ -56494,8 +56494,8 @@
           "SpawnPointsSet": 3,
           "spawnpoints": 5,
           "difficultyMultiplier": 120,
-          "power": 252055,
-          "xp": 503,
+          "power": 248020,
+          "xp": 499,
           "lightningVictory": 4,
           "staminaCost": 10,
           "maxAttempts": 6,
@@ -80795,7 +80795,7 @@
     {
       "id": "eventStandard6",
       "lastPlayableLevel": 30,
-      "unlockOffer": "offer_eventCampaign6_character_unlock",
+      "unlockOffer": "offer_campaign_eventCampaign6_ThutmoseUnlock",
       "unlockConditions": {
         "requiredUnits": {
           "allowedFactions": [
@@ -85072,6 +85072,4551 @@
             "necroDestroyer",
             "necroSpyder",
             "necroPlasmancer"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eventStandard7",
+      "lastPlayableLevel": 30,
+      "unlockOffer": "offer_eventCampaign7_character_unlock",
+      "unlockConditions": {
+        "requiredUnits": {
+          "allowedFactions": [
+            "Orks"
+          ],
+          "unlockedUnitIds": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        }
+      },
+      "starChests": [
+        [
+          {
+            "stars": 0,
+            "chestId": ""
+          },
+          {
+            "stars": 0,
+            "chestId": ""
+          }
+        ],
+        [
+          {
+            "stars": 0,
+            "chestId": ""
+          },
+          {
+            "stars": 0,
+            "chestId": ""
+          }
+        ],
+        [
+          {
+            "stars": 0,
+            "chestId": ""
+          },
+          {
+            "stars": 0,
+            "chestId": ""
+          }
+        ],
+        [
+          {
+            "stars": 0,
+            "chestId": ""
+          },
+          {
+            "stars": 0,
+            "chestId": ""
+          }
+        ],
+        [
+          {
+            "stars": 0,
+            "chestId": ""
+          },
+          {
+            "stars": 0,
+            "chestId": ""
+          }
+        ]
+      ],
+      "battles": [
+        {
+          "campaignId": 1031,
+          "battleId": "01",
+          "BoardId": "C2_28",
+          "SpawnPointsSet": 12,
+          "spawnpoints": 3,
+          "difficultyMultiplier": 100,
+          "power": 60,
+          "xp": 8,
+          "lightningVictory": 2,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "astraNpc1Guardsman:4",
+              "astraNpc1Guardsman:4",
+              "astraNpc1Guardsman:4",
+              "astraNpc1Guardsman:4"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:40-66"
+            ],
+            "star1": "gold:50",
+            "star2": "xpCommon",
+            "star3": "upgHpC013",
+            "chanceOf": "upgHpC013%12/13"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle01_start",
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle01_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1031,
+          "battleId": "02",
+          "BoardId": "MC2_01",
+          "SpawnPointsSet": 9,
+          "spawnpoints": 3,
+          "difficultyMultiplier": 100,
+          "power": 104,
+          "xp": 11,
+          "lightningVictory": 3,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "astraNpc2Lascannon:4",
+              "astraNpc1Guardsman:4",
+              "astraNpc1Guardsman:4",
+              "astraNpc1Guardsman:4",
+              "astraNpc1Guardsman:4",
+              "astraNpc1Guardsman:4"
+            ],
+            [
+              "orksNpc1Grot:1",
+              "orksNpc1Grot:1"
+            ]
+          ],
+          "playerTeams": [
+            2,
+            1
+          ],
+          "loot": {
+            "base": [
+              "gold:40-66"
+            ],
+            "star1": "gold:50",
+            "star2": "xpCommon",
+            "star3": "upgDmgC011",
+            "chanceOf": "upgDmgC011%12/13"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle02_start",
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle02_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1031,
+          "battleId": "03",
+          "BoardId": "C2_31",
+          "SpawnPointsSet": 11,
+          "spawnpoints": 3,
+          "difficultyMultiplier": 100,
+          "power": 257,
+          "xp": 17,
+          "lightningVictory": 3,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "astraNpc1Guardsman:4",
+              "astraNpc1Guardsman:4",
+              "astraNpc1Guardsman:4",
+              "astraNpc1Guardsman:4",
+              "astraNpc1Guardsman:4",
+              "astraNpc1Guardsman:4",
+              "astraNpc2Lascannon:4",
+              "astraNpc3Voxcaster:5",
+              "astraNpc3Voxcaster:5"
+            ],
+            [
+              "orksNpc2OrkBoy:1",
+              "orksNpc2OrkBoy:1",
+              "orksNpc2OrkBoy:1"
+            ]
+          ],
+          "playerTeams": [
+            2,
+            1
+          ],
+          "loot": {
+            "base": [
+              "gold:40-66"
+            ],
+            "star1": "gold:50",
+            "star2": "xpCommon",
+            "star3": "upgArmC001",
+            "chanceOf": "upgArmC001%12/13"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle03_start",
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle03_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1031,
+          "battleId": "03B",
+          "BoardId": "CE7_01",
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 1084,
+          "xp": 33,
+          "lightningVictory": 3,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "astraNpcBullgryn:3",
+              "astraNpcPrimarisPsy:3",
+              "astraNpc4Mortar:6",
+              "astraNpc4Mortar:6",
+              "astraNpc2Lascannon:6",
+              "astraNpc2Lascannon:6",
+              "astraNpc2Lascannon:6",
+              "astraNpc2Lascannon:6",
+              "astraNpc3Voxcaster:6",
+              "astraNpc3Voxcaster:6",
+              "astraNpc3Voxcaster:6",
+              "astraNpc3Voxcaster:6"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:60-106"
+            ],
+            "star1": "dust:100",
+            "star2": "gold:5000",
+            "star3": "upgHpR005",
+            "chanceOf": "upgHpR005%3/6"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "afterFirstVictoryBeforeBES": "dlg_ce7cbattle01_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1031,
+          "battleId": "04",
+          "BoardId": "C2_19",
+          "SpawnPointsSet": 7,
+          "spawnpoints": 3,
+          "difficultyMultiplier": 100,
+          "power": 290,
+          "xp": 18,
+          "lightningVictory": 3,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "bloodNpc1Intercessor:4",
+              "bloodNpc1Intercessor:4",
+              "bloodNpc1Intercessor:4",
+              "bloodNpc1Intercessor:4",
+              "bloodNpc1Intercessor:4"
+            ],
+            [
+              "orksNpc1Grot:1",
+              "orksNpc1Grot:1",
+              "orksNpc1Grot:1"
+            ]
+          ],
+          "playerTeams": [
+            2,
+            1
+          ],
+          "loot": {
+            "base": [
+              "gold:40-66"
+            ],
+            "star1": "gold:50",
+            "star2": "xpCommon",
+            "star3": "upgHpC016",
+            "chanceOf": "upgHpC016%12/13"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle04_start"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1031,
+          "battleId": "05",
+          "BoardId": "CE3_02",
+          "SpawnPointsSet": 5,
+          "spawnpoints": 4,
+          "difficultyMultiplier": 100,
+          "power": 580,
+          "xp": 25,
+          "lightningVictory": 3,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "astraNpc1Guardsman:6",
+              "astraNpc1Guardsman:6",
+              "astraNpc1Guardsman:6",
+              "astraNpc1Guardsman:6",
+              "astraNpc1Guardsman:6",
+              "astraNpc1Guardsman:6",
+              "bloodNpc1Intercessor:5",
+              "bloodNpc1Intercessor:5",
+              "bloodNpc1Intercessor:5",
+              "bloodNpc1Intercessor:5",
+              "bloodNpc1Intercessor:5"
+            ],
+            [
+              "orksNpc1Grot:1",
+              "orksNpc1Grot:1",
+              "orksNpc1Grot:1"
+            ]
+          ],
+          "playerTeams": [
+            2,
+            1
+          ],
+          "loot": {
+            "base": [
+              "gold:40-66"
+            ],
+            "star1": "gold:50",
+            "star2": "xpCommon",
+            "star3": "upgDmgC001",
+            "chanceOf": "upgDmgC001%12/13"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle05_start",
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle05_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1031,
+          "battleId": "06",
+          "boss": "bloodNpcIntercessor",
+          "BoardId": "C2_35",
+          "SpawnPointsSet": 10,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 927,
+          "xp": 31,
+          "lightningVictory": 4,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "bloodNpcIntercessor:3",
+              "bloodNpc1Intercessor:6",
+              "bloodNpc1Intercessor:6",
+              "bloodNpc1Intercessor:6",
+              "bloodNpc1Intercessor:6",
+              "astraNpc2Lascannon:6",
+              "astraNpc2Lascannon:6",
+              "astraNpc2Lascannon:6",
+              "astraNpc1Guardsman:6",
+              "astraNpc1Guardsman:6",
+              "astraNpc1Guardsman:6",
+              "astraNpc3Voxcaster:6"
+            ],
+            [
+              "orksNpc1Grot:1",
+              "orksNpc1Grot:1",
+              "orksNpc1Grot:1"
+            ]
+          ],
+          "playerTeams": [
+            2,
+            1
+          ],
+          "loot": {
+            "base": [
+              "gold:45-75"
+            ],
+            "star1": "shards_bloodIntercessor",
+            "star2": "shards_bloodIntercessor",
+            "star3": "shards_bloodIntercessor",
+            "chanceOf": "shards_bloodIntercessor%2/6"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle06_start",
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle06_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1031,
+          "battleId": "07",
+          "BoardId": "LE2_06",
+          "SpawnPointsSet": 1,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 918,
+          "xp": 31,
+          "lightningVictory": 3,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "bloodNpc1Intercessor:6",
+              "bloodNpc1Intercessor:6",
+              "bloodNpc1Intercessor:6",
+              "bloodNpc1Intercessor:6",
+              "bloodNpc1Intercessor:6",
+              "bloodNpc1Intercessor:6",
+              "bloodNpc1Intercessor:6",
+              "bloodNpc1Intercessor:6",
+              "bloodNpc1Intercessor:6"
+            ],
+            [
+              "powupArmor"
+            ]
+          ],
+          "playerTeams": [
+            2,
+            1
+          ],
+          "loot": {
+            "base": [
+              "gold:45-75"
+            ],
+            "star1": "gold:50",
+            "star2": "xpCommon",
+            "star3": "upgArmC002",
+            "chanceOf": "upgArmC002%12/13"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1031,
+          "battleId": "08",
+          "BoardId": "C2_18b",
+          "SpawnPointsSet": 0,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 798,
+          "xp": 29,
+          "lightningVictory": 3,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "ultraNpc1Inceptor:6",
+              "ultraNpc1Inceptor:6",
+              "ultraNpc1Inceptor:6",
+              "ultraNpc1Inceptor:6",
+              "ultraNpc1Inceptor:6",
+              "bloodNpc1Intercessor:6",
+              "bloodNpc1Intercessor:6",
+              "bloodNpc1Intercessor:6",
+              "bloodNpc1Intercessor:6"
+            ],
+            [
+              "powupDamage"
+            ]
+          ],
+          "playerTeams": [
+            2,
+            1
+          ],
+          "loot": {
+            "base": [
+              "gold:45-75"
+            ],
+            "star1": "gold:50",
+            "star2": "xpCommon",
+            "star3": "upgHpC003",
+            "chanceOf": "upgHpC003%12/13"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle08_start"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1031,
+          "battleId": "09",
+          "BoardId": "C2_73",
+          "SpawnPointsSet": 8,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 748,
+          "xp": 28,
+          "lightningVictory": 3,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "ultraNpc2Eliminator:6",
+              "ultraNpc2Eliminator:6",
+              "ultraNpc2Eliminator:6",
+              "bloodNpc1Intercessor:6",
+              "bloodNpc1Intercessor:6",
+              "bloodNpc1Intercessor:6",
+              "ultraNpc2Eliminator:6",
+              "astraNpc1Guardsman:7",
+              "astraNpc1Guardsman:7"
+            ],
+            [
+              "powupArmor"
+            ]
+          ],
+          "playerTeams": [
+            2,
+            1
+          ],
+          "loot": {
+            "base": [
+              "gold:45-75"
+            ],
+            "star1": "gold:50",
+            "star2": "xpCommon",
+            "star3": "upgDmgC013",
+            "chanceOf": "upgDmgC013%12/13"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle09_start",
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle09_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1031,
+          "battleId": "10",
+          "BoardId": "C2_32",
+          "SpawnPointsSet": 11,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 932,
+          "xp": 31,
+          "lightningVictory": 3,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "ultraNpc2Eliminator:6",
+              "ultraNpc2Eliminator:6",
+              "ultraNpc2Eliminator:6",
+              "ultraNpc2Eliminator:6",
+              "ultraNpc1Inceptor:6",
+              "ultraNpc1Inceptor:6",
+              "ultraNpc1Inceptor:6",
+              "bloodNpc1Intercessor:6",
+              "bloodNpc1Intercessor:6",
+              "bloodNpc1Intercessor:6"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:45-75"
+            ],
+            "star1": "dust:10",
+            "star2": "abilityTokenCommon_Imperial",
+            "star3": "upgHpR035",
+            "chanceOf": "upgHpR035%3/6"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1031,
+          "battleId": "11",
+          "boss": "bloodNpcDeathCompany",
+          "BoardId": "C2_64",
+          "SpawnPointsSet": 14,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 1110,
+          "xp": 34,
+          "lightningVictory": 4,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "bloodNpcDeathCompany:3",
+              "ultraNpc2Eliminator:6",
+              "ultraNpc2Eliminator:6",
+              "ultraNpc2Eliminator:6",
+              "bloodNpc1Intercessor:6",
+              "bloodNpc1Intercessor:6",
+              "bloodNpc1Intercessor:6",
+              "bloodNpc1Intercessor:6",
+              "bloodNpc1Intercessor:6",
+              "astraNpc1Guardsman:4",
+              "astraNpc1Guardsman:4"
+            ],
+            [
+              "powupArmor"
+            ]
+          ],
+          "playerTeams": [
+            2,
+            1
+          ],
+          "loot": {
+            "base": [
+              "gold:48-82"
+            ],
+            "star1": "shards_bloodDeathCompany",
+            "star2": "shards_bloodDeathCompany",
+            "star3": "shards_bloodDeathCompany",
+            "chanceOf": "shards_bloodDeathCompany%2/6"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle11_start",
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle11_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1031,
+          "battleId": "12",
+          "BoardId": "LHE_temp_02",
+          "SpawnPointsSet": 5,
+          "spawnpoints": 3,
+          "difficultyMultiplier": 100,
+          "power": 731,
+          "xp": 28,
+          "lightningVictory": 3,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "astraNpc3Voxcaster:7",
+              "astraNpc3Voxcaster:7",
+              "astraNpc3Voxcaster:7",
+              "astraNpc3Voxcaster:7",
+              "astraNpc1Guardsman:7",
+              "astraNpc1Guardsman:7",
+              "astraNpc1Guardsman:7",
+              "astraNpc1Guardsman:7",
+              "astraNpc1Guardsman:7",
+              "Debris_Crate_Imp:7"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:48-82"
+            ],
+            "star1": "gold:100",
+            "star2": "xpCommon",
+            "star3": "upgArmC013",
+            "chanceOf": "upgArmC013%12/13"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle12_start",
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle12_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1031,
+          "battleId": "13",
+          "BoardId": "C2_34",
+          "SpawnPointsSet": 10,
+          "spawnpoints": 3,
+          "difficultyMultiplier": 100,
+          "power": 979,
+          "xp": 32,
+          "lightningVictory": 3,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "ultraNpc4HeavyIntercessor:8",
+              "astraNpc1Guardsman:7",
+              "astraNpc1Guardsman:7",
+              "astraNpc1Guardsman:7",
+              "astraNpc1Guardsman:7",
+              "astraNpc1Guardsman:7",
+              "astraNpc1Guardsman:7",
+              "astraNpc1Guardsman:9",
+              "Debris_Crate_Imp:7",
+              "Debris_OilDrum:8"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:48-82"
+            ],
+            "star1": "gold:100",
+            "star2": "upgHpU016",
+            "star3": "xpUncommon",
+            "chanceOf": "upgHpU016%3/4"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle13_start"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1031,
+          "battleId": "13B",
+          "BoardId": "CE7_05",
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 6011,
+          "xp": 78,
+          "lightningVictory": 4,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "bloodNpcIntercessor:8",
+              "ultraNpcInceptorSgt:9",
+              "astraNpcDreir:8",
+              "bloodNpc1Intercessor:10",
+              "bloodNpc1Intercessor:10",
+              "ultraNpc1Inceptor:10",
+              "ultraNpc1Inceptor:10",
+              "Debris_OilDrum:10",
+              "Debris_ExplOilDrum:10"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:60-106"
+            ],
+            "star1": "dust:100",
+            "star2": "gold:5000",
+            "star3": "upgHpE003",
+            "chanceOf": "upgHpE003%1/4"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "afterFirstVictoryBeforeBES": "dlg_ce7cbattle02_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1031,
+          "battleId": "14",
+          "BoardId": "C2_30",
+          "SpawnPointsSet": 9,
+          "spawnpoints": 4,
+          "difficultyMultiplier": 100,
+          "power": 2442,
+          "xp": 50,
+          "lightningVictory": 3,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "ultraNpc4HeavyIntercessor:7",
+              "ultraNpc4HeavyIntercessor:7",
+              "ultraNpc4HeavyIntercessor:7",
+              "bloodNpc1Intercessor:8",
+              "bloodNpc1Intercessor:8",
+              "bloodNpc1Intercessor:8",
+              "astraNpc2Lascannon:7",
+              "astraNpc2Lascannon:7"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:48-82"
+            ],
+            "star1": "gold:100",
+            "star2": "upgDmgU012",
+            "star3": "xpUncommon",
+            "chanceOf": "upgDmgU012%3/4"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle14_start",
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle14_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1031,
+          "battleId": "15",
+          "BoardId": "C2_67",
+          "SpawnPointsSet": 10,
+          "spawnpoints": 4,
+          "difficultyMultiplier": 100,
+          "power": 2210,
+          "xp": 48,
+          "lightningVictory": 4,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "ultraNpc4HeavyIntercessor:7",
+              "ultraNpc4HeavyIntercessor:7",
+              "ultraNpc4HeavyIntercessor:7",
+              "ultraNpc4HeavyIntercessor:7",
+              "astraNpc1Guardsman:9",
+              "astraNpc1Guardsman:9",
+              "astraNpc1Guardsman:9",
+              "astraNpc1Guardsman:9",
+              "Debris_Crate_Imp:9",
+              "Debris_OilDrum:9",
+              "Debris_OilDrum:9"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:48-82"
+            ],
+            "star1": "gold:100",
+            "star2": "upgArmU009",
+            "star3": "xpUncommon",
+            "chanceOf": "upgArmU001%3/4"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1031,
+          "battleId": "16",
+          "BoardId": "CE7_02",
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 4028,
+          "xp": 64,
+          "lightningVictory": 3,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "ultraNpc4HeavyIntercessor:8",
+              "ultraNpc4HeavyIntercessor:8",
+              "ultraNpc4HeavyIntercessor:8",
+              "bloodNpc1Intercessor:9",
+              "bloodNpc1Intercessor:9",
+              "bloodNpc1Intercessor:9",
+              "ultraNpc1Inceptor:9",
+              "ultraNpc1Inceptor:9",
+              "ultraNpc1Inceptor:9",
+              "ultraNpc1Inceptor:9"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:48-82"
+            ],
+            "star1": "dust:10",
+            "star2": "abilityTokenCommon_Imperial",
+            "star3": "upgDmgR035",
+            "chanceOf": "upgDmgR035%3/6"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle16_start"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1031,
+          "battleId": "17",
+          "boss": "bloodNpcSanguinary",
+          "BoardId": "CE7_03",
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 5636,
+          "xp": 76,
+          "lightningVictory": 3,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "bloodNpcSanguinary:8",
+              "ultraNpc4HeavyIntercessor:10",
+              "bloodNpc1Intercessor:10",
+              "bloodNpc1Intercessor:10",
+              "bloodNpc1Intercessor:10",
+              "bloodNpc1Intercessor:10",
+              "ultraNpc1Inceptor:9",
+              "ultraNpc1Inceptor:9",
+              "ultraNpc2Eliminator:8",
+              "ultraNpc2Eliminator:8"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:52-90"
+            ],
+            "star1": "shards_bloodSanguinary",
+            "star2": "shards_bloodSanguinary",
+            "star3": "shards_bloodSanguinary",
+            "chanceOf": "shards_bloodSanguinary%2/6"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle17_start",
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle17_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1031,
+          "battleId": "18",
+          "BoardId": "C2_41",
+          "SpawnPointsSet": 9,
+          "spawnpoints": 3,
+          "difficultyMultiplier": 100,
+          "power": 2864,
+          "xp": 54,
+          "lightningVictory": 4,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "bloodNpc2Terminator:9",
+              "bloodNpc2Terminator:9",
+              "bloodNpc2Terminator:9",
+              "bloodNpc2Terminator:9",
+              "Debris_ExplOilDrum:6",
+              "Debris_ExplOilDrum:6"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:52-90"
+            ],
+            "star1": "gold:100",
+            "star2": "upgDmgU011",
+            "star3": "xpUncommon",
+            "chanceOf": "upgDmgU011%3/4"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle18_start",
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle18_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1031,
+          "battleId": "19",
+          "BoardId": "LE2_05",
+          "SpawnPointsSet": 1,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 4224,
+          "xp": 65,
+          "lightningVictory": 3,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "bloodNpc2Terminator:9",
+              "bloodNpc2Terminator:9",
+              "bloodNpc2Terminator:9",
+              "bloodNpc2Terminator:9",
+              "bloodNpc2Terminator:9",
+              "bloodNpc2Terminator:9"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:52-90"
+            ],
+            "star1": "gold:100",
+            "star2": "upgHpU002",
+            "star3": "xpUncommon",
+            "chanceOf": "upgHpU002%3/4"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1031,
+          "battleId": "20",
+          "BoardId": "C2_20",
+          "SpawnPointsSet": 13,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 5762,
+          "xp": 76,
+          "lightningVictory": 3,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "bloodNpc2Terminator:10",
+              "bloodNpc2Terminator:10",
+              "bloodNpc2Terminator:10",
+              "bloodNpc2Terminator:10",
+              "bloodNpc1Intercessor:10",
+              "bloodNpc1Intercessor:10",
+              "bloodNpc1Intercessor:10",
+              "Debris_OilDrum:14",
+              "Debris_OilDrum:14",
+              "Debris_OilDrum:14",
+              "Debris_OilDrum:14",
+              "Debris_ExplOilDrum:14"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:52-90"
+            ],
+            "star1": "gold:100",
+            "star2": "upgArmU001",
+            "star3": "xpUncommon",
+            "chanceOf": "upgArmU009%3/4"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle20_start"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1031,
+          "battleId": "21",
+          "BoardId": "CE7_04",
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 5764,
+          "xp": 76,
+          "lightningVictory": 4,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "bloodNpc2Terminator:10",
+              "bloodNpc2Terminator:10",
+              "bloodNpc2Terminator:10",
+              "ultraNpc4HeavyIntercessor:9",
+              "ultraNpc4HeavyIntercessor:9",
+              "ultraNpc4HeavyIntercessor:9",
+              "Debris_OilDrum:14",
+              "Debris_OilDrum:14",
+              "Debris_OilDrum:14",
+              "Debris_OilDrum:14"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:52-90"
+            ],
+            "star1": "dust:10",
+            "star2": "abilityTokenCommon_Imperial",
+            "star3": "upgArmR035",
+            "chanceOf": "upgArmR035%3/6"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle21_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1031,
+          "battleId": "22",
+          "boss": "bloodNpcTerminator",
+          "BoardId": "SyncPvp_Temperate_01",
+          "SpawnPointsSet": 6,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 7001,
+          "xp": 84,
+          "lightningVictory": 4,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "bloodNpcTerminator:8",
+              "bloodNpc2Terminator:11",
+              "bloodNpc2Terminator:11",
+              "bloodNpc1Intercessor:10",
+              "bloodNpc1Intercessor:10",
+              "bloodNpc1Intercessor:10",
+              "bloodNpc1Intercessor:10",
+              "bloodNpc1Intercessor:10",
+              "Debris_OilDrum:14",
+              "Debris_OilDrum:14",
+              "Debris_OilDrum:14"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:56-98"
+            ],
+            "star1": "shards_bloodTerminator",
+            "star2": "shards_bloodTerminator",
+            "star3": "shards_bloodTerminator",
+            "chanceOf": "shards_bloodTerminator%2/6"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle22_start",
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle22_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1031,
+          "battleId": "23",
+          "BoardId": "CE7_06",
+          "spawnpoints": 3,
+          "difficultyMultiplier": 100,
+          "power": 2832,
+          "xp": 54,
+          "lightningVictory": 4,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "astraNpc2Lascannon:12",
+              "astraNpc2Lascannon:12",
+              "astraNpc2Lascannon:12",
+              "astraNpc3Voxcaster:12",
+              "astraNpc3Voxcaster:12",
+              "astraNpc3Voxcaster:12",
+              "astraNpc1Guardsman:11",
+              "astraNpc1Guardsman:11",
+              "astraNpc1Guardsman:11",
+              "astraNpc1Guardsman:11",
+              "astraNpc1Guardsman:11",
+              "astraNpc1Guardsman:11"
+            ],
+            [
+              "orksNpc2OrkBoy:6",
+              "orksNpc2OrkBoy:6",
+              "orksNpc1Grot:6",
+              "orksNpc1Grot:6",
+              "orksNpc1Grot:6"
+            ]
+          ],
+          "playerTeams": [
+            2,
+            1
+          ],
+          "loot": {
+            "base": [
+              "gold:56-98"
+            ],
+            "star1": "gold:100",
+            "star2": "upgHpU007",
+            "star3": "xpUncommon",
+            "chanceOf": "upgHpU007%3/4"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle23_start"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1031,
+          "battleId": "24",
+          "BoardId": "CE3_01",
+          "SpawnPointsSet": 4,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 7614,
+          "xp": 88,
+          "lightningVictory": 3,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "astraNpc4Mortar:15",
+              "astraNpc4Mortar:15",
+              "astraNpc2Lascannon:15",
+              "astraNpc2Lascannon:15",
+              "astraNpc3Voxcaster:14",
+              "astraNpc3Voxcaster:14",
+              "astraNpc1Guardsman:14",
+              "astraNpc1Guardsman:14",
+              "astraNpc1Guardsman:14",
+              "astraNpc1Guardsman:14",
+              "Debris_OilDrum:10",
+              "Debris_OilDrum:10"
+            ],
+            [
+              "orksNpc1Grot:11",
+              "orksNpc1Grot:11"
+            ]
+          ],
+          "playerTeams": [
+            2,
+            1
+          ],
+          "loot": {
+            "base": [
+              "gold:56-98"
+            ],
+            "star1": "gold:100",
+            "star2": "upgDmgU004",
+            "star3": "xpUncommon",
+            "chanceOf": "upgDmgU004%3/4"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle24_start",
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle24_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1031,
+          "battleId": "25",
+          "BoardId": "C2_54",
+          "SpawnPointsSet": 11,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 15487,
+          "xp": 125,
+          "lightningVictory": 3,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "ultraNpc4HeavyIntercessor:14",
+              "ultraNpc4HeavyIntercessor:14",
+              "ultraNpc2Eliminator:14",
+              "ultraNpc2Eliminator:14",
+              "ultraNpc2Eliminator:14",
+              "Debris_OilDrum:8",
+              "Debris_OilDrum:8",
+              "Debris_OilDrum:8",
+              "Debris_OilDrum:8"
+            ],
+            [
+              "orksNpc2OrkBoy:10",
+              "orksNpc1Grot:10"
+            ]
+          ],
+          "playerTeams": [
+            2,
+            1
+          ],
+          "loot": {
+            "base": [
+              "gold:56-98"
+            ],
+            "star1": "gold:100",
+            "star2": "upgArmU005",
+            "star3": "xpUncommon",
+            "chanceOf": "upgArmU005%3/4"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle25_start"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1031,
+          "battleId": "25B",
+          "BoardId": "CE7_07",
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 51605,
+          "xp": 228,
+          "lightningVictory": 5,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "bloodNpcMephiston:11",
+              "bloodNpcDante:11",
+              "bloodNpcTerminator:11",
+              "bloodNpcDeathCompany:11",
+              "bloodNpcSanguinary:11",
+              "bloodNpcIntercessor:11",
+              "Debris_OilDrum:12",
+              "Debris_OilDrum:12",
+              "Debris_OilDrum:12",
+              "Debris_OilDrum:12",
+              "Debris_OilDrum:12"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:60-106"
+            ],
+            "star1": "dust:100",
+            "star2": "gold:5000",
+            "star3": "upgDmgE011",
+            "chanceOf": "upgDmgE011%1/4"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "afterFirstVictoryBeforeBES": "dlg_ce7cbattle03_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1031,
+          "battleId": "26",
+          "BoardId": "PVP_temperate_01",
+          "SpawnPointsSet": 5,
+          "spawnpoints": 3,
+          "difficultyMultiplier": 100,
+          "power": 9978,
+          "xp": 100,
+          "lightningVictory": 3,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "astraNpc5DeathRider:15",
+              "astraNpc5DeathRider:15",
+              "astraNpc5DeathRider:15",
+              "astraNpc5DeathRider:15",
+              "astraNpc5DeathRider:15",
+              "astraNpc5DeathRider:15",
+              "Debris_ExplOilDrum:10"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:56-98"
+            ],
+            "star1": "gold:100",
+            "star2": "xpRare",
+            "star3": "upgHpR005",
+            "chanceOf": "upgHpR005%3/6"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle26_start",
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle26_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1031,
+          "battleId": "27",
+          "BoardId": "survival_01",
+          "SpawnPointsSet": 1,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 18300,
+          "xp": 136,
+          "lightningVictory": 3,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "astraNpc1Guardsman:16",
+              "astraNpc1Guardsman:16",
+              "astraNpc5DeathRider:16",
+              "astraNpc5DeathRider:16",
+              "astraNpc5DeathRider:16",
+              "astraNpc5DeathRider:16",
+              "astraNpc2Lascannon:16",
+              "astraNpc2Lascannon:16",
+              "astraNpc2Lascannon:16",
+              "astraNpc3Voxcaster:16",
+              "astraNpc3Voxcaster:16",
+              "astraNpc3Voxcaster:16"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:56-98"
+            ],
+            "star1": "gold:250",
+            "star2": "xpRare",
+            "star3": "upgDmgR002",
+            "chanceOf": "upgDmgR002%3/6"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle27_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1031,
+          "battleId": "28",
+          "BoardId": "C2_50",
+          "SpawnPointsSet": 11,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 31295,
+          "xp": 177,
+          "lightningVictory": 3,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "astraNpc5DeathRider:17",
+              "astraNpc5DeathRider:17",
+              "astraNpc4Mortar:17",
+              "astraNpc4Mortar:17",
+              "astraNpc4Mortar:17",
+              "astraNpc4Mortar:17",
+              "bloodNpc1Intercessor:17",
+              "bloodNpc1Intercessor:17",
+              "bloodNpc1Intercessor:17",
+              "Debris_ExplOilDrum:14"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:56-98"
+            ],
+            "star1": "gold:250",
+            "star2": "xpRare",
+            "star3": "upgArmR005",
+            "chanceOf": "upgArmR005%3/6"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle28_start",
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle28_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1031,
+          "battleId": "29",
+          "BoardId": "C2_59",
+          "SpawnPointsSet": 11,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 55408,
+          "xp": 236,
+          "lightningVictory": 5,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "astraNpc2Lascannon:17",
+              "astraNpc2Lascannon:17",
+              "astraNpc2Lascannon:17",
+              "ultraNpc2Eliminator:16",
+              "ultraNpc2Eliminator:16",
+              "bloodNpc2Terminator:17",
+              "bloodNpc2Terminator:17",
+              "bloodNpc2Terminator:17",
+              "bloodNpc2Terminator:17",
+              "astraNpc5DeathRider:17",
+              "astraNpc5DeathRider:17",
+              "astraNpc5DeathRider:17"
+            ],
+            [
+              "powupDamage"
+            ]
+          ],
+          "playerTeams": [
+            2,
+            1
+          ],
+          "loot": {
+            "base": [
+              "gold:56-98"
+            ],
+            "star1": "gold:333",
+            "star2": "abilityTokenUncommon_Imperial",
+            "star3": "dust:100",
+            "chanceOf": "upgHpL115%1/9"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle29_start"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1031,
+          "battleId": "30",
+          "boss": "astraNpcYarrick",
+          "BoardId": "CE7_08",
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 54773,
+          "xp": 235,
+          "lightningVictory": 4,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "mow": "astraNpcMowOrdnanceBattery:9",
+          "units": [
+            [
+              "astraNpcYarrick:11",
+              "astarNpcEradiccator:11",
+              "ultraNpc2Eliminator:16",
+              "ultraNpc2Eliminator:16",
+              "bloodNpc2Terminator:17",
+              "bloodNpc2Terminator:17",
+              "bloodNpc1Intercessor:17",
+              "bloodNpc1Intercessor:17",
+              "bloodNpc1Intercessor:17"
+            ],
+            [
+              "orksNpc1Grot:10",
+              "orksNpc1Grot:10",
+              "orksNpc1Grot:10"
+            ]
+          ],
+          "playerTeams": [
+            2,
+            1
+          ],
+          "loot": {
+            "base": [
+              "gold:60-106"
+            ],
+            "star1": "shards_bloodMephiston",
+            "star2": "shards_bloodMephiston",
+            "star3": "shards_bloodMephiston",
+            "chanceOf": "shards_bloodMephiston%2/6"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle30_start",
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle30_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "eventExtremis7",
+      "lastPlayableLevel": 30,
+      "unlockConditions": {
+        "requiredUnits": {
+          "allowedFactions": [
+            "Orks"
+          ],
+          "unlockedUnitIds": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        "completedCampaigns": [
+          {
+            "campaignType": "Event",
+            "campaignId": "eventStandard7"
+          }
+        ]
+      },
+      "starChests": [
+        [
+          {
+            "stars": 0,
+            "chestId": ""
+          },
+          {
+            "stars": 0,
+            "chestId": ""
+          }
+        ],
+        [
+          {
+            "stars": 0,
+            "chestId": ""
+          },
+          {
+            "stars": 0,
+            "chestId": ""
+          }
+        ],
+        [
+          {
+            "stars": 0,
+            "chestId": ""
+          },
+          {
+            "stars": 0,
+            "chestId": ""
+          }
+        ],
+        [
+          {
+            "stars": 0,
+            "chestId": ""
+          },
+          {
+            "stars": 0,
+            "chestId": ""
+          }
+        ],
+        [
+          {
+            "stars": 0,
+            "chestId": ""
+          },
+          {
+            "stars": 0,
+            "chestId": ""
+          }
+        ]
+      ],
+      "battles": [
+        {
+          "campaignId": 1032,
+          "battleId": "01",
+          "BoardId": "C2_28",
+          "SpawnPointsSet": 13,
+          "spawnpoints": 3,
+          "difficultyMultiplier": 100,
+          "power": 1662,
+          "xp": 41,
+          "lightningVictory": 2,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "astraNpc1Guardsman:16",
+              "astraNpc1Guardsman:16",
+              "astraNpc1Guardsman:16",
+              "astraNpc1Guardsman:16",
+              "astraNpc1Guardsman:16",
+              "astraNpc1Guardsman:16"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:56-98"
+            ],
+            "star1": "xpRare",
+            "star2": "dust:50",
+            "star3": "upgHpR035",
+            "chanceOf": "upgHpC013%15/16"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle01_start",
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle01_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1032,
+          "battleId": "02",
+          "BoardId": "MC2_01",
+          "SpawnPointsSet": 10,
+          "spawnpoints": 3,
+          "difficultyMultiplier": 100,
+          "power": 4906,
+          "xp": 71,
+          "lightningVictory": 2,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "astraNpc1Guardsman:18",
+              "astraNpc1Guardsman:18",
+              "astraNpc1Guardsman:18",
+              "astraNpc1Guardsman:18",
+              "astraNpc2Lascannon:18",
+              "astraNpc2Lascannon:18",
+              "astraNpc2Lascannon:18"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:56-98"
+            ],
+            "star1": "xpRare",
+            "star2": "gold:2500",
+            "star3": "upgDmgR035",
+            "chanceOf": "upgDmgC011%15/16"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle02_start",
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle02_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1032,
+          "battleId": "03",
+          "BoardId": "C2_31",
+          "SpawnPointsSet": 12,
+          "spawnpoints": 3,
+          "difficultyMultiplier": 100,
+          "power": 24142,
+          "xp": 156,
+          "lightningVictory": 4,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "astraNpc3Voxcaster:18",
+              "astraNpc3Voxcaster:18",
+              "astraNpc3Voxcaster:18",
+              "astraNpc3Voxcaster:18",
+              "astraNpc3Voxcaster:18",
+              "astraNpc2Lascannon:18",
+              "astraNpc2Lascannon:18",
+              "astraNpc2Lascannon:18",
+              "astraNpc2Lascannon:18"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:56-98"
+            ],
+            "star1": "xpRare",
+            "star2": "shards_bloodIntercessor:2",
+            "star3": "upgArmR035",
+            "chanceOf": "upgArmC001%15/16"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle03_start",
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle03_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1032,
+          "battleId": "03B",
+          "BoardId": "CE7_01",
+          "SpawnPointsSet": 1,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 162369,
+          "xp": 403,
+          "lightningVictory": 3,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "astraNpcBullgryn:14",
+              "astraNpcPrimarisPsy:14",
+              "astraNpc4Mortar:22",
+              "astraNpc4Mortar:22",
+              "astraNpc4Mortar:22",
+              "astraNpc2Lascannon:22",
+              "astraNpc2Lascannon:22",
+              "astraNpc2Lascannon:22",
+              "astraNpc2Lascannon:22",
+              "astraNpc3Voxcaster:22",
+              "astraNpc3Voxcaster:22",
+              "astraNpc3Voxcaster:22"
+            ],
+            [
+              "powupMeleeHits",
+              "powupArmor",
+              "powupDamage"
+            ]
+          ],
+          "playerTeams": [
+            2,
+            1
+          ],
+          "loot": {
+            "base": [
+              "gold:60-106"
+            ],
+            "star1": "upgHpL115",
+            "star2": "shards_bloodMephiston:10",
+            "star3": "gems:100",
+            "chanceOf": "upgArmE013%2/6"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "afterFirstVictoryBeforeBES": "dlg_ce7cbattle01_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1032,
+          "battleId": "04",
+          "BoardId": "C2_19",
+          "SpawnPointsSet": 8,
+          "spawnpoints": 3,
+          "difficultyMultiplier": 100,
+          "power": 52825,
+          "xp": 230,
+          "lightningVictory": 4,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "bloodNpc1Intercessor:20",
+              "bloodNpc1Intercessor:20",
+              "bloodNpc1Intercessor:20",
+              "bloodNpc1Intercessor:20",
+              "astraNpc1Guardsman:18",
+              "astraNpc1Guardsman:18",
+              "astraNpc1Guardsman:18",
+              "astraNpc3Voxcaster:20",
+              "astraNpc3Voxcaster:20",
+              "astraNpc3Voxcaster:20"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:56-98"
+            ],
+            "star1": "upgHpR035",
+            "star2": "xpEpic",
+            "star3": "shards_bloodIntercessor:3",
+            "chanceOf": "upgHpC016%15/16"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle04_start"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1032,
+          "battleId": "05",
+          "BoardId": "CE3_02",
+          "SpawnPointsSet": 6,
+          "spawnpoints": 4,
+          "difficultyMultiplier": 100,
+          "power": 58484,
+          "xp": 242,
+          "lightningVictory": 4,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "astraNpc1Guardsman:18",
+              "astraNpc1Guardsman:18",
+              "astraNpc3Voxcaster:20",
+              "astraNpc3Voxcaster:20",
+              "astraNpc3Voxcaster:20",
+              "astraNpc3Voxcaster:20",
+              "bloodNpc1Intercessor:20",
+              "bloodNpc1Intercessor:20",
+              "bloodNpc1Intercessor:20",
+              "bloodNpc1Intercessor:20"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:56-98"
+            ],
+            "star1": "upgDmgR035",
+            "star2": "xpEpic",
+            "star3": "dust:100",
+            "chanceOf": "upgDmgC001%15/16"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle05_start",
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle05_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1032,
+          "battleId": "06",
+          "boss": "bloodNpcIntercessor",
+          "BoardId": "C2_35",
+          "SpawnPointsSet": 11,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 76110,
+          "xp": 276,
+          "lightningVictory": 3,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "bloodNpcIntercessor:13",
+              "bloodNpc1Intercessor:20",
+              "bloodNpc1Intercessor:20",
+              "bloodNpc1Intercessor:20",
+              "ultraNpc1Inceptor:20",
+              "ultraNpc1Inceptor:20",
+              "ultraNpc1Inceptor:20",
+              "astraNpc2Lascannon:20",
+              "astraNpc2Lascannon:20",
+              "astraNpc2Lascannon:20",
+              "astraNpc1Guardsman:18",
+              "astraNpc1Guardsman:18"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:60-106"
+            ],
+            "star1": "shards_bloodIntercessor:2",
+            "star2": "shards_bloodIntercessor:3",
+            "star3": "shards_bloodIntercessor:4",
+            "chanceOf": "shards_bloodIntercessor%8/13"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle06_start",
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle06_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1032,
+          "battleId": "07",
+          "BoardId": "LE2_06",
+          "SpawnPointsSet": 2,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 66916,
+          "xp": 259,
+          "lightningVictory": 4,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "bloodNpc1Intercessor:20",
+              "bloodNpc1Intercessor:20",
+              "bloodNpc1Intercessor:20",
+              "bloodNpc1Intercessor:20",
+              "bloodNpc1Intercessor:20",
+              "bloodNpc1Intercessor:20",
+              "bloodNpc1Intercessor:20",
+              "bloodNpc1Intercessor:20",
+              "astraNpc1Guardsman:18",
+              "astraNpc1Guardsman:18"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:56-98"
+            ],
+            "star1": "upgArmR035",
+            "star2": "shards_bloodDeathCompany:2",
+            "star3": "dust:100",
+            "chanceOf": "upgArmC002%15/16"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1032,
+          "battleId": "08",
+          "BoardId": "C2_18b",
+          "SpawnPointsSet": 1,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 80380,
+          "xp": 284,
+          "lightningVictory": 4,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "ultraNpc2Eliminator:20",
+              "ultraNpc2Eliminator:20",
+              "ultraNpc2Eliminator:20",
+              "bloodNpc1Intercessor:20",
+              "bloodNpc1Intercessor:20",
+              "bloodNpc1Intercessor:20",
+              "bloodNpc1Intercessor:20",
+              "bloodNpc1Intercessor:20",
+              "ultraNpc2Eliminator:20",
+              "ultraNpc2Eliminator:20"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:56-98"
+            ],
+            "star1": "upgHpR035",
+            "star2": "xpEpic",
+            "star3": "abilityTokenEpic_Imperial",
+            "chanceOf": "upgHpC003%15/16"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle08_start"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1032,
+          "battleId": "09",
+          "BoardId": "C2_73",
+          "SpawnPointsSet": 9,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 94648,
+          "xp": 308,
+          "lightningVictory": 3,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "bloodNpc1Intercessor:21",
+              "bloodNpc1Intercessor:21",
+              "bloodNpc1Intercessor:21",
+              "bloodNpc1Intercessor:21",
+              "bloodNpc1Intercessor:21",
+              "ultraNpc2Eliminator:21",
+              "ultraNpc2Eliminator:21",
+              "ultraNpc2Eliminator:21",
+              "ultraNpc2Eliminator:21"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:56-98"
+            ],
+            "star1": "upgDmgR035",
+            "star2": "xpEpic",
+            "star3": "shards_bloodDeathCompany:3",
+            "chanceOf": "upgDmgC013%15/16"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle09_start",
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle09_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1032,
+          "battleId": "10",
+          "BoardId": "C2_32",
+          "SpawnPointsSet": 12,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 113045,
+          "xp": 337,
+          "lightningVictory": 3,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "astraNpc1Guardsman:22",
+              "astraNpc1Guardsman:22",
+              "ultraNpc1Inceptor:22",
+              "ultraNpc1Inceptor:22",
+              "ultraNpc1Inceptor:22",
+              "bloodNpc1Intercessor:22",
+              "bloodNpc1Intercessor:22",
+              "bloodNpc1Intercessor:22",
+              "ultraNpc2Eliminator:22",
+              "ultraNpc2Eliminator:22"
+            ],
+            [
+              "powupArmor"
+            ]
+          ],
+          "playerTeams": [
+            2,
+            1
+          ],
+          "loot": {
+            "base": [
+              "gold:56-98"
+            ],
+            "star1": "upgArmR035",
+            "star2": "xpEpic",
+            "star3": "dust:150",
+            "chanceOf": "upgArmC013%15/16"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1032,
+          "battleId": "11",
+          "boss": "bloodNpcDeathCompany",
+          "BoardId": "C2_64",
+          "SpawnPointsSet": 15,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 187279,
+          "xp": 433,
+          "lightningVictory": 3,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "bloodNpcDeathCompany:14",
+              "bloodNpc1Intercessor:22",
+              "bloodNpc1Intercessor:22",
+              "bloodNpc1Intercessor:22",
+              "bloodNpc1Intercessor:22",
+              "bloodNpc1Intercessor:22",
+              "ultraNpc2Eliminator:22",
+              "ultraNpc2Eliminator:22",
+              "ultraNpc2Eliminator:22",
+              "ultraNpc2Eliminator:22",
+              "astraNpc1Guardsman:22",
+              "astraNpc1Guardsman:22"
+            ],
+            [
+              "powupArmor"
+            ]
+          ],
+          "playerTeams": [
+            2,
+            1
+          ],
+          "loot": {
+            "base": [
+              "gold:93-140"
+            ],
+            "star1": "shards_bloodDeathCompany:2",
+            "star2": "shards_bloodDeathCompany:3",
+            "star3": "shards_bloodDeathCompany:4",
+            "chanceOf": "shards_bloodDeathCompany%8/13"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle11_start",
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle11_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1032,
+          "battleId": "12",
+          "BoardId": "LHE_temp_02",
+          "SpawnPointsSet": 6,
+          "spawnpoints": 3,
+          "difficultyMultiplier": 100,
+          "power": 57058,
+          "xp": 239,
+          "lightningVictory": 3,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "astraNpc1Guardsman:22",
+              "astraNpc1Guardsman:22",
+              "astraNpc1Guardsman:22",
+              "astraNpc1Guardsman:22",
+              "astraNpc1Guardsman:22",
+              "astraNpc1Guardsman:22",
+              "astraNpc3Voxcaster:22",
+              "astraNpc3Voxcaster:22",
+              "astraNpc3Voxcaster:22",
+              "astraNpc3Voxcaster:22"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:74-123"
+            ],
+            "star1": "upgHpR035",
+            "star2": "xpEpic",
+            "star3": "abilityTokenEpic_Imperial",
+            "chanceOf": "upgArmU009%4/5"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle12_start",
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle12_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1032,
+          "battleId": "13",
+          "BoardId": "C2_34",
+          "SpawnPointsSet": 11,
+          "spawnpoints": 3,
+          "difficultyMultiplier": 100,
+          "power": 185909,
+          "xp": 432,
+          "lightningVictory": 3,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "ultraNpc4HeavyIntercessor:22",
+              "ultraNpc4HeavyIntercessor:22",
+              "ultraNpc4HeavyIntercessor:22",
+              "astraNpc3Voxcaster:23",
+              "astraNpc3Voxcaster:23",
+              "astraNpc3Voxcaster:23",
+              "astraNpc1Guardsman:24",
+              "astraNpc1Guardsman:24",
+              "astraNpc1Guardsman:24",
+              "astraNpc1Guardsman:24",
+              "Debris_OilDrum:12",
+              "Debris_OilDrum:12"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:74-123"
+            ],
+            "star1": "upgDmgR035",
+            "star2": "gold:5000",
+            "star3": "upgHpL115",
+            "chanceOf": "upgHpU016%4/5"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle13_start"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1032,
+          "battleId": "13B",
+          "BoardId": "CE7_05",
+          "SpawnPointsSet": 1,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 2496714,
+          "xp": 1581,
+          "lightningVictory": 4,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "bloodNpcIntercessor:18",
+              "ultraNpcInceptorSgt:16",
+              "astraNpcDreir:18",
+              "astraNpc4Mortar:33",
+              "astraNpc4Mortar:33",
+              "astraNpc4Mortar:33",
+              "astraNpc3Voxcaster:33",
+              "ultraNpc1Inceptor:33",
+              "ultraNpc1Inceptor:33",
+              "bloodNpc1Intercessor:33",
+              "bloodNpc1Intercessor:33",
+              "Debris_OilDrum:28"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:60-106"
+            ],
+            "star1": "upgArmL204",
+            "star2": "shards_bloodMephiston:15",
+            "star3": "gems:200",
+            "chanceOf": "upgArmL204%1/7"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "afterFirstVictoryBeforeBES": "dlg_ce7cbattle02_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1032,
+          "battleId": "14",
+          "BoardId": "C2_30",
+          "SpawnPointsSet": 10,
+          "spawnpoints": 4,
+          "difficultyMultiplier": 100,
+          "power": 388283,
+          "xp": 624,
+          "lightningVictory": 4,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "ultraNpc4HeavyIntercessor:24",
+              "ultraNpc4HeavyIntercessor:24",
+              "ultraNpc4HeavyIntercessor:24",
+              "bloodNpc1Intercessor:26",
+              "bloodNpc1Intercessor:26",
+              "bloodNpc1Intercessor:26",
+              "bloodNpc1Intercessor:26",
+              "bloodNpc1Intercessor:26",
+              "Debris_ExplOilDrum:20"
+            ],
+            [
+              "powupMeleeHits"
+            ]
+          ],
+          "playerTeams": [
+            2,
+            1
+          ],
+          "loot": {
+            "base": [
+              "gold:74-123"
+            ],
+            "star1": "upgArmR035",
+            "star2": "shards_bloodSanguinary:2",
+            "star3": "abilityTokenEpic_Imperial",
+            "chanceOf": "upgDmgU012%4/5"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle14_start",
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle14_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1032,
+          "battleId": "15",
+          "BoardId": "C2_67",
+          "SpawnPointsSet": 11,
+          "spawnpoints": 4,
+          "difficultyMultiplier": 100,
+          "power": 345521,
+          "xp": 588,
+          "lightningVictory": 4,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "ultraNpc4HeavyIntercessor:24",
+              "ultraNpc4HeavyIntercessor:24",
+              "ultraNpc4HeavyIntercessor:24",
+              "ultraNpc4HeavyIntercessor:24",
+              "ultraNpc4HeavyIntercessor:24",
+              "Debris_ExplOilDrum:20"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:74-123"
+            ],
+            "star1": "upgHpR005",
+            "star2": "xpEpic",
+            "star3": "shards_bloodSanguinary:3",
+            "chanceOf": "upgHpR005%8/12"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1032,
+          "battleId": "16",
+          "BoardId": "CE7_02",
+          "SpawnPointsSet": 1,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 469558,
+          "xp": 686,
+          "lightningVictory": 4,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "bloodNpc1Intercessor:28",
+              "bloodNpc1Intercessor:28",
+              "bloodNpc1Intercessor:28",
+              "ultraNpc1Inceptor:28",
+              "ultraNpc1Inceptor:28",
+              "ultraNpc1Inceptor:28",
+              "ultraNpc1Inceptor:28",
+              "ultraNpc4HeavyIntercessor:24",
+              "ultraNpc4HeavyIntercessor:24",
+              "Debris_OilDrum:22",
+              "Debris_OilDrum:22"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:74-123"
+            ],
+            "star1": "upgDmgR002",
+            "star2": "dust:250",
+            "star3": "upgHpL115",
+            "chanceOf": "upgDmgR002%8/12"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle16_start"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1032,
+          "battleId": "17",
+          "boss": "bloodNpcSanguinary",
+          "BoardId": "CE7_03",
+          "SpawnPointsSet": 1,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 1157515,
+          "xp": 1076,
+          "lightningVictory": 3,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "bloodNpcSanguinary:17",
+              "bloodNpc1Intercessor:30",
+              "bloodNpc1Intercessor:30",
+              "bloodNpc1Intercessor:30",
+              "bloodNpc1Intercessor:30",
+              "bloodNpc1Intercessor:30",
+              "ultraNpc4HeavyIntercessor:28",
+              "ultraNpc4HeavyIntercessor:28",
+              "ultraNpc4HeavyIntercessor:28",
+              "Debris_OilDrum:24",
+              "Debris_OilDrum:24"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:93-140"
+            ],
+            "star1": "shards_bloodSanguinary:2",
+            "star2": "shards_bloodSanguinary:3",
+            "star3": "shards_bloodSanguinary:4",
+            "chanceOf": "shards_bloodSanguinary%8/13"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle17_start",
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle17_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1032,
+          "battleId": "18",
+          "BoardId": "C2_41",
+          "SpawnPointsSet": 10,
+          "spawnpoints": 3,
+          "difficultyMultiplier": 100,
+          "power": 697195,
+          "xp": 835,
+          "lightningVictory": 4,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "bloodNpc2Terminator:28",
+              "bloodNpc2Terminator:28",
+              "bloodNpc2Terminator:28",
+              "bloodNpc2Terminator:28",
+              "bloodNpc2Terminator:28",
+              "Debris_OilDrum:24",
+              "Debris_OilDrum:24"
+            ],
+            [
+              "powupDamage"
+            ]
+          ],
+          "playerTeams": [
+            2,
+            1
+          ],
+          "loot": {
+            "base": [
+              "gold:74-123"
+            ],
+            "star1": "upgArmR005",
+            "star2": "upgHpL115",
+            "star3": "abilityTokenEpic_Imperial",
+            "chanceOf": "upgArmR005%8/12"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle18_start",
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle18_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1032,
+          "battleId": "19",
+          "BoardId": "LE2_05",
+          "SpawnPointsSet": 2,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 905603,
+          "xp": 952,
+          "lightningVictory": 4,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "bloodNpc2Terminator:29",
+              "bloodNpc2Terminator:29",
+              "bloodNpc2Terminator:29",
+              "bloodNpc2Terminator:29",
+              "bloodNpc2Terminator:29",
+              "bloodNpc2Terminator:29",
+              "astraNpc1Guardsman:30",
+              "Debris_OilDrum:24",
+              "Debris_OilDrum:24",
+              "Debris_OilDrum:24"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:74-123"
+            ],
+            "star1": "upgHpR005",
+            "star2": "shards_bloodTerminator:2",
+            "star3": "xpLegendary",
+            "chanceOf": "upgHpR035%8/12"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1032,
+          "battleId": "20",
+          "BoardId": "C2_20",
+          "SpawnPointsSet": 14,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 2509804,
+          "xp": 1585,
+          "lightningVictory": 5,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "bloodNpc2Terminator:33",
+              "bloodNpc2Terminator:33",
+              "bloodNpc2Terminator:33",
+              "bloodNpc2Terminator:33",
+              "bloodNpc1Intercessor:33",
+              "bloodNpc1Intercessor:33",
+              "bloodNpc1Intercessor:33",
+              "bloodNpc1Intercessor:33",
+              "bloodNpc1Intercessor:33",
+              "astraNpc1Guardsman:32",
+              "astraNpc1Guardsman:32",
+              "Debris_OilDrum:24"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:74-123"
+            ],
+            "star1": "upgDmgR002",
+            "star2": "upgHpL115",
+            "star3": "shards_bloodTerminator:3",
+            "chanceOf": "upgDmgR035%8/12"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle20_start"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1032,
+          "battleId": "21",
+          "BoardId": "CE7_04",
+          "SpawnPointsSet": 1,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 2089516,
+          "xp": 1446,
+          "lightningVictory": 4,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "bloodNpc2Terminator:33",
+              "bloodNpc2Terminator:33",
+              "bloodNpc2Terminator:33",
+              "ultraNpc4HeavyIntercessor:30",
+              "ultraNpc4HeavyIntercessor:30",
+              "ultraNpc4HeavyIntercessor:30",
+              "Debris_OilDrum:24"
+            ],
+            [
+              "powupDamage"
+            ]
+          ],
+          "playerTeams": [
+            2,
+            1
+          ],
+          "loot": {
+            "base": [
+              "gold:74-123"
+            ],
+            "star1": "upgArmR005",
+            "star2": "xpLegendary",
+            "star3": "abilityTokenEpic_Imperial",
+            "chanceOf": "upgArmR035%8/12"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle21_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1032,
+          "battleId": "22",
+          "boss": "bloodNpcTerminator",
+          "BoardId": "SyncPvp_Temperate_01",
+          "SpawnPointsSet": 7,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 3199224,
+          "xp": 1789,
+          "lightningVictory": 4,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "bloodNpcTerminator:18",
+              "bloodNpc2Terminator:33",
+              "bloodNpc2Terminator:33",
+              "bloodNpc2Terminator:33",
+              "bloodNpc2Terminator:33",
+              "bloodNpc2Terminator:33",
+              "bloodNpc1Intercessor:33",
+              "bloodNpc1Intercessor:33",
+              "bloodNpc1Intercessor:33",
+              "bloodNpc1Intercessor:33",
+              "Debris_OilDrum:24",
+              "Debris_OilDrum:24"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:93-140"
+            ],
+            "star1": "shards_bloodTerminator:2",
+            "star2": "shards_bloodTerminator:3",
+            "star3": "shards_bloodTerminator:4",
+            "chanceOf": "shards_bloodTerminator%8/13"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle22_start",
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle22_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1032,
+          "battleId": "23",
+          "BoardId": "CE7_06",
+          "SpawnPointsSet": 1,
+          "spawnpoints": 3,
+          "difficultyMultiplier": 100,
+          "power": 958810,
+          "xp": 980,
+          "lightningVictory": 3,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "astraNpc2Lascannon:34",
+              "astraNpc2Lascannon:34",
+              "astraNpc2Lascannon:34",
+              "astraNpc2Lascannon:34",
+              "astraNpc3Voxcaster:34",
+              "astraNpc3Voxcaster:34",
+              "astraNpc3Voxcaster:34",
+              "astraNpc3Voxcaster:34",
+              "astraNpc1Guardsman:34",
+              "astraNpc1Guardsman:34"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:84-147"
+            ],
+            "star1": "upgHpR005",
+            "star2": "xpLegendary",
+            "star3": "xpLegendary",
+            "chanceOf": "upgHpL115%1/7"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle23_start"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1032,
+          "battleId": "24",
+          "BoardId": "CE3_01",
+          "SpawnPointsSet": 5,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 889298,
+          "xp": 944,
+          "lightningVictory": 2,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "astraNpc4Mortar:34",
+              "astraNpc4Mortar:34",
+              "astraNpc4Mortar:34",
+              "astraNpc2Lascannon:34",
+              "astraNpc2Lascannon:34",
+              "astraNpc2Lascannon:34",
+              "astraNpc2Lascannon:34",
+              "astraNpc2Lascannon:34",
+              "astraNpc1Guardsman:34",
+              "astraNpc1Guardsman:34",
+              "astraNpc1Guardsman:34",
+              "astraNpc1Guardsman:34"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:84-147"
+            ],
+            "star1": "upgDmgE011",
+            "star2": "dust:500",
+            "star3": "abilityTokenLegendary_Imperial",
+            "chanceOf": "shards_bloodMephiston%8/13"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle24_start",
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle24_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1032,
+          "battleId": "25",
+          "BoardId": "C2_54",
+          "SpawnPointsSet": 12,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 4085604,
+          "xp": 2022,
+          "lightningVictory": 4,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "ultraNpc2Eliminator:37",
+              "ultraNpc2Eliminator:37",
+              "ultraNpc2Eliminator:37",
+              "ultraNpc2Eliminator:37",
+              "ultraNpc4HeavyIntercessor:34",
+              "ultraNpc4HeavyIntercessor:34",
+              "ultraNpc4HeavyIntercessor:34",
+              "ultraNpc4HeavyIntercessor:34",
+              "Debris_OilDrum:30",
+              "Debris_OilDrum:30"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:84-147"
+            ],
+            "star1": "upgHpE003",
+            "star2": "xpLegendary",
+            "star3": "abilityTokenLegendary_Imperial",
+            "chanceOf": "mythicShards_bloodIntercessor%3/14"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle25_start"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1032,
+          "battleId": "25B",
+          "BoardId": "CE7_07",
+          "SpawnPointsSet": 1,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 5323176,
+          "xp": 2308,
+          "lightningVictory": 4,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "bloodNpcMephiston:20",
+              "bloodNpcDante:20",
+              "bloodNpcTerminator:19",
+              "bloodNpcDeathCompany:19",
+              "bloodNpcSanguinary:19",
+              "bloodNpcIntercessor:19"
+            ],
+            [
+              "Debris_OilDrum:31",
+              "Debris_OilDrum:31",
+              "Debris_OilDrum:31",
+              "Debris_OilDrum:31",
+              "Debris_OilDrum:31",
+              "Debris_OilDrum:31"
+            ]
+          ],
+          "playerTeams": [
+            2,
+            3
+          ],
+          "loot": {
+            "base": [
+              "gold:90-155"
+            ],
+            "star1": "upgHpM003",
+            "star2": "abilityTokenMythic_Imperial",
+            "star3": "summoningToken",
+            "chanceOf": "upgDmgL204%1/7"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "afterFirstVictoryBeforeBES": "dlg_ce7cbattle03_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1032,
+          "battleId": "26",
+          "BoardId": "PVP_temperate_01",
+          "SpawnPointsSet": 6,
+          "spawnpoints": 3,
+          "difficultyMultiplier": 100,
+          "power": 1697716,
+          "xp": 1303,
+          "lightningVictory": 3,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "astraNpc5DeathRider:37",
+              "astraNpc5DeathRider:37",
+              "astraNpc5DeathRider:37",
+              "astraNpc5DeathRider:37",
+              "astraNpc5DeathRider:37",
+              "astraNpc5DeathRider:37",
+              "astraNpc5DeathRider:37",
+              "astraNpc5DeathRider:37",
+              "Debris_OilDrum:30",
+              "Debris_OilDrum:30"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:84-147"
+            ],
+            "star1": "upgArmE013",
+            "star2": "abilityTokenLegendary_Imperial",
+            "star3": "gold:12500",
+            "chanceOf": "mythicShards_bloodDeathCompany%3/14"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle26_start",
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle26_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1032,
+          "battleId": "27",
+          "BoardId": "survival_01",
+          "SpawnPointsSet": 2,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 2957483,
+          "xp": 1720,
+          "lightningVictory": 3,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "astraNpc5DeathRider:38",
+              "astraNpc5DeathRider:38",
+              "astraNpc5DeathRider:38",
+              "astraNpc4Mortar:38",
+              "astraNpc4Mortar:38",
+              "astraNpc4Mortar:38",
+              "bloodNpc1Intercessor:38",
+              "bloodNpc1Intercessor:38",
+              "bloodNpc1Intercessor:38",
+              "astraNpc3Voxcaster:38",
+              "astraNpc3Voxcaster:38",
+              "Debris_OilDrum:30"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:84-147"
+            ],
+            "star1": "upgDmgE011",
+            "star2": "gold:15000",
+            "star3": "abilityTokenMythic_Imperial",
+            "chanceOf": "mythicShards_bloodSanguinary%3/14"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle27_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1032,
+          "battleId": "28",
+          "BoardId": "C2_50",
+          "SpawnPointsSet": 12,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 2892684,
+          "xp": 1701,
+          "lightningVictory": 3,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "astraNpc5DeathRider:39",
+              "astraNpc5DeathRider:39",
+              "astraNpc5DeathRider:39",
+              "bloodNpc1Intercessor:39",
+              "bloodNpc1Intercessor:39",
+              "bloodNpc1Intercessor:39",
+              "astraNpc4Mortar:38",
+              "astraNpc4Mortar:38",
+              "astraNpc4Mortar:38",
+              "astraNpc4Mortar:38",
+              "Debris_OilDrum:30",
+              "Debris_OilDrum:30"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:84-147"
+            ],
+            "star1": "upgDmgL204",
+            "star2": "upgHpM003",
+            "star3": "abilityTokenMythic_Imperial",
+            "chanceOf": "mythicShards_bloodTerminator%3/14"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle28_start",
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle28_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1032,
+          "battleId": "29",
+          "BoardId": "C2_59",
+          "SpawnPointsSet": 12,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 4381920,
+          "xp": 2094,
+          "lightningVictory": 5,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "units": [
+            [
+              "bloodNpc2Terminator:37",
+              "bloodNpc2Terminator:37",
+              "bloodNpc2Terminator:37",
+              "ultraNpc2Eliminator:39",
+              "ultraNpc2Eliminator:39",
+              "ultraNpc2Eliminator:39",
+              "astraNpc2Lascannon:39",
+              "astraNpc2Lascannon:39",
+              "astraNpc2Lascannon:39",
+              "astraNpc5DeathRider:39",
+              "astraNpc5DeathRider:39",
+              "astraNpc5DeathRider:39"
+            ]
+          ],
+          "playerTeams": [
+            2
+          ],
+          "loot": {
+            "base": [
+              "gold:84-147"
+            ],
+            "star1": "abilityTokenMythic_Imperial",
+            "star2": "abilityTokenMythic_Imperial",
+            "star3": "abilityTokenMythic_Imperial",
+            "chanceOf": "mythicShards_bloodMephiston%3/14"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle29_start"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
+          ]
+        },
+        {
+          "campaignId": 1032,
+          "battleId": "30",
+          "boss": "astraNpcYarrick",
+          "BoardId": "CE7_08",
+          "SpawnPointsSet": 1,
+          "spawnpoints": 5,
+          "difficultyMultiplier": 100,
+          "power": 5645259,
+          "xp": 2376,
+          "lightningVictory": 5,
+          "staminaCost": 6,
+          "maxAttempts": 10,
+          "mow": "astraNpcMowOrdnanceBattery:49",
+          "units": [
+            [
+              "astraNpcYarrick:20",
+              "astarNpcEradiccator:20",
+              "bloodNpc2Terminator:37",
+              "bloodNpc2Terminator:37",
+              "ultraNpc2Eliminator:39",
+              "ultraNpc2Eliminator:39",
+              "bloodNpc1Intercessor:39",
+              "bloodNpc1Intercessor:39",
+              "bloodNpc1Intercessor:39",
+              "Debris_OilDrum:30"
+            ],
+            [
+              "powupHealth"
+            ]
+          ],
+          "playerTeams": [
+            2,
+            1
+          ],
+          "loot": {
+            "base": [
+              "gold:90-155"
+            ],
+            "star1": "abilityTokenMythic_Imperial",
+            "star2": "upgHpM003",
+            "star3": "xpMythic",
+            "chanceOf": "upgHpM003%3/25"
+          },
+          "variations": [
+            [
+              [
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                ""
+              ]
+            ]
+          ],
+          "tutorials": {
+            "startUntilVictory": "dlg_ce7battle30_start",
+            "afterFirstVictoryBeforeBES": "dlg_ce7battle30_end"
+          },
+          "requiredUnits": [
+            "orksNob",
+            "orksRuntherd",
+            "orksWeirdboy"
           ]
         }
       ]

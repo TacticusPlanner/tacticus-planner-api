@@ -132,9 +132,9 @@ public sealed class UnitDatamineReaderTests
     {
         var snapshot = GameCatalogLoader.Load();
 
-        Assert.Equal(119, snapshot.Characters.Count);
-        Assert.Equal(11, snapshot.Mows.Count);
-        Assert.Equal(539, snapshot.Npcs.Count);
+        Assert.Equal(120, snapshot.Characters.Count);
+        Assert.Equal(12, snapshot.Mows.Count);
+        Assert.Equal(576, snapshot.Npcs.Count);
         Assert.Equal(3, snapshot.Npcs.Single(npc => npc.Id == "votanNpc2Steeljack").Movement);
     }
 }

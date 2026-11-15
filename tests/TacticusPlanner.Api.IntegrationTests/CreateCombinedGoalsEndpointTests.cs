@@ -298,7 +298,7 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
     }
 
     [Fact]
-    public async Task MowUnlockGoalIsRejectedBecauseUnlockRequiresCharacterShardLocations()
+    public async Task MowUnlockGoalIsAcceptedWithADependentGoal()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
@@ -316,8 +316,16 @@ public sealed class CreateCombinedGoalsEndpointTests(PlannerApiFactory factory) 
             ]
         );
 
+        // A Machine of War has no shard nodes in the catalog, but an unowned one can still get an Unlock
+        // goal, as the create sheet offers it; the other goals depend on it as for a character.
         var response = await client.PostGoalAsync(request);
-        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+        response.EnsureSuccessStatusCode();
+        var created = await response.Content.ReadFromJsonAsync<CreateCombinedGoalsResponse>(TestContext.Current.CancellationToken);
+
+        Assert.NotNull(created);
+        Assert.Equal([GoalType.Unlock, GoalType.Ability], created.Goals.Select(goal => goal.GoalType));
+        Assert.All(created.Goals, goal => Assert.Equal(GoalEntityType.Mow, goal.EntityType));
+        Assert.Contains(created.Goals[0].GoalId, created.Goals[1].DependsOn);
     }
 
     [Fact]

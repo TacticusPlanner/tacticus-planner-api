@@ -138,7 +138,10 @@ internal static partial class GameCatalogDenormalizer
                 coreCharacters,
                 sources.Select(source => source.Type).ToArray(),
                 battles,
-                number);
+                number)
+            {
+                RequiredCampaignGroupId = releaseType == "event" ? null : RequiredCampaign(key, sources[0].Campaign, byId),
+            };
         }
 
         return groups;
@@ -176,6 +179,24 @@ internal static partial class GameCatalogDenormalizer
             ? ("eventCampaign" + number.Groups[1].Value, "event", int.Parse(number.Groups[1].ValueSpan, CultureInfo.InvariantCulture))
             : throw CampaignError(key, $"starts with event campaign '{campaignId}', which is not an eventStandard campaign");
     }
+
+    // The storyline campaign a storyline campaign follows (its game unlock condition `completedCampaigns`), whose id
+    // is that group's id; null when it follows none. Event groups never read it: their Extremis track follows their
+    // own Standard track.
+    private static string? RequiredCampaign(
+        string key,
+        DatamineCampaign campaign,
+        Dictionary<string, (string Kind, DatamineCampaign Campaign)> byId) =>
+        campaign.UnlockConditions?.CompletedCampaigns switch
+        {
+            null or [] => null,
+            [var previous] => byId.TryGetValue(previous.CampaignId, out var found)
+                ? found.Kind != CampaignEventKind
+                    ? previous.CampaignId
+                    : throw CampaignError(key, $"follows event campaign '{previous.CampaignId}', which is not a storyline group")
+                : throw CampaignError(key, $"follows campaign '{previous.CampaignId}' the game does not have"),
+            _ => throw CampaignError(key, "follows more than one campaign"),
+        };
 
     // The units a campaign asks to unlock, or those of the campaign it follows when it names none.
     private static IReadOnlyList<string>? CampaignUnlockUnits(
@@ -261,8 +282,9 @@ internal static partial class GameCatalogDenormalizer
             var npc = npcs.TryGetValue(enemy.NpcId, out var found)
                 ? found
                 : throw CampaignError(key, $"battle '{id}' names enemy '{enemy.NpcId}' the game does not have");
-            var row = CampaignEnemyStatRow(key, id, enemy.NpcId, enemy.Index, npc);
-            return new GameCatalogCampaignDetailedEnemy(enemy.NpcId, npc.Name, enemy.Count, row.StarLevel, CampaignRankName(key, id, row.Rank));
+            var servedIndex = CampaignEnemyStatRow(key, id, enemy.NpcId, enemy.Index, npc);
+            var row = npc.Stats[servedIndex];
+            return new GameCatalogCampaignDetailedEnemy(enemy.NpcId, npc.Name, enemy.Count, row.StarLevel, CampaignRankName(key, id, row.Rank), servedIndex);
         }).ToArray();
         var enemyNpcs = enemies.Select(enemy => npcs[enemy.NpcId]).ToArray();
 
@@ -310,18 +332,18 @@ internal static partial class GameCatalogDenormalizer
             battle.LightningVictory);
     }
 
-    // The stat row an enemy's index points at, as V1 read it: a boss index is 1-based, any other npc's is 0-based
-    // and capped at the last row.
-    private static DatamineNpcStat CampaignEnemyStatRow(string key, string battleId, string npcId, int index, DatamineNpc npc)
+    // The position of the stat row an enemy's index points at. Every index is 1-based: with these rows a battle's
+    // enemies add up to the power the game gives it, and V1's battle cards read them the same way.
+    private static int CampaignEnemyStatRow(string key, string battleId, string npcId, int index, DatamineNpc npc)
     {
         if (npc.Stats.Count == 0)
         {
             throw CampaignError(key, $"battle '{battleId}' enemy '{npcId}' has no stat rows");
         }
 
-        var row = npcId.Contains("Boss", StringComparison.Ordinal) ? index - 1 : Math.Min(index, npc.Stats.Count - 1);
+        var row = index - 1;
         return row >= 0 && row < npc.Stats.Count
-            ? npc.Stats[row]
+            ? row
             : throw CampaignError(key, $"battle '{battleId}' enemy '{npcId}:{index.ToString(CultureInfo.InvariantCulture)}' points past its {npc.Stats.Count} stat rows");
     }
 

@@ -20,6 +20,10 @@ public static class GameCatalogDatasets
     // tier's power multiplier; denormalization only sorts the characters by unit id.
     // See Models/HordeModeTiers.cs.
     public const string HordeModeTiers = "horde-mode-tiers";
+    // npc-tiers is a single curated S/A/B/C/D tier list of enemy NPCs for horde modes (how much harder an NPC is
+    // than its power says), with each tier's power multiplier; denormalization only sorts the NPCs by id.
+    // See Models/NpcTiers.cs.
+    public const string NpcTiers = "npc-tiers";
     public const string MythicQuests = "mythic-quests";
     // quest-events: the datamine's Quest Events (linearHeroEvent.json; one record per featured hero, 17 battles
     // each). quest-crates: the shared 17-crate point track. Both are served under the same key.
@@ -49,6 +53,10 @@ public static class GameCatalogDatasets
     // and the run map with chest rewards) from the datamine liveEvents/mowEvent.json and loot/chests.json. See
     // Denormalization/IncursionDenormalizer.cs.
     public const string Incursions = "incursions";
+    // npc-encounters: one record per (npc, source, group) naming every battle the npc fights in as an enemy, inverted
+    // from the campaign, LRE, quest, incursion and raid-boss views plus the raw Survival and Onslaught waves. See
+    // Denormalization/NpcEncounterDenormalizer.cs.
+    public const string NpcEncounters = "npc-encounters";
 
     // Route/key prefixes for the split dataset families.
     public const string UnitsPrefix = "units";
@@ -176,6 +184,7 @@ public static class GameCatalogDatasets
         EventDefinitions,
         EventOccurrences,
         HordeModeTiers,
+        NpcTiers,
         QuestCrates,
         CampaignCuration,
         LreCuration,
@@ -253,6 +262,7 @@ public static class GameCatalogDatasets
         Lres,
         LreBattles,
         HordeModeTiers,
+        NpcTiers,
         EventDefinitionsServed,
         EventsCalendar,
         Shops,
@@ -268,5 +278,6 @@ public static class GameCatalogDatasets
         ProgressionRules,
         Hre,
         Incursions,
+        NpcEncounters,
     ];
 }

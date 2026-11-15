@@ -263,11 +263,11 @@
     "eventName": "hero_release_event_2",
     "subtitleLocaKey": "",
     "titleLocaKey": "LiveEvents/herorelease_title",
-    "trackingEventNumber": 44,
-    "trackingFeaturedFaction": "AdeptusAstartes",
+    "trackingEventNumber": 46,
+    "trackingFeaturedFaction": "TheLostAndTheDamned",
     "previewTitleLocaKey": "LiveEvents/herorelease_preview_title",
-    "visualId": "herorelease_astar_eradicator",
-    "trackingFeaturedHero": "astarEradicator",
+    "visualId": "herorelease_losta_fearmonger",
+    "trackingFeaturedHero": "lostaFearmonger",
     "offerId": "",
     "shortDescriptionLocaKey": "LiveEvents/herorelease_desc_short",
     "longDescriptionLocaKey": "LiveEvents/herorelease_desc_long",
@@ -283,7 +283,7 @@
       "CampaignEvent"
     ],
     "unlockableHero": {
-      "heroId": "astarEradicator",
+      "heroId": "lostaFearmonger",
       "baseRarity": "Uncommon",
       "maxRarity": "Legendary"
     },

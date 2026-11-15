@@ -15,7 +15,7 @@ public sealed record GoalEditOutcome(
 
 /// <summary>
 /// The all-or-nothing edit behind <see cref="EditGoalEndpoint"/> (<c>goal-combined-edit</c>): the target,
-/// details, projects and priority sections run in that order inside one profile-locked transaction, against the
+/// details, projects, links and priority sections run in that order inside one profile-locked transaction, against the
 /// goal and memberships re-read under the lock, with one <c>SaveChangesAsync</c> and one commit. Any non-applied
 /// result rolls the transaction back. It writes no HTTP response.
 /// </summary>
@@ -104,6 +104,14 @@ public sealed class GoalCombinedEditor(
 
         if (requestedProjectIds is not null)
             membershipEditor.Apply(goal, requestedProjectIds, memberships, timeProvider.GetUtcNow());
+
+        if (req.LinkedGoalIds is { } linkedGoalIds)
+        {
+            var inFlight = (await orderService.InFlightAsync(ct)).ToDictionary(entity => entity.Id.Value);
+            if (GoalLinkRules.Error(goal.GoalType, goal.EntityType, goal.EntityId, linkedGoalIds, inFlight) is { } linkError)
+                return (new GoalEditResult.Invalid("LinkedGoalIds", linkError), null);
+            goal.LinkedGoalIds = linkedGoalIds.ToList();
+        }
 
         if (req.Priority is { } priority)
         {

@@ -32,15 +32,30 @@ Core characters SHALL be the `unlockedUnitIds` of the group's campaigns, or of t
 - **WHEN** the catalog loads from datamine `v1.43.157.2989`
 - **THEN** `elite2` (which follows `campaign2`) has core characters `["blackHaarken", "blackTerminator", "blackPossession"]`, faction `BlackLegion`, and allies including `TheLostAndTheDamned`
 
+### Requirement: A campaign definition names the campaign it follows
+
+A storyline campaign definition SHALL carry `requiredCampaignGroupId`: the id of the group that must be fully cleared before it opens, read from its first campaign's `completedCampaigns` unlock condition (a storyline group's id is its campaign id). It SHALL be null when the campaign follows none, and for campaign-event groups, whose Extremis track follows the group's own Standard track. A storyline campaign that follows a campaign the game does not have, an event campaign, or more than one campaign SHALL fail the load; event groups are not checked.
+
+#### Scenario: Elite and Mirror Elite campaigns
+
+- **WHEN** the catalog loads from datamine `v1.43.157.2989`
+- **THEN** `elite1`-`elite4` follow `campaign1`-`campaign4`, `eliteMirror1`-`eliteMirror4` follow `mirror1`-`mirror4`, and every other group follows none
+
 ### Requirement: Battle enemies come from the opposing teams
 
-A battle's enemies SHALL be the `npcId:index` units of every team whose `playerTeams` value is not 1, without board power-ups, counted per unit and sorted by npc id, then index. `stars` and `rank` SHALL come from the npc's stat row: a boss index is 1-based, any other npc's is 0-based and capped at the last row.
+A battle's enemies SHALL be the `npcId:index` units of every team whose `playerTeams` value is not 1, without board power-ups, counted per unit and sorted by npc id, then index. `stars` and `rank` SHALL come from the npc's stat row at the 1-based index, for bosses and every other npc, and `servedIndex` SHALL be that row's 0-based position. An index past the npc's ladder SHALL fail the load.
 
 #### Scenario: Allied team
 
 - **GIVEN** a battle whose second team has `playerTeams` 1
 - **WHEN** the catalog loads
 - **THEN** that team's units are not served as enemies or counted in `enemiesTotal`
+
+#### Scenario: A regular npc's index is 1-based
+
+- **GIVEN** a battle enemy `admecNpc1Vanguard:1`
+- **WHEN** the catalog loads
+- **THEN** its `stars` and `rank` come from that npc's first stat row and its `servedIndex` is 0
 
 ### Requirement: Drop chance ids are derived from the reward
 

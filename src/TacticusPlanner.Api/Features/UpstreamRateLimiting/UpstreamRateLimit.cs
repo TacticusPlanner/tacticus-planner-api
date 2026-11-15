@@ -19,13 +19,18 @@ public sealed class UpstreamRateLimitOptions
 }
 
 /// <summary>Endpoint metadata marking an endpoint that calls the Tacticus or V1 APIs on the caller's behalf.
-/// <see cref="Fast"/> is <c>upstream-fast</c> (per minute); <see cref="Slow"/> is <c>upstream-slow</c> (per hour).</summary>
-public sealed record UpstreamRateLimit(bool IsFast)
+/// <see cref="Fast"/> is <c>upstream-fast</c> (per minute); <see cref="Slow"/> is <c>upstream-slow</c> (per hour).
+/// <see cref="Exempt"/>, when set, lets a request through unlimited when it makes no upstream call (decided from the
+/// route and query only: the body is not read yet).</summary>
+public sealed record UpstreamRateLimit(bool IsFast, Func<HttpRequest, bool>? Exempt = null)
 {
     public const string ResponseDescription = "The per-profile upstream-call limit for this endpoint is exhausted; see Retry-After.";
 
     public static readonly UpstreamRateLimit Fast = new(true);
     public static readonly UpstreamRateLimit Slow = new(false);
+
+    /// <summary><c>upstream-slow</c>, except for requests <paramref name="exempt"/> accepts.</summary>
+    public static UpstreamRateLimit SlowUnless(Func<HttpRequest, bool> exempt) => new(false, exempt);
 }
 
 public static class UpstreamRateLimitingExtensions
@@ -54,7 +59,8 @@ public sealed class UpstreamRateLimitPreProcessor : IGlobalPreProcessor
         var http = context.HttpContext;
         if (http.ResponseStarted()
             || http.GetEndpoint() is not RouteEndpoint endpoint
-            || endpoint.Metadata.GetMetadata<UpstreamRateLimit>() is not { } policy)
+            || endpoint.Metadata.GetMetadata<UpstreamRateLimit>() is not { } policy
+            || policy.Exempt?.Invoke(http.Request) == true)
         {
             return;
         }

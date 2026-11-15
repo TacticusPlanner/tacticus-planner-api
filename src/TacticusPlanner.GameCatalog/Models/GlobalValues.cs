@@ -23,7 +23,10 @@ public sealed record GameCatalogGlobalValues(
     int BattleFatigueFleeChanceOverkill,
     // Trait constants by game key (numbers, plus a few strings such as putridExplosionFactionId), as the game ships them.
     IReadOnlyDictionary<string, JsonElement> TraitVariables,
-    IReadOnlyList<GameCatalogStaminaShopTier> StaminaShopTiers
+    IReadOnlyList<GameCatalogStaminaShopTier> StaminaShopTiers,
+    // The player Power Level that opens the Elite (and Mirror Elite) campaigns, on top of clearing the campaign
+    // each one follows (the game's powerLevelNeededToUnlockEliteCampaign).
+    int EliteCampaignMinPowerLevel
 );
 
 // One energy purchase of the shop's ladder, in game order: the energy and raid tickets it gives and its gem cost.
@@ -52,5 +55,9 @@ public sealed record DatamineGlobalValues(
     int? TerrifyingBonus,
     int? BattleFatigueFleeChance,
     int? BattleFatigueFleeChanceOverkill,
-    Dictionary<string, JsonElement>? TraitVariables
+    Dictionary<string, JsonElement>? TraitVariables,
+    DatamineUnlockRequirement? PowerLevelNeededToUnlockEliteCampaign = null
 );
+
+// A feature's unlock requirement in globalValues.json, e.g. { "PowerLevel": 25 }.
+public sealed record DatamineUnlockRequirement(int? PowerLevel);

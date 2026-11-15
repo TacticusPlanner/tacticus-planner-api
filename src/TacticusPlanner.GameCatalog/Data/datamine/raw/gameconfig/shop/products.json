@@ -8153,6 +8153,391 @@
       "amount": 1000
     }
   },
+  "product_seasonal_event_december_2026_progress_chest_01": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_1",
+    "chestId": "seasonal_event_22_progress_chest_01",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 40
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_02": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_2",
+    "chestId": "seasonal_event_22_progress_chest_02",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 45
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_03": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_3",
+    "chestId": "seasonal_event_22_progress_chest_03",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 50
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_04": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_4",
+    "chestId": "seasonal_event_22_progress_chest_04",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 55
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_05": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_5",
+    "chestId": "seasonal_event_22_progress_chest_05",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 60
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_06": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_6",
+    "chestId": "seasonal_event_22_progress_chest_06",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 65
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_07": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_7",
+    "chestId": "seasonal_event_22_progress_chest_07",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 70
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_08": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_8",
+    "chestId": "seasonal_event_22_progress_chest_08",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 75
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_09": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_9",
+    "chestId": "seasonal_event_22_progress_chest_09",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 80
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_10": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_10",
+    "chestId": "seasonal_event_22_progress_chest_10",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 85
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_11": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_11",
+    "chestId": "seasonal_event_22_progress_chest_11",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 90
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_12": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_12",
+    "chestId": "seasonal_event_22_progress_chest_12",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 95
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_13": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_13",
+    "chestId": "seasonal_event_22_progress_chest_13",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 100
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_14": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_14",
+    "chestId": "seasonal_event_22_progress_chest_14",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 105
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_15": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_15",
+    "chestId": "seasonal_event_22_progress_chest_15",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 110
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_16": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_16",
+    "chestId": "seasonal_event_22_progress_chest_16",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 115
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_17": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_17",
+    "chestId": "seasonal_event_22_progress_chest_17",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 120
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_18": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_18",
+    "chestId": "seasonal_event_22_progress_chest_18",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 125
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_19": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_19",
+    "chestId": "seasonal_event_22_progress_chest_19",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 130
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_20": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_20",
+    "chestId": "seasonal_event_22_progress_chest_20",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 140
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_21": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_21",
+    "chestId": "seasonal_event_22_progress_chest_21",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 150
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_22": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_22",
+    "chestId": "seasonal_event_22_progress_chest_22",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 160
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_23": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_23",
+    "chestId": "seasonal_event_22_progress_chest_23",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 170
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_24": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_24",
+    "chestId": "seasonal_event_22_progress_chest_24",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 180
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_25": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_25",
+    "chestId": "seasonal_event_22_progress_chest_25",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 190
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_26": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_26",
+    "chestId": "seasonal_event_22_progress_chest_26",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 205
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_27": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_27",
+    "chestId": "seasonal_event_22_progress_chest_27",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 220
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_28": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_28",
+    "chestId": "seasonal_event_22_progress_chest_28",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 235
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_29": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_29",
+    "chestId": "seasonal_event_22_progress_chest_29",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 255
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_30": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_30",
+    "chestId": "seasonal_event_22_progress_chest_30",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 280
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_31": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_31",
+    "chestId": "seasonal_event_22_progress_chest_31",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 350
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_32": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_32",
+    "chestId": "seasonal_event_22_progress_chest_32",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 450
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_33": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_33",
+    "chestId": "seasonal_event_22_progress_chest_33",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 600
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_34": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_34",
+    "chestId": "seasonal_event_22_progress_chest_34",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 800
+    }
+  },
+  "product_seasonal_event_december_2026_progress_chest_35": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_35",
+    "chestId": "seasonal_event_22_progress_chest_35",
+    "cost": {
+      "type": "seasonalEventCurrencyDecember2026",
+      "amount": 1000
+    }
+  },
   "product_se_progress_chest_june_2026_week1_01": {
     "productType": "chest",
     "iconType": "chestSprite",
@@ -9253,386 +9638,771 @@
       "amount": 250
     }
   },
-  "product_crescendo_event_01_progress_chest_01": {
+  "product_crescendo_event_a_progress_chest_01": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_1",
-    "chestId": "crescendo_event_01_progress_chest_01",
+    "chestId": "crescendo_event_a_progress_chest_01",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 40
     }
   },
-  "product_crescendo_event_01_progress_chest_02": {
+  "product_crescendo_event_a_progress_chest_02": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_2",
-    "chestId": "crescendo_event_01_progress_chest_02",
+    "chestId": "crescendo_event_a_progress_chest_02",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 45
     }
   },
-  "product_crescendo_event_01_progress_chest_03": {
+  "product_crescendo_event_a_progress_chest_03": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_3",
-    "chestId": "crescendo_event_01_progress_chest_03",
+    "chestId": "crescendo_event_a_progress_chest_03",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 50
     }
   },
-  "product_crescendo_event_01_progress_chest_04": {
+  "product_crescendo_event_a_progress_chest_04": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_4",
-    "chestId": "crescendo_event_01_progress_chest_04",
+    "chestId": "crescendo_event_a_progress_chest_04",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 55
     }
   },
-  "product_crescendo_event_01_progress_chest_05": {
+  "product_crescendo_event_a_progress_chest_05": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_5",
-    "chestId": "crescendo_event_01_progress_chest_05",
+    "chestId": "crescendo_event_a_progress_chest_05",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 60
     }
   },
-  "product_crescendo_event_01_progress_chest_06": {
+  "product_crescendo_event_a_progress_chest_06": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_6",
-    "chestId": "crescendo_event_01_progress_chest_06",
+    "chestId": "crescendo_event_a_progress_chest_06",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 65
     }
   },
-  "product_crescendo_event_01_progress_chest_07": {
+  "product_crescendo_event_a_progress_chest_07": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_7",
-    "chestId": "crescendo_event_01_progress_chest_07",
+    "chestId": "crescendo_event_a_progress_chest_07",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 70
     }
   },
-  "product_crescendo_event_01_progress_chest_08": {
+  "product_crescendo_event_a_progress_chest_08": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_8",
-    "chestId": "crescendo_event_01_progress_chest_08",
+    "chestId": "crescendo_event_a_progress_chest_08",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 75
     }
   },
-  "product_crescendo_event_01_progress_chest_09": {
+  "product_crescendo_event_a_progress_chest_09": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_9",
-    "chestId": "crescendo_event_01_progress_chest_09",
+    "chestId": "crescendo_event_a_progress_chest_09",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 80
     }
   },
-  "product_crescendo_event_01_progress_chest_10": {
+  "product_crescendo_event_a_progress_chest_10": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_10",
-    "chestId": "crescendo_event_01_progress_chest_10",
+    "chestId": "crescendo_event_a_progress_chest_10",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 85
     }
   },
-  "product_crescendo_event_01_progress_chest_11": {
+  "product_crescendo_event_a_progress_chest_11": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_11",
-    "chestId": "crescendo_event_01_progress_chest_11",
+    "chestId": "crescendo_event_a_progress_chest_11",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 90
     }
   },
-  "product_crescendo_event_01_progress_chest_12": {
+  "product_crescendo_event_a_progress_chest_12": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_12",
-    "chestId": "crescendo_event_01_progress_chest_12",
+    "chestId": "crescendo_event_a_progress_chest_12",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 95
     }
   },
-  "product_crescendo_event_01_progress_chest_13": {
+  "product_crescendo_event_a_progress_chest_13": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_13",
-    "chestId": "crescendo_event_01_progress_chest_13",
+    "chestId": "crescendo_event_a_progress_chest_13",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 100
     }
   },
-  "product_crescendo_event_01_progress_chest_14": {
+  "product_crescendo_event_a_progress_chest_14": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_14",
-    "chestId": "crescendo_event_01_progress_chest_14",
+    "chestId": "crescendo_event_a_progress_chest_14",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 105
     }
   },
-  "product_crescendo_event_01_progress_chest_15": {
+  "product_crescendo_event_a_progress_chest_15": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_15",
-    "chestId": "crescendo_event_01_progress_chest_15",
+    "chestId": "crescendo_event_a_progress_chest_15",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 110
     }
   },
-  "product_crescendo_event_01_progress_chest_16": {
+  "product_crescendo_event_a_progress_chest_16": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_16",
-    "chestId": "crescendo_event_01_progress_chest_16",
+    "chestId": "crescendo_event_a_progress_chest_16",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 115
     }
   },
-  "product_crescendo_event_01_progress_chest_17": {
+  "product_crescendo_event_a_progress_chest_17": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_17",
-    "chestId": "crescendo_event_01_progress_chest_17",
+    "chestId": "crescendo_event_a_progress_chest_17",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 120
     }
   },
-  "product_crescendo_event_01_progress_chest_18": {
+  "product_crescendo_event_a_progress_chest_18": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_18",
-    "chestId": "crescendo_event_01_progress_chest_18",
+    "chestId": "crescendo_event_a_progress_chest_18",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 125
     }
   },
-  "product_crescendo_event_01_progress_chest_19": {
+  "product_crescendo_event_a_progress_chest_19": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_19",
-    "chestId": "crescendo_event_01_progress_chest_19",
+    "chestId": "crescendo_event_a_progress_chest_19",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 130
     }
   },
-  "product_crescendo_event_01_progress_chest_20": {
+  "product_crescendo_event_a_progress_chest_20": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_20",
-    "chestId": "crescendo_event_01_progress_chest_20",
+    "chestId": "crescendo_event_a_progress_chest_20",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 140
     }
   },
-  "product_crescendo_event_01_progress_chest_21": {
+  "product_crescendo_event_a_progress_chest_21": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_21",
-    "chestId": "crescendo_event_01_progress_chest_21",
+    "chestId": "crescendo_event_a_progress_chest_21",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 150
     }
   },
-  "product_crescendo_event_01_progress_chest_22": {
+  "product_crescendo_event_a_progress_chest_22": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_22",
-    "chestId": "crescendo_event_01_progress_chest_22",
+    "chestId": "crescendo_event_a_progress_chest_22",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 160
     }
   },
-  "product_crescendo_event_01_progress_chest_23": {
+  "product_crescendo_event_a_progress_chest_23": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_23",
-    "chestId": "crescendo_event_01_progress_chest_23",
+    "chestId": "crescendo_event_a_progress_chest_23",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 170
     }
   },
-  "product_crescendo_event_01_progress_chest_24": {
+  "product_crescendo_event_a_progress_chest_24": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_24",
-    "chestId": "crescendo_event_01_progress_chest_24",
+    "chestId": "crescendo_event_a_progress_chest_24",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 180
     }
   },
-  "product_crescendo_event_01_progress_chest_25": {
+  "product_crescendo_event_a_progress_chest_25": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_25",
-    "chestId": "crescendo_event_01_progress_chest_25",
+    "chestId": "crescendo_event_a_progress_chest_25",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 190
     }
   },
-  "product_crescendo_event_01_progress_chest_26": {
+  "product_crescendo_event_a_progress_chest_26": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_26",
-    "chestId": "crescendo_event_01_progress_chest_26",
+    "chestId": "crescendo_event_a_progress_chest_26",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 200
     }
   },
-  "product_crescendo_event_01_progress_chest_27": {
+  "product_crescendo_event_a_progress_chest_27": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_27",
-    "chestId": "crescendo_event_01_progress_chest_27",
+    "chestId": "crescendo_event_a_progress_chest_27",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 215
     }
   },
-  "product_crescendo_event_01_progress_chest_28": {
+  "product_crescendo_event_a_progress_chest_28": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_28",
-    "chestId": "crescendo_event_01_progress_chest_28",
+    "chestId": "crescendo_event_a_progress_chest_28",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 230
     }
   },
-  "product_crescendo_event_01_progress_chest_29": {
+  "product_crescendo_event_a_progress_chest_29": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_29",
-    "chestId": "crescendo_event_01_progress_chest_29",
+    "chestId": "crescendo_event_a_progress_chest_29",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 250
     }
   },
-  "product_crescendo_event_01_progress_chest_30": {
+  "product_crescendo_event_a_progress_chest_30": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_30",
-    "chestId": "crescendo_event_01_progress_chest_30",
+    "chestId": "crescendo_event_a_progress_chest_30",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 280
     }
   },
-  "product_crescendo_event_01_progress_chest_31": {
+  "product_crescendo_event_a_progress_chest_31": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_31",
-    "chestId": "crescendo_event_01_progress_chest_31",
+    "chestId": "crescendo_event_a_progress_chest_31",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 320
     }
   },
-  "product_crescendo_event_01_progress_chest_32": {
+  "product_crescendo_event_a_progress_chest_32": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_32",
-    "chestId": "crescendo_event_01_progress_chest_32",
+    "chestId": "crescendo_event_a_progress_chest_32",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 450
     }
   },
-  "product_crescendo_event_01_progress_chest_33": {
+  "product_crescendo_event_a_progress_chest_33": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_33",
-    "chestId": "crescendo_event_01_progress_chest_33",
+    "chestId": "crescendo_event_a_progress_chest_33",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 525
     }
   },
-  "product_crescendo_event_01_progress_chest_34": {
+  "product_crescendo_event_a_progress_chest_34": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_34",
-    "chestId": "crescendo_event_01_progress_chest_34",
+    "chestId": "crescendo_event_a_progress_chest_34",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 700
     }
   },
-  "product_crescendo_event_01_progress_chest_35": {
+  "product_crescendo_event_a_progress_chest_35": {
     "productType": "chest",
     "iconType": "chestSprite",
     "icon": "hre",
     "locaKey": "Chests/EventChest_35",
-    "chestId": "crescendo_event_01_progress_chest_35",
+    "chestId": "crescendo_event_a_progress_chest_35",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 800
+    }
+  },
+  "product_crescendo_event_b_progress_chest_01": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_1",
+    "chestId": "crescendo_event_b_progress_chest_01",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 40
+    }
+  },
+  "product_crescendo_event_b_progress_chest_02": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_2",
+    "chestId": "crescendo_event_b_progress_chest_02",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 45
+    }
+  },
+  "product_crescendo_event_b_progress_chest_03": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_3",
+    "chestId": "crescendo_event_b_progress_chest_03",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 50
+    }
+  },
+  "product_crescendo_event_b_progress_chest_04": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_4",
+    "chestId": "crescendo_event_b_progress_chest_04",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 55
+    }
+  },
+  "product_crescendo_event_b_progress_chest_05": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_5",
+    "chestId": "crescendo_event_b_progress_chest_05",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 60
+    }
+  },
+  "product_crescendo_event_b_progress_chest_06": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_6",
+    "chestId": "crescendo_event_b_progress_chest_06",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 65
+    }
+  },
+  "product_crescendo_event_b_progress_chest_07": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_7",
+    "chestId": "crescendo_event_b_progress_chest_07",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 70
+    }
+  },
+  "product_crescendo_event_b_progress_chest_08": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_8",
+    "chestId": "crescendo_event_b_progress_chest_08",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 75
+    }
+  },
+  "product_crescendo_event_b_progress_chest_09": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_9",
+    "chestId": "crescendo_event_b_progress_chest_09",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 80
+    }
+  },
+  "product_crescendo_event_b_progress_chest_10": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_10",
+    "chestId": "crescendo_event_b_progress_chest_10",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 85
+    }
+  },
+  "product_crescendo_event_b_progress_chest_11": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_11",
+    "chestId": "crescendo_event_b_progress_chest_11",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 90
+    }
+  },
+  "product_crescendo_event_b_progress_chest_12": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_12",
+    "chestId": "crescendo_event_b_progress_chest_12",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 95
+    }
+  },
+  "product_crescendo_event_b_progress_chest_13": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_13",
+    "chestId": "crescendo_event_b_progress_chest_13",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 100
+    }
+  },
+  "product_crescendo_event_b_progress_chest_14": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_14",
+    "chestId": "crescendo_event_b_progress_chest_14",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 105
+    }
+  },
+  "product_crescendo_event_b_progress_chest_15": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_15",
+    "chestId": "crescendo_event_b_progress_chest_15",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 110
+    }
+  },
+  "product_crescendo_event_b_progress_chest_16": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_16",
+    "chestId": "crescendo_event_b_progress_chest_16",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 115
+    }
+  },
+  "product_crescendo_event_b_progress_chest_17": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_17",
+    "chestId": "crescendo_event_b_progress_chest_17",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 120
+    }
+  },
+  "product_crescendo_event_b_progress_chest_18": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_18",
+    "chestId": "crescendo_event_b_progress_chest_18",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 125
+    }
+  },
+  "product_crescendo_event_b_progress_chest_19": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_19",
+    "chestId": "crescendo_event_b_progress_chest_19",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 130
+    }
+  },
+  "product_crescendo_event_b_progress_chest_20": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_20",
+    "chestId": "crescendo_event_b_progress_chest_20",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 140
+    }
+  },
+  "product_crescendo_event_b_progress_chest_21": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_21",
+    "chestId": "crescendo_event_b_progress_chest_21",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 150
+    }
+  },
+  "product_crescendo_event_b_progress_chest_22": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_22",
+    "chestId": "crescendo_event_b_progress_chest_22",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 160
+    }
+  },
+  "product_crescendo_event_b_progress_chest_23": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_23",
+    "chestId": "crescendo_event_b_progress_chest_23",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 170
+    }
+  },
+  "product_crescendo_event_b_progress_chest_24": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_24",
+    "chestId": "crescendo_event_b_progress_chest_24",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 180
+    }
+  },
+  "product_crescendo_event_b_progress_chest_25": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_25",
+    "chestId": "crescendo_event_b_progress_chest_25",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 190
+    }
+  },
+  "product_crescendo_event_b_progress_chest_26": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_26",
+    "chestId": "crescendo_event_b_progress_chest_26",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 200
+    }
+  },
+  "product_crescendo_event_b_progress_chest_27": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_27",
+    "chestId": "crescendo_event_b_progress_chest_27",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 215
+    }
+  },
+  "product_crescendo_event_b_progress_chest_28": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_28",
+    "chestId": "crescendo_event_b_progress_chest_28",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 230
+    }
+  },
+  "product_crescendo_event_b_progress_chest_29": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_29",
+    "chestId": "crescendo_event_b_progress_chest_29",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 250
+    }
+  },
+  "product_crescendo_event_b_progress_chest_30": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_30",
+    "chestId": "crescendo_event_b_progress_chest_30",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 280
+    }
+  },
+  "product_crescendo_event_b_progress_chest_31": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_31",
+    "chestId": "crescendo_event_b_progress_chest_31",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 320
+    }
+  },
+  "product_crescendo_event_b_progress_chest_32": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_32",
+    "chestId": "crescendo_event_b_progress_chest_32",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 450
+    }
+  },
+  "product_crescendo_event_b_progress_chest_33": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_33",
+    "chestId": "crescendo_event_b_progress_chest_33",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 525
+    }
+  },
+  "product_crescendo_event_b_progress_chest_34": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_34",
+    "chestId": "crescendo_event_b_progress_chest_34",
+    "cost": {
+      "type": "seasonalEventCurrencyCrescendo",
+      "amount": 700
+    }
+  },
+  "product_crescendo_event_b_progress_chest_35": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_35",
+    "chestId": "crescendo_event_b_progress_chest_35",
     "cost": {
       "type": "seasonalEventCurrencyCrescendo",
       "amount": 800
@@ -9855,6 +10625,226 @@
     "chestId": "se_progress_chest_october_2026_20",
     "cost": {
       "type": "seasonalEventCurrencyOctober2026",
+      "amount": 250
+    }
+  },
+  "product_se_progress_chest_november_2026_01": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_1",
+    "chestId": "se_progress_chest_november_2026_01",
+    "cost": {
+      "type": "seasonalEventCurrencyNovember2026",
+      "amount": 30
+    }
+  },
+  "product_se_progress_chest_november_2026_02": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_2",
+    "chestId": "se_progress_chest_november_2026_02",
+    "cost": {
+      "type": "seasonalEventCurrencyNovember2026",
+      "amount": 35
+    }
+  },
+  "product_se_progress_chest_november_2026_03": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_3",
+    "chestId": "se_progress_chest_november_2026_03",
+    "cost": {
+      "type": "seasonalEventCurrencyNovember2026",
+      "amount": 40
+    }
+  },
+  "product_se_progress_chest_november_2026_04": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_4",
+    "chestId": "se_progress_chest_november_2026_04",
+    "cost": {
+      "type": "seasonalEventCurrencyNovember2026",
+      "amount": 45
+    }
+  },
+  "product_se_progress_chest_november_2026_05": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_5",
+    "chestId": "se_progress_chest_november_2026_05",
+    "cost": {
+      "type": "seasonalEventCurrencyNovember2026",
+      "amount": 50
+    }
+  },
+  "product_se_progress_chest_november_2026_06": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_6",
+    "chestId": "se_progress_chest_november_2026_06",
+    "cost": {
+      "type": "seasonalEventCurrencyNovember2026",
+      "amount": 55
+    }
+  },
+  "product_se_progress_chest_november_2026_07": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_7",
+    "chestId": "se_progress_chest_november_2026_07",
+    "cost": {
+      "type": "seasonalEventCurrencyNovember2026",
+      "amount": 60
+    }
+  },
+  "product_se_progress_chest_november_2026_08": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_8",
+    "chestId": "se_progress_chest_november_2026_08",
+    "cost": {
+      "type": "seasonalEventCurrencyNovember2026",
+      "amount": 65
+    }
+  },
+  "product_se_progress_chest_november_2026_09": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_9",
+    "chestId": "se_progress_chest_november_2026_09",
+    "cost": {
+      "type": "seasonalEventCurrencyNovember2026",
+      "amount": 70
+    }
+  },
+  "product_se_progress_chest_november_2026_10": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_10",
+    "chestId": "se_progress_chest_november_2026_10",
+    "cost": {
+      "type": "seasonalEventCurrencyNovember2026",
+      "amount": 75
+    }
+  },
+  "product_se_progress_chest_november_2026_11": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_11",
+    "chestId": "se_progress_chest_november_2026_11",
+    "cost": {
+      "type": "seasonalEventCurrencyNovember2026",
+      "amount": 80
+    }
+  },
+  "product_se_progress_chest_november_2026_12": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_12",
+    "chestId": "se_progress_chest_november_2026_12",
+    "cost": {
+      "type": "seasonalEventCurrencyNovember2026",
+      "amount": 85
+    }
+  },
+  "product_se_progress_chest_november_2026_13": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_13",
+    "chestId": "se_progress_chest_november_2026_13",
+    "cost": {
+      "type": "seasonalEventCurrencyNovember2026",
+      "amount": 90
+    }
+  },
+  "product_se_progress_chest_november_2026_14": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_14",
+    "chestId": "se_progress_chest_november_2026_14",
+    "cost": {
+      "type": "seasonalEventCurrencyNovember2026",
+      "amount": 95
+    }
+  },
+  "product_se_progress_chest_november_2026_15": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_15",
+    "chestId": "se_progress_chest_november_2026_15",
+    "cost": {
+      "type": "seasonalEventCurrencyNovember2026",
+      "amount": 100
+    }
+  },
+  "product_se_progress_chest_november_2026_16": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_16",
+    "chestId": "se_progress_chest_november_2026_16",
+    "cost": {
+      "type": "seasonalEventCurrencyNovember2026",
+      "amount": 110
+    }
+  },
+  "product_se_progress_chest_november_2026_17": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_17",
+    "chestId": "se_progress_chest_november_2026_17",
+    "cost": {
+      "type": "seasonalEventCurrencyNovember2026",
+      "amount": 130
+    }
+  },
+  "product_se_progress_chest_november_2026_18": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_18",
+    "chestId": "se_progress_chest_november_2026_18",
+    "cost": {
+      "type": "seasonalEventCurrencyNovember2026",
+      "amount": 160
+    }
+  },
+  "product_se_progress_chest_november_2026_19": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_19",
+    "chestId": "se_progress_chest_november_2026_19",
+    "cost": {
+      "type": "seasonalEventCurrencyNovember2026",
+      "amount": 220
+    }
+  },
+  "product_se_progress_chest_november_2026_20": {
+    "productType": "chest",
+    "iconType": "chestSprite",
+    "icon": "hre",
+    "locaKey": "Chests/EventChest_20",
+    "chestId": "se_progress_chest_november_2026_20",
+    "cost": {
+      "type": "seasonalEventCurrencyNovember2026",
       "amount": 250
     }
   },
@@ -11673,6 +12663,193 @@
       "amount": 0
     }
   },
+  "product_calendar_advent_2026_day_1_free": {
+    "productType": "product",
+    "iconType": "productSprite",
+    "rewards": [
+      "specialSummoningToken:1"
+    ],
+    "cost": {
+      "type": "gems",
+      "amount": 0
+    }
+  },
+  "product_calendar_advent_2026_day_3_free": {
+    "productType": "product",
+    "iconType": "productSprite",
+    "rewards": [
+      "gems:50"
+    ],
+    "cost": {
+      "type": "gems",
+      "amount": 0
+    }
+  },
+  "product_calendar_advent_2026_day_5_free": {
+    "productType": "product",
+    "iconType": "productSprite",
+    "rewards": [
+      "summoningToken:1"
+    ],
+    "cost": {
+      "type": "gems",
+      "amount": 0
+    }
+  },
+  "product_calendar_advent_2026_day_7_free": {
+    "productType": "product",
+    "iconType": "productSprite",
+    "rewards": [
+      "stamina:30",
+      "raidTicket:5"
+    ],
+    "cost": {
+      "type": "gems",
+      "amount": 0
+    }
+  },
+  "product_calendar_advent_2026_day_9_free": {
+    "productType": "product",
+    "iconType": "productSprite",
+    "rewards": [
+      "stamina_treasureBeach:1"
+    ],
+    "cost": {
+      "type": "gems",
+      "amount": 0
+    }
+  },
+  "product_calendar_advent_2026_day_11_free": {
+    "productType": "product",
+    "iconType": "productSprite",
+    "rewards": [
+      "specialSummoningToken:1"
+    ],
+    "cost": {
+      "type": "gems",
+      "amount": 0
+    }
+  },
+  "product_calendar_advent_2026_day_13_free": {
+    "productType": "product",
+    "iconType": "productSprite",
+    "rewards": [
+      "raidTicket:100"
+    ],
+    "cost": {
+      "type": "gems",
+      "amount": 0
+    }
+  },
+  "product_calendar_advent_2026_day_16_free": {
+    "productType": "product",
+    "iconType": "productSprite",
+    "rewards": [
+      "gems:50"
+    ],
+    "cost": {
+      "type": "gems",
+      "amount": 0
+    }
+  },
+  "product_calendar_advent_2026_day_19_free": {
+    "productType": "product",
+    "iconType": "productSprite",
+    "rewards": [
+      "summoningToken:1"
+    ],
+    "cost": {
+      "type": "gems",
+      "amount": 0
+    }
+  },
+  "product_calendar_advent_2026_day_21_free": {
+    "productType": "product",
+    "iconType": "productSprite",
+    "rewards": [
+      "stamina:30",
+      "raidTicket:5"
+    ],
+    "cost": {
+      "type": "gems",
+      "amount": 0
+    }
+  },
+  "product_calendar_advent_2026_day_22_free": {
+    "productType": "product",
+    "iconType": "productSprite",
+    "rewards": [
+      "gems:50"
+    ],
+    "cost": {
+      "type": "gems",
+      "amount": 0
+    }
+  },
+  "product_calendar_advent_2026_day_24_free": {
+    "productType": "product",
+    "iconType": "productSprite",
+    "rewards": [
+      "xp_battlepass:100",
+      "xpLegendary:1"
+    ],
+    "cost": {
+      "type": "gems",
+      "amount": 0
+    }
+  },
+  "product_loyalty_currency_december_2026": {
+    "productType": "product",
+    "iconType": "productSprite",
+    "rewards": [
+      "seasonalEventCurrencyDecember2026:100",
+      "specialSummoningToken:1",
+      "xpLegendary:10",
+      "gems:200"
+    ],
+    "cost": {
+      "type": "loyaltyCurrency",
+      "amount": 499
+    }
+  },
+  "product_webstore_free_december_2026": {
+    "productType": "product",
+    "iconType": "productSprite",
+    "rewards": [
+      "seasonalEventCurrencyDecember2026:20",
+      "avatarFrame_frameDecember2026"
+    ],
+    "cost": {
+      "type": "gems",
+      "amount": 0
+    }
+  },
+  "product_loyalty_currency_november_2026": {
+    "productType": "product",
+    "iconType": "productSprite",
+    "rewards": [
+      "seasonalEventCurrencyNovember2026:100",
+      "specialSummoningToken:1",
+      "xpLegendary:10",
+      "gems:200"
+    ],
+    "cost": {
+      "type": "loyaltyCurrency",
+      "amount": 499
+    }
+  },
+  "product_webstore_free_november_2026": {
+    "productType": "product",
+    "iconType": "productSprite",
+    "rewards": [
+      "seasonalEventCurrencyNovember2026:5",
+      "summoningToken:1"
+    ],
+    "cost": {
+      "type": "gems",
+      "amount": 0
+    }
+  },
   "product_calendar_seasonal_event_september_2026_day_1_free": {
     "productType": "product",
     "iconType": "productSprite",
@@ -11698,6 +12875,132 @@
       "amount": 0
     }
   },
+  "product_calendar_seasonal_event_november_2026_day_1_free": {
+    "productType": "product",
+    "iconType": "productSprite",
+    "rewards": [
+      "seasonalEventCurrencyNovember2026:10",
+      "gems:50",
+      "stamina:30",
+      "raidTicket:5"
+    ],
+    "cost": {
+      "type": "gems",
+      "amount": 0
+    }
+  },
+  "product_calendar_seasonal_event_november_2026_day_4_free": {
+    "productType": "product",
+    "iconType": "productSprite",
+    "rewards": [
+      "avatarFrame_frameNovember2026:1",
+      "stamina:60",
+      "raidTicket:10"
+    ],
+    "cost": {
+      "type": "gems",
+      "amount": 0
+    }
+  },
+  "product_calendar_seasonal_event_june_2026_day_3_free": {
+    "productType": "product",
+    "iconType": "productSprite",
+    "rewards": [
+      "seasonalEventCurrencyJune2026:10",
+      "stamina_treasureBeach:1"
+    ],
+    "cost": {
+      "type": "gems",
+      "amount": 0
+    }
+  },
+  "product_calendar_seasonal_event_june_2026_day_7_free": {
+    "productType": "product",
+    "iconType": "productSprite",
+    "rewards": [
+      "seasonalEventCurrencyJune2026:10",
+      "specialSummoningToken:1"
+    ],
+    "cost": {
+      "type": "gems",
+      "amount": 0
+    }
+  },
+  "product_calendar_seasonal_event_june_2026_day_11_free": {
+    "productType": "product",
+    "iconType": "productSprite",
+    "rewards": [
+      "seasonalEventCurrencyJune2026:10",
+      "stamina_waves:1"
+    ],
+    "cost": {
+      "type": "gems",
+      "amount": 0
+    }
+  },
+  "product_calendar_seasonal_event_june_2026_day_14_free": {
+    "productType": "product",
+    "iconType": "productSprite",
+    "rewards": [
+      "seasonalEventCurrencyJune2026:10",
+      "gems:100"
+    ],
+    "cost": {
+      "type": "gems",
+      "amount": 0
+    }
+  },
+  "product_calendar_seasonal_event_june_2026_day_17_free": {
+    "productType": "product",
+    "iconType": "productSprite",
+    "rewards": [
+      "seasonalEventCurrencyJune2026:10",
+      "stamina:90",
+      "raidTicket:15"
+    ],
+    "cost": {
+      "type": "gems",
+      "amount": 0
+    }
+  },
+  "product_calendar_seasonal_event_june_2026_day_21_free": {
+    "productType": "product",
+    "iconType": "productSprite",
+    "rewards": [
+      "seasonalEventCurrencyJune2026:10",
+      "specialSummoningToken:1"
+    ],
+    "cost": {
+      "type": "gems",
+      "amount": 0
+    }
+  },
+  "product_calendar_seasonal_event_may_2026_day_1_free": {
+    "productType": "product",
+    "iconType": "productSprite",
+    "rewards": [
+      "seasonalEventCurrencyMay2026:80",
+      "specialSummoningToken:1"
+    ],
+    "cost": {
+      "type": "gems",
+      "amount": 0
+    }
+  },
+  "product_calendar_seasonal_event_may_2026_day_7_free": {
+    "productType": "product",
+    "iconType": "productSprite",
+    "rewards": [
+      "seasonalEventCurrencyMay2026:80",
+      "stamina:60",
+      "raidTicket:10",
+      "gems:50"
+    ],
+    "cost": {
+      "type": "gems",
+      "amount": 0
+    }
+  },
   "product_calendar_seasonal_event_july_2026_day_1_free": {
     "productType": "product",
     "iconType": "productSprite",
@@ -11715,6 +13018,30 @@
     "rewards": [
       "stamina:30",
       "raidTicket:5"
+    ],
+    "cost": {
+      "type": "gems",
+      "amount": 0
+    }
+  },
+  "product_calendar_seasonal_event_december_2026_day_2_free": {
+    "productType": "product",
+    "iconType": "productSprite",
+    "rewards": [
+      "seasonalEventCurrencyDecember2026:10",
+      "specialSummoningToken:1"
+    ],
+    "cost": {
+      "type": "gems",
+      "amount": 0
+    }
+  },
+  "product_calendar_seasonal_event_december_2026_day_6_free": {
+    "productType": "product",
+    "iconType": "productSprite",
+    "rewards": [
+      "seasonalEventCurrencyDecember2026:10",
+      "gems:50"
     ],
     "cost": {
       "type": "gems",
@@ -11881,105 +13208,6 @@
     "rewards": [
       "seasonalEventCurrencyAugust2026:10",
       "specialSummoningToken:1"
-    ],
-    "cost": {
-      "type": "gems",
-      "amount": 0
-    }
-  },
-  "product_calendar_seasonal_event_june_2026_day_3_free": {
-    "productType": "product",
-    "iconType": "productSprite",
-    "rewards": [
-      "seasonalEventCurrencyJune2026:10",
-      "stamina_treasureBeach:1"
-    ],
-    "cost": {
-      "type": "gems",
-      "amount": 0
-    }
-  },
-  "product_calendar_seasonal_event_june_2026_day_7_free": {
-    "productType": "product",
-    "iconType": "productSprite",
-    "rewards": [
-      "seasonalEventCurrencyJune2026:10",
-      "specialSummoningToken:1"
-    ],
-    "cost": {
-      "type": "gems",
-      "amount": 0
-    }
-  },
-  "product_calendar_seasonal_event_june_2026_day_11_free": {
-    "productType": "product",
-    "iconType": "productSprite",
-    "rewards": [
-      "seasonalEventCurrencyJune2026:10",
-      "stamina_waves:1"
-    ],
-    "cost": {
-      "type": "gems",
-      "amount": 0
-    }
-  },
-  "product_calendar_seasonal_event_june_2026_day_14_free": {
-    "productType": "product",
-    "iconType": "productSprite",
-    "rewards": [
-      "seasonalEventCurrencyJune2026:10",
-      "gems:100"
-    ],
-    "cost": {
-      "type": "gems",
-      "amount": 0
-    }
-  },
-  "product_calendar_seasonal_event_june_2026_day_17_free": {
-    "productType": "product",
-    "iconType": "productSprite",
-    "rewards": [
-      "seasonalEventCurrencyJune2026:10",
-      "stamina:90",
-      "raidTicket:15"
-    ],
-    "cost": {
-      "type": "gems",
-      "amount": 0
-    }
-  },
-  "product_calendar_seasonal_event_june_2026_day_21_free": {
-    "productType": "product",
-    "iconType": "productSprite",
-    "rewards": [
-      "seasonalEventCurrencyJune2026:10",
-      "specialSummoningToken:1"
-    ],
-    "cost": {
-      "type": "gems",
-      "amount": 0
-    }
-  },
-  "product_calendar_seasonal_event_may_2026_day_1_free": {
-    "productType": "product",
-    "iconType": "productSprite",
-    "rewards": [
-      "seasonalEventCurrencyMay2026:80",
-      "specialSummoningToken:1"
-    ],
-    "cost": {
-      "type": "gems",
-      "amount": 0
-    }
-  },
-  "product_calendar_seasonal_event_may_2026_day_7_free": {
-    "productType": "product",
-    "iconType": "productSprite",
-    "rewards": [
-      "seasonalEventCurrencyMay2026:80",
-      "stamina:60",
-      "raidTicket:10",
-      "gems:50"
     ],
     "cost": {
       "type": "gems",

@@ -193,13 +193,15 @@ public sealed class OpenApiDocumentTests(GameCatalogApiFactory factory) : IClass
         return element.IsEnum ? element : null;
     }
 
-    /// <summary>An inline <c>enum</c>, a <c>$ref</c> to one, a nullable <c>oneOf</c>/<c>anyOf</c> wrapper or an array of them.</summary>
+    /// <summary>An inline <c>enum</c>, a <c>$ref</c> to one (or to an array of one), a nullable <c>oneOf</c>/<c>anyOf</c> wrapper or an array of them.</summary>
     private static bool IsStringEnum(JsonNode schema, JsonObject schemas)
     {
         if (schema["enum"] is not null)
             return true;
+        // A $ref to an enum, or to a named array of one (FastEndpoints names an enum array `EnumArray`).
         if (schema["$ref"]?.GetValue<string>() is { } reference)
-            return schemas[reference.Split('/')[^1]]?["enum"] is not null;
+            return schemas[reference.Split('/')[^1]] is { } target
+                && (target["enum"] is not null || (target["items"] is { } targetItems && IsStringEnum(targetItems, schemas)));
         if (schema["items"] is { } items)
             return IsStringEnum(items, schemas);
         var options = (schema["oneOf"] ?? schema["anyOf"])?.AsArray();

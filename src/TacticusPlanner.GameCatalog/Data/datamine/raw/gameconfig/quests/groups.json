@@ -9197,7 +9197,10 @@
         "questXp": 1,
         "locaKey": "testQuest_name",
         "rewards": [
-          "gold:1"
+          "gold:1",
+          "gems:1",
+          "stamina:1",
+          "summoningToken:1"
         ],
         "followedBy": "none",
         "icon": "ui_icon_quest_heal",
@@ -9282,11 +9285,6 @@
           {
             "name": "UseRequisitionOrders",
             "target": 11,
-            "locaKey": "UseRequisitionOrders_description"
-          },
-          {
-            "name": "UseRequisitionOrders",
-            "target": 10,
             "locaKey": "UseRequisitionOrders_description"
           }
         ]
@@ -9670,28 +9668,6 @@
         ]
       },
       {
-        "name": "test_UseRequisitionOrders",
-        "questXp": 1,
-        "locaKey": "testQuest_name",
-        "rewards": [
-          "gold:1"
-        ],
-        "followedBy": "none",
-        "icon": "ui_icon_quest_heal",
-        "tasks": [
-          {
-            "name": "UseRequisitionOrders",
-            "target": 11,
-            "locaKey": "UseRequisitionOrders_description"
-          },
-          {
-            "name": "UseRequisitionOrders",
-            "target": 10,
-            "locaKey": "UseRequisitionOrders_description"
-          }
-        ]
-      },
-      {
         "name": "test_SlayEnemiesOfUnitId",
         "questXp": 1,
         "locaKey": "testQuest_name",
@@ -9907,7 +9883,7 @@
         "successorQuests": [
           "hre2_q2"
         ],
-        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_AdeptusAstartes, ui_quest_frame_hre, misc_event_HRE",
+        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_TheLostAndTheDamned, ui_quest_frame_hre, misc_event_HRE",
         "tasks": [
           {
             "name": "WinLightningVictories",
@@ -9937,7 +9913,7 @@
         "successorQuests": [
           "hre2_q3"
         ],
-        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_AdeptusAstartes, ui_quest_frame_hre, misc_event_HRE",
+        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_TheLostAndTheDamned, ui_quest_frame_hre, misc_event_HRE",
         "tasks": [
           {
             "name": "RaidBattles",
@@ -9949,7 +9925,7 @@
             "target": 10,
             "locaKey": "SlayEnemiesWithFactionTrait_description",
             "taskParameters": {
-              "factionTrait": "Imperial"
+              "factionTrait": "Chaos"
             }
           }
         ]
@@ -9970,7 +9946,7 @@
         "successorQuests": [
           "hre2_q4"
         ],
-        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_AdeptusAstartes, ui_quest_frame_hre, misc_event_HRE",
+        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_TheLostAndTheDamned, ui_quest_frame_hre, misc_event_HRE",
         "tasks": [
           {
             "name": "WinCampaignBattles",
@@ -10000,7 +9976,7 @@
         "successorQuests": [
           "hre2_q5"
         ],
-        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_AdeptusAstartes, ui_quest_frame_hre, misc_event_HRE",
+        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_TheLostAndTheDamned, ui_quest_frame_hre, misc_event_HRE",
         "tasks": [
           {
             "name": "PlayBattlesInGameMode",
@@ -10033,7 +10009,7 @@
         "successorQuests": [
           "hre2_q6"
         ],
-        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_AdeptusAstartes, ui_quest_frame_hre, misc_event_HRE",
+        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_TheLostAndTheDamned, ui_quest_frame_hre, misc_event_HRE",
         "tasks": [
           {
             "name": "DealAbilityDamage",
@@ -10063,7 +10039,7 @@
         "successorQuests": [
           "hre2_q7"
         ],
-        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_AdeptusAstartes, ui_quest_frame_hre, misc_event_HRE",
+        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_TheLostAndTheDamned, ui_quest_frame_hre, misc_event_HRE",
         "tasks": [
           {
             "name": "HealHealth",
@@ -10093,14 +10069,14 @@
         "successorQuests": [
           "hre2_q8"
         ],
-        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_AdeptusAstartes, ui_quest_frame_hre, misc_event_HRE",
+        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_TheLostAndTheDamned, ui_quest_frame_hre, misc_event_HRE",
         "tasks": [
           {
             "name": "UseAbilityWithFactionTrait",
             "target": 20,
             "locaKey": "UseAbilityWithFactionTrait_description",
             "taskParameters": {
-              "factionTrait": "Imperial"
+              "factionTrait": "Chaos"
             }
           },
           {
@@ -10129,7 +10105,7 @@
         "successorQuests": [
           "hre2_q9"
         ],
-        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_AdeptusAstartes, ui_quest_frame_hre, misc_event_HRE",
+        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_TheLostAndTheDamned, ui_quest_frame_hre, misc_event_HRE",
         "tasks": [
           {
             "name": "PlayBattlesInGameMode",
@@ -10162,7 +10138,7 @@
         "successorQuests": [
           "hre2_q10"
         ],
-        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_AdeptusAstartes, ui_quest_frame_hre, misc_event_HRE",
+        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_TheLostAndTheDamned, ui_quest_frame_hre, misc_event_HRE",
         "tasks": [
           {
             "name": "DealDamageOfProfileType",
@@ -10195,14 +10171,14 @@
         "successorQuests": [
           "hre2_q11"
         ],
-        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_AdeptusAstartes, ui_quest_frame_hre, misc_event_HRE",
+        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_TheLostAndTheDamned, ui_quest_frame_hre, misc_event_HRE",
         "tasks": [
           {
             "name": "WinBattlesWithFactionTraitLineup",
             "target": 15,
             "locaKey": "WinBattlesWithFactionTraitLineup_description",
             "taskParameters": {
-              "factionTrait": "Imperial"
+              "factionTrait": "Chaos"
             }
           },
           {
@@ -10231,7 +10207,7 @@
         "successorQuests": [
           "hre2_q12"
         ],
-        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_AdeptusAstartes, ui_quest_frame_hre, misc_event_HRE",
+        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_TheLostAndTheDamned, ui_quest_frame_hre, misc_event_HRE",
         "tasks": [
           {
             "name": "WinLightningVictories",
@@ -10264,7 +10240,7 @@
         "successorQuests": [
           "hre2_q13"
         ],
-        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_AdeptusAstartes, ui_quest_frame_hre, misc_event_HRE",
+        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_TheLostAndTheDamned, ui_quest_frame_hre, misc_event_HRE",
         "tasks": [
           {
             "name": "HealHealth",
@@ -10297,7 +10273,7 @@
         "successorQuests": [
           "hre2_q14"
         ],
-        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_AdeptusAstartes, ui_quest_frame_hre, misc_event_HRE",
+        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_TheLostAndTheDamned, ui_quest_frame_hre, misc_event_HRE",
         "tasks": [
           {
             "name": "SlayEnemies",
@@ -10309,7 +10285,7 @@
             "target": 50,
             "locaKey": "UseAbilityWithFactionTrait_description",
             "taskParameters": {
-              "factionTrait": "Imperial"
+              "factionTrait": "Chaos"
             }
           }
         ]
@@ -10330,14 +10306,14 @@
         "successorQuests": [
           "hre2_q15"
         ],
-        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_AdeptusAstartes, ui_quest_frame_hre, misc_event_HRE",
+        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_TheLostAndTheDamned, ui_quest_frame_hre, misc_event_HRE",
         "tasks": [
           {
             "name": "WinBattlesWithFactionTraitLineup",
             "target": 25,
             "locaKey": "WinBattlesWithFactionTraitLineup_description",
             "taskParameters": {
-              "factionTrait": "Imperial"
+              "factionTrait": "Chaos"
             }
           },
           {
@@ -10363,7 +10339,7 @@
         "successorQuests": [
           "hre2_q16"
         ],
-        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_AdeptusAstartes, ui_quest_frame_hre, misc_event_HRE",
+        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_TheLostAndTheDamned, ui_quest_frame_hre, misc_event_HRE",
         "tasks": [
           {
             "name": "UseAbility",
@@ -10396,14 +10372,14 @@
         "successorQuests": [
           "hre2_q17"
         ],
-        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_AdeptusAstartes, ui_quest_frame_hre, misc_event_HRE",
+        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_TheLostAndTheDamned, ui_quest_frame_hre, misc_event_HRE",
         "tasks": [
           {
             "name": "SlayEnemiesWithFactionTrait",
             "target": 100,
             "locaKey": "SlayEnemiesWithFactionTrait_description",
             "taskParameters": {
-              "factionTrait": "Imperial"
+              "factionTrait": "Chaos"
             }
           },
           {
@@ -10429,7 +10405,7 @@
         "successorQuests": [
           "hre2_q18"
         ],
-        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_AdeptusAstartes, ui_quest_frame_hre, misc_event_HRE",
+        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_TheLostAndTheDamned, ui_quest_frame_hre, misc_event_HRE",
         "tasks": [
           {
             "name": "DealDamage",
@@ -10459,7 +10435,7 @@
         "successorQuests": [
           "hre2_q19"
         ],
-        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_AdeptusAstartes, ui_quest_frame_hre, misc_event_HRE",
+        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_TheLostAndTheDamned, ui_quest_frame_hre, misc_event_HRE",
         "tasks": [
           {
             "name": "DealAbilityDamage",
@@ -10489,7 +10465,7 @@
         "successorQuests": [
           "hre2_q20"
         ],
-        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_AdeptusAstartes, ui_quest_frame_hre, misc_event_HRE",
+        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_TheLostAndTheDamned, ui_quest_frame_hre, misc_event_HRE",
         "tasks": [
           {
             "name": "SlayEnemiesWithMeleeAttacks",
@@ -10519,14 +10495,14 @@
         "successorQuests": [
           "hre2_bonus"
         ],
-        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_AdeptusAstartes, ui_quest_frame_hre, misc_event_HRE",
+        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_TheLostAndTheDamned, ui_quest_frame_hre, misc_event_HRE",
         "tasks": [
           {
             "name": "UseAbilityWithHero",
             "target": 10,
             "locaKey": "UseAbilityWithHero_description",
             "taskParameters": {
-              "heroId": "astarEradicator"
+              "heroId": "lostaFearmonger"
             }
           },
           {
@@ -10540,7 +10516,7 @@
         "name": "hre2_bonus",
         "questXp": 20,
         "sortPriority": 800,
-        "locaKey": "hre_bonusAdeptusAstartes_name",
+        "locaKey": "hre_bonusTheLostAndTheDamned_name",
         "conditions": {
           "minPowerLevel": 6
         },
@@ -10548,14 +10524,14 @@
           "summoningToken"
         ],
         "followedBy": "none",
-        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_AdeptusAstartes, ui_quest_frame_hre, misc_event_HRE",
+        "icon": "icon_quest_hre, ui_quest_background_general_red, faction_TheLostAndTheDamned, ui_quest_frame_hre, misc_event_HRE",
         "tasks": [
           {
             "name": "DealDamageWithHero",
             "target": 15000,
             "locaKey": "DealDamageWithHero_description",
             "taskParameters": {
-              "heroId": "astarEradicator"
+              "heroId": "lostaFearmonger"
             }
           },
           {
@@ -12009,14 +11985,14 @@
           "machinesOfWarAmmo:1"
         ],
         "followedBy": "none",
-        "icon": "icon_quest_damage, ui_quest_background_general, damage_Bolter, ui_quest_frame_general, ui_quest_overlay_damage",
+        "icon": "icon_quest_damage, ui_quest_background_general, damage_Energy, ui_quest_frame_general, ui_quest_overlay_damage",
         "tasks": [
           {
             "name": "DealDamageOfProfileType",
             "target": 2500,
-            "locaKey": "DealDamageOfProfileType_Bolter_description",
+            "locaKey": "DealDamageOfProfileType_Energy_description",
             "taskParameters": {
-              "damageProfileType": "Bolter"
+              "damageProfileType": "Energy"
             }
           }
         ]
@@ -13311,6 +13287,167 @@
         ]
       },
       {
+        "name": "bp_x3_daily_m_bp_a_1st_lhe_win_01",
+        "category": "daily",
+        "sortPriority": 34,
+        "duration": 86400,
+        "locaKey": "DailyBPQuestMedium",
+        "rewards": [
+          "xp_battlepass:24",
+          "machinesOfWarAmmo:1"
+        ],
+        "followedBy": "none",
+        "icon": "ui_icon_quest_win_deploy_survive_hero",
+        "tasks": [
+          {
+            "name": "WinBattlesWithHero",
+            "target": 8,
+            "locaKey": "WinBattlesWithHero_description",
+            "taskParameters": {
+              "heroId": "lostaFearmonger"
+            }
+          }
+        ]
+      },
+      {
+        "name": "bp_x3_daily_s_bp_a_1st_lhe_use_ability_01",
+        "category": "daily",
+        "sortPriority": 35,
+        "duration": 86400,
+        "locaKey": "DailyBPQuestEasy",
+        "rewards": [
+          "xp_battlepass:15",
+          "machinesOfWarAmmo:1"
+        ],
+        "followedBy": "none",
+        "icon": "icon_quest_use_ability_with, ui_quest_background_ability, faction_TheLostAndTheDamned, ui_quest_frame_general, ui_quest_overlay_ability",
+        "tasks": [
+          {
+            "name": "UseAbilityWithFaction",
+            "target": 5,
+            "locaKey": "UseAbilityWithFaction_description",
+            "taskParameters": {
+              "factionId": "TheLostAndTheDamned"
+            }
+          }
+        ]
+      },
+      {
+        "name": "bp_x3_daily_s_bp_a_1st_lhe_trait_01",
+        "category": "daily",
+        "sortPriority": 35,
+        "duration": 86400,
+        "locaKey": "DailyBPQuestEasy",
+        "rewards": [
+          "xp_battlepass:15",
+          "machinesOfWarAmmo:1"
+        ],
+        "followedBy": "none",
+        "icon": "icon_quest_slay_trait, ui_quest_background_general_red, trait_Overwatch, ui_quest_frame_slay_with, ui_decor_bes_skull",
+        "tasks": [
+          {
+            "name": "SlayEnemiesWithTrait",
+            "target": 5,
+            "locaKey": "SlayEnemiesWithTrait_description",
+            "taskParameters": {
+              "trait": "Overwatch"
+            }
+          }
+        ]
+      },
+      {
+        "name": "bp_x3_daily_m_bp_a_1st_lhe_dmg_01",
+        "category": "daily",
+        "sortPriority": 34,
+        "duration": 86400,
+        "locaKey": "DailyBPQuestMedium",
+        "rewards": [
+          "xp_battlepass:24",
+          "machinesOfWarAmmo:1"
+        ],
+        "followedBy": "none",
+        "icon": "icon_quest_damage, ui_quest_background_general, damage_Bolter, ui_quest_frame_general, ui_quest_overlay_damage",
+        "tasks": [
+          {
+            "name": "DealDamageOfProfileType",
+            "target": 2500,
+            "locaKey": "DealDamageOfProfileType_Bolter_description",
+            "taskParameters": {
+              "damageProfileType": "Bolter"
+            }
+          }
+        ]
+      },
+      {
+        "name": "bp_x3_daily_m_bp_a_1st_lhe_slay_01",
+        "category": "daily",
+        "sortPriority": 34,
+        "duration": 86400,
+        "locaKey": "DailyBPQuestMedium",
+        "rewards": [
+          "xp_battlepass:24",
+          "machinesOfWarAmmo:1"
+        ],
+        "followedBy": "none",
+        "icon": "icon_quest_damage_red, ui_quest_background_general_red, simple_faction_TheLostAndTheDamned, ui_quest_frame_slay_of, misc_decor_bes_skull",
+        "tasks": [
+          {
+            "name": "SlayEnemiesWithFaction",
+            "target": 15,
+            "locaKey": "SlayEnemiesWithFaction_description",
+            "taskParameters": {
+              "factionId": "TheLostAndTheDamned"
+            }
+          }
+        ]
+      },
+      {
+        "name": "bp_x3_daily_l_bp_a_1st_lhe_slay_of_01",
+        "category": "daily",
+        "sortPriority": 33,
+        "duration": 86400,
+        "locaKey": "DailyBPQuestHard",
+        "rewards": [
+          "xp_battlepass:36",
+          "machinesOfWarAmmo:1"
+        ],
+        "followedBy": "none",
+        "icon": "icon_quest_damage_red, ui_quest_background_general_red, trait_faction_AstraMilitarum, ui_quest_frame_slay_of, misc_decor_bes_skull",
+        "tasks": [
+          {
+            "name": "SlayEnemiesOfFaction",
+            "target": 60,
+            "locaKey": "SlayEnemiesOfFaction_description",
+            "taskParameters": {
+              "factionId": "AstraMilitarum"
+            }
+          }
+        ]
+      },
+      {
+        "name": "bp_x3_daily_l_bp_a_1st_lhe_dmg_type_01",
+        "category": "daily",
+        "sortPriority": 33,
+        "duration": 86400,
+        "locaKey": "DailyBPQuestHard",
+        "rewards": [
+          "xp_battlepass:36",
+          "machinesOfWarAmmo:1"
+        ],
+        "followedBy": "none",
+        "icon": "icon_quest_damage, ui_quest_background_general, damage_Bolter, ui_quest_frame_general, ui_quest_overlay_damage",
+        "tasks": [
+          {
+            "name": "DealDamageOfProfileType",
+            "target": 7000,
+            "locaKey": "DealDamageOfProfileType_Bolter_description",
+            "taskParameters": {
+              "damageProfileType": "Bolter"
+            }
+          }
+        ]
+      },
+      {
         "name": "bp_x3_daily_m_bp_a_2nd_lhe_win_01",
         "category": "daily",
         "sortPriority": 34,
@@ -13328,7 +13465,7 @@
             "target": 8,
             "locaKey": "WinBattlesWithHero_description",
             "taskParameters": {
-              "heroId": "astarCyrus"
+              "heroId": "necroOverlord"
             }
           }
         ]
@@ -13344,14 +13481,14 @@
           "machinesOfWarAmmo:1"
         ],
         "followedBy": "none",
-        "icon": "icon_quest_use_ability_with, ui_quest_background_ability, faction_AdeptusAstartes, ui_quest_frame_general, ui_quest_overlay_ability",
+        "icon": "icon_quest_use_ability_with, ui_quest_background_ability, faction_Necrons, ui_quest_frame_general, ui_quest_overlay_ability",
         "tasks": [
           {
             "name": "UseAbilityWithFaction",
             "target": 15,
             "locaKey": "UseAbilityWithFaction_description",
             "taskParameters": {
-              "factionId": "AdeptusAstartes"
+              "factionId": "Necrons"
             }
           }
         ]
@@ -13367,14 +13504,14 @@
           "machinesOfWarAmmo:1"
         ],
         "followedBy": "none",
-        "icon": "icon_quest_damage, ui_quest_background_general, damage_Bolter, ui_quest_frame_general, ui_quest_overlay_damage",
+        "icon": "icon_quest_damage, ui_quest_background_general, damage_Energy, ui_quest_frame_general, ui_quest_overlay_damage",
         "tasks": [
           {
             "name": "DealDamageOfProfileType",
             "target": 5000,
-            "locaKey": "DealDamageOfProfileType_Bolter_description",
+            "locaKey": "DealDamageOfProfileType_Energy_description",
             "taskParameters": {
-              "damageProfileType": "Bolter"
+              "damageProfileType": "Energy"
             }
           }
         ]
@@ -13390,14 +13527,14 @@
           "machinesOfWarAmmo:1"
         ],
         "followedBy": "none",
-        "icon": "icon_quest_damage_red, ui_quest_background_general_red, simple_faction_Necrons, ui_quest_frame_slay_of, misc_decor_bes_skull",
+        "icon": "icon_quest_damage_red, ui_quest_background_general_red, simple_faction_AdeptusMechanicus, ui_quest_frame_slay_of, misc_decor_bes_skull",
         "tasks": [
           {
             "name": "SlayEnemiesOfFaction",
             "target": 70,
             "locaKey": "SlayEnemiesOfFaction_description",
             "taskParameters": {
-              "factionId": "Necrons"
+              "factionId": "AdeptusMechanicus"
             }
           }
         ]
@@ -13413,83 +13550,14 @@
           "machinesOfWarAmmo:1"
         ],
         "followedBy": "none",
-        "icon": "icon_quest_slay_trait, ui_quest_background_general_red, trait_Camouflage, ui_quest_frame_slay_with, ui_decor_bes_skull",
+        "icon": "icon_quest_slay_trait, ui_quest_background_general_red, trait_LivingMetal, ui_quest_frame_slay_with, ui_decor_bes_skull",
         "tasks": [
           {
             "name": "SlayEnemiesWithTrait",
             "target": 20,
             "locaKey": "SlayEnemiesWithTrait_description",
             "taskParameters": {
-              "trait": "Camouflage"
-            }
-          }
-        ]
-      },
-      {
-        "name": "bp_x3_daily_m_bp_d_1st_lhe_win_01",
-        "category": "daily",
-        "sortPriority": 34,
-        "duration": 86400,
-        "locaKey": "DailyBPQuestMedium",
-        "rewards": [
-          "xp_battlepass:24",
-          "machinesOfWarAmmo:1"
-        ],
-        "followedBy": "none",
-        "icon": "ui_icon_quest_win_deploy_survive_hero",
-        "tasks": [
-          {
-            "name": "WinBattlesWithHero",
-            "target": 8,
-            "locaKey": "WinBattlesWithHero_description",
-            "taskParameters": {
-              "heroId": "orksWeirdboy"
-            }
-          }
-        ]
-      },
-      {
-        "name": "bp_x3_daily_m_bp_d_1st_lhe_use_ability_01",
-        "category": "daily",
-        "sortPriority": 34,
-        "duration": 86400,
-        "locaKey": "DailyBPQuestMedium",
-        "rewards": [
-          "xp_battlepass:24",
-          "machinesOfWarAmmo:1"
-        ],
-        "followedBy": "none",
-        "icon": "icon_quest_use_ability_with, ui_quest_background_ability, faction_Orks, ui_quest_frame_general, ui_quest_overlay_ability",
-        "tasks": [
-          {
-            "name": "UseAbilityWithFaction",
-            "target": 15,
-            "locaKey": "UseAbilityWithFaction_description",
-            "taskParameters": {
-              "factionId": "Orks"
-            }
-          }
-        ]
-      },
-      {
-        "name": "bp_x3_daily_m_bp_d_1st_lhe_slay_01",
-        "category": "daily",
-        "sortPriority": 34,
-        "duration": 86400,
-        "locaKey": "DailyBPQuestMedium",
-        "rewards": [
-          "xp_battlepass:24",
-          "machinesOfWarAmmo:1"
-        ],
-        "followedBy": "none",
-        "icon": "icon_quest_damage_red, ui_quest_background_general_red, simple_faction_Orks, ui_quest_frame_slay_of, misc_decor_bes_skull",
-        "tasks": [
-          {
-            "name": "SlayEnemiesWithFaction",
-            "target": 30,
-            "locaKey": "SlayEnemiesWithFaction_description",
-            "taskParameters": {
-              "factionId": "Orks"
+              "trait": "LivingMetal"
             }
           }
         ]
@@ -14052,7 +14120,7 @@
         ]
       },
       {
-        "name": "bp_x3_daily_l_bp_d_1st_lhe_slay_with_alliance_01",
+        "name": "bp_x3_daily_l_slay_with_trait_flying_01",
         "category": "daily",
         "sortPriority": 33,
         "duration": 86400,
@@ -14062,60 +14130,14 @@
           "machinesOfWarAmmo:1"
         ],
         "followedBy": "none",
-        "icon": "ui_icon_quest_slay_with_alliance_xenos",
+        "icon": "ui_icon_quest_slay_with_trait_flying",
         "tasks": [
           {
-            "name": "SlayEnemiesWithFactionTrait",
+            "name": "SlayEnemiesWithTrait",
             "target": 80,
-            "locaKey": "SlayEnemiesWithFactionTrait_description",
+            "locaKey": "SlayEnemiesWithTrait_description",
             "taskParameters": {
-              "factionTrait": "Xenos"
-            }
-          }
-        ]
-      },
-      {
-        "name": "bp_x3_daily_l_bp_d_1st_lhe_slay_of_faction_01",
-        "category": "daily",
-        "sortPriority": 33,
-        "duration": 86400,
-        "locaKey": "DailyBPQuestHard",
-        "rewards": [
-          "xp_battlepass:36",
-          "machinesOfWarAmmo:1"
-        ],
-        "followedBy": "none",
-        "icon": "icon_quest_damage_red, ui_quest_background_general_red, simple_faction_Tau, ui_quest_frame_slay_of, misc_decor_bes_skull",
-        "tasks": [
-          {
-            "name": "SlayEnemiesOfFaction",
-            "target": 60,
-            "locaKey": "SlayEnemiesOfFaction_description",
-            "taskParameters": {
-              "factionId": "Tau"
-            }
-          }
-        ]
-      },
-      {
-        "name": "bp_x3_daily_l_bp_d_1st_lhe_use_ability_with_alliance_01",
-        "category": "daily",
-        "sortPriority": 33,
-        "duration": 86400,
-        "locaKey": "DailyBPQuestHard",
-        "rewards": [
-          "xp_battlepass:36",
-          "machinesOfWarAmmo:1"
-        ],
-        "followedBy": "none",
-        "icon": "ui_icon_quest_use_ability_with_alliance_xenos",
-        "tasks": [
-          {
-            "name": "UseAbilityWithFactionTrait",
-            "target": 40,
-            "locaKey": "UseAbilityWithFactionTrait_description",
-            "taskParameters": {
-              "factionTrait": "Xenos"
+              "trait": "Flying"
             }
           }
         ]
@@ -16030,14 +16052,14 @@
           "xp_seasonal:50"
         ],
         "followedBy": "none",
-        "icon": "icon_quest_use_ability_with, ui_quest_background_ability, faction_BloodAngels, ui_quest_frame_general, ui_quest_overlay_ability",
+        "icon": "icon_quest_use_ability_with, ui_quest_background_ability, faction_TheLostAndTheDamned, ui_quest_frame_general, ui_quest_overlay_ability",
         "tasks": [
           {
             "name": "UseAbilityWithFaction",
             "target": 5,
             "locaKey": "UseAbilityWithFaction_description",
             "taskParameters": {
-              "factionId": "BloodAngels"
+              "factionId": "TheLostAndTheDamned"
             }
           }
         ]
@@ -16054,14 +16076,14 @@
           "xp_seasonal:50"
         ],
         "followedBy": "none",
-        "icon": "icon_quest_slay_trait, ui_quest_background_general_red, trait_TeleportStrike, ui_quest_frame_slay_with, ui_decor_bes_skull",
+        "icon": "icon_quest_slay_trait, ui_quest_background_general_red, trait_Overwatch, ui_quest_frame_slay_with, ui_decor_bes_skull",
         "tasks": [
           {
             "name": "SlayEnemiesWithTrait",
             "target": 5,
             "locaKey": "SlayEnemiesWithTrait_description",
             "taskParameters": {
-              "trait": "TeleportStrike"
+              "trait": "Overwatch"
             }
           }
         ]
@@ -16169,14 +16191,14 @@
           "xp_seasonal:65"
         ],
         "followedBy": "none",
-        "icon": "icon_quest_damage, ui_quest_background_general, damage_Power, ui_quest_frame_general, ui_quest_overlay_damage",
+        "icon": "icon_quest_damage, ui_quest_background_general, damage_Bolter, ui_quest_frame_general, ui_quest_overlay_damage",
         "tasks": [
           {
             "name": "DealDamageOfProfileType",
             "target": 2500,
-            "locaKey": "DealDamageOfProfileType_Power_description",
+            "locaKey": "DealDamageOfProfileType_Bolter_description",
             "taskParameters": {
-              "damageProfileType": "Power"
+              "damageProfileType": "Bolter"
             }
           }
         ]
@@ -16200,7 +16222,7 @@
             "target": 8,
             "locaKey": "WinBattlesWithHero_description",
             "taskParameters": {
-              "heroId": "bloodTerminator"
+              "heroId": "lostaFearmonger"
             }
           }
         ]
@@ -16217,14 +16239,14 @@
           "xp_seasonal:65"
         ],
         "followedBy": "none",
-        "icon": "icon_quest_damage_red, ui_quest_background_general_red, simple_faction_BloodAngels, ui_quest_frame_slay_of, misc_decor_bes_skull",
+        "icon": "icon_quest_damage_red, ui_quest_background_general_red, simple_faction_TheLostAndTheDamned, ui_quest_frame_slay_of, misc_decor_bes_skull",
         "tasks": [
           {
             "name": "SlayEnemiesWithFaction",
-            "target": 30,
+            "target": 15,
             "locaKey": "SlayEnemiesWithFaction_description",
             "taskParameters": {
-              "factionId": "BloodAngels"
+              "factionId": "TheLostAndTheDamned"
             }
           }
         ]
@@ -16314,14 +16336,14 @@
           "xp_seasonal:85"
         ],
         "followedBy": "none",
-        "icon": "icon_quest_damage_red, ui_quest_background_general_red, trait_faction_Tyranids, ui_quest_frame_slay_of, misc_decor_bes_skull",
+        "icon": "icon_quest_damage_red, ui_quest_background_general_red, trait_faction_AstraMilitarum, ui_quest_frame_slay_of, misc_decor_bes_skull",
         "tasks": [
           {
             "name": "SlayEnemiesOfFaction",
             "target": 60,
-            "locaKey": "SlayEnemiesOfFaction_Tyranids_description",
+            "locaKey": "SlayEnemiesOfFaction_description",
             "taskParameters": {
-              "factionId": "Tyranids"
+              "factionId": "AstraMilitarum"
             }
           }
         ]
@@ -16362,14 +16384,14 @@
           "xp_seasonal:85"
         ],
         "followedBy": "none",
-        "icon": "icon_quest_damage, ui_quest_background_general, damage_Power, ui_quest_frame_general, ui_quest_overlay_damage",
+        "icon": "icon_quest_damage, ui_quest_background_general, damage_Bolter, ui_quest_frame_general, ui_quest_overlay_damage",
         "tasks": [
           {
             "name": "DealDamageOfProfileType",
             "target": 7000,
-            "locaKey": "DealDamageOfProfileType_Power_description",
+            "locaKey": "DealDamageOfProfileType_Bolter_description",
             "taskParameters": {
-              "damageProfileType": "Power"
+              "damageProfileType": "Bolter"
             }
           }
         ]
@@ -16935,7 +16957,28 @@
         ]
       },
       {
-        "name": "bp_se_october_2026_daily_m_traverse_hexes_01",
+        "name": "bp_se_november_2026_daily_s_traverse_hexes_01",
+        "category": "daily",
+        "sortPriority": 35,
+        "duration": 86400,
+        "locaKey": "DailyBPQuestEasy",
+        "rewards": [
+          "xp_battlepass:15",
+          "machinesOfWarAmmo:1",
+          "xp_seasonal:50"
+        ],
+        "followedBy": "none",
+        "icon": "ui_icon_quest_traverse_hexes",
+        "tasks": [
+          {
+            "name": "TraverseHexes",
+            "target": 200,
+            "locaKey": "TraverseHexes_description"
+          }
+        ]
+      },
+      {
+        "name": "bp_se_november_2026_daily_m_campaign_01",
         "category": "daily",
         "sortPriority": 34,
         "duration": 86400,
@@ -16946,17 +16989,17 @@
           "xp_seasonal:65"
         ],
         "followedBy": "none",
-        "icon": "ui_icon_quest_traverse_hexes",
+        "icon": "ui_icon_quest_win_campaign",
         "tasks": [
           {
-            "name": "TraverseHexes",
-            "target": 300,
-            "locaKey": "TraverseHexes_description"
+            "name": "WinCampaignBattles",
+            "target": 30,
+            "locaKey": "WinCampaignBattles_description"
           }
         ]
       },
       {
-        "name": "bp_se_october_2026_daily_l_slay_with_trait_overwatch_01",
+        "name": "bp_se_november_2026_daily_l_use_ability_01",
         "category": "daily",
         "sortPriority": 33,
         "duration": 86400,
@@ -16967,15 +17010,337 @@
           "xp_seasonal:85"
         ],
         "followedBy": "none",
-        "icon": "icon_quest_slay_trait, ui_quest_background_general_red, trait_Overwatch, ui_quest_frame_slay_with, ui_decor_bes_skull",
+        "icon": "ui_icon_quest_ability_use",
         "tasks": [
           {
-            "name": "SlayEnemiesWithTrait",
-            "target": 80,
-            "locaKey": "SlayEnemiesWithTrait_description",
+            "name": "UseAbility",
+            "target": 50,
+            "locaKey": "UseAbility_description"
+          }
+        ]
+      },
+      {
+        "name": "bp_se_november_2026_daily_s_deal_ability_dmg_01",
+        "category": "daily",
+        "sortPriority": 35,
+        "duration": 86400,
+        "locaKey": "DailyBPQuestEasy",
+        "rewards": [
+          "xp_battlepass:15",
+          "machinesOfWarAmmo:1",
+          "xp_seasonal:50"
+        ],
+        "followedBy": "none",
+        "icon": "ui_icon_quest_damage_ability",
+        "tasks": [
+          {
+            "name": "DealAbilityDamage",
+            "target": 3000,
+            "locaKey": "DealAbilityDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "bp_se_november_2026_daily_m_attack_ce_01",
+        "category": "daily",
+        "sortPriority": 34,
+        "duration": 86400,
+        "locaKey": "DailyBPQuestMedium",
+        "rewards": [
+          "xp_battlepass:24",
+          "machinesOfWarAmmo:1",
+          "xp_seasonal:65"
+        ],
+        "followedBy": "none",
+        "icon": "icon_quest_damage, ui_quest_background_general, misc_decor_bes_skull, ui_quest_frame_general, misc_game_modes",
+        "tasks": [
+          {
+            "name": "AttackUnitsInGameModes",
+            "target": 50,
+            "locaKey": "AttackUnitsInGameModes_description",
             "taskParameters": {
-              "trait": "Overwatch"
+              "gameModes": [
+                "CampaignEvent",
+                "PvP",
+                "Waves"
+              ]
             }
+          }
+        ]
+      },
+      {
+        "name": "bp_se_november_2026_daily_l_slay_with_ranged_01",
+        "category": "daily",
+        "sortPriority": 33,
+        "duration": 86400,
+        "locaKey": "DailyBPQuestHard",
+        "rewards": [
+          "xp_battlepass:36",
+          "machinesOfWarAmmo:1",
+          "xp_seasonal:85"
+        ],
+        "followedBy": "none",
+        "icon": "ui_icon_quest_slay_with_ranged",
+        "tasks": [
+          {
+            "name": "SlayEnemiesWithRangedAttacks",
+            "target": 100,
+            "locaKey": "SlayEnemiesWithRangedAttacks_description"
+          }
+        ]
+      },
+      {
+        "name": "bp_se_november_2026_daily_s_win_with_xen_01",
+        "category": "daily",
+        "sortPriority": 35,
+        "duration": 86400,
+        "locaKey": "DailyBPQuestEasy",
+        "rewards": [
+          "xp_battlepass:15",
+          "machinesOfWarAmmo:1",
+          "xp_seasonal:50"
+        ],
+        "followedBy": "none",
+        "icon": "ui_icon_quest_win_with_alliance_xenos",
+        "tasks": [
+          {
+            "name": "WinBattlesWithFactionTraitLineup",
+            "target": 5,
+            "locaKey": "WinBattlesWithFactionTraitLineup_description",
+            "taskParameters": {
+              "factionTrait": "Xenos"
+            }
+          }
+        ]
+      },
+      {
+        "name": "bp_se_november_2026_daily_m_bp_d_1st_lhe_win_01",
+        "category": "daily",
+        "sortPriority": 34,
+        "duration": 86400,
+        "locaKey": "DailyBPQuestMedium",
+        "rewards": [
+          "xp_battlepass:24",
+          "machinesOfWarAmmo:1",
+          "xp_seasonal:65"
+        ],
+        "followedBy": "none",
+        "icon": "ui_icon_quest_win_deploy_survive_hero",
+        "tasks": [
+          {
+            "name": "WinBattlesWithHero",
+            "target": 8,
+            "locaKey": "WinBattlesWithHero_description",
+            "taskParameters": {
+              "heroId": "orksWeirdboy"
+            }
+          }
+        ]
+      },
+      {
+        "name": "bp_se_november_2026_daily_l_bp_d_1st_lhe_slay_with_alliance_01",
+        "category": "daily",
+        "sortPriority": 33,
+        "duration": 86400,
+        "locaKey": "DailyBPQuestHard",
+        "rewards": [
+          "xp_battlepass:36",
+          "machinesOfWarAmmo:1",
+          "xp_seasonal:85"
+        ],
+        "followedBy": "none",
+        "icon": "ui_icon_quest_slay_with_alliance_xenos",
+        "tasks": [
+          {
+            "name": "SlayEnemiesWithFactionTrait",
+            "target": 80,
+            "locaKey": "SlayEnemiesWithFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Xenos"
+            }
+          }
+        ]
+      },
+      {
+        "name": "bp_se_november_2026_daily_s_slay_of_xen_01",
+        "category": "daily",
+        "sortPriority": 35,
+        "duration": 86400,
+        "locaKey": "DailyBPQuestEasy",
+        "rewards": [
+          "xp_battlepass:15",
+          "machinesOfWarAmmo:1",
+          "xp_seasonal:50"
+        ],
+        "followedBy": "none",
+        "icon": "ui_icon_quest_slay_of_alliance_xenos",
+        "tasks": [
+          {
+            "name": "SlayEnemiesOfFactionTrait",
+            "target": 50,
+            "locaKey": "SlayEnemiesOfFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Xenos"
+            }
+          }
+        ]
+      },
+      {
+        "name": "bp_se_november_2026_daily_m_bp_d_1st_lhe_use_ability_01",
+        "category": "daily",
+        "sortPriority": 34,
+        "duration": 86400,
+        "locaKey": "DailyBPQuestMedium",
+        "rewards": [
+          "xp_battlepass:24",
+          "machinesOfWarAmmo:1",
+          "xp_seasonal:65"
+        ],
+        "followedBy": "none",
+        "icon": "icon_quest_use_ability_with, ui_quest_background_ability, faction_Orks, ui_quest_frame_general, ui_quest_overlay_ability",
+        "tasks": [
+          {
+            "name": "UseAbilityWithFaction",
+            "target": 15,
+            "locaKey": "UseAbilityWithFaction_description",
+            "taskParameters": {
+              "factionId": "Orks"
+            }
+          }
+        ]
+      },
+      {
+        "name": "bp_se_november_2026_daily_l_bp_d_1st_lhe_slay_of_faction_01",
+        "category": "daily",
+        "sortPriority": 33,
+        "duration": 86400,
+        "locaKey": "DailyBPQuestHard",
+        "rewards": [
+          "xp_battlepass:36",
+          "machinesOfWarAmmo:1",
+          "xp_seasonal:85"
+        ],
+        "followedBy": "none",
+        "icon": "icon_quest_damage_red, ui_quest_background_general_red, simple_faction_Tau, ui_quest_frame_slay_of, misc_decor_bes_skull",
+        "tasks": [
+          {
+            "name": "SlayEnemiesOfFaction",
+            "target": 60,
+            "locaKey": "SlayEnemiesOfFaction_description",
+            "taskParameters": {
+              "factionId": "Tau"
+            }
+          }
+        ]
+      },
+      {
+        "name": "bp_se_november_2026_daily_s_slay_with_ranged_01",
+        "category": "daily",
+        "sortPriority": 35,
+        "duration": 86400,
+        "locaKey": "DailyBPQuestEasy",
+        "rewards": [
+          "xp_battlepass:15",
+          "machinesOfWarAmmo:1",
+          "xp_seasonal:50"
+        ],
+        "followedBy": "none",
+        "icon": "icon_quest_slay_trait, ui_quest_background_general_red, stat_ranged, ui_quest_frame_slay_with, misc_decor_bes_skull",
+        "tasks": [
+          {
+            "name": "SlayEnemiesWithRangedAttacks",
+            "target": 40,
+            "locaKey": "SlayEnemiesWithRangedAttacks_description"
+          }
+        ]
+      },
+      {
+        "name": "bp_se_november_2026_daily_m_bp_d_1st_lhe_slay_01",
+        "category": "daily",
+        "sortPriority": 34,
+        "duration": 86400,
+        "locaKey": "DailyBPQuestMedium",
+        "rewards": [
+          "xp_battlepass:24",
+          "machinesOfWarAmmo:1",
+          "xp_seasonal:65"
+        ],
+        "followedBy": "none",
+        "icon": "icon_quest_damage_red, ui_quest_background_general_red, simple_faction_Orks, ui_quest_frame_slay_of, misc_decor_bes_skull",
+        "tasks": [
+          {
+            "name": "SlayEnemiesWithFaction",
+            "target": 30,
+            "locaKey": "SlayEnemiesWithFaction_description",
+            "taskParameters": {
+              "factionId": "Orks"
+            }
+          }
+        ]
+      },
+      {
+        "name": "bp_se_november_2026_daily_l_bp_d_1st_lhe_use_ability_with_alliance_01",
+        "category": "daily",
+        "sortPriority": 33,
+        "duration": 86400,
+        "locaKey": "DailyBPQuestHard",
+        "rewards": [
+          "xp_battlepass:36",
+          "machinesOfWarAmmo:1",
+          "xp_seasonal:85"
+        ],
+        "followedBy": "none",
+        "icon": "ui_icon_quest_use_ability_with_alliance_xenos",
+        "tasks": [
+          {
+            "name": "UseAbilityWithFactionTrait",
+            "target": 40,
+            "locaKey": "UseAbilityWithFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Xenos"
+            }
+          }
+        ]
+      },
+      {
+        "name": "bp_se_november_2026_daily_s_damage_01",
+        "category": "daily",
+        "sortPriority": 35,
+        "duration": 86400,
+        "locaKey": "DailyBPQuestEasy",
+        "rewards": [
+          "xp_battlepass:15",
+          "machinesOfWarAmmo:1",
+          "xp_seasonal:50"
+        ],
+        "followedBy": "none",
+        "icon": "ui_icon_quest_deal_damage",
+        "tasks": [
+          {
+            "name": "DealDamage",
+            "target": 3000,
+            "locaKey": "DealDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "bp_se_november_2026_daily_l_slay_from_higher_elevation_01",
+        "category": "daily",
+        "sortPriority": 33,
+        "duration": 86400,
+        "locaKey": "DailyBPQuestHard",
+        "rewards": [
+          "xp_battlepass:36",
+          "machinesOfWarAmmo:1",
+          "xp_seasonal:85"
+        ],
+        "followedBy": "none",
+        "icon": "ui_icon_quest_slay_from_higher_elevation",
+        "tasks": [
+          {
+            "name": "SlayEnemiesFromHigherElevation",
+            "target": 35,
+            "locaKey": "SlayEnemiesFromHigherElevation_description"
           }
         ]
       }
@@ -22596,6 +22961,138 @@
         ]
       },
       {
+        "name": "december_2026_daily_01",
+        "category": "daily",
+        "sortPriority": 930,
+        "duration": 86400,
+        "rewards": [
+          "xp_seasonal:70"
+        ],
+        "followedBy": "none",
+        "icon": "icon_quest_slay_trait, ui_quest_background_general_blue, misc_melee, ui_quest_frame_hre, misc_game_modes",
+        "tasks": [
+          {
+            "name": "SlayEnemies",
+            "target": 75,
+            "locaKey": "SlayEnemies_description"
+          }
+        ]
+      },
+      {
+        "name": "december_2026_daily_02",
+        "category": "daily",
+        "sortPriority": 930,
+        "duration": 86400,
+        "rewards": [
+          "xp_seasonal:70"
+        ],
+        "followedBy": "none",
+        "icon": "icon_quest_slay_trait, ui_quest_background_general_red, misc_elevation, ui_quest_frame_slay_with, misc_decor_bes_skull",
+        "tasks": [
+          {
+            "name": "SlayEnemiesFromHigherElevation",
+            "target": 15,
+            "locaKey": "SlayEnemiesFromHigherElevation_description"
+          }
+        ]
+      },
+      {
+        "name": "december_2026_daily_03",
+        "category": "daily",
+        "sortPriority": 930,
+        "duration": 86400,
+        "rewards": [
+          "xp_seasonal:70"
+        ],
+        "followedBy": "none",
+        "icon": "icon_quest_use_ability_with, ui_quest_background_general_blue, misc_alliance_imperial, ui_quest_frame_general, ui_quest_overlay_ability",
+        "tasks": [
+          {
+            "name": "UseAbilityWithFactionTrait",
+            "target": 12,
+            "locaKey": "UseAbilityWithFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Imperial"
+            }
+          }
+        ]
+      },
+      {
+        "name": "december_2026_daily_04",
+        "category": "daily",
+        "sortPriority": 930,
+        "duration": 86400,
+        "rewards": [
+          "xp_seasonal:70"
+        ],
+        "followedBy": "none",
+        "icon": "icon_quest_slay_trait, ui_quest_background_general_red, misc_alliance_imperial, ui_quest_frame_slay_with, misc_decor_bes_skull",
+        "tasks": [
+          {
+            "name": "SlayEnemiesWithFactionTrait",
+            "target": 20,
+            "locaKey": "SlayEnemiesWithFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Imperial"
+            }
+          }
+        ]
+      },
+      {
+        "name": "december_2026_daily_05",
+        "category": "daily",
+        "sortPriority": 930,
+        "duration": 86400,
+        "rewards": [
+          "xp_seasonal:70"
+        ],
+        "followedBy": "none",
+        "icon": "icon_quest_slay_trait, ui_quest_background_general_blue, misc_overkill, ui_quest_frame_hre, misc_game_modes",
+        "tasks": [
+          {
+            "name": "Overkill",
+            "target": 20,
+            "locaKey": "Overkill_description"
+          }
+        ]
+      },
+      {
+        "name": "december_2026_daily_06",
+        "category": "daily",
+        "sortPriority": 930,
+        "duration": 86400,
+        "rewards": [
+          "xp_seasonal:75"
+        ],
+        "followedBy": "none",
+        "icon": "ui_icon_quest_traverse_hexes",
+        "tasks": [
+          {
+            "name": "TraverseHexes",
+            "target": 300,
+            "locaKey": "TraverseHexes_description"
+          }
+        ]
+      },
+      {
+        "name": "december_2026_daily_07",
+        "category": "daily",
+        "sortPriority": 930,
+        "duration": 86400,
+        "rewards": [
+          "xp_seasonal:75"
+        ],
+        "followedBy": "none",
+        "icon": "icon_quest_slay_trait, ui_quest_background_general_red, misc_summon, ui_quest_frame_general, misc_decor_bes_skull",
+        "tasks": [
+          {
+            "name": "Summon",
+            "target": 25,
+            "locaKey": "Summon_description"
+          }
+        ]
+      },
+      {
         "name": "june_2026_week1_daily_01",
         "category": "daily",
         "sortPriority": 930,
@@ -23161,10 +23658,11 @@
         ]
       },
       {
-        "name": "crescendo_01_daily_01",
+        "name": "crescendo_a_daily_01",
         "category": "daily",
         "sortPriority": 930,
         "duration": 86400,
+        "locaKey": "crescendo_01_daily_01_name",
         "rewards": [
           "xp_seasonal:70",
           "crusadeNpc:10"
@@ -23180,10 +23678,11 @@
         ]
       },
       {
-        "name": "crescendo_01_daily_02",
+        "name": "crescendo_a_daily_02",
         "category": "daily",
         "sortPriority": 930,
         "duration": 86400,
+        "locaKey": "crescendo_01_daily_02_name",
         "rewards": [
           "xp_seasonal:70",
           "crusadeNpc:10"
@@ -23199,10 +23698,11 @@
         ]
       },
       {
-        "name": "crescendo_01_daily_03",
+        "name": "crescendo_a_daily_03",
         "category": "daily",
         "sortPriority": 930,
         "duration": 86400,
+        "locaKey": "crescendo_01_daily_03_name",
         "rewards": [
           "xp_seasonal:70",
           "crusadeNpc:10"
@@ -23221,10 +23721,11 @@
         ]
       },
       {
-        "name": "crescendo_01_daily_04",
+        "name": "crescendo_a_daily_04",
         "category": "daily",
         "sortPriority": 930,
         "duration": 86400,
+        "locaKey": "crescendo_01_daily_04_name",
         "rewards": [
           "xp_seasonal:70",
           "crusadeNpc:10"
@@ -23243,10 +23744,11 @@
         ]
       },
       {
-        "name": "crescendo_01_daily_05",
+        "name": "crescendo_a_daily_05",
         "category": "daily",
         "sortPriority": 930,
         "duration": 86400,
+        "locaKey": "crescendo_01_daily_05_name",
         "rewards": [
           "xp_seasonal:70",
           "crusadeNpc:10"
@@ -23262,10 +23764,11 @@
         ]
       },
       {
-        "name": "crescendo_01_daily_06",
+        "name": "crescendo_a_daily_06",
         "category": "daily",
         "sortPriority": 930,
         "duration": 86400,
+        "locaKey": "crescendo_01_daily_06_name",
         "rewards": [
           "xp_seasonal:75",
           "crusadeNpc:10"
@@ -23281,12 +23784,159 @@
         ]
       },
       {
-        "name": "crescendo_01_daily_07",
+        "name": "crescendo_a_daily_07",
         "category": "daily",
         "sortPriority": 930,
         "duration": 86400,
+        "locaKey": "crescendo_01_daily_07_name",
         "rewards": [
           "xp_seasonal:75",
+          "crusadeNpc:10"
+        ],
+        "followedBy": "none",
+        "icon": "icon_quest_slay_trait, ui_quest_background_general_red, misc_summon, ui_quest_frame_general, misc_decor_bes_skull",
+        "tasks": [
+          {
+            "name": "Summon",
+            "target": 25,
+            "locaKey": "Summon_description"
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_daily_01",
+        "category": "daily",
+        "sortPriority": 930,
+        "duration": 86400,
+        "locaKey": "crescendo_01_daily_01_name",
+        "rewards": [
+          "xp_seasonalCrescendo:70",
+          "crusadeNpc:10"
+        ],
+        "followedBy": "none",
+        "icon": "icon_quest_slay_trait, ui_quest_background_general_blue, misc_melee, ui_quest_frame_hre, misc_game_modes",
+        "tasks": [
+          {
+            "name": "SlayEnemies",
+            "target": 75,
+            "locaKey": "SlayEnemies_description"
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_daily_02",
+        "category": "daily",
+        "sortPriority": 930,
+        "duration": 86400,
+        "locaKey": "crescendo_01_daily_02_name",
+        "rewards": [
+          "xp_seasonalCrescendo:70",
+          "crusadeNpc:10"
+        ],
+        "followedBy": "none",
+        "icon": "icon_quest_slay_trait, ui_quest_background_general_red, misc_elevation, ui_quest_frame_slay_with, misc_decor_bes_skull",
+        "tasks": [
+          {
+            "name": "SlayEnemiesFromHigherElevation",
+            "target": 15,
+            "locaKey": "SlayEnemiesFromHigherElevation_description"
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_daily_03",
+        "category": "daily",
+        "sortPriority": 930,
+        "duration": 86400,
+        "locaKey": "crescendo_01_daily_03_name",
+        "rewards": [
+          "xp_seasonalCrescendo:70",
+          "crusadeNpc:10"
+        ],
+        "followedBy": "none",
+        "icon": "icon_quest_use_ability_with, ui_quest_background_general_blue, misc_alliance_imperial, ui_quest_frame_general, ui_quest_overlay_ability",
+        "tasks": [
+          {
+            "name": "UseAbilityWithFactionTrait",
+            "target": 12,
+            "locaKey": "UseAbilityWithFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Imperial"
+            }
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_daily_04",
+        "category": "daily",
+        "sortPriority": 930,
+        "duration": 86400,
+        "locaKey": "crescendo_01_daily_04_name",
+        "rewards": [
+          "xp_seasonalCrescendo:70",
+          "crusadeNpc:10"
+        ],
+        "followedBy": "none",
+        "icon": "icon_quest_slay_trait, ui_quest_background_general_red, misc_alliance_imperial, ui_quest_frame_slay_with, misc_decor_bes_skull",
+        "tasks": [
+          {
+            "name": "SlayEnemiesWithFactionTrait",
+            "target": 20,
+            "locaKey": "SlayEnemiesWithFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Imperial"
+            }
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_daily_05",
+        "category": "daily",
+        "sortPriority": 930,
+        "duration": 86400,
+        "locaKey": "crescendo_01_daily_05_name",
+        "rewards": [
+          "xp_seasonalCrescendo:70",
+          "crusadeNpc:10"
+        ],
+        "followedBy": "none",
+        "icon": "icon_quest_slay_trait, ui_quest_background_general_blue, misc_overkill, ui_quest_frame_hre, misc_game_modes",
+        "tasks": [
+          {
+            "name": "Overkill",
+            "target": 20,
+            "locaKey": "Overkill_description"
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_daily_06",
+        "category": "daily",
+        "sortPriority": 930,
+        "duration": 86400,
+        "locaKey": "crescendo_01_daily_06_name",
+        "rewards": [
+          "xp_seasonalCrescendo:75",
+          "crusadeNpc:10"
+        ],
+        "followedBy": "none",
+        "icon": "ui_icon_quest_traverse_hexes",
+        "tasks": [
+          {
+            "name": "TraverseHexes",
+            "target": 300,
+            "locaKey": "TraverseHexes_description"
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_daily_07",
+        "category": "daily",
+        "sortPriority": 930,
+        "duration": 86400,
+        "locaKey": "crescendo_01_daily_07_name",
+        "rewards": [
+          "xp_seasonalCrescendo:75",
           "crusadeNpc:10"
         ],
         "followedBy": "none",
@@ -23394,6 +24044,117 @@
       },
       {
         "name": "october_2026_daily_06",
+        "category": "daily",
+        "sortPriority": 930,
+        "duration": 86400,
+        "rewards": [
+          "xp_seasonal:100"
+        ],
+        "followedBy": "none",
+        "icon": "icon_quest_small_motive, ui_quest_background_general_red, stat_critDmgBonus, ui_quest_frame_general, misc_decor_bes_skull",
+        "tasks": [
+          {
+            "name": "ScoreCrits",
+            "target": 20,
+            "locaKey": "ScoreCrits_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_daily_01",
+        "category": "daily",
+        "sortPriority": 930,
+        "duration": 86400,
+        "rewards": [
+          "xp_seasonal:100"
+        ],
+        "followedBy": "none",
+        "icon": "ui_icon_quest_traverse_hexes",
+        "tasks": [
+          {
+            "name": "TraverseHexes",
+            "target": 150,
+            "locaKey": "TraverseHexes_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_daily_02",
+        "category": "daily",
+        "sortPriority": 930,
+        "duration": 86400,
+        "rewards": [
+          "xp_seasonal:100"
+        ],
+        "followedBy": "none",
+        "icon": "icon_quest_slay_trait, ui_quest_background_general_red, misc_melee, ui_quest_frame_slay_with, misc_decor_bes_skull",
+        "tasks": [
+          {
+            "name": "SlayEnemiesWithMeleeAttacks",
+            "target": 50,
+            "locaKey": "SlayEnemiesWithMeleeAttacks_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_daily_03",
+        "category": "daily",
+        "sortPriority": 930,
+        "duration": 86400,
+        "rewards": [
+          "xp_seasonal:100"
+        ],
+        "followedBy": "none",
+        "icon": "icon_quest_slay_trait, ui_quest_background_general_blue, misc_overkill, ui_quest_frame_general, misc_defeat_skull",
+        "tasks": [
+          {
+            "name": "Overkill",
+            "target": 25,
+            "locaKey": "Overkill_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_daily_04",
+        "category": "daily",
+        "sortPriority": 930,
+        "duration": 86400,
+        "rewards": [
+          "xp_seasonal:100"
+        ],
+        "followedBy": "none",
+        "icon": "icon_quest_damage, ui_quest_background_general, misc_campaign, ui_quest_frame_general, misc_decor_bes_skull",
+        "tasks": [
+          {
+            "name": "PlayBattlesInGameMode",
+            "target": 10,
+            "locaKey": "PlayBattlesInGameMode_description",
+            "taskParameters": {
+              "gameMode": "AllCampaigns"
+            }
+          }
+        ]
+      },
+      {
+        "name": "november_2026_daily_05",
+        "category": "daily",
+        "sortPriority": 930,
+        "duration": 86400,
+        "rewards": [
+          "xp_seasonal:100"
+        ],
+        "followedBy": "none",
+        "icon": "icon_quest_slay_trait, ui_quest_background_general_red, misc_summon, ui_quest_frame_general, misc_decor_bes_skull",
+        "tasks": [
+          {
+            "name": "Summon",
+            "target": 25,
+            "locaKey": "Summon_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_daily_06",
         "category": "daily",
         "sortPriority": 930,
         "duration": 86400,
@@ -24378,6 +25139,495 @@
         "category": "seasonal",
         "sortPriority": 920,
         "locaKey": "September2026FreeMissionChainOne",
+        "positionInSuccessorQuests": "20",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:76",
+          "survivalBoost_stats"
+        ],
+        "followedBy": "none",
+        "icon": "ui_icon_quest_deal_damage",
+        "tasks": [
+          {
+            "name": "DealDamage",
+            "target": 150000,
+            "locaKey": "DealDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "december_2026_free_1_chain_01",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "December2026FreeMissionChainOne",
+        "positionInSuccessorQuests": "1",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "december_2026_free_1_chain_02"
+        ],
+        "icon": "icon_quest_damage, ui_quest_background_general_blue, misc_december_2026, ui_quest_frame_hre, misc_game_modes",
+        "tasks": [
+          {
+            "name": "PlayBattlesInGameMode",
+            "target": 1,
+            "locaKey": "PlayBattlesInGameMode_description",
+            "taskParameters": {
+              "gameMode": "Survival"
+            }
+          }
+        ]
+      },
+      {
+        "name": "december_2026_free_1_chain_02",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "December2026FreeMissionChainOne",
+        "positionInSuccessorQuests": "2",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "december_2026_free_1_chain_03"
+        ],
+        "icon": "icon_quest_slay_trait, ui_quest_background_general_red, misc_alliance_imperial, ui_quest_frame_slay_of, misc_decor_bes_skull",
+        "tasks": [
+          {
+            "name": "SlayEnemiesWithFactionTrait",
+            "target": 50,
+            "locaKey": "SlayEnemiesWithFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Imperial"
+            }
+          }
+        ]
+      },
+      {
+        "name": "december_2026_free_1_chain_03",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "December2026FreeMissionChainOne",
+        "positionInSuccessorQuests": "3",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "december_2026_free_1_chain_04"
+        ],
+        "icon": "icon_quest_slay_trait, ui_quest_background_general_blue, misc_spawn_point, ui_quest_frame_general, misc_defeat_skull",
+        "tasks": [
+          {
+            "name": "DefeatWaves",
+            "target": 15,
+            "locaKey": "DefeatWaves_description"
+          }
+        ]
+      },
+      {
+        "name": "december_2026_free_1_chain_04",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "December2026FreeMissionChainOne",
+        "positionInSuccessorQuests": "4",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "december_2026_free_1_chain_05"
+        ],
+        "icon": "ui_icon_quest_heal",
+        "tasks": [
+          {
+            "name": "HealHealth",
+            "target": 5000,
+            "locaKey": "HealHealth_description"
+          }
+        ]
+      },
+      {
+        "name": "december_2026_free_1_chain_05",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "December2026FreeMissionChainOne",
+        "positionInSuccessorQuests": "5",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "december_2026_free_1_chain_06"
+        ],
+        "icon": "icon_quest_slay_trait, ui_quest_background_general_red, misc_alliance_imperial, ui_quest_frame_slay_of, misc_decor_bes_skull",
+        "tasks": [
+          {
+            "name": "SlayEnemiesWithFactionTrait",
+            "target": 75,
+            "locaKey": "SlayEnemiesWithFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Imperial"
+            }
+          }
+        ]
+      },
+      {
+        "name": "december_2026_free_1_chain_06",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "December2026FreeMissionChainOne",
+        "positionInSuccessorQuests": "6",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "december_2026_free_1_chain_07"
+        ],
+        "icon": "icon_quest_damage, ui_quest_background_general_blue, misc_december_2026, ui_quest_frame_hre, misc_game_modes",
+        "tasks": [
+          {
+            "name": "PlayBattlesInGameMode",
+            "target": 1,
+            "locaKey": "PlayBattlesInGameMode_description",
+            "taskParameters": {
+              "gameMode": "Survival"
+            }
+          }
+        ]
+      },
+      {
+        "name": "december_2026_free_1_chain_07",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "December2026FreeMissionChainOne",
+        "positionInSuccessorQuests": "7",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "december_2026_free_1_chain_08"
+        ],
+        "icon": "ui_icon_quest_slay",
+        "tasks": [
+          {
+            "name": "SlayEnemies",
+            "target": 100,
+            "locaKey": "SlayEnemies_description"
+          }
+        ]
+      },
+      {
+        "name": "december_2026_free_1_chain_08",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "December2026FreeMissionChainOne",
+        "positionInSuccessorQuests": "8",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "december_2026_free_1_chain_09"
+        ],
+        "icon": "ui_icon_quest_heal",
+        "tasks": [
+          {
+            "name": "HealHealth",
+            "target": 10000,
+            "locaKey": "HealHealth_description"
+          }
+        ]
+      },
+      {
+        "name": "december_2026_free_1_chain_09",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "December2026FreeMissionChainOne",
+        "positionInSuccessorQuests": "9",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "december_2026_free_1_chain_10"
+        ],
+        "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
+        "tasks": [
+          {
+            "name": "DealAbilityDamage",
+            "target": 4250,
+            "locaKey": "DealAbilityDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "december_2026_free_1_chain_10",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "December2026FreeMissionChainOne",
+        "positionInSuccessorQuests": "10",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "december_2026_free_1_chain_11"
+        ],
+        "icon": "icon_quest_damage, ui_quest_background_general_blue, misc_december_2026, ui_quest_frame_hre, misc_game_modes",
+        "tasks": [
+          {
+            "name": "DealDamage",
+            "target": 10000,
+            "locaKey": "DealDamage_description"
+          },
+          {
+            "name": "PlayBattlesInGameMode",
+            "target": 1,
+            "locaKey": "PlayBattlesInGameMode_description",
+            "taskParameters": {
+              "gameMode": "Survival"
+            }
+          }
+        ]
+      },
+      {
+        "name": "december_2026_free_1_chain_11",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "December2026FreeMissionChainOne",
+        "positionInSuccessorQuests": "11",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "december_2026_free_1_chain_12"
+        ],
+        "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
+        "tasks": [
+          {
+            "name": "DealAbilityDamage",
+            "target": 12500,
+            "locaKey": "DealAbilityDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "december_2026_free_1_chain_12",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "December2026FreeMissionChainOne",
+        "positionInSuccessorQuests": "12",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "december_2026_free_1_chain_13"
+        ],
+        "icon": "icon_quest_slay_trait, ui_quest_background_general_blue, misc_overkill, ui_quest_frame_hre, misc_game_modes",
+        "tasks": [
+          {
+            "name": "Overkill",
+            "target": 75,
+            "locaKey": "Overkill_description"
+          }
+        ]
+      },
+      {
+        "name": "december_2026_free_1_chain_13",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "December2026FreeMissionChainOne",
+        "positionInSuccessorQuests": "13",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "december_2026_free_1_chain_14"
+        ],
+        "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
+        "tasks": [
+          {
+            "name": "DealAbilityDamage",
+            "target": 25000,
+            "locaKey": "DealAbilityDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "december_2026_free_1_chain_14",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "December2026FreeMissionChainOne",
+        "positionInSuccessorQuests": "14",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "december_2026_free_1_chain_15"
+        ],
+        "icon": "ui_icon_quest_heal",
+        "tasks": [
+          {
+            "name": "HealHealth",
+            "target": 15000,
+            "locaKey": "HealHealth_description"
+          }
+        ]
+      },
+      {
+        "name": "december_2026_free_1_chain_15",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "December2026FreeMissionChainOne",
+        "positionInSuccessorQuests": "15",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "december_2026_free_1_chain_16"
+        ],
+        "icon": "icon_quest_damage, ui_quest_background_general_blue, misc_december_2026, ui_quest_frame_hre, misc_game_modes",
+        "tasks": [
+          {
+            "name": "DealDamage",
+            "target": 50000,
+            "locaKey": "DealDamage_description"
+          },
+          {
+            "name": "PlayBattlesInGameMode",
+            "target": 1,
+            "locaKey": "PlayBattlesInGameMode_description",
+            "taskParameters": {
+              "gameMode": "Survival"
+            }
+          }
+        ]
+      },
+      {
+        "name": "december_2026_free_1_chain_16",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "December2026FreeMissionChainOne",
+        "positionInSuccessorQuests": "16",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "december_2026_free_1_chain_17"
+        ],
+        "icon": "icon_quest_slay_trait, ui_quest_background_general_red, misc_alliance_imperial, ui_quest_frame_slay_of, misc_decor_bes_skull",
+        "tasks": [
+          {
+            "name": "SlayEnemiesWithFactionTrait",
+            "target": 125,
+            "locaKey": "SlayEnemiesWithFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Imperial"
+            }
+          }
+        ]
+      },
+      {
+        "name": "december_2026_free_1_chain_17",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "December2026FreeMissionChainOne",
+        "positionInSuccessorQuests": "17",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "december_2026_free_1_chain_18"
+        ],
+        "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
+        "tasks": [
+          {
+            "name": "DealAbilityDamage",
+            "target": 63000,
+            "locaKey": "DealAbilityDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "december_2026_free_1_chain_18",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "December2026FreeMissionChainOne",
+        "positionInSuccessorQuests": "18",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "december_2026_free_1_chain_19"
+        ],
+        "icon": "icon_quest_slay_trait, ui_quest_background_general_blue, misc_spawn_point, ui_quest_frame_general, misc_defeat_skull",
+        "tasks": [
+          {
+            "name": "DefeatWaves",
+            "target": 15,
+            "locaKey": "DefeatWaves_description"
+          }
+        ]
+      },
+      {
+        "name": "december_2026_free_1_chain_19",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "December2026FreeMissionChainOne",
+        "positionInSuccessorQuests": "19",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "december_2026_free_1_chain_20"
+        ],
+        "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
+        "tasks": [
+          {
+            "name": "DealAbilityDamage",
+            "target": 90000,
+            "locaKey": "DealAbilityDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "december_2026_free_1_chain_20",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "December2026FreeMissionChainOne",
         "positionInSuccessorQuests": "20",
         "totalLengthOfSuccessorQuestChain": "20",
         "rewards": [
@@ -26585,7 +27835,7 @@
         ]
       },
       {
-        "name": "crescendo_01_free_1_chain_01",
+        "name": "crescendo_a_free_1_chain_01",
         "category": "seasonal",
         "sortPriority": 920,
         "locaKey": "Crescendo01FreeMissionChainOne",
@@ -26596,7 +27846,7 @@
           "survivalBoost_stats"
         ],
         "successorQuests": [
-          "crescendo_01_free_1_chain_02"
+          "crescendo_a_free_1_chain_02"
         ],
         "icon": "icon_quest_damage, ui_quest_background_general_blue, misc_crescendo_01, ui_quest_frame_hre, misc_game_modes",
         "tasks": [
@@ -26611,7 +27861,7 @@
         ]
       },
       {
-        "name": "crescendo_01_free_1_chain_02",
+        "name": "crescendo_a_free_1_chain_02",
         "category": "seasonal",
         "sortPriority": 920,
         "locaKey": "Crescendo01FreeMissionChainOne",
@@ -26622,7 +27872,7 @@
           "survivalBoost_stats"
         ],
         "successorQuests": [
-          "crescendo_01_free_1_chain_03"
+          "crescendo_a_free_1_chain_03"
         ],
         "icon": "icon_quest_slay_trait, ui_quest_background_general_red, misc_alliance_imperial, ui_quest_frame_slay_of, misc_decor_bes_skull",
         "tasks": [
@@ -26637,7 +27887,7 @@
         ]
       },
       {
-        "name": "crescendo_01_free_1_chain_03",
+        "name": "crescendo_a_free_1_chain_03",
         "category": "seasonal",
         "sortPriority": 920,
         "locaKey": "Crescendo01FreeMissionChainOne",
@@ -26648,7 +27898,7 @@
           "survivalBoost_stats"
         ],
         "successorQuests": [
-          "crescendo_01_free_1_chain_04"
+          "crescendo_a_free_1_chain_04"
         ],
         "icon": "icon_quest_slay_trait, ui_quest_background_general_blue, misc_spawn_point, ui_quest_frame_general, misc_defeat_skull",
         "tasks": [
@@ -26660,7 +27910,7 @@
         ]
       },
       {
-        "name": "crescendo_01_free_1_chain_04",
+        "name": "crescendo_a_free_1_chain_04",
         "category": "seasonal",
         "sortPriority": 920,
         "locaKey": "Crescendo01FreeMissionChainOne",
@@ -26671,7 +27921,7 @@
           "survivalBoost_stats"
         ],
         "successorQuests": [
-          "crescendo_01_free_1_chain_05"
+          "crescendo_a_free_1_chain_05"
         ],
         "icon": "ui_icon_quest_heal",
         "tasks": [
@@ -26683,7 +27933,7 @@
         ]
       },
       {
-        "name": "crescendo_01_free_1_chain_05",
+        "name": "crescendo_a_free_1_chain_05",
         "category": "seasonal",
         "sortPriority": 920,
         "locaKey": "Crescendo01FreeMissionChainOne",
@@ -26694,7 +27944,7 @@
           "survivalBoost_stats"
         ],
         "successorQuests": [
-          "crescendo_01_free_1_chain_06"
+          "crescendo_a_free_1_chain_06"
         ],
         "icon": "icon_quest_slay_trait, ui_quest_background_general_red, misc_alliance_imperial, ui_quest_frame_slay_of, misc_decor_bes_skull",
         "tasks": [
@@ -26709,7 +27959,7 @@
         ]
       },
       {
-        "name": "crescendo_01_free_1_chain_06",
+        "name": "crescendo_a_free_1_chain_06",
         "category": "seasonal",
         "sortPriority": 920,
         "locaKey": "Crescendo01FreeMissionChainOne",
@@ -26720,7 +27970,7 @@
           "survivalBoost_stats"
         ],
         "successorQuests": [
-          "crescendo_01_free_1_chain_07"
+          "crescendo_a_free_1_chain_07"
         ],
         "icon": "icon_quest_damage, ui_quest_background_general_blue, misc_crescendo_01, ui_quest_frame_hre, misc_game_modes",
         "tasks": [
@@ -26735,7 +27985,7 @@
         ]
       },
       {
-        "name": "crescendo_01_free_1_chain_07",
+        "name": "crescendo_a_free_1_chain_07",
         "category": "seasonal",
         "sortPriority": 920,
         "locaKey": "Crescendo01FreeMissionChainOne",
@@ -26746,7 +27996,7 @@
           "survivalBoost_stats"
         ],
         "successorQuests": [
-          "crescendo_01_free_1_chain_08"
+          "crescendo_a_free_1_chain_08"
         ],
         "icon": "ui_icon_quest_slay",
         "tasks": [
@@ -26758,7 +28008,7 @@
         ]
       },
       {
-        "name": "crescendo_01_free_1_chain_08",
+        "name": "crescendo_a_free_1_chain_08",
         "category": "seasonal",
         "sortPriority": 920,
         "locaKey": "Crescendo01FreeMissionChainOne",
@@ -26769,7 +28019,7 @@
           "survivalBoost_stats"
         ],
         "successorQuests": [
-          "crescendo_01_free_1_chain_09"
+          "crescendo_a_free_1_chain_09"
         ],
         "icon": "ui_icon_quest_heal",
         "tasks": [
@@ -26781,7 +28031,7 @@
         ]
       },
       {
-        "name": "crescendo_01_free_1_chain_09",
+        "name": "crescendo_a_free_1_chain_09",
         "category": "seasonal",
         "sortPriority": 920,
         "locaKey": "Crescendo01FreeMissionChainOne",
@@ -26792,7 +28042,7 @@
           "survivalBoost_stats"
         ],
         "successorQuests": [
-          "crescendo_01_free_1_chain_10"
+          "crescendo_a_free_1_chain_10"
         ],
         "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
         "tasks": [
@@ -26804,7 +28054,7 @@
         ]
       },
       {
-        "name": "crescendo_01_free_1_chain_10",
+        "name": "crescendo_a_free_1_chain_10",
         "category": "seasonal",
         "sortPriority": 920,
         "locaKey": "Crescendo01FreeMissionChainOne",
@@ -26815,7 +28065,7 @@
           "survivalBoost_stats"
         ],
         "successorQuests": [
-          "crescendo_01_free_1_chain_11"
+          "crescendo_a_free_1_chain_11"
         ],
         "icon": "icon_quest_damage, ui_quest_background_general_blue, misc_crescendo_01, ui_quest_frame_hre, misc_game_modes",
         "tasks": [
@@ -26835,7 +28085,7 @@
         ]
       },
       {
-        "name": "crescendo_01_free_1_chain_11",
+        "name": "crescendo_a_free_1_chain_11",
         "category": "seasonal",
         "sortPriority": 920,
         "locaKey": "Crescendo01FreeMissionChainOne",
@@ -26846,7 +28096,7 @@
           "survivalBoost_stats"
         ],
         "successorQuests": [
-          "crescendo_01_free_1_chain_12"
+          "crescendo_a_free_1_chain_12"
         ],
         "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
         "tasks": [
@@ -26858,7 +28108,7 @@
         ]
       },
       {
-        "name": "crescendo_01_free_1_chain_12",
+        "name": "crescendo_a_free_1_chain_12",
         "category": "seasonal",
         "sortPriority": 920,
         "locaKey": "Crescendo01FreeMissionChainOne",
@@ -26869,7 +28119,7 @@
           "survivalBoost_stats"
         ],
         "successorQuests": [
-          "crescendo_01_free_1_chain_13"
+          "crescendo_a_free_1_chain_13"
         ],
         "icon": "icon_quest_slay_trait, ui_quest_background_general_blue, misc_overkill, ui_quest_frame_hre, misc_game_modes",
         "tasks": [
@@ -26881,7 +28131,7 @@
         ]
       },
       {
-        "name": "crescendo_01_free_1_chain_13",
+        "name": "crescendo_a_free_1_chain_13",
         "category": "seasonal",
         "sortPriority": 920,
         "locaKey": "Crescendo01FreeMissionChainOne",
@@ -26892,7 +28142,7 @@
           "survivalBoost_stats"
         ],
         "successorQuests": [
-          "crescendo_01_free_1_chain_14"
+          "crescendo_a_free_1_chain_14"
         ],
         "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
         "tasks": [
@@ -26904,7 +28154,7 @@
         ]
       },
       {
-        "name": "crescendo_01_free_1_chain_14",
+        "name": "crescendo_a_free_1_chain_14",
         "category": "seasonal",
         "sortPriority": 920,
         "locaKey": "Crescendo01FreeMissionChainOne",
@@ -26915,7 +28165,7 @@
           "survivalBoost_stats"
         ],
         "successorQuests": [
-          "crescendo_01_free_1_chain_15"
+          "crescendo_a_free_1_chain_15"
         ],
         "icon": "ui_icon_quest_heal",
         "tasks": [
@@ -26927,7 +28177,7 @@
         ]
       },
       {
-        "name": "crescendo_01_free_1_chain_15",
+        "name": "crescendo_a_free_1_chain_15",
         "category": "seasonal",
         "sortPriority": 920,
         "locaKey": "Crescendo01FreeMissionChainOne",
@@ -26938,7 +28188,7 @@
           "survivalBoost_stats"
         ],
         "successorQuests": [
-          "crescendo_01_free_1_chain_16"
+          "crescendo_a_free_1_chain_16"
         ],
         "icon": "icon_quest_damage, ui_quest_background_general_blue, misc_crescendo_01, ui_quest_frame_hre, misc_game_modes",
         "tasks": [
@@ -26958,7 +28208,7 @@
         ]
       },
       {
-        "name": "crescendo_01_free_1_chain_16",
+        "name": "crescendo_a_free_1_chain_16",
         "category": "seasonal",
         "sortPriority": 920,
         "locaKey": "Crescendo01FreeMissionChainOne",
@@ -26969,7 +28219,7 @@
           "survivalBoost_stats"
         ],
         "successorQuests": [
-          "crescendo_01_free_1_chain_17"
+          "crescendo_a_free_1_chain_17"
         ],
         "icon": "icon_quest_slay_trait, ui_quest_background_general_red, misc_alliance_imperial, ui_quest_frame_slay_of, misc_decor_bes_skull",
         "tasks": [
@@ -26984,7 +28234,7 @@
         ]
       },
       {
-        "name": "crescendo_01_free_1_chain_17",
+        "name": "crescendo_a_free_1_chain_17",
         "category": "seasonal",
         "sortPriority": 920,
         "locaKey": "Crescendo01FreeMissionChainOne",
@@ -26995,7 +28245,7 @@
           "survivalBoost_stats"
         ],
         "successorQuests": [
-          "crescendo_01_free_1_chain_18"
+          "crescendo_a_free_1_chain_18"
         ],
         "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
         "tasks": [
@@ -27007,7 +28257,7 @@
         ]
       },
       {
-        "name": "crescendo_01_free_1_chain_18",
+        "name": "crescendo_a_free_1_chain_18",
         "category": "seasonal",
         "sortPriority": 920,
         "locaKey": "Crescendo01FreeMissionChainOne",
@@ -27018,7 +28268,7 @@
           "survivalBoost_stats"
         ],
         "successorQuests": [
-          "crescendo_01_free_1_chain_19"
+          "crescendo_a_free_1_chain_19"
         ],
         "icon": "icon_quest_slay_trait, ui_quest_background_general_blue, misc_spawn_point, ui_quest_frame_general, misc_defeat_skull",
         "tasks": [
@@ -27030,7 +28280,7 @@
         ]
       },
       {
-        "name": "crescendo_01_free_1_chain_19",
+        "name": "crescendo_a_free_1_chain_19",
         "category": "seasonal",
         "sortPriority": 920,
         "locaKey": "Crescendo01FreeMissionChainOne",
@@ -27041,7 +28291,7 @@
           "survivalBoost_stats"
         ],
         "successorQuests": [
-          "crescendo_01_free_1_chain_20"
+          "crescendo_a_free_1_chain_20"
         ],
         "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
         "tasks": [
@@ -27053,7 +28303,7 @@
         ]
       },
       {
-        "name": "crescendo_01_free_1_chain_20",
+        "name": "crescendo_a_free_1_chain_20",
         "category": "seasonal",
         "sortPriority": 920,
         "locaKey": "Crescendo01FreeMissionChainOne",
@@ -27061,6 +28311,495 @@
         "totalLengthOfSuccessorQuestChain": "20",
         "rewards": [
           "xp_seasonal:76",
+          "survivalBoost_stats"
+        ],
+        "followedBy": "none",
+        "icon": "ui_icon_quest_deal_damage",
+        "tasks": [
+          {
+            "name": "DealDamage",
+            "target": 150000,
+            "locaKey": "DealDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_free_1_chain_01",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "Crescendo01FreeMissionChainOne",
+        "positionInSuccessorQuests": "1",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonalCrescendo:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "crescendo_b_free_1_chain_02"
+        ],
+        "icon": "icon_quest_damage, ui_quest_background_general_blue, misc_crescendo_01, ui_quest_frame_hre, misc_game_modes",
+        "tasks": [
+          {
+            "name": "PlayBattlesInGameMode",
+            "target": 1,
+            "locaKey": "PlayBattlesInGameMode_description",
+            "taskParameters": {
+              "gameMode": "Survival"
+            }
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_free_1_chain_02",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "Crescendo01FreeMissionChainOne",
+        "positionInSuccessorQuests": "2",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonalCrescendo:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "crescendo_b_free_1_chain_03"
+        ],
+        "icon": "icon_quest_slay_trait, ui_quest_background_general_red, misc_alliance_imperial, ui_quest_frame_slay_of, misc_decor_bes_skull",
+        "tasks": [
+          {
+            "name": "SlayEnemiesWithFactionTrait",
+            "target": 50,
+            "locaKey": "SlayEnemiesWithFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Imperial"
+            }
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_free_1_chain_03",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "Crescendo01FreeMissionChainOne",
+        "positionInSuccessorQuests": "3",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonalCrescendo:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "crescendo_b_free_1_chain_04"
+        ],
+        "icon": "icon_quest_slay_trait, ui_quest_background_general_blue, misc_spawn_point, ui_quest_frame_general, misc_defeat_skull",
+        "tasks": [
+          {
+            "name": "DefeatWaves",
+            "target": 15,
+            "locaKey": "DefeatWaves_description"
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_free_1_chain_04",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "Crescendo01FreeMissionChainOne",
+        "positionInSuccessorQuests": "4",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonalCrescendo:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "crescendo_b_free_1_chain_05"
+        ],
+        "icon": "ui_icon_quest_heal",
+        "tasks": [
+          {
+            "name": "HealHealth",
+            "target": 5000,
+            "locaKey": "HealHealth_description"
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_free_1_chain_05",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "Crescendo01FreeMissionChainOne",
+        "positionInSuccessorQuests": "5",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonalCrescendo:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "crescendo_b_free_1_chain_06"
+        ],
+        "icon": "icon_quest_slay_trait, ui_quest_background_general_red, misc_alliance_imperial, ui_quest_frame_slay_of, misc_decor_bes_skull",
+        "tasks": [
+          {
+            "name": "SlayEnemiesWithFactionTrait",
+            "target": 75,
+            "locaKey": "SlayEnemiesWithFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Imperial"
+            }
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_free_1_chain_06",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "Crescendo01FreeMissionChainOne",
+        "positionInSuccessorQuests": "6",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonalCrescendo:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "crescendo_b_free_1_chain_07"
+        ],
+        "icon": "icon_quest_damage, ui_quest_background_general_blue, misc_crescendo_01, ui_quest_frame_hre, misc_game_modes",
+        "tasks": [
+          {
+            "name": "PlayBattlesInGameMode",
+            "target": 1,
+            "locaKey": "PlayBattlesInGameMode_description",
+            "taskParameters": {
+              "gameMode": "Survival"
+            }
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_free_1_chain_07",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "Crescendo01FreeMissionChainOne",
+        "positionInSuccessorQuests": "7",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonalCrescendo:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "crescendo_b_free_1_chain_08"
+        ],
+        "icon": "ui_icon_quest_slay",
+        "tasks": [
+          {
+            "name": "SlayEnemies",
+            "target": 100,
+            "locaKey": "SlayEnemies_description"
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_free_1_chain_08",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "Crescendo01FreeMissionChainOne",
+        "positionInSuccessorQuests": "8",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonalCrescendo:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "crescendo_b_free_1_chain_09"
+        ],
+        "icon": "ui_icon_quest_heal",
+        "tasks": [
+          {
+            "name": "HealHealth",
+            "target": 10000,
+            "locaKey": "HealHealth_description"
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_free_1_chain_09",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "Crescendo01FreeMissionChainOne",
+        "positionInSuccessorQuests": "9",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonalCrescendo:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "crescendo_b_free_1_chain_10"
+        ],
+        "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
+        "tasks": [
+          {
+            "name": "DealAbilityDamage",
+            "target": 4250,
+            "locaKey": "DealAbilityDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_free_1_chain_10",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "Crescendo01FreeMissionChainOne",
+        "positionInSuccessorQuests": "10",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonalCrescendo:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "crescendo_b_free_1_chain_11"
+        ],
+        "icon": "icon_quest_damage, ui_quest_background_general_blue, misc_crescendo_01, ui_quest_frame_hre, misc_game_modes",
+        "tasks": [
+          {
+            "name": "DealDamage",
+            "target": 10000,
+            "locaKey": "DealDamage_description"
+          },
+          {
+            "name": "PlayBattlesInGameMode",
+            "target": 1,
+            "locaKey": "PlayBattlesInGameMode_description",
+            "taskParameters": {
+              "gameMode": "Survival"
+            }
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_free_1_chain_11",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "Crescendo01FreeMissionChainOne",
+        "positionInSuccessorQuests": "11",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonalCrescendo:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "crescendo_b_free_1_chain_12"
+        ],
+        "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
+        "tasks": [
+          {
+            "name": "DealAbilityDamage",
+            "target": 12500,
+            "locaKey": "DealAbilityDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_free_1_chain_12",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "Crescendo01FreeMissionChainOne",
+        "positionInSuccessorQuests": "12",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonalCrescendo:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "crescendo_b_free_1_chain_13"
+        ],
+        "icon": "icon_quest_slay_trait, ui_quest_background_general_blue, misc_overkill, ui_quest_frame_hre, misc_game_modes",
+        "tasks": [
+          {
+            "name": "Overkill",
+            "target": 75,
+            "locaKey": "Overkill_description"
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_free_1_chain_13",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "Crescendo01FreeMissionChainOne",
+        "positionInSuccessorQuests": "13",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonalCrescendo:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "crescendo_b_free_1_chain_14"
+        ],
+        "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
+        "tasks": [
+          {
+            "name": "DealAbilityDamage",
+            "target": 25000,
+            "locaKey": "DealAbilityDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_free_1_chain_14",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "Crescendo01FreeMissionChainOne",
+        "positionInSuccessorQuests": "14",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonalCrescendo:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "crescendo_b_free_1_chain_15"
+        ],
+        "icon": "ui_icon_quest_heal",
+        "tasks": [
+          {
+            "name": "HealHealth",
+            "target": 15000,
+            "locaKey": "HealHealth_description"
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_free_1_chain_15",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "Crescendo01FreeMissionChainOne",
+        "positionInSuccessorQuests": "15",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonalCrescendo:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "crescendo_b_free_1_chain_16"
+        ],
+        "icon": "icon_quest_damage, ui_quest_background_general_blue, misc_crescendo_01, ui_quest_frame_hre, misc_game_modes",
+        "tasks": [
+          {
+            "name": "DealDamage",
+            "target": 50000,
+            "locaKey": "DealDamage_description"
+          },
+          {
+            "name": "PlayBattlesInGameMode",
+            "target": 1,
+            "locaKey": "PlayBattlesInGameMode_description",
+            "taskParameters": {
+              "gameMode": "Survival"
+            }
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_free_1_chain_16",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "Crescendo01FreeMissionChainOne",
+        "positionInSuccessorQuests": "16",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonalCrescendo:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "crescendo_b_free_1_chain_17"
+        ],
+        "icon": "icon_quest_slay_trait, ui_quest_background_general_red, misc_alliance_imperial, ui_quest_frame_slay_of, misc_decor_bes_skull",
+        "tasks": [
+          {
+            "name": "SlayEnemiesWithFactionTrait",
+            "target": 125,
+            "locaKey": "SlayEnemiesWithFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Imperial"
+            }
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_free_1_chain_17",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "Crescendo01FreeMissionChainOne",
+        "positionInSuccessorQuests": "17",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonalCrescendo:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "crescendo_b_free_1_chain_18"
+        ],
+        "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
+        "tasks": [
+          {
+            "name": "DealAbilityDamage",
+            "target": 63000,
+            "locaKey": "DealAbilityDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_free_1_chain_18",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "Crescendo01FreeMissionChainOne",
+        "positionInSuccessorQuests": "18",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonalCrescendo:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "crescendo_b_free_1_chain_19"
+        ],
+        "icon": "icon_quest_slay_trait, ui_quest_background_general_blue, misc_spawn_point, ui_quest_frame_general, misc_defeat_skull",
+        "tasks": [
+          {
+            "name": "DefeatWaves",
+            "target": 15,
+            "locaKey": "DefeatWaves_description"
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_free_1_chain_19",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "Crescendo01FreeMissionChainOne",
+        "positionInSuccessorQuests": "19",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonalCrescendo:76",
+          "survivalBoost_stats"
+        ],
+        "successorQuests": [
+          "crescendo_b_free_1_chain_20"
+        ],
+        "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
+        "tasks": [
+          {
+            "name": "DealAbilityDamage",
+            "target": 90000,
+            "locaKey": "DealAbilityDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_free_1_chain_20",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "Crescendo01FreeMissionChainOne",
+        "positionInSuccessorQuests": "20",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonalCrescendo:76",
           "survivalBoost_stats"
         ],
         "followedBy": "none",
@@ -27496,6 +29235,444 @@
         "category": "seasonal",
         "sortPriority": 920,
         "locaKey": "October2026FreeMissionChain",
+        "positionInSuccessorQuests": "20",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:90"
+        ],
+        "followedBy": "none",
+        "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
+        "tasks": [
+          {
+            "name": "DealAbilityDamage",
+            "target": 105000,
+            "locaKey": "DealAbilityDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_free_1_chain_01",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "November2026FreeMissionChain",
+        "positionInSuccessorQuests": "1",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:90"
+        ],
+        "successorQuests": [
+          "november_2026_free_1_chain_02"
+        ],
+        "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
+        "tasks": [
+          {
+            "name": "DealAbilityDamage",
+            "target": 7500,
+            "locaKey": "DealAbilityDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_free_1_chain_02",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "November2026FreeMissionChain",
+        "positionInSuccessorQuests": "2",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:90"
+        ],
+        "successorQuests": [
+          "november_2026_free_1_chain_03"
+        ],
+        "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
+        "tasks": [
+          {
+            "name": "DealAbilityDamage",
+            "target": 12000,
+            "locaKey": "DealAbilityDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_free_1_chain_03",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "November2026FreeMissionChain",
+        "positionInSuccessorQuests": "3",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:90"
+        ],
+        "successorQuests": [
+          "november_2026_free_1_chain_04"
+        ],
+        "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
+        "tasks": [
+          {
+            "name": "DealAbilityDamage",
+            "target": 15000,
+            "locaKey": "DealAbilityDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_free_1_chain_04",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "November2026FreeMissionChain",
+        "positionInSuccessorQuests": "4",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:90"
+        ],
+        "successorQuests": [
+          "november_2026_free_1_chain_05"
+        ],
+        "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
+        "tasks": [
+          {
+            "name": "DealAbilityDamage",
+            "target": 18000,
+            "locaKey": "DealAbilityDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_free_1_chain_05",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "November2026FreeMissionChain",
+        "positionInSuccessorQuests": "5",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:90"
+        ],
+        "successorQuests": [
+          "november_2026_free_1_chain_06"
+        ],
+        "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
+        "tasks": [
+          {
+            "name": "DealAbilityDamage",
+            "target": 21000,
+            "locaKey": "DealAbilityDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_free_1_chain_06",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "November2026FreeMissionChain",
+        "positionInSuccessorQuests": "6",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:90"
+        ],
+        "successorQuests": [
+          "november_2026_free_1_chain_07"
+        ],
+        "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
+        "tasks": [
+          {
+            "name": "DealAbilityDamage",
+            "target": 24000,
+            "locaKey": "DealAbilityDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_free_1_chain_07",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "November2026FreeMissionChain",
+        "positionInSuccessorQuests": "7",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:90"
+        ],
+        "successorQuests": [
+          "november_2026_free_1_chain_08"
+        ],
+        "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
+        "tasks": [
+          {
+            "name": "DealAbilityDamage",
+            "target": 27000,
+            "locaKey": "DealAbilityDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_free_1_chain_08",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "November2026FreeMissionChain",
+        "positionInSuccessorQuests": "8",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:90"
+        ],
+        "successorQuests": [
+          "november_2026_free_1_chain_09"
+        ],
+        "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
+        "tasks": [
+          {
+            "name": "DealAbilityDamage",
+            "target": 30000,
+            "locaKey": "DealAbilityDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_free_1_chain_09",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "November2026FreeMissionChain",
+        "positionInSuccessorQuests": "9",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:90"
+        ],
+        "successorQuests": [
+          "november_2026_free_1_chain_10"
+        ],
+        "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
+        "tasks": [
+          {
+            "name": "DealAbilityDamage",
+            "target": 33000,
+            "locaKey": "DealAbilityDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_free_1_chain_10",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "November2026FreeMissionChain",
+        "positionInSuccessorQuests": "10",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:90"
+        ],
+        "successorQuests": [
+          "november_2026_free_1_chain_11"
+        ],
+        "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
+        "tasks": [
+          {
+            "name": "DealAbilityDamage",
+            "target": 36000,
+            "locaKey": "DealAbilityDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_free_1_chain_11",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "November2026FreeMissionChain",
+        "positionInSuccessorQuests": "11",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:90"
+        ],
+        "successorQuests": [
+          "november_2026_free_1_chain_12"
+        ],
+        "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
+        "tasks": [
+          {
+            "name": "DealAbilityDamage",
+            "target": 40000,
+            "locaKey": "DealAbilityDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_free_1_chain_12",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "November2026FreeMissionChain",
+        "positionInSuccessorQuests": "12",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:90"
+        ],
+        "successorQuests": [
+          "november_2026_free_1_chain_13"
+        ],
+        "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
+        "tasks": [
+          {
+            "name": "DealAbilityDamage",
+            "target": 45000,
+            "locaKey": "DealAbilityDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_free_1_chain_13",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "November2026FreeMissionChain",
+        "positionInSuccessorQuests": "13",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:90"
+        ],
+        "successorQuests": [
+          "november_2026_free_1_chain_14"
+        ],
+        "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
+        "tasks": [
+          {
+            "name": "DealAbilityDamage",
+            "target": 50000,
+            "locaKey": "DealAbilityDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_free_1_chain_14",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "November2026FreeMissionChain",
+        "positionInSuccessorQuests": "14",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:90"
+        ],
+        "successorQuests": [
+          "november_2026_free_1_chain_15"
+        ],
+        "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
+        "tasks": [
+          {
+            "name": "DealAbilityDamage",
+            "target": 55000,
+            "locaKey": "DealAbilityDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_free_1_chain_15",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "November2026FreeMissionChain",
+        "positionInSuccessorQuests": "15",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:90"
+        ],
+        "successorQuests": [
+          "november_2026_free_1_chain_16"
+        ],
+        "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
+        "tasks": [
+          {
+            "name": "DealAbilityDamage",
+            "target": 60000,
+            "locaKey": "DealAbilityDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_free_1_chain_16",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "November2026FreeMissionChain",
+        "positionInSuccessorQuests": "16",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:90"
+        ],
+        "successorQuests": [
+          "november_2026_free_1_chain_17"
+        ],
+        "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
+        "tasks": [
+          {
+            "name": "DealAbilityDamage",
+            "target": 65000,
+            "locaKey": "DealAbilityDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_free_1_chain_17",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "November2026FreeMissionChain",
+        "positionInSuccessorQuests": "17",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:90"
+        ],
+        "successorQuests": [
+          "november_2026_free_1_chain_18"
+        ],
+        "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
+        "tasks": [
+          {
+            "name": "DealAbilityDamage",
+            "target": 75000,
+            "locaKey": "DealAbilityDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_free_1_chain_18",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "November2026FreeMissionChain",
+        "positionInSuccessorQuests": "18",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:90"
+        ],
+        "successorQuests": [
+          "november_2026_free_1_chain_19"
+        ],
+        "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
+        "tasks": [
+          {
+            "name": "DealAbilityDamage",
+            "target": 85000,
+            "locaKey": "DealAbilityDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_free_1_chain_19",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "November2026FreeMissionChain",
+        "positionInSuccessorQuests": "19",
+        "totalLengthOfSuccessorQuestChain": "20",
+        "rewards": [
+          "xp_seasonal:90"
+        ],
+        "successorQuests": [
+          "november_2026_free_1_chain_20"
+        ],
+        "icon": "icon_quest_small_motive, ui_quest_background_general_red, misc_ability, ui_quest_frame_general, ui_quest_overlay_damage",
+        "tasks": [
+          {
+            "name": "DealAbilityDamage",
+            "target": 95000,
+            "locaKey": "DealAbilityDamage_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_free_1_chain_20",
+        "category": "seasonal",
+        "sortPriority": 920,
+        "locaKey": "November2026FreeMissionChain",
         "positionInSuccessorQuests": "20",
         "totalLengthOfSuccessorQuestChain": "20",
         "rewards": [
@@ -28109,6 +30286,344 @@
             "locaKey": "SlayEnemiesOfFactionTrait_description",
             "taskParameters": {
               "factionTrait": "Imperial"
+            }
+          }
+        ]
+      },
+      {
+        "name": "december_2026_premium_chain_01",
+        "category": "seasonal",
+        "sortPriority": 900,
+        "locaKey": "December2026PremiumMissionChain",
+        "positionInSuccessorQuests": "1",
+        "totalLengthOfSuccessorQuestChain": "10",
+        "rewards": [
+          "xp_seasonal:100",
+          "seasonalEventCurrencyDecember2026:50"
+        ],
+        "successorQuests": [
+          "december_2026_premium_chain_02"
+        ],
+        "icon": "ui_icon_quest_slay",
+        "tasks": [
+          {
+            "name": "SlayEnemiesOfFactionTrait",
+            "target": 30,
+            "locaKey": "SlayEnemiesOfFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Xenos"
+            }
+          },
+          {
+            "name": "SlayEnemiesOfFactionTrait",
+            "target": 15,
+            "locaKey": "SlayEnemiesOfFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Chaos"
+            }
+          }
+        ]
+      },
+      {
+        "name": "december_2026_premium_chain_02",
+        "category": "seasonal",
+        "sortPriority": 900,
+        "locaKey": "December2026PremiumMissionChain",
+        "positionInSuccessorQuests": "2",
+        "totalLengthOfSuccessorQuestChain": "10",
+        "rewards": [
+          "xp_seasonal:100",
+          "seasonalEventCurrencyDecember2026:50"
+        ],
+        "successorQuests": [
+          "december_2026_premium_chain_03"
+        ],
+        "icon": "ui_icon_quest_slay",
+        "tasks": [
+          {
+            "name": "SlayEnemiesOfFactionTrait",
+            "target": 40,
+            "locaKey": "SlayEnemiesOfFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Xenos"
+            }
+          },
+          {
+            "name": "SlayEnemiesOfFactionTrait",
+            "target": 20,
+            "locaKey": "SlayEnemiesOfFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Chaos"
+            }
+          }
+        ]
+      },
+      {
+        "name": "december_2026_premium_chain_03",
+        "category": "seasonal",
+        "sortPriority": 900,
+        "locaKey": "December2026PremiumMissionChain",
+        "positionInSuccessorQuests": "3",
+        "totalLengthOfSuccessorQuestChain": "10",
+        "rewards": [
+          "xp_seasonal:100",
+          "seasonalEventCurrencyDecember2026:50"
+        ],
+        "successorQuests": [
+          "december_2026_premium_chain_04"
+        ],
+        "icon": "ui_icon_quest_slay",
+        "tasks": [
+          {
+            "name": "SlayEnemiesOfFactionTrait",
+            "target": 50,
+            "locaKey": "SlayEnemiesOfFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Xenos"
+            }
+          },
+          {
+            "name": "SlayEnemiesOfFactionTrait",
+            "target": 25,
+            "locaKey": "SlayEnemiesOfFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Chaos"
+            }
+          }
+        ]
+      },
+      {
+        "name": "december_2026_premium_chain_04",
+        "category": "seasonal",
+        "sortPriority": 900,
+        "locaKey": "December2026PremiumMissionChain",
+        "positionInSuccessorQuests": "4",
+        "totalLengthOfSuccessorQuestChain": "10",
+        "rewards": [
+          "xp_seasonal:100",
+          "seasonalEventCurrencyDecember2026:50"
+        ],
+        "successorQuests": [
+          "december_2026_premium_chain_05"
+        ],
+        "icon": "ui_icon_quest_slay",
+        "tasks": [
+          {
+            "name": "SlayEnemiesOfFactionTrait",
+            "target": 60,
+            "locaKey": "SlayEnemiesOfFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Xenos"
+            }
+          },
+          {
+            "name": "SlayEnemiesOfFactionTrait",
+            "target": 30,
+            "locaKey": "SlayEnemiesOfFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Chaos"
+            }
+          }
+        ]
+      },
+      {
+        "name": "december_2026_premium_chain_05",
+        "category": "seasonal",
+        "sortPriority": 900,
+        "locaKey": "December2026PremiumMissionChain",
+        "positionInSuccessorQuests": "5",
+        "totalLengthOfSuccessorQuestChain": "10",
+        "rewards": [
+          "xp_seasonal:100",
+          "seasonalEventCurrencyDecember2026:50"
+        ],
+        "successorQuests": [
+          "december_2026_premium_chain_06"
+        ],
+        "icon": "ui_icon_quest_slay",
+        "tasks": [
+          {
+            "name": "SlayEnemiesOfFactionTrait",
+            "target": 70,
+            "locaKey": "SlayEnemiesOfFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Xenos"
+            }
+          },
+          {
+            "name": "SlayEnemiesOfFactionTrait",
+            "target": 35,
+            "locaKey": "SlayEnemiesOfFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Chaos"
+            }
+          }
+        ]
+      },
+      {
+        "name": "december_2026_premium_chain_06",
+        "category": "seasonal",
+        "sortPriority": 900,
+        "locaKey": "December2026PremiumMissionChain",
+        "positionInSuccessorQuests": "6",
+        "totalLengthOfSuccessorQuestChain": "10",
+        "rewards": [
+          "xp_seasonal:100",
+          "seasonalEventCurrencyDecember2026:50"
+        ],
+        "successorQuests": [
+          "december_2026_premium_chain_07"
+        ],
+        "icon": "ui_icon_quest_slay",
+        "tasks": [
+          {
+            "name": "SlayEnemiesOfFactionTrait",
+            "target": 80,
+            "locaKey": "SlayEnemiesOfFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Xenos"
+            }
+          },
+          {
+            "name": "SlayEnemiesOfFactionTrait",
+            "target": 40,
+            "locaKey": "SlayEnemiesOfFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Chaos"
+            }
+          }
+        ]
+      },
+      {
+        "name": "december_2026_premium_chain_07",
+        "category": "seasonal",
+        "sortPriority": 900,
+        "locaKey": "December2026PremiumMissionChain",
+        "positionInSuccessorQuests": "7",
+        "totalLengthOfSuccessorQuestChain": "10",
+        "rewards": [
+          "xp_seasonal:100",
+          "seasonalEventCurrencyDecember2026:50"
+        ],
+        "successorQuests": [
+          "december_2026_premium_chain_08"
+        ],
+        "icon": "ui_icon_quest_slay",
+        "tasks": [
+          {
+            "name": "SlayEnemiesOfFactionTrait",
+            "target": 90,
+            "locaKey": "SlayEnemiesOfFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Xenos"
+            }
+          },
+          {
+            "name": "SlayEnemiesOfFactionTrait",
+            "target": 45,
+            "locaKey": "SlayEnemiesOfFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Chaos"
+            }
+          }
+        ]
+      },
+      {
+        "name": "december_2026_premium_chain_08",
+        "category": "seasonal",
+        "sortPriority": 900,
+        "locaKey": "December2026PremiumMissionChain",
+        "positionInSuccessorQuests": "8",
+        "totalLengthOfSuccessorQuestChain": "10",
+        "rewards": [
+          "xp_seasonal:100",
+          "seasonalEventCurrencyDecember2026:50"
+        ],
+        "successorQuests": [
+          "december_2026_premium_chain_09"
+        ],
+        "icon": "ui_icon_quest_slay",
+        "tasks": [
+          {
+            "name": "SlayEnemiesOfFactionTrait",
+            "target": 100,
+            "locaKey": "SlayEnemiesOfFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Xenos"
+            }
+          },
+          {
+            "name": "SlayEnemiesOfFactionTrait",
+            "target": 50,
+            "locaKey": "SlayEnemiesOfFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Chaos"
+            }
+          }
+        ]
+      },
+      {
+        "name": "december_2026_premium_chain_09",
+        "category": "seasonal",
+        "sortPriority": 900,
+        "locaKey": "December2026PremiumMissionChain",
+        "positionInSuccessorQuests": "9",
+        "totalLengthOfSuccessorQuestChain": "10",
+        "rewards": [
+          "xp_seasonal:100",
+          "seasonalEventCurrencyDecember2026:50"
+        ],
+        "successorQuests": [
+          "december_2026_premium_chain_10"
+        ],
+        "icon": "ui_icon_quest_slay",
+        "tasks": [
+          {
+            "name": "SlayEnemiesOfFactionTrait",
+            "target": 110,
+            "locaKey": "SlayEnemiesOfFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Xenos"
+            }
+          },
+          {
+            "name": "SlayEnemiesOfFactionTrait",
+            "target": 55,
+            "locaKey": "SlayEnemiesOfFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Chaos"
+            }
+          }
+        ]
+      },
+      {
+        "name": "december_2026_premium_chain_10",
+        "category": "seasonal",
+        "sortPriority": 900,
+        "locaKey": "December2026PremiumMissionChain",
+        "positionInSuccessorQuests": "10",
+        "totalLengthOfSuccessorQuestChain": "10",
+        "rewards": [
+          "xp_seasonal:100",
+          "seasonalEventCurrencyDecember2026:50"
+        ],
+        "followedBy": "none",
+        "icon": "ui_icon_quest_slay",
+        "tasks": [
+          {
+            "name": "SlayEnemiesOfFactionTrait",
+            "target": 120,
+            "locaKey": "SlayEnemiesOfFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Xenos"
+            }
+          },
+          {
+            "name": "SlayEnemiesOfFactionTrait",
+            "target": 60,
+            "locaKey": "SlayEnemiesOfFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Chaos"
             }
           }
         ]
@@ -29254,7 +31769,7 @@
         ]
       },
       {
-        "name": "crescendo_01_premium_chain_01",
+        "name": "crescendo_a_premium_chain_01",
         "category": "seasonal",
         "sortPriority": 900,
         "locaKey": "Crescendo01PremiumMissionChain",
@@ -29265,7 +31780,7 @@
           "seasonalEventCurrencyCrescendo:50"
         ],
         "successorQuests": [
-          "crescendo_01_premium_chain_02"
+          "crescendo_a_premium_chain_02"
         ],
         "icon": "ui_icon_quest_slay",
         "tasks": [
@@ -29280,7 +31795,7 @@
         ]
       },
       {
-        "name": "crescendo_01_premium_chain_02",
+        "name": "crescendo_a_premium_chain_02",
         "category": "seasonal",
         "sortPriority": 900,
         "locaKey": "Crescendo01PremiumMissionChain",
@@ -29291,7 +31806,7 @@
           "seasonalEventCurrencyCrescendo:50"
         ],
         "successorQuests": [
-          "crescendo_01_premium_chain_03"
+          "crescendo_a_premium_chain_03"
         ],
         "icon": "ui_icon_quest_slay",
         "tasks": [
@@ -29306,7 +31821,7 @@
         ]
       },
       {
-        "name": "crescendo_01_premium_chain_03",
+        "name": "crescendo_a_premium_chain_03",
         "category": "seasonal",
         "sortPriority": 900,
         "locaKey": "Crescendo01PremiumMissionChain",
@@ -29317,7 +31832,7 @@
           "seasonalEventCurrencyCrescendo:50"
         ],
         "successorQuests": [
-          "crescendo_01_premium_chain_04"
+          "crescendo_a_premium_chain_04"
         ],
         "icon": "ui_icon_quest_slay",
         "tasks": [
@@ -29332,7 +31847,7 @@
         ]
       },
       {
-        "name": "crescendo_01_premium_chain_04",
+        "name": "crescendo_a_premium_chain_04",
         "category": "seasonal",
         "sortPriority": 900,
         "locaKey": "Crescendo01PremiumMissionChain",
@@ -29343,7 +31858,7 @@
           "seasonalEventCurrencyCrescendo:50"
         ],
         "successorQuests": [
-          "crescendo_01_premium_chain_05"
+          "crescendo_a_premium_chain_05"
         ],
         "icon": "ui_icon_quest_slay",
         "tasks": [
@@ -29358,7 +31873,7 @@
         ]
       },
       {
-        "name": "crescendo_01_premium_chain_05",
+        "name": "crescendo_a_premium_chain_05",
         "category": "seasonal",
         "sortPriority": 900,
         "locaKey": "Crescendo01PremiumMissionChain",
@@ -29369,7 +31884,7 @@
           "seasonalEventCurrencyCrescendo:50"
         ],
         "successorQuests": [
-          "crescendo_01_premium_chain_06"
+          "crescendo_a_premium_chain_06"
         ],
         "icon": "ui_icon_quest_slay",
         "tasks": [
@@ -29384,7 +31899,7 @@
         ]
       },
       {
-        "name": "crescendo_01_premium_chain_06",
+        "name": "crescendo_a_premium_chain_06",
         "category": "seasonal",
         "sortPriority": 900,
         "locaKey": "Crescendo01PremiumMissionChain",
@@ -29395,7 +31910,7 @@
           "seasonalEventCurrencyCrescendo:50"
         ],
         "successorQuests": [
-          "crescendo_01_premium_chain_07"
+          "crescendo_a_premium_chain_07"
         ],
         "icon": "ui_icon_quest_slay",
         "tasks": [
@@ -29410,7 +31925,7 @@
         ]
       },
       {
-        "name": "crescendo_01_premium_chain_07",
+        "name": "crescendo_a_premium_chain_07",
         "category": "seasonal",
         "sortPriority": 900,
         "locaKey": "Crescendo01PremiumMissionChain",
@@ -29421,7 +31936,7 @@
           "seasonalEventCurrencyCrescendo:50"
         ],
         "successorQuests": [
-          "crescendo_01_premium_chain_08"
+          "crescendo_a_premium_chain_08"
         ],
         "icon": "ui_icon_quest_slay",
         "tasks": [
@@ -29436,7 +31951,7 @@
         ]
       },
       {
-        "name": "crescendo_01_premium_chain_08",
+        "name": "crescendo_a_premium_chain_08",
         "category": "seasonal",
         "sortPriority": 900,
         "locaKey": "Crescendo01PremiumMissionChain",
@@ -29447,7 +31962,7 @@
           "seasonalEventCurrencyCrescendo:50"
         ],
         "successorQuests": [
-          "crescendo_01_premium_chain_09"
+          "crescendo_a_premium_chain_09"
         ],
         "icon": "ui_icon_quest_slay",
         "tasks": [
@@ -29462,7 +31977,7 @@
         ]
       },
       {
-        "name": "crescendo_01_premium_chain_09",
+        "name": "crescendo_a_premium_chain_09",
         "category": "seasonal",
         "sortPriority": 900,
         "locaKey": "Crescendo01PremiumMissionChain",
@@ -29473,7 +31988,7 @@
           "seasonalEventCurrencyCrescendo:50"
         ],
         "successorQuests": [
-          "crescendo_01_premium_chain_10"
+          "crescendo_a_premium_chain_10"
         ],
         "icon": "ui_icon_quest_slay",
         "tasks": [
@@ -29488,7 +32003,7 @@
         ]
       },
       {
-        "name": "crescendo_01_premium_chain_10",
+        "name": "crescendo_a_premium_chain_10",
         "category": "seasonal",
         "sortPriority": 900,
         "locaKey": "Crescendo01PremiumMissionChain",
@@ -29496,6 +32011,264 @@
         "totalLengthOfSuccessorQuestChain": "10",
         "rewards": [
           "xp_seasonal:100",
+          "seasonalEventCurrencyCrescendo:50"
+        ],
+        "followedBy": "none",
+        "icon": "ui_icon_quest_slay",
+        "tasks": [
+          {
+            "name": "SlayEnemiesOfFactionTrait",
+            "target": 200,
+            "locaKey": "SlayEnemiesOfFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Chaos"
+            }
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_premium_chain_01",
+        "category": "seasonal",
+        "sortPriority": 900,
+        "locaKey": "Crescendo01PremiumMissionChain",
+        "positionInSuccessorQuests": "1",
+        "totalLengthOfSuccessorQuestChain": "10",
+        "rewards": [
+          "xp_seasonalCrescendo:100",
+          "seasonalEventCurrencyCrescendo:50"
+        ],
+        "successorQuests": [
+          "crescendo_b_premium_chain_02"
+        ],
+        "icon": "ui_icon_quest_slay",
+        "tasks": [
+          {
+            "name": "SlayEnemiesOfFactionTrait",
+            "target": 50,
+            "locaKey": "SlayEnemiesOfFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Chaos"
+            }
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_premium_chain_02",
+        "category": "seasonal",
+        "sortPriority": 900,
+        "locaKey": "Crescendo01PremiumMissionChain",
+        "positionInSuccessorQuests": "2",
+        "totalLengthOfSuccessorQuestChain": "10",
+        "rewards": [
+          "xp_seasonalCrescendo:100",
+          "seasonalEventCurrencyCrescendo:50"
+        ],
+        "successorQuests": [
+          "crescendo_b_premium_chain_03"
+        ],
+        "icon": "ui_icon_quest_slay",
+        "tasks": [
+          {
+            "name": "SlayEnemiesOfFactionTrait",
+            "target": 65,
+            "locaKey": "SlayEnemiesOfFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Chaos"
+            }
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_premium_chain_03",
+        "category": "seasonal",
+        "sortPriority": 900,
+        "locaKey": "Crescendo01PremiumMissionChain",
+        "positionInSuccessorQuests": "3",
+        "totalLengthOfSuccessorQuestChain": "10",
+        "rewards": [
+          "xp_seasonalCrescendo:100",
+          "seasonalEventCurrencyCrescendo:50"
+        ],
+        "successorQuests": [
+          "crescendo_b_premium_chain_04"
+        ],
+        "icon": "ui_icon_quest_slay",
+        "tasks": [
+          {
+            "name": "SlayEnemiesOfFactionTrait",
+            "target": 80,
+            "locaKey": "SlayEnemiesOfFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Chaos"
+            }
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_premium_chain_04",
+        "category": "seasonal",
+        "sortPriority": 900,
+        "locaKey": "Crescendo01PremiumMissionChain",
+        "positionInSuccessorQuests": "4",
+        "totalLengthOfSuccessorQuestChain": "10",
+        "rewards": [
+          "xp_seasonalCrescendo:100",
+          "seasonalEventCurrencyCrescendo:50"
+        ],
+        "successorQuests": [
+          "crescendo_b_premium_chain_05"
+        ],
+        "icon": "ui_icon_quest_slay",
+        "tasks": [
+          {
+            "name": "SlayEnemiesOfFactionTrait",
+            "target": 100,
+            "locaKey": "SlayEnemiesOfFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Chaos"
+            }
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_premium_chain_05",
+        "category": "seasonal",
+        "sortPriority": 900,
+        "locaKey": "Crescendo01PremiumMissionChain",
+        "positionInSuccessorQuests": "5",
+        "totalLengthOfSuccessorQuestChain": "10",
+        "rewards": [
+          "xp_seasonalCrescendo:100",
+          "seasonalEventCurrencyCrescendo:50"
+        ],
+        "successorQuests": [
+          "crescendo_b_premium_chain_06"
+        ],
+        "icon": "ui_icon_quest_slay",
+        "tasks": [
+          {
+            "name": "SlayEnemiesOfFactionTrait",
+            "target": 115,
+            "locaKey": "SlayEnemiesOfFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Chaos"
+            }
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_premium_chain_06",
+        "category": "seasonal",
+        "sortPriority": 900,
+        "locaKey": "Crescendo01PremiumMissionChain",
+        "positionInSuccessorQuests": "6",
+        "totalLengthOfSuccessorQuestChain": "10",
+        "rewards": [
+          "xp_seasonalCrescendo:100",
+          "seasonalEventCurrencyCrescendo:50"
+        ],
+        "successorQuests": [
+          "crescendo_b_premium_chain_07"
+        ],
+        "icon": "ui_icon_quest_slay",
+        "tasks": [
+          {
+            "name": "SlayEnemiesOfFactionTrait",
+            "target": 130,
+            "locaKey": "SlayEnemiesOfFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Chaos"
+            }
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_premium_chain_07",
+        "category": "seasonal",
+        "sortPriority": 900,
+        "locaKey": "Crescendo01PremiumMissionChain",
+        "positionInSuccessorQuests": "7",
+        "totalLengthOfSuccessorQuestChain": "10",
+        "rewards": [
+          "xp_seasonalCrescendo:100",
+          "seasonalEventCurrencyCrescendo:50"
+        ],
+        "successorQuests": [
+          "crescendo_b_premium_chain_08"
+        ],
+        "icon": "ui_icon_quest_slay",
+        "tasks": [
+          {
+            "name": "SlayEnemiesOfFactionTrait",
+            "target": 150,
+            "locaKey": "SlayEnemiesOfFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Chaos"
+            }
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_premium_chain_08",
+        "category": "seasonal",
+        "sortPriority": 900,
+        "locaKey": "Crescendo01PremiumMissionChain",
+        "positionInSuccessorQuests": "8",
+        "totalLengthOfSuccessorQuestChain": "10",
+        "rewards": [
+          "xp_seasonalCrescendo:100",
+          "seasonalEventCurrencyCrescendo:50"
+        ],
+        "successorQuests": [
+          "crescendo_b_premium_chain_09"
+        ],
+        "icon": "ui_icon_quest_slay",
+        "tasks": [
+          {
+            "name": "SlayEnemiesOfFactionTrait",
+            "target": 165,
+            "locaKey": "SlayEnemiesOfFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Chaos"
+            }
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_premium_chain_09",
+        "category": "seasonal",
+        "sortPriority": 900,
+        "locaKey": "Crescendo01PremiumMissionChain",
+        "positionInSuccessorQuests": "9",
+        "totalLengthOfSuccessorQuestChain": "10",
+        "rewards": [
+          "xp_seasonalCrescendo:100",
+          "seasonalEventCurrencyCrescendo:50"
+        ],
+        "successorQuests": [
+          "crescendo_b_premium_chain_10"
+        ],
+        "icon": "ui_icon_quest_slay",
+        "tasks": [
+          {
+            "name": "SlayEnemiesOfFactionTrait",
+            "target": 180,
+            "locaKey": "SlayEnemiesOfFactionTrait_description",
+            "taskParameters": {
+              "factionTrait": "Chaos"
+            }
+          }
+        ]
+      },
+      {
+        "name": "crescendo_b_premium_chain_10",
+        "category": "seasonal",
+        "sortPriority": 900,
+        "locaKey": "Crescendo01PremiumMissionChain",
+        "positionInSuccessorQuests": "10",
+        "totalLengthOfSuccessorQuestChain": "10",
+        "rewards": [
+          "xp_seasonalCrescendo:100",
           "seasonalEventCurrencyCrescendo:50"
         ],
         "followedBy": "none",
@@ -29728,6 +32501,234 @@
         "rewards": [
           "xp_seasonal:90",
           "seasonalEventCurrencyOctober2026:50"
+        ],
+        "followedBy": "none",
+        "icon": "ui_icon_quest_slay",
+        "tasks": [
+          {
+            "name": "SlayEnemies",
+            "target": 180,
+            "locaKey": "SlayEnemies_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_premium_chain_01",
+        "category": "seasonal",
+        "sortPriority": 900,
+        "locaKey": "November2026PremiumMissionChain",
+        "positionInSuccessorQuests": "1",
+        "totalLengthOfSuccessorQuestChain": "10",
+        "rewards": [
+          "xp_seasonal:90",
+          "seasonalEventCurrencyNovember2026:50"
+        ],
+        "successorQuests": [
+          "november_2026_premium_chain_02"
+        ],
+        "icon": "ui_icon_quest_slay",
+        "tasks": [
+          {
+            "name": "SlayEnemies",
+            "target": 45,
+            "locaKey": "SlayEnemies_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_premium_chain_02",
+        "category": "seasonal",
+        "sortPriority": 900,
+        "locaKey": "November2026PremiumMissionChain",
+        "positionInSuccessorQuests": "2",
+        "totalLengthOfSuccessorQuestChain": "10",
+        "rewards": [
+          "xp_seasonal:90",
+          "seasonalEventCurrencyNovember2026:50"
+        ],
+        "successorQuests": [
+          "november_2026_premium_chain_03"
+        ],
+        "icon": "ui_icon_quest_slay",
+        "tasks": [
+          {
+            "name": "SlayEnemies",
+            "target": 60,
+            "locaKey": "SlayEnemies_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_premium_chain_03",
+        "category": "seasonal",
+        "sortPriority": 900,
+        "locaKey": "November2026PremiumMissionChain",
+        "positionInSuccessorQuests": "3",
+        "totalLengthOfSuccessorQuestChain": "10",
+        "rewards": [
+          "xp_seasonal:90",
+          "seasonalEventCurrencyNovember2026:50"
+        ],
+        "successorQuests": [
+          "november_2026_premium_chain_04"
+        ],
+        "icon": "ui_icon_quest_slay",
+        "tasks": [
+          {
+            "name": "SlayEnemies",
+            "target": 75,
+            "locaKey": "SlayEnemies_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_premium_chain_04",
+        "category": "seasonal",
+        "sortPriority": 900,
+        "locaKey": "November2026PremiumMissionChain",
+        "positionInSuccessorQuests": "4",
+        "totalLengthOfSuccessorQuestChain": "10",
+        "rewards": [
+          "xp_seasonal:90",
+          "seasonalEventCurrencyNovember2026:50"
+        ],
+        "successorQuests": [
+          "november_2026_premium_chain_05"
+        ],
+        "icon": "ui_icon_quest_slay",
+        "tasks": [
+          {
+            "name": "SlayEnemies",
+            "target": 90,
+            "locaKey": "SlayEnemies_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_premium_chain_05",
+        "category": "seasonal",
+        "sortPriority": 900,
+        "locaKey": "November2026PremiumMissionChain",
+        "positionInSuccessorQuests": "5",
+        "totalLengthOfSuccessorQuestChain": "10",
+        "rewards": [
+          "xp_seasonal:90",
+          "seasonalEventCurrencyNovember2026:50"
+        ],
+        "successorQuests": [
+          "november_2026_premium_chain_06"
+        ],
+        "icon": "ui_icon_quest_slay",
+        "tasks": [
+          {
+            "name": "SlayEnemies",
+            "target": 105,
+            "locaKey": "SlayEnemies_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_premium_chain_06",
+        "category": "seasonal",
+        "sortPriority": 900,
+        "locaKey": "November2026PremiumMissionChain",
+        "positionInSuccessorQuests": "6",
+        "totalLengthOfSuccessorQuestChain": "10",
+        "rewards": [
+          "xp_seasonal:90",
+          "seasonalEventCurrencyNovember2026:50"
+        ],
+        "successorQuests": [
+          "november_2026_premium_chain_07"
+        ],
+        "icon": "ui_icon_quest_slay",
+        "tasks": [
+          {
+            "name": "SlayEnemies",
+            "target": 120,
+            "locaKey": "SlayEnemies_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_premium_chain_07",
+        "category": "seasonal",
+        "sortPriority": 900,
+        "locaKey": "November2026PremiumMissionChain",
+        "positionInSuccessorQuests": "7",
+        "totalLengthOfSuccessorQuestChain": "10",
+        "rewards": [
+          "xp_seasonal:90",
+          "seasonalEventCurrencyNovember2026:50"
+        ],
+        "successorQuests": [
+          "november_2026_premium_chain_08"
+        ],
+        "icon": "ui_icon_quest_slay",
+        "tasks": [
+          {
+            "name": "SlayEnemies",
+            "target": 135,
+            "locaKey": "SlayEnemies_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_premium_chain_08",
+        "category": "seasonal",
+        "sortPriority": 900,
+        "locaKey": "November2026PremiumMissionChain",
+        "positionInSuccessorQuests": "8",
+        "totalLengthOfSuccessorQuestChain": "10",
+        "rewards": [
+          "xp_seasonal:90",
+          "seasonalEventCurrencyNovember2026:50"
+        ],
+        "successorQuests": [
+          "november_2026_premium_chain_09"
+        ],
+        "icon": "ui_icon_quest_slay",
+        "tasks": [
+          {
+            "name": "SlayEnemies",
+            "target": 150,
+            "locaKey": "SlayEnemies_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_premium_chain_09",
+        "category": "seasonal",
+        "sortPriority": 900,
+        "locaKey": "November2026PremiumMissionChain",
+        "positionInSuccessorQuests": "9",
+        "totalLengthOfSuccessorQuestChain": "10",
+        "rewards": [
+          "xp_seasonal:90",
+          "seasonalEventCurrencyNovember2026:50"
+        ],
+        "successorQuests": [
+          "november_2026_premium_chain_10"
+        ],
+        "icon": "ui_icon_quest_slay",
+        "tasks": [
+          {
+            "name": "SlayEnemies",
+            "target": 165,
+            "locaKey": "SlayEnemies_description"
+          }
+        ]
+      },
+      {
+        "name": "november_2026_premium_chain_10",
+        "category": "seasonal",
+        "sortPriority": 900,
+        "locaKey": "November2026PremiumMissionChain",
+        "positionInSuccessorQuests": "10",
+        "totalLengthOfSuccessorQuestChain": "10",
+        "rewards": [
+          "xp_seasonal:90",
+          "seasonalEventCurrencyNovember2026:50"
         ],
         "followedBy": "none",
         "icon": "ui_icon_quest_slay",
@@ -37072,6 +40073,14 @@
             "name": "Summon",
             "target": 50,
             "locaKey": "Summon_description"
+          },
+          {
+            "name": "WinBattlesWithHero",
+            "target": 10,
+            "locaKey": "WinBattlesWithHero_description",
+            "taskParameters": {
+              "heroId": "tyranBiovore"
+            }
           }
         ]
       },
@@ -37239,6 +40248,90 @@
             "locaKey": "DealDamageWithHero_description",
             "taskParameters": {
               "heroId": "ultraDreadnought"
+            }
+          }
+        ]
+      },
+      {
+        "name": "hero_custoDreadnought_01",
+        "questXp": 20,
+        "sortPriority": 9,
+        "locaKey": "hero_custoDreadnought_name",
+        "positionInSuccessorQuests": "1",
+        "totalLengthOfSuccessorQuestChain": "3",
+        "rewards": [
+          "shards_custoDreadnought:10",
+          "abilityTokenCommon_Imperial:2",
+          "machinesOfWarToken_Imperial:2"
+        ],
+        "successorQuests": [
+          "hero_custoDreadnought_02"
+        ],
+        "icon": "icon_quest_hero, ui_quest_background_general, portrait_custoDreadnought, ui_quest_frame_hero, faction_Custodes",
+        "tasks": [
+          {
+            "name": "WinBattlesWithHero",
+            "target": 5,
+            "locaKey": "WinBattlesWithHero_description",
+            "taskParameters": {
+              "heroId": "custoDreadnought"
+            }
+          },
+          {
+            "name": "PlayPvpBattles",
+            "target": 5,
+            "locaKey": "PlayPvpBattles_description"
+          }
+        ]
+      },
+      {
+        "name": "hero_custoDreadnought_02",
+        "questXp": 30,
+        "sortPriority": 10,
+        "locaKey": "hero_custoDreadnought_name",
+        "positionInSuccessorQuests": "2",
+        "totalLengthOfSuccessorQuestChain": "3",
+        "rewards": [
+          "shards_custoDreadnought:15",
+          "abilityTokenCommon_Imperial:3",
+          "machinesOfWarToken_Imperial:3"
+        ],
+        "successorQuests": [
+          "hero_custoDreadnought_03"
+        ],
+        "icon": "icon_quest_hero, ui_quest_background_general, portrait_custoDreadnought, ui_quest_frame_hero, faction_Custodes",
+        "tasks": [
+          {
+            "name": "UseAbilityWithHero",
+            "target": 10,
+            "locaKey": "UseAbilityWithHero_description",
+            "taskParameters": {
+              "heroId": "custoDreadnought"
+            }
+          }
+        ]
+      },
+      {
+        "name": "hero_custoDreadnought_03",
+        "questXp": 50,
+        "sortPriority": 11,
+        "locaKey": "hero_custoDreadnought_name",
+        "positionInSuccessorQuests": "3",
+        "totalLengthOfSuccessorQuestChain": "3",
+        "rewards": [
+          "shards_custoDreadnought:25",
+          "abilityTokenCommon_Imperial:5",
+          "machinesOfWarToken_Imperial:5"
+        ],
+        "followedBy": "none",
+        "icon": "icon_quest_hero, ui_quest_background_general, portrait_custoDreadnought, ui_quest_frame_hero, faction_Custodes",
+        "tasks": [
+          {
+            "name": "DealDamageWithHero",
+            "target": 1000,
+            "locaKey": "DealDamageWithHero_description",
+            "taskParameters": {
+              "heroId": "custoDreadnought"
             }
           }
         ]
@@ -40687,6 +43780,95 @@
             "locaKey": "DealDamageWithHero_description",
             "taskParameters": {
               "heroId": "orksWeirdboy"
+            }
+          }
+        ]
+      },
+      {
+        "name": "hero_lostaFearmonger_01",
+        "questXp": 20,
+        "sortPriority": 9,
+        "locaKey": "hero_lostaFearmonger_name",
+        "positionInSuccessorQuests": "1",
+        "totalLengthOfSuccessorQuestChain": "3",
+        "rewards": [
+          "shards_lostaFearmonger:10",
+          "abilityTokenCommon_Chaos:2"
+        ],
+        "successorQuests": [
+          "hero_lostaFearmonger_02"
+        ],
+        "icon": "icon_quest_hero, ui_quest_background_general, portrait_lostaFearmonger, ui_quest_frame_hero, faction_TheLostAndTheDamned",
+        "tasks": [
+          {
+            "name": "WinBattlesWithHero",
+            "target": 5,
+            "locaKey": "WinBattlesWithHero_description",
+            "taskParameters": {
+              "heroId": "lostaFearmonger"
+            }
+          },
+          {
+            "name": "PlayPvpBattles",
+            "target": 5,
+            "locaKey": "PlayPvpBattles_description"
+          }
+        ]
+      },
+      {
+        "name": "hero_lostaFearmonger_02",
+        "questXp": 30,
+        "sortPriority": 10,
+        "locaKey": "hero_lostaFearmonger_name",
+        "positionInSuccessorQuests": "2",
+        "totalLengthOfSuccessorQuestChain": "3",
+        "rewards": [
+          "shards_lostaFearmonger:15",
+          "abilityTokenCommon_Chaos:3"
+        ],
+        "successorQuests": [
+          "hero_lostaFearmonger_03"
+        ],
+        "icon": "icon_quest_hero, ui_quest_background_general, portrait_lostaFearmonger, ui_quest_frame_hero, faction_TheLostAndTheDamned",
+        "tasks": [
+          {
+            "name": "SlayEnemiesWithHero",
+            "target": 50,
+            "locaKey": "SlayEnemiesWithHero_description",
+            "taskParameters": {
+              "heroId": "lostaFearmonger"
+            }
+          },
+          {
+            "name": "UseAbilityWithHero",
+            "target": 10,
+            "locaKey": "UseAbilityWithHero_description",
+            "taskParameters": {
+              "heroId": "lostaFearmonger"
+            }
+          }
+        ]
+      },
+      {
+        "name": "hero_lostaFearmonger_03",
+        "questXp": 50,
+        "sortPriority": 11,
+        "locaKey": "hero_lostaFearmonger_name",
+        "positionInSuccessorQuests": "3",
+        "totalLengthOfSuccessorQuestChain": "3",
+        "rewards": [
+          "shards_lostaFearmonger:25",
+          "abilityTokenCommon_Chaos:5"
+        ],
+        "followedBy": "none",
+        "icon": "icon_quest_hero, ui_quest_background_general, portrait_lostaFearmonger, ui_quest_frame_hero, faction_TheLostAndTheDamned",
+        "tasks": [
+          {
+            "name": "DealDamageWithHero",
+            "target": 4000,
+            "locaKey": "DealDamageWithHero_description",
+            "taskParameters": {
+              "heroId": "lostaFearmonger"
             }
           }
         ]
@@ -57410,6 +60592,143 @@
             "taskParameters": {
               "damageProfileType": "Toxic",
               "heroId": "lostaBile"
+            }
+          }
+        ]
+      },
+      {
+        "name": "mythic_lostaFearmonger_01",
+        "questXp": 25,
+        "sortPriority": 12,
+        "locaKey": "mythic_lostaFearmonger_name",
+        "positionInSuccessorQuests": "1",
+        "totalLengthOfSuccessorQuestChain": "5",
+        "rewards": [
+          "mythicShards_lostaFearmonger:4",
+          "heroAscensionOrbMythic_Chaos:2",
+          "xpMythic:1"
+        ],
+        "successorQuests": [
+          "mythic_lostaFearmonger_02"
+        ],
+        "icon": "icon_quest_hero, ui_quest_background_general, portrait_lostaFearmonger, ui_quest_frame_hero_mythic, faction_TheLostAndTheDamned",
+        "tasks": [
+          {
+            "name": "SlayEnemiesWithHeroInOneTurn",
+            "target": 1,
+            "locaKey": "SlayEnemiesWithHeroInOneTurn_description",
+            "taskParameters": {
+              "heroId": "lostaFearmonger",
+              "killAmount": "10"
+            }
+          }
+        ]
+      },
+      {
+        "name": "mythic_lostaFearmonger_02",
+        "questXp": 25,
+        "sortPriority": 13,
+        "locaKey": "mythic_lostaFearmonger_name",
+        "positionInSuccessorQuests": "2",
+        "totalLengthOfSuccessorQuestChain": "5",
+        "rewards": [
+          "mythicShards_lostaFearmonger:4",
+          "heroAscensionOrbMythic_Chaos:2",
+          "gold:250000"
+        ],
+        "successorQuests": [
+          "mythic_lostaFearmonger_03"
+        ],
+        "icon": "icon_quest_hero, ui_quest_background_general, portrait_lostaFearmonger, ui_quest_frame_hero_mythic, faction_TheLostAndTheDamned",
+        "tasks": [
+          {
+            "name": "DealDamageWithHeroInOneTurn",
+            "target": 1,
+            "locaKey": "DealDamageWithHeroInOneTurn_description",
+            "taskParameters": {
+              "heroId": "lostaFearmonger",
+              "damageAmount": "25000"
+            }
+          }
+        ]
+      },
+      {
+        "name": "mythic_lostaFearmonger_03",
+        "questXp": 25,
+        "sortPriority": 14,
+        "locaKey": "mythic_lostaFearmonger_name",
+        "positionInSuccessorQuests": "3",
+        "totalLengthOfSuccessorQuestChain": "5",
+        "rewards": [
+          "mythicShards_lostaFearmonger:4",
+          "heroAscensionOrbMythic_Chaos:2",
+          "abilityTokenMythic_Chaos:5"
+        ],
+        "successorQuests": [
+          "mythic_lostaFearmonger_04"
+        ],
+        "icon": "icon_quest_hero, ui_quest_background_general, portrait_lostaFearmonger, ui_quest_frame_hero_mythic, faction_TheLostAndTheDamned",
+        "tasks": [
+          {
+            "name": "OverkillWithHero",
+            "target": 200,
+            "locaKey": "OverkillWithHero_description",
+            "taskParameters": {
+              "heroId": "lostaFearmonger"
+            }
+          }
+        ]
+      },
+      {
+        "name": "mythic_lostaFearmonger_04",
+        "questXp": 25,
+        "sortPriority": 15,
+        "locaKey": "mythic_lostaFearmonger_name",
+        "positionInSuccessorQuests": "4",
+        "totalLengthOfSuccessorQuestChain": "5",
+        "rewards": [
+          "mythicShards_lostaFearmonger:4",
+          "heroAscensionOrbMythic_Chaos:2",
+          "gold:250000"
+        ],
+        "successorQuests": [
+          "mythic_lostaFearmonger_05"
+        ],
+        "icon": "icon_quest_hero, ui_quest_background_general, portrait_lostaFearmonger, ui_quest_frame_hero_mythic, faction_TheLostAndTheDamned",
+        "tasks": [
+          {
+            "name": "SlayEnemiesWithHeroToUnitEffectInOneTurn",
+            "target": 1,
+            "locaKey": "SlayEnemiesWithHeroToUnitEffectInOneTurn_UnitEffect_description",
+            "taskParameters": {
+              "unitEffect": "TerrorchemPoison",
+              "heroId": "lostaFearmonger",
+              "killAmount": "2"
+            }
+          }
+        ]
+      },
+      {
+        "name": "mythic_lostaFearmonger_05",
+        "questXp": 25,
+        "sortPriority": 16,
+        "locaKey": "mythic_lostaFearmonger_name",
+        "positionInSuccessorQuests": "5",
+        "totalLengthOfSuccessorQuestChain": "5",
+        "rewards": [
+          "mythicShards_lostaFearmonger:4",
+          "heroAscensionOrbMythic_Chaos:2",
+          "I_Crit_M006"
+        ],
+        "followedBy": "none",
+        "icon": "icon_quest_hero, ui_quest_background_general, portrait_lostaFearmonger, ui_quest_frame_hero_mythic, faction_TheLostAndTheDamned",
+        "tasks": [
+          {
+            "name": "DealDamageWithHero",
+            "target": 200000,
+            "locaKey": "DealDamageWithHero_description",
+            "taskParameters": {
+              "heroId": "lostaFearmonger"
             }
           }
         ]

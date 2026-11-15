@@ -41,8 +41,8 @@ public static class GameCatalogLoader
             LoadDatamine<List<DatamineHeroProgressionStep>>(GameCatalogDenormalizer.DatamineHeroProgressionStepsPath));
         var unlockShardCosts = GameCatalogDenormalizer.ReadDatamineUnlockShardCosts(
             LoadDatamine<Dictionary<string, DatamineHeroConversion>>(GameCatalogDenormalizer.DatamineHeroConversionPath));
-        var onslaughtRewards = GameCatalogDenormalizer.ReadDatamineOnslaughtRewards(
-            LoadDatamine<DatamineOnslaught>(GameCatalogDenormalizer.DatamineOnslaughtPath));
+        var onslaught = LoadDatamine<DatamineOnslaught>(GameCatalogDenormalizer.DatamineOnslaughtPath);
+        var onslaughtRewards = GameCatalogDenormalizer.ReadDatamineOnslaughtRewards(onslaught);
         var eventDefinitions = LoadDataset<IReadOnlyList<GameCatalogEventDefinition>>(GameCatalogDatasets.EventDefinitions);
         var eventOccurrences = LoadDataset<IReadOnlyList<GameCatalogEventOccurrence>>(GameCatalogDatasets.EventOccurrences);
         var tieredProgressRewards = LoadDatamine<Dictionary<string, List<DatamineTieredProgressReward>>>(
@@ -52,6 +52,7 @@ public static class GameCatalogLoader
             tieredProgressRewards,
             abilities);
         var hordeModeTiersRaw = LoadDataset<IReadOnlyList<GameCatalogHordeModeTiers>>(GameCatalogDatasets.HordeModeTiers);
+        var npcTiersRaw = LoadDataset<IReadOnlyList<GameCatalogNpcTiers>>(GameCatalogDatasets.NpcTiers);
         // groups.json holds chains of several shapes; each reader deserializes only the groups it names.
         var questGroups = LoadDatamine<Dictionary<string, JsonElement>>(GameCatalogDenormalizer.DatamineQuestGroupsPath);
         var mythicQuests = GameCatalogDenormalizer.ReadDatamineMythicQuests(
@@ -117,11 +118,14 @@ public static class GameCatalogLoader
                 LoadDatamine<List<DatamineCampaignEvent>>(GameCatalogDenormalizer.DatamineCampaignEventsPath))
             .ToDictionary(pair => pair.Key, pair => AssignCampaignBattleIndices(pair.Value), StringComparer.Ordinal);
 
+        var battleSets = LoadDatamine<Dictionary<string, JsonElement>>(GameCatalogDenormalizer.DatamineBattleSetsPath);
+        var survivalSeasons = GameCatalogDenormalizer.ReadDatamineSurvivalSeasons(battleSets, JsonOptions);
+
         var lresByEvent = GameCatalogDenormalizer.ReadDatamineLres(
             LoadDataset<Dictionary<string, GameCatalogLreCuration>>(GameCatalogDatasets.LreCuration),
             new DatamineLreSources(
                 LoadDatamine<List<DatamineLegendaryHeroEvent>>(GameCatalogDenormalizer.DatamineLegendaryHeroEventsPath),
-                LoadDatamine<Dictionary<string, JsonElement>>(GameCatalogDenormalizer.DatamineBattleSetsPath),
+                battleSets,
                 questGroups,
                 tieredProgressRewards,
                 LoadDatamine<List<DatamineShopSegment>>(GameCatalogDenormalizer.DatamineShopSegmentsPath),
@@ -153,6 +157,7 @@ public static class GameCatalogLoader
         var lreViews = GameCatalogDenormalizer.BuildLres(lresByEvent, unitsByFaction);
         var lreBattleViews = GameCatalogDenormalizer.BuildLreBattles(lresByEvent);
         var hordeModeTiersViews = GameCatalogDenormalizer.BuildHordeModeTiers(hordeModeTiersRaw);
+        var npcTiersViews = GameCatalogDenormalizer.BuildNpcTiers(npcTiersRaw);
         var eventDefinitionViews = GameCatalogDenormalizer.BuildEventDefinitions(eventDefinitions, hseScoring);
         var calendarDay = new DateTimeOffset(asOf.UtcDateTime.Date, TimeSpan.Zero);
         var eventsCalendar = GameCatalogDenormalizer.BuildEventsCalendar(eventDefinitions, eventOccurrences, calendarDay);
@@ -166,6 +171,19 @@ public static class GameCatalogLoader
             unitsByFaction.Values.SelectMany(faction => faction.Mows).ToArray());
         var questEventViews = GameCatalogDenormalizer.BuildQuestEvents(questEvents);
         var questCrateViews = GameCatalogDenormalizer.BuildQuestCrates(questCrates);
+        // Built last: it inverts the finished views above, so every group and battle id it names is served.
+        var npcEncounterViews = GameCatalogDenormalizer.BuildNpcEncounters(new NpcEncounterSourceData(
+            npcList,
+            unitsByFaction.Values.SelectMany(faction => faction.Characters).Select(character => character.Id).ToHashSet(StringComparer.Ordinal),
+            campaignBattleViews,
+            campaignDefinitionViews,
+            lreBattleViews,
+            questEventViews,
+            incursionViews,
+            raidBossesView,
+            raidBossRawData.UnitSets,
+            survivalSeasons,
+            onslaught.TierWaves));
 
         // Served dataset hashes are computed over the canonical JSON of each denormalized payload; the payload
         // types are recorded on the way for the schema hash.
@@ -193,6 +211,7 @@ public static class GameCatalogLoader
             [GameCatalogDatasets.Lres] = HashServed(GameCatalogDatasets.Lres, lreViews),
             [GameCatalogDatasets.LreBattles] = HashServed(GameCatalogDatasets.LreBattles, lreBattleViews),
             [GameCatalogDatasets.HordeModeTiers] = HashServed(GameCatalogDatasets.HordeModeTiers, hordeModeTiersViews),
+            [GameCatalogDatasets.NpcTiers] = HashServed(GameCatalogDatasets.NpcTiers, npcTiersViews),
             [GameCatalogDatasets.EventDefinitionsServed] = HashServed(GameCatalogDatasets.EventDefinitionsServed, eventDefinitionViews),
             [GameCatalogDatasets.EventsCalendar] = HashServed(GameCatalogDatasets.EventsCalendar, eventsCalendar),
             [GameCatalogDatasets.Shops] = HashServed(GameCatalogDatasets.Shops, shopViews),
@@ -208,6 +227,7 @@ public static class GameCatalogLoader
             [GameCatalogDatasets.ProgressionRules] = HashServed(GameCatalogDatasets.ProgressionRules, progressionRulesViews),
             [GameCatalogDatasets.Hre] = HashServed(GameCatalogDatasets.Hre, hreViews),
             [GameCatalogDatasets.Incursions] = HashServed(GameCatalogDatasets.Incursions, incursionViews),
+            [GameCatalogDatasets.NpcEncounters] = HashServed(GameCatalogDatasets.NpcEncounters, npcEncounterViews),
         };
 
         var schemaHash = GameCatalogContractHashing.ComputeContractHash(payloadTypes, JsonOptions);
@@ -255,6 +275,7 @@ public static class GameCatalogLoader
             lreViews,
             lreBattleViews,
             hordeModeTiersViews,
+            npcTiersViews,
             eventDefinitionViews,
             eventsCalendar,
             shopViews,
@@ -269,7 +290,8 @@ public static class GameCatalogLoader
             globalValuesViews,
             progressionRulesViews,
             hreViews,
-            incursionViews);
+            incursionViews,
+            npcEncounterViews);
 
         var errors = GameCatalogValidator.Validate(snapshot);
         if (errors.Count > 0)

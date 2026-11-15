@@ -42,7 +42,7 @@ public sealed class CampaignDatamineReaderTests
         4,
         900,
         [
-            ["admecNpc1Vanguard:5", "admecNpc1Vanguard:1", "admecBossDestroyer:1", "powupHealth", "admecNpc1Vanguard:1"],
+            ["admecNpc1Vanguard:3", "admecNpc1Vanguard:1", "admecBossDestroyer:1", "powupHealth", "admecNpc1Vanguard:1"],
             ["blackNpc3TraitorGuardsman:0"],
         ],
         [2, 1],
@@ -129,17 +129,29 @@ public sealed class CampaignDatamineReaderTests
         Assert.Equal(new GameCatalogCampaignPotentialReward("upgHpC015", "upgradeCommon_eventStandard"), Assert.Single(battle.Rewards.Potential));
         Assert.Equal("upgradeCommon_eventStandardChallenge", Assert.Single(group.Battles[1].Rewards.Potential).ChanceId);
 
-        // The allied team and the power-up are not enemies; a boss index is 1-based, an npc's 0-based and capped.
+        // The allied team and the power-up are not enemies; every index is 1-based.
         Assert.Equal(4, battle.EnemiesTotal);
         Assert.Equal(["AdeptusMechanicus"], battle.EnemiesFactions);
         Assert.Equal(["Exitor-Rho", "Skitarii Vanguard"], battle.EnemiesTypes);
         Assert.Equal(
             [
-                new GameCatalogCampaignDetailedEnemy("admecBossDestroyer", "Exitor-Rho", 1, 3, "Stone3"),
-                new GameCatalogCampaignDetailedEnemy("admecNpc1Vanguard", "Skitarii Vanguard", 2, 0, "Stone2"),
-                new GameCatalogCampaignDetailedEnemy("admecNpc1Vanguard", "Skitarii Vanguard", 1, 1, "Stone3"),
+                new GameCatalogCampaignDetailedEnemy("admecBossDestroyer", "Exitor-Rho", 1, 3, "Stone3", 0),
+                new GameCatalogCampaignDetailedEnemy("admecNpc1Vanguard", "Skitarii Vanguard", 2, 0, "Stone1", 0),
+                new GameCatalogCampaignDetailedEnemy("admecNpc1Vanguard", "Skitarii Vanguard", 1, 1, "Stone3", 2),
             ],
             battle.DetailedEnemyTypes);
+    }
+
+    [Theory]
+    [InlineData(0)]
+    [InlineData(4)]
+    public void AnEnemyIndexOutsideItsStatRowsFailsTheLoad(int index)
+    {
+        var error = Assert.Throws<InvalidOperationException>(() => Read(
+            Curation(),
+            Battle("01") with { Units = [[$"admecNpc1Vanguard:{index}"], ["blackNpc3TraitorGuardsman:0"]] }));
+
+        Assert.Contains($"enemy 'admecNpc1Vanguard:{index}' points past its 3 stat rows", error.Message, StringComparison.Ordinal);
     }
 
     [Fact]
@@ -196,6 +208,18 @@ public sealed class CampaignDatamineReaderTests
         Assert.Equal(("elite1", "Ultramarines", "Imperial"), (elite.GroupId, elite.Faction, elite.AlliesAlliance));
         Assert.Equal(core, elite.CoreCharacters);
         Assert.Equal(["Sisterhood", "Ultramarines"], elite.AlliesFactions);
+        // An Elite group follows its Standard group, whose id is the campaign id.
+        Assert.Equal("campaign1", elite.RequiredCampaignGroupId);
+
+        // A storyline campaign that follows an event campaign names no served group.
+        var campaigns = Indomitus();
+        campaigns["Elite"] = [campaigns["Elite"][0] with
+        {
+            UnlockConditions = campaigns["Elite"][0].UnlockConditions! with { CompletedCampaigns = [new DatamineCompletedCampaign("Event", "eventStandard1")] },
+        }];
+        campaigns["Event"] = [new DatamineCampaign("eventStandard1", [Battle("01")], EventUnlock)];
+        var followsEvent = Assert.Throws<InvalidOperationException>(() => Read(new([new("elite1", "IE")]), campaigns));
+        Assert.Contains("not a storyline group", followsEvent.Message, StringComparison.Ordinal);
 
         var missing = Assert.Throws<InvalidOperationException>(() => Read(new([new("campaign1", "I")]), Indomitus()));
         Assert.Contains("must be curated", missing.Message, StringComparison.Ordinal);
@@ -262,6 +286,22 @@ public sealed class CampaignDatamineReaderTests
         var definitions = GameCatalogDenormalizer.BuildCampaignDefinitions(snapshot.CampaignGroups).ToDictionary(definition => definition.GroupId);
 
         Assert.Equal((1, 2, 4, 4, 6), (definitions["campaign1"].Number, definitions["mirror2"].Number, definitions["elite4"].Number, definitions["eliteMirror4"].Number, definitions["eventCampaign6"].Number));
+        // Each Elite group follows its Standard group and each Mirror Elite group its Mirror group; every other group
+        // (an event's Extremis follows its own group's Standard track) follows none.
+        var required = definitions.Values
+            .Where(definition => definition.RequiredCampaignGroupId is not null)
+            .ToDictionary(definition => definition.GroupId, definition => definition.RequiredCampaignGroupId);
+        Assert.Equal(new Dictionary<string, string?>
+        {
+            ["elite1"] = "campaign1",
+            ["elite2"] = "campaign2",
+            ["elite3"] = "campaign3",
+            ["elite4"] = "campaign4",
+            ["eliteMirror1"] = "mirror1",
+            ["eliteMirror2"] = "mirror2",
+            ["eliteMirror3"] = "mirror3",
+            ["eliteMirror4"] = "mirror4",
+        }, required);
         var indomitus = GameCatalogDenormalizer.BuildCampaignBattles(snapshot.CampaignGroups, [])
             .Where(battle => battle.CampaignGroupId == "campaign1")
             .ToDictionary(battle => battle.NodeNumber, battle => battle.LightningVictoryTurns);

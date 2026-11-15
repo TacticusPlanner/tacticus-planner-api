@@ -22,7 +22,8 @@ public sealed class GlobalValuesDenormalizerTests
         TerrifyingBonus: -30,
         BattleFatigueFleeChance: 10,
         BattleFatigueFleeChanceOverkill: 40,
-        TraitVariables: new Dictionary<string, JsonElement> { ["livingMetalHp"] = JsonSerializer.SerializeToElement(10) });
+        TraitVariables: new Dictionary<string, JsonElement> { ["livingMetalHp"] = JsonSerializer.SerializeToElement(10) },
+        PowerLevelNeededToUnlockEliteCampaign: new DatamineUnlockRequirement(25));
 
     private static Dictionary<string, JsonElement> Products(string json) =>
         JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(json)!;
@@ -46,6 +47,15 @@ public sealed class GlobalValuesDenormalizerTests
         Assert.Equal(8, values.StaminaShopTiers.Count);
         Assert.Equal(new GameCatalogStaminaShopTier("product_stamina_00", 60, 10, 25), values.StaminaShopTiers[0]);
         Assert.Equal(new GameCatalogStaminaShopTier("product_stamina_06", 100, 15, 1500), values.StaminaShopTiers[^1]);
+        Assert.Equal(25, values.EliteCampaignMinPowerLevel);
+    }
+
+    [Fact]
+    public void TheEliteCampaignPowerLevelIsRequired()
+    {
+        var error = Assert.Throws<InvalidOperationException>(() => GameCatalogDenormalizer.ReadDatamineGlobalValues(
+            Values with { PowerLevelNeededToUnlockEliteCampaign = null }, ["product_stamina_00"], StaminaProduct));
+        Assert.Contains("powerLevelNeededToUnlockEliteCampaign", error.Message, StringComparison.Ordinal);
     }
 
     [Fact]

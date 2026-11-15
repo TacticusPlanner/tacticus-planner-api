@@ -280,8 +280,8 @@ public sealed class UpdateLegendaryEventRunInputsEndpoint : LegendaryEventPlanEn
             summary.Summary = "Writes one run's inputs (missions, completed missions, bundle, close shards).";
             summary.Description = "Upserts the given run (1–3) and leaves the other runs untouched. Completed mission "
                 + "arrays list distinct catalog indices, absent means none, and are stored ascending; each count must be "
-                + "at least its completed array's length. Values equal to the stored run, or all zero for a run with "
-                + "none, succeed without bumping the revision.";
+                + "at least its completed array's length. Values equal to the stored run succeed without bumping the "
+                + "revision; all zeros for a run with none are stored.";
             DescribeWrite(summary);
         });
     }

@@ -276,6 +276,19 @@ public sealed class V1GoalImportService(
                 }
                 config = new CreateGoalConfigRequest(Rank: new RankTargetRequest(
                     currentRank, false, 0, targetRank, sourceGoal.RankPoint5 ?? false, sourceGoal.RankAppliedUpgrades ?? 0));
+                if (sourceGoal.UpgradesRarity is { Count: > 0 } upgradesRarity)
+                {
+                    // A rarity-filtered Rank goal is a pre-farm, not a rank-up: it becomes an Upgrade goal, so it
+                    // no longer shares (and merges into) a full Rank goal's target key.
+                    goalType = GoalType.Upgrade;
+                    var rarityConfig = RarityUpgradeConfig(entityId, config.Rank!, upgradesRarity);
+                    if (rarityConfig is null)
+                    {
+                        return (null, Skipped(sourceGoal, entityType, entityId, goalType, "target_already_reached",
+                            "No base material of the chosen rarities is left in the goal's rank range."));
+                    }
+                    config = rarityConfig;
+                }
                 break;
 
             case 2:
@@ -437,9 +450,9 @@ public sealed class V1GoalImportService(
             .GroupBy(goal => new UnitKey(goal.Key.EntityType, goal.Key.EntityId))
             .Where(unitGoals => owners.Uses(unitGoals.Key, upgradeId))
             .Select(unitGoals => (Unit: unitGoals.Key, Need: MaterialNeed(unitGoals.Key, upgradeId, unitGoals.ToList(), playerSnapshot)))
-            .Where(entry => entry.Need > 0)
-            .Select(entry => UpgradeCandidate(entry.Unit, upgradeId, entry.Need, originalIndex, sourceGoal.Notes, inDailyPlanning,
-                null, linkedIds))
+            .Where(entry => entry.Need.Quantity > 0)
+            .Select(entry => UpgradeCandidate(entry.Unit, upgradeId, entry.Need.Quantity, originalIndex, sourceGoal.Notes, inDailyPlanning,
+                null, linkedIds, entry.Need))
             .ToList();
 
         if (candidates.Count == 0)
@@ -457,12 +470,14 @@ public sealed class V1GoalImportService(
 
     private static TranslatedGoal UpgradeCandidate(
         UnitKey unit, string upgradeId, int quantity, int originalIndex, string? notes, bool inDailyPlanning,
-        string? createdCode, IReadOnlyList<string>? linkedIds) =>
+        string? createdCode, IReadOnlyList<string>? linkedIds, PreFarmNeed? ranges = null) =>
         new(
             // Grouped per (unit, material) so the same material merges while different materials stay
             // separate Upgrade goals; the persisted goal's own target key is checked under the lock.
             new GoalKey(unit.EntityType, unit.EntityId, GoalType.Upgrade, "material:" + upgradeId),
-            new CreateGoalConfigRequest(Upgrade: new UpgradeTargetRequest([new UpgradeMaterialTargetRequest(upgradeId, quantity)])),
+            new CreateGoalConfigRequest(Upgrade: new UpgradeTargetRequest(
+                [new UpgradeMaterialTargetRequest(upgradeId, quantity)],
+                ranges?.RankRange, ranges?.ActiveRange, ranges?.PassiveRange)),
             originalIndex, notes, inDailyPlanning)
         {
             CreatedCode = createdCode,
@@ -471,48 +486,138 @@ public sealed class V1GoalImportService(
             LinkedSourceGoalIds = linkedIds,
         };
 
+    /// <summary>A pre-farm Upgrade goal's quantity, and the ranges that link it to the unit's imported Rank or
+    /// Ability goal (the planner counts the Upgrade goal's pieces inside those slots toward that goal). A range
+    /// is set only when a linked goal of that kind exists.</summary>
+    private sealed record PreFarmNeed(
+        int Quantity,
+        UpgradeRangeRequest? RankRange = null,
+        UpgradeRangeRequest? ActiveRange = null,
+        UpgradeRangeRequest? PassiveRange = null);
+
     /// <summary>How many of <paramref name="upgradeId"/> the unit still needs for its linked goals, counting
     /// every crafted upgrade down through its recipe: a Character from its live rank up to its highest linked
     /// Rank target (the whole remaining ladder when none is a Rank goal); a Mow from its live ability levels up
     /// to its linked Ability targets (both full tracks when none is an Ability goal). Upgrades already applied at
-    /// the current rank are not netted out, nor is inventory — the goal's own estimate does that.</summary>
-    private int MaterialNeed(
+    /// the current rank are not netted out, nor is inventory — the goal's own estimate does that. With a linked
+    /// Rank target, the rank range runs from the live rank to that target, one rank further when the target
+    /// names some of its own rank's slots (.5 or applied upgrades); with linked Ability targets, each track
+    /// range runs from the live level to the highest target.</summary>
+    private PreFarmNeed MaterialNeed(
         UnitKey unit, string upgradeId, IReadOnlyList<TranslatedGoal> unitGoals, PlayerDataSnapshot playerSnapshot)
     {
         var playerUnit = ResolvePlayerUnit(unit, playerSnapshot);
         var ids = new List<string>();
+        UpgradeRangeRequest? rankRange = null, activeRange = null, passiveRange = null;
         if (unit.EntityType == GoalEntityType.Character)
         {
             var steps = catalog.Current.CharacterViews.FirstOrDefault(item => item.Id == unit.EntityId)?.RankUpUpgrades;
-            if (steps is null) return 0;
+            if (steps is null) return new PreFarmNeed(0);
             var start = (int)((playerUnit as PlayerCharacterRecord)?.Rank ?? UnitRank.Stone1);
             var target = unitGoals
                 .Select(goal => goal.Config.Rank)
                 .OfType<RankTargetRequest>()
                 .MaxBy(rank => (rank.End, rank.EndPointFive ? 1 : 0, rank.EndAppliedUpgrades));
-            var end = target?.End ?? steps.Count;
-            ids.AddRange(steps.Skip(start).Take(Math.Max(0, end - start)).SelectMany(step => step.UpgradeIds));
-            if (target is not null && steps.ElementAtOrDefault(end) is { } endStep)
-            {
-                // Upgrades are column-major (two rows of three), so a ".5" target is the top row: 0, 2 and 4.
-                ids.AddRange(target.EndAppliedUpgrades > 0
-                    ? endStep.UpgradeIds.Take(target.EndAppliedUpgrades)
-                    : target.EndPointFive ? endStep.UpgradeIds.Where((_, index) => index % 2 == 0) : Enumerable.Empty<string>());
-            }
+            ids.AddRange(RankSpanUpgradeIds(steps, start, target));
+            if (target is not null) rankRange = RankSpanRange(start, target);
         }
         else
         {
             var mow = catalog.Current.MowList.FirstOrDefault(item => item.Id == unit.EntityId);
-            if (mow is null) return 0;
+            if (mow is null) return new PreFarmNeed(0);
             var abilityTargets = unitGoals.Select(goal => goal.Config.Ability).OfType<AbilityTargetRequest>().ToList();
             var activeEnd = abilityTargets.Count > 0 ? abilityTargets.Max(ability => ability.ActiveEnd) : mow.PrimaryAbility.Recipes.Count + 1;
             var passiveEnd = abilityTargets.Count > 0 ? abilityTargets.Max(ability => ability.PassiveEnd) : mow.SecondaryAbility.Recipes.Count + 1;
             ids.AddRange(RecipeRange(mow.PrimaryAbility.Recipes, playerUnit?.Abilities.ElementAtOrDefault(0)?.Level ?? 0, activeEnd));
             ids.AddRange(RecipeRange(mow.SecondaryAbility.Recipes, playerUnit?.Abilities.ElementAtOrDefault(1)?.Level ?? 0, passiveEnd));
+            if (abilityTargets.Count > 0)
+            {
+                activeRange = TrackRange(playerUnit?.Abilities.ElementAtOrDefault(0)?.Level ?? 0, activeEnd, mow.PrimaryAbility.Recipes.Count);
+                passiveRange = TrackRange(playerUnit?.Abilities.ElementAtOrDefault(1)?.Level ?? 0, passiveEnd, mow.SecondaryAbility.Recipes.Count);
+            }
         }
 
         var upgrades = catalog.Current.UpgradeViews.ToDictionary(item => item.Id, StringComparer.Ordinal);
-        return ids.Sum(id => CountWithin(id, upgradeId, upgrades, 0));
+        return new PreFarmNeed(ids.Sum(id => CountWithin(id, upgradeId, upgrades, 0)), rankRange, activeRange, passiveRange);
+    }
+
+    /// <summary>The rank-up upgrade ids from <paramref name="start"/> up to <paramref name="target"/> (the whole
+    /// remaining ladder without one), including the target rank's own slots a .5 or applied-upgrades target names.</summary>
+    private static IEnumerable<string> RankSpanUpgradeIds(
+        IReadOnlyList<GameCatalogCharacterRankUp> steps, int start, RankTargetRequest? target)
+    {
+        var end = target?.End ?? steps.Count;
+        var ids = steps.Skip(start).Take(Math.Max(0, end - start)).SelectMany(step => step.UpgradeIds);
+        if (target is null || steps.ElementAtOrDefault(end) is not { } endStep) return ids;
+        // Upgrades are column-major (two rows of three), so a ".5" target is the top row: 0, 2 and 4.
+        return ids.Concat(target.EndAppliedUpgrades > 0
+            ? endStep.UpgradeIds.Take(target.EndAppliedUpgrades)
+            : target.EndPointFive ? endStep.UpgradeIds.Where((_, index) => index % 2 == 0) : Enumerable.Empty<string>());
+    }
+
+    /// <summary>An Upgrade goal's rank range covering <paramref name="start"/> up to <paramref name="target"/>:
+    /// one rank further when the target names some of its own rank's slots, capped at Adamantine3. Null when
+    /// nothing is left to raise.</summary>
+    private static UpgradeRangeRequest? RankSpanRange(int start, RankTargetRequest target)
+    {
+        var partialEnd = target.EndAppliedUpgrades > 0 || target.EndPointFive;
+        var rangeEnd = Math.Min(partialEnd ? target.End + 1 : target.End, (int)UnitRank.Adamantine3);
+        return start < rangeEnd ? new UpgradeRangeRequest(start, rangeEnd) : null;
+    }
+
+    private static readonly string[] V1RarityNames = ["Common", "Uncommon", "Rare", "Epic", "Legendary", "Mythic"];
+
+    /// <summary>A V1 rarity-filtered Rank goal as an Upgrade goal: every base material of those rarities the
+    /// character's rank-up slots from <paramref name="rank"/>'s start to its target take (counted down through
+    /// crafted recipes, in ladder order), over that rank range. Null when none is left.</summary>
+    private CreateGoalConfigRequest? RarityUpgradeConfig(string characterId, RankTargetRequest rank, IReadOnlyList<int> v1Rarities)
+    {
+        var steps = catalog.Current.CharacterViews.FirstOrDefault(item => item.Id == characterId)?.RankUpUpgrades;
+        var rankRange = RankSpanRange(rank.Start, rank);
+        if (steps is null || rankRange is null) return null;
+        var rarities = v1Rarities
+            .Where(rarity => rarity >= 0 && rarity < V1RarityNames.Length)
+            .Select(rarity => V1RarityNames[rarity])
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var upgrades = catalog.Current.UpgradeViews.ToDictionary(item => item.Id, StringComparer.Ordinal);
+        var counts = new Dictionary<string, int>(StringComparer.Ordinal);
+        var order = new List<string>();
+        foreach (var id in RankSpanUpgradeIds(steps, rank.Start, rank))
+            AddBaseCounts(id, 1, upgrades, counts, order, 0);
+        var targets = order
+            .Where(id => upgrades.TryGetValue(id, out var upgrade) && rarities.Contains(upgrade.Rarity))
+            .Select(id => new UpgradeMaterialTargetRequest(id, counts[id]))
+            .ToList();
+        return targets.Count == 0
+            ? null
+            : new CreateGoalConfigRequest(Upgrade: new UpgradeTargetRequest(targets, rankRange));
+    }
+
+    /// <summary>Adds <paramref name="multiplier"/> of <paramref name="id"/>'s base materials to
+    /// <paramref name="counts"/>, through its recipe when crafted; <paramref name="order"/> keeps first-seen order.
+    /// The depth bound stops a recipe cycle.</summary>
+    private static void AddBaseCounts(
+        string id, int multiplier, IReadOnlyDictionary<string, GameCatalogUpgradeView> upgrades,
+        Dictionary<string, int> counts, List<string> order, int depth)
+    {
+        if (depth <= 16 && upgrades.TryGetValue(id, out var upgrade) && upgrade.Craftable)
+        {
+            foreach (var ingredient in upgrade.Recipe)
+                AddBaseCounts(ingredient.Material, multiplier * ingredient.Count, upgrades, counts, order, depth + 1);
+            return;
+        }
+
+        if (!counts.TryAdd(id, multiplier)) counts[id] += multiplier;
+        else order.Add(id);
+    }
+
+    /// <summary>A Mow track range from the live level to <paramref name="end"/>, within the track's ladder
+    /// (<c>1 &lt;= start &lt; end &lt;= recipeRows + 1</c>); null when there is nothing left to raise.</summary>
+    private static UpgradeRangeRequest? TrackRange(int level, int end, int recipeRows)
+    {
+        var start = Math.Max(1, level);
+        var cappedEnd = Math.Min(end, recipeRows + 1);
+        return start < cappedEnd ? new UpgradeRangeRequest(start, cappedEnd) : null;
     }
 
     /// <summary>A Mow ability track's recipes for levels <paramref name="start"/> up to <paramref name="end"/>:
@@ -637,16 +742,21 @@ public sealed class V1GoalImportService(
             {
                 // Material goals landing on the same unit with the same material merge into one, at the
                 // earliest one's priority. Each target was sized for the unit's own ladder, so the repeated
-                // material keeps the larger quantity rather than the sum.
+                // material keeps the larger quantity rather than the sum, and the ranges span all of them.
                 var targets = ordered
                     .SelectMany(goal => goal.Config.Upgrade!.Targets)
                     .GroupBy(target => target.UpgradeId, StringComparer.Ordinal)
                     .Select(targetGroup => new UpgradeMaterialTargetRequest(
                         targetGroup.Key, targetGroup.Max(target => target.Quantity)))
                     .ToList();
+                var upgradesInGroup = ordered.Select(goal => goal.Config.Upgrade!).ToList();
                 survivor = ordered[0] with
                 {
-                    Config = new CreateGoalConfigRequest(Upgrade: new UpgradeTargetRequest(targets)),
+                    Config = new CreateGoalConfigRequest(Upgrade: new UpgradeTargetRequest(
+                        targets,
+                        SpanRanges(upgradesInGroup.Select(upgrade => upgrade.RankRange)),
+                        SpanRanges(upgradesInGroup.Select(upgrade => upgrade.ActiveRange)),
+                        SpanRanges(upgradesInGroup.Select(upgrade => upgrade.PassiveRange)))),
                     Notes = JoinNotes(ordered.DistinctBy(goal => goal.OriginalIndex)),
                     InDailyPlanning = inDailyPlanning,
                 };
@@ -666,6 +776,13 @@ public sealed class V1GoalImportService(
         }
 
         return (survivors, mergedInto);
+    }
+
+    /// <summary>The smallest range covering every given one; null when none is set.</summary>
+    private static UpgradeRangeRequest? SpanRanges(IEnumerable<UpgradeRangeRequest?> ranges)
+    {
+        var set = ranges.OfType<UpgradeRangeRequest>().ToList();
+        return set.Count == 0 ? null : new UpgradeRangeRequest(set.Min(range => range.Start), set.Max(range => range.End));
     }
 
     /// <returns>The import's project, or null when nothing was committed.</returns>
@@ -772,9 +889,9 @@ public sealed class V1GoalImportService(
                 if (needsUnlock)
                 {
                     // Validated like every other synthesized/candidate goal before persisting (unlike the
-                    // synthesized Ascension path below, this one isn't structurally guaranteed valid: Unlock
-                    // is Character-only and further requires catalog shard-upgrade data — see
-                    // GoalTargetValidationService — neither of which NeedsUnlock checks).
+                    // synthesized Ascension path below, this one isn't structurally guaranteed valid: a
+                    // Character Unlock requires catalog shard-source data — see GoalTargetValidationService —
+                    // which NeedsUnlock doesn't check).
                     var unlockConfig = new CreateGoalConfigRequest();
                     var unlockError = await targetValidation.ValidateAsync(
                         profileId, unitKey.EntityType, unitKey.EntityId, GoalType.Unlock, unlockConfig, ct);
@@ -909,6 +1026,25 @@ public sealed class V1GoalImportService(
                 }
             }
 
+            // A pre-farm's Upgrade goal links to the Rank/Ability goals it was for, as created on its own unit.
+            var stagedBySourceId = staged
+                .Where(entry => sourceIdBySlot[entry.Key] is not null)
+                .GroupBy(entry => sourceIdBySlot[entry.Key]!, StringComparer.Ordinal)
+                .ToDictionary(group => group.Key, group => group.Select(entry => entry.Value.Goal).ToList(), StringComparer.Ordinal);
+            foreach (var (goal, candidate) in staged.Values)
+            {
+                if (goal.GoalType != GoalType.Upgrade || candidate.LinkedSourceGoalIds is not { Count: > 0 } linkedSourceIds)
+                    continue;
+                var linkable = GoalLinkRules.LinkableType(goal.EntityType);
+                goal.LinkedGoalIds = linkedSourceIds
+                    .SelectMany(sourceId => stagedBySourceId.GetValueOrDefault(sourceId) ?? [])
+                    .Where(linked => linked.EntityType == goal.EntityType && linked.EntityId == goal.EntityId && linked.GoalType == linkable)
+                    .Select(linked => linked.Id.Value)
+                    .Distinct()
+                    .Take(GoalLinkRules.MaxLinks)
+                    .ToList();
+            }
+
             if (pending.Count > 0)
             {
                 db.Projects.Add(project);
@@ -982,8 +1118,8 @@ public sealed class V1GoalImportService(
 
     /// <summary>Whether a Character absent from the roster needs a synthesized Unlock: not when the unit's
     /// imported goals include one, or the account already has one (v1-goal-import: "Missing prerequisites are
-    /// created automatically by the same rules as manual creation"). Unlock is only ever valid for a Character
-    /// (GoalTargetValidationService), so a Mow missing from the roster never gets one.</summary>
+    /// created automatically by the same rules as manual creation"). Only a Character gets a synthesized Unlock;
+    /// a Mow missing from the roster never gets one.</summary>
     private static bool NeedsUnlock(
         UnitKey unitKey, List<TranslatedGoal> unitCandidates, PlayerBaseUnitRecord? playerUnit,
         Dictionary<GoalKey, ExistingGoalRef> existingByKey) =>

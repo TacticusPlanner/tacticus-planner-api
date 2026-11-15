@@ -51,5 +51,11 @@ public class Goal : BaseEntity<GoalId>, IRevisionedEntity
     /// combined-creation flow (a later phase) links goals together.</summary>
     public List<Guid> DependsOn { get; set; } = [];
 
+    /// <summary>Upgrade goals only: the same unit's Rank (Character) or Ability (Machine of War) goals this
+    /// goal pre-farms for, in link order. The planner counts the goal's pieces inside those goals' slots toward
+    /// them; empty means the implicit link (same unit, overlapping range). Deleting a linked goal removes it
+    /// here.</summary>
+    public List<Guid> LinkedGoalIds { get; set; } = [];
+
     public virtual Profile? Profile { get; set; }
 }

@@ -13,8 +13,13 @@ public sealed record DatamineOnslaught(
 
 public sealed record DatamineOnslaughtTier(int Tier);
 
-// `rewards` is keyed by alliance; every wave of a round gives the same badge.
-public sealed record DatamineOnslaughtWave(int Tier, int Round, IReadOnlyDictionary<string, string>? Rewards);
+// `rewards` is keyed by alliance; every wave of a round gives the same badge. `enemies` are "{npcId}:{N}" strings
+// (read only by npc-encounters).
+public sealed record DatamineOnslaughtWave(
+    int Tier,
+    int Round,
+    IReadOnlyDictionary<string, string>? Rewards,
+    IReadOnlyList<string>? Enemies = null);
 
 // A row applies to heroes up to maxProgressionIndex; `rewards` are "shards_[heroId]:2-3"-style strings.
 public sealed record DatamineOnslaughtHeroRewards(int Tier, int MaxProgressionIndex, IReadOnlyList<string> Rewards);

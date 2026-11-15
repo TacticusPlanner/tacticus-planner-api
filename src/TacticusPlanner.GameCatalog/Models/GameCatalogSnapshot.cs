@@ -55,6 +55,7 @@ public sealed record GameCatalogSnapshot(
     IReadOnlyList<GameCatalogLreView> LreViews,
     IReadOnlyList<GameCatalogLreBattleView> LreBattleViews,
     IReadOnlyList<GameCatalogHordeModeTiers> HordeModeTiersViews,
+    IReadOnlyList<GameCatalogNpcTiers> NpcTiersViews,
     IReadOnlyList<GameCatalogEventDefinition> EventDefinitionViews,
     IReadOnlyDictionary<string, IReadOnlyList<GameCatalogEventsCalendarEntry>> EventsCalendar,
     IReadOnlyList<GameCatalogShopView> ShopViews,
@@ -69,7 +70,8 @@ public sealed record GameCatalogSnapshot(
     IReadOnlyList<GameCatalogGlobalValues> GlobalValuesViews,
     IReadOnlyList<GameCatalogProgressionRules> ProgressionRulesViews,
     IReadOnlyList<GameCatalogHre> HreViews,
-    IReadOnlyList<GameCatalogIncursion> IncursionViews
+    IReadOnlyList<GameCatalogIncursion> IncursionViews,
+    IReadOnlyList<GameCatalogNpcEncounter> NpcEncounterViews
 )
 {
     // The manifest served to clients: release metadata + per-dataset hash and download url. Built from the

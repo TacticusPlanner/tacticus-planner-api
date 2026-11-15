@@ -27,7 +27,8 @@ public sealed class HandlerCommandCeilingTests(PlannerApiFactory factory) : ICla
     private const int LegendaryEventPlanMutation = 3;
     // Three more small reads than the single whole-season load they replace, in exchange for O(1) rows.
     private const int RaidStatus = 7;
-    private const int PlayerSync = 6;
+    // Plus the automatic roster snapshot check: its savepoint, the setting, the profile lock and one recency read.
+    private const int PlayerSync = 10;
 
     private static readonly CreateGoalRequest Rank = new(
         GoalEntityType.Character,

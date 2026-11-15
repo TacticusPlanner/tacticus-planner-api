@@ -25,12 +25,19 @@ The record SHALL carry `maxStamina`, `staminaRegenerationTime`, `staminaRegenera
 `wavesStaminaRegenerationTime`, `wavesStaminaRegenerationAmount`, `campaignLevelMaxStamina`,
 `campaignLevelStaminaRegenerationTime`, `campaignLevelStaminaRegenerationAmount`, `minUnitsNeededForBattle`,
 `maxUnitsPossibleForBattle`, `terrifyingBonus`, `battleFatigueFleeChance`, `battleFatigueFleeChanceOverkill` and
-`traitVariables` (the game's map, sorted by key), with times in seconds.
+`traitVariables` (the game's map, sorted by key), with times in seconds. It SHALL also carry
+`eliteCampaignMinPowerLevel`, the Power Level that opens the Elite and Mirror Elite campaigns (the game's
+`powerLevelNeededToUnlockEliteCampaign.PowerLevel`); a missing or non-positive value SHALL fail the load.
 
 #### Scenario: A trait variable
 
 - **WHEN** the dataset is served at datamine `v1.43.157.2989`
 - **THEN** `traitVariables.deathToTheFalseEmperorExtraHitChance` is 50
+
+#### Scenario: Elite campaign Power Level
+
+- **WHEN** the dataset is served at datamine `v1.43.157.2989`
+- **THEN** `eliteCampaignMinPowerLevel` is 25
 
 ### Requirement: Each energy shop tier is resolved to its rewards and cost
 

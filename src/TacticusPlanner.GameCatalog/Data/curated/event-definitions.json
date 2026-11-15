@@ -123,6 +123,12 @@
     "requiredParameters": []
   },
   {
+    "id": "hse-global-blood-tithe",
+    "type": "HomeScreenEvent",
+    "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },
+    "requiredParameters": []
+  },
+  {
     "id": "hse-arsenal-of-war",
     "type": "HomeScreenEvent",
     "recurrence": { "kind": "None", "intervalDays": null, "durationDays": null, "anchorUtc": null },

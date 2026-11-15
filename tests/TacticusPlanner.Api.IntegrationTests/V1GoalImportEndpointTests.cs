@@ -8,6 +8,7 @@ using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.PlayerData.Chunks;
 using TacticusPlanner.Domain.Projects;
+using TacticusPlanner.GameCatalog;
 using TacticusPlanner.GameDomain;
 using TacticusPlanner.Persistence;
 
@@ -279,6 +280,37 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         Assert.Equal((int)UnitRank.Bronze1, goal.Config.Rank!.End);
         Assert.Contains("first", goal.Notes);
         Assert.Contains("second", goal.Notes);
+    }
+
+    [Fact]
+    public async Task ARarityFilteredRankGoalBecomesAnUpgradeGoalBesideTheFullRankGoal()
+    {
+        var (client, subject) = await CreateProvisionedClientAsync();
+        await SeedPlayerDataSnapshotAsync(subject, [Character(CharacterId, xpLevel: 60)]);
+
+        var body = await ImportGoalsAsync(
+            client,
+            [
+                RankGoal("r-common", CharacterId, 1, UnitRank.Bronze1) with { UpgradesRarity = [0] },
+                RankGoal("r-full", CharacterId, 2, UnitRank.Bronze1),
+            ],
+            automaticPrerequisites: false);
+
+        Assert.All(body.Outcomes, outcome => Assert.Equal(V1GoalOutcomeStatus.Created, outcome.Status));
+        Assert.Equal(GoalType.Rank, body.Outcomes.Single(o => o.SourceGoalId == "r-full").GoalType);
+        var upgradeGoal = await GetGoalAsync(client, GoalIdOf(body, "r-common"));
+        Assert.Equal(GoalType.Upgrade, upgradeGoal.GoalType);
+        var upgrade = upgradeGoal.Config.Upgrade!;
+        Assert.Equal(((int)UnitRank.Stone1, (int)UnitRank.Bronze1), (upgrade.RankRange!.Start, upgrade.RankRange.End));
+        Assert.NotEmpty(upgrade.Targets);
+        var upgrades = factory.Services.GetRequiredService<IGameCatalogProvider>().Current.UpgradeViews
+            .ToDictionary(item => item.Id);
+        Assert.All(upgrade.Targets, target =>
+        {
+            Assert.Equal("Common", upgrades[target.UpgradeId].Rarity);
+            Assert.False(upgrades[target.UpgradeId].Craftable);
+            Assert.True(target.Quantity > 0);
+        });
     }
 
     [Fact]
@@ -723,6 +755,19 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
             Assert.Equal(1, outcome.UpgradeQuantity);
         });
 
+        // Each Upgrade goal's rank range runs from the unit's live rank to its linked Rank goal's target, so
+        // the planner counts its pieces toward that Rank goal instead of farming them twice.
+        foreach (var outcome in preFarm)
+        {
+            var goal = await GetGoalAsync(client, outcome.GoalId!.Value);
+            var range = goal.Config.Upgrade!.RankRange!;
+            Assert.Equal(((int)UnitRank.Stone1, (int)UnitRank.Iron1), (range.Start, range.End));
+            Assert.Null(goal.Config.Upgrade.ActiveRange);
+            // And links to that unit's own imported Rank goal only.
+            var ownRank = outcome.EntityId == CharacterId ? "r1" : "r2";
+            Assert.Equal([GoalIdOf(body, ownRank)], goal.LinkedGoalIds);
+        }
+
         var priorities = await ImportPrioritiesAsync(client);
         var ordered = new[] { preFarm[0].GoalId!.Value, preFarm[1].GoalId!.Value, GoalIdOf(body, "r1"), GoalIdOf(body, "r2") }
             .Select(id => priorities[id])
@@ -751,6 +796,9 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
         var goal = await GetGoalAsync(client, survivor.GoalId!.Value);
         var target = Assert.Single(goal.Config.Upgrade!.Targets);
         Assert.Equal((SharedStoneUpgradeId, 10), (target.UpgradeId, target.Quantity));
+        // The pre-farm's range survives the merge with a range-less material goal.
+        var range = goal.Config.Upgrade.RankRange!;
+        Assert.Equal(((int)UnitRank.Stone1, (int)UnitRank.Iron1), (range.Start, range.End));
     }
 
     [Fact]
@@ -978,8 +1026,8 @@ public sealed class V1GoalImportEndpointTests(PlannerApiFactory factory) : IClas
     [Fact]
     public async Task UnlockIsNeverSynthesizedForAMachineOfWarNotInTheRoster()
     {
-        // Unlock is only ever a valid goal type for a Character (GoalTargetValidationService); a Mow
-        // absent from the roster must not get a synthesized Unlock attempt.
+        // The import only synthesizes Unlock for a Character (NeedsUnlock); a Mow absent from the roster
+        // must not get a synthesized Unlock attempt.
         var (client, subject) = await CreateProvisionedClientAsync();
         await SeedPlayerDataSnapshotAsync(subject, []); // account has player data, but not this Mow
 

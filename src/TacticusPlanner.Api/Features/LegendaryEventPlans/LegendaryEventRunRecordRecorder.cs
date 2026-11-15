@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using TacticusPlanner.Api.Features.RosterSnapshots;
 using TacticusPlanner.Domain.LegendaryEvents;
 using TacticusPlanner.Domain.PlayerData.Chunks;
 using TacticusPlanner.Domain.Profiles;
-using TacticusPlanner.Domain.RosterSnapshots;
 using TacticusPlanner.GameCatalog;
 using TacticusPlanner.GameCatalog.Models;
 using TacticusPlanner.Persistence;
@@ -58,7 +58,7 @@ public sealed class LegendaryEventRunRecordRecorder(PlannerDbContext db, IGameCa
                     Points = entry.CurrentPoints,
                     Lanes = lanes,
                     Teams = await LoadTeamsAsync(profileId, eventId, ct),
-                    Roster = NewRoster(characters, mows, now),
+                    Roster = RosterSnapshotFactory.Create(characters, mows, now),
                 });
                 continue;
             }
@@ -71,7 +71,7 @@ public sealed class LegendaryEventRunRecordRecorder(PlannerDbContext db, IGameCa
             latest.Points = entry.CurrentPoints;
             latest.Lanes = lanes;
             latest.Teams = await LoadTeamsAsync(profileId, eventId, ct);
-            latest.Roster = NewRoster(characters, mows, now);
+            latest.Roster = RosterSnapshotFactory.Create(characters, mows, now);
         }
     }
 
@@ -103,16 +103,6 @@ public sealed class LegendaryEventRunRecordRecorder(PlannerDbContext db, IGameCa
             .Select(team => team.Clone())
             .ToList();
     }
-
-    private static RosterSnapshot NewRoster(
-        IReadOnlyList<PlayerCharacterRecord> characters, IReadOnlyList<PlayerMowRecord> mows, DateTimeOffset now) =>
-        new()
-        {
-            TakenAt = now,
-            CatalogVersion = GameCatalogRelease.Version,
-            Characters = characters.OrderBy(unit => unit.UnitId.Value, StringComparer.Ordinal).Select(CloneCharacter).ToList(),
-            Mows = mows.OrderBy(unit => unit.UnitId.Value, StringComparer.Ordinal).Select(CloneMow).ToList(),
-        };
 
     private static bool HasEncounters(LreProgressRecord entry) =>
         entry.Alpha?.Encounters.Count > 0 || entry.Beta?.Encounters.Count > 0 || entry.Gamma?.Encounters.Count > 0;
@@ -178,44 +168,4 @@ public sealed class LegendaryEventRunRecordRecorder(PlannerDbContext db, IGameCa
 
         return true;
     }
-
-    // The synced chunk instances may also be owned by the player-data snapshot in this same unit of work, and EF
-    // tracks an owned instance under one owner only, so the record's roster gets its own copies.
-    private static PlayerCharacterRecord CloneCharacter(PlayerCharacterRecord unit) =>
-        new()
-        {
-            UnitId = unit.UnitId,
-            ProgressionIndex = unit.ProgressionIndex,
-            Xp = unit.Xp,
-            XpLevel = unit.XpLevel,
-            Shards = unit.Shards,
-            MythicShards = unit.MythicShards,
-            Abilities = unit.Abilities.Select(CloneAbility).ToList(),
-            AppliedUpgradeSlots = [.. unit.AppliedUpgradeSlots],
-            Rank = unit.Rank,
-            EquippedItems = unit.EquippedItems
-                .Select(item => new PlayerUnitEquipmentSlotRecord
-                {
-                    SlotId = item.SlotId,
-                    EquipmentId = item.EquipmentId,
-                    Level = item.Level,
-                })
-                .ToList(),
-        };
-
-    private static PlayerMowRecord CloneMow(PlayerMowRecord unit) =>
-        new()
-        {
-            UnitId = unit.UnitId,
-            ProgressionIndex = unit.ProgressionIndex,
-            Xp = unit.Xp,
-            XpLevel = unit.XpLevel,
-            Shards = unit.Shards,
-            MythicShards = unit.MythicShards,
-            Abilities = unit.Abilities.Select(CloneAbility).ToList(),
-            AppliedUpgradeSlots = [.. unit.AppliedUpgradeSlots],
-        };
-
-    private static PlayerUnitAbilityRecord CloneAbility(PlayerUnitAbilityRecord ability) =>
-        new() { AbilityId = ability.AbilityId, Level = ability.Level };
 }

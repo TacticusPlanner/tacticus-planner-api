@@ -5,6 +5,7 @@ using TacticusPlanner.Domain.LegendaryEvents;
 using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Domain.Projects;
+using TacticusPlanner.Domain.RosterSnapshots;
 using Vogen;
 
 namespace TacticusPlanner.Persistence;
@@ -28,4 +29,5 @@ namespace TacticusPlanner.Persistence;
 [EfCoreConverter<LegendaryEventPlanId>]
 [EfCoreConverter<LegendaryEventTeamId>]
 [EfCoreConverter<LegendaryEventRunRecordId>]
+[EfCoreConverter<PersonalRosterSnapshotId>]
 internal sealed partial class VogenEfCoreConverters;

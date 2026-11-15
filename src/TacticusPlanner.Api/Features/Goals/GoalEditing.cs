@@ -218,18 +218,8 @@ public sealed class GoalTargetEditor(
             _ => new CreateGoalConfigRequest(Upgrade: target.Upgrade),
         };
 
-        // The rarity cap on Ability targets honors the unit's own Ascension prerequisites, like combined
-        // creation does: an Ascension reachable through the stored dependency closure counts as reachable
-        // progression.
-        UnitProgression? floor = null;
-        if (goal.DependsOn.Count > 0)
-        {
-            var unitGoals = await AscensionFloor.LoadUnitGoalsAsync(db, goal.EntityType, goal.EntityId, ct);
-            floor = AscensionFloor.Reachable(goal.DependsOn, unitGoals);
-        }
-
         return await validation.ValidateAsync(
-            profileId, goal.EntityType, goal.EntityId, goal.GoalType, request, ct, floor, againstBaseline: true);
+            profileId, goal.EntityType, goal.EntityId, goal.GoalType, request, ct, againstBaseline: true);
     }
 }
 

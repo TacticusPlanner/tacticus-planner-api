@@ -92,6 +92,25 @@ public sealed class GameCatalogDatasetCachingTests(GameCatalogApiFactory factory
     }
 
     [Fact]
+    public async Task NpcEncountersAreServedAnonymouslyWithEveryBattleFieldWritten()
+    {
+        var client = factory.CreateClient();
+        var response = await GetAsync(client, "/api/v1/game-catalog/npc-encounters");
+
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+        var envelope = JsonNode.Parse(await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken))!;
+        Assert.Equal("npc-encounters", envelope["datasetKey"]!.ToString());
+        var records = envelope["data"]!.AsArray();
+        Assert.NotEmpty(records);
+        // Nullable battle fields are written as null, not omitted (the client schema requires every field).
+        var questBattle = records.First(record => (string?)record!["source"] == "questEvent")!["battles"]!.AsArray()[0]!.AsObject();
+        Assert.Equal(
+            ["battleId", "track", "tier", "number", "challenge", "role", "rounds", "count", "levels"],
+            questBattle.Select(property => property.Key));
+        Assert.Null(questBattle["battleId"]);
+    }
+
+    [Fact]
     public async Task MetadataOnlyReleaseAndContentChangeInvalidateTheValidator()
     {
         var real = factory.Services.GetRequiredService<IGameCatalogProvider>().Current;

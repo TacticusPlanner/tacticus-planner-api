@@ -172,7 +172,10 @@ do not commit secrets.
 | `V1Api__BaseUrl` | Base URL of the legacy V1 planner backend used by V1 profile import |
 | `V1Api__FunctionsKey` | Azure Functions `x-functions-key` for the V1 backend's `LoginUser`/`GetUserData` HTTP triggers (`AuthorizationLevel.Function`); sent as a header on every V1 request when set |
 | `RateLimiting__UpstreamFastPerMinute` | Optional, default `10`. Per-profile, per-endpoint requests/minute for `POST tacticus-api-key/validate` and `PUT me/tacticus-integration`; excess requests get `429` with `Retry-After` |
-| `RateLimiting__UpstreamSlowPerHour` | Optional, default `6`. Per-profile, per-endpoint requests/hour for `POST tacticus-integration/player-sync`, `POST guilds/register`, `POST guilds/me/sync` and `POST me/v1-import` |
+| `RateLimiting__UpstreamSlowPerHour` | Optional, default `6`. Per-profile, per-endpoint requests/hour for `POST tacticus-integration/player-sync`, `POST guilds/register`, `POST guilds/me/sync`, `POST me/v1-import` and `POST me/roster-snapshots` (not with `fromLastSync=true`) |
+| `RosterSnapshots__PersonalLimit` | Optional, default `20`. How many manual and V1-imported roster snapshots a profile may hold; automatic snapshots do not count |
+| `RosterSnapshots__AutoLimit` | Optional, default `12`. How many automatic roster snapshots a profile keeps; the oldest is replaced at the limit |
+| `RosterSnapshots__AutoWindowDays` | Optional, default `30`. A sync takes an automatic roster snapshot only when no roster snapshot of any kind was taken within this many days |
 | `ColumnEncryption__CurrentKeyVersion` | Logical key version used to encrypt new/updated sensitive columns |
 | `ColumnEncryption__Keys__<version>` | Base64/base64url 32-byte AES-256 key for the matching key version |
 | `Analytics__ProjectToken` | PostHog project token (public — identifies the project, not a secret) |
@@ -253,7 +256,8 @@ Early testers can copy their production planner data into their staging account:
 2. On staging, `POST /api/v1/account/import-from-production` sends the code to production's
    `POST /api/v1/internal/staging-transfer/export` (anonymous, authenticated by the
    `X-Staging-Transfer-Key` service-key header, left out of the OpenAPI document) and receives the profile's
-   goals, projects, Legendary Event plans and run records, settings and progress overrides.
+   goals, projects, Legendary Event plans and run records, personal roster snapshots, settings and progress
+   overrides.
 3. Staging replaces the caller's copies of those in one transaction with fresh ids. The Tacticus API key and
    user id, player-data snapshot and guild are never copied.
 
@@ -457,11 +461,15 @@ from the Actions tab):
   image `CD Stage` built for it; check that commit's staging deploy succeeded
   before releasing. `CD Stage` skips documentation-only pushes, so for such a
   commit run `CD Stage` by hand first, or production builds a fresh image.
-- From `release/X.Y` with `patch`: tags the next `vX.Y.Z` on that branch,
-  creates its release (notes since the previous `vX.Y.*`), builds the image
-  for that commit, and deploys it. Land the fix on `main` first, then
-  cherry-pick it into the release branch with a PR (CI runs on PRs to
-  `release/**`).
+- From `main` with `patch`: creates `release/X.Y.Z` from `main`, tags the
+  next `vX.Y.Z` on the newest line, creates its release, and deploys the image
+  `CD Stage` built for that commit, like a minor cut.
+- From `release/X.Y` or `release/X.Y.Z` with `hotfix`: tags the next hotfix of
+  that release, `vX.Y.Z.N` (so `v2.4.1` is followed by `v2.4.1.1`, leaving
+  `v2.4.2` for the next patch), creates its release (notes since the previous `vX.Y.*`),
+  builds the image for that commit, and deploys it. Land the fix on `main`
+  first, then cherry-pick it into the release branch with a PR (CI runs on PRs
+  to `release/**`).
 
 `CD Prod` does the deploy. `Release` calls it; run it by hand only to redeploy
 an existing tag. Images are always built and pushed under the `stage`

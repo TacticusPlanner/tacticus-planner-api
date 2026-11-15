@@ -38,6 +38,8 @@ public sealed record StagingTransferBundle
     public List<StagingTransferLegendaryEventPlan> LegendaryEventPlans { get; init; } = [];
 
     public List<StagingTransferLegendaryEventRunRecord> LegendaryEventRunRecords { get; init; } = [];
+
+    public List<StagingTransferPersonalRosterSnapshot> PersonalRosterSnapshots { get; init; } = [];
 }
 
 public sealed record StagingTransferOverrides
@@ -72,6 +74,8 @@ public sealed record StagingTransferGoal
     public GoalSnapshot? Snapshot { get; init; }
 
     public List<Guid> DependsOn { get; init; } = [];
+
+    public List<Guid> LinkedGoalIds { get; init; } = [];
 
     public DateTimeOffset CreatedAt { get; init; }
 }
@@ -133,6 +137,21 @@ public sealed record StagingTransferLegendaryEventRunRecord
     public LegendaryEventRunRecordLanes Lanes { get; init; } = new();
 
     public List<LegendaryEventTeamRecord> Teams { get; init; } = [];
+
+    public RosterSnapshot Roster { get; init; } = new();
+}
+
+public sealed record StagingTransferPersonalRosterSnapshot
+{
+    public string Name { get; init; } = string.Empty;
+
+    public RosterSnapshotSource Source { get; init; }
+
+    public DateTimeOffset TakenAt { get; init; }
+
+    /// <summary>Set exactly on a <see cref="RosterSnapshotSource.V1Import"/> snapshot, which needs one. Absent from
+    /// bundles exported before it was added; the importer then makes one up.</summary>
+    public string? ImportKey { get; init; }
 
     public RosterSnapshot Roster { get; init; } = new();
 }

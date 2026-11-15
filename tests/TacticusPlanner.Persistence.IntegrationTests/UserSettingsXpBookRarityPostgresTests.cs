@@ -23,6 +23,26 @@ public sealed class UserSettingsXpBookRarityPostgresTests
     [Fact]
     public async Task LegacySettingsJsonWithoutTheRarityReadsAsTheLegendaryDefault()
     {
+        var response = await ReadStoredAsync("""{"DailyEnergy": 638}""");
+
+        Assert.Equal(638, response.DailyEnergy);
+        Assert.Equal(XpBookRarity.Legendary, response.XpBookRarity);
+        Assert.Empty(response.Preferences);
+    }
+
+    [Fact]
+    public async Task LegacyWatchAdsOffReadsAsTheSkipDailyAdsPreference()
+    {
+        var response = await ReadStoredAsync("""{"DailyEnergy": 288, "WatchAds": false, "Preferences": 1}""");
+
+        Assert.Equal(
+            [UserPreference.LegendaryEventShowPaidOptions, UserPreference.LegendaryEventSkipDailyAds],
+            response.Preferences);
+    }
+
+    /// <summary>The response read for a user_settings row whose settings JSON is <paramref name="settingsJson"/>.</summary>
+    private static async Task<UserSettingsResponse> ReadStoredAsync(string settingsJson)
+    {
         await using var postgres = new PostgreSqlBuilder("postgres:18-alpine").Build();
         await postgres.StartAsync(TestContext.Current.CancellationToken);
         var connectionString = postgres.GetConnectionString();
@@ -43,11 +63,12 @@ public sealed class UserSettingsXpBookRarityPostgresTests
             await using var command = connection.CreateCommand();
             command.CommandText = """
                 INSERT INTO profiles (id, issuer, subject, display_name, created_at, updated_at)
-                VALUES (@profile, 'test', 'legacy-xp-book-rarity', 'Legacy Settings Profile', now(), now());
+                VALUES (@profile, 'test', 'legacy-settings', 'Legacy Settings Profile', now(), now());
                 INSERT INTO user_settings (id, revision, created_at, updated_at, settings)
-                VALUES (@profile, 0, now(), now(), '{"DailyEnergy": 638}'::jsonb);
+                VALUES (@profile, 0, now(), now(), @settings::jsonb);
                 """;
             command.Parameters.AddWithValue("profile", profileId);
+            command.Parameters.AddWithValue("settings", settingsJson);
             await command.ExecuteNonQueryAsync(TestContext.Current.CancellationToken);
         }
 
@@ -55,11 +76,7 @@ public sealed class UserSettingsXpBookRarityPostgresTests
             options, new PassthroughEncryption(), new StaticProfile(ProfileId.From(profileId)));
         var settings = await db.UserSettings.FirstAsync(
             entity => entity.Id == ProfileId.From(profileId), TestContext.Current.CancellationToken);
-        var response = UserSettingsResponse.From(settings);
-
-        Assert.Equal(638, response.DailyEnergy);
-        Assert.Equal(XpBookRarity.Legendary, response.XpBookRarity);
-        Assert.True(response.WatchAds);
+        return UserSettingsResponse.From(settings);
     }
 
     private sealed class PassthroughEncryption : IColumnEncryptionService

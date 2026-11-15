@@ -2,6 +2,7 @@ using System.IO.Compression;
 using Azure.Monitor.OpenTelemetry.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.DependencyInjection;
@@ -136,8 +137,11 @@ public static class Extensions
                 tracing
                     .AddAspNetCoreInstrumentation(options =>
                     {
+                        // CORS preflights are about a third of API traffic and would otherwise spend the
+                        // trace budget below on requests nobody debugs.
                         options.Filter = context =>
-                            !context.Request.Path.StartsWithSegments("/health");
+                            !context.Request.Path.StartsWithSegments("/health")
+                            && !HttpMethods.IsOptions(context.Request.Method);
                     })
                     .AddHttpClientInstrumentation();
 
@@ -155,6 +159,10 @@ public static class Extensions
             telemetry.UseAzureMonitor(options =>
             {
                 options.ConnectionString = applicationInsightsConnectionString;
+                // The distro's default of 5 traces/s dropped about 40% of prod requests, failures and their
+                // logs included, because the decision is made when a request starts. 50 sits above the busiest
+                // seconds while still capping ingestion during a traffic spike or bot flood.
+                options.TracesPerSecond = 50;
             });
         }
     }

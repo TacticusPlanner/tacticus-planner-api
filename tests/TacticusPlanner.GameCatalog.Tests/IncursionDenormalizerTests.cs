@@ -56,12 +56,12 @@ public sealed class IncursionDenormalizerTests
     [Fact]
     public void TheShippedIncursionsAreTheGames()
     {
-        Assert.Equal(11, Snapshot.IncursionViews.Count);
+        Assert.Equal(12, Snapshot.IncursionViews.Count);
         Assert.Equal(
             ["astraOrdnanceBattery", "blackForgefiend", "tyranBiovore"],
             Snapshot.IncursionViews.Take(3).Select(incursion => incursion.MowId));
-        Assert.Equal("necroReanimator", Snapshot.IncursionViews[^1].MowId);
-        Assert.Equal(("2024-12-02T08:00:00Z", false, true), (Broadside.AvailableFromUtc, Broadside.New, Broadside.Updated));
+        Assert.Equal("custoDreadnought", Snapshot.IncursionViews[^1].MowId);
+        Assert.Equal(("2024-12-02T08:00:00Z", false, false), (Broadside.AvailableFromUtc, Broadside.New, Broadside.Updated));
         Assert.Equal(new GameCatalogIncursionTokens(2, 3, 72001, 1, 1), Broadside.Tokens);
         Assert.Equal(3, Broadside.MinUnitsOfGrandAllianceNeeded);
         Assert.Equal(10, Broadside.AllowedFactions.Count);

@@ -5,8 +5,8 @@ using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.Features.Goals;
 
-/// <summary>The progression floor that a unit's stored Ascension prerequisites raise a target's rarity cap to,
-/// shared by combined creation and target edits so both accept the same targets.</summary>
+/// <summary>The progression floor that a unit's stored Ascension prerequisites raise a target's rarity cap to
+/// in combined creation. Target edits skip the rarity cap altogether.</summary>
 public static class AscensionFloor
 {
     /// <summary>The unit's stored goals other than Archived, keyed by id, for <see cref="Reachable"/>.</summary>

@@ -6,6 +6,7 @@ using Npgsql;
 using NpgsqlTypes;
 using Refit;
 using TacticusPlanner.Api.Features.LegendaryEventPlans;
+using TacticusPlanner.Domain.PlayerData.Chunks;
 using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Persistence;
 using TacticusPlanner.TacticusApi;
@@ -21,12 +22,14 @@ namespace TacticusPlanner.Api.Features.PlayerData;
 /// request happens to trigger the player-data provider's own sync (rewrite-v1-goal-import's
 /// player_data_required refusal was otherwise near-guaranteed on a brand-new account's first import).
 /// </summary>
-public sealed class PlayerDataSyncService(
+public sealed partial class PlayerDataSyncService(
     PlannerDbContext db,
     ITacticusApi tacticusApi,
     PlayerDataTransformer transformer,
     LegendaryEventRunRecordRecorder runRecordRecorder,
-    TimeProvider timeProvider)
+    TimeProvider timeProvider,
+    IEnumerable<IPlayerDataSyncDefaultStep> defaultSteps,
+    ILogger<PlayerDataSyncService> logger)
 {
     private static readonly IReadOnlyDictionary<string, Action<PlayerDataSnapshotEntity, PlayerDataTransformResult>> ChunkSetters =
         new Dictionary<string, Action<PlayerDataSnapshotEntity, PlayerDataTransformResult>>(StringComparer.Ordinal)
@@ -96,7 +99,13 @@ public sealed class PlayerDataSyncService(
             chunk => JsonSerializer.Serialize(chunk.Serialize(transformed), ChunkJsonOptions),
             StringComparer.Ordinal);
 
-    public async Task<PlayerDataSyncResult> SyncAsync(ProfileId profileId, string apiKey, CancellationToken ct)
+    public Task<PlayerDataSyncResult> SyncAsync(ProfileId profileId, string apiKey, CancellationToken ct) =>
+        SyncAsync(profileId, apiKey, postWrite: null, ct);
+
+    /// <summary>Syncs, running <paramref name="postWrite"/> (when given) inside the write transaction after run
+    /// records are staged and before the save, with the transformed roster being written.</summary>
+    public async Task<PlayerDataSyncResult> SyncAsync(
+        ProfileId profileId, string apiKey, IPlayerDataSyncPostWriteStep? postWrite, CancellationToken ct)
     {
         // Hashes and revision are read before the upstream fetch, so a slow response can never adopt a revision
         // another request committed meanwhile: the write below is predicated on exactly this revision.
@@ -126,7 +135,7 @@ public sealed class PlayerDataSyncService(
 
         try
         {
-            return await WriteAsync(profileId, stored, transformed, syncedAt, integration, ct);
+            return await WriteAsync(profileId, stored, transformed, syncedAt, integration, postWrite, ct);
         }
         catch (DbUpdateException exception) when (stored is null && IsSnapshotPrimaryKeyConflict(exception))
         {
@@ -143,7 +152,7 @@ public sealed class PlayerDataSyncService(
             }
 
             integration = await LoadIntegrationAsync(profileId, attemptedAt, ct);
-            return await WriteAsync(profileId, stored, transformed, syncedAt, integration, ct);
+            return await WriteAsync(profileId, stored, transformed, syncedAt, integration, postWrite, ct);
         }
     }
 
@@ -167,7 +176,7 @@ public sealed class PlayerDataSyncService(
         return integration;
     }
 
-    /// <summary>The snapshot write, run records and success metadata in one transaction: any failure, including a
+    /// <summary>The snapshot write, run records, the post-write step and success metadata in one transaction: any failure, including a
     /// revision conflict, rolls all of it back.</summary>
     private async Task<PlayerDataSyncResult> WriteAsync(
         ProfileId profileId,
@@ -175,6 +184,7 @@ public sealed class PlayerDataSyncService(
         PlayerDataTransformResult transformed,
         DateTimeOffset syncedAt,
         Domain.Profiles.TacticusIntegration? integration,
+        IPlayerDataSyncPostWriteStep? postWrite,
         CancellationToken ct)
     {
         var strategy = db.Database.CreateExecutionStrategy();
@@ -203,6 +213,12 @@ public sealed class PlayerDataSyncService(
             }
 
             await RecordRunsAsync(profileId, transformed, syncedAt, ct);
+            var write = new PlayerDataSyncWrite(profileId, transformed.Characters, transformed.Mows, syncedAt);
+            if (postWrite is not null)
+            {
+                await postWrite.ApplyAsync(write, ct);
+            }
+
             if (integration is not null)
             {
                 integration.TacticusSyncLastSucceededAt = syncedAt;
@@ -215,13 +231,48 @@ public sealed class PlayerDataSyncService(
             catch (DbUpdateException)
             {
                 runRecordRecorder.Discard();
+                postWrite?.Discard();
                 throw;
+            }
+
+            // A caller's own step (a manual snapshot) replaces the default steps for this sync.
+            if (postWrite is null)
+            {
+                await RunDefaultStepsAsync(transaction, write, ct);
             }
 
             await transaction.CommitAsync(ct);
             return new PlayerDataSyncResult.Success(snapshot);
         });
     }
+
+    /// <summary>Runs each default step after the sync's own writes are saved, each behind a savepoint: a failing step is
+    /// rolled back and logged, and the sync still commits.</summary>
+    private async Task RunDefaultStepsAsync(
+        Microsoft.EntityFrameworkCore.Storage.IDbContextTransaction transaction,
+        PlayerDataSyncWrite write,
+        CancellationToken ct)
+    {
+        foreach (var step in defaultSteps)
+        {
+            const string savepoint = "player_data_sync_default_step";
+            await transaction.CreateSavepointAsync(savepoint, ct);
+            try
+            {
+                await step.ApplyAsync(write, ct);
+                await db.SaveChangesAsync(ct);
+            }
+            catch (Exception exception) when (exception is not OperationCanceledException)
+            {
+                step.Discard();
+                await transaction.RollbackToSavepointAsync(savepoint, ct);
+                DefaultStepFailed(logger, exception, step.GetType().Name);
+            }
+        }
+    }
+
+    [LoggerMessage(Level = LogLevel.Warning, Message = "Post-sync step {Step} failed; the sync was kept.")]
+    private static partial void DefaultStepFailed(ILogger logger, Exception exception, string step);
 
     /// <summary>Writes only the chunks whose hash changed, plus the metadata, as one statement predicated on the
     /// revision read before the upstream fetch. <c>ExecuteUpdateAsync</c> cannot set the owned-JSON chunk columns
@@ -313,6 +364,27 @@ public sealed class PlayerDataSyncService(
         exception.InnerException is PostgresException { SqlState: PostgresErrorCodes.UniqueViolation };
 }
 
+/// <summary>The roster a sync is writing, as <see cref="IPlayerDataSyncPostWriteStep"/> receives it.</summary>
+public sealed record PlayerDataSyncWrite(
+    ProfileId ProfileId,
+    IReadOnlyList<PlayerCharacterRecord> Characters,
+    IReadOnlyList<PlayerMowRecord> Mows,
+    DateTimeOffset SyncedAt);
+
+/// <summary>
+/// Extra work a caller runs inside a sync's write transaction, after run records are staged and before the save,
+/// so it commits (or rolls back) with the synced data. It receives the full transformed roster even when no chunk
+/// changed. It only stages changes on the context; the sync saves.
+/// </summary>
+public interface IPlayerDataSyncPostWriteStep
+{
+    /// <summary>Runs once per write attempt; a retried attempt runs it again after <see cref="Discard"/>.</summary>
+    Task ApplyAsync(PlayerDataSyncWrite write, CancellationToken ct);
+
+    /// <summary>Drops whatever <see cref="ApplyAsync"/> staged, after a failed save.</summary>
+    void Discard();
+}
+
 internal sealed record StoredSnapshot(long Revision, Dictionary<string, string> ChunkHashes);
 
 public abstract record PlayerDataSyncResult
@@ -324,3 +396,10 @@ public abstract record PlayerDataSyncResult
     /// <summary>The Tacticus API failed or timed out; nothing was synced.</summary>
     public sealed record UpstreamUnavailable : PlayerDataSyncResult;
 }
+
+/// <summary>
+/// A step every sync runs when its caller supplies no <see cref="IPlayerDataSyncPostWriteStep"/> of its own (the
+/// automatic roster snapshot). It runs after the sync's writes are saved, so its reads see them, and behind a
+/// savepoint, so its failure never fails the sync.
+/// </summary>
+public interface IPlayerDataSyncDefaultStep : IPlayerDataSyncPostWriteStep;

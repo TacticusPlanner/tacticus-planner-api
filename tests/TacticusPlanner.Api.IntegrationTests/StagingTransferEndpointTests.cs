@@ -5,8 +5,11 @@ using TacticusPlanner.Api.Features.StagingTransfer;
 using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.LegendaryEvents;
 using TacticusPlanner.Domain.PlayerData;
+using TacticusPlanner.Domain.PlayerData.Chunks;
 using TacticusPlanner.Domain.Projects;
+using TacticusPlanner.Domain.RosterSnapshots;
 using TacticusPlanner.Domain.UserSettings;
+using TacticusPlanner.GameDomain;
 using TacticusPlanner.Persistence;
 
 namespace TacticusPlanner.Api.IntegrationTests;
@@ -63,7 +66,7 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
         importResponse.EnsureSuccessStatusCode();
         var counts = await importResponse.Content.ReadFromJsonAsync<ImportFromProductionResponse>(Ct);
         // Two projects: the seeded one and the Default project provisioned with the production account.
-        Assert.Equal(new ImportFromProductionResponse(2, 2, 1, 1, true, true), counts);
+        Assert.Equal(new ImportFromProductionResponse(2, 2, 1, 1, 1, true, true), counts);
 
         using var scope = target.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
@@ -101,11 +104,55 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
             .Where(entity => entity.ProfileId == profile.Id).ToListAsync(Ct));
         Assert.Equal(1234, record.Points);
 
+        var snapshot = Assert.Single(await db.PersonalRosterSnapshots.IgnoreQueryFilters().AsNoTracking()
+            .Where(entity => entity.ProfileId == profile.Id).ToListAsync(Ct));
+        Assert.Equal(("Before LE", RosterSnapshotSource.Manual, seeded.SnapshotTakenAt),
+            (snapshot.Name, snapshot.Source, snapshot.TakenAt));
+        Assert.Equal("ultraCalgar", Assert.Single(snapshot.Roster.Characters).UnitId.Value);
+        Assert.Equal(1, snapshot.CharacterCount);
+
         var settings = await db.UserSettings.IgnoreQueryFilters().AsNoTracking().FirstAsync(entity => entity.Id == profile.Id, Ct);
         Assert.Equal(538, settings.Settings.DailyEnergy);
 
         var overrides = await db.PlayerDataOverrides.IgnoreQueryFilters().AsNoTracking().FirstAsync(entity => entity.Id == profile.Id, Ct);
         Assert.Equal("Xenos", Assert.Single(overrides.OnslaughtProgressOverrides).Alliance);
+    }
+
+    [Fact]
+    public async Task ImportKeepsV1ImportedRosterSnapshots()
+    {
+        // A V1-imported snapshot must carry its import key; dropping it in the bundle failed the whole import.
+        var sourceSubject = $"prod-{Guid.NewGuid()}";
+        var sourceClient = await GoalsTestHelpers.CreateProvisionedClientAsync(source, sourceSubject);
+        using (var scope = source.Services.CreateScope())
+        {
+            var sourceDb = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
+            var sourceProfileId = (await sourceDb.Profiles.IgnoreQueryFilters().FirstAsync(entity => entity.Subject == sourceSubject, Ct)).Id;
+            sourceDb.PersonalRosterSnapshots.Add(PersonalRosterSnapshot.Create(
+                sourceProfileId,
+                "From V1",
+                RosterSnapshotSource.V1Import,
+                new RosterSnapshot { TakenAt = new DateTimeOffset(2026, 9, 1, 0, 0, 0, TimeSpan.Zero), CatalogVersion = "1" },
+                "v1:snapshot-1"));
+            await sourceDb.SaveChangesAsync(Ct);
+        }
+
+        var targetSubject = $"stg-{Guid.NewGuid()}";
+        var targetClient = await GoalsTestHelpers.CreateProvisionedClientAsync(target, targetSubject);
+        var codeResponse = await sourceClient.PostAsync("/api/v1/account/staging-transfer-code", null, Ct);
+        var code = await codeResponse.Content.ReadFromJsonAsync<CreateStagingTransferCodeResponse>(Ct);
+
+        var importResponse = await targetClient.PostAsJsonAsync(
+            "/api/v1/account/import-from-production", new ImportFromProductionRequest(code!.Code), Ct);
+        importResponse.EnsureSuccessStatusCode();
+
+        using var targetScope = target.Services.CreateScope();
+        var db = targetScope.ServiceProvider.GetRequiredService<PlannerDbContext>();
+        var profile = await db.Profiles.IgnoreQueryFilters().AsNoTracking().FirstAsync(entity => entity.Subject == targetSubject, Ct);
+        var snapshot = Assert.Single(await db.PersonalRosterSnapshots.IgnoreQueryFilters().AsNoTracking()
+            .Where(entity => entity.ProfileId == profile.Id).ToListAsync(Ct));
+        Assert.Equal(("From V1", RosterSnapshotSource.V1Import, "v1:snapshot-1"),
+            (snapshot.Name, snapshot.Source, snapshot.ImportKey));
     }
 
     [Fact]
@@ -149,7 +196,7 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
         Assert.Equal(HttpStatusCode.NotFound, codeOnTarget.StatusCode);
     }
 
-    private sealed record SeededSource(GoalId ParentGoalId, GoalId ChildGoalId);
+    private sealed record SeededSource(GoalId ParentGoalId, GoalId ChildGoalId, DateTimeOffset SnapshotTakenAt);
 
     private async Task<SeededSource> SeedSourceAsync(string subject)
     {
@@ -209,6 +256,17 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
             CatalogVersion = "1",
             Points = 1234,
         });
+        var takenAt = new DateTimeOffset(2026, 10, 1, 12, 0, 0, TimeSpan.Zero);
+        db.PersonalRosterSnapshots.Add(PersonalRosterSnapshot.Create(
+            profileId,
+            "Before LE",
+            RosterSnapshotSource.Manual,
+            new RosterSnapshot
+            {
+                TakenAt = takenAt,
+                CatalogVersion = "1",
+                Characters = [new PlayerCharacterRecord { UnitId = UnitId.From("ultraCalgar"), Rank = (UnitRank)12 }],
+            }));
         db.UserSettings.Add(new UserSettings { Id = profileId, Settings = new UserSettingsData { DailyEnergy = 538 } });
         db.PlayerDataOverrides.Add(new PlayerDataOverride
         {
@@ -217,6 +275,6 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
         });
 
         await db.SaveChangesAsync(Ct);
-        return new SeededSource(parent.Id, child.Id);
+        return new SeededSource(parent.Id, child.Id, takenAt);
     }
 }
