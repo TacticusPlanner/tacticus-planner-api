@@ -3,14 +3,15 @@ name: Release
 # Cuts and ships a production release. Run from main with minor or major to create a
 # release/X.Y branch and tag vX.Y.0, or with patch to create a release/X.Y.Z branch and tag the
 # next vX.Y.Z on the newest line. Run from a release/X.Y or release/X.Y.Z branch with hotfix to
-# tag the next vX.Y.Z on it (fixes land on main first, then are cherry-picked into the release
-# branch by PR).
+# tag the next hotfix of that release, vX.Y.Z.N, on it: v2.4.1 is followed by v2.4.1.1, v2.4.1.2,
+# and the patch number stays free for the next patch cut (fixes land on main first, then are
+# cherry-picked into the release branch by PR).
 # Each run creates a GitHub release with generated notes and deploys the tag to production.
 on:
   workflow_dispatch:
     inputs:
       bump:
-        description: minor/major/patch (run from main) cut a new release branch; hotfix (run from release/X.Y or release/X.Y.Z) tags the next fix on it.
+        description: minor/major/patch (run from main) cut a new release branch; hotfix (run from release/X.Y or release/X.Y.Z) tags the next vX.Y.Z.N on it.
         required: true
         type: choice
         options:

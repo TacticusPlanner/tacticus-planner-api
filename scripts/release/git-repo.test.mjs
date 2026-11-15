@@ -110,7 +110,7 @@ describe("createGitRepo", () => {
         { bump: "hotfix", refName: "release/1.0" },
         repo()
       )
-      assert.equal(result.tag, "v1.0.1")
+      assert.equal(result.tag, "v1.0.0.1")
       assert.equal(result.previous, "v1.0.0")
     } finally {
       git(work, "switch", "main")
