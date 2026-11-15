@@ -92,7 +92,7 @@ public sealed class ShopEventCalendarTests
         // Serve only week 1, as the denormalizer does when week 2's merchant is missing.
         var message = FindUndatedShopEventWeeks(
             snapshot with { RawEventShops = [served with { Weeks = [served.Weeks[0]] }] },
-            served.Weeks[0].Occurrence.StartUtc);
+            served.Weeks[0].Occurrence!.StartUtc);
 
         Assert.NotNull(message);
         Assert.Contains($"{served.EventKey} week 2", message, StringComparison.Ordinal);
