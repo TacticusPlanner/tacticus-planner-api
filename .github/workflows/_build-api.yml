@@ -13,6 +13,11 @@ on:
         required: false
         type: string
         default: ""
+      build-image:
+        description: Build the container image. CI skips it when no file that feeds the image changed.
+        required: false
+        type: boolean
+        default: true
       run-validation:
         description: Run formatting validation before building.
         required: false
@@ -74,4 +79,5 @@ jobs:
           if-no-files-found: ignore
 
       - name: Build container image
+        if: ${{ inputs.build-image }}
         run: docker build --file src/TacticusPlanner.Api/Dockerfile --tag tacticus-planner-api:${{ github.sha }} .
