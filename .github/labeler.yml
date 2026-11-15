@@ -14,15 +14,20 @@ docs-only:
           - "LICENSE"
 
 # Gate: the container image is built on a PR only when something that feeds it changed.
+# Only files the API image is built from. Directory.Packages.props is left out on purpose: restore runs
+# in locked mode, so a version bump that reaches the image always changes a src/ lock file too, while a
+# test-only bump (xunit, Verify, Testcontainers) touches just tests/ lock files and needs no image build.
 area:docker:
   - changed-files:
       - any-glob-to-any-file:
           - "**/Dockerfile"
           - ".dockerignore"
-          - "**/*.csproj"
-          - "Directory.*.props"
-          - "**/packages.lock.json"
           - "global.json"
+          - "Directory.Build.props"
+          - "src/**/*.csproj"
+          - "src/**/packages.lock.json"
+          - "orchestration/TacticusPlanner.ServiceDefaults/*.csproj"
+          - "orchestration/TacticusPlanner.ServiceDefaults/packages.lock.json"
 
 # Gate: the release script tests (Ubuntu and Windows) run only when the scripts changed.
 release-scripts:
