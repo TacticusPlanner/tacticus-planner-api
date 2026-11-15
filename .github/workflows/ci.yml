@@ -21,27 +21,55 @@ concurrency:
 
 jobs:
   # Required checks must always report, so PRs are not filtered with paths-ignore;
-  # instead the work is skipped (a skipped job satisfies a required check).
+  # instead the work is skipped (a skipped job or step satisfies a required check).
+  # actions/labeler labels the PR from .github/labeler.yml, and the labels decide what runs.
+  # Without a PR (manual runs, merge queue) or when labeling fails (a fork PR has a read-only
+  # token), everything runs.
   changes:
     name: Detect changes
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     permissions:
-      pull-requests: read
+      contents: read
+      pull-requests: write
     outputs:
-      code: ${{ steps.filter.outputs.code }}
+      code: ${{ steps.flags.outputs.code }}
+      docker: ${{ steps.flags.outputs.docker }}
+      release-scripts: ${{ steps.flags.outputs.release-scripts }}
     steps:
-      - id: filter
+      - name: Check out labeler config
+        if: github.event_name == 'pull_request'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          sparse-checkout: .github/labeler.yml
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+
+      - name: Label pull request
+        id: label
+        if: github.event_name == 'pull_request'
+        continue-on-error: true
+        uses: actions/labeler@v7
+        with:
+          sync-labels: true
+
+      - name: Decide what runs
+        id: flags
+        shell: bash
         env:
-          GH_TOKEN: ${{ github.token }}
-          PR_NUMBER: ${{ github.event.pull_request.number }}
+          LABELED: ${{ steps.label.outcome == 'success' }}
+          LABELS: ${{ steps.label.outputs.all-labels }}
         run: |
-          if [ -z "$PR_NUMBER" ]; then echo code=true >> "$GITHUB_OUTPUT"; exit 0; fi
-          files=$(gh api --paginate "repos/$GITHUB_REPOSITORY/pulls/$PR_NUMBER/files" --jq '.[].filename') || { echo code=true >> "$GITHUB_OUTPUT"; exit 0; }
-          if grep -qvE '\.md$|^(openspec|\.claude|\.agents)/|^LICENSE$' <<< "$files"; then
-            echo code=true >> "$GITHUB_OUTPUT"
-          else
-            echo code=false >> "$GITHUB_OUTPUT"
+          if [ "$LABELED" != "true" ]; then
+            echo "No labels (no PR, or labeling failed): running everything."
+            { echo code=true; echo docker=true; echo release-scripts=true; } >> "$GITHUB_OUTPUT"
+            exit 0
           fi
+          echo "Labels: $LABELS"
+          has() { tr ',' '\n' <<< "$LABELS" | grep -qxF "$1"; }
+          if has docs-only; then echo code=false; else echo code=true; fi >> "$GITHUB_OUTPUT"
+          if has area:docker; then echo docker=true; else echo docker=false; fi >> "$GITHUB_OUTPUT"
+          if has release-scripts; then echo release-scripts=true; else echo release-scripts=false; fi >> "$GITHUB_OUTPUT"
 
   build:
     name: Build
@@ -49,6 +77,7 @@ jobs:
     uses: ./.github/workflows/_build-api.yml
     with:
       skip: ${{ needs.changes.outputs.code != 'true' }}
+      build-image: ${{ needs.changes.outputs.docker == 'true' }}
 
   # Publishes the coverage that Build already collected, so PR tests run once. Publishing needs a
   # write token, so it runs apart from the job that executes the PR's code. Named "Coverage" to
@@ -130,6 +159,9 @@ jobs:
 
   release-scripts:
     name: Release scripts (${{ matrix.os }})
+    # Gated per step, not with a job-level `if`: a skipped matrix job reports one check named
+    # "Release scripts (${{ matrix.os }})", so per-OS required checks would never report.
+    needs: changes
     strategy:
       fail-fast: false
       matrix:
@@ -138,12 +170,15 @@ jobs:
     timeout-minutes: 5
     steps:
       - name: Check out code
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        if: needs.changes.outputs.release-scripts == 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Set up Node
-        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        if: needs.changes.outputs.release-scripts == 'true'
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
 
       - name: Test release scripts
+        if: needs.changes.outputs.release-scripts == 'true'
         run: node --test "scripts/release/*.test.mjs"
