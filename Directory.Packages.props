@@ -12,8 +12,8 @@
     <PackageVersion Include="MessagePack" Version="2.5.307" />
     <PackageVersion Include="Azure.Identity" Version="1.21.0" />
     <PackageVersion Include="Azure.Monitor.OpenTelemetry.AspNetCore" Version="1.6.0" />
-    <PackageVersion Include="FastEndpoints" Version="8.2.0" />
-    <PackageVersion Include="FastEndpoints.OpenApi" Version="8.2.0" />
+    <PackageVersion Include="FastEndpoints" Version="8.3.0" />
+    <PackageVersion Include="FastEndpoints.OpenApi" Version="8.3.0" />
     <PackageVersion Include="coverlet.collector" Version="10.0.1" />
     <PackageVersion Include="EFCore.NamingConventions" Version="10.0.1" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.12" />
