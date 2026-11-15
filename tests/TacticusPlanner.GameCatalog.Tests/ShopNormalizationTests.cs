@@ -6,6 +6,34 @@ namespace TacticusPlanner.GameCatalog.Tests;
 public sealed class ShopNormalizationTests
 {
     [Theory]
+    [InlineData("summoningToken", "summoningToken", 1, 1)]
+    [InlineData("seasonalEventCurrencyOctober2026:15", "seasonalEventCurrencyOctober2026", 15, 15)]
+    [InlineData("gold:600-660", "gold", 600, 660)]
+    [InlineData("xpCommon:3-3", "xpCommon", 3, 3)]
+    public void TryParseRewardRangeParsesEachForm(string raw, string expectedType, int expectedMin, int expectedMax)
+    {
+        Assert.True(ShopNormalization.TryParseRewardRange(raw, out var type, out var min, out var max));
+        Assert.Equal(expectedType, type);
+        Assert.Equal(expectedMin, min);
+        Assert.Equal(expectedMax, max);
+    }
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData(":5")]
+    [InlineData(":5-6")]
+    [InlineData("gold:0-5")]
+    [InlineData("gold:9-5")]
+    [InlineData("gold:5-")]
+    [InlineData("gold:1-2-3")]
+    [InlineData("gold:a-b")]
+    public void TryParseRewardRangeRejectsMalformedStrings(string? raw)
+    {
+        Assert.False(ShopNormalization.TryParseRewardRange(raw, out _, out _, out _));
+    }
+
+    [Theory]
     [InlineData("shards_eldarFarseer:5", "shards_eldarFarseer", 5)]
     [InlineData("draft_machinesOfWarTokens:10", "draft_machinesOfWarTokens", 10)]
     [InlineData("itemAscensionResource_Mythic", "itemAscensionResource_Mythic", 1)]

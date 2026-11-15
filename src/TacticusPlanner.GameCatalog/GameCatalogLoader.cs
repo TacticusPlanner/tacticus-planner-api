@@ -136,8 +136,10 @@ public static class GameCatalogLoader
             unitsByFaction,
             JsonOptions);
 
-        var rawShopsBySourceKey = GameCatalogDenormalizer.ReadDatamineShops(
-            LoadDatamine<Dictionary<string, JsonElement>>(GameCatalogDenormalizer.DatamineMerchantsPath), JsonOptions);
+        var merchants = LoadDatamine<Dictionary<string, JsonElement>>(GameCatalogDenormalizer.DatamineMerchantsPath);
+        var rawShopsBySourceKey = GameCatalogDenormalizer.ReadDatamineShops(merchants, JsonOptions);
+        var rawEventShops = GameCatalogDenormalizer.ReadDatamineEventShops(
+            merchants, eventDefinitions, eventOccurrences, JsonOptions);
 
         var raidBossRawData = LoadRaidBossRawData();
         var guildRaidMetaRawData = LoadGuildRaidMetaRawData();
@@ -162,6 +164,8 @@ public static class GameCatalogLoader
         var calendarDay = new DateTimeOffset(asOf.UtcDateTime.Date, TimeSpan.Zero);
         var eventsCalendar = GameCatalogDenormalizer.BuildEventsCalendar(eventDefinitions, eventOccurrences, calendarDay);
         var shopViews = GameCatalogDenormalizer.BuildShops(rawShopsBySourceKey);
+        var eventShopViews = GameCatalogDenormalizer.BuildEventShops(
+            rawEventShops, tieredProgressRewards, chests, questGroups, JsonOptions);
         var raidBossesView = GameCatalogDenormalizer.BuildRaidBosses(raidBossRawData);
         var guildRaidMetaView = GameCatalogDenormalizer.BuildGuildRaidMeta(guildRaidMetaRawData);
         var mythicQuestViews = GameCatalogDenormalizer.BuildMythicQuests(mythicQuests);
@@ -215,6 +219,7 @@ public static class GameCatalogLoader
             [GameCatalogDatasets.EventDefinitionsServed] = HashServed(GameCatalogDatasets.EventDefinitionsServed, eventDefinitionViews),
             [GameCatalogDatasets.EventsCalendar] = HashServed(GameCatalogDatasets.EventsCalendar, eventsCalendar),
             [GameCatalogDatasets.Shops] = HashServed(GameCatalogDatasets.Shops, shopViews),
+            [GameCatalogDatasets.EventShops] = HashServed(GameCatalogDatasets.EventShops, eventShopViews),
             [GameCatalogDatasets.RaidBosses] = HashServed(GameCatalogDatasets.RaidBosses, raidBossesView),
             [GameCatalogDatasets.GuildRaidMeta] = HashServed(GameCatalogDatasets.GuildRaidMeta, guildRaidMetaView),
             [GameCatalogDatasets.MythicQuestsServed] = HashServed(GameCatalogDatasets.MythicQuestsServed, mythicQuestViews),
@@ -255,6 +260,7 @@ public static class GameCatalogLoader
             new ReadOnlyCollection<GameCatalogDropChance>(dropChances.ToArray()),
             new ReadOnlyDictionary<string, GameCatalogLre>(lresByEvent),
             rawShopsBySourceKey,
+            rawEventShops,
             raidBossRawData,
             guildRaidMetaRawData,
             new ReadOnlyCollection<GameCatalogRawMythicQuests>(mythicQuests.ToArray()),
@@ -279,6 +285,7 @@ public static class GameCatalogLoader
             eventDefinitionViews,
             eventsCalendar,
             shopViews,
+            eventShopViews,
             raidBossesView,
             guildRaidMetaView,
             mythicQuestViews,
@@ -373,6 +380,10 @@ public static class GameCatalogLoader
         return JsonSerializer.Deserialize<T>(stream, JsonOptions)
             ?? throw new InvalidOperationException($"GameCatalog dataset '{key}' is empty.");
     }
+
+    /// <summary>The pinned datamine's <c>merchants.json</c>, for the CI calendar checks over event-shop merchants.</summary>
+    internal static IReadOnlyDictionary<string, JsonElement> LoadDatamineMerchants() =>
+        LoadDatamine<Dictionary<string, JsonElement>>(GameCatalogDenormalizer.DatamineMerchantsPath);
 
     private static T LoadDatamine<T>(string rawPath)
     {

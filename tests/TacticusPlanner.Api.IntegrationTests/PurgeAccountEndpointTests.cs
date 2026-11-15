@@ -1,7 +1,12 @@
 using System.Net;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using TacticusPlanner.Api.Features.AccountManagement;
 using TacticusPlanner.Api.Features.CurrentUser;
+using TacticusPlanner.Api.Features.EventShopPlans;
 using TacticusPlanner.Api.Features.Guilds;
+using TacticusPlanner.Domain.Profiles;
+using TacticusPlanner.Persistence;
 using TacticusPlanner.TacticusApi.Models.Guild;
 
 namespace TacticusPlanner.Api.IntegrationTests;
@@ -25,6 +30,34 @@ public sealed class PurgeAccountEndpointTests(PlannerApiFactory factory) : IClas
 
         Assert.NotEqual(before!.ApplicationUserId, after!.ApplicationUserId);
         Assert.False(after.HasCompletedOnboarding);
+    }
+
+    [Fact]
+    public async Task PurgeDeletesTheAccountsEventShopPlans()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var subject = NewSubject();
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory, subject);
+        var octoberPlan = await client.PutAsJsonAsync(
+            "/api/v1/event-shop-plans/october-2026",
+            new PutEventShopPlanRequest(0, [new EventShopCartEntryRequest(1, "THU", 1, "shards_astraYarrick", 1, 0, null)]),
+            ct);
+        Assert.Equal(HttpStatusCode.OK, octoberPlan.StatusCode);
+        ProfileId profileId;
+        using (var scope = factory.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
+            profileId = await db.Profiles.IgnoreQueryFilters()
+                .Where(profile => profile.Subject == subject).Select(profile => profile.Id).SingleAsync(ct);
+            Assert.NotEmpty(await db.EventShopPlans.IgnoreQueryFilters()
+                .Where(plan => plan.ProfileId == profileId).ToListAsync(ct));
+        }
+
+        Assert.Equal(HttpStatusCode.NoContent, (await client.DeleteAsync("/api/v1/account", ct)).StatusCode);
+
+        using var verify = factory.Services.CreateScope();
+        Assert.Empty(await verify.ServiceProvider.GetRequiredService<PlannerDbContext>().EventShopPlans.IgnoreQueryFilters()
+            .Where(plan => plan.ProfileId == profileId).ToListAsync(ct));
     }
 
     [Fact]

@@ -67,14 +67,42 @@
     "definitionId": "anniversary-event",
     "startUtc": "2026-08-02T00:00:00Z",
     "endUtc": "2026-08-09T00:00:00Z",
-    "parameters": { "weekNumber": 1 }
+    "parameters": { "weekNumber": 1, "eventKey": "August2026", "incomeFree": 750, "incomeBonusShipment": 1000 }
   },
   {
     "id": "occ-2026-08-09-anniversary-event-week2",
     "definitionId": "anniversary-event",
     "startUtc": "2026-08-09T00:00:00Z",
     "endUtc": "2026-08-16T00:00:00Z",
-    "parameters": { "weekNumber": 2 }
+    "parameters": { "weekNumber": 2, "eventKey": "August2026", "incomeFree": 750, "incomeBonusShipment": 1000 }
+  },
+  {
+    "id": "occ-2026-06-22-armageddon-shop-week1",
+    "definitionId": "armageddon-shop",
+    "startUtc": "2026-06-22T00:00:00Z",
+    "endUtc": "2026-06-29T00:00:00Z",
+    "parameters": { "weekNumber": 1, "eventKey": "June2026", "incomeFree": 1000, "incomeBonusShipment": 900 }
+  },
+  {
+    "id": "occ-2026-06-29-armageddon-shop-week2",
+    "definitionId": "armageddon-shop",
+    "startUtc": "2026-06-29T00:00:00Z",
+    "endUtc": "2026-07-06T00:00:00Z",
+    "parameters": { "weekNumber": 2, "eventKey": "June2026", "incomeFree": 1000, "incomeBonusShipment": 900 }
+  },
+  {
+    "id": "occ-2026-07-06-armageddon-shop-week3",
+    "definitionId": "armageddon-shop",
+    "startUtc": "2026-07-06T00:00:00Z",
+    "endUtc": "2026-07-13T00:00:00Z",
+    "parameters": { "weekNumber": 3, "eventKey": "June2026", "incomeFree": 1000, "incomeBonusShipment": 900 }
+  },
+  {
+    "id": "occ-2026-10-26-armageddon-shop-week1",
+    "definitionId": "armageddon-shop",
+    "startUtc": "2026-10-26T00:00:00Z",
+    "endUtc": "2026-11-02T00:00:00Z",
+    "parameters": { "weekNumber": 1, "eventKey": "October2026" }
   },
   {
     "id": "occ-2026-08-02-hse-training-rush",

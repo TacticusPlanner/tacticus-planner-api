@@ -44,7 +44,10 @@ public static partial class GameCatalogValidator
         ValidateReferences(snapshot, errors);
         ValidateEvents(snapshot, errors);
         ValidateHseScoring(snapshot, errors);
-        ValidateShops(snapshot, errors);
+        // Shard offers in both shop datasets resolve against the same unit set; build it once.
+        var shopUnitOrMowIds = ShopUnitOrMowIds(snapshot);
+        ValidateShops(snapshot, shopUnitOrMowIds, errors);
+        ValidateEventShops(snapshot, shopUnitOrMowIds, errors);
         ValidateRaidBosses(snapshot, errors);
         ValidateNpcs(snapshot, errors);
         ValidateGuildRaidMeta(snapshot, errors);

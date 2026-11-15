@@ -174,6 +174,115 @@ public sealed class EventsValidationTests
         Assert.Contains(errors, error => error.Code == "InvalidTimeWindow");
     }
 
+    private static GameCatalogEventDefinition ShopEventDefinition() =>
+        new("anniversary-event", "ShopEvent", new GameCatalogEventRecurrence("None", null, null, null),
+            ["weekNumber", "eventKey"], null);
+
+    private static GameCatalogEventOccurrence ShopEventWeek(Dictionary<string, JsonElement> parameters) =>
+        Occurrence("occ-shop", "anniversary-event", parameters);
+
+    [Fact]
+    public void ShopEventWeekWithoutEventKeyFailsValidation()
+    {
+        var errors = new List<GameCatalogValidationError>();
+
+        GameCatalogValidator.ValidateEvents(
+            [ShopEventDefinition()], [ShopEventWeek(new() { ["weekNumber"] = Json(1) })], errors);
+
+        var error = Assert.Single(errors);
+        Assert.Equal("MissingRequiredParameter", error.Code);
+        Assert.Contains("eventKey", error.Message);
+    }
+
+    [Theory]
+    [InlineData("october2026")]
+    [InlineData("October26")]
+    [InlineData("October2026Week1")]
+    public void ShopEventWeekWithMalformedEventKeyFailsValidation(string eventKey)
+    {
+        var errors = new List<GameCatalogValidationError>();
+
+        GameCatalogValidator.ValidateEvents(
+            [ShopEventDefinition()],
+            [ShopEventWeek(new() { ["weekNumber"] = Json(1), ["eventKey"] = Json(eventKey) })],
+            errors);
+
+        var error = Assert.Single(errors);
+        Assert.Equal("InvalidShopEventKey", error.Code);
+        Assert.Contains("occ-shop", error.Message);
+    }
+
+    [Theory]
+    [InlineData("\"2\"")]
+    [InlineData("1.5")]
+    [InlineData("0")]
+    public void ShopEventWeekWithMalformedWeekNumberFailsValidation(string weekNumber)
+    {
+        var errors = new List<GameCatalogValidationError>();
+
+        GameCatalogValidator.ValidateEvents(
+            [ShopEventDefinition()],
+            [ShopEventWeek(new()
+            {
+                ["weekNumber"] = JsonDocument.Parse(weekNumber).RootElement.Clone(),
+                ["eventKey"] = Json("August2026"),
+            })],
+            errors);
+
+        var error = Assert.Single(errors);
+        Assert.Equal("InvalidShopEventWeek", error.Code);
+        Assert.Contains("occ-shop", error.Message);
+    }
+
+    [Theory]
+    [InlineData("incomeFree")]
+    [InlineData("incomeBonusShipment")]
+    public void ShopEventWeekWithNegativeIncomeFailsValidation(string parameter)
+    {
+        var errors = new List<GameCatalogValidationError>();
+
+        GameCatalogValidator.ValidateEvents(
+            [ShopEventDefinition()],
+            [ShopEventWeek(new() { ["weekNumber"] = Json(1), ["eventKey"] = Json("August2026"), [parameter] = Json(-1) })],
+            errors);
+
+        var error = Assert.Single(errors);
+        Assert.Equal("InvalidShopEventIncome", error.Code);
+        Assert.Contains(parameter, error.Message);
+    }
+
+    [Fact]
+    public void ShopEventWeekWithKeyAndIncomePasses()
+    {
+        var errors = new List<GameCatalogValidationError>();
+
+        GameCatalogValidator.ValidateEvents(
+            [ShopEventDefinition()],
+            [ShopEventWeek(new()
+            {
+                ["weekNumber"] = Json(1),
+                ["eventKey"] = Json("August2026"),
+                ["incomeFree"] = Json(750),
+                ["incomeBonusShipment"] = Json(1000),
+            })],
+            errors);
+
+        Assert.Empty(errors);
+    }
+
+    [Fact]
+    public void IncomeParametersAreIgnoredOnNonShopEvents()
+    {
+        var definition = Definition("hse-faction-focus");
+        var occurrence = Occurrence("occ-focus", "hse-faction-focus",
+            new Dictionary<string, JsonElement> { ["incomeFree"] = Json("not a number") });
+        var errors = new List<GameCatalogValidationError>();
+
+        GameCatalogValidator.ValidateEvents([definition], [occurrence], errors);
+
+        Assert.Empty(errors);
+    }
+
     [Fact]
     public void OccurrenceWithStartBeforeEndPassesTimeWindowValidation()
     {

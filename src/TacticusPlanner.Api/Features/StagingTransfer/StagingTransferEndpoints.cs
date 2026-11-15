@@ -108,6 +108,7 @@ public sealed record ImportFromProductionResponse(
     int LegendaryEventPlans,
     int LegendaryEventRunRecords,
     int PersonalRosterSnapshots,
+    int EventShopPlans,
     bool Settings,
     bool Overrides);
 
@@ -123,7 +124,7 @@ public sealed class ImportFromProductionEndpoint : Endpoint<ImportFromProduction
             summary.Summary = "Replaces this staging account's planner data with a copy from production.";
             summary.Description = "Staging only (404 elsewhere). "
                 + "Redeems a code from production's POST account/staging-transfer-code and, in one transaction, "
-                + "replaces goals, projects, Legendary Event plans and run records, personal roster snapshots, settings and progress "
+                + "replaces goals, projects, Legendary Event plans and run records, event shop plans, personal roster snapshots, settings and progress "
                 + "overrides. The Tacticus API key, player data and guild are not copied. 400 when the code is "
                 + "invalid or expired; 502 when production cannot be reached.";
             summary.Response(StatusCodes.Status404NotFound, "Not available in this environment, or no profile.");
@@ -165,6 +166,7 @@ public sealed class ImportFromProductionEndpoint : Endpoint<ImportFromProduction
             counts.LegendaryEventPlans,
             counts.LegendaryEventRunRecords,
             counts.PersonalRosterSnapshots,
+            counts.EventShopPlans,
             counts.Settings,
             counts.Overrides), ct);
     }

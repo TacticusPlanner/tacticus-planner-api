@@ -2,6 +2,7 @@ using System.Net;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using TacticusPlanner.Api.Features.StagingTransfer;
+using TacticusPlanner.Domain.EventShops;
 using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.LegendaryEvents;
 using TacticusPlanner.Domain.PlayerData;
@@ -55,6 +56,7 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
         var targetSubject = $"stg-{Guid.NewGuid()}";
         var targetClient = await GoalsTestHelpers.CreateProvisionedClientAsync(target, targetSubject);
         var staleGoalIds = await GoalsTestHelpers.SeedRankGoalsAsync(target, targetSubject, 2, GoalStatus.Completed);
+        await SeedStaleEventShopPlansAsync(targetSubject);
 
         var codeResponse = await sourceClient.PostAsync("/api/v1/account/staging-transfer-code", null, Ct);
         codeResponse.EnsureSuccessStatusCode();
@@ -66,7 +68,7 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
         importResponse.EnsureSuccessStatusCode();
         var counts = await importResponse.Content.ReadFromJsonAsync<ImportFromProductionResponse>(Ct);
         // Two projects: the seeded one and the Default project provisioned with the production account.
-        Assert.Equal(new ImportFromProductionResponse(2, 2, 1, 1, 1, true, true), counts);
+        Assert.Equal(new ImportFromProductionResponse(2, 2, 1, 1, 1, 1, true, true), counts);
 
         using var scope = target.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
@@ -99,6 +101,16 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
             .Where(entity => entity.ProfileId == profile.Id).ToListAsync(Ct));
         Assert.Equal("testEvent", plan.EventId);
         Assert.Equal("Alpha team", Assert.Single(plan.Teams).Name);
+
+        // The staging plans seeded before the import (one for another event, one for the same event) are gone.
+        var eventShopPlan = Assert.Single(await db.EventShopPlans.IgnoreQueryFilters().AsNoTracking()
+            .Where(entity => entity.ProfileId == profile.Id).ToListAsync(Ct));
+        Assert.Equal(("october-2026", "1"), (eventShopPlan.EventId, eventShopPlan.CatalogVersion));
+        Assert.Equal(2, eventShopPlan.Entries.Count);
+        var entry = Assert.Single(eventShopPlan.Entries, entity => entity.Day == "THU");
+        Assert.Equal((1, "THU", 1, "shards_astraYarrick", 2, 1, (string?)null), (entry.Week, entry.Day, entry.SlotIndex, entry.RewardType, entry.Quantity, entry.PurchasedQuantity, entry.DraftAlliance));
+        var draft = Assert.Single(eventShopPlan.Entries, entity => entity.Day == "FRI");
+        Assert.Equal(("draft_legendary", "xenos"), (draft.RewardType, draft.DraftAlliance));
 
         var record = Assert.Single(await db.LegendaryEventRunRecords.IgnoreQueryFilters().AsNoTracking()
             .Where(entity => entity.ProfileId == profile.Id).ToListAsync(Ct));
@@ -156,6 +168,30 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
     }
 
     [Fact]
+    public async Task ImportClearsStagingEventShopPlansWhenProductionHasNone()
+    {
+        var sourceSubject = $"prod-{Guid.NewGuid()}";
+        var sourceClient = await GoalsTestHelpers.CreateProvisionedClientAsync(source, sourceSubject);
+        var targetSubject = $"stg-{Guid.NewGuid()}";
+        var targetClient = await GoalsTestHelpers.CreateProvisionedClientAsync(target, targetSubject);
+        await SeedStaleEventShopPlansAsync(targetSubject);
+
+        var codeResponse = await sourceClient.PostAsync("/api/v1/account/staging-transfer-code", null, Ct);
+        var code = await codeResponse.Content.ReadFromJsonAsync<CreateStagingTransferCodeResponse>(Ct);
+        var importResponse = await targetClient.PostAsJsonAsync(
+            "/api/v1/account/import-from-production", new ImportFromProductionRequest(code!.Code), Ct);
+        importResponse.EnsureSuccessStatusCode();
+        var counts = await importResponse.Content.ReadFromJsonAsync<ImportFromProductionResponse>(Ct);
+        Assert.Equal(0, counts!.EventShopPlans);
+
+        using var scope = target.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
+        var profile = await db.Profiles.IgnoreQueryFilters().AsNoTracking().FirstAsync(entity => entity.Subject == targetSubject, Ct);
+        Assert.Empty(await db.EventShopPlans.IgnoreQueryFilters().AsNoTracking()
+            .Where(entity => entity.ProfileId == profile.Id).ToListAsync(Ct));
+    }
+
+    [Fact]
     public async Task ImportRejectsAnInvalidCode()
     {
         var targetClient = await GoalsTestHelpers.CreateProvisionedClientAsync(target);
@@ -197,6 +233,28 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
     }
 
     private sealed record SeededSource(GoalId ParentGoalId, GoalId ChildGoalId, DateTimeOffset SnapshotTakenAt);
+
+    /// <summary>Staging plans the import must replace: one for an event production has no plan for, one for the
+    /// same event production has.</summary>
+    private async Task SeedStaleEventShopPlansAsync(string subject)
+    {
+        using var scope = target.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
+        var profileId = (await db.Profiles.IgnoreQueryFilters().FirstAsync(entity => entity.Subject == subject, Ct)).Id;
+        foreach (var eventId in new[] { "june-2026", "october-2026" })
+        {
+            db.EventShopPlans.Add(new EventShopPlan
+            {
+                Id = EventShopPlanId.From(Guid.CreateVersion7()),
+                ProfileId = profileId,
+                EventId = eventId,
+                CatalogVersion = "0",
+                Entries = [new EventShopCartEntry { Week = 1, Day = "MON", SlotIndex = 0, RewardType = "gold", Quantity = 1, PurchasedQuantity = 0 }],
+            });
+        }
+
+        await db.SaveChangesAsync(Ct);
+    }
 
     private async Task<SeededSource> SeedSourceAsync(string subject)
     {
@@ -244,6 +302,18 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
             EventId = "testEvent",
             CatalogVersion = "1",
             Teams = [new LegendaryEventTeamRecord { Id = LegendaryEventTeamId.From(Guid.CreateVersion7()), LaneId = "alpha", Name = "Alpha team" }],
+        });
+        db.EventShopPlans.Add(new EventShopPlan
+        {
+            Id = EventShopPlanId.From(Guid.CreateVersion7()),
+            ProfileId = profileId,
+            EventId = "october-2026",
+            CatalogVersion = "1",
+            Entries =
+            [
+                new EventShopCartEntry { Week = 1, Day = "THU", SlotIndex = 1, RewardType = "shards_astraYarrick", Quantity = 2, PurchasedQuantity = 1 },
+                new EventShopCartEntry { Week = 1, Day = "FRI", SlotIndex = 2, RewardType = "draft_legendary", Quantity = 1, PurchasedQuantity = 0, DraftAlliance = "xenos" },
+            ],
         });
         db.LegendaryEventRunRecords.Add(new LegendaryEventRunRecord
         {

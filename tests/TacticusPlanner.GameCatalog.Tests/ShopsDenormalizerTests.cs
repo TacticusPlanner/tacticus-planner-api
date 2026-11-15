@@ -25,6 +25,15 @@ public sealed class ShopsDenormalizerTests
         Assert.Single(GameCatalogDenormalizer.BuildShops(new Dictionary<string, GameCatalogRawShop> { ["shops-guild"] = shop }));
 
     [Fact]
+    public void EventMerchantsStayOutOfTheDailyShops()
+    {
+        var snapshot = GameCatalogLoader.Load();
+
+        Assert.NotEmpty(snapshot.RawEventShops);
+        Assert.Equal(["guild", "war", "rogue-trader", "crusade"], snapshot.ShopViews.Select(shop => shop.Id));
+    }
+
+    [Fact]
     public void OneRecordPerSourceFileKeyedByTheIdAfterTheShopsPrefix()
     {
         var shops = GameCatalogDenormalizer.BuildShops(new Dictionary<string, GameCatalogRawShop>

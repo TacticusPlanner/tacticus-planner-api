@@ -1,3 +1,4 @@
+using TacticusPlanner.Domain.EventShops;
 using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.GuildRaids;
 using TacticusPlanner.Domain.Guilds;
@@ -30,4 +31,5 @@ namespace TacticusPlanner.Persistence;
 [EfCoreConverter<LegendaryEventTeamId>]
 [EfCoreConverter<LegendaryEventRunRecordId>]
 [EfCoreConverter<PersonalRosterSnapshotId>]
+[EfCoreConverter<EventShopPlanId>]
 internal sealed partial class VogenEfCoreConverters;

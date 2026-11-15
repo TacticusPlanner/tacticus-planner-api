@@ -1,3 +1,4 @@
+using TacticusPlanner.Domain.EventShops;
 using TacticusPlanner.Domain.Goals;
 using TacticusPlanner.Domain.LegendaryEvents;
 using TacticusPlanner.Domain.PlayerData;
@@ -40,6 +41,8 @@ public sealed record StagingTransferBundle
     public List<StagingTransferLegendaryEventRunRecord> LegendaryEventRunRecords { get; init; } = [];
 
     public List<StagingTransferPersonalRosterSnapshot> PersonalRosterSnapshots { get; init; } = [];
+
+    public List<StagingTransferEventShopPlan> EventShopPlans { get; init; } = [];
 }
 
 public sealed record StagingTransferOverrides
@@ -118,6 +121,15 @@ public sealed record StagingTransferLegendaryEventPlan
     public List<LegendaryEventRunProgress> Runs { get; init; } = [];
 
     public List<LegendaryEventObjectiveAnnotation> Annotations { get; init; } = [];
+}
+
+public sealed record StagingTransferEventShopPlan
+{
+    public string EventId { get; init; } = string.Empty;
+
+    public string CatalogVersion { get; init; } = string.Empty;
+
+    public List<EventShopCartEntry> Entries { get; init; } = [];
 }
 
 public sealed record StagingTransferLegendaryEventRunRecord
