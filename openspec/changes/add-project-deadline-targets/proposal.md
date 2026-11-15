@@ -1,6 +1,6 @@
 ## Why
 
-Players plan projects toward a deadline: a Battle Pass, Guild Raid or Guild War season, a specific Legendary Event run, or a date they pick (UserJot [Plan goals against an event or deadline](https://tacticusplanner.userjot.com/board/p/plan-goals-against-an-event-or-deadline), In Progress, with the merged [Enhancements for Project Organization and Goal Management](https://tacticusplanner.userjot.com/board/p/enhancements-for-project-organization-and-goal-management)). Today a project's target can only name a Legendary Event (`add-project-event-target`), with no run and no other kind. Companion of `tacticus-planner-apps` change `add-project-deadline-targets`; this API half applies first.
+Players plan projects toward a deadline: a Battle Pass, Guild Raid or Guild War season, a specific Legendary Event run, or a date they pick (UserJot [Plan goals against an event or deadline](https://tacticusplanner.userjot.com/board/p/plan-goals-against-an-event-or-deadline), In Progress, with the merged [Enhancements for Project Organization and Goal Management](https://tacticusplanner.userjot.com/board/p/enhancements-for-project-organization-and-goal-management)). Today a project's target can only name a Legendary Event (`add-project-event-target`), with no run and no other kind. Companion of `tacticus-planner-apps` change `add-project-deadline-targets`; this API half applies first. It is phase 3 of the rollout: the web-only small wins and the deadline fit for today's Legendary Event targets ship before it with no API change.
 
 ## What Changes
 
