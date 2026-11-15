@@ -16,7 +16,7 @@ public sealed class GameCatalogEventShopsEndpointTests(GameCatalogApiFactory fac
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
         var envelope = JsonNode.Parse(await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken))!;
         var events = envelope["data"]!.AsArray();
-        Assert.Equal(["june-2026", "august-2026", "october-2026"], events.Select(node => node!["id"]!.GetValue<string>()));
+        Assert.Equal(["june-2026", "august-2026", "october-2026", "november-2026"], events.Select(node => node!["id"]!.GetValue<string>()));
         var october = events[2]!;
         Assert.Equal("seasonalEventCurrencyOctober2026", october["currency"]!.GetValue<string>());
         Assert.Equal(7, october["dayCount"]!.GetValue<int>());

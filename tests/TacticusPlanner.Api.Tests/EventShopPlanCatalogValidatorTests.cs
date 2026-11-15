@@ -103,4 +103,11 @@ public sealed class EventShopPlanCatalogValidatorTests
         var wednesdayStart = October with { StartUtc = new DateTimeOffset(2026, 8, 5, 0, 0, 0, TimeSpan.Zero) };
         Assert.Equal(["WED", "THU", "FRI", "SAT", "SUN", "MON", "TUE"], EventShopPlanCatalogValidator.DayOrder(wednesdayStart));
     }
+
+    [Fact]
+    public void DayOrderIsMondayFirstForAnUndatedEvent()
+    {
+        var undated = October with { StartUtc = null, DefinitionId = null };
+        Assert.Equal(["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"], EventShopPlanCatalogValidator.DayOrder(undated));
+    }
 }

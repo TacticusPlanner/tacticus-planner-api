@@ -16,10 +16,10 @@ public sealed class EventShopsDenormalizerTests
         Assert.Single(Snapshot.EventShopViews, eventShop => eventShop.Id == id);
 
     [Fact]
-    public void ServesTheThreeDatedEventsInStartOrder()
+    public void ServesTheFourDatedEventsInStartOrder()
     {
-        Assert.Equal(["june-2026", "august-2026", "october-2026"], Snapshot.EventShopViews.Select(view => view.Id));
-        Assert.Equal(["June2026", "August2026", "October2026"], Snapshot.EventShopViews.Select(view => view.EventKey));
+        Assert.Equal(["june-2026", "august-2026", "october-2026", "november-2026"], Snapshot.EventShopViews.Select(view => view.Id));
+        Assert.Equal(["June2026", "August2026", "October2026", "November2026"], Snapshot.EventShopViews.Select(view => view.EventKey));
     }
 
     [Fact]
@@ -38,6 +38,12 @@ public sealed class EventShopsDenormalizerTests
         Assert.Equal("armageddon-shop", june.DefinitionId);
         Assert.Equal("anniversary-event", august.DefinitionId);
         Assert.Equal("seasonalEventCurrencyOctober2026", october.Currency);
+
+        // Skull Harvest: the game's event text says it begins Monday 23 November and is week-long.
+        var november = Event("november-2026");
+        Assert.Equal(new DateTimeOffset(2026, 11, 23, 0, 0, 0, TimeSpan.Zero), november.StartUtc);
+        Assert.Equal(7, november.DayCount);
+        Assert.Equal("skull-harvest-shop", november.DefinitionId);
     }
 
     [Fact]
@@ -174,13 +180,73 @@ public sealed class EventShopsDenormalizerTests
     private static readonly string[] OneGold = ["gold:1"];
 
     [Fact]
-    public void UndatedMerchantIsNotServed()
+    public void UndatedSharedMerchantIsServedAsOneWeekWithoutADate()
+    {
+        var undated = Assert.Single(GameCatalogDenormalizer.ReadDatamineEventShops(
+            new Dictionary<string, JsonElement> { ["November2026EventShop"] = Merchant() },
+            [ShopEventDefinition], [], WebOptions));
+
+        Assert.False(undated.IsDated);
+        Assert.Null(undated.DefinitionId);
+        var week = Assert.Single(undated.Weeks);
+        Assert.Equal(1, week.Week);
+        Assert.Equal("November2026EventShop", week.MerchantKey);
+        Assert.Null(week.Occurrence);
+    }
+
+    [Fact]
+    public void UndatedPerWeekMerchantsServeWeeksUpToTheFirstMissingOne()
+    {
+        var undated = Assert.Single(GameCatalogDenormalizer.ReadDatamineEventShops(
+            new Dictionary<string, JsonElement>
+            {
+                ["November2026Week1EventShop"] = Merchant(),
+                ["November2026Week2EventShop"] = Merchant(),
+                ["November2026Week4EventShop"] = Merchant(),
+            },
+            [ShopEventDefinition], [], WebOptions));
+
+        Assert.Equal([1, 2], undated.Weeks.Select(week => week.Week));
+        Assert.True(undated.PerWeekMerchants);
+    }
+
+    [Fact]
+    public void UndatedEventsFollowTheDatedOnesAndOlderOnesAreDropped()
     {
         var events = GameCatalogDenormalizer.ReadDatamineEventShops(
-            new Dictionary<string, JsonElement> { ["November2026EventShop"] = Merchant() },
-            [ShopEventDefinition], [], WebOptions);
+            new Dictionary<string, JsonElement>
+            {
+                ["December2026EventShop"] = Merchant(),
+                ["November2026EventShop"] = Merchant(),
+                ["October2026EventShop"] = Merchant(),
+                ["May2026EventShop"] = Merchant(),
+            },
+            [ShopEventDefinition], [Week("November2026", 1, Start)], WebOptions);
 
-        Assert.Empty(events);
+        // November is dated; December is undated and later; October and May are undated and before November's
+        // month (an old event the calendar never dated), so they are not served.
+        Assert.Equal(["November2026", "December2026"], events.Select(shop => shop.EventKey));
+        Assert.Equal([true, false], events.Select(shop => shop.IsDated));
+    }
+
+    [Fact]
+    public void UndatedEventServesNoStartNoDefinitionAndNoIncome()
+    {
+        var raw = new GameCatalogRawEventShop("December2026", null, false,
+        [
+            new GameCatalogRawEventShopWeek(1, "December2026EventShop",
+                new GameCatalogRawShop("seasonalEventMerchant", null, false, 0, []), null),
+        ]);
+
+        var served = Assert.Single(GameCatalogDenormalizer.BuildEventShops(
+            [raw], new Dictionary<string, List<DatamineTieredProgressReward>>(), new Dictionary<string, JsonElement>(),
+            new Dictionary<string, JsonElement>(), WebOptions));
+
+        Assert.Equal("december-2026", served.Id);
+        Assert.Null(served.StartUtc);
+        Assert.Null(served.DefinitionId);
+        Assert.Equal(7, served.DayCount);
+        Assert.Null(Assert.Single(served.Weeks).EstimatedWeeklyIncome);
     }
 
     [Fact]

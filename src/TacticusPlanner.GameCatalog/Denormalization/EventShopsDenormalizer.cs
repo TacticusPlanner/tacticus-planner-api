@@ -28,11 +28,14 @@ internal static partial class GameCatalogDenormalizer
     /// <summary>
     /// Discovers the seasonal event shops: every <c>liveEventRequired</c> merchant named
     /// <c>&lt;Month&gt;&lt;Year&gt;[Week&lt;N&gt;]EventShop</c>, dated by the calendar's <c>ShopEvent</c> occurrences with
-    /// the same <c>eventKey</c>. A key with no merchant or no calendar week is not returned. With per-week merchants,
-    /// an event is served up to its first calendar week with no <c>Week&lt;N&gt;</c> merchant (none when week 1 has
-    /// none). None of these fail the load; the CI calendar checks in <c>ShopEventCalendarTests</c> report the gaps
-    /// that matter (current or upcoming weeks with no merchant, merchants with no calendar week). See
-    /// specs/game-event-shops-dataset.
+    /// the same <c>eventKey</c>. A calendar key with no merchant is not returned. With per-week merchants, an event is
+    /// served up to its first calendar week with no <c>Week&lt;N&gt;</c> merchant (none when week 1 has none). A
+    /// merchant key with no calendar week at all is returned undated (start date to be announced: no definition, no
+    /// occurrences; its weeks are 1 for a shared merchant, else 1 up to the first missing <c>Week&lt;N&gt;</c>), but
+    /// only when its month is not before the month the latest dated event starts in, so an old event the calendar
+    /// never dated does not show up as upcoming. None of these fail the load; the CI calendar checks in
+    /// <c>ShopEventCalendarTests</c> report the gaps that matter (current or upcoming weeks with no merchant,
+    /// merchants with no calendar week). See specs/game-event-shops-dataset.
     /// </summary>
     public static IReadOnlyList<GameCatalogRawEventShop> ReadDatamineEventShops(
         IReadOnlyDictionary<string, JsonElement> merchants,
@@ -76,11 +79,76 @@ internal static partial class GameCatalogDenormalizer
                 eventKey, weeks[0].Occurrence.DefinitionId, perWeekMerchants, rawWeeks));
         }
 
+        // Undated events count from the month the latest dated event starts in (any month when none is dated).
+        var undatedFrom = events.Count == 0
+            ? (DateTimeOffset?)null
+            : events.Max(shop => FirstOfMonth(shop.Weeks[0].Occurrence!.StartUtc));
+        events.AddRange(ReadUndatedEventShops(merchants, merchantsByEventKey, weeksByEventKey, undatedFrom, options).ToArray());
+
+        // Dated events by start, then the undated ones by month.
         return events
-            .OrderBy(shop => shop.Weeks[0].Occurrence.StartUtc)
+            .OrderBy(shop => shop.IsDated ? 0 : 1)
+            .ThenBy(shop => shop.Weeks[0].Occurrence?.StartUtc ?? EventKeyMonth(shop.EventKey))
             .ThenBy(shop => shop.EventKey, StringComparer.Ordinal)
             .ToArray();
     }
+
+    /// <summary>
+    /// The live-event merchants the calendar has no week for, as undated events, from the month the latest dated
+    /// event starts in onwards. See <see cref="ReadDatamineEventShops"/>.
+    /// </summary>
+    private static IEnumerable<GameCatalogRawEventShop> ReadUndatedEventShops(
+        IReadOnlyDictionary<string, JsonElement> merchants,
+        IReadOnlyDictionary<string, (string? Shared, SortedDictionary<int, string> PerWeek)> merchantsByEventKey,
+        IReadOnlyDictionary<string, IReadOnlyList<(int Week, GameCatalogEventOccurrence Occurrence)>> weeksByEventKey,
+        DateTimeOffset? earliestMonth,
+        JsonSerializerOptions options)
+    {
+        foreach (var (eventKey, eventMerchants) in merchantsByEventKey)
+        {
+            if (weeksByEventKey.ContainsKey(eventKey)
+                || EventKeyMonth(eventKey) is not { } month
+                || (earliestMonth is { } earliest && month < earliest))
+            {
+                continue;
+            }
+
+            var merchantKeys = eventMerchants.PerWeek.Count > 0
+                ? Enumerable.Range(1, eventMerchants.PerWeek.Count)
+                    .TakeWhile(eventMerchants.PerWeek.ContainsKey)
+                    .Select(week => (Week: week, MerchantKey: eventMerchants.PerWeek[week]))
+                    .ToArray()
+                : [(1, eventMerchants.Shared!)];
+            if (merchantKeys.Length == 0)
+            {
+                continue;
+            }
+
+            yield return new GameCatalogRawEventShop(
+                eventKey,
+                null,
+                eventMerchants.PerWeek.Count > 0,
+                merchantKeys
+                    .Select(week => new GameCatalogRawEventShopWeek(
+                        week.Week,
+                        week.MerchantKey,
+                        merchants[week.MerchantKey].Deserialize<GameCatalogRawShop>(options),
+                        null))
+                    .ToArray());
+        }
+    }
+
+    /// <summary>The first instant of an event key's month (<c>November2026</c> → 2026-11-01 UTC), or null when the
+    /// key is not a month and year.</summary>
+    internal static DateTimeOffset? EventKeyMonth(string eventKey) =>
+        DateTimeOffset.TryParseExact(
+            eventKey, "MMMMyyyy", CultureInfo.InvariantCulture,
+            DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out var month)
+            ? FirstOfMonth(month)
+            : null;
+
+    private static DateTimeOffset FirstOfMonth(DateTimeOffset instant) =>
+        new(instant.Year, instant.Month, 1, 0, 0, 0, TimeSpan.Zero);
 
     /// <summary>
     /// The datamine's live-event merchants by event key: the shared <c>&lt;Key&gt;EventShop</c> merchant key, if any,
@@ -214,7 +282,7 @@ internal static partial class GameCatalogDenormalizer
 
             return new GameCatalogEventShopWeekView(
                 week.Week,
-                ReadIncome(week.Occurrence),
+                week.Occurrence is null ? null : ReadIncome(week.Occurrence),
                 week.Merchant is null ? [] : BuildShopSlots(week.Merchant),
                 progressChestsKey is null ? [] : BuildRewardTiers(raw.EventKey, progressChestsKey, tieredProgressRewards, chests),
                 BuildMissions(raw.EventKey, missionPrefix, seasonalQuests));
@@ -230,7 +298,7 @@ internal static partial class GameCatalogDenormalizer
             raw.EventKey,
             raw.DefinitionId,
             EventShopCurrency(raw.EventKey),
-            raw.Weeks[0].Occurrence.StartUtc,
+            raw.Weeks[0].Occurrence?.StartUtc,
             7 * raw.Weeks.Count,
             milestones,
             weeks);

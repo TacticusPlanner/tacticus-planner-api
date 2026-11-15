@@ -22,36 +22,44 @@ public sealed record DatamineSeasonalQuestTask(
 
 /// <summary>
 /// One seasonal event shop as discovered from the datamine and dated by the calendar: its event key, the
-/// <c>ShopEvent</c> definition of its weeks, and per week the merchant and calendar occurrence. Kept on the snapshot
-/// for validation and plan-write lookups.
+/// <c>ShopEvent</c> definition of its weeks, and per week the merchant and calendar occurrence. An event the calendar
+/// does not date yet has no definition and no occurrences (<see cref="IsDated"/> is false). Kept on the snapshot for
+/// validation and plan-write lookups.
 /// </summary>
 public sealed record GameCatalogRawEventShop(
     string EventKey,
-    string DefinitionId,
+    string? DefinitionId,
     bool PerWeekMerchants,
-    IReadOnlyList<GameCatalogRawEventShopWeek> Weeks);
+    IReadOnlyList<GameCatalogRawEventShopWeek> Weeks)
+{
+    /// <summary>True when the calendar dates the event (every week has an occurrence).</summary>
+    public bool IsDated => Weeks.Count > 0 && Weeks[0].Occurrence is not null;
+}
 
-/// <summary>One calendar week of an event shop. <see cref="MerchantKey"/>/<see cref="Merchant"/> are null when the
-/// event has per-week merchants but none for this week (validation reports it).</summary>
+/// <summary>One week of an event shop. <see cref="MerchantKey"/>/<see cref="Merchant"/> are null when the event has
+/// per-week merchants but none for this week (validation reports it). <see cref="Occurrence"/> is the calendar week,
+/// null while the calendar does not date the event.</summary>
 public sealed record GameCatalogRawEventShopWeek(
     int Week,
     string? MerchantKey,
     GameCatalogRawShop? Merchant,
-    GameCatalogEventOccurrence Occurrence);
+    GameCatalogEventOccurrence? Occurrence);
 
 // ---- served view (public catalog surface) --------------------------------------------------------
 
 /// <summary>
 /// One seasonal event shop (<c>event-shops</c> dataset). Ids and structured values only: the client names the event
-/// from <see cref="DefinitionId"/> and derives dates, the current day and every label. See
-/// specs/game-event-shops-dataset.
+/// from <see cref="DefinitionId"/> (or, while it is null, from <see cref="EventKey"/>) and derives dates, the current
+/// day and every label. <see cref="StartUtc"/> and <see cref="DefinitionId"/> are null for an event the datamine ships
+/// but the calendar does not date yet (start date to be announced); its <see cref="DayCount"/> is then 7 per known
+/// week. See specs/game-event-shops-dataset.
 /// </summary>
 public sealed record GameCatalogEventShopView(
     string Id,
     string EventKey,
-    string DefinitionId,
+    string? DefinitionId,
     string Currency,
-    DateTimeOffset StartUtc,
+    DateTimeOffset? StartUtc,
     int DayCount,
     IReadOnlyList<GameCatalogRewardTierView> Milestones,
     IReadOnlyList<GameCatalogEventShopWeekView> Weeks);

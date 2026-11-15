@@ -99,15 +99,15 @@ public sealed class EventShopPlanCatalogValidator(IGameCatalogProvider catalog)
 
     /// <summary>
     /// The event's day order, starting at the weekday of its <c>startUtc</c> (an event need not start on a Monday);
-    /// Monday-first for an event no longer in the catalog.
+    /// Monday-first for an event no longer in the catalog or not dated yet.
     /// </summary>
     public static IReadOnlyList<string> DayOrder(GameCatalogEventShopView? eventShop)
     {
-        if (eventShop is null)
+        if (eventShop?.StartUtc is null)
             return EventShopValidation.Days;
 
         // DayOfWeek is Sunday = 0; Days is Monday-first.
-        var start = ((int)eventShop.StartUtc.UtcDateTime.DayOfWeek + 6) % 7;
+        var start = ((int)eventShop.StartUtc.Value.UtcDateTime.DayOfWeek + 6) % 7;
         return Enumerable.Range(0, 7).Select(offset => EventShopValidation.Days[(start + offset) % 7]).ToArray();
     }
 }

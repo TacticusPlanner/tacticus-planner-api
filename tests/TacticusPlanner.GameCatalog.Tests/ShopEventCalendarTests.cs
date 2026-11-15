@@ -31,7 +31,7 @@ public sealed class ShopEventCalendarTests
     /// Event keys the pinned datamine ships a merchant for whose calendar weeks are not authored yet. Each entry is a
     /// known gap (the event is not served); remove it when its weeks land in event-occurrences.json.
     /// </summary>
-    private static readonly string[] KnownUndatedEventKeys = ["November2026"];
+    private static readonly string[] KnownUndatedEventKeys = [];
 
     [Fact]
     public void EveryCurrentOrUpcomingEventShopMerchantHasCalendarWeeks()
@@ -92,7 +92,7 @@ public sealed class ShopEventCalendarTests
         // Serve only week 1, as the denormalizer does when week 2's merchant is missing.
         var message = FindUndatedShopEventWeeks(
             snapshot with { RawEventShops = [served with { Weeks = [served.Weeks[0]] }] },
-            served.Weeks[0].Occurrence.StartUtc);
+            served.Weeks[0].Occurrence!.StartUtc);
 
         Assert.NotNull(message);
         Assert.Contains($"{served.EventKey} week 2", message, StringComparison.Ordinal);
@@ -102,21 +102,21 @@ public sealed class ShopEventCalendarTests
     public void HelperFailsForAnUpcomingWeekWithoutAnEventShop()
     {
         var snapshot = GameCatalogLoader.Load();
-        var start = new DateTimeOffset(2026, 11, 16, 0, 0, 0, TimeSpan.Zero);
+        var start = new DateTimeOffset(2099, 11, 16, 0, 0, 0, TimeSpan.Zero);
         var november = new GameCatalogEventOccurrence(
-            "occ-2026-11-16-armageddon-shop-week1", "armageddon-shop", start, start.AddDays(7),
+            "occ-2099-11-16-armageddon-shop-week1", "armageddon-shop", start, start.AddDays(7),
             new Dictionary<string, JsonElement>
             {
                 ["weekNumber"] = JsonSerializer.SerializeToElement(1),
-                ["eventKey"] = JsonSerializer.SerializeToElement("November2026"),
+                ["eventKey"] = JsonSerializer.SerializeToElement("November2099"),
             });
 
         var message = FindUndatedShopEventWeeks(
             snapshot with { EventOccurrences = [.. snapshot.EventOccurrences, november] },
-            new DateTimeOffset(2026, 11, 20, 0, 0, 0, TimeSpan.Zero));
+            new DateTimeOffset(2099, 11, 20, 0, 0, 0, TimeSpan.Zero));
 
         Assert.NotNull(message);
-        Assert.Contains("November2026", message, StringComparison.Ordinal);
+        Assert.Contains("November2099", message, StringComparison.Ordinal);
     }
 
     [Fact]
