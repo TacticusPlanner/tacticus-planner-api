@@ -19,32 +19,30 @@ on:
         type: boolean
         default: true
       run-validation:
-        description: Run formatting validation before building.
+        description: Run the Format job (dotnet format --verify-no-changes) alongside the build.
         required: false
         type: boolean
         default: true
 
 jobs:
-  build:
-    name: Build API
-    if: ${{ !inputs.skip }}
+  # Format runs beside the build so a PR waits for the slower job, not for both in a row. "Build API"
+  # at the end only collects the results: it keeps the required check name the ruleset already lists.
+  format:
+    name: Format
+    if: ${{ !inputs.skip && inputs.run-validation }}
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 10
     permissions:
       contents: read
-    env:
-      ConnectionStrings__planner-db: Host=localhost;Port=5432;Database=tacticus_planner;Username=postgres;Password=postgres
-      Authentication__Authority: https://example.ciamlogin.com/example.onmicrosoft.com/v2.0
-      Authentication__Audience: api://tacticus-planner-api-ci
-
     steps:
       - name: Check out code
-        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ inputs.ref || github.ref }}
+          persist-credentials: false
 
       - name: Set up .NET
-        uses: actions/setup-dotnet@26b0ec14cb23fa6904739307f278c14f94c95bf1 # v5.4.0
+        uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
         with:
           global-json-file: global.json
           cache: true
@@ -57,8 +55,38 @@ jobs:
         run: dotnet restore orchestration/TacticusPlanner.AppHost/TacticusPlanner.AppHost.csproj
 
       - name: Check formatting
-        if: ${{ inputs.run-validation }}
         run: dotnet format TacticusPlanner.slnx --verify-no-changes --no-restore
+
+  test:
+    name: Build and test
+    if: ${{ !inputs.skip }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    env:
+      ConnectionStrings__planner-db: Host=localhost;Port=5432;Database=tacticus_planner;Username=postgres;Password=postgres
+      Authentication__Authority: https://example.ciamlogin.com/example.onmicrosoft.com/v2.0
+      Authentication__Audience: api://tacticus-planner-api-ci
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.ref || github.ref }}
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@0f4a354dd5547a28c70b7853dbd95d5b67886e73 # v6.1.0
+        with:
+          global-json-file: global.json
+          cache: true
+          cache-dependency-path: "**/packages.lock.json"
+
+      - name: Restore locked solution dependencies
+        run: dotnet restore TacticusPlanner.slnx --locked-mode
+
+      - name: Restore platform-specific AppHost dependencies
+        run: dotnet restore orchestration/TacticusPlanner.AppHost/TacticusPlanner.AppHost.csproj
 
       - name: Build
         run: dotnet build TacticusPlanner.slnx --configuration Release --no-restore
@@ -81,3 +109,28 @@ jobs:
       - name: Build container image
         if: ${{ inputs.build-image }}
         run: docker build --file src/TacticusPlanner.Api/Dockerfile --tag tacticus-planner-api:${{ github.sha }} .
+
+  build:
+    name: Build API
+    needs: [format, test]
+    # always() so a failed job above reports here as a failure instead of skipping this check (a
+    # skipped required check counts as passing). With skip set, nothing ran and this skips too.
+    if: ${{ always() && !inputs.skip }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions: {}
+    steps:
+      - name: Check results
+        env:
+          RESULTS: ${{ toJSON(needs) }}
+        run: |
+          echo "$RESULTS" | jq -r 'to_entries[] | "\(.key): \(.value.result)"'
+          # Format is skipped when run-validation is off; anything else must succeed.
+          if echo "$RESULTS" | jq -e 'to_entries | any(.value.result == "failure" or .value.result == "cancelled")' > /dev/null; then
+            echo "::error::A Build API job failed; see the jobs above."
+            exit 1
+          fi
+          if [ "$(echo "$RESULTS" | jq -r '.test.result')" != "success" ]; then
+            echo "::error::Build and test did not run."
+            exit 1
+          fi

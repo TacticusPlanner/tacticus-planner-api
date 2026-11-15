@@ -40,6 +40,17 @@ ci:
       - any-glob-to-any-file:
           - ".github/**"
 
+# The same label Dependabot adds. Its branches match too, so sync-labels never strips it from a
+# Dependabot PR that changes no package file (a GitHub Actions or Docker base image bump).
+dependencies:
+  - changed-files:
+      - any-glob-to-any-file:
+          - "Directory.Packages.props"
+          - "**/packages.lock.json"
+          - "global.json"
+  - head-branch:
+      - "^dependabot/"
+
 api-contract:
   - changed-files:
       - any-glob-to-any-file:
