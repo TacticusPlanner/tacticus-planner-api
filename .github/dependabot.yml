@@ -1,0 +1,119 @@
+# Dependabot version updates. Security alerts and security updates are repo settings
+# (Settings → Advanced Security), not configured here.
+version: 2
+updates:
+  # Central Package Management: Directory.Packages.props plus each project's packages.lock.json.
+  - package-ecosystem: nuget
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Kyiv
+    # Waits before offering a new release; security updates ignore the cooldown.
+    cooldown:
+      semver-patch-days: 3
+      semver-minor-days: 7
+      semver-major-days: 14
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: build(deps)
+    groups:
+      # Bump the AppHost's Sdk="Aspire.AppHost.Sdk/x.y.z" by hand alongside this group.
+      aspire:
+        patterns:
+          - "Aspire.*"
+      # Ships together with each .NET servicing release.
+      dotnet-platform:
+        patterns:
+          - "Microsoft.AspNetCore.*"
+          - "Microsoft.EntityFrameworkCore*"
+          - "Microsoft.Extensions.*"
+          - "Npgsql.*"
+          - "EFCore.*"
+      opentelemetry:
+        patterns:
+          - "OpenTelemetry.*"
+          - "Azure.Monitor.OpenTelemetry.*"
+      fastendpoints:
+        patterns:
+          - "FastEndpoints*"
+      refit:
+        patterns:
+          - "Refit*"
+      test:
+        patterns:
+          - "xunit*"
+          - "Microsoft.NET.Test.Sdk"
+          - "coverlet.*"
+          - "Verify.*"
+          - "Testcontainers.*"
+      minor-patch:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
+    ignore:
+      # .NET 10 is the LTS target; a move to the next major is a planned migration.
+      - dependency-name: "Microsoft.AspNetCore.*"
+        update-types:
+          - version-update:semver-major
+      - dependency-name: "Microsoft.EntityFrameworkCore*"
+        update-types:
+          - version-update:semver-major
+      - dependency-name: "Microsoft.Extensions.*"
+        update-types:
+          - version-update:semver-major
+
+  # Base-image digests carry OS security fixes. Keep the SDK tag in step with global.json.
+  - package-ecosystem: docker
+    directory: /src/TacticusPlanner.Api
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Kyiv
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: build(deps)
+    groups:
+      dotnet-images:
+        patterns:
+          - "*"
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - version-update:semver-major
+
+  # global.json: SDK feature-band and patch updates within .NET 10.
+  - package-ecosystem: dotnet-sdk
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "06:00"
+      timezone: Europe/Kyiv
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: build(deps)
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - version-update:semver-major
+          - version-update:semver-minor
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+      timezone: Europe/Kyiv
+    cooldown:
+      default-days: 7
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: ci(deps)
+    groups:
+      actions:
+        patterns:
+          - "*"
