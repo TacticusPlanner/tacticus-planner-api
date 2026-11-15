@@ -20,7 +20,8 @@ flag. A push to `main` publishes and deploys the current API to staging.
 
 ## Release flow
 
-Production only ships published, immutable `vX.Y.Z` tags. Three workflows are
+Production only ships published, immutable `vX.Y.Z` tags (`vX.Y.Z.N` for a
+hotfix, see [Versions](#versions)). Three workflows are
 involved:
 
 | Workflow | Trigger | What it does |
@@ -50,7 +51,7 @@ involved:
 ### What a Release run does
 
 1. **Tag:** computes the version, pushes the new release branch (major, minor
-   and patch only) and an annotated `vX.Y.Z` tag in one atomic push, then
+   and patch only) and an annotated version tag in one atomic push, then
    publishes a GitHub Release with notes generated since the previous tag.
 2. **Check:** confirms the tag is a published, non-draft release.
 3. **Build:** reuses the image staging already published for that commit (`tacticus-planner-api:<sha>`), or builds and pushes it if none exists. Production always deploys the `@sha256:` digest.
@@ -67,11 +68,19 @@ release published but not live; ship it later with `CD Prod` (see below).
 | `major` | `main` | `v(X+1).0.0` and branch `release/(X+1).0` |
 | `minor` | `main` | `vX.(Y+1).0` and branch `release/X.(Y+1)` |
 | `patch` | `main` | `vX.Y.(Z+1)` on the newest line and branch `release/X.Y.(Z+1)` |
-| `hotfix` | `release/X.Y` or `release/X.Y.Z` | next `vX.Y.Z` on that line, no new branch |
+| `hotfix` | `release/X.Y` or `release/X.Y.Z` | `vX.Y.Z.(N+1)` on that line's latest release, no new branch |
 
 With no tags yet, versions count from `1.0.0`, because this rewrite ships as V2
 of Tacticus Planner: `major` gives `v2.0.0` and `minor` gives `v1.1.0`. Use
 `major` for the first production launch.
+
+A hotfix never takes a patch number: it adds a fourth part to the release it
+fixes, so `v1.4.1` is followed by `v1.4.1.1`, `v1.4.1.2`, and so on, and a
+hotfix of a minor release `v1.4.0` is `v1.4.0.1`. The next `patch` from `main`
+still becomes `v1.4.2`. Four-part tags are not semver; nothing in the release
+or deploy pipeline needs semver (images are tagged by commit SHA and the tag is
+only matched by the workflows), but keep that in mind before feeding a tag to
+semver tooling.
 
 ## Example: cutting a release
 
@@ -113,9 +122,9 @@ release branch, or ship `main` as a **patch** on a branch of its own.
    reviewed, and squash-merge it.
 4. Actions → **Release** → *Use workflow from:* `release/1.4`; *bump:*
    `hotfix`.
-5. The run tags `v1.4.1` with notes since `v1.4.0`. Approve the deploy.
+5. The run tags `v1.4.0.1` with notes since `v1.4.0`. Approve the deploy.
 
-A second fix on the same line becomes `v1.4.2`. Anything merged to `main`
+A second fix on the same line becomes `v1.4.0.2`. Anything merged to `main`
 after `release/1.4` was cut stays out of the hotfix.
 
 A hotfix commit exists only on the release branch, so its image is built fresh
@@ -135,15 +144,15 @@ the backport: Actions → **Release** → *Use workflow from:* `main`; *bump:*
 cut. Unlike a hotfix, this ships everything merged since `v1.4.0`, not just
 the fix, and it reuses the image staging already ran.
 
-Later hotfixes for `v1.4.1` go into `release/1.4.1`, and become `v1.4.2`,
-`v1.4.3`, and so on. `release/1.4` no longer takes hotfixes, because it lacks
+Later hotfixes for `v1.4.1` go into `release/1.4.1`, and become `v1.4.1.1`,
+`v1.4.1.2`, and so on. `release/1.4` no longer takes hotfixes, because it lacks
 `v1.4.1`.
 
 ## Redeploying, rolling back and failed runs
 
 - **Ship a rejected or failed deploy:** Actions → **CD Prod** → *Use workflow
   from:* `main`; *ref:* `v1.4.1`. It refuses anything that is not a published,
-  non-draft `vX.Y.Z` release.
+  non-draft `vX.Y.Z` or `vX.Y.Z.N` release.
 - **Roll back:** run **CD Prod** with the previous release tag, for example
   `v1.4.0`. Check the migration notes below first: rolling back past a destructive migration needs a database restore.
 - **Release run failed after the tag was pushed, before the GitHub Release
@@ -170,7 +179,8 @@ Run the tests on any OS with Node 22 or newer:
 node --test "scripts/release/*.test.mjs"
 ```
 
-CI runs them on Linux and Windows. The folder is kept identical in
+CI runs them on Linux and Windows when a pull request changes `scripts/release/`
+(the `release-scripts` label from `.github/labeler.yml`). The folder is kept identical in
 `tacticus-planner-apps`; change both together.
 
 ## Rules

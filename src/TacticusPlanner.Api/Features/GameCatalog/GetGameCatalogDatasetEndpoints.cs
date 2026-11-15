@@ -258,6 +258,18 @@ public sealed class GetGameCatalogHordeModeTiersEndpoint(IGameCatalogProvider ca
     }
 }
 
+public sealed class GetGameCatalogNpcTiersEndpoint(IGameCatalogProvider catalog)
+    : ServedDatasetEndpoint<IReadOnlyList<GameCatalogNpcTiers>>(catalog, GameCatalogDatasets.NpcTiers)
+{
+    public override void Configure()
+    {
+        Get("game-catalog/npc-tiers", "game-catalog/npc-tiers/{envelopeHash}");
+        ConfigureServed(
+            "Gets the horde-mode NPC tier list.",
+            "The single S/A/B/C/D tier list of enemy NPCs for horde modes, with each tier's power multiplier applied to an NPC's power in clear estimates; an NPC may override its tier's multiplier, and one not listed is unrated (multiplier 1.0).");
+    }
+}
+
 public sealed class GetGameCatalogUnitPowerEndpoint(IGameCatalogProvider catalog)
     : ServedDatasetEndpoint<IReadOnlyList<GameCatalogUnitPower>>(catalog, GameCatalogDatasets.UnitPower)
 {

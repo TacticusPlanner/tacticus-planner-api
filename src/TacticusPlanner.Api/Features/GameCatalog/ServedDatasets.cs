@@ -36,6 +36,7 @@ public static class ServedDatasets
             [GameCatalogDatasets.Lres] = snapshot => snapshot.LreViews,
             [GameCatalogDatasets.LreBattles] = snapshot => snapshot.LreBattleViews,
             [GameCatalogDatasets.HordeModeTiers] = snapshot => snapshot.HordeModeTiersViews,
+            [GameCatalogDatasets.NpcTiers] = snapshot => snapshot.NpcTiersViews,
             [GameCatalogDatasets.UnitPower] = snapshot => snapshot.UnitPowerViews,
             [GameCatalogDatasets.Factions] = snapshot => snapshot.FactionViews,
             [GameCatalogDatasets.DamageTypes] = snapshot => snapshot.DamageTypeViews,
