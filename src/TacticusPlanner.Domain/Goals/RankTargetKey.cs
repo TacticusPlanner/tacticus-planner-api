@@ -10,9 +10,10 @@ namespace TacticusPlanner.Domain.Goals;
 /// </summary>
 public static class RankTargetKey
 {
-    /// <summary>Below Adamantine1 a rank's upgrades are a 3-slot row and point-five means all 3, so
-    /// (pointFive, 0) and (false, 3) are one end state; at Adamantine1+ slots are numbered individually and
-    /// point-five carries no meaning.</summary>
+    /// <summary>Below Diamond3 a rank's targetable upgrades are a 3-slot row and point-five means all 3, so
+    /// (pointFive, 0) and (false, 3) are one end state; from Diamond3 slots are numbered individually (each
+    /// needs its own XP level), with a Diamond3 point-five (saved before Diamond3 offered numbered targets)
+    /// still reading as at least 3; at Adamantine1+ point-five carries no meaning.</summary>
     public static string From(int end, bool endPointFive, int endAppliedUpgrades) =>
         $"{end}:{Slots(end, endPointFive, endAppliedUpgrades)}";
 
@@ -21,9 +22,11 @@ public static class RankTargetKey
     public static int Slots(int rank, bool pointFive, int appliedUpgrades)
     {
         var slots = Math.Max(appliedUpgrades, 0);
-        if (rank < (int)UnitRank.Adamantine1)
-            slots = pointFive ? 3 : Math.Min(slots, 3);
-        return slots;
+        if (rank >= (int)UnitRank.Adamantine1)
+            return slots;
+        if (rank >= (int)UnitRank.Diamond3)
+            return pointFive ? Math.Max(slots, 3) : slots;
+        return pointFive ? 3 : Math.Min(slots, 3);
     }
 
     public static string From(RankTarget target) => From(target.End, target.EndPointFive, target.EndAppliedUpgrades);

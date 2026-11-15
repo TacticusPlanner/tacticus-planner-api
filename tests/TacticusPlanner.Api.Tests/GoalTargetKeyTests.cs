@@ -15,8 +15,12 @@ public sealed class GoalTargetKeyTests
     [Theory]
     [InlineData((int)UnitRank.Diamond3, false, 0, 0)]
     [InlineData((int)UnitRank.Diamond3, true, 0, 3)]
-    [InlineData((int)UnitRank.Diamond3, false, 5, 3)]
+    [InlineData((int)UnitRank.Diamond3, false, 5, 5)]
+    [InlineData((int)UnitRank.Diamond3, true, 4, 4)]
+    [InlineData((int)UnitRank.Diamond2, false, 5, 3)]
+    [InlineData((int)UnitRank.Diamond2, true, 0, 3)]
     [InlineData((int)UnitRank.Adamantine1, true, 4, 4)]
+    [InlineData((int)UnitRank.Adamantine1, true, 0, 0)]
     public void RankSlotsNormalizePointFiveBelowAdamantine(int rank, bool pointFive, int applied, int expected) =>
         Assert.Equal(expected, RankTargetKey.Slots(rank, pointFive, applied));
 
