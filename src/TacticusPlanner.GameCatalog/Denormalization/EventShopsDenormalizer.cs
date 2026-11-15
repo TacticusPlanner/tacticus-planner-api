@@ -12,24 +12,82 @@ internal static partial class GameCatalogDenormalizer
     public const string SeasonalFreeQuestGroup = "seasonal_seasonal";
     public const string SeasonalPremiumQuestGroup = "seasonal_seasonal_premium";
 
-    [GeneratedRegex("^(?<key>[A-Z][a-z]+[0-9]{4})(?:Week(?<week>[0-9]+))?EventShop$", RegexOptions.CultureInvariant)]
+    [GeneratedRegex(
+        "^(?<key>" + ShopEventParameters.EventKeyRegex + ")(?:Week(?<week>[0-9]+))?EventShop$",
+        RegexOptions.CultureInvariant)]
     private static partial Regex EventMerchantKeyPattern();
 
-    [GeneratedRegex("^(?<month>[A-Z][a-z]+)(?<year>[0-9]{4})$", RegexOptions.CultureInvariant)]
-    private static partial Regex EventKeyPartsPattern();
+    /// <summary>The rest of a free mission name after <c>&lt;prefix&gt;_free_</c>: <c>&lt;n&gt;_chain_&lt;k&gt;</c>.</summary>
+    [GeneratedRegex("^(?<chain>[0-9]+)_chain_[0-9]+$", RegexOptions.CultureInvariant)]
+    private static partial Regex FreeChainSuffixPattern();
+
+    /// <summary>The rest of a premium mission name after <c>&lt;prefix&gt;_premium_</c>: <c>chain_&lt;k&gt;</c>.</summary>
+    [GeneratedRegex("^chain_[0-9]+$", RegexOptions.CultureInvariant)]
+    private static partial Regex PremiumChainSuffixPattern();
 
     /// <summary>
     /// Discovers the seasonal event shops: every <c>liveEventRequired</c> merchant named
     /// <c>&lt;Month&gt;&lt;Year&gt;[Week&lt;N&gt;]EventShop</c>, dated by the calendar's <c>ShopEvent</c> occurrences with
-    /// the same <c>eventKey</c>. A key with no merchant or no calendar week is not returned (the first is reported by
-    /// the CI calendar check, the second is simply not served). A calendar week whose merchant is missing is returned
-    /// with a null merchant for validation to report. See specs/game-event-shops-dataset.
+    /// the same <c>eventKey</c>. A key with no merchant or no calendar week is not returned. With per-week merchants,
+    /// an event is served up to its first calendar week with no <c>Week&lt;N&gt;</c> merchant (none when week 1 has
+    /// none). None of these fail the load; the CI calendar checks in <c>ShopEventCalendarTests</c> report the gaps
+    /// that matter (current or upcoming weeks with no merchant, merchants with no calendar week). See
+    /// specs/game-event-shops-dataset.
     /// </summary>
     public static IReadOnlyList<GameCatalogRawEventShop> ReadDatamineEventShops(
         IReadOnlyDictionary<string, JsonElement> merchants,
         IReadOnlyList<GameCatalogEventDefinition> eventDefinitions,
         IReadOnlyList<GameCatalogEventOccurrence> eventOccurrences,
         JsonSerializerOptions options)
+    {
+        var merchantsByEventKey = DatamineEventMerchants(merchants);
+
+        var weeksByEventKey = ShopEventWeeksByEventKey(eventDefinitions, eventOccurrences);
+
+        var events = new List<GameCatalogRawEventShop>();
+        foreach (var (eventKey, weeks) in weeksByEventKey)
+        {
+            if (!merchantsByEventKey.TryGetValue(eventKey, out var eventMerchants))
+            {
+                continue;
+            }
+
+            var perWeekMerchants = eventMerchants.PerWeek.Count > 0;
+            var rawWeeks = weeks
+                .Select(week => (week.Week, week.Occurrence, MerchantKey: perWeekMerchants
+                    ? eventMerchants.PerWeek.GetValueOrDefault(week.Week)
+                    : eventMerchants.Shared))
+                // Served up to the first calendar week with no merchant: a datamine that ships an event's first
+                // weeks before the rest, or drops its last ones, keeps loading. The CI calendar check reports the
+                // dropped weeks while they have not ended.
+                .TakeWhile(week => week.MerchantKey is not null)
+                .Select(week => new GameCatalogRawEventShopWeek(
+                    week.Week,
+                    week.MerchantKey,
+                    merchants[week.MerchantKey!].Deserialize<GameCatalogRawShop>(options),
+                    week.Occurrence))
+                .ToArray();
+            if (rawWeeks.Length == 0)
+            {
+                continue;
+            }
+
+            events.Add(new GameCatalogRawEventShop(
+                eventKey, weeks[0].Occurrence.DefinitionId, perWeekMerchants, rawWeeks));
+        }
+
+        return events
+            .OrderBy(shop => shop.Weeks[0].Occurrence.StartUtc)
+            .ThenBy(shop => shop.EventKey, StringComparer.Ordinal)
+            .ToArray();
+    }
+
+    /// <summary>
+    /// The datamine's live-event merchants by event key: the shared <c>&lt;Key&gt;EventShop</c> merchant key, if any,
+    /// and the <c>&lt;Key&gt;Week&lt;N&gt;EventShop</c> merchant keys by week number.
+    /// </summary>
+    internal static IReadOnlyDictionary<string, (string? Shared, SortedDictionary<int, string> PerWeek)> DatamineEventMerchants(
+        IReadOnlyDictionary<string, JsonElement> merchants)
     {
         var merchantsByEventKey = new Dictionary<string, (string? Shared, SortedDictionary<int, string> PerWeek)>(StringComparer.Ordinal);
         foreach (var (merchantKey, merchant) in merchants)
@@ -58,38 +116,7 @@ internal static partial class GameCatalogDenormalizer
             merchantsByEventKey[eventKey] = entry;
         }
 
-        var weeksByEventKey = ShopEventWeeksByEventKey(eventDefinitions, eventOccurrences);
-
-        var events = new List<GameCatalogRawEventShop>();
-        foreach (var (eventKey, weeks) in weeksByEventKey)
-        {
-            if (!merchantsByEventKey.TryGetValue(eventKey, out var eventMerchants))
-            {
-                continue;
-            }
-
-            var perWeekMerchants = eventMerchants.PerWeek.Count > 0;
-            var rawWeeks = weeks
-                .Select(week =>
-                {
-                    var merchantKey = perWeekMerchants
-                        ? eventMerchants.PerWeek.GetValueOrDefault(week.Week)
-                        : eventMerchants.Shared;
-                    var merchant = merchantKey is null
-                        ? null
-                        : merchants[merchantKey].Deserialize<GameCatalogRawShop>(options);
-                    return new GameCatalogRawEventShopWeek(week.Week, merchantKey, merchant, week.Occurrence);
-                })
-                .ToArray();
-
-            events.Add(new GameCatalogRawEventShop(
-                eventKey, weeks[0].Occurrence.DefinitionId, perWeekMerchants, rawWeeks));
-        }
-
-        return events
-            .OrderBy(shop => shop.Weeks[0].Occurrence.StartUtc)
-            .ThenBy(shop => shop.EventKey, StringComparer.Ordinal)
-            .ToArray();
+        return merchantsByEventKey;
     }
 
     /// <summary>
@@ -134,10 +161,10 @@ internal static partial class GameCatalogDenormalizer
     /// <summary>
     /// Builds the served <c>event-shops</c> array from the discovered events: slots through the daily-shop variant
     /// projection, ladders from <c>tieredProgressRewards.json</c> + <c>chests.json</c>, missions by name prefix from
-    /// the seasonal quest groups. A week with no merchant serves no slots (validation fails the load on it).
+    /// the seasonal quest groups. A week whose mission prefix matches no seasonal quest serves no missions.
     /// </summary>
-    /// <exception cref="InvalidOperationException">A ladder or mission reward cannot be parsed, a mission chain is
-    /// broken, or a week's mission prefix matches no seasonal quest.</exception>
+    /// <exception cref="InvalidOperationException">A ladder or mission reward cannot be parsed, or a mission chain is
+    /// broken.</exception>
     public static IReadOnlyList<GameCatalogEventShopView> BuildEventShops(
         IReadOnlyList<GameCatalogRawEventShop> rawEventShops,
         IReadOnlyDictionary<string, List<DatamineTieredProgressReward>> tieredProgressRewards,
@@ -190,7 +217,7 @@ internal static partial class GameCatalogDenormalizer
                 ReadIncome(week.Occurrence),
                 week.Merchant is null ? [] : BuildShopSlots(week.Merchant),
                 progressChestsKey is null ? [] : BuildRewardTiers(raw.EventKey, progressChestsKey, tieredProgressRewards, chests),
-                BuildMissions(raw.EventKey, week.Week, missionPrefix, seasonalQuests));
+                BuildMissions(raw.EventKey, missionPrefix, seasonalQuests));
         }).ToArray();
 
         var milestonesKey = $"se_milestones_{datamineKey}";
@@ -211,7 +238,7 @@ internal static partial class GameCatalogDenormalizer
 
     private static string DatamineEventKeyPrefix(string eventKey, string separator)
     {
-        var match = EventKeyPartsPattern().Match(eventKey);
+        var match = ShopEventParameters.EventKeyPattern().Match(eventKey);
         return match.Success
             ? $"{match.Groups["month"].Value.ToLowerInvariant()}{separator}{match.Groups["year"].Value}"
             : eventKey.ToLowerInvariant();
@@ -274,7 +301,6 @@ internal static partial class GameCatalogDenormalizer
 
     private static GameCatalogEventShopMissionsView BuildMissions(
         string eventKey,
-        int week,
         string prefix,
         IReadOnlyDictionary<string, IReadOnlyList<DatamineSeasonalQuest>> seasonalQuests)
     {
@@ -284,30 +310,27 @@ internal static partial class GameCatalogDenormalizer
             .Select(quest => BuildMission(eventKey, quest))
             .ToArray();
 
-        var freeChainPattern = new Regex(
-            $"^{Regex.Escape(prefix)}_free_(?<chain>[0-9]+)_chain_[0-9]+$", RegexOptions.CultureInvariant);
+        var freePrefix = $"{prefix}_free_";
         var free = seasonalQuests[SeasonalFreeQuestGroup]
-            .Select(quest => (Quest: quest, Match: freeChainPattern.Match(quest.Name)))
+            .Where(quest => quest.Name.StartsWith(freePrefix, StringComparison.Ordinal))
+            .Select(quest => (Quest: quest, Match: FreeChainSuffixPattern().Match(quest.Name[freePrefix.Length..])))
             .Where(entry => entry.Match.Success)
             .GroupBy(entry => int.Parse(entry.Match.Groups["chain"].Value, CultureInfo.InvariantCulture))
             .OrderBy(group => group.Key)
             .Select(group => BuildChain(eventKey, $"{prefix}_free_{group.Key}", group.Select(entry => entry.Quest).ToArray()))
             .ToArray();
 
-        var premiumChainPattern = new Regex(
-            $"^{Regex.Escape(prefix)}_premium_chain_[0-9]+$", RegexOptions.CultureInvariant);
+        var premiumPrefix = $"{prefix}_premium_";
         var premiumQuests = seasonalQuests[SeasonalPremiumQuestGroup]
-            .Where(quest => premiumChainPattern.IsMatch(quest.Name))
+            .Where(quest => quest.Name.StartsWith(premiumPrefix, StringComparison.Ordinal)
+                && PremiumChainSuffixPattern().IsMatch(quest.Name.AsSpan(premiumPrefix.Length)))
             .ToArray();
         GameCatalogEventShopMissionChainView[] premium = premiumQuests.Length == 0
             ? []
             : [BuildChain(eventKey, $"{prefix}_premium", premiumQuests)];
 
-        if (daily.Length == 0 && free.Length == 0 && premium.Length == 0)
-        {
-            throw EventShopError(eventKey, $"week {week} mission prefix '{prefix}' matches no seasonal quest.");
-        }
-
+        // A prefix that matches no quest (a datamine that pruned an old event's quests) serves no missions, like a
+        // missing ladder serves no tiers, so one event's quests can't fail the whole catalog load.
         return new GameCatalogEventShopMissionsView(daily, free, premium);
     }
 

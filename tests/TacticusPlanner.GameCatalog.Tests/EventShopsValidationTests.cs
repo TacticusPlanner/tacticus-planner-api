@@ -46,13 +46,8 @@ public sealed class EventShopsValidationTests
         Assert.Empty(Validate(Week(1, Start), Week(2, Start.AddDays(7)), Week(3, Start.AddDays(14))));
 
     [Fact]
-    public void MissingPerWeekMerchantFails()
-    {
-        var errors = Validate(Week(1, Start), new GameCatalogRawEventShopWeek(2, null, null, Occurrence(2, Start.AddDays(7))));
-
-        AssertSingleError(errors, "MissingEventShopMerchant");
-        Assert.Contains("week 2", errors[0].Message, StringComparison.Ordinal);
-    }
+    public void WeekWithoutAMerchantIsNotALoadError() =>
+        Assert.Empty(Validate(Week(1, Start), new GameCatalogRawEventShopWeek(2, null, null, Occurrence(2, Start.AddDays(7)))));
 
     [Fact]
     public void WeekNumbersNotOneToWFail() =>

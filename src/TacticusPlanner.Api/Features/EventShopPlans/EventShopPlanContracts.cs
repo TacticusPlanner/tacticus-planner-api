@@ -35,9 +35,10 @@ public sealed record EventShopCartEntryResponse(
 
 public sealed record EventShopPlanListResponse(IReadOnlyList<EventShopPlanResponse> Plans);
 
-/// <param name="ExpectedRevision">The plan revision the caller last read (0 for a plan that does not exist).</param>
+/// <param name="ExpectedRevision">The plan revision the caller last read (0 for a plan that does not exist). Required;
+/// a body without it is rejected with 400.</param>
 /// <param name="Entries">The whole cart; replaces the stored entries.</param>
-public sealed record PutEventShopPlanRequest(long ExpectedRevision, IReadOnlyList<EventShopCartEntryRequest>? Entries);
+public sealed record PutEventShopPlanRequest(long? ExpectedRevision, IReadOnlyList<EventShopCartEntryRequest>? Entries);
 
 /// <param name="DraftAlliance">Only for a <c>draft_*</c> reward; <c>imperial</c>, <c>xenos</c> or <c>chaos</c>.</param>
 public sealed record EventShopCartEntryRequest(

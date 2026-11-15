@@ -33,8 +33,10 @@ public sealed class EventShopPlanWriter(PlannerDbContext db)
 {
     private const string PlanUniqueIndex = "ix_event_shop_plans_profile_id_event_id";
 
-    /// <summary>Replaces the cart. A cart equal to the stored one (as a set) succeeds without bumping the revision
-    /// and, for a missing plan, without creating one.</summary>
+    /// <summary>Replaces the cart. A cart equal to the stored one (as a set), on a plan already written under the
+    /// current catalog version, succeeds without bumping the revision and, for a missing plan, without creating
+    /// one. The same cart on a plan from an older catalog version is a real write that moves it to the current
+    /// version.</summary>
     public async Task<EventShopPlanWriteResult> ReplaceEntriesAsync(
         ProfileId profileId,
         GameCatalogEventShopView eventShop,
@@ -49,7 +51,8 @@ public sealed class EventShopPlanWriter(PlannerDbContext db)
             if ((plan?.Revision ?? 0) != expectedRevision)
                 return await ConflictAsync(eventShop.Id, eventShop, ct);
 
-            if (EventShopPlanProjection.SameEntries(plan?.Entries ?? [], [.. entries]))
+            if (EventShopPlanProjection.SameEntries(plan?.Entries ?? [], [.. entries])
+                && (plan is null || plan.CatalogVersion == GameCatalogRelease.Version))
             {
                 return new EventShopPlanWriteResult.Saved(plan is null
                     ? EventShopPlanProjection.Empty(eventShop.Id)
@@ -66,10 +69,6 @@ public sealed class EventShopPlanWriter(PlannerDbContext db)
                     CatalogVersion = GameCatalogRelease.Version,
                 };
                 db.EventShopPlans.Add(plan);
-            }
-            else
-            {
-                db.Entry(plan).Property(entity => entity.UpdatedAt).IsModified = true;
             }
 
             plan.Entries = [.. entries];

@@ -131,6 +131,37 @@ public sealed class EventShopPlanEndpointTests(PlannerApiFactory factory) : ICla
     }
 
     [Fact]
+    public async Task SameEntriesOnAPlanFromAnOlderCatalogMoveItToTheCurrentVersion()
+    {
+        var subject = $"event-shop-old-catalog-{Guid.NewGuid()}";
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory, subject);
+        var saved = await ReadPlanAsync(await client.PutAsJsonAsync(PlanUrl, Put(0, Yarrick("THU")), Ct));
+        using (var scope = factory.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
+            await db.EventShopPlans.IgnoreQueryFilters()
+                .Where(plan => plan.EventId == EventId && plan.Profile!.Subject == subject)
+                .ExecuteUpdateAsync(setters => setters.SetProperty(plan => plan.CatalogVersion, "old-catalog"), Ct);
+        }
+
+        var again = await ReadPlanAsync(await client.PutAsJsonAsync(PlanUrl, Put(saved.Revision, Yarrick("THU")), Ct));
+
+        Assert.Equal(saved.Revision + 1, again.Revision);
+        Assert.Equal(GameCatalogRelease.Version, again.CatalogVersion);
+    }
+
+    [Fact]
+    public async Task PutWithoutAnExpectedRevisionIsRejectedAndCreatesNothing()
+    {
+        var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
+
+        var response = await client.PutAsJsonAsync(PlanUrl, new { entries = new[] { Yarrick("THU") } }, Ct);
+
+        await AssertBadRequestAsync(response, "expectedRevision");
+        Assert.Equal(0, (await ReadPlanAsync(await client.GetAsync(PlanUrl, Ct))).Revision);
+    }
+
+    [Fact]
     public async Task EmptyEntriesClearTheCartAndBumpTheRevision()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);

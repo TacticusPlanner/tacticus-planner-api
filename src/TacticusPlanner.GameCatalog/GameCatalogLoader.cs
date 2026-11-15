@@ -381,6 +381,10 @@ public static class GameCatalogLoader
             ?? throw new InvalidOperationException($"GameCatalog dataset '{key}' is empty.");
     }
 
+    /// <summary>The pinned datamine's <c>merchants.json</c>, for the CI calendar checks over event-shop merchants.</summary>
+    internal static IReadOnlyDictionary<string, JsonElement> LoadDatamineMerchants() =>
+        LoadDatamine<Dictionary<string, JsonElement>>(GameCatalogDenormalizer.DatamineMerchantsPath);
+
     private static T LoadDatamine<T>(string rawPath)
     {
         using var stream = DatamineFiles.Open(rawPath);

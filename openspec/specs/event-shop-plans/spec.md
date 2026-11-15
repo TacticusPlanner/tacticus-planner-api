@@ -55,7 +55,7 @@ Each entry SHALL carry `week` (1-based), `day` (`MON`..`SUN`), `slotIndex` (0-ba
 
 ### Requirement: One revision guards every mutation
 
-Every `PUT` and `DELETE` SHALL carry `expectedRevision` (0 for a plan that does not exist yet). When it differs from the current revision, the system SHALL make no change and respond 409 in the unified error shape with `issueCode` `eventShopPlanStale` and the current plan under `current`. A concurrent create detected at save time SHALL produce the same response after re-reading. A successful `PUT` SHALL bump the revision by exactly one, except that a `PUT` whose entries equal the stored entries (as a set) SHALL succeed without bumping it.
+Every `PUT` and `DELETE` SHALL carry `expectedRevision` (0 for a plan that does not exist yet). When it differs from the current revision, the system SHALL make no change and respond 409 in the unified error shape with `issueCode` `eventShopPlanStale` and the current plan under `current`. A concurrent create detected at save time SHALL produce the same response after re-reading. A successful `PUT` SHALL bump the revision by exactly one, except that a `PUT` whose entries equal the stored entries (as a set), on a plan whose `catalogVersion` is already the current catalog version (or with no stored plan), SHALL succeed without bumping it or writing anything. A `PUT` of the stored entries on a plan from an older catalog version SHALL be a write: it bumps the revision and moves `catalogVersion` to the current version. When `expectedRevision` is missing from a `PUT` body, the system SHALL respond 400 `validation` naming `expectedRevision` and change nothing.
 
 #### Scenario: Stale write is rejected
 
@@ -64,8 +64,18 @@ Every `PUT` and `DELETE` SHALL carry `expectedRevision` (0 for a plan that does 
 
 #### Scenario: No-op write keeps the revision
 
-- **WHEN** `PUT` sends the stored entries in a different order with the current revision
+- **WHEN** `PUT` sends the stored entries in a different order with the current revision, on a plan written under the current catalog version
 - **THEN** the response is 200 and the revision is unchanged
+
+#### Scenario: Same cart after a catalog bump moves the catalog version
+
+- **WHEN** a plan was written under catalog `v1`, the catalog is now `v2`, and `PUT` sends the stored entries with the current revision
+- **THEN** the response is 200, the revision is bumped by one and `catalogVersion` is `v2`
+
+#### Scenario: Missing expected revision is rejected
+
+- **WHEN** `PUT` sends `entries` without `expectedRevision`
+- **THEN** the response is 400 naming `expectedRevision` and no plan is created
 
 ### Requirement: Reads, list and delete
 
@@ -83,7 +93,7 @@ Every `PUT` and `DELETE` SHALL carry `expectedRevision` (0 for a plan that does 
 
 ### Requirement: Plans travel with account lifecycle features
 
-Deleting the account SHALL delete its event shop plans. The staging transfer export and import SHALL include event shop plans alongside the other per-profile plans, preserving `eventId`, `catalogVersion` and `entries`.
+Deleting the account SHALL delete its event shop plans. The staging transfer export and import SHALL include event shop plans alongside the other per-profile plans, preserving `eventId`, `catalogVersion` and `entries`. The import SHALL check each imported plan against the stored-plan shape invariants (entry count, day and alliance vocabulary, `0 ≤ purchasedQuantity ≤ quantity`, one entry per (`week`, `day`, `slotIndex`)) and SHALL fail the whole import, changing nothing, when one fails.
 
 #### Scenario: Account deletion removes plans
 

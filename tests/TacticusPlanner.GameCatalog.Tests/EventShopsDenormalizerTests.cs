@@ -203,22 +203,45 @@ public sealed class EventShopsDenormalizerTests
     }
 
     [Fact]
-    public void SharedMerchantIsUsedForEveryWeekAndAMissingPerWeekMerchantIsLeftForValidation()
+    public void SharedMerchantIsUsedForEveryWeek()
     {
         var shared = Assert.Single(GameCatalogDenormalizer.ReadDatamineEventShops(
             new Dictionary<string, JsonElement> { ["November2026EventShop"] = Merchant() },
             [ShopEventDefinition], [Week("November2026", 1, Start), Week("November2026", 2, Start.AddDays(7))], WebOptions));
-        Assert.All(shared.Weeks, week => Assert.Equal("November2026EventShop", week.MerchantKey));
 
-        var perWeek = Assert.Single(GameCatalogDenormalizer.ReadDatamineEventShops(
-            new Dictionary<string, JsonElement> { ["November2026Week1EventShop"] = Merchant() },
-            [ShopEventDefinition], [Week("November2026", 1, Start), Week("November2026", 2, Start.AddDays(7))], WebOptions));
-        Assert.Equal("November2026Week1EventShop", perWeek.Weeks[0].MerchantKey);
-        Assert.Null(perWeek.Weeks[1].Merchant);
+        Assert.All(shared.Weeks, week => Assert.Equal("November2026EventShop", week.MerchantKey));
     }
 
     [Fact]
-    public void UnmatchedMissionPrefixFailsTheLoadNamingTheEvent()
+    public void PerWeekMerchantsServeUpToTheFirstCalendarWeekWithoutOne()
+    {
+        var perWeek = Assert.Single(GameCatalogDenormalizer.ReadDatamineEventShops(
+            new Dictionary<string, JsonElement>
+            {
+                ["November2026Week1EventShop"] = Merchant(),
+                ["November2026Week3EventShop"] = Merchant(),
+            },
+            [ShopEventDefinition],
+            [Week("November2026", 1, Start), Week("November2026", 2, Start.AddDays(7)), Week("November2026", 3, Start.AddDays(14))],
+            WebOptions));
+
+        var week = Assert.Single(perWeek.Weeks);
+        Assert.Equal(1, week.Week);
+        Assert.Equal("November2026Week1EventShop", week.MerchantKey);
+    }
+
+    [Fact]
+    public void PerWeekMerchantsWithoutAWeekOneMerchantServeNothing()
+    {
+        var events = GameCatalogDenormalizer.ReadDatamineEventShops(
+            new Dictionary<string, JsonElement> { ["November2026Week2EventShop"] = Merchant() },
+            [ShopEventDefinition], [Week("November2026", 1, Start), Week("November2026", 2, Start.AddDays(7))], WebOptions);
+
+        Assert.Empty(events);
+    }
+
+    [Fact]
+    public void UnmatchedMissionPrefixServesNoMissions()
     {
         var raw = new GameCatalogRawEventShop("November2026", "armageddon-shop", false,
         [
@@ -226,12 +249,14 @@ public sealed class EventShopsDenormalizerTests
                 new GameCatalogRawShop("seasonalEventMerchant", null, false, 0, []), Week("November2026", 1, Start)),
         ]);
 
-        var error = Assert.Throws<InvalidOperationException>(() => GameCatalogDenormalizer.BuildEventShops(
+        var served = Assert.Single(GameCatalogDenormalizer.BuildEventShops(
             [raw], new Dictionary<string, List<DatamineTieredProgressReward>>(), new Dictionary<string, JsonElement>(),
             new Dictionary<string, JsonElement>(), WebOptions));
 
-        Assert.Contains("November2026", error.Message, StringComparison.Ordinal);
-        Assert.Contains("week 1", error.Message, StringComparison.Ordinal);
+        var missions = Assert.Single(served.Weeks).Missions;
+        Assert.Empty(missions.Daily);
+        Assert.Empty(missions.Free);
+        Assert.Empty(missions.Premium);
     }
 
     [Fact]

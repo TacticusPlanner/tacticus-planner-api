@@ -180,14 +180,19 @@ public sealed class StagingTransferImporter(PlannerDbContext db, TimeProvider ti
 
             foreach (var source in bundle.EventShopPlans.DistinctBy(plan => plan.EventId))
             {
-                db.EventShopPlans.Add(new EventShopPlan
+                var plan = new EventShopPlan
                 {
                     Id = EventShopPlanId.From(Guid.CreateVersion7()),
                     ProfileId = profileId,
                     EventId = source.EventId,
                     CatalogVersion = source.CatalogVersion,
                     Entries = source.Entries,
-                });
+                };
+
+                // The bundle comes from another build; a plan that breaks the stored shape fails the whole import
+                // (the transaction is never committed) instead of landing in jsonb.
+                EventShopValidation.AssertInvariants(plan);
+                db.EventShopPlans.Add(plan);
             }
 
             await db.SaveChangesAsync(ct);

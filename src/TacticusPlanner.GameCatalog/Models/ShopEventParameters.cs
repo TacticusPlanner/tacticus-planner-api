@@ -24,8 +24,15 @@ public static partial class ShopEventParameters
 
     public static readonly IReadOnlyList<string> IncomeParameters = [IncomeFree, IncomeBonusShipment];
 
-    [GeneratedRegex("^[A-Z][a-z]+[0-9]{4}$", RegexOptions.CultureInvariant)]
-    private static partial Regex EventKeyPattern();
+    /// <summary>
+    /// The one event-key rule, <c>&lt;Month&gt;&lt;Year&gt;</c>, with <c>month</c> and <c>year</c> groups. Every regex
+    /// that reads an event key (here, and the merchant-key pattern in the <c>event-shops</c> denormalizer) embeds it,
+    /// so a key the calendar accepts always splits the same way.
+    /// </summary>
+    internal const string EventKeyRegex = "(?<month>[A-Z][a-z]+)(?<year>[0-9]{4})";
+
+    [GeneratedRegex("^" + EventKeyRegex + "$", RegexOptions.CultureInvariant)]
+    internal static partial Regex EventKeyPattern();
 
     /// <summary>The event key when <paramref name="value"/> is a well-formed key string, else null.</summary>
     public static string? ReadEventKey(JsonElement value) =>

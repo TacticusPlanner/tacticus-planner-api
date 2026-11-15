@@ -105,7 +105,7 @@ For each entry of a `tieredProgressRewards.json` ladder, the served tier's `requ
 
 ### Requirement: Missions are selected by name prefix
 
-For a week with mission prefix `P`, `daily` SHALL be the quests of `gameconfig/quests/groups.json` group `seasonal_daily` whose `name` starts with `P_daily_`, ordered by name; `free` SHALL group the quests of `seasonal_seasonal` named `P_free_<n>_chain_<k>` into one chain per `<n>` (chain `id` `P_free_<n>`, chains ordered by `<n>`, missions ordered by following `successorQuests` from the quest that is no other quest's successor); `premium` SHALL be the single chain `P_premium` built the same way from `seasonal_seasonal_premium` quests named `P_premium_chain_<k>`. A mission's `id` SHALL be the quest `name`, its `rewards` its parsed `rewards` strings, and each task's `taskId`, `target` and `parameters` its `name`, `target` and `taskParameters`. The build SHALL fail, naming the event and week, when the prefix matches no quest in any of the three groups.
+For a week with mission prefix `P`, `daily` SHALL be the quests of `gameconfig/quests/groups.json` group `seasonal_daily` whose `name` starts with `P_daily_`, ordered by name; `free` SHALL group the quests of `seasonal_seasonal` named `P_free_<n>_chain_<k>` into one chain per `<n>` (chain `id` `P_free_<n>`, chains ordered by `<n>`, missions ordered by following `successorQuests` from the quest that is no other quest's successor); `premium` SHALL be the single chain `P_premium` built the same way from `seasonal_seasonal_premium` quests named `P_premium_chain_<k>`. A mission's `id` SHALL be the quest `name`, its `rewards` its parsed `rewards` strings, and each task's `taskId`, `target` and `parameters` its `name`, `target` and `taskParameters`. A prefix that matches no quest in any of the three groups SHALL serve empty `daily`, `free` and `premium` and SHALL NOT fail the build, so a datamine that prunes an old event's quests keeps the catalog loading.
 
 #### Scenario: Free chain is ordered by successor
 
@@ -117,19 +117,36 @@ For a week with mission prefix `P`, `daily` SHALL be the quests of `gameconfig/q
 - **WHEN** a mission task has `taskParameters` `{ "gameMode": "Survival" }`
 - **THEN** the served task carries `parameters` `{ "gameMode": "Survival" }`
 
-#### Scenario: Unmatched prefix fails the build
+#### Scenario: Unmatched prefix serves no missions
 
 - **WHEN** a dated week's mission prefix matches no seasonal quest
-- **THEN** the catalog build fails naming the event and week
+- **THEN** the catalog loads and that week's `missions` has empty `daily`, `free` and `premium`
 
 ### Requirement: Calendar weeks without an event shop are skipped, and flagged in CI while current
 
-A `ShopEvent` occurrence whose `eventKey` matches no merchant in the pinned datamine SHALL NOT be served as an event shop and SHALL NOT fail startup, so a datamine that drops an old event's merchants keeps the catalog loading and the calendar entry stays. A CI test SHALL fail, naming the event key, when such an occurrence has not ended at the time the test runs, so a current or upcoming week with no shop (a typo in `eventKey`, or a datamine not yet bumped) is caught before release.
+A `ShopEvent` occurrence whose `eventKey` matches no merchant in the pinned datamine SHALL NOT be served as an event shop and SHALL NOT fail startup, so a datamine that drops an old event's merchants keeps the catalog loading and the calendar entry stays. When an event has per-week merchants, it SHALL be served up to (not including) its first calendar week with no `Week<N>` merchant, and not at all when week 1 has none; this SHALL NOT fail startup either. A CI test SHALL fail, naming the event key and week, when an unserved occurrence (no merchant, or cut off by a missing per-week merchant) has not ended at the time the test runs, so a current or upcoming week with no shop (a typo in `eventKey`, or a datamine not yet bumped) is caught before release.
+
+CI SHALL also fail, naming the merchant, when a calendared event has a `Week<N>` merchant with no calendar week `N` (the extra week would not be served and its plans would be rejected), and, naming the event key, when the datamine has a live-event merchant for the current month or a later one whose event key has no calendar weeks at all (the event would be missing while it runs). Event keys listed as known gaps in that test are exempt from the last check until their weeks are authored.
 
 #### Scenario: Dropped past event keeps the catalog loading
 
 - **WHEN** a later datamine no longer contains `June2026Week1..3EventShop` and the calendar still has the `June2026` weeks, which ended in July 2026
 - **THEN** the catalog loads, `event-shops` has no `june-2026` record, and the CI test passes
+
+#### Scenario: Missing per-week merchant cuts the event short
+
+- **WHEN** `June2026` has four calendar weeks but only `June2026Week1..3EventShop`
+- **THEN** the catalog loads, `june-2026` is served with weeks 1-3 and `dayCount` 21, and the CI test fails naming `June2026` week 4 while that week has not ended
+
+#### Scenario: Datamine merchant week beyond the calendar fails CI
+
+- **WHEN** the datamine has `July2026Week1..3EventShop` and the calendar lists only `July2026` weeks 1 and 2
+- **THEN** the CI test fails naming `July2026Week3EventShop`
+
+#### Scenario: Current merchant without calendar weeks fails CI
+
+- **WHEN** the CI test runs on 2026-11-14, the pinned datamine has `November2026EventShop`, and the calendar has no `November2026` week
+- **THEN** the test fails naming `November2026`
 
 #### Scenario: Current week without a shop fails CI
 
@@ -138,17 +155,12 @@ A `ShopEvent` occurrence whose `eventKey` matches no merchant in the pinned data
 
 ### Requirement: Dated events are validated
 
-For every event that has calendar weeks and at least one matching merchant, the build SHALL fail, naming the event key, when: the event has per-week merchants and a calendar week has no `Week<N>` merchant; the occurrences' `weekNumber`s are not exactly 1..W; an occurrence does not last exactly 7 days or does not start at 00:00:00 UTC; week `N + 1` does not start exactly when week `N` ends; two occurrences share a `weekNumber`; a variant fails any `shops` variant rule (unparseable reward, cost or cron, empty day list, unresolvable shard unit); or a variant costs a currency other than `seasonalEventCurrency<Month><Year>`.
+For every event that has calendar weeks and at least one matching merchant, the build SHALL fail, naming the event key, when: the occurrences' `weekNumber`s are not exactly 1..W; an occurrence does not last exactly 7 days or does not start at 00:00:00 UTC; week `N + 1` does not start exactly when week `N` ends; two occurrences share a `weekNumber`; a variant fails any `shops` variant rule (unparseable reward, cost or cron, empty day list, unresolvable shard unit); or a variant costs a currency other than `seasonalEventCurrency<Month><Year>`.
 
 #### Scenario: Gap between weeks fails the build
 
 - **WHEN** `June2026` week 1 ends 2026-06-29 and week 2 starts 2026-06-30
 - **THEN** the catalog build fails naming `June2026`
-
-#### Scenario: Missing per-week merchant fails the build
-
-- **WHEN** `June2026` has four calendar weeks but only `June2026Week1..3EventShop`
-- **THEN** the catalog build fails naming `June2026` and week 4
 
 #### Scenario: Currency mismatch fails the build
 

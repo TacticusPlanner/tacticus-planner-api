@@ -109,10 +109,11 @@ public sealed class PutEventShopPlanEndpoint : Endpoint<PutEventShopPlanRequest,
             summary.Summary = "Replaces the cart of the caller's event shop plan, creating the plan if needed.";
             summary.Description = "Each entry must name a week, day and slot of the current catalog event, a reward that "
                 + "slot offers that day, a quantity within that offer's per-day cap and a purchased quantity up to it. "
-                + "Lock ids and power levels are not checked. A cart equal to the stored one succeeds without bumping "
-                + "the revision.";
+                + "Lock ids and power levels are not checked. expectedRevision is required. A cart equal to the stored one, "
+                + "on a plan already written under the current catalog version, succeeds without bumping the revision.";
             summary.Response<EventShopPlanResponse>(StatusCodes.Status200OK, "The whole plan after the write.");
-            summary.Response(StatusCodes.Status400BadRequest, "An entry fails validation; the error names the field.");
+            summary.Response(StatusCodes.Status400BadRequest,
+                "expectedRevision is missing or an entry fails validation; the error names the field.");
             summary.Response(StatusCodes.Status401Unauthorized, "The request is missing required identity claims.");
             summary.Response(StatusCodes.Status404NotFound,
                 "The event is not in the current catalog, or the caller has no profile.");
@@ -130,10 +131,12 @@ public sealed class PutEventShopPlanEndpoint : Endpoint<PutEventShopPlanRequest,
         }
 
         var failures = EventShopPlanCatalogValidator.ValidateEntries(eventShop, req.Entries);
-        if (failures.Count > 0)
+        if (req.ExpectedRevision is null)
+            AddError(new ValidationFailure("expectedRevision", "expectedRevision is required."));
+        foreach (var failure in failures)
+            AddError(new ValidationFailure(failure.Field, failure.Message));
+        if (req.ExpectedRevision is not { } expectedRevision || failures.Count > 0)
         {
-            foreach (var failure in failures)
-                AddError(new ValidationFailure(failure.Field, failure.Message));
             await Send.ErrorsAsync(StatusCodes.Status400BadRequest, ct);
             return;
         }
@@ -141,7 +144,7 @@ public sealed class PutEventShopPlanEndpoint : Endpoint<PutEventShopPlanRequest,
         var result = await Resolve<EventShopPlanWriter>().ReplaceEntriesAsync(
             profileId,
             eventShop,
-            req.ExpectedRevision,
+            expectedRevision,
             req.Entries!.Select(EventShopPlanProjection.ToEntity).ToArray(),
             ct);
         switch (result)

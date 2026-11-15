@@ -4,8 +4,9 @@ namespace TacticusPlanner.GameCatalog.Validation;
 
 public static partial class GameCatalogValidator
 {
-    private static void ValidateShops(GameCatalogSnapshot snapshot, List<GameCatalogValidationError> errors) =>
-        ValidateShops(snapshot.RawShopsBySourceKey, snapshot.ShopViews, ShopUnitOrMowIds(snapshot), errors);
+    private static void ValidateShops(
+        GameCatalogSnapshot snapshot, HashSet<string> unitOrMowIds, List<GameCatalogValidationError> errors) =>
+        ValidateShops(snapshot.RawShopsBySourceKey, snapshot.ShopViews, unitOrMowIds, errors);
 
     /// <summary>Character and MoW ids a shard offer may name (case-insensitive, as the shard reward types are).</summary>
     private static HashSet<string> ShopUnitOrMowIds(GameCatalogSnapshot snapshot)

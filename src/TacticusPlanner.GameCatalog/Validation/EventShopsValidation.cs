@@ -6,12 +6,12 @@ public static partial class GameCatalogValidator
 {
     private static readonly TimeSpan EventShopWeekLength = TimeSpan.FromDays(7);
 
-    private static void ValidateEventShops(GameCatalogSnapshot snapshot, List<GameCatalogValidationError> errors) =>
-        ValidateEventShops(snapshot.RawEventShops, snapshot.EventShopViews, ShopUnitOrMowIds(snapshot), errors);
+    private static void ValidateEventShops(
+        GameCatalogSnapshot snapshot, HashSet<string> unitOrMowIds, List<GameCatalogValidationError> errors) =>
+        ValidateEventShops(snapshot.RawEventShops, snapshot.EventShopViews, unitOrMowIds, errors);
 
     /// <summary>
-    /// Every dated event shop with a merchant must have one merchant per calendar week, weeks numbered 1..W that are
-    /// contiguous 7-day windows starting at 00:00 UTC, variants that meet every daily-shop rule, and a single cost
+    /// Every served event shop must have weeks numbered 1..W that are contiguous 7-day windows starting at 00:00 UTC, variants that meet every daily-shop rule, and a single cost
     /// currency <c>seasonalEventCurrency&lt;EventKey&gt;</c>. Every error names the event key. See
     /// specs/game-event-shops-dataset.
     /// </summary>
@@ -55,11 +55,10 @@ public static partial class GameCatalogValidator
                         $"Event '{eventKey}' week {week.Week} does not start when week {eventShop.Weeks[index - 1].Week} ends."));
                 }
 
+                // The denormalizer serves an event only up to its first week with a merchant, so this is only a
+                // merchant that deserialized to null; a missing one is a CI calendar check, not a load failure.
                 if (week.Merchant is null)
                 {
-                    errors.Add(new GameCatalogValidationError(
-                        dataset, "MissingEventShopMerchant",
-                        $"Event '{eventKey}' week {week.Week} has no '{eventKey}Week{week.Week}EventShop' merchant."));
                     continue;
                 }
 
