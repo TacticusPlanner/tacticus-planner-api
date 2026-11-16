@@ -28,7 +28,7 @@ The `target` section of `PUT /goals/{goalId}` SHALL accept `{ expectedRevision, 
 
 ### Requirement: Edited targets receive creation-equivalent validation and slot checks
 
-The new end target SHALL pass the same catalog range, entity/type, target-shape, and dependency-cap rules as creation, evaluated against the goal's persisted baseline and current catalog. A target that is already reached in synced player data SHALL be saved when valid relative to that baseline and current catalog, subject to the same explicit revision and slot-conflict rules as any other valid target; it SHALL have zero remaining need but SHALL not silently change stored lifecycle status. Whenever an edit changes the goal's target key (`goal-target-milestones`), the new key SHALL be checked against the profile's other in-flight goals of the same unit and type; an occupied target SHALL return 409 `slotOccupied` naming the existing goal. Validation or conflict failure SHALL be atomic.
+The new end target SHALL pass the same catalog range, entity/type, and target-shape rules as creation, evaluated against the goal's persisted baseline and current catalog. An edited Ability target SHALL be bounded by the highest ability level, not by the unit's current rarity cap or any Ascension dependency, so an owner can plan levels that need a future Ascension. A target that is already reached in synced player data SHALL be saved when valid relative to that baseline and current catalog, subject to the same explicit revision and slot-conflict rules as any other valid target; it SHALL have zero remaining need but SHALL not silently change stored lifecycle status. Whenever an edit changes the goal's target key (`goal-target-milestones`), the new key SHALL be checked against the profile's other in-flight goals of the same unit and type; an occupied target SHALL return 409 `slotOccupied` naming the existing goal. Validation or conflict failure SHALL be atomic.
 
 #### Scenario: Edit to an already reached target
 
@@ -47,6 +47,17 @@ The new end target SHALL pass the same catalog range, entity/type, target-shape,
 - **GIVEN** Ragnar has in-flight Ascension goals ending at `Legendary:RedFiveStars` and `Mythic:OneBlueStar`
 - **WHEN** the owner edits the Legendary goal's end to `Mythic:OneBlueStar`
 - **THEN** no config changes and the 409 identifies the Mythic goal and its target
+
+#### Scenario: Ability target edited past the rarity cap
+
+- **GIVEN** a Legendary Machine of War (ability cap 50) with an Ability goal from 36 to 50 and no Ascension goal
+- **WHEN** its owner edits the end target to 60
+- **THEN** the edit succeeds
+
+#### Scenario: Ability target edited past the highest level
+
+- **WHEN** an owner edits an Ability goal's end target to 61
+- **THEN** the edit is rejected without changing the goal
 
 ### Requirement: Concurrent edits and target history are explicit
 

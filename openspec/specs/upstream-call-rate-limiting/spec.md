@@ -8,7 +8,7 @@ Endpoints that call the upstream Tacticus or V1 APIs on the caller's behalf are 
 
 ### Requirement: Upstream-calling endpoints are limited per profile
 
-The system SHALL limit `POST tacticus-api-key/validate` and `PUT account/tacticus-integration` to 10 requests/minute by default (`upstream-fast`). `POST tacticus-integration/player-sync`, `POST guild/register`, `POST guild/sync`, `DELETE guild`, and `POST account/v1-import` SHALL default to 6 requests/hour (`upstream-slow`). Limits SHALL be configurable and per profile. Other endpoints SHALL NOT be limited.
+The system SHALL limit `POST tacticus-api-key/validate` and `PUT account/tacticus-integration` to 10 requests/minute by default (`upstream-fast`). `POST tacticus-integration/player-sync`, `POST guild/register`, `POST guild/sync`, `DELETE guild`, `POST account/v1-import` and `POST me/roster-snapshots` without `fromLastSync=true` SHALL default to 6 requests/hour (`upstream-slow`). Limits SHALL be configurable and per profile. Other endpoints, including `POST me/roster-snapshots` with `fromLastSync=true`, SHALL NOT be limited.
 
 #### Scenario: Within the limit
 
@@ -37,6 +37,12 @@ The system SHALL limit `POST tacticus-api-key/validate` and `PUT account/tacticu
 - **GIVEN** a profile has issued 6 `DELETE guild` requests within the current hour window
 - **WHEN** it issues a seventh
 - **THEN** the response is 429 `rateLimited` and no upstream call is made
+
+#### Scenario: Snapshot fallback is not limited
+
+- **GIVEN** a profile has exhausted its `upstream-slow` limit
+- **WHEN** it posts `me/roster-snapshots` with `fromLastSync=true`
+- **THEN** the request is processed normally without an upstream call
 
 ### Requirement: Each endpoint has its own fixed-window bucket
 
