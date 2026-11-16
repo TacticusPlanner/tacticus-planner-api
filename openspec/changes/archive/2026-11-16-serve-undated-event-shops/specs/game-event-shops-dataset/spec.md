@@ -14,14 +14,14 @@ The game catalog SHALL serve a dataset keyed `event-shops` as a plain array with
 - **WHEN** the datamine has `December2026EventShop`, no calendar occurrence has `eventKey` `December2026`, and the latest dated event starts in November 2026
 - **THEN** `event-shops` ends with a record `december-2026` with `startUtc` null, `definitionId` null, one week and `dayCount` 7, and the build does not fail
 
-#### Scenario: Old undated event is not served
+#### Scenario: Undated event is skipped
 
 - **WHEN** the datamine has `May2026EventShop`, no calendar occurrence has `eventKey` `May2026`, and the latest dated event starts in November 2026
 - **THEN** no `may-2026` record is served and the build does not fail
 
-#### Scenario: No events
+#### Scenario: No dated events
 
-- **WHEN** the datamine has no event-shop merchant
+- **WHEN** the datamine has no event-shop merchant, so no event is dated or undated
 - **THEN** the `event-shops` dataset is served as an empty array
 
 ### Requirement: Served event shop shape

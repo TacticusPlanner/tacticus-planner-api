@@ -25,6 +25,13 @@ Each record SHALL carry `availableFromUtc` (`yyyy-MM-ddTHH:mm:ssZ`), the game's 
 `allowedFactions`, `tokens` (`start`, `max`, `regenSeconds`, `regenAmount`, `costPerRun`),
 `minUnitsOfGrandAllianceNeeded`, `ohSoCloseOffer` and the `enhancements` its run maps use, keyed by enhancement id.
 
+#### Scenario: The Broadside's event rules
+
+- **WHEN** the dataset is served
+- **THEN** the `tauBroadside` record has `availableFromUtc` `2024-12-02T08:00:00Z`, 10 allowed factions, tokens starting
+  at 2 with a max of 3, 1 token regenerated every 72001 seconds and 1 spent per run, needs 3 Grand Alliance units, and
+  its `enhancements` are exactly the ones its run-map nodes name, including `Heal_01`
+
 ### Requirement: Each tier carries its battles and run map
 
 Each tier SHALL carry `index`, `rarity`, `battles` (`id`, `boardId`, `challenge`, `difficultyMultiplier`,
@@ -43,3 +50,13 @@ a `count`) and `nodes` (`index`, `depth`, `kind` of `battle`, `enhancement` or `
 The load SHALL fail when a node names an unknown battle, enhancement or chest, a node type is unknown, a node's
 `unlockedBy` or `exclusiveWith` is out of range, an enemy is not `npcId:level`, or a battle lacks three star rewards.
 Validation SHALL report `InvalidIncursion` when the MoW, an allowed faction, a tier rarity or an enemy npc is not served.
+
+#### Scenario: A run-map node names an unknown chest
+
+- **WHEN** a node names chest `mowe_x_00_01` and `chests.json` has no such chest
+- **THEN** the load fails with a message that the chest is missing
+
+#### Scenario: Unserved references fail validation
+
+- **WHEN** an Incursion names an unserved MoW, the faction `Squats`, the rarity `Shiny` or an unknown enemy npc
+- **THEN** validation reports an `InvalidIncursion` error for each
