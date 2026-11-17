@@ -27,11 +27,11 @@ public sealed class UpstreamRateLimitEndpointTests(PlannerApiFactory factory) : 
     }
 
     [Fact]
-    public async Task SlowPolicyAllowsSixPerHourThenRejectsWithRetryAfterAndIsolatesEndpointsAndProfiles()
+    public async Task SlowPolicyAllowsTenPerHourThenRejectsWithRetryAfterAndIsolatesEndpointsAndProfiles()
     {
         var client = await GoalsTestHelpers.CreateProvisionedClientAsync(factory);
 
-        Assert.DoesNotContain(HttpStatusCode.TooManyRequests, await RepeatAsync(client, Sync, 6));
+        Assert.DoesNotContain(HttpStatusCode.TooManyRequests, await RepeatAsync(client, Sync, 10));
         var rejected = await PostAsync(client, Sync);
 
         Assert.Equal(HttpStatusCode.TooManyRequests, rejected.StatusCode);
@@ -81,7 +81,7 @@ public sealed class UpstreamRateLimitEndpointTests(PlannerApiFactory factory) : 
         (await client.PutAsJsonAsync(
             "/api/v1/account/tacticus-integration", new UpdateTacticusIntegrationRequest(FakeTacticusApi.ValidKey, null), ct))
             .EnsureSuccessStatusCode();
-        for (var index = 0; index < 6; index++)
+        for (var index = 0; index < 10; index++)
         {
             (await PostAsync(client, PlayerSync)).EnsureSuccessStatusCode();
         }

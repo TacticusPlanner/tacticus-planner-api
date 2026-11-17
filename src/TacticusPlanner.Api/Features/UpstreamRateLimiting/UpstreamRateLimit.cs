@@ -15,7 +15,7 @@ public sealed class UpstreamRateLimitOptions
     public int UpstreamFastPerMinute { get; set; } = 10;
 
     [Range(1, int.MaxValue)]
-    public int UpstreamSlowPerHour { get; set; } = 6;
+    public int UpstreamSlowPerHour { get; set; } = 10;
 }
 
 /// <summary>Endpoint metadata marking an endpoint that calls the Tacticus or V1 APIs on the caller's behalf.
