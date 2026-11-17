@@ -8,7 +8,7 @@ Endpoints that call the upstream Tacticus or V1 APIs on the caller's behalf are 
 
 ### Requirement: Upstream-calling endpoints are limited per profile
 
-The system SHALL limit `POST tacticus-api-key/validate` and `PUT account/tacticus-integration` to 10 requests/minute by default (`upstream-fast`). `POST tacticus-integration/player-sync`, `POST guild/register`, `POST guild/sync`, `DELETE guild`, `POST account/v1-import` and `POST me/roster-snapshots` without `fromLastSync=true` SHALL default to 6 requests/hour (`upstream-slow`). Limits SHALL be configurable and per profile. Other endpoints, including `POST me/roster-snapshots` with `fromLastSync=true`, SHALL NOT be limited.
+The system SHALL limit `POST tacticus-api-key/validate` and `PUT account/tacticus-integration` to 10 requests/minute by default (`upstream-fast`). `POST tacticus-integration/player-sync`, `POST guild/register`, `POST guild/sync`, `DELETE guild`, `POST account/v1-import` and `POST me/roster-snapshots` without `fromLastSync=true` SHALL default to 10 requests/hour (`upstream-slow`). Limits SHALL be configurable and per profile. Other endpoints, including `POST me/roster-snapshots` with `fromLastSync=true`, SHALL NOT be limited.
 
 #### Scenario: Within the limit
 
