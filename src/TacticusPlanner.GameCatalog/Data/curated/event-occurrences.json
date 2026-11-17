@@ -109,7 +109,7 @@
     "definitionId": "skull-harvest-shop",
     "startUtc": "2026-11-23T00:00:00Z",
     "endUtc": "2026-11-30T00:00:00Z",
-    "parameters": { "weekNumber": 1, "eventKey": "November2026" }
+    "parameters": { "weekNumber": 1, "eventKey": "November2026", "incomeFree": 850, "incomeBonusShipment": 1100 }
   },
   {
     "id": "occ-2026-08-02-hse-training-rush",
