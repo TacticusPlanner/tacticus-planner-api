@@ -1,5 +1,5 @@
 ﻿{
-  version: 1.44.88.3089+e754020f93f0,
+  version: 1.44.88.3089+d31fe499de01,
   schemaHash: f4346089a29accbd2844611263bbbf3e3a8ead594a8f0fbffcf54bc51f15f841,
   gameVersion: 1.44.88.3089,
   sourceHash: {time-dependent},
@@ -46,7 +46,7 @@
     },
     {
       key: event-shops,
-      hash: d7c435c356cfe1b40a07faf4c79303b9bdbe58a34559140ca728fa987344ca4f,
+      hash: 96cc8a47a883c7af7a97f460e36c7b7e32a72d2d31138244b61d8e70108d2ca2,
       url: /api/v1/game-catalog/event-shops/{envelopeHash}
     },
     {
