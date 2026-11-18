@@ -87,7 +87,8 @@ public static class GameCatalogDatasets
     /// <c>genestealers-vs-tau-empire</c> -&gt; <c>eventCampaign3</c>,
     /// <c>adepta-sororitas-vs-death-guard</c> -&gt; <c>eventCampaign4</c>,
     /// <c>world-eaters-vs-adepta-sororitas</c> -&gt; <c>eventCampaign5</c>,
-    /// <c>necrons-vs-dark-angels</c> -&gt; <c>eventCampaign6</c> — because Tacticus itself reports event
+    /// <c>necrons-vs-dark-angels</c> -&gt; <c>eventCampaign6</c>,
+    /// <c>orks-vs-blood-angels</c> -&gt; <c>eventCampaign7</c> — because Tacticus itself reports event
     /// progress as one id with multiple <c>type</c> values (<c>Standard</c>/<c>Extremis</c>), not separate
     /// ids. Each event battle carries its own <c>type</c> (<c>Standard</c>/<c>Extremis</c>) plus a
     /// <c>challenge</c> flag (the old <c>eventStandardChallenge</c>/<c>eventExtremisChallenge</c> tiers) — a
@@ -118,6 +119,7 @@ public static class GameCatalogDatasets
         "campaign-battles-genestealers-vs-tau-empire",
         "campaign-battles-world-eaters-vs-adepta-sororitas",
         "campaign-battles-necrons-vs-dark-angels",
+        "campaign-battles-orks-vs-blood-angels",
     ];
 
     /// <summary>

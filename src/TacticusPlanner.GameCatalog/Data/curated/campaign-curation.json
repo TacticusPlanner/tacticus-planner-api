@@ -66,5 +66,8 @@
   },
   "campaign-battles-necrons-vs-dark-angels": {
     "campaigns": [{ "campaign": "eventStandard6", "battleIdPrefix": "DAS" }, { "campaign": "eventExtremis6", "battleIdPrefix": "DAE" }]
+  },
+  "campaign-battles-orks-vs-blood-angels": {
+    "campaigns": [{ "campaign": "eventStandard7", "battleIdPrefix": "BAS" }, { "campaign": "eventExtremis7", "battleIdPrefix": "BAE" }]
   }
 }
