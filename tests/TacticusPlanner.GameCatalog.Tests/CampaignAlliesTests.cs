@@ -38,6 +38,7 @@ public sealed class CampaignAlliesTests
         { "eventCampaign4", "Imperial", ["BlackTemplars", "Sisterhood"] },
         { "eventCampaign5", "Chaos", ["BlackLegion", "WorldEaters"] },
         { "eventCampaign6", "Xenos", ["Necrons"] },
+        { "eventCampaign7", "Xenos", ["Orks"] },
     };
 
     [Theory]
