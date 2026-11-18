@@ -27,8 +27,9 @@ public sealed class GetCurrentUserEndpoint : EndpointWithoutRequest<CurrentUserR
             summary.Description = "Every authenticated caller has a planner account: this endpoint creates the "
                 + "profile on first access if they do not exist yet. displayName is the user-confirmed "
                 + "name or null; suggestedDisplayName is a private, editable suggestion that is never public "
-                + "identity. Tacticus integration values are never returned in full — only a masked preview and "
-                + "whether onboarding is complete.";
+                + "identity. The Tacticus API key is never returned in full — only a masked preview. The "
+                + "Tacticus user id is the player's own in-game id, so it is returned in full to its owner "
+                + "(tacticusUserId) next to its masked preview.";
             summary.Response<CurrentUserResponse>(
                 StatusCodes.Status200OK,
                 "The authenticated user's account and Tacticus integration status."
@@ -83,6 +84,7 @@ public sealed class GetCurrentUserEndpoint : EndpointWithoutRequest<CurrentUserR
             tacticusApiKey is not null,
             SecretMasker.Mask(tacticusApiKey),
             SecretMasker.Mask(profile.TacticusUserId?.Value),
+            profile.TacticusUserId?.Value,
             analyticsId
         ), ct);
     }
@@ -145,5 +147,8 @@ public sealed record CurrentUserResponse(
     bool HasCompletedOnboarding,
     string? TacticusApiKeyMasked,
     string? TacticusUserIdMasked,
+    // The owner's own in-game id in full, so they can copy it (for example into a survey). Only ever
+    // returned to the signed-in owner; other players' ids stay masked (guild projections).
+    string? TacticusUserId,
     string AnalyticsId
 );

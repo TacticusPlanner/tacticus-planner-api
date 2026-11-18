@@ -25,6 +25,7 @@ public sealed class CurrentUserEndpointTests(PlannerApiFactory factory) : IClass
         Assert.False(body.HasCompletedOnboarding);
         Assert.Null(body.TacticusApiKeyMasked);
         Assert.Null(body.TacticusUserIdMasked);
+        Assert.Null(body.TacticusUserId);
     }
 
     [Fact]
