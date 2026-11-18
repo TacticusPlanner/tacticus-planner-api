@@ -1,5 +1,5 @@
 ﻿{
-  version: 1.44.88.3089+d31fe499de01,
+  version: 1.44.88.3089+5605c9fb840c,
   schemaHash: f4346089a29accbd2844611263bbbf3e3a8ead594a8f0fbffcf54bc51f15f841,
   gameVersion: 1.44.88.3089,
   sourceHash: {time-dependent},
@@ -11,12 +11,12 @@
     },
     {
       key: campaign-battles,
-      hash: 1ac8da493e1d6779c2358d29097c2fc40b2a4daee1304baa9709fe7efec473e5,
+      hash: 151bff5e6eb3d237aefc603abf9b16262864d278227172d65efc5116e3d93d4a,
       url: /api/v1/game-catalog/campaign-battles/{envelopeHash}
     },
     {
       key: campaign-definitions,
-      hash: 60e4ce3e5deff335c10606ed99460612d22ebeff65884ff825e44f5a04c857b6,
+      hash: 88a7e0c7cdecdac5c11ade214f4750d16e2ebe97f5967a7307c23b4c8e090117,
       url: /api/v1/game-catalog/campaign-definitions/{envelopeHash}
     },
     {
@@ -26,7 +26,7 @@
     },
     {
       key: characters,
-      hash: 1b20472613553065255e6c3dd25cdd860bface090622471d0a123c9cc295a92e,
+      hash: 0e57b1c4176447f8351fb6432624c234e88ac957f891127e69e7d1660dedb68c,
       url: /api/v1/game-catalog/characters/{envelopeHash}
     },
     {
@@ -111,7 +111,7 @@
     },
     {
       key: npc-encounters,
-      hash: 5c6314dbdfd81dbe185b231928b06411b5b01d761f9999743429d25a5c8f5d72,
+      hash: 9fb14d7364fe770a1e3d8a25fc22fcfbe066a7aed1bf735f1257ed091a4b4591,
       url: /api/v1/game-catalog/npc-encounters/{envelopeHash}
     },
     {
@@ -166,7 +166,7 @@
     },
     {
       key: upgrades,
-      hash: 75bce5c5e7e33dbe8e2dde011c89703a9cac92ae6bba3ecda744807cb7a7ff2e,
+      hash: 718ef5242a44ad75ba484634caa5bb48e590aab2c427f54dae105c30e73666a0,
       url: /api/v1/game-catalog/upgrades/{envelopeHash}
     }
   ]
