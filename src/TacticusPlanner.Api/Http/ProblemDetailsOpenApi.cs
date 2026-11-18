@@ -13,7 +13,7 @@ public static class ProblemDetailsOpenApi
     {
         document.Components ??= new OpenApiComponents();
         document.Components.Schemas ??= new Dictionary<string, IOpenApiSchema>();
-        document.Components.Schemas[SchemaName] = Schema();
+        document.Components.Schemas[SchemaName] = Schema(document);
 
         var operations = (document.Paths ?? []).Values
             .SelectMany(path => path.Operations?.Values.AsEnumerable() ?? []);
@@ -31,11 +31,15 @@ public static class ProblemDetailsOpenApi
         }
     }
 
-    private static OpenApiSchema Schema() => new()
+    /// <summary>The <c>TeamRuleCode</c> enum a refused team save names under <c>rules</c> (<c>personal-teams</c>).</summary>
+    public const string TeamRuleCodeSchema = "TeamRuleCode";
+
+    private static OpenApiSchema Schema(OpenApiDocument document) => new()
     {
         Type = JsonSchemaType.Object,
         Description = "RFC 7807 problem details. issueCode names the failure; errors maps fields to messages on a "
-            + "validation failure; current carries the conflicting resource in its read shape on a 409.",
+            + "validation failure; current carries the conflicting resource in its read shape on a 409; rules names "
+            + "the broken team rules on a 400 teamRulesBroken.",
         Required = new HashSet<string> { "type", "title", "status", "detail", "instance", "traceId", "issueCode" },
         Properties = new Dictionary<string, IOpenApiSchema>
         {
@@ -60,6 +64,12 @@ public static class ProblemDetailsOpenApi
                 },
             },
             ["current"] = new OpenApiSchema { Description = "The conflicting resource as its read endpoint serves it." },
+            ["rules"] = new OpenApiSchema
+            {
+                Type = JsonSchemaType.Array,
+                Description = "On a 400 teamRulesBroken: every team rule the refused team breaks.",
+                Items = new OpenApiSchemaReference(TeamRuleCodeSchema, document),
+            },
         },
     };
 }

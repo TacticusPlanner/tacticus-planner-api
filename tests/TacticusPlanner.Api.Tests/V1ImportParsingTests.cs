@@ -1,5 +1,6 @@
 using System.Text.Json;
 using TacticusPlanner.Api.Features.V1Import;
+using TacticusPlanner.Domain.Teams;
 
 namespace TacticusPlanner.Api.Tests;
 
@@ -98,4 +99,63 @@ public sealed class V1ImportParsingTests
         Assert.Contains(new V1CampaignEventProgress("eventCampaign1", "Extremis", 7), result.Progress);
     }
 
+
+    private static V1TeamImportData ReadTeams(string json) =>
+        TacticusV1Client.ReadTeams(JsonSerializer.Deserialize<V1UserData>(json, WebJsonOptions)?.Teams2);
+
+    [Theory]
+    [InlineData("{}")]
+    [InlineData("""{"teams2": null}""")]
+    [InlineData("""{"teams2": []}""")]
+    public void AbsentOrEmptyTeams2IsMissing(string json)
+    {
+        var result = ReadTeams(json);
+
+        Assert.False(result.IsPresent);
+        Assert.Null(result.Teams);
+    }
+
+    [Theory]
+    [InlineData("""{"teams2": {}}""")]
+    [InlineData("""{"teams2": "teams"}""")]
+    public void ANonArrayTeams2IsInvalid(string json)
+    {
+        var result = ReadTeams(json);
+
+        Assert.True(result.IsPresent);
+        Assert.Null(result.Teams);
+    }
+
+    [Fact]
+    public void Teams2EntriesAreReadLeniently()
+    {
+        var result = ReadTeams("""
+            {
+              "teams2": [
+                {
+                  "name": "GW Ultras", "priority": 2, "chars": ["ultraCalgar", 7, "ultraTitus"], "flexIndex": 2,
+                  "mows": ["ultraDreadnought"], "warOffense": true, "raid": true, "ta": false,
+                  "campaignStoryline": "tau", "incursionMows": ["orksRukkatrukk"], "notes": "Keep Titus flex"
+                },
+                { "name": "No chars", "chars": "ultraCalgar" },
+                { "chars": [] },
+                "not an object"
+              ]
+            }
+            """);
+
+        Assert.True(result.IsPresent);
+        var teams = Assert.IsAssignableFrom<IReadOnlyList<V1TeamSource>>(result.Teams);
+        Assert.Equal(4, teams.Count);
+        var first = teams[0];
+        Assert.Equal(("GW Ultras", 2d, 2), (first.Name, first.Priority, first.FlexIndex));
+        Assert.Equal(["ultraCalgar", "7", "ultraTitus"], first.Chars);
+        Assert.Equal(["ultraDreadnought"], first.Mows);
+        Assert.Equal([TeamMode.WarOffense, TeamMode.GuildRaid], first.Modes);
+        Assert.Equal(("tau", "Keep Titus flex"), (first.CampaignStoryline, first.Notes));
+        Assert.Equal(["orksRukkatrukk"], first.IncursionMows);
+        Assert.Equal(("No chars", null), (teams[1].Name, teams[1].Chars));
+        Assert.Null(teams[2].Name);
+        Assert.Equal((null, null), (teams[3].Name, teams[3].Chars));
+    }
 }

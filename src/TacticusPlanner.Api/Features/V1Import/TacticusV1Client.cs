@@ -38,6 +38,9 @@ public sealed record TacticusV1Profile(
 
     /// <summary>V1 <c>rosterSnapshots</c>; missing unless the profile carries a base snapshot.</summary>
     public V1RosterSnapshotImportData RosterSnapshots { get; init; } = V1RosterSnapshotImportData.Missing();
+
+    /// <summary>V1 <c>teams2</c>; missing unless the profile carries at least one entry.</summary>
+    public V1TeamImportData Teams { get; init; } = V1TeamImportData.Missing();
 }
 
 /// <summary>Distinguishes a profile with no V1 Legendary Event teams or progress from one whose teams cannot be
@@ -282,6 +285,7 @@ public sealed class TacticusV1Client(IHttpClientFactory httpClientFactory) : ITa
         {
             LegendaryEvents = ReadLegendaryEvents(payload.Data),
             RosterSnapshots = ReadRosterSnapshots(payload.Data?.RosterSnapshots),
+            Teams = ReadTeams(payload.Data?.Teams2),
         };
     }
 
@@ -319,6 +323,24 @@ public sealed class TacticusV1Client(IHttpClientFactory httpClientFactory) : ITa
         {
             return V1RosterSnapshotImportData.Invalid();
         }
+    }
+
+    /// <summary>
+    /// Reads V1 <c>teams2</c> (V1 <c>ITeam2[]</c>). The blob stays a raw <see cref="JsonElement"/> on
+    /// <see cref="V1UserData"/> so a malformed one fails only this part (<c>v1-team-import</c>). No key or an empty
+    /// array is missing; anything but an array is invalid. Each entry is read leniently, so an entry that cannot be
+    /// read is reported on its own outcome and the rest still import.
+    /// </summary>
+    internal static V1TeamImportData ReadTeams(JsonElement? element)
+    {
+        if (Present(element) is not { } present)
+            return V1TeamImportData.Missing();
+        if (present.ValueKind != JsonValueKind.Array)
+            return V1TeamImportData.Invalid();
+        if (present.GetArrayLength() == 0)
+            return V1TeamImportData.Missing();
+
+        return V1TeamImportData.Valid([.. present.EnumerateArray().Select(V1TeamSource.Read)]);
     }
 
     private static bool IsWellFormed(V1RosterSnapshotsState state)
@@ -572,7 +594,8 @@ internal sealed record V1UserData(
     JsonElement? LeProgress = null,
     JsonElement? LegendaryEventsProgress = null,
     JsonElement? LeSettings = null,
-    JsonElement? RosterSnapshots = null
+    JsonElement? RosterSnapshots = null,
+    JsonElement? Teams2 = null
 );
 
 internal sealed record V1OnslaughtPreferencesData(

@@ -9,6 +9,7 @@ using TacticusPlanner.Domain.PlayerData;
 using TacticusPlanner.Domain.PlayerData.Chunks;
 using TacticusPlanner.Domain.Projects;
 using TacticusPlanner.Domain.RosterSnapshots;
+using TacticusPlanner.Domain.Teams;
 using TacticusPlanner.Domain.UserSettings;
 using TacticusPlanner.GameDomain;
 using TacticusPlanner.Persistence;
@@ -68,7 +69,7 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
         importResponse.EnsureSuccessStatusCode();
         var counts = await importResponse.Content.ReadFromJsonAsync<ImportFromProductionResponse>(Ct);
         // Two projects: the seeded one and the Default project provisioned with the production account.
-        Assert.Equal(new ImportFromProductionResponse(2, 2, 1, 1, 1, 1, true, true), counts);
+        Assert.Equal(new ImportFromProductionResponse(2, 2, 1, 1, 1, 1, 3, true, true), counts);
 
         using var scope = target.Services.CreateScope();
         var db = scope.ServiceProvider.GetRequiredService<PlannerDbContext>();
@@ -122,6 +123,16 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
             (snapshot.Name, snapshot.Source, snapshot.TakenAt));
         Assert.Equal("ultraCalgar", Assert.Single(snapshot.Roster.Characters).UnitId.Value);
         Assert.Equal(1, snapshot.CharacterCount);
+
+        var teams = await db.Teams.IgnoreQueryFilters().AsNoTracking()
+            .Where(entity => entity.ProfileId == profile.Id).OrderBy(entity => entity.SortOrder).ToListAsync(Ct);
+        Assert.Equal(
+            [("First team", 1, (string?)null), ("V1 team", 2, "gw ultras"), ("Third team", 3, null)],
+            teams.Select(team => (team.Name, team.SortOrder, team.ImportKey)));
+        Assert.DoesNotContain(teams, team => seeded.TeamIds.Contains(team.Id));
+        Assert.Equal(["ultraCalgar", "ultraTitus"], teams[0].CharacterIds);
+        Assert.Equal((1, "prod notes"), (teams[0].FlexStartIndex, teams[0].Notes));
+        Assert.Equal([TeamMode.WarDefense], teams[0].Modes);
 
         var settings = await db.UserSettings.IgnoreQueryFilters().AsNoTracking().FirstAsync(entity => entity.Id == profile.Id, Ct);
         Assert.Equal(538, settings.Settings.DailyEnergy);
@@ -232,7 +243,7 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
         Assert.Equal(HttpStatusCode.NotFound, codeOnTarget.StatusCode);
     }
 
-    private sealed record SeededSource(GoalId ParentGoalId, GoalId ChildGoalId, DateTimeOffset SnapshotTakenAt);
+    private sealed record SeededSource(GoalId ParentGoalId, GoalId ChildGoalId, DateTimeOffset SnapshotTakenAt, IReadOnlyList<TeamId> TeamIds);
 
     /// <summary>Staging plans the import must replace: one for an event production has no plan for, one for the
     /// same event production has.</summary>
@@ -344,7 +355,16 @@ public sealed class StagingTransferEndpointTests : IAsyncDisposable
             OnslaughtProgressOverrides = [new OnslaughtProgressOverrideRecord { Alliance = "Xenos", Sector = "Iron", Tier = 2 }],
         });
 
+        // Three ordered teams, stored out of insertion order; the second came from a V1 import.
+        Team SeedTeam(string name, int position, string? importKey = null) => Team.Create(
+            profileId,
+            new TeamDraft(name, [TeamMode.WarDefense], ["ultraCalgar", "ultraTitus"], 1, ["ultraDreadnought"], null, [], "prod notes"),
+            position,
+            importKey);
+        var teams = new[] { SeedTeam("Third team", 3), SeedTeam("First team", 1), SeedTeam("V1 team", 2, "gw ultras") };
+        db.Teams.AddRange(teams);
+
         await db.SaveChangesAsync(Ct);
-        return new SeededSource(parent.Id, child.Id, takenAt);
+        return new SeededSource(parent.Id, child.Id, takenAt, [.. teams.Select(team => team.Id)]);
     }
 }

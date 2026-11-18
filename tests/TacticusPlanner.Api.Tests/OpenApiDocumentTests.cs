@@ -71,6 +71,28 @@ public sealed class OpenApiDocumentTests(GameCatalogApiFactory factory) : IClass
         Assert.True(plainStrings.Count == 0, "Enum-backed properties without an enum schema: " + string.Join(", ", plainStrings));
     }
 
+    /// <summary><c>personal-teams</c>: a team's <c>issues</c> and a refused save's <c>rules</c> are one closed enum
+    /// listing exactly the rules-table codes, so the generated client knows every code the server can send.</summary>
+    [Fact]
+    public async Task TeamRuleCodesAreOneContractEnum()
+    {
+        string[] rulesTable =
+        [
+            "nameLength", "noMode", "noUnits", "unknownUnit", "modeNotCombinable", "tooManyCoreCharacters", "tooManyMows",
+            "mowsNotAllowed", "campaignRequired", "unknownCampaign", "coreCharacterMissing", "factionNotAllowed",
+            "incursionRequired", "unknownIncursion", "noSharedIncursionFaction",
+        ];
+        var schemas = await SchemasAsync();
+
+        Assert.Equal(rulesTable, schemas["TeamRuleCode"]!["enum"]!.AsArray().Select(code => code!.GetValue<string>()));
+        Assert.Equal(
+            "#/components/schemas/IReadOnlyListOfTeamRuleCode",
+            schemas["TeamResponse"]!["properties"]!["issues"]!["$ref"]!.GetValue<string>());
+        Assert.Equal(
+            "#/components/schemas/TeamRuleCode",
+            schemas["ApiProblem"]!["properties"]!["rules"]!["items"]!["$ref"]!.GetValue<string>());
+    }
+
     [Theory]
     [InlineData("/api/v1/goals", "archived")]
     [InlineData("/api/v1/projects", "archived")]

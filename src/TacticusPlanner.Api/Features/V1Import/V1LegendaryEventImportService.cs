@@ -22,20 +22,6 @@ public sealed partial class V1LegendaryEventImportService(
     LegendaryEventPlanWriter writer,
     ILogger<V1LegendaryEventImportService> logger)
 {
-    /// <summary>V1 <c>CharactersService.canonicalName</c>'s hard-coded renames.</summary>
-    private static readonly Dictionary<string, string> UnitAliases = new(StringComparer.Ordinal)
-    {
-        ["Sho'Syl"] = "tauMarksman",
-        ["Re'Vas"] = "tauCrisis",
-        ["PoM"] = "tyranParasite",
-        ["Abaddon The Despoiler"] = "blackAbaddon",
-        ["Winged Tyrant Prime"] = "tyranWingedPrime",
-        ["Tan Gi'Da"] = "admecMarshall",
-        ["Nauseous Rotbone"] = "deathRotbone",
-        ["Sy-Gex"] = "admecDestroyer",
-        ["Patermine"] = "genesPatriarch",
-    };
-
     /// <summary>The most V1 events one import reads (V1 knows a few dozen), bounding the outcome list.</summary>
     internal const int MaxEvents = 100;
 
@@ -443,30 +429,6 @@ public sealed partial class V1LegendaryEventImportService(
             new(Name, Members, null, Objectives, run, Depth, Depth is null ? null : LegendaryEventDepthSource.Manual);
     }
 
-    /// <summary>V1 unit references → catalog unit ids: a catalog id, one of V1's renamed units, or a catalog
-    /// character name (V1's legacy <c>charactersIds</c> held names).</summary>
-    private sealed class UnitResolver(GameCatalogSnapshot catalog)
-    {
-        private readonly HashSet<string> ids = catalog.Characters.Select(character => character.Id)
-            .Concat(catalog.Mows.Select(mow => mow.Id))
-            .ToHashSet(StringComparer.Ordinal);
-
-        private readonly Dictionary<string, string> byName = catalog.Characters
-            .GroupBy(character => character.Name, StringComparer.OrdinalIgnoreCase)
-            .ToDictionary(group => group.Key, group => group.First().Id, StringComparer.OrdinalIgnoreCase);
-
-        public string? Resolve(string reference)
-        {
-            if (ids.Contains(reference))
-                return reference;
-            if (UnitAliases.TryGetValue(reference, out var alias) && ids.Contains(alias))
-                return alias;
-            return byName.GetValueOrDefault(reference.Trim());
-        }
-
-        /// <summary>For matching unit sets before lane checks: the resolved id, or the reference itself.</summary>
-        public string Canonical(string reference) => Resolve(reference) ?? reference;
-    }
 }
 
 /// <param name="EventId">The catalog event id, or null when the V1 event is not in the catalog.</param>
