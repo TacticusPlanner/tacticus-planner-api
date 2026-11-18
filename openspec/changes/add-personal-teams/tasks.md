@@ -21,7 +21,7 @@
 - [x] 3.1 Move `UnitResolver` and its aliases to a shared type in `Features/V1Import`, and verify the existing Legendary Event import tests pass unchanged.
 - [x] 3.2 Add `Teams2` to `V1UserData` and `TacticusV1Client.ReadTeams`, and verify parsing tests in `V1ImportParsingTests` for absent, empty, non-array and partly unreadable data.
 - [x] 3.3 Add `Teams` (default `false`) to `ImportV1Selection` beside the merged `RosterSnapshots`, plus `Teams` and `TeamOutcomes` on the response, and verify omitting the flag leaves the other parts unchanged.
-- [x] 3.4 Add `V1TeamImportService` with mode, campaign, flex, name and notes mapping and outcomes, and verify tests for the 14 campaign keys, the flex scenario, name and notes shortening, and rule issues listed on outcomes.
+- [x] 3.4 Add `V1TeamImportService` with mode, campaign, flex, name and notes mapping and outcomes, and verify tests for the 15 campaign keys, the flex scenario, name and notes shortening, and rule issues listed on outcomes.
 - [x] 3.5 Store the import key and add re-run and limit handling under the profile lock, and verify integration tests for a full re-run (`already_imported`), a re-run after a rename, a re-run after a delete, a collision with a team made in V2 (`duplicate_name`), keys colliding inside one import, and 18 existing teams plus 4 imports.
 
 ## 4. Staging transfer

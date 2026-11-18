@@ -183,6 +183,7 @@ public sealed class V1TeamImportEndpointTests(PlannerApiFactory factory) : IClas
     [InlineData("deathGuard", "eventCampaign4")]
     [InlineData("sisters", "eventCampaign5")]
     [InlineData("darkAngels", "eventCampaign6")]
+    [InlineData("bloodAngels", "eventCampaign7")]
     public async Task CampaignStorylinesMapOntoCampaignGroups(string storyline, string groupId)
     {
         var client = await ClientAsync();

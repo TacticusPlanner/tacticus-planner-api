@@ -131,6 +131,7 @@ public sealed class V1TeamImportService(PlannerDbContext db, IGameCatalogProvide
         ["deathGuard"] = "eventCampaign4",
         ["sisters"] = "eventCampaign5",
         ["darkAngels"] = "eventCampaign6",
+        ["bloodAngels"] = "eventCampaign7",
     };
 
     public async Task<V1TeamImportResult> ImportAsync(ProfileId profileId, V1TeamImportData source, CancellationToken ct)

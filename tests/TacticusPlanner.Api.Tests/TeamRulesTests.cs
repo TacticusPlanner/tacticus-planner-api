@@ -141,12 +141,13 @@ public sealed class TeamRulesTests
             Evaluate(Draft([TeamMode.Campaign], ["ultraTigurius", "ultraEliminatorSgt", "ultraInceptorSgt", "orksNob"], campaign: "campaign1")));
 
     [Fact]
-    public void EveryFourteenCampaignIsOffered()
+    public void EveryNonEliteCampaignIsOffered()
     {
         string[] expected =
         [
             "campaign1", "campaign2", "campaign3", "campaign4", "mirror1", "mirror2", "mirror3", "mirror4",
             "eventCampaign1", "eventCampaign2", "eventCampaign3", "eventCampaign4", "eventCampaign5", "eventCampaign6",
+            "eventCampaign7",
         ];
         Assert.Equal(expected.Order(), Facts.Campaigns.Keys.Order());
     }

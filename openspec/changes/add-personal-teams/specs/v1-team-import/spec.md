@@ -57,6 +57,7 @@ V1 `campaignStoryline` SHALL map to these campaign groups, and any other value S
 | `deathGuard` | `eventCampaign4` |
 | `sisters` | `eventCampaign5` |
 | `darkAngels` | `eventCampaign6` |
+| `bloodAngels` | `eventCampaign7` |
 
 A name longer than 40 characters SHALL be cut to 40, and notes longer than 300 characters SHALL be cut to 300; each SHALL be reported. Notes that are blank SHALL be imported as null.
 
