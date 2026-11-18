@@ -91,6 +91,7 @@ public sealed class TacticusIntegrationEndpointTests(PlannerApiFactory factory) 
         Assert.Null(body.PlayerName);
         Assert.Null(body.PowerLevel);
         Assert.EndsWith(updatedUserId.ToString()[^4..], body.TacticusUserIdMasked); // stored canonical (trimmed, lower-case)
+        Assert.Equal(updatedUserId.ToString(), body.TacticusUserId); // the owner gets their own id in full
     }
 
     [Fact]
@@ -117,6 +118,7 @@ public sealed class TacticusIntegrationEndpointTests(PlannerApiFactory factory) 
         Assert.False(body.TacticusUserIdConfigured);
         Assert.True(body.TacticusApiKeyConfigured);
         Assert.Null(body.TacticusUserIdMasked);
+        Assert.Null(body.TacticusUserId);
     }
 
     [Fact]

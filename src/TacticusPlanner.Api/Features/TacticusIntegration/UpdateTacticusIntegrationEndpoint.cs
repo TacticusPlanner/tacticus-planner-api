@@ -137,7 +137,8 @@ public sealed class UpdateTacticusIntegrationEndpoint
             playerName,
             powerLevel,
             SecretMasker.Mask(integration?.TacticusApiKey),
-            SecretMasker.Mask(profile.TacticusUserId?.Value)
+            SecretMasker.Mask(profile.TacticusUserId?.Value),
+            profile.TacticusUserId?.Value
         ), ct);
     }
 
@@ -160,5 +161,7 @@ public sealed record UpdateTacticusIntegrationResponse(
     string? PlayerName,
     int? PowerLevel,
     string? TacticusApiKeyMasked,
-    string? TacticusUserIdMasked
+    string? TacticusUserIdMasked,
+    // The owner's own in-game id in full; see CurrentUserResponse.TacticusUserId.
+    string? TacticusUserId
 );
