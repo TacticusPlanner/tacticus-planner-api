@@ -66,13 +66,18 @@ public sealed class TeamsService(PlannerDbContext db, IGameCatalogProvider catal
     /// <summary>
     /// Runs <paramref name="mutation"/> in a READ COMMITTED transaction holding the profile row lock, as
     /// <c>ProjectGoalPlanningService.ExecuteLockedMutationAsync</c> does: every count and position read inside it sees
-    /// what a predecessor committed, so the limit and positions hold under concurrency.
+    /// what a predecessor committed, so the limit and positions hold under concurrency. A retry after a transient
+    /// failure starts from what is stored: entities a rolled-back attempt left tracked (a team with its new fields and
+    /// revision, a team it added) are discarded first.
     /// </summary>
     public async Task<T> ExecuteLockedAsync<T>(Func<IDbContextTransaction, Task<T>> mutation, CancellationToken ct)
     {
         var strategy = db.Database.CreateExecutionStrategy();
+        var attempt = 0;
         return await strategy.ExecuteAsync(async () =>
         {
+            if (attempt++ > 0)
+                db.ChangeTracker.Clear();
             await using var transaction = await db.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted, ct);
             await db.LockCurrentProfileAsync(ct);
             return await mutation(transaction);

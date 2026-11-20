@@ -1,5 +1,9 @@
+using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Options;
 using Npgsql;
+using TacticusPlanner.Api.Features.Teams;
 using TacticusPlanner.Domain.Profiles;
 using TacticusPlanner.Domain.Teams;
 using Xunit;
@@ -97,6 +101,55 @@ public sealed class TeamPostgresTests
         var postgres = Assert.IsType<PostgresException>(error.InnerException);
         Assert.Equal(PostgresErrorCodes.UniqueViolation, postgres.SqlState);
         Assert.Equal("ux_teams_profile_id_import_key", postgres.ConstraintName);
+    }
+
+    [Fact]
+    public async Task ARetriedLockedUpdateStartsFromTheStoredTeam()
+    {
+        await using var database = await PostgresTestDatabase.StartAsync();
+        var ct = TestContext.Current.CancellationToken;
+        var team = Team.Create(database.ProfileId, Draft("Before"), 1);
+        await using (var seed = database.CreateContext())
+        {
+            seed.Teams.Add(team);
+            await seed.SaveChangesAsync(ct);
+        }
+
+        // The first commit fails transiently after its save, so the execution strategy runs the update again.
+        await using var db = database.CreateContext(new FailFirstCommit());
+        var service = new TeamsService(db, null!, Options.Create(new TeamOptions()));
+        var attempts = 0;
+        var outcome = await service.ExecuteLockedAsync(async transaction =>
+        {
+            attempts++;
+            var stored = await db.Teams.FirstAsync(entity => entity.Id == team.Id, ct);
+            if (stored.Revision != 1)
+                return "stale";
+            stored.Apply(Draft("After"));
+            await db.SaveChangesAsync(ct);
+            await transaction.CommitAsync(ct);
+            return "updated";
+        }, ct);
+
+        Assert.Equal(("updated", 2), (outcome, attempts));
+        await using var verify = database.CreateContext();
+        var saved = await verify.Teams.AsNoTracking().SingleAsync(ct);
+        Assert.Equal(("After", 2L), (saved.Name, saved.Revision));
+    }
+
+    private sealed class FailFirstCommit : DbTransactionInterceptor
+    {
+        private bool failed;
+
+        public override ValueTask<InterceptionResult> TransactionCommittingAsync(
+            DbTransaction transaction, TransactionEventData eventData, InterceptionResult result,
+            CancellationToken cancellationToken = default)
+        {
+            if (failed)
+                return ValueTask.FromResult(result);
+            failed = true;
+            throw new NpgsqlException("Simulated transient commit failure.", new TimeoutException());
+        }
     }
 
     [Fact]
