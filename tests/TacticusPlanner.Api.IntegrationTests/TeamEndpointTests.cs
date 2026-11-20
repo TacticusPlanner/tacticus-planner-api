@@ -159,9 +159,10 @@ public sealed class TeamEndpointTests(PlannerApiFactory factory) : IClassFixture
     {
         var (client, _) = await ClientAsync();
 
-        var response = await client.PostAsync(Url, new StringContent(
+        using var content = new StringContent(
             """{"name":"Shiny","modes":["horde"],"characterIds":["ultraCalgar","ultraTitus","ultraApothecary"],"mowIds":[],"incursionMowIds":[],"rarityCap":"Shiny"}""",
-            System.Text.Encoding.UTF8, "application/json"), Ct);
+            System.Text.Encoding.UTF8, "application/json");
+        var response = await client.PostAsync(Url, content, Ct);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         var problem = await response.ReadProblemAsync();
@@ -188,8 +189,8 @@ public sealed class TeamEndpointTests(PlannerApiFactory factory) : IClassFixture
         };
         body[field] = null;
 
-        var response = await client.PostAsync(Url, new StringContent(
-            body.ToJsonString(), System.Text.Encoding.UTF8, "application/json"), Ct);
+        using var content = new StringContent(body.ToJsonString(), System.Text.Encoding.UTF8, "application/json");
+        var response = await client.PostAsync(Url, content, Ct);
 
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
         Assert.Equal("validation", await response.ReadIssueCodeAsync());

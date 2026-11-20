@@ -137,6 +137,51 @@ public sealed class TeamPostgresTests
         Assert.Equal(("After", 2L), (saved.Name, saved.Revision));
     }
 
+    [Fact]
+    public async Task ARetryKeepsWhatTheCallerTrackedAtItsStoredValues()
+    {
+        await using var database = await PostgresTestDatabase.StartAsync();
+        var ct = TestContext.Current.CancellationToken;
+        var team = Team.Create(database.ProfileId, Draft("Before"), 1);
+        await using (var seed = database.CreateContext())
+        {
+            seed.Teams.Add(team);
+            await seed.SaveChangesAsync(ct);
+        }
+
+        await using var db = database.CreateContext(new FailFirstCommit());
+        // Tracked by the caller before the locked write, then changed by the attempt that rolls back.
+        var tracked = await db.Teams.FirstAsync(entity => entity.Id == team.Id, ct);
+        var service = new TeamsService(db, null!, Options.Create(new TeamOptions()));
+        var seen = new List<(string Name, EntityState State)>();
+        await service.ExecuteLockedAsync(async transaction =>
+        {
+            seen.Add((tracked.Name, db.Entry(tracked).State));
+            tracked.Apply(Draft("After"));
+            await db.SaveChangesAsync(ct);
+            await transaction.CommitAsync(ct);
+            return true;
+        }, ct);
+
+        Assert.Equal([("Before", EntityState.Unchanged), ("Before", EntityState.Unchanged)], seen);
+        await using var verify = database.CreateContext();
+        Assert.Equal("After", (await verify.Teams.AsNoTracking().SingleAsync(ct)).Name);
+    }
+
+    [Fact]
+    public async Task ALockedWriteRefusesUnsavedChanges()
+    {
+        await using var database = await PostgresTestDatabase.StartAsync();
+        var ct = TestContext.Current.CancellationToken;
+        await using var db = database.CreateContext();
+        db.Teams.Add(Team.Create(database.ProfileId, Draft("Pending"), 1));
+        var service = new TeamsService(db, null!, Options.Create(new TeamOptions()));
+
+        await Assert.ThrowsAsync<InvalidOperationException>(
+            () => service.ExecuteLockedAsync(_ => Task.FromResult(true), ct));
+        Assert.True(db.ChangeTracker.HasChanges());
+    }
+
     private sealed class FailFirstCommit : DbTransactionInterceptor
     {
         private bool failed;
